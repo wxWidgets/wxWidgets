@@ -125,6 +125,7 @@ void wxMaskedEdit::Create( const wxString& mask
         m_isNumber = false;
     }
 
+
     m_emptyBg   = wxColour(255,255,255);
     m_invalidBg = wxColour(255,255,255);
     m_validBg   = wxColour(255,255,255);
@@ -588,7 +589,6 @@ wxString wxMaskedEdit::GetEmptyMask()const
     {
         res << m_mask[it]->GetEmptyMask();
     }
-
     return res;
 
 }
@@ -667,4 +667,19 @@ wxString wxMaskedEdit::GetDecimalPoint()
     }
 
     return res;
+}
+
+void wxMaskedEdit::SetFillChar(wxChar newFillChar)
+{
+    unsigned int it;
+
+    for(it = 0; it < m_mask.GetCount(); it++)
+    {
+        m_mask[it]->SetFillChar(newFillChar);
+    }
+}
+
+wxChar wxMaskedEdit::GetFillChar()
+{
+    return m_mask[0]->GetFillChar();
 }

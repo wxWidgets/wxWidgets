@@ -78,6 +78,7 @@ bool wxMaskedField::Create( const wxString& mask
     m_groupChar    = groupChar;
     m_decimalPoint = decimalPoint;
     m_useParensForNegatives = useParensForNegatives;
+    m_fillChar = ' ';
     
     if(IsValid(defaultValue))
     {
@@ -262,9 +263,9 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                     }
                 }
                 
-                if(m_formatCodes.Find(wxT("_")) != wxNOT_FOUND && string[it] == ' ')
+                if(m_formatCodes.Find(wxT("_")) != wxNOT_FOUND && string[it] == m_fillChar)
                 {
-                    res << ' ';
+                    res << m_fillChar;
                     format = true;
                 }
 
@@ -272,7 +273,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                 {
                     if(res.Len() == 0 && 
                     ((string.Len() > 0 &&( IsCharValid(m_mask[0], string[1])) 
-                        || string[1] == ' ') 
+                        || string[1] == m_fillChar) 
                             || string.Len() == 1))
                     {
                         it++;
@@ -375,7 +376,7 @@ bool wxMaskedField::IsValid(const wxString& string) const
         {
             if(m_formatCodes.Find('_') != wxNOT_FOUND)
             {
-                if(string[it] != ' ')
+                if(string[it] != m_fillChar)
                 {
                     res = false;
                 }
@@ -647,9 +648,11 @@ wxString wxMaskedField::GetEmptyMask() const
         }
         else
         {
-            res << ' ';
+            res << m_fillChar;
         }
     }
+
+    printf("?%s?\n", (const char*) res.mb_str(wxConvUTF8));
     return res;
 }
 
@@ -672,4 +675,14 @@ bool wxMaskedField::IsNumber()
     }
 
     return res;
+}
+
+void wxMaskedField::SetFillChar(wxChar newFillChar)
+{
+    m_fillChar = newFillChar;
+}
+
+wxChar wxMaskedField::GetFillChar()
+{
+    return m_fillChar;
 }

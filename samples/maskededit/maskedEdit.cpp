@@ -278,6 +278,22 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
     gridSizer->Add(floatFormat, wxALL|wxEXPAND);
     gridSizer->Add(floatCtrl, wxALL|wxEXPAND);
 
+    wxStaticText* stateText     = new wxStaticText(pan, wxID_ANY, wxT("State "));
+    wxStaticText* stateMask     = new wxStaticText(pan, wxID_ANY, wxT("A{14}")); 
+    wxStaticText* stateFormat   = new wxStaticText(pan, wxID_ANY, wxT("F-_")); 
+    wxTextCtrl*   stateCtrl     = new wxTextCtrl(pan, wxID_ANY); 
+    wxMaskedEdit  stateMaskEdit(wxT("A{14}"), wxT("F-_"));
+    stateMaskEdit.SetFillChar('?');
+
+
+    stateCtrl->SetMask(stateMaskEdit);
+    stateCtrl->ChangeValue(stateMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(stateText, wxALL|wxEXPAND);
+    gridSizer->Add(stateMask, wxALL|wxEXPAND);
+    gridSizer->Add(stateFormat, wxALL|wxEXPAND);
+    gridSizer->Add(stateCtrl, wxALL|wxEXPAND);
+
 
     pan->SetSizer(gridSizer);
     gridSizer->SetSizeHints(pan);

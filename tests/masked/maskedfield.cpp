@@ -470,6 +470,7 @@ void MaskedFieldTestCase::TestGetEmptyedMask()
 
     for(unsigned int n = 0; n< WXSIZEOF(maskedEmpty); n++)
     {
+        printf(" n = %d\n", n);
         wxMaskedField mask(maskedEmpty[n].mask, wxT("F"));
         
         CPPUNIT_ASSERT( mask.GetEmptyMask().Cmp(maskedEmpty[n].result) == 0 );    

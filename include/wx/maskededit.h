@@ -139,6 +139,10 @@ public:
     bool IsNumber();
 
     wxString GetDecimalPoint();
+
+    void SetFillChar(wxChar newFillChar);
+    wxChar GetFillChar();
+
 private:
     //mask caracteristics
     fieldsArray m_mask;

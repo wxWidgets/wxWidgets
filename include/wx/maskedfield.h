@@ -89,6 +89,12 @@ public:
     wxString GetEmptyMask() const;
 
     bool IsNumber();
+
+    void SetFillChar(wxChar newFillChar);
+    
+    wxChar GetFillChar();
+
+
 private:
     // The mask in the field see wxMaskedEdit
     wxString m_mask;
@@ -115,6 +121,7 @@ private:
     
     // Use (###) in place of -###
     bool m_useParensForNegatives;
+    wxChar m_fillChar;
 
     bool IsNumber(const wxChar character) const;
     bool IsLowerCase(const wxChar character) const;    
