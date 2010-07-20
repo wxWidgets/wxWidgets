@@ -131,9 +131,9 @@ void RearrangeListTestCase::MoveClientData()
     items.push_back("second");
     items.push_back("third");
 
-    wxStringClientData* item0data = new wxStringClientData("item0data");
-    wxStringClientData* item1data = new wxStringClientData("item1data");
-    wxStringClientData* item2data = new wxStringClientData("item2data");
+    wxClientData* item0data = new wxStringClientData("item0data");
+    wxClientData* item1data = new wxStringClientData("item1data");
+    wxClientData* item2data = new wxStringClientData("item2data");
 
     wxDELETE(m_rearrange);
 
@@ -151,12 +151,9 @@ void RearrangeListTestCase::MoveClientData()
     m_rearrange->SetSelection(2);
     m_rearrange->MoveCurrentUp();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item1data), 
-                         m_rearrange->GetClientObject(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data), 
-                         m_rearrange->GetClientObject(1));
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item0data), 
-                         m_rearrange->GetClientObject(2)); 
+    CPPUNIT_ASSERT_EQUAL(item1data, m_rearrange->GetClientObject(0));
+    CPPUNIT_ASSERT_EQUAL(item2data, m_rearrange->GetClientObject(1));
+    CPPUNIT_ASSERT_EQUAL(item0data, m_rearrange->GetClientObject(2)); 
 
     CPPUNIT_ASSERT_EQUAL("second", m_rearrange->GetString(0));
     CPPUNIT_ASSERT_EQUAL("third", m_rearrange->GetString(1));
