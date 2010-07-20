@@ -141,7 +141,7 @@ public:
     wxString GetDecimalPoint();
 
     void SetFillChar(wxChar newFillChar);
-    wxChar GetFillChar();
+    wxChar GetFillChar() const;
 
 private:
     //mask caracteristics

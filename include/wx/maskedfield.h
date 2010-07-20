@@ -92,7 +92,7 @@ public:
 
     void SetFillChar(wxChar newFillChar);
     
-    wxChar GetFillChar();
+    wxChar GetFillChar() const;
 
 
 private:

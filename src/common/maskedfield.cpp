@@ -682,7 +682,7 @@ void wxMaskedField::SetFillChar(wxChar newFillChar)
     m_fillChar = newFillChar;
 }
 
-wxChar wxMaskedField::GetFillChar()
+wxChar wxMaskedField::GetFillChar() const
 {
     return m_fillChar;
 }

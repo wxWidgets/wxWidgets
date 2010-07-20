@@ -43,6 +43,9 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
        AddChoices(it, maskedEdit.GetChoices(it));
 
     }
+    wxChar fillChar = maskedEdit.GetFillChar();
+
+    SetFillChar(fillChar);
 }
     
 
@@ -679,7 +682,7 @@ void wxMaskedEdit::SetFillChar(wxChar newFillChar)
     }
 }
 
-wxChar wxMaskedEdit::GetFillChar()
+wxChar wxMaskedEdit::GetFillChar() const
 {
     return m_mask[0]->GetFillChar();
 }
