@@ -238,11 +238,17 @@ void GridTestCase::LabelClick()
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
-
-    //Right double click not supported with native headers
-    if( !ms_native )
+    if( ms_native )
+    {
+        //Right double click not supported with native headers so we get two 
+        //right click events
+        CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
+    }
+    else
+    {
+        CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
         CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+    }  
 }
 
 void GridTestCase::SortClick()
