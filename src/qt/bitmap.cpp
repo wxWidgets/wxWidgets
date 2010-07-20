@@ -65,11 +65,21 @@ static wxImage ConvertImage( QImage qtImage )
 static QImage ConvertImage( const wxImage &image )
 {
     bool hasAlpha = image.HasAlpha();
-    QImage qtImage(wxQtConvertSize(image.GetSize()), (hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32));
+    bool hasMask = image.HasMask();
+    QImage qtImage( wxQtConvertSize( image.GetSize() ),
+                   ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
     
     unsigned char *data = image.GetData();
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL;
     QRgb colour;
+
+    QRgb maskedColour;
+    if ( hasMask )
+    {
+        unsigned char r, g, b;
+        image.GetOrFindMaskColour( &r, &g, &b );
+        maskedColour = ( r << 16 ) + ( g << 8 ) + b;
+    }
     
     for (int y = 0; y < image.GetHeight(); y++)
     {
@@ -84,6 +94,10 @@ static QImage ConvertImage( const wxImage &image )
                 colour = 0;
             
             colour += (data[0] << 16) + (data[1] << 8) + data[2];
+
+            if ( hasMask && colour != maskedColour )
+                colour += 0xFF000000; // 255 << 24
+            
             qtImage.setPixel(x, y, colour);
             
             data += 3;
