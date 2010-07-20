@@ -1,13 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/evtloop.h
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
+
+#include <QtCore/QPointer>
+#include <QtCore/QTimer>
 
 class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
 {
@@ -28,6 +31,8 @@ public:
 protected:
 
 private:
+    QPointer< QTimer > m_qtIdleTimer;
+    
     wxDECLARE_NO_COPY_CLASS(wxQtEventLoopBase);
 };
 
@@ -53,5 +58,5 @@ public:
 #endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // wxUSE_GUI
-                                        
+
 #endif // _WX_QT_EVTLOOP_H_

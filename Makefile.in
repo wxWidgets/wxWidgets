@@ -4318,7 +4318,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_unix_mimetype.o \
 	monodll_fswatcher_inotify.o \
 	monodll_qt_apptraits.o \
-	monodll_qt_evtloop.o
+	monodll_qt_evtloop.o \
+	monodll_evtloop_qt.o \
+	monodll_evtloop_qt_moc.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -6372,7 +6374,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_unix_mimetype.o \
 	monolib_fswatcher_inotify.o \
 	monolib_qt_apptraits.o \
-	monolib_qt_evtloop.o
+	monolib_qt_evtloop.o \
+	monolib_evtloop_qt.o \
+	monolib_evtloop_qt_moc.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -8479,7 +8483,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_unix_mimetype.o \
 	basedll_fswatcher_inotify.o \
 	basedll_apptraits.o \
-	basedll_qt_evtloop.o
+	basedll_qt_evtloop.o \
+	basedll_evtloop_qt.o \
+	basedll_evtloop_qt_moc.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8579,7 +8585,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_unix_mimetype.o \
 	baselib_fswatcher_inotify.o \
 	baselib_apptraits.o \
-	baselib_qt_evtloop.o
+	baselib_qt_evtloop.o \
+	baselib_evtloop_qt.o \
+	baselib_evtloop_qt_moc.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -16182,6 +16190,12 @@ monodll_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONODLL_ODEP)
 monodll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
 
+monodll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+monodll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
+
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -21692,6 +21706,12 @@ monolib_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONOLIB_ODEP)
 
 monolib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+monolib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+monolib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -27204,6 +27224,12 @@ basedll_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(BASEDLL_ODEP)
 basedll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
 
+basedll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+basedll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
+
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -27704,6 +27730,12 @@ baselib_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(BASELIB_ODEP)
 
 baselib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+baselib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+baselib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp

@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/evtloop.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,6 +10,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/evtloop.h"
+#include "wx/qt/evtloop_qt.h"
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
 
@@ -17,6 +19,12 @@
 
 wxQtEventLoopBase::wxQtEventLoopBase()
 {
+    // Create an idle timer to run each time there are no events (timeout = 0)
+    m_qtIdleTimer = new wxQtIdleTimer( this );
+
+    // Pass all events to the idle timer, so it can be restarted each time
+    // an event is received
+    QCoreApplication::instance()->installEventFilter( m_qtIdleTimer );
 }
 
 void wxQtEventLoopBase::Exit(int rc)

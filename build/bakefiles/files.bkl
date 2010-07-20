@@ -323,6 +323,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_QT_SRC" hints="files">
     src/qt/apptraits.cpp
     src/qt/evtloop.cpp
+    src/qt/evtloop_qt.cpp
+    src/qt/evtloop_qt.moc.cpp
 </set>
 
 <set var="QT_LOWLEVEL_HDR" hints="files">
@@ -539,6 +541,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="NET_QT_SRC" hints="files">
     src/qt/evtloop.cpp
+    src/qt/evtloop_qt.cpp
+    src/qt/evtloop_qt.moc.cpp
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
