@@ -11,6 +11,7 @@
 
 #include "wx/toplevel.h"
 #include "wx/qt/converter.h"
+#include <QtGui/QIcon>
 
 wxTopLevelWindowNative::wxTopLevelWindowNative()
 {
@@ -79,3 +80,14 @@ wxString wxTopLevelWindowNative::GetTitle() const
     return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
 
+void wxTopLevelWindowNative::SetIcons( const wxIconBundle& icons )
+{
+    wxTopLevelWindowBase::SetIcons( icons );
+    
+    QIcon qtIcons;
+    for ( size_t i = 0; i < icons.GetIconCount(); i++ )
+    {
+        qtIcons.addPixmap( *icons.GetIconByIndex( i ).GetHandle() );
+    }
+    GetHandle()->setWindowIcon( qtIcons );
+}

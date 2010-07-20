@@ -42,6 +42,7 @@ public:
     virtual bool IsFullScreen() const;
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
+    virtual void SetIcons(const wxIconBundle& icons);
 };
     
 #endif // _WX_QT_TOPLEVEL_H_
