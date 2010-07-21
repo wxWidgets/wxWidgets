@@ -100,21 +100,21 @@ public:
     // virtual dtor for the base class
     virtual ~wxMessageDialogBase() { }
 
-    virtual wxString GetCaption() const { return m_caption; }
+    wxString GetCaption() const { return m_caption; }
 
     virtual void SetMessage(const wxString& message)
     {
         m_message = message;
     }
 
-    virtual wxString GetMessage() const { return m_message; }
+    wxString GetMessage() const { return m_message; }
 
-    virtual void SetExtendedMessage(const wxString& extendedMessage)
+    void SetExtendedMessage(const wxString& extendedMessage)
     {
         m_extendedMessage = extendedMessage;
     }
 
-    virtual wxString GetExtendedMessage() const { return m_extendedMessage; }
+    wxString GetExtendedMessage() const { return m_extendedMessage; }
 
     // change the dialog style flag
     void SetMessageDialogStyle(long style)

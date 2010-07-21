@@ -36,7 +36,6 @@
     #if wxUSE_MSGBOX_HOOK
         #include "wx/hashmap.h"
     #endif
-    #include "wx/msw/wrapcctl.h"
 #endif
 
 #include "wx/msw/private.h"

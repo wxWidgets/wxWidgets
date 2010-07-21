@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_PRIVATE_MSGDLG_H_
 #define _WX_MSW_PRIVATE_MSGDLG_H_
 
+#include "wx/msw/wrapcctl.h"
+
 // Macro to help identify if task dialogs are available.
 #ifdef TD_WARNING_ICON
     #define wxHAS_MSW_TASKDIALOG
