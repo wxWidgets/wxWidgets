@@ -84,7 +84,6 @@ public:
         const int m_stockId;
     };
 
-
     // ctors
     wxMessageDialogBase() { m_dialogStyle = 0; }
     wxMessageDialogBase(wxWindow *parent,
@@ -101,42 +100,21 @@ public:
     // virtual dtor for the base class
     virtual ~wxMessageDialogBase() { }
 
-
-    // methods for setting up more custom message dialogs -- all functions
-    // return false if they're not implemented
-    virtual bool SetYesNoLabels(const ButtonLabel& WXUNUSED(yes),
-                                const ButtonLabel& WXUNUSED(no))
-    {
-        return false;
-    }
-
-    virtual bool SetYesNoCancelLabels(const ButtonLabel& WXUNUSED(yes),
-                                      const ButtonLabel& WXUNUSED(no),
-                                      const ButtonLabel& WXUNUSED(cancel))
-    {
-        return false;
-    }
-
-    virtual bool SetOKLabel(const ButtonLabel& WXUNUSED(ok))
-    {
-        return false;
-    }
-
-    virtual bool SetOKCancelLabels(const ButtonLabel& WXUNUSED(ok),
-                                   const ButtonLabel& WXUNUSED(cancel))
-    {
-        return false;
-    }
+    virtual wxString GetCaption() const { return m_caption; }
 
     virtual void SetMessage(const wxString& message)
     {
         m_message = message;
     }
 
+    virtual wxString GetMessage() const { return m_message; }
+
     virtual void SetExtendedMessage(const wxString& extendedMessage)
     {
         m_extendedMessage = extendedMessage;
     }
+
+    virtual wxString GetExtendedMessage() const { return m_extendedMessage; }
 
     // change the dialog style flag
     void SetMessageDialogStyle(long style)
@@ -165,73 +143,7 @@ public:
         m_dialogStyle = style;
     }
 
-protected:
     long GetMessageDialogStyle() const { return m_dialogStyle; }
-
-    // based on message dialog style, returns exactly one of: wxICON_NONE,
-    // wxICON_ERROR, wxICON_WARNING, wxICON_QUESTION, wxICON_INFORMATION
-    long GetEffectiveIcon() const
-    {
-        if ( m_dialogStyle & wxICON_NONE )
-            return wxICON_NONE;
-        else if ( m_dialogStyle & wxICON_ERROR )
-            return wxICON_ERROR;
-        else if ( m_dialogStyle & wxICON_WARNING )
-            return wxICON_WARNING;
-        else if ( m_dialogStyle & wxICON_QUESTION )
-            return wxICON_QUESTION;
-        else if ( m_dialogStyle & wxICON_INFORMATION )
-            return wxICON_INFORMATION;
-        else if ( m_dialogStyle & wxYES )
-            return wxICON_QUESTION;
-        else
-            return wxICON_INFORMATION;
-    }
-
-
-    // for the platforms not supporting separate main and extended messages
-    // this function should be used to combine both of them in a single string
-    wxString GetFullMessage() const
-    {
-        wxString msg = m_message;
-        if ( !m_extendedMessage.empty() )
-            msg << "\n\n" << m_extendedMessage;
-
-        return msg;
-    }
-
-    wxString m_message,
-             m_extendedMessage,
-             m_caption;
-    long m_dialogStyle;
-
-    wxDECLARE_NO_COPY_CLASS(wxMessageDialogBase);
-};
-
-// this is a helper class for native wxMessageDialog implementations which need
-// to store the custom button labels as member variables and then use them in
-// ShowModal() (there could conceivably be a port which would have some native
-// functions for setting these labels immediately and we also don't need to
-// store them at all if custom labels are not supported, which is why we do
-// this in a separate class and not wxMessageDialogBase itself)
-#if defined(__WXCOCOA__) || \
-    defined(__WXGTK20__) || \
-    defined(__WXMAC__) || \
-    defined(__WXMSW__)
-
-class WXDLLIMPEXP_CORE wxMessageDialogWithCustomLabels
-    : public wxMessageDialogBase
-{
-public:
-    // ctors
-    wxMessageDialogWithCustomLabels() { }
-    wxMessageDialogWithCustomLabels(wxWindow *parent,
-                                    const wxString& message,
-                                    const wxString& caption,
-                                    long style)
-        : wxMessageDialogBase(parent, message, caption, style)
-    {
-    }
 
     // customization of the message box buttons
     virtual bool SetYesNoLabels(const ButtonLabel& yes,const ButtonLabel& no)
@@ -265,7 +177,6 @@ public:
         return true;
     }
 
-protected:
     // test if any custom labels were set
     bool HasCustomLabels() const
     {
@@ -284,6 +195,43 @@ protected:
         { return m_ok.empty() ? GetDefaultOKLabel() : m_ok; }
     wxString GetCancelLabel() const
         { return m_cancel.empty() ? GetDefaultCancelLabel() : m_cancel; }
+
+    // based on message dialog style, returns exactly one of: wxICON_NONE,
+    // wxICON_ERROR, wxICON_WARNING, wxICON_QUESTION, wxICON_INFORMATION
+    long GetEffectiveIcon() const
+    {
+        if ( m_dialogStyle & wxICON_NONE )
+            return wxICON_NONE;
+        else if ( m_dialogStyle & wxICON_ERROR )
+            return wxICON_ERROR;
+        else if ( m_dialogStyle & wxICON_WARNING )
+            return wxICON_WARNING;
+        else if ( m_dialogStyle & wxICON_QUESTION )
+            return wxICON_QUESTION;
+        else if ( m_dialogStyle & wxICON_INFORMATION )
+            return wxICON_INFORMATION;
+        else if ( m_dialogStyle & wxYES )
+            return wxICON_QUESTION;
+        else
+            return wxICON_INFORMATION;
+    }
+
+protected:
+    // for the platforms not supporting separate main and extended messages
+    // this function should be used to combine both of them in a single string
+    wxString GetFullMessage() const
+    {
+        wxString msg = m_message;
+        if ( !m_extendedMessage.empty() )
+            msg << "\n\n" << m_extendedMessage;
+
+        return msg;
+    }
+
+    wxString m_message,
+             m_extendedMessage,
+             m_caption;
+    long m_dialogStyle;
 
     // this function is called by our public SetXXXLabels() and should assign
     // the value to var with possibly some transformation (e.g. Cocoa version
@@ -309,15 +257,14 @@ private:
              m_ok,
              m_cancel;
 
-    wxDECLARE_NO_COPY_CLASS(wxMessageDialogWithCustomLabels);
+    wxDECLARE_NO_COPY_CLASS(wxMessageDialogBase);
 };
 
-#endif // ports needing wxMessageDialogWithCustomLabels
+#include "wx/generic/msgdlgg.h"
 
 #if defined(__WX_COMPILING_MSGDLGG_CPP__) || \
     defined(__WXUNIVERSAL__) || defined(__WXGPE__) || \
     (defined(__WXGTK__) && !defined(__WXGTK20__))
-    #include "wx/generic/msgdlgg.h"
 
     #define wxMessageDialog wxGenericMessageDialog
 #elif defined(__WXCOCOA__)
