@@ -150,9 +150,11 @@
             controls/headerctrltest.cpp
             controls/itemcontainertest.cpp
             controls/label.cpp
+            controls/listbasetest.cpp
             controls/listbooktest.cpp
             controls/listboxtest.cpp
             controls/listctrltest.cpp
+            controls/listviewtest.cpp
             controls/notebooktest.cpp
             controls/radioboxtest.cpp
             controls/rearrangelisttest.cpp
