@@ -6960,6 +6960,10 @@ if test "$wxUSE_REARRANGECTRL" = "yes"; then
     AC_DEFINE(wxUSE_REARRANGECTRL)
 fi
 
+if test "$wxUSE_RICHMSGDLG" = "yes"; then
+    AC_DEFINE(wxUSE_RICHMSGDLG)
+fi
+
 if test "$wxUSE_SASH" = "yes"; then
     AC_DEFINE(wxUSE_SASH)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"

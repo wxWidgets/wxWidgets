@@ -1531,6 +1531,17 @@
 #   endif
 #endif /* wxUSE_REARRANGECTRL */
 
+#if wxUSE_RICHMSGDLG
+#    if !wxUSE_MSGDLG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RICHMSGDLG requires wxUSE_MSGDLG"
+#        else
+#            undef wxUSE_MSGDLG
+#            define wxUSE_MSGDLG 1
+#        endif
+#    endif
+#endif /* wxUSE_RICHMSGDLG */
+
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR
 #   define wxUSE_NATIVE_STATUSBAR 0

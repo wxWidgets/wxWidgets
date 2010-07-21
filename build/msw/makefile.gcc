@@ -1763,6 +1763,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_ownerdrw.o \
 	$(OBJS)\monodll_msw_radiobox.o \
 	$(OBJS)\monodll_msw_radiobut.o \
+	$(OBJS)\monodll_richmsgdlg.o \
 	$(OBJS)\monodll_msw_scrolbar.o \
 	$(OBJS)\monodll_msw_slider.o \
 	$(OBJS)\monodll_msw_spinbutt.o \
@@ -1903,11 +1904,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
+	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
+	$(OBJS)\monodll_richmsgdlgg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
@@ -1988,7 +1991,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_generic_listctrl.o \
 	$(OBJS)\monodll_mdig.o \
-	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_univ_bmpbuttn.o \
 	$(OBJS)\monodll_univ_button.o \
@@ -2152,11 +2154,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
+	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
+	$(OBJS)\monodll_richmsgdlgg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
@@ -2481,6 +2485,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_ownerdrw.o \
 	$(OBJS)\monolib_msw_radiobox.o \
 	$(OBJS)\monolib_msw_radiobut.o \
+	$(OBJS)\monolib_richmsgdlg.o \
 	$(OBJS)\monolib_msw_scrolbar.o \
 	$(OBJS)\monolib_msw_slider.o \
 	$(OBJS)\monolib_msw_spinbutt.o \
@@ -2621,11 +2626,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
+	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
+	$(OBJS)\monolib_richmsgdlgg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
@@ -2706,7 +2713,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_generic_listctrl.o \
 	$(OBJS)\monolib_mdig.o \
-	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_univ_bmpbuttn.o \
 	$(OBJS)\monolib_univ_button.o \
@@ -2870,11 +2876,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
+	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
+	$(OBJS)\monolib_richmsgdlgg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
@@ -3100,6 +3108,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_ownerdrw.o \
 	$(OBJS)\coredll_msw_radiobox.o \
 	$(OBJS)\coredll_msw_radiobut.o \
+	$(OBJS)\coredll_richmsgdlg.o \
 	$(OBJS)\coredll_msw_scrolbar.o \
 	$(OBJS)\coredll_msw_slider.o \
 	$(OBJS)\coredll_msw_spinbutt.o \
@@ -3240,11 +3249,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
+	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
+	$(OBJS)\coredll_richmsgdlgg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
@@ -3325,7 +3336,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_generic_listctrl.o \
 	$(OBJS)\coredll_mdig.o \
-	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_univ_bmpbuttn.o \
 	$(OBJS)\coredll_univ_button.o \
@@ -3489,11 +3499,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
+	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
+	$(OBJS)\coredll_richmsgdlgg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
@@ -3609,6 +3621,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_ownerdrw.o \
 	$(OBJS)\corelib_msw_radiobox.o \
 	$(OBJS)\corelib_msw_radiobut.o \
+	$(OBJS)\corelib_richmsgdlg.o \
 	$(OBJS)\corelib_msw_scrolbar.o \
 	$(OBJS)\corelib_msw_slider.o \
 	$(OBJS)\corelib_msw_spinbutt.o \
@@ -3749,11 +3762,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
+	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
+	$(OBJS)\corelib_richmsgdlgg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
@@ -3834,7 +3849,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_generic_listctrl.o \
 	$(OBJS)\corelib_mdig.o \
-	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_univ_bmpbuttn.o \
 	$(OBJS)\corelib_univ_button.o \
@@ -3998,11 +4012,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
+	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
+	$(OBJS)\corelib_richmsgdlgg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
@@ -6315,6 +6331,9 @@ $(OBJS)\monodll_msw_radiobox.o: ../../src/msw/radiobox.cpp
 $(OBJS)\monodll_msw_radiobut.o: ../../src/msw/radiobut.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6391,9 +6410,6 @@ $(OBJS)\monodll_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -7802,6 +7818,11 @@ $(OBJS)\monodll_logg.o: ../../src/generic/logg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7823,6 +7844,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8530,6 +8556,9 @@ $(OBJS)\monolib_msw_radiobox.o: ../../src/msw/radiobox.cpp
 $(OBJS)\monolib_msw_radiobut.o: ../../src/msw/radiobut.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8606,9 +8635,6 @@ $(OBJS)\monolib_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -10017,6 +10043,11 @@ $(OBJS)\monolib_logg.o: ../../src/generic/logg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10038,6 +10069,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11153,6 +11189,9 @@ $(OBJS)\coredll_msw_radiobox.o: ../../src/msw/radiobox.cpp
 $(OBJS)\coredll_msw_radiobut.o: ../../src/msw/radiobut.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11229,9 +11268,6 @@ $(OBJS)\coredll_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -12235,6 +12271,11 @@ $(OBJS)\coredll_logg.o: ../../src/generic/logg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12256,6 +12297,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12458,6 +12504,9 @@ $(OBJS)\corelib_msw_radiobox.o: ../../src/msw/radiobox.cpp
 $(OBJS)\corelib_msw_radiobut.o: ../../src/msw/radiobut.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\corelib_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\corelib_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12534,9 +12583,6 @@ $(OBJS)\corelib_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -13540,6 +13586,11 @@ $(OBJS)\corelib_logg.o: ../../src/generic/logg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13561,6 +13612,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

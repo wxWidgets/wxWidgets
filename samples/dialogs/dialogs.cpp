@@ -33,6 +33,10 @@
 #include "wx/sysopt.h"
 #include "wx/notifmsg.h"
 
+#if wxUSE_RICHMSGDLG
+    #include "wx/richmsgdlg.h"
+#endif // wxUSE_RICHMSGDLG
+
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"
 #endif // wxUSE_COLOURDLG
@@ -127,6 +131,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_MESSAGE_DIALOG,                MyFrame::MessageBoxDialog)
     EVT_MENU(DIALOGS_MESSAGE_BOX_WXINFO,            MyFrame::MessageBoxInfo)
 #endif // wxUSE_MSGDLG
+#if wxUSE_RICHMSGDLG
+    EVT_MENU(DIALOGS_RICH_MESSAGE_DIALOG,           MyFrame::RichMessageDialog)
+#endif // wxUSE_RICHMSGDLG
 #if wxUSE_COLOURDLG
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
     EVT_MENU(DIALOGS_GET_COLOUR,                    MyFrame::GetColour)
@@ -289,6 +296,9 @@ bool MyApp::OnInit()
     menuDlg->Append(DIALOGS_MESSAGE_BOX, wxT("&Message box\tCtrl-M"));
     menuDlg->Append(DIALOGS_MESSAGE_BOX_WINDOW_MODAL, wxT("Window-Modal Message box "));
     menuDlg->Append(DIALOGS_MESSAGE_DIALOG, wxT("Message dialog\tShift-Ctrl-M"));
+#if wxUSE_RICHMSGDLG
+    menuDlg->Append(DIALOGS_RICH_MESSAGE_DIALOG, wxT("Rich message dialog"));
+#endif // wxUSE_RICHMSGDLG
 
 
 #if wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
@@ -844,6 +854,7 @@ void MyFrame::MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event)
 void MyFrame::MessageBoxDialog(wxCommandEvent& WXUNUSED(event))
 {
     TestMessageBoxDialog dlg(this);
+    dlg.Create();
     dlg.ShowModal();
 }
 
@@ -852,6 +863,15 @@ void MyFrame::MessageBoxInfo(wxCommandEvent& WXUNUSED(event))
     ::wxInfoMessageBox(this);
 }
 #endif // wxUSE_MSGDLG
+
+#if wxUSE_RICHMSGDLG
+void MyFrame::RichMessageDialog(wxCommandEvent& WXUNUSED(event))
+{
+    TestRichMessageDialog dlg(this);
+    dlg.Create();
+    dlg.ShowModal();
+}
+#endif // wxUSE_RICHMSGDLG
 
 #if wxUSE_NUMBERDLG
 void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event))
@@ -2513,6 +2533,9 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     return panel;
 }
 
+#endif // USE_SETTINGS_DIALOG
+
+#if wxUSE_MSGDLG
 // ----------------------------------------------------------------------------
 // TestMessageBoxDialog
 // ----------------------------------------------------------------------------
@@ -2536,6 +2559,10 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
                                wxDefaultPosition, wxDefaultSize,
                                wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
+}
+
+bool TestMessageBoxDialog::Create()
+{
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
     // this sizer allows to configure the messages shown in the message box
@@ -2555,11 +2582,13 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
 
     sizerTop->Add(sizerMsgs, wxSizerFlags(1).Expand().Border());
 
+    // if a derived class provides more message configurations, add these.
+    AddAdditionalTextOptions(sizerTop);
 
     // this one is for configuring the buttons
     wxSizer * const
     sizerBtnsBox = new wxStaticBoxSizer(wxVERTICAL, this, "&Buttons");
-    
+
     wxFlexGridSizer * const sizerBtns = new wxFlexGridSizer(2, 5, 5);
     sizerBtns->AddGrowableCol(1);
 
@@ -2622,6 +2651,9 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
     m_chkCentre = new wxCheckBox(this, wxID_ANY, "Centre on &parent");
     sizerFlags->Add(m_chkCentre, wxSizerFlags(1).Border());
 
+    // add any additional flag from subclasses
+    AddAdditionalFlags(sizerFlags);
+
     sizerTop->Add(sizerFlags, wxSizerFlags().Expand().Border());
 
     // finally buttons to show the resulting message box and close this dialog
@@ -2631,6 +2663,8 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
     SetSizerAndFit(sizerTop);
 
     m_buttons[Btn_Ok]->SetValue(true);
+
+    return true;
 }
 
 void TestMessageBoxDialog::OnUpdateLabelUI(wxUpdateUIEvent& event)
@@ -2652,7 +2686,7 @@ void TestMessageBoxDialog::OnUpdateNoDefaultUI(wxUpdateUIEvent& event)
     event.Enable( m_buttons[Btn_No]->IsChecked() );
 }
 
-void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
+long TestMessageBoxDialog::GetStyle()
 {
     long style = 0;
 
@@ -2697,9 +2731,13 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
     if ( m_chkNoDefault->IsEnabled() && m_chkNoDefault->IsChecked() )
         style |= wxNO_DEFAULT;
 
+    return style;
+}
 
-    wxMessageDialog dlg(this, m_textMsg->GetValue(), "Test Message Box",
-                        style);
+void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
+{
+    long style = dlg.GetWindowStyle();
+
     if ( !m_textExtMsg->IsEmpty() )
         dlg.SetExtendedMessage(m_textExtMsg->GetValue());
 
@@ -2729,6 +2767,12 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
             dlg.SetOKLabel(m_labels[Btn_Ok]->GetValue());
         }
     }
+}
+
+void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageDialog dlg(this, GetMessage(), "Test Message Box", GetStyle());
+    PrepareMessageDialog(dlg);
 
     dlg.ShowModal();
 }
@@ -2737,8 +2781,69 @@ void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     EndModal(wxID_CANCEL);
 }
+#endif // wxUSE_MSGDLG
 
-#endif // USE_SETTINGS_DIALOG
+#if wxUSE_RICHMSGDLG
+// ----------------------------------------------------------------------------
+// TestRichMessageDialog
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(TestRichMessageDialog, TestMessageBoxDialog)
+    EVT_BUTTON(wxID_APPLY, TestRichMessageDialog::OnApply)
+END_EVENT_TABLE()
+
+TestRichMessageDialog::TestRichMessageDialog(wxWindow *parent)
+                     : TestMessageBoxDialog(parent)
+{
+    SetTitle("Rich Message Dialog Test Dialog");
+}
+
+void TestRichMessageDialog::AddAdditionalTextOptions(wxSizer *sizer)
+{
+    wxSizer * const sizerMsgs = new wxStaticBoxSizer(wxVERTICAL, this,
+                                                     "&Additional Elements");
+
+    // add a option to show a check box.
+    wxFlexGridSizer * const sizerCheckBox = new wxFlexGridSizer(2, 5, 5);
+    sizerCheckBox->AddGrowableCol(1);
+    sizerCheckBox->Add(new wxStaticText(this, wxID_ANY, "&Check box:"));
+    m_textCheckBox = new wxTextCtrl(this, wxID_ANY);
+    sizerCheckBox->Add(m_textCheckBox, wxSizerFlags(1).Expand().Border(wxBOTTOM));
+    sizerMsgs->Add(sizerCheckBox, wxSizerFlags(1).Expand());
+
+    // add option to show a detailed text.
+    sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Detailed message:"));
+    m_textDetailed = new wxTextCtrl(this, wxID_ANY, "",
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxTE_MULTILINE);
+    sizerMsgs->Add(m_textDetailed, wxSizerFlags(1).Expand());
+
+    sizer->Add(sizerMsgs, wxSizerFlags(1).Expand().Border());
+}
+
+void TestRichMessageDialog::AddAdditionalFlags(wxSizer *sizer)
+{
+    // add checkbox to set the initial state for the checkbox shown
+    // in the dialog.
+    m_initialValueCheckBox =
+        new wxCheckBox(this, wxID_ANY, "Checkbox initially checked");
+    sizer->Add(m_initialValueCheckBox, wxSizerFlags(1).Border());
+}
+
+void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichMessageDialog dlg(this, GetMessage(), "Test Rich Message Dialog",
+                            GetStyle());
+    PrepareMessageDialog(dlg);
+
+    dlg.ShowCheckBox(m_textCheckBox->GetValue(),
+                     m_initialValueCheckBox->GetValue());
+    dlg.ShowDetailedText(m_textDetailed->GetValue());
+
+    dlg.ShowModal();
+}
+
+#endif // wxUSE_RICHMSGDLG
 
 #if wxUSE_LOG
 

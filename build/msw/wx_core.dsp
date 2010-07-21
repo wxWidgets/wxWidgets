@@ -2138,6 +2138,41 @@ SOURCE=..\..\src\msw\renderer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\richmsgdlg.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\scrolbar.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -3091,37 +3126,6 @@ SOURCE=..\..\src\generic\mdig.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\msgdlgg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -3146,6 +3150,10 @@ SOURCE=..\..\src\generic\progdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\renderg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\richmsgdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -5205,6 +5213,10 @@ SOURCE=..\..\include\wx\msw\region.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\richmsgdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\scrolbar.h
 # End Source File
 # Begin Source File
@@ -5490,6 +5502,10 @@ SOURCE=..\..\include\wx\generic\progdlgg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\propdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\richmsgdlgg.h
 # End Source File
 # Begin Source File
 
@@ -6486,6 +6502,10 @@ SOURCE=..\..\include\wx\region.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\renderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richmsgdlg.h
 # End Source File
 # Begin Source File
 
