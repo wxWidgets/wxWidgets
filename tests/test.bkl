@@ -157,6 +157,7 @@
             controls/radioboxtest.cpp
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
+            controls/slidertest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/togglebuttontest.cpp
