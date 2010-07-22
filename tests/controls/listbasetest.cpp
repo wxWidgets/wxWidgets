@@ -311,3 +311,24 @@ void ListBaseTestCase::Find()
     CPPUNIT_ASSERT_EQUAL(2, list->FindItem(1, "Item 40"));
     CPPUNIT_ASSERT_EQUAL(3, list->FindItem(2, "Item 0", true));
 }
+
+void ListBaseTestCase::Visible()
+{
+    wxListCtrl* const list = GetList();
+
+    list->InsertColumn(0, "Column 0");
+
+    int count = list->GetCountPerPage();
+
+    for( int i = 0; i < count + 10; i++ )
+    {
+        list->InsertItem(i, wxString::Format("string %d", i));
+    }
+
+    CPPUNIT_ASSERT_EQUAL(count + 10, list->GetItemCount());
+    CPPUNIT_ASSERT_EQUAL(0, list->GetTopItem());
+
+    list->EnsureVisible(count + 9);
+
+    CPPUNIT_ASSERT(list->GetTopItem() != 0);
+}
