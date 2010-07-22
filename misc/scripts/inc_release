@@ -104,3 +104,6 @@ run_sed samples/Info.plist \
 run_sed samples/docview/Info.plist \
     "/versionon/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
+
+run_set src/wxWindows.xcodeproj/project.pbxproj \
+    "s/DYLIB_CURRENT_VERSION = $ver_for_sed/DYLIB_CURRENT_VERSION = $ver_string_new/"
