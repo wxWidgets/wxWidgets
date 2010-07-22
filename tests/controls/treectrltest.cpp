@@ -21,6 +21,8 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
+#include "wx/artprov.h"
+#include "wx/imaglist.h"
 #include "wx/treectrl.h"
 #include "wx/uiaction.h"
 #include "testableframe.h"
@@ -50,6 +52,7 @@ private:
         CPPUNIT_TEST( Iteration );
         CPPUNIT_TEST( Parent );
         CPPUNIT_TEST( CollapseExpand );
+        CPPUNIT_TEST( AssignImageList );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -69,6 +72,7 @@ private:
     void Iteration();
     void Parent();
     void CollapseExpand();
+    void AssignImageList();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -460,4 +464,21 @@ void TreeCtrlTestCase::CollapseExpand()
     m_tree->CollapseAndReset(m_root);
 
     CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+}
+
+void TreeCtrlTestCase::AssignImageList()
+{
+    wxSize size(16, 16);
+
+    wxImageList *imagelist = new wxImageList(size.x, size.y);
+    imagelist->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, size));
+
+    wxImageList *statelist = new wxImageList(size.x, size.y);
+    statelist->Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, size));
+
+    m_tree->AssignImageList(imagelist);
+    m_tree->AssignStateImageList(statelist);
+
+    CPPUNIT_ASSERT_EQUAL(imagelist, m_tree->GetImageList());
+    CPPUNIT_ASSERT_EQUAL(statelist, m_tree->GetStateImageList());
 }
