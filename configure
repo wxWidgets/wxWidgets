@@ -42527,6 +42527,8 @@ if test "$wxUSE_DEBUG_GDB" = "yes" ; then
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "no" ; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
+
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
