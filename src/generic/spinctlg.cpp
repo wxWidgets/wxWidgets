@@ -561,6 +561,11 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
     wxCHECK_RET( digits <= 20, "too many digits for wxSpinCtrlDouble" );
 
+    if ( digits == m_digits )
+        return;
+
+    m_digits = digits;
+
     m_format.Printf(wxT("%%0.%ulf"), digits);
 
     DoSetValue(m_value);
