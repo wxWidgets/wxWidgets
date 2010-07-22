@@ -96,7 +96,7 @@ public:
     // shouldn't accept the focus at all and any attempts to explicitly set
     // focus to it should give focus to its text constol part
     virtual bool AcceptsFocus() const { return false; }
-    virtual void SetFocus() { if ( m_textCtrl ) m_textCtrl->SetFocus(); }
+    virtual void SetFocus();
 
     friend class wxSpinCtrlTextGeneric;
 

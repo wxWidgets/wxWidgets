@@ -279,6 +279,12 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 // operations forwarded to the subcontrols
 // ----------------------------------------------------------------------------
 
+void wxSpinCtrlGenericBase::SetFocus()
+{
+    if ( m_textCtrl )
+        m_textCtrl->SetFocus();
+}
+
 bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
     // Notice that we never enable this control itself, it must stay disabled
