@@ -25,33 +25,31 @@ addressed sooner.
 
 
 Unarchiving
-============================================================
+===========
 
-A setup program is provided (wxMSW-x.x.x-setup.exe) to automatically copy
-files to a directory on your hard disk. Do not install into a
-path that contains spaces.
+Please simply uncompress the .zip file manually into any directory.
+However we advise avoiding using directories with spaces in their
+names (notably "C:\Program Files") as this risks creating problems
+with makefiles and other command-line tools.
 
-The setup program contains the following:
 
-- All common, generic and MSW-specific wxWidgets source;
-- samples and demos;
-- documentation in MS HTML Help format;
-- makefiles for most Windows compilers, plus CodeWarrior
-  and VC++ IDE files;
-- JPEG, TIFF, PNG, ZLIB, wxSTC, REGEX, EXPAT library sources.
+Configuration
+=============
 
-Alternatively, you may unarchive the .zip form by hand:
-wxMSW-x.y.z.zip where x.y.z is the version number.
+In the majority of cases, you don't need to change the default
+library build configuration. If you wish to change some of the build
+options you need to edit the include/wx/msw/setup.h file enabling or
+disabling the features you would like to compile wxWidgets with[out].
 
-Unarchive the required files plus any optional documentation
-files into a suitable directory such as c:\wx.
+NB: If you checked your sources from version control repository and
+    didn't obtain them from a release file, the file above doesn't
+    exist and you will need to copy include/wx/msw/setup0.h to
+    include/wx/msw/setup.h.
 
-General installation notes
-==========================
+Notice that this file is later copied into a directory under lib for
+each of the build configurations which allows to have different
+build options for different configurations too.
 
-If installing from the SVN server, copy include/wx/msw/setup0.h to
-include/wx/msw/setup.h and edit the resulting file to choose
-the features you would like to compile wxWidgets with[out].
 
 Compilation
 ===========
