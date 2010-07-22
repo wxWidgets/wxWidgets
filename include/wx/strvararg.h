@@ -318,7 +318,11 @@ struct wxFormatStringArgumentFinder<wxWCharBuffer>
                           "format specifier doesn't match argument type" ); \
         } while ( wxFalse )
 #else
-    #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)
+    // Just define it to suppress "unused parameter" warnings for the
+    // parameters which we don't use otherwise
+    #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)                      \
+        wxUnusedVar(fmt);                                                     \
+        wxUnusedVar(index)
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
 

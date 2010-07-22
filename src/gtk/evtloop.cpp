@@ -91,7 +91,7 @@ void wxGUIEventLoop::WakeUp()
 
 extern "C"
 {
-static gboolean wx_on_channel_event(GIOChannel *channel,
+static gboolean wx_on_channel_event(GIOChannel * WXUNUSED_UNLESS_DEBUG(channel),
                                     GIOCondition condition,
                                     gpointer data)
 {
