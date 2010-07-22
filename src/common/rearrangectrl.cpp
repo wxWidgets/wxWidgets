@@ -150,8 +150,8 @@ void wxRearrangeList::Swap(int pos1, int pos2)
 
         case wxClientData_Object:
             {
-                wxClientData * const dataTmp = GetClientObject(pos1);
-                SetClientObject(pos1, GetClientObject(pos2));
+                wxClientData * const dataTmp = DetachClientObject(pos1);
+                SetClientObject(pos1, DetachClientObject(pos2));
                 SetClientObject(pos2, dataTmp);
             }
             break;
