@@ -160,6 +160,7 @@
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
             controls/slidertest.cpp
+            controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
