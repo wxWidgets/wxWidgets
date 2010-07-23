@@ -682,10 +682,10 @@ Basic Options
 ----------------------------------------------------------------
 
 BUILD=release
-  Builds release version of the library. It differs from default 'debug'
-  in lack of appended 'd' in name of library, does not define __WXDEBUG__
-  and not include debug information compiled into object files and the
-  executable.
+  Builds release version of the library. It differs from default 'debug' in
+  lack of appended 'd' in name of library and uses the release CRT libraries
+  instead of debug ones. Notice that even release builds do include debug
+  information by default, see DEBUG_FLAG for more information about it.
 
 SHARED=1
   Build shared libraries (DLLs). By default, DLLs are not built
@@ -751,16 +751,22 @@ MSLU=1
 
 DEBUG_FLAG=0
 DEBUG_FLAG=1
-  If set to 1, define __WXDEBUG__ symbol, append 'd' to library name and do
-  sanity checks at runtime. If set to 0, don't do it. By default, this is
-  governed by BUILD option (if 'debug', DEBUG_FLAG=1, if 'release' it is 0),
-  but it is sometimes desirable to modify default behaviour and e.g. define
-  __WXDEBUG__ even in release builds.
+DEBUG_FLAG=2
+  Specifies the level of debug support in wxWidgets. Notice that
+  this is independent from both BUILD and DEBUG_INFO options. By default
+  always set to 1 meaning that debug support is enabled: asserts are compiled
+  into the code (they are inactive by default in release builds of the
+  application but can be enabled), wxLogDebug() and wxLogTrace() are available
+  and __WXDEBUG__ is defined. Setting it to 0 completely disables all
+  debugging code in wxWidgets while setting it to 2 enables even the time
+  consuming assertions and checks which are deemed to be unsuitable for
+  production environment.
 
 DEBUG_INFO=0
 DEBUG_INFO=1
-  Same as DEBUG_FLAG in behaviour, this option affects whether debugging
-  information is included in the executable or not.
+  This option affects whether debugging information is generated. If
+  omitted or set to 'default' its value is determined the value of
+  the BUILD option.
 
 TARGET_CPU=AMD64|IA64
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
