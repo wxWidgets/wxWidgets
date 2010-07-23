@@ -2909,7 +2909,23 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
 
-    UpdateTabCtrlHeight();
+    // Update the height and do nothing else if it did something but otherwise
+    // (i.e. if the new art provider uses the same height as the old one) we
+    // need to manually set the art provider for all tabs ourselves.
+    if ( !UpdateTabCtrlHeight() )
+    {
+        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+        const size_t pane_count = all_panes.GetCount();
+        for (size_t i = 0; i < pane_count; ++i)
+        {
+            wxAuiPaneInfo& pane = all_panes.Item(i);
+            if (pane.name == wxT("dummy"))
+                continue;
+            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+            wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+            tabctrl->SetArtProvider(art->Clone());
+        }
+    }
 }
 
 // SetTabCtrlHeight() is the highest-level override of the
@@ -2950,34 +2966,36 @@ void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
 }
 
 // UpdateTabCtrlHeight() does the actual tab resizing. It's meant
-// to be used interally
-void wxAuiNotebook::UpdateTabCtrlHeight()
+// to be used internally
+bool wxAuiNotebook::UpdateTabCtrlHeight()
 {
     // get the tab ctrl height we will use
     int height = CalculateTabCtrlHeight();
 
     // if the tab control height needs to change, update
     // all of our tab controls with the new height
-    if (m_tab_ctrl_height != height)
+    if (m_tab_ctrl_height == height)
+        return false;
+
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+
+    m_tab_ctrl_height = height;
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
     {
-        wxAuiTabArt* art = m_tabs.GetArtProvider();
-
-        m_tab_ctrl_height = height;
-
-        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-        size_t i, pane_count = all_panes.GetCount();
-        for (i = 0; i < pane_count; ++i)
-        {
-            wxAuiPaneInfo& pane = all_panes.Item(i);
-            if (pane.name == wxT("dummy"))
-                continue;
-            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
-            wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
-            tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
-            tabctrl->SetArtProvider(art->Clone());
-            tab_frame->DoSizing();
-        }
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+        tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
+        tabctrl->SetArtProvider(art->Clone());
+        tab_frame->DoSizing();
     }
+
+    return true;
 }
 
 void wxAuiNotebook::UpdateHintWindowSize()
