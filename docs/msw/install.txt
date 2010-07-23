@@ -142,8 +142,7 @@ Using project files (VC++ 6 and later):
    Alternatively, use the special wx_dll.dsw project which adds the
    dependencies to force the correct order (but, because of this, doesn't work
    for the static libraries) or simply redo the build several times until all
-   DLLs are linked correctly. Please notice that it's normal that dbgrid project
-   doesn't build if wxUSE_ODBC is set to 0 (default).
+   DLLs are linked correctly.
 3. Open a sample project file, choose a configuration such as
    Win32 Debug using Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save disk
@@ -300,12 +299,7 @@ make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, change CPPFLAGS in build\msw\config.bcc.
 
-Note (2): if you get undefined _SQL... symbols at link time,
-either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
-directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
-recompile wxWidgets. The same applies if compiling using the IDE.
-
-Note (3): If you wish debug messages to be sent to the console in
+Note (2): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 
 Using the Debugger and IDE in BDS or Turbo Explorer
@@ -355,22 +349,18 @@ Watcom C++ 10.6/11 and OpenWatcom Compilation
 2. Change directory to samples\minimal and type 'wmake -f makefile.wat'
    to make this sample. Repeat for other samples of interest.
 
-Note (1): if your installation of Watcom doesn't have odbc32.lib file and
-          you need it (i.e. you have wxUSE_ODBC=1), you can use the file
-          from lib\watcom directory. See the notes in that directory.
-
-Note (2): if variant.cpp is compiled with date/time class options, the linker
+Note (1): if variant.cpp is compiled with date/time class options, the linker
           gives up. So the date/time option is switched off for Watcom C++.
           Also, wxAutomationObject is not compiled with Watcom C++ 10.
 
-Note (3): RawBitmaps won't work at present because they use unsupported template
+Note (2): RawBitmaps won't work at present because they use unsupported template
           classes
 
-Note (4): if Watcom can't read the precompiled header when building a sample,
+Note (3): if Watcom can't read the precompiled header when building a sample,
           try deleting .pch files in build\msw\wat_* and compiling
           the sample again.
 
-Note (5): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
+Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
           compiler doesn't come with standard C++ library headers by default.
           If you install STLPort or another STL implementation, you'll need to
           edit wx/string.h and remove the check for Digital Mars in it (search
@@ -734,11 +724,6 @@ USE_OPENGL=1
   You must also modify your setup.h to #define wxUSE_GLCANVAS 1. Note that
   OpenGL library is always built as additional library, even in monolithic
   build!
-
-USE_ODBC=1
-  Build two additional libraries in multilib mode, one with database
-  classes and one with wxGrid database support. You must
-  #define wxUSE_ODBC 1 in setup.h
 
 USE_HTML=0
   Do not build wxHTML library. If MONOLITHIC=1, then you must also
