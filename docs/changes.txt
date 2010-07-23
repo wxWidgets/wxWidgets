@@ -411,6 +411,7 @@ MSW:
 All (GUI):
 
 - wxAUI: support auto-orientable toolbars (wsu).
+- wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 
 
