@@ -21,6 +21,7 @@
 #include "wx/listctrl.h"
 #include "listbasetest.h"
 #include "testableframe.h"
+#include "asserthelper.h"
 #include "wx/uiaction.h"
 
 void ListBaseTestCase::ColumnsOrder()
@@ -331,4 +332,26 @@ void ListBaseTestCase::Visible()
     list->EnsureVisible(count + 9);
 
     CPPUNIT_ASSERT(list->GetTopItem() != 0);
+}
+
+void ListBaseTestCase::ItemFormatting()
+{
+    wxListCtrl* const list = GetList();
+
+    list->InsertColumn(0, "Column 0");
+
+    list->InsertItem(0, "Item 0");
+    list->InsertItem(1, "Item 1");
+    list->InsertItem(2, "Item 2");
+
+    list->SetTextColour(*wxYELLOW);
+    list->SetBackgroundColour(*wxGREEN);
+    list->SetItemTextColour(0, *wxRED);
+    list->SetItemBackgroundColour(1, *wxBLUE);
+
+    CPPUNIT_ASSERT_EQUAL(*wxGREEN, list->GetBackgroundColour());
+    CPPUNIT_ASSERT_EQUAL(*wxBLUE,list->GetItemBackgroundColour(1));
+
+    CPPUNIT_ASSERT_EQUAL(*wxYELLOW, list->GetTextColour());
+    CPPUNIT_ASSERT_EQUAL(*wxRED, list->GetItemTextColour(0));
 }

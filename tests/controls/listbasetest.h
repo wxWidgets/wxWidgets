@@ -29,7 +29,8 @@ protected:
         CPPUNIT_TEST( DeleteItems ); \
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
-        CPPUNIT_TEST( Visible )
+        CPPUNIT_TEST( Visible ); \
+        CPPUNIT_TEST( ItemFormatting )
 
     void ColumnsOrder();
     void ItemRect();
@@ -41,6 +42,7 @@ protected:
     void InsertItem();
     void Find();
     void Visible();
+    void ItemFormatting();
 
     DECLARE_NO_COPY_CLASS(ListBaseTestCase)
 };
