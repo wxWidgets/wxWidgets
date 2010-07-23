@@ -400,6 +400,14 @@ Major new features in this release
   was added.
 
 
+2.9.2:
+------
+
+MSW:
+
+- Fix Cygwin 1.7 build (David Gangola).
+
+
 2.9.1:
 ------
 

@@ -49,7 +49,7 @@
 
 #include <errno.h>
 
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__CYGWIN__)
     #include <netdb.h>
     #include <arpa/inet.h>
 #endif // __UNIX__
@@ -82,8 +82,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #ifdef __WXMSW__
     #define HAVE_INET_ADDR
 
+    #ifndef HAVE_GETHOSTBYNAME
     #define HAVE_GETHOSTBYNAME
+    #endif
+    #ifndef HAVE_GETSERVBYNAME
     #define HAVE_GETSERVBYNAME
+    #endif
 
     // under MSW getxxxbyname() functions are MT-safe (but not reentrant) so
     // we don't need to serialize calls to them

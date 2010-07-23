@@ -67,7 +67,9 @@
 #if defined(__CYGWIN__)
     #include <sys/unistd.h>
     #include <sys/stat.h>
-    #include <sys/cygwin.h> // for cygwin_conv_to_full_win32_path()
+    #include <sys/cygwin.h> // for cygwin_conv_path()
+    // and cygwin_conv_to_full_win32_path()
+    #include <cygwin/version.h>
 #endif  //GNUWIN32
 
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
@@ -367,7 +369,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 
     // first branch is for Cygwin
 #if defined(__UNIX__) && !defined(__WINE__)
-    const wxChar *szHome = wxGetenv("HOME");
+    const wxChar *szHome = wxGetenv(wxT("HOME"));
     if ( szHome == NULL ) {
       // we're homeless...
       wxLogWarning(_("can't find user's HOME, using current directory."));
@@ -383,7 +385,11 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     #ifdef __CYGWIN__
         // Cygwin returns unix type path but that does not work well
         static wxChar windowsPath[MAX_PATH];
-        cygwin_conv_to_full_win32_path(strDir, windowsPath);
+        #if CYGWIN_VERSION_DLL_MAJOR >= 1007
+            cygwin_conv_path(CCP_POSIX_TO_WIN_W, strDir, windowsPath, MAX_PATH);
+        #else
+            cygwin_conv_to_full_win32_path(strDir, windowsPath);
+        #endif
         strDir = windowsPath;
     #endif
 #elif defined(__WXWINCE__)
@@ -494,7 +500,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
         ULARGE_INTEGER bytesFree, bytesTotal;
 
         // may pass the path as is, GetDiskFreeSpaceEx() is smart enough
-        if ( !pGetDiskFreeSpaceEx(path.fn_str(),
+        if ( !pGetDiskFreeSpaceEx(path.t_str(),
                                   &bytesFree,
                                   &bytesTotal,
                                   NULL) )
@@ -544,7 +550,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
 
         // FIXME: this is wrong, we should extract the root drive from path
         //        instead, but this is the job for wxFileName...
-        if ( !::GetDiskFreeSpace(path.fn_str(),
+        if ( !::GetDiskFreeSpace(path.t_str(),
                                  &lSectorsPerCluster,
                                  &lBytesPerSector,
                                  &lNumberOfFreeClusters,
