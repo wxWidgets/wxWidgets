@@ -662,6 +662,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
         nShowCmd = SW_HIDE;
     }
 
+#if wxUSE_DEFERRED_SIZING
     // we only set pending size if we're maximized before being shown, now that
     // we're shown we don't need it any more (it is reset in size event handler
     // for child windows but we have to do it ourselves for this parent window)
@@ -671,6 +672,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
     // them, not the size returned by WM_NCCALCSIZE in DoGetClientSize() which
     // turns out to be wrong for maximized windows (see #11762)
     m_pendingSize = wxDefaultSize;
+#endif // wxUSE_DEFERRED_SIZING
 
     DoShowWindow(nShowCmd);
 
@@ -701,6 +703,7 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // so just remember that we should do it later in this case
         m_maximizeOnShow = maximize;
 
+#if wxUSE_DEFERRED_SIZING
         // after calling Maximize() the client code expects to get the frame
         // "real" size and doesn't want to know that, because of implementation
         // details, the frame isn't really maximized yet but will be only once
@@ -718,6 +721,7 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
             m_pendingSize = wxGetClientDisplayRect().GetSize();
         }
         //else: can't do anything in this case, we don't have the old size
+#endif // wxUSE_DEFERRED_SIZING
     }
 }
 

@@ -1865,11 +1865,13 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
     wxWindow * const parent = GetParent();
 
     wxPoint pos;
+#if wxUSE_DEFERRED_SIZING
     if ( m_pendingPosition != wxDefaultPosition )
     {
         pos = m_pendingPosition;
     }
     else // use current position
+#endif // wxUSE_DEFERRED_SIZING
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
