@@ -278,7 +278,7 @@ bool wxCFEventLoop::Pending() const
 
 int wxCFEventLoop::DoProcessEvents()
 {
-    return DispatchTimeout( 1000 );
+    return DispatchTimeout( 0 );
 }
 
 bool wxCFEventLoop::Dispatch()
