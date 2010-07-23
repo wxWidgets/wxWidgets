@@ -411,6 +411,7 @@ MSW:
 All (GUI):
 
 - wxAUI: support auto-orientable toolbars (wsu).
+- Add support for CP-866 encoding to wxEncodingConverter (madnut).
 
 
 2.9.1:
