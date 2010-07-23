@@ -19,6 +19,7 @@
 
 #include "wx/grid.h"
 #include "testableframe.h"
+#include "asserthelper.h"
 #include "wx/uiaction.h"
 
 class GridTestCase : public CppUnit::TestCase
@@ -472,10 +473,9 @@ void GridTestCase::LineFormatting()
 
     m_grid->EnableGridLines();
 
-    m_grid->SetGridLineColour(wxColour(*wxRED));
+    m_grid->SetGridLineColour(*wxRED);
 
-    CPPUNIT_ASSERT_EQUAL(m_grid->GetGridLineColour().GetRGB(), 
-                         wxColour(*wxRED).GetRGB());
+    CPPUNIT_ASSERT_EQUAL(m_grid->GetGridLineColour(), *wxRED);
 }
 
 void GridTestCase::SortSupport()
@@ -511,13 +511,11 @@ void GridTestCase::Labels()
     CPPUNIT_ASSERT_EQUAL("Column 1", m_grid->GetColLabelValue(0));
     CPPUNIT_ASSERT_EQUAL("Row 1", m_grid->GetRowLabelValue(0));
 
-    m_grid->SetLabelTextColour(wxColour(*wxGREEN));
-    m_grid->SetLabelBackgroundColour(wxColour(*wxRED));
+    m_grid->SetLabelTextColour(*wxGREEN);
+    m_grid->SetLabelBackgroundColour(*wxRED);
 
-    CPPUNIT_ASSERT_EQUAL(wxColour(*wxGREEN).GetRGB(), 
-                         m_grid->GetLabelTextColour().GetRGB());
-    CPPUNIT_ASSERT_EQUAL(wxColour(*wxRED).GetRGB(), 
-                         m_grid->GetLabelBackgroundColour().GetRGB());
+    CPPUNIT_ASSERT_EQUAL(*wxGREEN, m_grid->GetLabelTextColour());
+    CPPUNIT_ASSERT_EQUAL(*wxRED, m_grid->GetLabelBackgroundColour());
 
     m_grid->SetColLabelTextOrientation(wxVERTICAL);
 

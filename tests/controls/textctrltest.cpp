@@ -24,6 +24,7 @@
 
 #include "textentrytest.h"
 #include "testableframe.h"
+#include "asserthelper.h"
 #include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
@@ -312,22 +313,18 @@ void TextCtrlTestCase::Style()
     //Red text on a white background
     m_text->SetDefaultStyle(wxTextAttr(*wxRED, *wxWHITE));
 
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
-                         wxColour(*wxRED).GetRGB());
-
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
-                         wxColour(*wxWHITE).GetRGB());
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour(), *wxRED);
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour(), 
+                         *wxWHITE);
 
     m_text->AppendText("red on white ");
 
     //Red text on a grey backgroud
     m_text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
 
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
-                         wxColour(*wxRED).GetRGB());
-
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
-                         wxColour(*wxLIGHT_GREY).GetRGB());
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour(), *wxRED);
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour(), 
+                         *wxLIGHT_GREY);
 
     m_text->AppendText("red on grey ");
 
@@ -335,11 +332,9 @@ void TextCtrlTestCase::Style()
     m_text->SetDefaultStyle(wxTextAttr(*wxBLUE));
 
 
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
-                         wxColour(*wxBLUE).GetRGB());
-
-    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
-                         wxColour(*wxLIGHT_GREY).GetRGB());
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour(), *wxBLUE);
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour(), 
+                         *wxLIGHT_GREY);
 
     m_text->AppendText("blue on grey");
 
@@ -349,11 +344,8 @@ void TextCtrlTestCase::Style()
     //We have to check that styles are supported
     if(m_text->GetStyle(3, style))
     {
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour().GetRGB(), 
-                             wxColour(*wxRED).GetRGB());
-
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour().GetRGB(), 
-                             wxColour(*wxWHITE).GetRGB());
+        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
+        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
     }
 
     //And then setting the style
@@ -361,11 +353,8 @@ void TextCtrlTestCase::Style()
     {
         m_text->GetStyle(17, style);
 
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour().GetRGB(), 
-                             wxColour(*wxRED).GetRGB());
-
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour().GetRGB(), 
-                             wxColour(*wxWHITE).GetRGB());
+        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
+        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
     }
 }
 
