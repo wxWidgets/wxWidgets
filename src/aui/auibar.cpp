@@ -792,6 +792,22 @@ int wxAuiDefaultToolBarArt::ShowDropDown(wxWindow* wnd,
 
 
 
+static wxOrientation GetOrientation(long& style)
+{
+    switch (style & wxAUI_ORIENTATION_MASK)
+    {
+        case wxAUI_TB_HORIZONTAL:
+            return wxHORIZONTAL;
+        case wxAUI_TB_VERTICAL:
+            return wxVERTICAL;
+        default:
+            wxFAIL_MSG("toolbar cannot be locked in both horizontal and vertical orientations (maybe no lock was intended?)");
+            // fall through
+        case 0:
+            return wxBOTH;
+    }
+}
+
 BEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_SIZE(wxAuiToolBar::OnSize)
     EVT_IDLE(wxAuiToolBar::OnIdle)
@@ -837,13 +853,18 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     m_gripper_sizer_item = NULL;
     m_overflow_sizer_item = NULL;
     m_dragging = false;
+    m_orientation = GetOrientation(style);
+    if (m_orientation == wxBOTH)
+    {
+        m_orientation = wxHORIZONTAL;
+    }
     m_style = style | wxBORDER_NONE;
     m_gripper_visible = (m_style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflow_visible = (m_style & wxAUI_TB_OVERFLOW) ? true : false;
     m_overflow_state = 0;
     SetMargins(5, 5, 2, 2);
     SetFont(*wxNORMAL_FONT);
-    m_art->SetFlags((unsigned int)m_style);
+    SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
@@ -859,13 +880,17 @@ wxAuiToolBar::~wxAuiToolBar()
 
 void wxAuiToolBar::SetWindowStyleFlag(long style)
 {
+    GetOrientation(style);      // assert if style is invalid
+    wxCHECK_RET(IsPaneValid(style),
+                "window settings and pane settings are incompatible");
+
     wxControl::SetWindowStyleFlag(style);
 
     m_style = style;
 
     if (m_art)
     {
-        m_art->SetFlags((unsigned int)m_style);
+        SetArtFlags();
     }
 
     if (m_style & wxAUI_TB_GRIPPER)
@@ -898,7 +923,7 @@ void wxAuiToolBar::SetArtProvider(wxAuiToolBarArt* art)
 
     if (m_art)
     {
-        m_art->SetFlags((unsigned int)m_style);
+        SetArtFlags();
         m_art->SetTextOrientation(m_tool_text_orientation);
     }
 }
@@ -1342,8 +1367,16 @@ int wxAuiToolBar::GetToolPacking() const
 }
 
 
-void wxAuiToolBar::SetOrientation(int WXUNUSED(orientation))
+void wxAuiToolBar::SetOrientation(int orientation)
 {
+    wxCHECK_RET(orientation == wxHORIZONTAL ||
+                orientation == wxVERTICAL,
+                "invalid orientation value");
+    if (orientation != m_orientation)
+    {
+        m_orientation = wxOrientation(orientation);
+        SetArtFlags();
+    }
 }
 
 void wxAuiToolBar::SetMargins(int left, int right, int top, int bottom)
@@ -1651,6 +1684,65 @@ void wxAuiToolBar::SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
     m_custom_overflow_append = append;
 }
 
+// get size of hint rectangle for a particular dock location
+wxSize wxAuiToolBar::GetHintSize(int dock_direction) const
+{
+    switch (dock_direction)
+    {
+        case wxAUI_DOCK_TOP:
+        case wxAUI_DOCK_BOTTOM:
+            return m_horzHintSize;
+        case wxAUI_DOCK_RIGHT:
+        case wxAUI_DOCK_LEFT:
+            return m_vertHintSize;
+        default:
+            wxCHECK_MSG(false, wxDefaultSize, "invalid dock location value");
+    }
+}
+
+bool wxAuiToolBar::IsPaneValid(const wxAuiPaneInfo& pane) const
+{
+    return IsPaneValid(m_style, pane);
+}
+
+bool wxAuiToolBar::IsPaneValid(long style, const wxAuiPaneInfo& pane)
+{
+    if (style & wxAUI_TB_HORIZONTAL)
+    {
+        if (pane.IsLeftDockable() || pane.IsRightDockable())
+        {
+            return false;
+        }
+    }
+    else if (style & wxAUI_TB_VERTICAL)
+    {
+        if (pane.IsTopDockable() || pane.IsBottomDockable())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool wxAuiToolBar::IsPaneValid(long style) const
+{
+    wxAuiManager* manager = wxAuiManager::GetManager(const_cast<wxAuiToolBar*>(this));
+    if (manager)
+    {
+        return IsPaneValid(style, manager->GetPane(const_cast<wxAuiToolBar*>(this)));
+    }
+    return true;
+}
+
+void wxAuiToolBar::SetArtFlags() const
+{
+    unsigned int artflags = m_style & ~wxAUI_ORIENTATION_MASK;
+    if (m_orientation == wxVERTICAL)
+    {
+        artflags |= wxAUI_TB_VERTICAL;
+    }
+    m_art->SetFlags(artflags);
+}
 
 size_t wxAuiToolBar::GetToolCount() const
 {
@@ -1688,7 +1780,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
 
     wxRect rect = m_items[tool_idx].sizer_item->GetRect();
 
-    if (m_style & wxAUI_TB_VERTICAL)
+    if (m_orientation == wxVERTICAL)
     {
         // take the dropdown size into account
         if (m_overflow_visible)
@@ -1745,11 +1837,40 @@ bool wxAuiToolBar::Realize()
     if (!dc.IsOk())
         return false;
 
-    bool horizontal = true;
-    if (m_style & wxAUI_TB_VERTICAL)
-        horizontal = false;
+    // calculate hint sizes for both horizontal and vertical
+    // in the order that leaves toolbar in correct final state
+    bool retval = false;
+    if (m_orientation == wxHORIZONTAL)
+    {
+        if (RealizeHelper(dc, false))
+        {
+            m_vertHintSize = GetSize();
+            if (RealizeHelper(dc, true))
+            {
+                m_horzHintSize = GetSize();
+                retval = true;
+            }
+        }
+    }
+    else
+    {
+        if (RealizeHelper(dc, true))
+        {
+            m_horzHintSize = GetSize();
+            if (RealizeHelper(dc, false))
+            {
+                m_vertHintSize = GetSize();
+                retval = true;
+            }
+        }
+    }
 
+    Refresh(false);
+    return retval;
+}
 
+bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
+{
     // create the new sizer to add toolbar elements to
     wxBoxSizer* sizer = new wxBoxSizer(horizontal ? wxHORIZONTAL : wxVERTICAL);
 
@@ -1986,7 +2107,6 @@ bool wxAuiToolBar::Realize()
         m_sizer->SetDimension(0, 0, cur_size.x, cur_size.y);
     }
 
-    Refresh(false);
     return true;
 }
 
@@ -2001,7 +2121,7 @@ wxRect wxAuiToolBar::GetOverflowRect() const
     wxRect overflow_rect = m_overflow_sizer_item->GetRect();
     int overflow_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
 
-    if (m_style & wxAUI_TB_VERTICAL)
+    if (m_orientation == wxVERTICAL)
     {
         overflow_rect.y = cli_rect.height - overflow_size;
         overflow_rect.x = 0;
@@ -2119,11 +2239,6 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     int x, y;
     GetClientSize(&x, &y);
 
-    if (x > y)
-        SetOrientation(wxHORIZONTAL);
-    else
-        SetOrientation(wxVERTICAL);
-
     if (((x >= y) && m_absolute_min_size.x > x) ||
         ((y > x) && m_absolute_min_size.y > y))
     {
@@ -2158,6 +2273,11 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 
     Refresh(false);
     Update();
+
+    // idle events aren't sent while user is resizing frame (why?),
+    // but resizing toolbar here causes havoc,
+    // so force idle handler to run after size handling complete
+    QueueEvent(new wxIdleEvent);
 }
 
 
@@ -2180,6 +2300,76 @@ void wxAuiToolBar::DoSetSize(int x,
 
 void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 {
+    // if orientation doesn't match dock, fix it
+    wxAuiManager* manager = wxAuiManager::GetManager(this);
+    if (manager)
+    {
+        wxAuiPaneInfo& pane = manager->GetPane(this);
+        // pane state member is public, so it might have been changed
+        // without going through wxPaneInfo::SetFlag() check
+        bool ok = pane.IsOk();
+        wxCHECK2_MSG(!ok || IsPaneValid(m_style, pane), ok = false,
+                    "window settings and pane settings are incompatible");
+        if (ok)
+        {
+            wxOrientation newOrientation = m_orientation;
+            if (pane.IsDocked())
+            {
+                switch (pane.dock_direction)
+                {
+                    case wxAUI_DOCK_TOP:
+                    case wxAUI_DOCK_BOTTOM:
+                        newOrientation = wxHORIZONTAL;
+                        break;
+                    case wxAUI_DOCK_LEFT:
+                    case wxAUI_DOCK_RIGHT:
+                        newOrientation = wxVERTICAL;
+                        break;
+                    default:
+                        wxFAIL_MSG("invalid dock location value");
+                }
+            }
+            else if (pane.IsResizable() &&
+                    GetOrientation(m_style) == wxBOTH)
+            {
+                // changing orientation in OnSize causes havoc
+                int x, y;
+                GetClientSize(&x, &y);
+
+                if (x > y)
+                {
+                    newOrientation = wxHORIZONTAL;
+                }
+                else
+                {
+                    newOrientation = wxVERTICAL;
+                }
+            }
+            if (newOrientation != m_orientation)
+            {
+                SetOrientation(newOrientation);
+                Realize();
+                if (newOrientation == wxHORIZONTAL)
+                {
+                    pane.best_size = GetHintSize(wxAUI_DOCK_TOP);
+                }
+                else
+                {
+                    pane.best_size = GetHintSize(wxAUI_DOCK_LEFT);
+                }
+                if (pane.IsDocked())
+                {
+                    pane.floating_size = wxDefaultSize;
+                }
+                else
+                {
+                    SetSize(GetParent()->GetClientSize());
+                }
+                manager->Update();
+            }
+        }
+    }
+
     DoIdleUpdate();
     evt.Skip();
 }
@@ -2190,9 +2380,7 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
 
-    bool horizontal = true;
-    if (m_style & wxAUI_TB_VERTICAL)
-        horizontal = false;
+    bool horizontal = m_orientation == wxHORIZONTAL;
 
 
     m_art->DrawBackground(dc, this, cli_rect);
