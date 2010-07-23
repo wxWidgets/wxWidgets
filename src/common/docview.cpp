@@ -1036,14 +1036,8 @@ wxFileHistory *wxDocManager::OnCreateFileHistory()
 void wxDocManager::OnFileClose(wxCommandEvent& WXUNUSED(event))
 {
     wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        return;
-    if (doc->Close())
-    {
-        doc->DeleteAllViews();
-        if (m_docs.Member(doc))
-            delete doc;
-    }
+    if (doc)
+        CloseDocument(doc);
 }
 
 void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
