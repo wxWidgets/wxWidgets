@@ -789,6 +789,9 @@ void MyCanvas::DrawText(wxDC& dc)
     y += height;
     dc.DrawRectangle( 110, y, 100, height );
     dc.DrawText( wxT("Another visible text"), 110, y );
+
+    y += height;
+    dc.DrawText("And\nmore\ntext on\nmultiple\nlines", 110, y);
 }
 
 static const struct

@@ -596,7 +596,12 @@ public:
 
         The coordinates refer to the top-left corner of the rectangle bounding
         the string. See GetTextExtent() for how to get the dimensions of a text
-        string, which can be used to position the text more precisely.
+        string, which can be used to position the text more precisely and
+        DrawLabel() if you need to align the string differently.
+
+        Starting from wxWidgets 2.9.2 @a text parameter can be a multi-line
+        string, i.e. contain new line characters, and will be rendered
+        correctly.
 
         @note The current @ref GetLogicalFunction() "logical function" is
               ignored by this function.

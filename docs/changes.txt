@@ -406,7 +406,7 @@ Major new features in this release
 MSW:
 
 - Fix Cygwin 1.7 build (David Gangola).
-
+- Allow using wxDC::DrawText() with multiline texts.
 
 2.9.1:
 ------
