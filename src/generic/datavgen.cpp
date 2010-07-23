@@ -1989,9 +1989,12 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
     wxDataViewTreeNode * node = FindNode(parent);
 
-    wxCHECK_MSG( node != NULL, false, "item not found" );
-    wxCHECK_MSG( node->GetChildren().Index( item.GetID() ) != wxNOT_FOUND,
-                 false, "item not found" );
+    // Notice that it is possible that the item being deleted is not in the
+    // tree at all, for example we could be deleting a never shown (because
+    // collapsed) item in a tree model. So it's not an error if we don't know
+    // about this item, just return without doing anything then.
+    if ( !node || node->GetChildren().Index(item.GetID()) == wxNOT_FOUND )
+        return false;
 
     int sub = -1;
     node->GetChildren().Remove( item.GetID() );
