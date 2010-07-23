@@ -236,12 +236,7 @@ wxAuiDefaultTabArt::~wxAuiDefaultTabArt()
 
 wxAuiTabArt* wxAuiDefaultTabArt::Clone()
 {
-    wxAuiDefaultTabArt* art = new wxAuiDefaultTabArt;
-    art->SetNormalFont(m_normal_font);
-    art->SetSelectedFont(m_selected_font);
-    art->SetMeasuringFont(m_measuring_font);
-
-    return art;
+    return new wxAuiDefaultTabArt(*this);
 }
 
 void wxAuiDefaultTabArt::SetFlags(unsigned int flags)
