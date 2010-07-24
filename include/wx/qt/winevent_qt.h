@@ -18,6 +18,10 @@
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
 
+// TODO: Merge wxQtEventForwarder and wxQtSignalForwarder into one class (wxQtNotificationForwarder
+// or wxQtEventSignalForwarder), because we probably need a way to forward both events
+// and signals.
+
 template <typename QtWidget>
 class wxQtEventForwarder : public QtWidget
 {

@@ -40,6 +40,8 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     // Need to store argc, argv. The argc, argv from wxAppBase are
     // being initialized *after* Initialize();
 
+    // TODO: Check whether new/strdup etc. can be replaced with std::vector<>.
+
     // Clone and store arguments
     m_qtArgv = new char *[argc + 1];
     for ( int i = 0; i < argc; i++ )

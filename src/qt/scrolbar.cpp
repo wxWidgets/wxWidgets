@@ -125,6 +125,9 @@ WXWidget wxScrollBar::QtGetScrollBarsContainer() const
 // wxQtScrollBar
 /////////////////////////////////////////////////////////////////////////////
 
+// TODO: Write wxQtConvertOrientation() function to replace
+// Qt::Horizontal ? wxHORIZONTAL : wxVERTICA' etc.
+
 wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, Qt::Orientation orient, QWidget *parent )
     : QScrollBar( orient, parent ),
       wxQtSignalForwarder< wxScrollBar >( scrollBar )
