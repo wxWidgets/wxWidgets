@@ -9,12 +9,6 @@
 #include "wx/qt/dialog_qt.h"
 
 wxQtDialog::wxQtDialog( wxDialog *dialog, QWidget *parent )
-: wxQtEventForwarder< QDialog >( parent )
+    : wxQtEventForwarder< wxDialog, QDialog >( dialog, parent )
 {
-    m_dialog = dialog;
-}
-
-wxWindow *wxQtDialog::GetEventHandler() const
-{
-    return m_dialog;
 }

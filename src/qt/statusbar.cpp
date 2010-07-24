@@ -122,15 +122,11 @@ WXWidget wxStatusBar::QtGetScrollBarsContainer() const
     return 0;
 }
 
-wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )
-    : wxQtEventForwarder< QStatusBar >(parent)
-{
-    m_statusBar = statusBar;
-}
+//==============================================================================
 
-wxWindow *wxQtStatusBar::GetEventHandler() const
+wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )
+    : wxQtEventForwarder< wxStatusBar, QStatusBar >( statusBar, parent)
 {
-    return m_statusBar;
 }
 
 void wxQtStatusBar::resizeEvent ( QResizeEvent * event )

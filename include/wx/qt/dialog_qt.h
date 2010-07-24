@@ -13,19 +13,12 @@
 #include "wx/qt/winevent_qt.h"
 #include <QtGui/QDialog>
 
-class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventForwarder< QDialog >
+class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventForwarder< wxDialog, QDialog >
 {
     Q_OBJECT
 
     public:
         wxQtDialog( wxDialog *dialog, QWidget *parent );
-
-    protected:
-        virtual wxWindow *GetEventHandler() const;
-
-    private:
-        wxDialog *m_dialog;
-
 };
 
 #endif // _WX_QT_DIALOG_QT_H_

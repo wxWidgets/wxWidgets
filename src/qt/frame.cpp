@@ -76,13 +76,7 @@ QWidget *wxFrame::QtGetScrollBarsContainer() const
 //=============================================================================
 
 wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
-    : wxQtEventForwarder< QMainWindow >( parent )
+    : wxQtEventForwarder< wxFrame, QMainWindow >( frame, parent )
 {
-    m_frame = frame;
     setCentralWidget(new QWidget());
-}
-
-wxWindow *wxQtFrame::GetEventHandler() const
-{
-    return m_frame;
 }

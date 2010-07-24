@@ -136,6 +136,7 @@ int wxMessageDialog::ShowModal()
         case QMessageBox::No:
             return wxID_NO;
         default:
+            wxFAIL_MSG( wxT( "unexpected QMessageBox return code"));
             return -1;
     }                                        
 }
@@ -148,12 +149,6 @@ QMessageBox *wxMessageDialog::GetHandle() const
 //=============================================================================
 
 wxQtMessageDialog::wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent )
-: wxQtEventForwarder< QMessageBox >( parent )
+    : wxQtEventForwarder< wxMessageDialog, QMessageBox >( dialog, parent )
 {
-    m_messageDialog = dialog;
-}
-
-wxWindow *wxQtMessageDialog::GetEventHandler() const
-{
-    return m_messageDialog;
 }

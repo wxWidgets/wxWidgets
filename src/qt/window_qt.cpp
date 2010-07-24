@@ -9,12 +9,6 @@
 #include "wx/qt/window_qt.h"
 
 wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
-: wxQtEventForwarder< QWidget >( parent )
+    : wxQtEventForwarder< wxWindow, QWidget >( window, parent )
 {
-    m_wxWindow = window;
-}
-
-wxWindow *wxQtWidget::GetEventHandler() const
-{
-    return m_wxWindow;
 }

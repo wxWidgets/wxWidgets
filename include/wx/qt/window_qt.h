@@ -13,19 +13,12 @@
 #include "wx/qt/winevent_qt.h"
 #include <QtGui/QWidget>
 
-class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< QWidget >
+class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< wxWindow, QWidget >
 {
     Q_OBJECT
 
     public:
         wxQtWidget( wxWindow *window, QWidget *parent );
-        
-    protected:
-        virtual wxWindow *GetEventHandler() const;
-
-    private:
-        wxWindow *m_wxWindow;
-
 };
 
 #endif

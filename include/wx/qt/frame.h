@@ -51,21 +51,14 @@ private:
 
 
 
-class WXDLLIMPEXP_CORE wxQtFrame : public wxQtEventForwarder< QMainWindow >
+class WXDLLIMPEXP_CORE wxQtFrame : public wxQtEventForwarder< wxFrame, QMainWindow >
 {
     Q_OBJECT
 
 public:
     wxQtFrame( wxFrame *frame, QWidget *parent );
 
-protected:
-    virtual wxWindow *GetEventHandler() const;
-    
 private Q_SLOTS:
-
-private:
-    wxFrame *m_frame;
-
 };
 
 

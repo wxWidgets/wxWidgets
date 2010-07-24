@@ -50,18 +50,13 @@ private:
     DECLARE_DYNAMIC_CLASS( wxStatusBar )
 };
 
-class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventForwarder< QStatusBar >
+class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventForwarder< wxStatusBar, QStatusBar >
 {
     public:
         wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent );
         
     protected:
-        virtual wxWindow *GetEventHandler() const;
         virtual void resizeEvent ( QResizeEvent * event );
-        
-    private:
-        wxStatusBar *m_statusBar;
-        
 };
 
 #endif // _WX_QT_STATUSBAR_H_

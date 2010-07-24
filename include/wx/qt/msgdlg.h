@@ -34,19 +34,12 @@ private:
     QPointer< QMessageBox > m_qtMessageBox;
 };
 
-class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventForwarder< QMessageBox >
+class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventForwarder< wxMessageDialog, QMessageBox >
 {
     Q_OBJECT
     
     public:
         wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent );
-        
-    protected:
-        virtual wxWindow *GetEventHandler() const;
-        
-    private:
-        wxMessageDialog *m_messageDialog;
-        
 };
 
 #endif // _WX_QT_MSGDLG_H_
