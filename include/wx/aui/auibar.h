@@ -20,8 +20,8 @@
 #include "wx/sizer.h"
 #include "wx/pen.h"
 
-//class WXDLLIMPEXP_FWD_CORE wxSizerItem;
-class wxAuiPaneInfo;
+class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
 enum wxAuiToolBarStyle
 {
