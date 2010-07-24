@@ -678,6 +678,7 @@ MyFrame::MyFrame()
 
     // 500 width * 2750 height
     m_canvas->SetScrollbars( 10, 10, 50, 275 );
+    m_canvas->SetCursor(wxImage("cursor.png"));
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
