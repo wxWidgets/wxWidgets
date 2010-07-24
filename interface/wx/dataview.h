@@ -227,7 +227,7 @@ public:
     /**
         Call this to inform the model that an item has been added to the data.
     */
-    virtual bool ItemAdded(const wxDataViewItem& parent,
+    bool ItemAdded(const wxDataViewItem& parent,
                            const wxDataViewItem& item);
 
     /**
@@ -236,18 +236,18 @@ public:
         This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
     */
-    virtual bool ItemChanged(const wxDataViewItem& item);
+    bool ItemChanged(const wxDataViewItem& item);
 
     /**
         Call this to inform the model that an item has been deleted from the data.
     */
-    virtual bool ItemDeleted(const wxDataViewItem& parent,
+    bool ItemDeleted(const wxDataViewItem& parent,
                              const wxDataViewItem& item);
 
     /**
         Call this to inform the model that several items have been added to the data.
     */
-    virtual bool ItemsAdded(const wxDataViewItem& parent,
+    bool ItemsAdded(const wxDataViewItem& parent,
                             const wxDataViewItemArray& items);
 
     /**
@@ -256,12 +256,12 @@ public:
         This will eventually emit wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
     */
-    virtual bool ItemsChanged(const wxDataViewItemArray& items);
+    bool ItemsChanged(const wxDataViewItemArray& items);
 
     /**
         Call this to inform the model that several items have been deleted.
     */
-    virtual bool ItemsDeleted(const wxDataViewItem& parent,
+    bool ItemsDeleted(const wxDataViewItem& parent,
                               const wxDataViewItemArray& items);
 
     /**
