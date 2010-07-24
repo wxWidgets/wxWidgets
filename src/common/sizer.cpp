@@ -585,20 +585,13 @@ bool wxSizerItem::IsShown() const
             // arbitrarily decide that if at least one of our elements is
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
+            for ( wxSizerItemList::compatibility_iterator
+                    node = m_sizer->GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext() )
             {
-                // Some apps (such as dialog editors) depend on an empty sizer still
-                // being laid out correctly and reporting the correct size and position.
-                if (m_sizer->GetChildren().GetCount() == 0)
+                if ( node->GetData()->IsShown() )
                     return true;
-
-                for ( wxSizerItemList::compatibility_iterator
-                        node = m_sizer->GetChildren().GetFirst();
-                      node;
-                      node = node->GetNext() )
-                {
-                    if ( node->GetData()->IsShown() )
-                        return true;
-                }
             }
             return false;
 
