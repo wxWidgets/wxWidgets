@@ -412,6 +412,7 @@ All (GUI):
 
 - wxAUI: support auto-orientable toolbars (wsu).
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
+- wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 
 

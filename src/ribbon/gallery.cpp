@@ -32,6 +32,7 @@
 
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
 
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonGalleryEvent, wxCommandEvent)
 IMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl)
@@ -356,6 +357,13 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
                     notification.SetGalleryItem(m_selected_item);
                     ProcessWindowEvent(notification);
                 }
+
+                wxRibbonGalleryEvent notification(
+                    wxEVT_COMMAND_RIBBONGALLERY_CLICKED, GetId());
+                notification.SetEventObject(this);
+                notification.SetGallery(this);
+                notification.SetGalleryItem(m_selected_item);
+                ProcessWindowEvent(notification);
             }
         }
         m_mouse_active_rect = NULL;
