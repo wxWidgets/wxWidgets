@@ -1686,7 +1686,20 @@ public:
 
             The user won't be able to select any cells or rows in this mode.
          */
-        wxGridSelectColumns
+        wxGridSelectColumns,
+
+        /**
+            The selection mode allowing the user to select either the entire
+            columns or the entire rows but not individual cells nor blocks.
+
+            Notice that while this constant is defined as @code
+            wxGridSelectColumns | wxGridSelectRows @endcode this doesn't mean
+            that all the other combinations are valid -- at least currently
+            they are not.
+
+            @since 2.9.1
+         */
+        wxGridSelectRowsOrColumns
     };
 
     /**
