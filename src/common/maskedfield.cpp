@@ -586,6 +586,33 @@ bool wxMaskedField::IsAutoSelect() const
 }
 
 
+void wxMaskedField::SetAutoSelect(bool val)
+{
+    m_autoSelect = val;
+}
+
+
+wxString wxMaskedField::AutoSelectString(const wxString& string)
+{
+    wxString res = wxEmptyString;;
+    unsigned int it;
+
+    if(m_autoSelect)
+    {
+        for(it = 0; it < m_choices.GetCount(); it++)
+        {
+            if(m_choices[it].StartsWith(string))
+            {
+                it = m_choices.GetCount();
+                res = m_choices[it];
+            }
+        }
+    }
+
+    return res;
+}
+
+
 
 wxString wxMaskedField::GetPlainValue(const wxString& string)
 {

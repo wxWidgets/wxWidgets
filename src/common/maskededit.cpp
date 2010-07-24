@@ -686,3 +686,47 @@ wxChar wxMaskedEdit::GetFillChar() const
 {
     return m_mask[0]->GetFillChar();
 }
+
+
+bool wxMaskedEdit::IsAutoSelect()
+{
+    return m_mask[0]->IsAutoSelect();
+}
+
+void wxMaskedEdit::SetAutoSelect( bool val)
+{
+    m_mask[0]->SetAutoSelect(val);    
+}
+
+wxString wxMaskedEdit::GetAutoSelect(const wxString& begin)
+{
+    return m_mask[0]->AutoSelectString(begin);    
+}
+
+bool wxMaskedEdit::IsAutoSelect(unsigned int fieldIndex)
+{
+    bool res = false;
+
+    if(m_mask.GetCount() > fieldIndex)
+        res = m_mask[fieldIndex]->IsAutoSelect();
+
+    return res;
+}
+
+void wxMaskedEdit::SetAutoSelect(unsigned int fieldIndex, bool val)
+{
+    if(m_mask.GetCount() > fieldIndex)
+        m_mask[fieldIndex]->SetAutoSelect(val);
+}
+
+wxString wxMaskedEdit::GetAutoSelect(unsigned int fieldIndex, const wxString& begin)
+{
+    wxString res = wxEmptyString;
+
+    if(m_mask.GetCount() > fieldIndex)
+        res = m_mask[fieldIndex]->AutoSelectString(begin);
+
+    return res;
+}
+
+

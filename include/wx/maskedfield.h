@@ -81,6 +81,10 @@ public:
     bool IsParensForNegatives() const;
 
     bool IsAutoSelect() const;
+    
+    void SetAutoSelect(bool val = true);
+
+    wxString AutoSelectString(const wxString& string);
 
     wxString GetPlainValue(const wxString& string);
     
@@ -94,6 +98,7 @@ public:
     
     wxChar GetFillChar() const;
 
+   
 
 private:
     // The mask in the field see wxMaskedEdit

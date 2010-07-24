@@ -143,6 +143,16 @@ public:
     void SetFillChar(wxChar newFillChar);
     wxChar GetFillChar() const;
 
+    bool IsAutoSelect();
+    void SetAutoSelect(bool val = true);
+    wxString GetAutoSelect(const wxString& begin);  
+
+    bool IsAutoSelect(unsigned int fieldIndex);
+    void SetAutoSelect(unsigned int fieldIndex, bool val = true);
+    wxString GetAutoSelect(unsigned int fieldIndex, const wxString& begin);  
+
+
+
 private:
     //mask caracteristics
     fieldsArray m_mask;
