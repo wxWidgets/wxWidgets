@@ -261,11 +261,22 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argF
     return false;
 }
 
-bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& value, wxPGValidationInfo* pValidationInfo, int mode )
+//
+// Common validation code to be called in ValidateValue()
+// implementations.
+//
+// Note that 'value' is reference on purpose, so we can write
+// back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE.
+//
+template<typename T>
+bool NumericValidation( const wxPGProperty* property,
+                        T& value,
+                        wxPGValidationInfo* pValidationInfo,
+                        int mode,
+                        const wxString& strFmt )
 {
-    // Check for min/max
-    wxLongLong_t min = wxINT64_MIN;
-    wxLongLong_t max = wxINT64_MAX;
+    T min = (T) wxINT64_MIN;
+    T max = (T) wxINT64_MAX;
     wxVariant variant;
     bool minOk = false;
     bool maxOk = false;
@@ -273,14 +284,14 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
     variant = property->GetAttribute(wxPGGlobalVars->m_strMin);
     if ( !variant.IsNull() )
     {
-        min = variant.GetLongLong().GetValue();
+        variant.Convert(&min);
         minOk = true;
     }
 
     variant = property->GetAttribute(wxPGGlobalVars->m_strMax);
     if ( !variant.IsNull() )
     {
-        max = variant.GetLongLong().GetValue();
+        variant.Convert(&max);
         maxOk = true;
     }
 
@@ -291,13 +302,16 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
+                wxString smin = wxString::Format(strFmt, min);
+                wxString smax = wxString::Format(strFmt, max);
                 if ( !maxOk )
                     msg = wxString::Format(
-                                _("Value must be %lld or higher."), min);
+                                _("Value must be %s or higher."),
+                                smin.c_str());
                 else
                     msg = wxString::Format(
-                                _("Value must be between %lld and %lld."),
-                                min, max);
+                                _("Value must be between %s and %s."),
+                                smin.c_str(), smax.c_str());
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -315,13 +329,16 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
+                wxString smin = wxString::Format(strFmt, min);
+                wxString smax = wxString::Format(strFmt, max);
                 if ( !minOk )
                     msg = wxString::Format(
-                                _("Value must be %lld or lower."), max);
+                                _("Value must be %s or less."),
+                                smax.c_str());
                 else
                     msg = wxString::Format(
-                                _("Value must be between %lld and %lld."),
-                                min, max);
+                                _("Value must be between %s and %s."),
+                                smin.c_str(), smax.c_str());
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -332,6 +349,18 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
         }
     }
     return true;
+}
+
+bool wxIntProperty::DoValidation( const wxPGProperty* property,
+                                  wxLongLong_t& value,
+                                  wxPGValidationInfo* pValidationInfo,
+                                  int mode )
+{
+    return NumericValidation<wxLongLong_t>(property,
+                                           value,
+                                           pValidationInfo,
+                                           mode,
+                                           wxS("%lld"));
 }
 
 bool wxIntProperty::ValidateValue( wxVariant& value,
@@ -493,39 +522,13 @@ bool wxUIntProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(ar
 
 bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& validationInfo ) const
 {
-    // Check for min/max
-    wxULongLong_t ll = value.GetULongLong().GetValue();
-
-    wxULongLong_t min = 0;
-    wxULongLong_t max = wxUINT64_MAX;
-    wxVariant variant;
-
-    variant = GetAttribute(wxPGGlobalVars->m_strMin);
-    if ( !variant.IsNull() )
-    {
-        min = variant.GetULongLong().GetValue();
-        if ( ll < min )
-        {
-            validationInfo.SetFailureMessage(
-                wxString::Format(_("Value must be %llu or higher"),min)
-                );
-            return false;
-        }
-    }
-    variant = GetAttribute(wxPGGlobalVars->m_strMax);
-    if ( !variant.IsNull() )
-    {
-        max = variant.GetULongLong().GetValue();
-        if ( ll > max )
-        {
-            validationInfo.SetFailureMessage(
-                wxString::Format(_("Value must be %llu or less"),max)
-                );
-            return false;
-        }
-    }
-
-    return true;
+    wxULongLong_t uul = value.GetULongLong().GetValue();
+    return
+    NumericValidation<wxULongLong_t>(this,
+                                     uul,
+                                     &validationInfo,
+                                     wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE,
+                                     wxS("%llu"));
 }
 
 bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
@@ -672,60 +675,11 @@ bool wxFloatProperty::DoValidation( const wxPGProperty* property,
                                     wxPGValidationInfo* pValidationInfo,
                                     int mode )
 {
-    // Check for min/max
-    double min = (double)wxINT64_MIN;
-    double max = (double)wxINT64_MAX;
-    wxVariant variant;
-    bool minOk = false;
-    bool maxOk = false;
-
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMin);
-    if ( !variant.IsNull() )
-    {
-        min = variant.GetDouble();
-        minOk = true;
-    }
-
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMax);
-    if ( !variant.IsNull() )
-    {
-        max = variant.GetDouble();
-        maxOk = true;
-    }
-
-    if ( minOk )
-    {
-        if ( value < min )
-        {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->SetFailureMessage(
-                    wxString::Format(_("Value must be %f or higher"),min)
-                    );
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
-                value = min;
-            else
-                value = max - (min - value);
-            return false;
-        }
-    }
-
-    if ( maxOk )
-    {
-        max = variant.GetDouble();
-        if ( value > max )
-        {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->SetFailureMessage(
-                    wxString::Format(_("Value must be %f or less"),max)
-                    );
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
-                value = max;
-            else
-                value = min + (value - max);
-            return false;
-        }
-    }
-    return true;
+    return NumericValidation<double>(property,
+                                     value,
+                                     pValidationInfo,
+                                     mode,
+                                     wxS("%g"));
 }
 
 bool

@@ -122,9 +122,9 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** Constants used with DoValidation() methods.
+/** Constants used with NumericValidation<>().
 */
-enum wxPGDoValidationConstants
+enum wxPGNumericValidationConstants
 {
     /** Instead of modifying the value, show an error message.
     */
