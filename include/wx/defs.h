@@ -195,7 +195,7 @@
 
 /* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
 /* when using Windows sockets. */
-#if defined(__CYGWIN__) && (__WXMSW__)
+#ifdef __CYGWIN__
 #define __USE_W32_SOCKETS
 #endif
 
