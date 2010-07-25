@@ -257,7 +257,7 @@ public:
 
     /**
         This virtual function is redefined for every class that requires run-time
-        type information, when using the ::DECLARE_CLASS macro (or similar).
+        type information, when using the ::wxDECLARE_CLASS macro (or similar).
     */
     virtual wxClassInfo* GetClassInfo() const;
 

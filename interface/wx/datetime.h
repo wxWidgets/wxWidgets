@@ -1463,6 +1463,10 @@ public:
 */
 const wxDateTime wxDefaultDateTime;
 
+/*
+    wxInvalidDateTime is an alias for wxDefaultDateTime.
+*/
+#define wxInvalidDateTime wxDefaultDateTime
 
 
 /**

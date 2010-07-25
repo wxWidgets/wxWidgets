@@ -180,10 +180,9 @@ public:
         string (third overloard).
 
         When using third form, Set() accepts: colour names (those listed in
-        wxTheColourDatabase()), the CSS-like @c "rgb(r,g,b)" or
-        @c "rgba(r,g,b,a)" syntax (case insensitive) and the HTML-like syntax
-        (i.e. @c "#" followed by 6 hexadecimal digits for red, green, blue
-        components).
+        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax 
+        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal 
+        digits for red, green, blue components.
 
         Returns @true if the conversion was successful, @false otherwise.
 

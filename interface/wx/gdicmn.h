@@ -725,6 +725,12 @@ public:
 
 
 /**
+    Global istance of a wxColourDatabase.
+*/
+wxColourDatabase* wxTheColourDatabase;
+
+
+/**
     @class wxSize
 
     A wxSize is a useful data structure for graphics operations.
