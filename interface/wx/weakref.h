@@ -156,11 +156,10 @@ public:
     T& operator*() const;
 
     /**
-        Smart pointer member access.
-        Returns a pointer to the tracked object.
+        Smart pointer member access. Returns a pointer to the tracked object.
         If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
-    T* operator-();
+    T* operator->();
 
     /**
         Releases the currently tracked object and starts tracking @e pobj.
