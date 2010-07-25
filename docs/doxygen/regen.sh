@@ -31,14 +31,16 @@ mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
 # custom aliases
 cp images/powered-by-wxwidgets.png out/html
 cp images/logo_*.png out/html
+cp images/tab_*.gif out/html
 cp images/wxmsw/*png out/html/wxmsw
 cp images/wxmac/*png out/html/wxmac
 cp images/wxgtk/*png out/html/wxgtk
 cp wxwidgets.js out/html
 
-# this CSS is not automatically copied by Doxygen because it's
+# these CSS are not automatically copied by Doxygen because they're
 # included by our custom html header...
 cp wxwidgets.css out/html
+cp wxtabs.css out/html
 
 # which configuration should we use?
 if [[ -z "$1" ]]; then
