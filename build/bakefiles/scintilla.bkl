@@ -33,13 +33,13 @@
          cond="USE_STC=='1' and BUILDING_LIB=='1'">
         <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
         <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
-	<if cond="FORMAT!='autoconf'">
-	  <include>$(SETUPHDIR)</include>
-	  <include>$(TOP_SRCDIR)include</include>
-	</if>
+        <if cond="FORMAT!='autoconf'">
+            <include>$(SETUPHDIR)</include>
+            <include>$(TOP_SRCDIR)include</include>
+        </if>
         <define>WXUSINGDLL</define>
         <define>__WX__</define>
-	<define>__WX$(TOOLKIT)__</define>
+        <define>__WX$(TOOLKIT)__</define>
         <define>SCI_LEXER</define>
         <define>LINK_LEXERS</define>
         <dirname>$(LIBDIRNAME)</dirname>
@@ -152,7 +152,7 @@
         </sources>
     </lib>
 
-    <!-- use this to conditonally link against wxscintilla with <library>: -->
+    <!-- used to conditionally link against wxscintilla only if it's enabled -->
     <set var="wxscintilla_library_link">
         <if cond="USE_STC=='1' and BUILDING_LIB=='1'">wxscintilla</if>
     </set>
