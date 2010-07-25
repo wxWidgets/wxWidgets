@@ -213,7 +213,8 @@ WXEXPAT_OBJECTS =  \
 	wxexpat_xmltok.o
 WXSCINTILLA_CXXFLAGS = -DNDEBUG -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
-	-DWXUSINGDLL -D__WX$(TOOLKIT)__ $(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
+	$(__wxscintilla_usingdll_p) -D__WX$(TOOLKIT)__ $(____SHARED) $(CPPFLAGS) \
+	$(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	wxscintilla_AutoComplete.o \
 	wxscintilla_CallTip.o \
@@ -2044,6 +2045,7 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_SHARED_0_USE_STC_1@	= install_wxscintilla
 @COND_SHARED_0_USE_STC_1@__uninstall_wxscintilla___depname \
 @COND_SHARED_0_USE_STC_1@	= uninstall_wxscintilla
+@COND_SHARED_1@__wxscintilla_usingdll_p = -DWXUSINGDLL
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)

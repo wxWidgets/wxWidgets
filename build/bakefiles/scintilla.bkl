@@ -38,13 +38,17 @@
         <cppflags-borland>-w-8027</cppflags-borland>
     </template>
 
+    <set var="wxscintilla_usingdll">
+        <if cond="SHARED=='1'">WXUSINGDLL</if>
+    </set>
+
     <lib id="wxscintilla" template="3rdparty_lib,wxscintilla_cppflags"
          cond="USE_STC=='1' and BUILDING_LIB=='1'">
         <if cond="FORMAT!='autoconf'">
             <include>$(SETUPHDIR)</include>
             <include>$(TOP_SRCDIR)include</include>
         </if>
-        <define>WXUSINGDLL</define>
+        <define>$(wxscintilla_usingdll)</define>
         <define>__WX$(TOOLKIT)__</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>

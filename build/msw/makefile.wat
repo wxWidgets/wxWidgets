@@ -80,6 +80,10 @@ __wxtiff___depname =
 !ifeq USE_GUI 1
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
 !endif
+__wxscintilla_usingdll_p =
+!ifeq SHARED 1
+__wxscintilla_usingdll_p = -dWXUSINGDLL
+!endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
 EXTRALIBS_FOR_BASE = 
@@ -3400,8 +3404,8 @@ WXEXPAT_OBJECTS =  &
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	-i=$(SETUPHDIR) -i=..\..\include -dWXUSINGDLL -d__WXMSW__ $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=$(SETUPHDIR) -i=..\..\include $(__wxscintilla_usingdll_p) -d__WXMSW__ &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_AutoComplete.obj &
 	$(OBJS)\wxscintilla_CallTip.obj &

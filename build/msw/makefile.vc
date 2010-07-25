@@ -193,8 +193,8 @@ WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DLINK_LEXERS \
-	/I$(SETUPHDIR) /I..\..\include /DWXUSINGDLL /D__WXMSW__ $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I$(SETUPHDIR) /I..\..\include $(__wxscintilla_usingdll_p) /D__WXMSW__ \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.obj \
 	$(OBJS)\wxscintilla_CallTip.obj \
@@ -1708,6 +1708,9 @@ __RUNTIME_LIBS_100 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_100 = $(__THREADSFLAG)
+!endif
+!if "$(SHARED)" == "1"
+__wxscintilla_usingdll_p = /DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 EXTRALIBS_FOR_BASE = 

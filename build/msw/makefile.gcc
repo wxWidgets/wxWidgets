@@ -180,8 +180,8 @@ WXEXPAT_OBJECTS =  \
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -DNDEBUG -I..\..\src\stc\scintilla\include \
 	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
-	-I$(SETUPHDIR) -I..\..\include -DWXUSINGDLL -D__WXMSW__ $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(__wxscintilla_usingdll_p) -D__WXMSW__ \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.o \
 	$(OBJS)\wxscintilla_CallTip.o \
@@ -1524,6 +1524,9 @@ __wxjpeg___depname = $(LIBDIRNAME)\libwxjpeg$(WXDEBUGFLAG).a
 endif
 ifeq ($(USE_GUI),1)
 __wxtiff___depname = $(LIBDIRNAME)\libwxtiff$(WXDEBUGFLAG).a
+endif
+ifeq ($(SHARED),1)
+__wxscintilla_usingdll_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
