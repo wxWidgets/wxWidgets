@@ -257,20 +257,17 @@ void wxCursor::InitFromImage( const wxImage & image )
 
     // modify image so wxBitmap can be used to convert to pixmap
     image_copy.SetMask(false);
-    int i, j;
     wxByte* data = image_copy.GetData();
-    for (j = 0; j < h; j++)
+    for (int j = 0; j < h; j++)
     {
-        for (i = 0; i < w; i++, data += 3)
+        for (int i = 0; i < w; i++, data += 3)
         {
-            //if average value is > mid grey
-            if (int(data[0]) + data[1] + data[2] >= 3 * 128)
-            {
-                // wxBitmap only converts (255,255,255) to white
-                data[0] = 255;
-                data[1] = 255;
-                data[2] = 255;
-            }
+            // if average value of the pixel is > mid grey, convert it to
+            // background (0), otherwise to foreground (255, using wxBitmap
+            // convention)
+            data[0] =
+            data[1] =
+            data[2] = int(data[0]) + data[1] + data[2] >= 3 * 128 ? 0 : 255;
         }
     }
     wxBitmap bitmap(image_copy, 1);
