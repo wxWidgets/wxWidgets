@@ -220,9 +220,11 @@ public:
     /**
         Add another file to the report. If @a filename is an absolute path, it
         is copied to a file in the debug report directory with the same name.
-        Otherwise the file should already exist in this directory
-        @a description only exists to be displayed to the user in the report
-        summary shown by wxDebugReportPreview.
+        Otherwise the file will be searched in the temporary directory returned
+        by GetDirectory().
+        
+        The argument @a description only exists to be displayed to the user in 
+        the report summary shown by wxDebugReportPreview.
 
         @see GetDirectory(), AddText()
     */

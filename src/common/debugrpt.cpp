@@ -268,8 +268,10 @@ wxDebugReport::AddFile(const wxString& filename, const wxString& description)
         // we need to copy the file to the debug report directory: give it the
         // same name there
         name = fn.GetFullName();
-        wxCopyFile(fn.GetFullPath(),
-                   wxFileName(GetDirectory(), name).GetFullPath());
+
+        if (!wxCopyFile(fn.GetFullPath(),
+                        wxFileName(GetDirectory(), name).GetFullPath()))
+           return;
     }
     else // file relative to the report directory
     {
