@@ -1471,9 +1471,10 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString( wxT("BoolProperty with CheckBox"),
         wxT("Property attribute wxPG_BOOL_USE_CHECKBOX has been set to true.") );
 
-     pid = pg->Append( new wxFloatProperty( wxT("FloatProperty"),
-                                       wxPG_LABEL,
-                                       1234500.23 ) );
+    prop = pg->Append( new wxFloatProperty("FloatProperty",
+                                           wxPG_LABEL,
+                                           1234500.23) );
+    prop->SetAttribute("Min", -100.12);
 
     // A string property that can be edited in a separate editor dialog.
     pg->Append( new wxLongStringProperty( wxT("LongStringProperty"), wxT("LongStringProp"),
