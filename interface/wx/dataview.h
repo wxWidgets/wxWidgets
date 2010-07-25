@@ -20,17 +20,26 @@
     wxDataViewModel::GetValue in order to define the data model which acts as an
     interface between your actual data and the wxDataViewCtrl.
 
-    Since you will usually also allow the wxDataViewCtrl to change your data
+    Note that wxDataViewModel does not define the position or index of any item
+    in the control because different controls might display the same data differently.
+    wxDataViewModel does provide a wxDataViewModel::Compare method which the
+    wxDataViewCtrl may use to sort the data either in conjunction with a column
+    header or without (see wxDataViewModel::HasDefaultCompare).
+
+    wxDataViewModel (as indeed the entire wxDataViewCtrl code) is using wxVariant
+    to store data and its type in a generic way. wxVariant can be extended to contain
+    almost any data without changes to the original class. To a certain extent,
+    you can use (the somewhat more elegant) wxAny instead of wxVariant as there
+    is code to convert between the two, but it is unclear what impact this will
+    have on performance.
+
+    Since you will usually allow the wxDataViewCtrl to change your data
     through its graphical interface, you will also have to override
     wxDataViewModel::SetValue which the wxDataViewCtrl will call when a change
     to some data has been committed.
 
-    wxDataViewModel (as indeed the entire wxDataViewCtrl code) is using wxVariant
-    to store data and its type in a generic way. wxVariant can be extended to contain
-    almost any data without changes to the original class.
-
-    The data that is presented through this data model is expected to change at
-    run-time. You need to inform the data model when a change happened.
+    If the data represented by the model is changed by something else than its
+    associated wxDataViewCtrl, the control has to be notified about the change.
     Depending on what happened you need to call one of the following methods:
     - wxDataViewModel::ValueChanged,
     - wxDataViewModel::ItemAdded,
@@ -43,12 +52,6 @@
     - wxDataViewModel::ItemsAdded,
     - wxDataViewModel::ItemsDeleted,
     - wxDataViewModel::ItemsChanged.
-
-    Note that wxDataViewModel does not define the position or index of any item
-    in the control because different controls might display the same data differently.
-    wxDataViewModel does provide a wxDataViewModel::Compare method which the
-    wxDataViewCtrl may use to sort the data either in conjunction with a column
-    header or without (see wxDataViewModel::HasDefaultCompare).
 
     This class maintains a list of wxDataViewModelNotifier which link this class
     to the specific implementations on the supported platforms so that e.g. calling
@@ -74,6 +77,19 @@
 
         // add columns now
     @endcode
+
+    A potentially better way to avoid memory leaks is to use wxObjectDataPtr
+    
+    @code
+        wxObjectDataPtr<MyMusicModel> musicModel;
+        
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
+        musicModel = new MyMusicModel;
+        m_musicCtrl->AssociateModel( musicModel.get() );
+
+        // add columns now
+    @endcode
+
 
     @library{wxadv}
     @category{dvc}
