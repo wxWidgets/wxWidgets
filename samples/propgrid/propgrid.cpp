@@ -2180,7 +2180,9 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     pgman->SetExtraStyle(extraStyle);
 
-    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_BEEP | wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGE );
+    // This is the default validation failure behavior
+    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL |
+                                                      wxPG_VFB_SHOW_MESSAGEBOX );
 
     m_pPropGridManager->GetGrid()->SetVerticalSpacing( 2 );
 
