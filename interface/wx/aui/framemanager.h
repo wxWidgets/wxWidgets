@@ -793,6 +793,20 @@ public:
 
     See wxAuiManager for available event types.
 
+    @beginEventTable{wxAuiManagerEvent}
+    @event{EVT_AUI_PANE_BUTTON(func)}
+        Triggered when any button is pressed for any docked panes.
+    @event{EVT_AUI_PANE_CLOSE(func)}
+        Triggered when a docked or floating pane is closed.
+    @event{EVT_AUI_PANE_MAXIMIZE(func)}
+        Triggered when a pane is maximized.
+    @event{EVT_AUI_PANE_RESTORE(func)}
+        Triggered when a pane is restored.
+    @event{EVT_AUI_RENDER(func)}
+        This event can be caught to override the default renderer in order to
+        custom draw your wxAuiManager window (not recommended).
+    @endEventTable
+    
     @library{wxaui}
     @category{events,aui}
 
