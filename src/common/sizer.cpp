@@ -582,6 +582,7 @@ bool wxSizerItem::IsShown() const
             return m_window->IsShown();
 
         case Item_Sizer:
+        {
             // arbitrarily decide that if at least one of our elements is
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
@@ -594,6 +595,7 @@ bool wxSizerItem::IsShown() const
                     return true;
             }
             return false;
+        }
 
         case Item_Spacer:
             return m_spacer->IsShown();
