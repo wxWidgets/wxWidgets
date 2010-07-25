@@ -1519,7 +1519,7 @@ __wxjpeg___depname = $(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).lib
 !if "$(USE_GUI)" == "1"
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
 !endif
-!if "$(SHARED)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __wxscintilla_usingdll_p = -DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
