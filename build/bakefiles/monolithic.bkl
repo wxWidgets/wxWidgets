@@ -13,39 +13,28 @@
         $(BASE_SRC) $(BASE_AND_GUI_SRC) $(NET_SRC) $(MONOLIB_GUI_SRC) $(XML_SRC)
     </set>
 
-    <dll id="monodll" template="wx_dll"
-         cond="SHARED=='1' and MONOLITHIC=='1'">
+    <!-- settings common to mono{dll,lib} below -->
+    <template id="wx_monolib_or_dll" template="wxscintilla_cppflags">
         <define>wxUSE_BASE=1</define>
-        <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
+        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+    </template>
+
+    <dll id="monodll" template="wx_dll,wx_monolib_or_dll"
+         cond="SHARED=='1' and MONOLITHIC=='1'">
+        <define>WXMAKINGDLL</define>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
         <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
-        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
-        <!-- STC stuff, should this be conditionalized? -->
-        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
-        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
-        <define>__WX__</define>
-        <define>SCI_LEXER</define>
-        <define>LINK_LEXERS</define>
         <library>$(wxscintilla_library_link)</library>
     </dll>
 
-    <lib id="monolib" template="wx_lib"
+    <lib id="monolib" template="wx_lib,wx_monolib_or_dll"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <define>wxUSE_BASE=1</define>
-        <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
-        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
         <if cond="FORMAT=='watcom'">
             <set var="LIB_PAGESIZE" overwrite="1">8192</set>
         </if>
-        <!-- STC stuff, should this be conditionalized? -->
-        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
-        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
-        <define>__WX__</define>
-        <define>SCI_LEXER</define>
-        <define>LINK_LEXERS</define>
     </lib>
 
 
