@@ -316,7 +316,7 @@ wxLogTrace( wxTRACE_OleCalls, "IFoo::Bar() called" );
 will log the message if it was preceded by:
 
 @code
-wxLog::AddTraceMask( wxTRACE_OleCalls);
+wxLog::AddTraceMask( wxTRACE_OleCalls );
 @endcode
 
 The standard trace masks are given in wxLogTrace() documentation.

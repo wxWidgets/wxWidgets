@@ -1180,7 +1180,7 @@ void wxVLogError(const char* formatString, va_list argPtr);
 /** @addtogroup group_funcmacro_log */
 //@{
 /**
-    Log a message at wxLOG_Trace log level.
+    Log a message at @c wxLOG_Trace log level (see ::wxLogLevelValues enum).
 
     Notice that the use of trace masks is not recommended any more as setting
     the log components (please see @ref overview_log_enable) provides a way to
@@ -1192,30 +1192,10 @@ void wxVLogError(const char* formatString, va_list argPtr);
     function is that usually there are a lot of trace messages, so it might
     make sense to separate them from other debug messages.
 
-    wxLogTrace(const char*,const char*,...) and can be used instead of
-    wxLogDebug() if you would like to be able to separate trace messages into
-    different categories which can be enabled or disabled with
-    wxLog::AddTraceMask() and wxLog::RemoveTraceMask().
-
-    @header{wx/log.h}
-*/
-void wxLogTrace(const char *mask, const char* formatString, ... );
-void wxVLogTrace(const char *mask, const char* formatString, va_list argPtr);
-//@}
-
-/** @addtogroup group_funcmacro_log */
-//@{
-/**
-    Like wxLogDebug(), trace functions only do something in debug builds and
-    expand to nothing in the release one. The reason for making it a separate
-    function is that usually there are a lot of trace messages, so it might
-    make sense to separate them from other debug messages.
-
-    In this version of wxLogTrace(), trace messages can be separated into
-    different categories and calls using this function only log the message if
-    the given @a mask is currently enabled in wxLog. This lets you selectively
-    trace only some operations and not others by enabling the desired trace
-    masks with wxLog::AddTraceMask() or by setting the
+    Trace messages can be separated into different categories; these functions in facts
+    only log the message if the given @a mask is currently enabled in wxLog. 
+    This lets you selectively trace only some operations and not others by enabling the 
+    desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 
     The predefined string trace masks used by wxWidgets are:
@@ -1228,22 +1208,10 @@ void wxVLogTrace(const char *mask, const char* formatString, va_list argPtr);
     @itemdef{ wxTRACE_OleCalls, Trace OLE method calls (Win32 only) }
     @endDefList
 
-    @note Since both the mask and the format string are strings, this might
-          lead to function signature confusion in some cases: if you intend to
-          call the format string only version of wxLogTrace(), add a "%s"
-          format string parameter and then supply a second string parameter for
-          that "%s", the string mask version of wxLogTrace() will erroneously
-          get called instead, since you are supplying two string parameters to
-          the function. In this case you'll unfortunately have to avoid having
-          two leading string parameters, e.g. by adding a bogus integer (with
-          its "%d" format string).
-
     @header{wx/log.h}
 */
 void wxLogTrace(const char* mask, const char* formatString, ... );
-void wxVLogTrace(const char* mask,
-                  const char* formatString,
-                  va_list argPtr);
+void wxVLogTrace(const char* mask, const char* formatString, va_list argPtr);
 //@}
 
 /** @addtogroup group_funcmacro_log */
