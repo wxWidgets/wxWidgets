@@ -856,7 +856,7 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
 
 void MyFrame::OnAddMozart( wxCommandEvent& WXUNUSED(event) )
 {
-    m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", 1787 );
+    m_music_model->AddToClassical( "Eine kleine Nachtmusik", "Wolfgang Mozart", 1787 );
 }
 
 void MyFrame::DeleteSelectedItems()
