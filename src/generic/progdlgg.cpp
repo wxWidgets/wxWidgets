@@ -245,6 +245,9 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
         buttonSizer->Add(m_btnAbort, 0, sizerFlags, LAYOUT_MARGIN);
     }
 
+    if (!m_hasSkipButton && !m_hasAbortButton)
+        buttonSizer->AddSpacer(LAYOUT_MARGIN);
+
     sizerTop->Add(buttonSizer, 0, sizerFlags, LAYOUT_MARGIN );
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 
