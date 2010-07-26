@@ -681,6 +681,10 @@ public:
 
 // Overrideables
 
+    /// Hit-testing: returns a flag indicating hit test details, plus
+    /// information about position
+    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition);
+
     /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
@@ -1304,6 +1308,7 @@ public:
 
 // Virtuals
     virtual bool IsFloatable() const { return true; }
+    virtual void SetParent(wxRichTextObject* parent);
 
 // Accessors
     wxRichTextAnchoredObjectAttr GetAnchoredAttr();
@@ -1352,6 +1357,8 @@ public:
     // Clone function
     virtual wxRichTextObject* Clone() const { return new wxRichTextPlaceHoldingObject(*this); }
 
+    virtual void SetParent(wxRichTextObject* parent);
+
     /// Get the real object of this place holding one
     wxRichTextAnchoredObject* GetRealObject() { return m_real; }
 
@@ -1383,7 +1390,7 @@ public:
     wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextAnchoredObject(parent) { m_attrInit = false; }
     wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
-    wxRichTextImage(const wxRichTextImage& obj): wxRichTextAnchoredObject() { Copy(obj); }
+    wxRichTextImage(const wxRichTextImage& obj): wxRichTextAnchoredObject(obj) { Copy(obj); }
 
 // Overrideables
 

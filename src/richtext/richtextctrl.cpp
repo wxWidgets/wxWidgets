@@ -2869,6 +2869,13 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
     {
         wxRichTextObject *image = GetBuffer().GetLeafObjectAtPosition(position);
+        // Since we use place holding object to support floating feature
+        // we should notice this situation
+        if (image && image->IsPlaceHolding())
+        {
+            wxRichTextPlaceHoldingObject* ph = wxDynamicCast(image, wxRichTextPlaceHoldingObject);
+            image = ph->GetRealObject();
+        }
         if (image && image->IsKindOf(CLASSINFO(wxRichTextImage)))
         {
             m_image = wxDynamicCast(image, wxRichTextImage);

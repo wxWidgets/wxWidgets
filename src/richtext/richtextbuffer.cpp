@@ -98,6 +98,8 @@ public:
     int GetLastRectBottom();
     // Draw the floats inside a rect
     void Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
+    // HitTest the floats
+    int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition);
 private:
     FloatRectMapArray m_left;
     FloatRectMapArray m_right;
@@ -182,12 +184,12 @@ int wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start, 
     while (i < array.GetCount())
     {
         if (array[i]->startY - last >= height)
-            return last;
+            return last + 1;
         last = array[i]->endY;
         i++;
     }
 
-    return array[i]->endY + 1;
+    return last + 1;
 }
 
 int wxFloatCollector::GetFitPosition(int direction, int start, int height) const
@@ -311,6 +313,39 @@ void wxFloatCollector::Draw(wxDC& dc, const wxRichTextRange& range, const wxRich
         DrawFloat(m_left, dc, range, selectionRange, rect, descent, style);
     if (m_right.GetCount() > 0)
         DrawFloat(m_right, dc, range, selectionRange, rect, descent, style);
+}
+
+int HitTestFloat(const FloatRectMapArray& array, wxDC& WXUNUSED(dc), const wxPoint& pt, long& textPosition)
+{
+    unsigned int i;
+    if (array.GetCount() == 0)
+        return wxRICHTEXT_HITTEST_NONE;
+    i = SearchAdjacentRect(array, pt.y);
+    if (i < 0 || i >= array.GetCount())
+        return wxRICHTEXT_HITTEST_NONE;
+    wxPoint point = array[i]->anchor->GetPosition();
+    wxSize size = array[i]->anchor->GetCachedSize();
+    if (point.x <= pt.x && point.x + size.x >= pt.x
+        && point.y <= pt.y && point.y + size.y >= pt.y)
+    {
+        textPosition = array[i]->anchor->GetRange().GetStart();
+        if (pt.x > (pt.x + pt.x + size.x) / 2)
+            return wxRICHTEXT_HITTEST_BEFORE;
+        else
+            return wxRICHTEXT_HITTEST_AFTER;
+    }
+    
+    return wxRICHTEXT_HITTEST_NONE;
+}
+
+int wxFloatCollector::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition)
+{
+    int ret = HitTestFloat(m_left, dc, pt, textPosition);
+    if (ret == wxRICHTEXT_HITTEST_NONE)
+    {
+        ret = HitTestFloat(m_right, dc, pt, textPosition);
+    }
+    return ret;
 }
 
 // Helpers for efficiency 
@@ -875,6 +910,29 @@ void wxRichTextParagraphLayoutBox::Init()
     m_bottomMargin = 4;
     m_partialParagraph = false;
     m_floatCollector = NULL;
+}
+
+/// HitTest
+int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition)
+{
+    
+    if (m_floatCollector != NULL)
+        delete m_floatCollector;
+    m_floatCollector = new wxFloatCollector(0);
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+        wxASSERT (child != NULL);
+        m_floatCollector->CollectFloat(child);
+        node = node->GetNext();
+    }
+
+    int ret = m_floatCollector->HitTest(dc, pt, textPosition);
+    if (ret == wxRICHTEXT_HITTEST_NONE)
+        return wxRichTextCompositeObject::HitTest(dc, pt, textPosition);
+    else
+        return ret;
 }
 
 /// Draw the floating objects
@@ -7320,115 +7378,8 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         if (!m_ctrl->IsFrozen())
         {
             m_ctrl->LayoutContent();
-
-#if wxRICHTEXT_USE_OPTIMIZED_DRAWING
-            // Find refresh rectangle if we are in a position to optimise refresh
-            if ((m_cmdId == wxRICHTEXT_INSERT || m_cmdId == wxRICHTEXT_DELETE) && optimizationLineCharPositions)
-            {
-                size_t i;
-
-                wxSize clientSize = m_ctrl->GetClientSize();
-                wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
-
-                // Start/end positions
-                int firstY = 0;
-                int lastY = firstVisiblePt.y + clientSize.y;
-
-                bool foundEnd = false;
-
-                // position offset - how many characters were inserted
-                int positionOffset = GetRange().GetLength();
-
-                // Determine whether this is Do or Undo, and adjust positionOffset accordingly
-                if ((m_cmdId == wxRICHTEXT_DELETE && isDoCmd) || (m_cmdId == wxRICHTEXT_INSERT && !isDoCmd))
-                    positionOffset = - positionOffset;
-
-                // find the first line which is being drawn at the same position as it was
-                // before. Since we're talking about a simple insertion, we can assume
-                // that the rest of the window does not need to be redrawn.
-
-                wxRichTextParagraph* para = m_buffer->GetParagraphAtPosition(GetPosition());
-                // Since we support floating layout, we should redraw the whole para instead of just
-                // the first line touching the invalid range.
-                if (para)
-                {
-                    firstY = para->GetPosition().y;
-                }
-
-                wxRichTextObjectList::compatibility_iterator node = m_buffer->GetChildren().Find(para);
-                while (node)
-                {
-                    wxRichTextParagraph* child = (wxRichTextParagraph*) node->GetData();
-                    wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
-                    while (node2)
-                    {
-                        wxRichTextLine* line = node2->GetData();
-                        wxPoint pt = line->GetAbsolutePosition();
-                        wxRichTextRange range = line->GetAbsoluteRange();
-
-                        // we want to find the first line that is in the same position
-                        // as before. This will mean we're at the end of the changed text.
-
-                        if (pt.y > lastY) // going past the end of the window, no more info
-                        {
-                            node2 = wxRichTextLineList::compatibility_iterator();
-                            node = wxRichTextObjectList::compatibility_iterator();
-                        }
-                        // Detect last line in the buffer
-                        else if (!node2->GetNext() && para->GetRange().Contains(m_buffer->GetRange().GetEnd()))
-                        {
-                            // If deleting text, make sure we refresh below as well as above
-                            if (positionOffset >= 0)
-                            {
-                                foundEnd = true;
-                                lastY = pt.y + line->GetSize().y;
-                            }
-
-                            node2 = wxRichTextLineList::compatibility_iterator();
-                            node = wxRichTextObjectList::compatibility_iterator();
-
-                            break;
-                        }
-                        else
-                        {
-                            // search for this line being at the same position as before
-                            for (i = 0; i < optimizationLineCharPositions->GetCount(); i++)
-                            {
-                                if (((*optimizationLineCharPositions)[i] + positionOffset == range.GetStart()) &&
-                                    ((*optimizationLineYPositions)[i] == pt.y))
-                                {
-                                    // Stop, we're now the same as we were
-                                    foundEnd = true;
-
-                                    lastY = pt.y;
-
-                                    node2 = wxRichTextLineList::compatibility_iterator();
-                                    node = wxRichTextObjectList::compatibility_iterator();
-
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (node2)
-                            node2 = node2->GetNext();
-                    }
-
-                    if (node)
-                        node = node->GetNext();
-                }
-
-                firstY = wxMax(firstVisiblePt.y, firstY);
-                if (!foundEnd)
-                    lastY = firstVisiblePt.y + clientSize.y;
-
-                // Convert to device coordinates
-                wxRect rect(m_ctrl->GetPhysicalPoint(wxPoint(firstVisiblePt.x, firstY)), wxSize(clientSize.x, lastY - firstY));
-                m_ctrl->RefreshRect(rect);
-            }
-            else
-#endif
-                m_ctrl->Refresh(false);
+            // TODO Refresh the whole client area now
+            m_ctrl->Refresh(false);
 
 #if wxRICHTEXT_USE_OWN_CARET
             m_ctrl->PositionCaret();
@@ -7535,6 +7486,16 @@ void wxRichTextPlaceHoldingObject::Copy(const wxRichTextPlaceHoldingObject& obj)
     m_real = anchor;
 }
 
+void wxRichTextPlaceHoldingObject::SetParent(wxRichTextObject* parent)
+{
+    wxRichTextObject::SetParent(parent);
+    if (m_real)
+    {
+        m_real->wxRichTextObject::SetParent(parent);
+    }
+
+}
+
 /*!
  * wxRichTextAnchoredObject implementation
  */
@@ -7585,6 +7546,16 @@ void wxRichTextAnchoredObject::Copy(const wxRichTextAnchoredObject& obj)
     wxRichTextObject::Copy(obj);
     m_anchoredAttr = obj.m_anchoredAttr;
     m_ph = NULL;
+}
+
+void wxRichTextAnchoredObject::SetParent(wxRichTextObject* parent)
+{
+    wxRichTextObject::SetParent(parent);
+    if (m_ph)
+    {
+        m_ph->wxRichTextObject::SetParent(parent);
+    }
+
 }
 
 /*!
@@ -7762,6 +7733,11 @@ wxRichTextImageAttr wxRichTextImage::GetImageAttr()
 void wxRichTextImage::SetImageAttr(const wxRichTextImageAttr& attr)
 {
     m_attr = attr;
+    // Need to change when we support anchored not floating object
+    if (m_attr.m_floating)
+        m_attr.m_anchored = true;
+
+    SetAnchoredAttr(m_attr);
 }
 
 void wxRichTextImage::InitializeAttribute()
