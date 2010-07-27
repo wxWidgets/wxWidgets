@@ -3785,7 +3785,44 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 custom->SetValue( value );
                 wxRect cell_rect( xpos, GetLineStart( current ),
                                   col->GetWidth(), GetLineHeight( current ) );
-                 /* ignore ret */ custom->LeftClick( event.GetPosition(), cell_rect,
+
+                // Report position relative to the cell's custom area, i.e.
+                // no the entire space as given by the control but the one
+                // used by the renderer after calculation of alignment etc.
+
+                // adjust the rectangle ourselves to account for the alignment
+                wxRect rectItem = cell_rect;
+                const int align = custom->GetAlignment();
+                if ( align != wxDVR_DEFAULT_ALIGNMENT )
+                {
+                    const wxSize size = custom->GetSize();
+
+                    if ( size.x >= 0 && size.x < cell_rect.width )
+                    {
+                        if ( align & wxALIGN_CENTER_HORIZONTAL )
+                            rectItem.x += (cell_rect.width - size.x)/2;
+                        else if ( align & wxALIGN_RIGHT )
+                            rectItem.x += cell_rect.width - size.x;
+                        // else: wxALIGN_LEFT is the default
+                    }
+
+                    if ( size.y >= 0 && size.y < cell_rect.height )
+                    {
+                        if ( align & wxALIGN_CENTER_VERTICAL )
+                            rectItem.y += (cell_rect.height - size.y)/2;
+                        else if ( align & wxALIGN_BOTTOM )
+                            rectItem.y += cell_rect.height - size.y;
+                        // else: wxALIGN_TOP is the default
+                    }       
+                }
+
+                wxPoint pos( event.GetPosition() );
+                pos.x -= rectItem.x;
+                pos.y -= rectItem.y;
+
+                m_owner->CalcUnscrolledPosition( pos.x, pos.y, &pos.x, &pos.y );
+
+                 /* ignore ret */ custom->LeftClick( pos, cell_rect,
                                   model, item, col->GetModelColumn());
             }
         }
