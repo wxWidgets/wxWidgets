@@ -955,6 +955,15 @@ public:
     wxDataViewItem RowToItem(int row) const
         { return row == wxNOT_FOUND ? wxDataViewItem() : GetStore()->GetItem(row); }
 
+    int GetSelectedRow() const
+        { return ItemToRow(GetSelection()); }
+    void SelectRow(unsigned row)
+        { Select(RowToItem(row)); }
+    void UnselectRow(unsigned row)
+        { Unselect(RowToItem(row)); }
+    bool IsRowSelected(unsigned row) const
+        { return IsSelected(RowToItem(row)); }
+
     bool AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );

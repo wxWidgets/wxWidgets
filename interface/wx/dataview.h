@@ -1769,6 +1769,49 @@ public:
      */
     wxDataViewItem RowToItem(int row) const;
 
+    //@{
+    /**
+        @name Selection handling functions
+     */
+
+    /**
+        Returns index of the selected row or wxNOT_FOUND.
+
+        @see wxDataViewCtrl::GetSelection()
+
+        @since 2.9.2
+     */
+    int GetSelectedRow() const;
+
+    /**
+        Selects given row.
+
+        @see wxDataViewCtrl::Select()
+
+        @since 2.9.2
+     */
+    void SelectRow(unsigned row);
+
+    /**
+        Unselects given row.
+
+        @see wxDataViewCtrl::Unselect()
+
+        @since 2.9.2
+     */
+    void UnselectRow(unsigned row);
+
+    /**
+        Returns true if @a row is selected.
+
+        @see wxDataViewCtrl::IsSelected()
+
+        @since 2.9.2
+     */
+    bool IsRowSelected(unsigned row) const;
+
+    //@}
+
     /**
         @name Column management functions
     */
