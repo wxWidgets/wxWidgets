@@ -771,6 +771,10 @@ void wxTextCtrlBase::ApplyMask()
     wxString formatString;
     unsigned int cursor = GetInsertionPoint();
     bool invalid;
+    unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
+    unsigned int fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
+    wxString tmp;
+
 
     if(string != m_maskCtrl.GetEmptyMask())
     {
@@ -781,13 +785,10 @@ void wxTextCtrlBase::ApplyMask()
         //If the string is not valid
         if(invalid)
         {
-            printf("invalid\n");
             SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
-            printf("?%c?\n", (char) m_maskCtrl.GetFillChar());
             Replace(cursor -1, cursor, m_maskCtrl.GetFillChar());
     
             SetInsertionPoint ( cursor - 1);
-                
         }
         else
         {
@@ -800,10 +801,18 @@ void wxTextCtrlBase::ApplyMask()
                     Replace(0, formatString.Len() , formatString);
                }
             }
-
             SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
         }
 
+        if(m_maskCtrl.IsAutoSelect(fieldIndex))
+        {
+            printf("Hello\ncursor: %d\nmin: %d\n", cursor, fieldMinPos);
+            printf("val:%s\n", (const char *) string.Mid(fieldMinPos, cursor - fieldMinPos + 1).mb_str(wxConvUTF8));
+            tmp = m_maskCtrl.GetAutoSelect(string.Mid(fieldMinPos, cursor - fieldMinPos + 1));
+            printf("val:%s\n", (const char *) tmp.mb_str(wxConvUTF8));
+            if(tmp != wxEmptyString)
+                Replace(fieldMinPos, fieldMinPos + tmp.Len(), tmp); 
+        }
     }
 }
 
@@ -815,6 +824,7 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     unsigned int fieldMinPos;
     unsigned int it;
     wxString string = GetValue();
+    wxString tmp;
     wxString choice;
     wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
     wxChar fillChar = m_maskCtrl.GetFillChar();
@@ -1030,12 +1040,7 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     }
     ApplyMask();
 
-    if(m_maskCtrl.IsAutoSelect())
-    {
-        printf("Auto selected \n");
-    }
 }
-
 
 void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
 {

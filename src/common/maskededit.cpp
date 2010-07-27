@@ -699,7 +699,7 @@ void wxMaskedEdit::SetAutoSelect( bool val)
 
 wxString wxMaskedEdit::GetAutoSelect(const wxString& begin) const
 {
-    return m_mask[0]->AutoSelectString(begin);    
+    return m_mask[0]->AutoSelectString(begin);
 }
 
 bool wxMaskedEdit::IsAutoSelect(unsigned int fieldIndex) const

@@ -377,6 +377,31 @@ void MyFrame::CreateThirdPage(wxPanel* pan)
     gridSizer->Add(telText, wxALL|wxEXPAND);
     gridSizer->Add(telCombo, wxALL|wxEXPAND);
 
+
+    wxArrayString choice;
+    wxStaticText* usText     = new wxStaticText(pan, wxID_ANY, wxT("Autocomplete US states"));
+    wxTextCtrl*   usCtrl     = new wxTextCtrl(pan, wxID_ANY); 
+    wxMaskedEdit  usMaskEdit(wxT("A{14}"), wxT("F!_"));
+
+    choice.Add(wxT("ALABAMA"));
+    choice.Add(wxT("MISSOURI"));
+    choice.Add(wxT("MISSISSIPPI"));
+    choice.Add(wxT("UTAH"));
+    choice.Add(wxT("ALASKA"));
+    choice.Add(wxT("FLORIDE"));
+    choice.Add(wxT("WASHNGTON"));
+    usMaskEdit.SetAutoSelect(true);
+
+   
+    if(!usMaskEdit.AddChoices(choice))
+        printf("Oh merde\n");
+
+    usCtrl->SetMask(usMaskEdit);
+    usCtrl->ChangeValue(usMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(usText, wxALL|wxEXPAND);
+    gridSizer->Add(usCtrl, wxALL|wxEXPAND);
+
     pan->SetSizer(gridSizer);
     gridSizer->SetSizeHints(pan);
 

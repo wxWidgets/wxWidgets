@@ -599,19 +599,20 @@ wxString wxMaskedField::AutoSelectString(const wxString& string)
 
     if(m_autoSelect)
     {
+        printf("STRING = %s\n", (const char *) string.mb_str(wxConvUTF8));
         for(it = 0; it < m_choices.GetCount(); it++)
         {
+        printf("CHOICE = %s\n", (const char *) m_choices[it].mb_str(wxConvUTF8));
             if(m_choices[it].StartsWith(string))
             {
-                it = m_choices.GetCount();
                 res = m_choices[it];
+                it = m_choices.GetCount();
             }
         }
     }
-
+    
     return res;
 }
-
 
 
 wxString wxMaskedField::GetPlainValue(const wxString& string)
@@ -635,8 +636,6 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
             else if(string[it] != m_mask[it])
             {
                 res << string[itMask];
-
-                
             }
             else
             {
