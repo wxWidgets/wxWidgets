@@ -1029,6 +1029,11 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
         }
     }
     ApplyMask();
+
+    if(m_maskCtrl.IsAutoSelect())
+    {
+        printf("Auto selected \n");
+    }
 }
 
 

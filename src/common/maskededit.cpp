@@ -43,9 +43,8 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
        AddChoices(it, maskedEdit.GetChoices(it));
 
     }
-    wxChar fillChar = maskedEdit.GetFillChar();
-
-    SetFillChar(fillChar);
+    SetFillChar(maskedEdit.GetFillChar());
+    SetAutoSelect(maskedEdit.IsAutoSelect());
 }
     
 
@@ -688,7 +687,7 @@ wxChar wxMaskedEdit::GetFillChar() const
 }
 
 
-bool wxMaskedEdit::IsAutoSelect()
+bool wxMaskedEdit::IsAutoSelect() const
 {
     return m_mask[0]->IsAutoSelect();
 }
@@ -698,12 +697,12 @@ void wxMaskedEdit::SetAutoSelect( bool val)
     m_mask[0]->SetAutoSelect(val);    
 }
 
-wxString wxMaskedEdit::GetAutoSelect(const wxString& begin)
+wxString wxMaskedEdit::GetAutoSelect(const wxString& begin) const
 {
     return m_mask[0]->AutoSelectString(begin);    
 }
 
-bool wxMaskedEdit::IsAutoSelect(unsigned int fieldIndex)
+bool wxMaskedEdit::IsAutoSelect(unsigned int fieldIndex) const
 {
     bool res = false;
 
@@ -719,7 +718,7 @@ void wxMaskedEdit::SetAutoSelect(unsigned int fieldIndex, bool val)
         m_mask[fieldIndex]->SetAutoSelect(val);
 }
 
-wxString wxMaskedEdit::GetAutoSelect(unsigned int fieldIndex, const wxString& begin)
+wxString wxMaskedEdit::GetAutoSelect(unsigned int fieldIndex, const wxString& begin) const
 {
     wxString res = wxEmptyString;
 

@@ -143,13 +143,13 @@ public:
     void SetFillChar(wxChar newFillChar);
     wxChar GetFillChar() const;
 
-    bool IsAutoSelect();
+    bool IsAutoSelect() const;
     void SetAutoSelect(bool val = true);
-    wxString GetAutoSelect(const wxString& begin);  
+    wxString GetAutoSelect(const wxString& begin) const; 
 
-    bool IsAutoSelect(unsigned int fieldIndex);
+    bool IsAutoSelect(unsigned int fieldIndex) const;
     void SetAutoSelect(unsigned int fieldIndex, bool val = true);
-    wxString GetAutoSelect(unsigned int fieldIndex, const wxString& begin);  
+    wxString GetAutoSelect(unsigned int fieldIndex, const wxString& begin) const;  
 
 
 
