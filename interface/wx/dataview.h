@@ -1755,6 +1755,21 @@ public:
     //@}
 
     /**
+        Returns the position of given @e item or wxNOT_FOUND if it's
+        not a valid item.
+
+        @since 2.9.2
+     */
+    int ItemToRow(const wxDataViewItem &item) const;
+
+    /**
+        Returns the wxDataViewItem at the given @e row.
+
+        @since 2.9.2
+     */
+    wxDataViewItem RowToItem(int row) const;
+
+    /**
         @name Column management functions
     */
     //@{

@@ -950,6 +950,11 @@ public:
     const wxDataViewListStore *GetStore() const
         { return (const wxDataViewListStore*) GetModel(); }
 
+    int ItemToRow(const wxDataViewItem &item) const
+        { return item.IsOk() ? GetStore()->GetRow(item) : wxNOT_FOUND; }
+    wxDataViewItem RowToItem(int row) const
+        { return row == wxNOT_FOUND ? wxDataViewItem() : GetStore()->GetItem(row); }
+
     bool AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
