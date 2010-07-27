@@ -285,8 +285,19 @@ bool wxRearrangeDialog::Create(wxWindow *parent,
     // notice that the items in this sizer should be inserted accordingly to
     // wxRearrangeDialogSizerPositions order
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(new wxStaticText(this, wxID_ANY, message),
-                  wxSizerFlags().Border());
+
+    if ( !message.empty() )
+    {
+        sizerTop->Add(new wxStaticText(this, wxID_ANY, message),
+                      wxSizerFlags().Border());
+    }
+    else
+    {
+        // for convenience of other wxRearrangeDialog code that depends on
+        // positions of sizer items, insert a dummy zero-sized item
+        sizerTop->AddSpacer(0);
+    }
+
     sizerTop->Add(m_ctrl,
                   wxSizerFlags(1).Expand().Border());
     sizerTop->Add(CreateSeparatedButtonSizer(wxOK | wxCANCEL),
