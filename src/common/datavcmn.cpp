@@ -1600,10 +1600,6 @@ wxDataViewListCtrl::wxDataViewListCtrl( wxWindow *parent, wxWindowID id,
            const wxValidator& validator )
 {
     Create( parent, id, pos, size, style, validator );
-
-    wxDataViewListStore *store = new wxDataViewListStore;
-    AssociateModel( store );
-    store->DecRef();
 }
 
 wxDataViewListCtrl::~wxDataViewListCtrl()
@@ -1615,7 +1611,14 @@ bool wxDataViewListCtrl::Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, long style,
            const wxValidator& validator )
 {
-    return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
+    if ( !wxDataViewCtrl::Create( parent, id, pos, size, style, validator ) )
+        return false;
+
+    wxDataViewListStore *store = new wxDataViewListStore;
+    AssociateModel( store );
+    store->DecRef();
+
+    return true;
 }
 
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *column, const wxString &varianttype )
