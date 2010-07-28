@@ -517,6 +517,7 @@ wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
     : wxWidgetCocoaImpl(text, w),
       wxTextWidgetImpl(text)
 {
+    Init(w);
 }
 
 wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
@@ -525,6 +526,7 @@ wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(entry)
 {
+    Init(w);
 }
 
 void wxNSTextFieldControl::Init(WXWidget w)
