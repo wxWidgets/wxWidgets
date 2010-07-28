@@ -599,10 +599,8 @@ wxString wxMaskedField::AutoSelectString(const wxString& string)
 
     if(m_autoSelect)
     {
-        printf("STRING = %s\n", (const char *) string.mb_str(wxConvUTF8));
         for(it = 0; it < m_choices.GetCount(); it++)
         {
-        printf("CHOICE = %s\n", (const char *) m_choices[it].mb_str(wxConvUTF8));
             if(m_choices[it].StartsWith(string))
             {
                 res = m_choices[it];

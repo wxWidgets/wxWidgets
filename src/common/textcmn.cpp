@@ -775,7 +775,6 @@ void wxTextCtrlBase::ApplyMask()
     unsigned int fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
     wxString tmp;
 
-
     if(string != m_maskCtrl.GetEmptyMask())
     {
         
@@ -802,16 +801,6 @@ void wxTextCtrlBase::ApplyMask()
                }
             }
             SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
-        }
-
-        if(m_maskCtrl.IsAutoSelect(fieldIndex))
-        {
-            printf("Hello\ncursor: %d\nmin: %d\n", cursor, fieldMinPos);
-            printf("val:%s\n", (const char *) string.Mid(fieldMinPos, cursor - fieldMinPos + 1).mb_str(wxConvUTF8));
-            tmp = m_maskCtrl.GetAutoSelect(string.Mid(fieldMinPos, cursor - fieldMinPos + 1));
-            printf("val:%s\n", (const char *) tmp.mb_str(wxConvUTF8));
-            if(tmp != wxEmptyString)
-                Replace(fieldMinPos, fieldMinPos + tmp.Len(), tmp); 
         }
     }
 }
