@@ -1125,7 +1125,7 @@ public:
     void OnSelectAll(wxCommandEvent& event);
 
     /**
-        Standard handler for the wxID_PASTE command.
+        Standard handler for the wxID_UNDO command.
     */
     void OnUndo(wxCommandEvent& event);
 
