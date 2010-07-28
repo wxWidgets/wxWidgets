@@ -291,7 +291,9 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+    : wxWidgetCocoaImpl(wxPeer, w),
+      wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
@@ -511,7 +513,21 @@ wxSize wxNSTextViewControl::GetBestSize() const
 
 // wxNSTextFieldControl
 
-wxNSTextFieldControl::wxNSTextFieldControl( wxWindow *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
+    : wxWidgetCocoaImpl(text, w),
+      wxTextWidgetImpl(text)
+{
+}
+
+wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
+                                           wxTextEntry *entry,
+                                           WXWidget w)
+    : wxWidgetCocoaImpl(wxPeer, w),
+      wxTextWidgetImpl(entry)
+{
+}
+
+void wxNSTextFieldControl::Init(WXWidget w)
 {
     NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField*) w;
     m_textField = tf;
@@ -650,7 +666,7 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
-        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+        event.SetString( GetTextEntry()->GetValue() );
         wxpeer->HandleWindowEvent( event );
     }
 }
@@ -694,7 +710,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [v setBezeled:NO];
         [v setBordered:NO];
 
-        c = new wxNSTextFieldControl( wxpeer, v );
+        c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
     }
 
     return c;

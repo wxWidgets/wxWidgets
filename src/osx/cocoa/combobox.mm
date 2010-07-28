@@ -78,7 +78,8 @@
 }
 @end
 
-wxNSComboBoxControl::wxNSComboBoxControl( wxWindow *wxPeer, WXWidget w ) : wxNSTextFieldControl(wxPeer, w)
+wxNSComboBoxControl::wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
+    : wxNSTextFieldControl(wxPeer, wxPeer, w)
 {
     m_comboBox = (NSComboBox*)w;
 }
@@ -137,7 +138,7 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
     return result;
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer, 
+wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
                                     wxMenu* menu,

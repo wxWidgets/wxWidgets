@@ -470,7 +470,9 @@ static pascal OSStatus wxMacUnicodeTextControlEventHandler( EventHandlerCallRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacUnicodeTextControlEventHandler )
 
-wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer ) : wxMacControl( wxPeer )
+wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer )
+    : wxMacControl( wxPeer ),
+      wxTextWidgetImpl( wxPeer )
 {
 }
 
@@ -478,7 +480,8 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     const wxString& str,
     const wxPoint& pos,
     const wxSize& size, long style )
-    : wxMacControl( wxPeer )
+    : wxMacControl( wxPeer ),
+      wxTextWidgetImpl( wxPeer )
 {
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
@@ -707,7 +710,8 @@ protected :
 } ;
 
 wxMacMLTEControl::wxMacMLTEControl( wxTextCtrl *peer )
-    : wxMacControl( peer )
+    : wxMacControl( peer ),
+      wxTextWidgetImpl( peer )
 {
     SetNeedsFocusRect( true ) ;
 }
