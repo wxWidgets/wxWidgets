@@ -2334,7 +2334,7 @@ wxSize wxBoxSizer::CalcMin()
 
     // Using the max ratio ensures that the min size is big enough for all
     // items to have their min size and satisfy the proportions among them.
-    SizeInMajorDir(m_minSize) += maxMinSizeToProp*m_totalProportion;
+    SizeInMajorDir(m_minSize) += (int)(maxMinSizeToProp*m_totalProportion);
 
     return m_minSize;
 }

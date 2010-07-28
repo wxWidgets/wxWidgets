@@ -503,10 +503,8 @@ wxSize wxNSTextViewControl::GetBestSize() const
     if (m_textView && [m_textView layoutManager])
     {
         NSRect rect = [[m_textView layoutManager] usedRectForTextContainer: [m_textView textContainer]];
-        wxSize size = wxSize(rect.size.width, rect.size.height);
-        size.x += [m_textView textContainerInset].width;
-        size.y += [m_textView textContainerInset].height;
-        return size;
+        return wxSize((int)(rect.size.width + [m_textView textContainerInset].width),
+                      (int)(rect.size.height + [m_textView textContainerInset].height));
     }
     return wxSize(0,0);
 }
