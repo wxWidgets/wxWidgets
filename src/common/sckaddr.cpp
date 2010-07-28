@@ -878,7 +878,7 @@ wxString wxIPV4address::IPAddress() const
 
     return wxString::Format
            (
-            "%lu.%lu.%lu.%lu",
+            "%u.%u.%u.%u",
             (addr >> 24) & 0xff,
             (addr >> 16) & 0xff,
             (addr >> 8) & 0xff,
