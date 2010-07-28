@@ -1408,6 +1408,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
             {
                 // file already open, just activate it and return
                 ActivateDocument(doc);
+                return doc;
             }
         }
     }
