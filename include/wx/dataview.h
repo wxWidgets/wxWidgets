@@ -257,6 +257,7 @@ public:
     virtual bool HasDefaultCompare() const { return false; }
 
     // internal
+    virtual bool IsListModel() const { return false; }
     virtual bool IsVirtualListModel() const { return false; }
 
 protected:
@@ -328,6 +329,8 @@ public:
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
+
+    virtual bool IsListModel() const { return true; }
 };
 
 // ---------------------------------------------------------

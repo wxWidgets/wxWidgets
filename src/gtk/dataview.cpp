@@ -3502,10 +3502,15 @@ bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned 
 
 GtkTreeModelFlags wxDataViewCtrlInternal::get_flags()
 {
-    if (m_wx_model->IsVirtualListModel())
-        return GTK_TREE_MODEL_LIST_ONLY;
-    else
-        return GTK_TREE_MODEL_ITERS_PERSIST;
+    int flags = 0;
+
+    if ( m_wx_model->IsListModel() )
+        flags |= GTK_TREE_MODEL_LIST_ONLY;
+
+    if ( !m_wx_model->IsVirtualListModel() )
+        flags |= GTK_TREE_MODEL_ITERS_PERSIST;
+
+    return GtkTreeModelFlags(flags);
 }
 
 gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path )

@@ -411,6 +411,7 @@ public:
                             const wxString &name = wxT("wxdataviewctrlmainwindow") );
     virtual ~wxDataViewMainWindow();
 
+    bool IsList() const { return GetOwner()->GetModel()->IsListModel(); }
     bool IsVirtualList() const { return m_root == NULL; }
 
     // notifications from wxDataViewModel
@@ -1497,7 +1498,7 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
     }
 
     indent = 0;
-    if (!IsVirtualList())
+    if (!IsList())
     {
         wxDataViewTreeNode *node = GetTreeNodeByRow(row);
         indent = GetOwner()->GetIndent() * node->GetIndentLevel();
@@ -1764,7 +1765,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             // deal with the expander
             int indent = 0;
-            if ((!IsVirtualList()) && (col == expander))
+            if ((!IsList()) && (col == expander))
             {
                 // Calculate the indent first
                 indent = GetOwner()->GetIndent() * node->GetIndentLevel();
@@ -2795,7 +2796,7 @@ wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type,
 
 bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
 {
-    if (IsVirtualList())
+    if (IsList())
         return false;
 
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
@@ -2813,7 +2814,7 @@ bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
 
 bool wxDataViewMainWindow::HasChildren( unsigned int row ) const
 {
-    if (IsVirtualList())
+    if (IsList())
         return false;
 
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
@@ -2831,7 +2832,7 @@ bool wxDataViewMainWindow::HasChildren( unsigned int row ) const
 
 void wxDataViewMainWindow::Expand( unsigned int row )
 {
-    if (IsVirtualList())
+    if (IsList())
         return;
 
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
@@ -2887,7 +2888,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
 
 void wxDataViewMainWindow::Collapse(unsigned int row)
 {
-    if (IsVirtualList())
+    if (IsList())
         return;
 
     wxDataViewTreeNode *node = GetTreeNodeByRow(row);
@@ -3086,7 +3087,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
     // to get the correct x position where the actual text is
     int indent = 0;
     int row = GetRowByItem(item);
-    if (!IsVirtualList() && (column == 0 || GetOwner()->GetExpanderColumn() == column) )
+    if (!IsList() && (column == 0 || GetOwner()->GetExpanderColumn() == column) )
     {
         wxDataViewTreeNode* node = GetTreeNodeByRow(row);
         indent = GetOwner()->GetIndent() * node->GetIndentLevel();
@@ -3332,7 +3333,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         // Add the process for tree expanding/collapsing
         case WXK_LEFT:
         {
-            if (IsVirtualList())
+            if (IsList())
                break;
 
             wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
@@ -3473,7 +3474,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     // Test whether the mouse is hovered on the tree item button
     bool hoverOverExpander = false;
-    if ((!IsVirtualList()) && (GetOwner()->GetExpanderColumn() == col))
+    if ((!IsList()) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
         if( node!=NULL && node->HasChildren() )
