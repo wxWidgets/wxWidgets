@@ -756,7 +756,7 @@ public:
     void SetListStyleName(const wxString& name);
 
     /**
-        Sets the @see wxMaskedEdit
+        Set the @see wxMaskedEdit
     */
     void SetMask(const wxMaskedEdit& mask);
     

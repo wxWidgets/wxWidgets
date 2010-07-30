@@ -95,6 +95,7 @@ TODO: Organize them in a more human-readable way.
 @li @sample{keyboard}
 @li @sample{layout}
 @li @sample{listctrl}
+@li @sample{maskededit}
 @li @sample{mdi}
 @li @sample{mediaplayer}
 @li @sample{memcheck}
@@ -627,6 +628,16 @@ that allows a new MFC window to be created.
 For build instructions please read IMPORTANT NOTES in @c mfctest.cpp.
 
 @onlyfor{wxmsw}
+
+@sampledir{maskededit}
+
+@section page_sample_maskededit MaskedEdit Sample
+
+This sample demonstrate how use all mask features. In the first 
+tab basic mask, in the second page default value, fill char change
+and user choice list. The last page presente various mask in
+@see wxTextCtrl and @see wxComboBox.
+
 
 @sampledir{mfc}
 

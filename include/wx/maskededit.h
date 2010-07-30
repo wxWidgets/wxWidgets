@@ -54,10 +54,6 @@ public:
     //Clear the mask and the cursor return in the beginning of the mask
     void ClearValue();
     
- 
-    //Set the value in the text control associated
-    // bool SetValue(wxString value);
-    
     //Test if the current sequence is valid
     bool IsValid(const wxString& string) const;
     

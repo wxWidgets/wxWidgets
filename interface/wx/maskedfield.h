@@ -210,6 +210,20 @@ public:
     bool IsAutoSelect() const;
 
     /**
+        Set autoSelect
+        @param val if the field must be autoSelect or not
+    */
+    void SetAutoSelect(bool val = true);
+
+    /**
+        this method return a string beginning with string or wxEmptyString
+        @param string the beginning.
+        @return the first occurence n user choice beginning with string.
+    */
+    wxString AutoSelectString(const wxString& string);
+
+
+    /**
         This method is used to convert a string in an other string without the 
         mask. If the string is not valid compared to the mask, 
         an emptyString is returned.
@@ -241,4 +255,16 @@ public:
         ###.##. "." is the decimal point.
     */
     bool IsNumber();
-}
+
+    /**
+        Set the fillChar. Default value is ' '. 
+        @param newFillChar the new fillChar
+    */
+    void SetFillChar(wxChar newFillChar);
+    
+    /**
+        @return the current fillChar
+    */
+    wxChar GetFillChar() const;
+
+

@@ -183,15 +183,6 @@ public:
     void ClearValue();
     
     /**
-        Set the value in the text control associated
-        @param value 
-            The new text in the control, missing mask characters are inserted
-            automatically
-        @return return if the value is correctly set or not
-    */
-    bool SetValue(wxString value);
-    
-    /**
         Test if the current sequence is valid
         @return return true if the sequence is correct
     */
@@ -488,5 +479,18 @@ public:
         this method return wxEmptyString.
     */
     wxString GetDecimalPoint();
+
+    /**
+        Set the fill char. Default is ' '. If the mask is multi fields
+        this method return the fillchar of the first field
+        @param the new fill char
+    */
+    void SetFillChar(wxChar newFillChar);
+
+    /**
+        Get the fill char. If the msk is a multi fields, this method return
+        the fillchar of the first field
+    */
+    wxChar GetFillChar() const;
 
 }; 
