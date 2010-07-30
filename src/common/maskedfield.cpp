@@ -676,7 +676,6 @@ wxString wxMaskedField::GetEmptyMask() const
         }
     }
 
-    printf("?%s?\n", (const char*) res.mb_str(wxConvUTF8));
     return res;
 }
 

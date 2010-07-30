@@ -481,7 +481,7 @@ void MaskedFieldTestCase::TestIsNumber()
 { 
     static struct TestIsNumber
     {
-        wxString mask;      
+        wxString mask;
         bool result;
     }
     maskedNumber[]=
@@ -500,9 +500,6 @@ void MaskedFieldTestCase::TestIsNumber()
     {
         wxMaskedField mask(maskedNumber[n].mask, wxT("F"));
                 
-        CPPUNIT_ASSERT_EQUAL(maskedNumber[n].result, mask.IsNumber());    
+        CPPUNIT_ASSERT_EQUAL(maskedNumber[n].result, mask.IsNumber());
     }
-
-
-
 }

@@ -747,21 +747,30 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 
 void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
 {
-        m_maskCtrl = wxMaskedEdit(mask);
+    int width;
+    int height;
+
+    m_maskCtrl = wxMaskedEdit(mask);
      
     if(m_maskCtrl.GetMask().Cmp(wxEmptyString) != 0)
     {
-
         ChangeValue(m_maskCtrl.GetDefaultValue());
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
         Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
         Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
         Connect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
+
+        if(m_maskCtrl.GetFormatCode().Find('F') != wxNOT_FOUND)
+        {
+            GetSize(&width, &height);
+            SetSize(m_maskCtrl.GetEmptyMask().Len() * 4, height);
+        }
     }
     else
     {
          Disconnect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
          Disconnect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
+         Disconnect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
     }
 }
 
@@ -771,8 +780,6 @@ void wxTextCtrlBase::ApplyMask()
     wxString formatString;
     unsigned int cursor = GetInsertionPoint();
     bool invalid;
-    unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
-    unsigned int fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
     wxString tmp;
 
     if(string != m_maskCtrl.GetEmptyMask())
@@ -791,7 +798,6 @@ void wxTextCtrlBase::ApplyMask()
         }
         else
         {
-            printf("Valid\n");
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(string) != 0)
             {
@@ -1048,11 +1054,10 @@ void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
 
 }
 
-void wxTextCtrlBase::FocusMask(wxFocusEvent& event)
+void wxTextCtrlBase::FocusMask(wxFocusEvent& WXUNUSED(event))
 {
     SetInsertionPoint(0);
     SetSelection(0,1);
-    printf("FOCUS\n");
 }
 // ----------------------------------------------------------------------------
 // file IO functions
