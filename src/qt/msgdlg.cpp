@@ -125,7 +125,9 @@ int wxMessageDialog::ShowModal()
 {
     wxCHECK_MSG( m_qtMessageBox, -1, "Invalid dialog" );
     
-    switch ( GetHandle()->exec() )
+    // Exec may return a wx identifier if a close event is generated
+    int ret = GetHandle()->exec();
+    switch ( ret )
     {
         case QMessageBox::Ok:
             return wxID_OK;
@@ -136,8 +138,8 @@ int wxMessageDialog::ShowModal()
         case QMessageBox::No:
             return wxID_NO;
         default:
-            wxFAIL_MSG( wxT( "unexpected QMessageBox return code"));
-            return -1;
+            //wxFAIL_MSG( "unexpected QMessageBox return code" );
+            return ret;
     }                                        
 }
 

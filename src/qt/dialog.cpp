@@ -57,21 +57,21 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
 
 int wxDialog::ShowModal()
 {
-    wxCHECK_MSG( m_qtDialog, -1, "Invalid dialog" );
+    wxCHECK_MSG( GetHandle(), -1, "Invalid dialog" );
     
     return GetHandle()->exec();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxCHECK_RET( m_qtDialog, "Invalid dialog" );
+    wxCHECK_RET( GetHandle(), "Invalid dialog" );
     
     GetHandle()->done( retCode );
 }
 
 bool wxDialog::IsModal() const
 {
-    wxCHECK_MSG( m_qtDialog, false, "Invalid dialog" );
+    wxCHECK_MSG( GetHandle(), false, "Invalid dialog" );
 
     return GetHandle()->isModal();
 }
