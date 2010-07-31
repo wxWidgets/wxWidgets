@@ -21,4 +21,16 @@ class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< wxWindow, QWidget
         wxQtWidget( wxWindow *window, QWidget *parent );
 };
 
+#if wxUSE_ACCEL || defined( Q_MOC_RUN )
+class WXDLLIMPEXP_CORE wxQtShortcutHandler : public QObject, public wxQtSignalForwarder< wxWindow >
+{
+    Q_OBJECT
+    public:
+        wxQtShortcutHandler( wxWindow *window );
+    
+    public Q_SLOTS:
+        void activated();
+};
+#endif // wxUSE_ACCEL
+
 #endif

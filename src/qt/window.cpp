@@ -47,6 +47,8 @@ wxWindow::wxWindow()
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     m_qtPicture = new QPicture();
     m_horzScrollBar = m_vertScrollBar = NULL;
+    m_qtShortcutHandler = new wxQtShortcutHandler( this );
+    m_processingShortcut = false;
 }
 
 wxWindow::~wxWindow()
@@ -108,6 +110,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     SetSize(size);
     m_qtPicture = new QPicture();
     m_mouseInside = false;
+    m_qtShortcutHandler = new wxQtShortcutHandler( this );
+    m_processingShortcut = false;
 
     m_windowStyle = style;
 
@@ -444,6 +448,28 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 }
 #endif // wxUSE_MENUS
 
+#if wxUSE_ACCEL
+void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
+{
+    wxWindowBase::SetAcceleratorTable( accel );
+    
+    // Disable previously set accelerators
+    while ( !m_qtShortcuts.isEmpty() )
+        delete m_qtShortcuts.takeFirst();
+    
+    // Create new shortcuts (use GetHandle() so all events inside
+    // the window are handled, not only in the container subwindow)
+    m_qtShortcuts = accel.ConvertShortcutTable( GetHandle() );
+    
+    // Connect shortcuts to window
+    Q_FOREACH( QShortcut *s, m_qtShortcuts )
+    {
+        QObject::connect( s, SIGNAL( activated() ), m_qtShortcutHandler, SLOT( activated() ) );
+        QObject::connect( s, SIGNAL( activatedAmbiguously() ), m_qtShortcutHandler, SLOT( activated() ) );
+    }
+}
+#endif // wxUSE_ACCEL
+
 bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( event ))
 {
     /* If this window has scrollbars, only let wx handle the event if it is
@@ -635,6 +661,18 @@ static void FillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardSt
 
 bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
+#if wxUSE_ACCEL
+    if ( m_processingShortcut )
+    {
+        /* Enter here when a shortcut isn't handled by Qt.
+         * Return true to avoid Qt-processing of the event
+         * Instead, use the flag to indicate that it wasn't processed */
+        m_processingShortcut = false;
+        
+        return true;
+    }
+#endif // wxUSE_ACCEL
+
     bool handled = false;
 
     // Build the event
@@ -656,9 +694,28 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event
     handled = ProcessWindowEvent( e );
 
     // On key presses, send the EVT_CHAR event
-    // TODO: Check accelerators
-    if ( event->type() == QEvent::KeyPress )
+    if ( !handled && event->type() == QEvent::KeyPress )
     {
+#if wxUSE_ACCEL
+        // Check for accelerators
+        if ( !m_processingShortcut )
+        {
+            /* The call to notify() will try to execute a shortcut. If it fails
+             * it will call keyPressEvent() in our wxQtWidget which calls back
+             * to this function. We use the m_processingShortcut flag to avoid
+             * processing that recursive call and return back to this one. */
+            m_processingShortcut = true;
+            
+            QApplication::instance()->notify( GetHandle(), event );
+            
+            handled = m_processingShortcut;
+            m_processingShortcut = false;
+            
+            if ( handled )
+                return true;
+        }
+#endif // wxUSE_ACCEL
+
         e.SetEventType( wxEVT_CHAR );
 
         // Translated key code (including control + letter -> 1-26)
@@ -668,7 +725,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event
         if ( translated )
             e.m_keyCode = translated;
         
-        handled |= ProcessWindowEvent( e );
+        handled = ProcessWindowEvent( e );
     }
     
     return handled;
@@ -883,6 +940,26 @@ bool wxWindow::QtHandleFocusEvent ( QWidget *handler, QFocusEvent *event )
     
     return handled;
 }
+
+#if wxUSE_ACCEL
+void wxWindow::QtHandleShortcut ( int command )
+{
+    if (command != -1)
+    {
+        wxCommandEvent menu_event( wxEVT_COMMAND_MENU_SELECTED, command );
+        bool ret = ProcessWindowEvent( menu_event );
+        
+        if ( !ret )
+        {
+            // if the accelerator wasn't handled as menu event, try
+            // it as button click (for compatibility with other
+            // platforms):
+            wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
+            ProcessWindowEvent( button_event );
+        }
+    }
+}
+#endif // wxUSE_ACCEL
 
 QWidget *wxWindow::GetHandle() const
 {

@@ -12,3 +12,17 @@ wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
     : wxQtEventForwarder< wxWindow, QWidget >( window, parent )
 {
 }
+
+#if wxUSE_ACCEL
+wxQtShortcutHandler::wxQtShortcutHandler( wxWindow *window )
+    : wxQtSignalForwarder< wxWindow >( window )
+{
+}
+
+void wxQtShortcutHandler::activated()
+{
+    int command = sender()->property("wxQt_Command").toInt();
+    
+    GetSignalHandler()->QtHandleShortcut( command );
+}
+#endif // wxUSE_ACCEL

@@ -16,6 +16,7 @@
 #include <QtGui/QScrollBar>
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
 
 /* wxQt specific notes:
  *
@@ -100,6 +101,12 @@ public:
 
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
+#if wxUSE_ACCEL
+    // accelerators
+    // ------------
+    virtual void SetAcceleratorTable( const wxAcceleratorTable& accel );    
+#endif // wxUSE_ACCEL
+    
     // wxQt implementation internals:
 
     virtual WXWidget QtGetContainer() const;
@@ -118,6 +125,10 @@ public:
     virtual bool QtHandleCloseEvent  ( QWidget *handler, QCloseEvent *event );
     virtual bool QtHandleContextMenuEvent  ( QWidget *handler, QContextMenuEvent *event );
     virtual bool QtHandleFocusEvent  ( QWidget *handler, QFocusEvent *event );
+
+#if wxUSE_ACCEL
+    virtual void QtHandleShortcut ( int command );
+#endif // wxUSE_ACCEL
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,
@@ -171,7 +182,13 @@ private:
     QPicture *m_qtPicture;
 
     bool m_mouseInside;
-    
+
+#if wxUSE_ACCEL
+    QList< QShortcut* > m_qtShortcuts;
+    wxQtShortcutHandler *m_qtShortcutHandler;
+    bool m_processingShortcut;
+#endif // wxUSE_ACCEL
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )
 };
