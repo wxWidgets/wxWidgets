@@ -39,12 +39,6 @@
 #include "wx/msw/private/dc.h"
 #include "wx/private/window.h"
 
-#if wxUSE_EXTENDED_RTTI
-    IMPLEMENT_DYNAMIC_CLASS_XTI(wxCommandLinkButton, wxGenericCommandLinkButton, "wx/commandlinkbutton.h")
-#else
-    IMPLEMENT_DYNAMIC_CLASS(wxCommandLinkButton, wxGenericCommandLinkButton)
-#endif // wxUSE_EXTENDED_RTTI
-
 // ----------------------------------------------------------------------------
 // Helper functions
 // ----------------------------------------------------------------------------

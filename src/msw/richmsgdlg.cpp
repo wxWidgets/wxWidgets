@@ -25,8 +25,6 @@
 using wxMSWMessageDialog::wxMSWTaskDialogConfig;
 #endif
 
-wxIMPLEMENT_CLASS(wxRichMessageDialog, wxDialog)
-
 // ----------------------------------------------------------------------------
 // wxRichMessageDialog
 // ----------------------------------------------------------------------------

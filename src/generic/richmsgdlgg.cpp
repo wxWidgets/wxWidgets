@@ -25,6 +25,8 @@
 #include "wx/collpane.h"
 #include "wx/richmsgdlg.h"
 
+wxIMPLEMENT_CLASS(wxRichMessageDialog, wxDialog)
+
 // ----------------------------------------------------------------------------
 // Events and handlers
 // ----------------------------------------------------------------------------

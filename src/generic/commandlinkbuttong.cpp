@@ -24,6 +24,12 @@
 #include "wx/commandlinkbutton.h"
 #include "wx/artprov.h"
 
+#if wxUSE_EXTENDED_RTTI
+    wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxCommandLinkButton, wxButton, "wx/commandlinkbutton.h")
+#else
+    wxIMPLEMENT_DYNAMIC_CLASS(wxCommandLinkButton, wxButton)
+#endif // wxUSE_EXTENDED_RTTI
+
 // ----------------------------------------------------------------------------
 // Generic command link button
 // ----------------------------------------------------------------------------
