@@ -35,7 +35,7 @@ int wxRichMessageDialog::ShowModal()
 {
 #ifdef wxHAS_MSW_TASKDIALOG
     // use generic version when task dialogs aren't available.
-    if ( !wxMSWTaskDialogConfig::HasNativeTaskDialog() )
+    if ( !wxMSWMessageDialog::HasNativeTaskDialog() )
         return wxGenericRichMessageDialog::ShowModal();
 
     // create a task dialog

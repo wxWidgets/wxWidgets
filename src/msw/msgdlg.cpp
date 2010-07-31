@@ -602,10 +602,8 @@ int wxMessageDialog::ShowTaskDialog()
 
 int wxMessageDialog::ShowModal()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
-    if ( wxMSWTaskDialogConfig::HasNativeTaskDialog() )
+    if ( wxMSWMessageDialog::HasNativeTaskDialog() )
         return ShowTaskDialog();
-#endif
 
     return ShowMessageBox();
 }
@@ -632,12 +630,6 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
     btnNoLabel = dlg.GetNoLabel();
     btnOKLabel = dlg.GetOKLabel();
     btnCancelLabel = dlg.GetCancelLabel();
-}
-
-// static
-bool wxMSWTaskDialogConfig::HasNativeTaskDialog()
-{
-    return wxGetWinVersion() >= wxWinVersion_6;
 }
 
 void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
@@ -723,6 +715,15 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
 }
 
 #endif // wxHAS_MSW_TASKDIALOG
+
+bool wxMSWMessageDialog::HasNativeTaskDialog()
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    return wxGetWinVersion() >= wxWinVersion_6;
+#else
+    return false;
+#endif
+}
 
 int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
 {

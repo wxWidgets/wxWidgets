@@ -12,6 +12,7 @@
 #define _WX_MSW_PRIVATE_MSGDLG_H_
 
 #include "wx/msw/wrapcctl.h"
+#include "wx/ptr_scpd.h"
 
 // Macro to help identify if task dialogs are available.
 #ifdef TD_WARNING_ICON
@@ -27,26 +28,17 @@ namespace wxMSWMessageDialog
     class wxMSWTaskDialogConfig
     {
     public:
+        wxMSWTaskDialogConfig()
+            : buttons(new TASKDIALOG_BUTTON[3]),
+              parent(NULL),
+              iconId(0),
+              style(0),
+              useCustomLabels(false)
+            { }
+
         // initializes the object from a message dialog.
         wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg);
 
-        static bool HasNativeTaskDialog();
-
-        // Will create a task dialog with it's paremeters for it's creation
-        // stored in the provided TASKDIALOGCONFIG parameter.
-        // NOTE: The wxMSWTaskDialogConfig object needs to remain accessible
-        // during the subsequent call to TaskDialogIndirect().
-        void MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc);
-
-    protected:
-        // Used by MSWCommonTaskDialogInit() to add a regular button or a
-        // button with a custom label if used.
-        void AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
-                                 int btnCustomId,
-                                 int btnCommonId,
-                                 const wxString& customLabel);
-
-    private:
         wxScopedArray<TASKDIALOG_BUTTON> buttons;
         wxWindow *parent;
         wxString caption;
@@ -59,9 +51,24 @@ namespace wxMSWMessageDialog
         wxString btnNoLabel;
         wxString btnOKLabel;
         wxString btnCancelLabel;
+
+        // Will create a task dialog with it's paremeters for it's creation
+        // stored in the provided TASKDIALOGCONFIG parameter.
+        // NOTE: The wxMSWTaskDialogConfig object needs to remain accessible
+        // during the subsequent call to TaskDialogIndirect().
+        void MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc);
+
+        // Used by MSWCommonTaskDialogInit() to add a regular button or a
+        // button with a custom label if used.
+        void AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
+                                 int btnCustomId,
+                                 int btnCommonId,
+                                 const wxString& customLabel);
     }; // class wxMSWTaskDialogConfig
 
 #endif // wxHAS_MSW_TASKDIALOG
+
+    bool HasNativeTaskDialog();
 
     // Translates standard MSW button IDs like IDCANCEL into an equivalent
     // wx constant such as wxCANCEL.
