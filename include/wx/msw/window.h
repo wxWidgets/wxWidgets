@@ -590,6 +590,8 @@ protected:
                                           int& x, int& y,
                                           int& w, int& h) const;
 
+    bool MSWEnableHWND(WXHWND hWnd, bool enable);
+
 private:
     // common part of all ctors
     void Init();

@@ -699,9 +699,21 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 void wxWindowMSW::DoEnable( bool enable )
 {
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::EnableWindow(hWnd, (BOOL)enable);
+    MSWEnableHWND(GetHwnd(), enable);
+}
+
+bool wxWindowMSW::MSWEnableHWND(WXHWND hWnd, bool enable)
+{
+    if ( !hWnd )
+        return false;
+
+    // If disabling focused control, we move focus to the next one, as if the
+    // user pressed Tab. That's because we can't keep focus on a disabled
+    // control, Tab-navigation would stop working then.
+    if ( !enable && ::GetFocus() == hWnd )
+        Navigate();
+
+    return ::EnableWindow(hWnd, (BOOL)enable);
 }
 
 bool wxWindowMSW::Show(bool show)

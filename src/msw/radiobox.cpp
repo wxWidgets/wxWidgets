@@ -403,7 +403,7 @@ bool wxRadioBox::Enable(unsigned int item, bool enable)
     wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::Enable()") );
 
-    BOOL ret = ::EnableWindow((*m_radioButtons)[item], enable);
+    BOOL ret = MSWEnableHWND((*m_radioButtons)[item], enable);
 
     return (ret == 0) != enable;
 }
