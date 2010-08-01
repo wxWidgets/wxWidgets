@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobut.h"
+#include "wx/qt/converter.h"
 
 wxRadioButton::wxRadioButton()
 {
@@ -24,6 +25,12 @@ wxRadioButton::wxRadioButton( wxWindow *parent,
                const wxValidator& validator,
                const wxString& name)
 {
+    Create( parent, id, label, pos, size, style, validator, name );
+}
+
+wxRadioButton::~wxRadioButton()
+{
+    delete m_qtRadioButton;
 }
 
 bool wxRadioButton::Create( wxWindow *parent,
@@ -35,7 +42,9 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    return false;
+    m_qtRadioButton = new QRadioButton( wxQtConvertString( label ), parent->GetHandle() );
+
+    return wxControl::Create( parent, id, pos, size, style, validator, name );
 }
 
 void wxRadioButton::SetValue(bool value)
@@ -47,3 +56,7 @@ bool wxRadioButton::GetValue() const
     return false;
 }
 
+QRadioButton *wxRadioButton::GetHandle() const
+{
+    return m_qtRadioButton;
+}

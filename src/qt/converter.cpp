@@ -102,3 +102,36 @@ QSize  wxQtConvertSize( const wxSize &size )
 
     return QSize(size.GetWidth(), size.GetHeight());
 }
+
+Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation )
+{
+    if (( style & ( wxHORIZONTAL | wxVERTICAL )) == 0 )
+        style |= defaultOrientation;
+
+    switch ( style & ( wxHORIZONTAL | wxVERTICAL ))
+    {
+        case wxHORIZONTAL:
+            return Qt::Horizontal;
+
+        case wxVERTICAL:
+            return Qt::Vertical;
+    }
+    wxFAIL_MSG( "Unreachable code!" );
+    return static_cast< Qt::Orientation >( -1 );
+}
+
+
+wxOrientation wxQtConvertOrientation( Qt::Orientation qtOrientation )
+{
+    switch ( qtOrientation )
+    {
+        case Qt::Horizontal:
+            return wxHORIZONTAL;
+
+        case Qt::Vertical:
+            return wxVERTICAL;
+    }
+    wxFAIL_MSG( "Unreachable code!" );
+    return static_cast< wxOrientation >( -1 );
+}
+

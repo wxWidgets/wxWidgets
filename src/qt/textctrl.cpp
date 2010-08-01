@@ -37,9 +37,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString &name)
 {
-    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
+    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->QtGetContainer() );
 
-    return true;
+    return wxTextCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -109,7 +109,7 @@ bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
     return false;
 }
 
-//QLineEdit *wxTextCtrl::GetHandle() const
-//{
-//    return m_qtTextEdit;
-//}
+QTextEdit *wxTextCtrl::GetHandle() const
+{
+    return m_qtTextEdit;
+}

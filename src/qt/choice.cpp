@@ -26,6 +26,7 @@ wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
+    Create( parent, id, pos, size, n, choices, style, validator, name );
 }
 
 
@@ -37,8 +38,13 @@ wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
+    Create( parent, id, pos, size, choices, style, validator, name );
 }
 
+wxChoice::~wxChoice()
+{
+    delete m_qtComboBox;
+}
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
@@ -48,7 +54,10 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return false;
+    m_qtComboBox = new wxQtComboBox( parent );
+    m_qtComboBox->AddChoices( n, choices );
+
+    return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 
@@ -60,7 +69,10 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return false;
+    m_qtComboBox = new wxQtComboBox( parent );
+    m_qtComboBox->AddChoices( choices );
+
+    return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 
@@ -116,3 +128,7 @@ void wxChoice::DoDeleteOneItem(unsigned int pos)
 {
 }
 
+QComboBox *wxChoice::GetHandle() const
+{
+    return m_qtComboBox;
+}

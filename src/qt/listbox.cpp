@@ -25,6 +25,7 @@ wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name)
 {
+    Create( parent, id, pos, size, n, choices, style, validator, name );
 }
 
 wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
@@ -35,6 +36,12 @@ wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name)
 {
+    Create( parent, id, pos, size, choices, style, validator, name );
+}
+
+wxListBox::~wxListBox()
+{
+    delete m_qtListWidget;
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -45,7 +52,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtListWidget = new QListWidget( parent->GetHandle() );
+
+    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -56,7 +65,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtListWidget = new QListWidget( parent->GetHandle() );
+
+    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -125,3 +136,7 @@ void wxListBox::DoDeleteOneItem(unsigned int pos)
 {
 }
 
+QListWidget *wxListBox::GetHandle() const
+{
+    return m_qtListWidget;
+}

@@ -9,8 +9,6 @@
 #ifndef _WX_QT_TEXTENTRY_H_
 #define _WX_QT_TEXTENTRY_H_
 
-#include <QtGui/QLineEdit>
-
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
@@ -40,8 +38,6 @@ public:
     virtual void SetEditable(bool editable);
     
 protected:
-    virtual QLineEdit *GetHandle() const;
-    
     virtual wxString DoGetValue() const;
 
     virtual wxWindow *GetEditableWindow();

@@ -9,6 +9,9 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
+#include <QtCore/QPointer>
+#include "wx/qt/combobox_qt.h"
+
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
@@ -29,6 +32,8 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
+
+    virtual ~wxChoice();
 
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -53,6 +58,8 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
+    virtual QComboBox *GetHandle() const;
+
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
@@ -67,6 +74,8 @@ protected:
 
 
 private:
+    QPointer< wxQtComboBox > m_qtComboBox;
+
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
 

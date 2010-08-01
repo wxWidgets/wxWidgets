@@ -9,6 +9,9 @@
 #ifndef _WX_QT_SLIDER_H_
 #define _WX_QT_SLIDER_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QSlider>
+
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
@@ -21,6 +24,8 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
+
+    virtual ~wxSlider();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -46,9 +51,10 @@ public:
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
 
-protected:
+    virtual QSlider *GetHandle() const;
 
 private:
+    QPointer< QSlider > m_qtSlider;
 };
 
 #endif // _WX_QT_SLIDER_H_

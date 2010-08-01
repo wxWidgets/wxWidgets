@@ -33,6 +33,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 private:
+    // We re-use wxButton
 };
 
 #endif // _WX_QT_BMPBUTTN_H_

@@ -9,6 +9,9 @@
 #ifndef _WX_QT_COMBOBOX_H_
 #define _WX_QT_COMBOBOX_H_
 
+#include <QtCore/QPointer>
+#include "wx/qt/combobox_qt.h"
+
 class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 {
 public:
@@ -32,6 +35,8 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
+
+    virtual ~wxComboBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,
@@ -61,6 +66,8 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
     
+    virtual QComboBox *GetHandle() const;
+
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
@@ -74,6 +81,8 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
 
 private:
+    QPointer< wxQtComboBox > m_qtComboBox;
+
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };
 

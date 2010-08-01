@@ -22,6 +22,12 @@ wxNotebook::wxNotebook(wxWindow *parent,
          long style,
          const wxString& name)
 {
+    Create( parent, id, pos, size, style, name );
+}
+
+wxNotebook::~wxNotebook()
+{
+    delete m_qtTabWidget;
 }
 
 bool wxNotebook::Create(wxWindow *parent,
@@ -31,7 +37,9 @@ bool wxNotebook::Create(wxWindow *parent,
           long style,
           const wxString& name)
 {
-    return false;
+    m_qtTabWidget = new QTabWidget( parent->GetHandle() );
+
+    return wxNotebookBase::Create( parent, id, pos, size, style, name );
 }
 
 void wxNotebook::SetPadding(const wxSize& padding)
@@ -93,3 +101,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t page)
     return NULL;
 }
 
+QTabWidget *wxNotebook::GetHandle() const
+{
+    return m_qtTabWidget;
+}

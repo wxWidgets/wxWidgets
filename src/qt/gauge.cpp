@@ -24,6 +24,12 @@ wxGauge::wxGauge(wxWindow *parent,
         const wxValidator& validator,
         const wxString& name)
 {
+    Create( parent, id, range, pos, size, style, validator, name );
+}
+
+wxGauge::~wxGauge()
+{
+    delete m_qtProgressBar;
 }
 
 bool wxGauge::Create(wxWindow *parent,
@@ -35,6 +41,15 @@ bool wxGauge::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtProgressBar = new QProgressBar( parent->QtGetContainer() );
+    m_qtProgressBar->setOrientation( wxQtConvertOrientation( style, wxGA_HORIZONTAL ));
+    m_qtProgressBar->setRange( 0, range );
+
+    return wxGaugeBase::Create( parent, id, range, pos, size, style, validator, name );
 }
 
+
+QProgressBar *wxGauge::GetHandle() const
+{
+    return m_qtProgressBar;
+}

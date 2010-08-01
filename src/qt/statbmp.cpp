@@ -25,6 +25,12 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 long style,
                 const wxString& name)
 {
+    Create( parent, id, label, pos, size, style, name );
+}
+
+wxStaticBitmap::~wxStaticBitmap()
+{
+    delete m_qtLabel;
 }
 
 bool wxStaticBitmap::Create( wxWindow *parent,
@@ -35,7 +41,9 @@ bool wxStaticBitmap::Create( wxWindow *parent,
              long style,
              const wxString& name)
 {
-    return false;
+    m_qtLabel = new QLabel( parent->GetHandle() );
+
+    return wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)
@@ -56,3 +64,7 @@ wxIcon wxStaticBitmap::GetIcon() const
     return wxIcon();
 }
 
+QLabel *wxStaticBitmap::GetHandle() const
+{
+    return m_qtLabel;
+}

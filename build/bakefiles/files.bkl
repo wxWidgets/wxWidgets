@@ -345,6 +345,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/colordlg.h
     wx/qt/colour.h
     wx/qt/combobox.h
+    wx/qt/combobox_qt.h
     wx/qt/control.h
     wx/qt/converter.h
     wx/qt/ctrlsub.h
@@ -426,6 +427,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/colordlg.cpp
     src/qt/colour.cpp
     src/qt/combobox.cpp
+    src/qt/combobox_qt.cpp
+    src/qt/combobox_qt.moc.cpp
     src/qt/control.cpp
     src/qt/converter.cpp
     src/qt/ctrlsub.cpp

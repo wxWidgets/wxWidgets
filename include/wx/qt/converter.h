@@ -12,6 +12,9 @@
 #ifndef _WX_QT_CONVERTER_H_
 #define _WX_QT_CONVERTER_H_
 
+#include "wx/defs.h"
+#include <QtCore/Qt>
+
 // Rely on overloading and let the compiler pick the correct version, which makes
 // them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
 
@@ -44,6 +47,9 @@ class WXDLLIMPEXP_FWD_BASE wxSize;
 class QSize;
 wxSize wxQtConvertSize( const QSize  &size );
 QSize  wxQtConvertSize( const wxSize &size );
+
+Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation );
+wxOrientation wxQtConvertOrientation( Qt::Orientation );
 
 #endif // _WX_QT_CONVERTER_H_
 

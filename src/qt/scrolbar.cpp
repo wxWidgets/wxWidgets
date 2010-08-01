@@ -45,12 +45,8 @@ bool wxScrollBar::Create( wxWindow *parent, wxWindowID id,
         qtParent = parent->QtGetContainer();
         parent->AddChild(this);
     }
-
-    Qt::Orientation orient = Qt::Vertical;
-    if ( style & wxSB_HORIZONTAL )
-        orient = Qt::Horizontal;
-    
-    m_qtScrollBar = new wxQtScrollBar( this, orient, qtParent );
+    m_qtScrollBar = new wxQtScrollBar( this, wxQtConvertOrientation( style, wxSB_HORIZONTAL ),
+            qtParent );
     
     return wxControl::Create( parent, id, pos, size, style, validator, name );
 }
@@ -125,9 +121,6 @@ WXWidget wxScrollBar::QtGetScrollBarsContainer() const
 // wxQtScrollBar
 /////////////////////////////////////////////////////////////////////////////
 
-// TODO: Write wxQtConvertOrientation() function to replace
-// Qt::Horizontal ? wxHORIZONTAL : wxVERTICA' etc.
-
 wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, Qt::Orientation orient, QWidget *parent )
     : QScrollBar( orient, parent ),
       wxQtSignalForwarder< wxScrollBar >( scrollBar )
@@ -169,7 +162,7 @@ void wxQtScrollBar::OnActionTriggered( int action )
     
     wxScrollBar *scrollBar = GetSignalHandler();
     wxScrollEvent e( eventType, scrollBar->GetId(), sliderPosition(),
-                        orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
+            wxQtConvertOrientation( orientation() ));
                         
     scrollBar->ProcessWindowEvent(e);
 }
@@ -178,7 +171,7 @@ void wxQtScrollBar::OnSliderReleased()
 {
     wxScrollBar *scrollBar = GetSignalHandler();
     wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, scrollBar->GetId(), sliderPosition(),
-                        orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
+            wxQtConvertOrientation( orientation() ));
                         
     scrollBar->ProcessWindowEvent(e);
 }
@@ -187,7 +180,7 @@ void wxQtScrollBar::OnValueChanged( int position )
 {
     wxScrollBar *scrollBar = GetSignalHandler();
     wxScrollEvent e( wxEVT_SCROLL_CHANGED, scrollBar->GetId(), position,
-                     orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
+            wxQtConvertOrientation( orientation() ));
                      
     scrollBar->ProcessWindowEvent(e);
 }

@@ -46,10 +46,6 @@ public:
     
     virtual bool IsChecked(unsigned int item) const;
     virtual void Check(unsigned int item, bool check = true);
-
-protected:
-
-private:
 };
 
 #endif // _WX_QT_CHECKLST_H_

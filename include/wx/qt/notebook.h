@@ -9,6 +9,9 @@
 #ifndef _WX_QT_NOTEBOOK_H_
 #define _WX_QT_NOTEBOOK_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QTabWidget>
+
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
@@ -20,6 +23,8 @@ public:
              long style = 0,
              const wxString& name = wxNotebookNameStr);
     
+    virtual ~wxNotebook();
+
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -46,9 +51,13 @@ public:
     virtual int SetSelection(size_t n);
     virtual int ChangeSelection(size_t n);
 
+    virtual QTabWidget *GetHandle() const;
+
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
+private:
+    QPointer< QTabWidget > m_qtTabWidget;
 };
 
 #endif // _WX_QT_NOTEBOOK_H_

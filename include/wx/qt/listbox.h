@@ -9,6 +9,9 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QListWidget>
+
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
@@ -28,6 +31,8 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);
+
+    virtual ~wxListBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -54,6 +59,8 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
+    virtual QListWidget *GetHandle() const;
+
 protected:
     virtual void DoSetFirstItem(int n);
 
@@ -71,6 +78,8 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
     
 private:
+    QPointer< QListWidget > m_qtListWidget;
+
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
 

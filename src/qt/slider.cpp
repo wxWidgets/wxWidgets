@@ -24,6 +24,12 @@ wxSlider::wxSlider(wxWindow *parent,
          const wxValidator& validator,
          const wxString& name)
 {
+    Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
+}
+
+wxSlider::~wxSlider()
+{
+    delete m_qtSlider;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -35,7 +41,10 @@ bool wxSlider::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtSlider = new QSlider( wxQtConvertOrientation( style, wxSL_HORIZONTAL ),
+            parent->GetHandle() );
+
+    return wxSliderBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 int wxSlider::GetValue() const
@@ -88,4 +97,9 @@ int wxSlider::GetThumbLength() const
     return 0;
 }
 
+
+QSlider *wxSlider::GetHandle() const
+{
+    return m_qtSlider;
+}
 

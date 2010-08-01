@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/stattext.h"
+#include "wx/qt/converter.h"
 
 wxStaticText::wxStaticText()
 {
@@ -23,6 +24,12 @@ wxStaticText::wxStaticText(wxWindow *parent,
              long style,
              const wxString &name)
 {
+    Create( parent, id, label, pos, size, style, name );
+}
+
+wxStaticText::~wxStaticText()
+{
+    delete m_qtLabel;
 }
 
 bool wxStaticText::Create(wxWindow *parent,
@@ -33,6 +40,13 @@ bool wxStaticText::Create(wxWindow *parent,
             long style,
             const wxString &name)
 {
-    return false;
+    m_qtLabel = new QLabel( wxQtConvertString( label ), parent->GetHandle() );
+
+    return wxStaticTextBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
+
+QLabel *wxStaticText::GetHandle() const
+{
+    return m_qtLabel;
+}

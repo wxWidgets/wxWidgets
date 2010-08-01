@@ -51,7 +51,7 @@ public:
 
     virtual void ShowPosition(long pos);
     
-//    virtual QTextEdit *GetHandle() const;
+    virtual QTextEdit *GetHandle() const;
 
 protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);

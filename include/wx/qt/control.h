@@ -25,8 +25,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-protected:
-    virtual QWidget *GetHandle() const;
+//protected:
+//    virtual QWidget *GetHandle() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)

@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/combobox.h"
+#include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxComboBox, wxControl )
 
@@ -28,6 +29,7 @@ wxComboBox::wxComboBox(wxWindow *parent,
            const wxValidator& validator,
            const wxString& name )
 {
+    Create( parent, id, value, pos, size, n, choices, style, validator, name );
 }
 
 
@@ -40,8 +42,13 @@ wxComboBox::wxComboBox(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name )
 {
+    Create( parent, id, value, pos, size, choices, style, validator, name );
 }
 
+wxComboBox::~wxComboBox()
+{
+    delete m_qtComboBox;
+}
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& value,
@@ -52,7 +59,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    return false;
+    m_qtComboBox = new wxQtComboBox( parent, value );
+    m_qtComboBox->AddChoices( n, choices );
+
+    return wxControl::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
@@ -64,9 +74,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    return false;
-}
+    m_qtComboBox = new wxQtComboBox( parent, value );
+    m_qtComboBox->AddChoices( choices );
 
+    return wxControl::Create( parent, id, pos, size, style, validator, name );
+}
 
 void wxComboBox::SetSelection(int n)
 {
@@ -131,4 +143,9 @@ void wxComboBox::DoClear()
 
 void wxComboBox::DoDeleteOneItem(unsigned int pos)
 {
+}
+
+QComboBox *wxComboBox::GetHandle() const
+{
+    return m_qtComboBox;
 }

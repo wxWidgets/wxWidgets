@@ -23,6 +23,7 @@ wxControl::wxControl(wxWindow *parent, wxWindowID id,
          const wxValidator& validator,
          const wxString& name )
 {
+    Create( parent, id, pos, size, style, validator, name );
 }
 
 
@@ -32,12 +33,18 @@ bool wxControl::Create(wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return false;
+    bool isCreated = wxWindow::Create(parent, id, pos, size, style, name);
+
+#if wxUSE_VALIDATORS
+    SetValidator(validator);
+#endif
+
+    return isCreated;
 }
 
 
-QWidget *wxControl::GetHandle() const
-{
-    return NULL;
-}
+//QWidget *wxControl::GetHandle() const
+//{
+//    return NULL;
+//}
 

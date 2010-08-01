@@ -72,10 +72,12 @@ wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wx
     Create( parent, id, pos, size, style, name );
 }
 
-bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
-    const wxPoint & pos, const wxSize & size,
-    long style, const wxString & WXUNUSED( name ))
+bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
+        const wxSize & size, long style, const wxString &name )
 {
+    if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+        return false;
+
     // Should have already been created in the derived class in most cases
     
     if (GetHandle() == NULL) {
@@ -92,7 +94,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     }
 
     // Create layout for built-in scrolling bars
-    m_horzScrollBar = m_vertScrollBar = NULL;
     if ( QtGetScrollBarsContainer() )
     {
         QGridLayout *scrollLayout = new QGridLayout();
@@ -113,16 +114,25 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
 
-    m_windowStyle = style;
-
     return ( true );
 }
 
 bool wxWindow::Show( bool show )
 {
-    GetHandle()->setVisible( show );
+    if ( !wxWindowBase::Show( show ))
+        return false;
 
-    return wxWindowBase::Show( show );
+    // Show can be called before the underlying window is created:
+
+    QWidget *qtWidget = GetHandle();
+    if ( qtWidget != NULL )
+    {
+        qtWidget->setVisible( show );
+        return true;
+    }
+    else
+        return false;
+
 }
 
 
@@ -968,7 +978,7 @@ QWidget *wxWindow::GetHandle() const
 
 QWidget *wxWindow::QtGetContainer() const
 {
-    if ( m_qtContainer )
+    if ( m_qtContainer != NULL )
         return m_qtContainer;
     else
         return GetHandle();

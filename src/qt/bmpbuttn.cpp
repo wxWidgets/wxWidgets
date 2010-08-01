@@ -25,6 +25,7 @@ wxBitmapButton::wxBitmapButton(wxWindow *parent,
                const wxValidator& validator,
                const wxString& name )
 {
+    Create( parent, id, bitmap, pos, size, style, validator, name );
 }
 
 
@@ -37,6 +38,9 @@ bool wxBitmapButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name )
 {
-    return false;
+    if ( !wxBitmapButtonBase::Create( parent, id, pos, size, style, validator, name ))
+        return false;
+
+    return true;
 }
 

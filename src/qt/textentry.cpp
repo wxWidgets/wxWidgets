@@ -84,11 +84,6 @@ void wxTextEntry::SetEditable(bool editable)
 {
 }
 
-QLineEdit *wxTextEntry::GetHandle() const
-{
-    return NULL;
-}
-
 wxString wxTextEntry::DoGetValue() const
 {
     return wxString();
