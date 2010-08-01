@@ -41,6 +41,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
     m_qtMessageBox->setWindowTitle( wxQtConvertString( caption ) );
     
     // Apply the style
+    SetWindowStyleFlag( style );
 
     // Buttons
     if ( style & wxOK )
@@ -111,9 +112,6 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
 
     if ( style & wxSTAY_ON_TOP )
         m_qtMessageBox->setWindowModality( Qt::ApplicationModal );
-
-    wxMISSING_IMPLEMENTATION( "wxCENTRE flag" );
-    
 }
 
 wxMessageDialog::~wxMessageDialog()

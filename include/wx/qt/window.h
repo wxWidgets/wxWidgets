@@ -96,7 +96,11 @@ public:
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = NULL );
-    
+
+    // Styles
+    virtual void SetWindowStyleFlag( long style );
+    virtual void SetExtraStyle( long exStyle );
+                               
     virtual WXWidget GetHandle() const;
 
     virtual void SetDropTarget( wxDropTarget *dropTarget );

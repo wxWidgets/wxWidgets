@@ -41,6 +41,8 @@ public:
 
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetStatusBar(wxStatusBar *statusBar );
+    
+    virtual void SetWindowStyleFlag( long style );
 
     virtual QMainWindow *GetHandle() const;
     virtual WXWidget QtGetScrollBarsContainer() const;

@@ -9,7 +9,7 @@
 #include "wx/qt/window_qt.h"
 
 wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
-    : wxQtEventForwarder< wxWindow, QWidget >( window, parent )
+    : wxQtEventForwarder< wxWindow, QFrame >( window, parent )
 {
 }
 

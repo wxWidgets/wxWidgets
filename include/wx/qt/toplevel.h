@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/toplevel.h
 // Purpose:     declares wxTopLevelWindowNative class
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Modified by:
 // Created:     09.08.09
 // RCS-ID:      $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +43,10 @@ public:
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
     virtual void SetIcons(const wxIconBundle& icons);
+    
+    // Styles
+    virtual void SetWindowStyleFlag( long style );
+    virtual long GetWindowStyleFlag() const;
 };
     
 #endif // _WX_QT_TOPLEVEL_H_

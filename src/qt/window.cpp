@@ -97,7 +97,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     if ( QtGetScrollBarsContainer() )
     {
         QGridLayout *scrollLayout = new QGridLayout();
-        scrollLayout->setContentsMargins( 0, 0, 0, 0 );
+        scrollLayout->setContentsMargins( 0 , 0, 0, 0 );
+        scrollLayout->setSpacing( 0 );
         QtGetScrollBarsContainer()->setLayout( scrollLayout );
 
         // Container at top-left
@@ -113,6 +114,20 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     m_mouseInside = false;
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+    
+    // Use custom Qt window flags (allow to turn on or off
+    // the minimize/maximize/close buttons and title bar)
+    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+    
+    qtFlags |= Qt::CustomizeWindowHint;
+    qtFlags |= Qt::WindowTitleHint;
+    qtFlags |= Qt::WindowSystemMenuHint;
+    qtFlags |= Qt::WindowMinMaxButtonsHint;
+    qtFlags |= Qt::WindowCloseButtonHint;
+    
+    GetHandle()->setWindowFlags( qtFlags );
+    
+    SetWindowStyleFlag( style );
 
     return ( true );
 }
@@ -207,6 +222,7 @@ int wxWindow::GetCharWidth() const
 wxScrollBar *wxWindow::QtGetScrollBar( int orientation ) const
 {
     wxCHECK_MSG( QtGetScrollBarsContainer(), NULL, "This window can't have scrollbars" );
+    wxCHECK_MSG( CanScroll( orientation ), NULL, "Window can't scroll in that orientation" );
 
     wxScrollBar *scrollBar = NULL;
 
@@ -220,6 +236,8 @@ wxScrollBar *wxWindow::QtGetScrollBar( int orientation ) const
 
 void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
 {
+    wxCHECK_RET( CanScroll( orientation ), "Window can't scroll in that orientation" );
+    
     //If range is zero, don't create the scrollbar
     wxScrollBar *scrollBar = QtGetScrollBar( orientation );
 
@@ -259,7 +277,17 @@ void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int ran
     // Configure the scrollbar if it exists. If range is zero we can get here with
     // scrollBar == NULL and it is not a problem
     if ( scrollBar )
+    {
         scrollBar->SetScrollbar( pos, thumbvisible, range, thumbvisible, refresh );
+        if ( HasFlag( wxALWAYS_SHOW_SB ) && ( range == 0 ) )
+        {
+            // Disable instead of hide
+            scrollBar->GetHandle()->show();
+            scrollBar->GetHandle()->setEnabled( false );
+        }
+        else
+            scrollBar->GetHandle()->setEnabled( true );            
+    }
 }
 
 void wxWindow::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
@@ -337,6 +365,91 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+}
+
+void wxWindow::SetWindowStyleFlag( long style )
+{
+    wxWindowBase::SetWindowStyleFlag( style );
+    
+    wxMISSING_IMPLEMENTATION( "wxWANTS_CHARS, wxTAB_TRAVERSAL" );
+    // wxFULL_REPAINT_ON_RESIZE: Qt::WResizeNoErase (marked obsolete)
+    // wxTRANSPARENT_WINDOW, wxCLIP_CHILDREN: Used in window for
+    //   performance, apparently not needed.
+    
+    // wxWANTS_CHARS: Need to reimplement event() 
+    //   See: http://doc.qt.nokia.com/latest/qwidget.html#events
+    // wxTAB_TRAVERSAL: reimplement focusNextPrevChild()          
+   
+    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+    
+    // For this to work Qt::CustomizeWindowHint must be set (done in Create())
+    if ( HasFlag( wxCAPTION ) )
+    {
+        // Enable caption bar and all buttons. This behavious
+        // is overwritten by subclasses (wxTopLevelWindow).
+        qtFlags |= Qt::WindowTitleHint;
+        qtFlags |= Qt::WindowSystemMenuHint;
+        qtFlags |= Qt::WindowMinMaxButtonsHint;
+        qtFlags |= Qt::WindowCloseButtonHint;
+    }
+    else
+    {
+        // Disable caption bar, include all buttons to be effective
+        qtFlags &= ~Qt::WindowTitleHint;
+        qtFlags &= ~Qt::WindowSystemMenuHint;
+        qtFlags &= ~Qt::WindowMinMaxButtonsHint;
+        qtFlags &= ~Qt::WindowCloseButtonHint;
+    }
+    
+    GetHandle()->setWindowFlags( qtFlags );
+    
+    // Validate border styles
+    int numberOfBorderStyles = 0;
+    if ( HasFlag( wxBORDER_NONE ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_STATIC ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_SIMPLE ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_RAISED ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_SUNKEN ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_THEME ) ) numberOfBorderStyles++;
+    wxCHECK_RET( numberOfBorderStyles <= 1, "Only one border style can be specified" );
+    
+    // Borders only supported for QFrame's
+    QFrame *qtFrame = qobject_cast< QFrame* >( QtGetContainer() );
+    wxCHECK_RET( numberOfBorderStyles == 0 || qtFrame,
+                 "Borders not supported for this window type (not QFrame)" );
+    
+    if ( HasFlag( wxBORDER_NONE ) )
+    {
+        qtFrame->setFrameStyle( QFrame::NoFrame );
+    }
+    else if ( HasFlag( wxBORDER_STATIC ) )
+    {
+        wxMISSING_IMPLEMENTATION( "wxBORDER_STATIC" );
+    }
+    else if ( HasFlag( wxBORDER_SIMPLE ) )
+    {
+        qtFrame->setFrameStyle( QFrame::Panel );
+        qtFrame->setFrameShadow( QFrame::Plain );
+    }
+    else if ( HasFlag( wxBORDER_RAISED ) )
+    {
+        qtFrame->setFrameStyle( QFrame::Panel );
+        qtFrame->setFrameShadow( QFrame::Raised );
+    }
+    else if ( HasFlag( wxBORDER_SUNKEN ) )
+    {
+        qtFrame->setFrameStyle( QFrame::Panel );
+        qtFrame->setFrameShadow( QFrame::Sunken );
+    }
+    else if ( HasFlag( wxBORDER_THEME ) )
+    {
+        qtFrame->setFrameStyle( QFrame::StyledPanel );
+        qtFrame->setFrameShadow( QFrame::Plain );
+    }
+}
+
+void wxWindow::SetExtraStyle( long exStyle )
+{
 }
 
 void wxWindow::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,

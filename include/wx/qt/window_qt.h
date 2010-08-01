@@ -11,9 +11,9 @@
 
 #include "wx/window.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtGui/QWidget>
+#include <QtGui/QFrame>
 
-class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< wxWindow, QWidget >
+class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< wxWindow, QFrame >
 {
     Q_OBJECT
 
