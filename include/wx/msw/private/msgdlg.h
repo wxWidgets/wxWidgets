@@ -12,7 +12,7 @@
 #define _WX_MSW_PRIVATE_MSGDLG_H_
 
 #include "wx/msw/wrapcctl.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedarray.h"
 
 // Macro to help identify if task dialogs are available.
 #ifdef TD_WARNING_ICON
