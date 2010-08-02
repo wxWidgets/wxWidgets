@@ -8704,7 +8704,8 @@ wxRichTextAttr::operator wxTextAttrEx () const
     attr.SetTabs(GetTabs());
     attr.SetLeftIndent(GetLeftIndent(), GetLeftSubIndent());
     attr.SetRightIndent(GetRightIndent());
-    attr.SetFont(CreateFont());
+    if (HasFont())
+        attr.SetFont(CreateFont());
 
     attr.SetParagraphSpacingAfter(m_paragraphSpacingAfter);
     attr.SetParagraphSpacingBefore(m_paragraphSpacingBefore);
