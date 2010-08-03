@@ -38,12 +38,12 @@ void wxQtDCImpl::PrepareQPainter()
 
 bool wxQtDCImpl::CanDrawBitmap() const
 {
-    return false;
+    return true;
 }
 
 bool wxQtDCImpl::CanGetTextExtent() const
 {
-    return false;
+    return true;
 }
 
 void wxQtDCImpl::DoGetSize(int *width, int *height) const
@@ -255,13 +255,13 @@ void wxQtDCImpl::DestroyClippingRegion()
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                          wxFloodFillStyle style )
 {
-    m_qtPainter.device()->logicalDpiX();
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return false;
 }
 
 bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    m_qtPainter.device()->logicalDpiX();
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return false;
 }
 
@@ -342,9 +342,6 @@ void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
-    //TODO: Don't use mask if useMask is false
-    wxMISSING_IMPLEMENTATION( "useMask ");
-
     QPixmap pix = *bmp.GetHandle();
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
@@ -364,7 +361,26 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         m_qtPainter.setBackground(savedBrush);
         m_qtPainter.setPen(savedPen);
     } else {
-        m_qtPainter.drawPixmap(x, y, pix);
+        if ( !useMask )
+        {
+            // Temporarly disable mask
+            QBitmap mask;
+            mask = pix.mask();
+            pix.setMask( QBitmap() );
+
+            // Use text background
+            QBrush savedBrush = m_qtPainter.background();
+            m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+
+            // Draw
+            m_qtPainter.drawPixmap(x, y, pix);
+
+            // Restore saved settings and mask
+            m_qtPainter.setBackground(savedBrush);
+            pix.setMask( mask );
+        }
+        else
+            m_qtPainter.drawPixmap(x, y, pix);
     }
 }
 
