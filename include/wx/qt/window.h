@@ -115,6 +115,9 @@ public:
 
     virtual WXWidget QtGetContainer() const;
     virtual QPicture *QtGetPicture() const;
+
+    QImage *QtGetPaintBuffer();
+
     virtual void QtPaintClientDCPicture( QWidget *handler );
 
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
@@ -184,6 +187,7 @@ private:
     wxScrollBar *QtGetScrollBar( int orientation ) const;
 
     QPicture *m_qtPicture;
+    QImage *m_qtPaintBuffer;
 
     bool m_mouseInside;
 

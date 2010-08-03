@@ -27,21 +27,17 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_window = win;
-    
-    // Paint to an image
-    PrepareQPainter( wxQtConvertSize( win->GetClientSize() ) );
+
+    m_qtImage = win->QtGetPaintBuffer();
+    m_ok = m_qtPainter.begin( m_qtImage );
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
 {
-    // Copy the image to the window
     if ( m_ok )
     {
         m_qtPainter.end();
-
-        m_qtPainter.begin( m_window->QtGetContainer() );
-        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
-        m_qtPainter.end();
+        m_qtImage = NULL;
         m_ok = false;
     }
 }
@@ -59,9 +55,13 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     : wxWindowDCImpl( owner )
 {
     m_window = win;
-    
-    // Paint to an image
-    PrepareQPainter( wxQtConvertSize( win->GetClientSize() ) );
+
+    QPicture *pic = win->QtGetPicture();
+    int w, h;
+    win->GetClientSize( &w, &h );
+
+    pic->setBoundingRect( QRect( 0, 0, w, h ) );
+    m_ok = m_qtPainter.begin( pic );
 }
 
 wxClientDCImpl::~wxClientDCImpl()
@@ -72,14 +72,10 @@ wxClientDCImpl::~wxClientDCImpl()
     if ( m_ok )
     {
         m_qtPainter.end();
-        
-        m_qtPainter.begin( m_window->QtGetPicture() );
-        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
-        m_qtPainter.end();
         m_ok = false;
 
         if ( m_window != NULL )
-            m_window->Refresh();
+            m_window->GetHandle()->repaint();
     }
 }
 

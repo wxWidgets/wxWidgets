@@ -15,12 +15,14 @@
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
     : wxQtDCImpl( owner )
 {
+    m_qtImage = NULL;
     m_ok = false;
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
     : wxQtDCImpl( owner )
 {
+    m_qtImage = NULL;
     m_ok = false;
     DoSelect( bitmap );
 }
@@ -28,6 +30,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
     : wxQtDCImpl( owner )
 {
+    m_qtImage = NULL;
     m_ok = false;
 }
 
@@ -51,15 +54,15 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         m_pixmap = NULL;
     }
 
+    if ( m_qtImage )
+    {
+        delete m_qtImage;
+        m_qtImage = NULL;
+    }
+
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
         m_pixmap = bitmap.GetHandle();
 
-        if ( m_qtImage )
-        {
-            delete m_qtImage;
-            m_qtImage = NULL;
-        }
-        
         m_qtImage = new QImage( m_pixmap->toImage() );
 
         m_ok = m_qtPainter.begin( m_qtImage );

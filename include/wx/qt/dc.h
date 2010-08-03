@@ -115,6 +115,18 @@ protected:
 
     wxRegion *m_clippingRegion;
 private:
+    enum wxQtRasterColourOp
+    {
+        wxQtNONE,
+        wxQtWHITE,
+        wxQtBLACK,
+        wxQtINVERT
+    };
+    wxQtRasterColourOp m_rasterColourOp;
+    QColor m_qtPenColor;
+    QColor m_qtBrushColor;
+    void ApplyRasterColourOp();
+    
 };
 
 #endif // _WX_QT_DC_H_

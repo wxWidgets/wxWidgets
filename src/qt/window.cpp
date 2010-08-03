@@ -49,6 +49,7 @@ wxWindow::wxWindow()
     m_horzScrollBar = m_vertScrollBar = NULL;
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+    m_qtPaintBuffer = NULL;
 }
 
 wxWindow::~wxWindow()
@@ -63,6 +64,8 @@ wxWindow::~wxWindow()
     delete m_qtWindow; // This also destroys the container
     if ( m_qtPicture )
         delete m_qtPicture;
+    if ( m_qtPaintBuffer )
+        delete m_qtPaintBuffer;
 }
 
 
@@ -114,6 +117,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     m_mouseInside = false;
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+    m_qtPaintBuffer = NULL;
     
     // Use custom Qt window flags (allow to turn on or off
     // the minimize/maximize/close buttons and title bar)
@@ -128,6 +132,9 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     GetHandle()->setWindowFlags( qtFlags );
     
     SetWindowStyleFlag( style );
+
+    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
+    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
 
     return ( true );
 }
@@ -605,11 +612,38 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
     }
     else
     {
-        // Send event
-        wxEraseEvent erase;
-        ProcessWindowEvent(erase);
-        wxPaintEvent paint;
-        return ProcessWindowEvent(paint);
+        if ( !m_qtPicture->isNull() )
+        {
+            // Data from wxClientDC, paint it
+            QPainter p( QtGetContainer() );
+            p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
+            p.end();
+            QtPaintClientDCPicture( handler );
+
+            return true;
+        }
+        else
+        {
+            // Real paint event, send it
+            if ( m_qtPaintBuffer )
+            {
+                delete m_qtPaintBuffer;
+                m_qtPaintBuffer = 0;
+            }
+            wxEraseEvent erase;
+            ProcessWindowEvent(erase);
+            wxPaintEvent paint;
+            bool handled = ProcessWindowEvent(paint);
+
+            if ( m_qtPaintBuffer )
+            {
+                QPainter p( QtGetContainer() );
+                p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
+                p.end();
+            }
+
+            return handled;
+        }
     }
 }
 
@@ -1105,4 +1139,16 @@ QWidget *wxWindow::QtGetScrollBarsContainer() const
 QPicture *wxWindow::QtGetPicture() const
 {
     return m_qtPicture;
+}
+
+QImage *wxWindow::QtGetPaintBuffer()
+{
+    if ( !m_qtPaintBuffer )
+    {
+        m_qtPaintBuffer = new QImage( wxQtConvertSize( GetClientSize() ),
+                                      QImage::Format_ARGB32_Premultiplied );
+        m_qtPaintBuffer->fill( GetBackgroundColour().GetHandle().rgb() );
+    }
+
+    return m_qtPaintBuffer;
 }
