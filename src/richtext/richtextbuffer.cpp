@@ -3183,6 +3183,13 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
             // So when changing a list style interactively, could retrieve level based on current style, then
             // set appropriate indent and apply new style.
 
+            int outline = -1;
+            int num = -1;
+            if (para->GetAttributes().HasOutlineLevel())
+                outline = para->GetAttributes().GetOutlineLevel();
+            if (para->GetAttributes().HasBulletNumber())
+                num = para->GetAttributes().GetBulletNumber();
+
             if (!para->GetAttributes().GetParagraphStyleName().IsEmpty() && !para->GetAttributes().GetListStyleName().IsEmpty())
             {
                 int currentIndent = para->GetAttributes().GetLeftIndent();
@@ -3233,6 +3240,11 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                     foundCount ++;
                 }
             }
+
+            if (outline != -1)
+                para->GetAttributes().SetOutlineLevel(outline);
+            if (num != -1)
+                para->GetAttributes().SetBulletNumber(num);
         }
 
         node = node->GetNext();
