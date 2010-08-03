@@ -13,33 +13,55 @@
 #include "wx/qt/dcmemory.h"
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
-    : wxWindowDCImpl( owner )
+    : wxQtDCImpl( owner )
 {
     m_ok = false;
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
-    : wxWindowDCImpl( owner )
+    : wxQtDCImpl( owner )
 {
     m_ok = false;
     DoSelect( bitmap );
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
-    : wxWindowDCImpl( owner )
+    : wxQtDCImpl( owner )
 {
     m_ok = false;
 }
 
+wxMemoryDCImpl::~wxMemoryDCImpl()
+{
+    DoSelect( wxNullBitmap );
+}
+
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
-    if (IsOk())
+    if ( IsOk() )
+    {
+        // Copy image to bitmap
         m_qtPainter.end();
-    
-    m_ok = false;
-    
+
+        m_qtPainter.begin( m_pixmap );
+        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
+        m_qtPainter.end();
+
+        m_ok = false;
+        m_pixmap = NULL;
+    }
+
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
-        m_ok = m_qtPainter.begin( bitmap.GetHandle() );
-        if (m_ok) PrepareQPainter();
+        m_pixmap = bitmap.GetHandle();
+
+        if ( m_qtImage )
+        {
+            delete m_qtImage;
+            m_qtImage = NULL;
+        }
+        
+        m_qtImage = new QImage( m_pixmap->toImage() );
+
+        m_ok = m_qtPainter.begin( m_qtImage );
     }
 }

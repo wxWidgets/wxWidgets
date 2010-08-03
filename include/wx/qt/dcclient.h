@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dcclient.h
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,9 +17,13 @@ public:
     wxWindowDCImpl( wxDC *owner );
     wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
-protected:
+    ~wxWindowDCImpl();
 
+protected:
+    wxWindow *m_window;
+    
 private:
+
 };
 
 
@@ -30,9 +34,6 @@ public:
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
     ~wxClientDCImpl();
-
-private:
-    wxWindow *m_window;
 };
 
 

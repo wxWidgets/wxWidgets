@@ -11,6 +11,8 @@
 
 #include <QtGui/QPainter>
 
+class QImage;
+
 class WXDLLIMPEXP_FWD_CORE wxRegion;
 
 class WXDLLIMPEXP_CORE wxQtDCImpl : public wxDCImpl
@@ -108,7 +110,8 @@ public:
 
 protected:
     QPainter m_qtPainter;
-    void PrepareQPainter();
+    QImage *m_qtImage;
+    void PrepareQPainter( QSize size );
 
     wxRegion *m_clippingRegion;
 private:

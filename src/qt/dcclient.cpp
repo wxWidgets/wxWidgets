@@ -19,15 +19,31 @@
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
     : wxQtDCImpl( owner )
 {
+    m_window = NULL;
     m_ok = false;
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
-    // Paint to the container (the real part of the window)
-    m_ok = m_qtPainter.begin(win->QtGetContainer());
-    if (m_ok) PrepareQPainter();
+    m_window = win;
+    
+    // Paint to an image
+    PrepareQPainter( wxQtConvertSize( win->GetClientSize() ) );
+}
+
+wxWindowDCImpl::~wxWindowDCImpl()
+{
+    // Copy the image to the window
+    if ( m_ok )
+    {
+        m_qtPainter.end();
+
+        m_qtPainter.begin( m_window->QtGetContainer() );
+        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
+        m_qtPainter.end();
+        m_ok = false;
+    }
 }
 
 //##############################################################################
@@ -42,19 +58,29 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner )
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     : wxWindowDCImpl( owner )
 {
-    /* Paint to a QPicture that will then be painted in the next
-     * paint event of that window (a paint event will be generated
-     * when this wxClientDC is done). */
     m_window = win;
-    m_ok = m_qtPainter.begin( win->QtGetPicture() );
-    if (m_ok) PrepareQPainter();    
+    
+    // Paint to an image
+    PrepareQPainter( wxQtConvertSize( win->GetClientSize() ) );
 }
 
 wxClientDCImpl::~wxClientDCImpl()
 {
-    m_qtPainter.end();
-    if ( m_window != NULL )
-        m_window->Refresh();
+    /* Paint to a QPicture that will then be painted in the next
+     * paint event of that window (a paint event will be generated
+     * when this wxClientDC is done). */
+    if ( m_ok )
+    {
+        m_qtPainter.end();
+        
+        m_qtPainter.begin( m_window->QtGetPicture() );
+        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
+        m_qtPainter.end();
+        m_ok = false;
+
+        if ( m_window != NULL )
+            m_window->Refresh();
+    }
 }
 
 //##############################################################################

@@ -20,6 +20,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
     m_clippingRegion = new wxRegion;
+    m_qtImage = NULL;
 }
 
 wxQtDCImpl::~wxQtDCImpl()
@@ -29,11 +30,24 @@ wxQtDCImpl::~wxQtDCImpl()
 
     if ( m_clippingRegion != NULL )
         delete m_clippingRegion;
+
+    if ( m_qtImage != NULL )
+        delete m_qtImage;
 }
 
-void wxQtDCImpl::PrepareQPainter()
+void wxQtDCImpl::PrepareQPainter( QSize size )
 {
     //Do here all QPainter initialization (called after each begin())
+    if ( m_qtImage )
+    {
+        delete m_qtImage;
+        m_qtImage = NULL;
+    }
+
+    m_qtImage = new QImage( size, QImage::Format_ARGB32_Premultiplied );
+    m_qtImage->fill( QColor( Qt::transparent ).rgba() );
+
+    m_ok = m_qtPainter.begin( m_qtImage );
 }
 
 bool wxQtDCImpl::CanDrawBitmap() const
@@ -255,14 +269,34 @@ void wxQtDCImpl::DestroyClippingRegion()
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                          wxFloodFillStyle style )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+#if wxUSE_IMAGE
+    extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
+                              const wxColour & col, wxFloodFillStyle style);
+
+    return wxDoFloodFill( GetOwner(), x, y, col, style);
+#else
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+    wxUnusedVar(col);
+    wxUnusedVar(style);
+
     return false;
+#endif
 }
 
 bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return false;
+    wxCHECK_MSG( m_qtPainter.isActive(), false, "Invalid wxDC" );
+
+    if ( col )
+    {
+        QColor pixel = m_qtImage->pixel( x, y );
+        col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
+
+        return true;
+    }
+    else
+        return false;
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -331,7 +365,17 @@ void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
 
 void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    int w, h;
+    DoGetSize( &w, &h );
+
+    // Map width and height back (inverted transform)
+    QTransform inv = m_qtPainter.transform().inverted();
+    int left, top, right, bottom;
+    inv.map( w, h, &right, &bottom );
+    inv.map( 0, 0, &left, &top );
+    
+    m_qtPainter.drawLine( left, y, right, y );
+    m_qtPainter.drawLine( x, top, x, bottom );
 }
 
 void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -462,8 +506,22 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord xsrcMask,
                     wxCoord ysrcMask )
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
-    return false;
+    wxMISSING_IMPLEMENTATION( "wxDC::DoBlit Raster operation and mask src" );
+
+    wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+    
+    QImage *qtSource = implSource->m_qtImage;
+    wxCHECK_MSG( qtSource != NULL, false, "Invalid source DC" );
+
+    QImage qtSourceConverted = *qtSource;
+    if ( !useMask )
+        qtSourceConverted = qtSourceConverted.convertToFormat( QImage::Format_RGB32 );
+
+    m_qtPainter.drawImage( QRect( xdest, ydest, width, height ),
+                           qtSourceConverted,
+                           QRect( xsrc, ysrc, width, height ) );
+
+    return true;
 }
 
 void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
