@@ -1721,6 +1721,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
+    src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
     src/msw/richmsgdlg.cpp
@@ -1806,6 +1807,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pen.h
     wx/msw/printdlg.h
     wx/msw/printwin.h
+    wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
     wx/msw/region.h

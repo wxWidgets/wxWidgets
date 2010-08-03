@@ -319,6 +319,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_msw_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
+	$(OBJS)\monodll_progdlg.obj &
 	$(OBJS)\monodll_msw_radiobox.obj &
 	$(OBJS)\monodll_msw_radiobut.obj &
 	$(OBJS)\monodll_richmsgdlg.obj &
@@ -1046,6 +1047,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_msw_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
+	$(OBJS)\monolib_progdlg.obj &
 	$(OBJS)\monolib_msw_radiobox.obj &
 	$(OBJS)\monolib_msw_radiobut.obj &
 	$(OBJS)\monolib_richmsgdlg.obj &
@@ -1680,6 +1682,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_msw_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
+	$(OBJS)\coredll_progdlg.obj &
 	$(OBJS)\coredll_msw_radiobox.obj &
 	$(OBJS)\coredll_msw_radiobut.obj &
 	$(OBJS)\coredll_richmsgdlg.obj &
@@ -2195,6 +2198,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_msw_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
+	$(OBJS)\corelib_progdlg.obj &
 	$(OBJS)\corelib_msw_radiobox.obj &
 	$(OBJS)\corelib_msw_radiobut.obj &
 	$(OBJS)\corelib_richmsgdlg.obj &
@@ -6583,6 +6587,9 @@ $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8806,6 +8813,9 @@ $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
@@ -11441,6 +11451,9 @@ $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12754,6 +12767,9 @@ $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp

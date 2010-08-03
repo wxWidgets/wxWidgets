@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        progdlgg.h
-// Purpose:     wxProgressDialog class
+// Purpose:     wxGenericProgressDialog class
 // Author:      Karsten Ballueder
 // Modified by: Francesco Montorsi
 // Created:     09.05.1999
@@ -12,11 +12,6 @@
 #ifndef __PROGDLGH_G__
 #define __PROGDLGH_G__
 
-#include "wx/defs.h"
-#include "wx/progdlg.h"
-
-#if wxUSE_PROGRESSDLG
-
 #include "wx/dialog.h"
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
@@ -27,15 +22,16 @@ class WXDLLIMPEXP_FWD_CORE wxStaticText;
     Progress dialog which shows a moving progress bar.
     Taken from the Mahogany project.
 */
-class WXDLLIMPEXP_CORE wxProgressDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxGenericProgressDialog : public wxDialog
 {
 public:
-    wxProgressDialog(const wxString& title, const wxString& message,
-                     int maximum = 100,
-                     wxWindow *parent = NULL,
-                     int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
+    wxGenericProgressDialog();
+    wxGenericProgressDialog(const wxString& title, const wxString& message,
+                            int maximum = 100,
+                            wxWindow *parent = NULL,
+                            int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
-    virtual ~wxProgressDialog();
+    virtual ~wxGenericProgressDialog();
 
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
@@ -58,7 +54,52 @@ public:
 
     virtual bool Show( bool show = true );
 
+    // This enum is an implementation detail and should not be used
+    // by user code.
+    enum ProgressDialogState
+    {
+        Uncancelable = -1,   // dialog can't be canceled
+        Canceled,            // can be cancelled and, in fact, was
+        Continue,            // can be cancelled but wasn't
+        Finished             // finished, waiting to be removed from screen
+    };
+
 protected:
+    // continue processing or not (return value for Update())
+    ProgressDialogState m_state;
+
+    // the maximum value
+    int m_maximum;
+
+#if defined(__WXMSW__ ) || defined(__WXPM__)
+    // the factor we use to always keep the value in 16 bit range as the native
+    // control only supports ranges from 0 to 65,535
+    size_t m_factor;
+#endif // __WXMSW__
+
+    // time when the dialog was created
+    unsigned long m_timeStart;
+    // time when the dialog was closed or cancelled
+    unsigned long m_timeStop;
+    // time between the moment the dialog was closed/cancelled and resume
+    unsigned long m_break;
+
+    void Create(const wxString& title,
+                const wxString& message,
+                int maximum,
+                wxWindow *parent,
+                int style);
+
+    // Updates estimated times from a given progress bar value and stores the
+    // results in provided arguments.
+    void UpdateTimeEstimates(int value,
+                             unsigned long &elapsedTime,
+                             unsigned long &estimatedTime,
+                             unsigned long &remainingTime);
+
+    // Converts seconds to HH:mm:ss format.
+    static wxString GetFormattedTime(int time);
+
     // callback for optional abort button
     void OnCancel(wxCommandEvent&);
 
@@ -73,6 +114,9 @@ protected:
     void ReenableOtherWindows();
 
 private:
+    // update the label to show the given time (in seconds)
+    static void SetTimeLabel(unsigned long val, wxStaticText *label);
+
     // create the label with given text and another one to show the time nearby
     // as the next windows in the sizer, returns the created control
     wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
@@ -101,24 +145,9 @@ private:
     wxStaticText *m_elapsed,
                  *m_estimated,
                  *m_remaining;
-    // time when the dialog was created
-    unsigned long m_timeStart;
-    // time when the dialog was closed or cancelled
-    unsigned long m_timeStop;
-    // time between the moment the dialog was closed/cancelled and resume
-    unsigned long m_break;
 
     // parent top level window (may be NULL)
     wxWindow *m_parentTop;
-
-    // continue processing or not (return value for Update())
-    enum
-    {
-        Uncancelable = -1,   // dialog can't be canceled
-        Canceled,            // can be cancelled and, in fact, was
-        Continue,            // can be cancelled but wasn't
-        Finished             // finished, waiting to be removed from screen
-    } m_state;
 
     // skip some portion
     bool m_skip;
@@ -128,9 +157,6 @@ private:
     wxButton *m_btnAbort;
     wxButton *m_btnSkip;
 #endif
-
-    // the maximum value
-    int m_maximum;
 
     // saves the time when elapsed time was updated so there is only one
     // update per second
@@ -146,20 +172,11 @@ private:
     bool m_hasAbortButton,
          m_hasSkipButton;
 
-#if defined(__WXMSW__ ) || defined(__WXPM__)
-    // the factor we use to always keep the value in 16 bit range as the native
-    // control only supports ranges from 0 to 65,535
-    size_t m_factor;
-#endif // __WXMSW__
-
     // for wxPD_APP_MODAL case
     class WXDLLIMPEXP_FWD_CORE wxWindowDisabler *m_winDisabler;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxProgressDialog)
-    wxDECLARE_NO_COPY_CLASS(wxProgressDialog);
+    wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);
 };
-
-#endif // wxUSE_PROGRESSDLG
 
 #endif // __PROGDLGH_G__

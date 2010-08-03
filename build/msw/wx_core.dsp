@@ -2060,6 +2060,41 @@ SOURCE=..\..\src\msw\printwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\progdlg.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\radiobox.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -5194,6 +5229,10 @@ SOURCE=..\..\include\wx\msw\printdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\printwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\progdlg.h
 # End Source File
 # Begin Source File
 

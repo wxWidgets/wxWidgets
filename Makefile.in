@@ -2965,6 +2965,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
 	wx/msw/printwin.h \
+	wx/msw/progdlg.h \
 	wx/msw/radiobox.h \
 	wx/msw/radiobut.h \
 	wx/msw/region.h \
@@ -3489,6 +3490,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
 	wx/msw/printwin.h \
+	wx/msw/progdlg.h \
 	wx/msw/radiobox.h \
 	wx/msw/radiobut.h \
 	wx/msw/region.h \
@@ -5370,6 +5372,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_notebook.o \
 	monodll_access.o \
 	monodll_msw_ownerdrw.o \
+	monodll_progdlg.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
 	monodll_richmsgdlg.o \
@@ -5607,6 +5610,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_notebook.o \
 	monodll_access.o \
 	monodll_msw_ownerdrw.o \
+	monodll_progdlg.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
 	monodll_richmsgdlg.o \
@@ -7244,6 +7248,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_notebook.o \
 	monolib_access.o \
 	monolib_msw_ownerdrw.o \
+	monolib_progdlg.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
 	monolib_richmsgdlg.o \
@@ -7481,6 +7486,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_notebook.o \
 	monolib_access.o \
 	monolib_msw_ownerdrw.o \
+	monolib_progdlg.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
 	monolib_richmsgdlg.o \
@@ -9305,6 +9311,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_notebook.o \
 	coredll_access.o \
 	coredll_msw_ownerdrw.o \
+	coredll_progdlg.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
 	coredll_richmsgdlg.o \
@@ -9542,6 +9549,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_notebook.o \
 	coredll_access.o \
 	coredll_msw_ownerdrw.o \
+	coredll_progdlg.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
 	coredll_richmsgdlg.o \
@@ -10852,6 +10860,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_notebook.o \
 	corelib_access.o \
 	corelib_msw_ownerdrw.o \
+	corelib_progdlg.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
 	corelib_richmsgdlg.o \
@@ -11089,6 +11098,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_notebook.o \
 	corelib_access.o \
 	corelib_msw_ownerdrw.o \
+	corelib_progdlg.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
 	corelib_richmsgdlg.o \
@@ -18876,6 +18886,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_radiobox.o: $(srcdir)/src/msw/radiobox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/radiobox.cpp
 
@@ -24086,6 +24102,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_radiobox.o: $(srcdir)/src/msw/radiobox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/radiobox.cpp
@@ -29484,6 +29506,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_radiobox.o: $(srcdir)/src/msw/radiobox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/radiobox.cpp
 
@@ -33410,6 +33438,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_radiobox.o: $(srcdir)/src/msw/radiobox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/radiobox.cpp

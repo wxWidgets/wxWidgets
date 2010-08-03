@@ -40,7 +40,7 @@
 #include "wx/generic/printps.h"
 #include "wx/printdlg.h"
 #include "wx/generic/prntdlgg.h"
-#include "wx/generic/progdlgg.h"
+#include "wx/progdlg.h"
 #include "wx/paper.h"
 
 #include <stdlib.h>

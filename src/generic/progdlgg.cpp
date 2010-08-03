@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/progdlgg.cpp
-// Purpose:     wxProgressDialog class
+// Purpose:     wxGenericProgressDialog class
 // Author:      Karsten Ballueder
 // Modified by:
 // Created:     09.05.1999
@@ -67,44 +67,59 @@
 static const int wxID_SKIP = 32000;  // whatever
 
 // ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// update the label to show the given time (in seconds)
-static void SetTimeLabel(unsigned long val, wxStaticText *label);
-
-// ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
-    EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
-    EVT_BUTTON(wxID_SKIP, wxProgressDialog::OnSkip)
+BEGIN_EVENT_TABLE(wxGenericProgressDialog, wxDialog)
+    EVT_BUTTON(wxID_CANCEL, wxGenericProgressDialog::OnCancel)
+    EVT_BUTTON(wxID_SKIP, wxGenericProgressDialog::OnSkip)
 
-    EVT_CLOSE(wxProgressDialog::OnClose)
+    EVT_CLOSE(wxGenericProgressDialog::OnClose)
 END_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
-
 // ============================================================================
-// wxProgressDialog implementation
+// wxGenericProgressDialog implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog)
+
 // ----------------------------------------------------------------------------
-// wxProgressDialog creation
+// wxGenericProgressDialog creation
 // ----------------------------------------------------------------------------
 
-wxProgressDialog::wxProgressDialog(const wxString& title,
-                                   const wxString& message,
-                                   int maximum,
-                                   wxWindow *parent,
-                                   int style)
-                : wxDialog(GetParentForModalDialog(parent, style), wxID_ANY, title),
+wxGenericProgressDialog::wxGenericProgressDialog()
+                : wxDialog( NULL, wxID_ANY, "" ),
                   m_skip(false),
                   m_delay(3),
                   m_hasAbortButton(false),
                   m_hasSkipButton(false)
 {
+}
+
+wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
+                                                 const wxString& message,
+                                                 int maximum,
+                                                 wxWindow *parent,
+                                                 int style)
+                : wxDialog(GetParentForModalDialog(parent, style),
+                           wxID_ANY, title),
+                  m_skip(false),
+                  m_delay(3),
+                  m_hasAbortButton(false),
+                  m_hasSkipButton(false)
+{
+    Create( title, message, maximum, parent, style );
+}
+
+void wxGenericProgressDialog::Create( const wxString& title,
+                                      const wxString& message,
+                                      int maximum,
+                                      wxWindow *parent,
+                                      int style )
+{
+    SetParent( GetParentForModalDialog(parent, style) );
+    SetTitle( title );
+
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
     m_windowStyle |= style;
@@ -277,8 +292,82 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     Update();
 }
 
+void wxGenericProgressDialog::UpdateTimeEstimates(int value,
+                                                  unsigned long &elapsedTime,
+                                                  unsigned long &estimatedTime,
+                                                  unsigned long &remainingTime)
+{
+    unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
+    if ( value != 0 && (m_last_timeupdate < elapsed || value == m_maximum) )
+    {
+        m_last_timeupdate = elapsed;
+        unsigned long estimated = m_break +
+                (unsigned long)(( (double) (elapsed-m_break) * m_maximum ) / ((double)value)) ;
+        if (    estimated > m_display_estimated
+                && m_ctdelay >= 0
+            )
+        {
+            ++m_ctdelay;
+        }
+        else if (    estimated < m_display_estimated
+                    && m_ctdelay <= 0
+                )
+        {
+            --m_ctdelay;
+        }
+        else
+        {
+            m_ctdelay = 0;
+        }
+        if (    m_ctdelay >= m_delay          // enough confirmations for a higher value
+                || m_ctdelay <= (m_delay*-1)     // enough confirmations for a lower value
+                || value == m_maximum            // to stay consistent
+                || elapsed > m_display_estimated // to stay consistent
+                || ( elapsed > 0 && elapsed < 4 ) // additional updates in the beginning
+            )
+        {
+            m_display_estimated = estimated;
+            m_ctdelay = 0;
+        }
+    }
+
+    if ( value != 0 )
+    {
+        long display_remaining = m_display_estimated - elapsed;
+        if ( display_remaining < 0 )
+        {
+            display_remaining = 0;
+        }
+
+        estimatedTime = m_display_estimated;
+        remainingTime = display_remaining;
+    }
+
+    elapsedTime = elapsed;
+}
+
+// static
+wxString wxGenericProgressDialog::GetFormattedTime(int time)
+{
+    wxString results;
+
+    if ( time == -1 )
+    {
+        results = _("Unknown");
+    }
+    else
+    {
+        unsigned long hours = time / 3600;
+        unsigned long minutes = (time % 3600) / 60;
+        unsigned long seconds = time % 60;
+        results.Printf(wxT("%lu:%02lu:%02lu"), hours, minutes, seconds);
+    }
+
+    return results;
+}
+
 wxStaticText *
-wxProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
+wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
 {
     wxStaticText *label = new wxStaticText(this, wxID_ANY, text);
     wxStaticText *value = new wxStaticText(this, wxID_ANY, _("unknown"));
@@ -302,11 +391,11 @@ wxProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
 }
 
 // ----------------------------------------------------------------------------
-// wxProgressDialog operations
+// wxGenericProgressDialog operations
 // ----------------------------------------------------------------------------
 
 bool
-wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
+wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
     if ( !DoBeforeUpdate(skip) )
         return false;
@@ -326,47 +415,13 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
     {
-        unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
-        if (    m_last_timeupdate < elapsed
-             || value == m_maximum
-           )
-        {
-            m_last_timeupdate = elapsed;
-            unsigned long estimated = m_break +
-                  (unsigned long)(( (double) (elapsed-m_break) * m_maximum ) / ((double)value)) ;
-            if (    estimated > m_display_estimated
-                 && m_ctdelay >= 0
-               )
-            {
-                ++m_ctdelay;
-            }
-            else if (    estimated < m_display_estimated
-                      && m_ctdelay <= 0
-                    )
-            {
-                --m_ctdelay;
-            }
-            else
-            {
-                m_ctdelay = 0;
-            }
-            if (    m_ctdelay >= m_delay          // enough confirmations for a higher value
-                 || m_ctdelay <= (m_delay*-1)     // enough confirmations for a lower value
-                 || value == m_maximum            // to stay consistent
-                 || elapsed > m_display_estimated // to stay consistent
-                 || ( elapsed > 0 && elapsed < 4 ) // additional updates in the beginning
-               )
-            {
-                m_display_estimated = estimated;
-                m_ctdelay = 0;
-            }
-        }
+        unsigned long elapsed;
+        unsigned long display_remaining;
 
-        long display_remaining = m_display_estimated - elapsed;
-        if ( display_remaining < 0 )
-        {
-            display_remaining = 0;
-        }
+        UpdateTimeEstimates( value,
+                             elapsed,
+                             m_display_estimated,
+                             display_remaining );
 
         SetTimeLabel(elapsed, m_elapsed);
         SetTimeLabel(m_display_estimated, m_estimated);
@@ -402,7 +457,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             }
 
             wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
-                        "wxProgressDialog::Update needs a running event loop");
+                        "wxGenericProgressDialog::Update needs a running event loop");
 
             // allow the window to repaint:
             // NOTE: since we yield only for UI events with this call, there
@@ -435,7 +490,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
     return m_state != Canceled;
 }
 
-bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
+bool wxGenericProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
     if ( !DoBeforeUpdate(skip) )
         return false;
@@ -461,10 +516,10 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
     return m_state != Canceled;
 }
 
-bool wxProgressDialog::DoBeforeUpdate(bool *skip)
+bool wxGenericProgressDialog::DoBeforeUpdate(bool *skip)
 {
     wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
-                "wxProgressDialog::DoBeforeUpdate needs a running event loop");
+                "wxGenericProgressDialog::DoBeforeUpdate needs a running event loop");
 
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
@@ -484,10 +539,10 @@ bool wxProgressDialog::DoBeforeUpdate(bool *skip)
     return m_state != Canceled;
 }
 
-void wxProgressDialog::DoAfterUpdate()
+void wxGenericProgressDialog::DoAfterUpdate()
 {
     wxCHECK_RET(wxEventLoopBase::GetActive(),
-                "wxProgressDialog::DoAfterUpdate needs a running event loop");
+                "wxGenericProgressDialog::DoAfterUpdate needs a running event loop");
 
     // allow the window to repaint:
     // NOTE: since we yield only for UI events with this call, there
@@ -495,7 +550,7 @@ void wxProgressDialog::DoAfterUpdate()
     wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
 }
 
-void wxProgressDialog::Resume()
+void wxGenericProgressDialog::Resume()
 {
     m_state = Continue;
     m_ctdelay = m_delay; // force an update of the elapsed/estimated/remaining time
@@ -506,7 +561,7 @@ void wxProgressDialog::Resume()
     m_skip = false;
 }
 
-bool wxProgressDialog::Show( bool show )
+bool wxGenericProgressDialog::Show( bool show )
 {
     // reenable other windows before hiding this one because otherwise
     // Windows wouldn't give the focus back to the window which had
@@ -517,26 +572,26 @@ bool wxProgressDialog::Show( bool show )
     return wxDialog::Show(show);
 }
 
-int wxProgressDialog::GetValue() const
+int wxGenericProgressDialog::GetValue() const
 {
     if (m_gauge)
         return m_gauge->GetValue();
     return wxNOT_FOUND;
 }
 
-int wxProgressDialog::GetRange() const
+int wxGenericProgressDialog::GetRange() const
 {
     if (m_gauge)
         return m_gauge->GetRange();
     return wxNOT_FOUND;
 }
 
-wxString wxProgressDialog::GetMessage() const
+wxString wxGenericProgressDialog::GetMessage() const
 {
     return m_msg->GetLabel();
 }
 
-void wxProgressDialog::SetRange(int maximum)
+void wxGenericProgressDialog::SetRange(int maximum)
 {
     wxASSERT_MSG(m_gauge, "The dialog should have been constructed with a range > 0");
     wxASSERT_MSG(maximum > 0, "Invalid range");
@@ -553,22 +608,43 @@ void wxProgressDialog::SetRange(int maximum)
 }
 
 
-bool wxProgressDialog::WasCancelled() const
+bool wxGenericProgressDialog::WasCancelled() const
 {
     return m_hasAbortButton && m_state == Canceled;
 }
 
-bool wxProgressDialog::WasSkipped() const
+bool wxGenericProgressDialog::WasSkipped() const
 {
     return m_hasSkipButton && m_skip;
 }
 
+// static
+void wxGenericProgressDialog::SetTimeLabel(unsigned long val,
+                                           wxStaticText *label)
+{
+    if ( label )
+    {
+        wxString s;
+
+        if (val != (unsigned long)-1)
+        {
+            s = GetFormattedTime(val);
+        }
+        else
+        {
+            s = _("Unknown");
+        }
+
+        if ( s != label->GetLabel() )
+            label->SetLabel(s);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxProgressDialog::OnCancel(wxCommandEvent& event)
+void wxGenericProgressDialog::OnCancel(wxCommandEvent& event)
 {
     if ( m_state == Finished )
     {
@@ -592,13 +668,13 @@ void wxProgressDialog::OnCancel(wxCommandEvent& event)
     }
 }
 
-void wxProgressDialog::OnSkip(wxCommandEvent& WXUNUSED(event))
+void wxGenericProgressDialog::OnSkip(wxCommandEvent& WXUNUSED(event))
 {
     DisableSkip();
     m_skip = true;
 }
 
-void wxProgressDialog::OnClose(wxCloseEvent& event)
+void wxGenericProgressDialog::OnClose(wxCloseEvent& event)
 {
     if ( m_state == Uncancelable )
     {
@@ -625,13 +701,13 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
 // destruction
 // ----------------------------------------------------------------------------
 
-wxProgressDialog::~wxProgressDialog()
+wxGenericProgressDialog::~wxGenericProgressDialog()
 {
     // normally this should have been already done, but just in case
     ReenableOtherWindows();
 }
 
-void wxProgressDialog::ReenableOtherWindows()
+void wxGenericProgressDialog::ReenableOtherWindows()
 {
     if ( HasFlag(wxPD_APP_MODAL) )
     {
@@ -648,30 +724,7 @@ void wxProgressDialog::ReenableOtherWindows()
 // private functions
 // ----------------------------------------------------------------------------
 
-static void SetTimeLabel(unsigned long val, wxStaticText *label)
-{
-    if ( label )
-    {
-        wxString s;
-
-        if (val != (unsigned long)-1)
-        {
-            unsigned long hours = val / 3600;
-            unsigned long minutes = (val % 3600) / 60;
-            unsigned long seconds = val % 60;
-            s.Printf(wxT("%lu:%02lu:%02lu"), hours, minutes, seconds);
-        }
-        else
-        {
-            s = _("Unknown");
-        }
-
-        if ( s != label->GetLabel() )
-            label->SetLabel(s);
-    }
-}
-
-void wxProgressDialog::EnableSkip(bool enable)
+void wxGenericProgressDialog::EnableSkip(bool enable)
 {
     if(m_hasSkipButton)
     {
@@ -687,7 +740,7 @@ void wxProgressDialog::EnableSkip(bool enable)
     }
 }
 
-void wxProgressDialog::EnableAbort(bool enable)
+void wxGenericProgressDialog::EnableAbort(bool enable)
 {
     if(m_hasAbortButton)
     {
@@ -703,7 +756,7 @@ void wxProgressDialog::EnableAbort(bool enable)
     }
 }
 
-void wxProgressDialog::EnableClose()
+void wxGenericProgressDialog::EnableClose()
 {
     if(m_hasAbortButton)
     {
@@ -719,10 +772,10 @@ void wxProgressDialog::EnableClose()
     }
 }
 
-void wxProgressDialog::UpdateMessage(const wxString &newmsg)
+void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
     wxCHECK_RET(wxEventLoopBase::GetActive(),
-                "wxProgressDialog::UpdateMessage needs a running event loop");
+                "wxGenericProgressDialog::UpdateMessage needs a running event loop");
 
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {

@@ -1763,11 +1763,11 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             wxPD_CAN_ABORT |
                             wxPD_CAN_SKIP |
                             wxPD_APP_MODAL |
-                            // wxPD_AUTO_HIDE | -- try this as well
+                            //wxPD_AUTO_HIDE | // -- try this as well
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |
-                            wxPD_REMAINING_TIME
-                            | wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
+                            wxPD_REMAINING_TIME |
+                            wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
                             );
 
     bool cont = true;
@@ -1807,7 +1807,12 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
         // each skip will move progress about quarter forward
         if ( skip )
+        {
             i += max/4;
+
+            if ( i >= 100 )
+                i = 99;
+        }
 
         if ( !cont )
         {
