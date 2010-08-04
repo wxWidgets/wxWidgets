@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/html/htmlwin.h"
+#include "wx/uiaction.h"
+#include "testableframe.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -38,9 +40,17 @@ public:
 private:
     CPPUNIT_TEST_SUITE( HtmlWindowTestCase );
         CPPUNIT_TEST( SelectionToText );
+        CPPUNIT_TEST( Title );
+        CPPUNIT_TEST( CellClick );
+        CPPUNIT_TEST( LinkClick );
+        CPPUNIT_TEST( AppendToPage );
     CPPUNIT_TEST_SUITE_END();
 
     void SelectionToText();
+    void Title();
+    void CellClick();
+    void LinkClick();
+    void AppendToPage();
 
     wxHtmlWindow *m_win;
 
@@ -59,13 +69,13 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlWindowTestCase, "HtmlWindowTestCase" 
 
 void HtmlWindowTestCase::setUp()
 {
-    m_win = new wxHtmlWindow(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_win = new wxHtmlWindow(wxTheApp->GetTopWindow(), wxID_ANY,
+                             wxDefaultPosition, wxSize(400, 200));
 }
 
 void HtmlWindowTestCase::tearDown()
 {
-    m_win->Destroy();
-    m_win = NULL;
+    wxDELETE(m_win);
 }
 
 // ----------------------------------------------------------------------------
@@ -74,9 +84,15 @@ void HtmlWindowTestCase::tearDown()
 
 static const char *TEST_MARKUP =
     "<html><body>"
+    "<title>Page</title>"
     "  Title<p>"
     "  A longer line<br>"
     "  and the last line."
+    "</body></html>";
+
+static const char *TEST_MARKUP_LINK =
+    "<html><body>"
+    "<a href=\"link\">link<\\a> "
     "</body></html>";
 
 static const char *TEST_PLAIN_TEXT =
@@ -88,4 +104,61 @@ void HtmlWindowTestCase::SelectionToText()
     m_win->SelectAll();
 
     CPPUNIT_ASSERT_EQUAL( TEST_PLAIN_TEXT, m_win->SelectionToText() );
+}
+
+void HtmlWindowTestCase::Title()
+{
+    m_win->SetPage(TEST_MARKUP);
+
+    CPPUNIT_ASSERT_EQUAL("Page", m_win->GetOpenedPageTitle());
+}
+
+void HtmlWindowTestCase::CellClick()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count1(m_win, wxEVT_COMMAND_HTML_CELL_CLICKED);
+
+    wxUIActionSimulator sim;
+
+    m_win->SetPage(TEST_MARKUP);
+    m_win->Update();
+    m_win->Refresh();
+
+    sim.MouseMove(m_win->ClientToScreen(wxPoint(15, 15)));
+    sim.MouseClick();
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+}
+
+void HtmlWindowTestCase::LinkClick()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count1(m_win, wxEVT_COMMAND_HTML_LINK_CLICKED);
+
+    wxUIActionSimulator sim;
+
+    m_win->SetPage(TEST_MARKUP_LINK);
+    m_win->Update();
+    m_win->Refresh();
+
+    sim.MouseMove(m_win->ClientToScreen(wxPoint(15, 15)));
+    sim.MouseClick();
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+}
+
+void HtmlWindowTestCase::AppendToPage()
+{
+    m_win->SetPage(TEST_MARKUP_LINK);
+    m_win->AppendToPage("A new paragraph");
+
+    CPPUNIT_ASSERT_EQUAL("link A new paragraph", m_win->ToText());
 }
