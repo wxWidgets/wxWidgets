@@ -821,62 +821,69 @@ bool OutputString(wxOutputStream& stream,
     return stream.IsOk();
 }
 
-// flags for OutputStringEnt()
-enum
+enum EscapingMode
 {
-    XML_ESCAPE_QUOTES = 1
+    Escape_Text,
+    Escape_Attribute
 };
 
 // Same as above, but create entities first.
-// Translates '<' to "&lt;", '>' to "&gt;" and '&' to "&amp;"
-bool OutputStringEnt(wxOutputStream& stream,
-                     const wxString& str,
-                     wxMBConv *convMem,
-                     wxMBConv *convFile,
-                     int flags = 0)
+// Translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
+// http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping
+bool OutputEscapedString(wxOutputStream& stream,
+                         const wxString& str,
+                         wxMBConv *convMem,
+                         wxMBConv *convFile,
+                         EscapingMode mode)
 {
-    const size_t len = str.length();
-    size_t i,
-           last = 0;
-    for (i = 0; i < len; i++)
+    wxString escaped;
+    escaped.reserve(str.length());
+
+    for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
     {
-        wxChar c = str.GetChar(i);
-        if (c == wxS('<') || c == wxS('>') ||
-            (c == wxS('&') && str.substr(i+1, 4) != wxS("amp;")) ||
-            ((flags & XML_ESCAPE_QUOTES) && c == wxS('"')))
+        const wxChar c = *i;
+
+        switch ( c )
         {
-            if ( !OutputString(stream, str.substr(last, i - last),
-                               convMem, convFile) )
-                return false;
+            case wxS('<'):
+                escaped.append(wxS("&lt;"));
+                break;
+            case wxS('>'):
+                escaped.append(wxS("&gt;"));
+                break;
+            case wxS('&'):
+                escaped.append(wxS("&amp;"));
+                break;
+            case wxS('\r'):
+                escaped.append(wxS("&#xD;"));
+                break;
+            default:
+                if ( mode == Escape_Attribute )
+                {
+                    switch ( c )
+                    {
+                        case wxS('"'):
+                            escaped.append(wxS("&quot;"));
+                            break;
+                        case wxS('\t'):
+                            escaped.append(wxS("&#x9;"));
+                            break;
+                        case wxS('\n'):
+                            escaped.append(wxS("&#xA;"));
+                            break;
+                        default:
+                            escaped.append(c);
+                    }
 
-            const char *escaped;
-            switch ( c )
-            {
-                case wxS('<'):
-                    escaped = "&lt;";
-                    break;
-                case wxS('>'):
-                    escaped = "&gt;";
-                    break;
-                case wxS('&'):
-                    escaped = "&amp;";
-                    break;
-                case wxS('"'):
-                    escaped = "&quot;";
-                    break;
-                default:
-                    wxFAIL_MSG( "logic error in the code" );
-                    return false;
-            }
-
-            if ( !OutputString(stream, escaped, convMem, convFile) )
-                return false;
-
-            last = i + 1;
+                }
+                else
+                {
+                    escaped.append(c);
+                }
         }
     }
 
-    return OutputString(stream, str.substr(last, i - last), convMem, convFile);
+    return OutputString(stream, escaped, convMem, convFile);
 }
 
 bool OutputIndentation(wxOutputStream& stream,
@@ -906,7 +913,9 @@ bool OutputNode(wxOutputStream& stream,
             break;
 
         case wxXML_TEXT_NODE:
-            rc = OutputStringEnt(stream, node->GetContent(), convMem, convFile);
+            rc = OutputEscapedString(stream, node->GetContent(),
+                                     convMem, convFile,
+                                     Escape_Text);
             break;
 
         case wxXML_ELEMENT_NODE:
@@ -922,9 +931,9 @@ bool OutputNode(wxOutputStream& stream,
                     rc = OutputString(stream,
                                       wxS(" ") + attr->GetName() +  wxS("=\""),
                                       convMem, convFile) &&
-                         OutputStringEnt(stream, attr->GetValue(),
-                                         convMem, convFile,
-                                         XML_ESCAPE_QUOTES) &&
+                         OutputEscapedString(stream, attr->GetValue(),
+                                             convMem, convFile,
+                                             Escape_Attribute) &&
                          OutputString(stream, wxS("\""), convMem, convFile);
                 }
             }
