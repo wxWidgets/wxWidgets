@@ -37,7 +37,8 @@ protected:
         CPPUNIT_TEST( FindString ); \
         CPPUNIT_TEST( ClientData ); \
         CPPUNIT_TEST( VoidData ); \
-        CPPUNIT_TEST( Set )
+        CPPUNIT_TEST( Set ); \
+        CPPUNIT_TEST( SetString )
 
     void Append();
     void Insert();
@@ -47,6 +48,7 @@ protected:
     void ClientData();
     void VoidData();
     void Set();
+    void SetString();
 
 private:
     DECLARE_NO_COPY_CLASS(ItemContainerTestCase)

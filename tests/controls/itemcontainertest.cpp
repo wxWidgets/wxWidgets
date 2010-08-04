@@ -39,8 +39,6 @@ void ItemContainerTestCase::Append()
 
     CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(3));
     CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(4));
-
-    container->Clear();
 }
 
 void ItemContainerTestCase::Insert()
@@ -66,8 +64,6 @@ void ItemContainerTestCase::Insert()
 
     CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(1));
     CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(2));
-
-    container->Clear();
 }
 
 void ItemContainerTestCase::Count()
@@ -99,8 +95,6 @@ void ItemContainerTestCase::Count()
     container->Insert(testitems, 1);
 
     CPPUNIT_ASSERT_EQUAL(5, container->GetCount());
-
-    container->Clear();
 }
 
 void ItemContainerTestCase::ItemSelection()
@@ -127,8 +121,6 @@ void ItemContainerTestCase::ItemSelection()
 
     CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
-
-    container->Clear();
 }
 
 void ItemContainerTestCase::FindString()
@@ -146,8 +138,6 @@ void ItemContainerTestCase::FindString()
     CPPUNIT_ASSERT_EQUAL(1, container->FindString("item 1"));
     CPPUNIT_ASSERT_EQUAL(1, container->FindString("ITEM 1"));
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->FindString("ITEM 1", true));
-
-    container->Clear();
 }
 
 void ItemContainerTestCase::ClientData()
@@ -227,4 +217,23 @@ void ItemContainerTestCase::Set()
 
     CPPUNIT_ASSERT_EQUAL(2, container->GetCount());
     CPPUNIT_ASSERT_EQUAL("even newer 0", container->GetString(0));
+}
+
+void ItemContainerTestCase::SetString()
+{
+   wxItemContainer * const container = GetContainer();
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+    testitems.Add("item 3");
+
+    container->Append(testitems);
+
+    container->SetString(0, "new item 0");
+    container->SetString(2, "");
+
+    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("", container->GetString(2));
 }
