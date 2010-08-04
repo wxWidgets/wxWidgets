@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( LinePageSize );
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
+        CPPUNIT_TEST( Thumb );
     CPPUNIT_TEST_SUITE_END();
 
     void PageUpDown();
@@ -43,6 +44,7 @@ private:
     void LinePageSize();
     void Value();
     void Range();
+    void Thumb();
 
     wxSlider* m_slider;
 
@@ -164,4 +166,31 @@ void SliderTestCase::Range()
 
     CPPUNIT_ASSERT_EQUAL(75, m_slider->GetMin());
     CPPUNIT_ASSERT_EQUAL(50, m_slider->GetMax());
+}
+
+void SliderTestCase::Thumb()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_slider, wxEVT_SCROLL_THUMBTRACK);
+    EventCounter count1(m_slider, wxEVT_SCROLL_THUMBRELEASE);
+    EventCounter count2(m_slider, wxEVT_SCROLL_CHANGED);
+
+    wxUIActionSimulator sim;
+
+    m_slider->SetValue(0);
+
+    sim.MouseMove(m_slider->ClientToScreen(wxPoint(10, 10)));
+    sim.MouseDown();
+    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
+    sim.MouseUp();
+
+    wxYield();
+
+    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_SCROLL_THUMBTRACK) != 0);
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_THUMBRELEASE));
+#ifdef __WXMSW__
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_CHANGED));
+#endif
 }
