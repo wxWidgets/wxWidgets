@@ -20,6 +20,7 @@
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
 #include "testableframe.h"
+#include "asserthelper.h"
 #include "wx/uiaction.h"
 
 class RichTextCtrlTestCase : public CppUnit::TestCase
@@ -32,34 +33,62 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
-        CPPUNIT_TEST( Character );
-        CPPUNIT_TEST( Delete );
-        CPPUNIT_TEST( Return );
-        CPPUNIT_TEST( Style );
-        CPPUNIT_TEST( BufferReset );
-        CPPUNIT_TEST( Url );
-        CPPUNIT_TEST( Text );
+        CPPUNIT_TEST( CharacterEvent );
+        CPPUNIT_TEST( DeleteEvent );
+        CPPUNIT_TEST( ReturnEvent );
+        CPPUNIT_TEST( StyleEvent );
+        CPPUNIT_TEST( BufferResetEvent );
+        CPPUNIT_TEST( UrlEvent );
+        CPPUNIT_TEST( TextEvent );
         CPPUNIT_TEST( CutCopyPaste );
         CPPUNIT_TEST( UndoRedo );
         CPPUNIT_TEST( CaretPosition );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Range );
+        CPPUNIT_TEST( Alignment );
+        CPPUNIT_TEST( Bold );
+        CPPUNIT_TEST( Italic );
+        CPPUNIT_TEST( Underline );
+        CPPUNIT_TEST( Indent );
+        CPPUNIT_TEST( LineSpacing );
+        CPPUNIT_TEST( ParagraphSpacing );
+        CPPUNIT_TEST( TextColour );
+        CPPUNIT_TEST( NumberedBullet );
+        CPPUNIT_TEST( SymbolBullet );
+        CPPUNIT_TEST( FontSize );
+        CPPUNIT_TEST( Font );
+        CPPUNIT_TEST( Delete );
+        CPPUNIT_TEST( Url );
     CPPUNIT_TEST_SUITE_END();
 
-    void Character();
-    void Delete();
-    void Return();
-    void Style();
-    void BufferReset();
-    void Url();
-    void Text();
+    void CharacterEvent();
+    void DeleteEvent();
+    void ReturnEvent();
+    void StyleEvent();
+    void BufferResetEvent();
+    void UrlEvent();
+    void TextEvent();
     void CutCopyPaste();
     void UndoRedo();
     void CaretPosition();
     void Selection();
     void Editable();
     void Range();
+    void Alignment();
+    void Bold();
+    void Italic();
+    void Underline();
+    void Indent();
+    void LineSpacing();
+    void ParagraphSpacing();
+    void TextColour();
+    void NumberedBullet();
+    void SymbolBullet();
+    void FontSize();
+    void Font();
+    void Delete();
+    void Url();
 
     wxRichTextCtrl* m_rich;
 
@@ -83,7 +112,7 @@ void RichTextCtrlTestCase::tearDown()
     wxDELETE(m_rich);
 }
 
-void RichTextCtrlTestCase::Character()
+void RichTextCtrlTestCase::CharacterEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -109,7 +138,7 @@ void RichTextCtrlTestCase::Character()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
 }
 
-void RichTextCtrlTestCase::Delete()
+void RichTextCtrlTestCase::DeleteEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -130,7 +159,7 @@ void RichTextCtrlTestCase::Delete()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED)); 
 }
 
-void RichTextCtrlTestCase::Return()
+void RichTextCtrlTestCase::ReturnEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -146,7 +175,7 @@ void RichTextCtrlTestCase::Return()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 }
 
-void RichTextCtrlTestCase::Style()
+void RichTextCtrlTestCase::StyleEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -159,7 +188,7 @@ void RichTextCtrlTestCase::Style()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED));
 }
 
-void RichTextCtrlTestCase::BufferReset()
+void RichTextCtrlTestCase::BufferResetEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -181,7 +210,7 @@ void RichTextCtrlTestCase::BufferReset()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 }
 
-void RichTextCtrlTestCase::Url()
+void RichTextCtrlTestCase::UrlEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -200,7 +229,7 @@ void RichTextCtrlTestCase::Url()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 }
 
-void RichTextCtrlTestCase::Text()
+void RichTextCtrlTestCase::TextEvent()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -411,4 +440,288 @@ void RichTextCtrlTestCase::Range()
     inside.Swap();
 
     CPPUNIT_ASSERT(inside == range);
+}
+
+void RichTextCtrlTestCase::Alignment()
+{
+    m_rich->SetValue("text to align");
+    m_rich->SelectAll();
+
+    m_rich->ApplyAlignmentToSelection(wxTEXT_ALIGNMENT_RIGHT);
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_RIGHT));
+
+    m_rich->BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
+    m_rich->AddParagraph("middle aligned");
+    m_rich->EndAlignment();
+
+    m_rich->SetSelection(20, 25);
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_CENTRE));
+}
+
+void RichTextCtrlTestCase::Bold()
+{
+    m_rich->SetValue("text to bold");
+    m_rich->SelectAll();
+    m_rich->ApplyBoldToSelection();
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
+
+    m_rich->BeginBold();
+    m_rich->AddParagraph("bold paragraph");
+    m_rich->EndBold();
+    m_rich->AddParagraph("not bold paragraph");
+
+    m_rich->SetSelection(15, 20);
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
+
+    m_rich->SetSelection(30, 35);
+
+    CPPUNIT_ASSERT(!m_rich->IsSelectionBold());
+}
+
+void RichTextCtrlTestCase::Italic()
+{
+    m_rich->SetValue("text to italic");
+    m_rich->SelectAll();
+    m_rich->ApplyItalicToSelection();
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+
+    m_rich->BeginItalic();
+    m_rich->AddParagraph("italic paragraph");
+    m_rich->EndItalic();
+    m_rich->AddParagraph("not italic paragraph");
+
+    m_rich->SetSelection(20, 25);
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+
+    m_rich->SetSelection(35, 40);
+
+    CPPUNIT_ASSERT(!m_rich->IsSelectionItalics());
+}
+
+void RichTextCtrlTestCase::Underline()
+{
+    m_rich->SetValue("text to underline");
+    m_rich->SelectAll();
+    m_rich->ApplyUnderlineToSelection();
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionUnderlined());
+
+    m_rich->BeginUnderline();
+    m_rich->AddParagraph("underline paragraph");
+    m_rich->EndUnderline();
+    m_rich->AddParagraph("not underline paragraph");
+
+    m_rich->SetSelection(20, 25);
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionUnderlined());
+
+    m_rich->SetSelection(40, 45);
+
+    CPPUNIT_ASSERT(!m_rich->IsSelectionUnderlined());  
+}
+
+void RichTextCtrlTestCase::Indent()
+{
+    m_rich->BeginLeftIndent(12, -5);
+    m_rich->BeginRightIndent(14);
+    m_rich->AddParagraph("A paragraph with indents");
+    m_rich->EndLeftIndent();
+    m_rich->EndRightIndent();
+    m_rich->AddParagraph("No more indent");
+
+    wxTextAttr indent;
+    m_rich->GetStyle(5, indent);
+
+    CPPUNIT_ASSERT_EQUAL(12, indent.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(-5, indent.GetLeftSubIndent());
+    CPPUNIT_ASSERT_EQUAL(14, indent.GetRightIndent());
+
+    m_rich->GetStyle(35, indent);
+
+    CPPUNIT_ASSERT_EQUAL(0, indent.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(0, indent.GetLeftSubIndent());
+    CPPUNIT_ASSERT_EQUAL(0, indent.GetRightIndent());
+}
+
+void RichTextCtrlTestCase::LineSpacing()
+{
+    m_rich->BeginLineSpacing(20);
+    m_rich->AddParagraph("double spaced");
+    m_rich->EndLineSpacing();
+    m_rich->BeginLineSpacing(wxTEXT_ATTR_LINE_SPACING_HALF);
+    m_rich->AddParagraph("1.5 spaced");
+    m_rich->EndLineSpacing();
+    m_rich->AddParagraph("normally spaced");
+
+    wxTextAttr spacing;
+    m_rich->GetStyle(5, spacing);
+
+    CPPUNIT_ASSERT_EQUAL(20, spacing.GetLineSpacing());
+
+    m_rich->GetStyle(20, spacing);
+
+    CPPUNIT_ASSERT_EQUAL(15, spacing.GetLineSpacing());
+
+    m_rich->GetStyle(30, spacing);
+
+    CPPUNIT_ASSERT_EQUAL(10, spacing.GetLineSpacing());
+}
+
+void RichTextCtrlTestCase::ParagraphSpacing()
+{
+    m_rich->BeginParagraphSpacing(15, 20);
+    m_rich->AddParagraph("spaced paragraph");
+    m_rich->EndParagraphSpacing();
+    m_rich->AddParagraph("non-spaced paragraph");
+
+    wxTextAttr spacing;
+    m_rich->GetStyle(5, spacing);
+
+    CPPUNIT_ASSERT_EQUAL(15, spacing.GetParagraphSpacingBefore());
+    CPPUNIT_ASSERT_EQUAL(20, spacing.GetParagraphSpacingBefore());
+
+    m_rich->GetStyle(25, spacing);
+
+    CPPUNIT_ASSERT_EQUAL(0, spacing.GetParagraphSpacingBefore());
+    CPPUNIT_ASSERT_EQUAL(0, spacing.GetParagraphSpacingBefore());
+}
+
+void RichTextCtrlTestCase::TextColour()
+{
+    m_rich->BeginTextColour(*wxRED);
+    m_rich->AddParagraph("red paragraph");
+    m_rich->EndTextColour();
+    m_rich->AddParagraph("default paragraph");
+
+    wxTextAttr colour;
+    m_rich->GetStyle(5, colour);
+
+    CPPUNIT_ASSERT_EQUAL(*wxRED, colour.GetTextColour());
+
+    m_rich->GetStyle(25, colour);
+
+    CPPUNIT_ASSERT_EQUAL(*wxBLACK, colour.GetTextColour());
+}
+
+void RichTextCtrlTestCase::NumberedBullet()
+{
+    m_rich->BeginNumberedBullet(1, 15, 20);
+    m_rich->AddParagraph("bullet one");
+    m_rich->EndNumberedBullet();
+    m_rich->BeginNumberedBullet(2, 25, -5);
+    m_rich->AddParagraph("bullet two");
+    m_rich->EndNumberedBullet();
+
+    wxTextAttr bullet;
+    m_rich->GetStyle(5, bullet);
+
+    CPPUNIT_ASSERT(bullet.HasBulletStyle());
+    CPPUNIT_ASSERT(bullet.HasBulletNumber());
+    CPPUNIT_ASSERT_EQUAL(1, bullet.GetBulletNumber());
+    CPPUNIT_ASSERT_EQUAL(15, bullet.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(20, bullet.GetLeftSubIndent());
+
+    m_rich->GetStyle(15, bullet);
+
+    CPPUNIT_ASSERT(bullet.HasBulletStyle());
+    CPPUNIT_ASSERT(bullet.HasBulletNumber());
+    CPPUNIT_ASSERT_EQUAL(2, bullet.GetBulletNumber());
+    CPPUNIT_ASSERT_EQUAL(25, bullet.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(-5, bullet.GetLeftSubIndent());
+}
+
+void RichTextCtrlTestCase::SymbolBullet()
+{
+    m_rich->BeginSymbolBullet("*", 15, 20);
+    m_rich->AddParagraph("bullet one");
+    m_rich->EndSymbolBullet();
+    m_rich->BeginSymbolBullet("%", 25, -5);
+    m_rich->AddParagraph("bullet two");
+    m_rich->EndSymbolBullet();
+
+    wxTextAttr bullet;
+    m_rich->GetStyle(5, bullet);
+
+    CPPUNIT_ASSERT(bullet.HasBulletStyle());
+    CPPUNIT_ASSERT(bullet.HasBulletText());
+    CPPUNIT_ASSERT_EQUAL("*", bullet.GetBulletText());
+    CPPUNIT_ASSERT_EQUAL(15, bullet.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(20, bullet.GetLeftSubIndent());
+
+    m_rich->GetStyle(15, bullet);
+
+    CPPUNIT_ASSERT(bullet.HasBulletStyle());
+    CPPUNIT_ASSERT(bullet.HasBulletText());
+    CPPUNIT_ASSERT_EQUAL("%", bullet.GetBulletText());
+    CPPUNIT_ASSERT_EQUAL(25, bullet.GetLeftIndent());
+    CPPUNIT_ASSERT_EQUAL(-5, bullet.GetLeftSubIndent());
+}
+
+void RichTextCtrlTestCase::FontSize()
+{
+    m_rich->BeginFontSize(24);
+    m_rich->AddParagraph("Large text");
+    m_rich->EndFontSize();
+
+    wxTextAttr size;
+    m_rich->GetStyle(5, size);
+
+    CPPUNIT_ASSERT(size.HasFontSize());
+    CPPUNIT_ASSERT_EQUAL(24, size.GetFontSize());
+}
+
+void RichTextCtrlTestCase::Font()
+{
+    wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    m_rich->BeginFont(font);
+    m_rich->AddParagraph("paragraph with font");
+    m_rich->EndFont();
+
+    wxTextAttr fontstyle;
+    m_rich->GetStyle(5, fontstyle);
+
+    CPPUNIT_ASSERT_EQUAL(font, fontstyle.GetFont());
+}
+
+void RichTextCtrlTestCase::Delete()
+{
+    m_rich->AddParagraph("here is a long long line in a paragraph");
+    m_rich->SetSelection(0, 6);
+
+    CPPUNIT_ASSERT(m_rich->CanDeleteSelection());
+    
+    m_rich->DeleteSelection();
+
+    CPPUNIT_ASSERT_EQUAL("is a long long line in a paragraph", m_rich->GetValue());
+
+    m_rich->SetSelection(0, 5);
+
+    CPPUNIT_ASSERT(m_rich->CanDeleteSelection());
+
+    m_rich->DeleteSelectedContent();
+
+    CPPUNIT_ASSERT_EQUAL("long long line in a paragraph", m_rich->GetValue());
+
+    m_rich->Delete(wxRichTextRange(14, 29));
+
+    CPPUNIT_ASSERT_EQUAL("long long line", m_rich->GetValue());
+}
+
+void RichTextCtrlTestCase::Url()
+{
+    m_rich->BeginURL("http://www.wxwidgets.org");
+    m_rich->WriteText("http://www.wxwidgets.org");
+    m_rich->EndURL();
+
+    wxTextAttr url;
+    m_rich->GetStyle(5, url);
+
+    CPPUNIT_ASSERT(url.HasURL());
+    CPPUNIT_ASSERT_EQUAL("http://www.wxwidgets.org", url.GetURL());
 }
