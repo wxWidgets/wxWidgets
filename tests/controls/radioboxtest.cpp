@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/radiobox.h"
+    #include "wx/tooltip.h"
 #endif // WX_PRECOMP
 
 class RadioBoxTestCase : public CppUnit::TestCase
@@ -33,6 +34,10 @@ private:
         CPPUNIT_TEST( Enable );
         CPPUNIT_TEST( Show );
         CPPUNIT_TEST( HelpText );
+        CPPUNIT_TEST( ToolTip );
+        CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( Count );
+        CPPUNIT_TEST( SetString );
     CPPUNIT_TEST_SUITE_END();
 
     void FindString();
@@ -40,6 +45,10 @@ private:
     void Enable();
     void Show();
     void HelpText();
+    void ToolTip();
+    void Selection();
+    void Count();
+    void SetString();
 
     wxRadioBox* m_radio;
 
@@ -158,5 +167,56 @@ void RadioBoxTestCase::HelpText()
     m_radio->SetItemHelpText(1, "");
 
     CPPUNIT_ASSERT_EQUAL(wxEmptyString, m_radio->GetItemHelpText(1));
+}
+
+void RadioBoxTestCase::ToolTip()
+{
+#if defined (__WXMSW__) || (__WXGTK__)
+    //GetItemToolTip returns null if there is no tooltip set
+    CPPUNIT_ASSERT(!m_radio->GetItemToolTip(0));
+
+    m_radio->SetItemToolTip(1, "Item 1 help");
+
+    CPPUNIT_ASSERT_EQUAL("Item 1 help", m_radio->GetItemToolTip(1)->GetTip());
+
+    m_radio->SetItemHelpText(1, "");
+
+    //However if we set a blank tip this does count as a tooltip
+    CPPUNIT_ASSERT(!m_radio->GetItemToolTip(1));
+#endif
+}
+
+void RadioBoxTestCase::Selection()
+{
+    //Until other item containers the first item is selected by default
+    CPPUNIT_ASSERT_EQUAL(0, m_radio->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 0", m_radio->GetStringSelection());
+
+    m_radio->SetSelection(1);
+
+    CPPUNIT_ASSERT_EQUAL(1, m_radio->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 1", m_radio->GetStringSelection());
+
+    m_radio->SetStringSelection("item 2");
+
+    CPPUNIT_ASSERT_EQUAL(2, m_radio->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 2", m_radio->GetStringSelection());
+}
+
+void RadioBoxTestCase::Count()
+{
+    //A trivial test for the item count as items can neither
+    //be added or removed
+    CPPUNIT_ASSERT_EQUAL(3, m_radio->GetCount());
+    CPPUNIT_ASSERT(!m_radio->IsEmpty());
+}
+
+void RadioBoxTestCase::SetString()
+{
+    m_radio->SetString(0, "new item 0");
+    m_radio->SetString(2, "");
+
+    CPPUNIT_ASSERT_EQUAL("new item 0", m_radio->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("", m_radio->GetString(2));
 }
 
