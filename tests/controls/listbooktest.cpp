@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/listbook.h"
+#include "wx/listctrl.h"
 #include "bookctrlbasetest.h"
 
 class ListbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
@@ -40,7 +41,10 @@ private:
 
     CPPUNIT_TEST_SUITE( ListbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
+        CPPUNIT_TEST( ListView );
     CPPUNIT_TEST_SUITE_END();
+
+    void ListView();
 
     wxListbook *m_listbook;
 
@@ -62,4 +66,13 @@ void ListbookTestCase::setUp()
 void ListbookTestCase::tearDown()
 {
     wxDELETE(m_listbook);
+}
+
+void ListbookTestCase::ListView()
+{
+    wxListView* listview = m_listbook->GetListView();
+
+    CPPUNIT_ASSERT(listview);
+    CPPUNIT_ASSERT_EQUAL(3, listview->GetItemCount());
+    CPPUNIT_ASSERT_EQUAL("Panel 1", listview->GetItemText(0));
 }

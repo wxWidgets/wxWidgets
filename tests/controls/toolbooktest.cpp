@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/toolbook.h"
+#include "wx/toolbar.h"
 #include "bookctrlbasetest.h"
 
 class ToolbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
@@ -40,7 +41,10 @@ private:
 
     CPPUNIT_TEST_SUITE( ToolbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
+        CPPUNIT_TEST( ToolBar );
     CPPUNIT_TEST_SUITE_END();
+
+    void ToolBar();
 
     wxToolbook *m_toolbook;
 
@@ -62,4 +66,12 @@ void ToolbookTestCase::setUp()
 void ToolbookTestCase::tearDown()
 {
     wxDELETE(m_toolbook);
+}
+
+void ToolbookTestCase::ToolBar()
+{
+    wxToolBar* toolbar = static_cast<wxToolBar*>(m_toolbook->GetToolBar());
+
+    CPPUNIT_ASSERT(toolbar);
+    CPPUNIT_ASSERT_EQUAL(3, toolbar->GetToolsCount());
 }

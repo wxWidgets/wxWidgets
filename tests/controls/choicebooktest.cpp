@@ -40,7 +40,10 @@ private:
 
     CPPUNIT_TEST_SUITE( ChoicebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
+        CPPUNIT_TEST( Choice );
     CPPUNIT_TEST_SUITE_END();
+
+    void Choice();
 
     wxChoicebook *m_choicebook;
 
@@ -62,4 +65,13 @@ void ChoicebookTestCase::setUp()
 void ChoicebookTestCase::tearDown()
 {
     wxDELETE(m_choicebook);
+}
+
+void ChoicebookTestCase::Choice()
+{
+    wxChoice* choice = m_choicebook->GetChoiceCtrl();
+
+    CPPUNIT_ASSERT(choice);
+    CPPUNIT_ASSERT_EQUAL(3, choice->GetCount());
+    CPPUNIT_ASSERT_EQUAL("Panel 1", choice->GetString(0));
 }
