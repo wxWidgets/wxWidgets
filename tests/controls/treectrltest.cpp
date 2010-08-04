@@ -5,6 +5,7 @@
 // Created:     2008-11-26
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
+//              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -53,6 +54,11 @@ private:
         CPPUNIT_TEST( Parent );
         CPPUNIT_TEST( CollapseExpand );
         CPPUNIT_TEST( AssignImageList );
+        CPPUNIT_TEST( Focus );
+        CPPUNIT_TEST( Bold );
+        CPPUNIT_TEST( Visible );
+        CPPUNIT_TEST( Sort );
+        CPPUNIT_TEST( KeyNavigation );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -73,6 +79,11 @@ private:
     void Parent();
     void CollapseExpand();
     void AssignImageList();
+    void Focus();
+    void Bold();
+    void Visible();
+    void Sort();
+    void KeyNavigation();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -481,4 +492,97 @@ void TreeCtrlTestCase::AssignImageList()
 
     CPPUNIT_ASSERT_EQUAL(imagelist, m_tree->GetImageList());
     CPPUNIT_ASSERT_EQUAL(statelist, m_tree->GetStateImageList());
+}
+
+void TreeCtrlTestCase::Focus()
+{
+    CPPUNIT_ASSERT(!m_tree->GetFocusedItem());
+
+    m_tree->SetFocusedItem(m_child1);
+
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetFocusedItem());
+
+    m_tree->ClearFocusedItem();
+
+    CPPUNIT_ASSERT(!m_tree->GetFocusedItem());
+}
+
+void TreeCtrlTestCase::Bold()
+{
+    CPPUNIT_ASSERT(!m_tree->IsBold(m_child1));
+
+    m_tree->SetItemBold(m_child1);
+
+    CPPUNIT_ASSERT(m_tree->IsBold(m_child1));
+
+    m_tree->SetItemBold(m_child1, false);
+
+    CPPUNIT_ASSERT(!m_tree->IsBold(m_child1));
+}
+
+void TreeCtrlTestCase::Visible()
+{
+    m_tree->CollapseAll();
+
+    CPPUNIT_ASSERT(m_tree->IsVisible(m_root));
+    CPPUNIT_ASSERT(!m_tree->IsVisible(m_child1));
+
+    m_tree->EnsureVisible(m_grandchild);
+
+    CPPUNIT_ASSERT(m_tree->IsVisible(m_grandchild));
+
+    m_tree->ExpandAll();
+
+    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetFirstVisibleItem());
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetNextVisible(m_root));
+    CPPUNIT_ASSERT_EQUAL(m_grandchild, m_tree->GetNextVisible(m_child1));
+    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextVisible(m_grandchild));
+
+    CPPUNIT_ASSERT(!m_tree->GetNextVisible(m_child2));
+    CPPUNIT_ASSERT(!m_tree->GetPrevVisible(m_root));
+}
+
+void TreeCtrlTestCase::Sort()
+{
+    wxTreeItemId zitem = m_tree->AppendItem(m_root, "zzzz");
+    wxTreeItemId aitem = m_tree->AppendItem(m_root, "aaaa");
+
+    m_tree->SortChildren(m_root);
+
+    wxTreeItemIdValue cookie;
+
+    CPPUNIT_ASSERT_EQUAL(aitem, m_tree->GetFirstChild(m_root, cookie));
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetNextChild(m_root, cookie));
+    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextChild(m_root, cookie));
+    CPPUNIT_ASSERT_EQUAL(zitem, m_tree->GetNextChild(m_root, cookie));
+}
+
+void TreeCtrlTestCase::KeyNavigation()
+{
+    wxUIActionSimulator sim;
+
+    m_tree->CollapseAll();
+
+    m_tree->SelectItem(m_root);
+
+    sim.Char(WXK_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
+
+    sim.Char(WXK_LEFT);
+    wxYield();
+
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+
+    sim.Char(WXK_RIGHT);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetSelection());
+
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetSelection());
 }
