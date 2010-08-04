@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/asserthelper.cpp
+// Name:        tests/asserthelper.h
 // Purpose:     Helper functions for cppunit
 // Author:      Steven Lamerton
 // Created:     2010-07-23
@@ -7,8 +7,13 @@
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_TESTS_ASSERTHELPER_H_
+#define _WX_TESTS_ASSERTHELPER_H_
+
 #include <ostream>
 #include <wx/colour.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
 
 namespace
 {
@@ -28,3 +33,11 @@ namespace
 
 // this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxColour objects
 std::ostream& operator<<(std::ostream& os, const wxColour& c);
+
+// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxSize objects
+std::ostream& operator<<(std::ostream& os, const wxSize& s);
+
+// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxFont objects
+std::ostream& operator<<(std::ostream& os, const wxFont& f);
+
+#endif

@@ -44,3 +44,16 @@ std::ostream& operator<<(std::ostream& os, const wxColour& c)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const wxSize& s)
+{
+    os << s.x << "x" << s.y;
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const wxFont& f)
+{
+    os << f.GetNativeFontInfoUserDesc();
+
+    return os;
+}

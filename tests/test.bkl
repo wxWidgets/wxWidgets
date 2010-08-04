@@ -125,6 +125,7 @@
         <app-type>console</app-type>
 
         <sources>
+            asserthelper.cpp
             test.cpp
             testableframe.cpp
             geometry/rect.cpp
