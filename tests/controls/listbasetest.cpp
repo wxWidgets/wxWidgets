@@ -23,6 +23,8 @@
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
+#include "wx/imaglist.h"
+#include "wx/artprov.h"
 
 void ListBaseTestCase::ColumnsOrder()
 {
@@ -256,8 +258,7 @@ void ListBaseTestCase::DeleteItems()
     list->DeleteItem(0);
     list->DeleteAllItems();
 
-    //tidy up when we are finished, we put this before the asserts as it
-    //actually sends a DELETE_ALL_ITEMS event
+    //Check that ClearAll actually sends a DELETE_ALL_ITEMS event
     list->ClearAll();
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
@@ -283,8 +284,6 @@ void ListBaseTestCase::InsertItem()
     list->InsertItem(1, "more text");
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_INSERT_ITEM));
-
-    list->ClearAll();
 }
 
 void ListBaseTestCase::Find()
@@ -354,4 +353,84 @@ void ListBaseTestCase::ItemFormatting()
 
     CPPUNIT_ASSERT_EQUAL(*wxYELLOW, list->GetTextColour());
     CPPUNIT_ASSERT_EQUAL(*wxRED, list->GetItemTextColour(0));
+}
+
+void ListBaseTestCase::EditLabel()
+{
+    wxListCtrl* const list = GetList();
+
+    list->SetWindowStyleFlag(wxLC_REPORT | wxLC_EDIT_LABELS);
+
+    list->InsertColumn(0, "Column 0");
+
+    list->InsertItem(0, "Item 0");
+    list->InsertItem(1, "Item 1");
+
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(list, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT);
+    EventCounter count1(list, wxEVT_COMMAND_LIST_END_LABEL_EDIT);
+
+    wxUIActionSimulator sim;
+
+    list->EditLabel(0);
+
+    sim.Text("sometext");
+    sim.Char(WXK_RETURN);
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+}
+
+void ListBaseTestCase::ImageList()
+{
+    wxListCtrl* const list = GetList();
+
+    wxSize size(32, 32);
+
+    wxImageList* imglist = new wxImageList(size.x, size.y);
+    imglist->Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, size));
+    imglist->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, size));
+    imglist->Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, size));
+
+    list->AssignImageList(imglist, wxIMAGE_LIST_NORMAL);
+
+    CPPUNIT_ASSERT_EQUAL(imglist, list->GetImageList(wxIMAGE_LIST_NORMAL));
+}
+
+namespace
+{
+    //From the sample but fixed so it actually inverts
+    int wxCALLBACK
+    MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
+    {
+        // inverse the order
+        if (item1 < item2)
+            return 1;
+        if (item1 > item2)
+            return -1;
+
+        return 0;
+    }
+
+}
+
+void ListBaseTestCase::Sort()
+{
+    wxListCtrl* const list = GetList();
+
+    list->InsertColumn(0, "Column 0");
+
+    list->InsertItem(0, "Item 0");
+    list->SetItemData(0, 0);
+    list->InsertItem(1, "Item 1");
+    list->SetItemData(1, 1);
+
+    list->SortItems(MyCompareFunction, 0);
+
+    CPPUNIT_ASSERT_EQUAL("Item 1", list->GetItemText(0));
+    CPPUNIT_ASSERT_EQUAL("Item 0", list->GetItemText(1));
 }

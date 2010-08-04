@@ -30,7 +30,10 @@ protected:
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
         CPPUNIT_TEST( Visible ); \
-        CPPUNIT_TEST( ItemFormatting )
+        CPPUNIT_TEST( ItemFormatting ); \
+        CPPUNIT_TEST( EditLabel ); \
+        CPPUNIT_TEST( ImageList ); \
+        CPPUNIT_TEST( Sort ) 
 
     void ColumnsOrder();
     void ItemRect();
@@ -43,6 +46,9 @@ protected:
     void Find();
     void Visible();
     void ItemFormatting();
+    void EditLabel();
+    void ImageList();
+    void Sort();
 
     DECLARE_NO_COPY_CLASS(ListBaseTestCase)
 };
