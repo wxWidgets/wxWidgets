@@ -21,11 +21,6 @@
 
     See the uiaction sample for example usage of this class.
 
-    NOTE: For keyboard operations, currently you must pass the keycode of the actual
-    key on the keyboard. To simulate, e.g. IME actions, you'd need to simulate the actual
-    keypresses needed to active the IME, then the keypresses needed to type and select
-    the desired character.
-
     @library{wxcore}
 */
 
@@ -36,7 +31,6 @@ class wxUIActionSimulator
         Constructor.
     */
     wxUIActionSimulator();
-    ~wxUIActionSimulator();
 
     /**
         Move the mouse to the specified coordinates.
@@ -61,7 +55,8 @@ class wxUIActionSimulator
         Press a mouse button.
 
         @param button
-            Button to press. Valid constants are wxMOUSE_BTN_LEFT, wxMOUSE_BTN_MIDDLE, and wxMOUSE_BTN_RIGHT.
+            Button to press. Valid constants are @c wxMOUSE_BTN_LEFT, 
+            @c wxMOUSE_BTN_MIDDLE, and @c wxMOUSE_BTN_RIGHT.
     */
     bool MouseDown(int button = wxMOUSE_BTN_LEFT);
 
@@ -112,8 +107,7 @@ class wxUIActionSimulator
         an identical KeyUp or the modifiers will not be released (MSW and OSX).
 
         @param keycode
-            Key to operate on, as an integer. Under Windows and Unix this is 
-            interpreted as a wxKeyCode. Under OSX it is the native keycode type.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
@@ -124,8 +118,7 @@ class wxUIActionSimulator
         Release a key.
 
         @param keycode
-            Key to operate on, as an integer. Under Windows and Unix this is 
-            interpreted as a wxKeyCode. Under OSX it is the native keycode type.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
@@ -136,8 +129,7 @@ class wxUIActionSimulator
         Press and release a key.
 
         @param keycode
-            Key to operate on, as an integer. Under Windows and Unix this is 
-            interpreted as a wxKeyCode. Under OSX it is the native keycode type.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
