@@ -21,6 +21,7 @@
 #include "wx/artprov.h"
 #include "textentrytest.h"
 #include "itemcontainertest.h"
+#include "asserthelper.h"
 
 class BitmapComboBoxTestCase : public TextEntryTestCase, 
                                public ItemContainerTestCase,
@@ -101,4 +102,6 @@ void BitmapComboBoxTestCase::Bitmap()
     m_combo->SetItemBitmap(0, bitmap);
 
     CPPUNIT_ASSERT(m_combo->GetItemBitmap(0).IsOk());
+
+    CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
 }
