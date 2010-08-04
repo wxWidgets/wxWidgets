@@ -42,7 +42,10 @@ private:
     CPPUNIT_TEST_SUITE( NotebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
         CPPUNIT_TEST( Image );
+        CPPUNIT_TEST( RowCount );
     CPPUNIT_TEST_SUITE_END();
+
+    void RowCount();
 
     wxNotebook *m_notebook;
 
@@ -57,11 +60,31 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NotebookTestCase, "NotebookTestCase" );
 
 void NotebookTestCase::setUp()
 {
-    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY, 
+                                wxDefaultPosition, wxSize(400, 200));
     AddPanels();
 }
 
 void NotebookTestCase::tearDown()
 {
     wxDELETE(m_notebook);
+}
+
+void NotebookTestCase::RowCount()
+{
+    CPPUNIT_ASSERT_EQUAL(1, m_notebook->GetRowCount());
+
+#ifdef __WXMSW__
+    wxDELETE(m_notebook);
+    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY, 
+                                wxDefaultPosition, wxSize(400, 200),
+                                wxNB_MULTILINE);
+
+    for( unsigned int i = 0; i < 10; i++ )
+    {
+        m_notebook->AddPage(new wxPanel(m_notebook), "Panel", false, 0);
+    }
+
+    CPPUNIT_ASSERT( m_notebook->GetRowCount() != 1 );
+#endif
 }
