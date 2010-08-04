@@ -158,6 +158,7 @@
             controls/listviewtest.cpp
             controls/notebooktest.cpp
             controls/radioboxtest.cpp
+            controls/radiobutton.cpp
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
             controls/slidertest.cpp
