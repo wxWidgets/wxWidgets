@@ -149,6 +149,7 @@
             controls/gaugetest.cpp
             controls/gridtest.cpp
             controls/headerctrltest.cpp
+            controls/hyperlinkctrltest.cpp
             controls/itemcontainertest.cpp
             controls/label.cpp
             controls/listbasetest.cpp
