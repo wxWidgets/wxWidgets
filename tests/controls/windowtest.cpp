@@ -19,6 +19,7 @@
     #include "wx/button.h"
 #endif // WX_PRECOMP
 
+#include "asserthelper.h"
 #include "testableframe.h"
 #include "wx/uiaction.h"
 #include "wx/caret.h"
@@ -43,6 +44,12 @@ private:
         CPPUNIT_TEST( Help );
         CPPUNIT_TEST( Parent );
         CPPUNIT_TEST( Siblings );
+        CPPUNIT_TEST( Children );
+        CPPUNIT_TEST( Focus );
+        CPPUNIT_TEST( Positioning );
+        CPPUNIT_TEST( Show );
+        CPPUNIT_TEST( Enable );
+        CPPUNIT_TEST( FindWindowBy );
     CPPUNIT_TEST_SUITE_END();
 
     void ShowHideEvent();
@@ -54,6 +61,12 @@ private:
     void Help();
     void Parent();
     void Siblings();
+    void Children();
+    void Focus();
+    void Positioning();
+    void Show();
+    void Enable();
+    void FindWindowBy();
 
     wxWindow *m_window;
 
@@ -237,4 +250,132 @@ void WindowTestCase::Siblings()
     CPPUNIT_ASSERT_EQUAL(m_window, newwin->GetPrevSibling());
 
     wxDELETE(newwin);
+}
+
+void WindowTestCase::Children()
+{
+    CPPUNIT_ASSERT_EQUAL(0, m_window->GetChildren().GetCount());
+
+    wxWindow* child1 = new wxWindow(m_window, wxID_ANY);
+
+    CPPUNIT_ASSERT_EQUAL(1, m_window->GetChildren().GetCount());
+
+    m_window->RemoveChild(child1);
+
+    CPPUNIT_ASSERT_EQUAL(0, m_window->GetChildren().GetCount());
+
+    child1->SetId(wxID_HIGHEST + 1);
+    child1->SetName("child1");
+
+    m_window->AddChild(child1);
+
+    CPPUNIT_ASSERT_EQUAL(1, m_window->GetChildren().GetCount());
+    CPPUNIT_ASSERT_EQUAL(child1, m_window->FindWindow(wxID_HIGHEST + 1));
+    CPPUNIT_ASSERT_EQUAL(child1, m_window->FindWindow("child1"));
+
+    m_window->DestroyChildren();
+
+    CPPUNIT_ASSERT_EQUAL(0, m_window->GetChildren().GetCount());
+}
+
+void WindowTestCase::Focus()
+{
+    CPPUNIT_ASSERT(!m_window->HasFocus());
+
+    if ( m_window->AcceptsFocus() )
+    {
+        m_window->SetFocus();
+        CPPUNIT_ASSERT(m_window->HasFocus());
+    }
+
+    //Set the focus back to the main window
+    wxTheApp->GetTopWindow()->SetFocus();
+
+    if ( m_window->AcceptsFocusFromKeyboard() )
+    {
+        m_window->SetFocusFromKbd();
+        CPPUNIT_ASSERT(m_window->HasFocus());
+    }
+}
+
+void WindowTestCase::Positioning()
+{
+    //Some basic tests for consistency
+    int x, y;
+    m_window->GetPosition(&x, &y);
+
+    CPPUNIT_ASSERT_EQUAL(x, m_window->GetPosition().x);
+    CPPUNIT_ASSERT_EQUAL(y, m_window->GetPosition().y);
+    CPPUNIT_ASSERT(x >= 0);
+    CPPUNIT_ASSERT(y >= 0);
+    CPPUNIT_ASSERT_EQUAL(m_window->GetPosition(), 
+                         m_window->GetRect().GetTopLeft());
+
+    m_window->GetScreenPosition(&x, &y);
+    CPPUNIT_ASSERT_EQUAL(x, m_window->GetScreenPosition().x);
+    CPPUNIT_ASSERT_EQUAL(y, m_window->GetScreenPosition().y);
+    CPPUNIT_ASSERT(x >= 0);
+    CPPUNIT_ASSERT(y >= 0);
+    CPPUNIT_ASSERT_EQUAL(m_window->GetScreenPosition(), 
+                         m_window->GetScreenRect().GetTopLeft());
+}
+
+void WindowTestCase::Show()
+{
+    CPPUNIT_ASSERT(m_window->IsShown());
+
+    m_window->Hide();
+
+    CPPUNIT_ASSERT(!m_window->IsShown());
+
+    m_window->Show();
+
+    CPPUNIT_ASSERT(m_window->IsShown());
+
+    m_window->Show(false);
+
+    CPPUNIT_ASSERT(!m_window->IsShown());
+
+    m_window->ShowWithEffect(wxSHOW_EFFECT_BLEND);
+
+    CPPUNIT_ASSERT(m_window->IsShown());
+
+    m_window->HideWithEffect(wxSHOW_EFFECT_BLEND);
+
+    CPPUNIT_ASSERT(!m_window->IsShown());
+}
+
+void WindowTestCase::Enable()
+{
+    CPPUNIT_ASSERT(m_window->IsEnabled());
+
+    m_window->Disable();
+
+    CPPUNIT_ASSERT(!m_window->IsEnabled());
+
+    m_window->Enable();
+
+    CPPUNIT_ASSERT(m_window->IsEnabled());
+
+    m_window->Enable(false);
+
+    CPPUNIT_ASSERT(!m_window->IsEnabled());
+}
+
+void WindowTestCase::FindWindowBy()
+{
+    m_window->SetId(wxID_HIGHEST + 1);
+    m_window->SetName("name");
+    m_window->SetLabel("label");
+
+    CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowById(wxID_HIGHEST + 1));
+    CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByName("name"));
+    CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByLabel("label"));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), 
+                         wxWindow::FindWindowById(wxID_HIGHEST + 3));
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), 
+                         wxWindow::FindWindowByName("noname"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), 
+                         wxWindow::FindWindowByLabel("nolabel"));
 }

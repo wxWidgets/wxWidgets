@@ -40,4 +40,7 @@ std::ostream& operator<<(std::ostream& os, const wxSize& s);
 // this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxFont objects
 std::ostream& operator<<(std::ostream& os, const wxFont& f);
 
+// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxPoint objects
+std::ostream& operator<<(std::ostream& os, const wxPoint& p);
+
 #endif

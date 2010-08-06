@@ -57,3 +57,10 @@ std::ostream& operator<<(std::ostream& os, const wxFont& f)
 
     return os;
 }
+
+std::ostream& operator<<(std::ostream& os, const wxPoint& p)
+{
+    os << "(" << p.x << ", " << p.y << ")";
+
+    return os;
+}
