@@ -300,6 +300,16 @@ public:
     void AppendByte(char data);
 
     /**
+        Single call to append a data block to the buffer.
+
+        @param data
+            Pointer to block to append to the buffer.
+        @param len
+            Length of data to append.
+    */
+    void AppendData(const void *data, size_t len);
+
+    /**
         Ensure that the buffer is big enough and return a pointer to the start
         of the empty space in the buffer. This pointer can be used to directly
         write data into the buffer, this new data will be appended to the
