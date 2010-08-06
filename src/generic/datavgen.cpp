@@ -1378,7 +1378,7 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
     m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
     unsigned int row = GetLineAt( yy );
 
-    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+    if ((row >= GetRowCount()) || (xx > GetEndOfLastCol()))
     {
         RemoveDropHint();
         return wxDragNone;
@@ -1424,7 +1424,7 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
     m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
     unsigned int row = GetLineAt( yy );
 
-    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+    if ((row >= GetRowCount()) || (xx > GetEndOfLastCol()))
         return false;
 
     wxDataViewItem item = GetItemByRow( row );
@@ -1453,7 +1453,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
     m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
     unsigned int row = GetLineAt( yy );
 
-    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+    if ((row >= GetRowCount()) || (xx > GetEndOfLastCol()))
         return wxDragNone;
 
     wxDataViewItem item = GetItemByRow( row );
