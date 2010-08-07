@@ -158,6 +158,8 @@
             controls/listctrltest.cpp
             controls/listviewtest.cpp
             controls/notebooktest.cpp
+            controls/pickerbasetest.cpp
+            controls/pickertest.cpp
             controls/radioboxtest.cpp
             controls/radiobutton.cpp
             controls/rearrangelisttest.cpp
