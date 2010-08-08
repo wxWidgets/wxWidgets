@@ -1492,6 +1492,31 @@ wxVariant wxPGProperty::GetDefaultValue() const
     return wxVariant();
 }
 
+void wxPGProperty::Enable( bool enable )
+{
+    wxPropertyGrid* pg = GetGrid();
+
+    // Preferably call the version in the owning wxPropertyGrid,
+    // since it handles the editor de-activation.
+    if ( pg )
+        pg->EnableProperty(this, enable);
+    else
+        DoEnable(enable);
+}
+
+void wxPGProperty::DoEnable( bool enable )
+{
+    if ( enable )
+        ClearFlag(wxPG_PROP_DISABLED);
+    else
+        SetFlag(wxPG_PROP_DISABLED);
+
+    // Apply same to sub-properties as well
+    unsigned int i;
+    for ( i = 0; i < GetChildCount(); i++ )
+        Item(i)->DoEnable( enable );
+}
+
 void wxPGProperty::EnsureCells( unsigned int column )
 {
     if ( column >= m_cells.size() )

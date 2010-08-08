@@ -1399,42 +1399,6 @@ bool wxPropertyGridPageState::DoHideProperty( wxPGProperty* p, bool hide, int fl
 }
 
 // -----------------------------------------------------------------------
-
-bool wxPropertyGridPageState::DoEnableProperty( wxPGProperty* p, bool enable )
-{
-    if ( p )
-    {
-        if ( enable )
-        {
-            if ( !(p->m_flags & wxPG_PROP_DISABLED) )
-                return false;
-
-            // Enabling
-
-            p->m_flags &= ~(wxPG_PROP_DISABLED);
-        }
-        else
-        {
-            if ( p->m_flags & wxPG_PROP_DISABLED )
-                return false;
-
-            // Disabling
-
-            p->m_flags |= wxPG_PROP_DISABLED;
-
-        }
-
-        // Apply same to sub-properties as well
-        unsigned int i;
-        for ( i = 0; i < p->GetChildCount(); i++ )
-            DoEnableProperty( p->Item(i), enable );
-
-        return true;
-    }
-    return false;
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGridPageState wxVariant related routines
 // -----------------------------------------------------------------------
 

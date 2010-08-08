@@ -277,7 +277,7 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
             grid->DoSelectProperty( p, wxPG_SEL_FORCE );
     }
 
-    state->DoEnableProperty(p, enable);
+    p->DoEnable(enable);
 
     RefreshProperty( p );
 

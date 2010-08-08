@@ -153,6 +153,8 @@ public:
 
     /**
         Disables a property.
+
+        @see EnableProperty(), wxPGProperty::Enable()
     */
     bool DisableProperty( wxPGPropArg id );
 
@@ -164,12 +166,15 @@ public:
     bool EditorValidate();
 
     /**
-        Enables or disables property.
+        Enables or disables property. Disabled property usually appears as
+        having grey text.
 
         @param id
             Name or pointer to a property.
         @param enable
             If @false, property is disabled instead.
+
+        @see wxPGProperty::Enable()
     */
     bool EnableProperty( wxPGPropArg id, bool enable = true );
 

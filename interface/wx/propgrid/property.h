@@ -1162,6 +1162,17 @@ public:
     void Empty();
 
     /**
+        Enables or disables the property. Disabled property usually appears
+        as having grey text.
+
+        @param enable
+            If @false, property is disabled instead.
+
+        @see wxPropertyGridInterface::EnableProperty()
+    */
+    void Enable( bool enable = true );
+
+    /**
         Composes text from values of child properties.
     */
     wxString GenerateComposedValue() const;

@@ -473,9 +473,6 @@ public:
         }
     }
 
-    /** Enables or disables given property and its subproperties. */
-    bool DoEnableProperty( wxPGProperty* p, bool enable );
-
     /** Returns (precalculated) height of contained visible properties.
     */
     unsigned int GetVirtualHeight() const

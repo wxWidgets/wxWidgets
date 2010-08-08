@@ -1524,6 +1524,17 @@ public:
     void DeleteChoice( int index );
 
     /**
+        Enables or disables the property. Disabled property usually appears
+        as having grey text.
+
+        @param enable
+            If @false, property is disabled instead.
+
+        @see wxPropertyGridInterface::EnableProperty()
+    */
+    void Enable( bool enable = true );
+
+    /**
         Call to enable or disable usage of common value (integer value that can
         be selected for properties instead of their normal values) for this
         property.
@@ -2356,6 +2367,8 @@ protected:
 
     // Removes child property with given pointer. Does not delete it.
     void RemoveChild( wxPGProperty* p );
+
+    void DoEnable( bool enable );
 
     void DoPreAddChild( int index, wxPGProperty* prop );
 
