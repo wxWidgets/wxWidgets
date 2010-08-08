@@ -103,7 +103,7 @@ private:
 WX_DECLARE_LIST(wxDataViewItem, ItemList);
 WX_DEFINE_LIST(ItemList)
 
-class WXDLLIMPEXP_ADV wxDataViewCtrlInternal
+class wxDataViewCtrlInternal
 {
 public:
     wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model );
