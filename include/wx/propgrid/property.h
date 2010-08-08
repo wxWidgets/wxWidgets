@@ -473,6 +473,8 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 
     @remarks
     This flag cannot be used with property iterators.
+
+    @see wxPGProperty::SetAutoUnspecified()
 */
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
@@ -1909,6 +1911,21 @@ public:
     void SetAttributes( const wxPGAttributeStorage& attributes );
 
     /**
+        Set if user can change the property's value to unspecified by
+        modifying the value of the editor control (usually by clearing
+        it).  Currently, this can work with following properties:
+        wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
+        
+        @param enable
+            Whether to enable or disable this behavior (it is disabled by
+            default).
+    */
+    void SetAutoUnspecified( bool enable = true )
+    {
+        ChangeFlag(wxPG_PROP_AUTO_UNSPECIFIED, enable);
+    }
+
+    /**
         Sets property's background colour.
 
         @param colour
@@ -2039,23 +2056,14 @@ public:
     }
 
     /**
-        Sets given property flag.
+        Sets or clears given property flag. Mainly for internal use.
 
-        @see propgrid_propflags
-    */
-    void SetFlag( wxPGPropertyFlags flag )
-    {
-        //
-        // NB: While using wxPGPropertyFlags here makes it difficult to
-        //     combine different flags, it usefully prevents user from
-        //     using incorrect flags (say, wxWindow styles).
-        m_flags |= flag;
-    }
+        @remarks Setting a property flag never has any side-effect, and is
+                 intended almost exclusively for internal use. So, for
+                 example, if you want to disable a property, call
+                 Enable(false) instead of setting wxPG_PROP_DISABLED flag.
 
-    /**
-        Sets or clears given property flag.
-
-        @see propgrid_propflags
+        @see HasFlag(), GetFlags()
     */
     void ChangeFlag( wxPGPropertyFlags flag, bool set )
     {
@@ -2066,9 +2074,10 @@ public:
     }
 
     /**
-        Sets or clears given property flag, recursively.
+        Sets or clears given property flag, recursively. This function is
+        primarily intended for internal use.
 
-        @see propgrid_propflags
+        @see ChangeFlag()
     */
     void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
 
@@ -2180,8 +2189,6 @@ public:
     {
         return m_helpString;
     }
-
-    void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
 
     // Use, for example, to detect if item is inside collapsed section.
     bool IsSomeParent( wxPGProperty* candidate_parent ) const;
@@ -2374,6 +2381,17 @@ protected:
 
     void SetParentState( wxPropertyGridPageState* pstate )
         { m_parentState = pstate; }
+
+    void SetFlag( wxPGPropertyFlags flag )
+    {
+        //
+        // NB: While using wxPGPropertyFlags here makes it difficult to
+        //     combine different flags, it usefully prevents user from
+        //     using incorrect flags (say, wxWindow styles).
+        m_flags |= flag;
+    }
+
+    void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
 
     // Call after fixed sub-properties added/removed after creation.
     // if oldSelInd >= 0 and < new max items, then selection is

@@ -1516,7 +1516,7 @@ void FormMain::PopulateWithExamples ()
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
     //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
     pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
-    pg->GetProperty(wxT("ColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+    pg->GetProperty(wxT("ColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
         wxT("editor of this property to wxPGEditor_ComboBox)"));

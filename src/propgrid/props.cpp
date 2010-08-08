@@ -1343,7 +1343,7 @@ void wxFlagsProperty::OnSetValue()
             flag = choices.GetValue(i);
 
             if ( (newFlags & flag) != (m_oldValue & flag) )
-                Item(i)->SetFlag( wxPG_PROP_MODIFIED );
+                Item(i)->ChangeFlag( wxPG_PROP_MODIFIED, true );
         }
 
         m_oldValue = newFlags;
@@ -1451,7 +1451,7 @@ void wxFlagsProperty::RefreshChildren()
         wxPGProperty* p = Item(i);
 
         if ( subVal != (m_oldValue & flag) )
-            p->SetFlag( wxPG_PROP_MODIFIED );
+            p->ChangeFlag( wxPG_PROP_MODIFIED, true );
 
         p->SetValue( subVal?true:false );
     }
