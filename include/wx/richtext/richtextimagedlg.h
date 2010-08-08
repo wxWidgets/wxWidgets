@@ -89,6 +89,9 @@ public:
     void SetImageAttr(const wxRichTextImageAttr& attr);
     void ApplyImageAttr(wxRichTextImage* image);
 
+    /// Set the anchored object
+    void SetAnchoredObject(wxRichTextAnchoredObject* anchored);
+
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 private:
@@ -103,6 +106,8 @@ private:
     wxComboBox* m_scaleW;
     wxTextCtrl* m_height;
     wxComboBox* m_scaleH;
+    wxTextCtrl* m_offset;
+    wxComboBox* m_scaleOffset;
     wxButton* m_saveButton;
     wxButton* m_cancelButton;
     /// Control identifiers
@@ -113,9 +118,16 @@ private:
         ID_TEXTCTRL_WIDTH = 10017,
         ID_COMBOBOX_SCALE_W = 10018,
         ID_TEXTCTRL_HEIGHT = 10000,
-        ID_COMBOBOX_SCALE_H = 10002
+        ID_COMBOBOX_SCALE_H = 10002,
+        ID_BUTTON_PARA_UP = 10020,
+        ID_BUTTON_PARA_DOWN = 10021,
+        ID_TEXTCTRL_OFFSET = 10022,
+        ID_COMBOBOX_OFFSET = 10001
     };
 ////@end wxRichTextImageDlg member variables
+
+    wxRichTextObjectList::compatibility_iterator m_para;
+    wxRichTextBuffer* m_buffer;
 };
 
 #endif

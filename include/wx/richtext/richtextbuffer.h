@@ -125,6 +125,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextPlaceHoldingObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAnchoredObject;
 class wxFloatCollector;
 
 /*!
@@ -265,6 +266,7 @@ public:
     int m_align;
     int m_floating;
     int m_offset;
+    int m_scaleO;
 };
 
 /*!
@@ -720,6 +722,9 @@ public:
 // Operations
     /// Draw the floats of this buffer
     void DrawFloats(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
+
+    /// Move an anchored object to another paragraph
+    void MoveAnchoredObjectToParagraph(wxRichTextParagraph* from, wxRichTextParagraph* to, wxRichTextAnchoredObject* obj);
 
     /// Initialize the object.
     void Init();

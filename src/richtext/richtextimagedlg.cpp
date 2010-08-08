@@ -113,6 +113,8 @@ void wxRichTextImageDlg::Init()
     m_scaleW = NULL;
     m_height = NULL;
     m_scaleH = NULL;
+    m_offset = NULL;
+    m_scaleOffset = NULL;
     m_saveButton = NULL;
     m_cancelButton = NULL;
 ////@end wxRichTextImageDlg member initialisation
@@ -189,16 +191,50 @@ void wxRichTextImageDlg::CreateControls()
     itemFlexGridSizer9->Add(m_scaleH, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer16, 0, wxGROW|wxALL, 5);
+    itemBoxSizer2->Add(itemBoxSizer16, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-    itemBoxSizer16->Add(5, 5, 10, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer17 = new wxFlexGridSizer(1, 3, 0, 0);
+    itemBoxSizer16->Add(itemFlexGridSizer17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText18 = new wxStaticText( itemDialog1, wxID_STATIC, _("Move the image to"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer17->Add(itemStaticText18, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxButton* itemButton19 = new wxButton( itemDialog1, ID_BUTTON_PARA_UP, _("Previous Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer17->Add(itemButton19, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxButton* itemButton20 = new wxButton( itemDialog1, ID_BUTTON_PARA_DOWN, _("Next Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer17->Add(itemButton20, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxBoxSizer* itemBoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer21, 1, wxGROW|wxALL, 5);
+
+    wxStaticText* itemStaticText22 = new wxStaticText( itemDialog1, wxID_STATIC, _("Image Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer21->Add(itemStaticText22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    m_offset = new wxTextCtrl( itemDialog1, ID_TEXTCTRL_OFFSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_offset->SetMaxLength(10);
+    itemBoxSizer21->Add(m_offset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxArrayString m_scaleOffsetStrings;
+    m_scaleOffsetStrings.Add(_("px"));
+    m_scaleOffsetStrings.Add(_("cm"));
+    m_scaleOffset = new wxComboBox( itemDialog1, ID_COMBOBOX_OFFSET, _("px"), wxDefaultPosition, wxSize(60, -1), m_scaleOffsetStrings, wxCB_READONLY );
+    m_scaleOffset->SetStringSelection(_("px"));
+    itemBoxSizer21->Add(m_scaleOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    itemBoxSizer21->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxBoxSizer* itemBoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer26, 0, wxGROW|wxALL, 5);
+
+    itemBoxSizer26->Add(5, 5, 10, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_saveButton = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
     m_saveButton->SetDefault();
-    itemBoxSizer16->Add(m_saveButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer26->Add(m_saveButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_cancelButton = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer16->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer26->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 ////@end wxRichTextImageDlg content construction
 }
@@ -262,6 +298,23 @@ void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
     // TODO: to invoke layout with some method. :)
 }
 
+void wxRichTextImageDlg::SetAnchoredObject(wxRichTextAnchoredObject* anchored)
+{
+    wxRichTextObject* parent = anchored->GetParent();
+    wxRichTextBuffer* buffer = anchored->GetBuffer();
+    if (parent == NULL || buffer == NULL)
+        return;
+
+    m_para = buffer->GetChildren().GetFirst();
+
+    while (m_para)
+    {
+        if (m_para->GetData() == parent)
+            break;
+        m_para = m_para->GetNext();
+    }
+}
+
 bool wxRichTextImageDlg::TransferDataToWindow()
 {
     int remain = 100;
@@ -272,6 +325,7 @@ bool wxRichTextImageDlg::TransferDataToWindow()
     // Update scale
     m_scaleW->SetSelection(m_attr.m_scaleW);
     m_scaleH->SetSelection(m_attr.m_scaleH);
+    m_scaleOffset->SetSelection(m_attr.m_scaleO);
 
     // Update metric
     m_width->Clear();
@@ -304,6 +358,21 @@ bool wxRichTextImageDlg::TransferDataToWindow()
         *m_height << m_attr.m_height;
     }
 
+    m_offset->Clear();
+    if (m_attr.m_scaleO == wxRICHTEXT_MM)
+    {
+        int remainder = m_attr.m_offset % remain;
+        *m_offset << m_attr.m_offset / remain;
+        if (remainder)
+        {
+            *m_offset << '.' << remainder;
+        }
+    }
+    else
+    {
+        *m_offset << m_attr.m_offset;
+    }
+
     return true;
 }
 
@@ -311,18 +380,22 @@ bool wxRichTextImageDlg::TransferDataFromWindow()
 {
     wxString width = m_width->GetValue();
     wxString height = m_height->GetValue();
-    int w, h;
+    wxString offset = m_offset->GetValue();
+    int w, h, o;
 
     m_attr.m_align = m_alignment->GetSelection();
     m_attr.m_floating = m_float->GetSelection();
 
     m_attr.m_scaleW = m_scaleW->GetSelection();
     m_attr.m_scaleH = m_scaleH->GetSelection();
+    m_attr.m_scaleO = m_scaleOffset->GetSelection();
 
     if (ConvertFromString(width, w, m_attr.m_scaleW))
         m_attr.m_width = w;
     if (ConvertFromString(height, h, m_attr.m_scaleH))
         m_attr.m_height = h;
+    if (ConvertFromString(offset, o, m_attr.m_scaleO))
+        m_attr.m_offset = o;
 
     return true;
 }

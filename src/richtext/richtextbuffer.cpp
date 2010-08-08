@@ -297,7 +297,7 @@ void DrawFloat(const FloatRectMapArray& array, wxDC& dc, const wxRichTextRange& 
         return;
     j = SearchAdjacentRect(array, end);
     if (j < 0 || j >= array.GetCount())
-        j = i;
+        j = array.GetCount() - 1;
     while (i <= j)
     {
         wxRichTextObject* obj = array[i]->anchor;
@@ -399,6 +399,7 @@ wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr()
     m_align = wxRICHTEXT_CENTRE;
     m_floating = wxRICHTEXT_FLOAT_NONE;
     m_offset = 0;
+    m_scaleO = wxRICHTEXT_PX;
 }
 
 wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr)
@@ -417,6 +418,7 @@ void wxRichTextAnchoredObjectAttr::Copy(const wxRichTextAnchoredObjectAttr& attr
     m_align = attr.m_align;
     m_floating = attr.m_floating;
     m_offset = attr.m_offset;
+    m_scaleO = attr.m_scaleO;
 }
 
 /*!
@@ -952,6 +954,26 @@ void wxRichTextParagraphLayoutBox::DrawFloats(wxDC& dc, const wxRichTextRange& r
 
     m_floatCollector->Draw(dc, range, selectionRange, rect, descent, style);
 }
+
+void wxRichTextParagraphLayoutBox::MoveAnchoredObjectToParagraph(wxRichTextParagraph* from, wxRichTextParagraph* to, wxRichTextAnchoredObject* obj)
+{
+    if (from == to)
+        return;
+
+    wxRichTextAnchoredObjectAttr attr = obj->GetAnchoredAttr();
+    if (attr.m_floating == wxRICHTEXT_FLOAT_NONE)
+    {
+        from->RemoveChild(obj);
+        to->AppendChild(obj);
+    }
+    else
+    {
+        wxRichTextPlaceHoldingObject *ph = obj->GetPlaceHoldingObject();
+        from->RemoveChild(ph);
+        to->AppendChild(ph);
+    }
+}
+
 
 /// Draw the item
 bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style)
@@ -3788,6 +3810,8 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     int maxAscent = 0;
     int maxDescent = 0;
     int lineCount = 0;
+    int lineAscent = 0;
+    int lineDescent = 0;
 
     wxRichTextObjectList::compatibility_iterator node;
 
@@ -3873,9 +3897,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         //       buffer, so we may have different available line width with different
         //       [startY, endY]. So, we should can't determine how wide the available
         //       space is until we know the exact line height.
-        maxDescent = wxMax(childDescent, maxDescent);
-        maxAscent = wxMax(childSize.y-childDescent, maxAscent);
-        lineHeight = maxDescent + maxAscent;
+        lineDescent = wxMax(childDescent, maxDescent);
+        lineAscent = wxMax(childSize.y-childDescent, maxAscent);
+        lineHeight = lineDescent + lineAscent;
         availableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
         currentPosition.x = (lineCount == 0 ? availableRect.x + startPositionFirstLine : availableRect.x + startPositionSubsequentLines);
@@ -4964,8 +4988,20 @@ void wxRichTextParagraph::CollectFloat()
             wxRichTextPlaceHoldingObject* ph = wxDynamicCast(obj, wxRichTextPlaceHoldingObject);
             wxRichTextAnchoredObject* anchored = ph->GetRealObject();
             wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
+            /*
+             * If the object is a floating one, then add it into the anchoredObjects list,
+             * else use the real object to replace the place holding object and remove
+             * the m_anchored flag.
+             */
             if (attr.m_floating != wxRICHTEXT_FLOAT_NONE)
                 m_anchoredObjects.Append(obj);
+            else
+            {
+                attr.m_anchored = 0;
+                anchored->SetAnchoredAttr(attr);
+                InsertChild(anchored, obj);
+                RemoveChild(obj);
+            }
         }
 
         node = node->GetNext();
@@ -4988,6 +5024,12 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, w
         anchored->GetRangeSize(obj->GetRange(), size, descent, dc, style);
         wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
         int pos = floatCollector->GetFitPosition(attr.m_floating, rect.y + attr.m_offset, size.y);
+        
+        /* Update the offset */
+        attr.m_offset = pos - rect.y;
+        attr.m_scaleO = wxRICHTEXT_PX;
+        anchored->SetAnchoredAttr(attr);
+
         if (attr.m_floating == wxRICHTEXT_FLOAT_LEFT)
             x = 0;
         else if (attr.m_floating == wxRICHTEXT_FLOAT_RIGHT)
