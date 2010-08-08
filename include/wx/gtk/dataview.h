@@ -14,6 +14,8 @@
 
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
 
+struct _GtkTreePath;
+
 // ---------------------------------------------------------
 // wxDataViewColumn
 // ---------------------------------------------------------
@@ -170,6 +172,10 @@ public:
 
     GtkWidget *GtkGetTreeView() { return m_treeview; }
     wxDataViewCtrlInternal* GtkGetInternal() { return m_internal; }
+
+    // Convert GTK path to our item. Returned item may be invalid if get_iter()
+    // failed.
+    wxDataViewItem GTKPathToItem(struct _GtkTreePath *path) const;
 
     virtual void OnInternalIdle();
 
