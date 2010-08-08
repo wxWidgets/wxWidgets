@@ -3888,9 +3888,13 @@ void wxDataViewCtrl::Init()
     m_headerArea = NULL;
 }
 
-bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
-                            const wxPoint& pos, const wxSize& size,
-                            long style, const wxValidator& validator )
+bool wxDataViewCtrl::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString& name)
 {
 //    if ( (style & wxBORDER_MASK) == 0)
 //        style |= wxBORDER_SUNKEN;
@@ -3898,7 +3902,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     Init();
 
     if (!wxControl::Create( parent, id, pos, size,
-                            style | wxScrolledWindowStyle, validator))
+                            style | wxScrolledWindowStyle, validator, name))
         return false;
 
     SetInitialSize(size);
