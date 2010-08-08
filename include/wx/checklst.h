@@ -12,6 +12,8 @@
 #ifndef _WX_CHECKLST_H_BASE_
 #define _WX_CHECKLST_H_BASE_
 
+#include "wx/defs.h"
+
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/listbox.h"
