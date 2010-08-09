@@ -589,9 +589,9 @@ void RichTextCtrlTestCase::ParagraphSpacing()
     m_rich->GetStyle(25, spacing);
 
     //Make sure we test against the defaults
-    CPPUNIT_ASSERT_EQUAL(m_rich->GetDefaultStyle().GetParagraphSpacingBefore(), 
+    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetParagraphSpacingBefore(), 
                          spacing.GetParagraphSpacingBefore());
-    CPPUNIT_ASSERT_EQUAL(m_rich->GetDefaultStyle().GetParagraphSpacingAfter(), 
+    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetParagraphSpacingAfter(), 
                          spacing.GetParagraphSpacingAfter());
 }
 
