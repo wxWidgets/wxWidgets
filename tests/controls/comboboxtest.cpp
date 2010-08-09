@@ -182,7 +182,8 @@ void ComboBoxTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
 
+    //Since this uses FindString it is case insensative
     m_combo->SetValue("ITEM 2");
 
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
+    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
 }

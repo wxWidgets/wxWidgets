@@ -237,7 +237,7 @@ public:
 
         @note For a combobox with @c wxCB_READONLY style the string must be in
               the combobox choices list, otherwise the call to SetValue() is
-              ignored.
+              ignored. This is case insensitive.
 
         @param text
             The text to set.
