@@ -22,6 +22,8 @@
 #include "wx/fontpicker.h"
 #include "pickerbasetest.h"
 
+#if wxUSE_COLOURPICKERCTRL
+
 class ColourPickerCtrlTestCase : public PickerBaseTestCase, 
                                  public CppUnit::TestCase
 {
@@ -61,6 +63,10 @@ void ColourPickerCtrlTestCase::tearDown()
 {
     wxDELETE(m_colour);
 }
+
+#endif //wxUSE_COLOURPICKERCTRL
+
+#if wxUSE_DIRPICKERCTRL
 
 class DirPickerCtrlTestCase : public PickerBaseTestCase, 
                               public CppUnit::TestCase
@@ -102,6 +108,10 @@ void DirPickerCtrlTestCase::tearDown()
 {
     wxDELETE(m_dir);
 }
+
+#endif //wxUSE_DIRPICKERCTRL
+
+#if wxUSE_FILEPICKERCTRL
 
 class FilePickerCtrlTestCase : public PickerBaseTestCase, 
                                public CppUnit::TestCase
@@ -145,6 +155,10 @@ void FilePickerCtrlTestCase::tearDown()
     wxDELETE(m_file);
 }
 
+#endif //wxUSE_FILEPICKERCTRL
+
+#if wxUSE_FONTPICKERCTRL
+
 class FontPickerCtrlTestCase : public PickerBaseTestCase, 
                                public CppUnit::TestCase
 {
@@ -185,3 +199,4 @@ void FontPickerCtrlTestCase::tearDown()
     wxDELETE(m_font);
 }
 
+#endif //wxUSE_FONTPICKERCTRL

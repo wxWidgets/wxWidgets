@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_GRID
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -684,3 +686,5 @@ void GridTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
 }
+
+#endif //wxUSE_GRID

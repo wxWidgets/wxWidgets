@@ -14,6 +14,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_IMAGE
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -818,6 +820,8 @@ void ImageTestCase::SizeImage()
        );
    }
 }
+
+#endif //wxUSE_IMAGE
 
 
 /*

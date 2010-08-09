@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_NOTEBOOK
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -88,3 +90,5 @@ void NotebookTestCase::RowCount()
     CPPUNIT_ASSERT( m_notebook->GetRowCount() != 1 );
 #endif
 }
+
+#endif //wxUSE_NOTEBOOK

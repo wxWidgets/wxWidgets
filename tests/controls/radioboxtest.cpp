@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_RADIOBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -220,3 +222,4 @@ void RadioBoxTestCase::SetString()
     CPPUNIT_ASSERT_EQUAL("", m_radio->GetString(2));
 }
 
+#endif //wxUSE_RADIOBOX

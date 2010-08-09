@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_TREEBOOK
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -142,3 +144,4 @@ void TreebookTestCase::Delete()
     CPPUNIT_ASSERT_EQUAL(0, m_treebook->GetPageCount());
 }
 
+#endif //wxUSE_TREEBOOK

@@ -10,6 +10,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_LISTCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -434,3 +436,5 @@ void ListBaseTestCase::Sort()
     CPPUNIT_ASSERT_EQUAL("Item 1", list->GetItemText(0));
     CPPUNIT_ASSERT_EQUAL("Item 0", list->GetItemText(1));
 }
+
+#endif //wxUSE_LISTCTRL

@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_RICHTEXT
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -728,3 +730,5 @@ void RichTextCtrlTestCase::Url()
     CPPUNIT_ASSERT(url.HasURL());
     CPPUNIT_ASSERT_EQUAL("http://www.wxwidgets.org", url.GetURL());
 }
+
+#endif //wxUSE_RICHTEXT

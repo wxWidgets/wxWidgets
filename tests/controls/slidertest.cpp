@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_SLIDER
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -194,3 +196,5 @@ void SliderTestCase::Thumb()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_CHANGED));
 #endif
 }
+
+#endif

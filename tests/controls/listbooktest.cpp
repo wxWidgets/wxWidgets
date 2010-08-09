@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_LISTBOOK
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -76,3 +78,5 @@ void ListbookTestCase::ListView()
     CPPUNIT_ASSERT_EQUAL(3, listview->GetItemCount());
     CPPUNIT_ASSERT_EQUAL("Panel 1", listview->GetItemText(0));
 }
+
+#endif //wxUSE_LISTBOOK

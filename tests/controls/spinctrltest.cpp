@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_SPINCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -147,3 +149,5 @@ void SpinCtrlTestCase::Value()
 
     CPPUNIT_ASSERT_EQUAL(100, m_spin->GetValue());
 }
+
+#endif

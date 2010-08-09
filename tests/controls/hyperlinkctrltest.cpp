@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_HYPERLINKCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -103,3 +105,5 @@ void HyperlinkCtrlTestCase::Click()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 }
+
+#endif //wxUSE_HYPERLINKCTRL

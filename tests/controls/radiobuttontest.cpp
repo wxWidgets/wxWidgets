@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_RADIOBTN
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -147,3 +149,5 @@ void RadioButtonTestCase::Group()
     wxDELETE(g2radio0);
     wxDELETE(g2radio1);
 }
+
+#endif //wxUSE_RADIOBTN

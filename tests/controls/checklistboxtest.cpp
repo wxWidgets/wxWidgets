@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_CHECKLISTBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -89,6 +91,6 @@ void CheckListBoxTestCase::Check()
     m_check->Check(0);
 
     CPPUNIT_ASSERT_EQUAL(true, m_check->IsChecked(0));
-
 }
 
+#endif //wxUSE_CHECKLISTBOX

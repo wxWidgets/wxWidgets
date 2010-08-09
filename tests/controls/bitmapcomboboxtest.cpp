@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_BITMAPCOMBOBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -105,3 +107,5 @@ void BitmapComboBoxTestCase::Bitmap()
 
     CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
 }
+
+#endif //wxUSE_BITMAPCOMBOBOX

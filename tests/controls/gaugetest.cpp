@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_GAUGE
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -111,3 +113,5 @@ void GaugeTestCase::Value()
 
     CPPUNIT_ASSERT_EQUAL(-5, m_gauge->GetValue());
 }
+
+#endif //wxUSE_GAUGE

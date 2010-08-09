@@ -14,6 +14,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_LISTCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -133,3 +135,5 @@ void ListCtrlTestCase::ColumnClick()
 
     m_list->ClearAll();
 }
+
+#endif //wxUSE_LISTCTRL

@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_BUTTON
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -169,3 +171,5 @@ void ButtonTestCase::Bitmap()
     CPPUNIT_ASSERT(m_button->GetBitmapCurrent().IsOk());
     CPPUNIT_ASSERT(m_button->GetBitmapFocus().IsOk());
 }
+
+#endif //wxUSE_BUTTON

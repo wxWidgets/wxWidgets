@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_COMBOBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -187,3 +189,5 @@ void ComboBoxTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
 }
+
+#endif //wxUSE_COMBOBOX

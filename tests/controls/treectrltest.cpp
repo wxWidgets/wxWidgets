@@ -14,6 +14,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_TREECTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -586,3 +588,5 @@ void TreeCtrlTestCase::KeyNavigation()
 
     CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetSelection());
 }
+
+#endif //wxUSE_TREECTRL

@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_HTML
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -162,3 +164,5 @@ void HtmlWindowTestCase::AppendToPage()
 
     CPPUNIT_ASSERT_EQUAL("link A new paragraph", m_win->ToText());
 }
+
+#endif //wxUSE_HTML

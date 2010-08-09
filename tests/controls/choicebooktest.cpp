@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_CHOICEBOOK
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -75,3 +77,5 @@ void ChoicebookTestCase::Choice()
     CPPUNIT_ASSERT_EQUAL(3, choice->GetCount());
     CPPUNIT_ASSERT_EQUAL("Panel 1", choice->GetString(0));
 }
+
+#endif //wxUSE_CHOICEBOOK

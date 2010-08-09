@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_TEXTCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -399,3 +401,5 @@ void TextCtrlTestCase::LogTextCtrl()
 
     CPPUNIT_ASSERT(!m_text->IsEmpty());
 }
+
+#endif //wxUSE_TEXTCTRL

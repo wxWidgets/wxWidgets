@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_TOOLBOOK
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -75,3 +77,5 @@ void ToolbookTestCase::ToolBar()
     CPPUNIT_ASSERT(toolbar);
     CPPUNIT_ASSERT_EQUAL(3, toolbar->GetToolsCount());
 }
+
+#endif //wxUSE_TOOLBOOK

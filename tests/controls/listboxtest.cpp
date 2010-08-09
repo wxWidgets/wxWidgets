@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_LISTBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -249,3 +251,5 @@ void ListBoxTestCase::HitTest()
     CPPUNIT_ASSERT(m_list->HitTest(290, 190) == wxNOT_FOUND);
 #endif
 }
+
+#endif //wxUSE_LISTBOX

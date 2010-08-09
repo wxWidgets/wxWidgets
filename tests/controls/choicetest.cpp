@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_CHOICE
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -88,3 +90,5 @@ void ChoiceTestCase::Sort()
 
     CPPUNIT_ASSERT_EQUAL("a", m_choice->GetString(0));
 }
+
+#endif //wxUSE_CHOICE

@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_CHECKBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -132,3 +134,5 @@ void CheckBoxTestCase::ThirdStateUser()
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNDETERMINED, m_check->Get3StateValue());
 #endif
 }
+
+#endif //wxUSE_CHECKBOX
