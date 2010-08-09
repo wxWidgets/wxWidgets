@@ -97,13 +97,15 @@ void WindowTestCase::ShowHideEvent()
 
     EventCounter count(m_window, wxEVT_SHOW);
 
-    m_window->Show();
-
     CPPUNIT_ASSERT(m_window->IsShown());
 
     m_window->Show(false);
 
     CPPUNIT_ASSERT(!m_window->IsShown());
+
+    m_window->Show();
+
+    CPPUNIT_ASSERT(m_window->IsShown());
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount());
 #endif
