@@ -2096,7 +2096,7 @@ void wxCocoaDataViewControl::Select(const wxDataViewItem& item)
 {
     if (item.IsOk())
         [m_OutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]]
-            byExtendingSelection:NO];
+            byExtendingSelection:GetDataViewCtrl()->HasFlag(wxDV_MULTIPLE) ? YES : NO];
 }
 
 void wxCocoaDataViewControl::SelectAll()

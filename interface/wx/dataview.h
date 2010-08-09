@@ -963,6 +963,10 @@ public:
 
     /**
         Select the given item.
+
+        In single selection mode this changes the (unique) currently selected
+        item. In multi selection mode, the @a item is selected and the
+        previously selected items remain selected.
     */
     virtual void Select(const wxDataViewItem& item);
 
