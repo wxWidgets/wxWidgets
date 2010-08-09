@@ -179,7 +179,7 @@ void RadioBoxTestCase::ToolTip()
 
     CPPUNIT_ASSERT_EQUAL("Item 1 help", m_radio->GetItemToolTip(1)->GetTip());
 
-    m_radio->SetItemHelpText(1, "");
+    m_radio->SetItemToolTip(1, "");
 
     //However if we set a blank tip this does count as a tooltip
     CPPUNIT_ASSERT(!m_radio->GetItemToolTip(1));
