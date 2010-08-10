@@ -4132,13 +4132,13 @@ bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
             oper.SelectSize(rect) = oper.Select(size);
 
             int subtractLines = 0;
-            const int lineStart = oper.PosToLine(this, posLineStart);
+            const int lineStart = doper.PosToLine(this, posLineStart);
             if ( lineStart >= 0 )
             {
                 // ensure that if we have a multi-cell block we redraw all of
                 // it by increasing the refresh area to cover it entirely if a
                 // part of it is affected
-                const int lineEnd = oper.PosToLine(this, posLineEnd, true);
+                const int lineEnd = doper.PosToLine(this, posLineEnd, true);
                 for ( int line = lineStart; line < lineEnd; line++ )
                 {
                     int cellLines = oper.Select(
