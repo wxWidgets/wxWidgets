@@ -187,6 +187,8 @@ public:
 
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
+
+  virtual bool MSWHasInheritableBackground() const { return true; }
 #endif // wxUSE_UXTHEME
 
   // translate wxWin styles to the Windows ones
