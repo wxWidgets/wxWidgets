@@ -555,6 +555,12 @@ its directory. Please also see the @ref overview_i18n.
 
 @sampleabout{wxKeyEvent}
 
+This sample can be used to interactively test the events produced by pressing
+various keyboard keys. It also shows the interaction between accelerators and
+the normal keyboard events (which are overridden by any defined accelerators)
+and finally allows to test that not skipping an event in EVT_KEY_DOWN handler
+suppresses the subsequent EVT_CHAR event.
+
 @sampledir{keyboard}
 
 @section page_samples_layout Layout Sample
