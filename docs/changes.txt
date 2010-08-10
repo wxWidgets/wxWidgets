@@ -407,6 +407,7 @@ MSW:
 
 - Fix Cygwin 1.7 build (David Gangola).
 - Allow using wxDC::DrawText() with multiline texts.
+- Fix wxBitmapButton best size determination broken in 2.9.1.
 
 All (GUI):
 
