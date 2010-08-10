@@ -914,6 +914,26 @@ public:
     wxDataViewColumn* GetExpanderColumn() const;
 
     /**
+        Returns the currently focused item.
+
+        This is the item that the keyboard commands apply to. It may be invalid
+        if there is no focus currently.
+
+        This method is mostly useful for the controls with @c wxDV_MULTIPLE
+        style as in the case of single selection it returns the same thing as
+        GetSelection().
+
+        Notice that under all platforms except Mac OS X the currently focused
+        item may be selected or not but under OS X the current item is always
+        selected.
+
+        @see SetCurrentItem()
+
+        @since 2.9.2
+     */
+    wxDataViewItem GetCurrentItem() const;
+
+    /**
         Returns indentation.
     */
     int GetIndent() const;
@@ -979,6 +999,25 @@ public:
         Set which column shall contain the tree-like expanders.
     */
     void SetExpanderColumn(wxDataViewColumn* col);
+
+    /**
+        Changes the currently focused item.
+
+        The @a item parameter must be valid, there is no way to remove the
+        current item from the control.
+
+        In single selection mode, calling this method is the same as calling
+        Select() and is thus not very useful. In multiple selection mode this
+        method only moves the current item however without changing the
+        selection except under OS X where the current item is always selected,
+        so calling SetCurrentItem() selects @a item if it hadn't been selected
+        before.
+
+        @see GetCurrentItem()
+
+        @since 2.9.2
+     */
+    void SetCurrentItem(const wxDataViewItem& item);
 
     /**
         Sets the indendation.

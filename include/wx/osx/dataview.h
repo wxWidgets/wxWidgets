@@ -174,7 +174,6 @@ public:
   virtual void Expand(const wxDataViewItem& item);
   virtual bool IsExpanded(const wxDataViewItem & item) const;
 
-
   virtual unsigned int GetCount() const;
   virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
   virtual wxDataViewItem GetSelection() const;
@@ -278,6 +277,9 @@ protected:
 private:
  // initializing of local variables:
   void Init();
+
+  virtual wxDataViewItem DoGetCurrentItem() const;
+  virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
  //
  // variables

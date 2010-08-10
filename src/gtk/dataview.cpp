@@ -96,6 +96,97 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGtkTreePath);
 };
 
+// ----------------------------------------------------------------------------
+// wxGtkTreeSelectionLock: prevent selection from changing during the
+//                                 lifetime of this object
+// ----------------------------------------------------------------------------
+
+// Implementation note: it could be expected that setting the selection
+// function in this class ctor and resetting it back to the old value in its
+// dtor would work. However currently gtk_tree_selection_get_select_function()
+// can't be passed NULL (see https://bugzilla.gnome.org/show_bug.cgi?id=626276)
+// so we can't do this. Instead, we always use the selection function (which
+// imposes extra overhead, albeit minimal one, on all selection operations) and
+// just set/reset the flag telling it whether it should allow or forbid the
+// selection.
+//
+// Also notice that currently only a single object of this class may exist at
+// any given moment. It's just simpler like this and we don't need anything
+// more for now.
+
+extern "C"
+gboolean wxdataview_selection_func(GtkTreeSelection * WXUNUSED(selection),
+                                   GtkTreeModel * WXUNUSED(model),
+                                   GtkTreePath * WXUNUSED(path),
+                                   gboolean WXUNUSED(path_currently_selected),
+                                   gpointer data)
+{
+    return data == NULL;
+}
+
+class wxGtkTreeSelectionLock
+{
+public:
+    wxGtkTreeSelectionLock(GtkTreeSelection *selection)
+        : m_selection(selection)
+    {
+        wxASSERT_MSG( !ms_instance, "this class is not reentrant currently" );
+
+        ms_instance = this;
+
+        CheckCurrentSelectionFunc(NULL);
+
+        // Pass some non-NULL pointer as "data" for the callback, it doesn't
+        // matter what it is as long as it's non-NULL.
+        gtk_tree_selection_set_select_function(selection,
+                                               wxdataview_selection_func,
+                                               this,
+                                               NULL);
+    }
+
+    ~wxGtkTreeSelectionLock()
+    {
+        CheckCurrentSelectionFunc(wxdataview_selection_func);
+
+        gtk_tree_selection_set_select_function(m_selection,
+                                               wxdataview_selection_func,
+                                               NULL,
+                                               NULL);
+
+        ms_instance = NULL;
+    }
+
+private:
+    void CheckCurrentSelectionFunc(GtkTreeSelectionFunc func)
+    {
+        // We can only use gtk_tree_selection_get_select_function() with 2.14+
+        // so check for its availability both during compile- and run-time.
+#if GTK_CHECK_VERSION(2, 14, 0)
+        if ( gtk_check_version(2, 14, 0) != NULL )
+            return;
+
+        // If this assert is triggered, it means the code elsewhere has called
+        // gtk_tree_selection_set_select_function() but currently doing this
+        // breaks this class so the code here needs to be changed.
+        wxASSERT_MSG
+        (
+            gtk_tree_selection_get_select_function(m_selection) == func,
+            "selection function has changed unexpectedly, review this code!"
+        );
+#endif // GTK+ 2.14+
+
+        wxUnusedVar(func);
+    }
+
+    static wxGtkTreeSelectionLock *ms_instance;
+
+    GtkTreeSelection * const m_selection;
+
+    wxDECLARE_NO_COPY_CLASS(wxGtkTreeSelectionLock);
+};
+
+wxGtkTreeSelectionLock *wxGtkTreeSelectionLock::ms_instance = NULL;
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrlInternal
 //-----------------------------------------------------------------------------
@@ -4569,6 +4660,43 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     iter.user_data = item.GetID();
     wxGtkTreePath path(m_internal->get_path( &iter ));
     return gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
+}
+
+wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
+{
+    // The tree doesn't have any current item if it hadn't been created yet but
+    // it's arguably not an error to call this function in this case so just
+    // return an invalid item without asserting.
+    if ( !m_treeview )
+        return wxDataViewItem();
+
+    wxGtkTreePath path;
+    gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), path.ByRef(), NULL);
+
+    return GTKPathToItem(path);
+}
+
+void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
+{
+    wxCHECK_RET( m_treeview,
+                 "Current item can't be set before creating the control." );
+
+    // We need to make sure the model knows about this item or the path would
+    // be invalid and gtk_tree_view_set_cursor() would silently do nothing.
+    ExpandAncestors(item);
+
+    // We also need to preserve the existing selection from changing.
+    // Unfortunately the only way to do it seems to use our own selection
+    // function and forbid any selection changes during set cursor call.
+    wxGtkTreeSelectionLock
+        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)));
+
+    // Do move the cursor now.
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, NULL, FALSE);
 }
 
 wxDataViewItem wxDataViewCtrl::GetSelection() const

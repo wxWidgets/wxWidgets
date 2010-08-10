@@ -2069,6 +2069,22 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
 //
 // selection related methods (inherited from wxDataViewWidgetImpl)
 //
+
+wxDataViewItem wxCocoaDataViewControl::GetCurrentItem() const
+{
+    return wxDataViewItem([[m_OutlineView itemAtRow:[m_OutlineView selectedRow]] pointer]);
+}
+
+void wxCocoaDataViewControl::SetCurrentItem(const wxDataViewItem& item)
+{
+    // We can't have unselected current item in a NSTableView, as the
+    // documentation of its deselectRow method explains, the control will
+    // automatically change the current item to the closest still selected item
+    // if the current item is deselected. So we have no choice but to select
+    // the item in the same time as making it current.
+    Select(item);
+}
+
 int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
     NSIndexSet* selectedRowIndexes([m_OutlineView selectedRowIndexes]);

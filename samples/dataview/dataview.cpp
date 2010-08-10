@@ -88,6 +88,8 @@ private:
     void OnSelectNinth(wxCommandEvent& event);
     void OnCollapse(wxCommandEvent& event);
     void OnExpand(wxCommandEvent& event);
+    void OnShowCurrent(wxCommandEvent& event);
+    void OnSetNinthCurrent(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -283,6 +285,8 @@ enum
     ID_SELECT_NINTH     = 103,
     ID_COLLAPSE         = 104,
     ID_EXPAND           = 105,
+    ID_SHOW_CURRENT,
+    ID_SET_NINTH_CURRENT,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -315,6 +319,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_SELECT_NINTH, MyFrame::OnSelectNinth )
     EVT_BUTTON( ID_COLLAPSE, MyFrame::OnCollapse )
     EVT_BUTTON( ID_EXPAND, MyFrame::OnExpand )
+    EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
+    EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
@@ -411,13 +417,21 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     BuildDataViewCtrl(firstPanel, 0);    // sets m_ctrl[0]
 
+    const wxSizerFlags border = wxSizerFlags().DoubleBorder();
+
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer->Add( new wxButton( firstPanel, ID_ADD_MOZART,  "Add Mozart"),             0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_SEL,  "Delete selected"),        0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, "Delete \"Year\" column"), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,"Select ninth symphony"),  0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    "Collapse"),               0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_EXPAND,      "Expand"),                 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( firstPanel, ID_ADD_MOZART,  "Add Mozart"),             border );
+    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_SEL,  "Delete selected"),        border );
+    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, "Delete \"Year\" column"), border );
+    button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,"Select ninth symphony"),  border );
+    button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    "Collapse"),               border );
+    button_sizer->Add( new wxButton( firstPanel, ID_EXPAND,      "Expand"),                 border );
+
+    wxBoxSizer *sizerCurrent = new wxBoxSizer(wxHORIZONTAL);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_SHOW_CURRENT,
+                                   "&Show current"), border);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_SET_NINTH_CURRENT,
+                                   "Make &ninth symphony current"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[0]->SetMinSize(wxSize(-1, 200));
@@ -426,6 +440,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         new wxStaticText(firstPanel, wxID_ANY, "Most of the cells above are editable!"),
         0, wxGROW|wxALL, 5);
     firstPanelSz->Add(button_sizer);
+    firstPanelSz->Add(sizerCurrent);
     firstPanel->SetSizerAndFit(firstPanelSz);
 
 
@@ -912,6 +927,33 @@ void MyFrame::OnExpand( wxCommandEvent& WXUNUSED(event) )
     wxDataViewItem item = m_ctrl[0]->GetSelection();
     if (item.IsOk())
         m_ctrl[0]->Expand( item );
+}
+
+void MyFrame::OnShowCurrent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item = m_ctrl[0]->GetCurrentItem();
+    if ( item.IsOk() )
+    {
+        wxLogMessage("Current item: \"%s\" by %s",
+                     m_music_model->GetTitle(item),
+                     m_music_model->GetArtist(item));
+    }
+    else
+    {
+        wxLogMessage("There is no current item.");
+    }
+}
+
+void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item(m_music_model->GetNinthItem());
+    if ( !item.IsOk() )
+    {
+        wxLogError( "Cannot make the ninth symphony current: it was removed!" );
+        return;
+    }
+
+    m_ctrl[0]->SetCurrentItem(item);
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )

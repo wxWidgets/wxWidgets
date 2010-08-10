@@ -190,6 +190,9 @@ protected:
 private:
     void Init();
 
+    virtual wxDataViewItem DoGetCurrentItem() const;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item);
+
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
     friend class wxGtkDataViewModelNotifier;

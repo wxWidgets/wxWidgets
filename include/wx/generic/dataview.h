@@ -229,6 +229,9 @@ public:     // utility functions not part of the API
     wxDataViewColumn *GetColumnAt(unsigned int pos) const;
 
 private:
+    virtual wxDataViewItem DoGetCurrentItem() const;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item);
+
     wxDataViewColumnList      m_cols;
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;

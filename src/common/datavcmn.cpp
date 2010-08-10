@@ -994,6 +994,22 @@ void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
     }
 }
 
+wxDataViewItem wxDataViewCtrlBase::GetCurrentItem() const
+{
+    return HasFlag(wxDV_MULTIPLE) ? DoGetCurrentItem()
+                                  : GetSelection();
+}
+
+void wxDataViewCtrlBase::SetCurrentItem(const wxDataViewItem& item)
+{
+    wxCHECK_RET( item.IsOk(), "Can't make current an invalid item." );
+
+    if ( HasFlag(wxDV_MULTIPLE) )
+        DoSetCurrentItem(item);
+    else
+        Select(item);
+}
+
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )

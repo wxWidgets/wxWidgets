@@ -471,6 +471,7 @@ public:
     void ScrollWindow( int dx, int dy, const wxRect *rect = NULL );
     void ScrollTo( int rows, int column );
 
+    unsigned GetCurrentRow() const { return m_currentRow; }
     bool HasCurrentRow() { return m_currentRow != (unsigned int)-1; }
     void ChangeCurrentRow( unsigned int row );
 
@@ -4172,6 +4173,24 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
     return m_sortingColumnIdx == wxNOT_FOUND ? NULL
                                             : GetColumn(m_sortingColumnIdx);
+}
+
+wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
+{
+    return GetItemByRow(m_clientArea->GetCurrentRow());
+}
+
+void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
+{
+    const int row = m_clientArea->GetRowByItem(item);
+
+    const unsigned oldCurrent = m_clientArea->GetCurrentRow();
+    if ( static_cast<unsigned>(row) != oldCurrent )
+    {
+        m_clientArea->ChangeCurrentRow(row);
+        m_clientArea->RefreshRow(oldCurrent);
+        m_clientArea->RefreshRow(row);
+    }
 }
 
 // Selection code with wxDataViewItem as parameters

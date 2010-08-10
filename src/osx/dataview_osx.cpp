@@ -496,6 +496,16 @@ unsigned int wxDataViewCtrl::GetCount() const
   return GetDataViewPeer()->GetCount();
 }
 
+wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
+{
+    return GetDataViewPeer()->GetCurrentItem();
+}
+
+void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
+{
+    GetDataViewPeer()->SetCurrentItem(item);
+}
+
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
   if (item.IsOk() && (columnPtr != NULL))

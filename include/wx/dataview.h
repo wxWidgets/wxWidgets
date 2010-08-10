@@ -642,6 +642,12 @@ public:
     int GetIndent() const
         { return m_indent; }
 
+    // Current item is the one used by the keyboard navigation, it is the same
+    // as the (unique) selected item in single selection mode so these
+    // functions are mostly useful for controls with wxDV_MULTIPLE style.
+    wxDataViewItem GetCurrentItem() const;
+    void SetCurrentItem(const wxDataViewItem& item);
+
     virtual wxDataViewItem GetSelection() const = 0;
     virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
     virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
@@ -688,6 +694,12 @@ protected:
     virtual void DoSetIndent() = 0;
 
 private:
+    // Implementation of the public Set/GetCurrentItem() methods which are only
+    // called in multi selection case (for single selection controls their
+    // implementation is trivial and is done in the base class itself).
+    virtual wxDataViewItem DoGetCurrentItem() const = 0;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item) = 0;
+
     wxDataViewModel        *m_model;
     wxDataViewColumn       *m_expander_column;
     int m_indent ;
