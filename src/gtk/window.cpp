@@ -688,7 +688,14 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_rawFlags = 0;
 #if wxUSE_UNICODE
     event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
-#endif
+    if ( !event.m_uniChar && event.m_keyCode <= WXK_DELETE )
+    {
+        // Set Unicode key code to the ASCII equivalent for compatibility. E.g.
+        // let RETURN generate the key event with both key and Unicode key
+        // codes of 13.
+        event.m_uniChar = event.m_keyCode;
+    }
+#endif // wxUSE_UNICODE
     wxGetMousePosition( &x, &y );
     win->ScreenToClient( &x, &y );
     event.m_x = x;
@@ -791,16 +798,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     if ( !key_code )
         return false;
 
+    event.m_keyCode = key_code;
+
     // now fill all the other fields
     wxFillOtherKeyEventFields(event, win, gdk_event);
-
-    event.m_keyCode = key_code;
-#if wxUSE_UNICODE
-    if ( gdk_event->type == GDK_KEY_PRESS ||  gdk_event->type == GDK_KEY_RELEASE )
-    {
-        event.m_uniChar = key_code;
-    }
-#endif
 
     return true;
 }
