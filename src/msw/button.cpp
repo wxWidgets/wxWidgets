@@ -1391,33 +1391,38 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         // for simplicity, we start with centred rectangle and then move it to
         // the appropriate edge
         wxRect rectBitmap = wxRect(sizeBmp).CentreIn(rectButton);
-        switch ( m_imageData->GetBitmapPosition() )
+
+        // move bitmap only if we have a label, otherwise keep it centered
+        if ( ShowsLabel() )
         {
-            default:
-                wxFAIL_MSG( "invalid direction" );
-                // fall through
+            switch ( m_imageData->GetBitmapPosition() )
+            {
+                default:
+                    wxFAIL_MSG( "invalid direction" );
+                    // fall through
 
-            case wxLEFT:
-                rectBitmap.x = rectButton.x + margin.x;
-                rectButton.x += sizeBmpWithMargins.x;
-                rectButton.width -= sizeBmpWithMargins.x;
-                break;
+                case wxLEFT:
+                    rectBitmap.x = rectButton.x + margin.x;
+                    rectButton.x += sizeBmpWithMargins.x;
+                    rectButton.width -= sizeBmpWithMargins.x;
+                    break;
 
-            case wxRIGHT:
-                rectBitmap.x = rectButton.GetRight() - sizeBmp.x - margin.x;
-                rectButton.width -= sizeBmpWithMargins.x;
-                break;
+                case wxRIGHT:
+                    rectBitmap.x = rectButton.GetRight() - sizeBmp.x - margin.x;
+                    rectButton.width -= sizeBmpWithMargins.x;
+                    break;
 
-            case wxTOP:
-                rectBitmap.y = rectButton.y + margin.y;
-                rectButton.y += sizeBmpWithMargins.y;
-                rectButton.height -= sizeBmpWithMargins.y;
-                break;
+                case wxTOP:
+                    rectBitmap.y = rectButton.y + margin.y;
+                    rectButton.y += sizeBmpWithMargins.y;
+                    rectButton.height -= sizeBmpWithMargins.y;
+                    break;
 
-            case wxBOTTOM:
-                rectBitmap.y = rectButton.GetBottom() - sizeBmp.y - margin.y;
-                rectButton.height -= sizeBmpWithMargins.y;
-                break;
+                case wxBOTTOM:
+                    rectBitmap.y = rectButton.GetBottom() - sizeBmp.y - margin.y;
+                    rectButton.height -= sizeBmpWithMargins.y;
+                    break;
+            }
         }
 
         wxDCTemp dst((WXHDC)hdc);
