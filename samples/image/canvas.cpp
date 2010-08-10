@@ -641,22 +641,22 @@ void MyCanvas::CreateAntiAliasedBitmap()
 {
     wxBitmap bitmap( 300, 300 );
 
-    wxMemoryDC dc;
+    {
+        wxMemoryDC dc(bitmap);
 
-    dc.SelectObject( bitmap );
+        dc.Clear();
 
-    dc.Clear();
+        dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL) );
+        dc.SetTextForeground( wxT("RED") );
+        dc.DrawText( wxT("This is anti-aliased Text."), 20, 5 );
+        dc.DrawText( wxT("And a Rectangle."), 20, 45 );
 
-    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL) );
-    dc.SetTextForeground( wxT("RED") );
-    dc.DrawText( wxT("This is anti-aliased Text."), 20, 5 );
-    dc.DrawText( wxT("And a Rectangle."), 20, 45 );
+        dc.SetBrush( *wxRED_BRUSH );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRoundedRectangle( 20, 85, 200, 180, 20 );
+    }
 
-    dc.SetBrush( *wxRED_BRUSH );
-    dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.DrawRoundedRectangle( 20, 85, 200, 180, 20 );
-
-    wxImage original= bitmap.ConvertToImage();
+    wxImage original = bitmap.ConvertToImage();
     wxImage anti( 150, 150 );
 
     /* This is quite slow, but safe. Use wxImage::GetData() for speed instead. */
