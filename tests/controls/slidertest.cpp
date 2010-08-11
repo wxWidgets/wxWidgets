@@ -162,12 +162,6 @@ void SliderTestCase::Range()
 
     CPPUNIT_ASSERT_EQUAL(-50, m_slider->GetMin());
     CPPUNIT_ASSERT_EQUAL(0, m_slider->GetMax());
-
-    //Test backwards ranges
-    m_slider->SetRange(75, 50);
-
-    CPPUNIT_ASSERT_EQUAL(75, m_slider->GetMin());
-    CPPUNIT_ASSERT_EQUAL(50, m_slider->GetMax());
 }
 
 void SliderTestCase::Thumb()
