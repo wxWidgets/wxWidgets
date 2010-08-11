@@ -91,9 +91,6 @@ void RadioButtonTestCase::Value()
 
     EventCounter count(m_radio, wxEVT_COMMAND_RADIOBUTTON_SELECTED);
 
-    //We should be unselected by default
-    CPPUNIT_ASSERT(!m_radio->GetValue());
-
     m_radio->SetValue(true);
 
     CPPUNIT_ASSERT(m_radio->GetValue());
