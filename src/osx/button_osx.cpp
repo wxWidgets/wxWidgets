@@ -17,11 +17,30 @@
     #include "wx/panel.h"
     #include "wx/toplevel.h"
     #include "wx/dcclient.h"
+    #include "wx/stattext.h"
 #endif
 
 #include "wx/stockitem.h"
 
 #include "wx/osx/private.h"
+
+namespace
+{
+
+// Returns true only if the id is wxID_HELP and the label is "Help" or empty.
+bool IsHelpButtonWithStandardLabel(wxWindowID id, const wxString& label)
+{
+    if ( id != wxID_HELP )
+        return false;
+
+    if ( label.empty() )
+        return true;
+
+    const wxString labelText = wxStaticText::GetLabelText(label);
+    return labelText == "Help" || labelText == _("Help");
+}
+
+} // anonymous namespace
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
@@ -32,7 +51,7 @@ END_EVENT_TABLE()
 
 bool wxButton::Create(wxWindow *parent,
     wxWindowID id,
-    const wxString& lbl,
+    const wxString& labelOrig,
     const wxPoint& pos,
     const wxSize& size,
     long style,
@@ -54,9 +73,15 @@ bool wxButton::Create(wxWindow *parent,
                                  validator, name);
     }
 
-    wxString label(lbl);
-    if (label.empty() && wxIsStockID(id) && !(id == wxID_HELP))
-        label = wxGetStockLabel(id);
+    wxString label;
+
+    // Ignore the standard label for help buttons if possible, they use "?"
+    // label under Mac which looks better.
+    if ( !IsHelpButtonWithStandardLabel(id, labelOrig) )
+    {
+        label = labelOrig.empty() && wxIsStockID(id) ? wxGetStockLabel(id)
+                                                     : labelOrig;
+    }
 
     m_macIsUserPane = false ;
 
@@ -75,7 +100,13 @@ bool wxButton::Create(wxWindow *parent,
 
 void wxButton::SetLabel(const wxString& label)
 {
-    if ( GetId() == wxID_HELP || HasFlag(wxBU_NOTEXT) )
+    if ( IsHelpButtonWithStandardLabel(GetId(), label) )
+    {
+        // ignore the standard label for the help buttons, it's not used
+        return;
+    }
+
+    if ( HasFlag(wxBU_NOTEXT) )
     {
         // just store the label internally but don't really use it for the
         // button
