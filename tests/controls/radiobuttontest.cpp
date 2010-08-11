@@ -108,7 +108,10 @@ void RadioButtonTestCase::Value()
 void RadioButtonTestCase::Group()
 {
     //Add another button to the first group and create another of two buttons
-    wxRadioButton* g1radio0 = m_radio;
+    wxRadioButton* g1radio0 = new wxRadioButton(wxTheApp->GetTopWindow(), 
+                                                wxID_ANY, "wxRadioButton",
+                                                wxDefaultPosition, 
+                                                wxDefaultSize, wxRB_GROUP);
 
     wxRadioButton* g1radio1 = new wxRadioButton(wxTheApp->GetTopWindow(), 
                                                 wxID_ANY, "wxRadioButton");
@@ -122,10 +125,10 @@ void RadioButtonTestCase::Group()
                                                 wxID_ANY, "wxRadioButton");
 
     g1radio0->SetValue(true);
+    g2radio0->SetValue(true);
 
     CPPUNIT_ASSERT(g1radio0->GetValue());
     CPPUNIT_ASSERT(!g1radio1->GetValue());
-    //By default the first in a new group is selected
     CPPUNIT_ASSERT(g2radio0->GetValue());
     CPPUNIT_ASSERT(!g2radio1->GetValue());
 
@@ -145,6 +148,7 @@ void RadioButtonTestCase::Group()
     CPPUNIT_ASSERT(g2radio0->GetValue());
     CPPUNIT_ASSERT(!g2radio1->GetValue());
 
+    wxDELETE(g1radio0);
     wxDELETE(g1radio1);
     wxDELETE(g2radio0);
     wxDELETE(g2radio1);
