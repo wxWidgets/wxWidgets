@@ -611,7 +611,8 @@ void RichTextCtrlTestCase::TextColour()
 
     m_rich->GetStyle(25, colour);
 
-    CPPUNIT_ASSERT_EQUAL(*wxBLACK, colour.GetTextColour());
+    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetTextColour(),
+                         colour.GetTextColour());
 }
 
 void RichTextCtrlTestCase::NumberedBullet()
