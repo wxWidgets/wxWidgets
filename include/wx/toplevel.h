@@ -247,6 +247,10 @@ public:
     void CentreOnScreen(int dir = wxBOTH) { DoCentre(dir | wxCENTRE_ON_SCREEN); }
     void CenterOnScreen(int dir = wxBOTH) { CentreOnScreen(dir); }
 
+    // Get the default size for a new top level window. This is used when
+    // creating a wxTLW under some platforms if no explicit size given.
+    static wxSize GetDefaultSize();
+
 
     // default item access: we have a permanent default item which is the one
     // set by the user code but we may also have a temporary default item which
@@ -331,10 +335,6 @@ protected:
     // client area
     void DoLayout();
 
-    // Get the default size for the new window if no explicit size given. If
-    // there are better default sizes then these can be changed, just as long
-    // as they are not too small for TLWs (and not larger than screen).
-    static wxSize GetDefaultSize();
     static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
     static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
 
