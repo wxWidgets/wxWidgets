@@ -18,8 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/radiobox.h"
-    #include "wx/tooltip.h"
 #endif // WX_PRECOMP
+
+#include "wx/tooltip.h"
 
 class RadioBoxTestCase : public CppUnit::TestCase
 {

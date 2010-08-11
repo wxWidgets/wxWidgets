@@ -17,11 +17,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/spinctrl.h"
 #endif // WX_PRECOMP
 
 #include "testableframe.h"
 #include "wx/uiaction.h"
+#include "wx/spinctrl.h"
 
 class SpinCtrlTestCase : public CppUnit::TestCase
 {

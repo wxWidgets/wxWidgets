@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/panel.h"
-    #include "wx/notebook.h"
 #endif // WX_PRECOMP
 
+#include "wx/notebook.h"
 #include "bookctrlbasetest.h"
 
 class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase

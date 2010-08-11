@@ -24,6 +24,7 @@
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
+#include "wx/tooltip.h"
 
 class WindowTestCase : public CppUnit::TestCase
 {

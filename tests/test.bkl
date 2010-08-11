@@ -161,7 +161,7 @@
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
             controls/radioboxtest.cpp
-            controls/radiobutton.cpp
+            controls/radiobuttontest.cpp
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
             controls/slidertest.cpp

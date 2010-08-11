@@ -15,12 +15,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/tglbtn.h"
 #endif // WX_PRECOMP
 
 #include "testableframe.h"
 #include "wx/uiaction.h"
 #include "wx/artprov.h"
+#include "wx/tglbtn.h"
 
 class BitmapToggleButtonTestCase : public CppUnit::TestCase
 {
