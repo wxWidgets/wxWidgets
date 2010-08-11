@@ -13,6 +13,7 @@
 #include "wx/apptrait.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include <QtCore/QStringList>
 
 IMPLEMENT_DYNAMIC_CLASS( wxApp, wxAppBase )
 

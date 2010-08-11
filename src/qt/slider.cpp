@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/slider.h"
+#include "wx/qt/converter.h"
 
 wxSlider::wxSlider()
 {

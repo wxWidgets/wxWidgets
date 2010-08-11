@@ -9,6 +9,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/window.h"
 #include "wx/qt/combobox_qt.h"
 #include "wx/qt/converter.h"
 

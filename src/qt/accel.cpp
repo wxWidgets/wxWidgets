@@ -10,6 +10,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/accel.h"
+#include "wx/list.h"
+#include "wx/qt/converter.h"
+#include <QtCore/QVariant>
 
 // ----------------------------------------------------------------------------
 // wxAccelList: a list of wxAcceleratorEntries

@@ -11,6 +11,9 @@
 
 #include <QtGui/QComboBox>
 
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxArrayString;
+
 class WXDLLIMPEXP_CORE wxQtComboBox : public QComboBox
 {
 public:

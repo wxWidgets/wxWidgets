@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/gauge.h"
+#include "wx/qt/converter.h"
 
 wxGauge::wxGauge()
 {
