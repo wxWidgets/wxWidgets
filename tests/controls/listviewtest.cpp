@@ -115,9 +115,4 @@ void ListViewTestCase::Focus()
     m_list->Focus(0);
 
     CPPUNIT_ASSERT_EQUAL(0, m_list->GetFocusedItem());
-
-    //Setting focus to nothing retains previous focus
-    m_list->Focus(-1);
-
-    CPPUNIT_ASSERT_EQUAL(0, m_list->GetFocusedItem());
 }
