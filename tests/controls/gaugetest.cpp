@@ -86,14 +86,9 @@ void GaugeTestCase::Range()
 
     CPPUNIT_ASSERT_EQUAL(50, m_gauge->GetRange());
 
-    //Ranges <= 0 are ignored
-    m_gauge->SetValue(0);
+    m_gauge->SetRange(0);
 
-    CPPUNIT_ASSERT_EQUAL(50, m_gauge->GetRange());
-
-    m_gauge->SetValue(-1);
-
-    CPPUNIT_ASSERT_EQUAL(50, m_gauge->GetRange());
+    CPPUNIT_ASSERT_EQUAL(0, m_gauge->GetRange());
 }
 
 void GaugeTestCase::Value()
@@ -108,10 +103,9 @@ void GaugeTestCase::Value()
 
     CPPUNIT_ASSERT_EQUAL(0, m_gauge->GetValue());
 
-    //Unlike setvalue set range will let you set anything
-    m_gauge->SetValue(-5);
+    m_gauge->SetValue(100);
 
-    CPPUNIT_ASSERT_EQUAL(-5, m_gauge->GetValue());
+    CPPUNIT_ASSERT_EQUAL(100, m_gauge->GetValue());
 }
 
 #endif //wxUSE_GAUGE
