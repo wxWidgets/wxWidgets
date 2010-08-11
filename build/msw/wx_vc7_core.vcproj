@@ -1607,6 +1607,21 @@
 				RelativePath="..\..\src\msw\helpwin.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\hyperlink.cpp">
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\icon.cpp">
 			</File>
 			<File
@@ -4433,6 +4448,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\htmlhelp.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\hyperlink.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\icon.h">

@@ -1708,6 +1708,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/frame.cpp
     src/msw/gauge.cpp
     src/msw/headerctrl.cpp
+    src/msw/hyperlink.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
     src/msw/listctrl.cpp
@@ -1781,6 +1782,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/gauge.h
     wx/msw/gdiimage.h
     wx/msw/headerctrl.h
+    wx/msw/hyperlink.h
     wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h

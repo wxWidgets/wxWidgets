@@ -72,14 +72,7 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     SetURL(url.empty() ? label : url);
     SetLabel(label.empty() ? url : label);
 
-    m_rollover = false;
-    m_clicking = false;
-    m_visited = false;
-
-    // colours
-    m_normalColour = *wxBLUE;
-    m_hoverColour = *wxRED;
-    m_visitedColour = wxColour("#551a8b");
+    Init();
     SetForegroundColour(m_normalColour);
 
     // by default the font of an hyperlink control is underlined
@@ -102,13 +95,31 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
 
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftDown) );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftUp) );
-    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnRightUp) );
     Connect( wxEVT_MOTION, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnMotion) );
 
-    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_COMMAND_MENU_SELECTED,
-             wxCommandEventHandler(wxGenericHyperlinkCtrl::OnPopUpCopy) );
+    ConnectMenuHandlers();
 
     return true;
+}
+
+void wxGenericHyperlinkCtrl::Init()
+{
+    m_rollover = false;
+    m_clicking = false;
+    m_visited = false;
+
+    // colours
+    m_normalColour = *wxBLUE;
+    m_hoverColour = *wxRED;
+    m_visitedColour = wxColour("#551a8b");
+}
+
+void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
+{
+    // Connect the event handlers for the context menu.
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnRightUp) );
+    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_COMMAND_MENU_SELECTED,
+             wxCommandEventHandler(wxGenericHyperlinkCtrl::OnPopUpCopy) );
 }
 
 wxSize wxGenericHyperlinkCtrl::DoGetBestSize() const

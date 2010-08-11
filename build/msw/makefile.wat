@@ -306,6 +306,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_frame.obj &
 	$(OBJS)\monodll_msw_gauge.obj &
 	$(OBJS)\monodll_headerctrl.obj &
+	$(OBJS)\monodll_hyperlink.obj &
 	$(OBJS)\monodll_iniconf.obj &
 	$(OBJS)\monodll_msw_listbox.obj &
 	$(OBJS)\monodll_msw_listctrl.obj &
@@ -1034,6 +1035,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_frame.obj &
 	$(OBJS)\monolib_msw_gauge.obj &
 	$(OBJS)\monolib_headerctrl.obj &
+	$(OBJS)\monolib_hyperlink.obj &
 	$(OBJS)\monolib_iniconf.obj &
 	$(OBJS)\monolib_msw_listbox.obj &
 	$(OBJS)\monolib_msw_listctrl.obj &
@@ -1669,6 +1671,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_frame.obj &
 	$(OBJS)\coredll_msw_gauge.obj &
 	$(OBJS)\coredll_headerctrl.obj &
+	$(OBJS)\coredll_hyperlink.obj &
 	$(OBJS)\coredll_iniconf.obj &
 	$(OBJS)\coredll_msw_listbox.obj &
 	$(OBJS)\coredll_msw_listctrl.obj &
@@ -2185,6 +2188,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_frame.obj &
 	$(OBJS)\corelib_msw_gauge.obj &
 	$(OBJS)\corelib_headerctrl.obj &
+	$(OBJS)\corelib_hyperlink.obj &
 	$(OBJS)\corelib_iniconf.obj &
 	$(OBJS)\corelib_msw_listbox.obj &
 	$(OBJS)\corelib_msw_listctrl.obj &
@@ -6548,6 +6552,9 @@ $(OBJS)\monodll_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
 $(OBJS)\monodll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8774,6 +8781,9 @@ $(OBJS)\monolib_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
@@ -11412,6 +11422,9 @@ $(OBJS)\coredll_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
 $(OBJS)\coredll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12728,6 +12741,9 @@ $(OBJS)\corelib_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp

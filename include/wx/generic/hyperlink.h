@@ -20,7 +20,7 @@ class WXDLLIMPEXP_ADV wxGenericHyperlinkCtrl : public wxHyperlinkCtrlBase
 {
 public:
     // Default constructor (for two-step construction).
-    wxGenericHyperlinkCtrl() { }
+    wxGenericHyperlinkCtrl() { Init(); }
 
     // Constructor.
     wxGenericHyperlinkCtrl(wxWindow *parent,
@@ -31,7 +31,8 @@ public:
                             long style = wxHL_DEFAULT_STYLE,
                             const wxString& name = wxHyperlinkCtrlNameStr)
     {
-        (void)Create(parent, id, label, url, pos, size, style, name);
+        Init();
+        (void) Create(parent, id, label, url, pos, size, style, name);
     }
 
     // Creation function (for two-step construction).
@@ -65,6 +66,10 @@ public:
 
 
 protected:
+    // Common initialization routines used by both this class and any subclass.
+    void Init();
+    void ConnectMenuHandlers();
+
     // event handlers
 
     // Renders the hyperlink.

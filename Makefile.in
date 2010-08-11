@@ -2939,6 +2939,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/gauge.h \
 	wx/msw/gdiimage.h \
 	wx/msw/headerctrl.h \
+	wx/msw/hyperlink.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
@@ -3464,6 +3465,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/gauge.h \
 	wx/msw/gdiimage.h \
 	wx/msw/headerctrl.h \
+	wx/msw/hyperlink.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
@@ -5359,6 +5361,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
 	monodll_headerctrl.o \
+	monodll_msw_hyperlink.o \
 	monodll_msw_iniconf.o \
 	monodll_msw_listbox.o \
 	monodll_msw_listctrl.o \
@@ -5597,6 +5600,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
 	monodll_headerctrl.o \
+	monodll_msw_hyperlink.o \
 	monodll_msw_iniconf.o \
 	monodll_msw_listbox.o \
 	monodll_msw_listctrl.o \
@@ -6013,7 +6017,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_gtk_bmpcbox.o \
 	monodll_gtk_calctrl.o \
 	monodll_gtk_dataview.o \
-	monodll_hyperlink.o
+	monodll_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_animateg.o \
@@ -7235,6 +7239,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
 	monolib_headerctrl.o \
+	monolib_msw_hyperlink.o \
 	monolib_msw_iniconf.o \
 	monolib_msw_listbox.o \
 	monolib_msw_listctrl.o \
@@ -7473,6 +7478,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
 	monolib_headerctrl.o \
+	monolib_msw_hyperlink.o \
 	monolib_msw_iniconf.o \
 	monolib_msw_listbox.o \
 	monolib_msw_listctrl.o \
@@ -7889,7 +7895,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_gtk_bmpcbox.o \
 	monolib_gtk_calctrl.o \
 	monolib_gtk_dataview.o \
-	monolib_hyperlink.o
+	monolib_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_animateg.o \
@@ -9298,6 +9304,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
 	coredll_headerctrl.o \
+	coredll_hyperlink.o \
 	coredll_msw_iniconf.o \
 	coredll_msw_listbox.o \
 	coredll_msw_listctrl.o \
@@ -9536,6 +9543,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
 	coredll_headerctrl.o \
+	coredll_hyperlink.o \
 	coredll_msw_iniconf.o \
 	coredll_msw_listbox.o \
 	coredll_msw_listctrl.o \
@@ -10847,6 +10855,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
 	corelib_headerctrl.o \
+	corelib_hyperlink.o \
 	corelib_msw_iniconf.o \
 	corelib_msw_listbox.o \
 	corelib_msw_listctrl.o \
@@ -11085,6 +11094,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
 	corelib_headerctrl.o \
+	corelib_hyperlink.o \
 	corelib_msw_iniconf.o \
 	corelib_msw_listbox.o \
 	corelib_msw_listctrl.o \
@@ -16759,7 +16769,7 @@ monodll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
 monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
+monodll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
@@ -18807,6 +18817,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
@@ -21976,7 +21992,7 @@ monolib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
 monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
+monolib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
@@ -24024,6 +24040,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
@@ -29428,6 +29450,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
 
@@ -33360,6 +33388,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
