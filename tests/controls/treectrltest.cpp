@@ -44,13 +44,13 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
-        CPPUNIT_TEST( ItemClick );
+        WXUISIM_TEST( ItemClick );
         CPPUNIT_TEST( DeleteItem );
-        CPPUNIT_TEST( LabelEdit );
-        CPPUNIT_TEST( KeyDown );
-        CPPUNIT_TEST( CollapseExpandEvents );
-        CPPUNIT_TEST( SelectionChange );
-        CPPUNIT_TEST( Menu );
+        WXUISIM_TEST( LabelEdit );
+        WXUISIM_TEST( KeyDown );
+        WXUISIM_TEST( CollapseExpandEvents );
+        WXUISIM_TEST( SelectionChange );
+        WXUISIM_TEST( Menu );
         CPPUNIT_TEST( ItemData );
         CPPUNIT_TEST( Iteration );
         CPPUNIT_TEST( Parent );
@@ -60,7 +60,7 @@ private:
         CPPUNIT_TEST( Bold );
         CPPUNIT_TEST( Visible );
         CPPUNIT_TEST( Sort );
-        CPPUNIT_TEST( KeyNavigation );
+        WXUISIM_TEST( KeyNavigation );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );

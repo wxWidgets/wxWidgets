@@ -40,8 +40,8 @@ private:
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
-        CPPUNIT_TEST( ClickEvents );
-        CPPUNIT_TEST( ClickNotOnItem );
+        WXUISIM_TEST( ClickEvents );
+        WXUISIM_TEST( ClickNotOnItem );
         CPPUNIT_TEST( HitTest );
         //We also run all tests as an ownerdrawn list box we do not need to 
         //run the wxITEM_CONTAINER_TESTS as they are tested with wxCheckListBox
@@ -49,8 +49,8 @@ private:
         CPPUNIT_TEST( PseudoTest_OwnerDrawn );
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
-        CPPUNIT_TEST( ClickEvents );
-        CPPUNIT_TEST( ClickNotOnItem );
+        WXUISIM_TEST( ClickEvents );
+        WXUISIM_TEST( ClickNotOnItem );
         CPPUNIT_TEST( HitTest );
 #endif
     CPPUNIT_TEST_SUITE_END();

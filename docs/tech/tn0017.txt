@@ -45,7 +45,9 @@ II. Writing tests with CppUnit
  d) wxUIActionSimulator can be used when user input is required, for example 
     clicking buttons or typing text. A simple example of this can be found 
     in controls/buttontest.cpp. After simulating some user input always 
-    wxYield to allow event processing.
+    wxYield to allow event processing. When writing a test using 
+    wxUIActionSimulator always add the test using WXUISIM_TEST rather than
+    CPPUNIT_TEST as then it won't run on unsupported platforms.
 
 3. add a '<sources>' tag for your source file to tests/test.bkl
 

@@ -36,7 +36,7 @@ private:
     CPPUNIT_TEST_SUITE( HyperlinkCtrlTestCase );
         CPPUNIT_TEST( Colour );
         CPPUNIT_TEST( Url );
-        CPPUNIT_TEST( Click );
+        WXUISIM_TEST( Click );
     CPPUNIT_TEST_SUITE_END();
 
     void Colour();

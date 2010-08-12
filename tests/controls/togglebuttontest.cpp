@@ -33,7 +33,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( ToggleButtonTestCase );
-        CPPUNIT_TEST( Click );
+        WXUISIM_TEST( Click );
         CPPUNIT_TEST( Value );
     CPPUNIT_TEST_SUITE_END();
 
@@ -93,8 +93,6 @@ void ToggleButtonTestCase::Value()
                                           wxTestableFrame);
 
     EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
-
-    wxUIActionSimulator sim;
 
     m_button->SetValue(true);
 

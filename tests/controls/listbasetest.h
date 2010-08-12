@@ -24,14 +24,14 @@ protected:
         CPPUNIT_TEST( ItemRect ); \
         CPPUNIT_TEST( ItemText ); \
         CPPUNIT_TEST( ChangeMode ); \
-        CPPUNIT_TEST( ItemClick ); \
-        CPPUNIT_TEST( KeyDown ); \
+        WXUISIM_TEST( ItemClick ); \
+        WXUISIM_TEST( KeyDown ); \
         CPPUNIT_TEST( DeleteItems ); \
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
         CPPUNIT_TEST( Visible ); \
         CPPUNIT_TEST( ItemFormatting ); \
-        CPPUNIT_TEST( EditLabel ); \
+        WXUISIM_TEST( EditLabel ); \
         CPPUNIT_TEST( ImageList ); \
         CPPUNIT_TEST( Sort ) 
 

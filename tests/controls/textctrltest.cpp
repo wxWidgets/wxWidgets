@@ -48,12 +48,12 @@ private:
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
         wxTEXT_ENTRY_TESTS();
         CPPUNIT_TEST( MultiLineReplace );
-        CPPUNIT_TEST( ReadOnly );
-        CPPUNIT_TEST( MaxLength );
+        WXUISIM_TEST( ReadOnly );
+        WXUISIM_TEST( MaxLength );
         CPPUNIT_TEST( StreamInput );
         CPPUNIT_TEST( Redirector );
-        //CPPUNIT_TEST( ProcessEnter );
-        CPPUNIT_TEST( Url );
+        //WXUISIM_TEST( ProcessEnter );
+        WXUISIM_TEST( Url );
         CPPUNIT_TEST( Style );
         CPPUNIT_TEST( Lines );
         CPPUNIT_TEST( LogTextCtrl );

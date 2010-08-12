@@ -39,7 +39,7 @@ protected:
         CPPUNIT_TEST( Selection ); \
         CPPUNIT_TEST( InsertionPoint ); \
         CPPUNIT_TEST( Replace ); \
-        CPPUNIT_TEST( Editable ); \
+        WXUISIM_TEST( Editable ); \
         CPPUNIT_TEST( Hint ); \
         CPPUNIT_TEST( CopyPaste ); \
         CPPUNIT_TEST( UndoRedo )

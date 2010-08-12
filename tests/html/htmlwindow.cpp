@@ -43,8 +43,8 @@ private:
     CPPUNIT_TEST_SUITE( HtmlWindowTestCase );
         CPPUNIT_TEST( SelectionToText );
         CPPUNIT_TEST( Title );
-        CPPUNIT_TEST( CellClick );
-        CPPUNIT_TEST( LinkClick );
+        WXUISIM_TEST( CellClick );
+        WXUISIM_TEST( LinkClick );
         CPPUNIT_TEST( AppendToPage );
     CPPUNIT_TEST_SUITE_END();
 

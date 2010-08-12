@@ -1,6 +1,15 @@
 #include "wx/wxprec.h"
 #include "wx/cppunit.h"
 
+//Custom test marco that is only defined when wxUIActionSimulator is available
+//this allows the tests that do not rely on it to run on platforms that don't
+//support it
+#if wxUSE_UIACTIONSIMULATOR
+    #define WXUISIM_TEST(test) CPPUNIT_TEST(test)
+#else
+    #define WXUISIM_TEST(test) (void)0
+#endif
+
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
 #if (defined(__VISUALC__) && (__VISUALC__ >= 1300)) || \
     (defined(__GNUC__) && (__GNUC__ >= 3))

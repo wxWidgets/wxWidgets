@@ -33,7 +33,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RadioButtonTestCase );
-        CPPUNIT_TEST( Click );
+        WXUISIM_TEST( Click );
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Group );
     CPPUNIT_TEST_SUITE_END();

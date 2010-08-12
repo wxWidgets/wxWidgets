@@ -35,18 +35,18 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
-        CPPUNIT_TEST( CharacterEvent );
-        CPPUNIT_TEST( DeleteEvent );
-        CPPUNIT_TEST( ReturnEvent );
+        WXUISIM_TEST( CharacterEvent );
+        WXUISIM_TEST( DeleteEvent );
+        WXUISIM_TEST( ReturnEvent );
         CPPUNIT_TEST( StyleEvent );
         CPPUNIT_TEST( BufferResetEvent );
-        CPPUNIT_TEST( UrlEvent );
-        CPPUNIT_TEST( TextEvent );
+        WXUISIM_TEST( UrlEvent );
+        WXUISIM_TEST( TextEvent );
         CPPUNIT_TEST( CutCopyPaste );
         CPPUNIT_TEST( UndoRedo );
         CPPUNIT_TEST( CaretPosition );
         CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( Editable );
+        WXUISIM_TEST( Editable );
         CPPUNIT_TEST( Range );
         CPPUNIT_TEST( Alignment );
         CPPUNIT_TEST( Bold );

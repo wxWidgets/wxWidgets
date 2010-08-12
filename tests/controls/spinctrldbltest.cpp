@@ -31,11 +31,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlDoubleTestCase );
-        CPPUNIT_TEST( Arrows );
-        CPPUNIT_TEST( Wrap );
+        WXUISIM_TEST( Arrows );
+        WXUISIM_TEST( Wrap );
         CPPUNIT_TEST( Range );
         CPPUNIT_TEST( Value );
-        CPPUNIT_TEST( Increment );
+        WXUISIM_TEST( Increment );
         CPPUNIT_TEST( Digits );
     CPPUNIT_TEST_SUITE_END();
 

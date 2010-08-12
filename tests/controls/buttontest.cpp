@@ -38,8 +38,10 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( ButtonTestCase );
-        CPPUNIT_TEST( Click );
-        CPPUNIT_TEST( Disabled );
+        //We add tests that use wxUIActionSimulator with WXUISIM_TEST so they
+        //are not run on platofrms were wxUIActionSimulator isn't supported
+        WXUISIM_TEST( Click );
+        WXUISIM_TEST( Disabled );
         CPPUNIT_TEST( Auth );
         CPPUNIT_TEST( BitmapMargins );
         CPPUNIT_TEST( Bitmap );

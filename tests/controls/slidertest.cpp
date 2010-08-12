@@ -33,12 +33,12 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );
-        CPPUNIT_TEST( PageUpDown );
-        CPPUNIT_TEST( LineUpDown );
-        CPPUNIT_TEST( LinePageSize );
+        WXUISIM_TEST( PageUpDown );
+        WXUISIM_TEST( LineUpDown );
+        WXUISIM_TEST( LinePageSize );
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
-        CPPUNIT_TEST( Thumb );
+        WXUISIM_TEST( Thumb );
     CPPUNIT_TEST_SUITE_END();
 
     void PageUpDown();

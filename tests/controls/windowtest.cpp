@@ -37,7 +37,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( WindowTestCase );
         CPPUNIT_TEST( ShowHideEvent );
-        CPPUNIT_TEST( KeyEvent );
+        WXUISIM_TEST( KeyEvent );
         CPPUNIT_TEST( FocusEvent );
         CPPUNIT_TEST( Mouse );
         CPPUNIT_TEST( Properties );

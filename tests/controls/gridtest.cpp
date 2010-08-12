@@ -34,13 +34,13 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( GridTestCase );
-        CPPUNIT_TEST( CellEdit );
-        CPPUNIT_TEST( CellClick );
-        CPPUNIT_TEST( CellSelect );
-        CPPUNIT_TEST( LabelClick );
-        CPPUNIT_TEST( SortClick );
-        CPPUNIT_TEST( Size );
-        CPPUNIT_TEST( RangeSelect );
+        WXUISIM_TEST( CellEdit );
+        WXUISIM_TEST( CellClick );
+        WXUISIM_TEST( CellSelect );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
+        WXUISIM_TEST( Size );
+        WXUISIM_TEST( RangeSelect );
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
@@ -50,15 +50,15 @@ private:
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( SelectionMode );
         CPPUNIT_TEST( CellFormatting );
-        CPPUNIT_TEST( Editable );
-        CPPUNIT_TEST( ReadOnly );
+        WXUISIM_TEST( Editable );
+        WXUISIM_TEST( ReadOnly );
         CPPUNIT_TEST( PseudoTest_NativeHeader );
-        CPPUNIT_TEST( LabelClick );
-        CPPUNIT_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
-        CPPUNIT_TEST( LabelClick );
-        CPPUNIT_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
     CPPUNIT_TEST_SUITE_END();
 

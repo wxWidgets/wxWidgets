@@ -46,8 +46,8 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );
         wxLIST_BASE_TESTS();
-        CPPUNIT_TEST( ColumnClick );
-        CPPUNIT_TEST( ColumnDrag );
+        WXUISIM_TEST( ColumnClick );
+        WXUISIM_TEST( ColumnDrag );
     CPPUNIT_TEST_SUITE_END();
 
     //Column events are only supported in wxListCtrl currently so we test them
