@@ -51,7 +51,10 @@
     #include "wx/osx/private.h"
 #endif
 
-#include "testableframe.h"
+#if wxUSE_GUI
+    #include "testableframe.h"
+#endif
+
 #include "wx/socket.h"
 #include "wx/evtloop.h"
 
