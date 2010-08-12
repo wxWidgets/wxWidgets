@@ -172,6 +172,7 @@ void ListBoxTestCase::MultipleSelect()
 
 void ListBoxTestCase::ClickEvents()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
@@ -202,10 +203,12 @@ void ListBoxTestCase::ClickEvents()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void ListBoxTestCase::ClickNotOnItem()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
@@ -232,6 +235,7 @@ void ListBoxTestCase::ClickNotOnItem()
 
     //If we are not clicking on an item we shouldn't have any events
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 void ListBoxTestCase::HitTest()

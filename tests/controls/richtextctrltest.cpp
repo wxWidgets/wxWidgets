@@ -116,6 +116,7 @@ void RichTextCtrlTestCase::tearDown()
 
 void RichTextCtrlTestCase::CharacterEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -138,10 +139,12 @@ void RichTextCtrlTestCase::CharacterEvent()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CHARACTER));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
+#endif
 }
 
 void RichTextCtrlTestCase::DeleteEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -158,11 +161,13 @@ void RichTextCtrlTestCase::DeleteEvent()
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_DELETE));
     //Only one as the delete doesn't delete anthing
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED)); 
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED));
+#endif
 }
 
 void RichTextCtrlTestCase::ReturnEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -175,6 +180,7 @@ void RichTextCtrlTestCase::ReturnEvent()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void RichTextCtrlTestCase::StyleEvent()
@@ -214,6 +220,7 @@ void RichTextCtrlTestCase::BufferResetEvent()
 
 void RichTextCtrlTestCase::UrlEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -229,10 +236,12 @@ void RichTextCtrlTestCase::UrlEvent()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void RichTextCtrlTestCase::TextEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -246,6 +255,7 @@ void RichTextCtrlTestCase::TextEvent()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+#endif
 }
 
 void RichTextCtrlTestCase::CutCopyPaste()
@@ -386,6 +396,7 @@ void RichTextCtrlTestCase::Selection()
 
 void RichTextCtrlTestCase::Editable()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -406,6 +417,7 @@ void RichTextCtrlTestCase::Editable()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 void RichTextCtrlTestCase::Range()

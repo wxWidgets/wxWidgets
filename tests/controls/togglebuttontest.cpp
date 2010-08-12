@@ -63,6 +63,7 @@ void ToggleButtonTestCase::tearDown()
 
 void ToggleButtonTestCase::Click()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -85,6 +86,7 @@ void ToggleButtonTestCase::Click()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT(!m_button->GetValue());
+#endif
 }
 
 void ToggleButtonTestCase::Value()

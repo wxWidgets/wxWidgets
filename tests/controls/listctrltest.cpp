@@ -85,6 +85,7 @@ void ListCtrlTestCase::tearDown()
 
 void ListCtrlTestCase::ColumnDrag()
 {
+#if wxUSE_UIACTIONSIMULATOR
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -110,10 +111,12 @@ void ListCtrlTestCase::ColumnDrag()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
 
     m_list->ClearAll();
+#endif
 }
 
 void ListCtrlTestCase::ColumnClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -134,6 +137,7 @@ void ListCtrlTestCase::ColumnClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK));
 
     m_list->ClearAll();
+#endif
 }
 
 #endif //wxUSE_LISTCTRL

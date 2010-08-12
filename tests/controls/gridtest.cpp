@@ -125,6 +125,7 @@ void GridTestCase::tearDown()
 
 void GridTestCase::CellEdit()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -146,10 +147,12 @@ void GridTestCase::CellEdit()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_EDITOR_CREATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGING));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGED));
+#endif
 }
 
 void GridTestCase::CellClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -190,11 +193,13 @@ void GridTestCase::CellClick()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_DCLICK)); 
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_DCLICK));
+#endif
 }
 
 void GridTestCase::CellSelect()
 {
+#if wxUSE_UIACTIONSIMULATOR
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -222,10 +227,12 @@ void GridTestCase::CellSelect()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(3, frame->GetEventCount(wxEVT_GRID_SELECT_CELL));
+#endif
 }
 
 void GridTestCase::LabelClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -271,11 +278,13 @@ void GridTestCase::LabelClick()
     {
         CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
         CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
-    }  
+    }
+#endif
 }
 
 void GridTestCase::SortClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     m_grid->SetSortingColumn(0);
 
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
@@ -295,10 +304,12 @@ void GridTestCase::SortClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 
     m_grid->SetSortingColumn(wxNOT_FOUND);
+#endif
 }
 
 void GridTestCase::Size()
 {
+#if wxUSE_UIACTIONSIMULATOR
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -322,10 +333,12 @@ void GridTestCase::Size()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_ROW_SIZE));
+#endif
 }
 
 void GridTestCase::RangeSelect()
 {
+#if wxUSE_UIACTIONSIMULATOR
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -342,6 +355,7 @@ void GridTestCase::RangeSelect()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_RANGE_SELECT));
+#endif
 }
 
 void GridTestCase::Cursor()
@@ -630,6 +644,7 @@ void GridTestCase::CellFormatting()
 
 void GridTestCase::Editable()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -654,10 +669,12 @@ void GridTestCase::Editable()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 void GridTestCase::ReadOnly()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -685,6 +702,7 @@ void GridTestCase::ReadOnly()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 #endif //wxUSE_GRID

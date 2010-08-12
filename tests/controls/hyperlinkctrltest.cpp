@@ -91,6 +91,7 @@ void HyperlinkCtrlTestCase::Url()
 
 void HyperlinkCtrlTestCase::Click()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -104,6 +105,7 @@ void HyperlinkCtrlTestCase::Click()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 #endif //wxUSE_HYPERLINKCTRL

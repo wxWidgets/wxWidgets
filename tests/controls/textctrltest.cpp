@@ -128,6 +128,7 @@ void TextCtrlTestCase::MultiLineReplace()
 
 void TextCtrlTestCase::ReadOnly()
 {
+#if wxUSE_UIACTIONSIMULATOR
     // we need a read only control for this test so recreate it
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
@@ -159,10 +160,12 @@ void TextCtrlTestCase::ReadOnly()
 
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+#endif
 }
 
 void TextCtrlTestCase::MaxLength()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -197,6 +200,7 @@ void TextCtrlTestCase::MaxLength()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+#endif
 }
 
 void TextCtrlTestCase::StreamInput()
@@ -253,6 +257,7 @@ void TextCtrlTestCase::Redirector()
 #if 0
 void TextCtrlTestCase::ProcessEnter()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -278,11 +283,13 @@ void TextCtrlTestCase::ProcessEnter()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_ENTER));
+#endif
 }
 #endif
 
 void TextCtrlTestCase::Url()
 {
+#if wxUSE_UIACTIONSIMULATOR
 #if defined(__WXMSW__) || defined(__WXGTK__)
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
@@ -302,6 +309,7 @@ void TextCtrlTestCase::Url()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 #endif
 }
 

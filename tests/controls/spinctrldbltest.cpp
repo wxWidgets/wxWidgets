@@ -69,6 +69,7 @@ void SpinCtrlDoubleTestCase::tearDown()
 
 void SpinCtrlDoubleTestCase::Arrows()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -91,10 +92,12 @@ void SpinCtrlDoubleTestCase::Arrows()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
+#endif
 }
 
 void SpinCtrlDoubleTestCase::Wrap()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxDELETE(m_spin);
     m_spin = new wxSpinCtrlDouble(wxTheApp->GetTopWindow(), wxID_ANY, "", 
                                   wxDefaultPosition, wxDefaultSize, 
@@ -115,6 +118,7 @@ void SpinCtrlDoubleTestCase::Wrap()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
+#endif
 }
 
 void SpinCtrlDoubleTestCase::Range()
@@ -159,6 +163,7 @@ void SpinCtrlDoubleTestCase::Value()
 
 void SpinCtrlDoubleTestCase::Increment()
 {
+#if wxUSE_UIACTIONSIMULATOR
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetIncrement());
 
     m_spin->SetIncrement(0.1);
@@ -174,6 +179,7 @@ void SpinCtrlDoubleTestCase::Increment()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0.1, m_spin->GetValue());
+#endif
 }
 
 void SpinCtrlDoubleTestCase::Digits()

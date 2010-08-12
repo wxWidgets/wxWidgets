@@ -78,6 +78,8 @@ void ButtonTestCase::tearDown()
 
 void ButtonTestCase::Click()
 {
+//Because wxUIActionSimulator might not be availiable we put it in an #if block
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -95,10 +97,12 @@ void ButtonTestCase::Click()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
+#endif
 }
 
 void ButtonTestCase::Disabled()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -115,6 +119,7 @@ void ButtonTestCase::Disabled()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
+#endif
 }
 
 void ButtonTestCase::Auth()

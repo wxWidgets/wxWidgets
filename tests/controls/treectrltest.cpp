@@ -234,6 +234,7 @@ void TreeCtrlTestCase::SelectItemMulti()
 
 void TreeCtrlTestCase::ItemClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -256,6 +257,7 @@ void TreeCtrlTestCase::ItemClick()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+#endif
 }
 
 void TreeCtrlTestCase::DeleteItem()
@@ -275,6 +277,7 @@ void TreeCtrlTestCase::DeleteItem()
 
 void TreeCtrlTestCase::LabelEdit()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -295,10 +298,12 @@ void TreeCtrlTestCase::LabelEdit()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void TreeCtrlTestCase::KeyDown()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -311,10 +316,12 @@ void TreeCtrlTestCase::KeyDown()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
+#endif
 }
 
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -345,10 +352,12 @@ void TreeCtrlTestCase::CollapseExpandEvents()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
+#endif
 }
 
 void TreeCtrlTestCase::SelectionChange()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -376,10 +385,12 @@ void TreeCtrlTestCase::SelectionChange()
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGED));
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGING));
+#endif
 }
 
 void TreeCtrlTestCase::Menu()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -397,6 +408,7 @@ void TreeCtrlTestCase::Menu()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MENU));
+#endif
 }
 
 void TreeCtrlTestCase::ItemData()
@@ -561,6 +573,7 @@ void TreeCtrlTestCase::Sort()
 
 void TreeCtrlTestCase::KeyNavigation()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
 
     m_tree->CollapseAll();
@@ -587,6 +600,7 @@ void TreeCtrlTestCase::KeyNavigation()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetSelection());
+#endif
 }
 
 #endif //wxUSE_TREECTRL

@@ -47,7 +47,8 @@ II. Writing tests with CppUnit
     in controls/buttontest.cpp. After simulating some user input always 
     wxYield to allow event processing. When writing a test using 
     wxUIActionSimulator always add the test using WXUISIM_TEST rather than
-    CPPUNIT_TEST as then it won't run on unsupported platforms.
+    CPPUNIT_TEST as then it won't run on unsupported platforms. The test itself
+    must also be wrapped in a #if wxUSE_UIACTIONSIMULATOR block.
 
 3. add a '<sources>' tag for your source file to tests/test.bkl
 

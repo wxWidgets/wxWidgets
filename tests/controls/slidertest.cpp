@@ -71,6 +71,7 @@ void SliderTestCase::tearDown()
 
 void SliderTestCase::PageUpDown()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -88,10 +89,12 @@ void SliderTestCase::PageUpDown()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEUP));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEDOWN));
+#endif
 }
 
 void SliderTestCase::LineUpDown()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -109,10 +112,12 @@ void SliderTestCase::LineUpDown()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEUP));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEDOWN));
+#endif
 }
 
 void SliderTestCase::LinePageSize()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
     m_slider->SetFocus();
 
@@ -133,6 +138,7 @@ void SliderTestCase::LinePageSize()
 
     CPPUNIT_ASSERT_EQUAL(2, m_slider->GetLineSize());
     CPPUNIT_ASSERT_EQUAL(28, m_slider->GetValue());
+#endif
 }
 
 void SliderTestCase::Value()
@@ -166,6 +172,7 @@ void SliderTestCase::Range()
 
 void SliderTestCase::Thumb()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -188,6 +195,7 @@ void SliderTestCase::Thumb()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_THUMBRELEASE));
 #ifdef __WXMSW__
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_CHANGED));
+#endif
 #endif
 }
 

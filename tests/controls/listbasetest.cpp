@@ -175,6 +175,7 @@ void ListBaseTestCase::ChangeMode()
 
 void ListBaseTestCase::ItemClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -217,10 +218,12 @@ void ListBaseTestCase::ItemClick()
 
     //tidy up when we are finished
     list->ClearAll();
+#endif
 }
 
 void ListBaseTestCase::KeyDown()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -235,6 +238,7 @@ void ListBaseTestCase::KeyDown()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
+#endif
 }
 
 void ListBaseTestCase::DeleteItems()
@@ -359,6 +363,7 @@ void ListBaseTestCase::ItemFormatting()
 
 void ListBaseTestCase::EditLabel()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxListCtrl* const list = GetList();
 
     list->SetWindowStyleFlag(wxLC_REPORT | wxLC_EDIT_LABELS);
@@ -385,6 +390,7 @@ void ListBaseTestCase::EditLabel()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+#endif
 }
 
 void ListBaseTestCase::ImageList()

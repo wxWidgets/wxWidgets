@@ -114,6 +114,7 @@ void WindowTestCase::ShowHideEvent()
 
 void WindowTestCase::KeyEvent()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -132,6 +133,7 @@ void WindowTestCase::KeyEvent()
     CPPUNIT_ASSERT_EQUAL(5, frame->GetEventCount(wxEVT_KEY_DOWN));
     CPPUNIT_ASSERT_EQUAL(5, frame->GetEventCount(wxEVT_KEY_UP));
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount(wxEVT_CHAR));
+#endif
 }
 
 void WindowTestCase::FocusEvent()

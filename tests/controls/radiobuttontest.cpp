@@ -69,6 +69,7 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -82,6 +83,7 @@ void RadioButtonTestCase::Click()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
+#endif
 }
 
 void RadioButtonTestCase::Value()

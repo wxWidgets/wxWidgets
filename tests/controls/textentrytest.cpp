@@ -172,6 +172,7 @@ void TextEntryTestCase::Replace()
 
 void TextEntryTestCase::Editable()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -195,6 +196,7 @@ void TextEntryTestCase::Editable()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 void TextEntryTestCase::Hint()

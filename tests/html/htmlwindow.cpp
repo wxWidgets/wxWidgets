@@ -117,6 +117,7 @@ void HtmlWindowTestCase::Title()
 
 void HtmlWindowTestCase::CellClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -134,10 +135,12 @@ void HtmlWindowTestCase::CellClick()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void HtmlWindowTestCase::LinkClick()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -155,6 +158,7 @@ void HtmlWindowTestCase::LinkClick()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
 }
 
 void HtmlWindowTestCase::AppendToPage()

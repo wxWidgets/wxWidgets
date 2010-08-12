@@ -67,6 +67,7 @@ void SpinCtrlTestCase::tearDown()
 
 void SpinCtrlTestCase::Arrows()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -89,10 +90,12 @@ void SpinCtrlTestCase::Arrows()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+#endif
 }
 
 void SpinCtrlTestCase::Wrap()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxDELETE(m_spin);
     m_spin = new wxSpinCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "", 
                             wxDefaultPosition, wxDefaultSize, 
@@ -113,6 +116,7 @@ void SpinCtrlTestCase::Wrap()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+#endif
 }
 
 void SpinCtrlTestCase::Range()

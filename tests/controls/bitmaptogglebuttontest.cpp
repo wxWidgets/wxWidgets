@@ -68,6 +68,7 @@ void BitmapToggleButtonTestCase::tearDown()
 
 void BitmapToggleButtonTestCase::Click()
 {
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -92,6 +93,7 @@ void BitmapToggleButtonTestCase::Click()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT(!m_button->GetValue());
+#endif
 }
 
 void BitmapToggleButtonTestCase::Value()
