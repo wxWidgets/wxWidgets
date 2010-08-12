@@ -2422,7 +2422,8 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h \
-	wx/qt/evtloop.h
+	wx/qt/evtloop.h \
+	wx/qt/timer.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -2662,7 +2663,6 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/textdlg.h \
 	wx/qt/textentry.h \
 	wx/qt/tglbtn.h \
-	wx/qt/timer.h \
 	wx/qt/toolbar.h \
 	wx/qt/tooltip.h \
 	wx/qt/toplevel.h \
@@ -4321,7 +4321,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_qt_apptraits.o \
 	monodll_qt_evtloop.o \
 	monodll_evtloop_qt.o \
-	monodll_evtloop_qt_moc.o
+	monodll_evtloop_qt_moc.o \
+	monodll_qt_timer.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -5140,7 +5141,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
-	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -6108,7 +6108,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
-	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -6381,7 +6380,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_qt_apptraits.o \
 	monolib_qt_evtloop.o \
 	monolib_evtloop_qt.o \
-	monolib_evtloop_qt_moc.o
+	monolib_evtloop_qt_moc.o \
+	monolib_qt_timer.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -7200,7 +7200,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
-	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -8168,7 +8167,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
-	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -8494,7 +8492,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_apptraits.o \
 	basedll_qt_evtloop.o \
 	basedll_evtloop_qt.o \
-	basedll_evtloop_qt_moc.o
+	basedll_evtloop_qt_moc.o \
+	basedll_qt_timer.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8511,7 +8510,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_msw_stackwalk.o \
 	basedll_msw_stdpaths.o \
 	basedll_msw_thread.o \
-	basedll_timer.o \
+	basedll_msw_timer.o \
 	basedll_msw_utils.o \
 	basedll_msw_utilsexc.o \
 	basedll_fswatcher.o \
@@ -8596,7 +8595,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_apptraits.o \
 	baselib_qt_evtloop.o \
 	baselib_evtloop_qt.o \
-	baselib_evtloop_qt_moc.o
+	baselib_evtloop_qt_moc.o \
+	baselib_qt_timer.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -8613,7 +8613,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_msw_stackwalk.o \
 	baselib_msw_stdpaths.o \
 	baselib_msw_thread.o \
-	baselib_timer.o \
+	baselib_msw_timer.o \
 	baselib_msw_utils.o \
 	baselib_msw_utilsexc.o \
 	baselib_fswatcher.o \
@@ -9449,7 +9449,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
-	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -10417,7 +10416,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
-	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -11179,7 +11177,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
-	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -12147,7 +12144,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
-	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -16213,6 +16209,9 @@ monodll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONODLL_ODEP)
 monodll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
+monodll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -19618,9 +19617,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -21735,6 +21731,9 @@ monolib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONOLIB_ODEP)
 
 monolib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
+
+monolib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -25141,9 +25140,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -27259,6 +27255,9 @@ basedll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASEDLL_ODEP)
 basedll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
+basedll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -27301,7 +27300,7 @@ basedll_msw_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASEDLL_ODEP)
 basedll_msw_thread.o: $(srcdir)/src/msw/thread.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
-basedll_timer.o: $(srcdir)/src/msw/timer.cpp $(BASEDLL_ODEP)
+basedll_msw_timer.o: $(srcdir)/src/msw/timer.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 basedll_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASEDLL_ODEP)
@@ -27766,6 +27765,9 @@ baselib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASELIB_ODEP)
 baselib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
+baselib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -27808,7 +27810,7 @@ baselib_msw_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASELIB_ODEP)
 baselib_msw_thread.o: $(srcdir)/src/msw/thread.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
-baselib_timer.o: $(srcdir)/src/msw/timer.cpp $(BASELIB_ODEP)
+baselib_msw_timer.o: $(srcdir)/src/msw/timer.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 baselib_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASELIB_ODEP)
@@ -30849,9 +30851,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
@@ -35043,9 +35042,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
