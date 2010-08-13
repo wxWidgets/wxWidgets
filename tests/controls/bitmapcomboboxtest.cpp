@@ -25,6 +25,9 @@
 #include "itemcontainertest.h"
 #include "asserthelper.h"
 
+//Test only if we are based off of wxComboBox
+#ifndef wxGENERIC_BITMAPCOMBOBOX 
+
 class BitmapComboBoxTestCase : public TextEntryTestCase, 
                                public ItemContainerTestCase,
                                public CppUnit::TestCase
@@ -107,5 +110,7 @@ void BitmapComboBoxTestCase::Bitmap()
 
     CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
 }
+
+#endif //wxGENERIC_BITMAPCOMBOBOX
 
 #endif //wxUSE_BITMAPCOMBOBOX
