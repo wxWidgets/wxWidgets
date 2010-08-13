@@ -144,7 +144,7 @@ void wxRibbonMSWArtProvider::SetColourScheme(
 
     // Map primary saturation from [0, 1] to [.25, .75]
     bool primary_is_gray = false;
-    const float gray_saturation_threshold = 0.01;
+    static const double gray_saturation_threshold = 0.01;
     if(primary_hsl.saturation <= gray_saturation_threshold)
         primary_is_gray = true;
     else
