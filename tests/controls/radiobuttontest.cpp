@@ -97,9 +97,11 @@ void RadioButtonTestCase::Value()
 
     CPPUNIT_ASSERT(m_radio->GetValue());
 
+#ifndef __WXGTK__
     m_radio->SetValue(false);
 
     CPPUNIT_ASSERT(!m_radio->GetValue());
+#endif
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
 }
