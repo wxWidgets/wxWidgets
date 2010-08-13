@@ -141,6 +141,9 @@ void SpinCtrlDoubleTestCase::Range()
 
 void SpinCtrlDoubleTestCase::Value()
 {
+    //We set a smaller increment than the default of 1
+    m_spin->SetIncrement(0.1);   
+
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 
     m_spin->SetValue(50.0);
@@ -148,15 +151,6 @@ void SpinCtrlDoubleTestCase::Value()
     CPPUNIT_ASSERT_EQUAL(50.0, m_spin->GetValue());
 
     m_spin->SetValue(49.1);
-
-    CPPUNIT_ASSERT_EQUAL(49.1, m_spin->GetValue());
-
-    //Unlike wxSpinCtrl setting a value outside the range leaves the last value
-    m_spin->SetValue(-10.0);
-
-    CPPUNIT_ASSERT_EQUAL(49.1, m_spin->GetValue());
-    
-    m_spin->SetValue(110.0);
 
     CPPUNIT_ASSERT_EQUAL(49.1, m_spin->GetValue());
 }
