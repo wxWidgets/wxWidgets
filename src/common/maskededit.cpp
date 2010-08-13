@@ -729,3 +729,23 @@ wxString wxMaskedEdit::GetAutoSelect(unsigned int fieldIndex, const wxString& be
 }
 
 
+int wxMaskedEdit::GetNextChoiceKey() const
+{
+    return m_nextChoiceKey;
+}
+void wxMaskedEdit::SetNextChoiceKey(int keycode)
+{
+    m_nextChoiceKey = keycode;
+}
+
+int wxMaskedEdit::GetPreviousChoiceKey() const
+{
+    return m_previousChoiceKey;
+}
+
+void wxMaskedEdit::SetPreviousChoiceKey(int keycode)
+{
+    m_previousChoiceKey = keycode;
+}
+
+

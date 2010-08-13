@@ -147,6 +147,11 @@ public:
     void SetAutoSelect(unsigned int fieldIndex, bool val = true);
     wxString GetAutoSelect(unsigned int fieldIndex, const wxString& begin) const;  
 
+    int GetNextChoiceKey() const;
+    void SetNextChoiceKey(int keycode);
+
+    int GetPreviousChoiceKey() const;
+    void SetPreviousChoiceKey(int keycode);
 
 
 private:
@@ -154,6 +159,9 @@ private:
     fieldsArray m_mask;
     wxString m_maskValue;
     bool m_isNumber;
+
+    int m_nextChoiceKey;
+    int m_previousChoiceKey;
 
     //Control behavior
     wxColour m_emptyBg;
