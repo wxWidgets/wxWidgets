@@ -264,7 +264,18 @@ void ListBaseTestCase::DeleteItems()
     list->DeleteItem(0);
     list->DeleteAllItems();
 
+    //We need some items for ClearAll to clear
+
+    list->InsertColumn(0, "Column 0");
+
+    list->InsertItem(0, "Item 0");
+    list->InsertItem(1, "Item 1");
+
     //Check that ClearAll actually sends a DELETE_ALL_ITEMS event
+    list->ClearAll();
+
+    //Subsequent calls to ClearAll and DeleteAllItems shouldn't send events
+    list->DeleteAllItems();
     list->ClearAll();
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
