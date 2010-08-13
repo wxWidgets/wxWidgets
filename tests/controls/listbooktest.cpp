@@ -61,7 +61,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListbookTestCase, "ListbookTestCase" );
 
 void ListbookTestCase::setUp()
 {
-    m_listbook = new wxListbook(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_listbook = new wxListbook(wxTheApp->GetTopWindow(), wxID_ANY,
+                                wxDefaultPosition, wxSize(400, 300));
     AddPanels();
 }
 
