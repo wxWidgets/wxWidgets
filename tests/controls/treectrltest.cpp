@@ -510,8 +510,6 @@ void TreeCtrlTestCase::AssignImageList()
 
 void TreeCtrlTestCase::Focus()
 {
-    CPPUNIT_ASSERT(!m_tree->GetFocusedItem());
-
     m_tree->SetFocusedItem(m_child1);
 
     CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetFocusedItem());
