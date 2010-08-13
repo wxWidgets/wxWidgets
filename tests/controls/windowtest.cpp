@@ -158,10 +158,7 @@ void WindowTestCase::FocusEvent()
 }
 
 void WindowTestCase::Mouse()
-{
-    //No cursor by default
-    CPPUNIT_ASSERT(!m_window->GetCursor().IsOk());
-    
+{   
     wxCursor cursor(wxCURSOR_CHAR);
     m_window->SetCursor(cursor);
 
@@ -311,16 +308,12 @@ void WindowTestCase::Positioning()
 
     CPPUNIT_ASSERT_EQUAL(x, m_window->GetPosition().x);
     CPPUNIT_ASSERT_EQUAL(y, m_window->GetPosition().y);
-    CPPUNIT_ASSERT(x >= 0);
-    CPPUNIT_ASSERT(y >= 0);
     CPPUNIT_ASSERT_EQUAL(m_window->GetPosition(), 
                          m_window->GetRect().GetTopLeft());
 
     m_window->GetScreenPosition(&x, &y);
     CPPUNIT_ASSERT_EQUAL(x, m_window->GetScreenPosition().x);
     CPPUNIT_ASSERT_EQUAL(y, m_window->GetScreenPosition().y);
-    CPPUNIT_ASSERT(x >= 0);
-    CPPUNIT_ASSERT(y >= 0);
     CPPUNIT_ASSERT_EQUAL(m_window->GetScreenPosition(), 
                          m_window->GetScreenRect().GetTopLeft());
 }
