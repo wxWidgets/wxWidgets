@@ -43,6 +43,10 @@
     #define NM_RETURN (NM_FIRST - 4)
 #endif
 
+#ifndef LWS_RIGHT
+    #define LWS_RIGHT 0x0020
+#endif
+
 // ----------------------------------------------------------------------------
 // Helper functions
 // ----------------------------------------------------------------------------
@@ -97,7 +101,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
 
-    if ( !MSWCreateControl(wxT("SysLink"), msStyle, pos, size,
+    if ( style & wxHL_ALIGN_RIGHT )
+        msStyle |= LWS_RIGHT;
+
+    if ( !MSWCreateControl(WC_LINK, msStyle, pos, size,
                            GetLabelForSysLink( label, url ), exstyle) )
     {
         return false;
@@ -145,12 +152,24 @@ wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
     if ( !HasNativeHyperlinkCtrl() )
         return wxGenericHyperlinkCtrl::DoGetBestSize();
 
-    SIZE idealSize;
-    ::SendMessage( m_hWnd, LM_GETIDEALSIZE, 0, (LPARAM) &idealSize );
+    wxSize best;
 
-    wxSize best( idealSize.cx, idealSize.cy );
+    if ( wxGetWinVersion() >= wxWinVersion_6 )
+    {
+        SIZE idealSize;
+        ::SendMessage( m_hWnd, LM_GETIDEALSIZE, 0, (LPARAM) &idealSize );
+
+        best = wxSize( idealSize.cx, idealSize.cy );
+    }
+    else
+    {
+        // LM_GETIDEALSIZE is not supported in versions below Vista.
+        wxClientDC dc( const_cast<wxHyperlinkCtrl *>(this) );
+
+        best = dc.GetTextExtent(GetLabel());
+    }
+    
     CacheBestSize( best );
-
     return best;
 }
 
