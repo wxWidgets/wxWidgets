@@ -17,13 +17,17 @@
 
 #if wxUSE_RICHMSGDLG
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
+#include "wx/dynlib.h"
 #include "wx/msw/private/msgdlg.h"
 #include "wx/richmsgdlg.h"
 
 #ifdef wxHAS_MSW_TASKDIALOG
 using wxMSWMessageDialog::wxMSWTaskDialogConfig;
 #endif
+
+typedef HRESULT (*taskDialogIndirect_t)
+                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
 
 // ----------------------------------------------------------------------------
 // wxRichMessageDialog
@@ -54,10 +58,14 @@ int wxRichMessageDialog::ShowModal()
     if ( !m_detailedText.empty() )
         tdc.pszExpandedInformation = m_detailedText.wx_str();
 
+    wxLoadedDLL dllComCtl32( "comctl32.dll" );
+    taskDialogIndirect_t taskDialogIndirect =
+        (taskDialogIndirect_t) dllComCtl32.GetSymbol( "TaskDialogIndirect" );
+
     // create the task dialog, process the answer and return it.
     BOOL checkBoxChecked;
     int msAns;
-    HRESULT hr = ::TaskDialogIndirect( &tdc, &msAns, NULL, &checkBoxChecked );
+    HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, &checkBoxChecked );
     if ( FAILED(hr) )
     {
         wxLogApiError( "TaskDialogIndirect", hr );

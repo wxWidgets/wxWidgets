@@ -18,6 +18,7 @@
 #if wxUSE_PROGRESSDLG && wxUSE_THREADS
 
 #include "wx/scopedptr.h"
+#include "wx/dynlib.h"
 #include "wx/msw/private/msgdlg.h"
 #include "wx/progdlg.h"
 
@@ -44,6 +45,9 @@ using wxMSWMessageDialog::wxMSWTaskDialogConfig;
 #define wxSPDD_DESTROYED         0x800
 
 static const int wxID_SKIP = wxID_HIGHEST + 1;
+
+typedef HRESULT (*taskDialogIndirect_t)
+                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
 
 // ============================================================================
 // Helper classes
@@ -609,8 +613,12 @@ void* TaskDialogRunner::Entry()
         }
     }
 
+    wxLoadedDLL dllComCtl32( "comctl32.dll" );
+    taskDialogIndirect_t taskDialogIndirect =
+        (taskDialogIndirect_t) dllComCtl32.GetSymbol( "TaskDialogIndirect" );
+
     int msAns;
-    HRESULT hr = ::TaskDialogIndirect(&tdc, &msAns, NULL, NULL);
+    HRESULT hr = taskDialogIndirect(&tdc, &msAns, NULL, NULL);
     if ( FAILED(hr) )
         wxLogApiError( "TaskDialogIndirect", hr );
 #endif

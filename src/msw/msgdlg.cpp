@@ -38,6 +38,7 @@
     #endif
 #endif
 
+#include "wx/dynlib.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
@@ -80,6 +81,9 @@ const wxMessageDialog::ButtonAccessors wxMessageDialog::ms_buttons[] =
     { IDOK,     &wxMessageDialog::GetOKLabel     },
     { IDCANCEL, &wxMessageDialog::GetCancelLabel },
 };
+
+typedef HRESULT (*taskDialogIndirect_t)
+                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
 
 namespace
 {
@@ -578,12 +582,15 @@ int wxMessageDialog::ShowTaskDialog()
 {
 #ifdef wxHAS_MSW_TASKDIALOG
     WinStruct<TASKDIALOGCONFIG> tdc;
-    wxMSWTaskDialogConfig wxTdc(*this);
-
+    wxMSWTaskDialogConfig wxTdc( *this );
     wxTdc.MSWCommonTaskDialogInit( tdc );
 
+    wxLoadedDLL dllComCtl32( "comctl32.dll" );
+    taskDialogIndirect_t taskDialogIndirect =
+        (taskDialogIndirect_t) dllComCtl32.GetSymbol( "TaskDialogIndirect" );
+
     int msAns;
-    HRESULT hr = ::TaskDialogIndirect( &tdc, &msAns, NULL, NULL );
+    HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
     if ( FAILED(hr) )
     {
         wxLogApiError( "TaskDialogIndirect", hr );
