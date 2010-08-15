@@ -249,7 +249,8 @@ bool wxCollapsiblePane::IsCollapsed() const
 
 void wxCollapsiblePane::SetLabel(const wxString &str)
 {
-    gtk_expander_set_label(GTK_EXPANDER(m_widget), wxGTK_CONV(str));
+    gtk_expander_set_label(GTK_EXPANDER(m_widget),
+                           wxGTK_CONV(GTKConvertMnemonics(str)));
 
     // FIXME: we need to update our collapsed width in some way but using GetBestSize()
     // we may get the size of the control with the pane size summed up if we are expanded!
