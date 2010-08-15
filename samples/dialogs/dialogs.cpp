@@ -2741,7 +2741,7 @@ long TestMessageBoxDialog::GetStyle()
 
 void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
 {
-    long style = dlg.GetWindowStyle();
+    long style = dlg.GetMessageDialogStyle();
 
     if ( !m_textExtMsg->IsEmpty() )
         dlg.SetExtendedMessage(m_textExtMsg->GetValue());
