@@ -59,16 +59,18 @@ bool wxMaskedField::Create( const wxString& mask
     unsigned int it;
     bool res = true;
 
-
+    //test if the mask ended with \ and if it is the case m_mask is empty
     if(mask.EndsWith(wxT("\\")))
     {
         m_mask = wxEmptyString;
     }
     else
     {
+        // change the accolade i.e #{3} ###
         m_mask = ChangeAccolade(mask);
     }
 
+    //if the mask is empty i.e invalid
     if(mask.Cmp(wxEmptyString) != 0 
     && m_mask.Cmp(wxEmptyString) == 0)
         res = false;

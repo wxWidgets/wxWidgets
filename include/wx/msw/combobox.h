@@ -14,6 +14,7 @@
 
 #include "wx/choice.h"
 #include "wx/textentry.h"
+#include "wx/maskededit.h"
 
 #if wxUSE_COMBOBOX
 
