@@ -492,5 +492,32 @@ public:
         the fillchar of the first field
     */
     wxChar GetFillChar() const;
+    
+    /** 
+        Get the key corresponding to next choice.
+        Default : WXK_PAGEUP    
+        @return the key corresponding to next choice
+    */
+    int GetNextChoiceKey() const
+
+    /** 
+        Set the key corresponding to next choice. 
+        @param the new keycode
+    */
+    void SetNextChoiceKey(int keycode)
+
+    /** 
+        Get the key corresponding to previous choice.  
+        Default : WXK_PAGEDOWN 
+        @return the key corresponding to previous choice.
+    */
+    int GetPreviousChoiceKey() const;
+
+    /** 
+        Get the key corresponding to next choice.
+        Default : WXK_PAGEUP    
+        @return the key corresponding to next choice
+    */
+    void SetPreviousChoiceKey(int keycode);
 
 }; 

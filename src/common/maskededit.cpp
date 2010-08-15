@@ -23,7 +23,7 @@
 
 wxMaskedEdit::wxMaskedEdit()
 {
-
+    Create(wxT(""), wxT("F"), wxT(""));
 }
 
 
@@ -131,6 +131,9 @@ void wxMaskedEdit::Create( const wxString& mask
     m_emptyBg   = wxColour(255,255,255);
     m_invalidBg = wxColour(255,255,255);
     m_validBg   = wxColour(255,255,255);
+
+    m_nextChoiceKey = WXK_PAGEUP;
+    m_previousChoiceKey = WXK_PAGEDOWN;
 }
 
 
