@@ -110,6 +110,7 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
     unsigned long numberOfOccurences = 0;
     wxString res = wxEmptyString;
 
+    //if there is o accolade
     if(mask.Find('{') == wxNOT_FOUND  && mask.Find('}') == wxNOT_FOUND)
     {
         res = mask;
@@ -126,6 +127,8 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
         }
         else if(mask[it] == '{')
         {
+            // if there is no previous accolade or "back acolade" and
+            // the previous character is a valid mask character 
             if(indexOfAcc == 0 && indexOfBackAcc == 0 
             && mask[it -1] != '\\' 
             &&( mask[it-1] == 'a' || mask[it-1] == 'A'
@@ -145,6 +148,7 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
         }
         else if(mask[it] == '}')
         {
+            // if there is not a "back accolade" before 
             if(mask[it - 1] != '\\' 
             && (indexOfAcc == 0 || indexOfBackAcc != 0))
             {

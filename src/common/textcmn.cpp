@@ -781,9 +781,10 @@ void wxTextCtrlBase::ApplyMask()
     bool invalid;
     wxString tmp;
 
+    // if the mask isn't empty
     if(string != m_maskCtrl.GetEmptyMask())
     {
-        
+        //apply the format code
         formatString = m_maskCtrl.ApplyFormatCodes(string.Mid(0, GetInsertionPoint()));
         invalid = !m_maskCtrl.IsValid(formatString);
 
@@ -820,12 +821,11 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     unsigned int fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
     unsigned int it;
     wxString string = GetValue();
-    wxString tmpi = wxT("");
-    wxString choice = wxT("");
-    wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
+    wxString tmp;
+    wxString choice;
+    wxString mask;
     wxChar fillChar = m_maskCtrl.GetFillChar();
-
-    
+   
     if(keycode == nextKey || keycode == previousKey)
     {
         if(cursor == string.Len())
@@ -868,6 +868,10 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     }
     else
     {
+        if(string.Len() == cursor)
+            return;
+
+        mask = m_maskCtrl.GetEmptyMask()[cursor];
 
         switch(keycode)
         {
