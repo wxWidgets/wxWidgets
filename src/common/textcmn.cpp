@@ -868,10 +868,14 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     }
     else
     {
-        if(string.Len() == cursor)
-            return;
-
-        mask = m_maskCtrl.GetEmptyMask()[cursor];
+        if(string.Len() == cursor) 
+        {
+            if(keycode != WXK_LEFT && keycode != WXK_BACK )
+                mask = m_maskCtrl.GetEmptyMask()[cursor];
+            else
+                return;
+        }
+        
 
         switch(keycode)
         {
