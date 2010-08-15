@@ -128,10 +128,8 @@ struct ClassRegInfo
     }
 
     // the name of the registered class with and without CS_[HV]REDRAW styles
-    const wxString regname;
-    const wxString regnameNR;
-
-    wxDECLARE_NO_ASSIGN_CLASS(ClassRegInfo);
+    wxString regname;
+    wxString regnameNR;
 };
 
 namespace
