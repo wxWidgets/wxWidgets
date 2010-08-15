@@ -3616,6 +3616,11 @@ public:
     @class wxShowEvent
 
     An event being sent when the window is shown or hidden.
+    The event is triggered by calls to wxWindow::Show(), and any user
+    action showing a previously hidden window or vice versa (if allowed by
+    the current platform and/or window manager).
+    Notice that the event is not triggered when the application is iconized
+    (minimized) or restored under wxMSW.
 
     Currently only wxMSW, wxGTK and wxOS2 generate such events.
 

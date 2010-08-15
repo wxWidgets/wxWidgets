@@ -59,6 +59,8 @@ enum
         Process a @c wxEVT_MOVE_END event, which is generated when the user stops
         moving or sizing a window. wxMSW only.
         See wxMoveEvent.
+    @event{EVT_SHOW(func)}
+        Process a @c wxEVT_SHOW event. See wxShowEvent.
     @endEventTable
 
     @library{wxcore}

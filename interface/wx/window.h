@@ -235,8 +235,6 @@ enum wxWindowVariant
         Process scroll events. See wxScrollWinEvent.
     @event{EVT_SET_CURSOR(func)}
         Process a @c wxEVT_SET_CURSOR event. See wxSetCursorEvent.
-    @event{EVT_SHOW(func)}
-        Process a @c wxEVT_SHOW event. See wxShowEvent.
     @event{EVT_SIZE(func)}
         Process a @c wxEVT_SIZE event. See wxSizeEvent.
     @event{EVT_SYS_COLOUR_CHANGED(func)}
@@ -2234,6 +2232,11 @@ public:
         Shows or hides the window. You may need to call Raise()
         for a top level window if you want to bring it to top, although this is not
         needed if Show() is called immediately after the frame creation.
+
+        Notice that the default state of newly created top level windows is hidden
+        (to allow you to create their contents without flicker) unlike for
+        all the other, not derived from wxTopLevelWindow, windows that
+        are by default created in the shown state.
 
         @param show
             If @true displays the window. Otherwise, hides it.
