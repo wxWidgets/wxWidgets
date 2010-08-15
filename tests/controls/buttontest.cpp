@@ -89,11 +89,12 @@ void ButtonTestCase::Click()
 
     wxUIActionSimulator sim;
 
-    //We move in slightly to account for window decorations
+    //We move in slightly to account for window decorations, we need to yield
+    //after every wxUIActionSimulator action to keep everything working in GTK
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
-    sim.MouseClick();
+    wxYield();
 
-    //We have to yield to let event processing take place
+    sim.MouseClick();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
@@ -114,8 +115,9 @@ void ButtonTestCase::Disabled()
     m_button->Disable();
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
-    sim.MouseClick();
+    wxYield();
 
+    sim.MouseClick();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );

@@ -171,6 +171,8 @@ void GridTestCase::CellClick()
                                         + wxPoint(2, 2));
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
@@ -214,6 +216,8 @@ void GridTestCase::CellSelect()
                                         + wxPoint(4, 4));
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
@@ -223,6 +227,8 @@ void GridTestCase::CellSelect()
     m_grid->GoToCell(1, 0);
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseDblClick();
     wxYield();
 
@@ -247,6 +253,8 @@ void GridTestCase::LabelClick()
     pos = m_grid->ClientToScreen(pos);
 
     sim.MouseMove(pos);
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
@@ -298,6 +306,8 @@ void GridTestCase::SortClick()
     pos = m_grid->ClientToScreen(pos);
 
     sim.MouseMove(pos);
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
@@ -321,7 +331,16 @@ void GridTestCase::Size()
     wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() + 
                                         m_grid->GetColSize(0), 5));
 
-    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y);
+    sim.MouseMove(pt);
+    wxYield();
+
+    sim.MouseDown();
+    wxYield();
+
+    sim.MouseMove(pt.x + 50, pt.y);
+    wxYield();
+
+    sim.MouseUp();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_COL_SIZE));
@@ -351,7 +370,16 @@ void GridTestCase::RangeSelect()
                                                 m_grid->GetColLabelSize() + 10)
                                                 );
 
-    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y + 50);
+    sim.MouseMove(pt);
+    wxYield();
+
+    sim.MouseDown();
+    wxYield();
+
+    sim.MouseMove(pt.x + 50, pt.y + 50);
+    wxYield();
+
+    sim.MouseUp();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_RANGE_SELECT));
@@ -664,8 +692,9 @@ void GridTestCase::Editable()
     m_grid->ShowCellEditControl();
 
     sim.Text("abab");
-    sim.Char(WXK_RETURN);
+    wxYield();
 
+    sim.Char(WXK_RETURN);
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
@@ -697,8 +726,9 @@ void GridTestCase::ReadOnly()
     m_grid->ShowCellEditControl();
 
     sim.Text("abab");
-    sim.Char(WXK_RETURN);
+    wxYield();
 
+    sim.Char(WXK_RETURN);
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());

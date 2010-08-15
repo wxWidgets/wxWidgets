@@ -185,10 +185,15 @@ void SliderTestCase::Thumb()
     m_slider->SetValue(0);
 
     sim.MouseMove(m_slider->ClientToScreen(wxPoint(10, 10)));
-    sim.MouseDown();
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
-    sim.MouseUp();
+    wxYield();
 
+    sim.MouseDown();
+    wxYield();
+
+    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
+    wxYield();
+
+    sim.MouseUp();
     wxYield();
 
     CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_SCROLL_THUMBTRACK) != 0);

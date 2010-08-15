@@ -203,9 +203,17 @@ void ListBaseTestCase::ItemClick()
     wxPoint point = list->ClientToScreen(pos.GetPosition()) + wxPoint(2, 2);
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseClick();
+    wxYield();
+
     sim.MouseDblClick();
+    wxYield();
+
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
     sim.MouseClick(wxMOUSE_BTN_MIDDLE);
     wxYield();
 
@@ -234,6 +242,8 @@ void ListBaseTestCase::KeyDown()
     wxUIActionSimulator sim;
 
     list->SetFocus();
+    wxYield();
+
     sim.Text("aAbB");
     wxYield();
 
@@ -264,19 +274,18 @@ void ListBaseTestCase::DeleteItems()
     list->DeleteItem(0);
     list->DeleteAllItems();
 
-    //We need some items for ClearAll to clear
-
+    //Add some new items to tests ClearAll with
     list->InsertColumn(0, "Column 0");
-
     list->InsertItem(0, "Item 0");
     list->InsertItem(1, "Item 1");
 
     //Check that ClearAll actually sends a DELETE_ALL_ITEMS event
     list->ClearAll();
 
-    //Subsequent calls to ClearAll and DeleteAllItems shouldn't send events
-    list->DeleteAllItems();
+    //ClearAll and DeleteAllItems shouldn't send an event if there was nothing
+    //to clear
     list->ClearAll();
+    list->DeleteAllItems();
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));

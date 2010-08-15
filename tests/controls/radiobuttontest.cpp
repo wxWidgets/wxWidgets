@@ -69,7 +69,8 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
-#if wxUSE_UIACTIONSIMULATOR
+//GTK does not support selecting a single radio button
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) 
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -88,6 +89,7 @@ void RadioButtonTestCase::Click()
 
 void RadioButtonTestCase::Value()
 {
+#ifndef __WXGTK__
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -97,13 +99,12 @@ void RadioButtonTestCase::Value()
 
     CPPUNIT_ASSERT(m_radio->GetValue());
 
-#ifndef __WXGTK__
     m_radio->SetValue(false);
 
     CPPUNIT_ASSERT(!m_radio->GetValue());
-#endif
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
 }
 
 void RadioButtonTestCase::Group()

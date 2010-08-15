@@ -182,6 +182,7 @@ void TextEntryTestCase::Editable()
     EventCounter count(window, wxEVT_COMMAND_TEXT_UPDATED);
 
     window->SetFocus();
+    wxYield();
 
     wxUIActionSimulator sim;
     sim.Text("abcdef");

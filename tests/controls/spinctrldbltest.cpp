@@ -78,16 +78,15 @@ void SpinCtrlDoubleTestCase::Arrows()
     wxUIActionSimulator sim;
 
     m_spin->SetFocus();
+    wxYield();
 
     sim.Char(WXK_UP);
-
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetValue());
 
     sim.Char(WXK_DOWN);
-
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
@@ -142,7 +141,7 @@ void SpinCtrlDoubleTestCase::Range()
 void SpinCtrlDoubleTestCase::Value()
 {
     //We set a smaller increment than the default of 1
-    m_spin->SetIncrement(0.1);   
+    m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 

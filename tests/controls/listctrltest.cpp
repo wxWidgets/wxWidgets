@@ -103,11 +103,20 @@ void ListCtrlTestCase::ColumnDrag()
 
     wxPoint pt = m_list->ClientToScreen(wxPoint(m_list->GetColumnWidth(0), 5));
 
-    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y);
+    sim.MouseMove(pt);
+    wxYield();
+
+    sim.MouseDown();
+    wxYield();
+
+    sim.MouseMove(pt.x + 50, pt.y);
+    wxYield();
+
+    sim.MouseUp();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_DRAGGING));
+    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_COMMAND_LIST_COL_DRAGGING) > 0);
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
 
     m_list->ClearAll();

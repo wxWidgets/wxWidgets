@@ -250,8 +250,14 @@ void TreeCtrlTestCase::ItemClick()
     wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseDblClick();
+    wxYield();
+
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
     sim.MouseClick(wxMOUSE_BTN_MIDDLE);
     wxYield();
 
@@ -341,6 +347,8 @@ void TreeCtrlTestCase::CollapseExpandEvents()
     wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseDblClick();
     wxYield();
 
@@ -378,8 +386,14 @@ void TreeCtrlTestCase::SelectionChange()
     wxPoint point2 = m_tree->ClientToScreen(poschild2.GetPosition()) + wxPoint(4, 4);
 
     sim.MouseMove(point1);
+    wxYield();
+
     sim.MouseClick();
+    wxYield();
+
     sim.MouseMove(point1);
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
@@ -404,6 +418,8 @@ void TreeCtrlTestCase::Menu()
     wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
 
     sim.MouseMove(point);
+    wxYield();
+
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 

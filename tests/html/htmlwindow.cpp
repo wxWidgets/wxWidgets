@@ -130,8 +130,9 @@ void HtmlWindowTestCase::CellClick()
     m_win->Refresh();
 
     sim.MouseMove(m_win->ClientToScreen(wxPoint(15, 15)));
-    sim.MouseClick();
+    wxYield();
 
+    sim.MouseClick();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
@@ -153,8 +154,9 @@ void HtmlWindowTestCase::LinkClick()
     m_win->Refresh();
 
     sim.MouseMove(m_win->ClientToScreen(wxPoint(15, 15)));
-    sim.MouseClick();
+    wxYield();
 
+    sim.MouseClick();
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());

@@ -232,6 +232,8 @@ void RichTextCtrlTestCase::UrlEvent()
 
     wxUIActionSimulator sim;
     sim.MouseMove(m_rich->ClientToScreen(wxPoint(5, 5)));
+    wxYield();
+
     sim.MouseClick();
     wxYield();
 
