@@ -31,10 +31,10 @@ void SendButtonEvent(int button, bool isDown)
             xbutton = 1;
             break;
         case wxMOUSE_BTN_RIGHT:
-            xbutton = 2;
+            xbutton = 3;
             break;
         case wxMOUSE_BTN_MIDDLE:
-            xbutton = 3;
+            xbutton = 2;
             break;
         default:
             wxFAIL_MSG("Unsupported button passed in.");
