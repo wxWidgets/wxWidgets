@@ -750,6 +750,7 @@ void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
     int width;
     int height;
 
+    // Copy the mask in wxTextCtrl
     m_maskCtrl = wxMaskedEdit(mask);
      
     if(m_maskCtrl.GetMask().Cmp(wxEmptyString) != 0)
@@ -758,7 +759,6 @@ void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
         Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
         Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
-        Connect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
 
         if(m_maskCtrl.GetFormatCode().Find('F') != wxNOT_FOUND)
         {
@@ -770,7 +770,6 @@ void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
     {
          Disconnect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
          Disconnect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
-         Disconnect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
     }
 }
 
@@ -818,16 +817,15 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     const int previousKey = m_maskCtrl.GetPreviousChoiceKey();
     unsigned int cursor = GetInsertionPoint();
     unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
-    unsigned int fieldMinPos;
+    unsigned int fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
     unsigned int it;
     wxString string = GetValue();
-    wxString tmp;
-    wxString choice;
+    wxString tmpi = wxT("");
+    wxString choice = wxT("");
     wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
     wxChar fillChar = m_maskCtrl.GetFillChar();
 
-    fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
-
+    
     if(keycode == nextKey || keycode == previousKey)
     {
         if(cursor == string.Len())
@@ -1064,11 +1062,6 @@ void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
 
 }
 
-void wxTextCtrlBase::FocusMask(wxFocusEvent& WXUNUSED(event))
-{
-    SetInsertionPoint(0);
-    SetSelection(0,1);
-}
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------

@@ -737,7 +737,6 @@ protected:
     void ApplyMask();
     void KeyPressedMask(wxKeyEvent& event);
     void MouseClickedMask(wxMouseEvent& event);
-    void FocusMask(wxFocusEvent& event);
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)

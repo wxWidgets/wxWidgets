@@ -23,7 +23,7 @@
 
 wxMaskedEdit::wxMaskedEdit()
 {
-    Create(wxT(""), wxT("F"), wxT(""));
+    Create(wxT(""), wxArrayString(), wxT(""));
 }
 
 
