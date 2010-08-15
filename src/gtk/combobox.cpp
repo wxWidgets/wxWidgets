@@ -352,19 +352,11 @@ void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
 
 void wxComboBox::Popup()
 {
-    gtk_combo_box_popup( GTK_COMBO_BOX(m_widget) );
-
-    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId() );
-    event.SetEventObject( this );
-    HandleWindowEvent( event );
+     gtk_combo_box_popup( GTK_COMBO_BOX(m_widget) );
 }
 
 void wxComboBox::Dismiss()
 {
     gtk_combo_box_popdown( GTK_COMBO_BOX(m_widget) );
-
-    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId() );
-    event.SetEventObject( this );
-    HandleWindowEvent( event );
 }
 #endif // wxUSE_COMBOBOX
