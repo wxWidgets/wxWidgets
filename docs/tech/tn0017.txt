@@ -49,6 +49,18 @@ II. Writing tests with CppUnit
     wxUIActionSimulator always add the test using WXUISIM_TEST rather than
     CPPUNIT_TEST as then it won't run on unsupported platforms. The test itself
     must also be wrapped in a #if wxUSE_UIACTIONSIMULATOR block.
+ e) There are a number of classes that are available to help with testing GUI 
+    elements. Firstly throughout the test run there is a frame of type 
+    wxTestableFrame that you can access through wxTheApp->GetTopWindow(). This
+    class adds two new functions, GetEventCount, which takes an optional 
+    wxEventType. It then returns the number of events of that type that it has
+    received since the last call. Passing nothing returns the total number of 
+    event received since the last call. Also there is OnEvent, which counts the 
+    events based on type that are passed to it. To make it easy to count events
+    there is also a new class called EventCounter which takes a window and event 
+    type and connects the window to the top level wxTestableFrame with the specific
+    event type. It disconnects again once it is out of scope. It simply reduces
+    the amount of typing required to count events.
 
 3. add a '<sources>' tag for your source file to tests/test.bkl
 
