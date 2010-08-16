@@ -276,6 +276,14 @@ wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
 }
 
+void wxComboBox::SetValue(const wxString& value)
+{
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(value);
+    else
+        wxTextEntry::SetValue(value);
+}
+
 // ----------------------------------------------------------------------------
 // standard event handling
 // ----------------------------------------------------------------------------

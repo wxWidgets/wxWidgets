@@ -101,6 +101,8 @@ public:
 
     void OnChar( wxKeyEvent &event );
 
+    virtual void SetValue(const wxString& value);
+
     // Standard event handling
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
