@@ -170,8 +170,17 @@ wxFloatCollector::wxFloatCollector(int width) : m_left(FloatRectMapCmp), m_right
     m_para = NULL;
 }
 
+void FreeFloatRectMapArray(FloatRectMapArray& array)
+{
+    int len = array.GetCount();
+    for (int i = 0; i < len; i++)
+        delete array[i];
+}
+
 wxFloatCollector::~wxFloatCollector()
 {
+    FreeFloatRectMapArray(m_left);
+    FreeFloatRectMapArray(m_right);
 }
 
 int wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start, int height) const
@@ -215,6 +224,7 @@ void wxFloatCollector::CollectFloat(wxRichTextParagraph* para, wxRichTextObject*
         switch (direction)
         {
             case wxRICHTEXT_FLOAT_NONE:
+                delete map;
                 break;
             case wxRICHTEXT_FLOAT_LEFT:
                 // Just a not-enough simple assertion
@@ -226,6 +236,7 @@ void wxFloatCollector::CollectFloat(wxRichTextParagraph* para, wxRichTextObject*
                 m_right.Add(map);
                 break;
             default:
+                delete map;
                 assert("Must some error occurs");
         }
 
@@ -1119,7 +1130,6 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
             // If we're just formatting the visible part of the buffer,
             // and we're now past the bottom of the window, start quick
             // layout.
-            // added by bella, allways layout the full buffer now
             if (formatRect && child->GetPosition().y > rect.GetBottom())
                 forceQuickLayout = true;
         }
@@ -4968,6 +4978,7 @@ void wxRichTextParagraph::CollectFloat()
     while (node)
     {
         wxRichTextObject* obj = node->GetData();
+        wxRichTextObjectList::compatibility_iterator next = node->GetNext();
         if (obj->IsFloatable())
         {
             wxRichTextAnchoredObject* anchor = wxDynamicCast(obj, wxRichTextAnchoredObject);
@@ -5004,7 +5015,7 @@ void wxRichTextParagraph::CollectFloat()
             }
         }
 
-        node = node->GetNext();
+        node = next;
     }
 }
 
