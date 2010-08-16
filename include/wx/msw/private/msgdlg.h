@@ -19,6 +19,11 @@
     #define wxHAS_MSW_TASKDIALOG
 #endif
 
+#ifdef wxHAS_MSW_TASKDIALOG
+typedef WINCOMMCTRLAPI HRESULT (WINAPI *taskDialogIndirect_t)
+            (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
+#endif
+
 // Provides methods for creating a task dialog.
 namespace wxMSWMessageDialog
 {

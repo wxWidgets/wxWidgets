@@ -82,9 +82,6 @@ const wxMessageDialog::ButtonAccessors wxMessageDialog::ms_buttons[] =
     { IDCANCEL, &wxMessageDialog::GetCancelLabel },
 };
 
-typedef HRESULT (*taskDialogIndirect_t)
-                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
-
 namespace
 {
 

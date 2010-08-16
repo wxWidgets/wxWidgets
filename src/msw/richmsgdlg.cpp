@@ -26,9 +26,6 @@
 using wxMSWMessageDialog::wxMSWTaskDialogConfig;
 #endif
 
-typedef HRESULT (*taskDialogIndirect_t)
-                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
-
 // ----------------------------------------------------------------------------
 // wxRichMessageDialog
 // ----------------------------------------------------------------------------

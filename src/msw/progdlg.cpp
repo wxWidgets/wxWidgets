@@ -46,9 +46,6 @@ using wxMSWMessageDialog::wxMSWTaskDialogConfig;
 
 static const int wxID_SKIP = wxID_HIGHEST + 1;
 
-typedef HRESULT (*taskDialogIndirect_t)
-                    (const TASKDIALOGCONFIG *, int *, int *, BOOL *);
-
 // ============================================================================
 // Helper classes
 // ============================================================================
