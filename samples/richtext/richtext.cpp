@@ -1195,6 +1195,7 @@ void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
     image = wxDynamicCast(obj, wxRichTextImage);
 
     wxRichTextImageDlg imageDlg(this);
+    imageDlg.SetImageObject(image);
     imageDlg.SetImageAttr(image->GetImageAttr());
 
     if (imageDlg.ShowModal() == wxID_OK)

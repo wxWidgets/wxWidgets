@@ -15588,6 +15588,7 @@
                   <long name="title-mode">0</long>
                   <long name="locked">0</long>
                   <string name="proxy-type">"wbButtonProxy"</string>
+                  <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonParaUpClick|NONE||wxRichTextImageDlg"</string>
                   <string name="proxy-Id name">"ID_BUTTON_PARA_UP"</string>
                   <long name="proxy-Id value">10020</long>
                   <string name="proxy-Name">""</string>
@@ -15653,6 +15654,7 @@
                   <long name="title-mode">0</long>
                   <long name="locked">0</long>
                   <string name="proxy-type">"wbButtonProxy"</string>
+                  <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonParaDownClick|NONE||wxRichTextImageDlg"</string>
                   <string name="proxy-Id name">"ID_BUTTON_PARA_DOWN"</string>
                   <long name="proxy-Id value">10021</long>
                   <string name="proxy-Name">""</string>

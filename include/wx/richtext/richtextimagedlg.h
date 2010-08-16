@@ -71,6 +71,12 @@ public:
 
 ////@begin wxRichTextImageDlg event handler declarations
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP
+    void OnButtonParaUpClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN
+    void OnButtonParaDownClick( wxCommandEvent& event );
+
 ////@end wxRichTextImageDlg event handler declarations
 
 ////@begin wxRichTextImageDlg member function declarations
@@ -90,7 +96,7 @@ public:
     void ApplyImageAttr(wxRichTextImage* image);
 
     /// Set the anchored object
-    void SetAnchoredObject(wxRichTextAnchoredObject* anchored);
+    void SetImageObject(wxRichTextImage *image);
 
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
@@ -126,8 +132,8 @@ private:
     };
 ////@end wxRichTextImageDlg member variables
 
-    wxRichTextObjectList::compatibility_iterator m_para;
     wxRichTextBuffer* m_buffer;
+    wxRichTextImage* m_image;
 };
 
 #endif
