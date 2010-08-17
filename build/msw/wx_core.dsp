@@ -5058,6 +5058,10 @@ SOURCE=..\..\include\wx\msw\htmlhelp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\hyperlink.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\icon.h
 # End Source File
 # Begin Source File

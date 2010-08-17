@@ -3577,6 +3577,7 @@ COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
 	wx/msw/commandlinkbutton.h \
+	wx/msw/hyperlink.h \
 	wx/msw/notifmsg.h \
 	wx/msw/sound.h \
 	wx/msw/taskbar.h \
@@ -3611,6 +3612,7 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_PM@	wx/generic/animate.h wx/os2/joystick.h wx/os2/sound.h
 COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR =  \
 	wx/msw/commandlinkbutton.h \
+	wx/msw/hyperlink.h \
 	wx/msw/notifmsg.h \
 	wx/msw/sound.h \
 	wx/msw/taskbar.h
@@ -6009,7 +6011,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_gtk_bmpcbox.o \
 	monodll_gtk_calctrl.o \
 	monodll_gtk_dataview.o \
-	monodll_hyperlink.o
+	monodll_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_animateg.o \
@@ -7879,7 +7881,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_gtk_bmpcbox.o \
 	monolib_gtk_calctrl.o \
 	monolib_gtk_dataview.o \
-	monolib_hyperlink.o
+	monolib_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_animateg.o \
@@ -11546,7 +11548,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_gtk_bmpcbox.o \
 	advdll_gtk_calctrl.o \
 	advdll_gtk_dataview.o \
-	advdll_hyperlink.o
+	advdll_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_animateg.o \
@@ -11642,7 +11644,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_gtk_bmpcbox.o \
 	advlib_gtk_calctrl.o \
 	advlib_gtk_dataview.o \
-	advlib_hyperlink.o
+	advlib_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_animateg.o \
@@ -12805,6 +12807,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
 	monodll_commandlinkbutton.o \
+	monodll_msw_hyperlink.o \
 	monodll_msw_notifmsg.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
@@ -12844,6 +12847,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
 	monodll_commandlinkbutton.o \
+	monodll_msw_hyperlink.o \
 	monodll_msw_notifmsg.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o
@@ -12992,6 +12996,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
 	monolib_commandlinkbutton.o \
+	monolib_msw_hyperlink.o \
 	monolib_msw_notifmsg.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
@@ -13031,6 +13036,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
 	monolib_commandlinkbutton.o \
+	monolib_msw_hyperlink.o \
 	monolib_msw_notifmsg.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o
@@ -13276,6 +13282,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
 	advdll_commandlinkbutton.o \
+	advdll_msw_hyperlink.o \
 	advdll_msw_notifmsg.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
@@ -13315,6 +13322,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
 	advdll_commandlinkbutton.o \
+	advdll_msw_hyperlink.o \
 	advdll_msw_notifmsg.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o
@@ -13366,6 +13374,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
 	advlib_commandlinkbutton.o \
+	advlib_msw_hyperlink.o \
 	advlib_msw_notifmsg.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
@@ -13405,6 +13414,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
 	advlib_commandlinkbutton.o \
+	advlib_msw_hyperlink.o \
 	advlib_msw_notifmsg.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o
@@ -16745,7 +16755,7 @@ monodll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
 monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
+monodll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
@@ -20039,6 +20049,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
 
@@ -21956,7 +21972,7 @@ monolib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
 monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
+monolib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
@@ -25249,6 +25265,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
@@ -34463,7 +34485,7 @@ advdll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
 advdll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
+advdll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
@@ -34588,6 +34610,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_WINCE@advdll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_MSW@advdll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE@advdll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW@advdll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
@@ -34805,7 +34833,7 @@ advlib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
 advlib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
-advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
+advlib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
@@ -34930,6 +34958,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_WINCE@advlib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_MSW@advlib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
+
+@COND_TOOLKIT_WINCE@advlib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 @COND_TOOLKIT_MSW@advlib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp

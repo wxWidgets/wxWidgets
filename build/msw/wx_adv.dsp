@@ -426,6 +426,10 @@ SOURCE=..\..\src\msw\datectrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\hyperlink.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\joystick.cpp
 # End Source File
 # Begin Source File
@@ -819,6 +823,10 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 
 !ENDIF
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\hyperlink.h
 # End Source File
 # Begin Source File
 

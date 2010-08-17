@@ -920,6 +920,10 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\hyperlink.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\joystick.cpp"
 				>
 			</File>
@@ -1285,6 +1289,10 @@
 						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivu\wx\msw&quot;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\hyperlink.h"
+				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\joystick.h"

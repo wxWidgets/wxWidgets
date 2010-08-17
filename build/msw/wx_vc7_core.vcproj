@@ -4396,6 +4396,9 @@
 				RelativePath="..\..\include\wx\msw\htmlhelp.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\hyperlink.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\icon.h">
 			</File>
 			<File

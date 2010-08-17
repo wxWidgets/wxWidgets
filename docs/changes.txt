@@ -406,6 +406,7 @@ Major new features in this release
 MSW:
 
 - Fix Cygwin 1.7 build (David Gangola).
+- Native wxHyperlinkCtrl implementation (Rickard Westerlund, GSoC 2010 project).
 - Allow using wxDC::DrawText() with multiline texts.
 - Fix wxBitmapButton best size determination broken in 2.9.1.
 

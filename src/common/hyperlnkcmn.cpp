@@ -42,6 +42,12 @@
 // implementation
 // ============================================================================
 
+#if wxUSE_EXTENDED_RTTI
+    wxIMPLEMENT_DYNAMIC_CLASS_XTI( wxHyperlinkCtrl, wxControl, "wx/hyperlink.h")
+#else
+    wxIMPLEMENT_DYNAMIC_CLASS( wxHyperlinkCtrl, wxControl )
+#endif // wxUSE_EXTENDED_RTTI
+
 IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
 wxDEFINE_EVENT( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent );
 

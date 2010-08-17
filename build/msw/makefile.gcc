@@ -2205,6 +2205,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_commandlinkbutton.o \
+	$(OBJS)\monodll_hyperlink.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2246,6 +2247,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_commandlinkbutton.o \
+	$(OBJS)\monodll_hyperlink.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2924,6 +2926,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_commandlinkbutton.o \
+	$(OBJS)\monolib_hyperlink.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2965,6 +2968,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_commandlinkbutton.o \
+	$(OBJS)\monolib_hyperlink.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -4064,6 +4068,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_commandlinkbutton.o \
+	$(OBJS)\advdll_hyperlink.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -4105,6 +4110,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_commandlinkbutton.o \
+	$(OBJS)\advdll_hyperlink.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -4150,6 +4156,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_commandlinkbutton.o \
+	$(OBJS)\advlib_hyperlink.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -4191,6 +4198,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_commandlinkbutton.o \
+	$(OBJS)\advlib_hyperlink.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -8042,6 +8050,11 @@ $(OBJS)\monodll_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_hyperlink.o: ../../src/msw/hyperlink.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_notifmsg.o: ../../src/msw/notifmsg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10255,6 +10268,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13735,6 +13753,9 @@ $(OBJS)\advdll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 $(OBJS)\advdll_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_hyperlink.o: ../../src/msw/hyperlink.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_notifmsg.o: ../../src/msw/notifmsg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13850,6 +13871,9 @@ $(OBJS)\advlib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_notifmsg.o: ../../src/msw/notifmsg.cpp

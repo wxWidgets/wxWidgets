@@ -668,6 +668,9 @@
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\hyperlink.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\joystick.cpp">
 			</File>
 			<File
@@ -952,6 +955,9 @@
 						Outputs="..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
 						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivu\wx\msw&quot;"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\hyperlink.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\joystick.h">
