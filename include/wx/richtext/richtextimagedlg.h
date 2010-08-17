@@ -93,10 +93,10 @@ public:
 
     /// Set the image attribute
     void SetImageAttr(const wxRichTextImageAttr& attr);
-    void ApplyImageAttr(wxRichTextImage* image);
+    wxRichTextImage* ApplyImageAttr();
 
     /// Set the anchored object
-    void SetImageObject(wxRichTextImage *image);
+    void SetImageObject(wxRichTextImage *image, wxRichTextBuffer* buffer, wxRichTextCtrl* ctrl);
 
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
@@ -133,7 +133,9 @@ private:
 ////@end wxRichTextImageDlg member variables
 
     wxRichTextBuffer* m_buffer;
-    wxRichTextImage* m_image;
+    wxRichTextObject* m_image;
+    wxRichTextObject* m_parent;
+    wxRichTextCtrl* m_ctrl;
 };
 
 #endif

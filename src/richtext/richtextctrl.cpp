@@ -2837,11 +2837,11 @@ void wxRichTextCtrl::OnImage(wxCommandEvent& WXUNUSED(event))
     assert(m_image);
 
     wxRichTextImageDlg imageDlg(this);
-    imageDlg.SetImageAttr(m_image->GetImageAttr());
+    imageDlg.SetImageObject(m_image, &GetBuffer(), this);
 
     if (imageDlg.ShowModal() == wxID_OK)
     {
-        imageDlg.ApplyImageAttr(m_image);
+        m_image = imageDlg.ApplyImageAttr();
     }
 }
 

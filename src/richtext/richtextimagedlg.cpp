@@ -291,24 +291,27 @@ void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
 /*!
  * Apply the new style
  */
-void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
+wxRichTextImage* wxRichTextImageDlg::ApplyImageAttr()
 {
+    wxRichTextImage* image = wxDynamicCast(m_image, wxRichTextImage);
+
     TransferDataFromWindow();
-    wxRichTextCtrl *ctrl = image->GetBuffer()->GetRichTextCtrl();
-    if (ctrl)
+    if (m_ctrl)
     {
-        ctrl->SetImageStyle(image, m_attr);
+        m_ctrl->SetImageStyle(image, m_attr);
     }
-    // TODO: to invoke layout with some method. :)
+    return image;
 }
 
-void wxRichTextImageDlg::SetImageObject(wxRichTextImage* image)
+void wxRichTextImageDlg::SetImageObject(wxRichTextImage* image, wxRichTextBuffer* buffer, wxRichTextCtrl* ctrl)
 {
     wxRichTextObject* parent = image->GetParent();
-    wxRichTextBuffer* buffer = image->GetBuffer();
 
+    m_ctrl = ctrl;
     m_buffer = buffer;
     m_image = image;
+    m_parent = parent;
+    SetImageAttr(image->GetImageAttr());
 }
 
 bool wxRichTextImageDlg::TransferDataToWindow()
@@ -430,21 +433,18 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret, int
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP
  */
-
 void wxRichTextImageDlg::OnButtonParaUpClick( wxCommandEvent& WXUNUSED(event))
 {
 ////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP in wxRichTextImageDlg.
     // Before editing this code, remove the block markers.
     wxRichTextRange range = m_image->GetRange();
-    wxRichTextCtrl *ctrl = m_buffer->GetRichTextCtrl();
-    wxRichTextObject *parent = m_image->GetParent();
     wxRichTextObjectList::compatibility_iterator iter = m_buffer->GetChildren().GetFirst();
     if (iter == NULL)
         return;
 
     while (iter)
     {
-        if (iter->GetData() == parent)
+        if (iter->GetData() == m_parent)
             break;
         iter = iter->GetNext();
     }
@@ -455,9 +455,12 @@ void wxRichTextImageDlg::OnButtonParaUpClick( wxCommandEvent& WXUNUSED(event))
 
     wxRichTextObject *obj = iter->GetData();
     wxRichTextRange rg = obj->GetRange();
+    m_image = m_image->Clone();
+    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 
-    m_buffer->DeleteRangeWithUndo(range, ctrl);
-    m_buffer->InsertImageWithUndo(rg.GetEnd() - 1, m_image->GetImageBlock(), ctrl, 0, m_image->GetImageAttr());
+    m_buffer->DeleteRangeWithUndo(range, m_ctrl);
+    m_buffer->InsertObjectWithUndo(rg.GetEnd(), m_image, m_ctrl, 0);
+    m_parent = obj;
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP in wxRichTextImageDlg. 
 }
 
@@ -471,15 +474,13 @@ void wxRichTextImageDlg::OnButtonParaDownClick( wxCommandEvent& WXUNUSED(event))
 ////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN in wxRichTextImageDlg.
     // Before editing this code, remove the block markers.
     wxRichTextRange range = m_image->GetRange();
-    wxRichTextCtrl *ctrl = m_buffer->GetRichTextCtrl();
-    wxRichTextObject *parent = m_image->GetParent();
     wxRichTextObjectList::compatibility_iterator iter = m_buffer->GetChildren().GetFirst();
     if (iter == NULL)
         return;
 
     while (iter)
     {
-        if (iter->GetData() == parent)
+        if (iter->GetData() == m_parent)
             break;
         iter = iter->GetNext();
     }
@@ -490,9 +491,12 @@ void wxRichTextImageDlg::OnButtonParaDownClick( wxCommandEvent& WXUNUSED(event))
 
     wxRichTextObject *obj = iter->GetData();
     wxRichTextRange rg = obj->GetRange();
+    m_image = m_image->Clone();
+    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 
-    m_buffer->DeleteRangeWithUndo(range, ctrl);
-    m_buffer->InsertImageWithUndo(rg.GetEnd() - 1, m_image->GetImageBlock(), ctrl, 0, m_image->GetImageAttr());
+    m_buffer->DeleteRangeWithUndo(range, m_ctrl);
+    m_buffer->InsertObjectWithUndo(rg.GetEnd(), m_image, m_ctrl, 0);
+    m_parent = obj;
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN in wxRichTextImageDlg. 
 }
 

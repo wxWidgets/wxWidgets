@@ -1720,6 +1720,9 @@ public:
     /// Submit command to insert the given image
     bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0, const wxRichTextAnchoredObjectAttr& floatAttr = wxRichTextAnchoredObjectAttr());
 
+    /// Submit command to insert an object
+    bool InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags);
+
     /// Submit command to delete this range
     bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl);
 

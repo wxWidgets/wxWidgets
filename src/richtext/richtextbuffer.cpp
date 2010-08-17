@@ -6013,6 +6013,41 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
     return true;
 }
 
+// Insert an object with no change of it
+bool wxRichTextBuffer::InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags)
+{
+    wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert object"), wxRICHTEXT_INSERT, this, ctrl, false);
+
+    wxTextAttr* p = NULL;
+    wxTextAttr paraAttr;
+    if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
+    {
+        paraAttr = GetStyleForNewParagraph(pos);
+        if (!paraAttr.IsDefault())
+            p = & paraAttr;
+    }
+
+    wxTextAttr attr(GetDefaultStyle());
+
+    wxRichTextParagraph* newPara = new wxRichTextParagraph(this, & attr);
+    if (p)
+        newPara->SetAttributes(*p);
+
+    newPara->AppendChild(object);
+    action->GetNewParagraphs().AppendChild(newPara);
+    action->GetNewParagraphs().UpdateRanges();
+
+    action->GetNewParagraphs().SetPartialParagraph(true);
+
+    action->SetPosition(pos);
+
+    // Set the range we'll need to delete in Undo
+    action->SetRange(wxRichTextRange(pos, pos));
+
+    SubmitAction(action);
+
+    return true;
+}
 /// Get the style that is appropriate for a new paragraph at this position.
 /// If the previous paragraph has a paragraph style name, look up the next-paragraph
 /// style.
