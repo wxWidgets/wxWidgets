@@ -58,7 +58,9 @@
         just its parent (currently implemented only under MSW and GTK).
     @style{wxCENTRE}
         Centre the message box on its parent or on the screen if parent is not
-        specified (currently only implemented under MSW).
+        specified.
+        Setting this style under MSW makes no differences as the dialog is
+        always centered on the parent.
     @endStyleTable
 
     @library{wxcore}
