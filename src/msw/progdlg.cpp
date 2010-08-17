@@ -256,6 +256,9 @@ wxProgressDialog::~wxProgressDialog()
 
     if ( !HasFlag(wxPD_APP_MODAL) )
         GetParent()->Enable();
+
+    if ( GetParent() != NULL )
+        GetParent()->Raise();
 #endif
 }
 
