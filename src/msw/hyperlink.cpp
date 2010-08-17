@@ -101,9 +101,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
 
-    if ( style & wxHL_ALIGN_RIGHT )
-        msStyle |= LWS_RIGHT;
-
     if ( !MSWCreateControl(WC_LINK, msStyle, pos, size,
                            GetLabelForSysLink( label, url ), exstyle) )
     {
@@ -118,6 +115,16 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     ConnectMenuHandlers();
 
     return true;
+}
+
+WXDWORD wxHyperlinkCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD msStyle = wxControl::MSWGetStyle( style, exstyle );
+
+    if ( style & wxHL_ALIGN_RIGHT )
+        msStyle |= LWS_RIGHT;
+
+    return msStyle;
 }
 
 void wxHyperlinkCtrl::SetURL(const wxString &url)

@@ -59,8 +59,11 @@ public:
            Align the text to the left.
     @style{wxHL_ALIGN_RIGHT}
            Align the text to the right.
+           Unsupported for Windows versions from XP up to,
+           but not including, Vista.
     @style{wxHL_ALIGN_CENTRE}
            Center the text (horizontally).
+           Unsupported for Windows XP or later.
     @style{wxHL_CONTEXTMENU}
            Pop up a context menu when the hyperlink is right-clicked. The
            context menu contains a "Copy URL" menu item which is automatically

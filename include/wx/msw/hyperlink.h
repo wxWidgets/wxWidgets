@@ -52,6 +52,7 @@ public:
 
 protected:
     // overridden base class virtuals
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // Returns the best size for the window, which is the size needed
     // to display the text label.
