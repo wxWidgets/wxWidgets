@@ -4219,6 +4219,9 @@
 				RelativePath="..\..\include\wx\msw\combobox.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\commandlinkbutton.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\control.h">
 			</File>
 			<File
@@ -5025,6 +5028,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\combobox.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\commandlinkbutton.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\control.h">

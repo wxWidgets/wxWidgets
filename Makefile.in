@@ -3575,9 +3575,13 @@ COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 	wx/unix/taskbarx11.h \
 	wx/generic/animate.h
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR)
-@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_MSW@	wx/msw/notifmsg.h wx/msw/sound.h wx/msw/taskbar.h \
-@COND_TOOLKIT_MSW@	wx/msw/joystick.h
+COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
+	wx/msw/commandlinkbutton.h \
+	wx/msw/notifmsg.h \
+	wx/msw/sound.h \
+	wx/msw/taskbar.h \
+	wx/msw/joystick.h
+@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/osx/dataview.h \
@@ -3605,8 +3609,12 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_OSX_IPHONE@	wx/generic/animate.h wx/osx/sound.h
 @COND_TOOLKIT_PM@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_PM@	wx/generic/animate.h wx/os2/joystick.h wx/os2/sound.h
-@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_WINCE@	wx/msw/notifmsg.h wx/msw/sound.h wx/msw/taskbar.h
+COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR =  \
+	wx/msw/commandlinkbutton.h \
+	wx/msw/notifmsg.h \
+	wx/msw/sound.h \
+	wx/msw/taskbar.h
+@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
@@ -3629,6 +3637,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/animate.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
+	wx/commandlinkbutton.h \
 	wx/dataview.h \
 	wx/datectrl.h \
 	wx/dateevt.h \
@@ -3675,6 +3684,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/animate.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
+	wx/commandlinkbutton.h \
 	wx/dataview.h \
 	wx/datectrl.h \
 	wx/dateevt.h \
@@ -5942,6 +5952,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
+	monodll_commandlinkbuttong.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_editlbox.o \
@@ -5971,6 +5982,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
+	monodll_commandlinkbuttong.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_editlbox.o \
@@ -7810,6 +7822,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
+	monolib_commandlinkbuttong.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_editlbox.o \
@@ -7839,6 +7852,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
+	monolib_commandlinkbuttong.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_editlbox.o \
@@ -11475,6 +11489,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
+	advdll_commandlinkbuttong.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_editlbox.o \
@@ -11504,6 +11519,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
+	advdll_commandlinkbuttong.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_editlbox.o \
@@ -11569,6 +11585,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
+	advlib_commandlinkbuttong.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_editlbox.o \
@@ -11598,6 +11615,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
+	advlib_commandlinkbuttong.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_editlbox.o \
@@ -12786,6 +12804,7 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
+	monodll_commandlinkbutton.o \
 	monodll_msw_notifmsg.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
@@ -12824,6 +12843,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
+	monodll_commandlinkbutton.o \
 	monodll_msw_notifmsg.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o
@@ -12971,6 +12991,7 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
+	monolib_commandlinkbutton.o \
 	monolib_msw_notifmsg.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
@@ -13009,6 +13030,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
+	monolib_commandlinkbutton.o \
 	monolib_msw_notifmsg.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o
@@ -13253,6 +13275,7 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
+	advdll_commandlinkbutton.o \
 	advdll_msw_notifmsg.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
@@ -13291,6 +13314,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
+	advdll_commandlinkbutton.o \
 	advdll_msw_notifmsg.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o
@@ -13341,6 +13365,7 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
+	advlib_commandlinkbutton.o \
 	advlib_msw_notifmsg.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
@@ -13379,6 +13404,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
+	advlib_commandlinkbutton.o \
 	advlib_msw_notifmsg.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o
@@ -19917,6 +19943,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@monodll_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
+
 @COND_USE_GUI_1@monodll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
 
@@ -20003,6 +20032,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
@@ -25119,6 +25154,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@monolib_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
+
 @COND_USE_GUI_1@monolib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
 
@@ -25205,6 +25243,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
@@ -34449,6 +34493,9 @@ advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
 advdll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+advdll_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
+
 advdll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
 
@@ -34535,6 +34582,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_WINCE@advdll_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
+
+@COND_TOOLKIT_MSW@advdll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE@advdll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
 
 @COND_TOOLKIT_MSW@advdll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
@@ -34782,6 +34835,9 @@ advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
 advlib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+advlib_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
+
 advlib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
 
@@ -34868,6 +34924,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_WINCE@advlib_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
+
+@COND_TOOLKIT_MSW@advlib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE@advlib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
 
 @COND_TOOLKIT_MSW@advlib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp

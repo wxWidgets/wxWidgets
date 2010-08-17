@@ -411,6 +411,7 @@ MSW:
 
 All (GUI):
 
+- Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - wxAUI: support auto-orientable toolbars (wsu).
 - Added wxDataViewCtrl::Set/GetCurrentItem().
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).

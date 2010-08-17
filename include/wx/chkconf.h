@@ -547,6 +547,14 @@
 #   endif
 #endif /* !defined(wxUSE_COMBOBOX) */
 
+#ifndef wxUSE_COMMANDLINKBUTTON
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COMMANDLINKBUTTON must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_COMMANDLINKBUTTON 0
+#   endif
+#endif /* !defined(wxUSE_COMMANDLINKBUTTON) */
+
 #ifndef wxUSE_COMBOCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_COMBOCTRL must be defined, please read comment near the top of this file."
@@ -1424,6 +1432,17 @@
 #        endif
 #    endif
 #endif /* wxUSE_BMPBUTTON */
+
+#if wxUSE_COMMANDLINKBUTTON
+#    if !wxUSE_BUTTON
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_COMMANDLINKBUTTON requires wxUSE_BUTTON"
+#        else
+#            undef wxUSE_BUTTON
+#            define wxUSE_BUTTON 1
+#        endif
+#    endif
+#endif /* wxUSE_COMMANDLINKBUTTON */
 
 /*
    wxUSE_BOOKCTRL should be only used if any of the controls deriving from it

@@ -352,6 +352,10 @@ SOURCE=..\..\src\msw\calctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\commandlinkbutton.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\datecontrols.cpp
 
 !IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
@@ -490,6 +494,10 @@ SOURCE=..\..\src\generic\bmpcboxg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\calctrlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\commandlinkbuttong.cpp
 # End Source File
 # Begin Source File
 
@@ -719,6 +727,10 @@ SOURCE=..\..\include\wx\msw\calctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\commandlinkbutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\datectrl.h
 # End Source File
 # Begin Source File
@@ -927,6 +939,10 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\calctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\commandlinkbutton.h
 # End Source File
 # Begin Source File
 

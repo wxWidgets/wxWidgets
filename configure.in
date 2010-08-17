@@ -877,6 +877,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_COLOURPICKERCTRL=no
     DEFAULT_wxUSE_COMBOBOX=no
     DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMMANDLINKBUTTON=no
     DEFAULT_wxUSE_DATAVIEWCTRL=no
     DEFAULT_wxUSE_DATEPICKCTRL=no
     DEFAULT_wxUSE_DETECT_SM=no
@@ -935,6 +936,7 @@ WX_ARG_FEATURE(collpane,    [  --enable-collpane       use wxCollapsiblePane cla
 WX_ARG_FEATURE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
+WX_ARG_FEATURE(commandlinkbutton, [  --enable-commandlinkbutton      use wxCommmandLinkButton class], wxUSE_COMMANDLINKBUTTON)
 WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
@@ -6801,6 +6803,11 @@ fi
 
 if test "$wxUSE_COMBOCTRL" = "yes"; then
   AC_DEFINE(wxUSE_COMBOCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_COMMANDLINKBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_COMMANDLINKBUTTON)
   USES_CONTROLS=1
 fi
 

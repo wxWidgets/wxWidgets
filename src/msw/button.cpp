@@ -588,6 +588,71 @@ void wxButton::SetLabel(const wxString& label)
 // size management including autosizing
 // ----------------------------------------------------------------------------
 
+void wxButton::AdjustForBitmapSize(wxSize &size) const
+{
+    if ( !m_imageData )
+        return;
+
+    // account for the bitmap size
+    const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
+    const wxDirection dirBmp = m_imageData->GetBitmapPosition();
+    if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
+    {
+        size.x += sizeBmp.x;
+        if ( sizeBmp.y > size.y )
+            size.y = sizeBmp.y;
+    }
+    else // bitmap on top/below the text
+    {
+        size.y += sizeBmp.y;
+        if ( sizeBmp.x > size.x )
+            size.x = sizeBmp.x;
+    }
+
+    // account for the user-specified margins
+    size += 2*m_imageData->GetBitmapMargins();
+
+    // and also for the margins we always add internally (unless we have no
+    // border at all in which case the button has exactly the same size as
+    // bitmap and so no margins should be used)
+    if ( !HasFlag(wxBORDER_NONE) )
+    {
+        int marginH = 0,
+            marginV = 0;
+#if wxUSE_UXTHEME
+        if ( wxUxThemeEngine::GetIfActive() )
+        {
+            wxUxThemeHandle theme(const_cast<wxButton *>(this), L"BUTTON");
+
+            MARGINS margins;
+            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                    BP_PUSHBUTTON,
+                                                    PBS_NORMAL,
+                                                    TMT_CONTENTMARGINS,
+                                                    NULL,
+                                                    &margins);
+
+            // XP doesn't draw themed buttons correctly when the client
+            // area is smaller than 8x8 - enforce this minimum size for
+            // small bitmaps
+            size.IncTo(wxSize(8, 8));
+
+            marginH = margins.cxLeftWidth + margins.cxRightWidth
+                        + 2*XP_BUTTON_EXTRA_MARGIN;
+            marginV = margins.cyTopHeight + margins.cyBottomHeight
+                        + 2*XP_BUTTON_EXTRA_MARGIN;
+        }
+        else
+#endif // wxUSE_UXTHEME
+        {
+            marginH =
+            marginV = OD_BUTTON_MARGIN;
+        }
+
+        size.IncBy(marginH, marginV);
+    }
+}
+
 wxSize wxButton::DoGetBestSize() const
 {
     wxSize size;
@@ -606,64 +671,7 @@ wxSize wxButton::DoGetBestSize() const
 
     if ( m_imageData )
     {
-        // account for the bitmap size
-        const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
-        const wxDirection dirBmp = m_imageData->GetBitmapPosition();
-        if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
-        {
-            size.x += sizeBmp.x;
-            if ( sizeBmp.y > size.y )
-                size.y = sizeBmp.y;
-        }
-        else // bitmap on top/below the text
-        {
-            size.y += sizeBmp.y;
-            if ( sizeBmp.x > size.x )
-                size.x = sizeBmp.x;
-        }
-
-        // account for the user-specified margins
-        size += 2*m_imageData->GetBitmapMargins();
-
-        // and also for the margins we always add internally (unless we have no
-        // border at all in which case the button has exactly the same size as
-        // bitmap and so no margins should be used)
-        if ( !HasFlag(wxBORDER_NONE) )
-        {
-            int marginH = 0,
-                marginV = 0;
-#if wxUSE_UXTHEME
-            if ( wxUxThemeEngine::GetIfActive() )
-            {
-                wxUxThemeHandle theme(const_cast<wxButton *>(this), L"BUTTON");
-
-                MARGINS margins;
-                wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
-                                                        BP_PUSHBUTTON,
-                                                        PBS_NORMAL,
-                                                        TMT_CONTENTMARGINS,
-                                                        NULL,
-                                                        &margins);
-
-                // XP doesn't draw themed buttons correctly when the client
-                // area is smaller than 8x8 - enforce this minimum size for
-                // small bitmaps
-                size.IncTo(wxSize(8, 8));
-
-                marginH = margins.cxLeftWidth + margins.cxRightWidth
-                            + 2*XP_BUTTON_EXTRA_MARGIN;
-                marginV = margins.cyTopHeight + margins.cyBottomHeight
-                            + 2*XP_BUTTON_EXTRA_MARGIN;
-            }
-            else
-#endif // wxUSE_UXTHEME
-            {
-                marginH =
-                marginV = OD_BUTTON_MARGIN;
-            }
-
-            size.IncBy(marginH, marginV);
-        }
+        AdjustForBitmapSize(size);
 
         CacheBestSize(size);
     }

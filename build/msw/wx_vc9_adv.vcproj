@@ -876,6 +876,10 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\commandlinkbutton.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\datecontrols.cpp"
 				>
 				<FileConfiguration
@@ -970,6 +974,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\calctrlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\commandlinkbuttong.cpp"
 				>
 			</File>
 			<File
@@ -1176,6 +1184,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\calctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\commandlinkbutton.h"
 				>
 			</File>
 			<File
@@ -1394,6 +1406,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\calctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\commandlinkbutton.h"
 				>
 			</File>
 			<File

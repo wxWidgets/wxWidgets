@@ -1818,6 +1818,7 @@ Optional Features:
   --enable-colourpicker   use wxColourPickerCtrl class
   --enable-combobox       use wxComboBox class
   --enable-comboctrl      use wxComboCtrl class
+  --enable-commandlinkbutton      use wxCommmandLinkButton class
   --enable-dataviewctrl   use wxDataViewCtrl class
   --enable-datepick       use wxDatePickerCtrl class
   --enable-detect_sm      use code to detect X11 session manager
@@ -9738,6 +9739,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_COLOURPICKERCTRL=no
     DEFAULT_wxUSE_COMBOBOX=no
     DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMMANDLINKBUTTON=no
     DEFAULT_wxUSE_DATAVIEWCTRL=no
     DEFAULT_wxUSE_DATEPICKCTRL=no
     DEFAULT_wxUSE_DETECT_SM=no
@@ -10435,6 +10437,50 @@ fi
             fi
           else
             result=$wxUSE_COMBOCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-commandlinkbutton" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-commandlinkbutton... $ECHO_C" >&6; }
+          # Check whether --enable-commandlinkbutton was given.
+if test "${enable_commandlinkbutton+set}" = set; then
+  enableval=$enable_commandlinkbutton;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_commandlinkbutton='wxUSE_COMMANDLINKBUTTON=yes'
+                          else
+                            wx_cv_use_commandlinkbutton='wxUSE_COMMANDLINKBUTTON=no'
+                          fi
+
+else
+
+                          wx_cv_use_commandlinkbutton='wxUSE_COMMANDLINKBUTTON=${'DEFAULT_wxUSE_COMMANDLINKBUTTON":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_commandlinkbutton"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_COMMANDLINKBUTTON = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_COMMANDLINKBUTTON
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -46885,6 +46931,14 @@ fi
 if test "$wxUSE_COMBOCTRL" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_COMBOCTRL 1
+_ACEOF
+
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_COMMANDLINKBUTTON" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_COMMANDLINKBUTTON 1
 _ACEOF
 
   USES_CONTROLS=1

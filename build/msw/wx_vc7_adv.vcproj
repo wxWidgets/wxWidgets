@@ -635,6 +635,9 @@
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\commandlinkbutton.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\datecontrols.cpp">
 				<FileConfiguration
 					Name="Universal Debug|Win32"
@@ -706,6 +709,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\calctrlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\commandlinkbuttong.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\datavgen.cpp">
@@ -865,6 +871,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\calctrl.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\commandlinkbutton.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\datectrl.h">
@@ -1035,6 +1044,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\calctrl.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\commandlinkbutton.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dataview.h">

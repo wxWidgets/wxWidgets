@@ -745,6 +745,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_editlbox.obj &
@@ -764,6 +765,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
+	$(OBJS)\monodll_commandlinkbutton.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -784,6 +786,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_editlbox.obj &
@@ -803,6 +806,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
+	$(OBJS)\monodll_commandlinkbutton.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -1465,6 +1469,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_editlbox.obj &
@@ -1484,6 +1489,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
+	$(OBJS)\monolib_commandlinkbutton.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -1504,6 +1510,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_editlbox.obj &
@@ -1523,6 +1530,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
+	$(OBJS)\monolib_commandlinkbutton.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -2617,6 +2625,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
+	$(OBJS)\advdll_commandlinkbuttong.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_editlbox.obj &
@@ -2636,6 +2645,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
+	$(OBJS)\advdll_commandlinkbutton.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2656,6 +2666,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
+	$(OBJS)\advdll_commandlinkbuttong.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_editlbox.obj &
@@ -2675,6 +2686,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
+	$(OBJS)\advdll_commandlinkbutton.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2701,6 +2713,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
+	$(OBJS)\advlib_commandlinkbuttong.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_editlbox.obj &
@@ -2720,6 +2733,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
+	$(OBJS)\advlib_commandlinkbutton.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -2740,6 +2754,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
+	$(OBJS)\advlib_commandlinkbuttong.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_editlbox.obj &
@@ -2759,6 +2774,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
+	$(OBJS)\advlib_commandlinkbutton.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -8180,6 +8196,11 @@ $(OBJS)\monodll_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8271,6 +8292,11 @@ $(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10387,6 +10413,11 @@ $(OBJS)\monolib_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10478,6 +10509,11 @@ $(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -13895,6 +13931,9 @@ $(OBJS)\advdll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 $(OBJS)\advdll_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -13952,6 +13991,9 @@ $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 $(OBJS)\advdll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_notifmsg.obj :  .AUTODEPEND ..\..\src\msw\notifmsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14004,6 +14046,9 @@ $(OBJS)\advlib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
@@ -14061,6 +14106,9 @@ $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_notifmsg.obj :  .AUTODEPEND ..\..\src\msw\notifmsg.cpp

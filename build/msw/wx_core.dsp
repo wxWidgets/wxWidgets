@@ -4835,6 +4835,10 @@ SOURCE=..\..\include\wx\msw\combobox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\commandlinkbutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\control.h
 # End Source File
 # Begin Source File
@@ -5891,6 +5895,10 @@ SOURCE=..\..\include\wx\combo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\commandlinkbutton.h
 # End Source File
 # Begin Source File
 

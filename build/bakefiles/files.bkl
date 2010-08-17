@@ -2899,6 +2899,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp
+    src/generic/commandlinkbuttong.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
     src/generic/editlbox.cpp
@@ -2923,6 +2924,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/animate.h
     wx/bmpcbox.h
     wx/calctrl.h
+    wx/commandlinkbutton.h
     wx/dataview.h
     wx/datectrl.h
     wx/dateevt.h
@@ -2966,11 +2968,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
+    src/msw/commandlinkbutton.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
+    wx/msw/commandlinkbutton.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
