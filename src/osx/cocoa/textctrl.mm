@@ -708,6 +708,12 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // FIXME: How can we remove the native control's border?
             // setBordered is separate from the text ctrl's border.
         }
+        
+        NSTextFieldCell* cell = [v cell];
+        [cell setScrollable:YES];
+        // TODO: Remove if we definitely are sure, it's not needed
+        // as setting scrolling to yes, should turn off any wrapping
+        // [cell setLineBreakMode:NSLineBreakByClipping]; 
 
         [v setBezeled:NO];
         [v setBordered:NO];
