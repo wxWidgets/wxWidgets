@@ -387,7 +387,6 @@ dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
-DEFAULT_wxUSE_UIACTIONSIMULATOR=no
 
 dnl automatic features
 DEFAULT_wxUSE_UNICODE_UTF8=auto
