@@ -2578,19 +2578,35 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
         }
 
-        // according to HIG, in explicit apply windows the order is:
-        // [ Help                     Apply   Cancel   OK ]
         if (m_buttonApply)
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+        {
+            // according to HIG, in explicit apply windows the order is:
+            // [ Help                     Apply   Cancel   OK ]
 
-        if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
-            // Cancel or help should be default
-            // m_buttonCancel->SetDefaultButton();
+            Add((wxWindow*)m_buttonApply,
+                0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonCancel)
+                Add((wxWindow*)m_buttonCancel,
+                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonAffirmative)
+                Add((wxWindow*)m_buttonAffirmative,
+                     0, wxALIGN_CENTRE | wxLEFT, 6);
+        }
+        else
+        {
+            // without an Apply button, have the buttons representing
+            // affirmative and negative close to each other.
+
+            if (m_buttonAffirmative)
+                Add((wxWindow*)m_buttonAffirmative,
+                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonCancel)
+                Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT, 6);
         }
 
-        if (m_buttonAffirmative)
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
 #elif defined(__WXMSW__)
         // Windows
 
