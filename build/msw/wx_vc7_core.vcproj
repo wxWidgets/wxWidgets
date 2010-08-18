@@ -1901,6 +1901,21 @@
 				RelativePath="..\..\src\msw\printwin.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\progdlg.cpp">
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\radiobox.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -4472,6 +4487,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\printwin.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\progdlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\radiobox.h">

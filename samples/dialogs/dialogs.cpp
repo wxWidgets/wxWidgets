@@ -1756,25 +1756,26 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
     static const int max = 100;
 
-    wxProgressDialog dialog(wxT("Progress dialog example"),
-                            wxT("An informative message"),
+    wxProgressDialog dialog("Progress dialog example",
+                            // "Reserve" enough space for the multiline
+                            // messages below, we'll change it anyhow
+                            // immediately in the loop below
+                            wxString(' ', 100) + "\n\n\n\n",
                             max,    // range
                             this,   // parent
                             wxPD_CAN_ABORT |
                             wxPD_CAN_SKIP |
                             wxPD_APP_MODAL |
-                            // wxPD_AUTO_HIDE | -- try this as well
+                            //wxPD_AUTO_HIDE | // -- try this as well
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |
-                            wxPD_REMAINING_TIME
-                            | wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
+                            wxPD_REMAINING_TIME |
+                            wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
                             );
 
     bool cont = true;
     for ( int i = 0; i <= max; i++ )
     {
-        wxMilliSleep(200);
-
         wxString msg;
 
         // test both modes of wxProgressDialog behaviour: start in
@@ -1783,15 +1784,25 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
         if ( i == max )
         {
-            msg = wxT("That's all, folks!");
+            msg = "That's all, folks!\n"
+                  "\n"
+                  "Nothing to see here any more.";
         }
         else if ( !determinate )
         {
-            msg = wxT("Testing indeterminate mode");
+            msg = "Testing indeterminate mode\n"
+                  "\n"
+                  "This mode allows you to show to the user\n"
+                  "that something is going on even if you don't know\n"
+                  "when exactly will you finish.";
         }
         else if ( determinate )
         {
-            msg = wxT("Now in standard determinate mode");
+            msg = "Now in standard determinate mode\n"
+                  "\n"
+                  "This is the standard usage mode in which you\n"
+                  "update the dialog after performing each new step of work.\n"
+                  "It requires knowing the total number of steps in advance.";
         }
 
         // will be set to true if "Skip" button was pressed
@@ -1807,7 +1818,12 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
         // each skip will move progress about quarter forward
         if ( skip )
+        {
             i += max/4;
+
+            if ( i >= 100 )
+                i = 99;
+        }
 
         if ( !cont )
         {
@@ -1819,6 +1835,8 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
             cont = true;
             dialog.Resume();
         }
+
+        wxMilliSleep(200);
     }
 
     if ( !cont )

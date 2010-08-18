@@ -403,13 +403,6 @@ Major new features in this release
 2.9.2:
 ------
 
-MSW:
-
-- Fix Cygwin 1.7 build (David Gangola).
-- Native wxHyperlinkCtrl implementation (Rickard Westerlund, GSoC 2010 project).
-- Allow using wxDC::DrawText() with multiline texts.
-- Fix wxBitmapButton best size determination broken in 2.9.1.
-
 All (GUI):
 
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
@@ -419,6 +412,15 @@ All (GUI):
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
+
+MSW:
+
+- Native implementation of wxHyperlinkCtrl and wxProgressDialog under modern
+  Windows versions (Rickard Westerlund, GSoC 2010 project).
+- Fix Cygwin 1.7 build (David Gangola).
+- Allow using wxDC::DrawText() with multiline texts.
+- Fix wxBitmapButton best size determination broken in 2.9.1.
+
 
 
 2.9.1:
