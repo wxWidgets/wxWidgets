@@ -561,7 +561,7 @@ void wxProgressDialog::SetTitle(const wxString& title)
     }
 #endif // wxHAS_MSW_TASKDIALOG
 
-    return wxGenericProgressDialog::SetTitle(title);
+    wxGenericProgressDialog::SetTitle(title);
 }
 
 wxString wxProgressDialog::GetTitle() const
