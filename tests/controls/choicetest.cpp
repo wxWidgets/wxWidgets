@@ -64,7 +64,7 @@ void ChoiceTestCase::tearDown()
 
 void ChoiceTestCase::Sort()
 {
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXOSX__)
     wxDELETE(m_choice);
     m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY, 
                             wxDefaultPosition, wxDefaultSize, 0, 0,

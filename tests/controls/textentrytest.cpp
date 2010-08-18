@@ -208,6 +208,7 @@ void TextEntryTestCase::Hint()
 
 void TextEntryTestCase::CopyPaste()
 {
+#ifndef __WXOSX__
     wxTextEntry * const entry = GetTestEntry();
 
     entry->AppendText("sometext");
@@ -222,6 +223,7 @@ void TextEntryTestCase::CopyPaste()
         entry->Paste();
         CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
     }
+#endif
 }
 
 void TextEntryTestCase::UndoRedo()

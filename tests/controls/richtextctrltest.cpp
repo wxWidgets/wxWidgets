@@ -262,6 +262,7 @@ void RichTextCtrlTestCase::TextEvent()
 
 void RichTextCtrlTestCase::CutCopyPaste()
 {
+#ifndef __WXOSX__
     m_rich->AppendText("sometext");
     m_rich->SelectAll();
 
@@ -285,6 +286,7 @@ void RichTextCtrlTestCase::CutCopyPaste()
         m_rich->Paste();
         CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
     }
+#endif
 }
 
 void RichTextCtrlTestCase::UndoRedo()

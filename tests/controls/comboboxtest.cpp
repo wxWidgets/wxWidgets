@@ -143,7 +143,7 @@ void ComboBoxTestCase::PopDismiss()
 
 void ComboBoxTestCase::Sort()
 {
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXOSX__)
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "", 
                              wxDefaultPosition, wxDefaultSize, 0, NULL, 
                              wxCB_SORT);
@@ -170,6 +170,7 @@ void ComboBoxTestCase::Sort()
 
 void ComboBoxTestCase::ReadOnly()
 {
+#ifndef __WXOSX__
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
@@ -190,6 +191,7 @@ void ComboBoxTestCase::ReadOnly()
     m_combo->SetValue("ITEM 2");
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
+#endif
 }
 
 #endif //wxUSE_COMBOBOX

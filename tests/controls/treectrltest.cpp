@@ -526,7 +526,7 @@ void TreeCtrlTestCase::AssignImageList()
 
 void TreeCtrlTestCase::Focus()
 {
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXOSX__)
     m_tree->SetFocusedItem(m_child1);
 
     CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetFocusedItem());

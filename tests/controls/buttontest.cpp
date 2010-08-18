@@ -168,7 +168,7 @@ void ButtonTestCase::BitmapMargins()
 
 void ButtonTestCase::Bitmap()
 {
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXOSX__)
     //We start with no bitmaps
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 

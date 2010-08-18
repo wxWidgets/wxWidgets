@@ -138,6 +138,7 @@ void WindowTestCase::KeyEvent()
 
 void WindowTestCase::FocusEvent()
 {
+#ifndef __WXOSX__
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -155,6 +156,7 @@ void WindowTestCase::FocusEvent()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_KILL_FOCUS));
     CPPUNIT_ASSERT(!m_window->HasFocus());
+#endif
 }
 
 void WindowTestCase::Mouse()
@@ -284,6 +286,7 @@ void WindowTestCase::Children()
 
 void WindowTestCase::Focus()
 {
+#ifndef __WXOSX__
     CPPUNIT_ASSERT(!m_window->HasFocus());
 
     if ( m_window->AcceptsFocus() )
@@ -300,6 +303,7 @@ void WindowTestCase::Focus()
         m_window->SetFocusFromKbd();
         CPPUNIT_ASSERT(m_window->HasFocus());
     }
+#endif
 }
 
 void WindowTestCase::Positioning()

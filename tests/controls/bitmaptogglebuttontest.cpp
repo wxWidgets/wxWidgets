@@ -86,6 +86,8 @@ void BitmapToggleButtonTestCase::Click()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
     CPPUNIT_ASSERT(m_button->GetValue());
 
+    wxMilliSleep(1000);
+
     sim.MouseClick();
     wxYield();
 

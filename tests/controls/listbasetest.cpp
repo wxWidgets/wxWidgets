@@ -253,6 +253,7 @@ void ListBaseTestCase::KeyDown()
 
 void ListBaseTestCase::DeleteItems()
 {
+#ifndef __WXOSX__
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -289,6 +290,7 @@ void ListBaseTestCase::DeleteItems()
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+#endif
 }
 
 void ListBaseTestCase::InsertItem()

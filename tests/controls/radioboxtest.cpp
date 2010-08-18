@@ -113,6 +113,7 @@ void RadioBoxTestCase::RowColCount()
 
 void RadioBoxTestCase::Enable()
 {
+#ifndef __WXOSX__
     m_radio->Enable(false);
 
     CPPUNIT_ASSERT(!m_radio->IsItemEnabled(0));
@@ -134,6 +135,7 @@ void RadioBoxTestCase::Enable()
     CPPUNIT_ASSERT(!m_radio->IsItemEnabled(0));
     CPPUNIT_ASSERT(m_radio->IsItemEnabled(1));
     CPPUNIT_ASSERT(m_radio->IsItemEnabled(2));
+#endif
 }
 
 void RadioBoxTestCase::Show()

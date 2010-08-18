@@ -205,6 +205,7 @@ void TextCtrlTestCase::MaxLength()
 
 void TextCtrlTestCase::StreamInput()
 {
+#ifndef __WXOSX__
     *m_text << "stringinput"
             << 10
             << 1000L
@@ -233,6 +234,7 @@ void TextCtrlTestCase::StreamInput()
 
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
+#endif
 #endif
 }
 
@@ -313,6 +315,7 @@ void TextCtrlTestCase::Url()
 
 void TextCtrlTestCase::Style()
 {
+#ifndef __WXOSX__
     delete m_text;
     //We need wxTE_RICH under windows for style support
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
@@ -364,10 +367,12 @@ void TextCtrlTestCase::Style()
         CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
         CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
     }
+#endif
 }
 
 void TextCtrlTestCase::Lines()
 {
+#ifndef __WXOSX__
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
                             wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE | wxTE_DONTWRAP);
@@ -386,6 +391,7 @@ void TextCtrlTestCase::Lines()
     CPPUNIT_ASSERT_EQUAL(5, m_text->GetNumberOfLines());
     CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
     CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
+#endif
 }
 
 void TextCtrlTestCase::LogTextCtrl()
