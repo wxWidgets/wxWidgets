@@ -132,7 +132,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericCommandLinkButton);
 };
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/commandlinkbutton.h"
 #else
     class WXDLLIMPEXP_ADV wxCommandLinkButton : public wxGenericCommandLinkButton
