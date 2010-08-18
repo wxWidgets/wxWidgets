@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_HYPERLINKCTRL
+#if wxUSE_HYPERLINKCTRL && wxUSE_UNICODE
 
 #include "wx/hyperlink.h"
 
@@ -169,4 +169,4 @@ bool wxHyperlinkCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
    return wxGenericHyperlinkCtrl::MSWOnNotify(idCtrl, lParam, result);
 }
 
-#endif // wxUSE_HYPERLINKCTRL
+#endif // wxUSE_HYPERLINKCTRL && wxUSE_UNICODE
