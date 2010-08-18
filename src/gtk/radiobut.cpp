@@ -123,8 +123,6 @@ void wxRadioButton::SetValue( bool val )
         // should give an assert
         // RL - No it shouldn't.  A wxGenericValidator might try to set it
         //      as FALSE.  Failing silently is probably TRTTD here.
-        // RR - MSW actually unchecks the radio button so do this here, too
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widget), FALSE );
     }
 
     g_signal_handlers_unblock_by_func(
