@@ -100,6 +100,7 @@ void ListBoxTestCase::tearDown()
 
 void ListBoxTestCase::Sort()
 {
+#ifndef __WXGTK__
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY, 
                             wxDefaultPosition, wxDefaultSize, 0, 0,
@@ -125,6 +126,7 @@ void ListBoxTestCase::Sort()
     m_list->Append("a");
 
     CPPUNIT_ASSERT_EQUAL("a", m_list->GetString(0));
+#endif
 }
 
 void ListBoxTestCase::MultipleSelect()
@@ -243,7 +245,7 @@ void ListBoxTestCase::ClickNotOnItem()
 
 void ListBoxTestCase::HitTest()
 {
-#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXOSX__)
     wxArrayString testitems;
     testitems.Add("item 0");
     testitems.Add("item 1");

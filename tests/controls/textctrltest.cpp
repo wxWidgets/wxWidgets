@@ -289,8 +289,7 @@ void TextCtrlTestCase::ProcessEnter()
 
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
                             wxDefaultPosition, wxDefaultSize,
@@ -309,7 +308,6 @@ void TextCtrlTestCase::Url()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
-#endif
 #endif
 }
 

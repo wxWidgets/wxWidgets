@@ -327,7 +327,7 @@ void TreeCtrlTestCase::KeyDown()
 
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -365,7 +365,7 @@ void TreeCtrlTestCase::CollapseExpandEvents()
 
 void TreeCtrlTestCase::SelectionChange()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -391,7 +391,7 @@ void TreeCtrlTestCase::SelectionChange()
     sim.MouseClick();
     wxYield();
 
-    sim.MouseMove(point1);
+    sim.MouseMove(point2);
     wxYield();
 
     sim.MouseClick();
@@ -526,6 +526,7 @@ void TreeCtrlTestCase::AssignImageList()
 
 void TreeCtrlTestCase::Focus()
 {
+#ifndef __WXGTK__
     m_tree->SetFocusedItem(m_child1);
 
     CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetFocusedItem());
@@ -533,6 +534,7 @@ void TreeCtrlTestCase::Focus()
     m_tree->ClearFocusedItem();
 
     CPPUNIT_ASSERT(!m_tree->GetFocusedItem());
+#endif
 }
 
 void TreeCtrlTestCase::Bold()
@@ -587,7 +589,7 @@ void TreeCtrlTestCase::Sort()
 
 void TreeCtrlTestCase::KeyNavigation()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxUIActionSimulator sim;
 
     m_tree->CollapseAll();

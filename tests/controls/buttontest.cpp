@@ -168,6 +168,7 @@ void ButtonTestCase::BitmapMargins()
 
 void ButtonTestCase::Bitmap()
 {
+#ifndef __WXGTK__
     //We start with no bitmaps
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
@@ -179,6 +180,7 @@ void ButtonTestCase::Bitmap()
     CPPUNIT_ASSERT(m_button->GetBitmapPressed().IsOk());
     CPPUNIT_ASSERT(m_button->GetBitmapCurrent().IsOk());
     CPPUNIT_ASSERT(m_button->GetBitmapFocus().IsOk());
+#endif
 }
 
 #endif //wxUSE_BUTTON

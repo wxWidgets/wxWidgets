@@ -61,7 +61,7 @@ void FrameTestCase::tearDown()
 
 void FrameTestCase::Iconize()
 {
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#ifdef __WXMSW__
     wxTestableFrame* testframe = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 

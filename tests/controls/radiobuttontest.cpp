@@ -69,8 +69,7 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
-//GTK does not support selecting a single radio button
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) 
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 

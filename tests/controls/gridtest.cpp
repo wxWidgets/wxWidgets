@@ -238,7 +238,7 @@ void GridTestCase::CellSelect()
 
 void GridTestCase::LabelClick()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -292,7 +292,7 @@ void GridTestCase::LabelClick()
 
 void GridTestCase::SortClick()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     m_grid->SetSortingColumn(0);
 
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
@@ -319,7 +319,7 @@ void GridTestCase::SortClick()
 
 void GridTestCase::Size()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 

@@ -90,6 +90,7 @@ void RadioBoxTestCase::FindString()
 
 void RadioBoxTestCase::RowColCount()
 {
+#ifndef __WXGTK__
     wxArrayString choices;
     choices.push_back("item 0");
     choices.push_back("item 1");
@@ -107,6 +108,7 @@ void RadioBoxTestCase::RowColCount()
 
     CPPUNIT_ASSERT_EQUAL(3, m_radio->GetColumnCount());
     CPPUNIT_ASSERT_EQUAL(1, m_radio->GetRowCount());
+#endif
 }
 
 void RadioBoxTestCase::Enable()

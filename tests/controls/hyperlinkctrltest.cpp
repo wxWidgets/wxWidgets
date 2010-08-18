@@ -67,6 +67,7 @@ void HyperlinkCtrlTestCase::tearDown()
 
 void HyperlinkCtrlTestCase::Colour()
 {
+#ifndef __WXGTK__
     CPPUNIT_ASSERT(m_hyperlink->GetHoverColour().IsOk());
     CPPUNIT_ASSERT(m_hyperlink->GetNormalColour().IsOk());
     CPPUNIT_ASSERT(m_hyperlink->GetVisitedColour().IsOk());
@@ -78,6 +79,7 @@ void HyperlinkCtrlTestCase::Colour()
     CPPUNIT_ASSERT_EQUAL(*wxGREEN, m_hyperlink->GetHoverColour());
     CPPUNIT_ASSERT_EQUAL(*wxRED, m_hyperlink->GetNormalColour());
     CPPUNIT_ASSERT_EQUAL(*wxBLUE, m_hyperlink->GetVisitedColour());
+#endif
 }
 
 void HyperlinkCtrlTestCase::Url()

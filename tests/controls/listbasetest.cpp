@@ -175,7 +175,7 @@ void ListBaseTestCase::ChangeMode()
 
 void ListBaseTestCase::ItemClick()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -231,7 +231,7 @@ void ListBaseTestCase::ItemClick()
 
 void ListBaseTestCase::KeyDown()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 

@@ -69,7 +69,7 @@ void SpinCtrlDoubleTestCase::tearDown()
 
 void SpinCtrlDoubleTestCase::Arrows()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#ifndef __WXGTK__
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -140,7 +140,7 @@ void SpinCtrlDoubleTestCase::Range()
 
 void SpinCtrlDoubleTestCase::Value()
 {
-    //We set a smaller increment than the default of 1
+    m_spin->SetDigits(2);
     m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
@@ -156,7 +156,7 @@ void SpinCtrlDoubleTestCase::Value()
 
 void SpinCtrlDoubleTestCase::Increment()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetIncrement());
 
     m_spin->SetIncrement(0.1);

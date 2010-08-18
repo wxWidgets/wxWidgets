@@ -143,6 +143,7 @@ void ComboBoxTestCase::PopDismiss()
 
 void ComboBoxTestCase::Sort()
 {
+#ifndef __WXGTK__
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "", 
                              wxDefaultPosition, wxDefaultSize, 0, NULL, 
                              wxCB_SORT);
@@ -164,6 +165,7 @@ void ComboBoxTestCase::Sort()
     m_combo->Append("a");
 
     CPPUNIT_ASSERT_EQUAL("a", m_combo->GetString(0));
+#endif
 }
 
 void ComboBoxTestCase::ReadOnly()
