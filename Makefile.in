@@ -2969,6 +2969,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/radiobut.h \
 	wx/msw/region.h \
 	wx/msw/rcdefs.h \
+	wx/msw/richmsgdlg.h \
 	wx/msw/scrolbar.h \
 	wx/msw/setup0.h \
 	wx/msw/slider.h \
@@ -3491,6 +3492,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/radiobut.h \
 	wx/msw/region.h \
 	wx/msw/rcdefs.h \
+	wx/msw/richmsgdlg.h \
 	wx/msw/scrolbar.h \
 	wx/msw/setup0.h \
 	wx/msw/slider.h \
@@ -3846,6 +3848,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/prntdlgg.h \
 	wx/generic/printps.h \
 	wx/generic/progdlgg.h \
+	wx/generic/richmsgdlgg.h \
 	wx/generic/scrolwin.h \
 	wx/generic/spinctlg.h \
 	wx/generic/splitter.h \
@@ -3877,6 +3880,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/radiobut.h \
 	wx/rearrangectrl.h \
 	wx/renderer.h \
+	wx/richmsgdlg.h \
 	wx/scrolbar.h \
 	wx/scrolbar.h \
 	wx/scrolwin.h \
@@ -4549,11 +4553,13 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_generic_infobar.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
+	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
+	monodll_richmsgdlgg.o \
 	monodll_scrlwing.o \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
@@ -4584,7 +4590,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_fontpickerg.o \
 	monodll_generic_listctrl.o \
 	monodll_mdig.o \
-	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
 	monodll_univ_bmpbuttn.o \
 	monodll_univ_button.o \
@@ -4747,11 +4752,13 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_generic_infobar.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
+	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
+	monodll_richmsgdlgg.o \
 	monodll_scrlwing.o \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
@@ -5160,7 +5167,6 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_fontpickerg.o \
 	monodll_generic_imaglist.o \
 	monodll_generic_listctrl.o \
-	monodll_msgdlgg.o \
 	monodll_paletteg.o \
 	monodll_regiong.o \
 	monodll_generic_statusbr.o
@@ -5177,7 +5183,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_fontdlgg.o \
 	monodll_fontpickerg.o \
 	monodll_generic_listctrl.o \
-	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
 	monodll_gtk1_bmpbuttn.o \
@@ -5219,7 +5224,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
 	monodll_fontdlgg.o \
-	monodll_msgdlgg.o \
 	monodll_artgtk.o \
 	monodll_gtk_bmpbuttn.o \
 	monodll_gtk_button.o \
@@ -5375,6 +5379,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
+	monodll_richmsgdlg.o \
 	monodll_msw_scrolbar.o \
 	monodll_msw_slider.o \
 	monodll_msw_spinbutt.o \
@@ -5610,6 +5615,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
+	monodll_richmsgdlg.o \
 	monodll_msw_scrolbar.o \
 	monodll_msw_slider.o \
 	monodll_msw_spinbutt.o \
@@ -6419,11 +6425,13 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_generic_infobar.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
+	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
+	monolib_richmsgdlgg.o \
 	monolib_scrlwing.o \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
@@ -6454,7 +6462,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_fontpickerg.o \
 	monolib_generic_listctrl.o \
 	monolib_mdig.o \
-	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
 	monolib_univ_bmpbuttn.o \
 	monolib_univ_button.o \
@@ -6617,11 +6624,13 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_generic_infobar.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
+	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
+	monolib_richmsgdlgg.o \
 	monolib_scrlwing.o \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
@@ -7030,7 +7039,6 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_fontpickerg.o \
 	monolib_generic_imaglist.o \
 	monolib_generic_listctrl.o \
-	monolib_msgdlgg.o \
 	monolib_paletteg.o \
 	monolib_regiong.o \
 	monolib_generic_statusbr.o
@@ -7047,7 +7055,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_fontdlgg.o \
 	monolib_fontpickerg.o \
 	monolib_generic_listctrl.o \
-	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
 	monolib_gtk1_bmpbuttn.o \
@@ -7089,7 +7096,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
 	monolib_fontdlgg.o \
-	monolib_msgdlgg.o \
 	monolib_artgtk.o \
 	monolib_gtk_bmpbuttn.o \
 	monolib_gtk_button.o \
@@ -7245,6 +7251,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
+	monolib_richmsgdlg.o \
 	monolib_msw_scrolbar.o \
 	monolib_msw_slider.o \
 	monolib_msw_spinbutt.o \
@@ -7480,6 +7487,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
+	monolib_richmsgdlg.o \
 	monolib_msw_scrolbar.o \
 	monolib_msw_slider.o \
 	monolib_msw_spinbutt.o \
@@ -8476,11 +8484,13 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_generic_infobar.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
+	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
+	coredll_richmsgdlgg.o \
 	coredll_scrlwing.o \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
@@ -8511,7 +8521,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_fontpickerg.o \
 	coredll_generic_listctrl.o \
 	coredll_mdig.o \
-	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
 	coredll_univ_bmpbuttn.o \
 	coredll_univ_button.o \
@@ -8674,11 +8683,13 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_generic_infobar.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
+	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
+	coredll_richmsgdlgg.o \
 	coredll_scrlwing.o \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
@@ -9087,7 +9098,6 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_fontpickerg.o \
 	coredll_generic_imaglist.o \
 	coredll_generic_listctrl.o \
-	coredll_msgdlgg.o \
 	coredll_paletteg.o \
 	coredll_regiong.o \
 	coredll_generic_statusbr.o
@@ -9104,7 +9114,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_fontdlgg.o \
 	coredll_fontpickerg.o \
 	coredll_generic_listctrl.o \
-	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
 	coredll_gtk1_bmpbuttn.o \
@@ -9146,7 +9155,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
 	coredll_fontdlgg.o \
-	coredll_msgdlgg.o \
 	coredll_artgtk.o \
 	coredll_gtk_bmpbuttn.o \
 	coredll_gtk_button.o \
@@ -9302,6 +9310,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
+	coredll_richmsgdlg.o \
 	coredll_msw_scrolbar.o \
 	coredll_msw_slider.o \
 	coredll_msw_spinbutt.o \
@@ -9537,6 +9546,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
+	coredll_richmsgdlg.o \
 	coredll_msw_scrolbar.o \
 	coredll_msw_slider.o \
 	coredll_msw_spinbutt.o \
@@ -10017,11 +10027,13 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_generic_infobar.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
+	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
+	corelib_richmsgdlgg.o \
 	corelib_scrlwing.o \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
@@ -10052,7 +10064,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_fontpickerg.o \
 	corelib_generic_listctrl.o \
 	corelib_mdig.o \
-	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
 	corelib_univ_bmpbuttn.o \
 	corelib_univ_button.o \
@@ -10215,11 +10226,13 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_generic_infobar.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
+	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
+	corelib_richmsgdlgg.o \
 	corelib_scrlwing.o \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
@@ -10628,7 +10641,6 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_fontpickerg.o \
 	corelib_generic_imaglist.o \
 	corelib_generic_listctrl.o \
-	corelib_msgdlgg.o \
 	corelib_paletteg.o \
 	corelib_regiong.o \
 	corelib_generic_statusbr.o
@@ -10645,7 +10657,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_fontdlgg.o \
 	corelib_fontpickerg.o \
 	corelib_generic_listctrl.o \
-	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
 	corelib_gtk1_bmpbuttn.o \
@@ -10687,7 +10698,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
 	corelib_fontdlgg.o \
-	corelib_msgdlgg.o \
 	corelib_artgtk.o \
 	corelib_gtk_bmpbuttn.o \
 	corelib_gtk_button.o \
@@ -10843,6 +10853,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
+	corelib_richmsgdlg.o \
 	corelib_msw_scrolbar.o \
 	corelib_msw_slider.o \
 	corelib_msw_spinbutt.o \
@@ -11078,6 +11089,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
+	corelib_richmsgdlg.o \
 	corelib_msw_scrolbar.o \
 	corelib_msw_slider.o \
 	corelib_msw_spinbutt.o \
@@ -18531,18 +18543,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monodll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
 
@@ -18899,6 +18899,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_radiobut.o: $(srcdir)/src/msw/radiobut.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/radiobut.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_scrolbar.o: $(srcdir)/src/msw/scrolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/scrolbar.cpp
@@ -19872,6 +19878,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_logg.o: $(srcdir)/src/generic/logg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/logg.cpp
 
+@COND_USE_GUI_1@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
+
 @COND_USE_GUI_1@monodll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -19886,6 +19895,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_renderg.o: $(srcdir)/src/generic/renderg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/renderg.cpp
+
+@COND_USE_GUI_1@monodll_richmsgdlgg.o: $(srcdir)/src/generic/richmsgdlgg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/richmsgdlgg.cpp
 
 @COND_USE_GUI_1@monodll_scrlwing.o: $(srcdir)/src/generic/scrlwing.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/scrlwing.cpp
@@ -23748,18 +23760,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monolib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
 
@@ -24116,6 +24116,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_radiobut.o: $(srcdir)/src/msw/radiobut.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/radiobut.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_scrolbar.o: $(srcdir)/src/msw/scrolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/scrolbar.cpp
@@ -25089,6 +25095,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_logg.o: $(srcdir)/src/generic/logg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/logg.cpp
 
+@COND_USE_GUI_1@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
+
 @COND_USE_GUI_1@monolib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -25103,6 +25112,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_renderg.o: $(srcdir)/src/generic/renderg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/renderg.cpp
+
+@COND_USE_GUI_1@monolib_richmsgdlgg.o: $(srcdir)/src/generic/richmsgdlgg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/richmsgdlgg.cpp
 
 @COND_USE_GUI_1@monolib_scrlwing.o: $(srcdir)/src/generic/scrlwing.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/scrlwing.cpp
@@ -29151,18 +29163,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@coredll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
 
@@ -29519,6 +29519,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_radiobut.o: $(srcdir)/src/msw/radiobut.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/radiobut.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_scrolbar.o: $(srcdir)/src/msw/scrolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/scrolbar.cpp
@@ -30492,6 +30498,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_logg.o: $(srcdir)/src/generic/logg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/logg.cpp
 
+@COND_USE_GUI_1@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
+
 @COND_USE_GUI_1@coredll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -30506,6 +30515,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_renderg.o: $(srcdir)/src/generic/renderg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/renderg.cpp
+
+@COND_USE_GUI_1@coredll_richmsgdlgg.o: $(srcdir)/src/generic/richmsgdlgg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/richmsgdlgg.cpp
 
 @COND_USE_GUI_1@coredll_scrlwing.o: $(srcdir)/src/generic/scrlwing.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/scrlwing.cpp
@@ -33069,18 +33081,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@corelib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
 
@@ -33437,6 +33437,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_radiobut.o: $(srcdir)/src/msw/radiobut.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/radiobut.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_richmsgdlg.o: $(srcdir)/src/msw/richmsgdlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/richmsgdlg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_scrolbar.o: $(srcdir)/src/msw/scrolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/scrolbar.cpp
@@ -34410,6 +34416,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_logg.o: $(srcdir)/src/generic/logg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/logg.cpp
 
+@COND_USE_GUI_1@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
+
 @COND_USE_GUI_1@corelib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -34424,6 +34433,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_renderg.o: $(srcdir)/src/generic/renderg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/renderg.cpp
+
+@COND_USE_GUI_1@corelib_richmsgdlgg.o: $(srcdir)/src/generic/richmsgdlgg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/richmsgdlgg.cpp
 
 @COND_USE_GUI_1@corelib_scrlwing.o: $(srcdir)/src/generic/scrlwing.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/scrlwing.cpp

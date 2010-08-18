@@ -751,6 +751,7 @@
 #define wxUSE_LISTCTRL      1   // wxListCtrl
 #define wxUSE_RADIOBOX      1   // wxRadioBox
 #define wxUSE_RADIOBTN      1   // wxRadioButton
+#define wxUSE_RICHMSGDLG    1   // wxRichMessageDialog
 #define wxUSE_SCROLLBAR     1   // wxScrollBar
 #define wxUSE_SEARCHCTRL    1   // wxSearchCtrl
 #define wxUSE_SLIDER        1   // wxSlider

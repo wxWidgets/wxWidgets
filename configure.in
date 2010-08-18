@@ -898,6 +898,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
     DEFAULT_wxUSE_RADIOBTN=no
+    DEFAULT_wxUSE_RICHMSGDLG=no
     DEFAULT_wxUSE_REARRANGECTRL=no
     DEFAULT_wxUSE_SASH=no
     DEFAULT_wxUSE_SCROLLBAR=no
@@ -961,6 +962,7 @@ WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox 
 WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_FEATURE(richmsgdlg,  [  --enable-richmsgdlg     use wxRichMessageDialog class], wxUSE_RICHMSGDLG)
 WX_ARG_FEATURE(rearrangectrl,[  --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog], wxUSE_REARRANGECTRL)
 WX_ARG_FEATURE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
 WX_ARG_FEATURE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
@@ -6968,6 +6970,10 @@ fi
 
 if test "$wxUSE_REARRANGECTRL" = "yes"; then
     AC_DEFINE(wxUSE_REARRANGECTRL)
+fi
+
+if test "$wxUSE_RICHMSGDLG" = "yes"; then
+    AC_DEFINE(wxUSE_RICHMSGDLG)
 fi
 
 if test "$wxUSE_SASH" = "yes"; then

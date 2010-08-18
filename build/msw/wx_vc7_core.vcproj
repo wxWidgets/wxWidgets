@@ -1985,6 +1985,21 @@
 				RelativePath="..\..\src\msw\renderer.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\richmsgdlg.cpp">
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\scrolbar.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -2740,18 +2755,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\msgdlgg.cpp">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp">
@@ -2770,6 +2773,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\renderg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\richmsgdlgg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\scrlwing.cpp">
@@ -4480,6 +4486,9 @@
 				RelativePath="..\..\include\wx\msw\region.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\richmsgdlg.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\scrolbar.h">
 			</File>
 			<File
@@ -4695,6 +4704,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\propdlg.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\richmsgdlgg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\sashwin.h">
@@ -5445,6 +5457,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\renderer.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richmsgdlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextbuffer.h">

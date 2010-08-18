@@ -759,11 +759,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/infobar.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
+    src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp
+    src/generic/richmsgdlgg.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
     src/generic/spinctlg.cpp
@@ -830,6 +832,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/printps.h
     wx/generic/progdlgg.h
+    wx/generic/richmsgdlgg.h
     wx/generic/scrolwin.h
     wx/generic/spinctlg.h
     wx/generic/splitter.h
@@ -861,6 +864,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/radiobut.h
     wx/rearrangectrl.h
     wx/renderer.h
+    wx/richmsgdlg.h
     wx/scrolbar.h
     wx/scrolbar.h
     wx/scrolwin.h
@@ -1105,7 +1109,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
-    src/generic/msgdlgg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
@@ -1289,7 +1292,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
-    src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     <!-- GTK1 specific files: -->
@@ -1718,6 +1720,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ownerdrw.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
+    src/msw/richmsgdlg.cpp
     src/msw/scrolbar.cpp
     src/msw/slider.cpp
     src/msw/spinbutt.cpp
@@ -1803,6 +1806,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/radiobut.h
     wx/msw/region.h
     wx/msw/rcdefs.h
+    wx/msw/richmsgdlg.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
     wx/msw/slider.h
@@ -2669,7 +2673,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
-    src/generic/msgdlgg.cpp
     src/generic/paletteg.cpp
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
@@ -2790,7 +2793,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
-    src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp

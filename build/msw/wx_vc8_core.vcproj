@@ -2680,6 +2680,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\richmsgdlg.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\scrolbar.cpp"
 				>
 				<FileConfiguration
@@ -3687,22 +3707,6 @@
 			<File
 				RelativePath="..\..\src\generic\msgdlgg.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp"
@@ -3726,6 +3730,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\renderg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\richmsgdlgg.cpp"
 				>
 			</File>
 			<File
@@ -5992,6 +6000,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\richmsgdlg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\scrolbar.h"
 				>
 			</File>
@@ -6278,6 +6290,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\propdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\richmsgdlgg.h"
 				>
 			</File>
 			<File
@@ -7277,6 +7293,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\renderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richmsgdlg.h"
 				>
 			</File>
 			<File

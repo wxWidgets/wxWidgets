@@ -929,6 +929,14 @@
 #   endif
 #endif /* !defined(wxUSE_RIBBON) */
 
+#ifndef wxUSE_RICHMSGDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_RICHMSGDLG must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_RICHMSGDLG 0
+#   endif
+#endif /* !defined(wxUSE_RIBBON) */
+
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SASH must be defined, please read comment near the top of this file."
@@ -1538,6 +1546,17 @@
 #       endif
 #   endif
 #endif /* wxUSE_REARRANGECTRL */
+
+#if wxUSE_RICHMSGDLG
+#    if !wxUSE_MSGDLG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RICHMSGDLG requires wxUSE_MSGDLG"
+#        else
+#            undef wxUSE_MSGDLG
+#            define wxUSE_MSGDLG 1
+#        endif
+#    endif
+#endif /* wxUSE_RICHMSGDLG */
 
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR
