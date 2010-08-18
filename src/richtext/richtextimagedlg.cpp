@@ -456,11 +456,11 @@ void wxRichTextImageDlg::OnButtonParaUpClick( wxCommandEvent& WXUNUSED(event))
     wxRichTextObject *obj = iter->GetData();
     wxRichTextRange rg = obj->GetRange();
     m_image = m_image->Clone();
-    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 
     m_buffer->DeleteRangeWithUndo(range, m_ctrl);
     m_buffer->InsertObjectWithUndo(rg.GetEnd(), m_image, m_ctrl, 0);
     m_parent = obj;
+    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP in wxRichTextImageDlg. 
 }
 
@@ -492,11 +492,11 @@ void wxRichTextImageDlg::OnButtonParaDownClick( wxCommandEvent& WXUNUSED(event))
     wxRichTextObject *obj = iter->GetData();
     wxRichTextRange rg = obj->GetRange();
     m_image = m_image->Clone();
-    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 
     m_buffer->DeleteRangeWithUndo(range, m_ctrl);
     m_buffer->InsertObjectWithUndo(rg.GetEnd(), m_image, m_ctrl, 0);
     m_parent = obj;
+    m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN in wxRichTextImageDlg. 
 }
 
