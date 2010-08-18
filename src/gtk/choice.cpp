@@ -75,7 +75,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     {
         // if our m_strings != NULL, Append() will check for it and insert
         // items in the correct order
-        m_strings = new wxSortedArrayString;
+        m_strings = new wxGtkCollatedArrayString;
     }
 
     m_widget = gtk_combo_box_new_text();
@@ -140,9 +140,9 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         n = pos + i;
         // If sorted, use this wxSortedArrayStrings to determine
         // the right insertion point
-        if(m_strings)
+        if (m_strings)
             n = m_strings->Add(items[i]);
-
+            
         GTKInsertComboBoxTextItem( n, items[i] );
 
         m_clientData.Insert( NULL, n );

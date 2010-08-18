@@ -118,7 +118,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
     if (HasFlag(wxCB_SORT))
-        m_strings = new wxSortedArrayString();
+        m_strings = new wxGtkCollatedArrayString();
 
     GTKCreateComboBoxWidget();
 
