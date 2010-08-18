@@ -16,7 +16,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_MSGDLG && (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__) || defined(__WXGPE__))
+#if wxUSE_MSGDLG
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -103,7 +103,11 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif // wxUSE_STATTEXT
 
-    // 3) buttons
+    // 3) optional checkbox and detailed text
+    AddMessageDialogCheckBox( topsizer );
+    AddMessageDialogDetails( topsizer );
+
+    // 4) buttons
     int center_flag = wxEXPAND;
     if (m_dialogStyle & wxYES_NO)
         center_flag = wxALIGN_CENTRE;
@@ -162,4 +166,4 @@ int wxGenericMessageDialog::ShowModal()
     return wxMessageDialogBase::ShowModal();
 }
 
-#endif // wxUSE_MSGDLG && !defined(__WXGTK20__)
+#endif // wxUSE_MSGDLG

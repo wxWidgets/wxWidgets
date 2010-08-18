@@ -44,7 +44,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
-               : wxMessageDialogWithCustomLabels
+               : wxMessageDialogBase
                  (
                     GetParentForModalDialog(parent, style),
                     message,
@@ -79,7 +79,7 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
     int stockId = label.GetStockId();
     if ( stockId == wxID_NONE )
     {
-        wxMessageDialogWithCustomLabels::DoSetCustomLabel(var, label);
+        wxMessageDialogBase::DoSetCustomLabel(var, label);
         var = wxConvertMnemonicsToGTK(var);
     }
     else // stock label

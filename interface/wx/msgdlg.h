@@ -47,6 +47,8 @@
     @style{wxICON_QUESTION}
         Displays a question mark symbol. This icon is automatically used
         with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
+        This style is not supported for MSW task dialogs, as question icons do
+        not follow the guidelines. No icon will be displayed in this case.
     @style{wxICON_INFORMATION}
         Displays an information symbol. This icon is used by default if
         @c wxYES_NO is not given so it is usually unnecessary to specify it
@@ -56,7 +58,9 @@
         just its parent (currently implemented only under MSW and GTK).
     @style{wxCENTRE}
         Centre the message box on its parent or on the screen if parent is not
-        specified (currently only implemented under MSW).
+        specified.
+        Setting this style under MSW makes no differences as the dialog is
+        always centered on the parent.
     @endStyleTable
 
     @library{wxcore}
