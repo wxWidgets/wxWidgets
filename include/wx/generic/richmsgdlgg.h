@@ -28,12 +28,7 @@ public:
           m_detailsPane(NULL)
     { }
 
-    virtual bool IsCheckBoxChecked() const
-    {
-        // This function can be called before the dialog is shown and hence
-        // before the check box is created.
-        return m_checkBox? m_checkBoxValue : m_checkBox->IsChecked();
-    }
+    virtual bool IsCheckBoxChecked() const;
 
 protected:
     wxCheckBox *m_checkBox;

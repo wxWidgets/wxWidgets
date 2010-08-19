@@ -18,6 +18,7 @@
 #if wxUSE_RICHMSGDLG
 
 #ifndef WX_PRECOMP
+    #include "wx/checkbox.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
 #endif
@@ -82,6 +83,13 @@ void wxGenericRichMessageDialog::AddMessageDialogDetails(wxSizer *sizer)
         sizerDetails->Add( m_detailsPane, wxSizerFlags().Right().Expand() );
         sizer->Add( sizerDetails, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
     }
+}
+
+bool wxGenericRichMessageDialog::IsCheckBoxChecked() const
+{
+    // This function can be called before the dialog is shown and hence before
+    // the check box is created.
+    return m_checkBox? m_checkBoxValue : m_checkBox->IsChecked();
 }
 
 #endif // wxUSE_RICHMSGDLG
