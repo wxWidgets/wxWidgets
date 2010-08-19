@@ -294,6 +294,7 @@ Related Overviews: @ref overview_cmndlg
 @li wxRearrangeDialog: Dialog allowing the user to rearrange a list of items.
 @li wxRichTextFormattingDialog: A dialog for formatting the content of a
     wxRichTextCtrl
+@li wxRichMessageDialog: Nicer message box dialog
 @li wxSingleChoiceDialog: Dialog to get a single selection from a list and
     return the string
 @li wxSymbolPickerDialog: Symbol selector dialog

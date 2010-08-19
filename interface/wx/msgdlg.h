@@ -67,6 +67,7 @@
     @category{cmndlg}
 
     @see @ref overview_cmndlg_msg
+    @see wxRichMessageDialog
 */
 class wxMessageDialog : public wxDialog
 {
