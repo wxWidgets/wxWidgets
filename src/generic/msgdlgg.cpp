@@ -38,10 +38,34 @@
 #define __WX_COMPILING_MSGDLGG_CPP__ 1
 #include "wx/msgdlg.h"
 #include "wx/artprov.h"
+#include "wx/textwrapper.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// wxTitleTextWrapper: simple class to create wrapped text in "title font"
+// ----------------------------------------------------------------------------
+
+class wxTitleTextWrapper : public wxTextSizerWrapper
+{
+public:
+    wxTitleTextWrapper(wxWindow *win)
+        : wxTextSizerWrapper(win)
+    {
+    }
+
+protected:
+    virtual wxWindow *OnCreateLine(const wxString& s)
+    {
+        wxWindow * const win = wxTextSizerWrapper::OnCreateLine(s);
+
+        win->SetFont(win->GetFont().Larger().MakeBold());
+
+        return win;
+    }
+};
 
 // ----------------------------------------------------------------------------
 // icons
@@ -98,8 +122,29 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
 
 #if wxUSE_STATTEXT
     // 2) text
-    icon_text->Add( CreateTextSizer( GetFullMessage() ), 0, wxALIGN_CENTER | wxLEFT, 10 );
 
+    wxBoxSizer * const textsizer = new wxBoxSizer(wxVERTICAL);
+
+    // We want to show the main message in a different font to make it stand
+    // out if the extended message is used as well. This looks better and is
+    // more consistent with the native dialogs under MSW and GTK.
+    wxString lowerMessage;
+    if ( !m_extendedMessage.empty() )
+    {
+        wxTitleTextWrapper titleWrapper(this);
+        textsizer->Add(CreateTextSizer(GetMessage(), titleWrapper),
+                       wxSizerFlags().Border(wxBOTTOM, 20));
+
+        lowerMessage = GetExtendedMessage();
+    }
+    else // no extended message
+    {
+        lowerMessage = GetMessage();
+    }
+
+    textsizer->Add(CreateTextSizer(lowerMessage));
+
+    icon_text->Add(textsizer, 0, wxALIGN_CENTER, 10);
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif // wxUSE_STATTEXT
 

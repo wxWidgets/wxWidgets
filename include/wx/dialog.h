@@ -22,6 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxDialogLayoutAdapter;
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrolledWindow;
+class wxTextSizerWrapper;
 
 // Also see the bit summary table in wx/toplevel.h.
 
@@ -115,9 +116,14 @@ public:
     }
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
-    // splits text up at newlines and places the
-    // lines into a vertical wxBoxSizer
-    wxSizer *CreateTextSizer( const wxString &message );
+    // splits text up at newlines and places the lines into a vertical
+    // wxBoxSizer
+    wxSizer *CreateTextSizer( const wxString& message );
+
+    // same as above but uses a customized wxTextSizerWrapper to create
+    // non-standard controls for the lines
+    wxSizer *CreateTextSizer( const wxString& message,
+                              wxTextSizerWrapper& wrapper );
 #endif // wxUSE_STATTEXT // && wxUSE_TEXTCTRL
 
     // returns a horizontal wxBoxSizer containing the given buttons
