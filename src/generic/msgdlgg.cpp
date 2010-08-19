@@ -116,7 +116,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
         if (is_pda)
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else
-            icon_text->Add( icon, 0, wxCENTER );
+            icon_text->Add(icon, wxSizerFlags().Top().Border(wxRIGHT, 20));
     }
 #endif // wxUSE_STATBMP
 

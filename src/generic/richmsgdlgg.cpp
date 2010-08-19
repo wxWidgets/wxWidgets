@@ -53,15 +53,10 @@ void wxGenericRichMessageDialog::AddMessageDialogCheckBox(wxSizer *sizer)
 {
     if ( !m_checkBoxText.empty() )
     {
-        wxSizer *sizerCheckBox = new wxBoxSizer( wxHORIZONTAL );
+        m_checkBox = new wxCheckBox(this, wxID_ANY, m_checkBoxText);
+        m_checkBox->SetValue(m_checkBoxValue);
 
-        m_checkBox = new wxCheckBox( this,
-                                     wxID_ANY,
-                                     m_checkBoxText );
-        m_checkBox->SetValue( m_checkBoxValue );
-        sizerCheckBox->Add( m_checkBox, 0, wxBOTTOM | wxALIGN_LEFT );
-
-        sizer->Add( sizerCheckBox, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
+        sizer->Add(m_checkBox, wxSizerFlags().Left().Border(wxLEFT|wxTOP, 10));
     }
 }
 
