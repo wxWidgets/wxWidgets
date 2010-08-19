@@ -15,7 +15,9 @@
 
 #include "wx/uiaction.h"
 
-#include <ApplicationServices/ApplicationServices.h>
+#include "wx/log.h"
+
+#include "wx/osx/private.h"
 
 CGEventTapLocation tap = kCGSessionEventTap;
 
@@ -107,14 +109,6 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case WXK_ESCAPE:      keycode = kVK_Escape; break;
         case WXK_SPACE:       keycode = kVK_Space; break;
         case WXK_DELETE:      keycode = kVK_Delete; break;
-
-        case WXK_BACK:        keycode = kVK_Delete; break;
-        case WXK_TAB:         keycode = kVK_Tab; break;
-        case WXK_RETURN:      keycode = kVK_Return; break;
-        case WXK_ESCAPE:      keycode = kVK_Escape; break;
-        case WXK_SPACE:       keycode = kVK_Space; break;
-        case WXK_DELETE:      keycode = kVK_Delete; break;
-
 
         case WXK_SHIFT:       keycode = kVK_Shift; break;
         case WXK_ALT:         keycode = kVK_Option; break;
@@ -251,7 +245,7 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
             SendCharCode(kVK_Command, true);
     }
 
-    CGKeyCode cgcode = wxCharCodeWXToOSX(keycode);
+    CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
     SendCharCode(cgcode, isDown);
 
     if(!isDown)
