@@ -141,7 +141,7 @@ void HtmlWindowTestCase::CellClick()
 
 void HtmlWindowTestCase::LinkClick()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 

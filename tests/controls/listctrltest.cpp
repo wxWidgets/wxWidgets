@@ -85,7 +85,7 @@ void ListCtrlTestCase::tearDown()
 
 void ListCtrlTestCase::ColumnDrag()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 

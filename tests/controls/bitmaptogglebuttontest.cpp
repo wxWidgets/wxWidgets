@@ -68,7 +68,7 @@ void BitmapToggleButtonTestCase::tearDown()
 
 void BitmapToggleButtonTestCase::Click()
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
