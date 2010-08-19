@@ -693,10 +693,15 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
             bmp = m_active_close_bmp;
         }
 
+        int offsetY = tab_y-1;
+        if (m_flags & wxAUI_NB_BOTTOM)
+            offsetY = 1;
+
         wxRect rect(tab_x + tab_width - close_button_width - 1,
-                    tab_y + (tab_height/2) - (bmp.GetHeight()/2),
+                    offsetY + (tab_height/2) - (bmp.GetHeight()/2),
                     close_button_width,
                     tab_height);
+                    
         IndentPressedBitmap(&rect, close_button_state);
         dc.DrawBitmap(bmp, rect.x, rect.y, true);
 
