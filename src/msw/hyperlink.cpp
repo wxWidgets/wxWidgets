@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/stattext.h"
+    #include "wx/msw/private.h"
 #endif
 
 // ----------------------------------------------------------------------------
