@@ -1619,6 +1619,20 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
+    // There is no call to tell the model that everything
+    // has been deleted so call row_deleted() for every
+    // child of root...
+
+    int count = m_owner->GtkGetInternal()->iter_n_children( NULL ); // number of children of root
+
+    GtkTreePath *path = gtk_tree_path_new_first();  // points to root
+
+    int i;
+    for (i = 0; i < count; i++)
+        gtk_tree_model_row_deleted( GTK_TREE_MODEL(m_wxgtk_model), path );
+    
+    gtk_tree_path_free( path );
+    
     m_owner->GtkGetInternal()->Cleared();
 
     return true;
@@ -3370,6 +3384,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
     {
         wxDataViewItemArray children;
         unsigned int count = m_wx_model->GetChildren( node->GetItem(), children );
+        
         unsigned int pos;
         for (pos = 0; pos < count; pos++)
         {
@@ -3534,16 +3549,14 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
 
 bool wxDataViewCtrlInternal::Cleared()
 {
-    GtkWidget* tree_widget = GetOwner()->GtkGetTreeView();
-    gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), NULL );
-    gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), GTK_TREE_MODEL(m_gtk_model) );
-
     if (m_root)
     {
         delete m_root;
-        InitTree();
+        m_root = NULL;
     }
-
+        
+    InitTree();
+    
     return true;
 }
 
@@ -3707,7 +3720,7 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
         while (node)
         {
             int pos = node->GetChildren().Index( id );
-
+            
             gtk_tree_path_prepend_index( retval, pos );
 
             id = node->GetItem().GetID();
