@@ -85,7 +85,11 @@
 #define wxCC_GENERIC_TLW_IS_DIALOG
 #define wxComboCtrlGenericTLW   wxDialog
 
-#include "wx/gtk/private.h"
+#if defined(__WXGTK20__)
+# include "wx/gtk/private.h"
+#else
+# include "wx/gtk1/private.h"
+#endif
 
 // NB: Let's not be afraid to use wxGTK's wxPopupTransientWindow as a
 //     'perfect' popup, as it can succesfully host child controls even in
