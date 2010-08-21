@@ -374,8 +374,7 @@ bool wxPrintPaperModule::OnInit()
 
 void wxPrintPaperModule::OnExit()
 {
-    delete wxThePrintPaperDatabase;
-    wxThePrintPaperDatabase = NULL;
+    wxDELETE(wxThePrintPaperDatabase);
 }
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

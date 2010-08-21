@@ -622,16 +622,10 @@ void wxTextCtrl::Init()
 
     m_text = NULL;
     m_showPositionOnThaw = NULL;
-    m_gdkHandCursor = NULL;
-    m_gdkXTermCursor = NULL;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
-    if(m_gdkHandCursor)
-        gdk_cursor_unref(m_gdkHandCursor);
-    if(m_gdkXTermCursor)
-        gdk_cursor_unref(m_gdkXTermCursor);
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -763,8 +757,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
         if (style & wxTE_AUTO_URL)
         {
             GtkTextIter start, end;
-            m_gdkHandCursor = gdk_cursor_new(GDK_HAND2);
-            m_gdkXTermCursor = gdk_cursor_new(GDK_XTERM);
 
             // We create our wxUrl tag here for slight efficiency gain - we
             // don't have to check for the tag existance in callbacks,
@@ -1873,13 +1865,11 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(m_text), &end, x, y);
     if (!gtk_text_iter_has_tag(&end, tag))
     {
-        gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(m_text),
-                              GTK_TEXT_WINDOW_TEXT), m_gdkXTermCursor);
+        SetCursor(wxCursor(wxCURSOR_IBEAM));
         return;
     }
 
-    gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(m_text),
-                          GTK_TEXT_WINDOW_TEXT), m_gdkHandCursor);
+    SetCursor(wxCursor(wxCURSOR_HAND));
 
     start = end;
     if(!gtk_text_iter_begins_tag(&start, tag))

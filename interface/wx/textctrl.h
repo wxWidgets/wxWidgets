@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTextAttr
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -759,7 +759,7 @@ public:
         Set the @see wxMaskedEdit
     */
     void SetMask(const wxMaskedEdit& mask);
-    
+
     /**
         Specifies the outline level. Zero represents normal text.
         At present, the outline level is not used, but may be used in future for

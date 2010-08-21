@@ -45,9 +45,6 @@ public:
     // implement base class (pure) virtual methods
     // -------------------------------------------
 
-    virtual void SetLabel(const wxString& WXUNUSED(label)) { }
-    virtual wxString GetLabel() const { return wxEmptyString; }
-
     virtual bool Destroy();
 
     virtual void Raise();
@@ -113,6 +110,10 @@ public:
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
     virtual bool IsDoubleBuffered() const;
+
+    // SetLabel(), which does nothing in wxWindow
+    virtual void SetLabel(const wxString& label) { m_gtkLabel = label; }
+    virtual wxString GetLabel() const            { return m_gtkLabel; }
 
     // implementation
     // --------------
@@ -241,7 +242,10 @@ public:
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
     GtkWidget           *m_wxwindow;        // mostly the client area as per wxWidgets
-
+    
+    // label for use with GetLabelSetLabel
+    wxString             m_gtkLabel;
+    
     // return true if the window is of a standard (i.e. not wxWidgets') class
     bool IsOfStandardClass() const { return m_wxwindow == NULL; }
 
@@ -279,6 +283,10 @@ public:
     // find the direction of the given scrollbar (must be one of ours)
     ScrollDir ScrollDirFromRange(GtkRange *range) const;
 
+    // set the current cursor for all GdkWindows making part of this widget
+    // (see GTKGetWindow)
+    void GTKUpdateCursor(bool update_self = true, bool recurse = true);
+
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
@@ -310,6 +318,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+    virtual wxSize DoGetBorderSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoEnable(bool enable);
 
@@ -356,12 +365,6 @@ protected:
 
     // sets the border of a given GtkScrolledWindow from a wx style
     static void GTKScrolledWindowSetBorder(GtkWidget* w, int style);
-
-    // set the current cursor for all GdkWindows making part of this widget
-    // (see GTKGetWindow)
-    //
-    // should be called from OnInternalIdle() if it's overridden
-    void GTKUpdateCursor();
 
     // Connect the given function to the specified signal on m_widget.
     //

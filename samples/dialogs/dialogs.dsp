@@ -293,10 +293,6 @@ SOURCE=.\dialogs.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dialogs.rc
-# End Source File
-# Begin Source File
-
 SOURCE=.\..\..\src\generic\dirdlgg.cpp
 
 !IF  "$(CFG)" == "dialogs - Win32 DLL Universal Release"
@@ -405,6 +401,10 @@ SOURCE=.\..\..\src\generic\fontdlgg.cpp
 
 !ENDIF
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"

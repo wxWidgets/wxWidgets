@@ -3,7 +3,7 @@
 // Purpose:     interface of wxControlWithItems
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -347,6 +347,51 @@ public:
     */
     void Delete(unsigned int n);
 
+
+    /**
+        Returns the client object associated with the given item and transfers
+        its ownership to the caller.
+
+        This method, unlike GetClientObject(), expects the caller to delete the
+        returned pointer. It also replaces the internally stored pointer with
+        @NULL, i.e. completely detaches the client object pointer from the
+        control.
+
+        It's an error to call this method unless HasClientObjectData() returns
+        @true.
+
+        @param n
+            The zero-based item index.
+        @return The associated client object pointer to be deleted by caller or
+            @NULL.
+
+        @since 2.9.2
+     */
+    wxClientData *DetachClientObject(unsigned int n);
+
+    /**
+       Returns true, if either untyped data (@c void*) or object data (wxClientData*)
+       is associated with the items of the control.
+    */
+    bool HasClientData() const;
+
+    /**
+       Returns true, if object data is associated with the items of the
+       control.
+
+       Object data pointers have the type @c wxClientData* instead of @c void*
+       and, importantly, are owned by the control, i.e. will be deleted by it,
+       unlike their untyped counterparts.
+    */
+    bool HasClientObjectData() const;
+
+    /**
+       Returns true, if untyped data (@c void*)
+       is associated with the items of the control.
+    */
+    bool HasClientUntypedData() const;
+
+
     //@{
 
     /**
@@ -369,6 +414,10 @@ public:
         have typed client data at all although it is OK to call it even if the
         given item doesn't have any client data associated with it (but other
         items do).
+
+        Notice that the returned pointer is still owned by the control and will
+        be deleted by it, use DetachClientObject() if you want to remove the
+        pointer from the control.
 
         @param n
             The zero-based position of the item.

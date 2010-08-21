@@ -85,7 +85,7 @@ protected:
 
 extern WXDLLIMPEXP_CORE int wxEntry();
 
-#define IMPLEMENT_WXWIN_MAIN                                              \
+#define wxIMPLEMENT_WXWIN_MAIN                                            \
                                                                           \
     extern "C" {                                                          \
                                                                           \

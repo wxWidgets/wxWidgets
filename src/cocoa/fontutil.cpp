@@ -6,7 +6,7 @@
 // Created:     05.11.99
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -249,9 +249,7 @@ bool wxFontModule::OnInit()
 
 void wxFontModule::OnExit()
 {
-    delete g_fontHash;
-
-    g_fontHash = NULL;
+    wxDELETE(g_fontHash);
 }
 
 #endif

@@ -76,6 +76,13 @@ public:
     virtual bool IsCanvasWindow() const { return true; }
 #endif
 
+#ifdef __WXMSW__
+    // This is overridden for MSW to return true for all panels that are child
+    // of a window with themed background (such as wxNotebook) which should
+    // show through the child panels.
+    virtual bool HasTransparentBackground();
+#endif // __WXMSW__
+
     WX_DECLARE_CONTROL_CONTAINER();
 
 protected:
@@ -85,6 +92,7 @@ protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxWindowBase::GetDefaultBorder(); }
 
+private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel)
     DECLARE_EVENT_TABLE()
 };

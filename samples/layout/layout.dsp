@@ -256,7 +256,7 @@ SOURCE=.\layout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\layout.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"

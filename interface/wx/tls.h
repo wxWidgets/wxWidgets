@@ -3,7 +3,7 @@
 // Purpose:     wxTLS_TYPE()
 // Author:      Vadim Zeitlin
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

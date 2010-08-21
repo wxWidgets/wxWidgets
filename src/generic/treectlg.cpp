@@ -977,13 +977,7 @@ void wxGenericTreeCtrl::Init()
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 #endif
-    m_boldFont = wxFont(m_normalFont.GetPointSize(),
-                        m_normalFont.GetFamily(),
-                        m_normalFont.GetStyle(),
-                        wxBOLD,
-                        m_normalFont.GetUnderlined(),
-                        m_normalFont.GetFaceName(),
-                        m_normalFont.GetEncoding());
+    m_boldFont = m_normalFont.Bold();
 }
 
 bool wxGenericTreeCtrl::Create(wxWindow *parent,
@@ -1298,14 +1292,8 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
 {
     wxTreeCtrlBase::SetFont(font);
 
-    m_normalFont = font ;
-    m_boldFont = wxFont(m_normalFont.GetPointSize(),
-                        m_normalFont.GetFamily(),
-                        m_normalFont.GetStyle(),
-                        wxBOLD,
-                        m_normalFont.GetUnderlined(),
-                        m_normalFont.GetFaceName(),
-                        m_normalFont.GetEncoding());
+    m_normalFont = font;
+    m_boldFont = m_normalFont.Bold();
 
     if (m_anchor)
         m_anchor->RecursiveResetTextSize();
@@ -3076,6 +3064,21 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     // end   : go to last item without opening parents
     // alnum : start or continue searching for the item with this prefix
     int keyCode = event.GetKeyCode();
+
+#ifdef __WXOSX__
+    // Make the keys work as they do in the native control:
+    // right => expand
+    // left => collapse if current item is expanded
+    if (keyCode == WXK_RIGHT)
+    {
+        keyCode = '+';
+    }
+    else if (keyCode == WXK_LEFT && IsExpanded(m_current))
+    {
+        keyCode = '-';
+    }
+#endif // __WXOSX__
+
     switch ( keyCode )
     {
         case '+':

@@ -24,13 +24,24 @@ class wxRibbonArtProvider;
 class WXDLLIMPEXP_RIBBON wxRibbonControl : public wxControl
 {
 public:
-    wxRibbonControl() { m_art = NULL; }
+    wxRibbonControl() { Init(); }
 
     wxRibbonControl(wxWindow *parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxControlNameStr);
+                    const wxString& name = wxControlNameStr)
+    {
+        Init();
+
+        Create(parent, id, pos, size, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxControlNameStr);
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     wxRibbonArtProvider* GetArtProvider() const {return m_art;}
@@ -51,6 +62,9 @@ protected:
                                         wxSize relative_to) const;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
                                        wxSize relative_to) const;
+
+private:
+    void Init() { m_art = NULL; }
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonControl)

@@ -97,7 +97,6 @@ private:
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
     WXEVENTREF            m_macCurrentEvent ;
-    CFRunLoopSourceRef    m_macEventPosted ;
 
 public:
     static long           s_macAboutMenuItemId ;

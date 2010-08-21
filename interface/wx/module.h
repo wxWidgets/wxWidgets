@@ -3,7 +3,7 @@
 // Purpose:     interface of wxModule
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -15,7 +15,7 @@
 
     To define a new kind of module, derive a class from wxModule, override the
     wxModule::OnInit and wxModule::OnExit functions, and add the
-    DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to header and implementation
+    wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS to header and implementation
     files (which can be the same file).
     On initialization, wxWidgets will find all classes derived from wxModule, create
     an instance of each, and call each wxModule::OnInit function. On exit, wxWidgets
@@ -37,24 +37,24 @@
           virtual void OnExit() { wxDDECleanUp(); };
 
       private:
-          DECLARE_DYNAMIC_CLASS(wxDDEModule)
+          wxDECLARE_DYNAMIC_CLASS(wxDDEModule);
       };
 
-      IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
+      wxIMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule);
 
       // Another module which uses DDE in its OnInit()
       class MyModule: public wxModule
       {
       public:
-          MyModule() { AddDependency(CLASSINFO(wxDDEModule)); }
+          MyModule() { AddDependency(wxCLASSINFO(wxDDEModule)); }
           virtual bool OnInit() { ... code using DDE ... }
           virtual void OnExit() { ... }
 
       private:
-          DECLARE_DYNAMIC_CLASS(MyModule)
+          wxDECLARE_DYNAMIC_CLASS(MyModule);
       };
 
-      IMPLEMENT_DYNAMIC_CLASS(MyModule, wxModule)
+      wxIMPLEMENT_DYNAMIC_CLASS(MyModule, wxModule);
 
       // Another module which uses DDE in its OnInit()
       // but uses a named dependency
@@ -66,10 +66,10 @@
           virtual void OnExit() { ... }
 
       private:
-          DECLARE_DYNAMIC_CLASS(MyModule2)
+          wxDECLARE_DYNAMIC_CLASS(MyModule2)
       };
 
-      IMPLEMENT_DYNAMIC_CLASS(MyModule2, wxModule)
+      wxIMPLEMENT_DYNAMIC_CLASS(MyModule2, wxModule)
     @endcode
 
     @library{wxbase}
@@ -104,7 +104,7 @@ protected:
     /**
         Call this function from the constructor of the derived class.
 
-        @a dep must be the CLASSINFO() of a wxModule-derived class and the
+        @a dep must be the wxCLASSINFO() of a wxModule-derived class and the
         corresponding module will be loaded before and unloaded after this module.
 
         @param dep
@@ -119,7 +119,7 @@ protected:
         the class info.
 
         This is useful when a module is  declared entirely in a source file and
-        there is no header for the declaration of the module needed by CLASSINFO(),
+        there is no header for the declaration of the module needed by wxCLASSINFO(),
         however errors are not detected until run-time, instead of compile-time, then.
         Note that circular dependencies are detected and result in a fatal error.
 

@@ -6,7 +6,7 @@
 // Created:     2008-08-31
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPGRIDDEFS_H_
@@ -339,6 +339,19 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
                               wxIntegerEqual,
                               wxPGHashMapI2I,
                               class WXDLLIMPEXP_PROPGRID);
+
+// Utility to find if specific item is in a vector. Returns index to
+// the item, or wxNOT_FOUND if not present.
+template<typename CONTAINER, typename T>
+int wxPGFindInVector( CONTAINER vector, const T& item )
+{
+    for ( unsigned int i=0; i<vector.size(); i++ )
+    {
+        if ( vector[i] == item )
+            return (int) i;
+    }
+    return wxNOT_FOUND;
+}
 
 // -----------------------------------------------------------------------
 

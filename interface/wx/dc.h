@@ -3,7 +3,7 @@
 // Purpose:     interface of wxDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -222,19 +222,20 @@ public:
 
     /**
         Draws an arc of a circle, centred on (@a xc, @a yc), with starting
-        point (@a x1, @a y1) and ending at (@a x2, @a y2). The current pen is
-        used for the outline and the current brush for filling the shape.
+        point (@a xStart, @a yStart) and ending at (@a xEnd, @a yEnd). 
+        The current pen is used for the outline and the current brush for 
+        filling the shape.
 
         The arc is drawn in a counter-clockwise direction from the start point
         to the end point.
     */
-    void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
+    void DrawArc(wxCoord xStart, wxCoord yStart, wxCoord xEnd, wxCoord yEnd,
                  wxCoord xc, wxCoord yc);
 
     /**
         @overload
     */
-    void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
+    void DrawArc(const wxPoint& ptStart, const wxPoint& ptEnd, const wxPoint& centre);
 
     /**
         Draw a bitmap on the device context at the specified point. If
@@ -595,7 +596,12 @@ public:
 
         The coordinates refer to the top-left corner of the rectangle bounding
         the string. See GetTextExtent() for how to get the dimensions of a text
-        string, which can be used to position the text more precisely.
+        string, which can be used to position the text more precisely and
+        DrawLabel() if you need to align the string differently.
+
+        Starting from wxWidgets 2.9.2 @a text parameter can be a multi-line
+        string, i.e. contain new line characters, and will be rendered
+        correctly.
 
         @note The current @ref GetLogicalFunction() "logical function" is
               ignored by this function.

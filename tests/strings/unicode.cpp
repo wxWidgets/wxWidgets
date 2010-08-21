@@ -21,12 +21,16 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include "wx/encconv.h"
+
+// ----------------------------------------------------------------------------
 // helper class holding the matching MB and WC strings
-//
-// either str or wcs (but not both) may be NULL, this means that the conversion
-// to it should fail
+// ----------------------------------------------------------------------------
+
 struct StringConversionData
 {
+    // either str or wcs (but not both) may be NULL, this means that the conversion
+    // to it should fail
     StringConversionData(const char *str_, const wchar_t *wcs_, int flags_ = 0)
         : str(str_), wcs(wcs_), flags(flags_)
     {
@@ -470,3 +474,4 @@ void UnicodeTestCase::Iteration()
     }
 }
 #endif // wxUSE_UNICODE
+

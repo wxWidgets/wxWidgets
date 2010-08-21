@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPGProperty
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -129,6 +129,15 @@
     Sets a specific message for the dir dialog.
 */
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
+
+/**
+    wxArrayStringProperty's string delimiter character. If this is aquotation
+    mark or hyphen, then strings will be quoted instead (with given
+    character).
+
+    Default delimiter is quotation mark.
+*/
+#define wxPG_ARRAY_DELIMITER                wxS("Delimiter")
 
 /** Sets displayed date format for wxDateProperty.
 */
@@ -278,6 +287,8 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 
     @remarks
     This flag cannot be used with property iterators.
+
+    @see wxPGProperty::SetAutoUnspecified()
 */
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
@@ -621,7 +632,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @endcode
 
     Since wxPGProperty derives from wxObject, you can use standard
-    DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS macros. From the
+    wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS macros. From the
     above example they were omitted for sake of simplicity, and besides,
     they are only really needed if you need to use wxRTTI with your
     property class.
@@ -1131,9 +1142,14 @@ public:
     bool AreChildrenComponents() const;
 
     /**
-        Sets or clears given property flag.
+        Sets or clears given property flag. Mainly for internal use.
 
-        @see propgrid_propflags
+        @remarks Setting a property flag never has any side-effect, and is
+                 intended almost exclusively for internal use. So, for
+                 example, if you want to disable a property, call
+                 Enable(false) instead of setting wxPG_PROP_DISABLED flag.
+
+        @see HasFlag(), GetFlags()
     */
     void ChangeFlag( wxPGPropertyFlags flag, bool set );
 
@@ -1151,6 +1167,17 @@ public:
 
     /** Deletes all child properties. */
     void Empty();
+
+    /**
+        Enables or disables the property. Disabled property usually appears
+        as having grey text.
+
+        @param enable
+            If @false, property is disabled instead.
+
+        @see wxPropertyGridInterface::EnableProperty()
+    */
+    void Enable( bool enable = true );
 
     /**
         Composes text from values of child properties.
@@ -1491,6 +1518,18 @@ public:
     void SetAttribute( const wxString& name, wxVariant value );
 
     /**
+        Set if user can change the property's value to unspecified by
+        modifying the value of the editor control (usually by clearing
+        it).  Currently, this can work with following properties:
+        wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
+
+        @param enable
+            Whether to enable or disable this behavior (it is disabled by
+            default).
+    */
+    void SetAutoUnspecified( bool enable = true );
+
+    /**
         Sets property's background colour.
 
         @param colour
@@ -1561,16 +1600,10 @@ public:
     void SetDefaultValue( wxVariant& value );
 
     /**
-        Sets given property flag.
+        Sets or clears given property flag, recursively. This function is
+        primarily intended for internal use.
 
-        @see propgrid_propflags
-    */
-    void SetFlag( wxPGPropertyFlags flag );
-
-    /**
-        Sets or clears given property flag, recursively.
-
-        @see propgrid_propflags
+        @see ChangeFlag()
     */
     void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
 

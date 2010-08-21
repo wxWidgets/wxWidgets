@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/wx/stackwalk.h
+// Name:        wx/stackwalk.h
 // Purpose:     wxStackWalker and related classes, common part
 // Author:      Vadim Zeitlin
 // Modified by:

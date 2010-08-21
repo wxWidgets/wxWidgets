@@ -63,10 +63,10 @@ LIBTYPE_SUFFIX = dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 !endif
 !ifeq MONOLITHIC 1
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 !endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
@@ -93,11 +93,11 @@ __DEBUGINFO_1 = debug all
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !ifeq DEBUG_INFO 1
 __DEBUGINFO_1 = debug all
@@ -111,7 +111,7 @@ __OPTIMIZEFLAG_2 = -ot -ox
 !endif
 __THREADSFLAG_5 =
 !ifeq USE_THREADS 0
-__THREADSFLAG_5 = 
+__THREADSFLAG_5 =
 !endif
 !ifeq USE_THREADS 1
 __THREADSFLAG_5 = -bm
@@ -121,18 +121,18 @@ __RUNTIME_LIBS_6 =
 __RUNTIME_LIBS_6 = -br
 !endif
 !ifeq RUNTIME_LIBS static
-__RUNTIME_LIBS_6 = 
+__RUNTIME_LIBS_6 =
 !endif
 __RTTIFLAG_7 =
 !ifeq USE_RTTI 0
-__RTTIFLAG_7 = 
+__RTTIFLAG_7 =
 !endif
 !ifeq USE_RTTI 1
 __RTTIFLAG_7 = -xr
 !endif
 __EXCEPTIONSFLAG_8 =
 !ifeq USE_EXCEPTIONS 0
-__EXCEPTIONSFLAG_8 = 
+__EXCEPTIONSFLAG_8 =
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_8 = -xs
@@ -229,7 +229,7 @@ MASKEDEDIT_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH &
 	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 MASKEDEDIT_OBJECTS =  &
-	$(OBJS)\maskedEdit_maskedEdit.obj
+	$(OBJS)\maskededit_maskededit.obj
 
 
 all : $(OBJS)
@@ -238,31 +238,30 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\maskedEdit.exe
+all : .SYMBOLIC $(OBJS)\maskededit.exe
 
-clean : .SYMBOLIC 
+clean : .SYMBOLIC
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\maskedEdit.exe del $(OBJS)\maskedEdit.exe
+	-if exist $(OBJS)\maskededit.exe del $(OBJS)\maskededit.exe
 
-$(OBJS)\maskedEdit.exe :  $(MASKEDEDIT_OBJECTS) $(OBJS)\maskedEdit_sample.res
-	@%create $(OBJS)\maskedEdit.lbc
-	@%append $(OBJS)\maskedEdit.lbc option quiet
-	@%append $(OBJS)\maskedEdit.lbc name $^@
-	@%append $(OBJS)\maskedEdit.lbc option caseexact
-	@%append $(OBJS)\maskedEdit.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
-	@for %i in ($(MASKEDEDIT_OBJECTS)) do @%append $(OBJS)\maskedEdit.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\maskedEdit.lbc library %i
-	@%append $(OBJS)\maskedEdit.lbc option resource=$(OBJS)\maskedEdit_sample.res
-	@for %i in () do @%append $(OBJS)\maskedEdit.lbc option stack=%i
-	wlink @$(OBJS)\maskedEdit.lbc
+$(OBJS)\maskededit.exe :  $(MASKEDEDIT_OBJECTS) $(OBJS)\maskededit_sample.res
+	@%create $(OBJS)\maskededit.lbc
+	@%append $(OBJS)\maskededit.lbc option quiet
+	@%append $(OBJS)\maskededit.lbc name $^@
+	@%append $(OBJS)\maskededit.lbc option caseexact
+	@%append $(OBJS)\maskededit.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
+	@for %i in ($(MASKEDEDIT_OBJECTS)) do @%append $(OBJS)\maskededit.lbc file %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\maskededit.lbc library %i
+	@%append $(OBJS)\maskededit.lbc option resource=$(OBJS)\maskededit_sample.res
+	@for %i in () do @%append $(OBJS)\maskededit.lbc option stack=%i
+	wlink @$(OBJS)\maskededit.lbc
 
-$(OBJS)\maskedEdit_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
+$(OBJS)\maskededit_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
-$(OBJS)\maskedEdit_maskedEdit.obj :  .AUTODEPEND .\maskedEdit.cpp
+$(OBJS)\maskededit_maskededit.obj :  .AUTODEPEND .\maskededit.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MASKEDEDIT_CXXFLAGS) $<
-

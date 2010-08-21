@@ -1002,8 +1002,7 @@ void MyFrame::OnSelectFile(wxCommandEvent& WXUNUSED(event))
 #endif // __WXMSW__
         m_useMemory = false;
 
-        delete m_sound;
-        m_sound = NULL;
+        wxDELETE(m_sound);
         NotifyUsingFile(m_soundFile);
     }
 #endif // wxUSE_FILEDLG
@@ -1026,8 +1025,7 @@ void MyFrame::OnSelectResource(wxCommandEvent& WXUNUSED(event))
     m_soundFile.clear();
     m_useMemory = false;
 
-    delete m_sound;
-    m_sound = NULL;
+    wxDELETE(m_sound);
 
     NotifyUsingFile(wxT("Windows WAV resource"));
 }

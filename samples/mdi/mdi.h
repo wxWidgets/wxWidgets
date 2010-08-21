@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/toolbar.h"
@@ -93,6 +93,26 @@ private:
     static unsigned ms_numChildren;
 
     MyCanvas *m_canvas;
+
+    // simple test event handler class
+    class EventHandler : public wxEvtHandler
+    {
+    public:
+        EventHandler(unsigned numChild) : m_numChild(numChild) { }
+
+    private:
+        void OnRefresh(wxCommandEvent& event)
+        {
+            wxLogMessage("Child #%u refreshed.", m_numChild);
+            event.Skip();
+        }
+
+        const unsigned m_numChild;
+
+        DECLARE_EVENT_TABLE()
+
+        wxDECLARE_NO_COPY_CLASS(EventHandler);
+    };
 
     DECLARE_EVENT_TABLE()
 };

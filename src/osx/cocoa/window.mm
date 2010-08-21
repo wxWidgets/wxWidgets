@@ -16,6 +16,7 @@
     #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/combobox.h"
 #endif
 
 #ifdef __WXMAC__
@@ -1076,9 +1077,42 @@ bool wxWidgetCocoaImpl::isFlipped(WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 
 void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 {
+    // preparing the update region
+    
+    wxRegion updateRgn;
+    const NSRect *rects;
+    NSInteger count;
+
+    [slf getRectsBeingDrawn:&rects count:&count];
+    for ( int i = 0 ; i < count ; ++i )
+    {
+        updateRgn.Union(wxFromNSRect(slf, rects[i]));
+    }
+
+    wxWindow* wxpeer = GetWXPeer();
+
+    if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
+    {
+        // as this update region is in native window locals we must adapt it to wx window local
+        updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
+    }
+    
+    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
+    {
+        int xoffset = 0, yoffset = 0;
+        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
+        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
+        rgn.Offset( xoffset, yoffset );
+        updateRgn.Intersect(rgn);
+    }
+    
+    wxpeer->GetUpdateRegion() = updateRgn;
+
+    // setting up the drawing context
+    
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSaveGState( context );
-
+    
 #if OSX_DEBUG_DRAWING
     CGContextBeginPath( context );
     CGContextMoveToPoint(context, 0, 0);
@@ -1093,34 +1127,13 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     CGContextClosePath( context );
     CGContextStrokePath(context);
 #endif
-
+    
     if ( !m_isFlipped )
     {
         CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
         CGContextScaleCTM( context, 1, -1 );
     }
-
-    wxRegion updateRgn;
-    const NSRect *rects;
-    NSInteger count;
-
-    [slf getRectsBeingDrawn:&rects count:&count];
-    for ( int i = 0 ; i < count ; ++i )
-    {
-        updateRgn.Union(wxFromNSRect(slf, rects[i]));
-    }
-
-    wxWindow* wxpeer = GetWXPeer();
-    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
-    {
-        int xoffset = 0, yoffset = 0;
-        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
-        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
-        rgn.Offset( xoffset, yoffset );
-        updateRgn.Intersect(rgn);
-    }
     
-    wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
 
     bool handled = wxpeer->MacDoRedraw( 0 );
@@ -1157,10 +1170,17 @@ void wxWidgetCocoaImpl::controlTextDidChange()
     wxWindow* wxpeer = (wxWindow*)GetWXPeer();
     if ( wxpeer ) 
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-        event.SetEventObject( wxpeer );
-        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-        wxpeer->HandleWindowEvent( event );
+        // since native rtti doesn't have to be enabled and wx' rtti is not aware of the mixin wxTextEntry, workaround is needed
+        wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl );
+        wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox );
+        if ( tc )
+            tc->SendTextUpdatedEventIfAllowed();
+        else if ( cb )
+            cb->SendTextUpdatedEventIfAllowed();
+        else 
+        {
+            wxFAIL_MSG("Unexpected class for controlTextDidChange event");
+        }
     }
 }
 

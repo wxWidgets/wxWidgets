@@ -92,27 +92,15 @@ wxFrame *wxFrameBase::New(wxWindow *parent,
 void wxFrameBase::DeleteAllBars()
 {
 #if wxUSE_MENUS
-    if ( m_frameMenuBar )
-    {
-        delete m_frameMenuBar;
-        m_frameMenuBar = NULL;
-    }
+    wxDELETE(m_frameMenuBar);
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
-    if ( m_frameStatusBar )
-    {
-        delete m_frameStatusBar;
-        m_frameStatusBar = NULL;
-    }
+    wxDELETE(m_frameStatusBar);
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    if ( m_frameToolBar )
-    {
-        delete m_frameToolBar;
-        m_frameToolBar = NULL;
-    }
+    wxDELETE(m_frameToolBar);
 #endif // wxUSE_TOOLBAR
 }
 

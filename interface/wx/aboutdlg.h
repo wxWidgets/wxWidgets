@@ -3,7 +3,7 @@
 // Purpose:     interface of wxAboutDialogInfo
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -29,6 +29,22 @@
     don't support URLs, licence text nor custom icons in the about dialog and if
     either of those is used, wxAboutBox() will automatically use the generic version
     so you should avoid specifying these fields to achieve more native look and feel.
+    
+    Example of usage:
+    @code
+    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+    {
+        wxAboutDialogInfo aboutInfo;
+        aboutInfo.SetName("MyApp");
+        aboutInfo.SetVersion(MY_APP_VERSION_STRING);
+        aboutInfo.SetDescription(_("My wxWidgets-based application!"));
+        aboutInfo.SetCopyright("(C) 1992-2010");
+        aboutInfo.SetWebSite("http://myapp.org");
+        aboutInfo.AddDeveloper("My Self");
+
+        wxAboutBox(aboutInfo);
+    }
+    @endcode
 
     @library{wxadv}
     @category{cmndlg,data}

@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STD_IOSTREAM
+#if wxUSE_STREAMS && wxUSE_STD_IOSTREAM
 
 #ifndef WX_PRECOMP
 #endif
@@ -290,4 +290,4 @@ wxStdOutputStream::wxStdOutputStream(wxOutputStream& stream) :
 
 #endif // VC6/!VC6
 
-#endif // wxUSE_STD_IOSTREAM
+#endif // wxUSE_STREAMS && wxUSE_STD_IOSTREAM

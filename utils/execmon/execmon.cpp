@@ -6,7 +6,7 @@
 // Created:     25/3/09
 // RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

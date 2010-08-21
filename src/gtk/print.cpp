@@ -211,25 +211,6 @@ extern "C"
 
         printout->OnEndPrinting();
     }
-
-    static gboolean
-    gtk_preview_print_callback(GtkPrintOperation * WXUNUSED(operation),
-                               GtkPrintOperationPreview * WXUNUSED(preview),
-                               GtkPrintContext *context,
-                               GtkWindow *parent,
-                               gpointer user_data)
-    {
-        wxPrintout *printout = (wxPrintout *) user_data;
-
-        printout->SetIsPreview(true);
-
-        /* We create a Cairo context with 72dpi resolution. This resolution is
-         * only used for positioning. */
-        cairo_t *cairo = gdk_cairo_create(GTK_WIDGET(parent)->window);
-        gtk_print_context_set_cairo_context(context, cairo, 72, 72);
-
-        return false;
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -855,8 +836,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     native->SetPrintJob( printOp );
 
-    printout->SetIsPreview(false);
-
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
     dataToSend.printout = printout;
@@ -865,7 +844,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     g_signal_connect (printOp, "begin-print", G_CALLBACK (gtk_begin_print_callback), &dataToSend);
     g_signal_connect (printOp, "draw-page", G_CALLBACK (gtk_draw_page_print_callback), &dataToSend);
     g_signal_connect (printOp, "end-print", G_CALLBACK (gtk_end_print_callback), printout);
-    g_signal_connect (printOp, "preview", G_CALLBACK (gtk_preview_print_callback), printout);
 
     // This is used to setup the DC and
     // show the dialog if desired

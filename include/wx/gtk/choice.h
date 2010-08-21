@@ -17,6 +17,8 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 // wxChoice
 //-----------------------------------------------------------------------------
 
+class wxGtkCollatedArrayString;
+
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
@@ -84,7 +86,7 @@ public:
 protected:
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)
-    wxSortedArrayString *m_strings;
+    wxGtkCollatedArrayString *m_strings;
 
     // contains the client data for the items
     wxArrayPtrVoid m_clientData;

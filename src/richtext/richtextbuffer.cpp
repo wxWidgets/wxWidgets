@@ -2654,6 +2654,13 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
             // So when changing a list style interactively, could retrieve level based on current style, then
             // set appropriate indent and apply new style.
 
+            int outline = -1;
+            int num = -1;
+            if (para->GetAttributes().HasOutlineLevel())
+                outline = para->GetAttributes().GetOutlineLevel();
+            if (para->GetAttributes().HasBulletNumber())
+                num = para->GetAttributes().GetBulletNumber();
+
             if (!para->GetAttributes().GetParagraphStyleName().IsEmpty() && !para->GetAttributes().GetListStyleName().IsEmpty())
             {
                 int currentIndent = para->GetAttributes().GetLeftIndent();
@@ -2704,6 +2711,11 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                     foundCount ++;
                 }
             }
+
+            if (outline != -1)
+                para->GetAttributes().SetOutlineLevel(outline);
+            if (num != -1)
+                para->GetAttributes().SetBulletNumber(num);
         }
 
         node = node->GetNext();
@@ -7423,11 +7435,7 @@ wxRichTextImageBlock::wxRichTextImageBlock(const wxRichTextImageBlock& block):wx
 
 wxRichTextImageBlock::~wxRichTextImageBlock()
 {
-    if (m_data)
-    {
-        delete[] m_data;
-        m_data = NULL;
-    }
+    wxDELETEA(m_data);
 }
 
 void wxRichTextImageBlock::Init()
@@ -7439,8 +7447,7 @@ void wxRichTextImageBlock::Init()
 
 void wxRichTextImageBlock::Clear()
 {
-    delete[] m_data;
-    m_data = NULL;
+    wxDELETEA(m_data);
     m_dataSize = 0;
     m_imageType = wxBITMAP_TYPE_INVALID;
 }
@@ -7539,11 +7546,7 @@ bool wxRichTextImageBlock::Write(const wxString& filename)
 void wxRichTextImageBlock::Copy(const wxRichTextImageBlock& block)
 {
     m_imageType = block.m_imageType;
-    if (m_data)
-    {
-        delete[] m_data;
-        m_data = NULL;
-    }
+    wxDELETEA(m_data);
     m_dataSize = block.m_dataSize;
     if (m_dataSize == 0)
         return;
@@ -7790,8 +7793,7 @@ bool wxRichTextBufferDataObject::GetDataHere(void *pBuf) const
 
 bool wxRichTextBufferDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-    delete m_richTextBuffer;
-    m_richTextBuffer = NULL;
+    wxDELETE(m_richTextBuffer);
 
     wxString bufXML((const char*) buf, wxConvUTF8);
 
@@ -7802,8 +7804,7 @@ bool wxRichTextBufferDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     {
         wxLogError(wxT("Could not read the buffer from an XML stream.\nYou may have forgotten to add the XML file handler."));
 
-        delete m_richTextBuffer;
-        m_richTextBuffer = NULL;
+        wxDELETE(m_richTextBuffer);
 
         return false;
     }

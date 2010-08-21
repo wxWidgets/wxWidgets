@@ -74,11 +74,7 @@ wxGenericMDIParentFrame::~wxGenericMDIParentFrame()
     wxDELETE(m_clientWindow);
 
 #if wxUSE_MENUS
-    if (m_pMyMenuBar)
-    {
-        delete m_pMyMenuBar;
-        m_pMyMenuBar = NULL;
-    }
+    wxDELETE(m_pMyMenuBar);
 
     RemoveWindowMenu(GetMenuBar());
 #endif // wxUSE_MENUS

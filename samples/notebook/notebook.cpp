@@ -6,7 +6,7 @@
 // Created:     26/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2002 wxWidgets team
-// License:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -402,10 +402,11 @@ MyFrame::MyFrame()
     RecreateBook();
 
     m_panel->SetSizer(m_sizerFrame);
+    m_panel->Layout();
 
-    m_sizerFrame->SetSizeHints(this);
-
-    Centre(wxBOTH);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_panel, wxSizerFlags(1).Expand());
+    SetSizerAndFit(sizer);
 }
 
 MyFrame::~MyFrame()

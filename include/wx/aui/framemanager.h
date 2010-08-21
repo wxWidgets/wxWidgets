@@ -222,6 +222,8 @@ public:
         source.window = window;
         source.frame = frame;
         source.buttons = buttons;
+        wxCHECK_RET(source.IsValid(),
+                    "window settings and pane settings are incompatible");
         // now assign
         *this = source;
     }
@@ -253,7 +255,15 @@ public:
 #ifdef SWIG
     %typemap(out) wxAuiPaneInfo& { $result = $self; Py_INCREF($result); }
 #endif
-    wxAuiPaneInfo& Window(wxWindow* w) { window = w; return *this; }
+    wxAuiPaneInfo& Window(wxWindow* w)
+    {
+        wxAuiPaneInfo test(*this);
+        test.window = w;
+        wxCHECK_MSG(test.IsValid(), *this,
+                    "window settings and pane settings are incompatible");
+        *this = test;
+        return *this;
+    }
     wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxAuiPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
     wxAuiPaneInfo& Left() { dock_direction = wxAUI_DOCK_LEFT; return *this; }
@@ -308,10 +318,14 @@ public:
 
     wxAuiPaneInfo& DefaultPane()
     {
-        state |= optionTopDockable | optionBottomDockable |
+        wxAuiPaneInfo test(*this);
+        test.state |= optionTopDockable | optionBottomDockable |
                  optionLeftDockable | optionRightDockable |
                  optionFloatable | optionMovable | optionResizable |
                  optionCaption | optionPaneBorder | buttonClose;
+        wxCHECK_MSG(test.IsValid(), *this,
+                    "window settings and pane settings are incompatible");
+        *this = test;
         return *this;
     }
 
@@ -334,10 +348,14 @@ public:
 
     wxAuiPaneInfo& SetFlag(int flag, bool option_state)
     {
+        wxAuiPaneInfo test(*this);
         if (option_state)
-            state |= flag;
+            test.state |= flag;
         else
-            state &= ~flag;
+            test.state &= ~flag;
+        wxCHECK_MSG(test.IsValid(), *this,
+                    "window settings and pane settings are incompatible");
+        *this = test;
         return *this;
     }
 
@@ -416,6 +434,8 @@ public:
     wxAuiPaneButtonArray buttons; // buttons on the pane
 
     wxRect rect;              // current rectangle (populated by wxAUI)
+
+    bool IsValid() const;
 };
 
 
@@ -551,7 +571,7 @@ protected:
     void OnFloatingPaneMoved(wxWindow* window, wxDirection dir);
     void OnFloatingPaneActivated(wxWindow* window);
     void OnFloatingPaneClosed(wxWindow* window, wxCloseEvent& evt);
-    void OnFloatingPaneResized(wxWindow* window, const wxSize& size);
+    void OnFloatingPaneResized(wxWindow* window, const wxRect& rect);
     void Render(wxDC* dc);
     void Repaint(wxDC* dc = NULL);
     void ProcessMgrEvent(wxAuiManagerEvent& event);

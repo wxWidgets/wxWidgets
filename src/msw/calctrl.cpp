@@ -214,7 +214,7 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
 
         case MCHT_CALENDARDATE:
             if ( date )
-                date->SetFromMSWSysTime(hti.st);
+                date->SetFromMSWSysDate(hti.st);
             return wxCAL_HITTEST_DAY;
 
         case MCHT_CALENDARDAY:
@@ -263,10 +263,8 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
 {
     wxCHECK_MSG( dt.IsValid(), false, "invalid date" );
 
-    const wxDateTime date = dt.GetDateOnly();
-
     SYSTEMTIME st;
-    date.GetAsMSWSysTime(&st);
+    dt.GetAsMSWSysDate(&st);
     if ( !MonthCal_SetCurSel(GetHwnd(), &st) )
     {
         wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
@@ -274,7 +272,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
         return false;
     }
 
-    m_date = date;
+    m_date = dt.GetDateOnly();
 
     return true;
 }
@@ -283,6 +281,7 @@ wxDateTime wxCalendarCtrl::GetDate() const
 {
 #if wxDEBUG_LEVEL
     SYSTEMTIME st;
+
     if ( !MonthCal_GetCurSel(GetHwnd(), &st) )
     {
         wxASSERT_MSG( !m_date.IsValid(), "mismatch between data and control" );
@@ -290,14 +289,14 @@ wxDateTime wxCalendarCtrl::GetDate() const
         return wxDefaultDateTime;
     }
 
-    wxDateTime dt(st);
+    wxDateTime dt;
+    dt.SetFromMSWSysDate(st);
 
     // Windows XP and earlier didn't include the time component into the
     // returned date but Windows 7 does, so we can't compare the full objects
     // in the same way under all the Windows versions, just compare their date
     // parts
-    wxASSERT_MSG( dt.GetDateOnly() == m_date.GetDateOnly(),
-                  "mismatch between data and control" );
+    wxASSERT_MSG( dt.IsSameDate(m_date), "mismatch between data and control" );
 #endif // wxDEBUG_LEVEL
 
     return m_date;
@@ -336,7 +335,7 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt1 )
     {
         if ( flags & GDTR_MIN )
-            dt1->SetFromMSWSysTime(st[0]);
+            dt1->SetFromMSWSysDate(st[0]);
         else
             *dt1 = wxDefaultDateTime;
     }
@@ -344,7 +343,7 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt2 )
     {
         if ( flags & GDTR_MAX )
-            dt2->SetFromMSWSysTime(st[1]);
+            dt2->SetFromMSWSysDate(st[1]);
         else
             *dt2 = wxDefaultDateTime;
     }
@@ -454,7 +453,7 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // which expects GetDate() to return the new date
                 const wxDateTime dateOld = m_date;
                 const NMSELCHANGE * const sch = (NMSELCHANGE *)lParam;
-                m_date.SetFromMSWSysTime(sch->stSelStart);
+                m_date.SetFromMSWSysDate(sch->stSelStart);
 
                 // changing the year or the month results in a second dummy
                 // MCN_SELCHANGE event on this system which doesn't really

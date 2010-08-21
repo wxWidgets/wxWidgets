@@ -3,7 +3,7 @@
 // Purpose:     interface of wxMenu, wxMenuItem
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -55,8 +55,10 @@ public:
         For the standard menu items (such as commands to open a file, exit the
         program and so on, see @ref page_stockitems for the full list) it is enough
         to specify just the stock ID and leave @a text and @a helpString empty.
+        Some platforms (currently wxGTK only, and see the remark in SetBitmap()
+        documentation) will also show standard bitmaps for stock menu items.
 
-        In fact, leaving at least @a text empty for the stock menu items is strongly
+        Leaving at least @a text empty for the stock menu items is actually strongly
         recommended as they will have appearance and keyboard interface (including
         standard accelerators) familiar to the user.
 
@@ -73,7 +75,7 @@ public:
         helpMenu->Append(wxID_ABOUT);
 
         // use the stock label and the stock accelerator but not the stock help string:
-        helpMenu->Append(wxID_ABOUT, wxEmptyString, "My custom help string");
+        helpMenu->Append(wxID_ABOUT, "", "My custom help string");
 
         // use all stock properties except for the bitmap:
         wxMenuItem *mymenu = new wxMenuItem(helpMenu, wxID_ABOUT);

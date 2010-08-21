@@ -121,13 +121,15 @@ extern void wxSetKeyboardHook(bool doIt);
 // see http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/110282
 struct ClassRegInfo
 {
-    // the base name of the class: this is used to construct the unique name in
-    // wxApp::GetRegisteredClassName()
-    wxString basename;
+    ClassRegInfo(const wxChar *name)
+        : regname(name),
+          regnameNR(regname + wxApp::GetNoRedrawClassSuffix())
+    {
+    }
 
     // the name of the registered class with and without CS_[HV]REDRAW styles
-    wxString regname,
-             regnameNR;
+    wxString regname;
+    wxString regnameNR;
 };
 
 namespace
@@ -650,7 +652,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     const size_t count = gs_regClassesInfo.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( gs_regClassesInfo[n].basename == name )
+        if ( gs_regClassesInfo[n].regname == name )
             return gs_regClassesInfo[n].regname.c_str();
     }
 
@@ -665,16 +667,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
 
 
-    ClassRegInfo regClass;
-    regClass.basename = name;
-
-    // constuct a unique suffix to allow registering the class with the same
-    // base name in a main application using wxWidgets and a DLL using
-    // wxWidgets loaded into its address space: as gs_regClassesInfo variable
-    // is different in them, we're going to obtain a unique prefix by using its
-    // address here
-    regClass.regname = regClass.basename +
-                            wxString::Format(wxT("@%p"), &gs_regClassesInfo);
+    ClassRegInfo regClass(name);
     wndclass.lpszClassName = regClass.regname.wx_str();
     if ( !::RegisterClass(&wndclass) )
     {
@@ -683,10 +676,6 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
         return NULL;
     }
 
-    // NB: remember that code elsewhere supposes that no redraw class names
-    //     use the same names as normal classes with "NR" suffix so we must put
-    //     "NR" at the end instead of using more natural basename+"NR"+suffix
-    regClass.regnameNR = regClass.regname + GetNoRedrawClassSuffix();
     wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
     wndclass.lpszClassName = regClass.regnameNR.wx_str();
     if ( !::RegisterClass(&wndclass) )

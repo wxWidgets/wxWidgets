@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/uxtheme.h
+// Name:        wx/msw/uxtheme.h
 // Purpose:     wxUxThemeEngine class: support for XP themes
 // Author:      John Platts, Vadim Zeitlin
 // Modified by:
 // Created:     2003
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 John Platts, Vadim Zeitlin
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UXTHEME_H_

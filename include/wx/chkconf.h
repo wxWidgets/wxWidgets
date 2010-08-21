@@ -121,6 +121,14 @@
 #   endif
 #endif /* !defined(wxUSE_EXCEPTIONS) */
 
+#ifndef wxUSE_FILE_HISTORY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILE_HISTORY must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_FILE_HISTORY 0
+#   endif
+#endif /* !defined(wxUSE_FILE_HISTORY) */
+
 #ifndef wxUSE_FILESYSTEM
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FILESYSTEM must be defined, please read comment near the top of this file."
@@ -539,6 +547,14 @@
 #   endif
 #endif /* !defined(wxUSE_COMBOBOX) */
 
+#ifndef wxUSE_COMMANDLINKBUTTON
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COMMANDLINKBUTTON must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_COMMANDLINKBUTTON 0
+#   endif
+#endif /* !defined(wxUSE_COMMANDLINKBUTTON) */
+
 #ifndef wxUSE_COMBOCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_COMBOCTRL must be defined, please read comment near the top of this file."
@@ -910,6 +926,14 @@
 #       error "wxUSE_RIBBON must be defined, please read comment near the top of this file."
 #   else
 #       define wxUSE_RIBBON 0
+#   endif
+#endif /* !defined(wxUSE_RIBBON) */
+
+#ifndef wxUSE_RICHMSGDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_RICHMSGDLG must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_RICHMSGDLG 0
 #   endif
 #endif /* !defined(wxUSE_RIBBON) */
 
@@ -1417,6 +1441,17 @@
 #    endif
 #endif /* wxUSE_BMPBUTTON */
 
+#if wxUSE_COMMANDLINKBUTTON
+#    if !wxUSE_BUTTON
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_COMMANDLINKBUTTON requires wxUSE_BUTTON"
+#        else
+#            undef wxUSE_BUTTON
+#            define wxUSE_BUTTON 1
+#        endif
+#    endif
+#endif /* wxUSE_COMMANDLINKBUTTON */
+
 /*
    wxUSE_BOOKCTRL should be only used if any of the controls deriving from it
    are used
@@ -1511,6 +1546,17 @@
 #       endif
 #   endif
 #endif /* wxUSE_REARRANGECTRL */
+
+#if wxUSE_RICHMSGDLG
+#    if !wxUSE_MSGDLG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RICHMSGDLG requires wxUSE_MSGDLG"
+#        else
+#            undef wxUSE_MSGDLG
+#            define wxUSE_MSGDLG 1
+#        endif
+#    endif
+#endif /* wxUSE_RICHMSGDLG */
 
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR
@@ -1802,6 +1848,15 @@
 #        else
 #            undef wxUSE_STREAMS
 #            define wxUSE_STREAMS 1
+#        endif
+#   endif
+
+#   if !wxUSE_FILE_HISTORY
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "DocView requires wxUSE_FILE_HISTORY"
+#        else
+#            undef wxUSE_FILE_HISTORY
+#            define wxUSE_FILE_HISTORY 1
 #        endif
 #   endif
 #endif /* wxUSE_DOC_VIEW_ARCHITECTURE */

@@ -70,8 +70,7 @@ void wxSystemSettingsModule::OnExit()
 {
     sm_optionNames.Clear();
     sm_optionValues.Clear();
-    delete gs_fontDefault;
-    gs_fontDefault = NULL;
+    wxDELETE(gs_fontDefault);
 }
 
 wxColour wxSystemSettingsNative::GetColour(

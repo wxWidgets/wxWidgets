@@ -3,12 +3,12 @@
 // Purpose:     Samples page of the Doxygen manual
 // Author:      wxWidgets team
 // RCS-ID:      $Id: utilities.h 52634 2008-03-20 13:45:17Z VS $
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
-@page page_samples wxWidgets Samples Overview
+@page page_samples Samples Overview
 
 @brief Overview of the examples provided with wxWidgets.
 
@@ -556,6 +556,12 @@ its directory. Please also see the @ref overview_i18n.
 
 @sampleabout{wxKeyEvent}
 
+This sample can be used to interactively test the events produced by pressing
+various keyboard keys. It also shows the interaction between accelerators and
+the normal keyboard events (which are overridden by any defined accelerators)
+and finally allows to test that not skipping an event in EVT_KEY_DOWN handler
+suppresses the subsequent EVT_CHAR event.
+
 @sampledir{keyboard}
 
 @section page_samples_layout Layout Sample
@@ -633,7 +639,7 @@ For build instructions please read IMPORTANT NOTES in @c mfctest.cpp.
 
 @section page_sample_maskededit MaskedEdit Sample
 
-This sample demonstrate how use all mask features. In the first 
+This sample demonstrate how use all mask features. In the first
 tab basic mask, in the second page default value, fill char change
 and user choice list. The last page presente various mask in
 @see wxTextCtrl and @see wxComboBox.

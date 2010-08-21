@@ -141,7 +141,7 @@ public: \
   static wxProtoInfo g_proto_##class;
 
 #define IMPLEMENT_PROTOCOL(class, name, serv, host) \
-wxProtoInfo class::g_proto_##class(name, serv, host, CLASSINFO(class)); \
+wxProtoInfo class::g_proto_##class(name, serv, host, wxCLASSINFO(class)); \
 bool wxProtocolUse##class = true;
 
 #define USE_PROTOCOL(class) \

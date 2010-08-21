@@ -198,16 +198,6 @@ bool wxDirData::Read(wxString * WXUNUSED(filename))
 #endif // not or new VMS/old VMS
 
 // ----------------------------------------------------------------------------
-// wxDir helpers
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxDir::Exists(const wxString& dir)
-{
-    return wxDirExists(dir);
-}
-
-// ----------------------------------------------------------------------------
 // wxDir construction/destruction
 // ----------------------------------------------------------------------------
 

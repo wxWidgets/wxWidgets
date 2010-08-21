@@ -115,8 +115,7 @@ public:
             wxLogSysError(_("Error closing kqueue instance"));
         }
 
-        delete m_source;
-        m_source = NULL;
+        wxDELETE(m_source);
     }
 
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryKq> watch)
@@ -419,11 +418,7 @@ wxKqueueFileSystemWatcher::wxKqueueFileSystemWatcher(const wxFileName& path,
 {
     if (!Init())
     {
-        if (m_service)
-        {
-            delete m_service;
-            m_service = NULL;
-        }
+        wxDELETE(m_service);
         return;
     }
 

@@ -191,6 +191,18 @@ wxClientData *wxItemContainer::GetClientObject(unsigned int n) const
     return static_cast<wxClientData *>(DoGetItemClientData(n));
 }
 
+wxClientData *wxItemContainer::DetachClientObject(unsigned int n)
+{
+    wxClientData * const data = GetClientObject(n);
+    if ( data )
+    {
+        // reset the pointer as we don't own it any more
+        DoSetItemClientData(n, NULL);
+    }
+
+    return data;
+}
+
 void wxItemContainer::SetClientData(unsigned int n, void *data)
 {
     if ( !HasClientData() )

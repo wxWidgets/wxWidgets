@@ -3,7 +3,7 @@
 // Purpose:     interface of wxApp
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -24,11 +24,11 @@
         objects in the application (see wxAppConsole::FilterEvent)
     @li implement Apple-specific event handlers (see wxAppConsole::MacXXX functions)
 
-    You should use the macro IMPLEMENT_APP(appClass) in your application
+    You should use the macro wxIMPLEMENT_APP(appClass) in your application
     implementation file to tell wxWidgets how to create an instance of your
     application class.
 
-    Use DECLARE_APP(appClass) in a header file if you want the ::wxGetApp() function
+    Use wxDECLARE_APP(appClass) in a header file if you want the ::wxGetApp() function
     (which returns a reference to your application object) to be visible to other
     files.
 
@@ -856,35 +856,37 @@ public:
 
 /**
     This is used in headers to create a forward declaration of the ::wxGetApp()
-    function implemented by IMPLEMENT_APP().
+    function implemented by wxIMPLEMENT_APP().
 
-    It creates the declaration <tt>className& wxGetApp()</tt>.
+    It creates the declaration <tt>className& wxGetApp()</tt>
+    (requires a final semicolon).
 
     @header{wx/app.h}
 
     Example:
 
     @code
-    DECLARE_APP(MyApp)
+    wxDECLARE_APP(MyApp);
     @endcode
 */
-#define DECLARE_APP( className )
+#define wxDECLARE_APP( className )
 
 /**
     This is used in the application class implementation file to make the
     application class known to wxWidgets for dynamic construction.
+    Note that this macro requires a final semicolon.
 
     @header{wx/app.h}
 
     Example:
 
     @code
-    IMPLEMENT_APP(MyApp)
+    wxIMPLEMENT_APP(MyApp);
     @endcode
 
-    @see DECLARE_APP().
+    @see wxDECLARE_APP()
 */
-#define IMPLEMENT_APP( className )
+#define wxIMPLEMENT_APP( className )
 
 //@}
 
@@ -904,10 +906,10 @@ wxApp *wxTheApp;
 
 /**
     This function doesn't exist in wxWidgets but it is created by using the
-    IMPLEMENT_APP() macro.
+    wxIMPLEMENT_APP() macro.
 
     Thus, before using it anywhere but in the same module where this macro is
-    used, you must make it available using DECLARE_APP().
+    used, you must make it available using wxDECLARE_APP().
 
     The advantage of using this function compared to directly using the global
     ::wxTheApp pointer is that the latter is of type wxApp* and so wouldn't
@@ -1060,11 +1062,11 @@ void wxExit();
     @def wxDISABLE_DEBUG_SUPPORT()
 
     Use this macro to disable all debugging code in release build when not
-    using IMPLEMENT_APP().
+    using wxIMPLEMENT_APP().
 
     Currently this macro disables assert checking and debug and trace level
     logging messages in release build (i.e. when @c NDEBUG is defined). It is
-    used by IMPLEMENT_APP() macro so you only need to use it explicitly if you
+    used by wxIMPLEMENT_APP() macro so you only need to use it explicitly if you
     don't use this macro but initialize wxWidgets directly (e.g. calls
     wxEntry() or wxEntryStart() itself).
 

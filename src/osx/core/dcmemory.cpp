@@ -58,8 +58,7 @@ wxMemoryDCImpl::~wxMemoryDCImpl()
     if ( m_selected.Ok() )
     {
         m_selected.EndRawAccess() ;
-        delete m_graphicContext ;
-        m_graphicContext = NULL ;
+        wxDELETE(m_graphicContext);
     }
 }
 
@@ -68,8 +67,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     if ( m_selected.Ok() )
     {
         m_selected.EndRawAccess() ;
-        delete m_graphicContext ;
-        m_graphicContext = NULL ;
+        wxDELETE(m_graphicContext);
     }
 
     m_selected = bitmap;

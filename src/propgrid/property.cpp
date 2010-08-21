@@ -6,7 +6,7 @@
 // Created:     2008-08-23
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -692,12 +692,7 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    for ( unsigned int i = 0; i<m_children.size(); i++ )
-    {
-        if ( p == m_children[i] )
-            return i;
-    }
-    return wxNOT_FOUND;
+    return wxPGFindInVector(m_children, p);
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -1364,6 +1359,12 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 }
                 i++;
             }
+
+            // Always call OnSetValue() for a parent property (do not call it
+            // here if the value is non-null because it will then be called
+            // below)
+            if ( value.IsNull() )
+                OnSetValue();
         }
 
         if ( !value.IsNull() )
@@ -1489,6 +1490,31 @@ wxVariant wxPGProperty::GetDefaultValue() const
     }
 
     return wxVariant();
+}
+
+void wxPGProperty::Enable( bool enable )
+{
+    wxPropertyGrid* pg = GetGrid();
+
+    // Preferably call the version in the owning wxPropertyGrid,
+    // since it handles the editor de-activation.
+    if ( pg )
+        pg->EnableProperty(this, enable);
+    else
+        DoEnable(enable);
+}
+
+void wxPGProperty::DoEnable( bool enable )
+{
+    if ( enable )
+        ClearFlag(wxPG_PROP_DISABLED);
+    else
+        SetFlag(wxPG_PROP_DISABLED);
+
+    // Apply same to sub-properties as well
+    unsigned int i;
+    for ( i = 0; i < GetChildCount(); i++ )
+        Item(i)->DoEnable( enable );
 }
 
 void wxPGProperty::EnsureCells( unsigned int column )
@@ -1911,7 +1937,7 @@ void wxPGProperty::SetChoiceSelection( int newValue )
     }
 }
 
-bool wxPGProperty::SetChoices( wxPGChoices& choices )
+bool wxPGProperty::SetChoices( const wxPGChoices& choices )
 {
     // Property must be de-selected first (otherwise choices in
     // the control would be de-synced with true choices)

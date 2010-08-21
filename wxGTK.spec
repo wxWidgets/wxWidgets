@@ -1,5 +1,5 @@
 %define _prefix /usr
-%define ver  2.9.1
+%define ver  2.9.2
 %define ver2 2.9
 %define rel  1
 
@@ -278,8 +278,6 @@ wx/listimpl.cpp
 wx/log.h
 wx/longlong.h
 wx/math.h
-wx/maskedfield.h
-wx/maskededit.h
 wx/memconf.h
 wx/memory.h
 wx/memtext.h
@@ -287,6 +285,7 @@ wx/mimetype.h
 wx/module.h
 wx/mousestate.h
 wx/msgout.h
+wx/msgqueue.h
 wx/mstream.h
 wx/object.h
 wx/platform.h
@@ -354,6 +353,7 @@ wx/meta/convertible.h
 wx/meta/if.h
 wx/meta/int2type.h
 wx/meta/movable.h
+wx/meta/pod.h
 wx/fswatcher.h
 wx/generic/fswatcher.h
 wx/unix/app.h

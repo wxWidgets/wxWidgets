@@ -214,7 +214,7 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_PARAGRAPH = \
         (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
+            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL|wxTEXT_ATTR_PAGE_BREAK),
 
     wxTEXT_ATTR_ALL = (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 };
@@ -591,7 +591,7 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
-    
+
 
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
@@ -599,9 +599,6 @@ protected:
 
     // the text style which will be used for any new text added to the control
     wxTextAttr m_defaultStyle;
-
-    //Mask
-    wxMaskedEdit m_maskCtrl;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAreaBase);
 };
@@ -629,8 +626,8 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlIface);
-    
-   
+
+
 };
 
 // ----------------------------------------------------------------------------
@@ -707,10 +704,9 @@ public:
     }
 
     //mask
-   
-    virtual void SetMask(const wxMaskedEdit& mask);
-    // wxWindow overrides
-    
+
+    void SetAssociatedMask(const wxMaskedEdit& mask);
+
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
         return GetClassDefaultAttributes(GetWindowVariant());
@@ -723,6 +719,15 @@ public:
     }
 
 protected:
+
+    //mask event
+    void OnKeyMask(wxKeyEvent& event)
+    {
+        OnKeyPressedMask(event);
+        OnSetBackgroundMask();
+    }
+    void OnSetBackgroundMask();
+
     // override streambuf method
 #if wxHAS_TEXT_WINDOW_STREAM
     int overflow(int i);
@@ -733,10 +738,6 @@ protected:
 
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }
-    //Mask event methods
-    void ApplyMask();
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)

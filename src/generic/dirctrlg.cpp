@@ -1095,6 +1095,22 @@ bool wxGenericDirCtrl::CollapsePath(const wxString& path)
 
 wxString wxGenericDirCtrl::GetPath() const
 {
+    // Allow calling GetPath() in multiple selection from OnSelFilter
+    if (m_treeCtrl->HasFlag(wxTR_MULTIPLE))
+    {
+        wxArrayTreeItemIds items;
+        m_treeCtrl->GetSelections(items);
+        if (items.size() > 0)
+        {
+            // return first string only
+            wxTreeItemId id = items[0];
+            wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+            return data->m_path;
+        }
+        
+        return wxEmptyString;
+    }
+
     wxTreeItemId id = m_treeCtrl->GetSelection();
     if (id)
     {
@@ -1496,11 +1512,7 @@ public:
     bool OnInit() { wxTheFileIconsTable = new wxFileIconsTable; return true; }
     void OnExit()
     {
-        if (wxTheFileIconsTable)
-        {
-            delete wxTheFileIconsTable;
-            wxTheFileIconsTable = NULL;
-        }
+        wxDELETE(wxTheFileIconsTable);
     }
 };
 

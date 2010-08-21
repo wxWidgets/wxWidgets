@@ -6,7 +6,7 @@
 // Created:     2008-06-19
 // Id:          $Id$
 // Copyright:   (c) 2008 Marcin Wojdyr
-// License:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -115,8 +115,7 @@ void StatBmpWidgetsPage::CreateContent()
 
 void StatBmpWidgetsPage::RecreateWidget()
 {
-    delete m_statbmp;
-    m_statbmp = NULL;
+    wxDELETE(m_statbmp);
 
     wxString filepath = m_filepicker->GetPath();
     if ( filepath.empty() )

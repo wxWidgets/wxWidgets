@@ -6,7 +6,7 @@
 // Created:     10.07.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -91,7 +91,7 @@ void wxGUIEventLoop::WakeUp()
 
 extern "C"
 {
-static gboolean wx_on_channel_event(GIOChannel *channel,
+static gboolean wx_on_channel_event(GIOChannel * WXUNUSED_UNLESS_DEBUG(channel),
                                     GIOCondition condition,
                                     gpointer data)
 {

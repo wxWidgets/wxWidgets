@@ -3,7 +3,7 @@
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -78,6 +78,12 @@ operators and copy constructors since they are reference-counted:
 @li wxBrush
 @li wxCursor
 @li wxFont
+@li wxGraphicsBrush
+@li wxGraphicsContext
+@li wxGraphicsFont
+@li wxGraphicsMatrix
+@li wxGraphicsPath
+@li wxGraphicsPen
 @li wxIcon
 @li wxImage
 @li wxMetafile

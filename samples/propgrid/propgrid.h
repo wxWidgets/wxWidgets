@@ -6,7 +6,7 @@
 // Created:     2004-09-25
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SAMPLES_PROPGRID_PROPGRID_H_
@@ -225,6 +225,8 @@ public:
     void OnIterate2Click( wxCommandEvent& event );
     void OnIterate3Click( wxCommandEvent& event );
     void OnIterate4Click( wxCommandEvent& event );
+
+    void OnExtendedKeyNav( wxCommandEvent& event );
 
     void OnPropertyGridChange( wxPropertyGridEvent& event );
     void OnPropertyGridChanging( wxPropertyGridEvent& event );

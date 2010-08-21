@@ -665,6 +665,12 @@
 				RelativePath=".\controls\listctrltest.cpp">
 			</File>
 			<File
+				RelativePath=".\masked\maskededit.cpp">
+			</File>
+			<File
+				RelativePath=".\masked\maskedfield.cpp">
+			</File>
+			<File
 				RelativePath=".\graphics\measuring.cpp">
 			</File>
 			<File

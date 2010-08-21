@@ -65,7 +65,7 @@ enum wxPrintfArgType
 #ifdef wxLongLong_t
     wxPAT_LONGLONGINT,  // %Ld, etc
 #endif
-    wxPAT_SIZET,        // %Zd, etc
+    wxPAT_SIZET,        // %zd, etc
 
     wxPAT_DOUBLE,       // %e, %E, %f, %g, %G
     wxPAT_LONGDOUBLE,   // %le, etc
@@ -93,7 +93,7 @@ union wxPrintfArg
 #ifdef wxLongLong_t
     wxLongLong_t pad_longlongint;       // %Ld, etc
 #endif
-    size_t pad_sizet;                   // %Zd, etc
+    size_t pad_sizet;                   // %zd, etc
 
     double pad_double;                  // %e, %E, %f, %g, %G
     long double pad_longdouble;         // %le, etc
@@ -161,7 +161,7 @@ public:
     //       it's task of the caller ensure that memory is still valid !
     const CharType *m_pArgEnd;
 
-    // a little buffer where formatting flags like #+\.hlqLZ are stored by Parse()
+    // a little buffer where formatting flags like #+\.hlqLz are stored by Parse()
     // for use in Process()
     char m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
@@ -201,6 +201,7 @@ void wxPrintfConvSpec<CharType>::Init()
     m_pArgPos = m_pArgEnd = NULL;
     m_type = wxPAT_INVALID;
 
+    memset(m_szFlags, 0, sizeof(m_szFlags));
     // this character will never be removed from m_szFlags array and
     // is important when calling sprintf() in wxPrintfConvSpec::Process() !
     m_szFlags[0] = '%';
@@ -293,22 +294,26 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             // integer conversion specifier for MSVC compatibility
             // (it behaves exactly as '%lli' or '%Li' or '%qi')
             case wxT('I'):
-                if (*(m_pArgEnd+1) != wxT('6') ||
-                    *(m_pArgEnd+2) != wxT('4'))
-                    return false;       // bad format
+                if (*(m_pArgEnd+1) == wxT('6') &&
+                    *(m_pArgEnd+2) == wxT('4'))
+                {
+                    m_pArgEnd++;
+                    m_pArgEnd++;
 
-                m_pArgEnd++;
-                m_pArgEnd++;
-
-                ilen = 2;
-                CHECK_PREC
-                m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs++] = '6';
-                m_szFlags[flagofs++] = '4';
-                break;
+                    ilen = 2;
+                    CHECK_PREC
+                    m_szFlags[flagofs++] = char(ch);
+                    m_szFlags[flagofs++] = '6';
+                    m_szFlags[flagofs++] = '4';
+                    break;
+                }
+                // else: fall-through, 'I' is MSVC equivalent of C99 'z'
 #endif      // __WXMSW__
 
+            case wxT('z'):
             case wxT('Z'):
+                // 'z' is C99 standard for size_t and ptrdiff_t, 'Z' was used
+                // for this purpose in libc5 and by wx <= 2.8
                 ilen = 3;
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
@@ -387,7 +392,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('X'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 if (ilen == 0)
                     m_type = wxPAT_INT;
                 else if (ilen == -1)
@@ -415,7 +419,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('G'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 if (ilen == 2)
                     m_type = wxPAT_LONGDOUBLE;
                 else
@@ -426,7 +429,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('p'):
                 m_type = wxPAT_POINTER;
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 done = true;
                 break;
 

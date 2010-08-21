@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/arrstr.h
+// Name:        wx/arrstr.h
 // Purpose:     wxArrayString class
 // Author:      Mattia Barbon and Vadim Zeitlin
 // Modified by:
@@ -136,11 +136,11 @@ public:
     //
     // NB: the reason for using int and not bool is that like this we can avoid
     //     using this ctor for implicit conversions from "const char *" (which
-    //     we'd like to be implicitly converted to wxString instead!)
-    //
-    //     of course, using explicit would be even better - if all compilers
-    //     supported it...
-  wxArrayString(int autoSort) { Init(autoSort != 0); }
+    //     we'd like to be implicitly converted to wxString instead!). This
+    //     wouldn't be needed if the 'explicit' keyword was supported by all
+    //     compilers, or if this was protected ctor for wxSortedArrayString,
+    //     but we're stuck with it now.
+  wxEXPLICIT wxArrayString(int autoSort) { Init(autoSort != 0); }
     // C string array ctor
   wxArrayString(size_t sz, const char** a);
   wxArrayString(size_t sz, const wchar_t** a);

@@ -586,7 +586,8 @@ static wxString FileToCppArray(wxString filename, int num)
                   wxT("Huge file not supported") );
 
     snum.Printf(wxT("%i"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %i;\n"), lng);
+    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %lu;\n"),
+                  static_cast<unsigned long>(lng));
     output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
@@ -618,7 +619,7 @@ static wxString FileToCppArray(wxString filename, int num)
 void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 {
     wxFFile file(parOutput, wxT("wt"));
-    size_t i;
+    unsigned i;
 
     if (flagVerbose)
         wxPrintf(wxT("creating C++ source file ") + parOutput +  wxT("...\n"));
@@ -688,7 +689,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 #endif // wxUSE_MIMETYPE
 
         s.Printf("    XRC_ADD_FILE(wxT(\"XRC_resource/" + flist[i] +
-                 "\"), xml_res_file_%i, xml_res_size_%i, wxT(\"%s\"));\n",
+                 "\"), xml_res_file_%u, xml_res_size_%u, wxT(\"%s\"));\n",
                  i, i, mime.c_str());
         file.Write(s);
     }
@@ -779,7 +780,7 @@ static wxString FileToPythonArray(wxString filename, int num)
 void XmlResApp::MakePackagePython(const wxArrayString& flist)
 {
     wxFFile file(parOutput, wxT("wt"));
-    size_t i;
+    unsigned i;
 
     if (flagVerbose)
         wxPrintf(wxT("creating Python source file ") + parOutput +  wxT("...\n"));
@@ -818,7 +819,7 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
     {
         wxString s;
         s.Printf("    wx.MemoryFSHandler.AddFile('XRC_resource/" + flist[i] +
-                 "', xml_res_file_%i)\n", i);
+                 "', xml_res_file_%u)\n", i);
         file.Write(s);
     }
     for (i = 0; i < parFiles.GetCount(); i++)
@@ -844,9 +845,12 @@ void XmlResApp::OutputGettext()
 
     for (ExtractedStrings::const_iterator i = str.begin(); i != str.end(); ++i)
     {
-        wxString s;
+        const wxFileName filename(i->filename);
 
-        s.Printf("#line %d \"%s\"\n", i->lineNo, i->filename);
+        wxString s;
+        s.Printf("#line %d \"%s\"\n",
+                 i->lineNo, filename.GetFullPath(wxPATH_UNIX));
+
         fout.Write(s);
         fout.Write("_(\"" + i->str + "\");\n");
     }

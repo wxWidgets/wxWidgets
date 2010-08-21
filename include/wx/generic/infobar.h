@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxStaticText;
 // wxInfoBar
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxInfoBarGeneric : public wxInfoBarBase
+class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxInfoBarBase
 {
 public:
     // the usual ctors and Create() but remember that info bar is created

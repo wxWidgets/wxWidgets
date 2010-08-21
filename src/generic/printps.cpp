@@ -40,7 +40,7 @@
 #include "wx/generic/printps.h"
 #include "wx/printdlg.h"
 #include "wx/generic/prntdlgg.h"
-#include "wx/generic/progdlgg.h"
+#include "wx/progdlg.h"
 #include "wx/paper.h"
 
 #include <stdlib.h>
@@ -79,8 +79,6 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
-
-    printout->SetIsPreview(false);
 
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);

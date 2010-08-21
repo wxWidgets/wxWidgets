@@ -20,7 +20,10 @@
 
 wxSize wxButton::DoGetBestSize() const
 {
-    if ( GetId() == wxID_HELP )
+    // We only use help button bezel if we don't have any (non standard) label
+    // to display in the button. Otherwise even wxID_HELP buttons look like
+    // normal push buttons.
+    if ( GetId() == wxID_HELP && GetLabel().empty() )
         return wxSize( 23 , 23 ) ;
 
     wxRect r ;
@@ -157,7 +160,7 @@ void SetBezelStyleFromBorderFlags(NSButton *v, long style)
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID id,
-                                    const wxString& WXUNUSED(label),
+                                    const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),
@@ -166,7 +169,11 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    if ( id == wxID_HELP )
+    // We can't display a custom label inside a button with help bezel style so
+    // we only use it if we are using the default label. wxButton itself checks
+    // if the label is just "Help" in which case it discards it and passes us
+    // an empty string.
+    if ( id == wxID_HELP && label.empty() )
     {
         [v setBezelStyle:NSHelpButtonBezelStyle];
     }

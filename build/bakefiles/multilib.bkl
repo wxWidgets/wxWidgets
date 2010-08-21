@@ -364,13 +364,7 @@
     <!--                            STC                                   -->
     <!-- ================================================================ -->
 
-    <template id="stc_base">
-        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
-        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
-        <define>__WX__</define>
-        <define>SCI_LEXER</define>
-        <define>LINK_LEXERS</define>
-        <cppflags-borland>-w-8027</cppflags-borland>
+    <template id="stc_base" template="wxscintilla_cppflags">
         <library>wxscintilla</library>
     </template>
 

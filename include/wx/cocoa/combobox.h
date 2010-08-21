@@ -150,18 +150,6 @@ public:
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 
-    
-    virtual void SetMask(const wxMaskedEdit& mask);
-protected:    
-    
-    //Mask event methods
-    void ApplyMask();
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
-
-    // Mask
-    wxMaskedEdit m_maskCtrl;
-
 
 private:
     // implement wxTextEntry pure virtual method

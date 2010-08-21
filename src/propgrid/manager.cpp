@@ -6,7 +6,7 @@
 // Created:     2005-01-14
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -623,8 +623,7 @@ wxPropertyGridManager::~wxPropertyGridManager()
     END_MOUSE_CAPTURE
 
     //m_pPropGrid->ClearSelection();
-    delete m_pPropGrid;
-    m_pPropGrid = NULL;
+    wxDELETE(m_pPropGrid);
 
     size_t i;
     for ( i=0; i<m_arrPages.size(); i++ )

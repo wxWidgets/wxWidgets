@@ -6,7 +6,7 @@
 // Created:     2008-08-24
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -1299,13 +1299,8 @@ bool wxPropertyGridPageState::DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wx
 
 bool wxPropertyGridPageState::DoIsPropertySelected( wxPGProperty* prop ) const
 {
-    const wxArrayPGProperty& selection = m_selection;
-
-    for ( unsigned int i=0; i<selection.size(); i++ )
-    {
-        if ( selection[i] == prop )
-            return true;
-    }
+    if ( wxPGFindInVector(m_selection, prop) != wxNOT_FOUND )
+        return true;
 
     return false;
 }
@@ -1401,42 +1396,6 @@ bool wxPropertyGridPageState::DoHideProperty( wxPGProperty* p, bool hide, int fl
     VirtualHeightChanged();
 
     return true;
-}
-
-// -----------------------------------------------------------------------
-
-bool wxPropertyGridPageState::DoEnableProperty( wxPGProperty* p, bool enable )
-{
-    if ( p )
-    {
-        if ( enable )
-        {
-            if ( !(p->m_flags & wxPG_PROP_DISABLED) )
-                return false;
-
-            // Enabling
-
-            p->m_flags &= ~(wxPG_PROP_DISABLED);
-        }
-        else
-        {
-            if ( p->m_flags & wxPG_PROP_DISABLED )
-                return false;
-
-            // Disabling
-
-            p->m_flags |= wxPG_PROP_DISABLED;
-
-        }
-
-        // Apply same to sub-properties as well
-        unsigned int i;
-        for ( i = 0; i < p->GetChildCount(); i++ )
-            DoEnableProperty( p->Item(i), enable );
-
-        return true;
-    }
-    return false;
 }
 
 // -----------------------------------------------------------------------

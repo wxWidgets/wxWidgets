@@ -3,7 +3,7 @@
 // Purpose:     interface of wxFileName
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -456,7 +456,7 @@ public:
     bool DirExists() const;
 
     /**
-        Returns @true if the directory with this name exists.
+        Returns @true if the directory with name @a dir exists.
     */
     static bool DirExists(const wxString& dir);
 
@@ -475,7 +475,7 @@ public:
     bool FileExists() const;
 
     /**
-        Returns @true if the file with this name exists.
+        Returns @true if the file with name @a file exists.
 
         @see DirExists()
     */

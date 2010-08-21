@@ -933,11 +933,7 @@ void wxStdScrollBarInputHandler::StopScrolling(wxScrollBar *control)
 
     m_btnCapture = -1;
 
-    if ( m_timerScroll )
-    {
-        delete m_timerScroll;
-        m_timerScroll = NULL;
-    }
+    wxDELETE(m_timerScroll);
 
     // unpress the arrow and highlight the current element
     Press(control, false);

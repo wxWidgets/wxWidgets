@@ -590,7 +590,11 @@ protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     // these can be overridden
-    virtual void UpdateTabCtrlHeight();
+
+    // update the height, return true if it was done or false if the new height
+    // calculated by CalculateTabCtrlHeight() is the same as the old one
+    virtual bool UpdateTabCtrlHeight();
+
     virtual int CalculateTabCtrlHeight();
     virtual wxSize CalculateNewSplitSize();
 

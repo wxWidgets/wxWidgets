@@ -121,19 +121,6 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                                        ,WXLPARAM lParam
                                       );
 
-    virtual void SetMask(const wxMaskedEdit& mask);
-protected:
-    //Mask event methods
-    void ApplySingleFieldMask();
-    void ApplyMultipleFieldsMask();
-    void ApplyMask(wxCommandEvent& event);
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
-
-    // Mask
-    wxMaskedEdit m_maskCtrl;
-
-
 private:
     // implement wxTextEntry pure virtual methods
     virtual wxWindow *GetEditableWindow() { return this; }

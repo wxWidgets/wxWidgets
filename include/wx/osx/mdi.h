@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/osx/carbon/mdi.h
+// Name:        wx/osx/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes.
 // Author:      Stefan Csomor
 // Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes

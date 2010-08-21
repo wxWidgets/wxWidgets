@@ -233,7 +233,7 @@ layout:
 listctrl: 
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) all
 
-maskededit: 
+maskededit:
 	$(MAKE) -C maskededit -f makefile.gcc $(MAKEARGS) all
 
 mdi: 

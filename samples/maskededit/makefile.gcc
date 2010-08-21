@@ -29,8 +29,8 @@ MASKEDEDIT_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-I.\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MASKEDEDIT_OBJECTS =  \
-	$(OBJS)\maskedEdit_sample_rc.o \
-	$(OBJS)\maskedEdit_maskedEdit.o
+	$(OBJS)\maskededit_sample_rc.o \
+	$(OBJS)\maskededit_maskededit.o
 
 ### Conditionally set variables: ###
 
@@ -62,10 +62,10 @@ ifeq ($(SHARED),1)
 LIBTYPE_SUFFIX = dll
 endif
 ifeq ($(MONOLITHIC),0)
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
@@ -77,13 +77,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG_5 = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG_5 = 
+__RTTIFLAG_5 =
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG_6 = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_6 = 
+__EXCEPTIONSFLAG_6 =
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -188,17 +188,17 @@ endif
 endif
 ifeq ($(BUILD),release)
 ifeq ($(DEBUG_INFO),default)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 endif
 ifeq ($(DEBUG_INFO),0)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 ifeq ($(DEBUG_INFO),1)
 __DEBUGINFO = -g
 endif
 ifeq ($(USE_THREADS),0)
-__THREADSFLAG = 
+__THREADSFLAG =
 endif
 ifeq ($(USE_THREADS),1)
 __THREADSFLAG = -mthreads
@@ -211,20 +211,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\maskedEdit.exe
+all: $(OBJS)\maskededit.exe
 
-clean: 
+clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
-	-if exist $(OBJS)\maskedEdit.exe del $(OBJS)\maskedEdit.exe
+	-if exist $(OBJS)\maskededit.exe del $(OBJS)\maskededit.exe
 
-$(OBJS)\maskedEdit.exe: $(MASKEDEDIT_OBJECTS) $(OBJS)\maskedEdit_sample_rc.o
+$(OBJS)\maskededit.exe: $(MASKEDEDIT_OBJECTS) $(OBJS)\maskededit_sample_rc.o
 	$(CXX) -o $@ $(MASKEDEDIT_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
-$(OBJS)\maskedEdit_sample_rc.o: ./../../samples/sample.rc
+$(OBJS)\maskededit_sample_rc.o: ./../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
-$(OBJS)\maskedEdit_maskedEdit.o: ./maskedEdit.cpp
+$(OBJS)\maskededit_maskededit.o: ./maskededit.cpp
 	$(CXX) -c -o $@ $(MASKEDEDIT_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean

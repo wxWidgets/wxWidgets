@@ -3,18 +3,18 @@
 // Purpose:     interface of wxArtProvider
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
     This type identifies the client of the art objects requested to wxArtProvider.
 */
-typedef wxString wxArtClient;
+typedef class wxString wxArtClient;
 
 /**
     This type identifies a specific art object which can be requested to wxArtProvider.
 */
-typedef wxString wxArtID;
+typedef class wxString wxArtID;
 
 
 /**

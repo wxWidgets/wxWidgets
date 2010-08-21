@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/textctrl.h
+// Name:        wx/osx/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      Stefan Csomor
 // Modified by:

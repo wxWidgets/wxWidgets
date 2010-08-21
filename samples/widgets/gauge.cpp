@@ -6,7 +6,7 @@
 // Created:     27.03.01
 // Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
-// License:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -335,8 +335,7 @@ void GaugeWidgetsPage::StopTimer(wxButton *clicked)
     wxCHECK_RET( m_timer, wxT("shouldn't be called") );
 
     m_timer->Stop();
-    delete m_timer;
-    m_timer = NULL;
+    wxDELETE(m_timer);
 
     if (clicked->GetId() == GaugePage_Progress)
     {
@@ -388,6 +387,8 @@ void GaugeWidgetsPage::OnButtonIndeterminateProgress(wxCommandEvent& event)
     else // stop the running timer
     {
         StopTimer(b);
+
+        m_gauge->SetValue(0);
 
         wxLogMessage(wxT("Stopped the timer."));
     }

@@ -193,6 +193,12 @@
 #define va_list __gnuc_va_list
 #endif /*  HP-UX */
 
+/* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
+/* when using Windows sockets. */
+#ifdef __CYGWIN__
+#define __USE_W32_SOCKETS
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  check for native bool type and TRUE/FALSE constants */
 /*  ---------------------------------------------------------------------------- */
@@ -322,6 +328,12 @@ typedef short int WXTYPE;
         /*  GCC 3.1 has std::string::compare; */
         /*  3.0 never was in MinGW, 2.95 hasn't it */
         #define HAVE_STD_STRING_COMPARE
+    #endif
+#endif
+
+#ifndef HAVE_TR1_TYPE_TRAITS
+    #if defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
+        #define HAVE_TR1_TYPE_TRAITS
     #endif
 #endif
 
@@ -820,21 +832,30 @@ typedef wxUint16 wxWord;
     #define SIZEOF_VOID_P 4
     #define SIZEOF_SIZE_T 4
 #elif defined(__WINDOWS__)
-    /*  Win64 uses LLP64 model and so ints and longs have the same size as in */
-    /*  Win32 */
     #if defined(__WIN32__)
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
-        /* Assume that if SIZEOF_INT is defined that all the other ones except
-           SIZEOF_SIZE_T, are too.  See next #if below.  */
+        /*
+            Win64 uses LLP64 model and so ints and longs have the same size as
+            in Win32.
+         */
         #ifndef SIZEOF_INT
             #define SIZEOF_INT 4
-            #define SIZEOF_LONG 4
-            #define SIZEOF_WCHAR_T 2
+        #endif
 
+        #ifndef SIZEOF_LONG
+            #define SIZEOF_LONG 4
+        #endif
+
+        #ifndef SIZEOF_WCHAR_T
+            /* Windows uses UTF-16 */
+            #define SIZEOF_WCHAR_T 2
+        #endif
+
+        #ifndef SIZEOF_SIZE_T
             /*
-               under Win64 sizeof(size_t) == 8 and so it is neither unsigned
+               Under Win64 sizeof(size_t) == 8 and so it is neither unsigned
                int nor unsigned long!
              */
             #ifdef __WIN64__
@@ -847,25 +868,14 @@ typedef wxUint16 wxWord;
                 #define wxSIZE_T_IS_UINT
             #endif
             #undef wxSIZE_T_IS_ULONG
+        #endif
 
+        #ifndef SIZEOF_VOID_P
             #ifdef __WIN64__
                 #define SIZEOF_VOID_P 8
             #else /*  Win32 */
                 #define SIZEOF_VOID_P 4
             #endif /*  Win64/32 */
-        #endif /*  !defined(SIZEOF_INT) */
-
-        /*
-          If Python.h was included first, it defines all of the SIZEOF's above
-          except for SIZEOF_SIZE_T, so we need to do it here to avoid
-          triggering the #error in the ssize_t typedefs below...
-        */
-        #ifndef SIZEOF_SIZE_T
-            #ifdef __WIN64__
-                #define SIZEOF_SIZE_T 8
-            #else /* Win32 */
-                #define SIZEOF_SIZE_T 4
-            #endif
         #endif
     #else
         #error "Unsupported Windows version"
@@ -1557,12 +1567,40 @@ enum wxBorder
  * Some styles are used across more than one group,
  * so the values mustn't clash with others in the group.
  * Otherwise, numbers can be reused across groups.
- *
- * From version 1.66:
- * Window (cross-group) styles now take up the first half
- * of the flag, and control-specific styles the
- * second half.
- *
+ */
+
+/*
+    Summary of the bits used by various styles.
+
+    High word, containing styles which can be used with many windows:
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxFULL_REPAINT_ON_RESIZE
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxPOPUP_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxWANTS_CHARS
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxTAB_TRAVERSAL
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxTRANSPARENT_WINDOW
+      |  |  |  |  |  |  |  |  |  |  \________________ wxBORDER_NONE
+      |  |  |  |  |  |  |  |  |  \___________________ wxCLIP_CHILDREN
+      |  |  |  |  |  |  |  |  \______________________ wxALWAYS_SHOW_SB
+      |  |  |  |  |  |  |  \_________________________ wxBORDER_STATIC
+      |  |  |  |  |  |  \____________________________ wxBORDER_SIMPLE
+      |  |  |  |  |  \_______________________________ wxBORDER_RAISED
+      |  |  |  |  \__________________________________ wxBORDER_SUNKEN
+      |  |  |  \_____________________________________ wxBORDER_{DOUBLE,THEME}
+      |  |  \________________________________________ wxCAPTION/wxCLIP_SIBLINGS
+      |  \___________________________________________ wxHSCROLL
+      \______________________________________________ wxVSCROLL
+
+
+    Low word style bits is class-specific meaning that the same bit can have
+    different meanings for different controls (e.g. 0x10 is wxCB_READONLY
+    meaning that the control can't be modified for wxComboBox but wxLB_SORT
+    meaning that the control should be kept sorted for wxListBox, while
+    wxLB_SORT has a different value -- and this is just fine).
  */
 
 /*

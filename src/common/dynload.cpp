@@ -61,8 +61,7 @@ public:
 
     virtual void OnExit()
     {
-        delete wxPluginLibrary::ms_classes;
-        wxPluginLibrary::ms_classes = NULL;
+        wxDELETE(wxPluginLibrary::ms_classes);
         wxPluginManager::ClearManifest();
     }
 

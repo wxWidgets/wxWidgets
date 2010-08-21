@@ -25,33 +25,31 @@ addressed sooner.
 
 
 Unarchiving
-============================================================
+===========
 
-A setup program is provided (wxMSW-x.x.x-setup.exe) to automatically copy
-files to a directory on your hard disk. Do not install into a
-path that contains spaces.
+Please simply uncompress the .zip file manually into any directory.
+However we advise avoiding using directories with spaces in their
+names (notably "C:\Program Files") as this risks creating problems
+with makefiles and other command-line tools.
 
-The setup program contains the following:
 
-- All common, generic and MSW-specific wxWidgets source;
-- samples and demos;
-- documentation in MS HTML Help format;
-- makefiles for most Windows compilers, plus CodeWarrior
-  and VC++ IDE files;
-- JPEG, TIFF, PNG, ZLIB, wxSTC, REGEX, EXPAT library sources.
+Configuration
+=============
 
-Alternatively, you may unarchive the .zip form by hand:
-wxMSW-x.y.z.zip where x.y.z is the version number.
+In the majority of cases, you don't need to change the default
+library build configuration. If you wish to change some of the build
+options you need to edit the include/wx/msw/setup.h file enabling or
+disabling the features you would like to compile wxWidgets with[out].
 
-Unarchive the required files plus any optional documentation
-files into a suitable directory such as c:\wx.
+NB: If you checked your sources from version control repository and
+    didn't obtain them from a release file, the file above doesn't
+    exist and you will need to copy include/wx/msw/setup0.h to
+    include/wx/msw/setup.h.
 
-General installation notes
-==========================
+Notice that this file is later copied into a directory under lib for
+each of the build configurations which allows to have different
+build options for different configurations too.
 
-If installing from the SVN server, copy include/wx/msw/setup0.h to
-include/wx/msw/setup.h and edit the resulting file to choose
-the features you would like to compile wxWidgets with[out].
 
 Compilation
 ===========
@@ -144,8 +142,7 @@ Using project files (VC++ 6 and later):
    Alternatively, use the special wx_dll.dsw project which adds the
    dependencies to force the correct order (but, because of this, doesn't work
    for the static libraries) or simply redo the build several times until all
-   DLLs are linked correctly. Please notice that it's normal that dbgrid project
-   doesn't build if wxUSE_ODBC is set to 0 (default).
+   DLLs are linked correctly.
 3. Open a sample project file, choose a configuration such as
    Win32 Debug using Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save disk
@@ -302,12 +299,7 @@ make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, change CPPFLAGS in build\msw\config.bcc.
 
-Note (2): if you get undefined _SQL... symbols at link time,
-either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
-directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
-recompile wxWidgets. The same applies if compiling using the IDE.
-
-Note (3): If you wish debug messages to be sent to the console in
+Note (2): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 
 Using the Debugger and IDE in BDS or Turbo Explorer
@@ -357,22 +349,18 @@ Watcom C++ 10.6/11 and OpenWatcom Compilation
 2. Change directory to samples\minimal and type 'wmake -f makefile.wat'
    to make this sample. Repeat for other samples of interest.
 
-Note (1): if your installation of Watcom doesn't have odbc32.lib file and
-          you need it (i.e. you have wxUSE_ODBC=1), you can use the file
-          from lib\watcom directory. See the notes in that directory.
-
-Note (2): if variant.cpp is compiled with date/time class options, the linker
+Note (1): if variant.cpp is compiled with date/time class options, the linker
           gives up. So the date/time option is switched off for Watcom C++.
           Also, wxAutomationObject is not compiled with Watcom C++ 10.
 
-Note (3): RawBitmaps won't work at present because they use unsupported template
+Note (2): RawBitmaps won't work at present because they use unsupported template
           classes
 
-Note (4): if Watcom can't read the precompiled header when building a sample,
+Note (3): if Watcom can't read the precompiled header when building a sample,
           try deleting .pch files in build\msw\wat_* and compiling
           the sample again.
 
-Note (5): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
+Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
           compiler doesn't come with standard C++ library headers by default.
           If you install STLPort or another STL implementation, you'll need to
           edit wx/string.h and remove the check for Digital Mars in it (search
@@ -694,10 +682,10 @@ Basic Options
 ----------------------------------------------------------------
 
 BUILD=release
-  Builds release version of the library. It differs from default 'debug'
-  in lack of appended 'd' in name of library, does not define __WXDEBUG__
-  and not include debug information compiled into object files and the
-  executable.
+  Builds release version of the library. It differs from default 'debug' in
+  lack of appended 'd' in name of library and uses the release CRT libraries
+  instead of debug ones. Notice that even release builds do include debug
+  information by default, see DEBUG_FLAG for more information about it.
 
 SHARED=1
   Build shared libraries (DLLs). By default, DLLs are not built
@@ -737,11 +725,6 @@ USE_OPENGL=1
   OpenGL library is always built as additional library, even in monolithic
   build!
 
-USE_ODBC=1
-  Build two additional libraries in multilib mode, one with database
-  classes and one with wxGrid database support. You must
-  #define wxUSE_ODBC 1 in setup.h
-
 USE_HTML=0
   Do not build wxHTML library. If MONOLITHIC=1, then you must also
   #define wxUSE_HTML 1 in setup.h.
@@ -768,16 +751,22 @@ MSLU=1
 
 DEBUG_FLAG=0
 DEBUG_FLAG=1
-  If set to 1, define __WXDEBUG__ symbol, append 'd' to library name and do
-  sanity checks at runtime. If set to 0, don't do it. By default, this is
-  governed by BUILD option (if 'debug', DEBUG_FLAG=1, if 'release' it is 0),
-  but it is sometimes desirable to modify default behaviour and e.g. define
-  __WXDEBUG__ even in release builds.
+DEBUG_FLAG=2
+  Specifies the level of debug support in wxWidgets. Notice that
+  this is independent from both BUILD and DEBUG_INFO options. By default
+  always set to 1 meaning that debug support is enabled: asserts are compiled
+  into the code (they are inactive by default in release builds of the
+  application but can be enabled), wxLogDebug() and wxLogTrace() are available
+  and __WXDEBUG__ is defined. Setting it to 0 completely disables all
+  debugging code in wxWidgets while setting it to 2 enables even the time
+  consuming assertions and checks which are deemed to be unsuitable for
+  production environment.
 
 DEBUG_INFO=0
 DEBUG_INFO=1
-  Same as DEBUG_FLAG in behaviour, this option affects whether debugging
-  information is included in the executable or not.
+  This option affects whether debugging information is generated. If
+  omitted or set to 'default' its value is determined the value of
+  the BUILD option.
 
 TARGET_CPU=AMD64|IA64
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86

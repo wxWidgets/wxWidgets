@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "maskededit", "maskededit_vc7.vcproj", "{7727C609-92AA-587B-BE20-38BDA85E0EDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Universal Debug|Win32 = Universal Debug|Win32
+		Universal Release|Win32 = Universal Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+		DLL Universal Debug|Win32 = DLL Universal Debug|Win32
+		DLL Universal Release|Win32 = DLL Universal Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Debug|Win32.Build.0 = Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Release|Win32.ActiveCfg = Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Release|Win32.Build.0 = Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.Universal Release|Win32.Build.0 = Universal Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
+		{7727C609-92AA-587B-BE20-38BDA85E0EDE}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

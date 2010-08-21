@@ -33,8 +33,6 @@
 #include "wx/msw/private.h"
 #elif defined(__WXMAC__)
 #include "wx/osx/private.h"
-// only for kThemeBrushToolbarBackground
-#include <Carbon/Carbon.h>
 #endif
 
 wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
@@ -389,9 +387,12 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
         icon = tab.page->GetIcon();
         if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) == 0)
         {
+            if(icon.IsOk())
+            {
             int x = tab.rect.x + (tab.rect.width - icon.GetWidth()) / 2;
             dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
                 icon.GetHeight()) / 2, true);
+            }
         }
     }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)

@@ -6,7 +6,7 @@
     Author:     Mike Wetherell
     RCS-ID:     $Id$
     Copyright:  (c) 2007 Mike Wetherell
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 
     Usage: xsltproc -html tools/email.xsl http://svn.wxwidgets.org/users.cgi \
             > config/include/wx-devs.xml

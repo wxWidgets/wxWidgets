@@ -260,7 +260,7 @@ SOURCE=.\prefs.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\..\sample.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 

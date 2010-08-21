@@ -1800,7 +1800,8 @@ public:
     // version for NUL-terminated data:
     static wxString From8BitData(const char *data)
       { return wxString(data); }
-    const char *To8BitData() const { return c_str(); }
+    const wxScopedCharBuffer To8BitData() const
+        { return wxScopedCharBuffer::CreateNonOwned(wx_str(), length()); }
 #endif // Unicode/ANSI
 
     // conversions with (possible) format conversions: have to return a
@@ -2280,7 +2281,6 @@ public:
       // convert to a double
   bool ToDouble(double *val) const;
 
-#if wxUSE_XLOCALE
   // conversions to numbers using C locale
       // convert to a signed integer
   bool ToCLong(long *val, int base = 10) const;
@@ -2288,7 +2288,13 @@ public:
   bool ToCULong(unsigned long *val, int base = 10) const;
       // convert to a double
   bool ToCDouble(double *val) const;
-#endif
+
+  // create a string representing the given floating point number
+    // in the current locale
+  static wxString FromDouble(double val)
+    { return wxString::Format(wxS("%g"), val); }
+    // in C locale
+  static wxString FromCDouble(double val);
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output

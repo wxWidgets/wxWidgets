@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/vscroll.h
+// Name:        wx/vscroll.h
 // Purpose:     Variable scrolled windows (wx[V/H/HV]ScrolledWindow)
 // Author:      Vadim Zeitlin
 // Modified by: Brad Anderson, Bryan Petty

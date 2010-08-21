@@ -102,6 +102,8 @@ public:
 
     void OnChar( wxKeyEvent &event );
 
+    virtual void SetValue(const wxString& value);
+
     // Standard event handling
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
@@ -119,16 +121,13 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    virtual void DisableEvents();
-    virtual void EnableEvents();
-    
-    virtual void SetMask(const wxMaskedEdit& mask);
-    
-    GtkWidget* GetConnectWidget();
+    virtual void GTKDisableEvents();
+    virtual void GTKEnableEvents();
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    GtkWidget* GetConnectWidget();
 protected:
     // From wxWindowGTK:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
@@ -143,33 +142,18 @@ protected:
 
     virtual GtkEntry *GetEntry() const
         { return m_entry; }
- 
-    //Mask event methods
-    void ApplyMask();
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
 
-    // Mask
-    wxMaskedEdit m_maskCtrl;
-
-   
     GtkEntry*   m_entry;
 
 private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const;
-    virtual void EnableTextChangedEvents(bool enable)
-    {
-        if ( enable )
-            EnableEvents();
-        else
-            DisableEvents();
-    }
+    virtual void EnableTextChangedEvents(bool enable);
 
     void Init();
 
- 
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()
 };

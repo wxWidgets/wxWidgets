@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/apptrait.h"
+#include "wx/artprov.h"
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
@@ -64,13 +65,18 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int WXUNUSED(flags) = 0,
-                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* WXUNUSED(params) = NULL)
+                                  wxHeaderSortIconType WXUNUSED(sortArrow)
+                                    = wxHDR_SORT_ICON_NONE,
+                                  wxHeaderButtonParams* params = NULL)
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
         dc.DrawRoundedRectangle(rect, 5);
-        dc.DrawLabel(wxT("MyRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
+
+        wxString label;
+        if ( params )
+            label = params->m_labelText;
+        dc.DrawLabel(label, wxNullBitmap, rect, wxALIGN_CENTER);
         return rect.width;
     }
 };
@@ -118,6 +124,18 @@ private:
         { OnToggleDrawFlag(event, wxCONTROL_CHECKED); }
     void OnDrawHot(wxCommandEvent& event)
         { OnToggleDrawFlag(event, wxCONTROL_CURRENT); }
+    void OnDrawUndetermined(wxCommandEvent &event)
+        { OnToggleDrawFlag(event, wxCONTROL_UNDETERMINED); }
+
+    void OnAlignLeft(wxCommandEvent& WXUNUSED(event))
+        { OnChangeAlign(wxALIGN_LEFT); }
+    void OnAlignCentre(wxCommandEvent& WXUNUSED(event))
+        { OnChangeAlign(wxALIGN_CENTRE); }
+    void OnAlignRight(wxCommandEvent& WXUNUSED(event))
+        { OnChangeAlign(wxALIGN_RIGHT); }
+
+    void OnUseIcon(wxCommandEvent& event);
+    void OnUseBitmap(wxCommandEvent& event);
 
 #if wxUSE_DYNLIB_CLASS
     void OnLoad(wxCommandEvent& event);
@@ -127,6 +145,7 @@ private:
     void OnAbout(wxCommandEvent& event);
 
     void OnToggleDrawFlag(wxCommandEvent& event, int flag);
+    void OnChangeAlign(int align);
 
     class MyPanel *m_panel;
 
@@ -138,10 +157,20 @@ private:
 class MyPanel : public wxPanel
 {
 public:
-    MyPanel(wxWindow *parent) : wxPanel(parent) { m_flags = 0; }
+    MyPanel(wxWindow *parent) : wxPanel(parent)
+    {
+        m_flags = 0;
+        m_align = wxALIGN_LEFT;
+        m_useIcon =
+        m_useBitmap = false;
+    }
 
     int GetFlags() const { return m_flags; }
     void SetFlags(int flags) { m_flags = flags; }
+
+    void SetAlignment(int align) { m_align = align; }
+    void SetUseIcon(bool useIcon) { m_useIcon = useIcon; }
+    void SetUseBitmap(bool useBitmap) { m_useBitmap = useBitmap; }
 
 private:
     void OnPaint(wxPaintEvent&)
@@ -151,7 +180,7 @@ private:
         wxRendererNative& renderer = wxRendererNative::Get();
 
         int x1 = 10,    // text offset
-            x2 = 200,   // drawing offset
+            x2 = 300,   // drawing offset
             y = 10;
 
         const int lineHeight = dc.GetCharHeight();
@@ -168,15 +197,39 @@ private:
             flagsString += "wxCONTROL_CURRENT ";
         if ( m_flags & wxCONTROL_CHECKED )
             flagsString += "wxCONTROL_CHECKED ";
+        if ( m_flags & wxCONTROL_UNDETERMINED )
+            flagsString += "wxCONTROL_UNDETERMINED ";
         if ( flagsString.empty() )
             flagsString = "(none)";
         dc.DrawText("Using flags: " + flagsString, x1, y);
         y += lineHeight*3;
 
-        dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
+        const wxCoord widthHdr = 120;
+
+        const wxHeaderSortIconType
+            hdrSortIcon = m_useIcon ? wxHDR_SORT_ICON_UP
+                                    : wxHDR_SORT_ICON_NONE;
+
+        wxHeaderButtonParams hdrParams;
+        hdrParams.m_labelText = "Header";
+        hdrParams.m_labelAlignment = m_align;
+        if ( m_useBitmap )
+        {
+            hdrParams.m_labelBitmap = wxArtProvider::GetBitmap(wxART_WARNING,
+                                                               wxART_LIST);
+        }
+
+        dc.DrawText("DrawHeaderButton() (default)", x1, y);
+        wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
+                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  hdrSortIcon, &hdrParams);
+        y += lineHeight + heightHdr;
+
+        dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
         renderer.DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, 100, heightHdr), m_flags);
+                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  hdrSortIcon, &hdrParams);
         y += lineHeight + heightHdr;
 
         dc.DrawText("DrawCheckBox()", x1, y);
@@ -218,6 +271,9 @@ private:
     }
 
     int m_flags;
+    int m_align;
+    bool m_useIcon,
+         m_useBitmap;
 
     DECLARE_EVENT_TABLE()
 };
@@ -239,6 +295,14 @@ enum
     Render_DrawPressed,
     Render_DrawChecked,
     Render_DrawHot,
+    Render_DrawUndetermined,
+
+    Render_AlignLeft,
+    Render_AlignCentre,
+    Render_AlignRight,
+
+    Render_UseIcon,
+    Render_UseBitmap,
 
 #if wxUSE_DYNLIB_CLASS
     Render_Load,
@@ -267,6 +331,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_DrawPressed, MyFrame::OnDrawPressed)
     EVT_MENU(Render_DrawChecked, MyFrame::OnDrawChecked)
     EVT_MENU(Render_DrawHot, MyFrame::OnDrawHot)
+    EVT_MENU(Render_DrawUndetermined, MyFrame::OnDrawUndetermined)
+    EVT_MENU(Render_AlignLeft, MyFrame::OnAlignLeft)
+    EVT_MENU(Render_AlignCentre, MyFrame::OnAlignCentre)
+    EVT_MENU(Render_AlignRight, MyFrame::OnAlignRight)
+
+    EVT_MENU(Render_UseIcon, MyFrame::OnUseIcon)
+    EVT_MENU(Render_UseBitmap, MyFrame::OnUseBitmap)
 
 #if wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
@@ -339,7 +410,19 @@ MyFrame::MyFrame()
                               "Draw in &checked state\tCtrl-C");
     menuFile->AppendCheckItem(Render_DrawHot,
                               "Draw in &hot state\tCtrl-H");
+    menuFile->AppendCheckItem(Render_DrawUndetermined,
+                              "Draw in unde&termined state\tCtrl-T");
     menuFile->AppendSeparator();
+
+    menuFile->AppendRadioItem(Render_AlignLeft, "&Left align\tCtrl-1");
+    menuFile->AppendRadioItem(Render_AlignCentre, "C&entre align\tCtrl-2");
+    menuFile->AppendRadioItem(Render_AlignRight, "&Right align\tCtrl-3");
+    menuFile->AppendSeparator();
+
+    menuFile->AppendCheckItem(Render_UseIcon, "Draw &icon\tCtrl-I");
+    menuFile->AppendCheckItem(Render_UseBitmap, "Draw &bitmap\tCtrl-B");
+    menuFile->AppendSeparator();
+
 #if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, wxT("&Load renderer...\tCtrl-L"));
     menuFile->Append(Render_Unload, wxT("&Unload renderer\tCtrl-U"));
@@ -388,6 +471,24 @@ void MyFrame::OnToggleDrawFlag(wxCommandEvent& event, int flag)
         flags &= ~flag;
 
     m_panel->SetFlags(flags);
+    m_panel->Refresh();
+}
+
+void MyFrame::OnChangeAlign(int align)
+{
+    m_panel->SetAlignment(align);
+    m_panel->Refresh();
+}
+
+void MyFrame::OnUseIcon(wxCommandEvent& event)
+{
+    m_panel->SetUseIcon(event.IsChecked());
+    m_panel->Refresh();
+}
+
+void MyFrame::OnUseBitmap(wxCommandEvent& event)
+{
+    m_panel->SetUseBitmap(event.IsChecked());
     m_panel->Refresh();
 }
 

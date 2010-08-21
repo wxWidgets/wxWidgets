@@ -45,8 +45,8 @@
 // ----------------------------------------------------------------------------
 
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -345,7 +345,7 @@ bool MyApp::OnInit()
 
     // Create the main application window
     MyFrame *frame = new MyFrame(wxT("Drawing sample"),
-                                 wxPoint(50, 50), wxSize(550, 340));
+                                 wxDefaultPosition, wxSize(550, 840));
 
     // Show it and tell the application that it's our main window
     frame->Show(true);
@@ -366,21 +366,13 @@ bool MyApp::OnInit()
 
 void MyApp::DeleteBitmaps()
 {
-    delete gs_bmpNoMask;
-    delete gs_bmpWithColMask;
-    delete gs_bmpMask;
-    delete gs_bmpWithMask;
-    delete gs_bmp4;
-    delete gs_bmp4_mono;
-    delete gs_bmp36;
-
-    gs_bmpNoMask = NULL;
-    gs_bmpWithColMask = NULL;
-    gs_bmpMask = NULL;
-    gs_bmpWithMask = NULL;
-    gs_bmp4 = NULL;
-    gs_bmp4_mono = NULL;
-    gs_bmp36 = NULL;
+    wxDELETE(gs_bmpNoMask);
+    wxDELETE(gs_bmpWithColMask);
+    wxDELETE(gs_bmpMask);
+    wxDELETE(gs_bmpWithMask);
+    wxDELETE(gs_bmp4);
+    wxDELETE(gs_bmp4_mono);
+    wxDELETE(gs_bmp36);
 }
 
 // ----------------------------------------------------------------------------
@@ -772,7 +764,7 @@ void MyCanvas::DrawText(wxDC& dc)
     wxCoord height;
     wxCoord descent;
     dc.GetTextExtent( wxT("This is Swiss 18pt text."), &length, &height, &descent );
-    text.Printf( wxT("Dimensions are length %ld, height %ld, descent %ld"), length, height, descent );
+    text.Printf( wxT("Dimensions are length %d, height %d, descent %d"), length, height, descent );
     dc.DrawText( text, 110, 80 );
 
     text.Printf( wxT("CharHeight() returns: %d"), dc.GetCharHeight() );
@@ -797,6 +789,9 @@ void MyCanvas::DrawText(wxDC& dc)
     y += height;
     dc.DrawRectangle( 110, y, 100, height );
     dc.DrawText( wxT("Another visible text"), 110, y );
+
+    y += height;
+    dc.DrawText("And\nmore\ntext on\nmultiple\nlines", 110, y);
 }
 
 static const struct
@@ -1052,8 +1047,15 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
         gc->PopState();
     }
     gc->PopState();
+
+    gc->PushState();
+    gc->Translate(60, 400);
+    gc->DrawText("Scaled smiley inside a square", 0, 0);
+    gc->DrawRectangle(BASE2, BASE2, 100, 100);
+    gc->DrawBitmap(m_smile_bmp, BASE2, BASE2, 100, 100);
+    gc->PopState();
 }
-#endif
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 void MyCanvas::DrawCircles(wxDC& dc)
 {
@@ -1687,7 +1689,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     // set the frame icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(File_ShowDefault, wxT("&Default screen\tF1"));

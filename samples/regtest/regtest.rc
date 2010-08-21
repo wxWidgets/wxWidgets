@@ -1,4 +1,4 @@
-#include "wx/msw/wx.rc"
+#include "../sample.rc"
 
 app_icon 	ICON "registry.ico"
 icon_key1 	ICON "key1.ico"

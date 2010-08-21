@@ -52,7 +52,7 @@ private:
 
     wxToolBar *MakeToolBar()
     {
-        wxToolBar *tb = new wxToolBar(this, wxID_ANY,
+        wxToolBar *tb = new wxToolBar(m_panel, wxID_ANY,
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTB_NODIVIDER);
         AddToolBarButton(tb, "Help", wxART_HELP_BOOK);
@@ -65,6 +65,8 @@ private:
         tb->Realize( );
         return tb;
     }
+
+    wxPanel *m_panel;
 };
 
 class WrapSizerApp : public wxApp
@@ -91,6 +93,8 @@ WrapSizerFrame::WrapSizerFrame()
 {
     SetIcon(wxICON(sample));
 
+    m_panel = new wxPanel(this);
+
     // Root sizer, vertical
     wxSizer * const sizerRoot = new wxBoxSizer(wxVERTICAL);
 
@@ -104,14 +108,14 @@ WrapSizerFrame::WrapSizerFrame()
     sizerRoot->Add(sizerTop, wxSizerFlags().Expand().Border());
 
     // A number of checkboxes inside a wrap sizer
-    wxSizer *sizerMid = new wxStaticBoxSizer(wxVERTICAL, this,
+    wxSizer *sizerMid = new wxStaticBoxSizer(wxVERTICAL, m_panel,
                                                 "With check-boxes");
     wxSizer * const sizerMidWrap = new wxWrapSizer(wxHORIZONTAL);
     for ( int nCheck = 0; nCheck < 6; nCheck++ )
     {
         wxCheckBox *chk = new wxCheckBox
                                 (
-                                this,
+                                m_panel,
                                 wxID_ANY,
                                 wxString::Format("Option %d", nCheck)
                                 );
@@ -124,28 +128,28 @@ WrapSizerFrame::WrapSizerFrame()
 
 
     // A shaped item inside a box sizer
-    wxSizer *sizerBottom = new wxStaticBoxSizer(wxVERTICAL, this,
+    wxSizer *sizerBottom = new wxStaticBoxSizer(wxVERTICAL, m_panel,
                                                 "With wxSHAPED item");
     wxSizer *sizerBottomBox = new wxBoxSizer(wxHORIZONTAL);
     sizerBottom->Add(sizerBottomBox, wxSizerFlags(100).Expand());
 
-    sizerBottomBox->Add(new wxListBox(this, wxID_ANY,
+    sizerBottomBox->Add(new wxListBox(m_panel, wxID_ANY,
                                         wxPoint(0, 0), wxSize(70, 70)),
                         wxSizerFlags().Expand().Shaped());
     sizerBottomBox->AddSpacer(10);
-    sizerBottomBox->Add(new wxCheckBox(this, wxID_ANY,
+    sizerBottomBox->Add(new wxCheckBox(m_panel, wxID_ANY,
                                         "A much longer option..."),
                         wxSizerFlags(100).Border());
     sizerRoot->Add(sizerBottom, wxSizerFlags(100).Expand().Border());
 
     // OK Button
-    sizerRoot->Add(new wxButton(this, wxID_OK),
+    sizerRoot->Add(new wxButton(m_panel, wxID_OK),
                     wxSizerFlags().Centre().DoubleBorder());
     Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
                 wxCommandEventHandler(WrapSizerFrame::OnButton));
 
-    // Set sizer for window
-    SetSizerAndFit(sizerRoot);
+    // Set sizer for the panel
+    m_panel->SetSizer(sizerRoot);
 
     Show();
 }

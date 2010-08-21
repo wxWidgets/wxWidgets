@@ -79,11 +79,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// the constants describing the format of ll_CC locale string
-static const size_t LEN_LANG = 2;
-static const size_t LEN_SUBLANG = 2;
-static const size_t LEN_FULL = LEN_LANG + 1 + LEN_SUBLANG; // 1 for '_'
-
 #define TRACE_I18N wxS("i18n")
 
 // ============================================================================
@@ -99,10 +94,10 @@ static wxLocale *wxSetLocale(wxLocale *pLocale);
 namespace
 {
 
-// get just the language part
+// get just the language part ("en" in "en_GB")
 inline wxString ExtractLang(const wxString& langFull)
 {
-    return langFull.Left(LEN_LANG);
+    return langFull.BeforeFirst('_');
 }
 
 // helper functions of GetSystemLanguage()
@@ -111,7 +106,11 @@ inline wxString ExtractLang(const wxString& langFull)
 // get everything else (including the leading '_')
 inline wxString ExtractNotLang(const wxString& langFull)
 {
-    return langFull.Mid(LEN_LANG);
+    size_t pos = langFull.find('_');
+    if ( pos != wxString::npos )
+        return langFull.substr(pos);
+    else
+        return wxString();
 }
 
 #endif // __UNIX__
@@ -201,8 +200,7 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
 /*static*/ void wxLocale::DestroyLanguagesDB()
 {
-    delete ms_languagesDB;
-    ms_languagesDB = NULL;
+    wxDELETE(ms_languagesDB);
 }
 
 
@@ -240,7 +238,7 @@ bool wxLocale::Init(const wxString& name,
                     const wxString& locale,
                     bool            bLoadDefault
 #if WXWIN_COMPATIBILITY_2_8
-                   ,bool            bConvertEncoding
+                   ,bool            WXUNUSED_UNLESS_DEBUG(bConvertEncoding)
 #endif
                     )
 {
@@ -642,94 +640,92 @@ bool wxLocale::Init(int language, int flags)
         langFull.Truncate(posEndLang);
     }
 
-    // in addition to the format above, we also can have full language names
-    // in LANG env var - for example, SuSE is known to use LANG="german" - so
-    // check for this
-
     // do we have just the language (or sublang too)?
-    bool justLang = langFull.length() == LEN_LANG;
-    if ( justLang ||
-        (langFull.length() == LEN_FULL && langFull[LEN_LANG] == wxS('_')) )
+    const bool justLang = langFull.find('_') == wxString::npos;
+
+    // 0. Make sure the lang is according to latest ISO 639
+    //    (this is necessary because glibc uses iw and in instead
+    //    of he and id respectively).
+
+    // the language itself (second part is the dialect/sublang)
+    wxString langOrig = ExtractLang(langFull);
+
+    wxString lang;
+    if ( langOrig == wxS("iw"))
+        lang = wxS("he");
+    else if (langOrig == wxS("in"))
+        lang = wxS("id");
+    else if (langOrig == wxS("ji"))
+        lang = wxS("yi");
+    else if (langOrig == wxS("no_NO"))
+        lang = wxS("nb_NO");
+    else if (langOrig == wxS("no_NY"))
+        lang = wxS("nn_NO");
+    else if (langOrig == wxS("no"))
+        lang = wxS("nb_NO");
+    else
+        lang = langOrig;
+
+    // did we change it?
+    if ( lang != langOrig )
     {
-        // 0. Make sure the lang is according to latest ISO 639
-        //    (this is necessary because glibc uses iw and in instead
-        //    of he and id respectively).
+        langFull = lang + ExtractNotLang(langFull);
+    }
 
-        // the language itself (second part is the dialect/sublang)
-        wxString langOrig = ExtractLang(langFull);
-
-        wxString lang;
-        if ( langOrig == wxS("iw"))
-            lang = wxS("he");
-        else if (langOrig == wxS("in"))
-            lang = wxS("id");
-        else if (langOrig == wxS("ji"))
-            lang = wxS("yi");
-        else if (langOrig == wxS("no_NO"))
-            lang = wxS("nb_NO");
-        else if (langOrig == wxS("no_NY"))
-            lang = wxS("nn_NO");
-        else if (langOrig == wxS("no"))
-            lang = wxS("nb_NO");
-        else
-            lang = langOrig;
-
-        // did we change it?
-        if ( lang != langOrig )
+    // 1. Try to find the language either as is:
+    // a) With modifier if set
+    if ( !modifier.empty() )
+    {
+        wxString langFullWithModifier = langFull + modifier;
+        for ( i = 0; i < count; i++ )
         {
-            langFull = lang + ExtractNotLang(langFull);
+            if ( ms_languagesDB->Item(i).CanonicalName == langFullWithModifier )
+                break;
         }
+    }
 
-        // 1. Try to find the language either as is:
-        // a) With modifier if set
-        if ( !modifier.empty() )
+    // b) Without modifier
+    if ( modifier.empty() || i == count )
+    {
+        for ( i = 0; i < count; i++ )
         {
-            wxString langFullWithModifier = langFull + modifier;
-            for ( i = 0; i < count; i++ )
-            {
-                if ( ms_languagesDB->Item(i).CanonicalName == langFullWithModifier )
-                    break;
-            }
+            if ( ms_languagesDB->Item(i).CanonicalName == langFull )
+                break;
         }
+    }
 
-        // b) Without modifier
-        if ( modifier.empty() || i == count )
+    // 2. If langFull is of the form xx_YY, try to find xx:
+    if ( i == count && !justLang )
+    {
+        for ( i = 0; i < count; i++ )
         {
-            for ( i = 0; i < count; i++ )
+            if ( ms_languagesDB->Item(i).CanonicalName == lang )
             {
-                if ( ms_languagesDB->Item(i).CanonicalName == langFull )
-                    break;
-            }
-        }
-
-        // 2. If langFull is of the form xx_YY, try to find xx:
-        if ( i == count && !justLang )
-        {
-            for ( i = 0; i < count; i++ )
-            {
-                if ( ms_languagesDB->Item(i).CanonicalName == lang )
-                {
-                    break;
-                }
-            }
-        }
-
-        // 3. If langFull is of the form xx, try to find any xx_YY record:
-        if ( i == count && justLang )
-        {
-            for ( i = 0; i < count; i++ )
-            {
-                if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName)
-                        == langFull )
-                {
-                    break;
-                }
+                break;
             }
         }
     }
-    else // not standard format
+
+    // 3. If langFull is of the form xx, try to find any xx_YY record:
+    if ( i == count && justLang )
     {
-        // try to find the name in verbose description
+        for ( i = 0; i < count; i++ )
+        {
+            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName)
+                    == langFull )
+            {
+                break;
+            }
+        }
+    }
+
+
+    if ( i == count )
+    {
+        // In addition to the format above, we also can have full language
+        // names in LANG env var - for example, SuSE is known to use
+        // LANG="german" - so check for use of non-standard format and try to
+        // find the name in verbose description.
         for ( i = 0; i < count; i++ )
         {
             if (ms_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)

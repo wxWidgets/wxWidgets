@@ -92,6 +92,12 @@ public:
     void OnTextEnter(wxCommandEvent& event);
     void OnTextChar(wxKeyEvent& event);
 
+    // this window itself is used only as a container for its sub windows so it
+    // shouldn't accept the focus at all and any attempts to explicitly set
+    // focus to it should give focus to its text constol part
+    virtual bool AcceptsFocus() const { return false; }
+    virtual void SetFocus();
+
     friend class wxSpinCtrlTextGeneric;
 
 protected:
@@ -105,8 +111,13 @@ protected:
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 
-    // Ensure that the textctrl shows correct value
-    void SyncSpinToText();
+    // update our value to reflect the text control contents (if it has been
+    // modified by user, do nothing otherwise)
+    //
+    // can also change the text control if its value is invalid
+    //
+    // return true if our value has changed
+    bool SyncSpinToText();
 
     // Send the correct event type
     virtual void DoSendEvent() = 0;

@@ -3,7 +3,7 @@
 ## Purpose:     Main configuration file for the wxWidgets manual
 ## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
-## Licence:     wxWindows license
+## Licence:     wxWindows licence
 #############################################################################
 
 #---------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 2.9.1
+PROJECT_NUMBER         = 2.9.2
 OUTPUT_DIRECTORY       = out
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -83,7 +83,7 @@ ALIASES += flag{1}="</div>\li <span class='flag'>\1</span>:<div class='flagDesc'
 ALIASES += endFlagTable="</div>\n"
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
+ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'/></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'/></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'/></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
 
 # aliases for the creation of "named member groups"
 # USAGE: the first argument must not contain spaces and be a unique identifier 

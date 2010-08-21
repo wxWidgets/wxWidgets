@@ -20,7 +20,7 @@
 
 /*
 
-Permission to use this file under wxWindows license given by
+Permission to use this file under wxWindows licence given by
 copyright holder:
 --------
 From andersca@gnu.org Tue Dec  9 13:01:56 2003

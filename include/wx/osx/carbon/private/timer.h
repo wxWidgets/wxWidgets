@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/private/timer.h
+// Name:        wx/osx/carbon/private/timer.h
 // Purpose:     wxTimer class
 // Author:      Stefan Csomor
 // Created:     1998-01-01

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPropertyGrid editors
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -184,7 +184,8 @@ public:
 
     class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
     {
-        DECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor)
+        wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
+        
     public:
         wxSampleMultiButtonEditor() {}
         virtual ~wxSampleMultiButtonEditor() {}
@@ -201,7 +202,7 @@ public:
                               wxEvent& event ) const;
     };
 
-    IMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor);
 
     wxPGWindowList wxSampleMultiButtonEditor::CreateControls( wxPropertyGrid* propGrid,
                                                               wxPGProperty* property,

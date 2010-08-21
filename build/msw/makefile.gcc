@@ -31,7 +31,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 	RUNTIME_LIBS="$(RUNTIME_LIBS)" GCC_VERSION="$(GCC_VERSION)"
 CPPDEPS = -MT$@ -MF$@.d -MD -MP
 WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
 COMPILER_PREFIX = gcc
 OBJS = \
 	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -179,9 +179,9 @@ WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmltok.o
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -DNDEBUG -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -I$(SETUPHDIR) -I..\..\include -DWXUSINGDLL \
-	-D__WX__ -D__WXMSW__ -DSCI_LEXER -DLINK_LEXERS $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(SETUPHDIR) -I..\..\include $(__wxscintilla_usingdll_p) -D__WXMSW__ \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.o \
 	$(OBJS)\wxscintilla_CallTip.o \
@@ -294,10 +294,9 @@ MONODLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
-	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
-	-DWXMAKINGDLL -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) \
-	$(CFLAGS)
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 -DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -305,9 +304,9 @@ MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
-	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 -DWXMAKINGDLL \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-I..\..\src\regex -I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.o \
@@ -353,8 +352,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_list.o \
 	$(OBJS)\monodll_log.o \
 	$(OBJS)\monodll_longlong.o \
-	$(OBJS)\monodll_maskededit.o \
-	$(OBJS)\monodll_maskedfield.o \
 	$(OBJS)\monodll_memory.o \
 	$(OBJS)\monodll_mimecmn.o \
 	$(OBJS)\monodll_module.o \
@@ -445,9 +442,9 @@ MONOLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
-	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) $(CFLAGS)
+	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -455,10 +452,10 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
-	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\regex -I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+	$(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.o \
 	$(OBJS)\monolib_any.o \
@@ -503,8 +500,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_list.o \
 	$(OBJS)\monolib_log.o \
 	$(OBJS)\monolib_longlong.o \
-	$(OBJS)\monolib_maskededit.o \
-	$(OBJS)\monolib_maskedfield.o \
 	$(OBJS)\monolib_memory.o \
 	$(OBJS)\monolib_mimecmn.o \
 	$(OBJS)\monolib_module.o \
@@ -651,8 +646,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_list.o \
 	$(OBJS)\basedll_log.o \
 	$(OBJS)\basedll_longlong.o \
-	$(OBJS)\basedll_maskededit.o \
-	$(OBJS)\basedll_maskedfield.o \
 	$(OBJS)\basedll_memory.o \
 	$(OBJS)\basedll_mimecmn.o \
 	$(OBJS)\basedll_module.o \
@@ -783,8 +776,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_list.o \
 	$(OBJS)\baselib_log.o \
 	$(OBJS)\baselib_longlong.o \
-	$(OBJS)\baselib_maskededit.o \
-	$(OBJS)\baselib_maskedfield.o \
 	$(OBJS)\baselib_memory.o \
 	$(OBJS)\baselib_mimecmn.o \
 	$(OBJS)\baselib_module.o \
@@ -1031,8 +1022,10 @@ HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_m_links.o \
 	$(OBJS)\htmldll_m_list.o \
 	$(OBJS)\htmldll_m_pre.o \
+	$(OBJS)\htmldll_m_span.o \
 	$(OBJS)\htmldll_m_style.o \
 	$(OBJS)\htmldll_m_tables.o \
+	$(OBJS)\htmldll_styleparams.o \
 	$(OBJS)\htmldll_winpars.o \
 	$(OBJS)\htmldll_htmllbox.o
 HTMLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
@@ -1066,8 +1059,10 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_m_links.o \
 	$(OBJS)\htmllib_m_list.o \
 	$(OBJS)\htmllib_m_pre.o \
+	$(OBJS)\htmllib_m_span.o \
 	$(OBJS)\htmllib_m_style.o \
 	$(OBJS)\htmllib_m_tables.o \
+	$(OBJS)\htmllib_styleparams.o \
 	$(OBJS)\htmllib_winpars.o \
 	$(OBJS)\htmllib_htmllbox.o
 QADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
@@ -1531,6 +1526,11 @@ ifeq ($(USE_GUI),1)
 __wxtiff___depname = $(LIBDIRNAME)\libwxtiff$(WXDEBUGFLAG).a
 endif
 ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
+__wxscintilla_usingdll_p = -DWXUSINGDLL
+endif
+endif
+ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
@@ -1570,8 +1570,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_m_links.o \
 	$(OBJS)\monodll_m_list.o \
 	$(OBJS)\monodll_m_pre.o \
+	$(OBJS)\monodll_m_span.o \
 	$(OBJS)\monodll_m_style.o \
 	$(OBJS)\monodll_m_tables.o \
+	$(OBJS)\monodll_styleparams.o \
 	$(OBJS)\monodll_winpars.o \
 	$(OBJS)\monodll_htmllbox.o \
 	$(OBJS)\monodll_debugrpt.o \
@@ -1762,8 +1764,10 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_notebook.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_ownerdrw.o \
+	$(OBJS)\monodll_progdlg.o \
 	$(OBJS)\monodll_msw_radiobox.o \
 	$(OBJS)\monodll_msw_radiobut.o \
+	$(OBJS)\monodll_richmsgdlg.o \
 	$(OBJS)\monodll_msw_scrolbar.o \
 	$(OBJS)\monodll_msw_slider.o \
 	$(OBJS)\monodll_msw_spinbutt.o \
@@ -1797,7 +1801,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_clrpickercmn.o \
 	$(OBJS)\monodll_colourcmn.o \
 	$(OBJS)\monodll_combocmn.o \
-	$(OBJS)\monodll_comboboxcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -1819,6 +1822,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -1854,6 +1858,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_layout.o \
 	$(OBJS)\monodll_lboxcmn.o \
 	$(OBJS)\monodll_listctrlcmn.o \
+	$(OBJS)\monodll_maskededit.o \
+	$(OBJS)\monodll_maskedfield.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_mousemanager.o \
@@ -1900,13 +1906,16 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
 	$(OBJS)\monodll_headerctrlg.o \
+	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
+	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
+	$(OBJS)\monodll_richmsgdlgg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
@@ -1987,7 +1996,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_generic_listctrl.o \
 	$(OBJS)\monodll_mdig.o \
-	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_univ_bmpbuttn.o \
 	$(OBJS)\monodll_univ_button.o \
@@ -2044,7 +2052,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_clrpickercmn.o \
 	$(OBJS)\monodll_colourcmn.o \
 	$(OBJS)\monodll_combocmn.o \
-	$(OBJS)\monodll_comboboxcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -2066,6 +2073,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -2101,6 +2109,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_layout.o \
 	$(OBJS)\monodll_lboxcmn.o \
 	$(OBJS)\monodll_listctrlcmn.o \
+	$(OBJS)\monodll_maskededit.o \
+	$(OBJS)\monodll_maskedfield.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_mousemanager.o \
@@ -2147,13 +2157,16 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
 	$(OBJS)\monodll_headerctrlg.o \
+	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
+	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
+	$(OBJS)\monodll_richmsgdlgg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
 	$(OBJS)\monodll_spinctlg.o \
@@ -2180,6 +2193,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrlg.o \
+	$(OBJS)\monodll_commandlinkbuttong.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_editlbox.o \
@@ -2189,7 +2203,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_hyperlinkg.o \
-	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_notifmsgg.o \
 	$(OBJS)\monodll_odcombo.o \
@@ -2200,6 +2213,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
+	$(OBJS)\monodll_commandlinkbutton.o \
+	$(OBJS)\monodll_hyperlink.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2220,6 +2235,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrlg.o \
+	$(OBJS)\monodll_commandlinkbuttong.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_editlbox.o \
@@ -2229,7 +2245,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_hyperlinkg.o \
-	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_notifmsgg.o \
 	$(OBJS)\monodll_odcombo.o \
@@ -2240,6 +2255,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
+	$(OBJS)\monodll_commandlinkbutton.o \
+	$(OBJS)\monodll_hyperlink.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2283,8 +2300,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_m_links.o \
 	$(OBJS)\monolib_m_list.o \
 	$(OBJS)\monolib_m_pre.o \
+	$(OBJS)\monolib_m_span.o \
 	$(OBJS)\monolib_m_style.o \
 	$(OBJS)\monolib_m_tables.o \
+	$(OBJS)\monolib_styleparams.o \
 	$(OBJS)\monolib_winpars.o \
 	$(OBJS)\monolib_htmllbox.o \
 	$(OBJS)\monolib_debugrpt.o \
@@ -2475,8 +2494,10 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_notebook.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_ownerdrw.o \
+	$(OBJS)\monolib_progdlg.o \
 	$(OBJS)\monolib_msw_radiobox.o \
 	$(OBJS)\monolib_msw_radiobut.o \
+	$(OBJS)\monolib_richmsgdlg.o \
 	$(OBJS)\monolib_msw_scrolbar.o \
 	$(OBJS)\monolib_msw_slider.o \
 	$(OBJS)\monolib_msw_spinbutt.o \
@@ -2510,7 +2531,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_clrpickercmn.o \
 	$(OBJS)\monolib_colourcmn.o \
 	$(OBJS)\monolib_combocmn.o \
-	$(OBJS)\monolib_comboboxcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -2532,6 +2552,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -2567,6 +2588,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_layout.o \
 	$(OBJS)\monolib_lboxcmn.o \
 	$(OBJS)\monolib_listctrlcmn.o \
+	$(OBJS)\monolib_maskededit.o \
+	$(OBJS)\monolib_maskedfield.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_mousemanager.o \
@@ -2613,13 +2636,16 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
 	$(OBJS)\monolib_headerctrlg.o \
+	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
+	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
+	$(OBJS)\monolib_richmsgdlgg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
@@ -2700,7 +2726,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_generic_listctrl.o \
 	$(OBJS)\monolib_mdig.o \
-	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_univ_bmpbuttn.o \
 	$(OBJS)\monolib_univ_button.o \
@@ -2757,7 +2782,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_clrpickercmn.o \
 	$(OBJS)\monolib_colourcmn.o \
 	$(OBJS)\monolib_combocmn.o \
-	$(OBJS)\monolib_comboboxcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -2779,6 +2803,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -2814,6 +2839,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_layout.o \
 	$(OBJS)\monolib_lboxcmn.o \
 	$(OBJS)\monolib_listctrlcmn.o \
+	$(OBJS)\monolib_maskededit.o \
+	$(OBJS)\monolib_maskedfield.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_mousemanager.o \
@@ -2860,13 +2887,16 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
 	$(OBJS)\monolib_headerctrlg.o \
+	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
+	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
+	$(OBJS)\monolib_richmsgdlgg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
 	$(OBJS)\monolib_spinctlg.o \
@@ -2893,6 +2923,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrlg.o \
+	$(OBJS)\monolib_commandlinkbuttong.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_editlbox.o \
@@ -2902,7 +2933,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_hyperlinkg.o \
-	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_notifmsgg.o \
 	$(OBJS)\monolib_odcombo.o \
@@ -2913,6 +2943,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
+	$(OBJS)\monolib_commandlinkbutton.o \
+	$(OBJS)\monolib_hyperlink.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2933,6 +2965,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrlg.o \
+	$(OBJS)\monolib_commandlinkbuttong.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_editlbox.o \
@@ -2942,7 +2975,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_hyperlinkg.o \
-	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_notifmsgg.o \
 	$(OBJS)\monolib_odcombo.o \
@@ -2953,6 +2985,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
+	$(OBJS)\monolib_commandlinkbutton.o \
+	$(OBJS)\monolib_hyperlink.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -3091,8 +3125,10 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_notebook.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_ownerdrw.o \
+	$(OBJS)\coredll_progdlg.o \
 	$(OBJS)\coredll_msw_radiobox.o \
 	$(OBJS)\coredll_msw_radiobut.o \
+	$(OBJS)\coredll_richmsgdlg.o \
 	$(OBJS)\coredll_msw_scrolbar.o \
 	$(OBJS)\coredll_msw_slider.o \
 	$(OBJS)\coredll_msw_spinbutt.o \
@@ -3126,7 +3162,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_clrpickercmn.o \
 	$(OBJS)\coredll_colourcmn.o \
 	$(OBJS)\coredll_combocmn.o \
-	$(OBJS)\coredll_comboboxcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -3148,6 +3183,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3183,6 +3219,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_layout.o \
 	$(OBJS)\coredll_lboxcmn.o \
 	$(OBJS)\coredll_listctrlcmn.o \
+	$(OBJS)\coredll_maskededit.o \
+	$(OBJS)\coredll_maskedfield.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_mousemanager.o \
@@ -3229,13 +3267,16 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
 	$(OBJS)\coredll_headerctrlg.o \
+	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
+	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
+	$(OBJS)\coredll_richmsgdlgg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
@@ -3316,7 +3357,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_generic_listctrl.o \
 	$(OBJS)\coredll_mdig.o \
-	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_univ_bmpbuttn.o \
 	$(OBJS)\coredll_univ_button.o \
@@ -3373,7 +3413,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_clrpickercmn.o \
 	$(OBJS)\coredll_colourcmn.o \
 	$(OBJS)\coredll_combocmn.o \
-	$(OBJS)\coredll_comboboxcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -3395,6 +3434,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3430,6 +3470,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_layout.o \
 	$(OBJS)\coredll_lboxcmn.o \
 	$(OBJS)\coredll_listctrlcmn.o \
+	$(OBJS)\coredll_maskededit.o \
+	$(OBJS)\coredll_maskedfield.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_mousemanager.o \
@@ -3476,13 +3518,16 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
 	$(OBJS)\coredll_headerctrlg.o \
+	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
+	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
+	$(OBJS)\coredll_richmsgdlgg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
 	$(OBJS)\coredll_spinctlg.o \
@@ -3595,8 +3640,10 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_notebook.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_ownerdrw.o \
+	$(OBJS)\corelib_progdlg.o \
 	$(OBJS)\corelib_msw_radiobox.o \
 	$(OBJS)\corelib_msw_radiobut.o \
+	$(OBJS)\corelib_richmsgdlg.o \
 	$(OBJS)\corelib_msw_scrolbar.o \
 	$(OBJS)\corelib_msw_slider.o \
 	$(OBJS)\corelib_msw_spinbutt.o \
@@ -3630,7 +3677,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_clrpickercmn.o \
 	$(OBJS)\corelib_colourcmn.o \
 	$(OBJS)\corelib_combocmn.o \
-	$(OBJS)\corelib_comboboxcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -3652,6 +3698,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -3687,6 +3734,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_layout.o \
 	$(OBJS)\corelib_lboxcmn.o \
 	$(OBJS)\corelib_listctrlcmn.o \
+	$(OBJS)\corelib_maskededit.o \
+	$(OBJS)\corelib_maskedfield.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_mousemanager.o \
@@ -3733,13 +3782,16 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
 	$(OBJS)\corelib_headerctrlg.o \
+	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
+	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
+	$(OBJS)\corelib_richmsgdlgg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
@@ -3820,7 +3872,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_generic_listctrl.o \
 	$(OBJS)\corelib_mdig.o \
-	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_univ_bmpbuttn.o \
 	$(OBJS)\corelib_univ_button.o \
@@ -3877,7 +3928,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_clrpickercmn.o \
 	$(OBJS)\corelib_colourcmn.o \
 	$(OBJS)\corelib_combocmn.o \
-	$(OBJS)\corelib_comboboxcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -3899,6 +3949,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -3934,6 +3985,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_layout.o \
 	$(OBJS)\corelib_lboxcmn.o \
 	$(OBJS)\corelib_listctrlcmn.o \
+	$(OBJS)\corelib_maskededit.o \
+	$(OBJS)\corelib_maskedfield.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_mousemanager.o \
@@ -3980,13 +4033,16 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
 	$(OBJS)\corelib_headerctrlg.o \
+	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
+	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
+	$(OBJS)\corelib_richmsgdlgg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
 	$(OBJS)\corelib_spinctlg.o \
@@ -4027,6 +4083,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrlg.o \
+	$(OBJS)\advdll_commandlinkbuttong.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_editlbox.o \
@@ -4036,7 +4093,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_hyperlinkg.o \
-	$(OBJS)\advdll_infobar.o \
 	$(OBJS)\advdll_laywin.o \
 	$(OBJS)\advdll_notifmsgg.o \
 	$(OBJS)\advdll_odcombo.o \
@@ -4047,6 +4103,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
+	$(OBJS)\advdll_commandlinkbutton.o \
+	$(OBJS)\advdll_hyperlink.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -4067,6 +4125,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrlg.o \
+	$(OBJS)\advdll_commandlinkbuttong.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_editlbox.o \
@@ -4076,7 +4135,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_hyperlinkg.o \
-	$(OBJS)\advdll_infobar.o \
 	$(OBJS)\advdll_laywin.o \
 	$(OBJS)\advdll_notifmsgg.o \
 	$(OBJS)\advdll_odcombo.o \
@@ -4087,6 +4145,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
+	$(OBJS)\advdll_commandlinkbutton.o \
+	$(OBJS)\advdll_hyperlink.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -4111,6 +4171,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrlg.o \
+	$(OBJS)\advlib_commandlinkbuttong.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_editlbox.o \
@@ -4120,7 +4181,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_hyperlinkg.o \
-	$(OBJS)\advlib_infobar.o \
 	$(OBJS)\advlib_laywin.o \
 	$(OBJS)\advlib_notifmsgg.o \
 	$(OBJS)\advlib_odcombo.o \
@@ -4131,6 +4191,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
+	$(OBJS)\advlib_commandlinkbutton.o \
+	$(OBJS)\advlib_hyperlink.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -4151,6 +4213,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrlg.o \
+	$(OBJS)\advlib_commandlinkbuttong.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_editlbox.o \
@@ -4160,7 +4223,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_hyperlinkg.o \
-	$(OBJS)\advlib_infobar.o \
 	$(OBJS)\advlib_laywin.o \
 	$(OBJS)\advlib_notifmsgg.o \
 	$(OBJS)\advlib_odcombo.o \
@@ -4171,6 +4233,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
+	$(OBJS)\advlib_commandlinkbutton.o \
+	$(OBJS)\advlib_hyperlink.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -5135,7 +5199,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -5961,12 +6025,6 @@ $(OBJS)\monodll_log.o: ../../src/common/log.cpp
 $(OBJS)\monodll_longlong.o: ../../src/common/longlong.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_maskededit.o: ../../src/common/maskededit.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_maskedfield.o: ../../src/common/maskedfield.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_memory.o: ../../src/common/memory.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6300,10 +6358,16 @@ $(OBJS)\monodll_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\monodll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_progdlg.o: ../../src/msw/progdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_msw_radiobox.o: ../../src/msw/radiobox.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msw_radiobut.o: ../../src/msw/radiobut.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
@@ -6382,9 +6446,6 @@ $(OBJS)\monodll_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -6591,10 +6652,16 @@ $(OBJS)\monodll_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\monodll_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_winpars.o: ../../src/html/winpars.cpp
@@ -7252,11 +7319,6 @@ $(OBJS)\monodll_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7358,6 +7420,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7533,6 +7600,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7767,12 +7844,22 @@ $(OBJS)\monodll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_logg.o: ../../src/generic/logg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7798,6 +7885,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7912,6 +8004,11 @@ $(OBJS)\monodll_calctrlg.o: ../../src/generic/calctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_commandlinkbuttong.o: ../../src/generic/commandlinkbuttong.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_datavgen.o: ../../src/generic/datavgen.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7953,11 +8050,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8012,6 +8104,16 @@ $(OBJS)\monodll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_hyperlink.o: ../../src/msw/hyperlink.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_notifmsg.o: ../../src/msw/notifmsg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8037,7 +8139,7 @@ $(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 endif
 
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__NDEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gcc$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --define wxUSE_BASE=1 --define WXMAKINGDLL --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__NDEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gcc$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
 
 $(OBJS)\monolib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -8166,12 +8268,6 @@ $(OBJS)\monolib_log.o: ../../src/common/log.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_longlong.o: ../../src/common/longlong.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_maskededit.o: ../../src/common/maskededit.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_memory.o: ../../src/common/memory.cpp
@@ -8507,10 +8603,16 @@ $(OBJS)\monolib_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\monolib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_progdlg.o: ../../src/msw/progdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_msw_radiobox.o: ../../src/msw/radiobox.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_radiobut.o: ../../src/msw/radiobut.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
@@ -8589,9 +8691,6 @@ $(OBJS)\monolib_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -8798,10 +8897,16 @@ $(OBJS)\monolib_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\monolib_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_winpars.o: ../../src/html/winpars.cpp
@@ -9459,11 +9564,6 @@ $(OBJS)\monolib_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9565,6 +9665,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9740,6 +9845,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9974,12 +10089,22 @@ $(OBJS)\monolib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_logg.o: ../../src/generic/logg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10005,6 +10130,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10119,6 +10249,11 @@ $(OBJS)\monolib_calctrlg.o: ../../src/generic/calctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_commandlinkbuttong.o: ../../src/generic/commandlinkbuttong.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_datavgen.o: ../../src/generic/datavgen.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10160,11 +10295,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10215,6 +10345,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10373,12 +10513,6 @@ $(OBJS)\basedll_log.o: ../../src/common/log.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_longlong.o: ../../src/common/longlong.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\basedll_maskededit.o: ../../src/common/maskededit.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\basedll_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_memory.o: ../../src/common/memory.cpp
@@ -10712,12 +10846,6 @@ $(OBJS)\baselib_log.o: ../../src/common/log.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_longlong.o: ../../src/common/longlong.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_maskededit.o: ../../src/common/maskededit.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_memory.o: ../../src/common/memory.cpp
@@ -11128,10 +11256,16 @@ $(OBJS)\coredll_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\coredll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_progdlg.o: ../../src/msw/progdlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_msw_radiobox.o: ../../src/msw/radiobox.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_msw_radiobut.o: ../../src/msw/radiobut.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
@@ -11210,9 +11344,6 @@ $(OBJS)\coredll_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -11681,11 +11812,6 @@ $(OBJS)\coredll_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11787,6 +11913,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11962,6 +12093,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12196,12 +12337,22 @@ $(OBJS)\coredll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_logg.o: ../../src/generic/logg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12227,6 +12378,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12420,10 +12576,16 @@ $(OBJS)\corelib_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\corelib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\corelib_progdlg.o: ../../src/msw/progdlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\corelib_msw_radiobox.o: ../../src/msw/radiobox.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_radiobut.o: ../../src/msw/radiobut.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_richmsgdlg.o: ../../src/msw/richmsgdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_scrolbar.o: ../../src/msw/scrolbar.cpp
@@ -12502,9 +12664,6 @@ $(OBJS)\corelib_generic_listctrl.o: ../../src/generic/listctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_mdig.o: ../../src/generic/mdig.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_univ_bmpbuttn.o: ../../src/univ/bmpbuttn.cpp
@@ -12973,11 +13132,6 @@ $(OBJS)\corelib_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13079,6 +13233,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13254,6 +13413,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13488,12 +13657,22 @@ $(OBJS)\corelib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_logg.o: ../../src/generic/logg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13519,6 +13698,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_renderg.o: ../../src/generic/renderg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_richmsgdlgg.o: ../../src/generic/richmsgdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13634,6 +13818,9 @@ $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 $(OBJS)\advdll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_commandlinkbuttong.o: ../../src/generic/commandlinkbuttong.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_datavgen.o: ../../src/generic/datavgen.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13659,9 +13846,6 @@ $(OBJS)\advdll_helpext.o: ../../src/generic/helpext.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advdll_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_laywin.o: ../../src/generic/laywin.cpp
@@ -13692,6 +13876,12 @@ $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_notifmsg.o: ../../src/msw/notifmsg.cpp
@@ -13748,6 +13938,9 @@ $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 $(OBJS)\advlib_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advlib_commandlinkbuttong.o: ../../src/generic/commandlinkbuttong.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advlib_datavgen.o: ../../src/generic/datavgen.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13773,9 +13966,6 @@ $(OBJS)\advlib_helpext.o: ../../src/generic/helpext.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_laywin.o: ../../src/generic/laywin.cpp
@@ -13806,6 +13996,12 @@ $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_commandlinkbutton.o: ../../src/msw/commandlinkbutton.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_notifmsg.o: ../../src/msw/notifmsg.cpp
@@ -13922,10 +14118,16 @@ $(OBJS)\htmldll_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\htmldll_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmldll_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmldll_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmldll_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_winpars.o: ../../src/html/winpars.cpp
@@ -13997,10 +14199,16 @@ $(OBJS)\htmllib_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\htmllib_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmllib_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmllib_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmllib_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_winpars.o: ../../src/html/winpars.cpp

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/dcprint.h
+// Name:        wx/osx/dcprint.h
 // Purpose:     wxPrinterDC class
 // Author:      Stefan Csomor
 // Modified by:

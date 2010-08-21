@@ -3,7 +3,7 @@
 // Purpose:     wxMaskedEdit unit test
 // Author:      Julien Weinzorn
 // Created:     2010-06-02
-// RCS-ID:      $Id: ??????????????????????????????? $
+// RCS-ID:      $Id: $
 // Copyright:   (c) 2009 Julien Weinzorn
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
 
     static struct TestFormat
     {
-        wxString mask;      
+        wxString mask;
         wxString formatCodes;
         wxString test;
         wxString result;
@@ -97,7 +97,7 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
         {wxT("###.AAA.aC\\&")   , wxT("F!") , wxT("111.aaa.aZ&"), wxT("111.AAA.aZ&")},
         {wxT("#XX.")            , wxT("F!_"), wxT("3rt.")       , wxT("3rt.")},
         {wxT("#XX.")            , wxT("F!_"), wxT("3rt..")      , wxT("3rt..")},
-        
+
         {wxT("###.|###.|###.|###"), wxEmptyString, wxT("1.2.3.4")    , wxT("1.2.3.4")},
         {wxT("###.A|AA|.aX|\\&")  , wxEmptyString, wxT("111.aaa.aZ&"), wxT("111.AAA.aZ&")},
         {wxT("#X|X.")             , wxEmptyString, wxT("3rt.")       , wxT("3rt.")},
@@ -114,9 +114,9 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
             mask = wxMaskedEdit(maskedFormat[n].mask, formatCodes);
 
         }
-            CPPUNIT_ASSERT( maskedFormat[n].result.Cmp(mask.ApplyFormatCodes( maskedFormat[n].test)) == 0); 
+            CPPUNIT_ASSERT( maskedFormat[n].result.Cmp(mask.ApplyFormatCodes( maskedFormat[n].test)) == 0);
     }
-   
+
 }
 
 void MaskedEditTestCase::GetPlainValueTest()
@@ -129,10 +129,10 @@ void MaskedEditTestCase::GetPlainValueTest()
     formatCodes.Add(wxT("F!_"));
     formatCodes.Add(wxT("F!_"));
     formatCodes.Add(wxT("F!_"));
-  
+
     static struct TestPlainValue
     {
-        wxString mask;      
+        wxString mask;
         wxString formatCodes;
         wxString test;
         wxString result;
@@ -142,7 +142,7 @@ void MaskedEditTestCase::GetPlainValueTest()
         {wxT("###.###.###.###") , wxT("F_")  , wxT("1.2.3.4")    , wxT("1.2.3.4")},
         {wxT("###.AAA.aC\\&")   , wxT("F!")  , wxT("111.aaa.aZ&"), wxT("111AAAaZ")},
         {wxT("#XX.")            , wxT("F!_") , wxT("3rt.")       , wxT("3rt")},
-        
+
         {wxT("###.|###.|###.|###"), wxEmptyString, wxT("1.2.3.4")    , wxT("1.2.3.4")},
         {wxT("###.A|AA|.aX|\\&")  , wxEmptyString, wxT("111.aaa.aZ&"), wxT("111AAAaZ")},
         {wxT("#X|X.")             , wxEmptyString, wxT("3rt.")       , wxT("3rt")},
@@ -159,18 +159,18 @@ void MaskedEditTestCase::GetPlainValueTest()
         {
             mask = wxMaskedEdit(maskedPlainValue[n].mask, formatCodes);
         }
-        
+
         tmp = mask.ApplyFormatCodes(maskedPlainValue[n].test);
 
-        CPPUNIT_ASSERT( maskedPlainValue[n].result.Cmp(mask.GetPlainValue(tmp)) == 0); 
+        CPPUNIT_ASSERT( maskedPlainValue[n].result.Cmp(mask.GetPlainValue(tmp)) == 0);
     }
 }
 
 
 void MaskedEditTestCase::IsValidTest()
-{ 
+{
     wxMaskedEdit mask;
-    wxString formatString; 
+    wxString formatString;
     static struct TestValid
     {
         wxString mask;
@@ -180,7 +180,7 @@ void MaskedEditTestCase::IsValidTest()
     listTest[]=
     {
         //same as maskedfield
-        {wxT("")     , wxT("")     , true}, 
+        {wxT("")     , wxT("")     , true},
         {wxT("")     , wxT("azd")  , false},
         {wxT("###")  , wxT("123")  , true},
         {wxT("###")  , wxT("Az3")  , false},
@@ -191,28 +191,28 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("###.") , wxT("111.") , true},
 
         {wxT("AAa.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AAa.#X*") , wxT("AZc3,|")  , false}, 
+        {wxT("AAa.#X*") , wxT("AZc3,|")  , false},
         {wxT("AAa.#X*") , wxT("aZc.|.|") , false},
-        {wxT("AAa.#X*") , wxT("")        , true}, 
+        {wxT("AAa.#X*") , wxT("")        , true},
         {wxT("AAa.#X*") , wxT("AZc.3,|4"), false},
 
         {wxT("AAa.\\*A") , wxT("AZa.*Aa"), false},
-        
+
         {wxT("###\\*###") , wxT("") , true},
         {wxT("###\\*###") , wxT("123*593") , true},
         {wxT("###\\*###") , wxT("123456") , false},
         {wxT("###\\*###") , wxT("124\\*45") , false},
 
         {wxT("Aa{5} A{5}")  , wxT("A")       , true},
-    
+
         {wxT("###")    , wxT("1")  , true},
         {wxT("###")     , wxT("1")  , true},
         {wxT("###")    , wxT("111")  , true},
         {wxT("###")    , wxT("-111") , true},
- 
+
         {wxT("#{6}")   , wxT("-") , true},
         {wxT("#{6}")   , wxT("1") , true},
- 
+
 
 
         //with more than one field
@@ -224,12 +224,12 @@ void MaskedEditTestCase::IsValidTest()
 
         {wxT("#|##\\*#|##") , wxT("")        , true},
         {wxT("###\\*###")   , wxT("123*593") , true},
-        {wxT("|###\\*#|##") , wxT("123456")  , false}, 
+        {wxT("|###\\*#|##") , wxT("123456")  , false},
         {wxT("|###\\*###|") , wxT("124\\*45"), false},
         {wxT("|###\\*###|") , wxT("124*45")  , true},
 
         {wxT("##|h|##|m") , wxT("1")         , true}
-        
+
     };
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
@@ -239,8 +239,8 @@ void MaskedEditTestCase::IsValidTest()
         else
             mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
 
-        formatString = mask.ApplyFormatCodes(listTest[n].test); 
-        CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(formatString)); 
+        formatString = mask.ApplyFormatCodes(listTest[n].test);
+        CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(formatString));
     }
 
 }
@@ -264,7 +264,7 @@ void MaskedEditTestCase::SetMaskTest()
         {wxT("AAa.#X*") , wxT("AZc..") , true},
         {wxT("A|Aa.#X*") , wxT("")        , false},
         {wxT("AAa.|#X*") , wxT("AZc.3,|4"), false},
-    }; 
+    };
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
@@ -272,8 +272,8 @@ void MaskedEditTestCase::SetMaskTest()
             mask = wxMaskedEdit(masked[n].mask, formatCodes);
         else
             mask = wxMaskedEdit(masked[n].mask, formatCode);
-        
-        CPPUNIT_ASSERT( mask.SetMask(masked[n].newMask) == masked[n].result); 
+
+        CPPUNIT_ASSERT( mask.SetMask(masked[n].newMask) == masked[n].result);
     }
 }
 
@@ -282,7 +282,7 @@ void MaskedEditTestCase::SetDefaultValueTest()
 {
     static struct TestDefaultValue
     {
-        wxString mask;      
+        wxString mask;
         wxString formatCodes;
         wxString test;
         bool result;
@@ -322,7 +322,7 @@ void MaskedEditTestCase::SetDefaultValueTest()
         }
 
         tmp = mask.ApplyFormatCodes(maskedDefaultValue[n].test);
-        CPPUNIT_ASSERT_EQUAL( maskedDefaultValue[n].result, mask.SetDefaultValue(tmp)  );    
+        CPPUNIT_ASSERT_EQUAL( maskedDefaultValue[n].result, mask.SetDefaultValue(tmp)  );
     }
 
 
@@ -348,7 +348,7 @@ void MaskedEditTestCase::AddChoiceTest()
         {wxT("###|.###") , wxT("111.111")  , false},
         {wxT("###.###") , wxT("1a2.34t") , false},
         {wxT("###|.###") , wxT("123|.111")  , false},
-    }; 
+    };
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
@@ -358,7 +358,7 @@ void MaskedEditTestCase::AddChoiceTest()
         else
             mask = wxMaskedEdit(masked[n].mask, formatCode);
 
-        CPPUNIT_ASSERT( mask.AddChoice(masked[n].choice) == masked[n].result); 
+        CPPUNIT_ASSERT( mask.AddChoice(masked[n].choice) == masked[n].result);
     }
 
 
@@ -366,13 +366,13 @@ void MaskedEditTestCase::AddChoiceTest()
 //FIXME how to test this
 void MaskedEditTestCase::AddChoicesTest()
 {
-    
+
 }
 
 void MaskedEditTestCase::SetMaskFieldTest()
 {
     wxMaskedEdit mask;
-    
+
     static struct TestMask
     {
         wxString mask;
@@ -387,14 +387,14 @@ void MaskedEditTestCase::SetMaskFieldTest()
         {wxT("AAa.#X*")   , wxT("AZc#.")   , 1 , false},
         {wxT("A|Aa.#X*")  , wxT("")        , 0 , true},
         {wxT("AAa.|#X*")  , wxT("AZc.3,|4"), 2 , false},
-    }; 
+    };
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
         mask = wxMaskedEdit(masked[n].mask, wxT(""));
-        CPPUNIT_ASSERT_EQUAL(masked[n].result , mask.SetMask(masked[n].field, masked[n].newMask)); 
+        CPPUNIT_ASSERT_EQUAL(masked[n].result , mask.SetMask(masked[n].field, masked[n].newMask));
     }
-   
+
 }
 
 void MaskedEditTestCase::AddChoiceFieldTest()
@@ -418,7 +418,7 @@ void MaskedEditTestCase::AddChoiceFieldTest()
         {wxT("###|.###") , wxT("111")     , 1 , false},
         {wxT("###.###")  , wxT("1a2.34t") , 1 , false},
         {wxT("###|.###") , wxT("123|.111"), 1 , false},
-    }; 
+    };
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
@@ -428,7 +428,7 @@ void MaskedEditTestCase::AddChoiceFieldTest()
         else
             mask = wxMaskedEdit(masked[n].mask, formatCode);
 
-        CPPUNIT_ASSERT( mask.AddChoice(masked[n].field, masked[n].choice) == masked[n].result); 
+        CPPUNIT_ASSERT( mask.AddChoice(masked[n].field, masked[n].choice) == masked[n].result);
     }
 }
 
@@ -448,7 +448,7 @@ void MaskedEditTestCase::GetEmptyMaskTest()
         {wxT("###.AAA.aC\\&")   , wxT("   .   .  &")},
         {wxT("#XX.")            , wxT("   .")},
         {wxT("(###) - ###-####"), wxT("(   ) -    -    ")},
- 
+
         //With multiple fields
         {wxT("###|.###.|###.|###") , wxT("   .   .   .   ")},
         {wxT("##|#|.AAA.|aC|\\&")   , wxT("   .   .  &")},
@@ -466,7 +466,7 @@ void MaskedEditTestCase::GetEmptyMaskTest()
 
 }
 void MaskedEditTestCase::GetFieldIndexTest()
-{    
+{
     static struct TestFieldIndex
     {
         wxString mask;
@@ -507,7 +507,7 @@ void MaskedEditTestCase::GetFieldIndexTest()
 
 }
 void MaskedEditTestCase::GetMinFieldPositionTest()
-{   
+{
     static struct TestMinFieldIndex
     {
         wxString mask;
@@ -540,7 +540,7 @@ void MaskedEditTestCase::GetMinFieldPositionTest()
 }
 
 void MaskedEditTestCase::GetMaxFieldPositionTest()
-{  
+{
     static struct TestMasFieldIndex
     {
         wxString mask;
@@ -568,4 +568,3 @@ void MaskedEditTestCase::GetMaxFieldPositionTest()
         CPPUNIT_ASSERT_EQUAL(maskedTest[n].result,  mask.GetMaxFieldPosition(maskedTest[n].test));
     }
 }
-

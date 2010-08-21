@@ -140,8 +140,7 @@ public:
 
     ~CListItemInternalData()
     {
-        delete m_pAttr;
-        m_pAttr = NULL;
+        wxDELETE(m_pAttr);
     }
 
     wxListItemAttr*                 m_pAttr;
@@ -965,8 +964,7 @@ wxListCtrl::~wxListCtrl ()
     {
         m_pTextCtrl->SetHWND(0);
         m_pTextCtrl->UnsubclassWin();
-        delete m_pTextCtrl;
-        m_pTextCtrl = NULL;
+        wxDELETE(m_pTextCtrl);
     }
 
     if (m_bOwnsImageListNormal)

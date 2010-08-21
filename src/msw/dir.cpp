@@ -30,7 +30,6 @@
 #endif // PCH
 
 #include "wx/dir.h"
-#include "wx/filefn.h"          // for wxDirExists()
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
@@ -68,7 +67,7 @@ inline void FreeFindData(FIND_DATA fd)
 inline FIND_DATA FindFirst(const wxString& spec,
                            FIND_STRUCT *finddata)
 {
-    return ::FindFirstFile(spec.fn_str(), finddata);
+    return ::FindFirstFile(spec.t_str(), finddata);
 }
 
 inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
@@ -285,16 +284,6 @@ bool wxDirData::Read(wxString *filename)
     }
 
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// wxDir helpers
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxDir::Exists(const wxString& dir)
-{
-    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------

@@ -395,16 +395,16 @@ public:
     // the hDC parameter is the DC background will be drawn on, it can be used
     // to call SetBrushOrgEx() on it if the returned brush is a bitmap one
     //
-    // child parameter is never NULL
+    // child parameter is never NULL, it can be this window itself or one of
+    // its (grand)children
     //
     // the base class version returns a solid brush if we have a non default
     // background colour or 0 otherwise
     virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child);
 
     // return the background brush to use for painting the given window by
-    // quering the parent windows via their MSWGetBgBrushForChild() recursively
-    WXHBRUSH MSWGetBgBrush(WXHDC hDC) { return MSWGetBgBrush(hDC, this); }
-    WXHBRUSH MSWGetBgBrush(WXHDC hDC, wxWindowMSW *child);
+    // querying the parent windows via MSWGetBgBrushForChild() recursively
+    WXHBRUSH MSWGetBgBrush(WXHDC hDC);
 
     enum MSWThemeColour
     {
@@ -437,6 +437,11 @@ public:
     {
         return true;
     }
+
+    // This should be overridden to return true for the controls which have
+    // themed background that should through their children. Currently only
+    // wxNotebook uses this.
+    virtual bool MSWHasInheritableBackground() const { return false; }
 
 #if !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
     #define wxHAS_MSW_BACKGROUND_ERASE_HOOK
@@ -589,6 +594,8 @@ protected:
                                           const wxSize& size,
                                           int& x, int& y,
                                           int& w, int& h) const;
+
+    bool MSWEnableHWND(WXHWND hWnd, bool enable);
 
 private:
     // common part of all ctors

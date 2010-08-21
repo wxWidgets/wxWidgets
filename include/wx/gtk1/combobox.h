@@ -151,8 +151,7 @@ public:
     void DisableEvents();
     void EnableEvents();
 
-    virtual void SetMask(const wxMaskedEdit& mask);
-    
+
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void DoApplyWidgetStyle(GtkRcStyle *style);
@@ -180,13 +179,7 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
-    //Mask event methods
-    void ApplyMask();
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
 
-    // Mask
-    wxMaskedEdit m_maskCtrl;
 
 
 private:

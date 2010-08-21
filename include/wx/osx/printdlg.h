@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/printdlg.h
+// Name:        wx/osx/printdlg.h
 // Purpose:     wxPrintDialog, wxPageSetupDialog classes.
 //              Use generic, PostScript version if no
 //              platform-specific implementation.

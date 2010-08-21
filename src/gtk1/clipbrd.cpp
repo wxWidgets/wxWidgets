@@ -216,8 +216,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
         {
             wxLogTrace(TRACE_CLIPBOARD, wxT("wxClipboard will get cleared" ));
 
-            delete wxTheClipboard->m_data;
-            wxTheClipboard->m_data = NULL;
+            wxDELETE(wxTheClipboard->m_data);
         }
     }
 
@@ -383,11 +382,7 @@ void wxClipboard::Clear()
             while (m_waiting) gtk_main_iteration();
         }
 
-        if (m_data)
-        {
-            delete m_data;
-            m_data = NULL;
-        }
+        wxDELETE(m_data);
 
 #if wxUSE_THREADS
         /* re-enable GUI threads */

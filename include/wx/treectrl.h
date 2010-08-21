@@ -22,7 +22,7 @@
 
 #include "wx/control.h"
 #include "wx/treebase.h"
-#include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through CLASSINFO macro
+#include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through wxCLASSINFO macro
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -353,7 +353,7 @@ public:
         // been before. textCtrlClass parameter allows you to create an edit
         // control of arbitrary user-defined class deriving from wxTextCtrl.
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
-                      wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl)) = 0;
+                      wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl)) = 0;
         // returns the same pointer as StartEdit() if the item is being edited,
         // NULL otherwise (it's assumed that no more than one item may be
         // edited simultaneously)

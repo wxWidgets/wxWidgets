@@ -6,7 +6,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Angel vidal
 //              (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

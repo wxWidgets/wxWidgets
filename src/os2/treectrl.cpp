@@ -80,11 +80,7 @@ public:
     wxTreeItemInternalData() {}
     ~wxTreeItemInternalData()
     {
-        if(m_pAttr)
-        {
-            delete m_pAttr;
-            m_pAttr = NULL;
-        }
+        wxDELETE(m_pAttr);
     }
 
     wxTreeItemAttr*                 m_pAttr;

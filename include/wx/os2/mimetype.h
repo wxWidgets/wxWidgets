@@ -96,12 +96,6 @@ public:
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // these are NOPs under OS/2
-    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = true)
-        { return true; }
-    bool ReadMimeTypes(const wxString& WXUNUSED(filename))
-        { return true; }
-
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
 
 private:

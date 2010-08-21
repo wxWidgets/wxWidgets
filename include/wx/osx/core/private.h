@@ -103,6 +103,7 @@ class wxNonOwnedWindow;
 
 class wxMacControl;
 class wxWidgetImpl;
+class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
 
@@ -480,7 +481,7 @@ public :
                                     long extraStyle);
 
 #if wxOSX_USE_COCOA
-    static wxWidgetImplType*    CreateComboBox( wxWindowMac* wxpeer, 
+    static wxWidgetImplType*    CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* parent, 
                                     wxWindowID id, 
                                     wxMenu* menu,
@@ -563,6 +564,8 @@ public:
     // accessing content
 
     virtual unsigned int    ListGetCount() const = 0;
+    
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const = 0;
 };
 
 //
@@ -570,15 +573,22 @@ public:
 //
 
 class WXDLLIMPEXP_FWD_CORE wxTextAttr;
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 // common interface for all implementations
 class WXDLLIMPEXP_CORE wxTextWidgetImpl
 
 {
 public :
-    wxTextWidgetImpl() {}
+    // Any widgets implementing this interface must be associated with a
+    // wxTextEntry so instead of requiring the derived classes to implement
+    // another (pure) virtual function, just take the pointer to this entry in
+    // our ctor and implement GetTextEntry() ourselves.
+    wxTextWidgetImpl(wxTextEntry *entry) : m_entry(entry) {}
 
     virtual ~wxTextWidgetImpl() {}
+
+    wxTextEntry *GetTextEntry() const { return m_entry; }
 
     virtual bool CanFocus() const { return true; }
 
@@ -620,6 +630,11 @@ public :
     virtual void CheckSpelling(bool WXUNUSED(check)) { }
     
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
+
+private:
+    wxTextEntry * const m_entry;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextWidgetImpl);
 };
 
 // common interface for all implementations

@@ -87,6 +87,9 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint
 {
+    wxUnusedVar( anImage );
+    wxUnusedVar( aPoint );
+    
     bool optionDown = GetCurrentKeyModifiers() & optionKey;
     wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
     
@@ -120,8 +123,12 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
             if (cursorID != wxCURSOR_NONE)
             {
+                // TODO under 10.6 the os itself deals with the cursor, remove if things
+                // work properly everywhere
+#if 0
                 wxCursor cursor( cursorID );
                 cursor.MacInstall();
+#endif
             }
         }
     }
@@ -129,6 +136,9 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
+    wxUnusedVar( anImage );
+    wxUnusedVar( aPoint );
+    
     resultCode = operation;
     dragFinished = YES;
 }
@@ -170,7 +180,7 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return gCurrentSource;
 }
 
-wxDragResult wxDropSource::DoDragDrop(int flags)
+wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 
@@ -201,12 +211,31 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
-        
+
+        NSPoint down = [theEvent locationInWindow];
+        NSPoint p = [view convertPoint:down toView:nil];
+                
         gCurrentSource = this;
-        NSImage* image = [[NSImage alloc] initWithSize: NSMakeSize(16,16)];
+        
+        // add a dummy square as dragged image for the moment, 
+        // TODO: proper drag image for data
+        NSSize sz = NSMakeSize(16,16);
+        NSRect fillRect = NSMakeRect(0, 0, 16, 16);
+        NSImage* image = [[NSImage alloc] initWithSize: sz];
+ 
+        [image lockFocus];
+        
+        [[[NSColor whiteColor] colorWithAlphaComponent:0.8] set];
+        NSRectFill(fillRect);
+        [[NSColor blackColor] set];
+        NSFrameRectWithWidthUsingOperation(fillRect,1.0f,NSCompositeDestinationOver);
+        
+        [image unlockFocus];        
+        
+        
         DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
         [delegate setImplementation: this];
-        [view dragImage:image at:NSMakePoint(0.0, 16.0) offset:NSMakeSize(0.0,0.0) 
+        [view dragImage:image at:p offset:NSMakeSize(0.0,0.0) 
             event: theEvent pasteboard: pboard source:delegate slideBack: NO];
         
         wxEventLoopBase * const loop = wxEventLoop::GetActive();

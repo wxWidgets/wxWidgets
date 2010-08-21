@@ -83,6 +83,7 @@ wxString wxSystemOptions::GetOption(const wxString& name)
         // and then for "wx_name" which can be set to change the option globally
         wxString var(name);
         var.Replace(wxT("."), wxT("_"));  // '.'s not allowed in env var names
+        var.Replace(wxT("-"), wxT("_"));  // and neither are '-'s
 
         wxString appname;
         if ( wxTheApp )

@@ -24,8 +24,7 @@
     #pragma hdrstop
 #endif
 
-//DARWIN _ONLY_
-#ifdef __DARWIN__
+#if wxOSX_USE_COCOA_OR_CARBON
 
 #include "wx/osx/core/hid.h"
 

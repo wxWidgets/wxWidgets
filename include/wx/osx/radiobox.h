@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/radiobox.h
+// Name:        wx/osx/radiobox.h
 // Purpose:     wxRadioBox class
 // Author:      Stefan Csomor
 // Modified by:

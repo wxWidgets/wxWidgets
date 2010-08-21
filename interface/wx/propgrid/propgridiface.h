@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPGProperty
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // -----------------------------------------------------------------------
@@ -153,6 +153,8 @@ public:
 
     /**
         Disables a property.
+
+        @see EnableProperty(), wxPGProperty::Enable()
     */
     bool DisableProperty( wxPGPropArg id );
 
@@ -164,12 +166,15 @@ public:
     bool EditorValidate();
 
     /**
-        Enables or disables property.
+        Enables or disables property. Disabled property usually appears as
+        having grey text.
 
         @param id
             Name or pointer to a property.
         @param enable
             If @false, property is disabled instead.
+
+        @see wxPGProperty::Enable()
     */
     bool EnableProperty( wxPGPropArg id, bool enable = true );
 
@@ -226,8 +231,12 @@ public:
             is used.
 
         @beginWxPythonOnly
-        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and
-        instead of * operator, use GetProperty() method.
+        Instead of ++ operator, use Next() method, and instead of * operator,
+        use GetProperty() method. There is also GetPyIterator() method (which
+        takes the same arguments but instead returns a pythonic iterator),
+        @c Properties attribute which is an iterator over all non-category,
+        non-private properties, and finally @c Items attribute which is an
+        iterator over all items except private child properties.
         @endWxPythonOnly
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
@@ -249,8 +258,12 @@ public:
             iteration will instead begin from bottommost valid item.
 
         @beginWxPythonOnly
-        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and
-        instead of * operator, use GetProperty() method.
+        Instead of ++ operator, use Next() method, and instead of * operator,
+        use GetProperty() method. There is also GetPyIterator() method (which
+        takes the same arguments but instead returns a pythonic iterator),
+        @c Properties attribute which is an iterator over all non-category,
+        non-private properties, and finally @c Items attribute which is an
+        iterator over all items except private child properties.
         @endWxPythonOnly
     */
     wxPropertyGridIterator GetIterator( int flags, int startPos );
@@ -457,8 +470,14 @@ public:
         @param flags
             See @ref propgrid_iterator_flags.
 
-        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and
-            instead of * operator, use GetProperty() method.
+        @beginWxPythonOnly
+        Instead of ++ operator, use Next() method, and instead of * operator,
+        use GetProperty() method. There is also GetPyVIterator() method (which
+        takes the same arguments but instead returns a pythonic iterator),
+        @c Properties attribute which is an iterator over all non-category,
+        non-private properties, and finally @c Items attribute which is an
+        iterator over all items except private child properties.
+        @endWxPythonOnly
     */
     virtual wxPGVIterator GetVIterator( int flags ) const;
 

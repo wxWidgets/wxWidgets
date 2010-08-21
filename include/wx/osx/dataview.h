@@ -49,14 +49,14 @@ public:
     virtual int GetMinWidth() const { return m_minWidth; }
     virtual wxString GetTitle() const { return m_title; }
     virtual int GetWidth() const;
-    virtual bool IsHidden() const { return false; } // TODO
     virtual bool IsSortOrderAscending() const { return m_ascending; }
     virtual bool IsSortKey() const;
+    virtual bool IsHidden() const;
 
     virtual void SetAlignment  (wxAlignment align);
     virtual void SetBitmap     (wxBitmap const& bitmap);
     virtual void SetFlags      (int flags) { SetIndividualFlags(flags); }
-    virtual void SetHidden     (bool WXUNUSED(hidden)) { } // TODO
+    virtual void SetHidden     (bool hidden);
     virtual void SetMaxWidth   (int maxWidth);
     virtual void SetMinWidth   (int minWidth);
     virtual void SetReorderable(bool reorderable);
@@ -129,18 +129,27 @@ public:
   {
     Init();
   }
-  wxDataViewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
-                 const wxValidator& validator = wxDefaultValidator)
+  wxDataViewCtrl(wxWindow *parent,
+                 wxWindowID winid,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxDataViewCtrlNameStr )
   {
     Init();
-    Create(parent, id, pos, size, style, validator );
+    Create(parent, winid, pos, size, style, validator, name);
   }
 
   ~wxDataViewCtrl();
 
- // explicit control creation
-  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=0,
-              const wxValidator& validator=wxDefaultValidator);
+  bool Create(wxWindow *parent,
+              wxWindowID winid,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0,
+              const wxValidator& validator = wxDefaultValidator,
+              const wxString& name = wxDataViewCtrlNameStr);
 
   virtual wxControl* GetMainWindow() // not used for the native implementation
   {
@@ -164,7 +173,6 @@ public:
   virtual void EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn* columnPtr=NULL);
   virtual void Expand(const wxDataViewItem& item);
   virtual bool IsExpanded(const wxDataViewItem & item) const;
-
 
   virtual unsigned int GetCount() const;
   virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
@@ -269,6 +277,9 @@ protected:
 private:
  // initializing of local variables:
   void Init();
+
+  virtual wxDataViewItem DoGetCurrentItem() const;
+  virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
  //
  // variables

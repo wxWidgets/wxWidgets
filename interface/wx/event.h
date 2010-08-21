@@ -4,7 +4,7 @@
 //              wxEvent-derived classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -463,10 +463,10 @@ public:
         The normal order of event table searching is as follows:
         -# wxApp::FilterEvent() is called. If it returns anything but @c -1
            (default) the processing stops here.
-        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-           the function skips to step (7).
         -# TryBefore() is called (this is where wxValidator are taken into
            account for wxWindow objects). If this returns @true, the function exits.
+        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
+           the function skips to step (7).
         -# Dynamic event table of the handlers bound using Bind<>() is
            searched. If a handler is found, it is executed and the function
            returns @true unless the handler used wxEvent::Skip() to indicate
@@ -489,8 +489,8 @@ public:
            processed, ProcessEvent() on wxTheApp object is called as the last
            step.
 
-        Notice that steps (2)-(6) are performed in ProcessEventHere() which is
-        called by this function.
+        Notice that steps (2)-(6) are performed in ProcessEventLocally()
+        which is called by this function.
 
         @param event
             Event to process.
@@ -503,21 +503,30 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     /**
-        Try to process the event in this event handler.
+        Try to process the event in this handler and all those chained to it.
 
-        This method is called from ProcessEvent(), please see the detailed
-        description of the event processing logic there.
+        As explained in ProcessEvent() documentation, the event handlers may be
+        chained in a doubly-linked list. This function tries to process the
+        event in this handler (including performing any pre-processing done in
+        TryBefore(), e.g. applying validators) and all those following it in
+        the chain until the event is processed or the chain is exhausted.
 
-        It is @em not virtual and so may not be overridden but it does call
-        virtual TryBefore() which may be overridden.
+        This function is called from ProcessEvent() and, in turn, calls
+        TryThis() for each handler in turn. It is not virtual and so cannot be
+        overridden but can, and should, be called to forward an event to
+        another handler instead of ProcessEvent() which would result in a
+        duplicate call to TryAfter(), e.g. resulting in all unprocessed events
+        being sent to the application object multiple times.
+
+        @since 2.9.1
 
         @param event
             Event to process.
         @return
-            @true if this object itself defines a handler for this event and
-            the handler didn't skip the event.
+            @true if this handler of one of those chained to it processed the
+            event.
      */
-    bool ProcessEventHere(wxEvent& event);
+    bool ProcessEventLocally(wxEvent& event);
 
     /**
         Processes an event by calling ProcessEvent() and handles any exceptions
@@ -1083,9 +1092,28 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryBefore(wxEvent& event);
+
+    /**
+        Try to process the event in this event handler.
+
+        This method is called from ProcessEventLocally() and thus, indirectly,
+        from ProcessEvent(), please see the detailed description of the event
+        processing logic there.
+
+        It is currently @em not virtual and so may not be overridden.
+
+        @since 2.9.1
+
+        @param event
+            Event to process.
+        @return
+            @true if this object itself defines a handler for this event and
+            the handler didn't skip the event.
+     */
+    bool TryThis(wxEvent& event);
 
     /**
         Method called by ProcessEvent() as last resort.
@@ -1112,7 +1140,7 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryAfter(wxEvent& event);
 };
@@ -1151,7 +1179,7 @@ enum wxKeyCategoryFlags
 /**
     @class wxKeyEvent
 
-    This event class contains information about keypress (character) events.
+    This event class contains information about key press and release events.
 
     Notice that there are three different kinds of keyboard events in wxWidgets:
     key down and up events and char events. The difference between the first two
@@ -1161,13 +1189,12 @@ enum wxKeyCategoryFlags
     generated) down events but only one up so it is wrong to assume that there is
     one up event corresponding to each down one.
 
-    Both key events provide untranslated key codes while the char event carries
-    the translated one. The untranslated code for alphanumeric keys is always
-    an upper case value. For the other keys it is one of @c WXK_XXX values
-    from the ::wxKeyCode enumeration.
-    The translated key is, in general, the character the user expects to appear
-    as the result of the key combination when typing the text into a text entry
-    zone, for example.
+    Both key down and up events provide untranslated key codes while the char
+    event carries the translated one. The untranslated code for alphanumeric
+    keys is always an upper case value. For the other keys it is one of @c
+    WXK_XXX values from the ::wxKeyCode enumeration. The translated key is, in
+    general, the character the user expects to appear as the result of the key
+    combination when typing the text into a text entry zone, for example.
 
     A few examples to clarify this (all assume that CAPS LOCK is unpressed
     and the standard US keyboard): when the @c 'A' key is pressed, the key down
@@ -1179,18 +1206,29 @@ enum wxKeyCategoryFlags
 
     Although in this simple case it is clear that the correct key code could be
     found in the key down event handler by checking the value returned by
-    wxKeyEvent::ShiftDown(), in general you should use @c EVT_CHAR for this as
-    for non-alphanumeric keys the translation is keyboard-layout dependent and
-    can only be done properly by the system itself.
+    wxKeyEvent::ShiftDown(), in general you should use @c EVT_CHAR if you need
+    the translated key as for non-alphanumeric keys the translation is
+    keyboard-layout dependent and can only be done properly by the system
+    itself.
 
     Another kind of translation is done when the control key is pressed: for
     example, for CTRL-A key press the key down event still carries the
     same key code @c 'a' as usual but the char event will have key code of 1,
     the ASCII value of this key combination.
 
+    Notice that while pressing any key will generate a key down event (except
+    in presence of IME perhaps) a few special keys don't generate a char event:
+    currently, Shift, Control (or Command), Alt (or Menu or Meta) and Caps, Num
+    and Scroll Lock keys don't do it. For all the other keys you have the
+    choice about whether to choose key down or char event for handling it and
+    either can be used. However it is advised to use char events only for the
+    keys that are supposed to generate characters on screen and key down events
+    for all the rest.
+
+
     You may discover how the other keys on your system behave interactively by
-    running the @ref page_samples_text wxWidgets sample and pressing some keys
-    in any of the text controls shown in it.
+    running the @ref page_samples_keyboard wxWidgets sample and pressing some
+    keys in it.
 
     @b Tip: be sure to call @c event.Skip() for events that you don't process in
     key event function, otherwise menu shortcuts may cease to work under Windows.
@@ -1204,7 +1242,9 @@ enum wxKeyCategoryFlags
     @note For Windows programmers: The key and char events in wxWidgets are
           similar to but slightly different from Windows @c WM_KEYDOWN and
           @c WM_CHAR events. In particular, Alt-x combination will generate a
-          char event in wxWidgets (unless it is used as an accelerator).
+          char event in wxWidgets (unless it is used as an accelerator) and
+          almost all keys, including ones without ASCII equivalents, generate
+          char events too.
 
 
     @beginEventTable{wxKeyEvent}
@@ -1233,12 +1273,13 @@ public:
 
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
-        while non-ASCII events return values such as @b WXK_LEFT for the left cursor
-        key. See ::wxKeyCode for a full list of the virtual key codes.
+        while non-ASCII events return values such as @b WXK_LEFT for the left
+        cursor key. See ::wxKeyCode for a full list of the virtual key codes.
 
-        Note that in Unicode build, the returned value is meaningful only if the
-        user entered a character that can be represented in current locale's default
-        charset. You can obtain the corresponding Unicode character using GetUnicodeKey().
+        Note that in Unicode build, the returned value is meaningful only if
+        the user entered a character that can be represented in current
+        locale's default charset. You can obtain the corresponding Unicode
+        character using GetUnicodeKey().
     */
     int GetKeyCode() const;
 
@@ -1280,6 +1321,9 @@ public:
 
     /**
         Returns the Unicode character corresponding to this key event.
+
+        If the key pressed doesn't have any character value (e.g. a cursor key)
+        this method will return 0.
 
         This function is only available in Unicode build, i.e. when
         @c wxUSE_UNICODE is 1.
@@ -1986,17 +2030,17 @@ public:
     @event{EVT_RIGHT_DCLICK(func)}
         Process a @c wxEVT_RIGHT_DCLICK event.
     @event{EVT_MOUSE_AUX1_DOWN(func)}
-        Process a @c wxEVT_MOUSE_AUX1_DOWN event.
+        Process a @c wxEVT_AUX1_DOWN event.
     @event{EVT_MOUSE_AUX1_UP(func)}
-        Process a @c wxEVT_MOUSE_AUX1_UP event.
+        Process a @c wxEVT_AUX1_UP event.
     @event{EVT_MOUSE_AUX1_DCLICK(func)}
-        Process a @c wxEVT_MOUSE_AUX1_DCLICK event.
+        Process a @c wxEVT_AUX1_DCLICK event.
     @event{EVT_MOUSE_AUX2_DOWN(func)}
-        Process a @c wxEVT_MOUSE_AUX2_DOWN event.
+        Process a @c wxEVT_AUX2_DOWN event.
     @event{EVT_MOUSE_AUX2_UP(func)}
-        Process a @c wxEVT_MOUSE_AUX2_UP event.
+        Process a @c wxEVT_AUX2_UP event.
     @event{EVT_MOUSE_AUX2_DCLICK(func)}
-        Process a @c wxEVT_MOUSE_AUX2_DCLICK event.
+        Process a @c wxEVT_AUX2_DCLICK event.
     @event{EVT_MOTION(func)}
         Process a @c wxEVT_MOTION event.
     @event{EVT_ENTER_WINDOW(func)}
@@ -3572,6 +3616,11 @@ public:
     @class wxShowEvent
 
     An event being sent when the window is shown or hidden.
+    The event is triggered by calls to wxWindow::Show(), and any user
+    action showing a previously hidden window or vice versa (if allowed by
+    the current platform and/or window manager).
+    Notice that the event is not triggered when the application is iconized
+    (minimized) or restored under wxMSW.
 
     Currently only wxMSW, wxGTK and wxOS2 generate such events.
 
@@ -3827,13 +3876,6 @@ typedef int wxEventType;
 wxEventType wxEVT_NULL;
 
 /**
-    Initializes a new event type using wxNewEventType().
-
-    @deprecated Use wxDEFINE_EVENT() instead
-*/
-#define DEFINE_EVENT_TYPE(name)     const wxEventType name = wxNewEventType();
-
-/**
     Generates a new unique event type.
 
     Usually this function is only used by wxDEFINE_EVENT() and not called
@@ -3929,9 +3971,9 @@ wxEventType wxNewEventType();
 
     ...
 
-    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
         EVT_MY(wxID_ANY, MyFrame::OnMyEvent)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
     @endcode
 
     @param evt
@@ -3961,38 +4003,39 @@ wxEventType wxNewEventType();
 #define wx__DECLARE_EVT0(evt, fn) \
     wx__DECLARE_EVT1(evt, wxID_ANY, fn)
 
-
 /**
     Use this macro inside a class declaration to declare a @e static event table
     for that class.
 
-    In the implementation file you'll need to use the BEGIN_EVENT_TABLE()
-    and the END_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
+    In the implementation file you'll need to use the wxBEGIN_EVENT_TABLE()
+    and the wxEND_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
     to capture events.
+    
+    Note that this macro requires a final semicolon.
 
     @see @ref overview_events_eventtables
 */
-#define DECLARE_EVENT_TABLE()
+#define wxDECLARE_EVENT_TABLE()
 
 /**
     Use this macro in a source file to start listing @e static event handlers
     for a specific class.
 
-    Use END_EVENT_TABLE() to terminate the event-declaration block.
+    Use wxEND_EVENT_TABLE() to terminate the event-declaration block.
 
     @see @ref overview_events_eventtables
 */
-#define BEGIN_EVENT_TABLE(theClass, baseClass)
+#define wxBEGIN_EVENT_TABLE(theClass, baseClass)
 
 /**
     Use this macro in a source file to end listing @e static event handlers
     for a specific class.
 
-    Use BEGIN_EVENT_TABLE() to start the event-declaration block.
+    Use wxBEGIN_EVENT_TABLE() to start the event-declaration block.
 
     @see @ref overview_events_eventtables
 */
-#define END_EVENT_TABLE()
+#define wxEND_EVENT_TABLE()
 
 /**
     In a GUI application, this function posts @a event to the specified @e dest

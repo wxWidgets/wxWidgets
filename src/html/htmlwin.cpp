@@ -469,14 +469,13 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     SetBackgroundImage(wxNullBitmap);
 
     m_Parser->SetDC(dc);
-    if (m_Cell)
-    {
-        delete m_Cell;
-        // notice that it's important to set m_Cell to NULL here before calling
-        // Parse() below, even if it will be overwritten by its return value:
-        // without this we may crash if it's used from inside Parse()
-        m_Cell = NULL;
-    }
+
+    // notice that it's important to set m_Cell to NULL here before calling
+    // Parse() below, even if it will be overwritten by its return value as
+    // without this we may crash if it's used from inside Parse(), so use
+    // wxDELETE() and not just delete here
+    wxDELETE(m_Cell);
+
     m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(newsrc);
     delete dc;
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
@@ -1150,6 +1149,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     // draw the HTML window contents
     dc->SetMapMode(wxMM_TEXT);
     dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    dc->SetLayoutDirection(GetLayoutDirection());
 
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;

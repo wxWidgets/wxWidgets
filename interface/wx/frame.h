@@ -3,7 +3,7 @@
 // Purpose:     interface of wxFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -43,7 +43,11 @@
     @style{wxICONIZE}
            Display the frame iconized (minimized). Windows only.
     @style{wxCAPTION}
-           Puts a caption on the frame.
+           Puts a caption on the frame. Notice that this flag is required by
+           wxMINIMIZE_BOX, wxMAXIMIZE_BOX and wxCLOSE_BOX on most systems as
+           the corresponding buttons cannot be shown if the window has no title
+           bar at all. I.e. if wxCAPTION is not specified those styles would be
+           simply ignored.
     @style{wxMINIMIZE}
            Identical to wxICONIZE. Windows only.
     @style{wxMINIMIZE_BOX}
@@ -51,31 +55,37 @@
     @style{wxMAXIMIZE}
            Displays the frame maximized. Windows and GTK+ only.
     @style{wxMAXIMIZE_BOX}
-           Displays a maximize box on the frame.
+           Displays a maximize box on the frame. Notice that under wxGTK
+           wxRESIZE_BORDER must be used as well or this style is ignored.
     @style{wxCLOSE_BOX}
            Displays a close box on the frame.
     @style{wxSTAY_ON_TOP}
            Stay on top of all other windows, see also wxFRAME_FLOAT_ON_PARENT.
     @style{wxSYSTEM_MENU}
-           Displays a system menu.
+           Displays a system menu containing the list of various windows
+           commands in the window title bar. Unlike wxMINIMIZE_BOX,
+           wxMAXIMIZE_BOX and wxCLOSE_BOX styles this style can be used without
+           wxCAPTION, at least under Windows, and makes the system menu
+           available without showing it on screen in this case. However it is
+           recommended to only use it together with wxCAPTION for consistent
+           behaviour under all platforms.
     @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window.
     @style{wxFRAME_TOOL_WINDOW}
-           Causes a frame with a small titlebar to be created; the frame does
+           Causes a frame with a small title bar to be created; the frame does
            not appear in the taskbar under Windows or GTK+.
     @style{wxFRAME_NO_TASKBAR}
            Creates an otherwise normal frame but it does not appear in the
            taskbar under Windows or GTK+ (note that it will minimize to the
            desktop window under Windows which may seem strange to the users
            and thus it might be better to use this style only without
-           wxMINIMIZE_BOX style). In wxGTK, the flag is respected only if GTK+
-           is at least version 2.2 and the window manager supports
-           _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other platforms.
+           wxMINIMIZE_BOX style). In wxGTK, the flag is respected only if the
+           window manager supports _NET_WM_STATE_SKIP_TASKBAR hint.
     @style{wxFRAME_FLOAT_ON_PARENT}
            The frame will always be on top of its parent (unlike wxSTAY_ON_TOP).
            A frame created with this style must have a non-@NULL parent.
     @style{wxFRAME_SHAPED}
-           Windows with this style are   allowed to have their shape changed
+           Windows with this style are allowed to have their shape changed
            with the SetShape() method.
     @endStyleTable
 

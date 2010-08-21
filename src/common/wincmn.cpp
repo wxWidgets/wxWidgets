@@ -364,8 +364,7 @@ wxWindowBase::~wxWindowBase()
         // This removes any dangling pointers to this window in other windows'
         // constraintsInvolvedIn lists.
         UnsetConstraints(m_constraints);
-        delete m_constraints;
-        m_constraints = NULL;
+        wxDELETE(m_constraints);
     }
 #endif // wxUSE_CONSTRAINTS
 
@@ -737,17 +736,14 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
 
 wxSize wxWindowBase::DoGetBorderSize() const
 {
-    // there is one case in which we can implement it for all ports easily:
-    // do it as some classes used by both wxUniv and native ports (e.g.
-    // wxGenericStaticText) do override DoGetBestClientSize() and so this
-    // method must work for them and that ensures that it does, at least in
-    // the default case)
+    // there is one case in which we can implement it for all ports easily
     if ( GetBorder() == wxBORDER_NONE )
         return wxSize(0, 0);
 
-    wxFAIL_MSG( "must be overridden if called" );
-
-    return wxDefaultSize;
+    // otherwise use the difference between the real size and the client size
+    // as a fallback: notice that this is incorrect in general as client size
+    // also doesn't take the scrollbars into account
+    return GetSize() - GetClientSize();
 }
 
 wxSize wxWindowBase::GetBestSize() const
@@ -1254,8 +1250,7 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
 
     if ( deleteHandler )
     {
-        delete firstHandler;
-        firstHandler = NULL;
+        wxDELETE(firstHandler);
     }
 
     return firstHandler;
@@ -2076,8 +2071,7 @@ void wxWindowBase::DeleteRelatedConstraints()
             node = next;
         }
 
-        delete m_constraintsInvolvedIn;
-        m_constraintsInvolvedIn = NULL;
+        wxDELETE(m_constraintsInvolvedIn);
     }
 }
 
@@ -2297,7 +2291,9 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         if ( (constr->width.GetRelationship() != wxAsIs ) ||
              (constr->height.GetRelationship() != wxAsIs) )
         {
-            SetSize(x, y, w, h);
+            // We really shouldn't set negative sizes for the windows so make
+            // them at least of 1*1 size
+            SetSize(x, y, w > 0 ? w : 1, h > 0 ? h : 1);
         }
         else
         {
@@ -2983,7 +2979,7 @@ bool wxWindowBase::TryBefore(wxEvent& event)
     if ( event.GetEventObject() == this )
     {
         wxValidator * const validator = GetValidator();
-        if ( validator && validator->ProcessEventHere(event) )
+        if ( validator && validator->ProcessEventLocally(event) )
         {
             return true;
         }

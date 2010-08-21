@@ -79,7 +79,7 @@ public:
     bool SetItemState( long item, long state, long stateMask);
     bool SetItemImage( long item, int image, int selImage = -1 );
     bool SetItemColumnImage( long item, long column, int image );
-    wxString GetItemText( long item ) const;
+    wxString GetItemText( long item, int col = 0 ) const;
     void SetItemText( long item, const wxString& str );
     wxUIntPtr GetItemData( long item ) const;
     bool SetItemPtrData(long item, wxUIntPtr data);
@@ -121,7 +121,7 @@ public:
     void SetItemCount(long count);
 
     wxTextCtrl *EditLabel(long item,
-                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
     wxTextCtrl* GetEditControl() const;
     void Edit( long item ) { EditLabel(item); }
 
@@ -221,7 +221,7 @@ protected:
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
 
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;

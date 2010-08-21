@@ -13,7 +13,7 @@
  *
  * wxWidgets:
  *  The Scriptics license can be found in the file COPYRIGHT. Modifications
- *  for wxWidgets are under the wxWidgets licence, see README for details.
+ *  for wxWidgets are under the wxWindows licence, see README for details.
  */
 
 #ifndef CONST

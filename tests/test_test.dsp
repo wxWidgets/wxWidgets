@@ -279,9 +279,21 @@ SOURCE=.\datetime\datetimetest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\file\dir.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\dummy.cpp
 # ADD BASE CPP /Yc"testprec.h"
 # ADD CPP /Yc"testprec.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\dynamiclib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\environ.cpp
 # End Source File
 # Begin Source File
 
@@ -310,6 +322,10 @@ SOURCE=.\streams\fileback.cpp
 # Begin Source File
 
 SOURCE=.\config\fileconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\file\filefn.cpp
 # End Source File
 # Begin Source File
 
@@ -345,7 +361,15 @@ SOURCE=.\fswatcher\fswatchertest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uris\ftp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\hashes\hashes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\interactive\input.cpp
 # End Source File
 # Begin Source File
 
@@ -381,14 +405,6 @@ SOURCE=.\longlong\longlongtest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\masked\maskededit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\masked\maskedfield.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\mbconv\mbconvtest.cpp
 # End Source File
 # Begin Source File
@@ -397,11 +413,35 @@ SOURCE=.\streams\memstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\metatest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\thread\misc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\misc\misctests.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\module.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\interactive\output.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\pathlist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\thread\queue.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\config\regconf.cpp
 # End Source File
 # Begin Source File
 
@@ -430,6 +470,10 @@ SOURCE=.\streams\stdstream.cpp
 # Begin Source File
 
 SOURCE=.\strings\stdstrings.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\events\stopwatch.cpp
 # End Source File
 # Begin Source File
 

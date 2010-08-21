@@ -6,7 +6,7 @@
 // Created:     2004-11-06
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Stefan Neis <Stefan.Neis@t-online.de>
-// License:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

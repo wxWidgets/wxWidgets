@@ -998,8 +998,8 @@ void wxMacControl::GetPosition( int &x, int &y ) const
     {
         HIRect parent;
         HIViewGetFrame( HIViewGetSuperview(m_controlRef), &parent );
-        x -= parent.origin.x;
-        y -= parent.origin.y;
+        x -= (int)parent.origin.x;
+        y -= (int)parent.origin.y;
     }
     
 }

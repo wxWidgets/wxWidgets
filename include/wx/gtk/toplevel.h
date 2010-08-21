@@ -72,6 +72,10 @@ public:
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }
 
+    virtual void SetLabel(const wxString& label) { SetTitle( label ); }
+    virtual wxString GetLabel() const            { return GetTitle(); }
+
+
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 

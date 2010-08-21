@@ -327,7 +327,6 @@ wxDDEServer::~wxDDEServer()
     {
         wxDDEConnection *connection = node->GetData();
         wxDDEConnectionList::compatibility_iterator next = node->GetNext();
-        connection->SetConnected(false);
         connection->OnDisconnect(); // May delete the node implicitly
         node = next;
     }

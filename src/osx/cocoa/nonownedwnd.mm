@@ -13,6 +13,8 @@
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
     #include "wx/frame.h"
+    #include "wx/app.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/osx/private.h"
@@ -134,7 +136,18 @@ bool shouldHandleSelector(SEL selector)
 - (void)sendEvent:(NSEvent *) event
 {
     if ( ![self WX_filterSendEvent: event] )
+    {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(event, NULL);
+
         [super sendEvent: event];
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
+    }
 }
 
 // The default implementation always moves the window back onto the screen,
@@ -396,7 +409,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
@@ -504,6 +517,29 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         defer:NO
         ];
 
+    // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
+    // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
+    // above the parent.
+    wxDialog * const parentDialog = wxDynamicCast(parent, wxDialog);
+    if (parentDialog && parentDialog->IsModal())
+    {
+        if (level == kCGFloatingWindowLevel)
+        {
+            level = kCGUtilityWindowLevel;
+        }
+
+        // Cocoa's modal loop does not process other windows by default, but
+        // don't call this on normal window levels so nested modal dialogs will
+        // still behave modally.
+        if (level != kCGNormalWindowLevel)
+        {
+            if ([m_macWindow isKindOfClass:[NSPanel class]])
+            {
+                [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+            }
+        }
+    }
+
     [m_macWindow setLevel:level];
 
     [m_macWindow setDelegate:controller];
@@ -515,6 +551,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [m_macWindow setOpaque:NO];
         [m_macWindow setAlphaValue:1.0];
     }
+    
+    if ( !(style & wxFRAME_TOOL_WINDOW) )
+        [m_macWindow setHidesOnDeactivate:NO];
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )

@@ -18,9 +18,9 @@ typedef long wxTextPos;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_BASE wxMaskedEdit;
 
 #include "wx/gdicmn.h"              // for wxPoint
+#include "wx/maskededit.h"
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
 // ----------------------------------------------------------------------------
@@ -143,7 +143,7 @@ public:
     virtual bool SetHint(const wxString& hint);
     virtual wxString GetHint() const;
 
-    
+
     // margins
     // -------
 
@@ -160,7 +160,6 @@ public:
 
     // mask
     // ----
-    virtual void SetMask(const wxMaskedEdit& WXUNUSED(mask)){};
     // implementation only
     // -------------------
 
@@ -177,6 +176,14 @@ public:
     }
 
 
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
+    // events are not currently disabled
+    void SendTextUpdatedEventIfAllowed()
+    {
+        if ( EventsAllowed() )
+            SendTextUpdatedEvent();
+    }
+
     // this function is provided solely for the purpose of forwarding text
     // change notifications state from one control to another, e.g. it can be
     // used by a wxComboBox which derives from wxTextEntry if it delegates all
@@ -191,6 +198,10 @@ public:
         else
             SuppressTextChangedEvents();
     }
+    //mask
+    virtual void SetMask(const wxMaskedEdit& mask);
+
+    virtual void OnKeyPressedMask(wxKeyEvent& event);
 
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
@@ -212,6 +223,15 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
+
+
+
+    virtual void OnApplyMask(int keycode);
+    virtual void OnSetBackgroundMask(){};
+
+
+    //Mask attribut
+    wxMaskedEdit m_maskCtrl;
 
 
     // class which should be used to temporarily disable text change events
@@ -240,16 +260,6 @@ protected:
     };
 
     friend class EventsSuppressor;
-
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
-    // events are not currently disabled
-    void SendTextUpdatedEventIfAllowed()
-    {
-        if ( EventsAllowed() )
-            SendTextUpdatedEvent();
-    }
-
-
 
 private:
     // suppress or resume the text changed events generation: don't use these

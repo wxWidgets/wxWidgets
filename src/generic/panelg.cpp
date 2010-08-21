@@ -137,3 +137,20 @@ void wxPanel::InitDialog()
     GetEventHandler()->ProcessEvent(event);
 }
 
+#ifdef __WXMSW__
+
+bool wxPanel::HasTransparentBackground()
+{
+    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+    {
+        if ( win->MSWHasInheritableBackground() )
+            return true;
+
+        if ( win->IsTopLevel() )
+            break;
+    }
+
+    return false;
+}
+
+#endif // __WXMSW__

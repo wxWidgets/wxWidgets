@@ -6,7 +6,7 @@
 // Created:     27.06.2005
 // RCS-ID:      $Id$
 // Copyright:   (c) 2005 Lukasz Michalski <lmichalski@user.sourceforge.net>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -650,8 +650,7 @@ EventWorker::DoRead()
         if (m_size == m_infill)
         {
             m_signature[0] = m_signature[1] = 0x0;
-            delete [] m_inbuf;
-            m_inbuf = NULL;
+            wxDELETEA(m_inbuf);
             m_infill = 0;
             return;
         }
@@ -713,8 +712,7 @@ void  EventWorker::DoWrite()
     {
         if (m_written == m_size)
         {
-            delete [] m_outbuf;
-            m_outbuf = NULL;
+            wxDELETEA(m_outbuf);
             m_outfill = 0;
             LogWorker( "All data written");
             return;

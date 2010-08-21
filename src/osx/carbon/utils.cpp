@@ -195,45 +195,6 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 #endif // wxUSE_GUI
 
-#if wxUSE_BASE
-// ----------------------------------------------------------------------------
-// Common Event Support
-// ----------------------------------------------------------------------------
-
-void wxMacWakeUp()
-{
-    OSStatus err = noErr;
-
-#if wxOSX_USE_CARBON
-#if 0
-    // lead sometimes to race conditions, although all calls used should be thread safe ...
-    static wxMacCarbonEvent s_wakeupEvent;
-    if ( !s_wakeupEvent.IsValid() )
-    {
-       err = s_wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
-                    kEventAttributeNone );
-    }
-    if ( err == noErr )
-    {
-
-        if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
-            return;
-        s_wakeupEvent.SetCurrentTime();
-        err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
-                              kEventPriorityHigh );
-    }
-#else
-    wxMacCarbonEvent wakeupEvent;
-    wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
-                        kEventAttributeNone );
-    err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
-                           kEventPriorityHigh );
-#endif
-#endif
-}
-
-#endif // wxUSE_BASE
-
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------

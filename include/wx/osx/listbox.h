@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/listbox.h
+// Name:        wx/osx/listbox.h
 // Purpose:     wxListBox class
 // Author:      Stefan Csomor
 // Modified by:

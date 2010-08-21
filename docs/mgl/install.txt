@@ -99,10 +99,10 @@ will output necessary C++ compiler flags and wx-config --libs will list all
 needed libraries. See an example of wxWidgets application makefile:
 
 minimal: minimal.o
-	$(CC) -o minimal minimal.o `wx-config --libs`
+	$(CXX) -o minimal minimal.o `wx-config --libs`
 
-minimal.o: minimal.cpp mondrian.xpm
-	$(CC) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
+minimal.o: minimal.cpp
+	$(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
 
 * Using configure to build MS-DOS version

@@ -1077,11 +1077,8 @@ wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( m_internal->GetState() != STATE_NEW )
-    {
-        // actually, it may be almost any state at all, not only STATE_RUNNING
-        return wxTHREAD_RUNNING;
-    }
+    wxCHECK_MSG( m_internal->GetState() == STATE_NEW, wxTHREAD_RUNNING,
+             wxT("thread may only be started once after Create()") );
 
     // the thread has just been created and is still suspended - let it run
     return Resume();
@@ -1285,18 +1282,15 @@ void wxThreadModule::OnExit()
         wxLogLastError(wxT("TlsFree failed."));
     }
 
-    delete gs_critsectThreadDelete;
-    gs_critsectThreadDelete = NULL;
+    wxDELETE(gs_critsectThreadDelete);
 
     if ( gs_critsectGui )
     {
         gs_critsectGui->Leave();
-        delete gs_critsectGui;
-        gs_critsectGui = NULL;
+        wxDELETE(gs_critsectGui);
     }
 
-    delete gs_critsectWaitingForGui;
-    gs_critsectWaitingForGui = NULL;
+    wxDELETE(gs_critsectWaitingForGui);
 }
 
 // ----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 // Created:     24.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Julian Smart
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -693,8 +693,7 @@ bool wxSetWMDecorations(Window w, long style)
     }
 
     if ((style & wxCAPTION) ||
-        (style & wxTINY_CAPTION_HORIZ) ||
-        (style & wxTINY_CAPTION_VERT))
+        (style & wxTINY_CAPTION))
     {
         wmProp.props |= GR_WM_PROPS_CAPTION ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;

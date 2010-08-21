@@ -6,7 +6,7 @@
 // Created:     03.06.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -189,8 +189,7 @@ void wxRadioBoxBase::SetItemToolTip(unsigned int item, const wxString& text)
         if ( tooltip )
         {
             // delete the tooltip
-            delete tooltip;
-            tooltip = NULL;
+            wxDELETE(tooltip);
         }
         else // nothing to do
         {

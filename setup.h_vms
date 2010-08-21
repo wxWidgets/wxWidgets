@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 6 April 2010                                                       *
+ * Date : 19 August 2010                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -191,7 +191,7 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
-#if defined( __WXX11__ ) || defined ( __WXMOTIF__ )
+#if defined( __WXX11__ )
     #define wxUSE_UNICODE 0
 #else
     #define wxUSE_UNICODE 1
@@ -254,7 +254,7 @@ typedef pid_t GPid;
 #define wxUSE_INTL          1
 #include <locale.h>
 
-#if defined (__WXMOTIF__) || defined( __WXX11__ )
+#if defined (__WXMOTIF__)
 #define wxUSE_XLOCALE 0
 #else
 #define wxUSE_XLOCALE 1
@@ -382,6 +382,7 @@ typedef pid_t GPid;
 #define wxUSE_COLLPANE      1
 #define wxUSE_COLOURPICKERCTRL 1
 #define wxUSE_COMBOBOX     1
+#define wxUSE_COMMANDLINKBUTTON 1
 #define wxUSE_DATAVIEWCTRL   1
 #define wxUSE_DATEPICKCTRL 1
 #define wxUSE_DIRPICKERCTRL 1
@@ -396,6 +397,7 @@ typedef pid_t GPid;
 #define wxUSE_LISTCTRL     1
 #define wxUSE_RADIOBOX     1
 #define wxUSE_RADIOBTN     1
+#define wxUSE_RICHMSGDLG    1
 #define wxUSE_SCROLLBAR    1
 #define wxUSE_SEARCHCTRL    1
 #define wxUSE_SLIDER       1
@@ -512,6 +514,8 @@ typedef pid_t GPid;
 #define wxUSE_WIZARDDLG 1
 
 #define wxUSE_ABOUTDLG 1
+
+#define wxUSE_FILE_HISTORY 1
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
@@ -751,6 +755,16 @@ typedef pid_t GPid;
  * Define if your compiler has std::tr1::unordered_set
  */
 #undef HAVE_TR1_UNORDERED_SET
+
+/*
+ * Define if your compiler has <tr1/type_traits>
+ */
+#undef HAVE_TR1_TYPE_TRAITS
+
+/*
+ * Define if your compiler has <type_traits>
+ */
+#undef HAVE_TYPE_TRAITS
 
 /*
  * Define if the compiler supports simple visibility declarations.

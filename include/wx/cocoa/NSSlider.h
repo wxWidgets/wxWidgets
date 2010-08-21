@@ -6,7 +6,7 @@
 // Created:     2007/08/10
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Software 2000 Ltd. All rights reserved.
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WXNSSLIDER_H_

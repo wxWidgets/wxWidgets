@@ -8,7 +8,7 @@ dnl
 dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
-dnl This script is under the wxWidgets licence.
+dnl This script is under the wxWindows licence.
 dnl
 dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.9.1], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.9.2], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -43,7 +43,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=9
-wx_release_number=1
+wx_release_number=2
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -563,8 +563,10 @@ if test "$wxUSE_GUI" = "yes"; then
     # to be removed when --disable-gtk2 isn't needed
     if test "x$wxUSE_GTK2" = "xyes"; then
         wxGTK_VERSION=2
+        wxUSE_GTK1=0
     elif test "x$wxUSE_GTK2" = "xno"; then
         wxGTK_VERSION=1
+        wxUSE_GTK1=1
     fi
 
     for toolkit in $ALL_TOOLKITS; do
@@ -767,6 +769,7 @@ WX_ARG_FEATURE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibr
 WX_ARG_FEATURE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
 WX_ARG_FEATURE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
 WX_ARG_FEATURE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
+WX_ARG_FEATURE(filehistory,   [  --enable-filehistory    use wxFileHistory class], wxUSE_FILE_HISTORY)
 WX_ARG_FEATURE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
 WX_ARG_FEATURE(fontenum,      [  --enable-fontenum       use wxFontEnumerator class], wxUSE_FONTENUM)
 WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
@@ -874,6 +877,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_COLOURPICKERCTRL=no
     DEFAULT_wxUSE_COMBOBOX=no
     DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMMANDLINKBUTTON=no
     DEFAULT_wxUSE_DATAVIEWCTRL=no
     DEFAULT_wxUSE_DATEPICKCTRL=no
     DEFAULT_wxUSE_DETECT_SM=no
@@ -894,6 +898,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
     DEFAULT_wxUSE_RADIOBTN=no
+    DEFAULT_wxUSE_RICHMSGDLG=no
     DEFAULT_wxUSE_REARRANGECTRL=no
     DEFAULT_wxUSE_SASH=no
     DEFAULT_wxUSE_SCROLLBAR=no
@@ -932,6 +937,7 @@ WX_ARG_FEATURE(collpane,    [  --enable-collpane       use wxCollapsiblePane cla
 WX_ARG_FEATURE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
+WX_ARG_FEATURE(commandlinkbutton, [  --enable-commandlinkbutton      use wxCommmandLinkButton class], wxUSE_COMMANDLINKBUTTON)
 WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
@@ -956,6 +962,7 @@ WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox 
 WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_FEATURE(richmsgdlg,  [  --enable-richmsgdlg     use wxRichMessageDialog class], wxUSE_RICHMSGDLG)
 WX_ARG_FEATURE(rearrangectrl,[  --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog], wxUSE_REARRANGECTRL)
 WX_ARG_FEATURE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
 WX_ARG_FEATURE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
@@ -1284,7 +1291,11 @@ if test "x$NEEDS_GCC40" == "xyes"; then
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
-    MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    if test "$wxUSE_OSX_IPHONE" = 1; then
+        MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    else
+        MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    fi
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
@@ -2129,6 +2140,8 @@ if test "$wxUSE_STL" = "yes"; then
         fi
     fi
 fi
+
+AC_CHECK_HEADERS([type_traits tr1/type_traits])
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
@@ -3711,14 +3724,13 @@ fi
 
 
 dnl ---------------------------------------------------------------------------
-dnl wxDisplay Sanity checks
+dnl wxDisplay checks
 dnl ---------------------------------------------------------------------------
 
+USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-dnl ---------------------------------------------------------------------------
-dnl Xinerama (for unix ) - Brian Victor
-dnl ---------------------------------------------------------------------------
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+    dnl Xinerama is used for wxGTK1/wxX11/wxMotif only
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
         AC_MSG_CHECKING([for Xinerama])
         WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xinerama)
         if test "$ac_find_libraries" != "" ; then
@@ -3726,37 +3738,40 @@ dnl ---------------------------------------------------------------------------
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
             fi
+            USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             AC_MSG_RESULT([yes])
-
-            AC_MSG_CHECKING([for Xxf86vm extension])
-            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
-            if test "$ac_find_libraries" != "" ; then
-                AC_MSG_RESULT([yes])
-                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
-                                 [
-                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
-                                 ],
-                                 [],
-                                 [
-                                      #if HAVE_X11_XLIB_H
-                                        #include <X11/Xlib.h>
-                                      #endif
-                                 ])
-            else
-                AC_MSG_RESULT([no])
-            fi
-
         else
             AC_MSG_RESULT([no])
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
-dnl ---------------------------------------------------------------------------
-dnl DirectDraw for MSW - optionally used by WxDisplay.
-dnl ---------------------------------------------------------------------------
+        dnl DirectDraw for MSW - optionally used by WxDisplay.
         AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
+    fi
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+    dnl wxGTK2 needs Xxf86vm as well as Xinerama-using ports from above
+    if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
+        AC_MSG_CHECKING([for Xxf86vm extension])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
+        if test "$ac_find_libraries" != "" ; then
+            AC_MSG_RESULT([yes])
+            AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                             [
+                              GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+                             ],
+                             [],
+                             [
+                                  #if HAVE_X11_XLIB_H
+                                    #include <X11/Xlib.h>
+                                  #endif
+                             ])
+        else
+            AC_MSG_RESULT([no])
+        fi
     fi
 fi
 
@@ -5382,6 +5397,8 @@ if test "$wxUSE_DEBUG_GDB" = "yes" ; then
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "no" ; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
+
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
@@ -5891,6 +5908,10 @@ if test "$wxUSE_TARSTREAM" = "yes"; then
   else
     AC_DEFINE(wxUSE_TARSTREAM)
   fi
+fi
+
+if test "$wxUSE_FILE_HISTORY" = "yes"; then
+  AC_DEFINE(wxUSE_FILE_HISTORY)
 fi
 
 if test "$wxUSE_FILESYSTEM" = "yes"; then
@@ -6787,6 +6808,11 @@ if test "$wxUSE_COMBOCTRL" = "yes"; then
   USES_CONTROLS=1
 fi
 
+if test "$wxUSE_COMMANDLINKBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_COMMANDLINKBUTTON)
+  USES_CONTROLS=1
+fi
+
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
   USES_CONTROLS=1
@@ -6944,6 +6970,10 @@ fi
 
 if test "$wxUSE_REARRANGECTRL" = "yes"; then
     AC_DEFINE(wxUSE_REARRANGECTRL)
+fi
+
+if test "$wxUSE_RICHMSGDLG" = "yes"; then
+    AC_DEFINE(wxUSE_RICHMSGDLG)
 fi
 
 if test "$wxUSE_SASH" = "yes"; then
@@ -7653,7 +7683,11 @@ dnl all additional libraries (except wxWidgets itself) we link with
 EXTRA_FRAMEWORKS=
 if test "$wxUSE_MAC" = 1 ; then
     if test "$USE_DARWIN" = 1; then
-        EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+            EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
+        else
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        fi
     fi
 fi
 if test "$wxUSE_OLD_COCOA" = 1 ; then

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPropertyGrid
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -233,14 +233,35 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display customizable text message explaining the situation.
+    Display a text message explaining the situation. 
+
+    To customize the way the message is displayed, you need to
+    reimplement wxPropertyGrid::DoShowPropertyError() in a
+    derived class. Default behavior is to display the text on
+    the top-level frame's status bar, if present, and otherwise
+    using wxMessageBox.
 */
 wxPG_VFB_SHOW_MESSAGE               = 0x08,
 
 /**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message using wxMessageBox.
+*/
+wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
+
+/**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message on the status bar (when present - you can reimplement
+    wxPropertyGrid::GetStatusBar() in a derived class to specify
+    this yourself).
+*/
+wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
+
+/**
     Defaults.
 */
-wxPG_VFB_DEFAULT                    = wxPG_VFB_STAY_IN_PROPERTY|wxPG_VFB_BEEP,
+wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
+                                      wxPG_VFB_SHOW_MESSAGEBOX,
 };
 
 /** @}
@@ -445,6 +466,15 @@ public:
     /**
         Adds given key combination to trigger given action.
 
+        Here is a sample code to make Enter key press move focus to
+        the next property.
+
+        @code
+            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                                       WXK_RETURN);
+            propGrid->DedicateKey(WXK_RETURN);
+        @endcode
+
         @param action
             Which action to trigger. See @ref propgrid_keyboard_actions.
         @param keycode
@@ -545,6 +575,16 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxPG_DEFAULT_STYLE,
                 const wxChar* name = wxPropertyGridNameStr );
+
+    /**
+        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        key presses will not be redirected to editor controls.
+
+        Using this function allows, for example, navigation between
+        properties using arrow keys even when the focus is in the editor
+        control.
+    */
+    void DedicateKey( int keycode );
 
     /**
         Enables or disables (shows/hides) categories according to parameter
@@ -1025,6 +1065,45 @@ public:
     */
     void SetVerticalSpacing( int vspacing );
 
+    /**
+        @name wxPropertyGrid customization
+
+        Reimplement these member functions in derived class for better
+        control over wxPropertyGrid behavior.
+    */
+    //@{
+    
+    /**
+        Override in derived class to display error messages in custom manner
+        (these message usually only result from validation failure).
+
+        @remarks If you implement this, then you also need to implement
+                 DoHidePropertyError() - possibly to do nothing, if error
+                 does not need hiding (e.g. it was logged or shown in a
+                 message box).
+
+        @see DoHidePropertyError()
+    */
+    virtual void DoShowPropertyError( wxPGProperty* property,
+                                      const wxString& msg );
+
+    /**
+        Override in derived class to hide an error displayed by
+        DoShowPropertyError().
+
+        @see DoShowPropertyError()
+    */
+    virtual void DoHidePropertyError( wxPGProperty* property );
+
+    /**
+        Return wxStatusBar that is used by this wxPropertyGrid. You can
+        reimplement this member function in derived class to override
+        the default behavior of using the top-level wxFrame's status
+        bar, if any.
+    */
+    virtual wxStatusBar* GetStatusBar();
+
+    //@}
 
     /**
         @name Property development functions

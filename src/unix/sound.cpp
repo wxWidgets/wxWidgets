@@ -570,8 +570,7 @@ bool wxSound::Create(int size, const wxByte* data)
 
         Stop();
 
-        delete ms_backend;
-        ms_backend = NULL;
+        wxDELETE(ms_backend);
 #if wxUSE_LIBSDL && wxUSE_PLUGINS
         delete ms_backendSDL;
 #endif

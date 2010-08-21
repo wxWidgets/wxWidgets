@@ -446,7 +446,7 @@ void wxMenu::DestroyWidgetAndDetach()
 WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
                              WXWidget parent,
                              wxMenu * topMenu,
-                             size_t WXUNUSED(index),
+                             size_t menuIndex,
                              const wxString& title,
                              bool pullDown)
 {
@@ -493,7 +493,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
             XmNlabelString, label_str(),
             XmNsubMenuId, menu,
             (String)wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
-            XmNpositionIndex, index,
+            XmNpositionIndex, menuIndex,
             NULL);
 
         if (mnem != 0)

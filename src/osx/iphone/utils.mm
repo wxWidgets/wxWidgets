@@ -37,7 +37,7 @@
 
 #include <AudioToolbox/AudioServices.h>
 
-#if wxUSE_BASE
+#if 1 // wxUSE_BASE
 
 // Emit a beeeeeep
 void wxBell()
@@ -85,11 +85,6 @@ bool wxApp::DoInitGui()
 
 void wxApp::DoCleanUp()
 {
-}
-
-void wxMacWakeUp()
-{
-    // TODO
 }
 
 #endif // wxUSE_BASE

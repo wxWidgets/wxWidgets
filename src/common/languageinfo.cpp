@@ -77,6 +77,9 @@
 #ifndef LANG_BENGALI
 #define LANG_BENGALI (0)
 #endif
+#ifndef LANG_BOSNIAN
+#define LANG_BOSNIAN (0)
+#endif
 #ifndef LANG_BULGARIAN
 #define LANG_BULGARIAN (0)
 #endif
@@ -316,6 +319,9 @@
 #endif
 #ifndef SUBLANG_AZERI_LATIN
 #define SUBLANG_AZERI_LATIN SUBLANG_DEFAULT
+#endif
+#ifndef SUBLANG_BOSNIAN_BOSNIA_HERZEGOVINA_LATIN
+#define SUBLANG_BOSNIAN_BOSNIA_HERZEGOVINA_LATIN SUBLANG_DEFAULT
 #endif
 #ifndef SUBLANG_CHINESE_SIMPLIFIED
 #define SUBLANG_CHINESE_SIMPLIFIED SUBLANG_DEFAULT
@@ -583,6 +589,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_BHUTANI,                    "dz"   , 0              , 0                                 , wxLayout_LeftToRight, "Bhutani")
    LNG(wxLANGUAGE_BIHARI,                     "bh"   , 0              , 0                                 , wxLayout_LeftToRight, "Bihari")
    LNG(wxLANGUAGE_BISLAMA,                    "bi"   , 0              , 0                                 , wxLayout_LeftToRight, "Bislama")
+   LNG(wxLANGUAGE_BOSNIAN,                    "bs"   , LANG_BOSNIAN   , SUBLANG_BOSNIAN_BOSNIA_HERZEGOVINA_LATIN, wxLayout_LeftToRight, "Bosnian")
    LNG(wxLANGUAGE_BRETON,                     "br"   , 0              , 0                                 , wxLayout_LeftToRight, "Breton")
    LNG(wxLANGUAGE_BULGARIAN,                  "bg_BG", LANG_BULGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bulgarian")
    LNG(wxLANGUAGE_BURMESE,                    "my"   , 0              , 0                                 , wxLayout_LeftToRight, "Burmese")

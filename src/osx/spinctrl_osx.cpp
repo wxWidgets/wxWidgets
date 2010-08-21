@@ -281,10 +281,8 @@ wxSpinCtrl::~wxSpinCtrl()
     // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
-    delete m_text;
-    m_text = NULL ;
-    delete m_btn;
-    m_btn = NULL ;
+    wxDELETE(m_text);
+    wxDELETE(m_btn);
 }
 
 // ----------------------------------------------------------------------------

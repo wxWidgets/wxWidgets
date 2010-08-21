@@ -1184,6 +1184,8 @@ void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
     {
         m_filterExtension.clear();
     }
+
+    GenerateFilterChangedEvent( this, this );
 }
 
 void wxGenericFileCtrl::SetWildcard( const wxString& wildCard )

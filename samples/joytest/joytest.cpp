@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -67,13 +67,7 @@ bool MyApp::OnInit()
     frame = new MyFrame(NULL, wxT("Joystick Demo"), wxDefaultPosition,
         wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
-  // Give it an icon (this is ignored in MDI mode: uses resources)
-#ifdef __WXMSW__
-    frame->SetIcon(wxIcon(wxT("joyicon")));
-#endif
-#ifdef __X__
-    frame->SetIcon(wxIcon(wxT("joyicon.xbm")));
-#endif
+    frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/osx/carbon/dataview.h
+// Name:        wx/osx/cocoa/dataview.h
 // Purpose:     wxDataViewCtrl native implementation header for carbon
 // Author:
 // Id:          $Id: dataview.h 57374 2009-01-27
@@ -471,6 +471,8 @@ public:
     //
     // selection related methods (inherited from wxDataViewWidgetImpl)
     //
+    virtual wxDataViewItem GetCurrentItem() const;
+    virtual void SetCurrentItem(const wxDataViewItem& item);
     virtual int  GetSelections(wxDataViewItemArray& sel)   const;
     virtual bool IsSelected(const wxDataViewItem& item) const;
     virtual void Select(const wxDataViewItem& item);

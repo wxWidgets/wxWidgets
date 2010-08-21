@@ -1095,6 +1095,18 @@ bool wxMacDataViewDataBrowserListViewControl::AssociateModel(wxDataViewModel* WX
 //
 // selection related methods (inherited from wxDataViewWidgetImpl)
 //
+wxDataViewItem wxMacDataViewDataBrowserListViewControl::GetCurrentItem() const
+{
+    wxFAIL_MSG( "unimplemented for Carbon" );
+
+    return wxDataViewItem();
+}
+
+void wxMacDataViewDataBrowserListViewControl::SetCurrentItem(const wxDataViewItem& WXUNUSED(item))
+{
+    wxFAIL_MSG( "unimplemented for Carbon" );
+}
+
 int wxMacDataViewDataBrowserListViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
   size_t noOfSelectedItems;
@@ -1183,7 +1195,7 @@ wxDataViewColumn* wxMacDataViewDataBrowserListViewControl::GetSortingColumn() co
 
 void wxMacDataViewDataBrowserListViewControl::Resort()
 {
-  (void) Resort();
+    (void) wxMacDataBrowserListViewControl::Resort();
 }
 
 //
@@ -2092,8 +2104,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                   dataObject->Add(textDataObject);
                 else
                 {
-                  delete textDataObject;
-                  textDataObject = NULL;
+                  wxDELETE(textDataObject);
                 }
               }
             } /* block */
@@ -2124,8 +2135,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                       dataObject->Add(textDataObject);
                     else
                     {
-                      delete textDataObject;
-                      textDataObject = NULL;
+                      wxDELETE(textDataObject);
                     }
                   }
                   else // overwrite data because the 'utxt' flavor has priority over the 'TEXT' flavor
@@ -2749,6 +2759,17 @@ void wxDataViewColumn::SetWidth(int width)
     }
   }
 }
+
+void wxDataViewColumn::SetHidden(bool WXUNUSED(hidden))
+{
+    // How to do that?
+}
+
+bool wxDataViewColumn::IsHidden() const
+{
+    return true;
+}
+
 
 void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
 {

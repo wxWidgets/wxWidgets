@@ -487,7 +487,7 @@ listctrl : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
-maskededit : .SYMBOLIC 
+maskededit : .SYMBOLIC
 	cd maskededit
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)

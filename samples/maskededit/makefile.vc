@@ -21,7 +21,7 @@ LIBDIRNAME = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 MASKEDEDIT_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
-	$(__DEBUGINFO_0) /Fd$(OBJS)\maskedEdit.pdb $(____DEBUGRUNTIME_3_p) \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\maskededit.pdb $(____DEBUGRUNTIME_3_p) \
 	$(__OPTIMIZEFLAG_6) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
@@ -30,9 +30,9 @@ MASKEDEDIT_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 MASKEDEDIT_OBJECTS =  \
-	$(OBJS)\maskedEdit_maskedEdit.obj
+	$(OBJS)\maskededit_maskededit.obj
 MASKEDEDIT_RESOURCES =  \
-	$(OBJS)\maskedEdit_sample.res
+	$(OBJS)\maskededit_sample.res
 
 ### Conditionally set variables: ###
 
@@ -88,19 +88,19 @@ LINK_TARGET_CPU = /MACHINE:X64
 LINK_TARGET_CPU = /MACHINE:IA64
 !endif
 !if "$(MONOLITHIC)" == "0"
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_0 = /Zi
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_0 = 
+__DEBUGINFO_0 =
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_0 = 
+__DEBUGINFO_0 =
 !endif
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_0 = /Zi
@@ -109,10 +109,10 @@ __DEBUGINFO_0 = /Zi
 __DEBUGINFO_1 = /DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_1 = /DEBUG
@@ -121,10 +121,10 @@ __DEBUGINFO_1 = /DEBUG
 __DEBUGINFO_2 = $(__DEBUGRUNTIME_5)
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = 
+__DEBUGINFO_2 =
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_2 = 
+__DEBUGINFO_2 =
 !endif
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_2 = $(__DEBUGRUNTIME_5)
@@ -133,10 +133,10 @@ __DEBUGINFO_2 = $(__DEBUGRUNTIME_5)
 ____DEBUGRUNTIME_3_p = /D_DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p = 
+____DEBUGRUNTIME_3_p =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_3_p = 
+____DEBUGRUNTIME_3_p =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_3_p = /D_DEBUG
@@ -145,10 +145,10 @@ ____DEBUGRUNTIME_3_p = /D_DEBUG
 ____DEBUGRUNTIME_3_p_1 = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p_1 = 
+____DEBUGRUNTIME_3_p_1 =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_3_p_1 = 
+____DEBUGRUNTIME_3_p_1 =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_3_p_1 = /d _DEBUG
@@ -157,16 +157,16 @@ ____DEBUGRUNTIME_3_p_1 = /d _DEBUG
 __DEBUGRUNTIME_4 = d
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_4 = 
+__DEBUGRUNTIME_4 =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_4 = 
+__DEBUGRUNTIME_4 =
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 __DEBUGRUNTIME_4 = d
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_5 = 
+__DEBUGRUNTIME_5 =
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
 __DEBUGRUNTIME_5 = /opt:ref /opt:icf
@@ -175,7 +175,7 @@ __DEBUGRUNTIME_5 = /opt:ref /opt:icf
 __DEBUGRUNTIME_5 = /opt:ref /opt:icf
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_5 = 
+__DEBUGRUNTIME_5 =
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_6 = /Od
@@ -196,13 +196,13 @@ __RUNTIME_LIBS_10 = D
 __RUNTIME_LIBS_10 = $(__THREADSFLAG_9)
 !endif
 !if "$(USE_RTTI)" == "0"
-__RTTIFLAG_11 = 
+__RTTIFLAG_11 =
 !endif
 !if "$(USE_RTTI)" == "1"
 __RTTIFLAG_11 = /GR
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONSFLAG_12 = 
+__EXCEPTIONSFLAG_12 =
 !endif
 !if "$(USE_EXCEPTIONS)" == "1"
 __EXCEPTIONSFLAG_12 = /EHsc
@@ -329,24 +329,23 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\maskedEdit.exe
+all: $(OBJS)\maskededit.exe
 
-clean: 
+clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\maskedEdit.exe del $(OBJS)\maskedEdit.exe
-	-if exist $(OBJS)\maskedEdit.ilk del $(OBJS)\maskedEdit.ilk
-	-if exist $(OBJS)\maskedEdit.pdb del $(OBJS)\maskedEdit.pdb
+	-if exist $(OBJS)\maskededit.exe del $(OBJS)\maskededit.exe
+	-if exist $(OBJS)\maskededit.ilk del $(OBJS)\maskededit.ilk
+	-if exist $(OBJS)\maskededit.pdb del $(OBJS)\maskededit.pdb
 
-$(OBJS)\maskedEdit.exe: $(MASKEDEDIT_OBJECTS) $(OBJS)\maskedEdit_sample.res
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\maskedEdit.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+$(OBJS)\maskededit.exe: $(MASKEDEDIT_OBJECTS) $(OBJS)\maskededit_sample.res
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\maskededit.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
 	$(MASKEDEDIT_OBJECTS) $(MASKEDEDIT_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
 
-$(OBJS)\maskedEdit_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\maskededit_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
 
-$(OBJS)\maskedEdit_maskedEdit.obj: .\maskedEdit.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MASKEDEDIT_CXXFLAGS) .\maskedEdit.cpp
-
+$(OBJS)\maskededit_maskededit.obj: .\maskededit.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MASKEDEDIT_CXXFLAGS) .\maskededit.cpp

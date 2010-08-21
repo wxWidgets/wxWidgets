@@ -106,7 +106,7 @@
 // ----------------------------------------------------------------------------
 
 // Use this macro to check build options. Adding it to a file in DLL will
-// ensure that the DLL checks build options in same way IMPLEMENT_APP() does.
+// ensure that the DLL checks build options in same way wxIMPLEMENT_APP() does.
 #define WX_CHECK_BUILD_OPTIONS(libName)                                 \
     static struct wxBuildOptionsChecker                                 \
     {                                                                   \

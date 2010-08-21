@@ -78,7 +78,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title, pos, size, style)
 {
-    SetIcon(wxIcon(sample_xpm));
+    SetIcon(wxICON(sample));
 
     // Make the "File" menu
     wxMenu *fileMenu = new wxMenu;

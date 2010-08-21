@@ -159,6 +159,8 @@ wxString wxHTTP::GetCookie(const wxString& cookie) const
 
 wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) const
 {
+    // TODO: Use wxBase64Encode() now that we have it instead of reproducing it
+
     static const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     wxString buf;
@@ -249,16 +251,14 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
     wxIPV4address *addr;
 
     if (m_addr) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         Close();
     }
 
     m_addr = addr = new wxIPV4address();
 
     if (!addr->Hostname(host)) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         m_lastError = wxPROTO_NETERR;
         return false;
     }
@@ -346,7 +346,17 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     Write("\r\n", 2);
 
     if ( req == wxHTTP_POST ) {
-        Write(m_post_buf.mbc_str(), m_post_buf.Len());
+        // Post data can be arbitrary binary data when the "binary" content
+        // transfer encoding is used so don't assume it's ASCII only or
+        // NUL-terminated.
+        {
+            const wxScopedCharBuffer buf(m_post_buf.To8BitData());
+            Write(buf, buf.length());
+        } // delete the buffer before modifying the string it points to, it
+          // wouldn't really be a problem here even if we didn't do this
+          // because we won't use this buffer again but this will avoid any
+          // nasty surprises in the future if this code changes
+
         m_post_buf = wxEmptyString;
     }
 

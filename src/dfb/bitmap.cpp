@@ -696,8 +696,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
     wxCHECK_RET( GetDepth() > 1 && GetDepth() <= 8, wxT("cannot set palette for bitmap of this depth") );
 
     AllocExclusive();
-    delete M_BITMAP->m_palette;
-    M_BITMAP->m_palette = NULL;
+    wxDELETE(M_BITMAP->m_palette);
 
     if ( !palette.Ok() ) return;
 

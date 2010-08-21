@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -97,6 +97,10 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyChild::EventHandler, wxEvtHandler)
+    EVT_MENU(MDI_REFRESH, MyChild::EventHandler::OnRefresh)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -451,10 +455,16 @@ MyChild::MyChild(wxMDIParentFrame *parent)
     // they can be resized at all
     if ( canBeResized )
         SetSizeHints(100, 100);
+
+    // test that event handlers pushed on top of MDI children do work (this
+    // used to be broken, see #11225)
+    PushEventHandler(new EventHandler(ms_numChildren));
 }
 
 MyChild::~MyChild()
 {
+    PopEventHandler(true);
+
     ms_numChildren--;
 }
 

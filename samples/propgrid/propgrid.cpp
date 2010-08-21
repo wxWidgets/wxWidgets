@@ -6,7 +6,7 @@
 // Created:     2004-09-25
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //
@@ -264,11 +264,7 @@ wxAdvImageFileProperty::wxAdvImageFileProperty( const wxString& label,
 wxAdvImageFileProperty::~wxAdvImageFileProperty ()
 {
     // Delete old image
-    if ( m_pImage )
-    {
-        delete m_pImage;
-        m_pImage = (wxImage*) NULL;
-    }
+    wxDELETE(m_pImage);
 }
 
 void wxAdvImageFileProperty::OnSetValue()
@@ -276,11 +272,7 @@ void wxAdvImageFileProperty::OnSetValue()
     wxFileProperty::OnSetValue();
 
     // Delete old image
-    if ( m_pImage )
-    {
-        delete m_pImage;
-        m_pImage = (wxImage*) NULL;
-    }
+    wxDELETE(m_pImage);
 
     wxString imagename = GetValueAsString(0);
 
@@ -398,11 +390,7 @@ void wxAdvImageFileProperty::LoadThumbnails( size_t index )
 
         }
 
-        if ( m_pImage )
-        {
-            delete m_pImage;
-            m_pImage = (wxImage*) NULL;
-        }
+        wxDELETE(m_pImage);
     }
 }
 
@@ -691,7 +679,8 @@ enum
     ID_RUNMINIMAL,
     ID_ENABLELABELEDITING,
     ID_VETOCOLDRAG,
-    ID_SHOWHEADER
+    ID_SHOWHEADER,
+    ID_ONEXTENDEDKEYNAV
 };
 
 // -----------------------------------------------------------------------
@@ -756,6 +745,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_ITERATE2, FormMain::OnIterate2Click )
     EVT_MENU( ID_ITERATE3, FormMain::OnIterate3Click )
     EVT_MENU( ID_ITERATE4, FormMain::OnIterate4Click )
+    EVT_MENU( ID_ONEXTENDEDKEYNAV, FormMain::OnExtendedKeyNav )
     EVT_MENU( ID_SETBGCOLOUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_SETBGCOLOURRECUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_CLEARMODIF, FormMain::OnClearModifyStatusClick )
@@ -1481,9 +1471,10 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString( wxT("BoolProperty with CheckBox"),
         wxT("Property attribute wxPG_BOOL_USE_CHECKBOX has been set to true.") );
 
-     pid = pg->Append( new wxFloatProperty( wxT("FloatProperty"),
-                                       wxPG_LABEL,
-                                       1234500.23 ) );
+    prop = pg->Append( new wxFloatProperty("FloatProperty",
+                                           wxPG_LABEL,
+                                           1234500.23) );
+    prop->SetAttribute("Min", -100.12);
 
     // A string property that can be edited in a separate editor dialog.
     pg->Append( new wxLongStringProperty( wxT("LongStringProperty"), wxT("LongStringProp"),
@@ -1525,7 +1516,7 @@ void FormMain::PopulateWithExamples ()
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
     //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
     pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
-    pg->GetProperty(wxT("ColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+    pg->GetProperty(wxT("ColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
         wxT("editor of this property to wxPGEditor_ComboBox)"));
@@ -2190,7 +2181,9 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     pgman->SetExtraStyle(extraStyle);
 
-    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_BEEP | wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGE );
+    // This is the default validation failure behavior
+    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL |
+                                                      wxPG_VFB_SHOW_MESSAGEBOX );
 
     m_pPropGridManager->GetGrid()->SetVerticalSpacing( 2 );
 
@@ -2307,6 +2300,11 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools2->Append(ID_ITERATE2, wxT("Iterate Over Visible Items") );
     menuTools2->Append(ID_ITERATE3, wxT("Reverse Iterate Over Properties") );
     menuTools2->Append(ID_ITERATE4, wxT("Iterate Over Categories") );
+    menuTools2->AppendSeparator();
+    menuTools2->Append(ID_ONEXTENDEDKEYNAV, "Extend Keyboard Navigation",
+                       "This will set Enter to navigate to next property, "
+                       "and allows arrow keys to navigate even when in "
+                       "editor control.");
     menuTools2->AppendSeparator();
     menuTools2->Append(ID_SETPROPERTYVALUE, wxT("Set Property Value") );
     menuTools2->Append(ID_CLEARMODIF, wxT("Clear Modified Status"), wxT("Clears wxPG_MODIFIED flag from all properties.") );
@@ -2684,6 +2682,25 @@ void FormMain::OnIterate4Click( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
+void FormMain::OnExtendedKeyNav( wxCommandEvent& WXUNUSED(event) )
+{
+    // Use AddActionTrigger() and DedicateKey() to set up Enter,
+    // Up, and Down keys for navigating between properties.
+    wxPropertyGrid* propGrid = m_pPropGridManager->GetGrid();
+
+    propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                               WXK_RETURN);
+    propGrid->DedicateKey(WXK_RETURN);
+
+    // Up and Down keys are alredy associated with navigation,
+    // but we must also prevent them from being eaten by
+    // editor controls.
+    propGrid->DedicateKey(WXK_UP);
+    propGrid->DedicateKey(WXK_DOWN);
+}
+
+// -----------------------------------------------------------------------
+
 void FormMain::OnFitColumnsClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGridPage* page = m_pPropGridManager->GetCurrentPage();
@@ -3033,8 +3050,8 @@ void FormMain::OnCatColours( wxCommandEvent& event )
 
 void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
 {
-    int style;
-    int extraStyle;
+    int style = 0;
+    int extraStyle = 0;
 
     {
         wxArrayString chs;

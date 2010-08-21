@@ -143,45 +143,15 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
 
 #if wxUSE_STATTEXT
 
-class wxTextSizerWrapper : public wxTextWrapper
-{
-public:
-    wxTextSizerWrapper(wxWindow *win)
-    {
-        m_win = win;
-        m_hLine = 0;
-    }
-
-    wxSizer *CreateSizer(const wxString& text, int widthMax)
-    {
-        m_sizer = new wxBoxSizer(wxVERTICAL);
-        Wrap(m_win, text, widthMax);
-        return m_sizer;
-    }
-
-protected:
-    virtual void OnOutputLine(const wxString& line)
-    {
-        if ( !line.empty() )
-        {
-            m_sizer->Add(new wxStaticText(m_win, wxID_ANY, line));
-        }
-        else // empty line, no need to create a control for it
-        {
-            if ( !m_hLine )
-                m_hLine = m_win->GetCharHeight();
-
-            m_sizer->Add(5, m_hLine);
-        }
-    }
-
-private:
-    wxWindow *m_win;
-    wxSizer *m_sizer;
-    int m_hLine;
-};
-
 wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
+{
+    wxTextSizerWrapper wrapper(this);
+
+    return CreateTextSizer(message, wrapper);
+}
+
+wxSizer *wxDialogBase::CreateTextSizer(const wxString& message,
+                                       wxTextSizerWrapper& wrapper)
 {
     // I admit that this is complete bogus, but it makes
     // message boxes work for pda screens temporarily..
@@ -197,8 +167,6 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
     // for example), we don't want this special meaning, so we need to quote it
     wxString text(message);
     text.Replace(wxT("&"), wxT("&&"));
-
-    wxTextSizerWrapper wrapper(this);
 
     return wrapper.CreateSizer(text, widthMax);
 }
@@ -680,8 +648,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
                     stdButtonSizer->Realize();
                 else
                 {
-                    delete buttonSizer;
-                    buttonSizer = NULL;
+                    wxDELETE(buttonSizer);
                 }
             }
 

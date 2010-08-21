@@ -95,7 +95,8 @@ enum
     // Internal use: Skip popup animation.
     wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000,
     // Internal use: Drop-button is a bitmap button or has non-default size
-    // (but can still be on either side of the control).
+    // (but can still be on either side of the control), regardless whether
+    // specified by the platform or the application.
     wxCC_IFLAG_HAS_NONSTANDARD_BUTTON   = 0x4000
 };
 
@@ -141,6 +142,7 @@ struct wxComboCtrlFeatures
 class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl
 {
     friend class wxComboPopup;
+    friend class wxComboPopupEvtHandler;
 public:
     // ctors and such
     wxComboCtrlBase() : wxControl() { Init(); }
@@ -400,6 +402,10 @@ public:
     wxPoint GetMargins() const
         { return DoGetMargins(); }
 
+    // Set custom style flags for embedded wxTextCtrl. Usually must be used
+    // with two-step creation, before Create() call.
+    void SetTextCtrlStyle( int style );
+
     // Return internal flags
     wxUint32 GetInternalFlags() const { return m_iFlags; }
 
@@ -557,7 +563,7 @@ protected:
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
 
- 
+
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
 
@@ -584,7 +590,7 @@ protected:
     wxEvtHandler*           m_toplevEvtHandler;
 
     // this is for the control in popup
-    wxEvtHandler*           m_popupExtraHandler;
+    wxEvtHandler*           m_popupEvtHandler;
 
     // this is for the popup window
     wxEvtHandler*           m_popupWinEvtHandler;
@@ -649,6 +655,9 @@ protected:
     // platform-dependant customization and other flags
     wxUint32                m_iFlags;
 
+    // custom style for m_text
+    int                     m_textCtrlStyle;
+
     // draw blank button background under bitmap?
     bool                    m_blankButtonBg;
 
@@ -657,7 +666,7 @@ protected:
 
     // should the focus be reset to the textctrl in idle time?
     bool                    m_resetFocus;
-   
+
 
 private:
     void Init();

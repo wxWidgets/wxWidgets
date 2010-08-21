@@ -154,8 +154,7 @@ void wxExtHelpController::DeleteList()
             node = m_MapList->GetFirst();
         }
 
-        delete m_MapList;
-        m_MapList = NULL;
+        wxDELETE(m_MapList);
     }
 }
 

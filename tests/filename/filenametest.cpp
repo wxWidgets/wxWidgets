@@ -23,6 +23,7 @@
 
 #include "wx/filename.h"
 #include "wx/filefn.h"
+#include "wx/stdpaths.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
@@ -131,6 +132,8 @@ private:
 #endif // __WINDOWS__
         CPPUNIT_TEST( TestUNC );
         CPPUNIT_TEST( TestVolumeUniqueName );
+        CPPUNIT_TEST( TestCreateTempFileName );
+        CPPUNIT_TEST( TestGetTimes );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -146,6 +149,8 @@ private:
 #endif // __WINDOWS__
     void TestUNC();
     void TestVolumeUniqueName();
+    void TestCreateTempFileName();
+    void TestGetTimes();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -498,10 +503,16 @@ void FileNameTestCase::TestGetHumanReadable()
         { "304 KB",    304351, 0, wxSIZE_CONV_SI          },
     };
 
+    CLocaleSetter loc;      // we want to use "C" locale for LC_NUMERIC
+                            // so that regardless of the system's locale
+                            // the decimal point used by GetHumanReadableSize()
+                            // is always '.'
     for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
     {
         const TestData& td = testData[n];
 
+        // take care of using the decimal point for the current locale before
+        // the actual comparison
         CPPUNIT_ASSERT_EQUAL
         (
             td.result,
@@ -567,4 +578,69 @@ void FileNameTestCase::TestVolumeUniqueName()
     CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
                           "Program Files\\setup.exe",
                           fn.GetFullPath(wxPATH_DOS) );
+}
+
+void FileNameTestCase::TestCreateTempFileName()
+{
+    static const struct TestData
+    {
+        const char *prefix;
+        const char *expectedFolder;
+        bool shouldSucceed;
+    } testData[] =
+    {
+        { "", "$SYSTEM_TEMP", true },
+        { "foo", "$SYSTEM_TEMP", true },
+        { "..", "$SYSTEM_TEMP", true },
+        { "../bar", "..", true },
+#ifdef __WXMSW__
+        { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
+        { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
+#elif defined( __UNIX__ )
+        { "$USER_DOCS_DIR/", "$USER_DOCS_DIR", true },
+        { "/tmp/foo", "/tmp", true },
+        { "/tmp/a/directory/which/does/not/exist", "", false },
+#endif // __UNIX__
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        wxString prefix = testData[n].prefix;
+        prefix.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+
+        std::string errDesc = wxString::Format("failed on prefix '%s'", prefix).ToStdString();
+
+        wxString path = wxFileName::CreateTempFileName(prefix);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, !testData[n].shouldSucceed, path.empty() );
+
+        if (testData[n].shouldSucceed)
+        {
+            errDesc += "; path is " + path.ToStdString();
+        
+            // test the place where the temp file has been created
+            wxString expected = testData[n].expectedFolder;
+            expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
+            expected.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, expected, wxFileName(path).GetPath() );
+
+            // the temporary file is created with full permissions for the current process
+            // so we should always be able to remove it:
+            CPPUNIT_ASSERT_MESSAGE( errDesc, wxRemoveFile(path) );
+        }
+    }
+}
+
+void FileNameTestCase::TestGetTimes()
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    CPPUNIT_ASSERT( fn.IsOk() );
+
+    wxDateTime dtAccess, dtMod, dtCreate;
+    CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
+
+    // make sure all retrieved dates are equal to the current date&time 
+    // with an accuracy up to 1 minute
+    CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CPPUNIT_ASSERT(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
 }

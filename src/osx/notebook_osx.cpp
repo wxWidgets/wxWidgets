@@ -378,6 +378,20 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             pPage->Layout();
     }
 
+    // If the selected page is hidden at this point, the notebook
+    // has become visible for the first time after creation, and
+    // we postponed showing the page in ChangePage().
+    // So show the selected page now.
+    if ( m_nSelection != -1 )
+    {
+        wxNotebookPage *pPage = m_pages[m_nSelection];
+        if ( !pPage->IsShown() )
+        {
+            pPage->Show( true );
+            pPage->SetFocus();
+        }
+    }
+
     // Processing continues to next OnSize
     event.Skip();
 }
@@ -502,8 +516,20 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     if ( nSel != -1 )
     {
         wxNotebookPage *pPage = m_pages[nSel];
-        pPage->Show( true );
-        pPage->SetFocus();
+        if ( IsShownOnScreen() )
+        {
+            pPage->Show( true );
+            pPage->SetFocus();
+        }
+        else
+        {
+            // Postpone Show() until the control is actually shown.
+            // Otherwise this forces the containing toplevel window
+            // to show, even if it's just being created and called
+            // AddPage() without intent to show the window yet.
+            // We Show() the selected page in our OnSize handler,
+            // unless it already is shown.
+        }
     }
 
     m_nSelection = nSel;

@@ -240,7 +240,7 @@ dnl check for different proprietary compilers depending on target platform
 dnl _AC_BAKEFILE_PROG_COMPILER(LANG)
 AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
 [
-    AC_PROG_$1
+    AC_REQUIRE([AC_PROG_$1])
 
     dnl Intel compiler can be used under several different OS and even
     dnl different architectures (x86, amd64 and Itanium) so it's easier to just

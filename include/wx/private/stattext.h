@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/private/stattext.h
+// Name:        wx/private/stattext.h
 // Purpose:     Internal declarations for dlgcmn.cpp and stattextcmn.cpp
 // Author:      Francesco Montorsi
 // Created:     2007-01-07 (extracted from dlgcmn.cpp)

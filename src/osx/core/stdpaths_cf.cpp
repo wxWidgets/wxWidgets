@@ -118,7 +118,7 @@ wxString wxStandardPathsCF::GetDocumentsDir() const
 wxString wxStandardPathsCF::GetConfigDir() const
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-    return wxMacFindFolder((short)kLocalDomain, kPreferencesFolderType, kCreateFolder);
+    return wxMacFindFolderNoSeparator((short)kLocalDomain, kPreferencesFolderType, kCreateFolder);
 #else
     return wxT("/Library/Preferences");
 #endif
@@ -127,7 +127,7 @@ wxString wxStandardPathsCF::GetConfigDir() const
 wxString wxStandardPathsCF::GetUserConfigDir() const
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-    return wxMacFindFolder((short)kUserDomain, kPreferencesFolderType, kCreateFolder);
+    return wxMacFindFolderNoSeparator((short)kUserDomain, kPreferencesFolderType, kCreateFolder);
 #else
     return wxFileName::GetHomeDir() + wxT("/Library/Preferences");
 #endif
@@ -141,36 +141,7 @@ wxString wxStandardPathsCF::GetDataDir() const
 wxString wxStandardPathsCF::GetExecutablePath() const
 {
 #ifdef __WXMAC__
-#if 1
-    return GetFromFunc(CFBundleCopyBundleURL);
-#else
-    // TODO remove if cf implementation ok
-    ProcessInfoRec processinfo;
-    ProcessSerialNumber procno ;
-#ifdef __LP64__
-    FSRef  fsRef;
-#else
-    FSSpec fsSpec;
-#endif
-
-    procno.highLongOfPSN = 0 ;
-    procno.lowLongOfPSN = kCurrentProcess ;
-    processinfo.processInfoLength = sizeof(ProcessInfoRec);
-    processinfo.processName = NULL;
-#ifdef __LP64__
-    processinfo.processAppRef = &fsRef;
-#else
-    processinfo.processAppSpec = &fsSpec;
-#endif
-
-    GetProcessInformation( &procno , &processinfo ) ;
-#ifdef __LP64__
-    return wxMacFSRefToPath(&fsRef);
-#else
-    return wxMacFSSpec2MacFilename(&fsSpec);
-#endif
-#endif
-
+    return GetFromFunc(CFBundleCopyExecutableURL);
 #else
     return wxStandardPathsBase::GetExecutablePath();
 #endif
@@ -179,7 +150,7 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 wxString wxStandardPathsCF::GetLocalDataDir() const
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-    return AppendAppInfo(wxMacFindFolder((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
+    return AppendAppInfo(wxMacFindFolderNoSeparator((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
     return AppendAppInfo(wxT("/Library/Application Support"));
 #endif
@@ -188,7 +159,7 @@ wxString wxStandardPathsCF::GetLocalDataDir() const
 wxString wxStandardPathsCF::GetUserDataDir() const
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-    return AppendAppInfo(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
+    return AppendAppInfo(wxMacFindFolderNoSeparator((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
     return AppendAppInfo(wxFileName::GetHomeDir() + wxT("/Library/Application Support"));
 #endif

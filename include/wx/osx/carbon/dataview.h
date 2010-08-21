@@ -403,6 +403,8 @@ public:
  //
  // selection related methods (inherited from wxDataViewWidgetImpl)
  //
+  virtual wxDataViewItem GetCurrentItem() const;
+  virtual void SetCurrentItem(const wxDataViewItem& item);
   virtual int  GetSelections(wxDataViewItemArray& sel)   const;
   virtual bool IsSelected   (wxDataViewItem const& item) const;
   virtual void Select       (wxDataViewItem const& item);

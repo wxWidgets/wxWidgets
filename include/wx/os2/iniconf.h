@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/iniconf.h
+// Name:        wx/msw/iniconf.h
 // Purpose:     INI-file based wxConfigBase implementation
 // Author:      David Webster
 // Modified by:

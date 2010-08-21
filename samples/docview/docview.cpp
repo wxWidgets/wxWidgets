@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -181,7 +181,7 @@ bool MyApp::OnInit()
         // Create a template relating image documents to their views
         new wxDocTemplate(docManager, "Image", "*.png;*.jpg", "", "png;jpg",
                           "Image Doc", "Image View",
-                          CLASSINFO(wxImageDocument), CLASSINFO(wxImageView));
+                          CLASSINFO(ImageDocument), CLASSINFO(ImageView));
     }
 
     // create the main frame window

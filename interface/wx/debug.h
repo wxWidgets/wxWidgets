@@ -3,7 +3,7 @@
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */
@@ -249,10 +249,10 @@ void wxDisableAsserts();
     @def wxDISABLE_ASSERTS_IN_RELEASE_BUILD
 
     Use this macro to disable asserts in release build when not using
-    IMPLEMENT_APP().
+    wxIMPLEMENT_APP().
 
     By default, assert message boxes are suppressed in release build by
-    IMPLEMENT_APP() which uses this macro. If you don't use IMPLEMENT_APP()
+    wxIMPLEMENT_APP() which uses this macro. If you don't use wxIMPLEMENT_APP()
     because your application initializes wxWidgets directly (e.g. calls
     wxEntry() or wxEntryStart() itself) but still want to suppress assert
     notifications in release build you need to use this macro directly.
@@ -289,7 +289,7 @@ void wxDisableAsserts();
     Will always generate an assert error with specified message if this code is
     reached (in debug mode).
 
-    This macro is useful for marking unreachable" code areas, for example it
+    This macro is useful for marking "unreachable" code areas, for example it
     may be used in the "default:" branch of a switch statement if all possible
     cases are processed above.
 

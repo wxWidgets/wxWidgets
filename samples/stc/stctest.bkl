@@ -21,8 +21,6 @@
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
         </if>
-
-        <win32-res>../sample.rc</win32-res>
     </exe>
 
     <wx-data id="data">

@@ -7,7 +7,7 @@
 // Copyright:   (c) Julian Smart
 //              (c) 2004 ABX
 //              (c) Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -191,12 +191,23 @@ class TestMessageBoxDialog : public wxDialog
 public:
     TestMessageBoxDialog(wxWindow *parent);
 
-private:
+    bool Create();
+
+protected:
+    wxString GetMessage() { return m_textMsg->GetValue(); }
+    long GetStyle();
+
+    void PrepareMessageDialog(wxMessageDialogBase &dlg);
+
+    virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
+    virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+
     void OnApply(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
     void OnUpdateLabelUI(wxUpdateUIEvent& event);
     void OnUpdateNoDefaultUI(wxUpdateUIEvent& event);
 
+private:
     enum
     {
         Btn_Yes,
@@ -239,6 +250,28 @@ private:
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
+
+#if wxUSE_RICHMSGDLG
+class TestRichMessageDialog : public TestMessageBoxDialog
+{
+public:
+    TestRichMessageDialog(wxWindow *parent);
+
+protected:
+    // overrides method in base class
+    virtual void AddAdditionalTextOptions(wxSizer *sizer);
+    virtual void AddAdditionalFlags(wxSizer *sizer);
+
+    void OnApply(wxCommandEvent& event);
+
+private:
+    wxTextCtrl *m_textCheckBox;
+    wxCheckBox *m_initialValueCheckBox;
+    wxTextCtrl *m_textDetailed;
+
+    DECLARE_EVENT_TABLE()
+};
+#endif // wxUSE_RICHMSGDLG
 
 class TestDefaultActionDialog: public wxDialog
 {
@@ -302,6 +335,9 @@ public:
     void MessageBoxWindowModal(wxCommandEvent& event);
     void MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event);
 #endif // wxUSE_MSGDLG
+#if wxUSE_RICHMSGDLG
+    void RichMessageDialog(wxCommandEvent& event);
+#endif // wxUSE_RICHMSGDLG
 
 #if wxUSE_COLOURDLG
     void ChooseColour(wxCommandEvent& event);
@@ -480,6 +516,7 @@ enum
     DIALOGS_MESSAGE_BOX_WINDOW_MODAL,
     DIALOGS_MESSAGE_DIALOG,
     DIALOGS_MESSAGE_BOX_WXINFO,
+    DIALOGS_RICH_MESSAGE_DIALOG,
     DIALOGS_SINGLE_CHOICE,
     DIALOGS_MULTI_CHOICE,
     DIALOGS_REARRANGE,

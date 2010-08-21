@@ -159,6 +159,7 @@ private:
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
 
 typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&);
 
@@ -169,6 +170,8 @@ typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&
     wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, winid, wxRibbonGalleryEventHandler(fn))
 #define EVT_RIBBONGALLERY_SELECTED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, winid, wxRibbonGalleryEventHandler(fn))
+#define EVT_RIBBONGALLERY_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONGALLERY_CLICKED, winid, wxRibbonGalleryEventHandler(fn))
 #else
 
 // wxpython/swig event work
@@ -179,7 +182,7 @@ typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&
     EVT_RIBBONGALLERY_HOVER_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, 1 )
     EVT_RIBBONGALLERY_SELECTED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONGALLERY_SELECTED, 1 )
 }
-#endif
+#endif // SWIG
 
 #endif // wxUSE_RIBBON
 

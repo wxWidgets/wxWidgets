@@ -473,7 +473,7 @@ sub_listctrl:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
-sub_maskededit: 
+sub_maskededit:
 	cd maskededit
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"

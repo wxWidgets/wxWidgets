@@ -111,7 +111,7 @@ protected:
     // implement wxTextEntry pure virtual methods
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual WXWidget GetTextWidget() const;
- 
+
     //Mask event methods
     void ApplyMask(event);
     void KeyPressedMask(wxKeyEvent& event);

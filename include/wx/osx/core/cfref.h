@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/corefoundation/cfref.h
+// Name:        wx/osx/core/cfref.h
 // Purpose:     wxCFRef template class
 // Author:      David Elliott <dfe@cox.net>
 // Modified by: Stefan Csomor
@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 // Notes:       See http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/index.html
 /////////////////////////////////////////////////////////////////////////////
-/*! @header     wx/mac/corefoundation/cfref.h
+/*! @header     wx/osx/core/cfref.h
     @abstract   wxCFRef template class
     @discussion FIXME: Convert doc tags to something less buggy with C++
 */

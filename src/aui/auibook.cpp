@@ -236,12 +236,7 @@ wxAuiDefaultTabArt::~wxAuiDefaultTabArt()
 
 wxAuiTabArt* wxAuiDefaultTabArt::Clone()
 {
-    wxAuiDefaultTabArt* art = new wxAuiDefaultTabArt;
-    art->SetNormalFont(m_normal_font);
-    art->SetSelectedFont(m_selected_font);
-    art->SetMeasuringFont(m_measuring_font);
-
-    return art;
+    return new wxAuiDefaultTabArt(*this);
 }
 
 void wxAuiDefaultTabArt::SetFlags(unsigned int flags)
@@ -595,10 +590,15 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
             bmp = m_active_close_bmp;
         }
 
+        int offsetY = tab_y-1;
+        if (m_flags & wxAUI_NB_BOTTOM)
+            offsetY = 1;
+
         wxRect rect(tab_x + tab_width - close_button_width - 1,
-                    tab_y + (tab_height/2) - (bmp.GetHeight()/2),
+                    offsetY + (tab_height/2) - (bmp.GetHeight()/2),
                     close_button_width,
                     tab_height);
+
         IndentPressedBitmap(&rect, close_button_state);
         dc.DrawBitmap(bmp, rect.x, rect.y, true);
 
@@ -2051,7 +2051,7 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
         return false;
 
     wxAuiTabContainerButton* btn = NULL;
-    if (ButtonHitTest(x, y, &btn))
+    if (ButtonHitTest(x, y, &btn) && !(btn->cur_state & wxAUI_BUTTON_STATE_DISABLED))
     {
         if (m_buttons.Index(*btn) != wxNOT_FOUND)
             return false;
@@ -2089,8 +2089,7 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
         if (button.rect.Contains(x,y) &&
-            !(button.cur_state & (wxAUI_BUTTON_STATE_HIDDEN |
-                                   wxAUI_BUTTON_STATE_DISABLED)))
+            !(button.cur_state & wxAUI_BUTTON_STATE_HIDDEN ))
         {
             if (hit)
                 *hit = &button;
@@ -2298,7 +2297,8 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     {
         // make sure we're still clicking the button
         wxAuiTabContainerButton* button = NULL;
-        if (!ButtonHitTest(evt.m_x, evt.m_y, &button))
+        if (!ButtonHitTest(evt.m_x, evt.m_y, &button) ||
+            button->cur_state & wxAUI_BUTTON_STATE_DISABLED)
             return;
 
         if (button != m_pressed_button)
@@ -2393,7 +2393,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
     // check if the mouse is hovering above a button
     wxAuiTabContainerButton* button;
-    if (ButtonHitTest(pos.x, pos.y, &button))
+    if (ButtonHitTest(pos.x, pos.y, &button) && !(button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
     {
         if (m_hover_button && button != m_hover_button)
         {
@@ -2909,7 +2909,23 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
 
-    UpdateTabCtrlHeight();
+    // Update the height and do nothing else if it did something but otherwise
+    // (i.e. if the new art provider uses the same height as the old one) we
+    // need to manually set the art provider for all tabs ourselves.
+    if ( !UpdateTabCtrlHeight() )
+    {
+        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+        const size_t pane_count = all_panes.GetCount();
+        for (size_t i = 0; i < pane_count; ++i)
+        {
+            wxAuiPaneInfo& pane = all_panes.Item(i);
+            if (pane.name == wxT("dummy"))
+                continue;
+            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+            wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+            tabctrl->SetArtProvider(art->Clone());
+        }
+    }
 }
 
 // SetTabCtrlHeight() is the highest-level override of the
@@ -2950,34 +2966,36 @@ void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
 }
 
 // UpdateTabCtrlHeight() does the actual tab resizing. It's meant
-// to be used interally
-void wxAuiNotebook::UpdateTabCtrlHeight()
+// to be used internally
+bool wxAuiNotebook::UpdateTabCtrlHeight()
 {
     // get the tab ctrl height we will use
     int height = CalculateTabCtrlHeight();
 
     // if the tab control height needs to change, update
     // all of our tab controls with the new height
-    if (m_tab_ctrl_height != height)
+    if (m_tab_ctrl_height == height)
+        return false;
+
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+
+    m_tab_ctrl_height = height;
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
     {
-        wxAuiTabArt* art = m_tabs.GetArtProvider();
-
-        m_tab_ctrl_height = height;
-
-        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-        size_t i, pane_count = all_panes.GetCount();
-        for (i = 0; i < pane_count; ++i)
-        {
-            wxAuiPaneInfo& pane = all_panes.Item(i);
-            if (pane.name == wxT("dummy"))
-                continue;
-            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
-            wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
-            tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
-            tabctrl->SetArtProvider(art->Clone());
-            tab_frame->DoSizing();
-        }
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+        tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
+        tabctrl->SetArtProvider(art->Clone());
+        tab_frame->DoSizing();
     }
+
+    return true;
 }
 
 void wxAuiNotebook::UpdateHintWindowSize()

@@ -699,9 +699,21 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 void wxWindowMSW::DoEnable( bool enable )
 {
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::EnableWindow(hWnd, (BOOL)enable);
+    MSWEnableHWND(GetHwnd(), enable);
+}
+
+bool wxWindowMSW::MSWEnableHWND(WXHWND hWnd, bool enable)
+{
+    if ( !hWnd )
+        return false;
+
+    // If disabling focused control, we move focus to the next one, as if the
+    // user pressed Tab. That's because we can't keep focus on a disabled
+    // control, Tab-navigation would stop working then.
+    if ( !enable && ::GetFocus() == hWnd )
+        Navigate();
+
+    return ::EnableWindow(hWnd, (BOOL)enable) != 0;
 }
 
 bool wxWindowMSW::Show(bool show)
@@ -1076,10 +1088,14 @@ void wxWindowMSW::SetScrollbar(int orient,
         info.nMax = range - 1;      //  as both nMax and nMax are inclusive
         info.nPos = pos;
 
-        // enable the scrollbar if it had been disabled before by specifying
-        // SIF_DISABLENOSCROLL below: as we can't know whether this had been
-        // done or not just do it always
-        ::EnableScrollBar(hwnd, WXOrientToSB(orient), ESB_ENABLE_BOTH);
+        // We normally also reenable scrollbar in case it had been previously
+        // disabled by specifying SIF_DISABLENOSCROLL below but we should only
+        // do this if it has valid range, otherwise it would be enabled but not
+        // do anything.
+        if ( range >= pageSize )
+        {
+            ::EnableScrollBar(hwnd, WXOrientToSB(orient), ESB_ENABLE_BOTH);
+        }
     }
     //else: leave all the fields to be 0
 
@@ -1861,11 +1877,13 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
     wxWindow * const parent = GetParent();
 
     wxPoint pos;
+#if wxUSE_DEFERRED_SIZING
     if ( m_pendingPosition != wxDefaultPosition )
     {
         pos = m_pendingPosition;
     }
     else // use current position
+#endif // wxUSE_DEFERRED_SIZING
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -2712,9 +2730,14 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
+    // notice that we cast wParam and lParam to long to avoid mismatch with
+    // format specifiers in 64 bit builds where they are both int64 quantities
+    //
+    // casting like this loses information, of course, but it shouldn't matter
+    // much for this diagnostic code and it keeps the code simple
     wxLogTrace("winmsg",
                wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
-               wxGetMessageName(message), hWnd, (long)wParam, lParam);
+               wxGetMessageName(message), hWnd, (long)wParam, (long)lParam);
 #endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
@@ -3983,8 +4006,7 @@ bool wxWindowMSW::HandleDestroy()
     {
         m_dropTarget->Revoke(m_hWnd);
 
-        delete m_dropTarget;
-        m_dropTarget = NULL;
+        wxDELETE(m_dropTarget);
     }
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -4916,41 +4938,31 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindowMSW *child)
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC),
+                                   wxWindowMSW * WXUNUSED(child))
 {
     if ( m_hasBgCol )
     {
-        // our background colour applies to:
-        //  1. this window itself, always
-        //  2. all children unless the colour is "not inheritable"
-        //  3. even if it is not inheritable, our immediate transparent
-        //     children should still inherit it -- but not any transparent
-        //     children because it would look wrong if a child of non
-        //     transparent child would show our bg colour when the child itself
-        //     does not
-        if ( child == this ||
-                m_inheritBgCol ||
-                    (child->HasTransparentBackground() &&
-                        child->GetParent() == this) )
-        {
-            // draw children with the same colour as the parent
-            wxBrush *
-                brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+        wxBrush *
+            brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
 
-            return (WXHBRUSH)GetHbrushOf(*brush);
-        }
+        return (WXHBRUSH)GetHbrushOf(*brush);
     }
 
     return 0;
 }
 
-WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, wxWindowMSW *child)
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, child);
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, this);
         if ( hBrush )
             return hBrush;
+
+        // don't use the parent background if we're not transparent
+        if ( !win->HasTransparentBackground() )
+            break;
 
         // background is not inherited beyond top level windows
         if ( win->IsTopLevel() )
@@ -5619,20 +5631,10 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
     event.SetTimestamp(::GetMessageTime());
 #endif
 
-    // translate the position to client coords
-    POINT pt;
-#ifdef __WXWINCE__
-    GetCursorPosWinCE(&pt);
-#else
-    GetCursorPos(&pt);
-#endif
-    RECT rect;
-    GetWindowRect(GetHwnd(),&rect);
-    pt.x -= rect.left;
-    pt.y -= rect.top;
-
-    event.m_x = pt.x;
-    event.m_y = pt.y;
+    // translate the position to client coordinates
+    const wxPoint mousePos = ScreenToClient(wxGetMousePosition());
+    event.m_x = mousePos.x;
+    event.m_y = mousePos.y;
 
     return event;
 }
@@ -5741,7 +5743,8 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), wxT('&'));
+                const wxString label(item->GetItemLabel());
+                const wxChar *p = wxStrchr(label.wx_str(), wxT('&'));
                 while ( p++ )
                 {
                     if ( *p == wxT('&') )

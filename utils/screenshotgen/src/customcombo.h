@@ -3,7 +3,7 @@
 // Purpose:     Define some custom wxComboCtrls
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef WX_CUSTOM_COMBO_H

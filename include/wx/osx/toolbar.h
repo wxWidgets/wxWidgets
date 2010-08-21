@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/toolbar.h
+// Name:        wx/osx/toolbar.h
 // Purpose:     wxToolBar class
 // Author:      Stefan Csomor
 // Modified by:

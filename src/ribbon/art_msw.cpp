@@ -143,21 +143,38 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     // tertiary not used for anything
 
     // Map primary saturation from [0, 1] to [.25, .75]
-    primary_hsl.saturation = cos(primary_hsl.saturation * M_PI) * -0.25 + 0.5;
+    bool primary_is_gray = false;
+    static const double gray_saturation_threshold = 0.01;
+    if(primary_hsl.saturation <= gray_saturation_threshold)
+        primary_is_gray = true;
+    else
+    {
+        primary_hsl.saturation = cos(primary_hsl.saturation * M_PI)
+            * -0.25 + 0.5;
+    }
 
     // Map primary luminance from [0, 1] to [.23, .83]
     primary_hsl.luminance = cos(primary_hsl.luminance * M_PI) * -0.3 + 0.53;
 
     // Map secondary saturation from [0, 1] to [0.16, 0.84]
-    secondary_hsl.saturation = cos(secondary_hsl.saturation * M_PI) * -0.34 + 0.5;
+    bool secondary_is_gray = false;
+    if(secondary_hsl.saturation <= gray_saturation_threshold)
+        secondary_is_gray = true;
+    else
+    {
+        secondary_hsl.saturation = cos(secondary_hsl.saturation * M_PI)
+            * -0.34 + 0.5;
+    }
 
     // Map secondary luminance from [0, 1] to [0.1, 0.9]
     secondary_hsl.luminance = cos(secondary_hsl.luminance * M_PI) * -0.4 + 0.5;
 
 #define LikePrimary(h, s, l) \
-    primary_hsl.ShiftHue(h ## f).Saturated(s ## f).Lighter(l ## f).ToRGB()
+    primary_hsl.ShiftHue(h ## f).Saturated(primary_is_gray ? 0 : s ## f) \
+    .Lighter(l ## f).ToRGB()
 #define LikeSecondary(h, s, l) \
-    secondary_hsl.ShiftHue(h ## f).Saturated(s ## f).Lighter(l ## f).ToRGB()
+    secondary_hsl.ShiftHue(h ## f).Saturated(secondary_is_gray ? 0 : s ## f) \
+    .Lighter(l ## f).ToRGB()
 
     m_page_border_pen = LikePrimary(1.4, 0.00, -0.08);
 
@@ -1018,11 +1035,14 @@ void wxRibbonMSWArtProvider::DrawTab(
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
     {
         wxBitmap icon = tab.page->GetIcon();
+        if(icon.IsOk())
+        {
         int x = tab.rect.x + 4;
         if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) == 0)
             x = tab.rect.x + (tab.rect.width - icon.GetWidth()) / 2;
         dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
             icon.GetHeight()) / 2, true);
+        }
     }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {

@@ -146,7 +146,7 @@ wxCFEventLoop::AddSourceForFD(int WXUNUSED(fd),
 
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-void wxObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
+extern "C" void wxObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
 {
     wxCFEventLoop * eventloop = static_cast<wxCFEventLoop *>(info);
     if ( eventloop )
@@ -196,8 +196,9 @@ wxCFEventLoop::wxCFEventLoop()
     bzero( &ctxt, sizeof(ctxt) );
     ctxt.info = this;
     m_runLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0,
-                                                wxObserverCallBack, &ctxt );
+                                            wxObserverCallBack, &ctxt );
     CFRunLoopAddObserver(m_runLoop, m_runLoopObserver, kCFRunLoopCommonModes);
+    CFRelease(m_runLoopObserver);
 }
 
 wxCFEventLoop::~wxCFEventLoop()
@@ -213,10 +214,20 @@ CFRunLoopRef wxCFEventLoop::CFGetCurrentRunLoop() const
 
 void wxCFEventLoop::WakeUp()
 {
-    extern void wxMacWakeUp();
-
-    wxMacWakeUp();
+    CFRunLoopWakeUp(m_runLoop);
 }
+
+#if wxUSE_BASE
+
+void wxMacWakeUp()
+{
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    
+    if ( loop )
+        loop->WakeUp();
+}
+
+#endif
 
 bool wxCFEventLoop::YieldFor(long eventsToProcess)
 {
@@ -267,7 +278,7 @@ bool wxCFEventLoop::Pending() const
 
 int wxCFEventLoop::DoProcessEvents()
 {
-    return DispatchTimeout( 1000 );
+    return DispatchTimeout( 0 );
 }
 
 bool wxCFEventLoop::Dispatch()

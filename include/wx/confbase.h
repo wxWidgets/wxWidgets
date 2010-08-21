@@ -181,6 +181,10 @@ public:
   bool Read(const wxString& key, double* val) const;
   bool Read(const wxString& key, double* val, double defVal) const;
 
+    // read a float
+  bool Read(const wxString& key, float* val) const;
+  bool Read(const wxString& key, float* val, float defVal) const;
+
     // read a bool
   bool Read(const wxString& key, bool* val) const;
   bool Read(const wxString& key, bool* val, bool defVal) const;

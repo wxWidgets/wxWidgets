@@ -6,7 +6,7 @@
 // Created:     06.04.01
 // Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin, 2006 Wlodzimierz Skiba
-// License:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -335,11 +335,7 @@ void BookWidgetsPage::CreateImageList()
     }
     else // no images
     {
-        if ( m_imageList )
-        {
-            delete m_imageList;
-            m_imageList = NULL;
-        }
+        wxDELETE(m_imageList);
     }
 
     // because of the bug in wxMSW we can't use SetImageList(NULL) - although

@@ -433,12 +433,12 @@ wxString wxFileDialog::GetFilename() const
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
-    m_fc.SetWildcard( wildCard );
+    wxFileDialogBase::SetWildcard(wildCard);
+    m_fc.SetWildcard( GetWildcard() );
 }
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
-
     m_fc.SetFilterIndex( filterIndex);
 }
 

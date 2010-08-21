@@ -35,8 +35,9 @@ public:
     virtual ~wxFTP();
 
     // Connecting and disconnecting
-    bool Connect(const wxSockAddress& addr, bool wait = true);
-    bool Connect(const wxString& host);
+    virtual bool Connect(const wxSockAddress& addr, bool wait = true);
+    virtual bool Connect(const wxString& host) { return Connect(host, 0); }
+    virtual bool Connect(const wxString& host, unsigned short port);
 
     // disconnect
     virtual bool Close();

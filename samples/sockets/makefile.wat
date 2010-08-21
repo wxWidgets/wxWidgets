@@ -292,7 +292,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\baseserver.exe del $(OBJS)\baseserver.exe
 
 !ifeq USE_GUI 1
-$(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_client.res
+$(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_sample.res
 	@%create $(OBJS)\client.lbc
 	@%append $(OBJS)\client.lbc option quiet
 	@%append $(OBJS)\client.lbc name $^@
@@ -300,13 +300,13 @@ $(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_client.res
 	@%append $(OBJS)\client.lbc  $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(CLIENT_OBJECTS)) do @%append $(OBJS)\client.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\client.lbc library %i
-	@%append $(OBJS)\client.lbc option resource=$(OBJS)\client_client.res
+	@%append $(OBJS)\client.lbc option resource=$(OBJS)\client_sample.res
 	@for %i in () do @%append $(OBJS)\client.lbc option stack=%i
 	wlink @$(OBJS)\client.lbc
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_server.res
+$(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_sample.res
 	@%create $(OBJS)\server.lbc
 	@%append $(OBJS)\server.lbc option quiet
 	@%append $(OBJS)\server.lbc name $^@
@@ -314,7 +314,7 @@ $(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_server.res
 	@%append $(OBJS)\server.lbc  $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(SERVER_OBJECTS)) do @%append $(OBJS)\server.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\server.lbc library %i
-	@%append $(OBJS)\server.lbc option resource=$(OBJS)\server_server.res
+	@%append $(OBJS)\server.lbc option resource=$(OBJS)\server_sample.res
 	@for %i in () do @%append $(OBJS)\server.lbc option stack=%i
 	wlink @$(OBJS)\server.lbc
 !endif
@@ -343,17 +343,17 @@ $(OBJS)\baseserver.exe :  $(BASESERVER_OBJECTS)
 	@for %i in () do @%append $(OBJS)\baseserver.lbc option stack=%i
 	wlink @$(OBJS)\baseserver.lbc
 
+$(OBJS)\client_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+
 $(OBJS)\client_client.obj :  .AUTODEPEND .\client.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CLIENT_CXXFLAGS) $<
 
-$(OBJS)\client_client.res :  .AUTODEPEND .\client.rc
+$(OBJS)\server_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\server_server.obj :  .AUTODEPEND .\server.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SERVER_CXXFLAGS) $<
-
-$(OBJS)\server_server.res :  .AUTODEPEND .\server.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\baseclient_baseclient.obj :  .AUTODEPEND .\baseclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASECLIENT_CXXFLAGS) $<

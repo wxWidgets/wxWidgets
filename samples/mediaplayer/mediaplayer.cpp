@@ -54,18 +54,18 @@
 // Headers
 // ----------------------------------------------------------------------------
 
-#include "wx/mediactrl.h"   //for wxMediaCtrl
-#include "wx/filedlg.h"     //for opening files from OpenFile
-#include "wx/slider.h"      //for a slider for seeking within media
-#include "wx/sizer.h"       //for positioning controls/wxBoxSizer
-#include "wx/timer.h"       //timer for updating status bar
-#include "wx/textdlg.h"     //for getting user text from OpenURL/Debug
-#include "wx/notebook.h"    //for wxNotebook and putting movies in pages
-#include "wx/cmdline.h"     //for wxCmdLineParser (optional)
-#include "wx/listctrl.h"    //for wxListCtrl
-#include "wx/dnd.h"         //drag and drop for the playlist
-#include "wx/filename.h"    //For wxFileName::GetName()
-#include "wx/config.h"      //for native wxConfig
+#include "wx/mediactrl.h"   // for wxMediaCtrl
+#include "wx/filedlg.h"     // for opening files from OpenFile
+#include "wx/slider.h"      // for a slider for seeking within media
+#include "wx/sizer.h"       // for positioning controls/wxBoxSizer
+#include "wx/timer.h"       // timer for updating status bar
+#include "wx/textdlg.h"     // for getting user text from OpenURL/Debug
+#include "wx/notebook.h"    // for wxNotebook and putting movies in pages
+#include "wx/cmdline.h"     // for wxCmdLineParser (optional)
+#include "wx/listctrl.h"    // for wxListCtrl
+#include "wx/dnd.h"         // drag and drop for the playlist
+#include "wx/filename.h"    // For wxFileName::GetName()
+#include "wx/config.h"      // for native wxConfig
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -203,8 +203,8 @@ private:
     void DoOpenFile(const wxString& path, bool bNewPage);
     void DoPlayFile(const wxString& path);
 
-    class wxMediaPlayerTimer* m_timer;     //Timer to write info to status bar
-    wxNotebook* m_notebook;     //Notebook containing our pages
+    class wxMediaPlayerTimer* m_timer;     // Timer to write info to status bar
+    wxNotebook* m_notebook;     // Notebook containing our pages
 
     // Maybe I should use more accessors, but for simplicity
     // I'll allow the other classes access to our members
@@ -237,30 +237,30 @@ class wxMediaPlayerNotebookPage : public wxPanel
     void OnMediaFinished(wxMediaEvent& event);
 
 public:
-    bool IsBeingDragged();      //accessor for m_bIsBeingDragged
+    bool IsBeingDragged();      // accessor for m_bIsBeingDragged
 
-    //make wxMediaPlayerFrame able to access the private members
+    // make wxMediaPlayerFrame able to access the private members
     friend class wxMediaPlayerFrame;
 
-    int      m_nLastFileId;     //List ID of played file in listctrl
-    wxString m_szFile;          //Name of currently playing file/location
+    int      m_nLastFileId;     // List ID of played file in listctrl
+    wxString m_szFile;          // Name of currently playing file/location
 
-    wxMediaCtrl* m_mediactrl;   //Our media control
-    class wxMediaPlayerListCtrl* m_playlist;  //Our playlist
-    wxSlider* m_slider;         //The slider below our media control
-    wxSlider* m_pbSlider;       //Lower-left slider for adjusting speed
-    wxSlider* m_volSlider;      //Lower-right slider for adjusting volume
-    int m_nLoops;               //Number of times media has looped
-    bool m_bLoop;               //Whether we are looping or not
-    bool m_bIsBeingDragged;     //Whether the user is dragging the scroll bar
-    wxMediaPlayerFrame* m_parentFrame;  //Main wxFrame of our sample
-    wxButton* m_prevButton;     //Go to previous file button
-    wxButton* m_playButton;     //Play/pause file button
-    wxButton* m_stopButton;     //Stop playing file button
-    wxButton* m_nextButton;     //Next file button
-    wxButton* m_vdButton;       //Volume down button
-    wxButton* m_vuButton;       //Volume up button
-    wxGauge*  m_gauge;          //Gauge to keep in line with slider
+    wxMediaCtrl* m_mediactrl;   // Our media control
+    class wxMediaPlayerListCtrl* m_playlist;  // Our playlist
+    wxSlider* m_slider;         // The slider below our media control
+    wxSlider* m_pbSlider;       // Lower-left slider for adjusting speed
+    wxSlider* m_volSlider;      // Lower-right slider for adjusting volume
+    int m_nLoops;               // Number of times media has looped
+    bool m_bLoop;               // Whether we are looping or not
+    bool m_bIsBeingDragged;     // Whether the user is dragging the scroll bar
+    wxMediaPlayerFrame* m_parentFrame;  // Main wxFrame of our sample
+    wxButton* m_prevButton;     // Go to previous file button
+    wxButton* m_playButton;     // Play/pause file button
+    wxButton* m_stopButton;     // Stop playing file button
+    wxButton* m_nextButton;     // Next file button
+    wxButton* m_vdButton;       // Volume down button
+    wxButton* m_vuButton;       // Volume up button
+    wxGauge*  m_gauge;          // Gauge to keep in line with slider
 };
 
 // ----------------------------------------------------------------------------
@@ -270,13 +270,13 @@ public:
 class wxMediaPlayerTimer : public wxTimer
 {
 public:
-    //Ctor
+    // Ctor
     wxMediaPlayerTimer(wxMediaPlayerFrame* frame) {m_frame = frame;}
 
-    //Called each time the timer's timeout expires
+    // Called each time the timer's timeout expires
     void Notify();
 
-    wxMediaPlayerFrame* m_frame;       //The wxMediaPlayerFrame
+    wxMediaPlayerFrame* m_frame;       // The wxMediaPlayerFrame
 };
 
 // ----------------------------------------------------------------------------
@@ -330,8 +330,8 @@ public:
 // ----------------------------------------------------------------------------
 // wxPlayListDropTarget
 //
-//  Drop target for playlist (i.e. user drags a file from explorer unto
-//  playlist it adds the file)
+//  Drop target for playlist (i.e. allows users to drag a file from explorer into
+//  the playlist to add that file)
 // ----------------------------------------------------------------------------
 #if wxUSE_DRAG_AND_DROP
 class wxPlayListDropTarget : public wxFileDropTarget
@@ -438,7 +438,7 @@ bool wxMediaPlayerApp::OnInit()
 
     cmdLineDesc[1].kind = wxCMD_LINE_NONE;
 
-    //gets the passed media files from cmd line
+    // gets the passed media files from cmd line
     wxCmdLineParser parser (cmdLineDesc, argc, argv);
 
     // get filenames from the commandline
@@ -460,7 +460,7 @@ bool wxMediaPlayerApp::OnInit()
 
 void wxMediaPlayerApp::MacOpenFile(const wxString & fileName )
 {
-    //Called when a user drags a file over our app
+    // Called when a user drags a file over our app
     m_frame->DoOpenFile(fileName, true /* new page */);
 }
 
@@ -776,7 +776,7 @@ wxMediaPlayerFrame::~wxMediaPlayerFrame()
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnClose(wxCloseEvent& event)
 {
-    event.Skip(); //really close the frame
+    event.Skip(); // really close the frame
 }
 
 // ----------------------------------------------------------------------------
@@ -813,14 +813,14 @@ void wxMediaPlayerFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString msg;
     msg.Printf( wxT("This is a test of wxMediaCtrl.\n\n")
 
-                wxT("Intructions:\n")
+                wxT("Instructions:\n")
 
                 wxT("The top slider shows the current the current position, ")
                 wxT("which you can change by dragging and releasing it.\n")
 
                 wxT("The gauge (progress bar) shows the progress in ")
                 wxT("downloading data of the current file - it may always be ")
-                wxT("Empty due to lack of support from the current backend.\n")
+                wxT("empty due to lack of support from the current backend.\n")
 
                 wxT("The lower-left slider controls the volume and the lower-")
                 wxT("right slider controls the playback rate/speed of the ")
@@ -861,7 +861,7 @@ void wxMediaPlayerFrame::OnShowInterface(wxCommandEvent& event)
             wxMEDIACTRLPLAYERCONTROLS_DEFAULT :
              wxMEDIACTRLPLAYERCONTROLS_NONE)    )
     {
-        //error - uncheck and warn user
+        // error - uncheck and warn user
         wxMenuItem* pSIItem = GetMenuBar()->FindItem(wxID_SHOWINTERFACE);
         wxASSERT(pSIItem);
         pSIItem->Check(!event.IsChecked());
@@ -1071,7 +1071,7 @@ void wxMediaPlayerFrame::OnSelectBackend(wxCommandEvent& WXUNUSED(evt))
 {
     wxString sBackend = wxGetTextFromUser(wxT("Enter backend to use"));
 
-    if(sBackend.empty() == false)  //could have been cancelled by the user
+    if(sBackend.empty() == false)  // could have been cancelled by the user
     {
         int sel = m_notebook->GetSelection();
 
@@ -1124,7 +1124,7 @@ void wxMediaPlayerFrame::OpenURL(bool bNewPage)
         wxT("Enter the URL that has the movie to play")
                                      );
 
-    if(sUrl.empty() == false) //could have been cancelled by user
+    if(sUrl.empty() == false) // could have been cancelled by user
     {
         DoOpenFile(sUrl, bNewPage);
     }
@@ -1176,7 +1176,7 @@ void wxMediaPlayerFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
                                          wxLIST_NEXT_ALL,
                                          wxLIST_STATE_DONTCARE)) == -1)
         {
-            //no items in list
+            // no items in list
             wxMessageBox(wxT("No items in playlist!"));
     }
         else
@@ -1208,7 +1208,7 @@ void wxMediaPlayerFrame::OnKeyDown(wxKeyEvent& event)
     {
         wxMediaPlayerNotebookPage* currentpage =
             (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
-       //delete all selected items
+       // delete all selected items
        while(true)
        {
            wxInt32 nSelectedItem = currentpage->m_playlist->GetNextItem(
@@ -1225,7 +1225,7 @@ void wxMediaPlayerFrame::OnKeyDown(wxKeyEvent& event)
        }
     }
 
-   //Could be wxGetTextFromUser or something else important
+   // Could be wxGetTextFromUser or something else important
    if(event.GetEventObject() != this)
        event.Skip();
 }
@@ -1299,7 +1299,7 @@ void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
 
     if (nLastSelectedItem == -1)
     {
-        //nothing selected, default to the file before the currently playing one
+        // nothing selected, default to the file before the currently playing one
         if(currentpage->m_nLastFileId == 0)
             nLastSelectedItem = currentpage->m_playlist->GetItemCount() - 1;
     else
@@ -1311,7 +1311,7 @@ void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
         nLastSelectedItem -= 1;
 
     if(nLastSelectedItem == currentpage->m_nLastFileId)
-        return; //already playing... nothing to do
+        return; // already playing... nothing to do
 
     wxListItem listitem;
     listitem.SetId(nLastSelectedItem);
@@ -1363,7 +1363,7 @@ void wxMediaPlayerFrame::OnNext(wxCommandEvent& WXUNUSED(event))
             nLastSelectedItem += 1;
 
     if(nLastSelectedItem == currentpage->m_nLastFileId)
-        return; //already playing... nothing to do
+        return; // already playing... nothing to do
 
     wxListItem listitem;
     listitem.SetMask(wxLIST_MASK_TEXT |  wxLIST_MASK_DATA);
@@ -1547,14 +1547,14 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //  Make sure creation was successful
     bool bOK = m_mediactrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize, 0,
-//you could specify a macrod backend here like
+// you could specify a macro backend here like
 //  wxMEDIABACKEND_WMP10);
 //        wxT("wxPDFMediaBackend"));
                                    szBackend);
-//you could change the cursor here like
+// you could change the cursor here like
 //    m_mediactrl->SetCursor(wxCURSOR_BLANK);
-//note that this may not effect it if SetPlayerControls
-//is set to something else than wxMEDIACTRLPLAYERCONTROLS_NONE
+// note that this may not effect it if SetPlayerControls
+// is set to something else than wxMEDIACTRLPLAYERCONTROLS_NONE
     wxASSERT_MSG(bOK, wxT("Could not create media control!"));
     wxUnusedVar(bOK);
 
@@ -1566,7 +1566,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_playlist = new wxMediaPlayerListCtrl();
     m_playlist->Create(this, wxID_LISTCTRL, wxDefaultPosition,
                     wxDefaultSize,
-                    wxLC_REPORT //wxLC_LIST
+                    wxLC_REPORT // wxLC_LIST
                     | wxSUNKEN_BORDER);
 
     //  Set the background of our listctrl to white
@@ -1613,11 +1613,18 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_vuButton = new wxButton();
 
     m_prevButton->Create(this, wxID_BUTTONPREV, wxT("|<"));
+    m_prevButton->SetToolTip("Previous");
     m_playButton->Create(this, wxID_BUTTONPLAY, wxT(">"));
+    m_playButton->SetToolTip("Play");
     m_stopButton->Create(this, wxID_BUTTONSTOP, wxT("[]"));
+    m_stopButton->SetToolTip("Stop");
     m_nextButton->Create(this, wxID_BUTTONNEXT, wxT(">|"));
+    m_nextButton->SetToolTip("Next");
     m_vdButton->Create(this, wxID_BUTTONVD, wxT("(("));
+    m_vdButton->SetToolTip("Volume down");
     m_vuButton->Create(this, wxID_BUTTONVU, wxT("))"));
+    m_vuButton->SetToolTip("Volume up");
+
     vertsizer->Add(m_prevButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     vertsizer->Add(m_playButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     vertsizer->Add(m_stopButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -1631,9 +1638,9 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     //  Create our slider
     //
-    m_slider = new wxSlider(this, wxID_SLIDER, 0, //init
-                            0, //start
-                            0, //end
+    m_slider = new wxSlider(this, wxID_SLIDER, 0, // init
+                            0, // start
+                            0, // end
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     sizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);

@@ -137,7 +137,7 @@ public:
     // NB: This is a helper to get implicit conversion of variadic ctor's
     //     fixed arguments into something that can be passed to VarArgInit().
     //     Do not use, it's used by the ctor only.
-    struct WXDLLIMPEXP_BASE CtorString
+    struct CtorString
     {
         CtorString(const char *str) : m_str(str) {}
         CtorString(const wchar_t *str) : m_str(str) {}

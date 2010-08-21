@@ -3,7 +3,7 @@
 // Purpose:     interface of wxScopedPtr
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -108,22 +108,22 @@ public:
         This operator gets the pointer stored in the smart pointer or returns
         @NULL if there is none.
     */
-    const T* get();
+    T* get() const;
 
     /**
         This operator works like the standard C++ pointer operator to return the object
         being pointed to by the pointer.
 
-        @note
-        If the pointer is @NULL or invalid this will crash.
+        If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
-    const T& operator *();
+    T& operator *() const;
 
     /**
-        This operator works like the standard C++ pointer operator to return the pointer
-        in the smart pointer or @NULL if it is empty.
+        Smart pointer member access. Returns pointer to its object.
+
+        If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
-    const T* operator ->();
+    T* operator ->() const;
 
     /**
         Returns the currently hold pointer and resets the smart pointer object to
@@ -234,15 +234,14 @@ public:
     /**
         Returns a reference to the object.
 
-        @note
-        If the internal pointer is @NULL this method will cause an assert
-        in debug mode.
+        If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
-    T operator*() const;
+    T& operator*() const;
 
     /**
-        Returns pointer to object. If the pointer is @NULL this method will
-        cause an assert in debug mode.
+        Smart pointer member access. Returns pointer to object. 
+        
+        If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
     T* operator->() const;
 

@@ -593,7 +593,7 @@ listctrl:
 	call listctrl.bat
 	@del listctrl.bat
 
-maskededit: 
+maskededit:
 	@echo cd maskededit >maskededit.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>maskededit.bat
 	call maskededit.bat

@@ -256,7 +256,7 @@ SOURCE=.\cube.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cube.rc
+SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"
