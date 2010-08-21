@@ -980,7 +980,11 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
             {
                 // if we don't want to wait, just return immediately
                 if ( m_flags & wxSOCKET_NOWAIT )
+                {
+                    // this shouldn't be counted as an error in this case
+                    SetError(wxSOCKET_NOERROR);
                     break;
+                }
 
                 // otherwise wait until the socket becomes ready for reading or
                 // an error occurs on it
