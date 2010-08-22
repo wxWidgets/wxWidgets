@@ -180,7 +180,9 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case WXK_NUMPAD_DECIMAL:   keycode = kVK_ANSI_KeypadDecimal; break;
         case WXK_NUMPAD_DIVIDE:    keycode = kVK_ANSI_KeypadDivide; break;
 
-        default: wxLogDebug( "Unrecognised keycode %d", code );
+        default:
+            wxLogDebug( "Unrecognised keycode %d", code );
+            keycode = -1;
     }
 
     return keycode;
