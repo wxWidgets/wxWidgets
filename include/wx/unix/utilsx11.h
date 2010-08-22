@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/unix/utilsx11.h
 // Purpose:     Miscellaneous X11 functions
-// Author:      Mattia Barbon, Vaclav Slavik
+// Author:      Mattia Barbon, Vaclav Slavik, Vadim Zeitlin
 // Modified by:
 // Created:     25.03.02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
+//              (c) 2010 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +15,8 @@
 
 #include "wx/defs.h"
 #include "wx/gdicmn.h"
+
+#include <X11/Xlib.h>
 
 // NB: Content of this header is for wxWidgets' private use! It is not
 //     part of public API and may be modified or even disappear in the future!
@@ -46,8 +49,27 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
                              WXWindow window, bool show, wxRect *origSize,
                              wxX11FullScreenMethod method);
 
-#endif
-    // __WXMOTIF__, __WXGTK__, __WXX11__
 
-#endif
-    // _WX_UNIX_UTILSX11_H_
+// Class wrapping X11 Display: it opens it in ctor and closes it in dtor.
+class wxX11Display
+{
+public:
+    wxX11Display() { m_dpy = XOpenDisplay(NULL); }
+    ~wxX11Display() { if ( m_dpy ) XCloseDisplay(m_dpy); }
+
+    operator Display *() const { return m_dpy; }
+
+    // Using DefaultRootWindow() with an object of wxX11Display class doesn't
+    // compile because it is a macro which tries to cast wxX11Display so
+    // provide a convenient helper.
+    Window DefaultRoot() const { return DefaultRootWindow(m_dpy); }
+
+private:
+    Display *m_dpy;
+
+    wxDECLARE_NO_COPY_CLASS(wxX11Display);
+};
+
+#endif // __WXMOTIF__, __WXGTK__, __WXX11__
+
+#endif // _WX_UNIX_UTILSX11_H_
