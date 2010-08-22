@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -114,7 +114,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -184,7 +184,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivud\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -249,7 +249,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivu\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -319,7 +319,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -384,7 +384,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -454,7 +454,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivuddll\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -519,7 +519,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivudll\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -566,10 +566,37 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\asserthelper.cpp">
+			</File>
+			<File
 				RelativePath=".\graphics\bitmap.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\bitmapcomboboxtest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\bitmaptogglebuttontest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\bookctrlbasetest.cpp">
+			</File>
+			<File
 				RelativePath=".\sizers\boxsizer.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\buttontest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\checkboxtest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\checklistboxtest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\choicebooktest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\choicetest.cpp">
 			</File>
 			<File
 				RelativePath=".\window\clientsize.cpp">
@@ -644,7 +671,16 @@
 				RelativePath=".\font\fonttest.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\frametest.cpp">
+			</File>
+			<File
 				RelativePath=".\misc\garbage.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\gaugetest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\gridtest.cpp">
 			</File>
 			<File
 				RelativePath=".\misc\guifuncs.cpp">
@@ -656,16 +692,43 @@
 				RelativePath=".\html\htmlwindow.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\hyperlinkctrltest.cpp">
+			</File>
+			<File
 				RelativePath=".\image\image.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\itemcontainertest.cpp">
 			</File>
 			<File
 				RelativePath=".\controls\label.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\listbasetest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\listbooktest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\listboxtest.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\listctrltest.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\listviewtest.cpp">
+			</File>
+			<File
 				RelativePath=".\graphics\measuring.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\notebooktest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\pickerbasetest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\pickertest.cpp">
 			</File>
 			<File
 				RelativePath=".\geometry\point.cpp">
@@ -674,10 +737,22 @@
 				RelativePath=".\events\propagation.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\radioboxtest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\radiobuttontest.cpp">
+			</File>
+			<File
 				RelativePath=".\image\rawbmp.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\rearrangelisttest.cpp">
+			</File>
+			<File
 				RelativePath=".\geometry\rect.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\richtextctrltest.cpp">
 			</File>
 			<File
 				RelativePath=".\misc\selstoretest.cpp">
@@ -692,10 +767,22 @@
 				RelativePath=".\geometry\size.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\slidertest.cpp">
+			</File>
+			<File
 				RelativePath=".\net\socket.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\spinctrldbltest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\spinctrltest.cpp">
+			</File>
+			<File
 				RelativePath=".\test.cpp">
+			</File>
+			<File
+				RelativePath=".\testableframe.cpp">
 			</File>
 			<File
 				RelativePath=".\controls\textctrltest.cpp">
@@ -704,7 +791,19 @@
 				RelativePath=".\controls\textentrytest.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\togglebuttontest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\toolbooktest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\treebooktest.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\treectrltest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\windowtest.cpp">
 			</File>
 		</Filter>
 		<Filter

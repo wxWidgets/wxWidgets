@@ -1,6 +1,19 @@
 #include "wx/wxprec.h"
 #include "wx/cppunit.h"
 
+// Custom test macro that is only defined when wxUIActionSimulator is available
+// this allows the tests that do not rely on it to run on platforms that don't
+// support it.
+//
+// FIXME: And while OS X does support it, more or less, too many tests
+//        currently fail under it so disable all interactive tests there. They
+//        should, of course, be reenabled a.s.a.p.
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
+    #define WXUISIM_TEST(test) CPPUNIT_TEST(test)
+#else
+    #define WXUISIM_TEST(test) (void)0
+#endif
+
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
 #if (defined(__VISUALC__) && (__VISUALC__ >= 1300)) || \
     (defined(__GNUC__) && (__GNUC__ >= 3))

@@ -13,41 +13,41 @@
 
     @beginEventTable{wxRichTextEvent}
     @event{EVT_RICHTEXT_CHARACTER(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user
+        Process a @c wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user
         presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter.
     @event{EVT_RICHTEXT_DELETE(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user
+        Process a @c wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user
         presses the backspace or delete key. Valid event functions: GetFlags, GetPosition.
     @event{EVT_RICHTEXT_RETURN(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user
+        Process a @c wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user
         presses the return key. Valid event functions: GetFlags, GetPosition.
     @event{EVT_RICHTEXT_STYLE_CHANGED(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when
+        Process a @c wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when
         styling has been applied to the control. Valid event functions: GetPosition, GetRange.
     @event{EVT_RICHTEXT_STYLESHEET_CHANGED(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated
+        Process a @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated
         when the control's stylesheet has changed, for example the user added,
         edited or deleted a style. Valid event functions: GetRange, GetPosition.
     @event{EVT_RICHTEXT_STYLESHEET_REPLACING(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated
+        Process a @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated
         when the control's stylesheet is about to be replaced, for example when
         a file is loaded into the control.
         Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet.
     @event{EVT_RICHTEXT_STYLESHEET_REPLACED(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated
+        Process a @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated
         when the control's stylesheet has been replaced, for example when a file
         is loaded into the control.
         Valid event functions: GetOldStyleSheet, GetNewStyleSheet.
     @event{EVT_RICHTEXT_CONTENT_INSERTED(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when
+        Process a @c wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when
         content has been inserted into the control.
         Valid event functions: GetPosition, GetRange.
     @event{EVT_RICHTEXT_CONTENT_DELETED(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when
+        Process a @c wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when
         content has been deleted from the control.
         Valid event functions: GetPosition, GetRange.
     @event{EVT_RICHTEXT_BUFFER_RESET(id, func)}
-        Process a wxEVT_COMMAND_RICHTEXT_BUFFER_RESET event, generated when the
+        Process a @c wxEVT_COMMAND_RICHTEXT_BUFFER_RESET event, generated when the
         buffer has been reset by deleting all content.
         You can use this to set a default style for the first new paragraph.
     @endEventTable
@@ -74,30 +74,30 @@ public:
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     /**
-        Returns the character pressed, within a wxEVT_COMMAND_RICHTEXT_CHARACTER event.
+        Returns the character pressed, within a @c wxEVT_COMMAND_RICHTEXT_CHARACTER event.
     */
     wxChar GetCharacter() const;
 
     /**
         Returns flags indicating modifier keys pressed.
 
-        Possible values are wxRICHTEXT_CTRL_DOWN, wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
+        Possible values are @c wxRICHTEXT_CTRL_DOWN, @c wxRICHTEXT_SHIFT_DOWN, and @c wxRICHTEXT_ALT_DOWN.
     */
     int GetFlags() const;
 
     /**
         Returns the new style sheet.
 
-        Can be used in a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
-        wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
+        Can be used in a @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
+        @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
     wxRichTextStyleSheet* GetNewStyleSheet() const;
 
     /**
         Returns the old style sheet.
 
-        Can be used in a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
-        wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
+        Can be used in a @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
+        @c wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
     wxRichTextStyleSheet* GetOldStyleSheet() const;
 
@@ -119,7 +119,7 @@ public:
     /**
         Sets flags indicating modifier keys pressed.
 
-        Possible values are wxRICHTEXT_CTRL_DOWN, wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
+        Possible values are @c wxRICHTEXT_CTRL_DOWN, @c wxRICHTEXT_SHIFT_DOWN, and @c wxRICHTEXT_ALT_DOWN.
     */
     void SetFlags(int flags);
 

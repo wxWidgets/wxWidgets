@@ -130,12 +130,13 @@ typedef class wxString wxArtID;
         wxBitmap bmp = wxArtProvider::GetBitmap("gtk-cdrom", wxART_MENU);
     #endif
     @endcode
-    For a list of the GTK+ stock items please refer to the GTK+ documentation page
-    http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html.
+    For a list of the GTK+ stock items please refer to the
+    <a href="http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html">GTK+ documentation
+    page</a>.
     It is also possible to load icons from the current icon theme by specifying their name 
     (without extension and directory components).
-    Icon themes recognized by GTK+ follow the freedesktop.org Icon Themes specification
-    (see http://freedesktop.org/Standards/icon-theme-spec).
+    Icon themes recognized by GTK+ follow the freedesktop.org
+    <a href="http://freedesktop.org/Standards/icon-theme-spec">Icon Themes specification</a>.
     Note that themes are not guaranteed to contain all icons, so wxArtProvider may
     return ::wxNullBitmap or ::wxNullIcon.
     The default theme is typically installed in @c /usr/share/icons/hicolor.

@@ -236,7 +236,7 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_XRC_1[wx.bkl] ###
         COND_MONOLITHIC_0_SHARED_0_USE_XRC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_XRC_1)
-dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1[wx.bkl] ###
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1[../../tests/test.bkl,wx.bkl] ###
     COND_MONOLITHIC_0_SHARED_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1=""

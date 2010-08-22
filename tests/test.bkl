@@ -125,7 +125,9 @@
         <app-type>console</app-type>
 
         <sources>
+            asserthelper.cpp
             test.cpp
+            testableframe.cpp
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp
@@ -134,13 +136,44 @@
             graphics/ellipsization.cpp
             graphics/measuring.cpp
             config/config.cpp
+            controls/bitmapcomboboxtest.cpp
+            controls/bitmaptogglebuttontest.cpp
+            controls/bookctrlbasetest.cpp
+            controls/buttontest.cpp
+            controls/checkboxtest.cpp
+            controls/checklistboxtest.cpp
+            controls/choicebooktest.cpp
+            controls/choicetest.cpp
             controls/comboboxtest.cpp
+            controls/frametest.cpp
+            controls/gaugetest.cpp
+            controls/gridtest.cpp
             controls/headerctrltest.cpp
+            controls/hyperlinkctrltest.cpp
+            controls/itemcontainertest.cpp
             controls/label.cpp
+            controls/listbasetest.cpp
+            controls/listbooktest.cpp
+            controls/listboxtest.cpp
             controls/listctrltest.cpp
+            controls/listviewtest.cpp
+            controls/notebooktest.cpp
+            controls/pickerbasetest.cpp
+            controls/pickertest.cpp
+            controls/radioboxtest.cpp
+            controls/radiobuttontest.cpp
+            controls/rearrangelisttest.cpp
+            controls/richtextctrltest.cpp
+            controls/slidertest.cpp
+            controls/spinctrldbltest.cpp
+            controls/spinctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
+            controls/togglebuttontest.cpp
+            controls/toolbooktest.cpp
+            controls/treebooktest.cpp
             controls/treectrltest.cpp
+            controls/windowtest.cpp
             events/clone.cpp
             events/propagation.cpp
             font/fonttest.cpp
@@ -161,6 +194,7 @@
             window/clientsize.cpp
             window/setsize.cpp
         </sources>
+        <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>

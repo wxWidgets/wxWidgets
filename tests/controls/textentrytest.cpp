@@ -10,12 +10,15 @@
 #include "testprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/event.h"
     #include "wx/textentry.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
 #include "textentrytest.h"
+#include "testableframe.h"
+#include "wx/uiaction.h"
 
 void TextEntryTestCase::SetValue()
 {
@@ -36,69 +39,42 @@ void TextEntryTestCase::SetValue()
     CPPUNIT_ASSERT_EQUAL( "bye", entry->GetValue() );
 }
 
-namespace
-{
-    class TextTestEventHandler : public wxEvtHandler
-    {
-    public:
-        TextTestEventHandler() { m_events = 0; }
-
-        // calling this automatically resets the events counter
-        int GetEvents()
-        {
-            const int events = m_events;
-            m_events = 0;
-            return events;
-        }
-
-        void OnText(wxCommandEvent& WXUNUSED(event)) { m_events++; }
-
-    private:
-        int m_events;
-    };
-}
-
 void TextEntryTestCase::TextChangeEvents()
 {
-    TextTestEventHandler handler;
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
 
-    GetTestWindow()->Connect
-                     (
-                        wxEVT_COMMAND_TEXT_UPDATED,
-                        wxCommandEventHandler(TextTestEventHandler::OnText),
-                        NULL,
-                        &handler
-                     );
+    EventCounter count(GetTestWindow(), wxEVT_COMMAND_TEXT_UPDATED);
 
     wxTextEntry * const entry = GetTestEntry();
 
     // notice that SetValue() generates an event even if the text didn't change
     entry->SetValue("");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->SetValue("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->SetValue("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->ChangeValue("bar");
-    CPPUNIT_ASSERT_EQUAL( 0, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
 
     entry->AppendText("bar");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->Replace(3, 6, "baz");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->Remove(0, 3);
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->WriteText("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 
     entry->Clear();
-    CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
+    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
 }
 
 void TextEntryTestCase::CheckStringSelection(const char *sel)
@@ -194,3 +170,79 @@ void TextEntryTestCase::Replace()
     CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
 }
 
+void TextEntryTestCase::Editable()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    wxTextEntry * const entry = GetTestEntry();
+    wxWindow * const window = GetTestWindow();
+
+    EventCounter count(window, wxEVT_COMMAND_TEXT_UPDATED);
+
+    window->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+
+    entry->SetEditable(false);
+    sim.Text("gh");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+#endif
+}
+
+void TextEntryTestCase::Hint()
+{
+    GetTestEntry()->SetHint("This is a hint");
+    CPPUNIT_ASSERT_EQUAL("", GetTestEntry()->GetValue());
+}
+
+void TextEntryTestCase::CopyPaste()
+{
+#ifndef __WXOSX__
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->AppendText("sometext");
+    entry->SelectAll();
+
+    if(entry->CanCopy() && entry->CanPaste())
+    {
+        entry->Copy();
+        entry->Clear();
+        CPPUNIT_ASSERT(entry->IsEmpty());
+
+        wxYield();
+
+        entry->Paste();
+        CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+    }
+#endif
+}
+
+void TextEntryTestCase::UndoRedo()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->AppendText("sometext");
+
+    if(entry->CanUndo())
+    {
+        entry->Undo();
+        CPPUNIT_ASSERT(entry->IsEmpty());
+
+        if(entry->CanRedo())
+        {
+            entry->Redo();
+            CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+        }
+    }
+}

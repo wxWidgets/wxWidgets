@@ -22,10 +22,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-inline std::ostream& operator<<(std::ostream& o, const wxSize& s)
-{
-    return o << s.x << 'x' << s.y;
-}
+#include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
 // test class

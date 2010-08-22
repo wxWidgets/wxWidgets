@@ -16,13 +16,13 @@
     downloaded via HTTP protocol) in a window.
     The width of the window is constant - given in the constructor - and virtual height
     is changed dynamically depending on page size.
-    Once the window is created you can set its content by calling SetPage(text),
-    LoadPage(filename) or wxHtmlWindow::LoadFile.
+    Once the window is created you can set its content by calling SetPage() with raw HTML,
+    LoadPage() with a wxFileSystem location or LoadFile() with a filename.
 
     @note
-    wxHtmlWindow uses the wxImage class for displaying images.
-    Don't forget to initialize all image formats you need before loading any page!
-    (See ::wxInitAllImageHandlers and wxImage::AddHandler.)
+    wxHtmlWindow uses the wxImage class for displaying images, as such you need to
+    initialize the handlers for any image formats you use before loading a page.
+    See ::wxInitAllImageHandlers and wxImage::AddHandler.
 
     @beginStyleTable
     @style{wxHW_SCROLLBAR_NEVER}
@@ -108,7 +108,7 @@ public:
     wxString GetOpenedPage() const;
 
     /**
-        Returns title of the opened page or wxEmptyString if current page does not
+        Returns title of the opened page or wxEmptyString if the current page does not
         contain \<TITLE\> tag.
     */
     wxString GetOpenedPageTitle() const;
@@ -119,20 +119,20 @@ public:
     wxFrame* GetRelatedFrame() const;
 
     /**
-        Moves back to the previous page.
-        (each page displayed using LoadPage() is stored in history list.)
+        Moves back to the previous page. Only pages displayed using LoadPage()
+        are stored in history list.
     */
     bool HistoryBack();
 
     /**
         Returns @true if it is possible to go back in the history
-        (i.e. HistoryBack() won't fail).
+        i.e. HistoryBack() won't fail.
     */
     bool HistoryCanBack();
 
     /**
         Returns @true if it is possible to go forward in the history
-        (i.e. HistoryBack() won't fail).
+        i.e. HistoryForward() won't fail.
     */
     bool HistoryCanForward();
 
@@ -142,12 +142,13 @@ public:
     void HistoryClear();
 
     /**
-        Moves to next page in history.
+        Moves to next page in history. Only pages displayed using LoadPage()
+        are stored in history list.
     */
     bool HistoryForward();
 
     /**
-        Loads HTML page from file and displays it.
+        Loads an HTML page from a file and displays it.
 
         @return @false if an error occurred, @true otherwise
 
@@ -156,12 +157,13 @@ public:
     bool LoadFile(const wxFileName& filename);
 
     /**
-        Unlike SetPage() this function first loads HTML page from @a location
-        and then displays it. See example:
+        Unlike SetPage() this function first loads the HTML page from @a location
+        and then displays it.
 
         @param location
-            The address of document.
-            See wxFileSystem for details on address format and behaviour of "opener".
+            The address of the document.
+            See the @ref overview_fs for details on the address format
+            and wxFileSystem for a description of how the file is opened.
 
         @return @false if an error occurred, @true otherwise
 
@@ -258,8 +260,8 @@ public:
     void SelectWord(const wxPoint& pos);
 
     /**
-        Returns current selection as plain text.
-        Returns empty string if no text is currently selected.
+        Returns the current selection as plain text.
+        Returns an empty string if no text is currently selected.
     */
     wxString SelectionToText();
 
@@ -292,8 +294,7 @@ public:
                           const wxString& fixed_face = wxEmptyString);
 
     /**
-        Sets HTML page and display it. This won't @b load the page!!
-        It will display the @e source. See example:
+        Sets the source of a page and displays it, for example:
         @code
         htmlwin -> SetPage("<html><body>Hello, world!</body></html>");
         @endcode
@@ -301,7 +302,7 @@ public:
         If you want to load a document from some location use LoadPage() instead.
 
         @param source
-            The HTML document source to be displayed.
+            The HTML to be displayed.
 
         @return @false if an error occurred, @true otherwise.
     */

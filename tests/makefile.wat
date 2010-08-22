@@ -72,6 +72,11 @@ __test_gui___depname =
 !ifeq USE_GUI 1
 __test_gui___depname = $(OBJS)\test_gui.exe
 !endif
+__WXLIB_RICHTEXT_p =
+!ifeq MONOLITHIC 0
+__WXLIB_RICHTEXT_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
+!endif
 __WXLIB_MEDIA_p =
 !ifeq MONOLITHIC 0
 !ifeq USE_MEDIA 1
@@ -359,7 +364,9 @@ TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_dummy.obj &
+	$(OBJS)\test_gui_asserthelper.obj &
 	$(OBJS)\test_gui_test.obj &
+	$(OBJS)\test_gui_testableframe.obj &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj &
@@ -368,13 +375,44 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_ellipsization.obj &
 	$(OBJS)\test_gui_measuring.obj &
 	$(OBJS)\test_gui_config.obj &
+	$(OBJS)\test_gui_bitmapcomboboxtest.obj &
+	$(OBJS)\test_gui_bitmaptogglebuttontest.obj &
+	$(OBJS)\test_gui_bookctrlbasetest.obj &
+	$(OBJS)\test_gui_buttontest.obj &
+	$(OBJS)\test_gui_checkboxtest.obj &
+	$(OBJS)\test_gui_checklistboxtest.obj &
+	$(OBJS)\test_gui_choicebooktest.obj &
+	$(OBJS)\test_gui_choicetest.obj &
 	$(OBJS)\test_gui_comboboxtest.obj &
+	$(OBJS)\test_gui_frametest.obj &
+	$(OBJS)\test_gui_gaugetest.obj &
+	$(OBJS)\test_gui_gridtest.obj &
 	$(OBJS)\test_gui_headerctrltest.obj &
+	$(OBJS)\test_gui_hyperlinkctrltest.obj &
+	$(OBJS)\test_gui_itemcontainertest.obj &
 	$(OBJS)\test_gui_label.obj &
+	$(OBJS)\test_gui_listbasetest.obj &
+	$(OBJS)\test_gui_listbooktest.obj &
+	$(OBJS)\test_gui_listboxtest.obj &
 	$(OBJS)\test_gui_listctrltest.obj &
+	$(OBJS)\test_gui_listviewtest.obj &
+	$(OBJS)\test_gui_notebooktest.obj &
+	$(OBJS)\test_gui_pickerbasetest.obj &
+	$(OBJS)\test_gui_pickertest.obj &
+	$(OBJS)\test_gui_radioboxtest.obj &
+	$(OBJS)\test_gui_radiobuttontest.obj &
+	$(OBJS)\test_gui_rearrangelisttest.obj &
+	$(OBJS)\test_gui_richtextctrltest.obj &
+	$(OBJS)\test_gui_slidertest.obj &
+	$(OBJS)\test_gui_spinctrldbltest.obj &
+	$(OBJS)\test_gui_spinctrltest.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
 	$(OBJS)\test_gui_textentrytest.obj &
+	$(OBJS)\test_gui_togglebuttontest.obj &
+	$(OBJS)\test_gui_toolbooktest.obj &
+	$(OBJS)\test_gui_treebooktest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
+	$(OBJS)\test_gui_windowtest.obj &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
 	$(OBJS)\test_gui_fonttest.obj &
@@ -428,7 +466,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option caseexact
 	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
-	@for %i in ( $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test_gui.lbc library %i
+	@for %i in ( $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
 	@for %i in () do @%append $(OBJS)\test_gui.lbc option stack=%i
 	wlink @$(OBJS)\test_gui.lbc
@@ -697,7 +735,13 @@ $(OBJS)\test_gui_sample.res :  .AUTODEPEND .\..\samples\sample.rc
 $(OBJS)\test_gui_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_asserthelper.obj :  .AUTODEPEND .\asserthelper.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_test.obj :  .AUTODEPEND .\test.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_testableframe.obj :  .AUTODEPEND .\testableframe.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rect.obj :  .AUTODEPEND .\geometry\rect.cpp
@@ -724,16 +768,97 @@ $(OBJS)\test_gui_measuring.obj :  .AUTODEPEND .\graphics\measuring.cpp
 $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_bitmapcomboboxtest.obj :  .AUTODEPEND .\controls\bitmapcomboboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_bitmaptogglebuttontest.obj :  .AUTODEPEND .\controls\bitmaptogglebuttontest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_bookctrlbasetest.obj :  .AUTODEPEND .\controls\bookctrlbasetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_buttontest.obj :  .AUTODEPEND .\controls\buttontest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_checkboxtest.obj :  .AUTODEPEND .\controls\checkboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_checklistboxtest.obj :  .AUTODEPEND .\controls\checklistboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_choicebooktest.obj :  .AUTODEPEND .\controls\choicebooktest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_choicetest.obj :  .AUTODEPEND .\controls\choicetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_comboboxtest.obj :  .AUTODEPEND .\controls\comboboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_frametest.obj :  .AUTODEPEND .\controls\frametest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_gaugetest.obj :  .AUTODEPEND .\controls\gaugetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_gridtest.obj :  .AUTODEPEND .\controls\gridtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_headerctrltest.obj :  .AUTODEPEND .\controls\headerctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_hyperlinkctrltest.obj :  .AUTODEPEND .\controls\hyperlinkctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_itemcontainertest.obj :  .AUTODEPEND .\controls\itemcontainertest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_label.obj :  .AUTODEPEND .\controls\label.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_listbasetest.obj :  .AUTODEPEND .\controls\listbasetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_listbooktest.obj :  .AUTODEPEND .\controls\listbooktest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_listboxtest.obj :  .AUTODEPEND .\controls\listboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_listctrltest.obj :  .AUTODEPEND .\controls\listctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_listviewtest.obj :  .AUTODEPEND .\controls\listviewtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_notebooktest.obj :  .AUTODEPEND .\controls\notebooktest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_pickerbasetest.obj :  .AUTODEPEND .\controls\pickerbasetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_pickertest.obj :  .AUTODEPEND .\controls\pickertest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_radioboxtest.obj :  .AUTODEPEND .\controls\radioboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_radiobuttontest.obj :  .AUTODEPEND .\controls\radiobuttontest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_rearrangelisttest.obj :  .AUTODEPEND .\controls\rearrangelisttest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_richtextctrltest.obj :  .AUTODEPEND .\controls\richtextctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_slidertest.obj :  .AUTODEPEND .\controls\slidertest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_spinctrldbltest.obj :  .AUTODEPEND .\controls\spinctrldbltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_spinctrltest.obj :  .AUTODEPEND .\controls\spinctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
@@ -742,7 +867,19 @@ $(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
 $(OBJS)\test_gui_textentrytest.obj :  .AUTODEPEND .\controls\textentrytest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_togglebuttontest.obj :  .AUTODEPEND .\controls\togglebuttontest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_toolbooktest.obj :  .AUTODEPEND .\controls\toolbooktest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_treebooktest.obj :  .AUTODEPEND .\controls\treebooktest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_windowtest.obj :  .AUTODEPEND .\controls\windowtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_clone.obj :  .AUTODEPEND .\events\clone.cpp

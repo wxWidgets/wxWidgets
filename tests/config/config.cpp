@@ -18,6 +18,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_CONFIG
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -208,4 +210,4 @@ void ConfigTestCase::RecordingDefaultsTest()
     delete config;
 }
 
-
+#endif //wxUSE_CONFIG
