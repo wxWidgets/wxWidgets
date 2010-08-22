@@ -214,9 +214,15 @@ public:
     /**
         Deletes all items in the list control.
 
-        @note This function does @e not send the @c wxEVT_COMMAND_LIST_DELETE_ITEM
-              event because deleting many items from the control would be too slow
-              then (unlike wxListCtrl::DeleteItem).
+        This function does @e not send the @c wxEVT_COMMAND_LIST_DELETE_ITEM
+        event because deleting many items from the control would be too slow
+        then (unlike wxListCtrl::DeleteItem) but it does send the special @c
+        wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS event if the control was not empty.
+        If it was already empty, nothing is done and no event is sent.
+
+        @return @true if the items were successfully deleted or if the control
+            was already empty, @false if an error occurred while deleting the
+            items.
     */
     bool DeleteAllItems();
 
