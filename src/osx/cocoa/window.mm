@@ -1039,6 +1039,15 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     // is resigning
     NSView* otherView = FindFocus();
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
+
+    // It doesn't make sense to notify about the loss of focus if we're not
+    // really losing it and the window which has just gained focus is the same
+    // one as this window itself. Of course, this should never happen in the
+    // first place but somehow it does in wxGrid code and without this check we
+    // enter into an infinite recursion, see #12267.
+    if ( otherWindow == this )
+        return r;
+
     // NSTextViews have an editor as true responder, therefore the might get the
     // resign notification if their editor takes over, don't trigger any event then
     if ( r && !m_hasEditor)
