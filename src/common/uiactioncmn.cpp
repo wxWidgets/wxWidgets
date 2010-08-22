@@ -1,11 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/uiactioncmn.cpp
 // Purpose:     wxUIActionSimulator common implementation
-// Author:      Kevin Ollivier
+// Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
 // RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
 // Copyright:   (c) Kevin Ollivier
+//              (c) 2010 Steven Lamerton
+//              (c) 2010 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,15 +16,6 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
-
-wxUIActionSimulator::wxUIActionSimulator()
-{
-}
-
-wxUIActionSimulator::~wxUIActionSimulator()
-{
-}
-
 
 bool wxUIActionSimulator::MouseClick(int button)
 {
@@ -42,7 +35,9 @@ bool wxUIActionSimulator::MouseDblClick(int button)
     return true;
 }
 
-bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2, int button)
+bool
+wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
+                                   int button)
 {
     MouseMove(x1, y1);
     MouseDown(button);
@@ -52,10 +47,40 @@ bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2, int 
     return true;
 }
 
-bool  wxUIActionSimulator::Char(int keycode, bool shiftDown, bool cmdDown, bool altDown)
+bool
+wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
 {
-    Key(keycode, false, shiftDown, cmdDown, altDown);
-    Key(keycode, true, shiftDown, cmdDown, altDown);
+    wxASSERT_MSG( !(modifiers & wxMOD_CONTROL),
+        "wxMOD_CONTROL is not implemented, use wxMOD_CMD instead" );
+    wxASSERT_MSG( (modifiers & wxMOD_ALTGR) != wxMOD_ALTGR,
+        "wxMOD_ALTGR is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_META ),
+        "wxMOD_META is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_WIN ),
+        "wxMOD_WIN is not implemented" );
+
+    return DoKey(keycode, modifiers, isDown);
+}
+
+bool  wxUIActionSimulator::Char(int keycode, int modifiers)
+{
+    Key(keycode, modifiers, true);
+    Key(keycode, modifiers, false);
+
+    return true;
+}
+
+bool wxUIActionSimulator::Text(const char *s)
+{
+    while ( *s != '\0' )
+    {
+        const char ch = *s++;
+
+        wxASSERT_MSG( ch, "Only letters are allowed" );
+
+        if ( !Char(ch, isupper(ch) ? wxMOD_SHIFT : 0) )
+            return false;
+    }
 
     return true;
 }

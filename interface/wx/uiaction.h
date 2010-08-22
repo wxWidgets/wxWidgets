@@ -12,31 +12,24 @@
     wxUIActionSimulator is a class used to simulate user interface actions
     such as a mouse click or a key press.
 
-    @note that this class is currently experimental and disabled by default,
-    you must set @c wxUSE_UIACTIONSIMULATOR to 1 in your setup.h file or use
-    configure @c --enable-uiactionsim option to enable it.
+    Common usage for this class would be to provide playback and record (aka
+    macro recording) functionality for users, or to drive unit tests by
+    simulating user sessions.
 
-    Common usages for this class would be to provide playback and record (aka macro recording)
-    functionality for users, or to drive unit tests by simulating user sessions.
+    See the @ref page_samples_uiaction for an example of using this class.
 
-    See the uiaction sample for example usage of this class.
-
-    NOTE: For keyboard operations, currently you must pass the keycode of the actual
-    key on the keyboard. To simulate, e.g. IME actions, you'd need to simulate the actual
-    keypresses needed to active the IME, then the keypresses needed to type and select
-    the desired character.
+    @since 2.9.2
 
     @library{wxcore}
 */
 
 class wxUIActionSimulator
 {
-  public:
+public:
     /**
-        Constructor.
+        Default constructor.
     */
     wxUIActionSimulator();
-    ~wxUIActionSimulator();
 
     /**
         Move the mouse to the specified coordinates.
@@ -47,37 +40,49 @@ class wxUIActionSimulator
         @param y
             y coordinate to move to, in screen coordinates.
     */
-    bool        MouseMove(long x, long y);
+    bool MouseMove(long x, long y);
+
+    /**
+        Move the mouse to the specified coordinates.
+
+        @param point
+            Point to move to, in screen coordinates.
+    */
+    bool MouseMove(const wxPoint& point);
 
     /**
         Press a mouse button.
 
         @param button
-            Button to press. Valid constants are wxMOUSE_BTN_LEFT, wxMOUSE_BTN_MIDDLE, and wxMOUSE_BTN_RIGHT.
+            Button to press. Valid constants are @c wxMOUSE_BTN_LEFT,
+            @c wxMOUSE_BTN_MIDDLE, and @c wxMOUSE_BTN_RIGHT.
     */
-    bool        MouseDown(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDown(int button = wxMOUSE_BTN_LEFT);
 
     /**
         Release a mouse button.
 
         @param button
-            Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
+            Button to press. See wxUIActionSimulator::MouseDown for a list of
+            valid constants.
     */
-    bool        MouseUp(int button = wxMOUSE_BTN_LEFT);
+    bool MouseUp(int button = wxMOUSE_BTN_LEFT);
     /**
         Click a mouse button.
 
         @param button
-            Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
+            Button to press. See wxUIActionSimulator::MouseDown for a list of
+            valid constants.
     */
-    bool        MouseClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseClick(int button = wxMOUSE_BTN_LEFT);
     /**
         Double-click a mouse button.
 
         @param button
-            Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
+            Button to press. See wxUIActionSimulator::MouseDown for a list of
+            valid constants.
     */
-    bool        MouseDblClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDblClick(int button = wxMOUSE_BTN_LEFT);
 
     /**
         Perform a drag and drop operation.
@@ -95,59 +100,60 @@ class wxUIActionSimulator
             y destination coordinate, in screen coordinates.
 
         @param button
-            Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
+            Button to press. See wxUIActionSimulator::MouseDown for a list of
+            valid constants.
     */
-    bool        MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
+    bool MouseDragDrop(long x1, long y1, long x2, long y2,
+                       int button = wxMOUSE_BTN_LEFT);
 
     /**
         Press a key.
 
+        If you are using modifiers then it needs to be paired with an identical
+        KeyUp or the modifiers will not be released (MSW and OSX).
+
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given
+            keycode.
     */
-    bool        KeyDown(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool KeyDown(int keycode, int modifiers = wxMOD_NONE);
 
     /**
         Release a key.
 
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given
+            keycode.
     */
-    bool        KeyUp(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool KeyUp(int keycode, int modifiers = wxMOD_NONE);
 
     /**
         Press and release a key.
 
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer. It is interpreted as a wxKeyCode.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given
+            keycode.
     */
-    bool        Char(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool Char(int keycode, int modifiers = wxMOD_NONE);
+
+    /**
+        Emulate typing in the keys representing the given string.
+
+        Currently only the ASCII letters (i.e. characters @c a-z and @c A-Z)
+        are supported.
+
+        @param text
+            The string to type.
+    */
+    bool Text(const wxString& text);
 };
 

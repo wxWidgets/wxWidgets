@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Kevin Ollivier
+// Copyright:   (c) Kevin Ollivier, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,10 +16,10 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
- 
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
- 
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -52,8 +52,7 @@
 enum
 {
     // menu items
-    TheButton = 100,
-    RunSimulation
+    RunSimulation = 1
 };
 
 // ----------------------------------------------------------------------------
@@ -76,22 +75,21 @@ public:
     // ctor(s)
     MyFrame(const wxString& title);
 
-    void OnButtonPressed(wxCommandEvent&);
-    void OnRunSimulation(wxCommandEvent&);
-    
-    bool ButtonPressed() const { return m_buttonPressed; }
-    bool MenuSelected() const { return m_menuSelected; }
-    
+    void OnButtonPressed(wxCommandEvent& event);
+    void OnRunSimulation(wxCommandEvent& event);
+    void OnExit(wxCommandEvent& WXUNUSED(event)) { Close(); }
+
 private:
-    bool m_buttonPressed;
-    bool m_menuSelected;
+    wxButton* m_button;
+    wxTextCtrl* m_text;
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_BUTTON(TheButton, MyFrame::OnButtonPressed)
+    EVT_BUTTON(wxID_ANY, MyFrame::OnButtonPressed)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
+    EVT_MENU(wxID_EXIT, MyFrame::OnExit)
 END_EVENT_TABLE()
 
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -114,7 +112,7 @@ bool MyApp::OnInit()
 #if wxUSE_UIACTIONSIMULATOR
     MyFrame *frame = new MyFrame("wxUIActionSimulator sample application");
     frame->Show(true);
-    
+
     return true;
 #else // !wxUSE_UIACTIONSIMULATOR
     wxLogError("wxUSE_UIACTIONSIMULATOR must be 1 for this sample");
@@ -134,9 +132,6 @@ MyFrame::MyFrame(const wxString& title)
 {
     SetIcon(wxICON(sample));
 
-    m_buttonPressed = false;
-    m_menuSelected = false;
-
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *fileMenu = new wxMenu;
@@ -152,30 +147,48 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-    wxButton* button = new wxButton(this, TheButton, "Button");
-    button->SetName("TheButton");
+    wxPanel *panel = new wxPanel(this);
+
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(sizer);
+
+    m_button = new wxButton(panel, wxID_ANY, "&Button");
+    sizer->Add(m_button, wxSizerFlags().Centre().Border());
+
+    m_text = new wxTextCtrl(panel, wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_MULTILINE);
+    sizer->Add(m_text, wxSizerFlags(1).Expand().Border());
 }
 
 
 // event handlers
 
-void MyFrame::OnRunSimulation(wxCommandEvent&)
+void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
 {
     wxUIActionSimulator sim;
-    wxWindow* button = FindWindow(wxString("TheButton"));
-    wxPoint globalPoint = button->ClientToScreen(wxPoint(20, 10));
-    sim.MouseMove(globalPoint.x, globalPoint.y);
+
+    // Add some extra distance to take account of window decorations
+    sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     sim.MouseClick(wxMOUSE_BTN_LEFT);
-    
+
+    // Process the resulting button event
     wxYield();
-    
-    if (ButtonPressed())
-        wxMessageBox("Button automagically pressed!");
+
+    m_text->SetFocus();
+    sim.Char('A');
+    sim.Char('A', wxMOD_SHIFT);
+    sim.Char(WXK_RETURN);
+    sim.Char('Z');
+    sim.Char('Z', wxMOD_SHIFT);
+    sim.Char(WXK_RETURN);
+    sim.Text("aAbBcC");
+    sim.Char(WXK_RETURN);
 }
 
-void MyFrame::OnButtonPressed(wxCommandEvent&)
+void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))
 {
-    m_buttonPressed = true;
+    m_text->AppendText("Button pressed.\n");
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
