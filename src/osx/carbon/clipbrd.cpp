@@ -63,6 +63,8 @@ void wxClipboard::Clear()
 {
     wxDELETE(m_data);
 
+    wxCHECK_RET( m_pasteboard, "Clipboard creation failed." );
+
     OSStatus err = PasteboardClear( m_pasteboard );
     if (err != noErr)
     {
