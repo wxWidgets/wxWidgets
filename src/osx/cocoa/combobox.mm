@@ -95,9 +95,21 @@ int wxNSComboBoxControl::GetSelectedItem() const
 
 void wxNSComboBoxControl::SetSelectedItem(int item)
 {
-    wxASSERT_MSG(item >= 0 && item < [m_comboBox numberOfItems], "Inavlid item index.");
     SendEvents(false);
-    [m_comboBox selectItemAtIndex: item];
+
+    if ( item != wxNOT_FOUND )
+    {
+        wxASSERT_MSG( item >= 0 && item < [m_comboBox numberOfItems],
+                      "Inavlid item index." );
+        [m_comboBox selectItemAtIndex: item];
+    }
+    else // remove current selection (if we have any)
+    {
+        const int sel = GetSelectedItem();
+        if ( sel != wxNOT_FOUND )
+            [m_comboBox deselectItemAtIndex:sel];
+    }
+
     SendEvents(true);
 }
 
