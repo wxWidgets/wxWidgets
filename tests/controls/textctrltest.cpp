@@ -24,6 +24,8 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopeguard.h"
+
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -206,13 +208,19 @@ void TextCtrlTestCase::MaxLength()
 void TextCtrlTestCase::StreamInput()
 {
 #ifndef __WXOSX__
-    *m_text << "stringinput"
-            << 10
-            << 1000L
-            << 3.14f
-            << 2.71
-            << 'a'
-            << L'b';
+    {
+        // Ensure we use decimal point and not a comma.
+        char * const locOld = setlocale(LC_NUMERIC, "C");
+        wxON_BLOCK_EXIT2( setlocale, (int)LC_NUMERIC, locOld );
+
+        *m_text << "stringinput"
+                << 10
+                << 1000L
+                << 3.14f
+                << 2.71
+                << 'a'
+                << L'b';
+    }
 
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71ab", m_text->GetValue());
 
@@ -234,8 +242,8 @@ void TextCtrlTestCase::StreamInput()
 
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
-#endif
-#endif
+#endif // wxHAS_TEXT_WINDOW_STREAM
+#endif // !__WXOSX__
 }
 
 void TextCtrlTestCase::Redirector()
