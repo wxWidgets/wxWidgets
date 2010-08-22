@@ -101,7 +101,11 @@
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
     @style{wxFD_FILE_MUST_EXIST}
-           For open dialog only: the user may only select files that actually exist.
+           For open dialog only: the user may only select files that actually
+           exist. Notice that under OS X the file dialog with @c wxFD_OPEN
+           style always behaves as if this style was specified, because it is
+           impossible to choose a file that doesn't exist from a standard OS X
+           file dialog.
     @style{wxFD_MULTIPLE}
            For open dialog only: allows selecting multiple files.
     @style{wxFD_CHANGE_DIR}
