@@ -5098,7 +5098,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_ObjcRef.o \
 	monodll_cocoa_app.o \
 	monodll_cocoa_bitmap.o \
-	monodll_src_cocoa_bmpbuttn.o \
+	monodll_cocoa_bmpbuttn.o \
 	monodll_cocoa_brush.o \
 	monodll_src_cocoa_button.o \
 	monodll_src_cocoa_checkbox.o \
@@ -5440,7 +5440,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
-	monodll_osx_cocoa_bmpbuttn.o \
 	monodll_osx_cocoa_button.o \
 	monodll_osx_cocoa_checkbox.o \
 	monodll_osx_cocoa_choice.o \
@@ -6972,7 +6971,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_ObjcRef.o \
 	monolib_cocoa_app.o \
 	monolib_cocoa_bitmap.o \
-	monolib_src_cocoa_bmpbuttn.o \
+	monolib_cocoa_bmpbuttn.o \
 	monolib_cocoa_brush.o \
 	monolib_src_cocoa_button.o \
 	monolib_src_cocoa_checkbox.o \
@@ -7314,7 +7313,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_12) \
-	monolib_osx_cocoa_bmpbuttn.o \
 	monolib_osx_cocoa_button.o \
 	monolib_osx_cocoa_checkbox.o \
 	monolib_osx_cocoa_choice.o \
@@ -9033,7 +9031,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_ObjcRef.o \
 	coredll_cocoa_app.o \
 	coredll_cocoa_bitmap.o \
-	coredll_src_cocoa_bmpbuttn.o \
+	coredll_cocoa_bmpbuttn.o \
 	coredll_cocoa_brush.o \
 	coredll_src_cocoa_button.o \
 	coredll_src_cocoa_checkbox.o \
@@ -9375,7 +9373,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_14) \
-	coredll_osx_cocoa_bmpbuttn.o \
 	coredll_osx_cocoa_button.o \
 	coredll_osx_cocoa_checkbox.o \
 	coredll_osx_cocoa_choice.o \
@@ -10578,7 +10575,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_ObjcRef.o \
 	corelib_cocoa_app.o \
 	corelib_cocoa_bitmap.o \
-	corelib_src_cocoa_bmpbuttn.o \
+	corelib_cocoa_bmpbuttn.o \
 	corelib_cocoa_brush.o \
 	corelib_src_cocoa_button.o \
 	corelib_src_cocoa_checkbox.o \
@@ -10920,7 +10917,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_1_0) \
-	corelib_osx_cocoa_bmpbuttn.o \
 	corelib_osx_cocoa_button.o \
 	corelib_osx_cocoa_checkbox.o \
 	corelib_osx_cocoa_choice.o \
@@ -16063,9 +16059,6 @@ monodll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONODLL_ODEP)
 monodll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-monodll_osx_cocoa_bmpbuttn.o: $(srcdir)/src/osx/cocoa/bmpbuttn.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/bmpbuttn.mm
-
 monodll_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -16249,7 +16242,7 @@ monodll_cocoa_app.o: $(srcdir)/src/cocoa/app.mm $(MONODLL_ODEP)
 monodll_cocoa_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
 
-monodll_src_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(MONODLL_ODEP)
+monodll_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/bmpbuttn.mm
 
 monodll_cocoa_brush.o: $(srcdir)/src/cocoa/brush.mm $(MONODLL_ODEP)
@@ -21286,9 +21279,6 @@ monolib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONOLIB_ODEP)
 monolib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-monolib_osx_cocoa_bmpbuttn.o: $(srcdir)/src/osx/cocoa/bmpbuttn.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/bmpbuttn.mm
-
 monolib_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -21472,7 +21462,7 @@ monolib_cocoa_app.o: $(srcdir)/src/cocoa/app.mm $(MONOLIB_ODEP)
 monolib_cocoa_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
 
-monolib_src_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(MONOLIB_ODEP)
+monolib_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/bmpbuttn.mm
 
 monolib_cocoa_brush.o: $(srcdir)/src/cocoa/brush.mm $(MONOLIB_ODEP)
@@ -27226,9 +27216,6 @@ coredll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(COREDLL_ODEP)
 coredll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-coredll_osx_cocoa_bmpbuttn.o: $(srcdir)/src/osx/cocoa/bmpbuttn.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/bmpbuttn.mm
-
 coredll_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -27412,7 +27399,7 @@ coredll_cocoa_app.o: $(srcdir)/src/cocoa/app.mm $(COREDLL_ODEP)
 coredll_cocoa_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
 
-coredll_src_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(COREDLL_ODEP)
+coredll_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/bmpbuttn.mm
 
 coredll_cocoa_brush.o: $(srcdir)/src/cocoa/brush.mm $(COREDLL_ODEP)
@@ -31150,9 +31137,6 @@ corelib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(CORELIB_ODEP)
 corelib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-corelib_osx_cocoa_bmpbuttn.o: $(srcdir)/src/osx/cocoa/bmpbuttn.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/bmpbuttn.mm
-
 corelib_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -31336,7 +31320,7 @@ corelib_cocoa_app.o: $(srcdir)/src/cocoa/app.mm $(CORELIB_ODEP)
 corelib_cocoa_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
 
-corelib_src_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(CORELIB_ODEP)
+corelib_cocoa_bmpbuttn.o: $(srcdir)/src/cocoa/bmpbuttn.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/bmpbuttn.mm
 
 corelib_cocoa_brush.o: $(srcdir)/src/cocoa/brush.mm $(CORELIB_ODEP)
