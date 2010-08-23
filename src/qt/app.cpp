@@ -84,15 +84,3 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
 
     return true;
 }
-
-#if wxUSE_GUI
-
-wxGUIAppTraits::wxGUIAppTraits()
-{
-}
-
-wxGUIAppTraits::~wxGUIAppTraits()
-{
-}
-
-#endif // wxUSE_GUI

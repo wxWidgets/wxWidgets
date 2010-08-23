@@ -646,6 +646,10 @@ SOURCE=..\..\src\common\textcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\textdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\textentrycmn.cpp
 # End Source File
 # Begin Source File
@@ -3173,10 +3177,6 @@ SOURCE=..\..\src\generic\statusbr.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\textdlgg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\tipwin.cpp
 # End Source File
 # Begin Source File
@@ -3186,10 +3186,6 @@ SOURCE=..\..\src\generic\toolbkg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\treebkg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\generic\treectlg.cpp
 # End Source File
 # Begin Source File
 
@@ -5483,14 +5479,6 @@ SOURCE=..\..\include\wx\generic\stattextg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\textdlgg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\treectlg.h
 # End Source File
 # Begin Source File
 

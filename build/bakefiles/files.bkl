@@ -62,7 +62,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dir.cpp
     src/unix/dlunix.cpp
     src/unix/epolldispatcher.cpp
-    <!-- src/unix/evtloopunix.cpp -->
+    src/unix/evtloopunix.cpp
     src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
@@ -316,19 +316,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               wxQT                                       -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
-<set var="BASE_QT_HDR" hints="files">
-    wx/qt/evtloop.h
-    wx/qt/timer.h
-</set>
-
-<set var="BASE_QT_SRC" hints="files">
-    src/qt/apptraits.cpp
-    src/qt/evtloop.cpp
-    src/qt/evtloop_qt.cpp
-    src/qt/evtloop_qt.moc.cpp
-    src/qt/timer.cpp
-</set>
-
 <set var="QT_LOWLEVEL_HDR" hints="files">
     wx/qt/accel.h
     wx/qt/app.h
@@ -365,6 +352,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dialog_qt.h
     wx/qt/dirdlg.h
     wx/qt/dnd.h
+    wx/qt/evtloop.h
     wx/qt/filedlg.h
     wx/qt/font.h
     wx/qt/fontdlg.h
@@ -400,6 +388,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
+    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
@@ -413,6 +402,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="QT_LOWLEVEL_SRC" hints="files">
     src/qt/accel.cpp
     src/qt/app.cpp
+    src/qt/apptraits.cpp
     src/qt/bitmap.cpp
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
@@ -448,6 +438,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dirdlg.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
+    src/qt/evtloop.cpp
+    src/qt/evtloop_qt.cpp
+    src/qt/evtloop_qt.moc.cpp
     src/generic/fdrepdlg.cpp
     src/qt/filedlg.cpp
     src/generic/filepickerg.cpp
@@ -494,6 +487,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/textdlg.cpp
     src/qt/textentry.cpp
     src/qt/tglbtn.cpp
+    src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
@@ -543,10 +537,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_QT_SRC" hints="files">
-    src/qt/evtloop.cpp
-    src/qt/evtloop_qt.cpp
-    src/qt/evtloop_qt.moc.cpp
-    src/qt/timer.cpp
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -3875,13 +3865,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC) $(BASE_QT_SRC)</if>
+        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_SHARED_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_SRC)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_SRC)</if>
-        <!-- <if cond="PLATFORM_QT=='1'">$(BASE_QT_SRC)</if> -->
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
         <if cond="TOOLKIT=='OSX_CARBON'">$(BASE_AND_GUI_OSX_CARBON_SRC)</if>
@@ -3911,13 +3900,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_HDR)</if>
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR) $(BASE_QT_HDR)</if>
+        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_HDR)</if>
-        <!-- <if cond="PLATFORM_QT=='1'">$(BASE_QT_HDR)</if> -->
     </set>
 
     <set var="BASE_SRC" hints="files">

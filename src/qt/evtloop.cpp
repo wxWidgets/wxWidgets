@@ -15,10 +15,16 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
 
-#if wxUSE_BASE
-
 wxQtEventLoopBase::wxQtEventLoopBase()
 {
+    // We need a QCoreApplication for event loops, create it here if it doesn't
+    // already exist as we can't modify wxConsoleApp
+    if ( !QCoreApplication::instance() )
+    {
+        int n = 0;
+        new QCoreApplication( n , NULL );
+    }
+    
     // Create an idle timer to run each time there are no events (timeout = 0)
     m_qtIdleTimer = new wxQtIdleTimer( this );
 
@@ -74,8 +80,6 @@ wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHa
     return NULL;
 }
 #endif // wxUSE_EVENTLOOP_SOURCE
-
-#endif // wxUSE_BASE
 
 //#############################################################################
 

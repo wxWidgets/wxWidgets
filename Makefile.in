@@ -791,6 +791,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2081,6 +2082,7 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2103,6 +2105,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2125,6 +2128,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2141,6 +2145,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2163,6 +2168,7 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2185,6 +2191,7 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2207,6 +2214,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2229,6 +2237,7 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
@@ -2421,9 +2430,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/fswatcher_inotify.h \
-	wx/qt/evtloop.h \
-	wx/qt/timer.h
+	wx/unix/fswatcher_inotify.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -2628,6 +2635,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/dialog_qt.h \
 	wx/qt/dirdlg.h \
 	wx/qt/dnd.h \
+	wx/qt/evtloop.h \
 	wx/qt/filedlg.h \
 	wx/qt/font.h \
 	wx/qt/fontdlg.h \
@@ -2663,6 +2671,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/textdlg.h \
 	wx/qt/textentry.h \
 	wx/qt/tglbtn.h \
+	wx/qt/timer.h \
 	wx/qt/toolbar.h \
 	wx/qt/tooltip.h \
 	wx/qt/toplevel.h \
@@ -4275,6 +4284,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_unix_dir.o \
 	monodll_dlunix.o \
 	monodll_epolldispatcher.o \
+	monodll_evtloopunix.o \
 	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
 	monodll_unix_stackwalk.o \
@@ -4308,6 +4318,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_unix_dir.o \
 	monodll_dlunix.o \
 	monodll_epolldispatcher.o \
+	monodll_evtloopunix.o \
 	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
 	monodll_unix_stackwalk.o \
@@ -4317,12 +4328,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_utilsunx.o \
 	monodll_fswatcher_kqueue.o \
 	monodll_unix_mimetype.o \
-	monodll_fswatcher_inotify.o \
-	monodll_qt_apptraits.o \
-	monodll_qt_evtloop.o \
-	monodll_evtloop_qt.o \
-	monodll_evtloop_qt_moc.o \
-	monodll_qt_timer.o
+	monodll_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -5060,6 +5066,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_accel.o \
 	monodll_qt_app.o \
+	monodll_qt_apptraits.o \
 	monodll_qt_bitmap.o \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
@@ -5095,6 +5102,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
+	monodll_qt_evtloop.o \
+	monodll_evtloop_qt.o \
+	monodll_evtloop_qt_moc.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_qt_filedlg.o \
 	monodll_filepickerg.o \
@@ -5141,6 +5151,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
+	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -6027,6 +6038,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_accel.o \
 	monodll_qt_app.o \
+	monodll_qt_apptraits.o \
 	monodll_qt_bitmap.o \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
@@ -6062,6 +6074,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
+	monodll_qt_evtloop.o \
+	monodll_evtloop_qt.o \
+	monodll_evtloop_qt_moc.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_qt_filedlg.o \
 	monodll_filepickerg.o \
@@ -6108,6 +6123,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
+	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -6334,6 +6350,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_unix_dir.o \
 	monolib_dlunix.o \
 	monolib_epolldispatcher.o \
+	monolib_evtloopunix.o \
 	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
 	monolib_unix_stackwalk.o \
@@ -6367,6 +6384,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_unix_dir.o \
 	monolib_dlunix.o \
 	monolib_epolldispatcher.o \
+	monolib_evtloopunix.o \
 	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
 	monolib_unix_stackwalk.o \
@@ -6376,12 +6394,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_utilsunx.o \
 	monolib_fswatcher_kqueue.o \
 	monolib_unix_mimetype.o \
-	monolib_fswatcher_inotify.o \
-	monolib_qt_apptraits.o \
-	monolib_qt_evtloop.o \
-	monolib_evtloop_qt.o \
-	monolib_evtloop_qt_moc.o \
-	monolib_qt_timer.o
+	monolib_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -7119,6 +7132,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_accel.o \
 	monolib_qt_app.o \
+	monolib_qt_apptraits.o \
 	monolib_qt_bitmap.o \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
@@ -7154,6 +7168,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
+	monolib_qt_evtloop.o \
+	monolib_evtloop_qt.o \
+	monolib_evtloop_qt_moc.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_qt_filedlg.o \
 	monolib_filepickerg.o \
@@ -7200,6 +7217,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
+	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -8086,6 +8104,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_accel.o \
 	monolib_qt_app.o \
+	monolib_qt_apptraits.o \
 	monolib_qt_bitmap.o \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
@@ -8121,6 +8140,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
+	monolib_qt_evtloop.o \
+	monolib_evtloop_qt.o \
+	monolib_evtloop_qt_moc.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_qt_filedlg.o \
 	monolib_filepickerg.o \
@@ -8167,6 +8189,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
+	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -8446,6 +8469,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_unix_dir.o \
 	basedll_dlunix.o \
 	basedll_epolldispatcher.o \
+	basedll_evtloopunix.o \
 	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
 	basedll_unix_stackwalk.o \
@@ -8479,6 +8503,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_unix_dir.o \
 	basedll_dlunix.o \
 	basedll_epolldispatcher.o \
+	basedll_evtloopunix.o \
 	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
 	basedll_unix_stackwalk.o \
@@ -8488,12 +8513,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_utilsunx.o \
 	basedll_fswatcher_kqueue.o \
 	basedll_unix_mimetype.o \
-	basedll_fswatcher_inotify.o \
-	basedll_apptraits.o \
-	basedll_qt_evtloop.o \
-	basedll_evtloop_qt.o \
-	basedll_evtloop_qt_moc.o \
-	basedll_qt_timer.o
+	basedll_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8510,7 +8530,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_msw_stackwalk.o \
 	basedll_msw_stdpaths.o \
 	basedll_msw_thread.o \
-	basedll_msw_timer.o \
+	basedll_timer.o \
 	basedll_msw_utils.o \
 	basedll_msw_utilsexc.o \
 	basedll_fswatcher.o \
@@ -8519,8 +8539,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= basedll_msw_evtloop.o basedll_main.o \
-@COND_PLATFORM_WIN32_1@	basedll_mslu.o basedll_volume.o
+@COND_PLATFORM_WIN32_1@	= basedll_evtloop.o basedll_main.o basedll_mslu.o \
+@COND_PLATFORM_WIN32_1@	basedll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_CARBON@	= basedll_carbon_utils.o basedll_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
@@ -8549,6 +8569,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_unix_dir.o \
 	baselib_dlunix.o \
 	baselib_epolldispatcher.o \
+	baselib_evtloopunix.o \
 	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
 	baselib_unix_stackwalk.o \
@@ -8582,6 +8603,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_unix_dir.o \
 	baselib_dlunix.o \
 	baselib_epolldispatcher.o \
+	baselib_evtloopunix.o \
 	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
 	baselib_unix_stackwalk.o \
@@ -8591,12 +8613,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_utilsunx.o \
 	baselib_fswatcher_kqueue.o \
 	baselib_unix_mimetype.o \
-	baselib_fswatcher_inotify.o \
-	baselib_apptraits.o \
-	baselib_qt_evtloop.o \
-	baselib_evtloop_qt.o \
-	baselib_evtloop_qt_moc.o \
-	baselib_qt_timer.o
+	baselib_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -8613,7 +8630,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_msw_stackwalk.o \
 	baselib_msw_stdpaths.o \
 	baselib_msw_thread.o \
-	baselib_msw_timer.o \
+	baselib_timer.o \
 	baselib_msw_utils.o \
 	baselib_msw_utilsexc.o \
 	baselib_fswatcher.o \
@@ -8622,8 +8639,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= baselib_msw_evtloop.o baselib_main.o \
-@COND_PLATFORM_WIN32_1@	baselib_mslu.o baselib_volume.o
+@COND_PLATFORM_WIN32_1@	= baselib_evtloop.o baselib_main.o baselib_mslu.o \
+@COND_PLATFORM_WIN32_1@	baselib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_CARBON@	= baselib_carbon_utils.o baselib_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
@@ -9368,6 +9385,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_accel.o \
 	coredll_qt_app.o \
+	coredll_qt_apptraits.o \
 	coredll_qt_bitmap.o \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
@@ -9403,6 +9421,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
+	coredll_qt_evtloop.o \
+	coredll_evtloop_qt.o \
+	coredll_evtloop_qt_moc.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_qt_filedlg.o \
 	coredll_filepickerg.o \
@@ -9449,6 +9470,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
+	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -10335,6 +10357,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_accel.o \
 	coredll_qt_app.o \
+	coredll_qt_apptraits.o \
 	coredll_qt_bitmap.o \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
@@ -10370,6 +10393,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
+	coredll_qt_evtloop.o \
+	coredll_evtloop_qt.o \
+	coredll_evtloop_qt_moc.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_qt_filedlg.o \
 	coredll_filepickerg.o \
@@ -10416,6 +10442,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
+	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -11096,6 +11123,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_accel.o \
 	corelib_qt_app.o \
+	corelib_qt_apptraits.o \
 	corelib_qt_bitmap.o \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
@@ -11131,6 +11159,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
+	corelib_qt_evtloop.o \
+	corelib_evtloop_qt.o \
+	corelib_evtloop_qt_moc.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_qt_filedlg.o \
 	corelib_filepickerg.o \
@@ -11177,6 +11208,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
+	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -12063,6 +12095,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_accel.o \
 	corelib_qt_app.o \
+	corelib_qt_apptraits.o \
 	corelib_qt_bitmap.o \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
@@ -12098,6 +12131,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
+	corelib_qt_evtloop.o \
+	corelib_evtloop_qt.o \
+	corelib_evtloop_qt_moc.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_qt_filedlg.o \
 	corelib_filepickerg.o \
@@ -12144,6 +12180,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
+	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -13891,8 +13928,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_unix_sound.o \
 	monolib_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0)
-@COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_apptraits.o
-@COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_apptraits.o
+@COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
+@COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
 COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_bmpbuttn_osx.o \
 	coredll_button_osx.o \
@@ -13988,8 +14025,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	coredll_core_timer.o \
 	coredll_utilsexc_cf.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_1_4 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4)
-@COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_apptraits.o
-@COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_apptraits.o
+@COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
+@COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
 COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_bmpbuttn_osx.o \
 	corelib_button_osx.o \
@@ -16197,21 +16234,6 @@ monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 monodll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
-monodll_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
-
-monodll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-monodll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-monodll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
-
-monodll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -16286,9 +16308,6 @@ monodll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONODLL_ODEP)
 
 monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
-monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 monodll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/dir.cpp
@@ -18081,6 +18100,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
+@COND_PLATFORM_UNIX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
 @COND_PLATFORM_UNIX_1@monodll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
 
@@ -19230,6 +19258,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_app.o: $(srcdir)/src/qt/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/app.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_bitmap.o: $(srcdir)/src/qt/bitmap.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/bitmap.cpp
 
@@ -19361,6 +19392,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dnd.o: $(srcdir)/src/qt/dnd.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dnd.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -19616,6 +19656,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
@@ -21720,21 +21763,6 @@ monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 monolib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
-monolib_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
-
-monolib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-monolib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-monolib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
-
-monolib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -21809,9 +21837,6 @@ monolib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONOLIB_ODEP)
 
 monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
-monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 monolib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/dir.cpp
@@ -23604,6 +23629,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
+@COND_PLATFORM_UNIX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
 @COND_PLATFORM_UNIX_1@monolib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
 
@@ -24753,6 +24787,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_app.o: $(srcdir)/src/qt/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/app.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_bitmap.o: $(srcdir)/src/qt/bitmap.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/bitmap.cpp
 
@@ -24884,6 +24921,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dnd.o: $(srcdir)/src/qt/dnd.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dnd.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -25139,6 +25185,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
@@ -27243,21 +27292,6 @@ basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 basedll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
-basedll_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
-
-basedll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-basedll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-basedll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
-
-basedll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -27300,7 +27334,7 @@ basedll_msw_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASEDLL_ODEP)
 basedll_msw_thread.o: $(srcdir)/src/msw/thread.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
-basedll_msw_timer.o: $(srcdir)/src/msw/timer.cpp $(BASEDLL_ODEP)
+basedll_timer.o: $(srcdir)/src/msw/timer.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 basedll_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASEDLL_ODEP)
@@ -27332,9 +27366,6 @@ basedll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASEDLL_ODEP)
 
 basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
-basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 basedll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/dir.cpp
@@ -27378,7 +27409,7 @@ basedll_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASEDLL_ODEP)
 basedll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-basedll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASEDLL_ODEP)
+basedll_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
@@ -27443,6 +27474,15 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
@@ -27753,21 +27793,6 @@ baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 baselib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
-baselib_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
-
-baselib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-baselib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-baselib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
-
-baselib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
-
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
 
@@ -27810,7 +27835,7 @@ baselib_msw_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASELIB_ODEP)
 baselib_msw_thread.o: $(srcdir)/src/msw/thread.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
-baselib_msw_timer.o: $(srcdir)/src/msw/timer.cpp $(BASELIB_ODEP)
+baselib_timer.o: $(srcdir)/src/msw/timer.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 baselib_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASELIB_ODEP)
@@ -27842,9 +27867,6 @@ baselib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASELIB_ODEP)
 
 baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
-baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 baselib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/dir.cpp
@@ -27888,7 +27910,7 @@ baselib_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASELIB_ODEP)
 baselib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-baselib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASELIB_ODEP)
+baselib_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
@@ -27953,6 +27975,15 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
@@ -30468,6 +30499,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_app.o: $(srcdir)/src/qt/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/app.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_bitmap.o: $(srcdir)/src/qt/bitmap.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/bitmap.cpp
 
@@ -30596,6 +30630,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dnd.o: $(srcdir)/src/qt/dnd.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dnd.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -30852,6 +30895,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -30879,10 +30925,10 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
-@COND_PLATFORM_UNIX_1_USE_GUI_1@coredll_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_UNIX_1_USE_GUI_1@coredll_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@coredll_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@coredll_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
@@ -34659,6 +34705,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_app.o: $(srcdir)/src/qt/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/app.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_apptraits.o: $(srcdir)/src/qt/apptraits.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/apptraits.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_bitmap.o: $(srcdir)/src/qt/bitmap.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/bitmap.cpp
 
@@ -34787,6 +34836,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dnd.o: $(srcdir)/src/qt/dnd.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dnd.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -35043,6 +35101,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -35070,10 +35131,10 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
-@COND_PLATFORM_UNIX_1_USE_GUI_1@corelib_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_UNIX_1_USE_GUI_1@corelib_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@corelib_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@corelib_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)

@@ -877,6 +877,9 @@
 				RelativePath="..\..\src\common\textcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\textdlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\textentrycmn.cpp">
 			</File>
 			<File
@@ -2832,9 +2835,6 @@
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\textdlgg.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\generic\tipwin.cpp">
 			</File>
 			<File
@@ -2842,9 +2842,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\treebkg.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\generic\treectlg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\vlbox.cpp">
@@ -4716,12 +4713,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statusbr.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\textdlgg.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\treectlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\wizard.h">

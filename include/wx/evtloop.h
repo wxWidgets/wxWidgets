@@ -185,7 +185,7 @@ protected:
 };
 
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) \
-    || (defined(__UNIX__) && !defined(__WXOSX__) && !defined(__WXQT__))
+    || (defined(__UNIX__) && !defined(__WXOSX__))
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -243,8 +243,6 @@ private:
     // CoreFoundation-based event loop is currently in wxBase so include it in
     // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/evtloop.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/evtloop.h"
 #elif wxUSE_GUI
 
 // include the appropriate header defining wxGUIEventLoop
@@ -255,6 +253,8 @@ private:
     #include "wx/dfb/evtloop.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/evtloop.h"
+    #elif defined(__WXQT__)
+    #include "wx/qt/evtloop.h"
 #else // other platform
 
 #include "wx/stopwatch.h"   // for wxMilliClock_t
@@ -313,7 +313,7 @@ protected:
 #endif // wxUSE_GUI
 
 // include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__) && !defined(__WXQT__)
+#if defined(__UNIX__)
 #include "wx/unix/evtloop.h"
 #endif
 
