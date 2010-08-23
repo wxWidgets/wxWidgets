@@ -10,6 +10,8 @@
 #ifndef _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
 #define _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
 
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
+
 // ----------------------------------------------------------------------------
 // abstract base class testing wxTextEntry methods
 // ----------------------------------------------------------------------------
