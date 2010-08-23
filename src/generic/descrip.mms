@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 October 2009                                                      *
+# Date : 20 August 2010                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -93,7 +93,8 @@ OBJECTS = \
 		bmpcboxg.obj,\
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
-		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj
+		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
+		richmsgdlgg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -164,7 +165,7 @@ SOURCES = \
 		vscroll.cpp,\
 		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp\
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
-		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp
+		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -296,3 +297,4 @@ infobar.obj : infobar.cpp
 datavgen.obj : datavgen.cpp
 dbgrptg.obj : dbgrptg.cpp
 dragimgg.obj : dragimgg.cpp
+richmsgdlgg.obj : richmsgdlgg.cpp
