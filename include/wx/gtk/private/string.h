@@ -80,7 +80,7 @@ public:
             wxSharedPtr<wxGtkCollatableString> ptr = *iter;
             
             gchar *key = ptr->m_key;
-            if (strcmp(key,new_key) > 0)
+            if (strcmp(key,new_key) >= 0)
             {
                 m_list.insert( iter, new_ptr );
                 return index;
