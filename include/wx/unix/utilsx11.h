@@ -26,8 +26,8 @@
 #if defined(__WXGTK__)
 typedef void WXDisplay;
 typedef void* WXWindow;
-typedef unsigned long WXKeySym;
 #endif
+typedef unsigned long WXKeySym;
 
 int wxCharCodeXToWX(WXKeySym keySym);
 WXKeySym wxCharCodeWXToX(int id);
