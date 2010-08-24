@@ -143,7 +143,7 @@ void ComboBoxTestCase::PopDismiss()
 
 void ComboBoxTestCase::Sort()
 {
-#if !defined(__WXGTK__) && !defined(__WXOSX__)
+#if !defined(__WXOSX__)
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                              wxDefaultPosition, wxDefaultSize, 0, NULL,
                              wxCB_SORT);
