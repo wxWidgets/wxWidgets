@@ -86,8 +86,15 @@ void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
 
 void wxListBoxBase::UpdateOldSelections()
 {
+    // We need to remember the selection even in single-selection case on
+    // Windows, so that we don't send an event when the user clicks on an
+    // already selected item.
+#ifndef __WXMSW__
     if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
+#endif
+    {
         GetSelections( m_oldSelections );
+    }
 }
 
 bool wxListBoxBase::SendEvent(wxEventType evtType, int item, bool selected)
