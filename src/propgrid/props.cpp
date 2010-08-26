@@ -2342,7 +2342,7 @@ wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxArrayString& array )
     : wxPGProperty(label,name)
 {
-    m_delimiter = '"';
+    m_delimiter = ',';
     SetValue( array );
 }
 

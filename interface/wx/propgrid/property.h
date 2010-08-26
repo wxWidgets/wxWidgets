@@ -485,7 +485,8 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     @subsection wxArrayStringProperty
 
-    Allows editing of a list of strings in wxTextCtrl and in a separate dialog.
+    Allows editing of a list of strings in wxTextCtrl and in a separate
+    dialog. Supports "Delimiter" attribute, which defaults to comma (',').
 
     @subsection wxDateProperty
 
