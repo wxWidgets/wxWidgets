@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPGRIDDEFS_H_
 #define _WX_PROPGRID_PROPGRIDDEFS_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
 #include "wx/dynarray.h"

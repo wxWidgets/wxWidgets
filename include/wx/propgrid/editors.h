@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_EDITORS_H_
 #define _WX_PROPGRID_EDITORS_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
 // -----------------------------------------------------------------------
