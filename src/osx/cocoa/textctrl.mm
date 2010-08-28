@@ -291,7 +291,9 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+    : wxWidgetCocoaImpl(wxPeer, w),
+      wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
@@ -503,17 +505,31 @@ wxSize wxNSTextViewControl::GetBestSize() const
     if (m_textView && [m_textView layoutManager])
     {
         NSRect rect = [[m_textView layoutManager] usedRectForTextContainer: [m_textView textContainer]];
-        wxSize size = wxSize(rect.size.width, rect.size.height);
-        size.x += [m_textView textContainerInset].width;
-        size.y += [m_textView textContainerInset].height;
-        return size;
+        return wxSize((int)(rect.size.width + [m_textView textContainerInset].width),
+                      (int)(rect.size.height + [m_textView textContainerInset].height));
     }
     return wxSize(0,0);
 }
 
 // wxNSTextFieldControl
 
-wxNSTextFieldControl::wxNSTextFieldControl( wxWindow *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
+    : wxWidgetCocoaImpl(text, w),
+      wxTextWidgetImpl(text)
+{
+    Init(w);
+}
+
+wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
+                                           wxTextEntry *entry,
+                                           WXWidget w)
+    : wxWidgetCocoaImpl(wxPeer, w),
+      wxTextWidgetImpl(entry)
+{
+    Init(w);
+}
+
+void wxNSTextFieldControl::Init(WXWidget w)
 {
     NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField*) w;
     m_textField = tf;
@@ -652,7 +668,7 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
-        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+        event.SetString( GetTextEntry()->GetValue() );
         wxpeer->HandleWindowEvent( event );
     }
 }
@@ -692,11 +708,17 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // FIXME: How can we remove the native control's border?
             // setBordered is separate from the text ctrl's border.
         }
+        
+        NSTextFieldCell* cell = [v cell];
+        [cell setScrollable:YES];
+        // TODO: Remove if we definitely are sure, it's not needed
+        // as setting scrolling to yes, should turn off any wrapping
+        // [cell setLineBreakMode:NSLineBreakByClipping]; 
 
         [v setBezeled:NO];
         [v setBordered:NO];
 
-        c = new wxNSTextFieldControl( wxpeer, v );
+        c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
     }
 
     return c;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/colordlg.h
+// Name:        wx/osx/colordlg.h
 // Purpose:     wxColourDialog class. Use generic version if no
 //              platform-specific implementation.
 // Author:      Stefan Csomor

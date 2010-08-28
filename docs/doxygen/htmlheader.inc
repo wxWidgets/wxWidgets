@@ -11,7 +11,7 @@
     <meta name="created" content="$datetime"/>
     <meta name="keywords" content="wxWidgets"/>
     <link href="wxwidgets.css" rel="stylesheet" type="text/css"/>
-    <link href="tabs.css" rel="stylesheet" type="text/css"/>
+    <link href="wxtabs.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 

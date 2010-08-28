@@ -1303,6 +1303,18 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    // For compatibility with other ports (notably wxGTK) and because it's
+    // genuinely useful, we allow passing multiline strings to DrawText().
+    // However there is no native MSW function to draw them directly so we
+    // instead reuse the generic DrawLabel() method to render them. Of course,
+    // DrawLabel() itself will call back to us but with single line strings
+    // only so there won't be any infinite recursion here.
+    if ( text.find('\n') != wxString::npos )
+    {
+        GetOwner()->DrawLabel(text, wxRect(x, y, 0, 0));
+        return;
+    }
+
     WXMICROWIN_CHECK_HDC
 
     DrawAnyText(text, x, y);

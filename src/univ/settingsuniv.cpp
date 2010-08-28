@@ -72,7 +72,16 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::MAX /* wxSYS_COLOUR_INFOTEXT */,
         wxColourScheme::MAX /* wxSYS_COLOUR_INFOBK */,
         wxColourScheme::WINDOW /* wxSYS_COLOUR_LISTBOX */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_HOTLIGHT */,
+        wxColourScheme::TITLEBAR_ACTIVE_TEXT /* wxSYS_COLOUR_GRADIENTACTIVECAPTION */,
+        wxColourScheme::TITLEBAR_TEXT /* wxSYS_COLOUR_GRADIENTINACTIVECAPTION */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_MENUHILIGHT */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_MENUBAR */,
+        wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_LISTBOXTEXT */,
     };
+
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(s_mapSysToThemeCol) == wxSYS_COLOUR_MAX,
+                           StdColDefsMismatch );
 
     wxCHECK_MSG( index < (int)WXSIZEOF(s_mapSysToThemeCol), wxNullColour,
                  wxT("invalid wxSystemColour") );

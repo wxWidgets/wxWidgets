@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/popupwin.h
+// Name:        wx/osx/popupwin.h
 // Purpose:     wxPopupWindow class for wxMac
 // Author:      Stefan Csomor
 // Modified by:

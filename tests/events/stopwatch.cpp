@@ -55,27 +55,45 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StopWatchTestCase, "StopWatchTestCase" );
 
 void StopWatchTestCase::Misc()
 {
+    static const long tolerance = 100;  // in ms
+
     wxStopWatch sw;
-    long tmp;
+    long t;
 
     sw.Pause();         // pause it immediately
 
     wxSleep(2);
-    tmp = sw.Time();
-    CPPUNIT_ASSERT(tmp >= 0 && tmp < 100);
-            // should not have counted while paused!
+    t = sw.Time();
+
+    // check that the stop watch doesn't advance while paused
+    WX_ASSERT_MESSAGE
+    (
+        ("Actual time value is %ld", t),
+        t >= 0 && t < tolerance
+    );
 
     sw.Resume();
     wxSleep(3);
-    tmp = sw.Time();
-    CPPUNIT_ASSERT(tmp >= 3000 && tmp < 4000);
+    t = sw.Time();
+    // check that it did advance now by ~3s
+    WX_ASSERT_MESSAGE
+    (
+        ("Actual time value is %ld", t),
+        t > 3000 - tolerance && t < 3000 + tolerance
+    );
 
     sw.Pause();
     sw.Resume();
 
     wxSleep(2);
-    tmp = sw.Time();
-    CPPUNIT_ASSERT(tmp >= 5000 && tmp < 6000);
+    t = sw.Time();
+
+    // and it should advance again
+    WX_ASSERT_MESSAGE
+    (
+        ("Actual time value is %ld", t),
+        t > 5000 - tolerance && t < 5000 + tolerance
+    );
 }
 
 void StopWatchTestCase::BackwardsClockBug()

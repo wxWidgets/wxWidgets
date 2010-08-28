@@ -188,7 +188,7 @@ public:
         // access time (see #10567)
         m_hFile = ::CreateFile
                     (
-                     filename.fn_str(),             // name
+                     filename.t_str(),             // name
                      mode == ReadAttr ? FILE_READ_ATTRIBUTES    // access mask
                                       : FILE_WRITE_ATTRIBUTES,
                      FILE_SHARE_READ |              // sharing mode
@@ -613,7 +613,7 @@ bool wxFileName::FileExists( const wxString &filePath )
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // we must use GetFileAttributes() instead of the ANSI C functions because
     // it can cope with network (UNC) paths unlike them
-    DWORD ret = ::GetFileAttributes(filePath.fn_str());
+    DWORD ret = ::GetFileAttributes(filePath.t_str());
 
     return (ret != INVALID_FILE_ATTRIBUTES) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else // !__WIN32__
@@ -670,7 +670,7 @@ bool wxFileName::DirExists( const wxString &dirPath )
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
-    DWORD ret = ::GetFileAttributes(strPath.fn_str());
+    DWORD ret = ::GetFileAttributes(strPath.t_str());
 
     return (ret != INVALID_FILE_ATTRIBUTES) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
@@ -876,8 +876,8 @@ static wxString wxCreateTempImpl(
     }
 
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-    if ( !::GetTempFileName(dir.fn_str(), name.fn_str(), 0,
-                            wxStringBuffer(path, MAX_PATH + 1)) )
+    if (!::GetTempFileName(dir.t_str(), name.t_str(), 0,
+                           wxStringBuffer(path, MAX_PATH + 1)))
     {
         wxLogLastError(wxT("GetTempFileName"));
 
@@ -1287,7 +1287,11 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
         SHFILEOPSTRUCT fileop;
         wxZeroMemory(fileop);
         fileop.wFunc = FO_DELETE;
+    #if defined(__CYGWIN__) && defined(wxUSE_UNICODE)
+        fileop.pFrom = path.wc_str();
+    #else
         fileop.pFrom = path.fn_str();
+    #endif
         fileop.fFlags = FOF_SILENT | FOF_NOCONFIRMATION;
     #ifndef __WXWINCE__
         // FOF_NOERRORUI is not defined in WinCE
@@ -2058,13 +2062,13 @@ wxString wxFileName::GetShortPath() const
     wxString path(GetFullPath());
 
 #if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    DWORD sz = ::GetShortPathName(path.fn_str(), NULL, 0);
+    DWORD sz = ::GetShortPathName(path.t_str(), NULL, 0);
     if ( sz != 0 )
     {
         wxString pathOut;
         if ( ::GetShortPathName
                (
-                path.fn_str(),
+                path.t_str(),
                 wxStringBuffer(pathOut, sz),
                 sz
                ) != 0 )
@@ -2122,12 +2126,12 @@ wxString wxFileName::GetLongPath() const
 
     if ( s_pfnGetLongPathName )
     {
-        DWORD dwSize = (*s_pfnGetLongPathName)(path.fn_str(), NULL, 0);
+        DWORD dwSize = (*s_pfnGetLongPathName)(path.t_str(), NULL, 0);
         if ( dwSize > 0 )
         {
             if ( (*s_pfnGetLongPathName)
                  (
-                  path.fn_str(),
+                  path.t_str(),
                   wxStringBuffer(pathOut, dwSize),
                   dwSize
                  ) != 0 )
@@ -2179,7 +2183,7 @@ wxString wxFileName::GetLongPath() const
             continue;
         }
 
-        hFind = ::FindFirstFile(tmpPath.fn_str(), &findFileData);
+        hFind = ::FindFirstFile(tmpPath.t_str(), &findFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
             // Error: most likely reason is that path doesn't exist, so

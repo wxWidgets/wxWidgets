@@ -47,7 +47,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
-               : wxMessageDialogWithCustomLabels(parent, message, caption, style)
+               : wxMessageDialogBase(parent, message, caption, style)
 {
 }
 

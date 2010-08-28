@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -114,7 +114,7 @@ void DrawingView::OnUpdate(wxView* sender, wxObject* hint)
 // Clean up windows used for displaying the view.
 bool DrawingView::OnClose(bool deleteWindow)
 {
-    if ( !GetDocument()->Close() )
+    if ( !wxView::OnClose(deleteWindow) )
         return false;
 
     Activate(false);
@@ -181,7 +181,7 @@ void TextEditView::OnDraw(wxDC *WXUNUSED(dc))
 
 bool TextEditView::OnClose(bool deleteWindow)
 {
-    if ( !GetDocument()->Close() )
+    if ( !wxView::OnClose(deleteWindow) )
         return false;
 
     Activate(false);
@@ -344,7 +344,7 @@ void ImageView::OnDraw(wxDC* dc)
 
 bool ImageView::OnClose(bool deleteWindow)
 {
-    if ( !GetDocument()->Close() )
+    if ( !wxView::OnClose(deleteWindow) )
         return false;
 
     Activate(false);

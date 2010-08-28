@@ -5,7 +5,7 @@
 // Created:     2006-02-19
 // RCS-ID:      $Id: srchctrl.cpp 54820 2008-07-29 20:04:11Z SC $
 // Copyright:   Vince Harron
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".

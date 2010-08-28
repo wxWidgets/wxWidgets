@@ -3,7 +3,7 @@
 // Purpose:     Main page of the Doxygen manual
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -12,7 +12,7 @@
 @mainpage Reference manual
 @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
         Stefan Csomor, Francesco Montorsi, Bryan Petty, et al
-@date April, 2010
+@date July, 2010
 
 @image html main_wxlogo.png
 

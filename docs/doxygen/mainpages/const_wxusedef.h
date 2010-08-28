@@ -3,7 +3,7 @@
 // Purpose:     wxUSE preprocessor symbols
 // Author:      Tim Stahlhut
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -296,9 +296,9 @@ library:
 @section page_wxusedef_mac wxUSE preprocessor symbols used only in wxMac port
 
 @beginDefList
-@itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/mac/carbon/thread.cpp file.}
-@itemdef{wxUSE_MAC_PTHREADS_MUTEX, See src/mac/carbon/thread.cpp file.}
-@itemdef{wxUSE_MAC_SEMAPHORE_MUTEX, See src/mac/carbon/thread.cpp file.}
+@itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/osx/carbon/thread.cpp file.}
+@itemdef{wxUSE_MAC_PTHREADS_MUTEX, See src/osx/carbon/thread.cpp file.}
+@itemdef{wxUSE_MAC_SEMAPHORE_MUTEX, See src/osx/carbon/thread.cpp file.}
 @itemdef{wxUSE_WEBKIT, Use wxWebKitCtrl class.}
 @endDefList
 

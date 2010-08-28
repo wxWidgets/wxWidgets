@@ -12,7 +12,7 @@
 #ifndef _WX_GTK_MSGDLG_H_
 #define _WX_GTK_MSGDLG_H_
 
-class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogWithCustomLabels
+class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:
     wxMessageDialog(wxWindow *parent, const wxString& message,

@@ -1039,6 +1039,15 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     // is resigning
     NSView* otherView = FindFocus();
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
+
+    // It doesn't make sense to notify about the loss of focus if we're not
+    // really losing it and the window which has just gained focus is the same
+    // one as this window itself. Of course, this should never happen in the
+    // first place but somehow it does in wxGrid code and without this check we
+    // enter into an infinite recursion, see #12267.
+    if ( otherWindow == this )
+        return r;
+
     // NSTextViews have an editor as true responder, therefore the might get the
     // resign notification if their editor takes over, don't trigger any event then
     if ( r && !m_hasEditor)
@@ -1077,9 +1086,42 @@ bool wxWidgetCocoaImpl::isFlipped(WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 
 void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 {
+    // preparing the update region
+    
+    wxRegion updateRgn;
+    const NSRect *rects;
+    NSInteger count;
+
+    [slf getRectsBeingDrawn:&rects count:&count];
+    for ( int i = 0 ; i < count ; ++i )
+    {
+        updateRgn.Union(wxFromNSRect(slf, rects[i]));
+    }
+
+    wxWindow* wxpeer = GetWXPeer();
+
+    if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
+    {
+        // as this update region is in native window locals we must adapt it to wx window local
+        updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
+    }
+    
+    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
+    {
+        int xoffset = 0, yoffset = 0;
+        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
+        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
+        rgn.Offset( xoffset, yoffset );
+        updateRgn.Intersect(rgn);
+    }
+    
+    wxpeer->GetUpdateRegion() = updateRgn;
+
+    // setting up the drawing context
+    
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSaveGState( context );
-
+    
 #if OSX_DEBUG_DRAWING
     CGContextBeginPath( context );
     CGContextMoveToPoint(context, 0, 0);
@@ -1094,34 +1136,13 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     CGContextClosePath( context );
     CGContextStrokePath(context);
 #endif
-
+    
     if ( !m_isFlipped )
     {
         CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
         CGContextScaleCTM( context, 1, -1 );
     }
-
-    wxRegion updateRgn;
-    const NSRect *rects;
-    NSInteger count;
-
-    [slf getRectsBeingDrawn:&rects count:&count];
-    for ( int i = 0 ; i < count ; ++i )
-    {
-        updateRgn.Union(wxFromNSRect(slf, rects[i]));
-    }
-
-    wxWindow* wxpeer = GetWXPeer();
-    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
-    {
-        int xoffset = 0, yoffset = 0;
-        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
-        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
-        rgn.Offset( xoffset, yoffset );
-        updateRgn.Intersect(rgn);
-    }
     
-    wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
 
     bool handled = wxpeer->MacDoRedraw( 0 );

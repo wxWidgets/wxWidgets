@@ -96,6 +96,7 @@ gpointer   gtk_tree_entry_get_userdata  (GtkTreeEntry* entry)
 void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label)
 {
     g_assert(GTK_IS_TREE_ENTRY(entry));
+    gchar *temp;
 
     /* free previous if it exists */
     if(entry->label)
@@ -105,7 +106,9 @@ void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label
     }
 
     entry->label = g_strdup(label);
-    entry->collate_key = g_utf8_collate_key(label, -1); /* -1 == null terminated */
+    temp = g_utf8_casefold(label, -1); /* -1 == null terminated */
+    entry->collate_key = g_utf8_collate_key(temp, -1); /* -1 == null terminated */
+    g_free( temp );
 }
 
 void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata)

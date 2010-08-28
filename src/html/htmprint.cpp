@@ -196,7 +196,7 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
     m_Renderer = new wxHtmlDCRenderer;
     m_RendererHdr = new wxHtmlDCRenderer;
-    m_NumPages = wxHTML_PRINT_MAX_PAGES;
+    m_NumPages = INT_MAX;
     m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = true;
     m_Headers[0] = m_Headers[1] = wxEmptyString;
     m_Footers[0] = m_Footers[1] = wxEmptyString;
@@ -492,7 +492,6 @@ void wxHtmlPrintout::CountPages()
 
     int pos = 0;
     m_NumPages = 0;
-    // m_PageBreaks[0] = 0;
 
     m_PageBreaks.Clear();
     m_PageBreaks.Add( 0);
@@ -503,12 +502,6 @@ void wxHtmlPrintout::CountPages()
                                  m_PageBreaks,
                                  pos, true, INT_MAX);
         m_PageBreaks.Add( pos);
-        if( m_PageBreaks.GetCount() > wxHTML_PRINT_MAX_PAGES)
-        {
-            wxMessageBox( _("HTML pagination algorithm generated more than the allowed maximum number of pages and it can't continue any longer!"),
-            _("Warning"), wxCANCEL | wxICON_ERROR );
-            break;
-        }
     } while (pos < m_Renderer->GetTotalHeight());
 }
 

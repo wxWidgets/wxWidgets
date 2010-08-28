@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/wx_cwcocoa_d.h
+// Name:        wx/wx_cwcocoa_d.h
 // Purpose:     Metrowerks Prefix Header File (wxCocoa Debug)
 // Author:      Tommy Tian (tommy.tian@webex.com)
 // Modified by: David Elliott

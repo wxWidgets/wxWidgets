@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPlatformInfo
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -90,7 +90,7 @@ enum wxPortId
 
 /**
     The architecture of the operating system
-    (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64bit()
+    (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64Bit()
     documentation for more info).
 */
 enum wxArchitecture

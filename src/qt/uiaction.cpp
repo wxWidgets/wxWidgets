@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/qt/defs.h"
+#include "wx/qt/utils.h"
 #include "wx/uiaction.h"
 
 #if wxUSE_UIACTIONSIMULATOR
@@ -35,7 +36,7 @@ bool wxUIActionSimulator::MouseUp(int button)
     return false;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, bool shiftDown, bool cmdDown, bool altDown)
+bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 

@@ -735,6 +735,7 @@
 #define wxUSE_COLLPANE      1   // wxCollapsiblePane
 #define wxUSE_COLOURPICKERCTRL 1    // wxColourPickerCtrl
 #define wxUSE_COMBOBOX      1   // wxComboBox
+#define wxUSE_COMMANDLINKBUTTON 1   // wxCommandLinkButton
 #define wxUSE_DATAVIEWCTRL  1   // wxDataViewCtrl
 #define wxUSE_DATEPICKCTRL  1   // wxDatePickerCtrl
 #define wxUSE_DIRPICKERCTRL 1   // wxDirPickerCtrl
@@ -749,6 +750,7 @@
 #define wxUSE_LISTCTRL      1   // wxListCtrl
 #define wxUSE_RADIOBOX      1   // wxRadioBox
 #define wxUSE_RADIOBTN      1   // wxRadioButton
+#define wxUSE_RICHMSGDLG    1   // wxRichMessageDialog
 #define wxUSE_SCROLLBAR     1   // wxScrollBar
 #define wxUSE_SEARCHCTRL    1   // wxSearchCtrl
 #define wxUSE_SLIDER        1   // wxSlider
@@ -1243,9 +1245,7 @@
                                 // Include mouse wheel support
 
 // Compile wxUIActionSimulator class?
-//
-// This is experimental code subject to change. It's not fully implemented yet.
-#define wxUSE_UIACTIONSIMULATOR 0
+#define wxUSE_UIACTIONSIMULATOR 1
 
 // ----------------------------------------------------------------------------
 // wxDC classes for various output formats

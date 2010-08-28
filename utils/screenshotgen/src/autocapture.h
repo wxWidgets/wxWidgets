@@ -3,7 +3,7 @@
 // Purpose:     Defines the AutoCaptureMechanism class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _AUTOCAPTURE_H_

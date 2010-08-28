@@ -362,6 +362,24 @@ public:
 #if wxUSE_LONGLONG
     bool Convert(wxLongLong* value) const;
     bool Convert(wxULongLong* value) const;
+  #ifdef wxLongLong_t
+    bool Convert(wxLongLong_t* value) const
+    {
+        wxLongLong temp;
+        if ( !Convert(&temp) )
+            return false;
+        *value = temp.GetValue();
+        return true;
+    }
+    bool Convert(wxULongLong_t* value) const
+    {
+        wxULongLong temp;
+        if ( !Convert(&temp) )
+            return false;
+        *value = temp.GetValue();
+        return true;
+    }
+  #endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
 
 // Attributes

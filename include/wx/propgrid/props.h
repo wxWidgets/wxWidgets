@@ -6,11 +6,13 @@
 // Created:     2007-03-28
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPS_H_
 #define _WX_PROPGRID_PROPS_H_
+
+#include "wx/defs.h"
 
 #if wxUSE_PROPGRID
 
@@ -122,9 +124,9 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** Constants used with DoValidation() methods.
+/** Constants used with NumericValidation<>().
 */
-enum wxPGDoValidationConstants
+enum wxPGNumericValidationConstants
 {
     /** Instead of modifying the value, show an error message.
     */
@@ -716,7 +718,6 @@ class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxArrayStringProperty)
 public:
-
     wxArrayStringProperty( const wxString& label = wxPG_LABEL,
                            const wxString& name = wxPG_LABEL,
                            const wxArrayString& value = wxArrayString() );
@@ -729,8 +730,12 @@ public:
                                 int argFlags = 0 ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
-    virtual void GenerateValueAsString();
+    // Implement in derived class for custom array-to-string conversion.
+    virtual void ConvertArrayToString(const wxArrayString& arr,
+                                      wxString* pString,
+                                      const wxUniChar& delimiter) const;
 
     // Shows string editor dialog. Value to be edited should be read from
     // value, and if dialog is not cancelled, it should be stored back and true
@@ -745,8 +750,27 @@ public:
     // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
     virtual wxPGArrayEditorDialog* CreateEditorDialog();
 
+    enum ConversionFlags
+    {
+        Escape          = 0x01,
+        QuoteStrings    = 0x02
+    };
+
+    /**
+        Generates contents for string dst based on the contents of
+        wxArrayString src.
+    */
+    static void ArrayStringToString( wxString& dst, const wxArrayString& src,
+                                     wxUniChar delimiter, int flags );
+
 protected:
+    // Previously this was to be implemented in derived class for array-to-
+    // string conversion. Now you should implement ConvertValueToString()
+    // instead.
+    virtual void GenerateValueAsString();
+
     wxString        m_display; // Cache for displayed text.
+    wxUniChar       m_delimiter;
 };
 
 // -----------------------------------------------------------------------
@@ -761,9 +785,6 @@ public: \
               const wxString& name = wxPG_LABEL, \
               const wxArrayString& value = wxArrayString() ); \
     ~PROPNAME(); \
-    virtual void GenerateValueAsString(); \
-    virtual bool StringToValue( wxVariant& value, \
-                                const wxString& text, int = 0 ) const; \
     virtual bool OnEvent( wxPropertyGrid* propgrid, \
                           wxWindow* primary, wxEvent& event ); \
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ); \
@@ -785,32 +806,9 @@ PROPNAME::PROPNAME( const wxString& label, \
     : wxArrayStringProperty(label,name,value) \
 { \
     PROPNAME::GenerateValueAsString(); \
+    m_delimiter = DELIMCHAR; \
 } \
 PROPNAME::~PROPNAME() { } \
-void PROPNAME::GenerateValueAsString() \
-{ \
-    wxChar delimChar = DELIMCHAR; \
-    if ( delimChar == wxS('"') ) \
-        wxArrayStringProperty::GenerateValueAsString(); \
-    else \
-        wxPropertyGrid::ArrayStringToString(m_display, \
-                                            m_value.GetArrayString(), \
-                                            0,DELIMCHAR,0); \
-} \
-bool PROPNAME::StringToValue( wxVariant& variant, \
-                              const wxString& text, int ) const \
-{ \
-    wxChar delimChar = DELIMCHAR; \
-    if ( delimChar == wxS('"') ) \
-        return wxArrayStringProperty::StringToValue(variant, text, 0); \
-    \
-    wxArrayString arr; \
-    WX_PG_TOKENIZER1_BEGIN(text,DELIMCHAR) \
-        arr.Add( token ); \
-    WX_PG_TOKENIZER1_END() \
-    variant = arr; \
-    return true; \
-} \
 bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
                         wxWindow* primary, wxEvent& event ) \
 { \
@@ -867,6 +865,11 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize );
 
+    void EnableCustomNewAction()
+    {
+        m_hasCustomNewAction = true;
+    }
+
     /** Set value modified by dialog.
     */
     virtual void SetDialogValue( const wxVariant& WXUNUSED(value) )
@@ -901,8 +904,6 @@ public:
     // wxEditableListBox utilities
     int GetSelection() const;
 
-    //const wxArrayString& GetStrings() const { return m_array; }
-
     // implementation from now on
     void OnAddClick(wxCommandEvent& event);
     void OnDeleteClick(wxCommandEvent& event);
@@ -913,21 +914,17 @@ public:
 
 protected:
     wxEditableListBox*  m_elb;
-    wxButton*           m_butCustom;    // required for disabling/enabling changing.
-    wxButton*           m_butUp;
-    wxButton*           m_butDown;
 
     // These are used for focus repair
     wxWindow*           m_elbSubPanel;
     wxWindow*           m_lastFocused;
-
-    const wxChar*   m_custBtText;
 
     // A new item, edited by user, is pending at this index.
     // It will be committed once list ctrl item editing is done.
     int             m_itemPendingAtIndex;
 
     bool            m_modified;
+    bool            m_hasCustomNewAction;
 
     // These must be overridden - must return true on success.
     virtual wxString ArrayGet( size_t index ) = 0;
@@ -936,6 +933,10 @@ protected:
     virtual bool ArraySet( size_t index, const wxString& str ) = 0;
     virtual void ArrayRemoveAt( int index ) = 0;
     virtual void ArraySwap( size_t first, size_t second ) = 0;
+    virtual bool OnCustomNewAction(wxString* WXUNUSED(resString))
+    {
+        return false;
+    }
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayEditorDialog)
@@ -967,13 +968,17 @@ public:
         return m_array;
     }
 
-    void SetCustomButton( const wxChar* custBtText, wxArrayStringProperty* pcc )
+    void SetCustomButton( const wxString& custBtText,
+                          wxArrayStringProperty* pcc )
     {
-        m_custBtText = custBtText;
-        m_pCallingClass = pcc;
+        if ( custBtText.length() )
+        {
+            EnableCustomNewAction();
+            m_pCallingClass = pcc;
+        }
     }
 
-    void OnCustomEditClick(wxCommandEvent& event);
+    virtual bool OnCustomNewAction(wxString* resString);
 
 protected:
     wxArrayString   m_array;

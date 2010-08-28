@@ -6,7 +6,7 @@
 // Created:     03.03.03 (replaces the old file with the same name)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -280,7 +280,7 @@ bool wxDIB::Load(const wxString& filename)
     m_handle = (HBITMAP)::LoadImage
                          (
                             wxGetInstance(),
-                            filename.fn_str(),
+                            filename.t_str(),
                             IMAGE_BITMAP,
                             0, 0, // don't specify the size
                             LR_CREATEDIBSECTION | LR_LOADFROMFILE

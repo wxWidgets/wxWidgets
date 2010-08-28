@@ -578,7 +578,8 @@ inline int wxLstat(const wxString& path, wxStructStat *buf)
     { return wxCRT_Lstat(path.fn_str(), buf); }
 inline int wxRmDir(const wxString& path)
     { return wxCRT_RmDir(path.fn_str()); }
-#if defined(__WINDOWS__) || (defined(__OS2__) && defined(__WATCOMC__))
+#if (defined(__WINDOWS__) && !defined(__CYGWIN__)) \
+        || (defined(__OS2__) && defined(__WATCOMC__))
 inline int wxMkDir(const wxString& path, mode_t WXUNUSED(mode) = 0)
     { return wxCRT_MkDir(path.fn_str()); }
 #else

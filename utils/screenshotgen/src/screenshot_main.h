@@ -3,7 +3,7 @@
 // Purpose:     Defines the Application Frame
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _SCREENSHOT_MAIN_H_

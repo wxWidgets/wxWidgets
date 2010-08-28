@@ -6,7 +6,7 @@
 // Created:     2004/09/29
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"

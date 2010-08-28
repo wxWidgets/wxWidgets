@@ -1741,6 +1741,8 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
           i != prefixes.end();
           ++i )
     {
+        if (i->length() == 0)
+            continue;
         wxDir dir;
         if ( !dir.Open(*i) )
             continue;

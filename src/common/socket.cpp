@@ -7,7 +7,7 @@
 //             (C) 1999-2000, Guillermo Rodriguez Garcia
 //             (C) 2008 Vadim Zeitlin
 // RCS_ID:     $Id$
-// License:    wxWindows licence
+// Licence:    wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ==========================================================================
@@ -980,7 +980,11 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
             {
                 // if we don't want to wait, just return immediately
                 if ( m_flags & wxSOCKET_NOWAIT )
+                {
+                    // this shouldn't be counted as an error in this case
+                    SetError(wxSOCKET_NOERROR);
                     break;
+                }
 
                 // otherwise wait until the socket becomes ready for reading or
                 // an error occurs on it
@@ -1372,10 +1376,11 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
 {
     wxCHECK_MSG( m_impl, -1, "can't wait on invalid socket" );
 
-    // we're never going to become ready in a client if we're not connected any
-    // more (OTOH a server can call this to precisely wait for a connection so
-    // do wait for it in this case)
-    if ( !m_impl->IsServer() && !m_connected && !m_establishing )
+    // we're never going to become ready in a TCP client if we're not connected
+    // any more (OTOH a server can call this to precisely wait for a connection
+    // so do wait for it in this case and UDP client is never "connected")
+    if ( !m_impl->IsServer() &&
+            m_impl->m_stream && !m_connected && !m_establishing )
         return -1;
 
     // This can be set to true from Interrupt() to exit this function a.s.a.p.

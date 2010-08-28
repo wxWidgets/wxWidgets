@@ -280,7 +280,7 @@ static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
     //We compare collate keys here instead of calling g_utf8_collate
     //as it is rather slow (and even the docs reccommend this)
     int ret = strcmp(gtk_tree_entry_get_collate_key(entry),
-                     gtk_tree_entry_get_collate_key(entry2));
+                     gtk_tree_entry_get_collate_key(entry2)) >= 0;
 
     g_object_unref (entry);
     g_object_unref (entry2);

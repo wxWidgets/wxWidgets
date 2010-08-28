@@ -805,6 +805,7 @@ public:
 protected:
      // FIXME: this does not work, it allows this code to compile but will fail
      //        during run-time
+#ifndef __WXUNIVERSAL__
 #ifdef __WXMSW__
     virtual WXHWND GetEditHWND() const { return GetHWND(); }
 #endif
@@ -816,6 +817,7 @@ protected:
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
 #endif
+#endif // !__WXUNIVERSAL__
 
 // Overrides
 protected:

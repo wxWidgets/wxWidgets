@@ -6,7 +6,7 @@
 // Created:     28.06.2008
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Marcin Malich <me@malcom.pl>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

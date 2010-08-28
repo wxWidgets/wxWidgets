@@ -3,7 +3,7 @@
 // Purpose:     interface of wxListCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -86,44 +86,65 @@
     @beginEventEmissionTable{wxListEvent}
     @event{EVT_LIST_BEGIN_DRAG(id, func)}
            Begin dragging with the left mouse button.
+          Processes a @c wxEVT_COMMAND_LIST_BEGIN_DRAG event type.
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
-           Begin dragging with the right mouse button..
-    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
+           Begin dragging with the right mouse button.
+           Processes a @c wxEVT_COMMAND_LIST_BEGIN_RDRAG event type.
+    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
+           Processes a @c wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT event type.
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
            Finish editing a label. This can be prevented by calling Veto().
+           Processes a @c wxEVT_COMMAND_LIST_END_LABEL_EDIT event type.
     @event{EVT_LIST_DELETE_ITEM(id, func)}
            An item was deleted.
+           Processes a @c wxEVT_COMMAND_LIST_DELETE_ITEM event type.
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
            All items were deleted.
+           Processes a @c wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
            The item has been selected.
+           Processes a @c wxEVT_COMMAND_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
+           Processes a @c wxEVT_COMMAND_LIST_ITEM_DESELECTED event type.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
            The item has been activated (ENTER or double click).
+           Processes a @c wxEVT_COMMAND_LIST_ITEM_ACTIVATED event type.
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}
            The currently focused item has changed.
+           Processes a @c wxEVT_COMMAND_LIST_ITEM_FOCUSED event type.
     @event{EVT_LIST_ITEM_MIDDLE_CLICK(id, func)}
-           The middle mouse button has been clicked on an item.
+           The middle mouse button has been clicked on an item. This is
+           only supported by the generic control.
+           Processes a @c wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event type.
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
           The right mouse button has been clicked on an item.
+          Processes a @c wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event type.
     @event{EVT_LIST_KEY_DOWN(id, func)}
            A key has been pressed.
+           Processes a @c wxEVT_COMMAND_LIST_KEY_DOWN event type.
     @event{EVT_LIST_INSERT_ITEM(id, func)}
            An item has been inserted.
+           Processes a @c wxEVT_COMMAND_LIST_INSERT_ITEM event type.
     @event{EVT_LIST_COL_CLICK(id, func)}
            A column (m_col) has been left-clicked.
+           Processes a @c wxEVT_COMMAND_LIST_COL_CLICK event type.
     @event{EVT_LIST_COL_RIGHT_CLICK(id, func)}
            A column (m_col) has been right-clicked.
+           Processes a @c wxEVT_COMMAND_LIST_COL_RIGHT_CLICK event type.
     @event{EVT_LIST_COL_BEGIN_DRAG(id, func)}
            The user started resizing a column - can be vetoed.
+           Processes a @c wxEVT_COMMAND_LIST_COL_BEGIN_DRAG event type.
     @event{EVT_LIST_COL_DRAGGING(id, func)}
            The divider between columns is being dragged.
+           Processes a @c wxEVT_COMMAND_LIST_COL_DRAGGING event type.
     @event{EVT_LIST_COL_END_DRAG(id, func)}
            A column has been resized by the user.
+           Processes a @c wxEVT_COMMAND_LIST_COL_END_DRAG event type.
     @event{EVT_LIST_CACHE_HINT(id, func)}
            Prepare cache for a virtual list control.
+           Processes a @c wxEVT_COMMAND_LIST_CACHE_HINT event type.
     @endEventTable
 
 
@@ -198,6 +219,9 @@ public:
 
     /**
         Deletes all items and all columns.
+
+        @note  This sends an event of type @c wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
+               under all platforms.
     */
     void ClearAll();
 
@@ -214,9 +238,15 @@ public:
     /**
         Deletes all items in the list control.
 
-        @note This function does @e not send the @c wxEVT_COMMAND_LIST_DELETE_ITEM
-              event because deleting many items from the control would be too slow
-              then (unlike wxListCtrl::DeleteItem).
+        This function does @e not send the @c wxEVT_COMMAND_LIST_DELETE_ITEM
+        event because deleting many items from the control would be too slow
+        then (unlike wxListCtrl::DeleteItem) but it does send the special @c
+        wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS event if the control was not empty.
+        If it was already empty, nothing is done and no event is sent.
+
+        @return @true if the items were successfully deleted or if the control
+            was already empty, @false if an error occurred while deleting the
+            items.
     */
     bool DeleteAllItems();
 

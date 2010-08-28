@@ -304,3 +304,11 @@ void wxDataViewCtrl::DoSetIndent()
 {
 }
 
+wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
+{
+    return wxDataViewItem();
+}
+
+void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
+{
+}

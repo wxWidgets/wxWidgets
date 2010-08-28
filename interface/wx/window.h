@@ -3,7 +3,7 @@
 // Purpose:     interface of wxWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -235,8 +235,6 @@ enum wxWindowVariant
         Process scroll events. See wxScrollWinEvent.
     @event{EVT_SET_CURSOR(func)}
         Process a @c wxEVT_SET_CURSOR event. See wxSetCursorEvent.
-    @event{EVT_SHOW(func)}
-        Process a @c wxEVT_SHOW event. See wxShowEvent.
     @event{EVT_SIZE(func)}
         Process a @c wxEVT_SIZE event. See wxSizeEvent.
     @event{EVT_SYS_COLOUR_CHANGED(func)}
@@ -1633,6 +1631,8 @@ public:
         @param colour
             The colour to be used as the background colour; pass
             wxNullColour to reset to the default colour.
+            Note that you may want to use wxSystemSettings::GetColour() to retrieve 
+            a suitable colour to use rather than setting an hard-coded one.
 
         @remarks The background colour is usually painted by the default
                  wxEraseEvent event handler function under Windows and
@@ -1650,32 +1650,32 @@ public:
 
         @see GetBackgroundColour(), SetForegroundColour(),
              GetForegroundColour(), ClearBackground(),
-             Refresh(), wxEraseEvent
+             Refresh(), wxEraseEvent, wxSystemSettings
     */
     virtual bool SetBackgroundColour(const wxColour& colour);
 
     /**
         Sets the background style of the window.
 
-        The default background style is wxBG_STYLE_ERASE which indicates that
-        the window background may be erased in EVT_ERASE_BACKGROUND handler.
+        The default background style is @c wxBG_STYLE_ERASE which indicates that
+        the window background may be erased in @c EVT_ERASE_BACKGROUND handler.
         This is a safe, compatibility default; however you may want to change it
-        to wxBG_STYLE_SYSTEM if you don't define any erase background event
+        to @c wxBG_STYLE_SYSTEM if you don't define any erase background event
         handlers at all, to avoid unnecessary generation of erase background
         events and always let system erase the background. And you should
-        change the background style to wxBG_STYLE_PAINT if you define an
-        EVT_PAINT handler which completely overwrites the window background as
-        in this case erasing it previously, either in EVT_ERASE_BACKGROUND
+        change the background style to @c wxBG_STYLE_PAINT if you define an
+        @c EVT_PAINT handler which completely overwrites the window background as
+        in this case erasing it previously, either in @c EVT_ERASE_BACKGROUND
         handler or in the system default handler, would result in flicker as
         the background pixels will be repainted twice every time the window is
         redrawn. Do ensure that the background is entirely erased by your
-        EVT_PAINT handler in this case however as otherwise garbage may be left
+        @c EVT_PAINT handler in this case however as otherwise garbage may be left
         on screen.
 
         Notice that in previous versions of wxWidgets a common way to work
         around the above mentioned flickering problem was to define an empty
-        EVT_ERASE_BACKGROUND handler. Setting background style to
-        wxBG_STYLE_PAINT is a simpler and more efficient solution to the same
+        @c EVT_ERASE_BACKGROUND handler. Setting background style to
+        @c wxBG_STYLE_PAINT is a simpler and more efficient solution to the same
         problem.
 
         @see SetBackgroundColour(), GetForegroundColour(),
@@ -2232,6 +2232,11 @@ public:
         Shows or hides the window. You may need to call Raise()
         for a top level window if you want to bring it to top, although this is not
         needed if Show() is called immediately after the frame creation.
+
+        Notice that the default state of newly created top level windows is hidden
+        (to allow you to create their contents without flicker) unlike for
+        all the other, not derived from wxTopLevelWindow, windows that
+        are by default created in the shown state.
 
         @param show
             If @true displays the window. Otherwise, hides it.

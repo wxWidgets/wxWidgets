@@ -5,7 +5,7 @@ The 10-minute, do-it-yourself wx project baking guide (with free sample recipes!
 Status: DRAFT
 Author: Kevin Ollivier
 Date: 2/13/04
-License: wxWidgets License
+Licence: wxWindows Licence
 -----------------------------------------------------------------------
 
 Supporting many different platforms can be a difficult challenge. The

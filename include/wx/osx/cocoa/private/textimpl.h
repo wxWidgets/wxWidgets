@@ -20,7 +20,12 @@
 class wxNSTextFieldControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
 {
 public :
-    wxNSTextFieldControl( wxWindow *wxPeer, WXWidget w );
+    // wxNSTextFieldControl must always be associated with a wxTextEntry. If
+    // it's associated with a wxTextCtrl then we can get the associated entry
+    // from it but otherwise the second ctor should be used to explicitly pass
+    // us the entry.
+    wxNSTextFieldControl( wxTextCtrl *text, WXWidget w );
+    wxNSTextFieldControl( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w );
     virtual ~wxNSTextFieldControl();
 
     virtual wxString GetStringValue() const ;
@@ -36,10 +41,15 @@ public :
     virtual bool HasOwnContextMenu() const { return true; }
 
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
+
 protected :
     NSTextField* m_textField;
     long m_selStart;
     long m_selEnd;
+
+private:
+    // Common part of both ctors.
+    void Init(WXWidget w);
 };
 
 class wxNSTextViewControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
@@ -78,7 +88,7 @@ protected:
 class wxNSComboBoxControl : public wxNSTextFieldControl, public wxComboWidgetImpl
 {
 public :
-    wxNSComboBoxControl( wxWindow *wxPeer, WXWidget w );
+    wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w );
     virtual ~wxNSComboBoxControl();
     
     virtual int GetSelectedItem() const;

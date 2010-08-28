@@ -661,7 +661,7 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
             wxLogWarning(_("file '%s', line %d: key '%s' was first found at line %d."),
-                         buffer.GetName(), n + 1, strKey.c_str(), pEntry->Line());
+                         buffer.GetName(), (int)n + 1, strKey.c_str(), pEntry->Line());
 
           }
         }

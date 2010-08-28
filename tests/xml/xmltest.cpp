@@ -76,12 +76,14 @@ private:
         CPPUNIT_TEST( InsertChildAfter );
         CPPUNIT_TEST( LoadSave );
         CPPUNIT_TEST( CDATA );
+        CPPUNIT_TEST( Escaping );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
     void InsertChildAfter();
     void LoadSave();
     void CDATA();
+    void Escaping();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -214,4 +216,27 @@ void XmlTestCase::CDATA()
     // the node contents when CDATA is used and wxXMLDOC_KEEP_WHITESPACE_NODES
     // is not
     CPPUNIT_ASSERT_EQUAL( "Giovanni Mittone", n->GetContent() );
+}
+
+void XmlTestCase::Escaping()
+{
+    // Verify that attribute values are escaped correctly, see
+    // http://trac.wxwidgets.org/ticket/12275
+
+    const char *xmlText =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<root text=\"hello&#xD;&#xA;this is a new line\">\n"
+"  <x/>\n"
+"</root>\n"
+    ;
+
+    wxStringInputStream sis(xmlText);
+
+    wxXmlDocument doc;
+    CPPUNIT_ASSERT( doc.Load(sis) );
+
+    wxStringOutputStream sos;
+    CPPUNIT_ASSERT( doc.Save(sos) );
+
+    CPPUNIT_ASSERT_EQUAL( xmlText, sos.GetString() );
 }

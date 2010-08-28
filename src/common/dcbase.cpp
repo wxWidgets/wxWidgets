@@ -1211,6 +1211,12 @@ void wxDC::DrawLabel(const wxString& text,
             yUnderscore = 0;
 
     // split the string into lines and draw each of them separately
+    //
+    // NB: while wxDC::DrawText() on some platforms supports drawing multi-line
+    //     strings natively, this is not the case for all of them, notably not
+    //     wxMSW which uses this function for multi-line texts, so we may only
+    //     call DrawText() for single-line strings from here to avoid infinite
+    //     recursion.
     wxString curLine;
     for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {

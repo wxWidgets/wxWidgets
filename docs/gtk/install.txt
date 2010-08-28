@@ -330,7 +330,7 @@ are
     --with-odbc             Enables ODBC code. This is disabled
                             by default because iODBC is under the
                             L-GPL license which is less liberal than
-                            wxWidgets license.
+                            wxWindows licence.
 
     --without-libpng        Disables PNG image format code.
 

@@ -6,7 +6,7 @@
 // Created:     24.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001-2004 Stefan Csomor
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -73,10 +73,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
-    int w = WidthDefault(size.x);
-    int h = HeightDefault(size.y);
-
-    if ( !wxNonOwnedWindow::Create(parent, id, pos, wxSize(w,h), style, name) )
+    if ( !wxNonOwnedWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
     wxWindow::SetLabel( title ) ;

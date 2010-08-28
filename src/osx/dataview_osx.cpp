@@ -333,9 +333,15 @@ void wxDataViewCtrl::Init()
   m_cgContext         = NULL;
 }
 
-bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
+bool wxDataViewCtrl::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString& name)
 {
-  if (!(wxControl::Create(parent,id,pos,size,style & ~(wxHSCROLL | wxVSCROLL),validator)))
+  if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
   m_peer = ::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle());
 
@@ -488,6 +494,16 @@ wxDataViewColumn* wxDataViewCtrl::GetSortingColumn() const
 unsigned int wxDataViewCtrl::GetCount() const
 {
   return GetDataViewPeer()->GetCount();
+}
+
+wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
+{
+    return GetDataViewPeer()->GetCurrentItem();
+}
+
+void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
+{
+    GetDataViewPeer()->SetCurrentItem(item);
 }
 
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const

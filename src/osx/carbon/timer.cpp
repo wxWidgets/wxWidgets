@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sec/mac/carbon/timer.cpp
+// Name:        src/osx/carbon/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Stefan Csomor
 // Modified by:

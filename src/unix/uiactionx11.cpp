@@ -1,11 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/uiactionx11.cpp
 // Purpose:     wxUIActionSimulator implementation
-// Author:      Kevin Ollivier
+// Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
 // RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
 // Copyright:   (c) Kevin Ollivier
+//              (c) 2010 Steven Lamerton
+//              (c) 2010 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,56 +17,61 @@
 
 #include "wx/uiaction.h"
 
-#include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/XTest.h>
+
+#include "wx/unix/utilsx11.h"
+
+namespace
+{
 
 void SendButtonEvent(int button, bool isDown)
 {
-    int xbutton = 0;
+    int xbutton;
     switch (button)
     {
         case wxMOUSE_BTN_LEFT:
             xbutton = 1;
             break;
-        case wxMOUSE_BTN_RIGHT:
+        case wxMOUSE_BTN_MIDDLE:
             xbutton = 2;
             break;
-        case wxMOUSE_BTN_MIDDLE:
+        case wxMOUSE_BTN_RIGHT:
             xbutton = 3;
             break;
         default:
             wxFAIL_MSG("Unsupported button passed in.");
+            return;
     }
 
+    wxX11Display display;
+    wxCHECK_RET(display, "No display available!");
+
     XEvent event;
-
-    Display *display = XOpenDisplay(0);
-    wxASSERT_MSG(display, "No display available!");
-
     memset(&event, 0x00, sizeof(event));
 
-    if (isDown)
-        event.type = ButtonPress;
-    else
-        event.type = ButtonRelease;
-
+    event.type = isDown ? ButtonPress : ButtonRelease;
     event.xbutton.button = xbutton;
     event.xbutton.same_screen = True;
 
-    XQueryPointer(display, RootWindow(display, DefaultScreen(display)), &event.xbutton.root, &event.xbutton.window, &event.xbutton.x_root, &event.xbutton.y_root, &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
+    XQueryPointer(display, display.DefaultRoot(),
+                  &event.xbutton.root, &event.xbutton.window,
+                  &event.xbutton.x_root, &event.xbutton.y_root,
+                  &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
     event.xbutton.subwindow = event.xbutton.window;
 
     while (event.xbutton.subwindow)
     {
         event.xbutton.window = event.xbutton.subwindow;
-        XQueryPointer(display, event.xbutton.window, &event.xbutton.root, &event.xbutton.subwindow, &event.xbutton.x_root, &event.xbutton.y_root, &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
+        XQueryPointer(display, event.xbutton.window,
+                      &event.xbutton.root, &event.xbutton.subwindow,
+                      &event.xbutton.x_root, &event.xbutton.y_root,
+                      &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
     }
 
     XSendEvent(display, PointerWindow, True, 0xfff, &event);
-    XFlush(display);
-    XCloseDisplay(display);
 }
+
+} // anonymous namespace
 
 bool wxUIActionSimulator::MouseDown(int button)
 {
@@ -74,12 +81,12 @@ bool wxUIActionSimulator::MouseDown(int button)
 
 bool wxUIActionSimulator::MouseMove(long x, long y)
 {
-    Display *display = XOpenDisplay(0);
+    wxX11Display display;
     wxASSERT_MSG(display, "No display available!");
-    Window root = DefaultRootWindow(display);
+
+    Window root = display.DefaultRoot();
     XWarpPointer(display, None, root, 0, 0, 0, 0, x, y);
-    XFlush(display);
-    XCloseDisplay(display);
+
     return true;
 }
 
@@ -89,37 +96,61 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, bool WXUNUSED(shiftDown), bool WXUNUSED(cmdDown), bool WXUNUSED(altDown))
+bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
 {
-    Display *display = XOpenDisplay(0);
-    wxASSERT_MSG(display, "No display available!");
+    wxX11Display display;
+    wxCHECK_MSG(display, false, "No display available!");
 
-    XKeyEvent event;
-    int mask = 0xfff;
-    memset(&event, 0x00, sizeof(event));
+    int mask, type;
 
-    if (isDown) {
-        event.type = KeyPress;
+    if ( isDown )
+    {
+        type = KeyPress;
         mask = KeyPressMask;
     }
-    else {
-        event.type = KeyRelease;
+    else
+    {
+        type = KeyRelease;
         mask = KeyReleaseMask;
     }
+
+    WXKeySym xkeysym = wxCharCodeWXToX(keycode);
+    KeyCode xkeycode = XKeysymToKeycode(display, xkeysym);
+    if ( xkeycode == NoSymbol )
+        return false;
+
+    Window focus;
+    int revert;
+    XGetInputFocus(display, &focus, &revert);
+    if (focus == None)
+        return false;
+
+    int mod = 0;
+
+    if (modifiers & wxMOD_SHIFT)
+        mod |= ShiftMask;
+    //Mod1 is alt in the vast majority of cases
+    if (modifiers & wxMOD_ALT)
+        mod |= Mod1Mask;
+    if (modifiers & wxMOD_CMD)
+        mod |= ControlMask;
+
+    XKeyEvent event;
+    event.display = display;
+    event.window = focus;
+    event.root = DefaultRootWindow(event.display);
+    event.subwindow = None;
+    event.time = CurrentTime;
+    event.x = 1;
+    event.y = 1;
+    event.x_root = 1;
+    event.y_root = 1;
     event.same_screen = True;
+    event.type = type;
+    event.state = mod;
+    event.keycode = xkeycode;
 
-    XQueryPointer(display, RootWindow(display, DefaultScreen(display)), &event.root, &event.window, &event.x_root, &event.y_root, &event.x, &event.y, &event.state);
-    event.subwindow = event.window;
-
-    while (event.subwindow)
-    {
-        event.window = event.subwindow;
-        XQueryPointer(display, event.window, &event.root, &event.subwindow, &event.x_root, &event.y_root, &event.x, &event.y, &event.state);
-    }
-
-    XSendEvent(display, PointerWindow, True, mask, (XEvent*) &event);
-    XFlush(display);
-    XCloseDisplay(display);
+    XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
 
     return true;
 }

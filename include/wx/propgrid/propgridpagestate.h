@@ -6,11 +6,13 @@
 // Created:     2008-08-24
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPGRIDPAGESTATE_H_
 #define _WX_PROPGRID_PROPGRIDPAGESTATE_H_
+
+#include "wx/defs.h"
 
 #if wxUSE_PROPGRID
 
@@ -472,9 +474,6 @@ public:
             m_vhCalcPending = 0;
         }
     }
-
-    /** Enables or disables given property and its subproperties. */
-    bool DoEnableProperty( wxPGProperty* p, bool enable );
 
     /** Returns (precalculated) height of contained visible properties.
     */

@@ -582,25 +582,20 @@ bool wxSizerItem::IsShown() const
             return m_window->IsShown();
 
         case Item_Sizer:
+        {
             // arbitrarily decide that if at least one of our elements is
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
+            for ( wxSizerItemList::compatibility_iterator
+                    node = m_sizer->GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext() )
             {
-                // Some apps (such as dialog editors) depend on an empty sizer still
-                // being laid out correctly and reporting the correct size and position.
-                if (m_sizer->GetChildren().GetCount() == 0)
+                if ( node->GetData()->IsShown() )
                     return true;
-
-                for ( wxSizerItemList::compatibility_iterator
-                        node = m_sizer->GetChildren().GetFirst();
-                      node;
-                      node = node->GetNext() )
-                {
-                    if ( node->GetData()->IsShown() )
-                        return true;
-                }
             }
             return false;
+        }
 
         case Item_Spacer:
             return m_spacer->IsShown();
@@ -2339,7 +2334,7 @@ wxSize wxBoxSizer::CalcMin()
 
     // Using the max ratio ensures that the min size is big enough for all
     // items to have their min size and satisfy the proportions among them.
-    SizeInMajorDir(m_minSize) += maxMinSizeToProp*m_totalProportion;
+    SizeInMajorDir(m_minSize) += (int)(maxMinSizeToProp*m_totalProportion);
 
     return m_minSize;
 }
@@ -2583,19 +2578,35 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
         }
 
-        // according to HIG, in explicit apply windows the order is:
-        // [ Help                     Apply   Cancel   OK ]
         if (m_buttonApply)
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+        {
+            // according to HIG, in explicit apply windows the order is:
+            // [ Help                     Apply   Cancel   OK ]
 
-        if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
-            // Cancel or help should be default
-            // m_buttonCancel->SetDefaultButton();
+            Add((wxWindow*)m_buttonApply,
+                0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonCancel)
+                Add((wxWindow*)m_buttonCancel,
+                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonAffirmative)
+                Add((wxWindow*)m_buttonAffirmative,
+                     0, wxALIGN_CENTRE | wxLEFT, 6);
+        }
+        else
+        {
+            // without an Apply button, have the buttons representing
+            // affirmative and negative close to each other.
+
+            if (m_buttonAffirmative)
+                Add((wxWindow*)m_buttonAffirmative,
+                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
+            if (m_buttonCancel)
+                Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT, 6);
         }
 
-        if (m_buttonAffirmative)
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
 #elif defined(__WXMSW__)
         // Windows
 

@@ -1095,6 +1095,18 @@ bool wxMacDataViewDataBrowserListViewControl::AssociateModel(wxDataViewModel* WX
 //
 // selection related methods (inherited from wxDataViewWidgetImpl)
 //
+wxDataViewItem wxMacDataViewDataBrowserListViewControl::GetCurrentItem() const
+{
+    wxFAIL_MSG( "unimplemented for Carbon" );
+
+    return wxDataViewItem();
+}
+
+void wxMacDataViewDataBrowserListViewControl::SetCurrentItem(const wxDataViewItem& WXUNUSED(item))
+{
+    wxFAIL_MSG( "unimplemented for Carbon" );
+}
+
 int wxMacDataViewDataBrowserListViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
   size_t noOfSelectedItems;

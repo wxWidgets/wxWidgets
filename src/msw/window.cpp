@@ -699,9 +699,21 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 void wxWindowMSW::DoEnable( bool enable )
 {
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::EnableWindow(hWnd, (BOOL)enable);
+    MSWEnableHWND(GetHwnd(), enable);
+}
+
+bool wxWindowMSW::MSWEnableHWND(WXHWND hWnd, bool enable)
+{
+    if ( !hWnd )
+        return false;
+
+    // If disabling focused control, we move focus to the next one, as if the
+    // user pressed Tab. That's because we can't keep focus on a disabled
+    // control, Tab-navigation would stop working then.
+    if ( !enable && ::GetFocus() == hWnd )
+        Navigate();
+
+    return ::EnableWindow(hWnd, (BOOL)enable) != 0;
 }
 
 bool wxWindowMSW::Show(bool show)
@@ -1865,11 +1877,13 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
     wxWindow * const parent = GetParent();
 
     wxPoint pos;
+#if wxUSE_DEFERRED_SIZING
     if ( m_pendingPosition != wxDefaultPosition )
     {
         pos = m_pendingPosition;
     }
     else // use current position
+#endif // wxUSE_DEFERRED_SIZING
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -2716,9 +2730,14 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
+    // notice that we cast wParam and lParam to long to avoid mismatch with
+    // format specifiers in 64 bit builds where they are both int64 quantities
+    //
+    // casting like this loses information, of course, but it shouldn't matter
+    // much for this diagnostic code and it keeps the code simple
     wxLogTrace("winmsg",
                wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
-               wxGetMessageName(message), hWnd, (long)wParam, lParam);
+               wxGetMessageName(message), hWnd, (long)wParam, (long)lParam);
 #endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
@@ -5724,7 +5743,8 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), wxT('&'));
+                const wxString label(item->GetItemLabel());
+                const wxChar *p = wxStrchr(label.wx_str(), wxT('&'));
                 while ( p++ )
                 {
                     if ( *p == wxT('&') )

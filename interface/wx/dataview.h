@@ -3,7 +3,7 @@
 // Purpose:     interface of wxDataView* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -20,17 +20,26 @@
     wxDataViewModel::GetValue in order to define the data model which acts as an
     interface between your actual data and the wxDataViewCtrl.
 
-    Since you will usually also allow the wxDataViewCtrl to change your data
+    Note that wxDataViewModel does not define the position or index of any item
+    in the control because different controls might display the same data differently.
+    wxDataViewModel does provide a wxDataViewModel::Compare method which the
+    wxDataViewCtrl may use to sort the data either in conjunction with a column
+    header or without (see wxDataViewModel::HasDefaultCompare).
+
+    wxDataViewModel (as indeed the entire wxDataViewCtrl code) is using wxVariant
+    to store data and its type in a generic way. wxVariant can be extended to contain
+    almost any data without changes to the original class. To a certain extent,
+    you can use (the somewhat more elegant) wxAny instead of wxVariant as there
+    is code to convert between the two, but it is unclear what impact this will
+    have on performance.
+
+    Since you will usually allow the wxDataViewCtrl to change your data
     through its graphical interface, you will also have to override
     wxDataViewModel::SetValue which the wxDataViewCtrl will call when a change
     to some data has been committed.
 
-    wxDataViewModel (as indeed the entire wxDataViewCtrl code) is using wxVariant
-    to store data and its type in a generic way. wxVariant can be extended to contain
-    almost any data without changes to the original class.
-
-    The data that is presented through this data model is expected to change at
-    run-time. You need to inform the data model when a change happened.
+    If the data represented by the model is changed by something else than its
+    associated wxDataViewCtrl, the control has to be notified about the change.
     Depending on what happened you need to call one of the following methods:
     - wxDataViewModel::ValueChanged,
     - wxDataViewModel::ItemAdded,
@@ -43,12 +52,6 @@
     - wxDataViewModel::ItemsAdded,
     - wxDataViewModel::ItemsDeleted,
     - wxDataViewModel::ItemsChanged.
-
-    Note that wxDataViewModel does not define the position or index of any item
-    in the control because different controls might display the same data differently.
-    wxDataViewModel does provide a wxDataViewModel::Compare method which the
-    wxDataViewCtrl may use to sort the data either in conjunction with a column
-    header or without (see wxDataViewModel::HasDefaultCompare).
 
     This class maintains a list of wxDataViewModelNotifier which link this class
     to the specific implementations on the supported platforms so that e.g. calling
@@ -74,6 +77,19 @@
 
         // add columns now
     @endcode
+
+    A potentially better way to avoid memory leaks is to use wxObjectDataPtr
+    
+    @code
+        wxObjectDataPtr<MyMusicModel> musicModel;
+        
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
+        musicModel = new MyMusicModel;
+        m_musicCtrl->AssociateModel( musicModel.get() );
+
+        // add columns now
+    @endcode
+
 
     @library{wxadv}
     @category{dvc}
@@ -227,7 +243,7 @@ public:
     /**
         Call this to inform the model that an item has been added to the data.
     */
-    virtual bool ItemAdded(const wxDataViewItem& parent,
+    bool ItemAdded(const wxDataViewItem& parent,
                            const wxDataViewItem& item);
 
     /**
@@ -236,18 +252,18 @@ public:
         This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
     */
-    virtual bool ItemChanged(const wxDataViewItem& item);
+    bool ItemChanged(const wxDataViewItem& item);
 
     /**
         Call this to inform the model that an item has been deleted from the data.
     */
-    virtual bool ItemDeleted(const wxDataViewItem& parent,
+    bool ItemDeleted(const wxDataViewItem& parent,
                              const wxDataViewItem& item);
 
     /**
         Call this to inform the model that several items have been added to the data.
     */
-    virtual bool ItemsAdded(const wxDataViewItem& parent,
+    bool ItemsAdded(const wxDataViewItem& parent,
                             const wxDataViewItemArray& items);
 
     /**
@@ -256,12 +272,12 @@ public:
         This will eventually emit wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
     */
-    virtual bool ItemsChanged(const wxDataViewItemArray& items);
+    bool ItemsChanged(const wxDataViewItemArray& items);
 
     /**
         Call this to inform the model that several items have been deleted.
     */
-    virtual bool ItemsDeleted(const wxDataViewItem& parent,
+    bool ItemsDeleted(const wxDataViewItem& parent,
                               const wxDataViewItemArray& items);
 
     /**
@@ -660,7 +676,8 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxValidator& validator = wxDefaultValidator);
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxDataViewCtrlNameStr);
 
     /**
         Destructor.
@@ -841,7 +858,8 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxValidator& validator = wxDefaultValidator);
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxDataViewCtrlNameStr);
 
     /**
         Deletes given column.
@@ -898,6 +916,26 @@ public:
     wxDataViewColumn* GetExpanderColumn() const;
 
     /**
+        Returns the currently focused item.
+
+        This is the item that the keyboard commands apply to. It may be invalid
+        if there is no focus currently.
+
+        This method is mostly useful for the controls with @c wxDV_MULTIPLE
+        style as in the case of single selection it returns the same thing as
+        GetSelection().
+
+        Notice that under all platforms except Mac OS X the currently focused
+        item may be selected or not but under OS X the current item is always
+        selected.
+
+        @see SetCurrentItem()
+
+        @since 2.9.2
+     */
+    wxDataViewItem GetCurrentItem() const;
+
+    /**
         Returns indentation.
     */
     int GetIndent() const;
@@ -947,6 +985,10 @@ public:
 
     /**
         Select the given item.
+
+        In single selection mode this changes the (unique) currently selected
+        item. In multi selection mode, the @a item is selected and the
+        previously selected items remain selected.
     */
     virtual void Select(const wxDataViewItem& item);
 
@@ -959,6 +1001,25 @@ public:
         Set which column shall contain the tree-like expanders.
     */
     void SetExpanderColumn(wxDataViewColumn* col);
+
+    /**
+        Changes the currently focused item.
+
+        The @a item parameter must be valid, there is no way to remove the
+        current item from the control.
+
+        In single selection mode, calling this method is the same as calling
+        Select() and is thus not very useful. In multiple selection mode this
+        method only moves the current item however without changing the
+        selection except under OS X where the current item is always selected,
+        so calling SetCurrentItem() selects @a item if it hadn't been selected
+        before.
+
+        @see GetCurrentItem()
+
+        @since 2.9.2
+     */
+    void SetCurrentItem(const wxDataViewItem& item);
 
     /**
         Sets the indendation.
@@ -1736,6 +1797,64 @@ public:
     */
     wxDataViewListStore *GetStore();
     const wxDataViewListStore *GetStore() const;
+    //@}
+
+    /**
+        Returns the position of given @e item or wxNOT_FOUND if it's
+        not a valid item.
+
+        @since 2.9.2
+     */
+    int ItemToRow(const wxDataViewItem &item) const;
+
+    /**
+        Returns the wxDataViewItem at the given @e row.
+
+        @since 2.9.2
+     */
+    wxDataViewItem RowToItem(int row) const;
+
+    //@{
+    /**
+        @name Selection handling functions
+     */
+
+    /**
+        Returns index of the selected row or wxNOT_FOUND.
+
+        @see wxDataViewCtrl::GetSelection()
+
+        @since 2.9.2
+     */
+    int GetSelectedRow() const;
+
+    /**
+        Selects given row.
+
+        @see wxDataViewCtrl::Select()
+
+        @since 2.9.2
+     */
+    void SelectRow(unsigned row);
+
+    /**
+        Unselects given row.
+
+        @see wxDataViewCtrl::Unselect()
+
+        @since 2.9.2
+     */
+    void UnselectRow(unsigned row);
+
+    /**
+        Returns true if @a row is selected.
+
+        @see wxDataViewCtrl::IsSelected()
+
+        @since 2.9.2
+     */
+    bool IsRowSelected(unsigned row) const;
+
     //@}
 
     /**

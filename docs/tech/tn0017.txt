@@ -10,10 +10,10 @@ I. CppUnit Installation
 -----------------------
 
 1. Get it from http://www.sourceforge.net/projects/cppunit
-   (latest version as of the time of this writing is 1.8.0)
+   (latest version as of the time of this writing is 1.10.2)
 
 2. Build the library:
- a) Under Windows using VC++ (both versions 6 and 7 work):
+ a) Under Windows using VC++ (versions 6, 7, 8 & 9 work):
     - build everything in CppUnitLibraries.dsw work space
     - add include and lib subdirectories of the directory
       where you installed cppunit to the compiler search path
@@ -41,7 +41,26 @@ II. Writing tests with CppUnit
     // also include in it's own registry so that these tests can be run alone
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MBConvTestCase, "MBConvTestCase");
 
-   Read CppUnit documentation for more.
+    Read CppUnit documentation for more.
+ d) wxUIActionSimulator can be used when user input is required, for example
+    clicking buttons or typing text. A simple example of this can be found
+    in controls/buttontest.cpp. After simulating some user input always
+    wxYield to allow event processing. When writing a test using
+    wxUIActionSimulator always add the test using WXUISIM_TEST rather than
+    CPPUNIT_TEST as then it won't run on unsupported platforms. The test itself
+    must also be wrapped in a #if wxUSE_UIACTIONSIMULATOR block.
+ e) There are a number of classes that are available to help with testing GUI
+    elements. Firstly throughout the test run there is a frame of type
+    wxTestableFrame that you can access through wxTheApp->GetTopWindow(). This
+    class adds two new functions, GetEventCount, which takes an optional
+    wxEventType. It then returns the number of events of that type that it has
+    received since the last call. Passing nothing returns the total number of
+    event received since the last call. Also there is OnEvent, which counts the
+    events based on type that are passed to it. To make it easy to count events
+    there is also a new class called EventCounter which takes a window and event
+    type and connects the window to the top level wxTestableFrame with the specific
+    event type. It disconnects again once it is out of scope. It simply reduces
+    the amount of typing required to count events.
 
 3. add a '<sources>' tag for your source file to tests/test.bkl
 

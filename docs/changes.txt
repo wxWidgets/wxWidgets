@@ -400,6 +400,30 @@ Major new features in this release
   was added.
 
 
+2.9.2:
+------
+
+All (GUI):
+
+- Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
+- Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
+- Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
+- wxAUI: support auto-orientable toolbars (wsu).
+- Added wxDataViewCtrl::Set/GetCurrentItem().
+- wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
+- wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
+- Add support for CP-866 encoding to wxEncodingConverter (madnut).
+
+MSW:
+
+- Native implementation of wxHyperlinkCtrl and wxProgressDialog under modern
+  Windows versions (Rickard Westerlund, GSoC 2010 project).
+- Fix Cygwin 1.7 build (David Gangola).
+- Allow using wxDC::DrawText() with multiline texts.
+- Fix wxBitmapButton best size determination broken in 2.9.1.
+
+
+
 2.9.1:
 ------
 
@@ -500,6 +524,7 @@ All (GUI):
   new flags: wxPG_VFB_SHOW_MESSAGEBOX and wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR.
 - wxPropertyGrid: Added wxPropertyGrid::DedicateKey().
 - wxPropertyGrid: wxArrayStringProperty now uses wxEditableListBox.
+- wxPropertyGrid: Added "Delimiter" attribute for wxArrayStringProperty.
 - wxPropertyGridManager: added wxPG_NO_INTERNAL_BORDER,
   wxPG_EX_NO_TOOLBAR_DIVIDER and wxPG_EX_TOOLBAR_SEPARATOR styles for finer
   control over borders. Borders around property grid are now native for
@@ -531,6 +556,7 @@ All (GUI):
 - wxAUI: update floating window position and not only size on resize (MacGyver).
 - Added wxComboCtrl::SetTextCtrlStyle().
 - Also update client data in wxRearrangeList control (John Roberts).
+- Generate more click events in wxGrid when using native header (John Roberts).
 
 GTK:
 

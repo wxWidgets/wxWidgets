@@ -35,9 +35,6 @@ class WXDLLIMPEXP_FWD_CORE wxRegion;
 // key events related functions
 // ----------------------------------------------------------------------------
 
-extern int wxCharCodeXToWX(KeySym keySym);
-extern KeySym wxCharCodeWXToX(int id);
-
 WXPixel wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 

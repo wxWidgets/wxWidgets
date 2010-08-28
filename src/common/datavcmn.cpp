@@ -994,6 +994,22 @@ void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
     }
 }
 
+wxDataViewItem wxDataViewCtrlBase::GetCurrentItem() const
+{
+    return HasFlag(wxDV_MULTIPLE) ? DoGetCurrentItem()
+                                  : GetSelection();
+}
+
+void wxDataViewCtrlBase::SetCurrentItem(const wxDataViewItem& item)
+{
+    wxCHECK_RET( item.IsOk(), "Can't make current an invalid item." );
+
+    if ( HasFlag(wxDV_MULTIPLE) )
+        DoSetCurrentItem(item);
+    else
+        Select(item);
+}
+
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
@@ -1600,10 +1616,6 @@ wxDataViewListCtrl::wxDataViewListCtrl( wxWindow *parent, wxWindowID id,
            const wxValidator& validator )
 {
     Create( parent, id, pos, size, style, validator );
-
-    wxDataViewListStore *store = new wxDataViewListStore;
-    AssociateModel( store );
-    store->DecRef();
 }
 
 wxDataViewListCtrl::~wxDataViewListCtrl()
@@ -1615,7 +1627,14 @@ bool wxDataViewListCtrl::Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, long style,
            const wxValidator& validator )
 {
-    return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
+    if ( !wxDataViewCtrl::Create( parent, id, pos, size, style, validator ) )
+        return false;
+
+    wxDataViewListStore *store = new wxDataViewListStore;
+    AssociateModel( store );
+    store->DecRef();
+
+    return true;
 }
 
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *column, const wxString &varianttype )

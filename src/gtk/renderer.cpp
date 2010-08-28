@@ -6,7 +6,7 @@
 // Created:     20.07.2003
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -469,12 +469,21 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
     else
         state = GTK_STATE_NORMAL;
 
+    GtkShadowType shadow_type;
+
+    if ( flags & wxCONTROL_UNDETERMINED )
+        shadow_type = GTK_SHADOW_ETCHED_IN;
+    else if ( flags & wxCONTROL_CHECKED )
+        shadow_type = GTK_SHADOW_IN;
+    else
+        shadow_type = GTK_SHADOW_OUT;
+
     gtk_paint_check
     (
         button->style,
         gdk_window,
         state,
-        flags & wxCONTROL_CHECKED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+        shadow_type,
         NULL,
         button,
         "cellcheck",

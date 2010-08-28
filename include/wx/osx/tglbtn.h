@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/tglbtn.h
+// Name:        wx/osx/tglbtn.h
 // Purpose:     Declaration of the wxToggleButton class, which implements a
 //              toggle button under wxMac.
 // Author:      Stefan Csomor
@@ -7,7 +7,7 @@
 // Created:     08.02.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Stefan Csomor
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TOGGLEBUTTON_H_

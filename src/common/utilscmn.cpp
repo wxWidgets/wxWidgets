@@ -113,21 +113,12 @@
 static const wxChar hexArray[] = wxT("0123456789ABCDEF");
 
 // Convert 2-digit hex number to decimal
-int wxHexToDec(const wxString& buf)
+int wxHexToDec(const wxString& str)
 {
-    int firstDigit, secondDigit;
-
-    if (buf.GetChar(0) >= wxT('A'))
-        firstDigit = buf.GetChar(0) - wxT('A') + 10;
-    else
-        firstDigit = buf.GetChar(0) - wxT('0');
-
-    if (buf.GetChar(1) >= wxT('A'))
-        secondDigit = buf.GetChar(1) - wxT('A') + 10;
-    else
-        secondDigit = buf.GetChar(1) - wxT('0');
-
-    return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
+    char buf[2];
+    buf[0] = str.GetChar(0);
+    buf[1] = str.GetChar(1);
+    return wxHexToDec((const char*) buf);
 }
 
 // Convert decimal integer to 2-character hex string

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/corefoundation/cfdata.h
+// Name:        wx/osx/core/cfdataref.h
 // Purpose:     wxCFDataRef class
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 // Notes:       See http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBinaryData/index.html
 /////////////////////////////////////////////////////////////////////////////
-/*! @header     wx/mac/corefoundation/cfref.h
+/*! @header     wx/osx/core/cfdataref.h
     @abstract   wxCFDataRef template class
 */
 

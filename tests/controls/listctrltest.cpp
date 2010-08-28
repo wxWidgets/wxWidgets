@@ -5,6 +5,7 @@
 // Created:     2008-11-26
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
+//              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -12,6 +13,8 @@
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
+
+#if wxUSE_LISTCTRL
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -22,12 +25,15 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "listbasetest.h"
+#include "testableframe.h"
+#include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class ListCtrlTestCase : public CppUnit::TestCase
+class ListCtrlTestCase : public ListBaseTestCase, public CppUnit::TestCase
 {
 public:
     ListCtrlTestCase() { }
@@ -35,22 +41,21 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    virtual wxListCtrl *GetList() const { return m_list; }
+
 private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );
-#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
-        CPPUNIT_TEST( ColumnsOrder );
-#endif // wxHAS_LISTCTRL_COLUMN_ORDER
-        CPPUNIT_TEST( ItemRect );
-        CPPUNIT_TEST( ItemText );
-        CPPUNIT_TEST( ChangeMode );
+        wxLIST_BASE_TESTS();
+        WXUISIM_TEST( ColumnClick );
+        WXUISIM_TEST( ColumnDrag );
     CPPUNIT_TEST_SUITE_END();
 
-#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
-    void ColumnsOrder();
-#endif // wxHAS_LISTCTRL_COLUMN_ORDER
-    void ItemRect();
-    void ItemText();
-    void ChangeMode();
+#if wxUSE_UIACTIONSIMULATOR
+    // Column events are only supported in wxListCtrl currently so we test them
+    // here rather than in ListBaseTest
+    void ColumnClick();
+    void ColumnDrag();
+#endif // wxUSE_UIACTIONSIMULATOR
 
     wxListCtrl *m_list;
 
@@ -71,6 +76,7 @@ void ListCtrlTestCase::setUp()
 {
     m_list = new wxListCtrl(wxTheApp->GetTopWindow());
     m_list->SetWindowStyle(wxLC_REPORT);
+    m_list->SetSize(400, 200);
 }
 
 void ListCtrlTestCase::tearDown()
@@ -79,135 +85,70 @@ void ListCtrlTestCase::tearDown()
     m_list = NULL;
 }
 
-// ----------------------------------------------------------------------------
-// the tests themselves
-// ----------------------------------------------------------------------------
-
-#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
-
-void ListCtrlTestCase::ColumnsOrder()
+#if wxUSE_UIACTIONSIMULATOR
+void ListCtrlTestCase::ColumnDrag()
 {
-    int n;
-    wxListItem li;
-    li.SetMask(wxLIST_MASK_TEXT);
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
 
-    // first set up some columns
-    static const int NUM_COLS = 3;
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG);
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_DRAGGING);
+    EventCounter count2(m_list, wxEVT_COMMAND_LIST_COL_END_DRAG);
 
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertColumn(1, "Column 1");
     m_list->InsertColumn(2, "Column 2");
+    m_list->Update();
+    m_list->SetFocus();
 
-    // and a couple of test items too
-    m_list->InsertItem(0, "Item 0");
-    m_list->SetItem(0, 1, "first in first");
+    wxUIActionSimulator sim;
 
-    m_list->InsertItem(1, "Item 1");
-    m_list->SetItem(1, 2, "second in second");
+    wxPoint pt = m_list->ClientToScreen(wxPoint(m_list->GetColumnWidth(0), 5));
 
+    sim.MouseMove(pt);
+    wxYield();
 
-    // check that the order is natural in the beginning
-    const wxArrayInt orderOrig = m_list->GetColumnsOrder();
-    for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( n, orderOrig[n] );
+    sim.MouseDown();
+    wxYield();
 
-    // then rearrange them: using { 2, 0, 1 } order means that column 2 is
-    // shown first, then column 0 and finally column 1
-    wxArrayInt order(3);
-    order[0] = 2;
-    order[1] = 0;
-    order[2] = 1;
-    m_list->SetColumnsOrder(order);
+    sim.MouseMove(pt.x + 50, pt.y);
+    wxYield();
 
-    // check that we get back the same order as we set
-    const wxArrayInt orderNew = m_list->GetColumnsOrder();
-    for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( order[n], orderNew[n] );
+    sim.MouseUp();
+    wxYield();
 
-    // and the order -> index mappings for individual columns
-    for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( order[n], m_list->GetColumnIndexFromOrder(n) );
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
+    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_COMMAND_LIST_COL_DRAGGING) > 0);
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
 
-    // and also the reverse mapping
-    CPPUNIT_ASSERT_EQUAL( 1, m_list->GetColumnOrder(0) );
-    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetColumnOrder(1) );
-    CPPUNIT_ASSERT_EQUAL( 0, m_list->GetColumnOrder(2) );
-
-
-    // finally check that accessors still use indices, not order
-    CPPUNIT_ASSERT( m_list->GetColumn(0, li) );
-    CPPUNIT_ASSERT_EQUAL( "Column 0", li.GetText() );
-
-    li.SetId(0);
-    li.SetColumn(1);
-    CPPUNIT_ASSERT( m_list->GetItem(li) );
-    CPPUNIT_ASSERT_EQUAL( "first in first", li.GetText() );
-
-    li.SetId(1);
-    li.SetColumn(2);
-    CPPUNIT_ASSERT( m_list->GetItem(li) );
-    CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
+    m_list->ClearAll();
 }
 
-#endif // wxHAS_LISTCTRL_COLUMN_ORDER
-
-void ListCtrlTestCase::ItemRect()
+void ListCtrlTestCase::ColumnClick()
 {
-    // set up for the test
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
+
+
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
-    m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
-    m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
 
-    m_list->InsertItem(0, "Item 0");
-    m_list->SetItem(0, 1, "first column");
-    m_list->SetItem(0, 1, "second column");
+    wxUIActionSimulator sim;
 
-    // do test
-    wxRect r;
-    WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetItemRect(1, r) );
-    CPPUNIT_ASSERT( m_list->GetItemRect(0, r) );
-    CPPUNIT_ASSERT_EQUAL( 150, r.GetWidth() );
+    sim.MouseMove(m_list->ClientToScreen(wxPoint(4, 4)));
+    wxYield();
 
-    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 0, r) );
-    CPPUNIT_ASSERT_EQUAL( 60, r.GetWidth() );
+    sim.MouseClick();
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
 
-    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 1, r) );
-    CPPUNIT_ASSERT_EQUAL( 50, r.GetWidth() );
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK));
 
-    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 2, r) );
-    CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
-
-    WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
+    m_list->ClearAll();
 }
+#endif // wxUSE_UIACTIONSIMULATOR
 
-void ListCtrlTestCase::ItemText()
-{
-    m_list->InsertColumn(0, "First");
-    m_list->InsertColumn(1, "Second");
-
-    m_list->InsertItem(0, "0,0");
-    CPPUNIT_ASSERT_EQUAL( "0,0", m_list->GetItemText(0) );
-    CPPUNIT_ASSERT_EQUAL( "", m_list->GetItemText(0, 1) );
-
-    m_list->SetItem(0, 1, "0,1");
-    CPPUNIT_ASSERT_EQUAL( "0,1", m_list->GetItemText(0, 1) );
-}
-
-void ListCtrlTestCase::ChangeMode()
-{
-    m_list->InsertColumn(0, "Header");
-    m_list->InsertItem(0, "First");
-    m_list->InsertItem(1, "Second");
-    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
-
-    // check that switching the mode preserves the items
-    m_list->SetWindowStyle(wxLC_ICON);
-    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( "First", m_list->GetItemText(0) );
-
-    // and so does switching back
-    m_list->SetWindowStyle(wxLC_REPORT);
-    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( "First", m_list->GetItemText(0) );
-}
-
+#endif // wxUSE_LISTCTRL

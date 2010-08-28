@@ -12,7 +12,7 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogWithCustomLabels
+class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:
     wxMessageDialog(wxWindow *parent,
@@ -20,7 +20,7 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
-        : wxMessageDialogWithCustomLabels(parent, message, caption, style)
+        : wxMessageDialogBase(parent, message, caption, style)
     {
         m_hook = NULL;
     }
@@ -55,11 +55,16 @@ private:
     // offset all buttons starting from the first one given by dx to the right
     void OffsetButtonsStartingFrom(int first, int dx);
 
+    // used by ShowModal() to display a message box when task dialogs
+    // aren't available.
+    int ShowMessageBox();
+
+    // used by ShowModal() to display a task dialog.
+    int ShowTaskDialog();
 
     WXHANDLE m_hook; // HHOOK used to position the message box
 
-    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-    wxDECLARE_NO_COPY_CLASS(wxMessageDialog);
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMessageDialog);
 };
 
 

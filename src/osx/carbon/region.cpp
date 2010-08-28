@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      src/mac/carbon/region.cpp
+// File:      src/osx/carbon/region.cpp
 // Purpose:   Region class
 // Author:    Stefan Csomor
 // Created:   Fri Oct 24 10:46:34 MET 1997

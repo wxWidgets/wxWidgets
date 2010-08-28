@@ -67,7 +67,7 @@ inline void FreeFindData(FIND_DATA fd)
 inline FIND_DATA FindFirst(const wxString& spec,
                            FIND_STRUCT *finddata)
 {
-    return ::FindFirstFile(spec.fn_str(), finddata);
+    return ::FindFirstFile(spec.t_str(), finddata);
 }
 
 inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)

@@ -20,7 +20,7 @@ class WXDLLIMPEXP_ADV wxGenericHyperlinkCtrl : public wxHyperlinkCtrlBase
 {
 public:
     // Default constructor (for two-step construction).
-    wxGenericHyperlinkCtrl() { }
+    wxGenericHyperlinkCtrl() { Init(); }
 
     // Constructor.
     wxGenericHyperlinkCtrl(wxWindow *parent,
@@ -31,7 +31,8 @@ public:
                             long style = wxHL_DEFAULT_STYLE,
                             const wxString& name = wxHyperlinkCtrlNameStr)
     {
-        (void)Create(parent, id, label, url, pos, size, style, name);
+        Init();
+        (void) Create(parent, id, label, url, pos, size, style, name);
     }
 
     // Creation function (for two-step construction).
@@ -65,6 +66,10 @@ public:
 
 
 protected:
+    // Helper used by this class itself and native MSW implementation that
+    // connects OnRightUp() and OnPopUpCopy() handlers.
+    void ConnectMenuHandlers();
+
     // event handlers
 
     // Renders the hyperlink.
@@ -100,12 +105,15 @@ protected:
 
     // Returns the best size for the window, which is the size needed
     // to display the text label.
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
 
     // creates a context menu with "Copy URL" menuitem
     virtual void DoContextMenu(const wxPoint &);
 
 private:
+    // Common part of all ctors.
+    void Init();
+
     // URL associated with the link. This is transmitted inside
     // the HyperlinkEvent fired when the user clicks on the label.
     wxString m_url;
@@ -126,9 +134,6 @@ private:
     // True if a click is in progress (left button down) and the click
     // originated inside the label's bounding box.
     bool m_clicking;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxGenericHyperlinkCtrl)
 };
 
 #endif // _WX_GENERICHYPERLINKCTRL_H_

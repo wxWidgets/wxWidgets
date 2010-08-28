@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/nonownedwnd.h
+// Name:        wx/osx/nonownedwnd.h
 // Purpose:     declares wxNonOwnedWindow class
 // Author:      Stefan Csomor
 // Modified by:

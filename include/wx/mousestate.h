@@ -11,6 +11,7 @@
 #ifndef _WX_MOUSESTATE_H_
 #define _WX_MOUSESTATE_H_
 
+#include "wx/gdicmn.h"      // for wxPoint
 #include "wx/kbdstate.h"
 
 // the symbolic names for the mouse buttons

@@ -1595,10 +1595,10 @@ public:
     }
 
     // Allow adjustment of scroll increment. The default is (15, 15).
-    void SetScrollLineX(int x) { m_scrollLineX = x; }
-    void SetScrollLineY(int y) { m_scrollLineY = y; }
-    int GetScrollLineX() const { return m_scrollLineX; }
-    int GetScrollLineY() const { return m_scrollLineY; }
+    void SetScrollLineX(int x) { m_xScrollPixelsPerLine = x; }
+    void SetScrollLineY(int y) { m_yScrollPixelsPerLine = y; }
+    int GetScrollLineX() const { return m_xScrollPixelsPerLine; }
+    int GetScrollLineY() const { return m_yScrollPixelsPerLine; }
 
     // ------- drag and drop
 #if wxUSE_DRAG_AND_DROP
@@ -2045,9 +2045,6 @@ protected:
 
     bool       m_editable;              // applies to whole grid
     bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
-
-    int m_scrollLineX; // X scroll increment
-    int m_scrollLineY; // Y scroll increment
 
     void Init();        // common part of all ctors
     void Create();

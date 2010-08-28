@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -68,17 +68,23 @@ private:
         {
             m_useLoop = useLoop;
             if ( useLoop )
+            {
+                m_evtLoopOld = wxEventLoopBase::GetActive();
                 SetActive(this);
+            }
         }
 
         virtual ~SocketTestEventLoop()
         {
             if ( m_useLoop )
-                SetActive(NULL);
+            {
+                wxEventLoopBase::SetActive(m_evtLoopOld);
+            }
         }
 
     private:
         bool m_useLoop;
+        wxEventLoopBase *m_evtLoopOld;
     };
 
     // get the address to connect to, if NULL is returned it means that the

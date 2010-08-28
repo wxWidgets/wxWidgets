@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/menuitem.h
+// Name:        wx/osx/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
 // Modified by:

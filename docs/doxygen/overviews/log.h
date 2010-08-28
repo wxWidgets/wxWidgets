@@ -3,31 +3,24 @@
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page overview_log wxLog Classes Overview
 
-Classes:
-@li wxLog
-@li wxLogStderr
-@li wxLogStream
-@li wxLogTextCtrl
-@li wxLogWindow
-@li wxLogGui
-@li wxLogNull
-@li wxLogBuffer
-@li wxLogChain
-@li wxLogInterposer
-@li wxLogInterposerTemp
-@li wxStreamToTextRedirector
+Classes: wxLog, wxLogStderr, wxLogStream, wxLogTextCtrl, wxLogWindow, wxLogGui, wxLogNull, wxLogBuffer, 
+         wxLogChain, wxLogInterposer, wxLogInterposerTemp, wxStreamToTextRedirector
 
+Table of contents:
 @li @ref overview_log_introduction
+@li @ref overview_log_enable
 @li @ref overview_log_targets
+@li @ref overview_log_mt 
 @li @ref overview_log_customize
-
+@li @ref overview_log_tracemasks
+@li @ref overview_log_timestamps
 <hr>
 
 
@@ -41,43 +34,42 @@ as well as several standard implementations of it and a family of functions to
 use with them.
 
 First of all, no knowledge of wxLog classes is needed to use them. For this,
-you should only know about @e wxLogXXX() functions. All of them have the same
-syntax as @e printf() or @e vprintf() , i.e. they take the format string as the
-first argument and respectively a variable number of arguments or a variable
-argument list pointer. Here are all of them:
+you should only know about @ref group_funcmacro_log "wxLogXXX() functions". 
+All of them have the same syntax as @e printf() or @e vprintf() , i.e. they 
+take the format string as the first argument and respectively a variable number 
+of arguments or a variable argument list pointer. Here are all of them:
 
-@li wxLogFatalError which is like wxLogError, but also terminates the program
+@li wxLogFatalError() which is like wxLogError(), but also terminates the program
     with the exit code 3 (using @e abort() standard function). Unlike for all
     the other logging functions, this function can't be overridden by a log
     target.
-@li wxLogError is the function to use for error messages, i.e. the messages
+@li wxLogError() is the function to use for error messages, i.e. the messages
     that must be shown to the user. The default processing is to pop up a
     message box to inform the user about it.
-@li wxLogWarning for warnings. They are also normally shown to the user, but
+@li wxLogWarning() for warnings. They are also normally shown to the user, but
     don't interrupt the program work.
-@li wxLogMessage is for all normal, informational messages. They also appear in
+@li wxLogMessage() is for all normal, informational messages. They also appear in
     a message box by default (but it can be changed, see below).
-@li wxLogVerbose is for verbose output. Normally, it is suppressed, but might
+@li wxLogVerbose() is for verbose output. Normally, it is suppressed, but might
     be activated if the user wishes to know more details about the program
     progress (another, but possibly confusing name for the same function is
     wxLogInfo).
-@li wxLogStatus is for status messages. They will go into the status bar of the
+@li wxLogStatus() is for status messages. They will go into the status bar of the
     active or specified (as the first argument) wxFrame if it has one.
-@li wxLogSysError is mostly used by wxWidgets itself, but might be handy for
+@li wxLogSysError() is mostly used by wxWidgets itself, but might be handy for
     logging errors after system call (API function) failure. It logs the
     specified message text as well as the last system error code (@e errno or
-    ::GetLastError() depending on the platform) and the corresponding error
+    Windows' @e GetLastError() depending on the platform) and the corresponding error
     message. The second form of this function takes the error code explicitly
     as the first argument.
-@li wxLogDebug is @b the right function for debug output. It only does anything
-    at all in the debug mode (when the preprocessor symbol __WXDEBUG__ is
+@li wxLogDebug() is @b the right function for debug output. It only does anything
+    at all in the debug mode (when the preprocessor symbol @c __WXDEBUG__ is
     defined) and expands to nothing in release mode (otherwise).
-
-    @b Tip: under Windows, you must either run the program under debugger or
+    Note that under Windows, you must either run the program under debugger or
     use a 3rd party program such as DebugView
     (http://www.microsoft.com/technet/sysinternals/Miscellaneous/DebugView.mspx)
     to actually see the debug output.
-@li wxLogTrace as wxLogDebug only does something in debug build. The reason for
+@li wxLogTrace() as wxLogDebug() only does something in debug build. The reason for
     making it a separate function from it is that usually there are a lot of
     trace messages, so it might make sense to separate them from other debug
     messages which would be flooded in them. Moreover, the second version of
@@ -177,10 +169,10 @@ works.
 wxWidgets has the notion of a <em>log target</em>: it is just a class deriving
 from wxLog. As such, it implements the virtual functions of the base class
 which are called when a message is logged. Only one log target is @e active at
-any moment, this is the one used by @e wxLogXXX() functions. The normal usage
-of a log object (i.e. object of a class derived from wxLog) is to install it as
-the active target with a call to @e SetActiveTarget() and it will be used
-automatically by all subsequent calls to @e wxLogXXX() functions.
+any moment, this is the one used by @ref group_funcmacro_log "wxLogXXX() functions". 
+The normal usage of a log object (i.e. object of a class derived from wxLog) is 
+to install it as the active target with a call to @e SetActiveTarget() and it will be used
+automatically by all subsequent calls to @ref group_funcmacro_log "wxLogXXX() functions".
 
 To create a new log target class you only need to derive it from wxLog and
 override one or several of wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel() and
@@ -237,28 +229,6 @@ normally. For this the wxLogChain, wxLogInterposer, and wxLogInterposerTemp can
 be used.
 
 
-@section overview_log_customize Logging Customization
-
-To completely change the logging behaviour you may define a custom log target.
-For example, you could define a class inheriting from wxLog which shows all the
-log messages in some part of your main application window reserved for the
-message output without interrupting the user work flow with modal message
-boxes.
-
-To use your custom log target you may either call wxLog::SetActiveTarget() with
-your custom log object or create a wxAppTraits-derived class and override
-CreateLogTarget() virtual method in it and also override wxApp::CreateTraits()
-to return an instance of your custom traits object. Notice that in the latter
-case you should be prepared for logging messages early during the program
-startup and also during program shutdown so you shouldn't rely on existence of
-the main application window, for example. You can however safely assume that
-GUI is (already/still) available when your log target as used as wxWidgets
-automatically switches to using wxLogStderr if it isn't.
-
-The dialog sample illustrates this approach by defining a custom log target
-customizing the dialog used by wxLogGui for the single messages.
-
-
 @section overview_log_mt Logging in Multi-Threaded Applications
 
 Starting with wxWidgets 2.9.1, logging functions can be safely called from any
@@ -276,6 +246,100 @@ thread will appear in order in which they were logged.
 Also notice that wxLog::EnableLogging() and wxLogNull class which uses it only
 affect the current thread, i.e. logging messages may still be generated by the
 other threads after a call to @c EnableLogging(false).
+
+
+@section overview_log_customize Logging Customization
+
+To completely change the logging behaviour you may define a custom log target.
+For example, you could define a class inheriting from wxLog which shows all the
+log messages in some part of your main application window reserved for the
+message output without interrupting the user work flow with modal message
+boxes.
+
+To use your custom log target you may either call wxLog::SetActiveTarget() with
+your custom log object or create a wxAppTraits-derived class and override
+wxAppTraits::CreateLogTarget() virtual method in it and also override wxApp::CreateTraits()
+to return an instance of your custom traits object. Notice that in the latter
+case you should be prepared for logging messages early during the program
+startup and also during program shutdown so you shouldn't rely on existence of
+the main application window, for example. You can however safely assume that
+GUI is (already/still) available when your log target as used as wxWidgets
+automatically switches to using wxLogStderr if it isn't.
+
+There are several methods which may be overridden in the derived class to
+customize log messages handling: wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel() 
+and wxLog::DoLogText().
+
+The last method is the simplest one: you should override it if you simply
+want to redirect the log output elsewhere, without taking into account the
+level of the message. If you do want to handle messages of different levels
+differently, then you should override wxLog::DoLogTextAtLevel().
+
+Finally, if more control over the output format is needed, then the first
+function must be overridden as it allows to construct custom messages
+depending on the log level or even do completely different things depending
+on the message severity (for example, throw away all messages except
+warnings and errors, show warnings on the screen and forward the error
+messages to the user's (or programmer's) cell phone -- maybe depending on
+whether the timestamp tells us if it is day or night in the current time
+zone).
+
+The @e dialog sample illustrates this approach by defining a custom log target
+customizing the dialog used by wxLogGui for the single messages.
+
+
+@section overview_log_tracemasks Using trace masks
+
+Notice that the use of log trace masks is hardly necessary any longer in
+current wxWidgets version as the same effect can be achieved by using
+different log components for different log statements of any level. Please
+see @ref overview_log_enable for more information about the log components.
+
+The functions below allow some limited customization of wxLog behaviour
+without writing a new log target class (which, aside from being a matter of
+several minutes, allows you to do anything you want).
+The verbose messages are the trace messages which are not disabled in the
+release mode and are generated by wxLogVerbose().
+They are not normally shown to the user because they present little interest,
+but may be activated, for example, in order to help the user find some program
+problem.
+
+As for the (real) trace messages, their handling depends on the currently
+enabled trace masks: if wxLog::AddTraceMask() was called for the mask of the given
+message, it will be logged, otherwise nothing happens.
+
+For example,
+@code
+wxLogTrace( wxTRACE_OleCalls, "IFoo::Bar() called" );
+@endcode
+
+will log the message if it was preceded by:
+
+@code
+wxLog::AddTraceMask( wxTRACE_OleCalls );
+@endcode
+
+The standard trace masks are given in wxLogTrace() documentation.
+
+
+@section overview_log_timestamps Timestamps
+
+The wxLog::LogRecord() function automatically prepends a time stamp
+to all the messages. The format of the time stamp may be changed: it can be
+any string with % specifications fully described in the documentation of the
+standard @e strftime() function. For example, the default format is
+@c "[%d/%b/%y %H:%M:%S] " which gives something like @c "[17/Sep/98 22:10:16] "
+(without quotes) for the current date. 
+
+Setting an empty string as the time format or calling the shortcut wxLog::DisableTimestamp(), 
+disables timestamping of the messages completely.
+
+@note
+Timestamping is disabled for Visual C++ users in debug builds by
+default because otherwise it would be impossible to directly go to the line
+from which the log message was generated by simply clicking in the debugger
+window on the corresponding error message. If you wish to enable it, please
+use SetTimestamp() explicitly.
 
 */
 

@@ -14,6 +14,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_IMAGE
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -110,15 +112,6 @@ void ImageTestCase::LoadFromFile()
 
 void ImageTestCase::LoadFromSocketStream()
 {
-    // Skip this test when running on a build slave because it just keeps
-    // failing erratically and sends build failure notifications when it does.
-    //
-    // Of course, it would be even better to understand why does it fail but so
-    // far we didn't manage to do it so disable until someone can find the
-    // problem.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     if (!IsNetworkAvailable())      // implemented in test.cpp
     {
         wxLogWarning("No network connectivity; skipping the "
@@ -131,24 +124,37 @@ void ImageTestCase::LoadFromSocketStream()
         wxBitmapType type;
     } testData[] =
     {
-        { "http://wxwidgets.org/logo9.jpg", wxBITMAP_TYPE_JPEG },
-        { "http://wxwidgets.org/favicon.ico", wxBITMAP_TYPE_ICO }
+        { "http://www.wxwidgets.org/logo9.jpg", wxBITMAP_TYPE_JPEG },
+        { "http://www.wxwidgets.org/favicon.ico", wxBITMAP_TYPE_ICO }
     };
 
     for (unsigned int i=0; i<WXSIZEOF(testData); i++)
     {
         wxURL url(testData[i].url);
-        CPPUNIT_ASSERT(url.GetError() == wxURL_NOERR);
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            ("Constructing URL \"%s\" failed.", testData[i].url),
+            wxURL_NOERR,
+            url.GetError()
+        );
 
         wxInputStream *in_stream = url.GetInputStream();
-        CPPUNIT_ASSERT(in_stream && in_stream->IsOk());
+        WX_ASSERT_MESSAGE
+        (
+            ("Opening URL \"%s\" failed.", testData[i].url),
+            in_stream && in_stream->IsOk()
+        );
 
         wxImage img;
 
         // NOTE: it's important to inform wxImage about the type of the image being
         //       loaded otherwise it will try to autodetect the format, but that
         //       requires a seekable stream!
-        CPPUNIT_ASSERT(img.LoadFile(*in_stream, testData[i].type));
+        WX_ASSERT_MESSAGE
+        (
+            ("Loading image from \"%s\" failed.", testData[i].url),
+            img.LoadFile(*in_stream, testData[i].type)
+        );
 
         delete in_stream;
     }
@@ -818,6 +824,8 @@ void ImageTestCase::SizeImage()
        );
    }
 }
+
+#endif //wxUSE_IMAGE
 
 
 /*

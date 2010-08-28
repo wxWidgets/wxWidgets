@@ -6,7 +6,7 @@
 // Created:     2002/04/05
 // RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

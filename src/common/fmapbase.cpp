@@ -6,7 +6,7 @@
 // Created:     21.06.2003 (extracted from common/fontmap.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -74,6 +74,7 @@ static const wxFontEncoding gs_encodings[] =
     wxFONTENCODING_ISO8859_15,
     wxFONTENCODING_KOI8,
     wxFONTENCODING_KOI8_U,
+    wxFONTENCODING_CP866,
     wxFONTENCODING_CP874,
     wxFONTENCODING_CP932,
     wxFONTENCODING_CP936,
@@ -163,6 +164,7 @@ static const char* const gs_encodingDescs[] =
     wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
     wxTRANSLATE( "KOI8-U" ),
+    wxTRANSLATE( "Windows/DOS OEM Cyrillic (CP 866)" ),
     wxTRANSLATE( "Windows Thai (CP 874)" ),
     wxTRANSLATE( "Windows Japanese (CP 932)" ),
     wxTRANSLATE( "Windows Chinese Simplified (CP 936)" ),
@@ -265,6 +267,8 @@ static const wxChar* const gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
     // not recognizing it at all
     { wxT( "KOI8-R" ), wxT( "KOI8-RU" ), NULL },
     { wxT( "KOI8-U" ), NULL },
+
+    { wxT( "WINDOWS-866" ), wxT( "CP866" ), NULL },
 
     { wxT( "WINDOWS-874" ), wxT( "CP874" ), wxT( "MS874" ), wxT( "IBM-874" ), NULL },
     { wxT( "WINDOWS-932" ), wxT( "CP932" ), wxT( "MS932" ), wxT( "IBM-932" ), NULL },

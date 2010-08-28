@@ -3,7 +3,7 @@
 // Purpose:     interface of all thread-related wxWidgets classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -788,7 +788,7 @@ enum
 
             if (m_pThread)         // does the thread still exist?
             {
-                m_out.Printf("MYFRAME: deleting thread");
+                wxMessageOutputDebug().Printf("MYFRAME: deleting thread");
 
                 if (m_pThread->Delete() != wxTHREAD_NO_ERROR )
                     wxLogError("Can't delete the thread!");
@@ -1125,6 +1125,10 @@ public:
         of detached threads.
 
         This function can only be called from another thread context.
+        
+        Finally, note that once a thread has completed and its Entry() function
+        returns, you cannot call Run() on it again (an assert will fail in debug
+        builds or @c wxTHREAD_RUNNING will be returned in release builds).
     */
     wxThreadError Run();
 

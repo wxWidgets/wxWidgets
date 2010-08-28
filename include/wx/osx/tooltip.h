@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/tooltip.h
+// Name:        wx/osx/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Stefan Csomor
 // Modified by:

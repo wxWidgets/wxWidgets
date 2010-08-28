@@ -3,7 +3,7 @@
 // Purpose:     Platform details page of the Doxygen manual
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -82,7 +82,7 @@ in the distribution.
 wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform.
 Currently MacOS X 10.4 or higher are supported. wxOSX/Carbon can
 be compiled both using Apple's command line developer tools
-as well as Apple's XCode IDE. wxOSX/Carbon supports both the Intel
+as well as Apple's Xcode IDE. wxOSX/Carbon supports both the Intel
 and PowerPC architectures and can be used to produce
 "universal binaries" in order create application which can run
 both architecture. Unfortunately, wxOSX/Carbon does not support any

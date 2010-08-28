@@ -537,7 +537,7 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
 
 // FIXME what about tables??
 
-int wxCharCodeXToWX(KeySym keySym)
+int wxCharCodeXToWX(WXKeySym keySym)
 {
     int id;
     switch (keySym)
@@ -717,9 +717,9 @@ int wxCharCodeXToWX(KeySym keySym)
     return id;
 }
 
-KeySym wxCharCodeWXToX(int id)
+WXKeySym wxCharCodeWXToX(int id)
 {
-    KeySym keySym;
+    WXKeySym keySym;
 
     switch (id)
     {

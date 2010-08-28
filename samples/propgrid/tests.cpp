@@ -6,7 +6,7 @@
 // Created:     2007-05-16
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -106,7 +106,7 @@ public:
 void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 {
     pg->Append( new MyColourProperty(wxT("CustomColourProperty"), wxPG_LABEL, *wxGREEN) );
-    pg->GetProperty(wxT("CustomColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+    pg->GetProperty(wxT("CustomColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyEditor( wxT("CustomColourProperty"), wxPGEditor_ComboBox );
 
     pg->SetPropertyHelpString(wxT("CustomColourProperty"),

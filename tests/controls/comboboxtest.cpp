@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_COMBOBOX
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -23,12 +25,15 @@
 #endif // WX_PRECOMP
 
 #include "textentrytest.h"
+#include "itemcontainertest.h"
+#include "testableframe.h"
 
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class ComboBoxTestCase : public TextEntryTestCase
+class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase,
+                         public CppUnit::TestCase
 {
 public:
     ComboBoxTestCase() { }
@@ -40,6 +45,9 @@ private:
     virtual wxTextEntry *GetTestEntry() const { return m_combo; }
     virtual wxWindow *GetTestWindow() const { return m_combo; }
 
+    virtual wxItemContainer *GetContainer() const { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const { return m_combo; }
+
     virtual void CheckStringSelection(const char * WXUNUSED(sel))
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
@@ -49,11 +57,17 @@ private:
 
     CPPUNIT_TEST_SUITE( ComboBoxTestCase );
         wxTEXT_ENTRY_TESTS();
-
+        wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Size );
+        CPPUNIT_TEST( PopDismiss );
+        CPPUNIT_TEST( Sort );
+        CPPUNIT_TEST( ReadOnly );
     CPPUNIT_TEST_SUITE_END();
 
     void Size();
+    void PopDismiss();
+    void Sort();
+    void ReadOnly();
 
     wxComboBox *m_combo;
 
@@ -110,3 +124,74 @@ void ComboBoxTestCase::Size()
     CPPUNIT_ASSERT_EQUAL( heightOrig, m_combo->GetSize().y );
 }
 
+void ComboBoxTestCase::PopDismiss()
+{
+#if defined(__WXMSW__) || defined(__WXGTK210__)
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
+    EventCounter count1(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+
+    m_combo->Popup();
+    m_combo->Dismiss();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_DROPDOWN));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_CLOSEUP));
+#endif
+}
+
+void ComboBoxTestCase::Sort()
+{
+#if !defined(__WXOSX__)
+    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                             wxDefaultPosition, wxDefaultSize, 0, NULL,
+                             wxCB_SORT);
+
+    m_combo->Append("aaa");
+    m_combo->Append("Aaa");
+    m_combo->Append("aba");
+    m_combo->Append("aaab");
+    m_combo->Append("aab");
+    m_combo->Append("AAA");
+
+    CPPUNIT_ASSERT_EQUAL("AAA", m_combo->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_combo->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("aaa", m_combo->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_combo->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_combo->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_combo->GetString(5));
+
+    m_combo->Append("a");
+
+    CPPUNIT_ASSERT_EQUAL("a", m_combo->GetString(0));
+#endif
+}
+
+void ComboBoxTestCase::ReadOnly()
+{
+#ifndef __WXOSX__
+    wxArrayString testitems;
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+
+    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                             wxDefaultPosition, wxDefaultSize, testitems,
+                             wxCB_READONLY);
+
+    m_combo->SetValue("item 1");
+
+    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
+
+    m_combo->SetValue("not an item");
+
+    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
+
+    // Since this uses FindString it is case insensitive
+    m_combo->SetValue("ITEM 2");
+
+    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
+#endif
+}
+
+#endif //wxUSE_COMBOBOX

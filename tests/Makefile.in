@@ -46,7 +46,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).1
+WX_VERSION = $(WX_RELEASE).2
 LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -144,7 +144,9 @@ TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	$(__test_gui_os2_lib_res) \
+	test_gui_asserthelper.o \
 	test_gui_test.o \
+	test_gui_testableframe.o \
 	test_gui_rect.o \
 	test_gui_size.o \
 	test_gui_point.o \
@@ -153,13 +155,44 @@ TEST_GUI_OBJECTS =  \
 	test_gui_ellipsization.o \
 	test_gui_measuring.o \
 	test_gui_config.o \
+	test_gui_bitmapcomboboxtest.o \
+	test_gui_bitmaptogglebuttontest.o \
+	test_gui_bookctrlbasetest.o \
+	test_gui_buttontest.o \
+	test_gui_checkboxtest.o \
+	test_gui_checklistboxtest.o \
+	test_gui_choicebooktest.o \
+	test_gui_choicetest.o \
 	test_gui_comboboxtest.o \
+	test_gui_frametest.o \
+	test_gui_gaugetest.o \
+	test_gui_gridtest.o \
 	test_gui_headerctrltest.o \
+	test_gui_hyperlinkctrltest.o \
+	test_gui_itemcontainertest.o \
 	test_gui_label.o \
+	test_gui_listbasetest.o \
+	test_gui_listbooktest.o \
+	test_gui_listboxtest.o \
 	test_gui_listctrltest.o \
+	test_gui_listviewtest.o \
+	test_gui_notebooktest.o \
+	test_gui_pickerbasetest.o \
+	test_gui_pickertest.o \
+	test_gui_radioboxtest.o \
+	test_gui_radiobuttontest.o \
+	test_gui_rearrangelisttest.o \
+	test_gui_richtextctrltest.o \
+	test_gui_slidertest.o \
+	test_gui_spinctrldbltest.o \
+	test_gui_spinctrltest.o \
 	test_gui_textctrltest.o \
 	test_gui_textentrytest.o \
+	test_gui_togglebuttontest.o \
+	test_gui_toolbooktest.o \
+	test_gui_treebooktest.o \
 	test_gui_treectrltest.o \
+	test_gui_windowtest.o \
 	test_gui_clone.o \
 	test_gui_propagation.o \
 	test_gui_fonttest.o \
@@ -233,6 +266,9 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_ICC_PCH_1@	./.pch/testprec_test_gui/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_gui_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test_gui/testprec.h.gch
+COND_MONOLITHIC_0___WXLIB_RICHTEXT_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_RICHTEXT_p = $(COND_MONOLITHIC_0___WXLIB_RICHTEXT_p)
 COND_MONOLITHIC_0_USE_MEDIA_1___WXLIB_MEDIA_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0_USE_MEDIA_1@__WXLIB_MEDIA_p = $(COND_MONOLITHIC_0_USE_MEDIA_1___WXLIB_MEDIA_p)
@@ -312,7 +348,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
 
 @COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS)    -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LDFLAGS)  $(__WXLIB_MEDIA_p) $(EXTRALIBS_MEDIA) $(__WXLIB_XRC_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS)    -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LDFLAGS)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p) $(EXTRALIBS_MEDIA) $(__WXLIB_XRC_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_USE_GUI_1@	
 @COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
 
@@ -614,8 +650,14 @@ test_xmltest.o: $(srcdir)/xml/xmltest.cpp $(TEST_ODEP)
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
+test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/asserthelper.cpp
+
 test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/test.cpp
+
+test_gui_testableframe.o: $(srcdir)/testableframe.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/testableframe.cpp
 
 test_gui_rect.o: $(srcdir)/geometry/rect.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/geometry/rect.cpp
@@ -641,17 +683,98 @@ test_gui_measuring.o: $(srcdir)/graphics/measuring.cpp $(TEST_GUI_ODEP)
 test_gui_config.o: $(srcdir)/config/config.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/config/config.cpp
 
+test_gui_bitmapcomboboxtest.o: $(srcdir)/controls/bitmapcomboboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/bitmapcomboboxtest.cpp
+
+test_gui_bitmaptogglebuttontest.o: $(srcdir)/controls/bitmaptogglebuttontest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/bitmaptogglebuttontest.cpp
+
+test_gui_bookctrlbasetest.o: $(srcdir)/controls/bookctrlbasetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/bookctrlbasetest.cpp
+
+test_gui_buttontest.o: $(srcdir)/controls/buttontest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/buttontest.cpp
+
+test_gui_checkboxtest.o: $(srcdir)/controls/checkboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/checkboxtest.cpp
+
+test_gui_checklistboxtest.o: $(srcdir)/controls/checklistboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/checklistboxtest.cpp
+
+test_gui_choicebooktest.o: $(srcdir)/controls/choicebooktest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/choicebooktest.cpp
+
+test_gui_choicetest.o: $(srcdir)/controls/choicetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/choicetest.cpp
+
 test_gui_comboboxtest.o: $(srcdir)/controls/comboboxtest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/comboboxtest.cpp
+
+test_gui_frametest.o: $(srcdir)/controls/frametest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/frametest.cpp
+
+test_gui_gaugetest.o: $(srcdir)/controls/gaugetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/gaugetest.cpp
+
+test_gui_gridtest.o: $(srcdir)/controls/gridtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/gridtest.cpp
 
 test_gui_headerctrltest.o: $(srcdir)/controls/headerctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/headerctrltest.cpp
 
+test_gui_hyperlinkctrltest.o: $(srcdir)/controls/hyperlinkctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/hyperlinkctrltest.cpp
+
+test_gui_itemcontainertest.o: $(srcdir)/controls/itemcontainertest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/itemcontainertest.cpp
+
 test_gui_label.o: $(srcdir)/controls/label.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/label.cpp
 
+test_gui_listbasetest.o: $(srcdir)/controls/listbasetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/listbasetest.cpp
+
+test_gui_listbooktest.o: $(srcdir)/controls/listbooktest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/listbooktest.cpp
+
+test_gui_listboxtest.o: $(srcdir)/controls/listboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/listboxtest.cpp
+
 test_gui_listctrltest.o: $(srcdir)/controls/listctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/listctrltest.cpp
+
+test_gui_listviewtest.o: $(srcdir)/controls/listviewtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/listviewtest.cpp
+
+test_gui_notebooktest.o: $(srcdir)/controls/notebooktest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/notebooktest.cpp
+
+test_gui_pickerbasetest.o: $(srcdir)/controls/pickerbasetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/pickerbasetest.cpp
+
+test_gui_pickertest.o: $(srcdir)/controls/pickertest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/pickertest.cpp
+
+test_gui_radioboxtest.o: $(srcdir)/controls/radioboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/radioboxtest.cpp
+
+test_gui_radiobuttontest.o: $(srcdir)/controls/radiobuttontest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/radiobuttontest.cpp
+
+test_gui_rearrangelisttest.o: $(srcdir)/controls/rearrangelisttest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/rearrangelisttest.cpp
+
+test_gui_richtextctrltest.o: $(srcdir)/controls/richtextctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/richtextctrltest.cpp
+
+test_gui_slidertest.o: $(srcdir)/controls/slidertest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/slidertest.cpp
+
+test_gui_spinctrldbltest.o: $(srcdir)/controls/spinctrldbltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/spinctrldbltest.cpp
+
+test_gui_spinctrltest.o: $(srcdir)/controls/spinctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/spinctrltest.cpp
 
 test_gui_textctrltest.o: $(srcdir)/controls/textctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/textctrltest.cpp
@@ -659,8 +782,20 @@ test_gui_textctrltest.o: $(srcdir)/controls/textctrltest.cpp $(TEST_GUI_ODEP)
 test_gui_textentrytest.o: $(srcdir)/controls/textentrytest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/textentrytest.cpp
 
+test_gui_togglebuttontest.o: $(srcdir)/controls/togglebuttontest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/togglebuttontest.cpp
+
+test_gui_toolbooktest.o: $(srcdir)/controls/toolbooktest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/toolbooktest.cpp
+
+test_gui_treebooktest.o: $(srcdir)/controls/treebooktest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treebooktest.cpp
+
 test_gui_treectrltest.o: $(srcdir)/controls/treectrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treectrltest.cpp
+
+test_gui_windowtest.o: $(srcdir)/controls/windowtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/windowtest.cpp
 
 test_gui_clone.o: $(srcdir)/events/clone.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/clone.cpp

@@ -14,6 +14,8 @@
 
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
 
+struct _GtkTreePath;
+
 // ---------------------------------------------------------
 // wxDataViewColumn
 // ---------------------------------------------------------
@@ -111,17 +113,19 @@ public:
     wxDataViewCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator )
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxDataViewCtrlNameStr )
     {
         Init();
 
-        Create(parent, id, pos, size, style, validator );
+        Create(parent, id, pos, size, style, validator, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator );
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxDataViewCtrlNameStr);
 
     virtual ~wxDataViewCtrl();
 
@@ -171,6 +175,10 @@ public:
     GtkWidget *GtkGetTreeView() { return m_treeview; }
     wxDataViewCtrlInternal* GtkGetInternal() { return m_internal; }
 
+    // Convert GTK path to our item. Returned item may be invalid if get_iter()
+    // failed.
+    wxDataViewItem GTKPathToItem(struct _GtkTreePath *path) const;
+
     virtual void OnInternalIdle();
 
 protected:
@@ -181,6 +189,9 @@ protected:
 
 private:
     void Init();
+
+    virtual wxDataViewItem DoGetCurrentItem() const;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;

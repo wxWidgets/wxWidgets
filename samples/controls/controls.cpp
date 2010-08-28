@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -949,9 +949,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     dc.DrawText(wxT("Bitmap"), 30, 40);
     dc.SelectObject( wxNullBitmap );
 
-    (void)new wxBitmapButton(panel, ID_BITMAP_BTN, bitmap, wxPoint(100, 20));
-    (void)new wxToggleButton(panel, ID_BITMAP_BTN_ENABLE,
-                             wxT("Enable/disable &bitmap"), wxPoint(100, 140));
+    wxPanel *panel2 = new wxPanel(panel, -1, wxPoint(100, 0), wxSize(100, 200));
+    (void)new wxBitmapButton(panel2, ID_BITMAP_BTN, bitmap, wxPoint(0, 20));
+    (void)new wxToggleButton(panel2, ID_BITMAP_BTN_ENABLE,
+                             wxT("Enable/disable &bitmap"), wxPoint(0, 140));
 
 #if defined(__WXMSW__) || defined(__WXMOTIF__)
     // test for masked bitmap display

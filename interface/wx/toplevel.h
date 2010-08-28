@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTopLevelWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -59,6 +59,8 @@ enum
         Process a @c wxEVT_MOVE_END event, which is generated when the user stops
         moving or sizing a window. wxMSW only.
         See wxMoveEvent.
+    @event{EVT_SHOW(func)}
+        Process a @c wxEVT_SHOW event. See wxShowEvent.
     @endEventTable
 
     @library{wxcore}
@@ -147,6 +149,19 @@ public:
         key.
     */
     wxWindow* GetDefaultItem() const;
+
+    /**
+        Get the default size for a new top level window.
+
+        This is used internally by wxWidgets on some platforms to determine the
+        default size for a window created using ::wxDefaultSize so it is not
+        necessary to use it when creating a wxTopLevelWindow, however it may be
+        useful if a rough estimation of the window size is needed for some
+        other reason.
+
+        @since 2.9.2
+     */
+    static wxSize GetDefaultSize();
 
     /**
         Returns the standard icon of the window. The icon will be invalid if it

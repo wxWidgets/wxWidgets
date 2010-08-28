@@ -2,7 +2,7 @@
 
 ###################################
 # Author: Kevin Ollivier
-# License: wxWidgets License
+# Licence: wxWindows licence
 ###################################
 
 import os

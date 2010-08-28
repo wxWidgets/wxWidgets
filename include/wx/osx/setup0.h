@@ -737,6 +737,7 @@
 #define wxUSE_COLLPANE      1   // wxCollapsiblePane
 #define wxUSE_COLOURPICKERCTRL 1    // wxColourPickerCtrl
 #define wxUSE_COMBOBOX      1   // wxComboBox
+#define wxUSE_COMMANDLINKBUTTON 1   // wxCommandLinkButton
 #define wxUSE_DATAVIEWCTRL  1   // wxDataViewCtrl
 #define wxUSE_DATEPICKCTRL  1   // wxDatePickerCtrl
 #define wxUSE_DIRPICKERCTRL 1   // wxDirPickerCtrl
@@ -751,6 +752,7 @@
 #define wxUSE_LISTCTRL      1   // wxListCtrl
 #define wxUSE_RADIOBOX      1   // wxRadioBox
 #define wxUSE_RADIOBTN      1   // wxRadioButton
+#define wxUSE_RICHMSGDLG    1   // wxRichMessageDialog
 #define wxUSE_SCROLLBAR     1   // wxScrollBar
 #define wxUSE_SEARCHCTRL    1   // wxSearchCtrl
 #define wxUSE_SLIDER        1   // wxSlider
@@ -1245,9 +1247,7 @@
                                 // Include mouse wheel support
 
 // Compile wxUIActionSimulator class?
-//
-// This is experimental code subject to change. It's not fully implemented yet.
-#define wxUSE_UIACTIONSIMULATOR 0
+#define wxUSE_UIACTIONSIMULATOR 1
 
 // ----------------------------------------------------------------------------
 // wxDC classes for various output formats
@@ -1359,7 +1359,7 @@
 // override some settings for Metrowerks
 //
 // VZ: isn't this file only used when building with Metrowerks anyhow?
-// CS: no, it is also used by the XCode projects
+// CS: no, it is also used by the Xcode projects
 #ifdef __MWERKS__
     #undef wxUSE_DEBUG_CONTEXT
     #define wxUSE_DEBUG_CONTEXT 1
@@ -1387,7 +1387,7 @@
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
-// native toolbar does support embedding controls, but not comples panels, please test
+// native toolbar does support embedding controls, but not complex panels, please test
 #define wxOSX_USE_NATIVE_TOOLBAR 1
 
 // make sure we have the proper dispatcher for the console event loop

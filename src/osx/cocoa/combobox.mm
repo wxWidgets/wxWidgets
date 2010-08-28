@@ -78,7 +78,8 @@
 }
 @end
 
-wxNSComboBoxControl::wxNSComboBoxControl( wxWindow *wxPeer, WXWidget w ) : wxNSTextFieldControl(wxPeer, w)
+wxNSComboBoxControl::wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
+    : wxNSTextFieldControl(wxPeer, wxPeer, w)
 {
     m_comboBox = (NSComboBox*)w;
 }
@@ -94,9 +95,21 @@ int wxNSComboBoxControl::GetSelectedItem() const
 
 void wxNSComboBoxControl::SetSelectedItem(int item)
 {
-    wxASSERT_MSG(item >= 0 && item < [m_comboBox numberOfItems], "Inavlid item index.");
     SendEvents(false);
-    [m_comboBox selectItemAtIndex: item];
+
+    if ( item != wxNOT_FOUND )
+    {
+        wxASSERT_MSG( item >= 0 && item < [m_comboBox numberOfItems],
+                      "Inavlid item index." );
+        [m_comboBox selectItemAtIndex: item];
+    }
+    else // remove current selection (if we have any)
+    {
+        const int sel = GetSelectedItem();
+        if ( sel != wxNOT_FOUND )
+            [m_comboBox deselectItemAtIndex:sel];
+    }
+
     SendEvents(true);
 }
 
@@ -137,7 +150,7 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
     return result;
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer, 
+wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
                                     wxMenu* menu,

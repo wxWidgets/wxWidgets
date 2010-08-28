@@ -3,7 +3,7 @@
 // Purpose:     interface of wxVector<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -235,6 +235,17 @@ public:
         Returns the size of the vector.
     */
     size_type size() const;
+
+    /**
+        Efficiently exchanges contents of this vector with another one.
+
+        After the execution of this function the contents of this vector is
+        equal to the original contents of @a v and the contents of @a v becomes
+        the original contents of this vector without copying the data.
+
+        @since 2.9.1
+     */
+    void swap(wxVector& v);
 };
 
 
@@ -248,7 +259,7 @@ public:
    ... // items are added to the vector v...
    wxVectorSort(v);
    @endcode
-      
+
    @see wxVector<T>
 */
 template<typename T>

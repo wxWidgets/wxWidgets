@@ -569,6 +569,14 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 }
 
 
+bool wxAuiPaneInfo::IsValid() const
+{
+    // Should this RTTI and function call be rewritten as
+    // sending a new event type to allow other window types
+    // to check the pane settings?
+    wxAuiToolBar* toolbar = wxDynamicCast(window, wxAuiToolBar);
+    return !toolbar || toolbar->IsPaneValid(*this);
+}
 
 // -- wxAuiManager class implementation --
 
@@ -992,7 +1000,40 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (pane_info.IsDocked())
         RestoreMaximizedPane();
 
-    m_panes.Add(pane_info);
+    // special case:  wxAuiToolBar style interacts with docking flags
+    wxAuiPaneInfo test(pane_info);
+    wxAuiToolBar* toolbar = wxDynamicCast(window, wxAuiToolBar);
+    if (toolbar)
+    {
+        // if pane has default docking flags
+        const unsigned int dockMask = wxAuiPaneInfo::optionLeftDockable |
+                                        wxAuiPaneInfo::optionRightDockable |
+                                        wxAuiPaneInfo::optionTopDockable |
+                                        wxAuiPaneInfo::optionBottomDockable;
+        const unsigned int defaultDock = wxAuiPaneInfo().
+                                            DefaultPane().state & dockMask;
+        if ((test.state & dockMask) == defaultDock)
+        {
+            // set docking flags based on toolbar style
+            if (toolbar->GetWindowStyleFlag() & wxAUI_TB_VERTICAL)
+            {
+                test.TopDockable(false).BottomDockable(false);
+            }
+            else if (toolbar->GetWindowStyleFlag() & wxAUI_TB_HORIZONTAL)
+            {
+                test.LeftDockable(false).RightDockable(false);
+            }
+        }
+        else
+        {
+            // see whether non-default docking flags are valid
+            test.window = window;
+            wxCHECK_MSG(test.IsValid(), false,
+                        "toolbar style and pane docking flags are incompatible");
+        }
+    }
+
+    m_panes.Add(test);
 
     wxAuiPaneInfo& pinfo = m_panes.Last();
 
@@ -1004,7 +1045,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (pinfo.name.empty() || already_exists)
     {
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
-             wxPtrToUInt(pinfo.window) & 0xffffffff,
+             (unsigned long)(wxPtrToUInt(pinfo.window) & 0xffffffff),
              (unsigned int)time(NULL),
 #ifdef __WXWINCE__
              (unsigned int)GetTickCount(),
@@ -2546,6 +2587,9 @@ void wxAuiManager::Update()
                     style |= wxRESIZE_BORDER;
                 p.frame->SetWindowStyleFlag(style);
 
+                if (p.frame->GetLabel() != p.caption)
+                    p.frame->SetLabel(p.caption);
+
                 if (p.frame->IsShown() != p.IsShown())
                     p.frame->Show(p.IsShown());
             }
@@ -2780,7 +2824,22 @@ bool wxAuiManager::ProcessDockResult(wxAuiPaneInfo& target,
     }
 
     if (allowed)
+    {
         target = new_pos;
+        // Should this RTTI and function call be rewritten as
+        // sending a new event type to allow other window types
+        // to vary size based on dock location?
+        wxAuiToolBar* toolbar = wxDynamicCast(target.window, wxAuiToolBar);
+        if (toolbar)
+        {
+            wxSize hintSize = toolbar->GetHintSize(target.dock_direction);
+            if (target.best_size != hintSize)
+            {
+                target.best_size = hintSize;
+                target.floating_size = wxDefaultSize;
+            }
+        }
+    }
 
     return allowed;
 }

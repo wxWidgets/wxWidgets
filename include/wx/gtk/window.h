@@ -45,9 +45,6 @@ public:
     // implement base class (pure) virtual methods
     // -------------------------------------------
 
-    virtual void SetLabel(const wxString& WXUNUSED(label)) { }
-    virtual wxString GetLabel() const { return wxEmptyString; }
-
     virtual bool Destroy();
 
     virtual void Raise();
@@ -113,6 +110,10 @@ public:
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
     virtual bool IsDoubleBuffered() const;
+
+    // SetLabel(), which does nothing in wxWindow
+    virtual void SetLabel(const wxString& label) { m_gtkLabel = label; }
+    virtual wxString GetLabel() const            { return m_gtkLabel; }
 
     // implementation
     // --------------
@@ -241,7 +242,10 @@ public:
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
     GtkWidget           *m_wxwindow;        // mostly the client area as per wxWidgets
-
+    
+    // label for use with GetLabelSetLabel
+    wxString             m_gtkLabel;
+    
     // return true if the window is of a standard (i.e. not wxWidgets') class
     bool IsOfStandardClass() const { return m_wxwindow == NULL; }
 

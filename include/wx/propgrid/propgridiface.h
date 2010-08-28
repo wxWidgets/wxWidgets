@@ -6,11 +6,13 @@
 // Created:     2008-08-24
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_PROPGRID_PROPGRIDIFACE_H__
 #define __WX_PROPGRID_PROPGRIDIFACE_H__
+
+#include "wx/defs.h"
 
 #if wxUSE_PROPGRID
 
@@ -267,7 +269,11 @@ public:
     */
     wxPGProperty* RemoveProperty( wxPGPropArg id );
 
-    /** Disables property. */
+    /**
+        Disables a property.
+
+        @see EnableProperty(), wxPGProperty::Enable()
+    */
     bool DisableProperty( wxPGPropArg id ) { return EnableProperty(id,false); }
 
     /**
@@ -280,7 +286,14 @@ public:
 
     /**
         Enables or disables property, depending on whether enable is true or
-        false.
+        false. Disabled property usually appears as having grey text.
+
+        @param id
+            Name or pointer to a property.
+        @param enable
+            If @false, property is disabled instead.
+
+        @see wxPGProperty::Enable()
      */
     bool EnableProperty( wxPGPropArg id, bool enable = true );
 

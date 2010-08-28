@@ -3,7 +3,7 @@
 // Purpose:     interface of wxDateTime
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -1463,6 +1463,10 @@ public:
 */
 const wxDateTime wxDefaultDateTime;
 
+/*
+    wxInvalidDateTime is an alias for wxDefaultDateTime.
+*/
+#define wxInvalidDateTime wxDefaultDateTime
 
 
 /**

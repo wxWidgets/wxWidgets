@@ -48,6 +48,8 @@
 #if wxUSE_DETECT_SM
     #include "X11/Xlib.h"
     #include "X11/SM/SMlib.h"
+
+    #include "wx/unix/utilsx11.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -242,17 +244,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 #if wxUSE_DETECT_SM
 static wxString GetSM()
 {
-    class Dpy
-    {
-    public:
-        Dpy() { m_dpy = XOpenDisplay(NULL); }
-        ~Dpy() { if ( m_dpy ) XCloseDisplay(m_dpy); }
-
-        operator Display *() const { return m_dpy; }
-    private:
-        Display *m_dpy;
-    } dpy;
-
+    wxX11Display dpy;
     if ( !dpy )
         return wxEmptyString;
 

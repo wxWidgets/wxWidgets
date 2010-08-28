@@ -120,10 +120,11 @@ public:
     wxDataViewCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator )
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxDataViewCtrlNameStr )
              : wxScrollHelper(this)
     {
-        Create(parent, id, pos, size, style, validator );
+        Create(parent, id, pos, size, style, validator, name);
     }
 
     virtual ~wxDataViewCtrl();
@@ -133,7 +134,8 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
-                const wxValidator& validator = wxDefaultValidator );
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxDataViewCtrlNameStr);
 
     virtual bool AssociateModel( wxDataViewModel *model );
 
@@ -227,6 +229,9 @@ public:     // utility functions not part of the API
     wxDataViewColumn *GetColumnAt(unsigned int pos) const;
 
 private:
+    virtual wxDataViewItem DoGetCurrentItem() const;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item);
+
     wxDataViewColumnList      m_cols;
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;

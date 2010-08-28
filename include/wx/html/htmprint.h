@@ -199,7 +199,6 @@ private:
 
 private:
     int m_NumPages;
-    //int m_PageBreaks[wxHTML_PRINT_MAX_PAGES];
     wxArrayInt m_PageBreaks;
 
     wxString m_Document, m_BasePath;

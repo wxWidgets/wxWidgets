@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/fontdlg.h
+// Name:        wx/osx/fontdlg.h
 // Purpose:     wxFontDialog class using fonts window services (10.2+).
 // Author:      Ryan Norton
 // Modified by:

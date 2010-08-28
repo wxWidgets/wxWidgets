@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2005 Robert Roebling
 //              (c) 2005-2009 Vadim Zeitlin
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -678,6 +678,7 @@ MyFrame::MyFrame()
 
     // 500 width * 2750 height
     m_canvas->SetScrollbars( 10, 10, 50, 275 );
+    m_canvas->SetCursor(wxImage("cursor.png"));
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )

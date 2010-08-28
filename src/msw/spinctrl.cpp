@@ -625,7 +625,7 @@ bool wxSpinCtrl::Enable(bool enable)
         return false;
     }
 
-    ::EnableWindow(GetBuddyHwnd(), enable);
+    MSWEnableHWND(GetBuddyHwnd(), enable);
 
     return true;
 }

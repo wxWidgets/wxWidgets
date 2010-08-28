@@ -57,7 +57,7 @@ b) Using IDE:
 
 
 
-Original note from William Osborne follow:
+Original note from William Osborne follows:
 
 wxWidgets 2.5.3 CVS 10-18-2004
 ------------------------------

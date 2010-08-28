@@ -1035,13 +1035,13 @@ void wxHtmlHelpWindow::CreateIndex()
 
     m_IndexList->Clear();
 
-    size_t cnt = m_mergedIndex->size();
+    unsigned long cnt = m_mergedIndex->size();
 
     wxString cnttext;
     if (cnt > INDEX_IS_SMALL)
-        cnttext.Printf(_("%i of %i"), 0, cnt);
+        cnttext.Printf(_("%d of %lu"), 0, cnt);
     else
-        cnttext.Printf(_("%i of %i"), cnt, cnt);
+        cnttext.Printf(_("%lu of %lu"), cnt, cnt);
     m_IndexCountInfo->SetLabel(cnttext);
     if (cnt > INDEX_IS_SMALL)
         return;

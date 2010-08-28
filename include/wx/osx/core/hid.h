@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/corefoundation/hid.h
+// Name:        wx/osx/core/hid.h
 // Purpose:     DARWIN HID layer for WX
 // Author:      Ryan Norton
 // Modified by:

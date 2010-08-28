@@ -4,7 +4,7 @@
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
 // Copyright:   (c) 2005 Mike Wetherell
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"

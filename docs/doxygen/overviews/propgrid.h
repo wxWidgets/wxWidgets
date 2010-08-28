@@ -3,7 +3,7 @@
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -1014,6 +1014,14 @@ without warnings or errors.
 
   - wxPropertyGrid::CanClose() has been removed. Call
     wxPropertyGridInterface::EditorValidate() instead.
+
+  - wxPGProperty::SetFlag() has been moved to private API. This was done to
+    underline the fact that it was not the preferred method to change a
+    property's state since it never had any desired side-effects. ChangeFlag()
+    still exists for those who really need to achieve the same effect.
+
+  - wxArrayStringProperty default delimiter is now comma (','), and it can
+    be changed by setting the new "Delimiter" attribute.
 
 @subsection propgrid_compat_propdev Property and Editor Sub-classing Changes
 

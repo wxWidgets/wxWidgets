@@ -764,7 +764,7 @@ void MyCanvas::DrawText(wxDC& dc)
     wxCoord height;
     wxCoord descent;
     dc.GetTextExtent( wxT("This is Swiss 18pt text."), &length, &height, &descent );
-    text.Printf( wxT("Dimensions are length %ld, height %ld, descent %ld"), length, height, descent );
+    text.Printf( wxT("Dimensions are length %d, height %d, descent %d"), length, height, descent );
     dc.DrawText( text, 110, 80 );
 
     text.Printf( wxT("CharHeight() returns: %d"), dc.GetCharHeight() );
@@ -789,6 +789,9 @@ void MyCanvas::DrawText(wxDC& dc)
     y += height;
     dc.DrawRectangle( 110, y, 100, height );
     dc.DrawText( wxT("Another visible text"), 110, y );
+
+    y += height;
+    dc.DrawText("And\nmore\ntext on\nmultiple\nlines", 110, y);
 }
 
 static const struct

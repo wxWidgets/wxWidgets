@@ -238,7 +238,7 @@ bool wxLocale::Init(const wxString& name,
                     const wxString& locale,
                     bool            bLoadDefault
 #if WXWIN_COMPATIBILITY_2_8
-                   ,bool            bConvertEncoding
+                   ,bool            WXUNUSED_UNLESS_DEBUG(bConvertEncoding)
 #endif
                     )
 {

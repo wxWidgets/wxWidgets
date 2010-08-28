@@ -3,7 +3,7 @@
 // Purpose:     interface of wxHyperlinkEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -44,6 +44,7 @@ public:
     @class wxHyperlinkCtrl
 
     This class shows a static text element which links to an URL.
+
     Appearance and behaviour is completely customizable.
 
     In fact, when the user clicks on the hyperlink, a wxHyperlinkEvent is
@@ -58,9 +59,11 @@ public:
     @style{wxHL_ALIGN_LEFT}
            Align the text to the left.
     @style{wxHL_ALIGN_RIGHT}
-           Align the text to the right.
+           Align the text to the right. This style is not supported under
+           Windows XP but is supported under all the other Windows versions.
     @style{wxHL_ALIGN_CENTRE}
-           Center the text (horizontally).
+           Center the text (horizontally). This style is not supported by the
+           native MSW implementation used under Windows XP and later.
     @style{wxHL_CONTEXTMENU}
            Pop up a context menu when the hyperlink is right-clicked. The
            context menu contains a "Copy URL" menu item which is automatically
@@ -78,6 +81,9 @@ public:
         is done with the hyperlink's URL.
     @endEventTable
 
+    Currently this class is implemented using native support in wxGTK and wxMSW
+    (under Windows XP and later only) and a generic version is used by the
+    other ports.
 
     @library{wxadv}
     @category{ctrl}

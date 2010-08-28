@@ -10,14 +10,17 @@
 #ifndef _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
 #define _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
 
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
+
 // ----------------------------------------------------------------------------
 // abstract base class testing wxTextEntry methods
 // ----------------------------------------------------------------------------
 
-class TextEntryTestCase : public CppUnit::TestCase
+class TextEntryTestCase
 {
 public:
     TextEntryTestCase() { }
+    virtual ~TextEntryTestCase() { }
 
 protected:
     // this function must be overridden by the derived classes to return the
@@ -38,13 +41,21 @@ protected:
         CPPUNIT_TEST( TextChangeEvents ); \
         CPPUNIT_TEST( Selection ); \
         CPPUNIT_TEST( InsertionPoint ); \
-        CPPUNIT_TEST( Replace )
+        CPPUNIT_TEST( Replace ); \
+        WXUISIM_TEST( Editable ); \
+        CPPUNIT_TEST( Hint ); \
+        CPPUNIT_TEST( CopyPaste ); \
+        CPPUNIT_TEST( UndoRedo )
 
     void SetValue();
     void TextChangeEvents();
     void Selection();
     void InsertionPoint();
     void Replace();
+    void Editable();
+    void Hint();
+    void CopyPaste();
+    void UndoRedo();
 
 private:
     // Selection() test helper: verify that selection is as described by the
@@ -60,7 +71,7 @@ private:
     // wxChoice part of the control, not the selected text
     virtual void CheckStringSelection(const char *sel);
 
-    DECLARE_NO_COPY_CLASS(TextEntryTestCase)
+    wxDECLARE_NO_COPY_CLASS(TextEntryTestCase);
 };
 
 #endif // _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_

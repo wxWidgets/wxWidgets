@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/afterstd.h
+// Name:        wx/afterstd.h
 // Purpose:     #include after STL headers
 // Author:      Vadim Zeitlin
 // Modified by:

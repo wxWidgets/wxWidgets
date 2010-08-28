@@ -4,7 +4,7 @@
 // Author:      Hans Van Leemputten
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Hans Van Leemputten
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

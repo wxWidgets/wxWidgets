@@ -1,7 +1,7 @@
 """
 Name: doxymlparser.py
 Author: Kevin Ollivier
-License: wxWidgets License
+Licence: wxWindows licence
 """
 
 __description__ = """

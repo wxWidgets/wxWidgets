@@ -987,11 +987,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/infobar.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
+    src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp
+    src/generic/richmsgdlgg.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
     src/generic/spinctlg.cpp
@@ -1058,6 +1060,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/printps.h
     wx/generic/progdlgg.h
+    wx/generic/richmsgdlgg.h
     wx/generic/scrolwin.h
     wx/generic/spinctlg.h
     wx/generic/splitter.h
@@ -1089,6 +1092,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/radiobut.h
     wx/rearrangectrl.h
     wx/renderer.h
+    wx/richmsgdlg.h
     wx/scrolbar.h
     wx/scrolbar.h
     wx/scrolwin.h
@@ -1332,7 +1336,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
-    src/generic/msgdlgg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
@@ -1516,7 +1519,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
-    src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     <!-- GTK1 specific files: -->
@@ -1943,8 +1945,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
+    src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
+    src/msw/richmsgdlg.cpp
     src/msw/scrolbar.cpp
     src/msw/slider.cpp
     src/msw/spinbutt.cpp
@@ -2026,10 +2030,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pen.h
     wx/msw/printdlg.h
     wx/msw/printwin.h
+    wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
     wx/msw/region.h
     wx/msw/rcdefs.h
+    wx/msw/richmsgdlg.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
     wx/msw/slider.h
@@ -2722,7 +2728,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_COCOA_SRC" hints="files">
     $(OSX_CARBON_COCOA_SRC)
-    src/osx/cocoa/bmpbuttn.mm
     src/osx/cocoa/button.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm
@@ -2896,7 +2901,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
-    src/generic/msgdlgg.cpp
     src/generic/paletteg.cpp
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
@@ -3017,7 +3021,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
-    src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp
@@ -3126,6 +3129,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp
+    src/generic/commandlinkbuttong.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
     src/generic/editlbox.cpp
@@ -3150,6 +3154,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/animate.h
     wx/bmpcbox.h
     wx/calctrl.h
+    wx/commandlinkbutton.h
     wx/dataview.h
     wx/datectrl.h
     wx/dateevt.h
@@ -3193,11 +3198,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
+    src/msw/commandlinkbutton.cpp
+    src/msw/hyperlink.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
+    wx/msw/commandlinkbutton.h
+    wx/msw/hyperlink.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h

@@ -118,7 +118,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
     if (HasFlag(wxCB_SORT))
-        m_strings = new wxSortedArrayString();
+        m_strings = new wxGtkCollatedArrayString();
 
     GTKCreateComboBoxWidget();
 
@@ -222,11 +222,26 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxComboBox::GTKDisableEvents()
+void wxComboBox::EnableTextChangedEvents(bool enable)
 {
-    if ( GetEntry() )
+    if ( !GetEntry() )
+        return;
+
+    if ( enable )
+    {
+        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
+    }
+    else // disable
+    {
         g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
             (gpointer)gtkcombobox_text_changed_callback, this);
+    }
+}
+
+void wxComboBox::GTKDisableEvents()
+{
+    EnableTextChangedEvents(false);
 
     g_signal_handlers_block_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
@@ -236,9 +251,7 @@ void wxComboBox::GTKDisableEvents()
 
 void wxComboBox::GTKEnableEvents()
 {
-    if ( GetEntry() )
-        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
-            (gpointer)gtkcombobox_text_changed_callback, this);
+    EnableTextChangedEvents(true);
 
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
@@ -261,6 +274,14 @@ wxVisualAttributes
 wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
+}
+
+void wxComboBox::SetValue(const wxString& value)
+{
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(value);
+    else
+        wxTextEntry::SetValue(value);
 }
 
 // ----------------------------------------------------------------------------

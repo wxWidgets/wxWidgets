@@ -13,7 +13,7 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
-#include "wx/checkbox.h" // wxCheckBoxNameStr, in Datacmn.cpp
+#include "wx/checkbox.h" // wxCheckBoxNameStr, in datacmn.cpp
 //WXDLLIMPEXP_DATA_CORE(extern const wxChar) wxCheckBoxNameStr[];
 
 // Checkbox item (single checkbox)

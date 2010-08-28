@@ -438,6 +438,11 @@ public:
         return true;
     }
 
+    // This should be overridden to return true for the controls which have
+    // themed background that should through their children. Currently only
+    // wxNotebook uses this.
+    virtual bool MSWHasInheritableBackground() const { return false; }
+
 #if !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
     #define wxHAS_MSW_BACKGROUND_ERASE_HOOK
 #endif
@@ -589,6 +594,8 @@ protected:
                                           const wxSize& size,
                                           int& x, int& y,
                                           int& w, int& h) const;
+
+    bool MSWEnableHWND(WXHWND hWnd, bool enable);
 
 private:
     // common part of all ctors

@@ -57,7 +57,7 @@ END_EVENT_TABLE()
 // Carbon Events handlers
 // ----------------------------------------------------------------------------
 
-// prototype for function in src/mac/carbon/toplevel.cpp
+// prototype for function in src/osx/carbon/nonownedwnd.cpp
 void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent );
 
 static const EventTypeSpec eventList[] =

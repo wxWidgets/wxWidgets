@@ -6,7 +6,7 @@
 // Created:     30.08.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TEXTCTRLCE_H_

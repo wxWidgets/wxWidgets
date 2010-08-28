@@ -101,6 +101,8 @@ public:
 
     void OnChar( wxKeyEvent &event );
 
+    virtual void SetValue(const wxString& value);
+
     // Standard event handling
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
@@ -146,13 +148,7 @@ private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const;
-    virtual void EnableTextChangedEvents(bool enable)
-    {
-        if ( enable )
-            EnableEvents();
-        else
-            DisableEvents();
-    }
+    virtual void EnableTextChangedEvents(bool enable);
 
     void Init();
 

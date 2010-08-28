@@ -77,17 +77,10 @@ public:
 #endif
 
 #ifdef __WXMSW__
-    // This is a hack to support inheriting of background through child
-    // wxPanel: at least wxNotebook needs this under wxMSW as its background
-    // should apply to its children which are usually wxPanels which normally
-    // don't have a transparent background. Calling this function allows to
-    // change this for the panels which are used as notebook pages.
-    void MSWSetTransparentBackground(bool isTransparent = true)
-    {
-        m_isTransparent = isTransparent;
-    }
-
-    virtual bool HasTransparentBackground() { return m_isTransparent; }
+    // This is overridden for MSW to return true for all panels that are child
+    // of a window with themed background (such as wxNotebook) which should
+    // show through the child panels.
+    virtual bool HasTransparentBackground();
 #endif // __WXMSW__
 
     WX_DECLARE_CONTROL_CONTAINER();
@@ -100,10 +93,6 @@ protected:
     virtual wxBorder GetDefaultBorder() const { return wxWindowBase::GetDefaultBorder(); }
 
 private:
-#ifdef __WXMSW__
-    bool m_isTransparent;
-#endif // __WXMSW__
-
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel)
     DECLARE_EVENT_TABLE()
 };

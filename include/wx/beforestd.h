@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/beforestd.h
+// Name:        wx/beforestd.h
 // Purpose:     #include before STL headers
 // Author:      Vadim Zeitlin
 // Modified by:

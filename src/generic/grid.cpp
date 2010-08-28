@@ -170,6 +170,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxGridHeaderCtrl::OnClick)
+    EVT_HEADER_DCLICK(wxID_ANY, wxGridHeaderCtrl::OnDoubleClick)
+    EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxGridHeaderCtrl::OnRightClick)
 
     EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnBeginResize)
     EVT_HEADER_RESIZING(wxID_ANY, wxGridHeaderCtrl::OnResizing)
@@ -1911,7 +1913,6 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
-    SetScrollRate(m_scrollLineX, m_scrollLineY);
     CalcDimensions();
 
     return true;
@@ -2249,8 +2250,11 @@ void wxGrid::Init()
     m_extraWidth =
     m_extraHeight = 0;
 
-    m_scrollLineX = GRID_SCROLL_LINE_X;
-    m_scrollLineY = GRID_SCROLL_LINE_Y;
+    // we can't call SetScrollRate() as the window isn't created yet but OTOH
+    // we don't need to call it neither as the scroll position is (0, 0) right
+    // now anyhow, so just set the parameters directly
+    m_xScrollPixelsPerLine = GRID_SCROLL_LINE_X;
+    m_yScrollPixelsPerLine = GRID_SCROLL_LINE_Y;
 }
 
 // ----------------------------------------------------------------------------
@@ -4128,13 +4132,13 @@ bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
             oper.SelectSize(rect) = oper.Select(size);
 
             int subtractLines = 0;
-            const int lineStart = oper.PosToLine(this, posLineStart);
+            const int lineStart = doper.PosToLine(this, posLineStart);
             if ( lineStart >= 0 )
             {
                 // ensure that if we have a multi-cell block we redraw all of
                 // it by increasing the refresh area to cover it entirely if a
                 // part of it is affected
-                const int lineEnd = oper.PosToLine(this, posLineEnd, true);
+                const int lineEnd = doper.PosToLine(this, posLineEnd, true);
                 for ( int line = lineStart; line < lineEnd; line++ )
                 {
                     int cellLines = oper.Select(
@@ -4669,25 +4673,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(0, 0);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? 0
+                                             : m_currentCellCoords.GetRow(),
+                         0);
                 break;
 
             case WXK_END:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(m_numRows - 1, m_numCols - 1);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? m_numRows - 1
+                                             : m_currentCellCoords.GetRow(),
+                         m_numCols - 1);
                 break;
 
             case WXK_PAGEUP:
@@ -6415,7 +6409,7 @@ void wxGrid::MakeCellVisible( int row, int col )
             //
             // Sometimes GRID_SCROLL_LINE / 2 is not enough,
             // so just add a full scroll unit...
-            ypos += m_scrollLineY;
+            ypos += m_yScrollPixelsPerLine;
         }
 
         // special handling for wide cells - show always left part of the cell!
@@ -6434,15 +6428,15 @@ void wxGrid::MakeCellVisible( int row, int col )
             xpos = x0 + (right - cw);
 
             // see comment for ypos above
-            xpos += m_scrollLineX;
+            xpos += m_xScrollPixelsPerLine;
         }
 
         if ( xpos != -1 || ypos != -1 )
         {
             if ( xpos != -1 )
-                xpos /= m_scrollLineX;
+                xpos /= m_xScrollPixelsPerLine;
             if ( ypos != -1 )
-                ypos /= m_scrollLineY;
+                ypos /= m_yScrollPixelsPerLine;
             Scroll( xpos, ypos );
             AdjustScrollbars();
         }
@@ -8125,10 +8119,8 @@ void wxGrid::AutoSize()
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
     // client size but also leave space for (not needed any more) scrollbars
-    SetScrollbars(0, 0, 0, 0, 0, 0, true);
-
-    // restore the scroll rate parameters overwritten by SetScrollbars()
-    SetScrollRate(m_scrollLineX, m_scrollLineY);
+    SetScrollbars(m_xScrollPixelsPerLine, m_yScrollPixelsPerLine,
+                  0, 0, 0, 0, true);
 
     SetClientSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight);
 }

@@ -477,7 +477,7 @@ void wxFontRefData::MacFindFont()
             traits |= kCTFontItalicTrait;
 
         // use font caching
-        wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_info.m_faceName.c_str(), traits, m_info.m_pointSize );
+        wxString lookupnameWithSize = wxString::Format( "%s_%u_%d", m_info.m_faceName, traits, m_info.m_pointSize );
 
         static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
         m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxAnimation* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -183,7 +183,7 @@ public:
 
     Note that on wxGTK wxAnimation is capable of loading the formats supported
     by the internally-used @c gdk-pixbuf library (typically this means only
-    or @c wxANIMATION_TYPE_GIF).
+    @c wxANIMATION_TYPE_GIF).
     On other platforms wxAnimation is always capable of loading both GIF and ANI
     formats (i.e. both @c wxANIMATION_TYPE_GIF and @c wxANIMATION_TYPE_ANI).
 

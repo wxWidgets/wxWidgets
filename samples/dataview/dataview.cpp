@@ -6,7 +6,7 @@
 // Created:     06/01/06
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -71,8 +71,8 @@ public:
                            unsigned int nPanel,
                            unsigned long style = 0);
 
-public:     // event handlers
-
+private:
+    // event handlers
     void OnStyleChange(wxCommandEvent& event);
     void OnSetBackgroundColour(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
@@ -83,11 +83,13 @@ public:     // event handlers
     void OnPageChanged(wxBookCtrlEvent& event);
 
     void OnAddMozart(wxCommandEvent& event);
-    void OnDeleteMusic(wxCommandEvent& event);
+    void OnDeleteSelected(wxCommandEvent& event);
     void OnDeleteYear(wxCommandEvent& event);
     void OnSelectNinth(wxCommandEvent& event);
     void OnCollapse(wxCommandEvent& event);
     void OnExpand(wxCommandEvent& event);
+    void OnShowCurrent(wxCommandEvent& event);
+    void OnSetNinthCurrent(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -123,11 +125,18 @@ public:     // event handlers
     void OnHideAttributes( wxCommandEvent &event);
     void OnShowAttributes( wxCommandEvent &event);
 
+#if wxUSE_DRAG_AND_DROP
     void OnBeginDrag( wxDataViewEvent &event );
     void OnDropPossible( wxDataViewEvent &event );
     void OnDrop( wxDataViewEvent &event );
+#endif // wxUSE_DRAG_AND_DROP
 
-private:
+    void OnDataViewChar(wxKeyEvent& event);
+
+    // helper used by both OnDeleteSelected() and OnDataViewChar()
+    void DeleteSelectedItems();
+
+
     wxNotebook* m_notebook;
 
     // the controls stored in the various tabs of the main notebook:
@@ -271,11 +280,13 @@ enum
     ID_ATTR_CTRL        = 51,
 
     ID_ADD_MOZART       = 100,
-    ID_DELETE_MUSIC     = 101,
+    ID_DELETE_SEL       = 101,
     ID_DELETE_YEAR      = 102,
     ID_SELECT_NINTH     = 103,
     ID_COLLAPSE         = 104,
     ID_EXPAND           = 105,
+    ID_SHOW_CURRENT,
+    ID_SET_NINTH_CURRENT,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -303,11 +314,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, MyFrame::OnPageChanged )
 
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
-    EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
+    EVT_BUTTON( ID_DELETE_SEL, MyFrame::OnDeleteSelected )
     EVT_BUTTON( ID_DELETE_YEAR, MyFrame::OnDeleteYear )
     EVT_BUTTON( ID_SELECT_NINTH, MyFrame::OnSelectNinth )
     EVT_BUTTON( ID_COLLAPSE, MyFrame::OnCollapse )
     EVT_BUTTON( ID_EXPAND, MyFrame::OnExpand )
+    EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
+    EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
@@ -340,9 +353,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
 
+#if wxUSE_DRAG_AND_DROP
     EVT_DATAVIEW_ITEM_BEGIN_DRAG( ID_MUSIC_CTRL, MyFrame::OnBeginDrag )
     EVT_DATAVIEW_ITEM_DROP_POSSIBLE( ID_MUSIC_CTRL, MyFrame::OnDropPossible )
     EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
+#endif // wxUSE_DRAG_AND_DROP
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
     
@@ -402,13 +417,21 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     BuildDataViewCtrl(firstPanel, 0);    // sets m_ctrl[0]
 
+    const wxSizerFlags border = wxSizerFlags().DoubleBorder();
+
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer->Add( new wxButton( firstPanel, ID_ADD_MOZART,  "Add Mozart"),             0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_MUSIC,"Delete selected"),        0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, "Delete \"Year\" column"), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,"Select ninth symphony"),  0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    "Collapse"),               0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_EXPAND,      "Expand"),                 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( firstPanel, ID_ADD_MOZART,  "Add Mozart"),             border );
+    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_SEL,  "Delete selected"),        border );
+    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, "Delete \"Year\" column"), border );
+    button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,"Select ninth symphony"),  border );
+    button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    "Collapse"),               border );
+    button_sizer->Add( new wxButton( firstPanel, ID_EXPAND,      "Expand"),                 border );
+
+    wxBoxSizer *sizerCurrent = new wxBoxSizer(wxHORIZONTAL);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_SHOW_CURRENT,
+                                   "&Show current"), border);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_SET_NINTH_CURRENT,
+                                   "Make &ninth symphony current"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[0]->SetMinSize(wxSize(-1, 200));
@@ -417,6 +440,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         new wxStaticText(firstPanel, wxID_ANY, "Most of the cells above are editable!"),
         0, wxGROW|wxALL, 5);
     firstPanelSz->Add(button_sizer);
+    firstPanelSz->Add(sizerCurrent);
     firstPanel->SetSizerAndFit(firstPanelSz);
 
 
@@ -510,12 +534,17 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[0] =
                 new wxDataViewCtrl( parent, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize, style );
+            m_ctrl[0]->Connect(wxEVT_CHAR,
+                               wxKeyEventHandler(MyFrame::OnDataViewChar),
+                               NULL, this);
 
             m_music_model = new MyMusicTreeModel;
             m_ctrl[0]->AssociateModel( m_music_model.get() );
 
+#if wxUSE_DRAG_AND_DROP
             m_ctrl[0]->EnableDragSource( wxDF_UNICODETEXT );
             m_ctrl[0]->EnableDropTarget( wxDF_UNICODETEXT );
+#endif // wxUSE_DRAG_AND_DROP
 
             // column 0 of the view control:
 
@@ -794,6 +823,8 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 // MyFrame - event handlers for the first page
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
+
 void MyFrame::OnBeginDrag( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
@@ -846,18 +877,25 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
     wxLogMessage( "Text dropped: %s", obj.GetText() );
 }
 
+#endif // wxUSE_DRAG_AND_DROP
+
 void MyFrame::OnAddMozart( wxCommandEvent& WXUNUSED(event) )
 {
-    m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", 1787 );
+    m_music_model->AddToClassical( "Eine kleine Nachtmusik", "Wolfgang Mozart", 1787 );
 }
 
-void MyFrame::OnDeleteMusic( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::DeleteSelectedItems()
 {
     wxDataViewItemArray items;
     int len = m_ctrl[0]->GetSelections( items );
     for( int i = 0; i < len; i ++ )
         if (items[i].IsOk())
             m_music_model->Delete( items[i] );
+}
+
+void MyFrame::OnDeleteSelected( wxCommandEvent& WXUNUSED(event) )
+{
+    DeleteSelectedItems();
 }
 
 void MyFrame::OnDeleteYear( wxCommandEvent& WXUNUSED(event) )
@@ -889,6 +927,33 @@ void MyFrame::OnExpand( wxCommandEvent& WXUNUSED(event) )
     wxDataViewItem item = m_ctrl[0]->GetSelection();
     if (item.IsOk())
         m_ctrl[0]->Expand( item );
+}
+
+void MyFrame::OnShowCurrent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item = m_ctrl[0]->GetCurrentItem();
+    if ( item.IsOk() )
+    {
+        wxLogMessage("Current item: \"%s\" by %s",
+                     m_music_model->GetTitle(item),
+                     m_music_model->GetArtist(item));
+    }
+    else
+    {
+        wxLogMessage("There is no current item.");
+    }
+}
+
+void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item(m_music_model->GetNinthItem());
+    if ( !item.IsOk() )
+    {
+        wxLogError( "Cannot make the ninth symphony current: it was removed!" );
+        return;
+    }
+
+    m_ctrl[0]->SetCurrentItem(item);
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
@@ -1074,6 +1139,13 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
                  event.GetX(), event.GetY() );
 }
 
+void MyFrame::OnDataViewChar(wxKeyEvent& event)
+{
+    if ( event.GetKeyCode() == WXK_DELETE )
+        DeleteSelectedItems();
+    else
+        event.Skip();
+}
 
 // ----------------------------------------------------------------------------
 // MyFrame - event handlers for the second page

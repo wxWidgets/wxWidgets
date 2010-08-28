@@ -6,11 +6,13 @@
 // Created:     2004-09-25
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPGRID_H_
 #define _WX_PROPGRID_PROPGRID_H_
+
+#include "wx/defs.h"
 
 #if wxUSE_PROPGRID
 
@@ -1523,18 +1525,6 @@ public:
 
     // Events from editor controls are forward to this function
     void HandleCustomEditorEvent( wxEvent &event );
-
-    /**
-        Generates contents for string dst based on the contents of
-        wxArrayString src.
-
-        Format will be "(preDelim)str1(postDelim) (preDelim)str2(postDelim) and
-        so on. Set flags to 1 inorder to convert backslashes to double-back-
-        slashes and "(preDelims)"'s to "(preDelims)".
-    */
-    static void ArrayStringToString( wxString& dst, const wxArrayString& src,
-                                     wxChar preDelim, wxChar postDelim,
-                                     int flags );
 
     // Mostly useful for page switching.
     void SwitchState( wxPropertyGridPageState* pNewState );

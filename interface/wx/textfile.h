@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTextFile
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // TODO: document wxTextBuffer

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/arrstr.h
+// Name:        wx/arrstr.h
 // Purpose:     wxArrayString class
 // Author:      Mattia Barbon and Vadim Zeitlin
 // Modified by:

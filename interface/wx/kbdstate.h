@@ -4,7 +4,7 @@
 // Author:      wxWidgets team
 // Created:     2008-09-19
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

@@ -5,7 +5,7 @@
 // Created:     2006-02-19
 // RCS-ID:      $Id$
 // Copyright:   Vince Harron
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".

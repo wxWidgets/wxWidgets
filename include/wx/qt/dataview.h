@@ -134,6 +134,9 @@ protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
+private:
+    virtual wxDataViewItem DoGetCurrentItem() const;
+    virtual void DoSetCurrentItem(const wxDataViewItem& item);
 };
 
 #endif // _WX_QT_DATAVIEW_H_

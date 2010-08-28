@@ -3253,11 +3253,19 @@ protected:
     // validators.
     virtual bool TryBefore(wxEvent& event);
 
-    // this one is not a hook but just a helper which looks up the handler in
-    // this object itself called from ProcessEventLocally() and normally
-    // shouldn't be called directly as doing it would ignore any chained event
-    // handlers
-    bool TryHere(wxEvent& event);
+    // This one is not a hook but just a helper which looks up the handler in
+    // this object itself.
+    //
+    // It is called from ProcessEventLocally() and normally shouldn't be called
+    // directly as doing it would ignore any chained event handlers
+    bool TryHereOnly(wxEvent& event);
+
+    // Another helper which simply calls pre-processing hook and then tries to
+    // handle the event at this handler level.
+    bool TryBeforeAndHere(wxEvent& event)
+    {
+        return TryBefore(event) || TryHereOnly(event);
+    }
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it

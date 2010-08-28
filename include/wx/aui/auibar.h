@@ -20,7 +20,8 @@
 #include "wx/sizer.h"
 #include "wx/pen.h"
 
-//class WXDLLIMPEXP_FWD_CORE wxSizerItem;
+class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
 enum wxAuiToolBarStyle
 {
@@ -29,9 +30,17 @@ enum wxAuiToolBarStyle
     wxAUI_TB_NO_AUTORESIZE = 1 << 2,
     wxAUI_TB_GRIPPER       = 1 << 3,
     wxAUI_TB_OVERFLOW      = 1 << 4,
+    // using this style forces the toolbar to be vertical and
+    // be only dockable to the left or right sides of the window
+    // whereas by default it can be horizontal or vertical and
+    // be docked anywhere
     wxAUI_TB_VERTICAL      = 1 << 5,
     wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
+    // analogous to wxAUI_TB_VERTICAL, but forces the toolbar
+    // to be horizontal
+    wxAUI_TB_HORIZONTAL    = 1 << 7,
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
+    wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
     wxAUI_TB_DEFAULT_STYLE = 0
 };
 
@@ -564,6 +573,10 @@ public:
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
 
+    // get size of hint rectangle for a particular dock location
+    wxSize GetHintSize(int dock_direction) const;
+    bool IsPaneValid(const wxAuiPaneInfo& pane) const;
+
 protected:
 
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
@@ -635,6 +648,14 @@ protected:
     bool m_gripper_visible;
     bool m_overflow_visible;
     long m_style;
+
+    bool RealizeHelper(wxClientDC& dc, bool horizontal);
+    static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
+    bool IsPaneValid(long style) const;
+    void SetArtFlags() const;
+    wxOrientation m_orientation;
+    wxSize m_horzHintSize;
+    wxSize m_vertHintSize;
 
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxAuiToolBar)

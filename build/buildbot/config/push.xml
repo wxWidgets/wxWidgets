@@ -6,7 +6,7 @@
     Author:     Mike Wetherell
     RCS-ID:     $Id$
     Copyright:  (c) 2007 Mike Wetherell
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 
     This allows the logs from builds done elsewhere to be included in the
     buildbot results, see:

@@ -135,9 +135,33 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 
 #if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"
+// Note that the native control is only available in Unicode version under MSW.
+#elif defined(__WXMSW__) && wxUSE_UNICODE && !defined(__WXUNIVERSAL__)
+    #include "wx/msw/hyperlink.h"
 #else
     #include "wx/generic/hyperlink.h"
-    #define wxHyperlinkCtrl     wxGenericHyperlinkCtrl
+
+    class WXDLLIMPEXP_ADV wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
+    {
+    public:
+        wxHyperlinkCtrl() { }
+
+        wxHyperlinkCtrl(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& label,
+                        const wxString& url,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxHL_DEFAULT_STYLE,
+                        const wxString& name = wxHyperlinkCtrlNameStr)
+            : wxGenericHyperlinkCtrl(parent, id, label, url, pos, size,
+                                     style, name)
+        {
+        }
+
+    private:
+        wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxHyperlinkCtrl );
+    };
 #endif
 
 

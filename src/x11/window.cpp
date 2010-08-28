@@ -47,6 +47,7 @@
     #include "wx/layout.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
+    #include "wx/unix/utilsx11.h"
 #endif
 
 #include "wx/fontutil.h"

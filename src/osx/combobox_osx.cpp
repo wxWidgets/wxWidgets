@@ -186,12 +186,15 @@ int wxComboBox::FindString(const wxString& s, bool bCase) const
 
 wxString wxComboBox::GetString(unsigned int n) const
 {
+    wxCHECK_MSG( n < GetCount(), wxString(), "Invalid combobox index" );
+
     return GetComboPeer()->GetStringAtIndex(n);
 }
 
 wxString wxComboBox::GetStringSelection() const
 {
-    return GetString(GetSelection());
+    const int sel = GetSelection();
+    return sel == wxNOT_FOUND ? wxString() : GetString(sel);
 }
 
 void wxComboBox::SetString(unsigned int n, const wxString& s)

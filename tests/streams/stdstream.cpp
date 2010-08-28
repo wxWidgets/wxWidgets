@@ -4,7 +4,7 @@
 // Author:      Jonathan Liu <net147@gmail.com>
 // RCS-ID:      $Id$
 // Copyright:   (c) 2009 Jonathan Liu
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

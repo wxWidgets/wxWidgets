@@ -3,7 +3,7 @@
 // Purpose:     interface of wxRealPoint
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -583,6 +583,49 @@ public:
     wxSize& operator *=(int factor);
     //@}
 
+
+    /**
+        @name Defaults handling.
+
+        Test for and set non-specified wxPoint components.
+
+        Although a wxPoint is always initialized to (0, 0), wxWidgets commonly
+        uses wxDefaultCoord (defined as @c -1) to indicate that a point hasn't
+        been initialized or specified. In particular, ::wxDefaultPosition is
+        used in many places with this meaning.
+     */
+    //@{
+
+    /**
+        Returns @true if neither of the point components is equal to
+        wxDefaultCoord.
+
+        This method is typically used before calling SetDefaults().
+
+        @since 2.9.2
+    */
+    bool IsFullySpecified() const;
+
+    /**
+        Combine this object with another one replacing the uninitialized
+        values.
+
+        It is typically used like this:
+
+        @code
+        if ( !pos.IsFullySpecified() )
+        {
+            pos.SetDefaults(GetDefaultPosition());
+        }
+        @endcode
+
+        @see IsFullySpecified()
+
+        @since 2.9.2
+    */
+    void SetDefaults(const wxSize& sizeDefault);
+    //@}
+
     /**
         x member.
     */
@@ -595,7 +638,7 @@ public:
 };
 
 /**
-    Global istance of a wxPoint initialized with values (-1,-1).
+    Global instance of a wxPoint initialized with values (-1,-1).
 */
 wxPoint wxDefaultPosition;
 
@@ -722,6 +765,12 @@ public:
     */
     wxString FindName(const wxColour& colour) const;
 };
+
+
+/**
+    Global istance of a wxColourDatabase.
+*/
+wxColourDatabase* wxTheColourDatabase;
 
 
 /**

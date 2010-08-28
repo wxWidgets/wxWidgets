@@ -3,7 +3,7 @@
  =======================================
 
  Author: Utensil Candel (Email: UtensilCandel at GMail dot com)
- Licence: wxWidgets Licence
+ Licence: wxWindows licence
 
  Thanks: Francesco Montorsi, Bryan Petty, Auria, Jorg and wxForum
 

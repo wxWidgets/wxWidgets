@@ -122,7 +122,7 @@ protected:
     wxArrayInt m_oldSelections;
 
     // Update m_oldSelections with currently selected items (does nothing in
-    // single selection mode).
+    // single selection mode on platforms other than MSW).
     void UpdateOldSelections();
 
 private:

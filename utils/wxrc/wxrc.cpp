@@ -586,7 +586,8 @@ static wxString FileToCppArray(wxString filename, int num)
                   wxT("Huge file not supported") );
 
     snum.Printf(wxT("%i"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %zu;\n"), lng);
+    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %lu;\n"),
+                  static_cast<unsigned long>(lng));
     output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(

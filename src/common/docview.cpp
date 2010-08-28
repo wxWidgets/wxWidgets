@@ -1036,14 +1036,8 @@ wxFileHistory *wxDocManager::OnCreateFileHistory()
 void wxDocManager::OnFileClose(wxCommandEvent& WXUNUSED(event))
 {
     wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        return;
-    if (doc->Close())
-    {
-        doc->DeleteAllViews();
-        if (m_docs.Member(doc))
-            delete doc;
-    }
+    if (doc)
+        CloseDocument(doc);
 }
 
 void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
@@ -1093,7 +1087,7 @@ void wxDocManager::OnMRUFile(wxCommandEvent& event)
     // Check if the id is in the range assigned to MRU list entries.
     const int id = event.GetId();
     if ( id >= wxID_FILE1 &&
-            id < wxID_FILE1 + m_fileHistory->GetBaseId() )
+            id < wxID_FILE1 + static_cast<int>(m_fileHistory->GetCount()) )
     {
         DoOpenMRUFile(id - wxID_FILE1);
     }
@@ -1414,6 +1408,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
             {
                 // file already open, just activate it and return
                 ActivateDocument(doc);
+                return doc;
             }
         }
     }

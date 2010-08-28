@@ -527,6 +527,18 @@ public:
 
     wxPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
+
+    // check if both components are set/initialized
+    bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
+
+    // fill in the unset components with the values from the other point
+    void SetDefaults(const wxPoint& pt)
+    {
+        if ( x == wxDefaultCoord )
+            x = pt.x;
+        if ( y == wxDefaultCoord )
+            y = pt.y;
+    }
 };
 
 

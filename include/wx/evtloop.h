@@ -17,7 +17,7 @@
 
 // TODO: implement wxEventLoopSource for MSW (it should wrap a HANDLE and be
 //       monitored using MsgWaitForMultipleObjects())
-#if defined(__WXOSX__) || defined(__UNIX__)
+#if defined(__WXOSX__) || (defined(__UNIX__) && !defined(__CYGWIN__))
     #define wxUSE_EVENTLOOP_SOURCE 1
 #else
     #define wxUSE_EVENTLOOP_SOURCE 0
@@ -313,7 +313,7 @@ protected:
 #endif // wxUSE_GUI
 
 // include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__CYGWIN__)
 #include "wx/unix/evtloop.h"
 #endif
 

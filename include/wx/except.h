@@ -24,7 +24,9 @@
 // compilation errors in e.g. wx/scopeguard.h with at least g++ 4
 #if !wxUSE_EXCEPTIONS || \
         (defined(__GNUG__) && !defined(__EXCEPTIONS))
-    #define wxNO_EXCEPTIONS
+    #ifndef wxNO_EXCEPTIONS
+        #define wxNO_EXCEPTIONS
+    #endif
 #endif
 
 #ifdef wxNO_EXCEPTIONS

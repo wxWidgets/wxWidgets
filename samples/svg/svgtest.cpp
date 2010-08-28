@@ -4,7 +4,7 @@
 // Author:      Chris Elliott
 // Modified by:
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================

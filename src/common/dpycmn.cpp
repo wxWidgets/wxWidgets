@@ -6,7 +6,7 @@
 // Created:     01.03.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003-2006 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -234,7 +234,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     // consider that the window belongs to the display containing its centre
-    const wxRect r(window->GetRect());
+    const wxRect r(window->GetScreenRect());
     return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
 }
 

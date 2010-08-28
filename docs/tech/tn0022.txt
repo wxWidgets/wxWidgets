@@ -1,12 +1,8 @@
-                   Working with the wxWidgets release system
-                   =========================================
+                        Making a new wxWidgets release
+                        ==============================
 
-Process Overview:
-- run build/tools/create-archive.py --compression=all /path/to/output/dir
-- upload release to sf.net
-- update wxwidgets.org
-- promote release on software download sites
-
+Creating release files
+----------------------
 
 Currently our release system uses a Python 2.x script to generate releases.
 The script requires Unix utilities such as tar, zip and unix2dos and thus must
@@ -29,3 +25,40 @@ IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
           release. If you have legitimate modifications in the tree that need
           to be in the release, commit them first.
 
+
+Also run doxygen to create HTML documentation and pack it in .tar.bz2 and .zip
+formats.
+
+
+Uploading
+---------
+
+Upload the files to SourceForge (the simplest is to scp them to
+sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z) and to
+ftp.wxwidgets.org (ask Chris to do it).
+
+Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it).
+
+
+Announcement
+------------
+
+Post announcement at least to wx-announce@googlegroups.com.
+
+TODO: where else to announce it?
+
+Update www.wxwidgets.org, usually a news item is enough but something more can
+be called for for major releases.
+
+Post to wxBlog if necessary.
+
+
+Version updates
+---------------
+
+Trac: mark the milestone corresponding to the release as completed and add a
+new version for it to allow reporting bugs against it (ask Vadim or Robin to do
+it).
+
+Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
+with x.y.z+1 (minor or major versions updates require manual intervention).

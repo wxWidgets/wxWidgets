@@ -1,0 +1,217 @@
+/*****************************************************************************
+** Name:        wxtabs.css
+** Purpose:     The wxWidgets documentation CSS
+** Author:      Doxygen team
+** RCS-ID:      $Id$
+** Licence:     wxWindows licence
+*****************************************************************************/
+
+/*
+  Doxygen classic tabs styles, based on http://www.alistapart.com/articles/slidingdoors 
+*/
+
+DIV.tabs
+{
+   float            : left;
+   width            : 100%;
+   background       : url("tab_b.gif") repeat-x bottom;
+   margin-bottom    : 4px;
+}
+
+DIV.tabs UL
+{
+   margin           : 0px;
+   padding-left     : 10px;
+   list-style       : none;
+}
+
+DIV.tabs LI, DIV.tabs FORM
+{
+   display          : inline;
+   margin           : 0px;
+   padding          : 0px;
+}
+
+DIV.tabs FORM
+{
+   float            : right;
+}
+
+DIV.tabs A
+{
+   float            : left;
+   background       : url("tab_r.gif") no-repeat right top;
+   border-bottom    : 1px solid #84B0C7;
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+}
+
+DIV.tabs A:hover
+{
+   background-position: 100% -150px;
+}
+
+DIV.tabs A:link, DIV.tabs A:visited,
+DIV.tabs A:active, DIV.tabs A:hover
+{
+       color: #1A419D;
+}
+
+DIV.tabs SPAN
+{
+   float            : left;
+   display          : block;
+   background       : url("tab_l.gif") no-repeat left top;
+   padding          : 5px 9px;
+   white-space      : nowrap;
+}
+
+DIV.tabs INPUT
+{
+   float            : right;
+   display          : inline;
+   font-size        : 1em;
+}
+
+DIV.tabs TD
+{
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+}
+
+
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+DIV.tabs SPAN {float : none;}
+/* End IE5-Mac hack */
+
+DIV.tabs A:hover SPAN
+{
+   background-position: 0% -150px;
+}
+
+DIV.tabs LI.current A
+{
+   background-position: 100% -150px;
+   border-width     : 0px;
+}
+
+DIV.tabs LI.current SPAN
+{
+   background-position: 0% -150px;
+   padding-bottom   : 6px;
+}
+
+DIV.navpath
+{
+   background       : none;
+   border           : none;
+   border-bottom    : 1px solid #84B0C7;
+   text-align       : center;
+   margin           : 2px;
+   padding          : 2px;
+}
+
+
+/*
+   NOTE: since v. 1.7.0 Doxygen uses new style names for some tabs... and in particular uses "tabs2" for
+         the CSS style names of the "Class List, Class Index, Class Hierarchy, Class Members" tabs.
+         For now we keep for "tabs2" tabs the same style used with other ones.
+*/
+
+
+DIV.tabs2
+{
+   float            : left;
+   width            : 100%;
+   background       : url("tab_b.gif") repeat-x bottom;
+   margin-bottom    : 4px;
+}
+
+DIV.tabs2 UL
+{
+   margin           : 0px;
+   padding-left     : 10px;
+   list-style       : none;
+}
+
+DIV.tabs2 LI, DIV.tabs2 FORM
+{
+   display          : inline;
+   margin           : 0px;
+   padding          : 0px;
+}
+
+DIV.tabs2 FORM
+{
+   float            : right;
+}
+
+DIV.tabs2 A
+{
+   float            : left;
+   background       : url("tab_r.gif") no-repeat right top;
+   border-bottom    : 1px solid #84B0C7;
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+}
+
+DIV.tabs2 A:hover
+{
+   background-position: 100% -150px;
+}
+
+DIV.tabs2 A:link, DIV.tabs2 A:visited,
+DIV.tabs2 A:active, DIV.tabs2 A:hover
+{
+       color: #1A419D;
+}
+
+DIV.tabs2 SPAN
+{
+   float            : left;
+   display          : block;
+   background       : url("tab_l.gif") no-repeat left top;
+   padding          : 5px 9px;
+   white-space      : nowrap;
+}
+
+DIV.tabs2 INPUT
+{
+   float            : right;
+   display          : inline;
+   font-size        : 1em;
+}
+
+DIV.tabs2 TD
+{
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+}
+
+
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+DIV.tabs2 SPAN {float : none;}
+/* End IE5-Mac hack */
+
+DIV.tabs2 A:hover SPAN
+{
+   background-position: 0% -150px;
+}
+
+DIV.tabs2 LI.current A
+{
+   background-position: 100% -150px;
+   border-width     : 0px;
+}
+
+DIV.tabs2 LI.current SPAN
+{
+   background-position: 0% -150px;
+   padding-bottom   : 6px;
+}

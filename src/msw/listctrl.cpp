@@ -1464,7 +1464,9 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    return ListView_DeleteAllItems(GetHwnd()) != 0;
+    // Calling ListView_DeleteAllItems() will always generate an event but we
+    // shouldn't do it if the control is empty 
+    return !GetItemCount() || ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
 // Deletes all items

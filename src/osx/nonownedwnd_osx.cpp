@@ -101,8 +101,8 @@ void wxNonOwnedWindow::Init()
 
 bool wxNonOwnedWindow::Create(wxWindow *parent,
                                  wxWindowID id,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
+                                 const wxPoint& posOrig,
+                                 const wxSize& sizeOrig,
                                  long style,
                                  const wxString& name)
 {
@@ -114,22 +114,23 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     m_windowStyle = style;
     m_isShown = false;
 
+    // use the appropriate defaults for the position and size if necessary
+    wxPoint pos(posOrig);
+    if ( !pos.IsFullySpecified() )
+        pos.SetDefaults(wxGetClientDisplayRect().GetPosition());
+
+    wxSize size(sizeOrig);
+    if ( !size.IsFullySpecified() )
+        size.SetDefaults(wxTopLevelWindow::GetDefaultSize());
+
     // create frame.
-    int x = (int)pos.x;
-    int y = (int)pos.y;
-
-    wxRect display = wxGetClientDisplayRect() ;
-
-    if ( x == wxDefaultPosition.x )
-        x = display.x ;
-
-    if ( y == wxDefaultPosition.y )
-        y = display.y ;
-
-    int w = WidthDefault(size.x);
-    int h = HeightDefault(size.y);
-
-    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, wxPoint(x,y) , wxSize(w,h) , style , GetExtraStyle(), name );
+    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow
+                (
+                    this, parent,
+                    pos , size,
+                    style, GetExtraStyle(),
+                    name
+                );
     wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
     m_peer = wxWidgetImpl::CreateContentView(this);
 

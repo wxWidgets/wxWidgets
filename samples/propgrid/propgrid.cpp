@@ -6,7 +6,7 @@
 // Created:     2004-09-25
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //
@@ -1471,9 +1471,10 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString( wxT("BoolProperty with CheckBox"),
         wxT("Property attribute wxPG_BOOL_USE_CHECKBOX has been set to true.") );
 
-     pid = pg->Append( new wxFloatProperty( wxT("FloatProperty"),
-                                       wxPG_LABEL,
-                                       1234500.23 ) );
+    prop = pg->Append( new wxFloatProperty("FloatProperty",
+                                           wxPG_LABEL,
+                                           1234500.23) );
+    prop->SetAttribute("Min", -100.12);
 
     // A string property that can be edited in a separate editor dialog.
     pg->Append( new wxLongStringProperty( wxT("LongStringProperty"), wxT("LongStringProp"),
@@ -1515,7 +1516,7 @@ void FormMain::PopulateWithExamples ()
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
     //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
     pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
-    pg->GetProperty(wxT("ColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+    pg->GetProperty(wxT("ColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
         wxT("editor of this property to wxPGEditor_ComboBox)"));
@@ -2180,7 +2181,9 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     pgman->SetExtraStyle(extraStyle);
 
-    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_BEEP | wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGE );
+    // This is the default validation failure behavior
+    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL |
+                                                      wxPG_VFB_SHOW_MESSAGEBOX );
 
     m_pPropGridManager->GetGrid()->SetVerticalSpacing( 2 );
 

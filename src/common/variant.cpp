@@ -2360,6 +2360,15 @@ bool wxVariant::Convert(wxUniChar* value) const
         *value = (char) (((wxVariantDataLong*)GetData())->GetValue());
     else if (type == wxT("bool"))
         *value = (char) (((wxVariantDataBool*)GetData())->GetValue());
+    else if (type == wxS("string"))
+    {
+        // Also accept strings of length 1
+        const wxString& str = (((wxVariantDataString*)GetData())->GetValue());
+        if ( str.length() == 1 )
+            *value = str[0];
+        else
+            return false;
+    }
     else
         return false;
 

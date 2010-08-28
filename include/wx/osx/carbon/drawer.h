@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/drawer.h
+// Name:        wx/osx/carbon/drawer.h
 // Purpose:     Drawer child window class.
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal

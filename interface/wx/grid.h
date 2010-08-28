@@ -3,7 +3,7 @@
 // Purpose:     interface of wxGrid and related classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -1686,7 +1686,20 @@ public:
 
             The user won't be able to select any cells or rows in this mode.
          */
-        wxGridSelectColumns
+        wxGridSelectColumns,
+
+        /**
+            The selection mode allowing the user to select either the entire
+            columns or the entire rows but not individual cells nor blocks.
+
+            Notice that while this constant is defined as @code
+            wxGridSelectColumns | wxGridSelectRows @endcode this doesn't mean
+            that all the other combinations are valid -- at least currently
+            they are not.
+
+            @since 2.9.1
+         */
+        wxGridSelectRowsOrColumns
     };
 
     /**
@@ -2022,10 +2035,18 @@ public:
         are using the grid to display tabular data and don't have thousands of
         columns in it.
 
-        Also note that currently @c wxEVT_GRID_LABEL_LEFT_DCLICK and
-        @c wxEVT_GRID_LABEL_RIGHT_DCLICK events are not generated for the column
-        labels if the native columns header is used (but this limitation could
-        possibly be lifted in the future).
+        Another difference between the default behaviour and the native header
+        behaviour is that the latter provides the user with a context menu
+        (which appears on right clicking the header) allowing to rearrange the
+        grid columns if CanDragColMove() returns @true. If you want to prevent
+        this from happening for some reason, you need to define a handler for
+        @c wxEVT_GRID_LABEL_RIGHT_CLICK event which simply does nothing (in
+        particular doesn't skip the event) as this will prevent the default
+        right click handling from working.
+
+        Also note that currently @c wxEVT_GRID_LABEL_RIGHT_DCLICK event is not
+        generated for the column labels if the native columns header is used
+        (but this limitation could possibly be lifted in the future).
      */
     void UseNativeColHeader(bool native = true);
 

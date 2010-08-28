@@ -80,6 +80,12 @@ __wxtiff___depname =
 !ifeq USE_GUI 1
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
 !endif
+__wxscintilla_usingdll_p =
+!ifeq MONOLITHIC 0
+!ifeq SHARED 1
+__wxscintilla_usingdll_p = -dWXUSINGDLL
+!endif
+!endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
 EXTRALIBS_FOR_BASE = 
@@ -318,8 +324,10 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_msw_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
+	$(OBJS)\monodll_progdlg.obj &
 	$(OBJS)\monodll_msw_radiobox.obj &
 	$(OBJS)\monodll_msw_radiobut.obj &
+	$(OBJS)\monodll_richmsgdlg.obj &
 	$(OBJS)\monodll_msw_scrolbar.obj &
 	$(OBJS)\monodll_msw_slider.obj &
 	$(OBJS)\monodll_msw_spinbutt.obj &
@@ -460,11 +468,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
+	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
 	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
+	$(OBJS)\monodll_richmsgdlgg.obj &
 	$(OBJS)\monodll_scrlwing.obj &
 	$(OBJS)\monodll_selstore.obj &
 	$(OBJS)\monodll_spinctlg.obj &
@@ -543,7 +553,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fontpickerg.obj &
 	$(OBJS)\monodll_generic_listctrl.obj &
 	$(OBJS)\monodll_mdig.obj &
-	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
 	$(OBJS)\monodll_univ_bmpbuttn.obj &
 	$(OBJS)\monodll_univ_button.obj &
@@ -707,11 +716,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
+	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
 	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
+	$(OBJS)\monodll_richmsgdlgg.obj &
 	$(OBJS)\monodll_scrlwing.obj &
 	$(OBJS)\monodll_selstore.obj &
 	$(OBJS)\monodll_spinctlg.obj &
@@ -737,6 +748,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_editlbox.obj &
@@ -756,6 +768,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
+	$(OBJS)\monodll_commandlinkbutton.obj &
+	$(OBJS)\monodll_hyperlink.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -776,6 +790,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_editlbox.obj &
@@ -795,6 +810,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
+	$(OBJS)\monodll_commandlinkbutton.obj &
+	$(OBJS)\monodll_hyperlink.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -1036,8 +1053,10 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_msw_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
+	$(OBJS)\monolib_progdlg.obj &
 	$(OBJS)\monolib_msw_radiobox.obj &
 	$(OBJS)\monolib_msw_radiobut.obj &
+	$(OBJS)\monolib_richmsgdlg.obj &
 	$(OBJS)\monolib_msw_scrolbar.obj &
 	$(OBJS)\monolib_msw_slider.obj &
 	$(OBJS)\monolib_msw_spinbutt.obj &
@@ -1178,11 +1197,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
+	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
 	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
+	$(OBJS)\monolib_richmsgdlgg.obj &
 	$(OBJS)\monolib_scrlwing.obj &
 	$(OBJS)\monolib_selstore.obj &
 	$(OBJS)\monolib_spinctlg.obj &
@@ -1261,7 +1282,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fontpickerg.obj &
 	$(OBJS)\monolib_generic_listctrl.obj &
 	$(OBJS)\monolib_mdig.obj &
-	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
 	$(OBJS)\monolib_univ_bmpbuttn.obj &
 	$(OBJS)\monolib_univ_button.obj &
@@ -1425,11 +1445,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
+	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
 	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
+	$(OBJS)\monolib_richmsgdlgg.obj &
 	$(OBJS)\monolib_scrlwing.obj &
 	$(OBJS)\monolib_selstore.obj &
 	$(OBJS)\monolib_spinctlg.obj &
@@ -1455,6 +1477,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_editlbox.obj &
@@ -1474,6 +1497,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
+	$(OBJS)\monolib_commandlinkbutton.obj &
+	$(OBJS)\monolib_hyperlink.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -1494,6 +1519,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_editlbox.obj &
@@ -1513,6 +1539,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
+	$(OBJS)\monolib_commandlinkbutton.obj &
+	$(OBJS)\monolib_hyperlink.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -1661,8 +1689,10 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_msw_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
+	$(OBJS)\coredll_progdlg.obj &
 	$(OBJS)\coredll_msw_radiobox.obj &
 	$(OBJS)\coredll_msw_radiobut.obj &
+	$(OBJS)\coredll_richmsgdlg.obj &
 	$(OBJS)\coredll_msw_scrolbar.obj &
 	$(OBJS)\coredll_msw_slider.obj &
 	$(OBJS)\coredll_msw_spinbutt.obj &
@@ -1803,11 +1833,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_infobar.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
+	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
 	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
+	$(OBJS)\coredll_richmsgdlgg.obj &
 	$(OBJS)\coredll_scrlwing.obj &
 	$(OBJS)\coredll_selstore.obj &
 	$(OBJS)\coredll_spinctlg.obj &
@@ -1886,7 +1918,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fontpickerg.obj &
 	$(OBJS)\coredll_generic_listctrl.obj &
 	$(OBJS)\coredll_mdig.obj &
-	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
 	$(OBJS)\coredll_univ_bmpbuttn.obj &
 	$(OBJS)\coredll_univ_button.obj &
@@ -2050,11 +2081,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_infobar.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
+	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
 	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
+	$(OBJS)\coredll_richmsgdlgg.obj &
 	$(OBJS)\coredll_scrlwing.obj &
 	$(OBJS)\coredll_selstore.obj &
 	$(OBJS)\coredll_spinctlg.obj &
@@ -2167,8 +2200,10 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_msw_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
+	$(OBJS)\corelib_progdlg.obj &
 	$(OBJS)\corelib_msw_radiobox.obj &
 	$(OBJS)\corelib_msw_radiobut.obj &
+	$(OBJS)\corelib_richmsgdlg.obj &
 	$(OBJS)\corelib_msw_scrolbar.obj &
 	$(OBJS)\corelib_msw_slider.obj &
 	$(OBJS)\corelib_msw_spinbutt.obj &
@@ -2309,11 +2344,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_infobar.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
+	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
 	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
+	$(OBJS)\corelib_richmsgdlgg.obj &
 	$(OBJS)\corelib_scrlwing.obj &
 	$(OBJS)\corelib_selstore.obj &
 	$(OBJS)\corelib_spinctlg.obj &
@@ -2392,7 +2429,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fontpickerg.obj &
 	$(OBJS)\corelib_generic_listctrl.obj &
 	$(OBJS)\corelib_mdig.obj &
-	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
 	$(OBJS)\corelib_univ_bmpbuttn.obj &
 	$(OBJS)\corelib_univ_button.obj &
@@ -2556,11 +2592,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_infobar.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
+	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
 	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
+	$(OBJS)\corelib_richmsgdlgg.obj &
 	$(OBJS)\corelib_scrlwing.obj &
 	$(OBJS)\corelib_selstore.obj &
 	$(OBJS)\corelib_spinctlg.obj &
@@ -2603,6 +2641,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
+	$(OBJS)\advdll_commandlinkbuttong.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_editlbox.obj &
@@ -2622,6 +2661,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
+	$(OBJS)\advdll_commandlinkbutton.obj &
+	$(OBJS)\advdll_hyperlink.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2642,6 +2683,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
+	$(OBJS)\advdll_commandlinkbuttong.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_editlbox.obj &
@@ -2661,6 +2703,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
+	$(OBJS)\advdll_commandlinkbutton.obj &
+	$(OBJS)\advdll_hyperlink.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2687,6 +2731,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
+	$(OBJS)\advlib_commandlinkbuttong.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_editlbox.obj &
@@ -2706,6 +2751,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
+	$(OBJS)\advlib_commandlinkbutton.obj &
+	$(OBJS)\advlib_hyperlink.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -2726,6 +2773,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
+	$(OBJS)\advlib_commandlinkbuttong.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_editlbox.obj &
@@ -2745,6 +2793,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
+	$(OBJS)\advlib_commandlinkbutton.obj &
+	$(OBJS)\advlib_hyperlink.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -3243,7 +3293,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 	CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" CPPUNIT_LIBS="$(CPPUNIT_LIBS)" &
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
 COMPILER_PREFIX = wat
 OBJS = &
 	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -3391,9 +3441,9 @@ WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmltok.obj
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\stc\scintilla\include &
-	-i=..\..\src\stc\scintilla\src -i=$(SETUPHDIR) -i=..\..\include &
-	-dWXUSINGDLL -d__WX__ -d__WXMSW__ -dSCI_LEXER -dLINK_LEXERS $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
+	-i=$(SETUPHDIR) -i=..\..\include $(__wxscintilla_usingdll_p) -d__WXMSW__ &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_AutoComplete.obj &
 	$(OBJS)\wxscintilla_CallTip.obj &
@@ -3506,19 +3556,18 @@ MONODLL_CFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include &
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-dWXBUILDING -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	-dWXMAKINGDLL -i=..\..\src\stc\scintilla\include &
-	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	$(CPPFLAGS) $(CFLAGS)
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
+	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
+	-dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include &
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-dWXBUILDING -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	-dWXMAKINGDLL -i=..\..\src\stc\scintilla\include &
-	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
+	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
+	-dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL &
 	/fh=$(OBJS)\wxprec_monodll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  &
@@ -3654,19 +3703,19 @@ MONOLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include &
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-dWXBUILDING -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
 	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
-	-dSCI_LEXER -dLINK_LEXERS $(CPPFLAGS) $(CFLAGS)
+	-dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include &
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-dWXBUILDING -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
 	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
-	-dSCI_LEXER -dLINK_LEXERS /fh=$(OBJS)\wxprec_monolib.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 /fh=$(OBJS)\wxprec_monolib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
 	$(OBJS)\monolib_any.obj &
@@ -5385,7 +5434,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h :  $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcde
 build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -6544,10 +6593,16 @@ $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richmsgdlg.obj :  .AUTODEPEND ..\..\src\msw\richmsgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
@@ -6626,9 +6681,6 @@ $(OBJS)\monodll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
@@ -8037,6 +8089,11 @@ $(OBJS)\monodll_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8058,6 +8115,11 @@ $(OBJS)\monodll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_richmsgdlgg.obj :  .AUTODEPEND ..\..\src\generic\richmsgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8162,6 +8224,11 @@ $(OBJS)\monodll_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8257,6 +8324,16 @@ $(OBJS)\monodll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_notifmsg.obj :  .AUTODEPEND ..\..\src\msw\notifmsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8282,7 +8359,7 @@ $(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 !endif
 
 $(OBJS)\monodll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 -dWXMAKINGDLL -i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL $<
 
 $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -8746,10 +8823,16 @@ $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richmsgdlg.obj :  .AUTODEPEND ..\..\src\msw\richmsgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
@@ -8828,9 +8911,6 @@ $(OBJS)\monolib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
@@ -10239,6 +10319,11 @@ $(OBJS)\monolib_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10260,6 +10345,11 @@ $(OBJS)\monolib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_richmsgdlgg.obj :  .AUTODEPEND ..\..\src\generic\richmsgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10364,6 +10454,11 @@ $(OBJS)\monolib_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10455,6 +10550,16 @@ $(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11356,10 +11461,16 @@ $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_richmsgdlg.obj :  .AUTODEPEND ..\..\src\msw\richmsgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
@@ -11438,9 +11549,6 @@ $(OBJS)\coredll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
@@ -12444,6 +12552,11 @@ $(OBJS)\coredll_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12465,6 +12578,11 @@ $(OBJS)\coredll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_richmsgdlgg.obj :  .AUTODEPEND ..\..\src\generic\richmsgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12648,10 +12766,16 @@ $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_progdlg.obj :  .AUTODEPEND ..\..\src\msw\progdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_richmsgdlg.obj :  .AUTODEPEND ..\..\src\msw\richmsgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
@@ -12730,9 +12854,6 @@ $(OBJS)\corelib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
@@ -13736,6 +13857,11 @@ $(OBJS)\corelib_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13757,6 +13883,11 @@ $(OBJS)\corelib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_richmsgdlgg.obj :  .AUTODEPEND ..\..\src\generic\richmsgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13862,6 +13993,9 @@ $(OBJS)\advdll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 $(OBJS)\advdll_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -13919,6 +14053,12 @@ $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 $(OBJS)\advdll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_notifmsg.obj :  .AUTODEPEND ..\..\src\msw\notifmsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -13971,6 +14111,9 @@ $(OBJS)\advlib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrlg.obj :  .AUTODEPEND ..\..\src\generic\calctrlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
@@ -14028,6 +14171,12 @@ $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_notifmsg.obj :  .AUTODEPEND ..\..\src\msw\notifmsg.cpp

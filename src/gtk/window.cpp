@@ -688,7 +688,14 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_rawFlags = 0;
 #if wxUSE_UNICODE
     event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
-#endif
+    if ( !event.m_uniChar && event.m_keyCode <= WXK_DELETE )
+    {
+        // Set Unicode key code to the ASCII equivalent for compatibility. E.g.
+        // let RETURN generate the key event with both key and Unicode key
+        // codes of 13.
+        event.m_uniChar = event.m_keyCode;
+    }
+#endif // wxUSE_UNICODE
     wxGetMousePosition( &x, &y );
     win->ScreenToClient( &x, &y );
     event.m_x = x;
@@ -791,16 +798,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     if ( !key_code )
         return false;
 
+    event.m_keyCode = key_code;
+
     // now fill all the other fields
     wxFillOtherKeyEventFields(event, win, gdk_event);
-
-    event.m_keyCode = key_code;
-#if wxUSE_UNICODE
-    if ( gdk_event->type == GDK_KEY_PRESS ||  gdk_event->type == GDK_KEY_RELEASE )
-    {
-        event.m_uniChar = key_code;
-    }
-#endif
 
     return true;
 }
@@ -821,6 +822,37 @@ struct wxGtkIMData
         g_object_unref (context);
     }
 };
+
+namespace
+{
+
+// Send wxEVT_CHAR_HOOK event to the parent of the window and if it wasn't
+// processed, send wxEVT_CHAR to the window itself. Return true if either of
+// them was handled.
+bool
+SendCharHookAndCharEvents(const wxKeyEvent& event, wxWindow *win)
+{
+    // wxEVT_CHAR_HOOK must be sent to the top level parent window to allow it
+    // to handle key events in all of its children.
+    wxWindow * const parent = wxGetTopLevelParent(win);
+    if ( parent )
+    {
+        // We need to make a copy of the event object because it is
+        // modified while it's handled, notably its WasProcessed() flag
+        // is set after it had been processed once.
+        wxKeyEvent eventCharHook(event);
+        eventCharHook.SetEventType(wxEVT_CHAR_HOOK);
+        if ( parent->HandleWindowEvent(eventCharHook) )
+            return true;
+    }
+
+    // As above, make a copy of the event first.
+    wxKeyEvent eventChar(event);
+    eventChar.SetEventType(wxEVT_CHAR);
+    return win->HandleWindowEvent(eventChar);
+}
+
+} // anonymous namespace
 
 extern "C" {
 static gboolean
@@ -938,21 +970,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 #endif
             }
 
-            // Implement OnCharHook by checking ancestor top level windows
-            wxWindow *parent = win;
-            while (parent && !parent->IsTopLevel())
-                parent = parent->GetParent();
-            if (parent)
-            {
-                event.SetEventType( wxEVT_CHAR_HOOK );
-                ret = parent->HandleWindowEvent( event );
-            }
-
-            if (!ret)
-            {
-                event.SetEventType(wxEVT_CHAR);
-                ret = win->HandleWindowEvent( event );
-            }
+            ret = SendCharHookAndCharEvents(event, win);
         }
     }
 
@@ -984,13 +1002,6 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
     if( data.empty() )
         return;
 
-    bool ret = false;
-
-    // Implement OnCharHook by checking ancestor top level windows
-    wxWindow *parent = window;
-    while (parent && !parent->IsTopLevel())
-        parent = parent->GetParent();
-
     for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
     {
 #if wxUSE_UNICODE
@@ -1018,17 +1029,7 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
 #endif
         }
 
-        if (parent)
-        {
-            event.SetEventType( wxEVT_CHAR_HOOK );
-            ret = parent->HandleWindowEvent( event );
-        }
-
-        if (!ret)
-        {
-            event.SetEventType(wxEVT_CHAR);
-            ret = window->HandleWindowEvent( event );
-        }
+        SendCharHookAndCharEvents(event, window);
     }
 }
 }

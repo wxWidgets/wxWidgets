@@ -3,7 +3,7 @@
 // Purpose:     interface of wxFont
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -237,13 +237,10 @@ enum wxFontEncoding
     /// (this is used by wxEncodingConverter and wxUTFFile only for now)
     wxFONTENCODING_UNICODE,
 
-    // alternative names for Far Eastern encodings
-    // Chinese
     wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, //!< Simplified Chinese
     wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   //!< Traditional Chinese
-
-        // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
-    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932 //!< Shift JIS
+    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, //!< Shift JIS
+    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949 //!< Korean
 };
 
 

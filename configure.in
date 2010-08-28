@@ -8,7 +8,7 @@ dnl
 dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
-dnl This script is under the wxWidgets licence.
+dnl This script is under the wxWindows licence.
 dnl
 dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.9.1], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.9.2], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -43,7 +43,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=9
-wx_release_number=1
+wx_release_number=2
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -389,7 +389,6 @@ dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
-DEFAULT_wxUSE_UIACTIONSIMULATOR=no
 
 dnl automatic features
 DEFAULT_wxUSE_UNICODE_UTF8=auto
@@ -881,6 +880,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_COLOURPICKERCTRL=no
     DEFAULT_wxUSE_COMBOBOX=no
     DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMMANDLINKBUTTON=no
     DEFAULT_wxUSE_DATAVIEWCTRL=no
     DEFAULT_wxUSE_DATEPICKCTRL=no
     DEFAULT_wxUSE_DETECT_SM=no
@@ -901,6 +901,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
     DEFAULT_wxUSE_RADIOBTN=no
+    DEFAULT_wxUSE_RICHMSGDLG=no
     DEFAULT_wxUSE_REARRANGECTRL=no
     DEFAULT_wxUSE_SASH=no
     DEFAULT_wxUSE_SCROLLBAR=no
@@ -939,6 +940,7 @@ WX_ARG_FEATURE(collpane,    [  --enable-collpane       use wxCollapsiblePane cla
 WX_ARG_FEATURE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
+WX_ARG_FEATURE(commandlinkbutton, [  --enable-commandlinkbutton      use wxCommmandLinkButton class], wxUSE_COMMANDLINKBUTTON)
 WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
@@ -963,6 +965,7 @@ WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox 
 WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_FEATURE(richmsgdlg,  [  --enable-richmsgdlg     use wxRichMessageDialog class], wxUSE_RICHMSGDLG)
 WX_ARG_FEATURE(rearrangectrl,[  --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog], wxUSE_REARRANGECTRL)
 WX_ARG_FEATURE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
 WX_ARG_FEATURE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
@@ -5411,6 +5414,8 @@ if test "$wxUSE_DEBUG_GDB" = "yes" ; then
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "no" ; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
+
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
@@ -6820,6 +6825,11 @@ if test "$wxUSE_COMBOCTRL" = "yes"; then
   USES_CONTROLS=1
 fi
 
+if test "$wxUSE_COMMANDLINKBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_COMMANDLINKBUTTON)
+  USES_CONTROLS=1
+fi
+
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
   USES_CONTROLS=1
@@ -6977,6 +6987,10 @@ fi
 
 if test "$wxUSE_REARRANGECTRL" = "yes"; then
     AC_DEFINE(wxUSE_REARRANGECTRL)
+fi
+
+if test "$wxUSE_RICHMSGDLG" = "yes"; then
+    AC_DEFINE(wxUSE_RICHMSGDLG)
 fi
 
 if test "$wxUSE_SASH" = "yes"; then

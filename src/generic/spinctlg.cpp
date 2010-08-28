@@ -6,7 +6,7 @@
 // Created:     29.01.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -278,6 +278,12 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 // ----------------------------------------------------------------------------
 // operations forwarded to the subcontrols
 // ----------------------------------------------------------------------------
+
+void wxSpinCtrlGenericBase::SetFocus()
+{
+    if ( m_textCtrl )
+        m_textCtrl->SetFocus();
+}
 
 bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
@@ -560,6 +566,11 @@ void wxSpinCtrlDouble::DoSendEvent()
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
     wxCHECK_RET( digits <= 20, "too many digits for wxSpinCtrlDouble" );
+
+    if ( digits == m_digits )
+        return;
+
+    m_digits = digits;
 
     m_format.Printf(wxT("%%0.%ulf"), digits);
 

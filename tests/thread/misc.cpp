@@ -208,6 +208,7 @@ private:
         CPPUNIT_TEST( TestDetached );
         CPPUNIT_TEST( TestThreadSuspend );
         CPPUNIT_TEST( TestThreadDelete );
+        CPPUNIT_TEST( TestThreadRun );
         CPPUNIT_TEST( TestThreadConditions );
         CPPUNIT_TEST( TestSemaphore );
     CPPUNIT_TEST_SUITE_END();
@@ -218,6 +219,7 @@ private:
 
     void TestThreadSuspend();
     void TestThreadDelete();
+    void TestThreadRun();
     void TestThreadConditions();
 
     DECLARE_NO_COPY_CLASS(MiscThreadTestCase)
@@ -320,6 +322,7 @@ void MiscThreadTestCase::TestThreadSuspend()
 
 void MiscThreadTestCase::TestThreadDelete()
 {
+    // FIXME:
     // As above, using Sleep() is only for testing here - we must use some
     // synchronisation object instead to ensure that the thread is still
     // running when we delete it - deleting a detached thread which already
@@ -345,13 +348,23 @@ void MiscThreadTestCase::TestThreadDelete()
     MyJoinableThread thread3(20);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread3.Run() );
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread3.Delete() );       
-        // delete a joinable thread
+        // delete a joinable running thread
 
     MyJoinableThread thread4(2);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread4.Run() );
     wxMilliSleep(300);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread4.Delete() );       
         // delete a joinable thread which already terminated
+}
+
+void MiscThreadTestCase::TestThreadRun()
+{
+    MyJoinableThread thread1(2);
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread1.Run() );
+    thread1.Wait();     // wait until the thread ends
+
+    // verify that running twice the same thread fails
+    WX_ASSERT_FAILS_WITH_ASSERT( thread1.Run() );
 }
 
 void MiscThreadTestCase::TestThreadConditions()

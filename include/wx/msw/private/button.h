@@ -57,7 +57,8 @@ wxSize ComputeBestSize(wxControl *btn, int flags = 0);
 
 // compute the button size (as if wxBU_EXACTFIT were specified, i.e. without
 // adjusting it to be of default size if it's smaller) for the given label size
-wxSize GetFittingSize(wxWindow *win, const wxSize& sizeLabel, int flags = 0);
+WXDLLIMPEXP_CORE wxSize
+GetFittingSize(wxWindow *win, const wxSize& sizeLabel, int flags = 0);
 
 } // namespace wxMSWButton
 

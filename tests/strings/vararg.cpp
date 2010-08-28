@@ -196,8 +196,30 @@ void VarArgTestCase::ArgsValidation()
     wxString::Format("a string(%s,%s), ptr %p, int %i",
                      wxString(), "foo", "char* as pointer", 1);
 
+    // Microsoft has helpfully disabled support for "%n" in their CRT by
+    // default starting from VC8 and somehow even calling
+    // _set_printf_count_output() doesn't help here, so don't use "%n" at all
+    // with it.
+#if wxCHECK_VISUALC_VERSION(8)
+    #define wxNO_PRINTF_PERCENT_N
+#endif // VC8+
+
+    // Similarly, many modern Linux distributions ship with g++ that uses
+    // -D_FORTIFY_SOURCE=2 flag by default and this option prevents "%n" from
+    // being used in a string outside of read-only memory, meaning that it
+    // can't be used in wxString to which we (may, depending on build options)
+    // assign it, so also disable testing of "%n" in this case lest we die with
+    // an abort inside vswprintf().
+#if defined(_FORTIFY_SOURCE)
+    #if _FORTIFY_SOURCE >= 2
+        #define wxNO_PRINTF_PERCENT_N
+    #endif
+#endif
+
+#ifndef wxNO_PRINTF_PERCENT_N
     wxString::Format("foo%i%n", 42, &written);
     CPPUNIT_ASSERT_EQUAL( 5, written );
+#endif
 
     // but these are not:
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i: too many arguments", 42, 1, 2, 3) );
@@ -206,12 +228,17 @@ void VarArgTestCase::ArgsValidation()
 
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );
 
+    // we don't check wxNO_PRINTF_PERCENT_N here as these expressions should
+    // result in an assert in our code before the CRT functions are even called
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", &written) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%n", ptr) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
 
-#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
-    // this fails at compile-time with <type_traits>
+    // the following test (correctly) fails at compile-time with <type_traits>
+    // and it also (wrongly) fails when using VC6 because it somehow tries to
+    // use (inaccessible) VarArgTestCase copy ctor (FIXME-VC6)
+#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS) && \
+        !defined(__VISUALC6__)
     VarArgTestCase& somePOD = *this;
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", somePOD) );
 #endif
