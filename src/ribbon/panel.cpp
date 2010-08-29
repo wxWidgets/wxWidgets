@@ -22,6 +22,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
 #include "wx/display.h"
+#include "wx/sizer.h"
 
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
