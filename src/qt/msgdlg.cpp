@@ -23,17 +23,8 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
     : wxMessageDialogBase( parent, message, caption, style )
 {
-    if ( GetHandle() == NULL ) {
-        // Window has not been created yet
-        
-        QWidget *qtParent = NULL;
-        if ( parent != NULL ) {
-            qtParent = parent->QtGetContainer();
-            parent->AddChild( this );
-        }
-        
-        m_qtMessageBox = new wxQtMessageDialog( this, qtParent );
-    }
+    if ( GetHandle() == NULL )
+        m_qtMessageBox = wxQtCreateWidget< wxQtMessageDialog >( this, parent );
 
     // Set properties
     Move( pos );

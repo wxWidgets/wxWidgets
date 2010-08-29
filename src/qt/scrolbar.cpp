@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/scrolbar.h"
+#include "wx/qt/utils.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxScrollBar, wxScrollBarBase )
 
@@ -40,14 +41,11 @@ bool wxScrollBar::Create( wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name)
 {
-    QWidget *qtParent = NULL;
-    if ( parent != NULL ) {
-        qtParent = parent->QtGetContainer();
-        parent->AddChild(this);
+    if ( GetHandle() == NULL )
+    {
+        m_qtScrollBar = wxQtCreateWidget< wxQtScrollBar >( this, parent );
+        m_qtScrollBar->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
     }
-    m_qtScrollBar = new wxQtScrollBar( this, wxQtConvertOrientation( style, wxSB_HORIZONTAL ),
-            qtParent );
-    
     return wxControl::Create( parent, id, pos, size, style, validator, name );
 }
 
@@ -121,8 +119,8 @@ WXWidget wxScrollBar::QtGetScrollBarsContainer() const
 // wxQtScrollBar
 /////////////////////////////////////////////////////////////////////////////
 
-wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, Qt::Orientation orient, QWidget *parent )
-    : QScrollBar( orient, parent ),
+wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, QWidget *parent )
+    : QScrollBar( parent ),
       wxQtSignalForwarder< wxScrollBar >( scrollBar )
 {
     connect( this, SIGNAL( actionTriggered(int) ), this, SLOT( OnActionTriggered(int) ) );

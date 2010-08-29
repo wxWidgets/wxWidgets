@@ -13,6 +13,22 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
+// We need an explicit version so that 'GetHandle' instead of 'QtGetContainer'
+// is called/used:
+
+template <>
+    wxQtStatusBar *wxQtCreateWidget( wxStatusBar *statusBar, wxWindow *parent )
+    {
+        QWidget *qtParent = NULL;
+        if ( parent != NULL ) {
+            // The parent here is the widget itself, not the "container"
+            qtParent = parent->GetHandle();
+            parent->AddChild( statusBar );
+        }
+        return new wxQtStatusBar( statusBar, qtParent );
+    }
+
+
 wxStatusBar::wxStatusBar()
 {
 }
@@ -39,14 +55,8 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
-    QWidget *qtParent = NULL;
-    if ( parent != NULL ) {
-        // The parent here is the widget itself, not the "container"
-        qtParent = parent->GetHandle();
-        parent->AddChild( this );
-    }
-
-    m_qtStatusBar = new wxQtStatusBar( this, qtParent );
+    if ( GetHandle() == NULL )
+        m_qtStatusBar = wxQtCreateWidget< wxQtStatusBar >( this, parent );
 
     return wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style, name);
 }

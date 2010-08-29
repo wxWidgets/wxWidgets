@@ -22,4 +22,16 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 #define wxMISSING_IMPLEMENTATION( feature )\
     wxMissingImplementation( __FILE__, __LINE__, feature )
 
+template< typename QtWidget, typename WxWindow >
+    QtWidget *wxQtCreateWidget( WxWindow *window, wxWindow *parent )
+    {
+        QWidget *qtParent = NULL;
+        if ( parent != NULL )
+        {
+            qtParent = parent->QtGetContainer();
+            parent->AddChild( window );
+        }
+        return new QtWidget( window, qtParent );
+    }
+
 #endif // _WX_QT_UTILS_H_

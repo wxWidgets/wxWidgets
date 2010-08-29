@@ -83,18 +83,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     // Should have already been created in the derived class in most cases
     
-    if (GetHandle() == NULL) {
-        // Window has not been created yet (wxPanel subclass, plain wxWindow, etc.)
-        
-        QWidget *qtParent = NULL;
-        if ( parent != NULL ) {
-            qtParent = parent->QtGetContainer();
-            parent->AddChild(this);
-        }
-        
-        m_qtWindow = new wxQtWidget(this, qtParent);
-        
-    }
+    if ( GetHandle() == NULL )
+        m_qtWindow = wxQtCreateWidget< wxQtWidget >( this, parent );
 
     // Create layout for built-in scrolling bars
     if ( QtGetScrollBarsContainer() )
@@ -412,12 +402,18 @@ void wxWindow::SetWindowStyleFlag( long style )
     
     // Validate border styles
     int numberOfBorderStyles = 0;
-    if ( HasFlag( wxBORDER_NONE ) ) numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_STATIC ) ) numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_SIMPLE ) ) numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_RAISED ) ) numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_SUNKEN ) ) numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_THEME ) ) numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_NONE ))
+        numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_STATIC ))
+        numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_SIMPLE ))
+        numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_RAISED ))
+        numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_SUNKEN ))
+        numberOfBorderStyles++;
+    if ( HasFlag( wxBORDER_THEME ))
+        numberOfBorderStyles++;
     wxCHECK_RET( numberOfBorderStyles <= 1, "Only one border style can be specified" );
     
     // Borders only supported for QFrame's

@@ -59,9 +59,7 @@ class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar,
     Q_OBJECT
     
     public:
-        wxQtScrollBar( wxScrollBar *scrollBar,
-                       Qt::Orientation orient,
-                       QWidget *parent = 0 );
+        wxQtScrollBar( wxScrollBar *scrollBar, QWidget *parent = 0 );
                        
     private Q_SLOTS:
         void OnActionTriggered( int action );

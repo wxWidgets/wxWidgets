@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/dialog_qt.h"
 
 wxDialog::wxDialog()
@@ -40,17 +41,8 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    if ( GetHandle() == NULL ) {
-        // Window has not been created yet
-        
-        QWidget *qtParent = NULL;
-        if ( parent != NULL ) {
-            qtParent = parent->QtGetContainer();
-            parent->AddChild( this );
-        }
-        
-        m_qtDialog = new wxQtDialog( this, qtParent );
-    }
+    if ( GetHandle() == NULL )
+        m_qtDialog = wxQtCreateWidget< wxQtDialog >( this, parent );
     
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }

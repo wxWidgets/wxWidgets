@@ -11,6 +11,7 @@
 
 #include "wx/frame.h"
 #include "wx/menu.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 wxFrame::wxFrame()
@@ -24,6 +25,7 @@ wxFrame::~wxFrame()
     delete m_qtFrame;
 }
 
+
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
@@ -33,15 +35,11 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    // Create the Qt frame first so that GetHandle() works in the base classes:
+    // It might not be necessary to check whether the underlying Qt object has been
+    // create, but just in case we do it anyway:
 
-    QWidget *qtParent = NULL;
-    if ( parent != NULL ) {
-        qtParent = parent->QtGetContainer();
-        parent->AddChild(this);
-    }
-
-    m_qtFrame = new wxQtFrame( this, qtParent );
+    if ( GetHandle() == NULL )
+        m_qtFrame = wxQtCreateWidget< wxQtFrame >( this, parent );
 
     return wxFrameBase::Create( parent, id, title, pos, size, style, name );
 }

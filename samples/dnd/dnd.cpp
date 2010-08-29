@@ -27,7 +27,7 @@
 #include "wx/metafile.h"
 #include "wx/dirctrl.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXQT__)
     #include "../sample.xpm"
 #if wxUSE_DRAG_AND_DROP
     #include "dnd_copy.xpm"

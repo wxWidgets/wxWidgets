@@ -113,7 +113,7 @@ public:
     
     // wxQt implementation internals:
 
-    virtual WXWidget QtGetContainer() const;
+    virtual QWidget *QtGetContainer() const;
     virtual QPicture *QtGetPicture() const;
 
     QImage *QtGetPaintBuffer();
