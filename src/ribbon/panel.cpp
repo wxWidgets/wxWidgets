@@ -577,15 +577,20 @@ bool wxRibbonPanel::Layout()
         return true;
     }
 
-    // TODO: Delegate to a sizer
+    // Get wxRibbonPanel client size
+    wxPoint position;
+    wxClientDC dc(this);
+    wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
 
-    // Common case of no sizer and single child taking up the entire panel
-    if(GetChildren().GetCount() == 1)
+    // If there is a sizer, use it instead
+    if ( GetSizer() )
     {
+        GetSizer()->SetDimension(position.x, position.y, size.GetWidth(), size.GetHeight());
+    }
+    else if(GetChildren().GetCount() == 1)
+    {
+        // Common case of no sizer and single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxPoint position;
-        wxClientDC dc(this);
-        wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
         child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
     }
     return true;

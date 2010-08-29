@@ -27,6 +27,8 @@
 #include "wx/dcbuffer.h"
 #include "wx/colordlg.h"
 #include "wx/artprov.h"
+#include "wx/combobox.h"
+#include "wx/wrapsizer.h"
 
 // -- application --
 
@@ -247,9 +249,26 @@ MyFrame::MyFrame()
         shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
         shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
 
-        new wxRibbonPanel(home, wxID_ANY, wxT("Another Panel"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
-    }
-    {
+        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"), 
+                                        wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+                                        wxRIBBON_PANEL_EXT_BUTTON);
+
+        wxArrayString as;
+        as.Add("Item 1");
+        as.Add("Item 2");
+        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString, 
+                             wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
+        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString, 
+                             wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
+    
+        sizer_panelcombo->SetMinSize(wxSize(150, -1));
+        sizer_panelcombo2->SetMinSize(wxSize(150, -1));
+
+        wxSizer* sizer_panelsizer = new wxWrapSizer(wxHORIZONTAL);
+        sizer_panelsizer->Add(sizer_panelcombo, 2, wxALL|wxEXPAND, 2);
+        sizer_panelsizer->Add(sizer_panelcombo2, 2, wxALL|wxEXPAND, 2);
+        sizer_panel->SetSizer(sizer_panelsizer);
+
         wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
         m_bitmap_creation_dc.SetFont(label_font);
 
