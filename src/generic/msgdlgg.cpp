@@ -93,6 +93,66 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     m_created = false;
 }
 
+wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
+{
+#ifndef __SMARTPHONE__
+    if ( HasCustomLabels() )
+    {
+        wxStdDialogButtonSizer * const sizerStd = new wxStdDialogButtonSizer;
+
+        wxButton *btnDef = NULL;
+
+        if ( m_dialogStyle & wxOK )
+        {
+            btnDef = new wxButton(this, wxID_OK, GetCustomOKLabel());
+            sizerStd->AddButton(btnDef);
+        }
+
+        if ( m_dialogStyle & wxCANCEL )
+        {
+            wxButton * const
+                cancel = new wxButton(this, wxID_CANCEL, GetCustomCancelLabel());
+            sizerStd->AddButton(cancel);
+
+            if ( m_dialogStyle & wxCANCEL_DEFAULT )
+                btnDef = cancel;
+        }
+
+        if ( m_dialogStyle & wxYES_NO )
+        {
+            wxButton * const
+                yes = new wxButton(this, wxID_YES, GetCustomYesLabel());
+            sizerStd->AddButton(yes);
+
+            wxButton * const
+                no = new wxButton(this, wxID_NO, GetCustomNoLabel());
+            sizerStd->AddButton(no);
+            if ( m_dialogStyle & wxNO_DEFAULT )
+                btnDef = no;
+            else if ( !btnDef )
+                btnDef = yes;
+        }
+
+        if ( btnDef )
+        {
+            btnDef->SetDefault();
+            btnDef->SetFocus();
+        }
+
+        sizerStd->Realize();
+
+        return CreateSeparatedSizer(sizerStd);
+    }
+#endif // !__SMARTPHONE__
+
+    // Use standard labels for all buttons
+    return CreateSeparatedButtonSizer
+           (
+                m_dialogStyle & (wxOK | wxCANCEL | wxYES_NO |
+                                 wxNO_DEFAULT | wxCANCEL_DEFAULT)
+           );
+}
+
 void wxGenericMessageDialog::DoCreateMsgdialog()
 {
     wxDialog::Create(m_parent, wxID_ANY, m_caption, m_pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
@@ -156,11 +216,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     int center_flag = wxEXPAND;
     if (m_dialogStyle & wxYES_NO)
         center_flag = wxALIGN_CENTRE;
-    wxSizer *sizerBtn = CreateSeparatedButtonSizer
-                        (
-                            m_dialogStyle & (wxOK | wxCANCEL | wxYES_NO |
-                                             wxNO_DEFAULT | wxCANCEL_DEFAULT)
-                        );
+    wxSizer *sizerBtn = CreateMsgDlgButtonSizer();
     if ( sizerBtn )
         topsizer->Add(sizerBtn, 0, center_flag | wxALL, 10 );
 

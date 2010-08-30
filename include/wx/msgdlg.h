@@ -242,6 +242,16 @@ protected:
         var = label.GetAsString();
     }
 
+    // these functions return the custom label or empty string and should be
+    // used only in specific circumstances such as creating the buttons with
+    // these labels (in which case it makes sense to only use a custom label if
+    // it was really given and fall back on stock label otherwise), use the
+    // Get{Yes,No,OK,Cancel}Label() methods above otherwise
+    const wxString& GetCustomYesLabel() const { return m_yes; }
+    const wxString& GetCustomNoLabel() const { return m_no; }
+    const wxString& GetCustomOKLabel() const { return m_ok; }
+    const wxString& GetCustomCancelLabel() const { return m_cancel; }
+
 private:
     // these functions may be overridden to provide different defaults for the
     // default button labels (this is used by wxGTK)
