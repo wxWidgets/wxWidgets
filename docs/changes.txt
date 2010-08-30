@@ -95,6 +95,7 @@ All (GUI):
 
 - wxRTC: fixed style selection resetting after editing a style.
 - wxRTC: can now edit line spacing in .1 increments from 1 to 2.
+- wxRTC: fixed wrong line spacing and space after paragraph calculations.
 - wxRTC: GetStyleMergedWithBase now detects loops.
 
 wxMSW:
