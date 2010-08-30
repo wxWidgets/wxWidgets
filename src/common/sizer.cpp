@@ -2526,6 +2526,29 @@ void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
     m_buttonCancel = button;
 }
 
+#ifdef __WXGTK20__
+
+namespace
+{
+
+// Returns true only if the button is non-NULL and has the given id and text
+// (possible translated).
+bool IsStdButtonWithStdText(wxButton *btn, wxWindowID id, const char *label)
+{
+    if ( !btn )
+        return false;
+
+    if ( btn->GetId() != id )
+        return false;
+
+    const wxString labelText = btn->GetLabelText();
+    return labelText == label || labelText == wxGetTranslation(label);
+}
+
+} // anonymous namespace
+
+#endif // __WXGTK20__
+
 void wxStdDialogButtonSizer::Realize()
 {
 #ifdef __WXMAC__
@@ -2585,29 +2608,33 @@ void wxStdDialogButtonSizer::Realize()
         if (m_buttonHelp)
             Add(m_buttonHelp, flagsBtn);
 
-        // extra whitespace between help and cancel/ok buttons
+        // Align the rest of the buttons to the right.
         AddStretchSpacer();
 
-        if (m_buttonNegative)
+        // "No Yes Cancel" is an exception to the general rule according to
+        // which the affirmative buttons goes after "Cancel" so treat it
+        // separately
+        if ( IsStdButtonWithStdText(m_buttonNegative, wxID_NO, "No") &&
+              IsStdButtonWithStdText(m_buttonAffirmative, wxID_YES, "Yes") &&
+               IsStdButtonWithStdText(m_buttonCancel, wxID_CANCEL, "Cancel") )
+        {
             Add(m_buttonNegative, flagsBtn);
-
-        if (m_buttonApply)
-        {
-            Add(m_buttonApply, flagsBtn);
-
-            if (m_buttonCancel)
-                Add(m_buttonCancel, flagsBtn);
-
-            if (m_buttonAffirmative)
-                Add(m_buttonAffirmative, flagsBtn);
+            Add(m_buttonAffirmative, flagsBtn);
+            Add(m_buttonCancel, flagsBtn);
         }
-        else // No [Apply]
+        else // Use standard layout
         {
-            if (m_buttonAffirmative)
-                Add(m_buttonAffirmative, flagsBtn);
+            if (m_buttonNegative)
+                Add(m_buttonNegative, flagsBtn);
+
+            if (m_buttonApply)
+                Add(m_buttonApply, flagsBtn);
 
             if (m_buttonCancel)
                 Add(m_buttonCancel, flagsBtn);
+
+            if (m_buttonAffirmative)
+                Add(m_buttonAffirmative, flagsBtn);
         }
 
         // Ensure that the right margin is 12 as well.
