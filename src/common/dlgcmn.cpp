@@ -218,12 +218,8 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 }
 
-wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
+wxSizer *wxDialogBase::CreateSeparatedSizer(wxSizer *sizer)
 {
-    wxSizer *sizer = CreateButtonSizer(flags);
-    if ( !sizer )
-        return NULL;
-
     // Mac Human Interface Guidelines recommend not to use static lines as
     // grouping elements
 #if wxUSE_STATLINE && !defined(__WXMAC__)
@@ -235,6 +231,15 @@ wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
 #endif // wxUSE_STATLINE
 
     return sizer;
+}
+
+wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
+{
+    wxSizer *sizer = CreateButtonSizer(flags);
+    if ( !sizer )
+        return NULL;
+
+    return CreateSeparatedSizer(sizer);
 }
 
 #if wxUSE_BUTTON
