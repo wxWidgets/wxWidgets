@@ -4130,7 +4130,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     ApplyParagraphStyle(attr, rect);
     g_globalDC = NULL;
 
-    SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceBeforePara + spaceAfterPara));
+    SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceAfterPara));
 
     m_dirty = false;
 
@@ -5701,8 +5701,13 @@ bool wxRichTextPlainText::Merge(wxRichTextObject* object)
 
     if (textObject)
     {
+        bool isEmpty = m_text.IsEmpty();
         m_text += textObject->GetText();
-        wxRichTextApplyStyle(m_attributes, textObject->GetAttributes());
+        // Don't keep an empty object's attributes
+        if (isEmpty)
+            m_attributes = textObject->GetAttributes();
+        else
+            wxRichTextApplyStyle(m_attributes, textObject->GetAttributes());
         return true;
     }
     else
