@@ -7259,6 +7259,13 @@ void wxGrid::ClearAttrCache()
     }
 }
 
+void wxGrid::RefreshAttr(int row, int col)
+{
+    if ( m_attrCache.row == row && m_attrCache.col == col )
+        ClearAttrCache();
+}
+
+
 void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
 {
     if ( attr != NULL )

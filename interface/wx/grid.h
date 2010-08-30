@@ -3847,6 +3847,31 @@ public:
     bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
     /**
+        Invalidates the cached attribute for the given cell.
+
+        For efficiency reasons, wxGrid may cache the recently used attributes
+        (currently it caches only the single most recently used one, in fact)
+        which can result in the cell appearance not being refreshed even when
+        the attribute returned by your custom wxGridCellAttrProvider-derived
+        class has changed. To force the grid to refresh the cell attribute,
+        this function may be used. Notice that calling it will not result in
+        actually redrawing the cell, you still need to call
+        wxWindow::RefreshRect() to invalidate the area occupied by the cell in
+        the window to do this. Also note that you don't need to call this
+        function if you store the attributes in wxGrid itself, i.e. use its
+        SetAttr() and similar methods, it is only useful when using a separate
+        custom attributes provider.
+
+        @param row
+            The row of the cell whose attribute needs to be queried again.
+        @param col
+            The column of the cell whose attribute needs to be queried again.
+
+        @since 2.9.2
+     */
+    void RefreshAttr(int row, int col);
+
+    /**
         Sets the cell attributes for all cells in the specified column.
 
         For more information about controlling grid cell attributes see the
