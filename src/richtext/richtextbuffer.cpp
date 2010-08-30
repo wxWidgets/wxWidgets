@@ -3594,7 +3594,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     // Apply styles to wrapped lines
     ApplyParagraphStyle(attr, rect, dc);
 
-    SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceBeforePara + spaceAfterPara));
+    SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceAfterPara));
 
     m_dirty = false;
 
