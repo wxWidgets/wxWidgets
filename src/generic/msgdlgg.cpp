@@ -205,7 +205,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     textsizer->Add(CreateTextSizer(lowerMessage));
 
     icon_text->Add(textsizer, 0, wxALIGN_CENTER, 10);
-    topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( icon_text, 1, wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif // wxUSE_STATTEXT
 
     // 3) optional checkbox and detailed text
@@ -213,12 +213,9 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     AddMessageDialogDetails( topsizer );
 
     // 4) buttons
-    int center_flag = wxEXPAND;
-    if (m_dialogStyle & wxYES_NO)
-        center_flag = wxALIGN_CENTRE;
     wxSizer *sizerBtn = CreateMsgDlgButtonSizer();
     if ( sizerBtn )
-        topsizer->Add(sizerBtn, 0, center_flag | wxALL, 10 );
+        topsizer->Add(sizerBtn, 0, wxEXPAND | wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( topsizer );
