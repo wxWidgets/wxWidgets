@@ -9524,6 +9524,24 @@ inline void wxRichTextDecToHex(int dec, char* buf)
     buf[1] = hexArray[secondDigit];
 }
 
+inline int wxRichTextHexToDec(const wxChar* buf)
+{
+    int firstDigit, secondDigit;
+
+    if (buf[0] >= wxT('A'))
+        firstDigit = buf[0] - wxT('A') + 10;
+    else
+       firstDigit = buf[0] - wxT('0');
+
+    if (buf[1] >= wxT('A'))
+        secondDigit = buf[1] - wxT('A') + 10;
+    else
+        secondDigit = buf[1] - wxT('0');
+
+    return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
+}
+
+
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
@@ -9573,7 +9591,7 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageT
         str[0] = stream.GetC();
         str[1] = stream.GetC();
 
-        m_data[i] = (unsigned char)wxHexToDec(str);
+        m_data[i] = (unsigned char)wxRichTextHexToDec(str);
     }
 
     m_dataSize = dataSize;

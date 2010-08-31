@@ -1143,10 +1143,10 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     int fontWeight = wxNORMAL;
     int fontStyle = wxNORMAL;
     bool fontUnderlined = false;
-
     int fontFlags = 0;
+    const wxString emptyString; // save a temporary string construction in GetPropVal
 
-    fontFacename = node->GetPropVal(wxT("fontface"), wxEmptyString);
+    fontFacename = node->GetPropVal(wxT("fontface"), emptyString);
     if (!fontFacename.IsEmpty())
     {
         fontFlags |= wxTEXT_ATTR_FONT_FACE;
@@ -1156,32 +1156,32 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     }
 
     wxString value;
-    //value = node->GetPropVal(wxT("fontfamily"), wxEmptyString);
+    //value = node->GetPropVal(wxT("fontfamily"), emptyString);
     //if (!value.empty())
     //    fontFamily = wxAtoi(value);
 
-    value = node->GetPropVal(wxT("fontstyle"), wxEmptyString);
+    value = node->GetPropVal(wxT("fontstyle"), emptyString);
     if (!value.empty())
     {
         fontStyle = wxAtoi(value);
         fontFlags |= wxTEXT_ATTR_FONT_ITALIC;
     }
 
-    value = node->GetPropVal(wxT("fontsize"), wxEmptyString);
+    value = node->GetPropVal(wxT("fontsize"), emptyString);
     if (!value.empty())
     {
         fontSize = wxAtoi(value);
         fontFlags |= wxTEXT_ATTR_FONT_SIZE;
     }
 
-    value = node->GetPropVal(wxT("fontweight"), wxEmptyString);
+    value = node->GetPropVal(wxT("fontweight"), emptyString);
     if (!value.empty())
     {
         fontWeight = wxAtoi(value);
         fontFlags |= wxTEXT_ATTR_FONT_WEIGHT;
     }
 
-    value = node->GetPropVal(wxT("fontunderlined"), wxEmptyString);
+    value = node->GetPropVal(wxT("fontunderlined"), emptyString);
     if (!value.empty())
     {
         fontUnderlined = wxAtoi(value) != 0;
@@ -1196,7 +1196,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     // Restore correct font flags
     attr.SetFlags(fontFlags);
 
-    value = node->GetPropVal(wxT("textcolor"), wxEmptyString);
+    value = node->GetPropVal(wxT("textcolor"), emptyString);
     if (!value.empty())
     {
         if (value[0] == wxT('#'))
@@ -1205,7 +1205,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
             attr.SetTextColour(value);
     }
 
-    value = node->GetPropVal(wxT("bgcolor"), wxEmptyString);
+    value = node->GetPropVal(wxT("bgcolor"), emptyString);
     if (!value.empty())
     {
         if (value[0] == wxT('#'))
@@ -1214,30 +1214,30 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
             attr.SetBackgroundColour(value);
     }
 
-    value = node->GetPropVal(wxT("characterstyle"), wxEmptyString);
+    value = node->GetPropVal(wxT("characterstyle"), emptyString);
     if (!value.empty())
         attr.SetCharacterStyleName(value);
 
-    value = node->GetPropVal(wxT("texteffects"), wxEmptyString);
+    value = node->GetPropVal(wxT("texteffects"), emptyString);
     if (!value.IsEmpty())
     {
         attr.SetTextEffects(wxAtoi(value));
     }
 
-    value = node->GetPropVal(wxT("texteffectflags"), wxEmptyString);
+    value = node->GetPropVal(wxT("texteffectflags"), emptyString);
     if (!value.IsEmpty())
     {
         attr.SetTextEffectFlags(wxAtoi(value));
     }
 
-    value = node->GetPropVal(wxT("url"), wxEmptyString);
+    value = node->GetPropVal(wxT("url"), emptyString);
     if (!value.empty())
         attr.SetURL(value);
 
     // Set paragraph attributes
     if (isPara)
     {
-        value = node->GetPropVal(wxT("alignment"), wxEmptyString);
+        value = node->GetPropVal(wxT("alignment"), emptyString);
         if (!value.empty())
             attr.SetAlignment((wxTextAttrAlignment) wxAtoi(value));
 
@@ -1245,14 +1245,14 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         int leftIndent = 0;
         bool hasLeftIndent = false;
 
-        value = node->GetPropVal(wxT("leftindent"), wxEmptyString);
+        value = node->GetPropVal(wxT("leftindent"), emptyString);
         if (!value.empty())
         {
             leftIndent = wxAtoi(value);
             hasLeftIndent = true;
         }
 
-        value = node->GetPropVal(wxT("leftsubindent"), wxEmptyString);
+        value = node->GetPropVal(wxT("leftsubindent"), emptyString);
         if (!value.empty())
         {
             leftSubIndent = wxAtoi(value);
@@ -1262,31 +1262,31 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         if (hasLeftIndent)
             attr.SetLeftIndent(leftIndent, leftSubIndent);
 
-        value = node->GetPropVal(wxT("rightindent"), wxEmptyString);
+        value = node->GetPropVal(wxT("rightindent"), emptyString);
         if (!value.empty())
             attr.SetRightIndent(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("parspacingbefore"), wxEmptyString);
+        value = node->GetPropVal(wxT("parspacingbefore"), emptyString);
         if (!value.empty())
             attr.SetParagraphSpacingBefore(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("parspacingafter"), wxEmptyString);
+        value = node->GetPropVal(wxT("parspacingafter"), emptyString);
         if (!value.empty())
             attr.SetParagraphSpacingAfter(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("linespacing"), wxEmptyString);
+        value = node->GetPropVal(wxT("linespacing"), emptyString);
         if (!value.empty())
             attr.SetLineSpacing(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("bulletstyle"), wxEmptyString);
+        value = node->GetPropVal(wxT("bulletstyle"), emptyString);
         if (!value.empty())
             attr.SetBulletStyle(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("bulletnumber"), wxEmptyString);
+        value = node->GetPropVal(wxT("bulletnumber"), emptyString);
         if (!value.empty())
             attr.SetBulletNumber(wxAtoi(value));
 
-        value = node->GetPropVal(wxT("bulletsymbol"), wxEmptyString);
+        value = node->GetPropVal(wxT("bulletsymbol"), emptyString);
         if (!value.empty())
         {
             wxChar ch = wxAtoi(value);
@@ -1295,27 +1295,27 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
             attr.SetBulletText(s);
         }
 
-        value = node->GetPropVal(wxT("bullettext"), wxEmptyString);
+        value = node->GetPropVal(wxT("bullettext"), emptyString);
         if (!value.empty())
             attr.SetBulletText(value);
 
-        value = node->GetPropVal(wxT("bulletfont"), wxEmptyString);
+        value = node->GetPropVal(wxT("bulletfont"), emptyString);
         if (!value.empty())
             attr.SetBulletFont(value);
 
-        value = node->GetPropVal(wxT("bulletname"), wxEmptyString);
+        value = node->GetPropVal(wxT("bulletname"), emptyString);
         if (!value.empty())
             attr.SetBulletName(value);
 
-        value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
+        value = node->GetPropVal(wxT("parstyle"), emptyString);
         if (!value.empty())
             attr.SetParagraphStyleName(value);
 
-        value = node->GetPropVal(wxT("liststyle"), wxEmptyString);
+        value = node->GetPropVal(wxT("liststyle"), emptyString);
         if (!value.empty())
             attr.SetListStyleName(value);
 
-        value = node->GetPropVal(wxT("tabs"), wxEmptyString);
+        value = node->GetPropVal(wxT("tabs"), emptyString);
         if (!value.empty())
         {
             wxArrayInt tabs;
@@ -1328,13 +1328,13 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
             attr.SetTabs(tabs);
         }
 
-        value = node->GetPropVal(wxT("pagebreak"), wxEmptyString);
+        value = node->GetPropVal(wxT("pagebreak"), emptyString);
         if (!value.IsEmpty())
         {
             attr.SetPageBreak(wxAtoi(value) != 0);
         }
 
-        value = node->GetPropVal(wxT("outlinelevel"), wxEmptyString);
+        value = node->GetPropVal(wxT("outlinelevel"), emptyString);
         if (!value.IsEmpty())
         {
             attr.SetOutlineLevel(wxAtoi(value));
