@@ -3248,9 +3248,12 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         return SetListStyle(range, (wxRichTextListStyleDefinition*) def, flags);
     }
 
+    bool isPara = false;
+
     // Make sure the attr has the style name
     if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
     {
+        isPara = true;
         attr.SetParagraphStyleName(def->GetName());
 
         // If applying a paragraph style, we only want the paragraph nodes to adopt these
@@ -3265,9 +3268,28 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         return SetStyleEx(GetSelectionRange(), attr, flags);
     else
     {
-        wxRichTextAttr current = GetDefaultStyleEx();
-        current.Apply(attr);
+        wxTextAttr current = GetDefaultStyleEx();
+        wxTextAttr defaultStyle(attr);
+        if (isPara)
+        {
+            // Don't apply extra character styles since they are already implied
+            // in the paragraph style
+            defaultStyle.SetFlags(defaultStyle.GetFlags() & ~wxTEXT_ATTR_CHARACTER);
+        }
+        current.Apply(defaultStyle);
         SetAndShowDefaultStyle(current);
+
+        // If it's a paragraph style, we want to apply the style to the
+        // current paragraph even if we didn't select any text.
+        if (isPara)
+        {
+            long pos = GetAdjustedCaretPosition(GetCaretPosition());
+            wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(pos);
+            if (para)
+            {
+                return SetStyleEx(para->GetRange().FromInternal(), attr, flags);
+            }
+        }
         return true;
     }
 }
