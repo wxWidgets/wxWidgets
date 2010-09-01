@@ -688,6 +688,10 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     if ( !pageRemoved )
         return NULL;
 
+    // hide the removed page to maintain the invariant that only the
+    // selected page is visible and others are hidden:
+    pageRemoved->Show(false);
+
     TabCtrl_DeleteItem(GetHwnd(), nPage);
 
     if ( m_pages.IsEmpty() )
