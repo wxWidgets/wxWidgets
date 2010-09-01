@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
-// RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton
 //              (c) 2010 Vadim Zeitlin
@@ -16,7 +16,7 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
-
+#include "wx/window.h" //for wxCharCodeWXToMSW
 #include "wx/msw/wrapwin.h"
 
 namespace
