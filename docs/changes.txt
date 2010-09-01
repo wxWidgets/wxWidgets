@@ -97,6 +97,9 @@ All (GUI):
 - wxRTC: can now edit line spacing in .1 increments from 1 to 2.
 - wxRTC: fixed wrong line spacing and space after paragraph calculations.
 - wxRTC: GetStyleMergedWithBase now detects loops.
+- wxRTC: wxRichTextCtrl::ApplyStyle now applies a paragraph style at the cursor
+  without needing a selection, and setting the default style now avoids duplicating
+  character attributes in subsequently typed text when they exist in the paragraph style.
 
 wxMSW:
 
