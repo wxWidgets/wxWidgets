@@ -50,6 +50,7 @@
         </if>
         <define>$(wxscintilla_usingdll)</define>
         <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/stc/scintilla/src/AutoComplete.cxx
