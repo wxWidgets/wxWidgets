@@ -623,6 +623,28 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
     caption = dlg.GetCaption();
     message = dlg.GetMessage();
     extendedMessage = dlg.GetExtendedMessage();
+
+    // Before wxMessageDialog added support for extended message it was common
+    // practice to have long multiline texts in the message box with the first
+    // line playing the role of the main message and the rest of the extended
+    // one. Try to detect such usage automatically here by synthesizing the
+    // extended message on our own if it wasn't given.
+    if ( extendedMessage.empty() )
+    {
+        // Check if there is a blank separating line after the first line (this
+        // is not the same as searching for "\n\n" as we want the automatically
+        // recognized main message be single line to avoid embarrassing false
+        // positives).
+        const size_t posNL = message.find('\n');
+        if ( posNL != wxString::npos &&
+                posNL < message.length() - 1 &&
+                    message[posNL + 1 ] == '\n' )
+        {
+            extendedMessage.assign(message, posNL + 2, wxString::npos);
+            message.erase(posNL);
+        }
+    }
+
     iconId = dlg.GetEffectiveIcon();
     style = dlg.GetMessageDialogStyle();
     useCustomLabels = dlg.HasCustomLabels();
@@ -643,8 +665,23 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
-    tdc.pszMainInstruction = message.wx_str();
-    tdc.pszContent = extendedMessage.wx_str();
+
+    // If we have both the main and extended messages, just use them as
+    // intended. However if only one message is given we normally use it as the
+    // content and not as the main instruction because the latter is supposed
+    // to stand out compared to the former and doesn't look good if there is
+    // nothing for it to contrast with. Finally, notice that the extended
+    // message we use here might be automatically extracted from the main
+    // message in our ctor, see comment there.
+    if ( !extendedMessage.empty() )
+    {
+        tdc.pszMainInstruction = message.wx_str();
+        tdc.pszContent = extendedMessage.wx_str();
+    }
+    else
+    {
+        tdc.pszContent = message.wx_str();
+    }
 
     // set an icon to be used, if possible
     switch ( iconId )
