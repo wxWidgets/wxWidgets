@@ -628,7 +628,18 @@ bool wxProgressDialog::Show(bool show)
         }
 
         if ( !HasFlag(wxPD_APP_MODAL) )
-            GetParent()->Disable();
+        {
+            wxWindow * const parent = GetTopParent();
+            if ( parent )
+            {
+                parent->Disable();
+            }
+            else
+            {
+                wxFAIL_MSG( "Progress dialog must have a valid parent if "
+                            "wxPD_APP_MODAL is not used." );
+            }
+        }
         //else: otherwise all windows will be disabled by m_taskDialogRunner
 
         // Do not show the underlying dialog.
