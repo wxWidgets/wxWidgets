@@ -100,16 +100,14 @@ public:
 class wxProgressDialogTaskRunner : public wxThread
 {
 public:
-    wxProgressDialogTaskRunner(wxWindow* parent)
-        : wxThread(wxTHREAD_JOINABLE),
-          m_parent(parent)
+    wxProgressDialogTaskRunner()
+        : wxThread(wxTHREAD_JOINABLE)
         { }
 
     wxProgressDialogSharedData* GetSharedDataObject()
         { return &m_sharedData; }
 
 private:
-    wxWindow* m_parent;
     wxProgressDialogSharedData m_sharedData;
 
     virtual void* Entry();
@@ -586,7 +584,7 @@ bool wxProgressDialog::Show(bool show)
 
         // We're showing the dialog for the first time, create the thread that
         // will manage it.
-        m_taskDialogRunner = new wxProgressDialogTaskRunner(GetParent());
+        m_taskDialogRunner = new wxProgressDialogTaskRunner;
         m_sharedData = m_taskDialogRunner->GetSharedDataObject();
 
         // Initialize shared data.
