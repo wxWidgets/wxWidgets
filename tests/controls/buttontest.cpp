@@ -167,19 +167,15 @@ void ButtonTestCase::BitmapMargins()
 
 void ButtonTestCase::Bitmap()
 {
-#if !defined(__WXGTK__) && !defined(__WXOSX__)
     //We start with no bitmaps
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
-    //Set bitmap should set a bitmap for all states
-    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER,
+
+    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, 
+                                               wxART_OTHER,
                                                wxSize(32, 32)));
 
-    CPPUNIT_ASSERT(m_button->GetBitmapDisabled().IsOk());
-    CPPUNIT_ASSERT(m_button->GetBitmapPressed().IsOk());
-    CPPUNIT_ASSERT(m_button->GetBitmapCurrent().IsOk());
-    CPPUNIT_ASSERT(m_button->GetBitmapFocus().IsOk());
-#endif
+    CPPUNIT_ASSERT(m_button->GetBitmap().IsOk());
 }
 
 #endif //wxUSE_BUTTON
