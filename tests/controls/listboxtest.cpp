@@ -100,7 +100,7 @@ void ListBoxTestCase::tearDown()
 
 void ListBoxTestCase::Sort()
 {
-#ifndef(__WXOSX__)
+#ifndef __WXOSX__
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize, 0, 0,
