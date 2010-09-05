@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_TOGGLEBTN
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -113,3 +115,5 @@ void BitmapToggleButtonTestCase::Value()
 
     CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
 }
+
+#endif
