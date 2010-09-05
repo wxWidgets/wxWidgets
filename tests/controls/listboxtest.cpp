@@ -43,11 +43,11 @@ private:
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
         CPPUNIT_TEST( HitTest );
-        CPPUNIT_TEST( Sort );
-        //We also run all tests as an ownerdrawn list box we do not need to
+        //We also run all tests as an ownerdrawn list box.  We do not need to
         //run the wxITEM_CONTAINER_TESTS as they are tested with wxCheckListBox
 #ifdef __WXMSW__
         CPPUNIT_TEST( PseudoTest_OwnerDrawn );
+        CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
@@ -100,7 +100,7 @@ void ListBoxTestCase::tearDown()
 
 void ListBoxTestCase::Sort()
 {
-#if !defined(__WXGTK__) && !defined(__WXOSX__)
+#ifndef(__WXOSX__)
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize, 0, 0,
