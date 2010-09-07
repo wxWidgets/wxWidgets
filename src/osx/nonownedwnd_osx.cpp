@@ -176,9 +176,9 @@ void wxNonOwnedWindow::UnsubclassWin()
         GetParent()->RemoveChild(this);
     
     wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;    
-    m_isNativeWindowWrapper = false;
     wxDELETE(m_nowpeer);
     wxDELETE(m_peer);
+    m_isNativeWindowWrapper = false;
 }
 
 
