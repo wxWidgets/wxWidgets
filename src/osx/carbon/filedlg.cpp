@@ -602,6 +602,7 @@ int wxFileDialog::ShowModal()
         m_dir = wxPathOnly(m_path);
     }
 
+    UnsubclassWin();
     ::NavDisposeReply(&navReply);
     ::NavDialogDispose(dialog);
 

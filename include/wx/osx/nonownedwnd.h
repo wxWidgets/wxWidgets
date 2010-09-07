@@ -58,6 +58,9 @@ public:
     bool Create(wxWindow *parent, WXWindow nativeWindow);
     
     virtual ~wxNonOwnedWindow();
+    
+    virtual void SubclassWin(WXWindow nativeWindow);
+    virtual void UnsubclassWin();
 
     virtual wxPoint GetClientAreaOrigin() const;
 

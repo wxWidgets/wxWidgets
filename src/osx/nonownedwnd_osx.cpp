@@ -149,16 +149,38 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 
 bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
 {
-    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, nativeWindow );
-    m_isNativeWindowWrapper = true;
-    wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
-    m_peer = wxWidgetImpl::CreateContentView(this);
-
     if ( parent )
         parent->AddChild(this);
     
+    SubclassWin(nativeWindow);
+    
     return true;
 }
+
+void wxNonOwnedWindow::SubclassWin(WXWindow nativeWindow)
+{
+    wxASSERT_MSG( !m_isNativeWindowWrapper, wxT("subclassing window twice?") );
+    wxASSERT_MSG( m_nowpeer == NULL, wxT("window already was created") );
+
+    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, GetParent(), nativeWindow );
+    m_isNativeWindowWrapper = true;
+    wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
+    m_peer = wxWidgetImpl::CreateContentView(this);
+}
+
+void wxNonOwnedWindow::UnsubclassWin()
+{
+    wxASSERT_MSG( m_isNativeWindowWrapper, wxT("window was not subclassed") );
+
+    if ( GetParent() )
+        GetParent()->RemoveChild(this);
+    
+    wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;    
+    m_isNativeWindowWrapper = false;
+    wxDELETE(m_nowpeer);
+    wxDELETE(m_peer);
+}
+
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
