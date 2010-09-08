@@ -857,6 +857,9 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     while (m_waiting)
         gtk_main_iteration();
 
+    g_signal_handlers_disconnect_by_func (m_iconWindow,
+                                          (gpointer) gtk_dnd_window_configure_callback, this);
+
     return m_retValue;
 }
 
