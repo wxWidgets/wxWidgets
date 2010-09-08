@@ -946,21 +946,27 @@ void wxDropSource::RegisterWindow()
 
 void wxDropSource::UnregisterWindow()
 {
-    if (!m_widget)
-        return;
+    if (m_widget)
+    {
+        g_signal_handlers_disconnect_by_func (m_widget,
+                                              (gpointer) source_drag_data_get,
+                                              this);
+        g_signal_handlers_disconnect_by_func (m_widget,
+                                              (gpointer) source_drag_data_delete,
+                                              this);
+        g_signal_handlers_disconnect_by_func (m_widget,
+                                              (gpointer) source_drag_begin,
+                                              this);
+        g_signal_handlers_disconnect_by_func (m_widget,
+                                              (gpointer) source_drag_end,
+                                              this);
+    }
 
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_data_get,
-                                          this);
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_data_delete,
-                                          this);
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_begin,
-                                          this);
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_end,
-                                          this);
+    if (m_iconWindow)
+    {
+        g_signal_handlers_disconnect_by_func (m_iconWindow,
+                                              (gpointer) gtk_dnd_window_configure_callback, this);
+    }
 }
 
 #endif
