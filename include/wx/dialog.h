@@ -249,6 +249,13 @@ private:
     // can be used as our parent or NULL if it can't
     wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;
 
+    // Helper of OnCharHook() and OnCloseWindow(): find the appropriate button
+    // for closing the dialog and send a click event for it.
+    //
+    // Return true if we found a button to close the dialog and "clicked" it or
+    // false otherwise.
+    bool SendCloseButtonClickEvent();
+
     // handle Esc key presses
     void OnCharHook(wxKeyEvent& event);
 
