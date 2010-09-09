@@ -76,12 +76,6 @@
 // things we need
 // ----------------------------------------------------------------------------
 
-// RN:  I'm not sure why this is here - even minimal doesn't check for
-//      wxUSE_GUI.  I may have added it myself though...
-#if !wxUSE_GUI
-#error "This is a GUI sample"
-#endif
-
 #if !wxUSE_MEDIACTRL || !wxUSE_MENUS || !wxUSE_SLIDER || !wxUSE_TIMER || \
     !wxUSE_NOTEBOOK || !wxUSE_LISTCTRL
 #error "Not all required elements are enabled.  Please modify setup.h!"
