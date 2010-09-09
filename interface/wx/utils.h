@@ -928,7 +928,9 @@ unsigned long wxGetProcessId();
 
 /**
     Equivalent to the Unix kill function: send the given signal @a sig to the
-    process with PID @a pid. The valid signal values are:
+    process with PID @a pid.
+
+    The valid signal values are:
 
     @code
     enum wxSignal
@@ -957,7 +959,7 @@ unsigned long wxGetProcessId();
     @c wxSIGTERM under Windows.
 
     Returns 0 on success, -1 on failure. If the @a rc parameter is not @NULL,
-    it will be filled with a value of the the @c wxKillError enum:
+    it will be filled with a value from the @c wxKillError enum:
 
     @code
     enum wxKillError
