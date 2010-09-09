@@ -1452,9 +1452,11 @@ void wxWMP10MediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 }
 
 #endif
-// in source file that contains stuff you don't directly use
-#include "wx/html/forcelnk.h"
-FORCE_LINK_ME(wxmediabackend_wmp10)
+
+// Allow the user code to use wxFORCE_LINK_MODULE() to ensure that this object
+// file is not discarded by the linker.
+#include "wx/link.h"
+wxFORCE_LINK_THIS_MODULE(wxmediabackend_wmp10)
 
 #if 0 // Windows Media Player Mobile 9 hacks
 

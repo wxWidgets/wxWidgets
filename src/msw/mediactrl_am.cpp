@@ -2258,8 +2258,9 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 // End of wxAMMediaBackend
 //---------------------------------------------------------------------------
 
-// in source file that contains stuff you don't directly use
-#include "wx/html/forcelnk.h"
-FORCE_LINK_ME(wxmediabackend_am)
+// Allow the user code to use wxFORCE_LINK_MODULE() to ensure that this object
+// file is not discarded by the linker.
+#include "wx/link.h"
+wxFORCE_LINK_THIS_MODULE(wxmediabackend_am)
 
 #endif // wxUSE_MEDIACTRL && wxUSE_ACTIVEX
