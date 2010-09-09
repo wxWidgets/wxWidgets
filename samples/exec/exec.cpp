@@ -571,6 +571,8 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
+    m_pidLast = pid;
+
     static const wxString signalNames[] =
     {
         wxT("Just test (SIGNONE)"),
@@ -591,9 +593,11 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
         wxT("Terminate (SIGTERM)"),
     };
 
+    static int s_sigLast = wxSIGNONE;
     int sig = wxGetSingleChoiceIndex(wxT("How to kill the process?"),
                                      wxT("Exec question"),
                                      WXSIZEOF(signalNames), signalNames,
+                                     s_sigLast,
                                      this);
     switch ( sig )
     {
@@ -624,8 +628,11 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
             break;
     }
 
-    if ( sig == 0 )
+    s_sigLast = sig;
+
+    if ( sig == wxSIGNONE )
     {
+        // This simply calls Kill(wxSIGNONE) but using it is more convenient.
         if ( wxProcess::Exists(pid) )
         {
             wxLogStatus(wxT("Process %ld is running."), pid);
