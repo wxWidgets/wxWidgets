@@ -67,6 +67,17 @@
 #include "wx/filename.h"    // For wxFileName::GetName()
 #include "wx/config.h"      // for native wxConfig
 
+// Under MSW we have several different backends but when linking statically
+// they may be discarded by the linker (this definitely happens with MSVC) so
+// force linking them. You don't have to do this in your code if you don't plan
+// to use them, of course.
+#ifdef __WXMSW__
+    #include "wx/link.h"
+    wxFORCE_LINK_MODULE(wxmediabackend_am)
+    wxFORCE_LINK_MODULE(wxmediabackend_qt)
+    wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
+#endif // __WXMSW__
+
 #ifndef __WXMSW__
     #include "../sample.xpm"
 #endif
