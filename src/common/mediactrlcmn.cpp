@@ -123,7 +123,6 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
         while((classInfo = NextBackend(&it)) != NULL)
         {
-            wxLogMessage( classInfo->GetClassName() );
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
                 continue;
