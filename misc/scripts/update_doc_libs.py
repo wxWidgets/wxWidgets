@@ -2,7 +2,7 @@
 # Name:       misc/scripts/update_doc_libs.py
 # Purpose:    Automatically insert \Library{} headers in the doc files
 # Created:    2007-07-28
-# RCS-ID:     $Id: makeunixtags.sh 46320 2007-06-04 11:02:29Z VZ $
+# RCS-ID:     $Id$
 # Copyright:  (c) 2007 Francesco Montorsi
 # Licence:    wxWindows licence
 ##############################################################################
