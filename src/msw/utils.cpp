@@ -708,11 +708,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
         wxKillAllChildren(pid, sig, krc);
 
     // get the process handle to operate on
-    HANDLE hProcess = ::OpenProcess(SYNCHRONIZE |
-                                    PROCESS_TERMINATE |
-                                    PROCESS_QUERY_INFORMATION,
-                                    FALSE, // not inheritable
-                                    (DWORD)pid);
+    DWORD dwAccess = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
+    if ( sig == wxSIGKILL )
+        dwAccess |= PROCESS_TERMINATE;
+
+    HANDLE hProcess = ::OpenProcess(dwAccess, FALSE, (DWORD)pid);
     if ( hProcess == NULL )
     {
         if ( krc )
