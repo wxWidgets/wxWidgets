@@ -277,11 +277,62 @@ BEGIN_EVENT_TABLE(StdButtonSizerDialog, wxDialog)
     EVT_RADIOBUTTON(wxID_ANY, StdButtonSizerDialog::OnEvent)
 END_EVENT_TABLE()
 
+#if wxUSE_CMDLINE_PARSER
+
+#include "wx/cmdline.h"
+
+static const char *PROGRESS_SWITCH = "progress";
+
+void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    wxApp::OnInitCmdLine(parser);
+
+    parser.AddOption("", PROGRESS_SWITCH,
+                     "Style for the startup progress dialog (wxPD_XXX)",
+                     wxCMD_LINE_VAL_NUMBER);
+}
+
+bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+    if ( !wxApp::OnCmdLineParsed(parser) )
+        return false;
+
+    parser.Found(PROGRESS_SWITCH, &m_startupProgressStyle);
+
+    return true;
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+#if wxUSE_PROGRESSDLG
+    if ( m_startupProgressStyle != -1 )
+    {
+        // Show a test progress dialog before the main event loop is started:
+        // it should still work.
+        const int PROGRESS_COUNT = 100;
+        wxProgressDialog dlg
+                         (
+                            "Progress in progress",
+                            "Please wait, starting...",
+                            PROGRESS_COUNT,
+                            NULL,
+                            m_startupProgressStyle
+                         );
+        for ( int i = 0; i <= PROGRESS_COUNT; i++ )
+        {
+            if ( !dlg.Update(i) )
+                break;
+
+            wxMilliSleep(50);
+        }
+    }
+#endif // wxUSE_PROGRESSDLG
 
 #if wxUSE_IMAGE
     wxInitAllImageHandlers();

@@ -115,12 +115,26 @@ public:
 class MyApp: public wxApp
 {
 public:
+    MyApp() { m_startupProgressStyle = -1; }
+
     virtual bool OnInit();
+
+#if wxUSE_CMDLINE_PARSER
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+#endif // wxUSE_CMDLINE_PARSER
 
 protected:
 #if wxUSE_LOG
     virtual wxAppTraits *CreateTraits() { return new MyAppTraits; }
 #endif // wxUSE_LOG
+
+private:
+    // Flag set to a valid value if command line option "progress" is used,
+    // this allows testing of wxProgressDialog before the main event loop is
+    // started. If this option is not specified it is set to -1 by default
+    // meaning that progress dialog shouldn't be shown at all.
+    long m_startupProgressStyle;
 };
 
 #if USE_MODAL_PRESENTATION
