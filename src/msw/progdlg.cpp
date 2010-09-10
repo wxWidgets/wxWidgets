@@ -750,9 +750,7 @@ void* wxProgressDialogTaskRunner::Entry()
                                        m_sharedData.m_labelCancel );
         }
 
-        tdc.dwFlags |= TDF_CALLBACK_TIMER
-                       | TDF_SHOW_PROGRESS_BAR
-                       | TDF_SHOW_MARQUEE_PROGRESS_BAR;
+        tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
         if ( !m_sharedData.m_expandedInformation.empty() )
         {
