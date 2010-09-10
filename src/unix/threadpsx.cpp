@@ -974,7 +974,17 @@ void wxThreadInternal::Wait()
     // if the thread we're waiting for is waiting for the GUI mutex, we will
     // deadlock so make sure we release it temporarily
     if ( wxThread::IsMain() )
+    {
+#ifdef __WXOSX__
+        // give the thread we're waiting for chance to do the GUI call
+        // it might be in, we don't do this conditionally as the to be waited on
+        // thread might have to acquire the mutex later but before terminating
+        if ( wxGuiOwnedByMainThread() )
+            wxMutexGuiLeave();
+#else
         wxMutexGuiLeave();
+#endif
+    }
 
     wxLogTrace(TRACE_THREADS,
                wxT("Starting to wait for thread %p to exit."),
@@ -1004,9 +1014,11 @@ void wxThreadInternal::Wait()
         }
     }
 
+#ifndef __WXOSX__
     // reacquire GUI mutex
     if ( wxThread::IsMain() )
         wxMutexGuiEnter();
+#endif
 }
 
 void wxThreadInternal::Pause()
