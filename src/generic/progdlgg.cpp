@@ -94,7 +94,7 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
 
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
-    m_windowStyle |= style;
+    m_pdStyle = style;
 
     m_parentTop = wxGetTopLevelParent(parent);
 
@@ -122,9 +122,6 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
     m_ctdelay = 0;
 
     m_delay = 3;
-
-    m_hasAbortButton =
-    m_hasSkipButton = false;
 
     m_winDisabler = NULL;
     m_tempEventLoop = NULL;
@@ -172,15 +169,12 @@ void wxGenericProgressDialog::Create( const wxString& title,
         wxEventLoop::SetActive(m_tempEventLoop);
     }
 
-    m_hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
-    m_hasSkipButton = (style & wxPD_CAN_SKIP) != 0;
-
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
     // confusing to have it - it doesn't work anyhow
     //
     // FIXME: should probably have a (extended?) window style for this
-    if ( !m_hasAbortButton )
+    if ( !HasPDFlag(wxPD_CAN_ABORT) )
     {
         EnableCloseButton(false);
     }
@@ -190,7 +184,7 @@ void wxGenericProgressDialog::Create( const wxString& title,
     SetLeftMenu();
 #endif
 
-    m_state = m_hasAbortButton ? Continue : Uncancelable;
+    m_state = HasPDFlag(wxPD_CAN_ABORT) ? Continue : Uncancelable;
 
     // top-level sizerTop
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
@@ -255,9 +249,9 @@ void wxGenericProgressDialog::Create( const wxString& title,
     sizerTop->Add(sizerLabels, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
 
 #if defined(__SMARTPHONE__)
-    if ( m_hasSkipButton )
+    if ( HasPDFlag(wxPD_CAN_SKIP) )
         SetRightMenu(wxID_SKIP, _("Skip"));
-    if ( m_hasAbortButton )
+    if ( HasPDFlag(wxPD_CAN_ABORT) )
         SetLeftMenu(wxID_CANCEL);
 #else
     m_btnAbort =
@@ -274,21 +268,21 @@ void wxGenericProgressDialog::Create( const wxString& title,
 #endif // MSW/!MSW
                            ;
 
-    if ( m_hasSkipButton )
+    if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
         m_btnSkip = new wxButton(this, wxID_SKIP, _("&Skip"));
 
         buttonSizer->Add(m_btnSkip, 0, sizerFlags, LAYOUT_MARGIN);
     }
 
-    if ( m_hasAbortButton )
+    if ( HasPDFlag(wxPD_CAN_ABORT) )
     {
         m_btnAbort = new wxButton(this, wxID_CANCEL);
 
         buttonSizer->Add(m_btnAbort, 0, sizerFlags, LAYOUT_MARGIN);
     }
 
-    if (!m_hasSkipButton && !m_hasAbortButton)
+    if ( !HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) )
         buttonSizer->AddSpacer(LAYOUT_MARGIN);
 
     sizerTop->Add(buttonSizer, 0, sizerFlags, LAYOUT_MARGIN );
@@ -464,7 +458,7 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
         // so that we return true below and that out [Cancel] handler knew what
         // to do
         m_state = Finished;
-        if( !HasFlag(wxPD_AUTO_HIDE) )
+        if( !HasPDFlag(wxPD_AUTO_HIDE) )
         {
             EnableClose();
             DisableSkip();
@@ -623,12 +617,12 @@ void wxGenericProgressDialog::SetRange(int maximum)
 
 bool wxGenericProgressDialog::WasCancelled() const
 {
-    return m_hasAbortButton && m_state == Canceled;
+    return HasPDFlag(wxPD_CAN_ABORT) && m_state == Canceled;
 }
 
 bool wxGenericProgressDialog::WasSkipped() const
 {
-    return m_hasSkipButton && m_skip;
+    return HasPDFlag(wxPD_CAN_SKIP) && m_skip;
 }
 
 // static
@@ -728,7 +722,7 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
 
 void wxGenericProgressDialog::DisableOtherWindows()
 {
-    if ( HasFlag(wxPD_APP_MODAL) )
+    if ( HasPDFlag(wxPD_APP_MODAL) )
     {
         m_winDisabler = new wxWindowDisabler(this);
     }
@@ -742,7 +736,7 @@ void wxGenericProgressDialog::DisableOtherWindows()
 
 void wxGenericProgressDialog::ReenableOtherWindows()
 {
-    if ( HasFlag(wxPD_APP_MODAL) )
+    if ( HasPDFlag(wxPD_APP_MODAL) )
     {
         wxDELETE(m_winDisabler);
     }
@@ -759,7 +753,7 @@ void wxGenericProgressDialog::ReenableOtherWindows()
 
 void wxGenericProgressDialog::EnableSkip(bool enable)
 {
-    if(m_hasSkipButton)
+    if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
 #ifdef __SMARTPHONE__
         if(enable)
@@ -775,7 +769,7 @@ void wxGenericProgressDialog::EnableSkip(bool enable)
 
 void wxGenericProgressDialog::EnableAbort(bool enable)
 {
-    if(m_hasAbortButton)
+    if( HasPDFlag(wxPD_CAN_ABORT) )
     {
 #ifdef __SMARTPHONE__
         if(enable)
@@ -791,7 +785,7 @@ void wxGenericProgressDialog::EnableAbort(bool enable)
 
 void wxGenericProgressDialog::EnableClose()
 {
-    if(m_hasAbortButton)
+    if(HasPDFlag(wxPD_CAN_ABORT))
     {
 #ifdef __SMARTPHONE__
         SetLeftMenu(wxID_CANCEL, _("Close"));

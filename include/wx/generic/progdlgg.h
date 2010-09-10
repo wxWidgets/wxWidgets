@@ -82,6 +82,14 @@ protected:
     static wxString GetRemainingLabel() { return _("Remaining time:"); }
 
 
+    // Similar to wxWindow::HasFlag() but tests for a presence of a wxPD_XXX
+    // flag in our (separate) flags instead of using m_windowStyle.
+    bool HasPDFlag(int flag) const { return (m_pdStyle & flag) != 0; }
+
+    // Return the progress dialog style. Prefer to use HasPDFlag() if possible.
+    int GetPDStyle() const { return m_pdStyle; }
+
+
     // Updates estimated times from a given progress bar value and stores the
     // results in provided arguments.
     void UpdateTimeEstimates(int value,
@@ -170,6 +178,12 @@ private:
     // parent top level window (may be NULL)
     wxWindow *m_parentTop;
 
+    // Progress dialog styles: this is not the same as m_windowStyle because
+    // wxPD_XXX constants clash with the existing TLW styles so to be sure we
+    // don't have any conflicts we just use a separate variable for storing
+    // them.
+    int m_pdStyle;
+
     // skip some portion
     bool m_skip;
 
@@ -191,9 +205,6 @@ private:
     // counts the confirmations
     int m_ctdelay;
     unsigned long m_display_estimated;
-
-    bool m_hasAbortButton,
-         m_hasSkipButton;
 
     // for wxPD_APP_MODAL case
     wxWindowDisabler *m_winDisabler;

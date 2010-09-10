@@ -126,9 +126,12 @@ private:
 namespace
 {
 
+// This function returns true if the progress dialog with the given style
+// (combination of wxPD_XXX constants) needs the "Close" button and this button
+// only, i.e. not a "Cancel" one.
 bool UsesCloseButtonOnly(long style)
 {
-    return !((style & wxPD_CAN_ABORT) || (style & wxPD_AUTO_HIDE));
+    return !(style & (wxPD_CAN_ABORT | wxPD_AUTO_HIDE));
 }
 
 BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
@@ -356,7 +359,7 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             m_state = Finished;
             m_sharedData->m_state = Finished;
             m_sharedData->m_notifications |= wxSPDD_FINISHED;
-            if( !HasFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
+            if( !HasPDFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
             {
                 // Provide the finishing message if the application didn't.
                 m_message = _("Done.");
@@ -452,7 +455,7 @@ void wxProgressDialog::Resume()
             // it now.
             m_sharedData->m_notifications |= wxSPDD_ENABLE_SKIP;
 
-            if ( !UsesCloseButtonOnly(m_windowStyle) )
+            if ( !UsesCloseButtonOnly(GetPDStyle()) )
                 m_sharedData->m_notifications |= wxSPDD_ENABLE_ABORT;
 
             hwnd = m_sharedData->m_hwnd;
@@ -592,21 +595,21 @@ bool wxProgressDialog::Show(bool show)
         m_sharedData->m_message = m_message;
         m_sharedData->m_range = m_maximum;
         m_sharedData->m_state = Uncancelable;
-        m_sharedData->m_style = m_windowStyle;
+        m_sharedData->m_style = GetPDStyle();
 
-        if ( HasFlag(wxPD_CAN_ABORT) )
+        if ( HasPDFlag(wxPD_CAN_ABORT) )
         {
             m_sharedData->m_state = Continue;
             m_sharedData->m_labelCancel = _("Cancel");
         }
-        else if ( !HasFlag(wxPD_AUTO_HIDE) )
+        else if ( !HasPDFlag(wxPD_AUTO_HIDE) )
         {
             m_sharedData->m_labelCancel = _("Close");
         }
 
-        if ( m_windowStyle & (wxPD_ELAPSED_TIME
-                              | wxPD_ESTIMATED_TIME
-                              | wxPD_REMAINING_TIME) )
+        if ( HasPDFlag(wxPD_ELAPSED_TIME |
+                         wxPD_ESTIMATED_TIME |
+                            wxPD_REMAINING_TIME) )
         {
             // Use a non-empty string just to have the collapsible pane shown.
             m_sharedData->m_expandedInformation = " ";
@@ -625,21 +628,6 @@ bool wxProgressDialog::Show(bool show)
             return false;
         }
 
-        if ( !HasFlag(wxPD_APP_MODAL) )
-        {
-            wxWindow * const parent = GetTopParent();
-            if ( parent )
-            {
-                parent->Disable();
-            }
-            else
-            {
-                wxFAIL_MSG( "Progress dialog must have a valid parent if "
-                            "wxPD_APP_MODAL is not used." );
-            }
-        }
-        //else: otherwise all windows will be disabled by m_taskDialogRunner
-
         // Do not show the underlying dialog.
         return false;
     }
@@ -651,12 +639,12 @@ bool wxProgressDialog::Show(bool show)
 bool wxProgressDialog::HasNativeProgressDialog() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    // For a native implementation task dialogs are required, which
-    // also require at least one button to be present so the flags needs
-    // to be checked as well to see if this is the case.
+    // Native task dialog, if available, can't be used without any buttons so
+    // we fall back to the generic one if none of "Skip", "Cancel" and "Close"
+    // buttons is used.
     return HasNativeTaskDialog()
-           && ((m_windowStyle & (wxPD_CAN_SKIP | wxPD_CAN_ABORT))
-               || !(m_windowStyle & wxPD_AUTO_HIDE));
+            && (HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) ||
+                    !HasPDFlag(wxPD_AUTO_HIDE));
 #else // !wxHAS_MSW_TASKDIALOG
     // This shouldn't be even called in !wxHAS_MSW_TASKDIALOG case but as we
     // still must define the function as returning something, return false.
@@ -685,14 +673,14 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
     wxString expandedInformation;
 
     // Calculate the three different timing values.
-    if ( m_windowStyle & wxPD_ELAPSED_TIME )
+    if ( HasPDFlag(wxPD_ELAPSED_TIME) )
     {
         expandedInformation << GetElapsedLabel()
                             << " "
                             << GetFormattedTime(elapsedTime);
     }
 
-    if ( m_windowStyle & wxPD_ESTIMATED_TIME )
+    if ( HasPDFlag(wxPD_ESTIMATED_TIME) )
     {
         if ( !expandedInformation.empty() )
             expandedInformation += "\n";
@@ -702,7 +690,7 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
                             << GetFormattedTime(realEstimatedTime);
     }
 
-    if ( m_windowStyle & wxPD_REMAINING_TIME )
+    if ( HasPDFlag(wxPD_REMAINING_TIME) )
     {
         if ( !expandedInformation.empty() )
             expandedInformation += "\n";
