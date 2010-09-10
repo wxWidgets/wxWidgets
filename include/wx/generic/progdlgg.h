@@ -15,6 +15,7 @@
 #include "wx/dialog.h"
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 class WXDLLIMPEXP_FWD_CORE wxGauge;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
@@ -196,6 +197,11 @@ private:
 
     // for wxPD_APP_MODAL case
     wxWindowDisabler *m_winDisabler;
+
+    // Temporary event loop created by the dialog itself if there is no
+    // currently active loop when it is created.
+    wxEventLoop *m_tempEventLoop;
+
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);

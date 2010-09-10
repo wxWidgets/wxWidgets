@@ -127,6 +127,7 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
     m_hasSkipButton = false;
 
     m_winDisabler = NULL;
+    m_tempEventLoop = NULL;
 }
 
 wxGenericProgressDialog::wxGenericProgressDialog(wxWindow *parent,
@@ -159,6 +160,17 @@ void wxGenericProgressDialog::Create( const wxString& title,
 
     SetParent( GetParentForModalDialog(parent, style) );
     SetTitle( title );
+
+    // We need a running event loop in order to update the dialog and be able
+    // to process clicks on its buttons, so ensure that there is one running
+    // even if this means we have to start it ourselves (this happens most
+    // commonly during the program initialization, e.g. for the progress
+    // dialogs shown from overridden wxApp::OnInit()).
+    if ( !wxEventLoopBase::GetActive() )
+    {
+        m_tempEventLoop = new wxEventLoop;
+        wxEventLoop::SetActive(m_tempEventLoop);
+    }
 
     m_hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
     m_hasSkipButton = (style & wxPD_CAN_SKIP) != 0;
@@ -466,9 +478,6 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
-            wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
-                        "wxGenericProgressDialog::Update needs a running event loop");
-
             // allow the window to repaint:
             // NOTE: since we yield only for UI events with this call, there
             //       should be no side-effects
@@ -528,9 +537,6 @@ bool wxGenericProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 
 bool wxGenericProgressDialog::DoBeforeUpdate(bool *skip)
 {
-    wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
-                "wxGenericProgressDialog::DoBeforeUpdate needs a running event loop");
-
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
     // NOTE: using YieldFor() this call shouldn't give re-entrancy problems
@@ -551,9 +557,6 @@ bool wxGenericProgressDialog::DoBeforeUpdate(bool *skip)
 
 void wxGenericProgressDialog::DoAfterUpdate()
 {
-    wxCHECK_RET(wxEventLoopBase::GetActive(),
-                "wxGenericProgressDialog::DoAfterUpdate needs a running event loop");
-
     // allow the window to repaint:
     // NOTE: since we yield only for UI events with this call, there
     //       should be no side-effects
@@ -715,6 +718,12 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
 {
     // normally this should have been already done, but just in case
     ReenableOtherWindows();
+
+    if ( m_tempEventLoop )
+    {
+        wxEventLoopBase::SetActive(NULL);
+        delete m_tempEventLoop;
+    }
 }
 
 void wxGenericProgressDialog::DisableOtherWindows()
@@ -798,9 +807,6 @@ void wxGenericProgressDialog::EnableClose()
 
 void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
-    wxCHECK_RET(wxEventLoopBase::GetActive(),
-                "wxGenericProgressDialog::UpdateMessage needs a running event loop");
-
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
         m_msg->SetLabel(newmsg);
