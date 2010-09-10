@@ -114,6 +114,11 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int style)
 
     m_skip = false;
 
+#if !defined(__SMARTPHONE__)
+    m_btnAbort =
+    m_btnSkip = NULL;
+#endif
+
     m_display_estimated =
     m_last_timeupdate =
     m_ctdelay = 0;
