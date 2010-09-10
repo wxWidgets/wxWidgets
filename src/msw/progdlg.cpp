@@ -892,22 +892,19 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_TIMER:
             PerformNotificationUpdates(hwnd, sharedData);
 
-            // End dialog in three different cases:
-            // 1. Progress finished and dialog should automatically hide.
-            // 2. The wxProgressDialog object was destructed and should
-            //    automatically hide.
-            // 3. The dialog was canceled and wxProgressDialog object
-            //    was destroyed.
-            bool isCanceled =
-                sharedData->m_state == wxGenericProgressDialog::Canceled;
-            bool isFinished =
-                sharedData->m_state == wxGenericProgressDialog::Finished;
-            bool wasDestroyed =
-                (sharedData->m_notifications & wxSPDD_DESTROYED) != 0;
-            bool shouldAutoHide = (sharedData->m_style & wxPD_AUTO_HIDE) != 0;
+            /*
+                Decide whether we should end the dialog. This is done if either
+                the dialog object itself was destroyed or if the progress
+                finished and we were configured to hide automatically without
+                waiting for the user to dismiss us.
 
-            if ( (shouldAutoHide && (isFinished || wasDestroyed))
-                 || (wasDestroyed && isCanceled) )
+                Notice that we do not close the dialog if it was cancelled
+                because it's up to the user code in the main thread to decide
+                whether it really wants to cancel the dialog.
+             */
+            if ( (sharedData->m_notifications & wxSPDD_DESTROYED) ||
+                    (sharedData->m_state == wxProgressDialog::Finished &&
+                        sharedData->m_style & wxPD_AUTO_HIDE) )
             {
                 ::EndDialog( hwnd, IDCLOSE );
             }
