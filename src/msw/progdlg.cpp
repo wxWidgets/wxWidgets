@@ -86,7 +86,7 @@ public:
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
 
-    wxGenericProgressDialog::ProgressDialogState m_state;
+    wxProgressDialog::ProgressDialogState m_state;
     bool m_progressBarMarquee;
     bool m_skipped;
 
@@ -249,7 +249,7 @@ void PerformNotificationUpdates(HWND hwnd,
     // Is the progress finished?
     if ( sharedData->m_notifications & wxSPDD_FINISHED )
     {
-        sharedData->m_state = wxGenericProgressDialog::Finished;
+        sharedData->m_state = wxProgressDialog::Finished;
 
         if ( !(sharedData->m_style & wxPD_AUTO_HIDE) )
         {
@@ -812,8 +812,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     return TRUE;
 
                 case IDCANCEL:
-                    if ( sharedData->m_state
-                            == wxGenericProgressDialog::Finished )
+                    if ( sharedData->m_state == wxProgressDialog::Finished )
                     {
                         return FALSE;
                     }
@@ -823,16 +822,18 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     // a finished dialog.
                     if ( !UsesCloseButtonOnly(sharedData->m_style) )
                     {
-                        wxCHECK_MSG( sharedData->m_state ==
-                                        wxGenericProgressDialog::Continue,
-                                    TRUE,
-                                    "Dialog not in a cancelable state!");
+                        wxCHECK_MSG
+                        (
+                            sharedData->m_state == wxProgressDialog::Continue,
+                            TRUE,
+                            "Dialog not in a cancelable state!"
+                        );
 
                         ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
                         ::SendMessage(hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE);
 
                         sharedData->m_timeStop = wxGetCurrentTime();
-                        sharedData->m_state = wxGenericProgressDialog::Canceled;
+                        sharedData->m_state = wxProgressDialog::Canceled;
                     }
 
                     return TRUE;
