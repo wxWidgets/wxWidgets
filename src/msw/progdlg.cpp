@@ -27,6 +27,7 @@
 
 #include "wx/msw/private/msgdlg.h"
 #include "wx/progdlg.h"
+#include "wx/evtloop.h"
 
 using namespace wxMSWMessageDialog;
 
@@ -119,12 +120,36 @@ private:
                                                    LONG_PTR dwRefData);
 };
 
+namespace
+{
+
+// A custom event loop which runs until the state of the dialog becomes
+// "Dismissed".
+class wxProgressDialogModalLoop : public wxEventLoop
+{
+public:
+    wxProgressDialogModalLoop(wxProgressDialogSharedData& data)
+        : m_data(data)
+    {
+    }
+
+protected:
+    virtual void OnNextIteration()
+    {
+        wxCriticalSectionLocker locker(m_data.m_cs);
+
+        if ( m_data.m_state == wxProgressDialog::Dismissed )
+            Exit();
+    }
+
+    wxProgressDialogSharedData& m_data;
+
+    wxDECLARE_NO_COPY_CLASS(wxProgressDialogModalLoop);
+};
+
 // ============================================================================
 // Helper functions
 // ============================================================================
-
-namespace
-{
 
 // This function returns true if the progress dialog with the given style
 // (combination of wxPD_XXX constants) needs the "Close" button and this button
@@ -324,53 +349,62 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeProgressDialog() )
     {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-
-        // Do nothing in canceled state.
-        if ( !DoNativeBeforeUpdate(skip) )
-            return false;
-
-        value /= m_factor;
-
-        wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
-
-        m_sharedData->m_value = value;
-        m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
-
-        if ( !newmsg.empty() )
         {
-            m_message = newmsg;
-            m_sharedData->m_message = newmsg;
-            m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
-        }
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
-        if ( m_sharedData->m_progressBarMarquee )
-        {
-            m_sharedData->m_progressBarMarquee = false;
-            m_sharedData->m_notifications |= wxSPDD_PBMARQUEE_CHANGED;
-        }
+            // Do nothing in canceled state.
+            if ( !DoNativeBeforeUpdate(skip) )
+                return false;
 
-        UpdateExpandedInformation( value );
+            value /= m_factor;
 
-        // Has the progress bar finished?
-        if ( value == m_maximum )
-        {
-            if ( m_state == Finished )
-                return true;
+            wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
+            m_sharedData->m_value = value;
+            m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
+
+            if ( !newmsg.empty() )
+            {
+                m_message = newmsg;
+                m_sharedData->m_message = newmsg;
+                m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
+            }
+
+            if ( m_sharedData->m_progressBarMarquee )
+            {
+                m_sharedData->m_progressBarMarquee = false;
+                m_sharedData->m_notifications |= wxSPDD_PBMARQUEE_CHANGED;
+            }
+
+            UpdateExpandedInformation( value );
+
+            // If we didn't just reach the finish, all we have to do is to
+            // return true if the dialog wasn't cancelled and false otherwise.
+            if ( value != m_maximum || m_state == Finished )
+                return m_sharedData->m_state != Canceled;
+
+
+            // On finishing, the dialog without wxPD_AUTO_HIDE style becomes a
+            // modal one meaning that we must block here until the user
+            // dismisses it.
             m_state = Finished;
             m_sharedData->m_state = Finished;
             m_sharedData->m_notifications |= wxSPDD_FINISHED;
-            if( !HasPDFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
+            if ( !HasPDFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
             {
                 // Provide the finishing message if the application didn't.
                 m_message = _("Done.");
                 m_sharedData->m_message = m_message;
                 m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
             }
-        }
+        } // unlock m_sharedData->m_cs
 
-        return m_sharedData->m_state != Canceled;
+        // We only get here when we need to wait for the dialog to terminate so
+        // do just this by running a custom event loop until the dialog is
+        // dismissed.
+        wxProgressDialogModalLoop loop(*m_sharedData);
+        loop.Run();
+        return true;
     }
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -774,6 +808,10 @@ void* wxProgressDialogTaskRunner::Entry()
     if ( FAILED(hr) )
         wxLogApiError( "TaskDialogIndirect", hr );
 
+    // If the main thread is waiting for us to exit inside the event loop in
+    // Update(), wake it up so that it checks our status again.
+    wxWakeUpIdle();
+
     return NULL;
 }
 
@@ -820,6 +858,11 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                 case IDCANCEL:
                     if ( sharedData->m_state == wxProgressDialog::Finished )
                     {
+                        // If the main thread is waiting for us, tell it that
+                        // we're gone (and if it doesn't wait, it's harmless).
+                        sharedData->m_state = wxProgressDialog::Dismissed;
+
+                        // Let Windows close the dialog.
                         return FALSE;
                     }
 

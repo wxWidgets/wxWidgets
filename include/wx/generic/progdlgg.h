@@ -62,7 +62,8 @@ public:
         Uncancelable = -1,   // dialog can't be canceled
         Canceled,            // can be cancelled and, in fact, was
         Continue,            // can be cancelled but wasn't
-        Finished             // finished, waiting to be removed from screen
+        Finished,            // finished, waiting to be removed from screen
+        Dismissed            // was closed by user after finishing
     };
 
 protected:
