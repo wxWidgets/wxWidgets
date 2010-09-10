@@ -57,7 +57,7 @@ public:
 
     // This enum is an implementation detail and should not be used
     // by user code.
-    enum ProgressDialogState
+    enum State
     {
         Uncancelable = -1,   // dialog can't be canceled
         Canceled,            // can be cancelled and, in fact, was
@@ -121,7 +121,7 @@ protected:
 
 
     // continue processing or not (return value for Update())
-    ProgressDialogState m_state;
+    State m_state;
 
     // the maximum value
     int m_maximum;

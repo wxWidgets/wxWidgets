@@ -86,7 +86,7 @@ public:
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
 
-    wxProgressDialog::ProgressDialogState m_state;
+    wxProgressDialog::State m_state;
     bool m_progressBarMarquee;
     bool m_skipped;
 
