@@ -87,29 +87,26 @@ wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 // wxGenericProgressDialog creation
 // ----------------------------------------------------------------------------
 
-void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
+void wxGenericProgressDialog::Init(wxWindow *parent, int style)
 {
-    // Initialize the inherited members that we always use (even when we don't
-    // create a valid window here).
-
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
+
+    // Initialize all our members that we always use (even when we don't
+    // create a valid window in this class).
+
     m_pdStyle = style;
 
     m_parentTop = wxGetTopLevelParent(parent);
 
+    m_gauge = NULL;
+    m_msg = NULL;
+    m_elapsed =
+    m_estimated =
+    m_remaining = NULL;
 
-    // Initialize our own members.
     m_state = Uncancelable;
-    m_maximum = maximum;
-
-#if defined(__WXMSW__) || defined(__WXPM__)
-    // we can't have values > 65,536 in the progress control under Windows, so
-    // scale everything down
-    m_factor = m_maximum / 65536 + 1;
-    m_maximum /= m_factor;
-#endif // __WXMSW__
-
+    m_maximum = 0;
 
     m_timeStart = wxGetCurrentTime();
     m_timeStop = (unsigned long)-1;
@@ -127,12 +124,10 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
     m_tempEventLoop = NULL;
 }
 
-wxGenericProgressDialog::wxGenericProgressDialog(wxWindow *parent,
-                                                 int maximum,
-                                                 int style)
+wxGenericProgressDialog::wxGenericProgressDialog(wxWindow *parent, int style)
                        : wxDialog()
 {
-    Init(parent, maximum, style);
+    Init(parent, style);
 }
 
 wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
@@ -142,7 +137,7 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
                                                  int style)
                        : wxDialog()
 {
-    Init(parent, maximum, style);
+    Init(parent, style);
 
     Create( title, message, maximum, parent, style );
 }
@@ -157,6 +152,8 @@ void wxGenericProgressDialog::Create( const wxString& title,
 
     SetParent( GetParentForModalDialog(parent, style) );
     SetTitle( title );
+
+    SetMaximum(maximum);
 
     // We need a running event loop in order to update the dialog and be able
     // to process clicks on its buttons, so ensure that there is one running
@@ -192,29 +189,27 @@ void wxGenericProgressDialog::Create( const wxString& title,
     m_msg = new wxStaticText(this, wxID_ANY, message);
     sizerTop->Add(m_msg, 0, wxLEFT | wxTOP, 2*LAYOUT_MARGIN);
 
-    if ( maximum > 0 )
-    {
-        int gauge_style = wxGA_HORIZONTAL;
-        if ( style & wxPD_SMOOTH )
-            gauge_style |= wxGA_SMOOTH;
-        m_gauge = new wxGauge
-                      (
-                        this,
-                        wxID_ANY,
-                        m_maximum,
-                        wxDefaultPosition,
-                        // make the progress bar sufficiently long
-                        wxSize(wxMin(wxGetClientDisplayRect().width/3, 300), -1),
-                        gauge_style
-                      );
+    int gauge_style = wxGA_HORIZONTAL;
+    if ( style & wxPD_SMOOTH )
+        gauge_style |= wxGA_SMOOTH;
 
-        sizerTop->Add(m_gauge, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 2*LAYOUT_MARGIN);
-        m_gauge->SetValue(0);
-    }
-    else
-    {
-        m_gauge = NULL;
-    }
+#ifdef __WXMSW__
+    maximum /= m_factor;
+#endif
+
+    m_gauge = new wxGauge
+                  (
+                    this,
+                    wxID_ANY,
+                    maximum,
+                    wxDefaultPosition,
+                    // make the progress bar sufficiently long
+                    wxSize(wxMin(wxGetClientDisplayRect().width/3, 300), -1),
+                    gauge_style
+                  );
+
+    sizerTop->Add(m_gauge, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 2*LAYOUT_MARGIN);
+    m_gauge->SetValue(0);
 
     // create the estimated/remaining/total time zones if requested
     m_elapsed =
@@ -416,7 +411,7 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
     if ( !DoBeforeUpdate(skip) )
         return false;
 
-    wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
+    wxCHECK_MSG( m_gauge, false, "dialog should be fully created" );
 
 #ifdef __WXMSW__
     value /= m_factor;
@@ -424,8 +419,7 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
     wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
-    if ( m_gauge )
-        m_gauge->SetValue(value);
+    m_gauge->SetValue(value);
 
     UpdateMessage(newmsg);
 
@@ -508,7 +502,7 @@ bool wxGenericProgressDialog::Pulse(const wxString& newmsg, bool *skip)
     if ( !DoBeforeUpdate(skip) )
         return false;
 
-    wxASSERT_MSG( m_gauge, wxT("cannot update non existent dialog") );
+    wxCHECK_MSG( m_gauge, false, "dialog should be fully created" );
 
     // show a bit of progress
     m_gauge->Pulse();
@@ -581,16 +575,14 @@ bool wxGenericProgressDialog::Show( bool show )
 
 int wxGenericProgressDialog::GetValue() const
 {
-    if (m_gauge)
-        return m_gauge->GetValue();
-    return wxNOT_FOUND;
+    wxCHECK_MSG( m_gauge, -1, "dialog should be fully created" );
+
+    return m_gauge->GetValue();
 }
 
 int wxGenericProgressDialog::GetRange() const
 {
-    if (m_gauge)
-        return m_gauge->GetRange();
-    return wxNOT_FOUND;
+    return m_maximum;
 }
 
 wxString wxGenericProgressDialog::GetMessage() const
@@ -600,17 +592,23 @@ wxString wxGenericProgressDialog::GetMessage() const
 
 void wxGenericProgressDialog::SetRange(int maximum)
 {
-    wxASSERT_MSG(m_gauge, "The dialog should have been constructed with a range > 0");
-    wxASSERT_MSG(maximum > 0, "Invalid range");
+    wxCHECK_RET( m_gauge, "dialog should be fully created" );
+
+    wxCHECK_RET( maximum > 0, "Invalid range" );
 
     m_gauge->SetRange(maximum);
+
+    SetMaximum(maximum);
+}
+
+void wxGenericProgressDialog::SetMaximum(int maximum)
+{
     m_maximum = maximum;
 
 #if defined(__WXMSW__) || defined(__WXPM__)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;
-    m_maximum /= m_factor;
 #endif // __WXMSW__
 }
 

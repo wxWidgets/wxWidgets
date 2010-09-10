@@ -275,7 +275,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     int maximum,
                                     wxWindow *parent,
                                     int style )
-    : wxGenericProgressDialog(parent, maximum, style),
+    : wxGenericProgressDialog(parent, style),
       m_taskDialogRunner(NULL),
       m_sharedData(NULL),
       m_message(message),
@@ -284,6 +284,8 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeProgressDialog() )
     {
+        SetMaximum(maximum);
+
         Show();
         DisableOtherWindows();
 
@@ -501,17 +503,21 @@ wxString wxProgressDialog::GetMessage() const
 
 void wxProgressDialog::SetRange(int maximum)
 {
-    wxGenericProgressDialog::SetRange( maximum );
-
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeProgressDialog() )
     {
+        SetMaximum(maximum);
+
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
         m_sharedData->m_range = maximum;
         m_sharedData->m_notifications |= wxSPDD_RANGE_CHANGED;
+
+        return;
     }
 #endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::SetRange( maximum );
 }
 
 bool wxProgressDialog::WasSkipped() const

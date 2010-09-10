@@ -67,13 +67,19 @@ public:
 
 protected:
     // This ctor is used by the native MSW implementation only.
-    wxGenericProgressDialog(wxWindow *parent, int maximum, int style);
+    wxGenericProgressDialog(wxWindow *parent, int style);
 
     void Create(const wxString& title,
                 const wxString& message,
                 int maximum,
                 wxWindow *parent,
                 int style);
+
+    // Update just the m_maximum field, this is used by public SetRange() but,
+    // unlike it, doesn't update the controls state. This makes it useful for
+    // both this class and its derived classes that don't use m_gauge to
+    // display progress.
+    void SetMaximum(int maximum);
 
     // Return the labels to use for showing the elapsed/estimated/remaining
     // times respectively.
@@ -144,7 +150,7 @@ private:
     static void SetTimeLabel(unsigned long val, wxStaticText *label);
 
     // common part of all ctors
-    void Init(wxWindow *parent, int maximum, int style);
+    void Init(wxWindow *parent, int style);
 
     // create the label with given text and another one to show the time nearby
     // as the next windows in the sizer, returns the created control
