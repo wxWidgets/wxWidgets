@@ -355,22 +355,22 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
 
 #elif defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
 
-static wxMBConvUTF16 sUTF16Converter;
-
-static inline wxMBConv& GetConv(const wxDataFormat& format)
+namespace
 {
-    return
-        format == wxDF_UNICODETEXT
-        ? (wxMBConv&) sUTF16Converter
-        : (wxMBConv&) wxConvLocal;
+
+inline wxMBConv& GetConv(const wxDataFormat& format)
+{
+    static wxMBConvUTF16 s_UTF16Converter;
+
+    return format == wxDF_UNICODETEXT ? static_cast<wxMBConv&>(s_UTF16Converter)
+                                      : static_cast<wxMBConv&>(wxConvLocal);
 }
+
+} // anonymous namespace
 
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
-    size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
-    len += (format == wxDF_UNICODETEXT ? 2 : 1);
-
-    return len;
+    return GetConv(format).WC2MB(NULL, GetText().wc_str(), 0);
 }
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
@@ -378,26 +378,21 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
     if ( buf == NULL )
         return false;
 
-    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    wxCharBuffer buffer(GetConv(format).cWX2MB(GetText().c_str()));
 
-    size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
-    len += (format == wxDF_UNICODETEXT ? 2 : 1);
-
-    // trailing (uni)char 0
-    memcpy( (char*)buf, (const char*)buffer, len );
+    memcpy(buf, buffer.data(), buffer.length());
 
     return true;
 }
 
 bool wxTextDataObject::SetData(const wxDataFormat& format,
-                               size_t WXUNUSED(len), const void *buf)
+                               size_t WXUNUSED(len),
+                               const void *buf)
 {
     if ( buf == NULL )
         return false;
 
-    wxWCharBuffer buffer = GetConv(format).cMB2WX( (const char*)buf );
-
-    SetText( buffer );
+    SetText(GetConv(format).cMB2WX(static_cast<const char*>(buf)));
 
     return true;
 }
