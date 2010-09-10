@@ -17,6 +17,7 @@
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxGauge;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
 
 /*
     Progress dialog which shows a moving progress bar.
@@ -194,7 +195,7 @@ private:
          m_hasSkipButton;
 
     // for wxPD_APP_MODAL case
-    class WXDLLIMPEXP_FWD_CORE wxWindowDisabler *m_winDisabler;
+    wxWindowDisabler *m_winDisabler;
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);

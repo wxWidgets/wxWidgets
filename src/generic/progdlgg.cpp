@@ -125,6 +125,8 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int maximum, int style)
 
     m_hasAbortButton =
     m_hasSkipButton = false;
+
+    m_winDisabler = NULL;
 }
 
 wxGenericProgressDialog::wxGenericProgressDialog(wxWindow *parent,
