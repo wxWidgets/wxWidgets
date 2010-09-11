@@ -226,7 +226,7 @@ void wxApp::DoCleanUp()
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-    NSRect displayRect = [[NSScreen mainScreen] visibleFrame];
+    NSRect displayRect = [wxOSXGetMenuScreen() visibleFrame];
     wxRect r = wxFromNSRect( NULL, displayRect );
     if ( x )
         *x = r.x;
