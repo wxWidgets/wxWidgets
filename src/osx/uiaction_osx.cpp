@@ -228,7 +228,8 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
+bool
+wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
     CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
 
@@ -239,8 +240,6 @@ bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
 
     CGEventPost(kCGHIDEventTap, event);
     return true;
-}
-
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
