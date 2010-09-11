@@ -644,9 +644,9 @@ private:
 // global functions
 // ---------------------------------------------------------------------------
 
-// kbd code translation
+// key codes translation between wx and MSW
 WXDLLIMPEXP_CORE int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam = 0);
-WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id);
+WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id, bool *isExtended = NULL);
 
 // window creation helper class: before creating a new HWND, instantiate an
 // object of this class on stack - this allows to process the messages sent to

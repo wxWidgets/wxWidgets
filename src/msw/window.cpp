@@ -6199,65 +6199,84 @@ int wxCharCodeMSWToWX(int vk, WXLPARAM lParam)
     return wxk;
 }
 
-WXWORD wxCharCodeWXToMSW(int wxk)
+WXWORD wxCharCodeWXToMSW(int wxk, bool *isExtended)
 {
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
     {
         if ( gs_specialKeys[n].wxk == wxk )
+        {
+            // All extended keys (i.e. non-numpad versions of the keys that
+            // exist both in the numpad and outside of it) are dealt with
+            // below.
+            if ( isExtended )
+                *isExtended = false;
+
             return gs_specialKeys[n].vk;
+        }
     }
 
     // and then check for special keys not included in the table
+    bool extended = false;
     WXWORD vk;
     switch ( wxk )
     {
         case WXK_PAGEUP:
+            extended = true;
         case WXK_NUMPAD_PAGEUP:
             vk = VK_PRIOR;
             break;
 
         case WXK_PAGEDOWN:
+            extended = true;
         case WXK_NUMPAD_PAGEDOWN:
             vk = VK_NEXT;
             break;
 
         case WXK_END:
+            extended = true;
         case WXK_NUMPAD_END:
             vk = VK_END;
             break;
 
         case WXK_HOME:
+            extended = true;
         case WXK_NUMPAD_HOME:
             vk = VK_HOME;
             break;
 
         case WXK_LEFT:
+            extended = true;
         case WXK_NUMPAD_LEFT:
             vk = VK_LEFT;
             break;
 
         case WXK_UP:
+            extended = true;
         case WXK_NUMPAD_UP:
             vk = VK_UP;
             break;
 
         case WXK_RIGHT:
+            extended = true;
         case WXK_NUMPAD_RIGHT:
             vk = VK_RIGHT;
             break;
 
         case WXK_DOWN:
+            extended = true;
         case WXK_NUMPAD_DOWN:
             vk = VK_DOWN;
             break;
 
         case WXK_INSERT:
+            extended = true;
         case WXK_NUMPAD_INSERT:
             vk = VK_INSERT;
             break;
 
         case WXK_DELETE:
+            extended = true;
         case WXK_NUMPAD_DELETE:
             vk = VK_DELETE;
             break;
@@ -6278,6 +6297,9 @@ WXWORD wxCharCodeWXToMSW(int wxk)
                 vk = (WXWORD)wxk;
             }
     }
+
+    if ( isExtended )
+        *isExtended = extended;
 
     return vk;
 }

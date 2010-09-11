@@ -74,8 +74,16 @@ bool wxUIActionSimulator::MouseUp(int button)
 bool
 wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
-    DWORD vkkeycode = wxCharCodeWXToMSW(keycode);
-    keybd_event(vkkeycode, 0, isDown ? 0 : KEYEVENTF_KEYUP, 0);
+    bool isExtended;
+    DWORD vkkeycode = wxCharCodeWXToMSW(keycode, &isExtended);
+
+    DWORD flags = 0;
+    if ( isExtended )
+        flags |= KEYEVENTF_EXTENDEDKEY;
+    if ( !isDown )
+        flags |= KEYEVENTF_KEYUP;
+
+    keybd_event(vkkeycode, 0, flags, 0);
 
     return true;
 }
