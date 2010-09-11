@@ -50,8 +50,6 @@ wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
 bool
 wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
 {
-    wxASSERT_MSG( !(modifiers & wxMOD_CONTROL),
-        "wxMOD_CONTROL is not implemented, use wxMOD_CMD instead" );
     wxASSERT_MSG( (modifiers & wxMOD_ALTGR) != wxMOD_ALTGR,
         "wxMOD_ALTGR is not implemented" );
     wxASSERT_MSG( !(modifiers & wxMOD_META ),
