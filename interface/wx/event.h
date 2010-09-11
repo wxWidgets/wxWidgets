@@ -1272,14 +1272,49 @@ public:
     wxKeyEvent(wxEventType keyEventType = wxEVT_NULL);
 
     /**
-        Returns the virtual key code. ASCII events return normal ASCII values,
-        while non-ASCII events return values such as @b WXK_LEFT for the left
-        cursor key. See ::wxKeyCode for a full list of the virtual key codes.
+        Returns the key code of the key that generated this event.
 
-        Note that in Unicode build, the returned value is meaningful only if
-        the user entered a character that can be represented in current
-        locale's default charset. You can obtain the corresponding Unicode
-        character using GetUnicodeKey().
+        ASCII symbols return normal ASCII values, while events from special
+        keys such as "left cursor arrow" (@c WXK_LEFT) return values outside of
+        the ASCII range. See ::wxKeyCode for a full list of the virtual key
+        codes.
+
+        Note that this method returns a meaningful value only for special
+        non-alphanumeric keys or if the user entered a character that can be
+        represented in current locale's default charset. Otherwise, e.g. if the
+        user enters a Japanese character in a program not using Japanese
+        locale, this method returns @c WXK_NONE and GetUnicodeKey() should be
+        used to obtain the corresponding Unicode character.
+
+        Using GetUnicodeKey() is in general the right thing to do if you are
+        interested in the characters typed by the user, GetKeyCode() should be
+        only used for special keys (for which GetUnicodeKey() returns @c
+        WXK_NONE). To handle both kinds of keys you might write:
+        @code
+            void MyHandler::OnChar(wxKeyEvent& event)
+            {
+                if ( event.GetUnicodeKey() != WXK_NONE )
+                {
+                    // It's a printable character
+                    wxLogMessage("You pressed '%c'", event.GetUnicodeKey());
+                }
+                else
+                {
+                    // It's a special key, deal with all the known ones:
+                    switch ( keycode )
+                    {
+                        case WXK_LEFT:
+                        case WXK_RIGHT:
+                            ... move cursor ...
+                            break;
+
+                        case WXK_F1:
+                            ... give help ...
+                            break;
+                    }
+                }
+            }
+        @endcode
     */
     int GetKeyCode() const;
 

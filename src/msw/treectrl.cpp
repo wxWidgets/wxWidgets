@@ -2655,18 +2655,7 @@ bool wxTreeCtrl::MSWHandleSelectionKey(unsigned vkey)
 bool wxTreeCtrl::MSWHandleTreeKeyDownEvent(WXWPARAM wParam, WXLPARAM lParam)
 {
     wxTreeEvent keyEvent(wxEVT_COMMAND_TREE_KEY_DOWN, this);
-
-    int keyCode = wxCharCodeMSWToWX(wParam);
-
-    if ( !keyCode )
-    {
-        // wxCharCodeMSWToWX() returns 0 to indicate that this is a
-        // simple ASCII key
-        keyCode = wParam;
-    }
-
-    keyEvent.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN, keyCode,
-                                       lParam, wParam);
+    keyEvent.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN, wParam, lParam);
 
     bool processed = HandleTreeEvent(keyEvent);
 

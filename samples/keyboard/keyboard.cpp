@@ -348,9 +348,9 @@ wxString GetKeyName(const wxKeyEvent &event)
     const char* virt = GetVirtualKeyCodeName(keycode);
     if ( virt )
         return virt;
-    if ( keycode > 0 && keycode < 27 )
+    if ( keycode > 0 && keycode < 32 )
         return wxString::Format("Ctrl-%c", (unsigned char)('A' + keycode - 1));
-    if ( keycode >= 27 && keycode < 128 )
+    if ( keycode >= 32 && keycode < 128 )
         return wxString::Format("'%c'", (unsigned char)keycode);
 #if wxUSE_UNICODE
     return wxString::Format("'%c'", event.GetUnicodeKey());
@@ -371,7 +371,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                    "    none   "
 #endif
 #ifdef wxHAS_RAW_KEY_CODES
-                   "  %7lu    0x%lx"
+                   "  %7lu    0x%08lx"
 #else
                    "  not-set    not-set"
 #endif

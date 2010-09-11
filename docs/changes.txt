@@ -413,6 +413,7 @@ All (GUI):
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
+- Consistency fixes for keyboard events across all major ports.
 
 MSW:
 

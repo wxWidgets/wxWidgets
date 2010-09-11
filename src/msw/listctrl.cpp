@@ -2340,10 +2340,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
 
-                        // wxCharCodeMSWToWX() returns 0 if the key is an ASCII
-                        // value which should be used as is
-                        int code = wxCharCodeMSWToWX(wVKey);
-                        event.m_code = code ? code : wVKey;
+                        event.m_code = wxCharCodeMSWToWX(wVKey);
                     }
 
                     event.m_itemIndex =
