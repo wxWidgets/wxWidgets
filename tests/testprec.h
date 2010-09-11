@@ -92,3 +92,20 @@ private:
     const char * const m_locOld;
     wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
 };
+
+// Macro that can be used to register the test with the given name in both the
+// global unnamed registry so that it is ran by default and a registry with the
+// same name as this test to allow running just this test individually.
+//
+// Notice that the name shouldn't include the "TestCase" suffix, it's added
+// automatically by this macro.
+//
+// Implementation note: CPPUNIT_TEST_SUITE_[NAMED_]REGISTRATION macros can't be
+// used here because they both declare the variable with the same name (as the
+// "unique" name they generate is based on the line number which is the same
+// for both calls inside the macro), so we need to do it manually.
+#define wxREGISTER_UNIT_TEST(name) \
+    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
+        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterRegistry__ ); \
+    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
+        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterNamedRegistry__ )(#name "TestCase")
