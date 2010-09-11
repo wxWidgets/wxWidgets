@@ -6023,8 +6023,8 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
 namespace
 {
 
-// use the "extended" bit (24) of lParam to distinguish extended keys
-// from normal keys as the same key is sent
+// use the "extended" bit of lParam to distinguish extended keys from normal
+// keys as the same virtual key code is sent for both by Windows
 inline
 int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
 {
@@ -6032,7 +6032,7 @@ int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
     // WM_KEYDOWN but are just translating just a VK constant (e.g. done from
     // msw/treectrl.cpp when processing TVN_KEYDOWN) -- then assume this is a
     // non-numpad (hence extended) key as this is a more common case
-    return !lParam || (lParam & (1 << 24)) ? keyExtended : keyNormal;
+    return !lParam || (HIWORD(lParam) & KF_EXTENDED) ? keyExtended : keyNormal;
 }
 
 // this array contains the Windows virtual key codes which map one to one to
@@ -6189,7 +6189,7 @@ int wxCharCodeMSWToWX(int vk, WXLPARAM lParam)
         case VK_RETURN:
             // don't use ChooseNormalOrExtended() here as the keys are reversed
             // here: numpad enter is the extended one
-            wxk = lParam && (lParam & (1 << 24)) ? WXK_NUMPAD_ENTER : WXK_RETURN;
+            wxk = HIWORD(lParam) & KF_EXTENDED ? WXK_NUMPAD_ENTER : WXK_RETURN;
             break;
 
         default:
