@@ -881,8 +881,10 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         return_after_IM = true;
     }
 
-    if ((!ret) && (win->m_imData != NULL))
+    if (!ret && win->m_imData)
     {
+        win->m_imData->lastKeyEvent = gdk_event;
+
         // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
         // docs, if IM filter returns true, no further processing should be done.
         // we should send the key_down event anyway.
