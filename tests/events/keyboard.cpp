@@ -110,13 +110,7 @@ struct KeyDesc
     int m_mods;
 };
 
-// These functions are only needed because of wx bug: currently, modifiers key
-// events are inconsistent between platforms and wxMSW generates key down event
-// for e.g. WXK_CONTROL with wxMOD_CONTROL set and key up event with it unset
-// while wxGTK does exactly vice versa. So we provide these helpers to make it
-// possible to make the tests pass under all platforms for now but ideally they
-// should all be made to behave the same and this should become unnecessary.
-
+// Helper for ModKeyDown().
 int GetModForKey(int keycode)
 {
     switch ( keycode )
@@ -131,38 +125,18 @@ int GetModForKey(int keycode)
     return wxMOD_NONE;
 }
 
-#ifdef __WXGTK__
-
-KeyDesc ModKeyDown(int keycode)
-{
-    // Second level bug: currently wxUIActionSimulator produces different
-    // modifiers than actually pressing the key. So while the above comment is
-    // true for keys pressed by user, when simulating them we do get the
-    // corresponding bit set for the modifier press events.
-    //
-    // Again, this is a bug and wxUIActionSimulator should be fixed to behave
-    // as the real events do but until this happens just work around this here.
-    return KeyDesc(keycode, GetModForKey(keycode));
-}
-
-KeyDesc ModKeyUp(int keycode)
-{
-    return KeyDesc(keycode, GetModForKey(keycode));
-}
-
-#else // Assume MSW-like behaviour for all the other platforms.
-
+// Helper function to allow writing just ModKeyDown(WXK_CONTROL) instead of
+// more verbose KeyDesc(WXK_CONTROL, wxMOD_CONTROL).
 KeyDesc ModKeyDown(int keycode)
 {
     return KeyDesc(keycode, GetModForKey(keycode));
 }
 
+// Another helper provided for symmetry with ModKeyDown() only.
 KeyDesc ModKeyUp(int keycode)
 {
     return KeyDesc(keycode);
 }
-
-#endif // Platforms.
 
 // Verify that the event object corresponds to our idea of what it should be.
 void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
