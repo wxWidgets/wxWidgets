@@ -70,11 +70,17 @@ private:
     // implementation level it makes more sense to have them in a single
     // function.
     //
-    // This is a simple wrapper verifying the input parameters validity around
-    // the platform-specific DoKey() method implemented in platform-specific
-    // files.
+    // It calls DoModifiers() to simulate pressing the modifier keys if
+    // necessary and then DoKey() for the key itself.
     bool Key(int keycode, int modifiers, bool isDown);
 
+    // Call DoKey() for all modifier keys whose bits are set in the parameter.
+    void SimulateModifiers(int modifier, bool isDown);
+
+
+    // The low-level port-specific function which really generates the key
+    // presses. It should generate exactly one key event with the given
+    // parameters.
     bool DoKey(int keycode, int modifiers, bool isDown);
 };
 

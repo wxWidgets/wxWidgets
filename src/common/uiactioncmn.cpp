@@ -57,10 +57,28 @@ wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
     wxASSERT_MSG( !(modifiers & wxMOD_WIN ),
         "wxMOD_WIN is not implemented" );
 
-    return DoKey(keycode, modifiers, isDown);
+    if ( isDown )
+        SimulateModifiers(modifiers, true);
+
+    bool rc = DoKey(keycode, modifiers, isDown);
+
+    if ( !isDown )
+        SimulateModifiers(modifiers, false);
+
+    return rc;
 }
 
-bool  wxUIActionSimulator::Char(int keycode, int modifiers)
+void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)
+{
+    if ( modifiers & wxMOD_SHIFT )
+        DoKey(WXK_SHIFT, modifiers, isDown);
+    if ( modifiers & wxMOD_ALT )
+        DoKey(WXK_ALT, modifiers, isDown);
+    if ( modifiers & wxMOD_CONTROL )
+        DoKey(WXK_CONTROL, modifiers, isDown);
+}
+
+bool wxUIActionSimulator::Char(int keycode, int modifiers)
 {
     Key(keycode, modifiers, true);
     Key(keycode, modifiers, false);

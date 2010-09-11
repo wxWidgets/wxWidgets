@@ -60,17 +60,6 @@ CGPoint GetMousePosition()
     return pos;
 }
 
-bool SendCharCode(CGKeyCode keycode, bool isDown)
-{
-    wxCFRef<CGEventRef>
-        event(CGEventCreateKeyboardEvent(NULL, keycode, isDown));
-    if ( !event )
-        return false;
-
-    CGEventPost(kCGHIDEventTap, event);
-    return true;
-}
-
 CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
 {
     CGKeyCode keycode;
@@ -241,31 +230,17 @@ bool wxUIActionSimulator::MouseUp(int button)
 
 bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
 {
-    if (isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            SendCharCode(kVK_Shift, true);
-        if (modifiers & wxMOD_ALT)
-            SendCharCode(kVK_Option, true);
-        if (modifiers & wxMOD_CMD)
-            SendCharCode(kVK_Command, true);
-    }
-
     CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
-    if ( !SendCharCode(cgcode, isDown) )
+
+    wxCFRef<CGEventRef>
+        event(CGEventCreateKeyboardEvent(NULL, cgcode, isDown));
+    if ( !event )
         return false;
 
-    if(!isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            SendCharCode(kVK_Shift, false);
-        if (modifiers & wxMOD_ALT)
-            SendCharCode(kVK_Option, false);
-        if (modifiers & wxMOD_CMD)
-            SendCharCode(kVK_Command, false);
-    }
-
+    CGEventPost(kCGHIDEventTap, event);
     return true;
+}
+
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

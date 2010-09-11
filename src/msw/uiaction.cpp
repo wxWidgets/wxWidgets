@@ -41,11 +41,6 @@ DWORD EventTypeForMouseButton(int button, bool isDown)
     }
 }
 
-void DoSimulateKbdEvent(DWORD vk, bool isDown)
-{
-    keybd_event(vk, 0, isDown ? 0 : KEYEVENTF_KEYUP, 0);
-}
-
 } // anonymous namespace
 
 bool wxUIActionSimulator::MouseDown(int button)
@@ -76,30 +71,11 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
+bool
+wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
-    if (isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            DoSimulateKbdEvent(VK_SHIFT, true);
-        if (modifiers & wxMOD_ALT)
-            DoSimulateKbdEvent(VK_MENU, true);
-        if (modifiers & wxMOD_CMD)
-            DoSimulateKbdEvent(VK_CONTROL, true);
-    }
-
     DWORD vkkeycode = wxCharCodeWXToMSW(keycode);
     keybd_event(vkkeycode, 0, isDown ? 0 : KEYEVENTF_KEYUP, 0);
-
-    if (!isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            DoSimulateKbdEvent(VK_SHIFT, false);
-        if (modifiers & wxMOD_ALT)
-            DoSimulateKbdEvent(VK_MENU, false);
-        if (modifiers & wxMOD_CMD)
-            DoSimulateKbdEvent(VK_CONTROL, false);
-    }
 
     return true;
 }
