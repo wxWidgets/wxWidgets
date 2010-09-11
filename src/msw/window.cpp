@@ -5665,17 +5665,14 @@ wxWindowMSW::CreateKeyEvent(wxEventType evType,
     wxKeyEvent event(evType);
     InitAnyKeyEvent(event, wParam, lParam);
 
-    event.m_keyCode = wxMSWKeyboard::VKToWX(wParam, lParam);
+    event.m_keyCode = wxMSWKeyboard::VKToWX
+                                     (
+                                        wParam,
+                                        lParam
 #if wxUSE_UNICODE
-    if ( event.m_keyCode < WXK_START )
-    {
-        // It's an ASCII character, set Unicode key code to the same value
-        // for compatibility (both with the previous versions of wx and with
-        // the other ports), even if it's not very useful for these events as
-        // Unicode character is/should be mostly used by EVT_CHAR handlers.
-        event.m_uniChar = event.m_keyCode;
-    }
+                                        , &event.m_uniChar
 #endif // wxUSE_UNICODE
+                                     );
 
     return event;
 }
@@ -6158,32 +6155,76 @@ const struct wxKeyMapping
 
 } // anonymous namespace
 
-int VKToWX(WXWORD vk, WXLPARAM lParam)
+int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
 {
+    int wxk;
+
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
     {
         if ( gs_specialKeys[n].vk == vk )
-            return gs_specialKeys[n].wxk;
+        {
+            wxk = gs_specialKeys[n].wxk;
+            if ( wxk < WXK_START )
+            {
+                // Unicode code for this key is the same as its ASCII code.
+                if ( uc )
+                    *uc = wxk;
+            }
+
+            return wxk;
+        }
     }
 
     // keys requiring special handling
-    int wxk;
     switch ( vk )
     {
-        // the mapping for these keys may be incorrect on non-US keyboards so
-        // maybe we shouldn't map them to ASCII values at all
-        case VK_OEM_1:      wxk = ';'; break;
-        case VK_OEM_PLUS:   wxk = '+'; break;
-        case VK_OEM_COMMA:  wxk = ','; break;
-        case VK_OEM_MINUS:  wxk = '-'; break;
-        case VK_OEM_PERIOD: wxk = '.'; break;
-        case VK_OEM_2:      wxk = '/'; break;
-        case VK_OEM_3:      wxk = '~'; break;
-        case VK_OEM_4:      wxk = '['; break;
-        case VK_OEM_5:      wxk = '\\'; break;
-        case VK_OEM_6:      wxk = ']'; break;
-        case VK_OEM_7:      wxk = '\''; break;
+        case VK_OEM_1:
+        case VK_OEM_PLUS:
+        case VK_OEM_COMMA:
+        case VK_OEM_MINUS:
+        case VK_OEM_PERIOD:
+        case VK_OEM_2:
+        case VK_OEM_3:
+        case VK_OEM_4:
+        case VK_OEM_5:
+        case VK_OEM_6:
+        case VK_OEM_7:
+            // MapVirtualKey() returns 0 if it fails to convert the virtual
+            // key which nicely corresponds to our WXK_NONE.
+            wxk = ::MapVirtualKey(vk, MAPVK_VK_TO_CHAR);
+
+            if ( HIWORD(wxk) & 0x8000 )
+            {
+                // It's a dead key and we don't return anything at all for them
+                // as we simply don't have any way to indicate the difference
+                // between e.g. a normal "'" and "'" as a dead key -- and
+                // generating the same events for them just doesn't seem like a
+                // good idea.
+                wxk = WXK_NONE;
+            }
+            else // Not a dead key.
+            {
+                // In any case return this as a Unicode character value.
+                if ( uc )
+                    *uc = wxk;
+
+                // For compatibility with the old non-Unicode code we continue
+                // returning key codes for Latin-1 characters directly
+                // (normally it would really only make sense to do it for the
+                // ASCII characters, not Latin-1 ones).
+                if ( wxk > 255 )
+                {
+                    // But for anything beyond this we can only return the key
+                    // value as a real Unicode character, not a wxKeyCode
+                    // because this enum values clash with Unicode characters
+                    // (e.g. WXK_LBUTTON also happens to be U+012C a.k.a.
+                    // "LATIN CAPITAL LETTER I WITH BREVE").
+                    wxk = WXK_NONE;
+                }
+                //
+            }
+            break;
 
         // handle extended keys
         case VK_PRIOR:
@@ -6233,9 +6274,19 @@ int VKToWX(WXWORD vk, WXLPARAM lParam)
             break;
 
         default:
-            // must be a simple alphanumeric key and the values of them
-            // coincide in Windows and wx
-            wxk = vk;
+            if ( (vk >= '0' && vk <= '9') || (vk >= 'A' && vk <= 'Z') )
+            {
+                // A simple alphanumeric key and the values of them coincide in
+                // Windows and wx for both ASCII and Unicode codes.
+                wxk = vk;
+
+                if ( uc )
+                    *uc = vk;
+            }
+            else // Something we simply don't know about at all.
+            {
+                wxk = WXK_NONE;
+            }
     }
 
     return wxk;

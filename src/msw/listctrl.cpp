@@ -2342,6 +2342,14 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
 
                         event.m_code = wxMSWKeyboard::VKToWX(wVKey);
+
+                        if ( event.m_code == WXK_NONE )
+                        {
+                            // We can't translate this to a standard key code,
+                            // until support for Unicode key codes is added to
+                            // wxListEvent we just ignore them.
+                            return false;
+                        }
                     }
 
                     event.m_itemIndex =
