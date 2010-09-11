@@ -5643,18 +5643,18 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 // WM_KEYDOWN one
 bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 {
-    int id;
+    int keycode;
     if ( isASCII )
     {
-        id = wParam;
+        keycode = wParam;
     }
     else // we're called from WM_KEYDOWN
     {
         // don't pass lParam to wxCharCodeMSWToWX() here because we don't want
         // to get numpad key codes: CHAR events should use the logical keys
         // such as WXK_HOME instead of WXK_NUMPAD_HOME which is for KEY events
-        id = wxCharCodeMSWToWX(wParam);
-        if ( id == 0 )
+        keycode = wxCharCodeMSWToWX(wParam);
+        if ( keycode == 0 )
         {
             // it's ASCII and will be processed here only when called from
             // WM_CHAR (i.e. when isASCII = true), don't process it now
@@ -5662,7 +5662,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
         }
     }
 
-    wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam, wParam));
+    wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, keycode, lParam, wParam));
 
     // the alphanumeric keys produced by pressing AltGr+something on European
     // keyboards have both Ctrl and Alt modifiers which may confuse the user
@@ -5671,7 +5671,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     // KEY_DOWN event would still have the correct modifiers if they're really
     // needed)
     if ( event.m_controlDown && event.m_altDown &&
-            (id >= 32 && id < 256) )
+            (keycode >= 32 && keycode < 256) )
     {
         event.m_controlDown =
         event.m_altDown = false;
@@ -6020,9 +6020,12 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
     //   the_font.ReleaseResource();
 }
 
+namespace
+{
+
 // use the "extended" bit (24) of lParam to distinguish extended keys
 // from normal keys as the same key is sent
-static inline
+inline
 int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
 {
     // except that if lParam is 0, it means we don't have real lParam from
@@ -6037,7 +6040,7 @@ int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
 //
 // note that keys having a normal and numpad version (e.g. WXK_HOME and
 // WXK_NUMPAD_HOME) are not included in this table as the mapping is not 1-to-1
-static const struct wxKeyMapping
+const struct wxKeyMapping
 {
     int vk;
     wxKeyCode wxk;
@@ -6110,6 +6113,8 @@ static const struct wxKeyMapping
     { VK_APPS,          WXK_WINDOWS_MENU },
 #endif // VK_APPS defined
 };
+
+} // anonymous namespace
 
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
