@@ -180,6 +180,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_windowtest.obj \
 	$(OBJS)\test_gui_clone.obj \
 	$(OBJS)\test_gui_propagation.obj \
+	$(OBJS)\test_gui_keyboard.obj \
 	$(OBJS)\test_gui_fonttest.obj \
 	$(OBJS)\test_gui_image.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
@@ -848,6 +849,9 @@ $(OBJS)\test_gui_clone.obj: .\events\clone.cpp
 
 $(OBJS)\test_gui_propagation.obj: .\events\propagation.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\events\propagation.cpp
+
+$(OBJS)\test_gui_keyboard.obj: .\events\keyboard.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\events\keyboard.cpp
 
 $(OBJS)\test_gui_fonttest.obj: .\font\fonttest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\font\fonttest.cpp

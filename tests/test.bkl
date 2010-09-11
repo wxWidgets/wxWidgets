@@ -176,6 +176,7 @@
             controls/windowtest.cpp
             events/clone.cpp
             events/propagation.cpp
+            events/keyboard.cpp
             font/fonttest.cpp
             image/image.cpp
             image/rawbmp.cpp

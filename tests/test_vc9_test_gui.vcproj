@@ -980,6 +980,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\keyboard.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\label.cpp"
 				>
 			</File>
