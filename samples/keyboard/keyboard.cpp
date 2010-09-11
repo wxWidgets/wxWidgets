@@ -335,7 +335,12 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(NUMPAD_SUBTRACT)
         WXK_(NUMPAD_DECIMAL)
         WXK_(NUMPAD_DIVIDE)
+
+        WXK_(WINDOWS_LEFT)
+        WXK_(WINDOWS_RIGHT)
+        WXK_(COMMAND)
 #undef WXK_
+
     default:
         return NULL;
     }
@@ -352,11 +357,14 @@ wxString GetKeyName(const wxKeyEvent &event)
         return wxString::Format("Ctrl-%c", (unsigned char)('A' + keycode - 1));
     if ( keycode >= 32 && keycode < 128 )
         return wxString::Format("'%c'", (unsigned char)keycode);
+
 #if wxUSE_UNICODE
-    return wxString::Format("'%c'", event.GetUnicodeKey());
-#else
-    return "unknown";
+    int uc = event.GetUnicodeKey();
+    if ( uc != WXK_NONE )
+        return wxString::Format("'%c'", uc);
 #endif
+
+    return "unknown";
 }
 
 
