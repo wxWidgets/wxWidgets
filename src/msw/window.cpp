@@ -79,6 +79,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/keyboard.h"
 #include "wx/msw/dcclient.h"
 
 #if wxUSE_TOOLTIPS
@@ -3223,7 +3224,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                         // generate CHAR events with WXK_HOME and not
                         // WXK_NUMPAD_HOME even if the "Home" key on numpad was
                         // pressed.
-                        event.m_keyCode = wxCharCodeMSWToWX
+                        event.m_keyCode = wxMSWKeyboard::VKToWX
                                           (
                                             wParam,
                                             lParam | (KF_EXTENDED << 16)
@@ -5664,7 +5665,7 @@ wxWindowMSW::CreateKeyEvent(wxEventType evType,
     wxKeyEvent event(evType);
     InitAnyKeyEvent(event, wParam, lParam);
 
-    event.m_keyCode = wxCharCodeMSWToWX(wParam, lParam);
+    event.m_keyCode = wxMSWKeyboard::VKToWX(wParam, lParam);
 #if wxUSE_UNICODE
     if ( event.m_keyCode < WXK_START )
     {
@@ -6054,6 +6055,13 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
     //   the_font.ReleaseResource();
 }
 
+// ----------------------------------------------------------------------------
+// keyboard codes
+// ----------------------------------------------------------------------------
+
+namespace wxMSWKeyboard
+{
+
 namespace
 {
 
@@ -6070,7 +6078,7 @@ int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
 }
 
 // this array contains the Windows virtual key codes which map one to one to
-// WXK_xxx constants and is used in wxCharCodeMSWToWX/WXToMSW() below
+// WXK_xxx constants and is used in wxMSWKeyboard::VKToWX/WXToVK() below
 //
 // note that keys having a normal and numpad version (e.g. WXK_HOME and
 // WXK_NUMPAD_HOME) are not included in this table as the mapping is not 1-to-1
@@ -6150,7 +6158,7 @@ const struct wxKeyMapping
 
 } // anonymous namespace
 
-int wxCharCodeMSWToWX(WXWORD vk, WXLPARAM lParam)
+int VKToWX(WXWORD vk, WXLPARAM lParam)
 {
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
@@ -6233,7 +6241,7 @@ int wxCharCodeMSWToWX(WXWORD vk, WXLPARAM lParam)
     return wxk;
 }
 
-WXWORD wxCharCodeWXToMSW(int wxk, bool *isExtended)
+WXWORD WXToVK(int wxk, bool *isExtended)
 {
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
@@ -6338,6 +6346,8 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isExtended)
     return vk;
 }
 
+} // namespace wxMSWKeyboard
+
 // small helper for wxGetKeyState() and wxGetMouseState()
 static inline bool wxIsKeyDown(WXWORD vk)
 {
@@ -6370,7 +6380,7 @@ bool wxGetKeyState(wxKeyCode key)
                         key != VK_MBUTTON,
                     wxT("can't use wxGetKeyState() for mouse buttons") );
 
-    const WXWORD vk = wxCharCodeWXToMSW(key);
+    const WXWORD vk = wxMSWKeyboard::WXToVK(key);
 
     // if the requested key is a LED key, return true if the led is pressed
     if ( key == WXK_NUMLOCK || key == WXK_CAPITAL || key == WXK_SCROLL )
@@ -6495,7 +6505,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
     {
-        int id = wxCharCodeMSWToWX(wParam, lParam);
+        int id = wxMSWKeyboard::VKToWX(wParam, lParam);
         if ( id >= WXK_START )
         {
             wxKeyEvent event(wxEVT_CHAR_HOOK);

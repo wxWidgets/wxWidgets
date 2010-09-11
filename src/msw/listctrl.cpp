@@ -42,6 +42,7 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/keyboard.h"
 
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
   #include <ole2.h>
@@ -2340,7 +2341,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
 
-                        event.m_code = wxCharCodeMSWToWX(wVKey);
+                        event.m_code = wxMSWKeyboard::VKToWX(wVKey);
                     }
 
                     event.m_itemIndex =

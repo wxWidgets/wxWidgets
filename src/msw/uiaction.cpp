@@ -16,8 +16,9 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
-#include "wx/window.h" //for wxCharCodeWXToMSW
 #include "wx/msw/wrapwin.h"
+
+#include "wx/msw/private/keyboard.h"
 
 namespace
 {
@@ -75,7 +76,7 @@ bool
 wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
     bool isExtended;
-    DWORD vkkeycode = wxCharCodeWXToMSW(keycode, &isExtended);
+    DWORD vkkeycode = wxMSWKeyboard::WXToVK(keycode, &isExtended);
 
     DWORD flags = 0;
     if ( isExtended )

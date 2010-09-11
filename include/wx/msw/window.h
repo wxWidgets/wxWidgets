@@ -648,26 +648,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-// ----------------------------------------------------------------------------
-// inline functions
-// ----------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
-// global functions
-// ---------------------------------------------------------------------------
-
-// key codes translation between wx and MSW
-
-// Translate MSW virtual key code to wx key code. lParam is used to distinguish
-// between numpad and extended version of the keys, extended is assumed by
-// default if lParam == 0.
-WXDLLIMPEXP_CORE int wxCharCodeMSWToWX(WXWORD vk, WXLPARAM lParam = 0);
-
-// Translate wxKeyCode enum element (passed as int for compatibility reasons)
-// to MSW virtual key code. isExtended is set to true if the key corresponds to
-// a non-numpad version of a key that exists both on numpad and outside it.
-WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id, bool *isExtended = NULL);
-
 // window creation helper class: before creating a new HWND, instantiate an
 // object of this class on stack - this allows to process the messages sent to
 // the window even before CreateWindow() returns

@@ -33,6 +33,7 @@
 #include "wx/accel.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/keyboard.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 
@@ -111,7 +112,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         if ( flags & wxACCEL_CTRL )
             fVirt |= FCONTROL;
 
-        WORD key = wxCharCodeWXToMSW(entries[i].GetKeyCode());
+        WORD key = wxMSWKeyboard::WXToVK(entries[i].GetKeyCode());
 
         arr[i].fVirt = fVirt;
         arr[i].key = key;
