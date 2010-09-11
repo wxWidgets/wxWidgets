@@ -2289,9 +2289,11 @@ enum wxDataFormatId
     wxDF_MAX
 };
 
-/*  Virtual keycodes */
+/* Key codes */
 enum wxKeyCode
 {
+    WXK_NONE    =    0,
+
     WXK_BACK    =    8, // backspace
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
