@@ -1181,49 +1181,81 @@ enum wxKeyCategoryFlags
 
     This event class contains information about key press and release events.
 
-    Notice that there are three different kinds of keyboard events in wxWidgets:
-    key down and up events and char events. The difference between the first two
-    is clear - the first corresponds to a key press and the second to a key
-    release - otherwise they are identical. Just note that if the key is
-    maintained in a pressed state you will typically get a lot of (automatically
-    generated) down events but only one up so it is wrong to assume that there is
-    one up event corresponding to each down one.
+    The main information carried by this event is the key being pressed or
+    released. It can be accessed using either GetKeyCode() function or
+    GetUnicodeKey(). For the printable characters, the latter should be used as
+    it works for any keys, including non-Latin-1 characters that can be entered
+    when using national keyboard layouts. GetKeyCode() should be used to handle
+    special characters (such as cursor arrows keys or @c HOME or @c INS and so
+    on) which correspond to ::wxKeyCode enum elements above the @c WXK_START
+    constant. While GetKeyCode() also returns the character code for Latin-1
+    keys for compatibility, it doesn't work for Unicode characters in general
+    and will return @c WXK_NONE for any non-Latin-1 ones. For this reason, it's
+    recommended to always use GetUnicodeKey() and only fall back to GetKeyCode()
+    if GetUnicodeKey() returned @c WXK_NONE meaning that the event corresponds
+    to a non-printable special keys.
 
-    Both key down and up events provide untranslated key codes while the char
-    event carries the translated one. The untranslated code for alphanumeric
-    keys is always an upper case value. For the other keys it is one of @c
-    WXK_XXX values from the ::wxKeyCode enumeration. The translated key is, in
-    general, the character the user expects to appear as the result of the key
-    combination when typing the text into a text entry zone, for example.
+    While both of these functions can be used with the events of @c
+    wxEVT_KEY_DOWN, @c wxEVT_KEY_UP and @c wxEVT_CHAR types, the values
+    returned by them are different for the first two events and the last one.
+    For the latter, the key returned corresponds to the character that would
+    appear in e.g. a text zone if the user pressed the key in it. As such, its
+    value depends on the current state of the Shift key and, for the letters,
+    on the state of Caps Lock modifier. For example, if @c A key is pressed
+    without Shift being held down, wxKeyEvent of type @c wxEVT_CHAR generated
+    for this key press will return (from either GetKeyCode() or GetUnicodeKey()
+    as their meanings coincide for ASCII characters) key code of 97
+    corresponding the ASCII value of @c a. And if the same key is pressed but
+    with Shift being held (or Caps Lock being active), then the key could would
+    be 65, i.e. ASCII value of capital @c A.
 
-    A few examples to clarify this (all assume that CAPS LOCK is unpressed
-    and the standard US keyboard): when the @c 'A' key is pressed, the key down
-    event key code is equal to @c ASCII A == 65. But the char event key code
-    is @c ASCII a == 97. On the other hand, if you press both SHIFT and
-    @c 'A' keys simultaneously , the key code in key down event will still be
-    just @c 'A' while the char event key code parameter will now be @c 'A'
-    as well.
+    However for the key down and up events the returned key code will instead
+    be @c A independently of the state of the modifier keys i.e. it depends
+    only on physical key being pressed and is not translated to its logical
+    representation using the current keyboard state. Such untranslated key
+    codes are defined as follows:
+        - For the letters they correspond to the @e upper case value of the
+        letter.
+        - For the other alphanumeric keys (e.g. @c 7 or @c +), the untranslated
+        key code corresponds to the character produced by the key when it is
+        pressed without Shift. E.g. in standard US keyboard layout the
+        untranslated key code for the key @c =/+ in the upper right corner of
+        the keyboard is 61 which is the ASCII value of @c =.
+        - For the rest of the keys (i.e. special non-printable keys) it is the
+        same as the normal key code as no translation is used anyhow.
 
-    Although in this simple case it is clear that the correct key code could be
-    found in the key down event handler by checking the value returned by
-    wxKeyEvent::ShiftDown(), in general you should use @c EVT_CHAR if you need
-    the translated key as for non-alphanumeric keys the translation is
-    keyboard-layout dependent and can only be done properly by the system
-    itself.
+    Notice that the first rule applies to all Unicode letters, not just the
+    usual Latin-1 ones. However for non-Latin-1 letters only GetUnicodeKey()
+    can be used to retrieve the key code as GetKeyCode() just returns @c
+    WXK_NONE in this case.
 
-    Another kind of translation is done when the control key is pressed: for
-    example, for CTRL-A key press the key down event still carries the
-    same key code @c 'a' as usual but the char event will have key code of 1,
-    the ASCII value of this key combination.
+    To summarize: you should handle @c wxEVT_CHAR if you need the translated
+    key and @c wxEVT_KEY_DOWN if you only need the value of the key itself,
+    independent of the current keyboard state.
 
-    Notice that while pressing any key will generate a key down event (except
-    in presence of IME perhaps) a few special keys don't generate a char event:
-    currently, Shift, Control (or Command), Alt (or Menu or Meta) and Caps, Num
-    and Scroll Lock keys don't do it. For all the other keys you have the
-    choice about whether to choose key down or char event for handling it and
-    either can be used. However it is advised to use char events only for the
-    keys that are supposed to generate characters on screen and key down events
-    for all the rest.
+    @note Not all key down events may be generated by the user. As an example,
+        @c wxEVT_KEY_DOWN with @c = key code can be generated using the
+        standard US keyboard layout but not using the German one because the @c
+        = key corresponds to Shift-0 key combination in this layout and the key
+        code for it is @c 0, not @c =. Because of this you should avoid
+        requiring your users to type key events that might be impossible to
+        enter on their keyboard.
+
+
+    Another difference between key and char events is that another kind of
+    translation is done for the latter ones when the Control key is pressed:
+    char events for ASCII letters in this case carry codes corresponding to the
+    ASCII value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
+    26 for Ctrl-Z. This is convenient for terminal-like applications and can be
+    completely ignored by all the other ones (if you need to handle Ctrl-A it
+    is probably a better idea to use the key event rather than the char one).
+    Notice that currently no translation is done for the presses of @c [, @c
+    \\, @c ], @c ^ and @c _ keys which might be mapped to ASCII values from 27
+    to 31.
+
+    Finally, modifier keys only generate key events but no char events at all.
+    The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
+    @c WXK_WINDOWS_XXX from ::wxKeyCode enum.
 
 
     You may discover how the other keys on your system behave interactively by

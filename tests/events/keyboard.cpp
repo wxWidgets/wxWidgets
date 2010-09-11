@@ -188,27 +188,16 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                   ev.GetKeyCode() );
 
 #if wxUSE_UNICODE
-    if ( desc.m_keycode < 0x80 )
+    if ( desc.m_keycode < WXK_START )
     {
-        // FIXME: Currently wxMSW generates 'A' key code for key down/up events
-        // for the 'a' physical key while wxGTK and wxOSX/Cocoa generate them
-        // with 'a' and it's not clear which behaviour is more correct so don't
-        // test this for those events, only test it for EVT_CHAR where the
-        // correct behaviour is clear.
-
-        if ( t == wxEVT_CHAR )
-        {
-            // For 7-bit ASCII Unicode keys are the same as normal key codes.
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
-                                          (char)desc.m_keycode,
-                                          (char)ev.GetUnicodeKey() );
-        }
+        // For Latin-1 our key code is the same as Unicode character value.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
+                                      (char)desc.m_keycode,
+                                      (char)ev.GetUnicodeKey() );
     }
-    else
+    else // Special key
     {
-        // In this test we don't use any really Unicode characters so far so
-        // anything above 0x80 must be special keys (e.g. WXK_CONTROL &c) which
-        // don't have any Unicode equivalent.
+        // Key codes above WXK_START don't correspond to printable characters.
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong non-zero Unicode key in " + msg,
                                       0,
                                       (int)ev.GetUnicodeKey() );
