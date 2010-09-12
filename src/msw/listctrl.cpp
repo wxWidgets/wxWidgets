@@ -2238,22 +2238,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
 
-                // delete the associated internal data
-                if ( wxMSWListItemData *data = MSWGetItemData(iItem) )
-                {
-                    const unsigned count = m_internalData.size();
-                    for ( unsigned n = 0; n < count; n++ )
-                    {
-                        if ( m_internalData[n] == data )
-                        {
-                            m_internalData.erase(m_internalData.begin() + n);
-                            wxDELETE(data);
-                            break;
-                        }
-                    }
-
-                    wxASSERT_MSG( !data, "invalid internal data pointer?" );
-                }
                 break;
 
             case LVN_INSERTITEM:
@@ -2608,6 +2592,27 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // with the real one
             m_count = 0;
             return true;
+
+        case LVN_DELETEITEM:
+            // Delete the associated internal data. Notice that this can be
+            // done only after the event has been handled as the data could be
+            // accessed during the handling of the event.
+            if ( wxMSWListItemData *data = MSWGetItemData(event.m_itemIndex) )
+            {
+                const unsigned count = m_internalData.size();
+                for ( unsigned n = 0; n < count; n++ )
+                {
+                    if ( m_internalData[n] == data )
+                    {
+                        m_internalData.erase(m_internalData.begin() + n);
+                        wxDELETE(data);
+                        break;
+                    }
+                }
+
+                wxASSERT_MSG( !data, "invalid internal data pointer?" );
+            }
+            break;
 
         case LVN_ENDLABELEDITA:
         case LVN_ENDLABELEDITW:
