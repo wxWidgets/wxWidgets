@@ -825,7 +825,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         }
         else
         {
-            OutputString(stream, wxString::Format(wxT(" imagetype=\"%d\"") + style + wxT(">"), (int) imageObj.GetImageBlock().GetImageType()));
+            OutputString(stream, wxString::Format(wxT(" imagetype=\"%d\""), (int) imageObj.GetImageBlock().GetImageType()) + style + wxT(">"));
         }
 
         OutputIndentation(stream, indent+1);
