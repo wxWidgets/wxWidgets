@@ -15,6 +15,15 @@
     
     A panel adds a border and label to a group of controls, and can be
     minimised (either automatically to conserve space, or manually by the user).
+
+    Non ribbon controls can be placed on a panel using wxSizers to manage
+    layout. wxWrapSizer and AddStretchSpacer() are useful for proportional
+    vertical and horizontal positioning. Note that layout is done within the
+    constraints of the panel's client area and this is dictated by
+    wxRibbonArtProvider.
+
+    Mixing ribbon and non-ribbon controls in a RibbonPanel is not supported at
+    present.
     
     @sa wxRibbonPage
     
