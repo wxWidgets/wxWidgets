@@ -36,6 +36,8 @@
 #include "wx/gtk/private/gdkconv.h"
 using namespace wxGTKImpl;
 
+class wxGtkDataViewModelNotifier;
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -197,7 +199,7 @@ WX_DEFINE_LIST(ItemList)
 class wxDataViewCtrlInternal
 {
 public:
-    wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model );
+    wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model );
     ~wxDataViewCtrlInternal();
 
     // model iface
@@ -231,6 +233,8 @@ public:
     bool ItemChanged( const wxDataViewItem &item );
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
+    bool BeforeReset(size_t old_Size,size_t new_size);
+    bool AfterReset();
     void Resort();
 
     // sorting interface
@@ -278,6 +282,8 @@ private:
     GtkTargetEntry        m_dropTargetTargetEntry;
     wxCharBuffer          m_dropTargetTargetEntryTarget;
     wxDataObject         *m_dropDataObject;
+    
+    wxGtkDataViewModelNotifier *m_notifier;
 };
 
 
@@ -1472,9 +1478,7 @@ gtk_wx_cell_renderer_activate(
 class wxGtkDataViewModelNotifier: public wxDataViewModelNotifier
 {
 public:
-    wxGtkDataViewModelNotifier( GtkWxTreeModel  *wxgtk_model,
-                                wxDataViewModel *wx_model,
-                                wxDataViewCtrl  *ctrl );
+    wxGtkDataViewModelNotifier( wxDataViewModel *wx_model, wxDataViewCtrlInternal *internal );
     ~wxGtkDataViewModelNotifier();
 
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
@@ -1483,13 +1487,14 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
     virtual void Resort();
-
-    void SetGtkModel( GtkWxTreeModel *model ) { m_wxgtk_model = model; }
+    virtual bool BeforeReset(size_t old_size,size_t new_size);
+    virtual bool AfterReset();
+    
+    void UpdateLastCount();
 
 private:
-    GtkWxTreeModel      *m_wxgtk_model;
-    wxDataViewModel     *m_wx_model;
-    wxDataViewCtrl      *m_owner;
+    wxDataViewModel         *m_wx_model;
+    wxDataViewCtrlInternal  *m_internal;
 };
 
 // ---------------------------------------------------------
@@ -1497,105 +1502,110 @@ private:
 // ---------------------------------------------------------
 
 wxGtkDataViewModelNotifier::wxGtkDataViewModelNotifier(
-    GtkWxTreeModel* wxgtk_model, wxDataViewModel *wx_model,
-    wxDataViewCtrl *ctrl )
+    wxDataViewModel *wx_model, wxDataViewCtrlInternal *internal )
 {
-    m_wxgtk_model = wxgtk_model;
     m_wx_model = wx_model;
-    m_owner = ctrl;
+    m_internal = internal;
 }
 
 wxGtkDataViewModelNotifier::~wxGtkDataViewModelNotifier()
 {
     m_wx_model = NULL;
-    m_wxgtk_model = NULL;
+    m_internal = NULL;
 }
 
 bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    m_owner->GtkGetInternal()->ItemAdded( parent, item );
+    m_internal->ItemAdded( parent, item );
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
 
     GtkTreeIter iter;
-    iter.stamp = m_wxgtk_model->stamp;
+    iter.stamp = wxgtk_model->stamp;
     iter.user_data = item.GetID();
 
     wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(m_wxgtk_model), &iter ));
+        GTK_TREE_MODEL(wxgtk_model), &iter ));
     gtk_tree_model_row_inserted(
-        GTK_TREE_MODEL(m_wxgtk_model), path, &iter);
+        GTK_TREE_MODEL(wxgtk_model), path, &iter);
 
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
 #if 0
     // using _get_path for a deleted item cannot be
     // a good idea
     GtkTreeIter iter;
-    iter.stamp = m_wxgtk_model->stamp;
+    iter.stamp = wxgtk_model->stamp;
     iter.user_data = (gpointer) item.GetID();
     wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(m_wxgtk_model), &iter ));
+        GTK_TREE_MODEL(wxgtk_model), &iter ));
 #else
     // so get the path from the parent
     GtkTreeIter iter;
-    iter.stamp = m_wxgtk_model->stamp;
+    iter.stamp = wxgtk_model->stamp;
     iter.user_data = (gpointer) parent.GetID();
     wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(m_wxgtk_model), &iter ));
+        GTK_TREE_MODEL(wxgtk_model), &iter ));
     // and add the final index ourselves
-    int index = m_owner->GtkGetInternal()->GetIndexOf( parent, item );
+    int index = m_internal->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
 #endif
 
     gtk_tree_model_row_deleted(
-        GTK_TREE_MODEL(m_wxgtk_model), path );
+        GTK_TREE_MODEL(wxgtk_model), path );
 
-    m_owner->GtkGetInternal()->ItemDeleted( parent, item );
+    m_internal->ItemDeleted( parent, item );
 
     return true;
 }
 
 void wxGtkDataViewModelNotifier::Resort()
 {
-    m_owner->GtkGetInternal()->Resort();
+    m_internal->Resort();
 }
 
 bool wxGtkDataViewModelNotifier::ItemChanged( const wxDataViewItem &item )
 {
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
+    
     GtkTreeIter iter;
-    iter.stamp = m_wxgtk_model->stamp;
+    iter.stamp = wxgtk_model->stamp;
     iter.user_data = (gpointer) item.GetID();
 
     wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(m_wxgtk_model), &iter ));
+        GTK_TREE_MODEL(wxgtk_model), &iter ));
     gtk_tree_model_row_changed(
-        GTK_TREE_MODEL(m_wxgtk_model), path, &iter );
+        GTK_TREE_MODEL(wxgtk_model), path, &iter );
 
-    m_owner->GtkGetInternal()->ItemChanged( item );
+    m_internal->ItemChanged( item );
 
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsigned int model_col )
 {
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
+    wxDataViewCtrl *ctrl = m_internal->GetOwner();
+    
     // This adds GTK+'s missing MVC logic for ValueChanged
     unsigned int index;
-    for (index = 0; index < m_owner->GetColumnCount(); index++)
+    for (index = 0; index < ctrl->GetColumnCount(); index++)
     {
-        wxDataViewColumn *column = m_owner->GetColumn( index );
+        wxDataViewColumn *column = ctrl->GetColumn( index );
         if (column->GetModelColumn() == model_col)
         {
-            GtkTreeView *widget = GTK_TREE_VIEW(m_owner->m_treeview);
+            GtkTreeView *widget = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
             GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
             // Get cell area
             GtkTreeIter iter;
-            iter.stamp = m_wxgtk_model->stamp;
+            iter.stamp = wxgtk_model->stamp;
             iter.user_data = (gpointer) item.GetID();
             wxGtkTreePath path(wxgtk_tree_model_get_path(
-                GTK_TREE_MODEL(m_wxgtk_model), &iter ));
+                GTK_TREE_MODEL(wxgtk_model), &iter ));
             GdkRectangle cell_area;
             gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
 
@@ -1608,7 +1618,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
 
-            m_owner->GtkGetInternal()->ValueChanged( item, model_col );
+            m_internal->ValueChanged( item, model_col );
 
             return true;
         }
@@ -1617,23 +1627,45 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
     return false;
 }
 
+bool wxGtkDataViewModelNotifier::BeforeReset(size_t WXUNUSED(old_size), size_t WXUNUSED(new_size))
+{
+    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
+    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), NULL );
+    
+    return true;
+}
+
+bool wxGtkDataViewModelNotifier::AfterReset()
+{
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
+    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
+    
+    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), GTK_TREE_MODEL(wxgtk_model) );
+
+    m_internal->Cleared(); 
+    
+    return true;
+}
+
 bool wxGtkDataViewModelNotifier::Cleared()
 {
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
+    
     // There is no call to tell the model that everything
     // has been deleted so call row_deleted() for every
     // child of root...
 
-    int count = m_owner->GtkGetInternal()->iter_n_children( NULL ); // number of children of root
-
+    int count = m_internal->iter_n_children( NULL ); // number of children of root
+    
     GtkTreePath *path = gtk_tree_path_new_first();  // points to root
 
     int i;
     for (i = 0; i < count; i++)
-        gtk_tree_model_row_deleted( GTK_TREE_MODEL(m_wxgtk_model), path );
+        gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
     
     gtk_tree_path_free( path );
     
-    m_owner->GtkGetInternal()->Cleared();
+    m_internal->Cleared();
 
     return true;
 }
@@ -3344,12 +3376,12 @@ void wxGtkTreeModelNode::Resort()
 // wxDataViewCtrlInternal
 //-----------------------------------------------------------------------------
 
-wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
-    wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model )
+wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model )
 {
     m_owner = owner;
     m_wx_model = wx_model;
-    m_gtk_model = gtk_model;
+    
+    m_gtk_model = NULL;
     m_root = NULL;
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
@@ -3358,12 +3390,28 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_dragDataObject = NULL;
     m_dropDataObject = NULL;
 
+    m_gtk_model = wxgtk_tree_model_new();
+    m_gtk_model->internal = this;
+
+    m_notifier = new wxGtkDataViewModelNotifier( wx_model, this );
+
+    wx_model->AddNotifier( m_notifier );
+
+    // g_object_unref( gtk_model ); ???
+
     if (!m_wx_model->IsVirtualListModel())
         InitTree();
+        
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->GtkGetTreeView()), GTK_TREE_MODEL(m_gtk_model) );
 }
 
 wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
 {
+    m_wx_model->RemoveNotifier( m_notifier );
+
+    // remove the model from the GtkTreeView before it gets destroyed 
+    gtk_tree_view_set_model( GTK_TREE_VIEW( m_owner->GtkGetTreeView() ), NULL );
+
     g_object_unref( m_gtk_model );
 
     delete m_dragDataObject;
@@ -4340,21 +4388,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
 wxDataViewCtrl::~wxDataViewCtrl()
 {
-    if (m_notifier)
-        GetModel()->RemoveNotifier( m_notifier );
-
     m_cols.Clear();
-
-    // remove the model from the GtkTreeView before it gets destroyed by the
-    // wxDataViewCtrlBase's dtor
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_treeview), NULL );
 
     delete m_internal;
 }
 
 void wxDataViewCtrl::Init()
 {
-    m_notifier = NULL;
     m_internal = NULL;
 
     m_cols.DeleteContents( true );
@@ -4492,18 +4532,7 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     }
 #endif
 
-    GtkWxTreeModel *gtk_model = wxgtk_tree_model_new();
-    m_internal = new wxDataViewCtrlInternal( this, model, gtk_model );
-    gtk_model->internal = m_internal;
-
-    m_notifier = new wxGtkDataViewModelNotifier( gtk_model, model, this );
-
-    model->AddNotifier( m_notifier );
-
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_treeview), GTK_TREE_MODEL(gtk_model) );
-
-    // unref in wxDataViewCtrlInternal
-    // g_object_unref( gtk_model );
+    m_internal = new wxDataViewCtrlInternal( this, model );
 
     return true;
 }

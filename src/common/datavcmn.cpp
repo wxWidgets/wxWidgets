@@ -235,6 +235,36 @@ bool wxDataViewModel::Cleared()
     return ret;
 }
 
+bool wxDataViewModel::BeforeReset( size_t old_size, size_t new_size )
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->BeforeReset(old_size,new_size))
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::AfterReset()
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->AfterReset())
+            ret = false;
+    }
+
+    return ret;
+}
+
 void wxDataViewModel::Resort()
 {
     wxDataViewModelNotifiers::iterator iter;
@@ -499,9 +529,11 @@ wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_siz
 
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
-    m_size = new_size;
+    /* wxDataViewModel:: */ BeforeReset( m_size, new_size );
 
-    /* wxDataViewModel:: */ Cleared();
+    m_size = new_size;
+    
+    /* wxDataViewModel:: */ AfterReset();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()

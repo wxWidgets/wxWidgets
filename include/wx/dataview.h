@@ -125,6 +125,10 @@ public:
     virtual bool ItemsChanged( const wxDataViewItemArray &items );
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
+    
+    // this is needed for the virtual list model under GTK+
+    virtual bool BeforeReset( size_t WXUNUSED(old_size), size_t WXUNUSED(new_size) ) { return true; }
+    virtual bool AfterReset() { return Cleared(); }
 
     virtual void Resort() = 0;
 
@@ -245,7 +249,12 @@ public:
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
 
-    // delegatd action
+    // this is needed for the virtual list model under GTK+
+    bool BeforeReset( size_t old_size, size_t new_size );
+    bool AfterReset();
+
+
+    // delegated action
     virtual void Resort();
 
     void AddNotifier( wxDataViewModelNotifier *notifier );

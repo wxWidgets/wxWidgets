@@ -195,11 +195,9 @@ private:
 
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
-    friend class wxGtkDataViewModelNotifier;
     friend class wxDataViewCtrlInternal;
 
     GtkWidget               *m_treeview;
-    wxDataViewModelNotifier *m_notifier;
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
 
