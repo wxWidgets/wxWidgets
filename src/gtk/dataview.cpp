@@ -233,7 +233,7 @@ public:
     bool ItemChanged( const wxDataViewItem &item );
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
-    bool BeforeReset(size_t old_Size,size_t new_size);
+    bool BeforeReset();
     bool AfterReset();
     void Resort();
 
@@ -258,8 +258,12 @@ public:
     // item can be deleted already in the model
     int GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item );
 
+    virtual void OnInternalIdle();
+    
 protected:
     void InitTree();
+    void ScheduleRefresh();
+    
     wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
@@ -284,6 +288,8 @@ private:
     wxDataObject         *m_dropDataObject;
     
     wxGtkDataViewModelNotifier *m_notifier;
+    
+    bool                  m_dirty;
 };
 
 
@@ -1487,7 +1493,7 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
     virtual void Resort();
-    virtual bool BeforeReset(size_t old_size,size_t new_size);
+    virtual bool BeforeReset();
     virtual bool AfterReset();
     
     void UpdateLastCount();
@@ -1627,22 +1633,22 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
     return false;
 }
 
-bool wxGtkDataViewModelNotifier::BeforeReset(size_t WXUNUSED(old_size), size_t WXUNUSED(new_size))
+bool wxGtkDataViewModelNotifier::BeforeReset()
 {
     GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
     gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), NULL );
-    
+
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::AfterReset()
 {
-    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
     GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
+    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
+    
+    m_internal->Cleared(); 
     
     gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), GTK_TREE_MODEL(wxgtk_model) );
-
-    m_internal->Cleared(); 
     
     return true;
 }
@@ -3390,6 +3396,8 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     m_dragDataObject = NULL;
     m_dropDataObject = NULL;
 
+    m_dirty = false;
+    
     m_gtk_model = wxgtk_tree_model_new();
     m_gtk_model->internal = this;
 
@@ -3416,6 +3424,21 @@ wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
 
     delete m_dragDataObject;
     delete m_dropDataObject;
+}
+
+void wxDataViewCtrlInternal::ScheduleRefresh()
+{
+    m_dirty = true;
+}
+
+void wxDataViewCtrlInternal::OnInternalIdle()
+{
+    if (m_dirty)
+    {
+        GtkWidget *widget = m_owner->GtkGetTreeView();
+        gtk_widget_queue_draw( widget );
+        m_dirty = false;
+    }
 }
 
 void wxDataViewCtrlInternal::InitTree()
@@ -3605,6 +3628,8 @@ bool wxDataViewCtrlInternal::Cleared()
         
     InitTree();
     
+    ScheduleRefresh();
+    
     return true;
 }
 
@@ -3612,6 +3637,8 @@ void wxDataViewCtrlInternal::Resort()
 {
     if (!m_wx_model->IsVirtualListModel())
         m_root->Resort();
+        
+    ScheduleRefresh();
 }
 
 bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
@@ -3628,6 +3655,8 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
             parent_node->AddLeave( item.GetID() );
     }
 
+    ScheduleRefresh();
+    
     return true;
 }
 
@@ -3642,6 +3671,8 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wx
         parent_node->DeleteChild( item.GetID() );
     }
 
+    ScheduleRefresh();
+    
     return true;
 }
 
@@ -4507,6 +4538,8 @@ wxDataViewItem wxDataViewCtrl::GTKPathToItem(GtkTreePath *path) const
 void wxDataViewCtrl::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
+    
+    m_internal->OnInternalIdle();
 
     unsigned int cols = GetColumnCount();
     unsigned int i;

@@ -235,7 +235,7 @@ bool wxDataViewModel::Cleared()
     return ret;
 }
 
-bool wxDataViewModel::BeforeReset( size_t old_size, size_t new_size )
+bool wxDataViewModel::BeforeReset()
 {
     bool ret = true;
 
@@ -243,7 +243,7 @@ bool wxDataViewModel::BeforeReset( size_t old_size, size_t new_size )
     for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
         wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->BeforeReset(old_size,new_size))
+        if (!notifier->BeforeReset())
             ret = false;
     }
 
@@ -375,6 +375,8 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
+    /* wxDataViewModel:: */ BeforeReset();
+    
     m_hash.Clear();
 
     // IDs are ordered until an item gets deleted or inserted
@@ -387,7 +389,7 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
 
     m_nextFreeID = new_size + 1;
 
-    /* wxDataViewModel:: */ Cleared();
+    /* wxDataViewModel:: */ AfterReset();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
@@ -529,7 +531,7 @@ wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_siz
 
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
-    /* wxDataViewModel:: */ BeforeReset( m_size, new_size );
+    /* wxDataViewModel:: */ BeforeReset();
 
     m_size = new_size;
     

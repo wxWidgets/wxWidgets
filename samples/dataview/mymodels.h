@@ -222,11 +222,6 @@ public:
         return wxT("string");
     }
 
-    virtual unsigned int GetRowCount()
-    {
-        return m_textColValues.GetCount();
-    }
-
     virtual void GetValueByRow( wxVariant &variant,
                                 unsigned int row, unsigned int col ) const;
     virtual bool GetAttrByRow( unsigned int row, unsigned int col,
@@ -238,6 +233,5 @@ private:
     wxArrayString    m_textColValues;
     wxArrayString    m_iconColValues;
     wxIcon           m_icon[2];
-    int              m_virtualItems;
 };
 

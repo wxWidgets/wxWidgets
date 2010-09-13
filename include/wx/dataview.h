@@ -126,8 +126,8 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
     
-    // this is needed for the virtual list model under GTK+
-    virtual bool BeforeReset( size_t WXUNUSED(old_size), size_t WXUNUSED(new_size) ) { return true; }
+    // some platforms, such as GTK+, may need a two step procedure for ::Reset()
+    virtual bool BeforeReset() { return true; }
     virtual bool AfterReset() { return Cleared(); }
 
     virtual void Resort() = 0;
@@ -249,8 +249,8 @@ public:
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
 
-    // this is needed for the virtual list model under GTK+
-    bool BeforeReset( size_t old_size, size_t new_size );
+    // some platforms, such as GTK+, may need a two step procedure for ::Reset()
+    bool BeforeReset();
     bool AfterReset();
 
 
