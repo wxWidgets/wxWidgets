@@ -327,28 +327,17 @@ protected:
 
 
 /**
-    @class wxDataViewIndexListModel
+    @class wxDataViewListModel
 
-    wxDataViewIndexListModel is a specialized data model which lets you address
-    an item by its position (row) rather than its wxDataViewItem (which you can
-    obtain from this class).
-    This model also provides its own wxDataViewIndexListModel::Compare
-    method which sorts the model's data by the index.
-
-    This model is not a virtual model since the control stores each wxDataViewItem.
-    Use wxDataViewVirtualListModel if you need to display millions of items or
-    have other reason to use a virtual control.
+    Base class with abstract API for wxDataViewIndexListModel and
+    wxDataViewVirtualListModel.
 
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewIndexListModel : public wxDataViewModel
+class wxDataViewListModel : public wxDataViewModel
 {
 public:
-    /**
-        Constructor.
-    */
-    wxDataViewIndexListModel(unsigned int initial_size = 0);
 
     /**
         Destructor.
@@ -455,6 +444,34 @@ public:
 };
 
 
+/**
+    @class wxDataViewIndexListModel
+
+    wxDataViewIndexListModel is a specialized data model which lets you address
+    an item by its position (row) rather than its wxDataViewItem (which you can
+    obtain from this class).
+    This model also provides its own wxDataViewIndexListModel::Compare
+    method which sorts the model's data by the index.
+
+    This model is not a virtual model since the control stores each wxDataViewItem.
+    Use wxDataViewVirtualListModel if you need to display millions of items or
+    have other reason to use a virtual control.
+
+    @see wxDataViewListModel for the API.
+    
+    @library{wxadv}
+    @category{dvc}
+*/
+
+class wxDataViewIndexListModel : public wxDataViewListModel
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewIndexListModel(unsigned int initial_size = 0);
+
+};
 
 /**
     @class wxDataViewVirtualListModel
@@ -464,15 +481,15 @@ public:
     the exact same interface as wxDataViewIndexListModel.
     The important difference is that under platforms other than OS X, using this
     model will result in a truly virtual control able to handle millions of items
-    as the control doesn't store any item (a feature not supported by the
-    Carbon API under OS X).
+    as the control doesn't store any item (a feature not supported by OS X).
 
-    @see wxDataViewIndexListModel for the API.
+    @see wxDataViewListModel for the API.
 
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewVirtualListModel : public wxDataViewModel
+
+class wxDataViewVirtualListModel : public wxDataViewListModel
 {
 public:
     /**
@@ -480,10 +497,6 @@ public:
     */
     wxDataViewVirtualListModel(unsigned int initial_size = 0);
 
-    /**
-        Returns the number of virtual items (i.e. rows) in the list.
-    */
-    unsigned int GetCount() const;
 };
 
 

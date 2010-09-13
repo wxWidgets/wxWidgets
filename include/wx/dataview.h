@@ -305,6 +305,8 @@ public:
     // helper methods provided by list models only
     virtual unsigned GetRow( const wxDataViewItem &item ) const = 0;
 
+    // returns the number of rows 
+    virtual unsigned int GetCount() const = 0;
 
     // implement some base class pure virtual directly
     virtual wxDataViewItem
@@ -338,6 +340,7 @@ public:
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
+
 
     virtual bool IsListModel() const { return true; }
 };
