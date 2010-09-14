@@ -2092,17 +2092,24 @@ void wxComboCtrlBase::OnButtonClick()
 {
     // Derived classes can override this method for totally custom
     // popup action
-    if ( !IsPopupWindowState(Visible) )
+    switch ( GetPopupWindowState() )
     {
-        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
+        case Hidden:
+        {
+            wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+            event.SetEventObject(this);
+            HandleWindowEvent(event);
 
-        ShowPopup();
-    }
-    else
-    {
-        HidePopup(true);
+            ShowPopup();
+            break;
+        }
+
+        case Animating:
+        case Visible:
+        {
+            HidePopup(true);
+            break;
+        }
     }
 }
 
