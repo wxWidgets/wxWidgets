@@ -390,7 +390,10 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             m_state = Finished;
             m_sharedData->m_state = Finished;
             m_sharedData->m_notifications |= wxSPDD_FINISHED;
-            if ( !HasPDFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
+            if ( HasPDFlag(wxPD_AUTO_HIDE) )
+                return true;
+
+            if ( newmsg.empty() )
             {
                 // Provide the finishing message if the application didn't.
                 m_message = _("Done.");
