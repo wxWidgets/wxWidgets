@@ -667,11 +667,20 @@ void wxListLineData::SetAttr(wxListItemAttr *attr)
     item->SetAttr(attr);
 }
 
-bool wxListLineData::SetAttributes(wxDC *dc,
-                                   const wxListItemAttr *attr,
-                                   bool highlighted)
+void wxListLineData::ApplyAttributes(wxDC *dc,
+                                     const wxRect& rectHL,
+                                     bool highlighted,
+                                     bool current)
 {
-    wxWindow *listctrl = m_owner->GetParent();
+    const wxListItemAttr * const attr = GetAttr();
+
+    wxWindow * const listctrl = m_owner->GetParent();
+
+    const bool hasFocus = listctrl->HasFocus()
+#if defined(__WXMAC__) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
+                && IsControlActive( (ControlRef)listctrl->GetHandle() )
+#endif
+                ;
 
     // fg colour
 
@@ -680,20 +689,16 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     // arithmetics on wxColour, unfortunately)
     wxColour colText;
     if ( highlighted )
-#ifdef __WXMAC__
     {
-        if (m_owner->HasFocus()
-#if !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)m_owner->GetHandle() )
-#endif
-        )
+#ifdef __WXMAC__
+        if ( hasFocus )
             colText = *wxWHITE;
         else
             colText = *wxBLACK;
-    }
 #else
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 #endif
+    }
     else if ( attr && attr->HasTextColour() )
         colText = attr->GetTextColour();
     else
@@ -710,45 +715,25 @@ bool wxListLineData::SetAttributes(wxDC *dc,
 
     dc->SetFont(font);
 
-    // bg colour
-    bool hasBgCol = attr && attr->HasBackgroundColour();
-    if ( highlighted || hasBgCol )
+    // background
+    if ( highlighted )
     {
-        if ( highlighted )
-            dc->SetBrush( *m_owner->GetHighlightBrush() );
-        else
-            dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
-
-        dc->SetPen( *wxTRANSPARENT_PEN );
-
-        return true;
-    }
-
-    return false;
-}
-
-void wxListLineData::Draw( wxDC *dc )
-{
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
-
-    bool highlighted = IsHighlighted();
-
-    wxListItemAttr *attr = GetAttr();
-
-    if ( SetAttributes(dc, attr, highlighted) )
-    {
-        int flags = 0;
-        if (highlighted)
-            flags |= wxCONTROL_SELECTED;
-        if (m_owner->HasFocus()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-            && IsControlActive( (ControlRef)m_owner->GetHandle() )
-#endif
-        )
+        // Use the renderer method to ensure that the selected items use the
+        // native look.
+        int flags = wxCONTROL_SELECTED;
+        if ( hasFocus )
             flags |= wxCONTROL_FOCUSED;
+        if (current)
+           flags |= wxCONTROL_CURRENT;
         wxRendererNative::Get().
-            DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
+            DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
+    }
+    else if ( attr && attr->HasBackgroundColour() )
+    {
+        // Draw the background using the items custom background colour.
+        dc->SetBrush(attr->GetBackgroundColour());
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->DrawRectangle(rectHL);
     }
 
     // just for debugging to better see where the items are
@@ -759,6 +744,14 @@ void wxListLineData::Draw( wxDC *dc )
     dc->SetPen(*wxGREEN_PEN);
     dc->DrawRectangle( m_gi->m_rectIcon );
 #endif
+}
+
+void wxListLineData::Draw(wxDC *dc, bool current)
+{
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
+    wxCHECK_RET( node, wxT("no subitems at all??") );
+
+    ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
 
     wxListItemData *item = node->GetData();
     if (item->HasImage())
@@ -788,18 +781,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
     //       GetAttr() and move these lines into the loop below
-    wxListItemAttr *attr = GetAttr();
-    if ( SetAttributes(dc, attr, highlighted) )
-    {
-        int flags = 0;
-        if (highlighted)
-            flags |= wxCONTROL_SELECTED;
-        if (m_owner->HasFocus())
-            flags |= wxCONTROL_FOCUSED;
-        if (current)
-           flags |= wxCONTROL_CURRENT;
-        wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
-    }
+
+    ApplyAttributes(dc, rectHL, highlighted, current);
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
             yMid = rect.y + rect.height/2;
@@ -2110,7 +2093,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         size_t count = GetItemCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            GetLine(i)->Draw( &dc );
+            GetLine(i)->Draw( &dc, i == m_current );
         }
     }
 
