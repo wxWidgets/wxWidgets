@@ -443,10 +443,20 @@ void wxRibbonGallery::EnsureVisible(const wxRibbonGalleryItem* item)
     if(item == NULL || !item->IsVisible() || IsEmpty())
         return;
 
-    int y = item->GetPosition().GetTop();
-    int base_y = m_items.Item(0)->GetPosition().GetTop();
-    int delta = y - base_y - m_scroll_amount;
-    ScrollLines(delta / m_bitmap_padded_size.GetHeight());
+    if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        int x = item->GetPosition().GetLeft();
+        int base_x = m_items.Item(0)->GetPosition().GetLeft();
+        int delta = x - base_x - m_scroll_amount;
+        ScrollLines(delta / m_bitmap_padded_size.GetWidth());
+    }
+    else
+    {
+        int y = item->GetPosition().GetTop();
+        int base_y = m_items.Item(0)->GetPosition().GetTop();
+        int delta = y - base_y - m_scroll_amount;
+        ScrollLines(delta / m_bitmap_padded_size.GetHeight());
+    }
 }
 
 bool wxRibbonGallery::IsHovered() const
