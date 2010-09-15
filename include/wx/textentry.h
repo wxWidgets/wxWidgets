@@ -38,8 +38,7 @@ public:
     // SetValue() generates a text change event, ChangeValue() doesn't
     virtual void SetValue(const wxString& value)
         { DoSetValue(value, SetValue_SendEvent); }
-    virtual void ChangeValue(const wxString& value)
-        { DoSetValue(value, SetValue_NoEvent); }
+    virtual void ChangeValue(const wxString& value);
 
     // writing text inserts it at the current position replacing any current
     // selection, appending always inserts it at the end and doesn't remove any

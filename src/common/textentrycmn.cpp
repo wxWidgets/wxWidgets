@@ -75,6 +75,20 @@ public:
 
     const wxString& GetHintString() const { return m_hint; }
 
+    // This is called whenever the text control contents changes.
+    //
+    // We call it ourselves when this change generates an event but it's also
+    // necessary to call it explicitly from wxTextEntry::ChangeValue() as it,
+    // by design, does not generate any events.
+    void HandleTextUpdate(const wxString& text)
+    {
+        m_text = text;
+
+        // If we're called because of a call to Set or ChangeValue(), the
+        // control may still have the hint text colour, reset it in this case.
+        RestoreTextColourIfNecessary();
+    }
+
 private:
     // Show the hint in the window if we should do it, i.e. if the window
     // doesn't have any text of its own.
@@ -133,11 +147,7 @@ private:
         // which uses it internally because this would just forward back to us
         // so go directly to the private method which returns the real control
         // contents.
-        m_text = m_entry->DoGetValue();
-
-        // If this event is generated because of calling SetValue(), the
-        // control may still have the hint text colour, reset it in this case.
-        RestoreTextColourIfNecessary();
+        HandleTextUpdate(m_entry->DoGetValue());
 
         event.Skip();
     }
@@ -194,6 +204,16 @@ wxString wxTextEntryBase::GetRange(long from, long to) const
 // ----------------------------------------------------------------------------
 // text operations
 // ----------------------------------------------------------------------------
+
+void wxTextEntryBase::ChangeValue(const wxString& value)
+{
+    DoSetValue(value, SetValue_NoEvent);
+
+    // As we didn't generate any events for wxTextEntryHintData to catch,
+    // notify it explicitly about our changed contents.
+    if ( m_hintData )
+        m_hintData->HandleTextUpdate(value);
+}
 
 void wxTextEntryBase::AppendText(const wxString& text)
 {
