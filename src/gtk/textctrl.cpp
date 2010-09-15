@@ -1334,14 +1334,14 @@ void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (from == -1 && to == -1)
-    {
-        from = 0;
-        to = GetValue().length();
-    }
-
     if ( IsMultiLine() )
     {
+        if (from == -1 && to == -1)
+        {
+            from = 0;
+            to = GetValue().length();
+        }
+
         GtkTextIter fromi, toi;
         gtk_text_buffer_get_iter_at_offset( m_buffer, &fromi, from );
         gtk_text_buffer_get_iter_at_offset( m_buffer, &toi, to );
