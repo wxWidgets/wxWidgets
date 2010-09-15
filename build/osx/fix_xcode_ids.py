@@ -56,12 +56,11 @@ def toUuid(name):
 for s in dict:
     # s[0] is the original ID, s[1] is the name
     newId = toUuid(s[1])
-    num = 0
     # Some names can appear twice or even more (depending on number of
     # targets), make them unique
     while newId in idDict.values() :
-        num = num + 1
-        newId = toUuid(s[1] + str(num))
+        # [2:-1] to skip prepended 0x and trailing L
+        newId = hex(int(newId, 16) + 1)[2:-1].upper()
  
     assert(not s[0] in idDict)
     idDict[s[0]] = newId
