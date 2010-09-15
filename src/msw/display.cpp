@@ -104,56 +104,17 @@ LONG WINAPI ChangeDisplaySettingsExForWin95(LPCTSTR WXUNUSED(lpszDeviceName),
 }
 #endif // !__WXWINCE__
 
-// ----------------------------------------------------------------------------
-// display information classes
-// ----------------------------------------------------------------------------
-
-struct wxDisplayInfo
-{
-    wxDisplayInfo(HMONITOR hmon = NULL)
-    {
-        m_hmon = hmon;
-        m_flags = (DWORD)-1;
-    }
-
-    virtual ~wxDisplayInfo() { }
-
-
-    // use GetMonitorInfo() to fill in all of our fields if needed (i.e. if it
-    // hadn't been done before)
-    void Initialize();
-
-
-    // handle of this monitor used by MonitorXXX() functions, never NULL
-    HMONITOR m_hmon;
-
-    // the entire area of this monitor in virtual screen coordinates
-    wxRect m_rect;
-
-    // the work or client area, i.e. the area available for the normal windows
-    wxRect m_rectClient;
-
-    // the display device name for this monitor, empty initially and retrieved
-    // on demand by DoGetName()
-    wxString m_devName;
-
-    // the flags of this monitor, also used as initialization marker: if this
-    // is -1, GetMonitorInfo() hadn't been called yet
-    DWORD m_flags;
-};
-
-WX_DEFINE_ARRAY_PTR(wxDisplayInfo *, wxDisplayInfoArray);
 
 // ----------------------------------------------------------------------------
-// common base class for all Win32 wxDisplayImpl versions
+// wxDisplayMSW declaration
 // ----------------------------------------------------------------------------
 
-class wxDisplayImplWin32Base : public wxDisplayImpl
+class wxDisplayMSW : public wxDisplayImpl
 {
 public:
-    wxDisplayImplWin32Base(unsigned n, wxDisplayInfo& info)
+    wxDisplayMSW(unsigned n, HMONITOR hmon)
         : wxDisplayImpl(n),
-          m_info(info)
+          m_hmon(hmon)
     {
     }
 
@@ -163,6 +124,8 @@ public:
     virtual bool IsPrimary() const;
 
     virtual wxVideoMode GetCurrentMode() const;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
+    virtual bool ChangeMode(const wxVideoMode& mode);
 
 protected:
     // convert a DEVMODE to our wxVideoMode
@@ -177,81 +140,39 @@ protected:
                            dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
     }
 
-    wxDisplayInfo& m_info;
+    HMONITOR m_hmon;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxDisplayMSW);
 };
 
+
 // ----------------------------------------------------------------------------
-// common base class for all Win32 wxDisplayFactory versions
+// wxDisplayFactoryMSW declaration
 // ----------------------------------------------------------------------------
 
-// functions dynamically bound by wxDisplayFactoryWin32Base::Initialize()
+WX_DEFINE_ARRAY(HMONITOR, wxMonitorHandleArray);
+
+// functions dynamically bound by wxDisplayFactoryMSW ctor.
 static MonitorFromPoint_t gs_MonitorFromPoint = NULL;
 static MonitorFromWindow_t gs_MonitorFromWindow = NULL;
 static GetMonitorInfo_t gs_GetMonitorInfo = NULL;
+static EnumDisplayMonitors_t gs_EnumDisplayMonitors = NULL;
 
-class wxDisplayFactoryWin32Base : public wxDisplayFactory
+class wxDisplayFactoryMSW : public wxDisplayFactory
 {
 public:
-    virtual ~wxDisplayFactoryWin32Base();
+    // ctor checks if the current system supports multimon API and dynamically
+    // bind the functions we need if this is the case and fills the
+    // m_displays array if they're available
+    wxDisplayFactoryMSW();
 
     bool IsOk() const { return !m_displays.empty(); }
 
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
     virtual unsigned GetCount() { return unsigned(m_displays.size()); }
     virtual int GetFromPoint(const wxPoint& pt);
     virtual int GetFromWindow(const wxWindow *window);
-
-protected:
-    // ctor checks if the current system supports multimon API and dynamically
-    // bind the functions we need if this is the case and sets
-    // ms_supportsMultimon if they're available
-    wxDisplayFactoryWin32Base();
-
-    // delete all m_displays elements: can be called from the derived class
-    // dtor if it is important to do this before destroying it,
-    // otherwise will be done by our dtor
-    void Clear();
-
-    // find the monitor corresponding to the given handle, return wxNOT_FOUND
-    // if not found
-    int FindDisplayFromHMONITOR(HMONITOR hmon) const;
-
-
-    // flag indicating whether gs_MonitorXXX functions are available
-    static int ms_supportsMultimon;
-
-    // the array containing information about all available displays, should be
-    // filled by the derived class ctors
-    wxDisplayInfoArray m_displays;
-
-
-    wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryWin32Base);
-};
-
-// ----------------------------------------------------------------------------
-// wxDisplay implementation using Windows multi-monitor support functions
-// ----------------------------------------------------------------------------
-
-class wxDisplayImplMultimon : public wxDisplayImplWin32Base
-{
-public:
-    wxDisplayImplMultimon(unsigned n, wxDisplayInfo& info)
-        : wxDisplayImplWin32Base(n, info)
-    {
-    }
-
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
-
-private:
-    wxDECLARE_NO_COPY_CLASS(wxDisplayImplMultimon);
-};
-
-class wxDisplayFactoryMultimon : public wxDisplayFactoryWin32Base
-{
-public:
-    wxDisplayFactoryMultimon();
-
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
 
 private:
     // EnumDisplayMonitors() callback
@@ -260,93 +181,99 @@ private:
                                           LPRECT lprcMonitor,
                                           LPARAM dwData);
 
-    // add a monitor description to m_displays array
-    void AddDisplay(HMONITOR hMonitor, LPRECT lprcMonitor);
+    // find the monitor corresponding to the given handle,
+    // return wxNOT_FOUND if not found
+    int FindDisplayFromHMONITOR(HMONITOR hmon) const;
+
+    // the array containing information about all available displays, filled by
+    // MultimonEnumProc()
+    wxMonitorHandleArray m_displays;
+
+    wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMSW);
 };
 
 
-// ============================================================================
-// common classes implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
-// wxDisplay
+// wxDisplay implementation
 // ----------------------------------------------------------------------------
 
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    wxDisplayFactoryMultimon *factoryMM = new wxDisplayFactoryMultimon;
+    wxDisplayFactoryMSW *factoryMM = new wxDisplayFactoryMSW;
 
     if ( factoryMM->IsOk() )
         return factoryMM;
 
     delete factoryMM;
 
-    // finally fall back to a stub implementation if all else failed (Win95?)
+    // fall back to a stub implementation if no multimon support (Win95?)
     return new wxDisplayFactorySingle;
 }
 
 
 // ----------------------------------------------------------------------------
-// wxDisplayInfo
+// wxDisplayMSW implementation
 // ----------------------------------------------------------------------------
 
-void wxDisplayInfo::Initialize()
+wxRect wxDisplayMSW::GetGeometry() const
 {
-    if ( m_flags == (DWORD)-1 )
+    WinStruct<MONITORINFOEX> monInfo;
+
+    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
     {
-        WinStruct<MONITORINFOEX> monInfo;
-        if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
-        {
-            wxLogLastError(wxT("GetMonitorInfo"));
-            m_flags = 0;
-            return;
-        }
-
-        wxCopyRECTToRect(monInfo.rcMonitor, m_rect);
-        wxCopyRECTToRect(monInfo.rcWork, m_rectClient);
-        m_devName = monInfo.szDevice;
-        m_flags = monInfo.dwFlags;
+        wxLogLastError(wxT(__FUNCTION__));
+        return wxRect();
     }
+
+    wxRect rect;
+    wxCopyRECTToRect(monInfo.rcMonitor, rect);
+
+    return rect;
 }
 
-// ----------------------------------------------------------------------------
-// wxDisplayImplWin32Base
-// ----------------------------------------------------------------------------
-
-wxRect wxDisplayImplWin32Base::GetGeometry() const
+wxRect wxDisplayMSW::GetClientArea() const
 {
-    if ( m_info.m_rect.IsEmpty() )
-        m_info.Initialize();
+    WinStruct<MONITORINFOEX> monInfo;
 
-    return m_info.m_rect;
+    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
+    {
+        wxLogLastError(wxT(__FUNCTION__));
+        return wxRect();
+    }
+
+    wxRect rectClient;
+    wxCopyRECTToRect(monInfo.rcWork, rectClient);
+
+    return rectClient;
 }
 
-wxRect wxDisplayImplWin32Base::GetClientArea() const
+wxString wxDisplayMSW::GetName() const
 {
-    if ( m_info.m_rectClient.IsEmpty() )
-        m_info.Initialize();
+    WinStruct<MONITORINFOEX> monInfo;
 
-    return m_info.m_rectClient;
+    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
+    {
+        wxLogLastError(wxT(__FUNCTION__));
+        return "";
+    }
+
+    return monInfo.szDevice;
 }
 
-wxString wxDisplayImplWin32Base::GetName() const
+bool wxDisplayMSW::IsPrimary() const
 {
-    if ( m_info.m_devName.empty() )
-        m_info.Initialize();
+    WinStruct<MONITORINFOEX> monInfo;
 
-    return m_info.m_devName;
+    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
+    {
+        wxLogLastError(wxT(__FUNCTION__));
+        return false;
+    }
+
+    return (monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
 }
 
-bool wxDisplayImplWin32Base::IsPrimary() const
-{
-    if ( m_info.m_flags == (DWORD)-1 )
-        m_info.Initialize();
-
-    return (m_info.m_flags & MONITORINFOF_PRIMARY) != 0;
-}
-
-wxVideoMode wxDisplayImplWin32Base::GetCurrentMode() const
+wxVideoMode wxDisplayMSW::GetCurrentMode() const
 {
     wxVideoMode mode;
 
@@ -361,6 +288,7 @@ wxVideoMode wxDisplayImplWin32Base::GetCurrentMode() const
     DEVMODE dm;
     dm.dmSize = sizeof(dm);
     dm.dmDriverExtra = 0;
+
     if ( !::EnumDisplaySettings(deviceName, ENUM_CURRENT_SETTINGS, &dm) )
     {
         wxLogLastError(wxT("EnumDisplaySettings(ENUM_CURRENT_SETTINGS)"));
@@ -373,152 +301,7 @@ wxVideoMode wxDisplayImplWin32Base::GetCurrentMode() const
     return mode;
 }
 
-// ----------------------------------------------------------------------------
-// wxDisplayFactoryWin32Base
-// ----------------------------------------------------------------------------
-
-int wxDisplayFactoryWin32Base::ms_supportsMultimon = -1;
-
-wxDisplayFactoryWin32Base::wxDisplayFactoryWin32Base()
-{
-    if ( ms_supportsMultimon == -1 )
-    {
-        ms_supportsMultimon = 0;
-
-        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
-
-        if ( (wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllDisplay)) == NULL ||
-             (wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllDisplay)) == NULL ||
-             (wxDL_INIT_FUNC_AW(gs_, GetMonitorInfo, dllDisplay)) == NULL )
-            return;
-
-        ms_supportsMultimon = 1;
-
-        // we can safely let dllDisplay go out of scope, the DLL itself will
-        // still remain loaded as all programs link to it statically anyhow
-    }
-}
-
-void wxDisplayFactoryWin32Base::Clear()
-{
-    WX_CLEAR_ARRAY(m_displays);
-}
-
-wxDisplayFactoryWin32Base::~wxDisplayFactoryWin32Base()
-{
-    Clear();
-}
-
-// helper for GetFromPoint() and GetFromWindow()
-int wxDisplayFactoryWin32Base::FindDisplayFromHMONITOR(HMONITOR hmon) const
-{
-    if ( hmon )
-    {
-        const size_t count = m_displays.size();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            if ( hmon == m_displays[n]->m_hmon )
-                return n;
-        }
-    }
-
-    return wxNOT_FOUND;
-}
-
-int wxDisplayFactoryWin32Base::GetFromPoint(const wxPoint& pt)
-{
-    POINT pt2;
-    pt2.x = pt.x;
-    pt2.y = pt.y;
-
-    return FindDisplayFromHMONITOR(gs_MonitorFromPoint(pt2,
-                                                       MONITOR_DEFAULTTONULL));
-}
-
-int wxDisplayFactoryWin32Base::GetFromWindow(const wxWindow *window)
-{
-    return FindDisplayFromHMONITOR(gs_MonitorFromWindow(GetHwndOf(window),
-                                                        MONITOR_DEFAULTTONULL));
-}
-
-// ============================================================================
-// wxDisplay implementation using Win32 multimon API
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxDisplayFactoryMultimon initialization
-// ----------------------------------------------------------------------------
-
-wxDisplayFactoryMultimon::wxDisplayFactoryMultimon()
-{
-    if ( !ms_supportsMultimon )
-        return;
-
-    // look up EnumDisplayMonitors()
-    EnumDisplayMonitors_t pfnEnumDisplayMonitors;
-    {
-        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
-        if ( (wxDL_INIT_FUNC(pfn, EnumDisplayMonitors, dllDisplay)) == NULL )
-            return;
-    }
-
-    // enumerate all displays
-    if ( !pfnEnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
-    {
-        wxLogLastError(wxT("EnumDisplayMonitors"));
-    }
-}
-
-/* static */
-BOOL CALLBACK
-wxDisplayFactoryMultimon::MultimonEnumProc(
-  HMONITOR hMonitor,        // handle to display monitor
-  HDC WXUNUSED(hdcMonitor), // handle to monitor-appropriate device context
-  LPRECT lprcMonitor,       // pointer to monitor intersection rectangle
-  LPARAM dwData             // data passed from EnumDisplayMonitors (this)
-)
-{
-    wxDisplayFactoryMultimon *const self = (wxDisplayFactoryMultimon *)dwData;
-    self->AddDisplay(hMonitor, lprcMonitor);
-
-    // continue the enumeration
-    return TRUE;
-}
-
-// ----------------------------------------------------------------------------
-// wxDisplayFactoryMultimon helper functions
-// ----------------------------------------------------------------------------
-
-void wxDisplayFactoryMultimon::AddDisplay(HMONITOR hMonitor, LPRECT lprcMonitor)
-{
-    wxDisplayInfo *info = new wxDisplayInfo(hMonitor);
-
-    // we also store the display geometry
-    info->m_rect = wxRect(lprcMonitor->left, lprcMonitor->top,
-                          lprcMonitor->right - lprcMonitor->left,
-                          lprcMonitor->bottom - lprcMonitor->top);
-
-    // now add this monitor to the array
-    m_displays.Add(info);
-}
-
-// ----------------------------------------------------------------------------
-// wxDisplayFactoryMultimon inherited pure virtuals implementation
-// ----------------------------------------------------------------------------
-
-wxDisplayImpl *wxDisplayFactoryMultimon::CreateDisplay(unsigned n)
-{
-    wxCHECK_MSG( n < m_displays.size(), NULL, wxT("invalid display index") );
-
-    return new wxDisplayImplMultimon(n, *(m_displays[n]));
-}
-
-// ----------------------------------------------------------------------------
-// wxDisplayImplMultimon implementation
-// ----------------------------------------------------------------------------
-
-wxArrayVideoModes
-wxDisplayImplMultimon::GetModes(const wxVideoMode& modeMatch) const
+wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
 {
     wxArrayVideoModes modes;
 
@@ -533,6 +316,7 @@ wxDisplayImplMultimon::GetModes(const wxVideoMode& modeMatch) const
     DEVMODE dm;
     dm.dmSize = sizeof(dm);
     dm.dmDriverExtra = 0;
+
     for ( int iModeNum = 0;
           ::EnumDisplaySettings(deviceName, iModeNum, &dm);
           iModeNum++ )
@@ -547,7 +331,7 @@ wxDisplayImplMultimon::GetModes(const wxVideoMode& modeMatch) const
     return modes;
 }
 
-bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 {
     // prepare ChangeDisplaySettingsEx() parameters
     DEVMODE dm;
@@ -654,6 +438,94 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     }
 
     return false;
+}
+
+
+// ----------------------------------------------------------------------------
+// wxDisplayFactoryMSW implementation
+// ----------------------------------------------------------------------------
+
+wxDisplayFactoryMSW::wxDisplayFactoryMSW()
+{
+    if ( gs_MonitorFromPoint==NULL || gs_MonitorFromWindow==NULL
+         || gs_GetMonitorInfo==NULL || gs_EnumDisplayMonitors==NULL )
+    {
+        // First initialization, or last initialization failed.
+        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
+
+        wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllDisplay);
+        wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllDisplay);
+        wxDL_INIT_FUNC_AW(gs_, GetMonitorInfo, dllDisplay);
+        wxDL_INIT_FUNC(gs_, EnumDisplayMonitors, dllDisplay);
+
+        // we can safely let dllDisplay go out of scope, the DLL itself will
+        // still remain loaded as all programs link to it statically anyhow
+    }
+
+    if ( gs_MonitorFromPoint==NULL || gs_MonitorFromWindow==NULL
+         || gs_GetMonitorInfo==NULL || gs_EnumDisplayMonitors==NULL )
+        return;
+
+    // enumerate all displays
+    if ( !gs_EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
+    {
+        wxLogLastError(wxT("EnumDisplayMonitors"));
+    }
+}
+
+/* static */
+BOOL CALLBACK
+wxDisplayFactoryMSW::MultimonEnumProc(
+    HMONITOR hMonitor,              // handle to display monitor
+    HDC WXUNUSED(hdcMonitor),       // handle to monitor-appropriate device context
+    LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
+    LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
+{
+    wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
+
+    self->m_displays.Add(hMonitor);
+
+    // continue the enumeration
+    return TRUE;
+}
+
+wxDisplayImpl *wxDisplayFactoryMSW::CreateDisplay(unsigned n)
+{
+    wxCHECK_MSG( n < m_displays.size(), NULL, wxT("An invalid index was passed to wxDisplay") );
+
+    return new wxDisplayMSW(n, m_displays[n]);
+}
+
+// helper for GetFromPoint() and GetFromWindow()
+int wxDisplayFactoryMSW::FindDisplayFromHMONITOR(HMONITOR hmon) const
+{
+    if ( hmon )
+    {
+        const size_t count = m_displays.size();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( hmon == m_displays[n] )
+                return n;
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
+int wxDisplayFactoryMSW::GetFromPoint(const wxPoint& pt)
+{
+    POINT pt2;
+    pt2.x = pt.x;
+    pt2.y = pt.y;
+
+    return FindDisplayFromHMONITOR(gs_MonitorFromPoint(pt2,
+                                                       MONITOR_DEFAULTTONULL));
+}
+
+int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
+{
+    return FindDisplayFromHMONITOR(gs_MonitorFromWindow(GetHwndOf(window),
+                                                        MONITOR_DEFAULTTONULL));
 }
 
 #endif // wxUSE_DISPLAY
