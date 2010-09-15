@@ -42,48 +42,76 @@ class WXDLLIMPEXP_CORE wxTextEntryHintData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLAS
 public:
     wxTextEntryHintData(wxTextEntryBase *entry, wxWindow *win)
         : m_entry(entry),
-          m_win(win)
+          m_win(win),
+          m_text(m_entry->GetValue())
     {
         wxBIND_OR_CONNECT_HACK(win, wxEVT_SET_FOCUS, wxFocusEventHandler,
                                 wxTextEntryHintData::OnSetFocus, this);
         wxBIND_OR_CONNECT_HACK(win, wxEVT_KILL_FOCUS, wxFocusEventHandler,
                                 wxTextEntryHintData::OnKillFocus, this);
-
-        // we don't have any hint yet
-        m_showsHint = false;
+        wxBIND_OR_CONNECT_HACK(win, wxEVT_COMMAND_TEXT_UPDATED,
+                                wxCommandEventHandler,
+                                wxTextEntryHintData::OnTextChanged, this);
     }
 
     // default dtor is ok
 
-    // are we showing the hint right now?
-    bool ShowsHint() const { return m_showsHint; }
+    // Get the real text of the control such as it was before we replaced it
+    // with the hint.
+    const wxString& GetText() const { return m_text; }
 
+    // Set the hint to show, shouldn't be empty normally.
+    //
+    // This should be called after creating a new wxTextEntryHintData object
+    // and may be called more times in the future.
     void SetHintString(const wxString& hint)
     {
         m_hint = hint;
 
-        if ( m_showsHint )
-        {
-            // update it immediately
-            m_entry->ChangeValue(hint);
-        }
-        //else: the new hint will be shown later
+        if ( !m_win->HasFocus() )
+            ShowHintIfAppropriate();
+        //else: The new hint will be shown later when we lose focus.
     }
 
     const wxString& GetHintString() const { return m_hint; }
 
 private:
+    // Show the hint in the window if we should do it, i.e. if the window
+    // doesn't have any text of its own.
+    void ShowHintIfAppropriate()
+    {
+        // Never overwrite existing window text.
+        if ( !m_text.empty() )
+            return;
+
+        // Save the old text colour and set a more inconspicuous one for the
+        // hint.
+        m_colFg = m_win->GetForegroundColour();
+        m_win->SetForegroundColour(*wxLIGHT_GREY);
+
+        m_entry->DoSetValue(m_hint, wxTextEntryBase::SetValue_NoEvent);
+    }
+
+    // Restore the original text colour if we had changed it to show the hint
+    // and not restored it yet.
+    void RestoreTextColourIfNecessary()
+    {
+        if ( m_colFg.IsOk() )
+        {
+            m_win->SetForegroundColour(m_colFg);
+            m_colFg = wxColour();
+        }
+    }
+
     void OnSetFocus(wxFocusEvent& event)
     {
-        // hide the hint if we were showing it
-        if ( m_showsHint )
+        // If we had been showing the hint before, remove it now and restore
+        // the normal colour.
+        if ( m_text.empty() )
         {
-            // Clear() would send an event which we don't want, so do it like
-            // this
-            m_entry->ChangeValue(wxString());
-            m_win->SetForegroundColour(m_colFg);
+            RestoreTextColourIfNecessary();
 
-            m_showsHint = false;
+            m_entry->DoSetValue(wxString(), wxTextEntryBase::SetValue_NoEvent);
         }
 
         event.Skip();
@@ -91,19 +119,29 @@ private:
 
     void OnKillFocus(wxFocusEvent& event)
     {
-        // restore the hint if the user didn't do anything in the control
-        if ( m_entry->IsEmpty() )
-        {
-            m_entry->ChangeValue(m_hint);
-
-            m_colFg = m_win->GetForegroundColour();
-            m_win->SetForegroundColour(*wxLIGHT_GREY);
-
-            m_showsHint = true;
-        }
+        // Restore the hint if the user didn't enter anything.
+        ShowHintIfAppropriate();
 
         event.Skip();
     }
+
+    void OnTextChanged(wxCommandEvent& event)
+    {
+        // Update the stored window text.
+        //
+        // Notice that we can't use GetValue() nor wxCommandEvent::GetString()
+        // which uses it internally because this would just forward back to us
+        // so go directly to the private method which returns the real control
+        // contents.
+        m_text = m_entry->DoGetValue();
+
+        // If this event is generated because of calling SetValue(), the
+        // control may still have the hint text colour, reset it in this case.
+        RestoreTextColourIfNecessary();
+
+        event.Skip();
+    }
+
 
     // the text control we're associated with (as its interface and its window)
     wxTextEntryBase * const m_entry;
@@ -112,12 +150,12 @@ private:
     // the original foreground colour of m_win before we changed it
     wxColour m_colFg;
 
-    // the hint passed to wxTextEntry::SetHint()
+    // The hint passed to wxTextEntry::SetHint(), never empty.
     wxString m_hint;
 
-    // true if we're currently showing it, for this we must be empty and not
-    // have focus
-    bool m_showsHint;
+    // The real text of the window.
+    wxString m_text;
+
 
     wxDECLARE_NO_COPY_CLASS(wxTextEntryHintData);
 };
@@ -137,7 +175,7 @@ wxTextEntryBase::~wxTextEntryBase()
 
 wxString wxTextEntryBase::GetValue() const
 {
-    return m_hintData && m_hintData->ShowsHint() ? wxString() : DoGetValue();
+    return m_hintData ? m_hintData->GetText() : DoGetValue();
 }
 
 wxString wxTextEntryBase::GetRange(long from, long to) const
@@ -252,10 +290,20 @@ bool wxTextEntryBase::CanPaste() const
 
 bool wxTextEntryBase::SetHint(const wxString& hint)
 {
-    if ( !m_hintData )
-        m_hintData = new wxTextEntryHintData(this, GetEditableWindow());
+    if ( !hint.empty() )
+    {
+        if ( !m_hintData )
+            m_hintData = new wxTextEntryHintData(this, GetEditableWindow());
 
-    m_hintData->SetHintString(hint);
+        m_hintData->SetHintString(hint);
+    }
+    else if ( m_hintData )
+    {
+        // Setting empty hint removes any currently set one.
+        delete m_hintData;
+        m_hintData = NULL;
+    }
+    //else: Setting empty hint when we don't have any doesn't do anything.
 
     return true;
 }

@@ -279,6 +279,10 @@ private:
 
     // hint-related stuff, only allocated if/when SetHint() is used
     wxTextEntryHintData *m_hintData;
+
+    // It needs to call our Do{Get,Set}Value() to work with the real control
+    // contents.
+    friend class wxTextEntryHintData;
 };
 
 #ifdef __WXUNIVERSAL__
