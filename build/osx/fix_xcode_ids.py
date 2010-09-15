@@ -11,7 +11,6 @@
 
 import sys
 import re
-import uuid
 
 USAGE = """fix_xcode_ids - Modifies an Xcode project in-place to use the same identifiers (based on name) instead of being different on each regeneration"
 Usage: fix_xcode_ids xcode_proj_dir"""
@@ -51,7 +50,8 @@ dict = rc.findall(strIn)
 
 # convert a name to an identifier for Xcode
 def toUuid(name):
-    return uuid.uuid3(uuid.NAMESPACE_DNS, name).hex[:24].upper()
+    from uuid import uuid3, UUID
+    return uuid3(UUID("349f853c-91f8-4eba-b9b9-5e9f882e693c"), name).hex[:24].upper()
 
 for s in dict:
     # s[0] is the original ID, s[1] is the name
