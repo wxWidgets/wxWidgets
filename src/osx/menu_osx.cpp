@@ -515,13 +515,26 @@ void wxMenuBar::Init()
 
     m_appleMenu = new wxMenu();
     m_appleMenu->SetAllowRearrange(false);
-    m_appleMenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
-    m_appleMenu->AppendSeparator();
+
+    // Create standard items unless the application explicitly disabled this by
+    // setting the corresponding ids to wxID_NONE: although this is not
+    // recommended, sometimes these items really don't make sense.
+    if ( wxApp::s_macAboutMenuItemId != wxID_NONE )
+    {
+        m_appleMenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
+        m_appleMenu->AppendSeparator();
+    }
+
 #if !wxOSX_USE_CARBON
-    m_appleMenu->Append( wxApp::s_macPreferencesMenuItemId, "Preferences..." );
-    m_appleMenu->AppendSeparator();
+    if ( wxApp::s_macPreferencesMenuItemId != wxID_NONE )
+    {
+        m_appleMenu->Append( wxApp::s_macPreferencesMenuItemId, "Preferences..." );
+        m_appleMenu->AppendSeparator();
+    }
+
+    // Do always add "Quit" item unconditionally however, it can't be disabled.
     m_appleMenu->Append( wxApp::s_macExitMenuItemId, "Quit\tCtrl+Q" );
-#endif
+#endif // !wxOSX_USE_CARBON
 
     m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
 }
