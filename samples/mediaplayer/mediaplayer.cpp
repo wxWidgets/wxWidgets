@@ -71,12 +71,12 @@
 // they may be discarded by the linker (this definitely happens with MSVC) so
 // force linking them. You don't have to do this in your code if you don't plan
 // to use them, of course.
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(WXUSINGDLL)
     #include "wx/link.h"
     wxFORCE_LINK_MODULE(wxmediabackend_am)
     wxFORCE_LINK_MODULE(wxmediabackend_qt)
     wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
-#endif // __WXMSW__
+#endif // static wxMSW build
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
