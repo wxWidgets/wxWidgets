@@ -140,6 +140,10 @@ protected:
                            dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
     }
 
+    // Call GetMonitorInfo() and fill in the provided struct and return true if
+    // it succeeded, otherwise return false.
+    bool GetMonInfo(MONITORINFOEX& monInfo) const;
+
     HMONITOR m_hmon;
 
 private:
@@ -215,18 +219,24 @@ private:
 // wxDisplayMSW implementation
 // ----------------------------------------------------------------------------
 
+bool wxDisplayMSW::GetMonInfo(MONITORINFOEX& monInfo) const
+{
+    if ( !gs_GetMonitorInfo(m_hmon, &monInfo) )
+    {
+        wxLogLastError(wxT("GetMonitorInfo"));
+        return false;
+    }
+
+    return true;
+}
+
 wxRect wxDisplayMSW::GetGeometry() const
 {
     WinStruct<MONITORINFOEX> monInfo;
 
-    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
-    {
-        wxLogLastError(wxT(__FUNCTION__));
-        return wxRect();
-    }
-
     wxRect rect;
-    wxCopyRECTToRect(monInfo.rcMonitor, rect);
+    if ( GetMonInfo(monInfo) )
+        wxCopyRECTToRect(monInfo.rcMonitor, rect);
 
     return rect;
 }
@@ -235,14 +245,9 @@ wxRect wxDisplayMSW::GetClientArea() const
 {
     WinStruct<MONITORINFOEX> monInfo;
 
-    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
-    {
-        wxLogLastError(wxT(__FUNCTION__));
-        return wxRect();
-    }
-
     wxRect rectClient;
-    wxCopyRECTToRect(monInfo.rcWork, rectClient);
+    if ( GetMonInfo(monInfo) )
+        wxCopyRECTToRect(monInfo.rcWork, rectClient);
 
     return rectClient;
 }
@@ -251,24 +256,19 @@ wxString wxDisplayMSW::GetName() const
 {
     WinStruct<MONITORINFOEX> monInfo;
 
-    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
-    {
-        wxLogLastError(wxT(__FUNCTION__));
-        return "";
-    }
+    wxString name;
+    if ( GetMonInfo(monInfo) )
+        name = monInfo.szDevice;
 
-    return monInfo.szDevice;
+    return name;
 }
 
 bool wxDisplayMSW::IsPrimary() const
 {
     WinStruct<MONITORINFOEX> monInfo;
 
-    if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
-    {
-        wxLogLastError(wxT(__FUNCTION__));
+    if ( !GetMonInfo(monInfo) )
         return false;
-    }
 
     return (monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
 }
