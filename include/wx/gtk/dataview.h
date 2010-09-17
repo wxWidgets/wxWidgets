@@ -200,6 +200,7 @@ private:
     GtkWidget               *m_treeview;
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
+    wxDataViewItem           m_ensureVisibleDefered;
 
     virtual void AddChildGTK(wxWindowGTK* child);
     void GtkEnableSelectionEvents();

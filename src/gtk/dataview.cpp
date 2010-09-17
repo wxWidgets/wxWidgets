@@ -4548,6 +4548,16 @@ void wxDataViewCtrl::OnInternalIdle()
         wxDataViewColumn *col = GetColumn( i );
         col->OnInternalIdle();
     }
+    
+    if (m_ensureVisibleDefered.IsOk())
+    {
+        ExpandAncestors(m_ensureVisibleDefered);
+        GtkTreeIter iter;
+        iter.user_data = (gpointer) m_ensureVisibleDefered.GetID();
+        wxGtkTreePath path(m_internal->get_path( &iter ));
+        gtk_tree_view_scroll_to_cell( GTK_TREE_VIEW(m_treeview), path, NULL, false, 0.0, 0.0 );
+        m_ensureVisibleDefered = wxDataViewItem(0);
+    }
 }
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
@@ -4948,6 +4958,7 @@ void wxDataViewCtrl::UnselectAll()
 void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
                                    const wxDataViewColumn *WXUNUSED(column))
 {
+    m_ensureVisibleDefered = item;
     ExpandAncestors(item);
 
     GtkTreeIter iter;
