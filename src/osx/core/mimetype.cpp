@@ -4,7 +4,7 @@
 // Author:      Neil Perkins
 // Modified by:
 // Created:     2010-05-15
-// RCS-ID:      $Id: mimetype.cpp 54734 2008-07-21 01:33:51Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Neil Perkins
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

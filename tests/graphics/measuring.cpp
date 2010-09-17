@@ -3,7 +3,7 @@
 // Purpose:     Tests for wxGraphicsRenderer::CreateMeasuringContext
 // Author:      Kevin Ollivier
 // Created:     2008-02-12
-// RCS-ID:      $Id: clientsize.cpp 53740 2008-05-25 02:56:22Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Kevin Ollivier <kevino@theolliviers.com>
 ///////////////////////////////////////////////////////////////////////////////
 

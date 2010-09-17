@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxNonOwnedWindow
 // Author:      Stefan Csomor
 // Created:     2008-03-24
-// RCS-ID:      $Id: nonownedwnd.cpp 50329 2007-11-29 17:00:58Z VS $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor 2008
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
