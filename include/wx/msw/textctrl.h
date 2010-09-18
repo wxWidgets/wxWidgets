@@ -236,6 +236,19 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 #if wxUSE_RICHEDIT
+    // Apply the character-related parts of wxTextAttr to the given selection
+    // or the entire control if start == end == -1.
+    //
+    // This function is private and should only be called for rich edit
+    // controls and with (from, to) already in correct order, i.e. from <= to.
+    bool MSWSetCharFormat(const wxTextAttr& attr, long from = -1, long to = -1);
+
+    // Same as above for paragraph-related parts of wxTextAttr. Note that this
+    // can only be applied to the selection as RichEdit doesn't support setting
+    // the paragraph styles globally.
+    bool MSWSetParaFormat(const wxTextAttr& attr, long from, long to);
+
+
     // we're using RICHEDIT (and not simple EDIT) control if this field is not
     // 0, it also gives the version of the RICHEDIT control being used
     // (although not directly: 1 is for 1.0, 2 is for either 2.0 or 3.0 as we
