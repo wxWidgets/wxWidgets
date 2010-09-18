@@ -2365,16 +2365,15 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     if ( !wxTextCtrlBase::SetFont(font) )
         return false;
 
-    if ( IsRich() )
+    if ( GetRichVersion() >= 4 )
     {
-        // Using WM_SETFONT doesn't work reliably with rich edit controls: as
-        // an example, if we set a fixed width font for a richedit 4.1 control,
-        // it's used for the ASCII characters but inserting any non-ASCII ones
-        // switches the font to a proportional one, whether it's done
-        // programmatically or not. So just use EM_SETCHARFORMAT for this too.
+        // Using WM_SETFONT is not enough with RichEdit 4.1: it does work but
+        // for ASCII characters only and inserting a non-ASCII one into it
+        // later reverts to the default font so use EM_SETCHARFORMAT to change
+        // the default font for it.
         wxTextAttr attr;
         attr.SetFont(font);
-        SetDefaultStyle(attr);
+        SetStyle(-1, -1, attr);
     }
 
     return true;
@@ -2467,11 +2466,19 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
     }
 #endif // wxUSE_RICHEDIT2
 
-    // Apply the style to the selection.
-    DoSetSelection(start, end, SetSel_NoScroll);
+    // Apply the style either to the selection or to the entire control.
+    WPARAM selMode;
+    if ( start != -1 || end != -1 )
+    {
+        DoSetSelection(start, end, SetSel_NoScroll);
+        selMode = SCF_SELECTION;
+    }
+    else
+    {
+        selMode = SCF_ALL;
+    }
 
-    if ( !::SendMessage(GetHwnd(), EM_SETCHARFORMAT,
-                        SCF_SELECTION, (LPARAM)&cf) )
+    if ( !::SendMessage(GetHwnd(), EM_SETCHARFORMAT, selMode, (LPARAM)&cf) )
     {
         wxLogLastError(wxT("SendMessage(EM_SETCHARFORMAT)"));
         return false;
