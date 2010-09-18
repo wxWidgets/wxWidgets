@@ -237,8 +237,9 @@ protected:
 
 #if wxUSE_RICHEDIT
     // we're using RICHEDIT (and not simple EDIT) control if this field is not
-    // 0, it also gives the version of the RICHEDIT control being used (1, 2 or
-    // 3 so far)
+    // 0, it also gives the version of the RICHEDIT control being used
+    // (although not directly: 1 is for 1.0, 2 is for either 2.0 or 3.0 as we
+    // can't nor really need to distinguish between them and 4 is for 4.1)
     int m_verRichEdit;
 #endif // wxUSE_RICHEDIT
 

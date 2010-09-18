@@ -434,6 +434,8 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
                 {
                     // yes, class name for version 4.1 really is 5.0
                     windowClass = wxT("RICHEDIT50W");
+
+                    m_verRichEdit = 4;
                 }
                 else if ( wxRichEditModule::Load(wxRichEditModule::Version_2or3) )
                 {
