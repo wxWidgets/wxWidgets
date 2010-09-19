@@ -24,6 +24,7 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -33,7 +34,14 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtTreeWidget = new QTreeWidget( parent->GetHandle() );
+
+    return wxTreeCtrlBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+wxTreeCtrl::~wxTreeCtrl()
+{
+    delete m_qtTreeWidget;
 }
 
 unsigned wxTreeCtrl::GetCount() const
@@ -347,3 +355,7 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
     return wxTreeItemId();
 }
 
+QTreeWidget *wxTreeCtrl::GetHandle() const
+{
+    return m_qtTreeWidget;
+}

@@ -9,6 +9,9 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QTreeWidget>
+
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
@@ -19,6 +22,8 @@ public:
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr);
+
+    virtual ~wxTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
@@ -111,6 +116,8 @@ public:
 
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly = false) const;
 
+    virtual QTreeWidget *GetHandle() const;
+
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const;
     virtual void DoSetItemState(const wxTreeItemId& item, int state);
@@ -130,6 +137,8 @@ protected:
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
 private:
+    QPointer< QTreeWidget > m_qtTreeWidget;
+
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };
 

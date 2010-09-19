@@ -9,12 +9,18 @@
 #ifndef _WX_QT_CLRPICKER_H_
 #define _WX_QT_CLRPICKER_H_
 
-#include "wx/button.h"
+#include "wx/generic/clrpickerg.h"
+
 // TODO: A QtColorPicker is available from
 // http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Widgets/qtcolorpicker/
 // How to integrate into wxWidgets:
+//
+// class WXDLLIMPEXP_CORE wxColourPickerWidget : public wxButton, public wxColourPickerWidgetBase
 
-class WXDLLIMPEXP_CORE wxColourPickerWidget : public wxButton, public wxColourPickerWidgetBase
+// TODO: For now we reuse the existing wxGenericColourButton but this should be
+// changed to use the above mentioned color picker.
+
+class WXDLLIMPEXP_CORE wxColourPickerWidget : public wxGenericColourButton
 {
 public:
     wxColourPickerWidget();

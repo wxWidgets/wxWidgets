@@ -27,7 +27,7 @@ wxButton::wxButton(wxWindow *parent, wxWindowID id,
 
 wxButton::~wxButton()
 {
-    delete m_qtButton;
+    delete m_qtPushButton;
 }
 
 bool wxButton::Create(wxWindow *parent, wxWindowID id,
@@ -37,7 +37,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name )
 {
-    m_qtButton = new wxQtButton( this, wxQtConvertString( label ), parent->GetHandle() );
+    m_qtPushButton = new wxQtButton( this, wxQtConvertString( label ), parent->GetHandle() );
 
     return wxButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
@@ -46,14 +46,14 @@ wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    m_qtButton->setDefault( true );
+    m_qtPushButton->setDefault( true );
 
     return oldDefault;
 
 }
 QPushButton *wxButton::GetHandle() const
 {
-    return m_qtButton;
+    return m_qtPushButton;
 }
 
 //=============================================================================

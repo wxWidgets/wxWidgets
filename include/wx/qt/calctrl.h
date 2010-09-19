@@ -33,7 +33,7 @@ public:
         Create(parent, id, date, pos, size, style, name);
     }
 
-    ~wxCalendarCtrl();
+    virtual ~wxCalendarCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -76,6 +76,8 @@ public:
     void SetPosition(const wxPoint& pt);
 
     using wxCalendarCtrlBase::GenerateAllChangeEvents;
+
+    virtual QCalendarWidget *GetHandle() const;
 
 protected:
     virtual void RefreshHolidays();

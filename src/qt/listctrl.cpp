@@ -27,11 +27,13 @@ wxListCtrl::wxListCtrl(wxWindow *parent,
            const wxValidator& validator,
            const wxString& name)
 {
+    Create( parent, id, pos, size, style, validator, name );
 }
 
 
 wxListCtrl::~wxListCtrl()
 {
+    delete m_qtListWidget;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -42,7 +44,9 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtListWidget = new QListWidget( parent->GetHandle() );
+
+    return wxControl::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
@@ -414,3 +418,8 @@ int wxListCtrl::GetItemSpacing(bool isSmall) const
 
 #endif // WXWIN_COMPATIBILITY_2_6
 
+
+QListWidget *wxListCtrl::GetHandle() const
+{
+    return m_qtListWidget;
+}

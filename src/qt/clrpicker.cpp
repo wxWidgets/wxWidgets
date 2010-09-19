@@ -24,6 +24,7 @@ wxColourPickerWidget::wxColourPickerWidget(wxWindow *parent,
                const wxValidator& validator,
                const wxString& name )
 {
+    Create( parent, id, initial, pos, size, style, validator, name );
 }
 
 
@@ -36,11 +37,12 @@ bool wxColourPickerWidget::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name )
 {
-    return false;
+    return wxGenericColourButton::Create( parent, id, initial, pos, size, style, validator, name );
 }
 
 
 void wxColourPickerWidget::UpdateColour()
 {
+    wxGenericColourButton::UpdateColour();
 }
 

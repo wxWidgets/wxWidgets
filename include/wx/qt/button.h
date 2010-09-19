@@ -39,7 +39,7 @@ public:
     virtual QPushButton *GetHandle() const;
 
 private:
-    QPointer< QPushButton > m_qtButton;
+    QPointer< QPushButton > m_qtPushButton;
 };
 
 

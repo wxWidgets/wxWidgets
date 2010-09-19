@@ -10,6 +10,8 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
+#include <QtCore/QPointer>
+#include <QtGui/QListWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -290,8 +292,10 @@ public:
     wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
 #endif // WXWIN_COMPATIBILITY_2_6
 
-protected:
+    virtual QListWidget *GetHandle() const;
+
 private:
+    QPointer< QListWidget > m_qtListWidget;
 };
 
 #endif

@@ -9,6 +9,10 @@
 #ifndef _WX_QT_RADIOBOX_H_
 #define _WX_QT_RADIOBOX_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QGroupBox>
+
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
 public:
@@ -35,6 +39,8 @@ public:
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr);
+
+    virtual ~wxRadioBox();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -72,9 +78,15 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
-protected:
+    virtual QGroupBox *GetHandle() const;
 
 private:
+    // Shows the group box:
+    QPointer< QGroupBox > m_qtGroupBox;
+
+    // Handles the mutual exclusion of buttons:
+    QPointer< QButtonGroup > m_qtButtonGroup;
+
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
 

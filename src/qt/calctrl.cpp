@@ -314,6 +314,11 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
+QCalendarWidget *wxCalendarCtrl::GetHandle() const
+{
+    return m_qtCalendar;
+}
+
 //=============================================================================
 
 wxQtCalendarCtrl::wxQtCalendarCtrl(wxCalendarCtrl *calendar, QWidget *parent)

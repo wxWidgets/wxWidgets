@@ -10,6 +10,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/tglbtn.h"
+#include "wx/bitmap.h"
+#include "wx/qt/converter.h"
 
 wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
 
@@ -28,6 +30,7 @@ wxBitmapToggleButton::wxBitmapToggleButton(wxWindow *parent,
                const wxValidator& validator,
                const wxString& name)
 {
+    Create( parent, id, label, pos, size, style, validator, name );
 }
 
 bool wxBitmapToggleButton::Create(wxWindow *parent,
@@ -38,7 +41,10 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtPushButton = new QPushButton( parent->GetHandle() );
+    m_qtPushButton->setIcon( QIcon( *label.GetHandle() ));
+
+    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 void wxBitmapToggleButton::SetValue(bool state)
@@ -48,6 +54,11 @@ void wxBitmapToggleButton::SetValue(bool state)
 bool wxBitmapToggleButton::GetValue() const
 {
     return false;
+}
+
+QPushButton *wxBitmapToggleButton::GetHandle() const
+{
+    return m_qtPushButton;
 }
 
 //##############################################################################
@@ -65,6 +76,7 @@ wxToggleButton::wxToggleButton(wxWindow *parent,
                const wxValidator& validator,
                const wxString& name)
 {
+    Create( parent, id, label, pos, size, style, validator, name );
 }
 
 bool wxToggleButton::Create(wxWindow *parent,
@@ -75,7 +87,14 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    return false;
+    m_qtPushButton = new QPushButton( wxQtConvertString( label ), parent->GetHandle() );
+
+    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+wxToggleButton::~wxToggleButton()
+{
+    delete m_qtPushButton;
 }
 
 void wxToggleButton::SetValue(bool state)
@@ -87,3 +106,7 @@ bool wxToggleButton::GetValue() const
     return false;
 }
 
+QPushButton *wxToggleButton::GetHandle() const
+{
+    return m_qtPushButton;
+}

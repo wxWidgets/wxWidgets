@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobox.h"
+#include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
 
@@ -28,6 +29,7 @@ wxRadioBox::wxRadioBox(wxWindow *parent,
            const wxValidator& val,
            const wxString& name)
 {
+    Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
 }
 
 wxRadioBox::wxRadioBox(wxWindow *parent,
@@ -41,6 +43,13 @@ wxRadioBox::wxRadioBox(wxWindow *parent,
            const wxValidator& val,
            const wxString& name)
 {
+    Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
+}
+
+wxRadioBox::~wxRadioBox()
+{
+    delete m_qtGroupBox;
+    delete m_qtButtonGroup;
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -54,7 +63,10 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    return false;
+    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
+    m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
+
+    return wxControl::Create( parent, id, pos, size, style, val, name );
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -68,7 +80,10 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    return false;
+    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
+    m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
+
+    return wxControl::Create( parent, id, pos, size, style, val, name );
 }
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
@@ -112,5 +127,10 @@ void wxRadioBox::SetSelection(int n)
 int wxRadioBox::GetSelection() const
 {
     return 0;
+}
+
+QGroupBox *wxRadioBox::GetHandle() const
+{
+    return m_qtGroupBox;
 }
 

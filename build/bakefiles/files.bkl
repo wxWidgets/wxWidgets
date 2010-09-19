@@ -330,6 +330,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
+    wx/qt/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -414,6 +415,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/choice.cpp
     src/qt/clipbrd.cpp
     src/qt/clrpicker.cpp
+    src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/qt/colordlg.cpp
     src/qt/colour.cpp
