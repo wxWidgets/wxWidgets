@@ -294,6 +294,8 @@ int BenchApp::OnRun()
             wxPrintf("%.2f avg (min=%ld, max=%ld)\n",
                      (float)timeTotal / times, timeMin, timeMax);
         }
+
+        fflush(stdout);
     }
 
     return rc;
