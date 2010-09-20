@@ -293,6 +293,114 @@ BENCHMARK_FUNC(ReplaceShorter)
     return str.Replace("xx", "y") != 0;
 }
 
+// ----------------------------------------------------------------------------
+// string case conversion
+// ----------------------------------------------------------------------------
+
+BENCHMARK_FUNC(Lower)
+{
+    return GetTestAsciiString().Lower().length() > 0;
+}
+
+BENCHMARK_FUNC(Upper)
+{
+    return GetTestAsciiString().Upper().length() > 0;
+}
+
+// ----------------------------------------------------------------------------
+// string comparison
+// ----------------------------------------------------------------------------
+
+BENCHMARK_FUNC(StrcmpA)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return wxCRT_StrcmpA(s, s) == 0;
+}
+
+BENCHMARK_FUNC(StrcmpW)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return wxCRT_StrcmpW(s, s) == 0;
+}
+
+BENCHMARK_FUNC(StricmpA)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return wxCRT_StricmpA(s, s) == 0;
+}
+
+BENCHMARK_FUNC(StricmpW)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return wxCRT_StricmpW(s, s) == 0;
+}
+
+BENCHMARK_FUNC(StringCmp)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return s.Cmp(s) == 0;
+}
+
+BENCHMARK_FUNC(StringCmpNoCase)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return s.CmpNoCase(s) == 0;
+}
+
+// Also benchmark various native functions under MSW. Surprisingly/annoyingly
+// they sometimes have vastly better performance than alternatives, especially
+// for case-sensitive comparison (see #10375).
+#ifdef __WXMSW__
+
+#include "wx/msw/wrapwin.h"
+
+BENCHMARK_FUNC(MSWlstrcmp)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return lstrcmp(s.t_str(), s.t_str()) == 0;
+}
+
+BENCHMARK_FUNC(MSWlstrcmpi)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return lstrcmpi(s.t_str(), s.t_str()) == 0;
+}
+
+BENCHMARK_FUNC(MSWCompareString)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return ::CompareString
+             (
+                LOCALE_USER_DEFAULT,
+                0,
+                s.t_str(), s.length(),
+                s.t_str(), s.length()
+             ) == CSTR_EQUAL;
+}
+
+BENCHMARK_FUNC(MSWCompareStringIgnoreCase)
+{
+    const wxString& s = GetTestAsciiString();
+
+    return ::CompareString
+             (
+                LOCALE_USER_DEFAULT,
+                NORM_IGNORECASE,
+                s.t_str(), s.length(),
+                s.t_str(), s.length()
+             ) == CSTR_EQUAL;
+}
+
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // string buffers: wx[W]CharBuffer
