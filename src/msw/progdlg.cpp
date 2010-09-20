@@ -151,14 +151,6 @@ protected:
 // Helper functions
 // ============================================================================
 
-// This function returns true if the progress dialog with the given style
-// (combination of wxPD_XXX constants) needs the "Close" button and this button
-// only, i.e. not a "Cancel" one.
-bool UsesCloseButtonOnly(long style)
-{
-    return !(style & (wxPD_CAN_ABORT | wxPD_AUTO_HIDE));
-}
-
 BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
 {
     wxProgressDialogSharedData *sharedData =
@@ -307,7 +299,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
       m_title(title)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         SetMaximum(maximum);
 
@@ -347,7 +339,7 @@ wxProgressDialog::~wxProgressDialog()
 bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
@@ -417,7 +409,7 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
@@ -452,7 +444,7 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         if ( m_sharedData->m_skipped  )
         {
@@ -482,7 +474,7 @@ void wxProgressDialog::Resume()
     wxGenericProgressDialog::Resume();
 
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         HWND hwnd;
 
@@ -494,7 +486,8 @@ void wxProgressDialog::Resume()
             // it now.
             m_sharedData->m_notifications |= wxSPDD_ENABLE_SKIP;
 
-            if ( !UsesCloseButtonOnly(GetPDStyle()) )
+            // Also re-enable "Cancel" itself
+            if ( HasPDFlag(wxPD_CAN_ABORT) )
                 m_sharedData->m_notifications |= wxSPDD_ENABLE_ABORT;
 
             hwnd = m_sharedData->m_hwnd;
@@ -518,7 +511,7 @@ void wxProgressDialog::Resume()
 int wxProgressDialog::GetValue() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_value;
@@ -531,7 +524,7 @@ int wxProgressDialog::GetValue() const
 wxString wxProgressDialog::GetMessage() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
         return m_message;
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -541,7 +534,7 @@ wxString wxProgressDialog::GetMessage() const
 void wxProgressDialog::SetRange(int maximum)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         SetMaximum(maximum);
 
@@ -560,7 +553,7 @@ void wxProgressDialog::SetRange(int maximum)
 bool wxProgressDialog::WasSkipped() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         if ( !m_sharedData )
         {
@@ -579,7 +572,7 @@ bool wxProgressDialog::WasSkipped() const
 bool wxProgressDialog::WasCancelled() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_state == Canceled;
@@ -592,7 +585,7 @@ bool wxProgressDialog::WasCancelled() const
 void wxProgressDialog::SetTitle(const wxString& title)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         m_title = title;
 
@@ -611,7 +604,7 @@ void wxProgressDialog::SetTitle(const wxString& title)
 wxString wxProgressDialog::GetTitle() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
         return m_title;
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -621,7 +614,7 @@ wxString wxProgressDialog::GetTitle() const
 bool wxProgressDialog::Show(bool show)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         // The dialog can't be hidden at all and showing it again after it had
         // been shown before doesn't do anything.
@@ -645,8 +638,10 @@ bool wxProgressDialog::Show(bool show)
             m_sharedData->m_state = Continue;
             m_sharedData->m_labelCancel = _("Cancel");
         }
-        else if ( !HasPDFlag(wxPD_AUTO_HIDE) )
+        else // Dialog can't be cancelled.
         {
+            // We still must have at least a single button in the dialog so
+            // just don't call it "Cancel" in this case.
             m_sharedData->m_labelCancel = _("Close");
         }
 
@@ -677,22 +672,6 @@ bool wxProgressDialog::Show(bool show)
 #endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::Show( show );
-}
-
-bool wxProgressDialog::HasNativeProgressDialog() const
-{
-#ifdef wxHAS_MSW_TASKDIALOG
-    // Native task dialog, if available, can't be used without any buttons so
-    // we fall back to the generic one if none of "Skip", "Cancel" and "Close"
-    // buttons is used.
-    return HasNativeTaskDialog()
-            && (HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) ||
-                    !HasPDFlag(wxPD_AUTO_HIDE));
-#else // !wxHAS_MSW_TASKDIALOG
-    // This shouldn't be even called in !wxHAS_MSW_TASKDIALOG case but as we
-    // still must define the function as returning something, return false.
-    return false;
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 void wxProgressDialog::UpdateExpandedInformation(int value)
@@ -786,12 +765,8 @@ void* wxProgressDialogTaskRunner::Entry()
 
         // Use a Cancel button when requested or use a Close button when
         // the dialog does not automatically hide.
-        if ( (m_sharedData.m_style & wxPD_CAN_ABORT)
-             || !(m_sharedData.m_style & wxPD_AUTO_HIDE) )
-        {
-            wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
-                                       m_sharedData.m_labelCancel );
-        }
+        wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
+                                   m_sharedData.m_labelCancel );
 
         tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
@@ -846,7 +821,9 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                            0,
                            MAKELPARAM(0, sharedData->m_range) );
 
-            if ( UsesCloseButtonOnly(sharedData->m_style) )
+            // If we can't be aborted, the "Close" button will only be enabled
+            // when the progress ends (and not even then with wxPD_AUTO_HIDE).
+            if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
                 ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE );
             break;
 
@@ -872,7 +849,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     // Close button on the window triggers an IDCANCEL press,
                     // don't allow it when it should only be possible to close
                     // a finished dialog.
-                    if ( !UsesCloseButtonOnly(sharedData->m_style) )
+                    if ( sharedData->m_style & wxPD_CAN_ABORT )
                     {
                         wxCHECK_MSG
                         (

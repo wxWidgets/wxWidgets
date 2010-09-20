@@ -48,10 +48,6 @@ public:
     virtual void Update() { wxGenericProgressDialog::Update(); }
 
 private:
-    // Returns true if the task dialog is available. If not, all the methods of
-    // this class simply fall back to wxGenericProgressDialog versions.
-    bool HasNativeProgressDialog() const;
-
     // Performs common routines to Update() and Pulse(). Requires the
     // shared object to have been entered.
     bool DoNativeBeforeUpdate(bool *skip);
