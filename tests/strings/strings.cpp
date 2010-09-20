@@ -455,6 +455,10 @@ void StringTestCase::Compare()
     CPPUNIT_ASSERT( s1 != neq2 );
     CPPUNIT_ASSERT( s1 != neq3 );
     CPPUNIT_ASSERT( s1 != neq4 );
+
+    CPPUNIT_ASSERT( wxString("\n").Cmp(" ") < 0 );
+    CPPUNIT_ASSERT( wxString("'").Cmp("!") > 0 );
+    CPPUNIT_ASSERT( wxString("!").Cmp("z") < 0 );
 }
 
 void StringTestCase::CompareNoCase()
@@ -502,6 +506,10 @@ void StringTestCase::CompareNoCase()
     CPPUNIT_CNCNEQ_ASSERT( s1, neq );
     CPPUNIT_CNCNEQ_ASSERT( s1, neq2 );
     CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
+
+    CPPUNIT_ASSERT( wxString("\n").CmpNoCase(" ") < 0 );
+    CPPUNIT_ASSERT( wxString("'").CmpNoCase("!") > 0);
+    CPPUNIT_ASSERT( wxString("!").Cmp("Z") < 0 );
 }
 
 void StringTestCase::Contains()
