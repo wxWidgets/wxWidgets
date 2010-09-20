@@ -210,7 +210,7 @@ wxDateTime wxDatePickerCtrl::GetValue() const
     SYSTEMTIME st;
     if ( DateTime_GetSystemtime(GetHwnd(), &st) == GDT_VALID )
     {
-        dt.SetFromMSWSysTime(st);
+        dt.SetFromMSWSysDate(st);
     }
 
     wxASSERT_MSG( m_date.IsValid() == dt.IsValid() &&
@@ -252,7 +252,7 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt1 )
     {
         if ( flags & GDTR_MIN )
-            dt1->SetFromMSWSysTime(st[0]);
+            dt1->SetFromMSWSysDate(st[0]);
         else
             *dt1 = wxDefaultDateTime;
     }
@@ -260,7 +260,7 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt2 )
     {
         if ( flags & GDTR_MAX )
-            dt2->SetFromMSWSysTime(st[1]);
+            dt2->SetFromMSWSysDate(st[1]);
         else
             *dt2 = wxDefaultDateTime;
     }
@@ -283,7 +283,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             NMDATETIMECHANGE *dtch = (NMDATETIMECHANGE *)hdr;
             wxDateTime dt;
             if ( dtch->dwFlags == GDT_VALID )
-                dt.SetFromMSWSysTime(dtch->st);
+                dt.SetFromMSWSysDate(dtch->st);
 
             // filter out duplicate DTN_DATETIMECHANGE events which the native
             // control sends us when using wxDP_DROPDOWN style
