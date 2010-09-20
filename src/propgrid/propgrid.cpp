@@ -4032,6 +4032,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         wxPrintf( "P = NULL\n" );
 */
 
+    wxWindow* primaryCtrl = NULL;
+
     // If we are frozen, then just set the values.
     if ( m_frozen )
     {
@@ -4157,7 +4159,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
-                wxWindow* primaryCtrl = GetEditorControl();
+                primaryCtrl = GetEditorControl();
 
                 //
                 // Essentially, primaryCtrl == m_wndEditor
@@ -4285,34 +4287,30 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         ClearInternalFlag(wxPG_FL_IN_SELECT_PROPERTY);
     }
 
-#if wxUSE_STATUSBAR
+    const wxString* pHelpString = NULL;
 
-    //
-    // Show help text in status bar.
-    //   (if found and grid not embedded in manager with help box and
-    //    style wxPG_EX_HELP_AS_TOOLTIPS is not used).
-    //
+    if ( p )
+        pHelpString = &p->GetHelpString();
 
     if ( !(GetExtraStyle() & wxPG_EX_HELP_AS_TOOLTIPS) )
     {
+#if wxUSE_STATUSBAR
+
+        //
+        // Show help text in status bar.
+        //   (if found and grid not embedded in manager with help box and
+        //    style wxPG_EX_HELP_AS_TOOLTIPS is not used).
+        //
         wxStatusBar* statusbar = GetStatusBar();
         if ( statusbar )
         {
-            const wxString* pHelpString = (const wxString*) NULL;
-
-            if ( p )
+            if ( pHelpString && pHelpString->length() )
             {
-                pHelpString = &p->GetHelpString();
-                if ( pHelpString->length() )
-                {
-                    // Set help box text.
-                    statusbar->SetStatusText( *pHelpString );
-                    m_iFlags |= wxPG_FL_STRING_IN_STATUSBAR;
-                }
+                // Set help box text.
+                statusbar->SetStatusText( *pHelpString );
+                m_iFlags |= wxPG_FL_STRING_IN_STATUSBAR;
             }
-
-            if ( (!pHelpString || !pHelpString->length()) &&
-                 (m_iFlags & wxPG_FL_STRING_IN_STATUSBAR) )
+            else if ( m_iFlags & wxPG_FL_STRING_IN_STATUSBAR )
             {
                 // Clear help box - but only if it was written
                 // by us at previous time.
@@ -4320,8 +4318,21 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 m_iFlags &= ~(wxPG_FL_STRING_IN_STATUSBAR);
             }
         }
-    }
 #endif
+    }
+    else
+    {
+#if wxPG_SUPPORT_TOOLTIPS
+        //
+        // Show help as a tool tip on the editor control.
+        //
+        if ( pHelpString && pHelpString->length() &&
+             primaryCtrl )
+        {
+            primaryCtrl->SetToolTip(*pHelpString);
+        }
+#endif
+    }
 
     // call wx event handler (here so that it also occurs on deselection)
     if ( !(flags & wxPG_SEL_DONT_SEND_EVENT) )
