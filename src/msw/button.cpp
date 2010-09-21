@@ -45,6 +45,7 @@
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
 #include "wx/private/window.h"
+#include "wx/msw/missing.h"
 
 using namespace wxMSWImpl;
 

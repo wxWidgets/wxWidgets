@@ -28,10 +28,6 @@
     #define BST_INDETERMINATE 0x0002
 #endif
 
-#ifndef DT_HIDEPREFIX
-    #define DT_HIDEPREFIX 0x00100000
-#endif
-
 namespace wxMSWButton
 {
 

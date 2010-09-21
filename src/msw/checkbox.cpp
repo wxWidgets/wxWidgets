@@ -39,6 +39,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // constants
