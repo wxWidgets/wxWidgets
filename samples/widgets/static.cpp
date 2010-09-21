@@ -94,6 +94,18 @@ public:
     virtual ~StaticWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_statText; }
+    virtual Widgets GetWidgets() const
+    {
+        Widgets widgets;
+        widgets.push_back(m_sizerStatBox->GetStaticBox());
+        widgets.push_back(m_statText);
+        widgets.push_back(m_statMarkup);
+#if wxUSE_STATLINE
+        widgets.push_back(m_statLine);
+#endif // wxUSE_STATLINE
+
+        return widgets;
+    }
     virtual void RecreateWidget() { CreateStatic(); }
 
     // lazy creation of the content
