@@ -512,18 +512,32 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
             PaintBackground(dc, dimensions);
         }
 
+        UINT drawTextFlags = DT_SINGLELINE | DT_VCENTER;
+
+        // determine the state of UI queues to draw the text correctly under XP
+        // and later systems
+        static const bool isXPorLater = wxGetWinVersion() >= wxWinVersion_XP;
+        if ( isXPorLater )
+        {
+            if ( ::SendMessage(GetHwnd(), WM_QUERYUISTATE, 0, 0) &
+                    UISF_HIDEACCEL )
+            {
+                drawTextFlags |= DT_HIDEPREFIX;
+            }
+        }
+
         // now draw the text
         if ( !rtl )
         {
             RECT rc2 = { x, 0, x + width, y };
             ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       DT_SINGLELINE | DT_VCENTER);
+                       drawTextFlags);
         }
         else // RTL
         {
             RECT rc2 = { x, 0, x - width, y };
             ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       DT_SINGLELINE | DT_VCENTER | DT_RTLREADING);
+                       drawTextFlags | DT_RTLREADING);
         }
     }
 }

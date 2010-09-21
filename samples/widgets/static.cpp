@@ -308,7 +308,7 @@ void StaticWidgetsPage::CreateContent()
     // NB: must be done _before_ calling CreateStatic()
     Reset();
 
-    m_textBox->SetValue(wxT("This is a box"));
+    m_textBox->SetValue(wxT("This is a &box"));
     m_textLabel->SetValue(wxT("And this is a\n\tlabel inside the box with a &mnemonic.\n")
                           wxT("Only this text is affected by the ellipsize settings."));
     m_textLabelWithMarkup->SetValue(wxT("Another label, this time <b>decorated</b> ")
