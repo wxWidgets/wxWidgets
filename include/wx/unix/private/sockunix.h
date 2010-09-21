@@ -14,6 +14,14 @@
 
 #include <unistd.h>
 #include <sys/ioctl.h>
+
+// Under older (Open)Solaris versions FIONBIO is declared in this header only.
+// In the newer versions it's included by sys/ioctl.h but it's simpler to just
+// include it always instead of testing for whether it is or not.
+#ifdef __SOLARIS__
+    #include <sys/filio.h>
+#endif
+
 #include "wx/private/fdiomanager.h"
 
 class wxSocketImplUnix : public wxSocketImpl,
