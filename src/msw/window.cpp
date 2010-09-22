@@ -3233,7 +3233,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                                             wParam,
                                             lParam | (KF_EXTENDED << 16)
                                           );
-                        processed = HandleWindowEvent(event);
+
+                        // Don't produce events without any valid character
+                        // code (even if this shouldn't normally happen...).
+                        if ( event.m_keyCode != WXK_NONE )
+                            processed = HandleWindowEvent(event);
                 }
             }
             if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
@@ -6244,26 +6248,23 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
                 // good idea.
                 wxk = WXK_NONE;
             }
-            else // Not a dead key.
-            {
-                // In any case return this as a Unicode character value.
-                if ( uc )
-                    *uc = wxk;
 
-                // For compatibility with the old non-Unicode code we continue
-                // returning key codes for Latin-1 characters directly
-                // (normally it would really only make sense to do it for the
-                // ASCII characters, not Latin-1 ones).
-                if ( wxk > 255 )
-                {
-                    // But for anything beyond this we can only return the key
-                    // value as a real Unicode character, not a wxKeyCode
-                    // because this enum values clash with Unicode characters
-                    // (e.g. WXK_LBUTTON also happens to be U+012C a.k.a.
-                    // "LATIN CAPITAL LETTER I WITH BREVE").
-                    wxk = WXK_NONE;
-                }
-                //
+            // In any case return this as a Unicode character value.
+            if ( uc )
+                *uc = wxk;
+
+            // For compatibility with the old non-Unicode code we continue
+            // returning key codes for Latin-1 characters directly
+            // (normally it would really only make sense to do it for the
+            // ASCII characters, not Latin-1 ones).
+            if ( wxk > 255 )
+            {
+                // But for anything beyond this we can only return the key
+                // value as a real Unicode character, not a wxKeyCode
+                // because this enum values clash with Unicode characters
+                // (e.g. WXK_LBUTTON also happens to be U+012C a.k.a.
+                // "LATIN CAPITAL LETTER I WITH BREVE").
+                wxk = WXK_NONE;
             }
             break;
 
@@ -6320,14 +6321,14 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
                 // A simple alphanumeric key and the values of them coincide in
                 // Windows and wx for both ASCII and Unicode codes.
                 wxk = vk;
-
-                if ( uc )
-                    *uc = vk;
             }
             else // Something we simply don't know about at all.
             {
                 wxk = WXK_NONE;
             }
+
+            if ( uc )
+                *uc = vk;
     }
 
     return wxk;
@@ -6599,7 +6600,11 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     {
         wchar_t uc;
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
-        if ( id != WXK_NONE )
+        if ( id != WXK_NONE
+#if wxUSE_UNICODE
+                || uc != WXK_NONE
+#endif // wxUSE_UNICODE
+                )
         {
             const wxWindow * const win = wxGetActiveWindow();
 

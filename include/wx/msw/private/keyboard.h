@@ -27,8 +27,9 @@ namespace wxMSWKeyboard
 // default if lParam == 0.
 //
 // Returns WXK_NONE if translation couldn't be done at all (this happens e.g.
-// for dead keys) or if the key corresponds to a non-ASCII character in which
-// case uc is filled with its Unicode value.
+// for dead keys and in this case uc will be WXK_NONE too) or if the key
+// corresponds to a non-Latin-1 character in which case uc is filled with its
+// Unicode value.
 WXDLLIMPEXP_CORE int VKToWX(WXWORD vk, WXLPARAM lParam = 0, wchar_t *uc = NULL);
 
 // Translate wxKeyCode enum element (passed as int for compatibility reasons)
