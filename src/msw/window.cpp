@@ -5632,17 +5632,34 @@ void wxWindowMSW::GenerateMouseLeave()
 // keyboard handling
 // ---------------------------------------------------------------------------
 
-void
-wxWindowMSW::InitAnyKeyEvent(wxKeyEvent& event,
-                             WXWPARAM wParam,
-                             WXLPARAM lParam) const
+namespace
 {
-    event.SetId(GetId());
+
+// Implementation of InitAnyKeyEvent() which can also be used when there is no
+// associated window: this can happen for the wxEVT_CHAR_HOOK events created by
+// the global keyboard hook (e.g. the event might have happened in a non-wx
+// window).
+void
+MSWInitAnyKeyEvent(wxKeyEvent& event,
+                   WXWPARAM wParam,
+                   WXLPARAM lParam,
+                   const wxWindow *win /* may be NULL */)
+{
+    if ( win )
+    {
+        event.SetId(win->GetId());
+        event.SetEventObject(const_cast<wxWindow *>(win));
+    }
+    else // No associated window.
+    {
+        // Use wxID_ANY for compatibility with the old code even if wxID_NONE
+        // would arguably make more sense.
+        event.SetId(wxID_ANY);
+    }
+
     event.m_shiftDown = wxIsShiftDown();
     event.m_controlDown = wxIsCtrlDown();
     event.m_altDown = (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN;
-
-    event.SetEventObject(const_cast<wxWindow *>(this));
 
     event.m_rawCode = (wxUint32) wParam;
     event.m_rawFlags = (wxUint32) lParam;
@@ -5650,10 +5667,30 @@ wxWindowMSW::InitAnyKeyEvent(wxKeyEvent& event,
     event.SetTimestamp(::GetMessageTime());
 #endif
 
-    // translate the position to client coordinates
-    const wxPoint mousePos = ScreenToClient(wxGetMousePosition());
-    event.m_x = mousePos.x;
-    event.m_y = mousePos.y;
+    // Event coordinates must be in window client coordinates system which
+    // doesn't make sense if there is no window.
+    //
+    // We could use screen coordinates for such events but this would make the
+    // logic of the event handlers more complicated: you'd need to test for the
+    // event object and interpret the coordinates differently according to
+    // whether it's NULL or not so unless somebody really asks for this let's
+    // just avoid the issue.
+    if ( win )
+    {
+        const wxPoint mousePos = win->ScreenToClient(wxGetMousePosition());
+        event.m_x = mousePos.x;
+        event.m_y = mousePos.y;
+    }
+}
+
+} // anonymous namespace
+
+void
+wxWindowMSW::InitAnyKeyEvent(wxKeyEvent& event,
+                             WXWPARAM wParam,
+                             WXLPARAM lParam) const
+{
+    MSWInitAnyKeyEvent(event, wParam, lParam, this);
 }
 
 wxKeyEvent
@@ -6560,32 +6597,22 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
     {
-        int id = wxMSWKeyboard::VKToWX(wParam, lParam);
-        if ( id >= WXK_START )
+        wchar_t uc;
+        int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
+        if ( id != WXK_NONE )
         {
-            wxKeyEvent event(wxEVT_CHAR_HOOK);
-            if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
-                event.m_altDown = true;
+            const wxWindow * const win = wxGetActiveWindow();
 
-            event.SetEventObject(NULL);
+            wxKeyEvent event(wxEVT_CHAR_HOOK);
+            MSWInitAnyKeyEvent(event, wParam, lParam, win);
+
             event.m_keyCode = id;
-            event.m_shiftDown = wxIsShiftDown();
-            event.m_controlDown = wxIsCtrlDown();
-#ifndef __WXWINCE__
-            event.SetTimestamp(::GetMessageTime());
-#endif
-            wxWindow *win = wxGetActiveWindow();
-            wxEvtHandler *handler;
-            if ( win )
-            {
-                handler = win->GetEventHandler();
-                event.SetId(win->GetId());
-            }
-            else
-            {
-                handler = wxTheApp;
-                event.SetId(wxID_ANY);
-            }
+#if wxUSE_UNICODE
+            event.m_uniChar = uc;
+#endif // wxUSE_UNICODE
+
+            wxEvtHandler * const handler = win ? win->GetEventHandler()
+                                               : wxTheApp;
 
             if ( handler && handler->ProcessEvent(event) )
             {
