@@ -902,6 +902,7 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_PAINT          (wxGenericTreeCtrl::OnPaint)
     EVT_SIZE           (wxGenericTreeCtrl::OnSize)
     EVT_MOUSE_EVENTS   (wxGenericTreeCtrl::OnMouse)
+    EVT_KEY_DOWN       (wxGenericTreeCtrl::OnKeyDown)
     EVT_CHAR           (wxGenericTreeCtrl::OnChar)
     EVT_SET_FOCUS      (wxGenericTreeCtrl::OnSetFocus)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
@@ -3021,16 +3022,19 @@ void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
-void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
+void wxGenericTreeCtrl::OnKeyDown( wxKeyEvent &event )
 {
+    // send a tree event
     wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, this);
     te.m_evtKey = event;
     if ( GetEventHandler()->ProcessEvent( te ) )
-    {
-        // intercepted by the user code
         return;
-    }
 
+    event.Skip();
+}
+
+void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
+{
     if ( (m_current == 0) || (m_key_current == 0) )
     {
         event.Skip();
