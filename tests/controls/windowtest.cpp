@@ -185,11 +185,9 @@ void WindowTestCase::Mouse()
 
 void WindowTestCase::Properties()
 {
-#ifndef __WXGTK__
     m_window->SetLabel("label");
 
     CPPUNIT_ASSERT_EQUAL("label", m_window->GetLabel());
-#endif
 
     m_window->SetName("name");
 
@@ -370,15 +368,11 @@ void WindowTestCase::FindWindowBy()
 {
     m_window->SetId(wxID_HIGHEST + 1);
     m_window->SetName("name");
-#ifndef __WXGTK__
     m_window->SetLabel("label");
-#endif
 
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowById(wxID_HIGHEST + 1));
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByName("name"));
-#ifndef __WXGTK__
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByLabel("label"));
-#endif
 
     CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL),
                          wxWindow::FindWindowById(wxID_HIGHEST + 3));
