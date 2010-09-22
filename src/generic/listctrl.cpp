@@ -2682,6 +2682,16 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
 
+    // send a list event
+    wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, parent->GetId() );
+    le.m_itemIndex = m_current;
+    if (HasCurrent())
+        GetLine(m_current)->GetItem( 0, le.m_item );
+    le.m_code = event.GetKeyCode();
+    le.SetEventObject( parent );
+    if (parent->GetEventHandler()->ProcessEvent( le ))
+        return;
+
     event.Skip();
 }
 
@@ -2700,17 +2710,6 @@ void wxListMainWindow::OnKeyUp( wxKeyEvent &event )
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
     wxWindow *parent = GetParent();
-
-    // send a list_key event up
-    if ( HasCurrent() )
-    {
-        wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
-        le.m_itemIndex = m_current;
-        GetLine(m_current)->GetItem( 0, le.m_item );
-        le.m_code = event.GetKeyCode();
-        le.SetEventObject( parent );
-        parent->GetEventHandler()->ProcessEvent( le );
-    }
 
     // propagate the char event upwards
     wxKeyEvent ke(event);

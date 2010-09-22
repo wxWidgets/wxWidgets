@@ -1085,7 +1085,7 @@ protected:
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
         The right mouse button has been clicked on an item.
     @event{EVT_LIST_KEY_DOWN(id, func)}
-        A key has been pressed.
+        A key has been pressed. GetIndex() may be -1 if no item is selected. 
     @event{EVT_LIST_INSERT_ITEM(id, func)}
         An item has been inserted.
     @event{EVT_LIST_COL_CLICK(id, func)}

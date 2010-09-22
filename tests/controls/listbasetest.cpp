@@ -228,7 +228,7 @@ void ListBaseTestCase::ItemClick()
 
 void ListBaseTestCase::KeyDown()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -239,8 +239,6 @@ void ListBaseTestCase::KeyDown()
     wxUIActionSimulator sim;
 
     list->SetFocus();
-    wxYield();
-
     sim.Text("aAbB");
     wxYield();
 
