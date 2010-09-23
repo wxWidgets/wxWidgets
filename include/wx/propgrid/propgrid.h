@@ -1751,9 +1751,6 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual bool SetFont( const wxFont& font );
-#if wxPG_SUPPORT_TOOLTIPS
-    void SetToolTip( const wxString& tipString );
-#endif
     virtual void Freeze();
     virtual void SetExtraStyle( long exStyle );
     virtual void Thaw();

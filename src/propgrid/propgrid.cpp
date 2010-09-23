@@ -4922,28 +4922,6 @@ bool wxPropertyGrid::HandleMouseDoubleClick( int WXUNUSED(x),
 
 // -----------------------------------------------------------------------
 
-#if wxPG_SUPPORT_TOOLTIPS
-
-void wxPropertyGrid::SetToolTip( const wxString& tipString )
-{
-    if ( tipString.length() )
-    {
-        wxScrolledWindow::SetToolTip(tipString);
-    }
-    else
-    {
-    #if wxPG_ALLOW_EMPTY_TOOLTIPS
-        wxScrolledWindow::SetToolTip( m_emptyString );
-    #else
-        wxScrolledWindow::SetToolTip( NULL );
-    #endif
-    }
-}
-
-#endif // #if wxPG_SUPPORT_TOOLTIPS
-
-// -----------------------------------------------------------------------
-
 // Return false if should be skipped
 bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                                       wxMouseEvent &event )
@@ -5033,8 +5011,6 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         //
         if ( m_windowStyle & wxPG_TOOLTIPS )
         {
-            wxToolTip* tooltip = GetToolTip();
-
             if ( m_propHover != prevHover || prevSide != m_mouseSide )
             {
                 if ( m_propHover && !m_propHover->IsCategory() )
@@ -5074,34 +5050,18 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             int tw, th;
                             GetTextExtent( tipString, &tw, &th, 0, 0 );
                             if ( tw > space )
-                            {
                                 SetToolTip( tipString );
-                            }
                         }
                         else
                         {
-                            if ( tooltip )
-                            {
-                            #if wxPG_ALLOW_EMPTY_TOOLTIPS
-                                SetToolTip( m_emptyString );
-                            #else
-                                wxScrolledWindow::SetToolTip( NULL );
-                            #endif
-                            }
+                            SetToolTip( m_emptyString );
                         }
 
                     }
                 }
                 else
                 {
-                    if ( tooltip )
-                    {
-                    #if wxPG_ALLOW_EMPTY_TOOLTIPS
-                        SetToolTip( m_emptyString );
-                    #else
-                        wxScrolledWindow::SetToolTip( NULL );
-                    #endif
-                    }
+                    SetToolTip( m_emptyString );
                 }
             }
         }
