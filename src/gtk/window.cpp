@@ -3794,7 +3794,18 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
 
 void wxWindowGTK::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
-    gtk_tooltips_set_tip(tips, GetConnectWidget(), tip, NULL);
+    GtkWidget *w = GetConnectWidget();
+    gtk_tooltips_set_tip(tips, w, tip, NULL);
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if ( !tip || tip[0] == '\0' )
+    {
+        // Just applying empty tool tip doesn't work on 2.12.0, so also use
+        // gtk_widget_set_has_tooltip.
+        if (gtk_check_version(2, 12, 0) == NULL)
+            gtk_widget_set_has_tooltip(w, FALSE);
+    }
+#endif
 }
 #endif // wxUSE_TOOLTIPS
 
