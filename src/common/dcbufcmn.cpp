@@ -130,6 +130,9 @@ void wxBufferedDC::UnMask()
     wxCoord x = 0,
             y = 0;
 
+    // Ensure the scale matches the device
+    SetUserScale(1.0, 1.0);
+    
     if ( m_style & wxBUFFER_CLIENT_AREA )
         GetDeviceOrigin(&x, &y);
 
