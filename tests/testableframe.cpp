@@ -2,7 +2,7 @@
 // Name:        testableframe.cpp
 // Purpose:     An improved wxFrame for unit-testing
 // Author:      Steven Lamerton
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,6 +54,11 @@ int wxTestableFrame::GetEventCount(wxEventType type)
     }
 }
 
+void wxTestableFrame::ClearEventCount(wxEventType type)
+{
+    m_count[type] = 0;
+}
+
 EventCounter::EventCounter(wxWindow* win, wxEventType type) : m_type(type),
                                                               m_win(win)
 
@@ -73,6 +78,9 @@ EventCounter::~EventCounter()
                       wxEventHandler(wxTestableFrame::OnEvent),
                       NULL,
                       m_frame);
+
+    //This stops spurious counts from previous tests
+    m_frame->ClearEventCount(m_type);
 
     m_frame = NULL;
     m_win = NULL;
