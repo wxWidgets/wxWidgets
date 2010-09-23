@@ -373,9 +373,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ )
     {
         wxNotebookPage *pPage = m_pages[nPage];
-        pPage->SetSize(rect);
-        if ( pPage->GetAutoLayout() )
-            pPage->Layout();
+        pPage->SetSize(rect, wxSIZE_FORCE_EVENT);
     }
 
     // If the selected page is hidden at this point, the notebook
