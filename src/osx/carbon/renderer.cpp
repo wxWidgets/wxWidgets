@@ -24,6 +24,7 @@
     #include "wx/bitmap.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/toplevel.h"
 #endif
 
@@ -37,11 +38,13 @@
     #include "wx/mstream.h"
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+
 // check if we're currently in a paint event
 inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
-    wxUnusedVar(dc);
-    return ( win->MacGetCGContextRef() != NULL );
+    return win->MacGetCGContextRef() != NULL ||
+           // wxMemoryDC's also have a valid CGContext.
+           dc.IsKindOf( CLASSINFO(wxMemoryDC) ); 
 }
 
 
