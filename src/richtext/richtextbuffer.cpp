@@ -1387,7 +1387,7 @@ long wxRichTextParagraphLayoutBox::GetVisibleLineNumber(long pos, bool caretPosi
                 wxRichTextLine* line = node2->GetData();
                 wxRichTextRange lineRange = line->GetAbsoluteRange();
 
-                if (lineRange.Contains(pos))
+                if (lineRange.Contains(pos) || pos == lineRange.GetStart())
                 {
                     // If the caret is displayed at the end of the previous wrapped line,
                     // we want to return the line it's _displayed_ at (not the actual line
