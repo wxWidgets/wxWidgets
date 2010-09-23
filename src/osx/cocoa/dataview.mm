@@ -2976,7 +2976,12 @@ void wxDataViewColumn::SetResizeable(bool resizeable)
 
 void wxDataViewColumn::SetSortable(bool sortable)
 {
-    wxDataViewColumnBase::SetSortable(sortable);
+    // wxDataViewColumnBase::SetSortable(sortable);
+    // Avoid endless recursion and just set the flag here
+    if (sortable)
+        m_flags |= wxDATAVIEW_COL_SORTABLE;
+    else
+        m_flags &= ~wxDATAVIEW_COL_SORTABLE;
 }
 
 void wxDataViewColumn::SetSortOrder(bool ascending)
