@@ -1991,7 +1991,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             // Clear area beyond last painted property
             if ( paintFinishY < drawBottomY )
             {
-                wxLogDebug("%i", paintFinishY);
                 dcPtr->SetPen(m_colEmptySpace);
                 dcPtr->SetBrush(m_colEmptySpace);
                 dcPtr->DrawRectangle(0, paintFinishY,
