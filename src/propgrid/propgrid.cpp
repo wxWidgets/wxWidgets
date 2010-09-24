@@ -1945,6 +1945,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
+    // itemRect is in virtual grid space
     wxRect drawRect(itemsRect->x - vx,
                     itemsRect->y - vy,
                     itemsRect->width,
@@ -1985,8 +1986,9 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
         if ( dcPtr )
         {
+            // paintFinishY and drawBottomY are in buffer/physical space
             paintFinishY = DoDrawItems( *dcPtr, itemsRect, isBuffered );
-            int drawBottomY = itemsRect->y + itemsRect->height;
+            int drawBottomY = itemsRect->y + itemsRect->height - vy;
 
             // Clear area beyond last painted property
             if ( paintFinishY < drawBottomY )
