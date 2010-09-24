@@ -18,6 +18,7 @@
 
 #include "wx/thread.h"
 #include "wx/dcclient.h"
+#include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/tooltip.h"
 #include "wx/datetime.h"
