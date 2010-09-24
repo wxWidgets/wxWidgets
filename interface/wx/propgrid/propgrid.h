@@ -439,7 +439,9 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
     @category{propgrid}
     @appearance{propertygrid.png}
 */
-class wxPropertyGrid : public wxScrolledWindow, public wxPropertyGridInterface
+class wxPropertyGrid : public wxControl,
+                       public wxScrollHelper,
+                       public wxPropertyGridInterface
 {
 public:
     /**
@@ -450,7 +452,7 @@ public:
 
     /**
         Constructor.
-        The styles to be used are styles valid for the wxWindow and wxScrolledWindow.
+        The styles to be used are styles valid for the wxWindow.
 
         @see @ref propgrid_window_styles.
     */
@@ -810,7 +812,7 @@ public:
 
         @param pt
             Coordinates in the virtual grid space. You may need to use
-            wxScrolledWindow::CalcScrolledPosition() for translating
+            wxScrolled<T>::CalcScrolledPosition() for translating
             wxPropertyGrid client coordinates into something this member
             function can use.
     */

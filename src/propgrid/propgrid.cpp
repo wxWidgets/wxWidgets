@@ -246,9 +246,9 @@ void wxPropertyGridInitGlobalsIfNeeded()
 // wxPropertyGrid
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPropertyGrid, wxScrolledWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyGrid, wxControl)
 
-BEGIN_EVENT_TABLE(wxPropertyGrid, wxScrolledWindow)
+BEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
   EVT_IDLE(wxPropertyGrid::OnIdle)
   EVT_PAINT(wxPropertyGrid::OnPaint)
   EVT_SIZE(wxPropertyGrid::OnResize)
@@ -271,7 +271,7 @@ END_EVENT_TABLE()
 // -----------------------------------------------------------------------
 
 wxPropertyGrid::wxPropertyGrid()
-    : wxScrolledWindow()
+    : wxControl(), wxScrollHelper(this)
 {
     Init1();
 }
@@ -284,7 +284,7 @@ wxPropertyGrid::wxPropertyGrid( wxWindow *parent,
                                 const wxSize& size,
                                 long style,
                                 const wxString& name )
-    : wxScrolledWindow()
+    : wxControl(), wxScrollHelper(this)
 {
     Init1();
     Create(parent,id,pos,size,style,name);
@@ -311,7 +311,10 @@ bool wxPropertyGrid::Create( wxWindow *parent,
     style &= ~(wxTAB_TRAVERSAL);
     style |= wxWANTS_CHARS;
 
-    wxScrolledWindow::Create(parent,id,pos,size,style,name);
+    wxControl::Create(parent, id, pos, size,
+                      style | wxScrolledWindowStyle,
+                      wxDefaultValidator,
+                      name);
 
     Init2();
 
@@ -470,10 +473,6 @@ void wxPropertyGrid::Init2()
 
     m_timeCreated = ::wxGetLocalTimeMillis();
 
-    //m_canvas->Create(this, wxID_ANY, wxPoint(0, 0), GetClientSize(),
-    //                 wxWANTS_CHARS | wxCLIP_CHILDREN);
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
     m_iFlags |= wxPG_FL_INITIALIZED;
 
     m_ncWidth = wndsize.GetWidth();
@@ -572,7 +571,7 @@ bool wxPropertyGrid::Destroy()
     if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
         ReleaseMouse();
 
-    return wxScrolledWindow::Destroy();
+    return wxControl::Destroy();
 }
 
 // -----------------------------------------------------------------------
@@ -631,12 +630,12 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             //
             // Tooltips disabled
             //
-            wxScrolledWindow::SetToolTip( NULL );
+            SetToolTip( NULL );
         }
     #endif
     }
 
-    wxScrolledWindow::SetWindowStyleFlag ( style );
+    wxControl::SetWindowStyleFlag ( style );
 
     if ( m_iFlags & wxPG_FL_INITIALIZED )
     {
@@ -654,7 +653,7 @@ void wxPropertyGrid::Freeze()
 {
     if ( !m_frozen )
     {
-        wxScrolledWindow::Freeze();
+        wxControl::Freeze();
     }
     m_frozen++;
 }
@@ -667,7 +666,7 @@ void wxPropertyGrid::Thaw()
 
     if ( !m_frozen )
     {
-        wxScrolledWindow::Thaw();
+        wxControl::Thaw();
         RecalculateVirtualSize();
     #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
         Refresh();
@@ -1130,7 +1129,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         }
     }
 
-    wxScrolledWindow::SetExtraStyle( exStyle );
+    wxControl::SetExtraStyle( exStyle );
 
     if ( exStyle & wxPG_EX_INIT_NOCAT )
         m_pState->InitNonCatMode();
@@ -1236,7 +1235,7 @@ bool wxPropertyGrid::Reparent( wxWindowBase *newParent )
 {
     OnTLPChanging((wxWindow*)newParent);
 
-    bool res = wxScrolledWindow::Reparent(newParent);
+    bool res = wxControl::Reparent(newParent);
 
     return res;
 }
@@ -1249,7 +1248,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 {
     int x = 0, y = 0;
 
-    m_captionFont = wxScrolledWindow::GetFont();
+    m_captionFont = wxControl::GetFont();
 
     GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
     m_subgroup_extramargin = x + (x/2);
@@ -1444,7 +1443,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     // Must disable active editor.
     DoClearSelection();
 
-    bool res = wxScrolledWindow::SetFont( font );
+    bool res = wxControl::SetFont( font );
     if ( res && GetParent()) // may not have been Create()ed yet if SetFont called from SetWindowVariant
     {
         CalculateFontAndBitmapStuff( m_vspacing );
@@ -1830,6 +1829,9 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     r.x = 0;
     r.width = GetClientSize().x;
 
+    r.y = vy;
+    r.height = GetClientSize().y;
+
     // Repaint this rectangle
     DrawItems( dc, r.y, r.y + r.height, &r );
 
@@ -1919,7 +1921,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
 void wxPropertyGrid::DrawItems( wxDC& dc,
                                 unsigned int topItemY,
                                 unsigned int bottomItemY,
-                                const wxRect* drawRect )
+                                const wxRect* itemsRect )
 {
     if ( m_frozen ||
          m_height < 1 ||
@@ -1929,14 +1931,24 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
     m_pState->EnsureVirtualHeight();
 
-    wxRect tempDrawRect;
-    if ( !drawRect )
+    wxRect tempItemsRect;
+    if ( !itemsRect )
     {
-        tempDrawRect = wxRect(0, topItemY,
-                              m_pState->m_width,
-                              bottomItemY);
-        drawRect = &tempDrawRect;
+        tempItemsRect = wxRect(0, topItemY,
+                               m_pState->m_width,
+                               bottomItemY);
+        itemsRect = &tempItemsRect;
     }
+
+    int vx, vy;
+    GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
+    vy *= wxPG_PIXELS_PER_UNIT;
+
+    wxRect drawRect(itemsRect->x - vx,
+                    itemsRect->y - vy,
+                    itemsRect->width,
+                    itemsRect->height);
 
     // items added check
     if ( m_pState->m_itemsAdded ) PrepareAfterItemsAdded();
@@ -1955,7 +1967,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         {
             if ( !m_doubleBuffer )
             {
-                paintFinishY = drawRect->y;
+                paintFinishY = itemsRect->y;
                 dcPtr = NULL;
             }
             else
@@ -1973,28 +1985,26 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
         if ( dcPtr )
         {
-            dc.SetClippingRegion( *drawRect );
-            paintFinishY = DoDrawItems( *dcPtr, drawRect, isBuffered );
-            int drawBottomY = drawRect->y + drawRect->height;
+            paintFinishY = DoDrawItems( *dcPtr, itemsRect, isBuffered );
+            int drawBottomY = itemsRect->y + itemsRect->height;
 
             // Clear area beyond last painted property
             if ( paintFinishY < drawBottomY )
             {
+                wxLogDebug("%i", paintFinishY);
                 dcPtr->SetPen(m_colEmptySpace);
                 dcPtr->SetBrush(m_colEmptySpace);
                 dcPtr->DrawRectangle(0, paintFinishY,
                                      m_width,
                                      drawBottomY );
             }
-
-            dc.DestroyClippingRegion();
         }
 
     #if wxPG_DOUBLE_BUFFER
         if ( bufferDC )
         {
-            dc.Blit( drawRect->x, drawRect->y, drawRect->width,
-                     drawRect->height,
+            dc.Blit( drawRect.x, drawRect.y, drawRect.width,
+                     drawRect.height,
                      bufferDC, 0, 0, wxCOPY );
             delete bufferDC;
         }
@@ -2005,29 +2015,29 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         // Just clear the area
         dc.SetPen(m_colEmptySpace);
         dc.SetBrush(m_colEmptySpace);
-        dc.DrawRectangle(*drawRect);
+        dc.DrawRectangle(drawRect);
     }
 }
 
 // -----------------------------------------------------------------------
 
 int wxPropertyGrid::DoDrawItems( wxDC& dc,
-                                 const wxRect* drawRect,
+                                 const wxRect* itemsRect,
                                  bool isBuffered ) const
 {
     const wxPGProperty* firstItem;
     const wxPGProperty* lastItem;
 
-    firstItem = DoGetItemAtY(drawRect->y);
-    lastItem = DoGetItemAtY(drawRect->y+drawRect->height-1);
+    firstItem = DoGetItemAtY(itemsRect->y);
+    lastItem = DoGetItemAtY(itemsRect->y+itemsRect->height-1);
 
     if ( !lastItem )
         lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     if ( m_frozen || m_height < 1 || firstItem == NULL )
-        return drawRect->y;
+        return itemsRect->y;
 
-    wxCHECK_MSG( !m_pState->m_itemsAdded, drawRect->y,
+    wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->y,
                  "no items added" );
     wxASSERT( m_pState->m_properties->GetChildCount() );
 
@@ -2036,8 +2046,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int firstItemTopY;
     int lastItemBottomY;
 
-    firstItemTopY = drawRect->y;
-    lastItemBottomY = drawRect->y + drawRect->height;
+    firstItemTopY = itemsRect->y;
+    lastItemBottomY = itemsRect->y + itemsRect->height;
 
     // Align y coordinates to item boundaries
     firstItemTopY -= firstItemTopY % lh;
@@ -2047,20 +2057,20 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     // Entire range outside scrolled, visible area?
     if ( firstItemTopY >= (int)m_pState->GetVirtualHeight() ||
          lastItemBottomY <= 0 )
-        return drawRect->y;
+        return itemsRect->y;
 
     wxCHECK_MSG( firstItemTopY < lastItemBottomY,
-                 drawRect->y,
+                 itemsRect->y,
                  "invalid y values" );
 
     /*
     wxLogDebug("  -> DoDrawItems ( \"%s\" -> \"%s\"
-               "height=%i (ch=%i), drawRect = 0x%lX )",
+               "height=%i (ch=%i), itemsRect = 0x%lX )",
         firstItem->GetLabel().c_str(),
         lastItem->GetLabel().c_str(),
         (int)(lastItemBottomY - firstItemTopY),
         (int)m_height,
-        (unsigned long)drawRect );
+        (unsigned long)&itemsRect );
     */
 
     wxRect r;
@@ -2071,7 +2081,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     //
     // With wxPG_DOUBLE_BUFFER, do double buffering
-    // - buffer's y = 0, so align drawRect and coordinates to that
+    // - buffer's y = 0, so align itemsRect and coordinates to that
     //
 #if wxPG_DOUBLE_BUFFER
     int yRelMod = 0;
@@ -2080,15 +2090,15 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     if ( isBuffered )
     {
-        xRelMod = drawRect->x;
-        yRelMod = drawRect->y;
+        xRelMod = itemsRect->x;
+        yRelMod = itemsRect->y;
 
         //
-        // drawRect conversion
-        cr2 = *drawRect;
+        // itemsRect conversion
+        cr2 = *itemsRect;
         cr2.x -= xRelMod;
         cr2.y -= yRelMod;
-        drawRect = &cr2;
+        itemsRect = &cr2;
         firstItemTopY -= yRelMod;
         lastItemBottomY -= yRelMod;
     }
@@ -4651,7 +4661,7 @@ void wxPropertyGrid::SetVirtualWidth( int width )
 
 void wxPropertyGrid::SetFocusOnCanvas()
 {
-    SetFocusIgnoringChildren();
+    SetFocus();
     m_editorFocused = 0;
 }
 
@@ -4783,7 +4793,10 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                         else DoExpand( p, true );
                     }
 
-                res = false;
+                // Do not Skip() the event after selection has been made.
+                // Otherwise default event handling behavior kicks in
+                // and may revert focus back to the main canvas.
+                res = true;
             }
             else
             {
@@ -5264,9 +5277,13 @@ void wxPropertyGrid::OnMouseClick( wxMouseEvent &event )
     int x, y;
     if ( OnMouseCommon( event, &x, &y ) )
     {
-        HandleMouseClick(x,y,event);
+        if ( !HandleMouseClick(x, y, event) )
+            event.Skip();
     }
-    event.Skip();
+    else
+    {
+        event.Skip();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -5289,7 +5306,9 @@ void wxPropertyGrid::OnMouseDoubleClick( wxMouseEvent &event )
     int x, y;
     CalcUnscrolledPosition( event.m_x, event.m_y, &x, &y );
     HandleMouseDoubleClick(x,y,event);
-    event.Skip();
+
+    // Do not Skip() event here - OnMouseClick() call above
+    // should have already taken care of it.
 }
 
 // -----------------------------------------------------------------------
@@ -5311,9 +5330,13 @@ void wxPropertyGrid::OnMouseUp( wxMouseEvent &event )
     int x, y;
     if ( OnMouseCommon( event, &x, &y ) )
     {
-        HandleMouseUp(x,y,event);
+        if ( !HandleMouseUp(x, y, event) )
+            event.Skip();
     }
-    event.Skip();
+    else
+    {
+        event.Skip();
+    }
 }
 
 // -----------------------------------------------------------------------
