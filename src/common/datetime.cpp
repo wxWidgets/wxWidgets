@@ -508,8 +508,12 @@ wxDateTime::Tm::Tm()
 {
     year = (wxDateTime_t)wxDateTime::Inv_Year;
     mon = wxDateTime::Inv_Month;
-    mday = 0;
-    hour = min = sec = msec = 0;
+    mday =
+    yday = 0;
+    hour =
+    min =
+    sec =
+    msec = 0;
     wday = wxDateTime::Inv_WeekDay;
 }
 
