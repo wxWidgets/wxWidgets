@@ -6602,7 +6602,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
         if ( id != WXK_NONE
 #if wxUSE_UNICODE
-                || uc != WXK_NONE
+                || static_cast<int>(uc) != WXK_NONE
 #endif // wxUSE_UNICODE
                 )
         {
