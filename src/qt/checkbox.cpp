@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/checkbox.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 wxCheckBox::wxCheckBox()
@@ -27,19 +28,35 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
             const wxString& name )
 {
+    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
+        return false;
+
     m_qtCheckBox = new QCheckBox( wxQtConvertString( label ), parent->GetHandle() );
 
-    return wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
+    if ( style & wxCHK_2STATE )
+        m_qtCheckBox->setTristate( false );
+    else if ( style & wxCHK_3STATE )
+    {
+        m_qtCheckBox->setTristate( true );
+
+        if ( style & wxCHK_ALLOW_3RD_STATE_FOR_USER )
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxCHK_ALLOW_3RD_STATE_FOR_USER ));
+    }
+    if ( style & wxALIGN_RIGHT )
+        m_qtCheckBox->setLayoutDirection( Qt::RightToLeft );
+
+    return true;
 }
 
 
 void wxCheckBox::SetValue(bool value)
 {
+    m_qtCheckBox->setChecked( value );
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return false;
+    return m_qtCheckBox->isChecked();
 }
 
 QCheckBox *wxCheckBox::GetHandle() const
