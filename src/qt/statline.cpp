@@ -41,3 +41,7 @@ bool wxStaticLine::Create( wxWindow *parent,
     return wxStaticLineBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
+QFrame *wxStaticLine::GetHandle() const
+{
+    return m_qtFrame;
+}
