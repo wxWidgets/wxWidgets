@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobox.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
@@ -46,22 +47,7 @@ wxRadioBox::wxRadioBox(wxWindow *parent,
     Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
 }
 
-bool wxRadioBox::Create(wxWindow *parent,
-            wxWindowID id,
-            const wxString& title,
-            const wxPoint& pos,
-            const wxSize& size,
-            int n, const wxString choices[],
-            int majorDim,
-            long style,
-            const wxValidator& val,
-            const wxString& name)
-{
-    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
-    m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
-    return wxControl::Create( parent, id, pos, size, style, val, name );
-}
 
 bool wxRadioBox::Create(wxWindow *parent,
             wxWindowID id,
@@ -74,11 +60,50 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
+    return Create( parent, id, title, pos, size, choices.size(), &choices[ 0 ],
+        majorDim, style, val, name );
+}
+
+
+template < typename QtButton >
+static void AddChoices( QButtonGroup *qtButtonGroup, int count, const wxString choices[] )
+{
+    while ( count-- > 0 )
+        qtButtonGroup->addButton( new QtButton( wxQtConvertString( *choices++ )));
+}
+
+
+bool wxRadioBox::Create(wxWindow *parent,
+            wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos,
+            const wxSize& size,
+            int n, const wxString choices[],
+            int majorDim,
+            long style,
+            const wxValidator& val,
+            const wxString& name)
+{
+    if ( !CreateControl( parent, id, pos, size, style, val, name ))
+        return false;
+
     m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
-    return wxControl::Create( parent, id, pos, size, style, val, name );
+    if ( style & wxRA_SPECIFY_ROWS )
+        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_ROWS ));
+    else if ( style & wxRA_SPECIFY_COLS )
+        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_COLS ));
+
+    if ( style & wxRA_USE_CHECKBOX )
+        AddChoices< QCheckBox >( m_qtButtonGroup, n, choices );
+    else
+        AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
+
+    return true;
 }
+
+
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {

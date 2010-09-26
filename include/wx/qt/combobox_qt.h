@@ -14,6 +14,8 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxArrayString;
 
+// Shared implementation for wxChoice and wxComboBox:
+
 class WXDLLIMPEXP_CORE wxQtComboBox : public QComboBox
 {
 public:
@@ -21,7 +23,10 @@ public:
     wxQtComboBox( wxWindow *parent, const wxString &value );
 
     void AddChoices( int count, const wxString choices[] );
-    void AddChoices( const wxArrayString &choices );
+
+    // void SetSelection( int n );
+    // int GetSelection() const;
+
 };
 
 #endif /* _WX_QT_COMBOBOX_QT_H_ */

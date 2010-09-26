@@ -45,20 +45,6 @@ wxComboBox::wxComboBox(wxWindow *parent, wxWindowID id,
     Create( parent, id, value, pos, size, choices, style, validator, name );
 }
 
-bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
-            const wxString& value,
-            const wxPoint& pos,
-            const wxSize& size,
-            int n, const wxString choices[],
-            long style,
-            const wxValidator& validator,
-            const wxString& name )
-{
-    m_qtComboBox = new wxQtComboBox( parent, value );
-    m_qtComboBox->AddChoices( n, choices );
-
-    return wxControl::Create( parent, id, pos, size, style, validator, name );
-}
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& value,
@@ -69,10 +55,27 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, value );
-    m_qtComboBox->AddChoices( choices );
+    return Create( parent, id, value, pos, size, choices.size(), &choices[ 0 ],
+        style, validator, name );
+}
 
-    return wxControl::Create( parent, id, pos, size, style, validator, name );
+
+bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
+            const wxString& value,
+            const wxPoint& pos,
+            const wxSize& size,
+            int n, const wxString choices[],
+            long style,
+            const wxValidator& validator,
+            const wxString& name )
+{
+    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
+        return false;
+
+    m_qtComboBox = new wxQtComboBox( parent, value );
+    m_qtComboBox->AddChoices( n, choices );
+
+    return true;
 }
 
 void wxComboBox::SetSelection(int n)

@@ -50,6 +50,7 @@ public:
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,

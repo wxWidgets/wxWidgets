@@ -14,6 +14,7 @@
 #include "wx/qt/converter.h"
 
 // Constructor for wxChoice:
+
 wxQtComboBox::wxQtComboBox( wxWindow *parent )
     : QComboBox( parent->GetHandle() )
 {
@@ -21,6 +22,7 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent )
 }
 
 // Constructor for wxComboBox:
+
 wxQtComboBox::wxQtComboBox( wxWindow *parent, const wxString &value )
     : QComboBox( parent->GetHandle() )
 {
@@ -29,21 +31,8 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, const wxString &value )
 }
 
 
-template < typename StringIterator >
-static void QtAddChoices( wxQtComboBox *qtComboBox,
-        StringIterator begin, StringIterator end )
-{
-    for ( ; begin != end; ++begin )
-        qtComboBox->addItem( wxQtConvertString( *begin ));
-}
-
-
 void wxQtComboBox::AddChoices( int count, const wxString choices[] )
 {
-   QtAddChoices( this, &choices[ 0 ], &choices[ count ] );
-}
-
-void wxQtComboBox::AddChoices( const wxArrayString &choices )
-{
-    QtAddChoices( this, choices.begin(), choices.end() );
+    while ( count-- > 0 )
+        addItem( wxQtConvertString( *choices++ ));
 }
