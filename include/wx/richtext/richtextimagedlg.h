@@ -21,6 +21,7 @@
  */
 #include "wx/richtext/richtextbuffer.h"
 ////@begin includes
+#include "wx/statline.h"
 ////@end includes
 
 /*!
@@ -35,33 +36,33 @@
  */
 
 ////@begin control identifiers
-#define SYMBOL_WXRICHTEXTIMAGEDLG_STYLE wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL
-#define SYMBOL_WXRICHTEXTIMAGEDLG_TITLE _("wxRichTextImagePage")
-#define SYMBOL_WXRICHTEXTIMAGEDLG_IDNAME ID_WXRICHTEXTIMAGEPAGE
-#define SYMBOL_WXRICHTEXTIMAGEDLG_SIZE wxSize(400, 300)
-#define SYMBOL_WXRICHTEXTIMAGEDLG_POSITION wxDefaultPosition
+#define SYMBOL_WXRICHTEXTIMAGEDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL
+#define SYMBOL_WXRICHTEXTIMAGEDIALOG_TITLE _("Image Properties")
+#define SYMBOL_WXRICHTEXTIMAGEDIALOG_IDNAME ID_WXRICHTEXTIMAGEPAGE
+#define SYMBOL_WXRICHTEXTIMAGEDIALOG_SIZE wxSize(400, 300)
+#define SYMBOL_WXRICHTEXTIMAGEDIALOG_POSITION wxDefaultPosition
 ////@end control identifiers
 
 
 /*!
- * wxRichTextImageDlg class declaration
+ * wxRichTextImageDialog class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextImageDlg: public wxDialog
+class WXDLLIMPEXP_RICHTEXT wxRichTextImageDialog: public wxDialog
 {    
-    DECLARE_DYNAMIC_CLASS( wxRichTextImageDlg )
+    DECLARE_DYNAMIC_CLASS( wxRichTextImageDialog )
     DECLARE_EVENT_TABLE()
 
 public:
     /// Constructors
-    wxRichTextImageDlg();
-    wxRichTextImageDlg( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTIMAGEDLG_IDNAME, const wxString& caption = SYMBOL_WXRICHTEXTIMAGEDLG_TITLE, const wxPoint& pos = SYMBOL_WXRICHTEXTIMAGEDLG_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTIMAGEDLG_SIZE, long style = SYMBOL_WXRICHTEXTIMAGEDLG_STYLE );
+    wxRichTextImageDialog();
+    wxRichTextImageDialog( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTIMAGEDIALOG_IDNAME, const wxString& caption = SYMBOL_WXRICHTEXTIMAGEDIALOG_TITLE, const wxPoint& pos = SYMBOL_WXRICHTEXTIMAGEDIALOG_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTIMAGEDIALOG_SIZE, long style = SYMBOL_WXRICHTEXTIMAGEDIALOG_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTIMAGEDLG_IDNAME, const wxString& caption = SYMBOL_WXRICHTEXTIMAGEDLG_TITLE, const wxPoint& pos = SYMBOL_WXRICHTEXTIMAGEDLG_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTIMAGEDLG_SIZE, long style = SYMBOL_WXRICHTEXTIMAGEDLG_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTIMAGEDIALOG_IDNAME, const wxString& caption = SYMBOL_WXRICHTEXTIMAGEDIALOG_TITLE, const wxPoint& pos = SYMBOL_WXRICHTEXTIMAGEDIALOG_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTIMAGEDIALOG_SIZE, long style = SYMBOL_WXRICHTEXTIMAGEDIALOG_STYLE );
 
     /// Destructor
-    ~wxRichTextImageDlg();
+    ~wxRichTextImageDialog();
 
     /// Initialises member variables
     void Init();
@@ -69,7 +70,7 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
-////@begin wxRichTextImageDlg event handler declarations
+////@begin wxRichTextImageDialog event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP
     void OnButtonParaUpClick( wxCommandEvent& event );
@@ -77,26 +78,26 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN
     void OnButtonParaDownClick( wxCommandEvent& event );
 
-////@end wxRichTextImageDlg event handler declarations
+////@end wxRichTextImageDialog event handler declarations
 
-////@begin wxRichTextImageDlg member function declarations
+////@begin wxRichTextImageDialog member function declarations
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-////@end wxRichTextImageDlg member function declarations
+////@end wxRichTextImageDialog member function declarations
 
     /// Should we show tooltips?
     static bool ShowToolTips();
 
     /// Set the image attribute
-    void SetImageAttr(const wxRichTextImageAttr& attr);
+    void SetImageAttr(const wxRichTextAnchoredObjectAttr& attr);
     wxRichTextImage* ApplyImageAttr();
 
     /// Set the anchored object
-    void SetImageObject(wxRichTextImage *image, wxRichTextBuffer* buffer, wxRichTextCtrl* ctrl);
+    void SetImageObject(wxRichTextImage *image, wxRichTextBuffer* buffer);
 
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
@@ -104,16 +105,16 @@ private:
     /// Convert CM to MM
     bool ConvertFromString(const wxString& string, int& ret, int scale);
 private:
-    wxRichTextImageAttr m_attr;
-////@begin wxRichTextImageDlg member variables
+    wxRichTextAnchoredObjectAttr m_attr;
+////@begin wxRichTextImageDialog member variables
     wxComboBox* m_alignment;
     wxComboBox* m_float;
     wxTextCtrl* m_width;
-    wxComboBox* m_scaleW;
+    wxComboBox* m_unitsW;
     wxTextCtrl* m_height;
-    wxComboBox* m_scaleH;
+    wxComboBox* m_unitsH;
     wxTextCtrl* m_offset;
-    wxComboBox* m_scaleOffset;
+    wxComboBox* m_unitsOffset;
     wxButton* m_saveButton;
     wxButton* m_cancelButton;
     /// Control identifiers
@@ -130,12 +131,11 @@ private:
         ID_TEXTCTRL_OFFSET = 10022,
         ID_COMBOBOX_OFFSET = 10001
     };
-////@end wxRichTextImageDlg member variables
+////@end wxRichTextImageDialog member variables
 
     wxRichTextBuffer* m_buffer;
     wxRichTextObject* m_image;
     wxRichTextObject* m_parent;
-    wxRichTextCtrl* m_ctrl;
 };
 
 #endif

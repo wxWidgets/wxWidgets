@@ -20,7 +20,6 @@
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
-#include "wx/richtext/richtextimagedlg.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -303,7 +302,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     long ids = wxNewId();
     m_contextMenu->AppendSeparator();
-    m_contextMenu->Append(ids, _("Image Property"));
+    m_contextMenu->Append(ids, _("&Properties"));
 
     Connect(ids, wxEVT_UPDATE_UI, wxUpdateUIEventHandler(wxRichTextCtrl::OnUpdateImage));
     Connect(ids, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxRichTextCtrl::OnImage));
@@ -336,7 +335,7 @@ void wxRichTextCtrl::Init()
     m_fullLayoutSavedPosition = 0;
     m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
     m_caretPositionForDefaultStyle = -2;
-    m_image = NULL;
+    m_currentObject = NULL;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -2834,20 +2833,14 @@ void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 
 void wxRichTextCtrl::OnImage(wxCommandEvent& WXUNUSED(event))
 {
-    assert(m_image);
-
-    wxRichTextImageDlg imageDlg(this);
-    imageDlg.SetImageObject(m_image, &GetBuffer(), this);
-
-    if (imageDlg.ShowModal() == wxID_OK)
-    {
-        m_image = imageDlg.ApplyImageAttr();
-    }
+    if (GetCurrentObject() && GetCurrentObject()->CanEditProperties())
+        GetCurrentObject()->EditProperties(this, & GetBuffer());        
+    SetCurrentObject(NULL);
 }
 
 void wxRichTextCtrl::OnUpdateImage(wxUpdateUIEvent& event)
 {
-    event.Enable(m_image != NULL);
+    event.Enable(GetCurrentObject() != NULL && GetCurrentObject()->CanEditProperties());
 }
 
 void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
@@ -2868,26 +2861,11 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     int hit = GetBuffer().HitTest(dc, logicalPt, position);
     if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
     {
-        wxRichTextObject *image = GetBuffer().GetLeafObjectAtPosition(position);
-        // Since we use place holding object to support floating feature
-        // we should notice this situation
-        if (image && image->IsPlaceHolding())
-        {
-            wxRichTextPlaceHoldingObject* ph = wxDynamicCast(image, wxRichTextPlaceHoldingObject);
-            image = ph->GetRealObject();
-        }
-        if (image && image->IsKindOf(CLASSINFO(wxRichTextImage)))
-        {
-            m_image = wxDynamicCast(image, wxRichTextImage);
-        }
-        else
-        {
-            m_image = NULL;
-        }
+        m_currentObject = GetBuffer().GetLeafObjectAtPosition(position);
     }
     else
     {
-        m_image = NULL;
+        m_currentObject = NULL;
     }
 
     if (m_contextMenu)
@@ -2905,7 +2883,7 @@ bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxTextAttr& st
     return GetBuffer().SetStyle(range.ToInternal(), style);
 }
 
-void wxRichTextCtrl::SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& attr)
+void wxRichTextCtrl::SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& attr)
 {
     GetBuffer().SetImageStyle(image, attr);
 }

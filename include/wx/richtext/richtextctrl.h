@@ -184,6 +184,10 @@ public:
     long GetSelectionAnchor() const { return m_selectionAnchor; }
     void SetSelectionAnchor(long anchor) { m_selectionAnchor = anchor; }
 
+    /// The wxRichTextObject object under mouse if any
+    wxRichTextObject* GetCurrentObject() const { return m_currentObject; }
+    void SetCurrentObject(wxRichTextObject* obj) { m_currentObject = obj; }
+
 // Operations
 
     // editing
@@ -223,7 +227,7 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     // Set an image style
-    void SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& style);
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& style);
 
     // get the common set of styles for the range
     virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style);
@@ -883,8 +887,8 @@ private:
     wxCursor                m_urlCursor;
 
     static wxArrayString    sm_availableFontNames;
-    /// The wxRichTextImage object under mouse if any
-    wxRichTextImage*        m_image;
+    /// The wxRichTextObject object under mouse if any
+    wxRichTextObject*       m_currentObject;
     long                    m_imagePropertyId;
 };
 

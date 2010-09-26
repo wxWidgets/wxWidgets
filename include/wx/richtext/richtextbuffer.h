@@ -124,9 +124,8 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextPlaceHoldingObject;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAnchoredObject;
-class wxFloatCollector;
+class wxRichTextFloatCollector;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -255,34 +254,47 @@ enum wxRichTextHitTestFlags
 class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObjectAttr
 {
 public:
-    wxRichTextAnchoredObjectAttr();
-    ~wxRichTextAnchoredObjectAttr() {};
+    wxRichTextAnchoredObjectAttr() { Init(); }
+    wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr) { Copy(attr); }
+    
+    void Init();
 
-    wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr);
-    void operator= (const wxRichTextAnchoredObjectAttr& attr);
+    void operator= (const wxRichTextAnchoredObjectAttr& attr) { Copy(attr); }
     void Copy(const wxRichTextAnchoredObjectAttr& attr);
+    
+    /// Is this anchored? TODO: difference between anchored and floating?
+    bool IsAnchored() const { return m_floating != wxRICHTEXT_FLOAT_NONE; }
 
-    bool m_anchored;
+    /// Is this floating?
+    bool IsFloating() const { return m_floating != wxRICHTEXT_FLOAT_NONE; }
+    void SetFloatingMode(int floating) { m_floating = floating; }
+    
+    int GetAlignment() const { return m_align; }
+    void SetAlignment(int align) { m_align = align; }
+
+    int GetOffset() const { return m_offset; }
+    void SetOffset(int offset) { m_offset = offset; }
+
+    int GetUnitsOffset() const { return m_unitsOffset; }
+    void SetUnitsOffset(int offset) { m_unitsOffset = offset; }
+
+    int GetUnitsW() const { return m_unitsW; }
+    void SetUnitsW(int u) { m_unitsW = u; }
+
+    int GetUnitsH() const { return m_unitsH; }
+    void SetUnitsH(int u) { m_unitsH = u; }
+
+    int GetWidth() const { return m_width; }
+    void SetWidth(int w) { m_width = w; }
+
+    int GetHeight() const { return m_height; }
+    void SetHeight(int h) { m_height = h; }
+
     int m_align;
     int m_floating;
     int m_offset;
-    int m_scaleO;
-};
-
-/*!
- * wxRichTextImageAttr class declaration
- */
-class WXDLLIMPEXP_RICHTEXT wxRichTextImageAttr : public wxRichTextAnchoredObjectAttr
-{
-public:
-    wxRichTextImageAttr() : wxRichTextAnchoredObjectAttr() {};
-    ~wxRichTextImageAttr() {};
-
-    wxRichTextImageAttr(const wxRichTextImageAttr& attr);
-    void operator= (const wxRichTextImageAttr& attr);
-    void Copy(const wxRichTextImageAttr& attr);
-
-    int m_scaleW, m_scaleH;
+    int m_unitsOffset;
+    int m_unitsW, m_unitsH;
     int m_width, m_height;
 };
 
@@ -431,11 +443,14 @@ public:
     /// Returns true if the object is empty
     virtual bool IsEmpty() const { return false; }
 
-    /// Whether this object floatalbe
+    /// Whether this object floatable
     virtual bool IsFloatable() const { return false; }
 
+    /// Whether this object is currently floating
+    virtual bool IsFloating() const { return false; }
+
     /// Whether this object is a place holding one
-    virtual bool IsPlaceHolding() const { return false; }
+    // virtual bool IsPlaceHolding() const { return false; }
 
     /// Floating direction
     virtual int GetFloatDirection() const { return wxRICHTEXT_FLOAT_NONE; }
@@ -452,6 +467,12 @@ public:
 
     /// Dump to output stream for debugging
     virtual void Dump(wxTextOutputStream& stream);
+    
+    /// Can we edit properties via a GUI?
+    virtual bool CanEditProperties() const { return false; }
+
+    /// Edit properties via a GUI
+    virtual bool EditProperties(wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) { return false; }
 
 // Accessors
 
@@ -680,6 +701,7 @@ public:
 
     wxRichTextParagraphLayoutBox(wxRichTextObject* parent = NULL);
     wxRichTextParagraphLayoutBox(const wxRichTextParagraphLayoutBox& obj): wxRichTextBox() { Init(); Copy(obj); }
+    ~wxRichTextParagraphLayoutBox();
 
 // Overrideables
 
@@ -799,7 +821,7 @@ public:
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Set image attribute
-    void SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the conbined text attributes for this position.
     virtual bool GetStyle(long position, wxTextAttr& style);
@@ -896,12 +918,17 @@ public:
 
     /// Invalidate the buffer. With no argument, invalidates whole buffer.
     void Invalidate(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
+    
+    /// Gather information about floating objects. If untilObj is non-NULL,
+    /// will stop getting information if the current object is this, since we
+    /// will collect the rest later.
+    virtual bool UpdateFloatingObjects(int width, wxRichTextObject* untilObj = NULL);
 
     /// Get invalid range, rounding to entire paragraphs if argument is true.
     wxRichTextRange GetInvalidRange(bool wholeParagraphs = false) const;
 
-    /// Get the wxFloatCollector of this object
-    wxFloatCollector* GetFloatCollector() { return m_floatCollector; }
+    /// Get the wxRichTextFloatCollector of this object
+    wxRichTextFloatCollector* GetFloatCollector() { return m_floatCollector; }
 
 protected:
     wxRichTextCtrl* m_ctrl;
@@ -914,7 +941,7 @@ protected:
     bool            m_partialParagraph;
 
     // The floating layout state
-    wxFloatCollector* m_floatCollector;
+    wxRichTextFloatCollector* m_floatCollector;
 };
 
 /*!
@@ -1119,11 +1146,8 @@ public:
     /// Get default tabstop array
     static const wxArrayInt& GetDefaultTabs() { return sm_defaultTabs; }
 
-    /// Collect all the floats from the paragraph
-    void CollectFloat();
-
     /// Layout the floats object
-    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, wxFloatCollector* floatCollector);
+    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, wxRichTextFloatCollector* floatCollector);
 
 protected:
     /// The lines that make up the wrapped paragraph
@@ -1132,10 +1156,7 @@ protected:
     /// Default tabstops
     static wxArrayInt  sm_defaultTabs;
 
-    /// The anchored objects
-    wxRichTextObjectList m_anchoredObjects;
-
-friend class wxFloatCollector;
+friend class wxRichTextFloatCollector;
 };
 
 /*!
@@ -1243,6 +1264,12 @@ public:
     // Make an image block from the wxImage in the given
     // format.
     virtual bool MakeImageBlock(wxImage& image, wxBitmapType imageType, int quality = 80);
+    
+    // Uses a const wxImage for efficiency, but can't set quality (only relevant for JPEG)
+    virtual bool MakeImageBlockDefaultQuality(const wxImage& image, wxBitmapType imageType);
+
+    // Makes the image block
+    virtual bool DoMakeImageBlock(const wxImage& image, wxBitmapType imageType);
 
     // Write to a file
     bool Write(const wxString& filename);
@@ -1308,77 +1335,31 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObject: public wxRichTextObject
 public:
 // Constructors
     wxRichTextAnchoredObject(wxRichTextObject* parent = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
-    wxRichTextAnchoredObject(const wxRichTextAnchoredObject& obj) : wxRichTextObject(obj), m_ph(NULL) { Copy(obj); }
+    wxRichTextAnchoredObject(const wxRichTextAnchoredObject& obj) : wxRichTextObject(obj) /* , m_ph(NULL) */ { Copy(obj); }
     ~wxRichTextAnchoredObject();
 
 // Virtuals
     virtual bool IsFloatable() const { return true; }
+
+    /// Whether this object is currently floating
+    virtual bool IsFloating() const { return m_anchoredAttr.m_floating != wxRICHTEXT_FLOAT_NONE; }
+
     virtual void SetParent(wxRichTextObject* parent);
 
 // Accessors
-    wxRichTextAnchoredObjectAttr GetAnchoredAttr();
+    const wxRichTextAnchoredObjectAttr& GetAnchoredAttr() const { return m_anchoredAttr; }
     void SetAnchoredAttr(const wxRichTextAnchoredObjectAttr& attr);
 
     /// The floating direction
     virtual int GetFloatDirection() const { return m_anchoredAttr.m_floating; }
 
-    // Get the place holding object
-    wxRichTextPlaceHoldingObject* GetPlaceHoldingObject();
-    void SetPlaceHoldingObject(wxRichTextPlaceHoldingObject* obj) { m_ph = obj; }
-
     void operator=(const wxRichTextAnchoredObject&) { wxASSERT("Nobody can reset this object using ="); }
 
 // Functions
     void Copy(const wxRichTextAnchoredObject& obj);
-private:
+
+protected:
     wxRichTextAnchoredObjectAttr m_anchoredAttr;
-    wxRichTextPlaceHoldingObject* m_ph;
-};
-
-/*!
- * wxRichTextPlaceHoldingOjbect class declaration
- * This object is a place holding object, it means that
- * this object take no space at all, but its 'real object'
- * such as a 'floating image' takes space.
- */
-class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextObject
-{
-    DECLARE_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject)
-public:
-// Constructors
-    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL, wxRichTextAnchoredObject *real = NULL);
-    wxRichTextPlaceHoldingObject(const wxRichTextPlaceHoldingObject& obj) : wxRichTextObject(obj), m_real(NULL) { Copy(obj); }
-    ~wxRichTextPlaceHoldingObject();
-
-// Overrideables
-    /// Draw the object
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionrange, const wxRect& rect, int descent, int style);
-    /// Layout the real floating objects
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
-    /// Get the object size for the given range. Returns false if the range
-    /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
-
-    // Clone function
-    virtual wxRichTextObject* Clone() const { return new wxRichTextPlaceHoldingObject(*this); }
-
-    virtual void SetParent(wxRichTextObject* parent);
-
-    /// Get the real object of this place holding one
-    wxRichTextAnchoredObject* GetRealObject() { return m_real; }
-
-    /// Set the real object of this place holding one
-    void SetRealObject(wxRichTextAnchoredObject* obj) { m_real = obj; }
-
-    /// Whether this object is a place holding one
-    virtual bool IsPlaceHolding() const { return true; }
-
-    void operator=(const wxRichTextPlaceHoldingObject&) { wxASSERT("Nobody can reset this object using ="); }
-
-    // Copy function
-    void Copy(const wxRichTextPlaceHoldingObject&);
-private:
-    wxRichTextAnchoredObject* m_real;
 };
 
 /*!
@@ -1392,7 +1373,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextAnchoredObject
 public:
 // Constructors
 
-    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextAnchoredObject(parent) { m_attrInit = false; }
+    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextAnchoredObject(parent) { }
     wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextAnchoredObject(obj) { Copy(obj); }
@@ -1410,22 +1391,27 @@ public:
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     /// Returns true if the object is empty
-    virtual bool IsEmpty() const { return !m_image.Ok(); }
+    virtual bool IsEmpty() const { return !m_imageBlock.Ok(); }
+
+    /// Can we edit properties via a GUI?
+    virtual bool CanEditProperties() const { return true; }
+
+    /// Edit properties via a GUI
+    virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
 
 // Accessors
 
-    /// Get the image
-    const wxImage& GetImage() const { return m_image; }
+    /// Get the image cache (scaled bitmap)
+    const wxBitmap& GetImageCache() const { return m_imageCache; }
 
-    /// Set the image
-    void SetImage(const wxImage& image) { m_image = image; }
+    /// Set the image cache
+    void SetImageCache(const wxBitmap& bitmap) { m_imageCache = bitmap; }
+
+    /// Reset the image cache
+    void ResetImageCache() { m_imageCache = wxNullBitmap; }
 
     /// Get the image block containing the raw data
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
-
-    /// Get/Set the image attribute
-    wxRichTextImageAttr GetImageAttr();
-    void SetImageAttr(const wxRichTextImageAttr& attr);
 
 // Operations
 
@@ -1435,22 +1421,12 @@ public:
     /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextImage(*this); }
 
-    /// Load wxImage from the block
-    virtual bool LoadFromBlock();
+    /// Create a cached image at the required size
+    virtual bool LoadImageCache(wxDC& dc, bool resetCache = false);
 
-    /// Make block from the wxImage
-    virtual bool MakeBlock();
-
-private:
-    /// Initialize the attribute struct
-    void InitializeAttribute();
-    void UpdateImageSize(wxDC& dc, int& width, int& height) const;
 protected:
-    // TODO: reduce the multiple representations of data
-    wxImage                 m_image;
     wxRichTextImageBlock    m_imageBlock;
-    wxRichTextImageAttr     m_attr;
-    bool                    m_attrInit;
+    wxBitmap                m_imageCache;
 };
 
 

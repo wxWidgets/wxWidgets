@@ -754,6 +754,8 @@ void MyFrame::WriteInitialText()
 
     r.BeginSuppressUndo();
 
+    r.Freeze();
+
     r.BeginParagraphSpacing(0, 20);
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -782,7 +784,6 @@ void MyFrame::WriteInitialText()
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
     wxRichTextAnchoredObjectAttr anchoredAttr;
-    anchoredAttr.m_anchored = true;
     anchoredAttr.m_floating = wxRICHTEXT_FLOAT_LEFT;
     r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
     r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
@@ -947,6 +948,8 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
+
+    r.Thaw();
 
     r.EndSuppressUndo();
 }
@@ -1182,24 +1185,21 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
 {
     wxRichTextRange range;
-    wxRichTextImage* image;
-    wxRichTextObject *obj;
-    assert(m_richTextCtrl->HasSelection());
+    wxASSERT(m_richTextCtrl->HasSelection());
 
     range = m_richTextCtrl->GetSelectionRange();
-    assert(range.ToInternal().GetLength() == 1);
+    wxASSERT(range.ToInternal().GetLength() == 1);
 
-    obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
-    assert(obj != NULL);
-    assert(obj->IsKindOf(CLASSINFO(wxRichTextImage)));
-    image = wxDynamicCast(obj, wxRichTextImage);
-
-    wxRichTextImageDlg imageDlg(this);
-    imageDlg.SetImageObject(image, &m_richTextCtrl->GetBuffer(), m_richTextCtrl);
-
-    if (imageDlg.ShowModal() == wxID_OK)
+    wxRichTextImage* image = wxDynamicCast(m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart()), wxRichTextImage);
+    if (image)
     {
-        image = imageDlg.ApplyImageAttr();
+        wxRichTextImageDialog imageDlg(this);
+        imageDlg.SetImageObject(image, &m_richTextCtrl->GetBuffer());
+
+        if (imageDlg.ShowModal() == wxID_OK)
+        {
+            image = imageDlg.ApplyImageAttr();
+        }
     }
 }
 
