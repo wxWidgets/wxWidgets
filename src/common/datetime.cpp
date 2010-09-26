@@ -1616,6 +1616,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     // construct Tm from these values
     Tm tm;
     tm.year = (int)year;
+    tm.yday = (wxDateTime_t)(dayOfYear - 1); // use C convention for day number
     tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
     tm.mday = (wxDateTime_t)day;
     tm.msec = (wxDateTime_t)(timeOnly % 1000);

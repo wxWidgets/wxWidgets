@@ -245,6 +245,42 @@ public:
 
 
     /**
+        Contains broken down date-time representation.
+
+        This struct is analogous to standard C <code>struct tm</code> and uses
+        the same, not always immediately obvious, conventions for its members:
+        notably its mon and mday fields count from 0 while yday counts from 1.
+     */
+    struct Tm
+    {
+        wxDateTime_t msec,  ///< Number of milliseconds.
+                     sec,   ///< Seconds in 0..59 (60 with leap seconds) range.
+                     min,   ///< Minutes in 0..59 range.
+                     hour,  ///< Hours since midnight in 0..23 range.
+                     mday,  ///< Day of the month in 1..31 range.
+                     yday;  ///< Day of the year in 0..365 range.
+        Month mon;          ///< Month, as an enumerated constant.
+        int year;           ///< Year.
+
+        /**
+            Check if the given date/time is valid (in Gregorian calendar).
+
+            Return @false if the components don't correspond to a correct date.
+         */
+        bool IsValid() const;
+
+        /**
+            Return the week day corresponding to this date.
+
+            Unlike the other fields, the week day is not always available and
+            so must be accessed using this method as it is computed on demand
+            when it is called.
+         */
+        WeekDay GetWeekDay();
+    };
+
+
+    /**
         @name Constructors, Assignment Operators and Setters
 
         Constructors and various Set() methods are collected here. If you
