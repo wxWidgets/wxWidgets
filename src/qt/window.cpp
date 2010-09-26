@@ -32,25 +32,66 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS( wxWindow, wxWindowBase )
 
+// We use the QObject property capabilities to store the wxWindow pointer, so we
+// don't need to use a separate lookup table. We also want to use it in the proper
+// way and so we don't store void pointers e.g.:
+// qVariantSetValue( variant, static_cast< void * >( window ));
+// static_cast< wxWindow * >( qVariantValue< void * >( variant ));
+// but declare the corresponding Qt meta type:
+
+Q_DECLARE_METATYPE( wxWindow * )
+
+static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
+
+static void SetWindowPointerProperty( QObject *qtObject, wxWindow *window )
+{
+    QVariant variant;
+    qVariantSetValue( variant, window );
+    qtObject->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
+}
+
+static wxWindow *GetWindowPointerProperty( const QObject *qtObject )
+{
+    QVariant variant = qtObject->property( WINDOW_POINTER_PROPERTY_NAME );
+    return qVariantValue< wxWindow * >( variant );
+}
+
+
+
 static wxWindow *s_capturedWindow = NULL;
 
 /* static */ wxWindow *wxWindowBase::DoFindFocus()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxWindow *window = NULL;
+    QWidget *qtWidget = QApplication::focusWidget();
+    if ( qtWidget != NULL )
+        window = GetWindowPointerProperty( qtWidget );
 
-    return NULL;
+    return window;
 }
 
 
 wxWindow::wxWindow()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    m_horzScrollBar = NULL;
+    m_vertScrollBar = NULL;
+
     m_qtPicture = new QPicture();
-    m_horzScrollBar = m_vertScrollBar = NULL;
+    m_qtPaintBuffer = NULL;
+
+    m_mouseInside = false;
+
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
-    m_qtPaintBuffer = NULL;
 }
+
+
+wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+    long style, const wxString& name)
+{
+    Create( parent, id, pos, size, style, name );
+}
+
 
 wxWindow::~wxWindow()
 {
@@ -66,12 +107,6 @@ wxWindow::~wxWindow()
 }
 
 
-wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name)
-{
-    Create( parent, id, pos, size, style, name );
-}
-
 bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         const wxSize & size, long style, const wxString &name )
 {
@@ -82,6 +117,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     
     if ( GetHandle() == NULL )
         m_qtWindow = wxQtCreateWidget< wxQtWidget >( this, parent );
+
+    SetWindowPointerProperty( GetHandle(), this );
 
     // Create layout for built-in scrolling bars
     if ( QtGetScrollBarsContainer() )
@@ -100,11 +137,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     Move(pos);
     SetSize(size);
-    m_qtPicture = new QPicture();
-    m_mouseInside = false;
-    m_qtShortcutHandler = new wxQtShortcutHandler( this );
-    m_processingShortcut = false;
-    m_qtPaintBuffer = NULL;
     
     // Use custom Qt window flags (allow to turn on or off
     // the minimize/maximize/close buttons and title bar)
@@ -319,31 +351,32 @@ int wxWindow::GetScrollRange( int orientation ) const
 // Handle event from scrollbars
 void wxWindow::QtOnScrollBarEvent( wxScrollEvent& event )
 {
-    wxEventType winEventType = 0;
-    wxEventType scrollBarEventType = event.GetEventType();
-    
-    if ( scrollBarEventType == wxEVT_SCROLL_TOP )
-        winEventType = wxEVT_SCROLLWIN_TOP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_BOTTOM )
-        winEventType = wxEVT_SCROLLWIN_BOTTOM;
-    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEUP )
-        winEventType = wxEVT_SCROLLWIN_PAGEUP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEDOWN )
-        winEventType = wxEVT_SCROLLWIN_PAGEDOWN;
-    else if ( scrollBarEventType == wxEVT_SCROLL_LINEUP )
-        winEventType = wxEVT_SCROLLWIN_LINEUP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_LINEDOWN )
-        winEventType = wxEVT_SCROLLWIN_LINEDOWN;
-    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBTRACK )
-        winEventType = wxEVT_SCROLLWIN_THUMBTRACK;
-    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBRELEASE )
-        winEventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+    wxEventType windowEventType = 0;
 
-    if ( winEventType )
+    // Map the scroll bar event to the corresponding scroll window event:
+
+    wxEventType scrollBarEventType = event.GetEventType();
+    if ( scrollBarEventType == wxEVT_SCROLL_TOP )
+        windowEventType = wxEVT_SCROLLWIN_TOP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_BOTTOM )
+        windowEventType = wxEVT_SCROLLWIN_BOTTOM;
+    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEUP )
+        windowEventType = wxEVT_SCROLLWIN_PAGEUP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEDOWN )
+        windowEventType = wxEVT_SCROLLWIN_PAGEDOWN;
+    else if ( scrollBarEventType == wxEVT_SCROLL_LINEUP )
+        windowEventType = wxEVT_SCROLLWIN_LINEUP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_LINEDOWN )
+        windowEventType = wxEVT_SCROLLWIN_LINEDOWN;
+    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBTRACK )
+        windowEventType = wxEVT_SCROLLWIN_THUMBTRACK;
+    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBRELEASE )
+        windowEventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+
+    if ( windowEventType != 0 )
     {
-        wxScrollWinEvent e( winEventType, event.GetPosition(),
-                            event.GetOrientation() );
-        ProcessWindowEvent( e );
+        wxScrollWinEvent event( windowEventType, event.GetPosition(), event.GetOrientation() );
+        ProcessWindowEvent( event );
     }
 }
 
