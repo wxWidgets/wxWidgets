@@ -4925,7 +4925,8 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 bool wxWindowMSW::MSWHasEraseBgHook() const
 {
-    return gs_eraseBgHooks.find(this) != gs_eraseBgHooks.end();
+    return gs_eraseBgHooks.find(const_cast<wxWindowMSW *>(this))
+                != gs_eraseBgHooks.end();
 }
 
 void wxWindowMSW::MSWSetEraseBgHook(wxWindow *child)
