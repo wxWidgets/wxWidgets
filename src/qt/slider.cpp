@@ -28,11 +28,6 @@ wxSlider::wxSlider(wxWindow *parent,
     Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
 }
 
-wxSlider::~wxSlider()
-{
-    delete m_qtSlider;
-}
-
 bool wxSlider::Create(wxWindow *parent,
             wxWindowID id,
             int value, int minValue, int maxValue,

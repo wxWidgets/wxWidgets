@@ -25,8 +25,6 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-    ~wxButton();
-
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,

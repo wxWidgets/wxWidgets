@@ -31,11 +31,6 @@ wxListCtrl::wxListCtrl(wxWindow *parent,
 }
 
 
-wxListCtrl::~wxListCtrl()
-{
-    delete m_qtListWidget;
-}
-
 bool wxListCtrl::Create(wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos,

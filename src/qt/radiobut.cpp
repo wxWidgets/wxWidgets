@@ -28,11 +28,6 @@ wxRadioButton::wxRadioButton( wxWindow *parent,
     Create( parent, id, label, pos, size, style, validator, name );
 }
 
-wxRadioButton::~wxRadioButton()
-{
-    delete m_qtRadioButton;
-}
-
 bool wxRadioButton::Create( wxWindow *parent,
              wxWindowID id,
              const wxString& label,

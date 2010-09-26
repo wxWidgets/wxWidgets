@@ -25,11 +25,6 @@ wxNotebook::wxNotebook(wxWindow *parent,
     Create( parent, id, pos, size, style, name );
 }
 
-wxNotebook::~wxNotebook()
-{
-    delete m_qtTabWidget;
-}
-
 bool wxNotebook::Create(wxWindow *parent,
           wxWindowID id,
           const wxPoint& pos,

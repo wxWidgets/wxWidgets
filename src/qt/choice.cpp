@@ -41,11 +41,6 @@ wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
     Create( parent, id, pos, size, choices, style, validator, name );
 }
 
-wxChoice::~wxChoice()
-{
-    delete m_qtComboBox;
-}
-
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,

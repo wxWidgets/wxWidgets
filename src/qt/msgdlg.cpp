@@ -105,11 +105,6 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         m_qtMessageBox->setWindowModality( Qt::ApplicationModal );
 }
 
-wxMessageDialog::~wxMessageDialog()
-{
-    delete m_qtMessageBox;
-}
-
 int wxMessageDialog::ShowModal()
 {
     wxCHECK_MSG( m_qtMessageBox, -1, "Invalid dialog" );

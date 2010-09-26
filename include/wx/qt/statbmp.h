@@ -24,8 +24,6 @@ public:
                     long style = 0,
                     const wxString& name = wxStaticBitmapNameStr );
 
-    ~wxStaticBitmap();
-
     bool Create( wxWindow *parent,
                  wxWindowID id,
                  const wxBitmap& label,

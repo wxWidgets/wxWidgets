@@ -36,8 +36,6 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
 
-    virtual ~wxComboBox();
-
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,

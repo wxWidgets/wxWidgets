@@ -23,7 +23,6 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
                  const wxString &name = wxStaticTextNameStr );
-    ~wxStaticText();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

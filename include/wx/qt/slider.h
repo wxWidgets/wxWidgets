@@ -25,8 +25,6 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
 
-    virtual ~wxSlider();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 int value, int minValue, int maxValue,

@@ -24,8 +24,6 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxCheckBoxNameStr);
 
-    virtual ~wxBitmapToggleButton();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxBitmap& label,
@@ -61,8 +59,6 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxCheckBoxNameStr);
     
-    virtual ~wxToggleButton();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label,

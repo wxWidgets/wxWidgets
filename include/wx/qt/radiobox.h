@@ -40,8 +40,6 @@ public:
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr);
 
-    virtual ~wxRadioBox();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -81,7 +79,7 @@ public:
     virtual QGroupBox *GetHandle() const;
 
 private:
-    // Shows the group box:
+    // The 'visual' group box:
     wxQtPointer< QGroupBox > m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:

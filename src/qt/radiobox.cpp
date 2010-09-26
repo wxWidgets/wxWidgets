@@ -46,12 +46,6 @@ wxRadioBox::wxRadioBox(wxWindow *parent,
     Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
 }
 
-wxRadioBox::~wxRadioBox()
-{
-    delete m_qtGroupBox;
-    delete m_qtButtonGroup;
-}
-
 bool wxRadioBox::Create(wxWindow *parent,
             wxWindowID id,
             const wxString& title,

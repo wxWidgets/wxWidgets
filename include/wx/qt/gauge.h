@@ -26,8 +26,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxGaugeNameStr);
 
-    virtual ~wxGauge();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 int range,

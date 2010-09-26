@@ -21,7 +21,8 @@ public:
             const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE,
             const wxString &name = wxDialogNameStr );
-    ~wxDialog();
+
+    virtual ~wxDialog();
     
     bool Create( wxWindow *parent, wxWindowID id,
             const wxString &title,

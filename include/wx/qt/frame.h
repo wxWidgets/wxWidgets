@@ -22,7 +22,6 @@ class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     wxFrame();
-    ~wxFrame();
     wxFrame(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -30,6 +29,8 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
                const wxString& name = wxFrameNameStr);
+
+    virtual ~wxFrame();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

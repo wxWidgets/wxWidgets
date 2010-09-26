@@ -28,11 +28,6 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
     Create( parent, id, label, pos, size, style, name );
 }
 
-wxStaticBitmap::~wxStaticBitmap()
-{
-    delete m_qtLabel;
-}
-
 bool wxStaticBitmap::Create( wxWindow *parent,
              wxWindowID id,
              const wxBitmap& label,

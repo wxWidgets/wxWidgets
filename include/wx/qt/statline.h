@@ -9,6 +9,7 @@
 #ifndef _WX_QT_STATLINE_H_
 #define _WX_QT_STATLINE_H_
 
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QFrame>
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
@@ -29,10 +30,11 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxStaticLineNameStr );
-protected:
+
+    virtual QFrame *GetHandle() const;
 
 private:
-    QFrame m_qtFrame;
+    wxQtPointer< QFrame > m_qtFrame;
 };
 
 #endif // _WX_QT_STATLINE_H_

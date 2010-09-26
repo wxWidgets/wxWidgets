@@ -25,11 +25,6 @@ wxButton::wxButton(wxWindow *parent, wxWindowID id,
     Create( parent, id, label, pos, size, style, validator, name );
 }
 
-wxButton::~wxButton()
-{
-    delete m_qtPushButton;
-}
-
 bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxString& label,
        const wxPoint& pos,

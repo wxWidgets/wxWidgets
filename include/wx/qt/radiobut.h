@@ -25,8 +25,6 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxRadioButtonNameStr );
 
-    ~wxRadioButton();
-
     bool Create( wxWindow *parent,
                  wxWindowID id,
                  const wxString& label,

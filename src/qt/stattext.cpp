@@ -27,11 +27,6 @@ wxStaticText::wxStaticText(wxWindow *parent,
     Create( parent, id, label, pos, size, style, name );
 }
 
-wxStaticText::~wxStaticText()
-{
-    delete m_qtLabel;
-}
-
 bool wxStaticText::Create(wxWindow *parent,
             wxWindowID id,
             const wxString &label,

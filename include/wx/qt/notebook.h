@@ -23,8 +23,6 @@ public:
              long style = 0,
              const wxString& name = wxNotebookNameStr);
     
-    virtual ~wxNotebook();
-
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,

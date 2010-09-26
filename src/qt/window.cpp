@@ -61,11 +61,8 @@ wxWindow::~wxWindow()
 
     DestroyChildren(); // This also destroys scrollbars
 
-    delete m_qtWindow; // This also destroys the container
-    if ( m_qtPicture )
-        delete m_qtPicture;
-    if ( m_qtPaintBuffer )
-        delete m_qtPaintBuffer;
+    delete m_qtPicture;
+    delete m_qtPaintBuffer;
 }
 
 

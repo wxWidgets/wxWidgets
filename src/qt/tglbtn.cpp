@@ -92,11 +92,6 @@ bool wxToggleButton::Create(wxWindow *parent,
     return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
-wxToggleButton::~wxToggleButton()
-{
-    delete m_qtPushButton;
-}
-
 void wxToggleButton::SetValue(bool state)
 {
 }

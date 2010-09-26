@@ -22,12 +22,10 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-    ~wxMessageDialog();
 
     // Reimplemented to translate return codes from Qt to wx
     virtual int ShowModal();
     
-protected:
     virtual QMessageBox *GetHandle() const;
 
 private:

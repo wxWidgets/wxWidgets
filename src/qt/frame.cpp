@@ -18,18 +18,15 @@ wxFrame::wxFrame()
 {
 }
 
-wxFrame::~wxFrame()
-{
-    SendDestroyEvent();
-    
-    delete m_qtFrame;
-}
-
-
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
     Create( parent, id, title, pos, size, style, name );
+}
+
+wxFrame::~wxFrame()
+{
+    SendDestroyEvent();
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,

@@ -22,8 +22,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxCheckBoxNameStr);
 
-    ~wxCheckBox();
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label,

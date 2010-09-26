@@ -28,8 +28,6 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxListCtrlNameStr);
 
-    virtual ~wxListCtrl();
-
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,

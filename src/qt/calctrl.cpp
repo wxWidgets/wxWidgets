@@ -124,14 +124,6 @@ void wxCalendarCtrl::SetWindowStyleFlag(long style)
         UpdateStyle();
 }
 
-// Temporary stub
-void wxCalendarCtrl::SetPosition(const wxPoint& pt)
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    m_qtCalendar->move(pt.x, pt.y);
-}
-
 bool wxCalendarCtrl::SetDate(const wxDateTime& date)
 {
     wxCHECK_MSG( date.IsValid(), false, "invalid date" );

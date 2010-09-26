@@ -22,6 +22,7 @@ wxStaticLine::wxStaticLine( wxWindow *parent,
               long style,
               const wxString &name)
 {
+    Create( parent, id, pos, size, style, name );
 }
 
 bool wxStaticLine::Create( wxWindow *parent,
@@ -31,6 +32,12 @@ bool wxStaticLine::Create( wxWindow *parent,
              long style,
              const wxString &name)
 {
-    return false;
+    m_qtFrame = new QFrame( parent->GetHandle() );
+    if ( style & wxLI_HORIZONTAL )
+        m_qtFrame->setFrameStyle( QFrame::HLine );
+    else if ( style & wxLI_VERTICAL )
+        m_qtFrame->setFrameStyle( QFrame::VLine );
+
+    return wxStaticLineBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 

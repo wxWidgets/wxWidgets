@@ -72,9 +72,6 @@ public:
 
     virtual void SetWindowStyleFlag(long style);
 
-    // Temporary stub
-    void SetPosition(const wxPoint& pt);
-
     using wxCalendarCtrlBase::GenerateAllChangeEvents;
 
     virtual QCalendarWidget *GetHandle() const;

@@ -39,11 +39,6 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
     return wxTreeCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
-wxTreeCtrl::~wxTreeCtrl()
-{
-    delete m_qtTreeWidget;
-}
-
 unsigned wxTreeCtrl::GetCount() const
 {
     return 0;

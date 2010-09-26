@@ -23,11 +23,6 @@ wxCheckBox::wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
     Create( parent, id, label, pos, size, style, validator, name );
 }
 
-wxCheckBox::~wxCheckBox()
-{
-    delete m_qtCheckBox;
-}
-
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
             const wxString& name )

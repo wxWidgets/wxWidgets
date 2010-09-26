@@ -17,13 +17,6 @@ wxDialog::wxDialog()
 {
 }
 
-wxDialog::~wxDialog()
-{
-    SendDestroyEvent();
-    
-    delete m_qtDialog;
-}
-
 wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
         const wxString &title,
         const wxPoint &pos,
@@ -33,6 +26,12 @@ wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
 {
     Create( parent, id, title, pos, size, style, name );
 }
+
+wxDialog::~wxDialog()
+{
+    SendDestroyEvent();
+}
+
 
 bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         const wxString &title,

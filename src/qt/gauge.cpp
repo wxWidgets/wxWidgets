@@ -28,11 +28,6 @@ wxGauge::wxGauge(wxWindow *parent,
     Create( parent, id, range, pos, size, style, validator, name );
 }
 
-wxGauge::~wxGauge()
-{
-    delete m_qtProgressBar;
-}
-
 bool wxGauge::Create(wxWindow *parent,
             wxWindowID id,
             int range,
