@@ -15,7 +15,7 @@
 #include "wx/frame.h"
 #include "wx/qt/winevent_qt.h"
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QMainWindow>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
@@ -48,7 +48,7 @@ public:
     virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
-    QPointer< QMainWindow > m_qtFrame;
+    wxQtPointer< QMainWindow > m_qtFrame;
 };
 
 

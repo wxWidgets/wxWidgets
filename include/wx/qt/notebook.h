@@ -9,7 +9,7 @@
 #ifndef _WX_QT_NOTEBOOK_H_
 #define _WX_QT_NOTEBOOK_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QTabWidget>
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
@@ -57,7 +57,7 @@ protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
 private:
-    QPointer< QTabWidget > m_qtTabWidget;
+    wxQtPointer< QTabWidget > m_qtTabWidget;
 };
 
 #endif // _WX_QT_NOTEBOOK_H_

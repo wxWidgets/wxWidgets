@@ -26,7 +26,7 @@ protected:
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
 private:
-    QPointer< QMenu > m_qtMenu;
+    wxQtPointer< QMenu > m_qtMenu;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
 };
@@ -52,7 +52,7 @@ public:
     virtual QMenuBar *GetHandle() const;
 
 private:
-    QPointer< QMenuBar > m_qtMenuBar;
+    wxQtPointer< QMenuBar > m_qtMenuBar;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar)
 };

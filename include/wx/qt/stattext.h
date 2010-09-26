@@ -9,7 +9,7 @@
 #ifndef _WX_QT_STATTEXT_H_
 #define _WX_QT_STATTEXT_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
@@ -35,7 +35,7 @@ public:
 
     QLabel *GetHandle() const;
 private:
-    QPointer< QLabel > m_qtLabel;
+    wxQtPointer< QLabel > m_qtLabel;
 
 };
 

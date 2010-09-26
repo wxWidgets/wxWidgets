@@ -11,7 +11,7 @@
 
 #include "wx/qt/winevent_qt.h"
 #include "wx/button.h"
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QPushButton>
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
@@ -39,7 +39,7 @@ public:
     virtual QPushButton *GetHandle() const;
 
 private:
-    QPointer< QPushButton > m_qtPushButton;
+    wxQtPointer< QPushButton > m_qtPushButton;
 };
 
 

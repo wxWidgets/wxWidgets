@@ -9,7 +9,7 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QTreeWidget>
 
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
@@ -137,7 +137,7 @@ protected:
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
 private:
-    QPointer< QTreeWidget > m_qtTreeWidget;
+    wxQtPointer< QTreeWidget > m_qtTreeWidget;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

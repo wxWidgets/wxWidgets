@@ -9,7 +9,7 @@
 #ifndef _WX_QT_CHECKBOX_H_
 #define _WX_QT_CHECKBOX_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QCheckBox>
 
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
@@ -41,7 +41,7 @@ public:
 protected:
 
 private:
-    QPointer< QCheckBox > m_qtCheckBox;
+    wxQtPointer< QCheckBox > m_qtCheckBox;
 };
 
 #endif // _WX_QT_CHECKBOX_H_

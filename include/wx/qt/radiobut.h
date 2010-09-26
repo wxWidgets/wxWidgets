@@ -9,7 +9,7 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QRadioButton>
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
@@ -44,7 +44,7 @@ public:
 protected:
 
 private:
-    QPointer< QRadioButton > m_qtRadioButton;
+    wxQtPointer< QRadioButton > m_qtRadioButton;
 };
 
 #endif // _WX_QT_RADIOBUT_H_

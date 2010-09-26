@@ -14,7 +14,7 @@
 #include "wx/calctrl.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QCalendarWidget>
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
@@ -86,7 +86,7 @@ private:
     void Init();
     void UpdateStyle();
 
-    QPointer< QCalendarWidget > m_qtCalendar;
+    wxQtPointer< QCalendarWidget > m_qtCalendar;
     wxColour m_colHeaderFg,
              m_colHeaderBg,
              m_colHolidayFg,

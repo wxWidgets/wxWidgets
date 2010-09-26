@@ -9,7 +9,7 @@
 #ifndef _WX_QT_STATBMP_H_
 #define _WX_QT_STATBMP_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
@@ -43,7 +43,7 @@ public:
 protected:
 
 private:
-    QPointer< QLabel > m_qtLabel;
+    wxQtPointer< QLabel > m_qtLabel;
 
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 };

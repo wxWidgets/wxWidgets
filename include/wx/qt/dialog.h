@@ -38,7 +38,7 @@ public:
     virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
-    QPointer< QDialog > m_qtDialog;
+    wxQtPointer< QDialog > m_qtDialog;
 };
 
 #endif // _WX_QT_DIALOG_H_

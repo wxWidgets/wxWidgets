@@ -9,7 +9,7 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include "wx/qt/combobox_qt.h"
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
@@ -74,7 +74,7 @@ protected:
 
 
 private:
-    QPointer< wxQtComboBox > m_qtComboBox;
+    wxQtPointer< wxQtComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };

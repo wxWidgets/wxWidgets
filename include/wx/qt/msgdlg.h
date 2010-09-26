@@ -31,7 +31,7 @@ protected:
     virtual QMessageBox *GetHandle() const;
 
 private:
-    QPointer< QMessageBox > m_qtMessageBox;
+    wxQtPointer< QMessageBox > m_qtMessageBox;
 };
 
 class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventForwarder< wxMessageDialog, QMessageBox >

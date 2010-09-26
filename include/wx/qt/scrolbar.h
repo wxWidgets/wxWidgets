@@ -48,7 +48,7 @@ public:
 protected:
 
 private:
-    QPointer< QScrollBar > m_qtScrollBar;
+    wxQtPointer< QScrollBar > m_qtScrollBar;
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 

@@ -9,7 +9,7 @@
 #ifndef _WX_QT_COMBOBOX_H_
 #define _WX_QT_COMBOBOX_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include "wx/qt/combobox_qt.h"
 
 class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
@@ -81,7 +81,7 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
 
 private:
-    QPointer< wxQtComboBox > m_qtComboBox;
+    wxQtPointer< wxQtComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };

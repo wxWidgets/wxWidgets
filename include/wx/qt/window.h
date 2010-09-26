@@ -11,7 +11,7 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QWidget>
 #include <QtGui/QScrollBar>
 
@@ -177,8 +177,8 @@ protected:
     virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
-    QPointer< QWidget > m_qtWindow;
-    QPointer< QWidget > m_qtContainer;
+    wxQtPointer< QWidget > m_qtWindow;
+    wxQtPointer< QWidget > m_qtContainer;
 
     wxScrollBar *m_horzScrollBar;
     wxScrollBar *m_vertScrollBar;

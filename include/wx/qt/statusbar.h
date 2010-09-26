@@ -44,7 +44,7 @@ private:
     void Init();
     void UpdateFields();
 
-    QPointer< QStatusBar > m_qtStatusBar;
+    wxQtPointer< QStatusBar > m_qtStatusBar;
     QList< QLabel* > m_qtPanes;
 
     DECLARE_DYNAMIC_CLASS( wxStatusBar )

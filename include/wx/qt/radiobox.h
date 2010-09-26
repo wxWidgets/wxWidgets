@@ -9,7 +9,7 @@
 #ifndef _WX_QT_RADIOBOX_H_
 #define _WX_QT_RADIOBOX_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QButtonGroup>
 #include <QtGui/QGroupBox>
 
@@ -82,10 +82,10 @@ public:
 
 private:
     // Shows the group box:
-    QPointer< QGroupBox > m_qtGroupBox;
+    wxQtPointer< QGroupBox > m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:
-    QPointer< QButtonGroup > m_qtButtonGroup;
+    wxQtPointer< QButtonGroup > m_qtButtonGroup;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };

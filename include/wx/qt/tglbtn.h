@@ -43,7 +43,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 
     // TODO: Check how to reuse wxQtButton.
-    QPointer< QPushButton > m_qtPushButton;
+    wxQtPointer< QPushButton > m_qtPushButton;
 };
 
 
@@ -78,7 +78,7 @@ public:
 
 private:
     // TODO: Check how to reuse wxQtButton.
-    QPointer< QPushButton > m_qtPushButton;
+    wxQtPointer< QPushButton > m_qtPushButton;
 };
 
 #endif // _WX_QT_TGLBTN_H_

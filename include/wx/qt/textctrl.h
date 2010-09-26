@@ -9,7 +9,7 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QTextEdit>
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
@@ -58,7 +58,7 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType);
     
 private:
-    QPointer< QTextEdit > m_qtTextEdit;
+    wxQtPointer< QTextEdit > m_qtTextEdit;
 
 };
 

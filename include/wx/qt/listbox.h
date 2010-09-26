@@ -9,7 +9,7 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QListWidget>
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
@@ -78,7 +78,7 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
     
 private:
-    QPointer< QListWidget > m_qtListWidget;
+    wxQtPointer< QListWidget > m_qtListWidget;
 
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };

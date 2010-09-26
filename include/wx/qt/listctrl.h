@@ -10,7 +10,7 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QListWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -295,7 +295,7 @@ public:
     virtual QListWidget *GetHandle() const;
 
 private:
-    QPointer< QListWidget > m_qtListWidget;
+    wxQtPointer< QListWidget > m_qtListWidget;
 };
 
 #endif

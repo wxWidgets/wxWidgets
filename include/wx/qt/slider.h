@@ -9,7 +9,7 @@
 #ifndef _WX_QT_SLIDER_H_
 #define _WX_QT_SLIDER_H_
 
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 #include <QtGui/QSlider>
 
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
@@ -54,7 +54,7 @@ public:
     virtual QSlider *GetHandle() const;
 
 private:
-    QPointer< QSlider > m_qtSlider;
+    wxQtPointer< QSlider > m_qtSlider;
 };
 
 #endif // _WX_QT_SLIDER_H_

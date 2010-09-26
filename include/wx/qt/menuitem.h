@@ -12,7 +12,7 @@
 #include "wx/menuitem.h"
 #include "wx/qt/winevent_qt.h"
 #include <QtGui/QAction>
-#include <QtCore/QPointer>
+#include "wx/qt/pointer_qt.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
@@ -43,7 +43,7 @@ public:
 
 private:
     // Qt is using an action instead of a menu item.
-    QPointer< QAction > m_qtAction;
+    wxQtPointer< QAction > m_qtAction;
 
     wxDECLARE_NO_COPY_CLASS( wxMenuItem );
 };
