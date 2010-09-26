@@ -39,9 +39,11 @@
 // macros
 // ---------------------------------------------------------------------------
 
-#define CALL_CARET_API(api, args)   \
-        if ( !api args )                \
-            wxLogLastError(wxT(#api))
+#define CALL_CARET_API(api, args) \
+        if ( !api args ) \
+        { \
+            wxLogLastError(wxT(#api)); \
+        }
 
 // ===========================================================================
 // implementation
