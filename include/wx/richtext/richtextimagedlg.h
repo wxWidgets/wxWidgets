@@ -72,11 +72,11 @@ public:
 
 ////@begin wxRichTextImageDialog event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_UP
-    void OnButtonParaUpClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTIMAGEDIALOG_PARA_UP
+    void OnRichtextimagedialogParaUpClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PARA_DOWN
-    void OnButtonParaDownClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTIMAGEDIALOG_DOWN
+    void OnRichtextimagedialogDownClick( wxCommandEvent& event );
 
 ////@end wxRichTextImageDialog event handler declarations
 
@@ -121,15 +121,15 @@ private:
     enum {
         ID_WXRICHTEXTIMAGEPAGE = 10015,
         ID_COMBOBOX_ALIGN = 10016,
-        ID_COMBOBOX = 10019,
-        ID_TEXTCTRL_WIDTH = 10017,
-        ID_COMBOBOX_SCALE_W = 10018,
-        ID_TEXTCTRL_HEIGHT = 10000,
-        ID_COMBOBOX_SCALE_H = 10002,
-        ID_BUTTON_PARA_UP = 10020,
-        ID_BUTTON_PARA_DOWN = 10021,
-        ID_TEXTCTRL_OFFSET = 10022,
-        ID_COMBOBOX_OFFSET = 10001
+        ID_RICHTEXTIMAGEDIALOG_FLOATING_MODE = 10017,
+        ID_RICHTEXTIMAGEDIALOG_WIDTH = 10018,
+        ID_RICHTEXTIMAGEDIALOG_UNITS_W = 10019,
+        ID_RICHTEXTIMAGEDIALOG_HEIGHT = 10020,
+        ID_RICHTEXTIMAGEDIALOG_UNITS_H = 10021,
+        ID_RICHTEXTIMAGEDIALOG_OFFSET = 10022,
+        ID_RICHTEXTIMAGEDIALOG_OFFSET_UNITS = 10023,
+        ID_RICHTEXTIMAGEDIALOG_PARA_UP = 10024,
+        ID_RICHTEXTIMAGEDIALOG_DOWN = 10025
     };
 ////@end wxRichTextImageDialog member variables
 
