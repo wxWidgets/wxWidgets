@@ -1692,7 +1692,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     gint l = gtk_text_buffer_get_char_count( m_buffer );
 
     wxCHECK_MSG( position >= 0 && position <= l, false,
-                 _T("invalid range in wxTextCtrl::GetStyle") );
+                 wxT("invalid range in wxTextCtrl::GetStyle") );
 
     GtkTextIter positioni;
     gtk_text_buffer_get_iter_at_offset(m_buffer, &positioni, position);
