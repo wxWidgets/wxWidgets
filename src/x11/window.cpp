@@ -47,7 +47,6 @@
     #include "wx/layout.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
-    #include "wx/unix/utilsx11.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -56,6 +55,8 @@
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
 #endif
+
+#include "wx/unix/utilsx11.h"
 
 #include "wx/x11/private.h"
 #include "X11/Xutil.h"
