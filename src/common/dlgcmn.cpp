@@ -503,15 +503,17 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     closing.Append(this);
 
-    // Note that if a cancel button and handler aren't present in the dialog,
-    // nothing will happen when you close the dialog via the window manager, or
-    // via Close(). We wouldn't want to destroy the dialog by default, since
-    // the dialog may have been created on the stack. However, this does mean
-    // that calling dialog->Close() won't delete the dialog unless the handler
-    // for wxID_CANCEL does so. So use Destroy() if you want to be sure to
-    // destroy the dialog. The default OnCancel (above) simply ends a modal
-    // dialog, and hides a modeless dialog.
-    SendCloseButtonClickEvent();
+    if ( !SendCloseButtonClickEvent() )
+    {
+        // If the handler didn't close the dialog (e.g. because there is no
+        // button with matching id) we still want to close it when the user
+        // clicks the "x" button in the title bar, otherwise we shouldn't even
+        // have put it there.
+        //
+        // Notice that using wxID_CLOSE might have been a better choice but we
+        // use wxID_CANCEL for compatibility reasons.
+        EndDialog(wxID_CANCEL);
+    }
 
     closing.DeleteObject(this);
 }
