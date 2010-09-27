@@ -53,8 +53,8 @@
     #include "wx/x11/private.h"
     #include "wx/gtk/private/string.h"
 
-    #define wxPANGO_CONV(s) (wxConvUTF8.cWX2MB((s)))
-    #define wxPANGO_CONV_BACK(s) (wxConvUTF8.cMB2WX((s)))
+    #define wxPANGO_CONV(s) s.utf8_str()
+    #define wxPANGO_CONV_BACK(s) wxString::FromUTF8Unchecked(s)
 #endif
 
 // ----------------------------------------------------------------------------
