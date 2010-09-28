@@ -1425,7 +1425,7 @@ long wxRichTextParagraphLayoutBox::GetVisibleLineNumber(long pos, bool caretPosi
         wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
         wxASSERT( child != NULL );
 
-        if (child->GetRange().Contains(pos) || pos == lineRange.GetStart())
+        if (child->GetRange().Contains(pos) || pos == child->GetRange().GetStart())
         {
             wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
             while (node2)
