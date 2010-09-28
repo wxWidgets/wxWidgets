@@ -235,6 +235,10 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
         delete ((wxPGEditor*)vt_it->second);
     }
 
+    // Make sure the global pointers have been reset
+    wxASSERT(wxPG_EDITOR(TextCtrl) == NULL);
+    wxASSERT(wxPG_EDITOR(ChoiceAndButton) == NULL);
+
     delete wxPGProperty::sm_wxPG_LABEL;
 }
 

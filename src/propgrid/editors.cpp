@@ -507,7 +507,12 @@ void wxPGTextCtrlEditor::OnFocus( wxPGProperty* property,
     wxPGTextCtrlEditor_OnFocus(property, tc);
 }
 
-wxPGTextCtrlEditor::~wxPGTextCtrlEditor() { }
+wxPGTextCtrlEditor::~wxPGTextCtrlEditor()
+{
+    // Reset the global pointer. Useful when wxPropertyGrid is accessed
+    // from an external main loop.
+    wxPG_EDITOR(TextCtrl) = NULL;
+}
 
 
 // -----------------------------------------------------------------------
@@ -1216,7 +1221,10 @@ bool wxPGChoiceEditor::CanContainCustomImage() const
 }
 
 
-wxPGChoiceEditor::~wxPGChoiceEditor() { }
+wxPGChoiceEditor::~wxPGChoiceEditor()
+{
+    wxPG_EDITOR(Choice) = NULL;
+}
 
 
 // -----------------------------------------------------------------------
@@ -1300,7 +1308,11 @@ void wxPGComboBoxEditor::OnFocus( wxPGProperty* property,
 }
 
 
-wxPGComboBoxEditor::~wxPGComboBoxEditor() { }
+wxPGComboBoxEditor::~wxPGComboBoxEditor()
+{
+    wxPG_EDITOR(ComboBox) = NULL;
+}
+
 
 
 // -----------------------------------------------------------------------
@@ -1352,8 +1364,10 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
 }
 
 
-wxPGChoiceAndButtonEditor::~wxPGChoiceAndButtonEditor() { }
-
+wxPGChoiceAndButtonEditor::~wxPGChoiceAndButtonEditor()
+{
+    wxPG_EDITOR(ChoiceAndButton) = NULL;
+}
 
 // -----------------------------------------------------------------------
 // wxPGTextCtrlAndButtonEditor
@@ -1377,8 +1391,10 @@ wxPGWindowList wxPGTextCtrlAndButtonEditor::CreateControls( wxPropertyGrid* prop
 }
 
 
-wxPGTextCtrlAndButtonEditor::~wxPGTextCtrlAndButtonEditor() { }
-
+wxPGTextCtrlAndButtonEditor::~wxPGTextCtrlAndButtonEditor()
+{
+    wxPG_EDITOR(TextCtrlAndButton) = NULL;
+}
 
 // -----------------------------------------------------------------------
 // wxPGCheckBoxEditor
@@ -1708,8 +1724,10 @@ void wxPGCheckBoxEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property)
 }
 
 
-wxPGCheckBoxEditor::~wxPGCheckBoxEditor() { }
-
+wxPGCheckBoxEditor::~wxPGCheckBoxEditor()
+{
+    wxPG_EDITOR(CheckBox) = NULL;
+}
 
 #endif // wxPG_INCLUDE_CHECKBOX
 
