@@ -370,9 +370,8 @@ wxFontStyle wxFont::GetStyle() const
     return M_FONTDATA->m_info.style;
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.family;
 }
 

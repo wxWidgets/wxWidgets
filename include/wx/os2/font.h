@@ -93,7 +93,6 @@ public:
     // Implement base class pure virtuals
     //
     virtual int               GetPointSize(void) const;
-    virtual wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool              GetUnderlined(void) const;
@@ -131,6 +130,7 @@ public:
 
 protected:
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& rInfo);
+    virtual wxFontFamily DoGetFamily() const;
 
     // implement wxObject virtuals which are used by AllocExclusive()
     virtual wxGDIRefData *CreateGDIRefData() const;

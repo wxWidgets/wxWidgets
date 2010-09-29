@@ -367,6 +367,20 @@ bool wxFontBase::operator==(const wxFont& font) const
            );
 }
 
+wxFontFamily wxFontBase::GetFamily() const
+{
+    wxCHECK_MSG( IsOk(), wxFONTFAMILY_UNKNOWN, wxS("invalid font") );
+
+    // Don't return wxFONTFAMILY_UNKNOWN from here because it prevents the code
+    // like wxFont(size, wxNORMAL_FONT->GetFamily(), ...) from working (see
+    // #12330). This is really just a hack but it allows to keep compatibility
+    // and doesn't really have any bad drawbacks so do this until someone comes
+    // up with a better idea.
+    const wxFontFamily family = DoGetFamily();
+
+    return family == wxFONTFAMILY_UNKNOWN ? wxFONTFAMILY_DEFAULT : family;
+}
+
 wxString wxFontBase::GetFamilyString() const
 {
     wxCHECK_MSG( IsOk(), "wxFONTFAMILY_DEFAULT", "invalid font" );

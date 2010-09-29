@@ -732,10 +732,8 @@ wxSize wxFont::GetPixelSize() const
 #endif
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTFAMILY_MAX, wxT("invalid font") );
-
     return M_FONTDATA->GetFamily();
 }
 

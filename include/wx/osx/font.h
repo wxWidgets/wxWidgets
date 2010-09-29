@@ -101,7 +101,6 @@ public:
     // implement base class pure virtuals
     virtual int GetPointSize() const;
     virtual wxSize GetPixelSize() const;
-    virtual wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
@@ -168,6 +167,7 @@ public:
 
 protected:
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+    virtual wxFontFamily DoGetFamily() const;
 
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

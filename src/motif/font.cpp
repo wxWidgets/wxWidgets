@@ -455,10 +455,8 @@ wxString wxFont::GetFaceName() const
     return M_FONTDATA->m_faceName ;
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( Ok(), wxFONTFAMILY_MAX, wxT("invalid font") );
-
     return M_FONTDATA->m_family;
 }
 
