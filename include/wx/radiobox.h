@@ -12,6 +12,8 @@
 #ifndef _WX_RADIOBOX_H_BASE_
 #define _WX_RADIOBOX_H_BASE_
 
+#include "wx/defs.h"
+
 #if wxUSE_RADIOBOX
 
 #include "wx/ctrlsub.h"
