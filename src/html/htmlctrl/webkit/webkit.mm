@@ -684,7 +684,6 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
 
     NSString* resultAsString;
-    wxString resultAsWxString = wxEmptyString;
     NSString* className = NSStringFromClass([result class]);
     if ([className isEqualToString:@"NSCFNumber"])
         resultAsString = [NSString stringWithFormat:@"%@", result];
@@ -699,10 +698,9 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     else if ([className isEqualToString:@"WebScriptObject"])
         resultAsString = [result stringRepresentation];
     else
-        fprintf(stderr, "wxWebKitCtrl::RunScript - Unexpected return type: %s!\n", [className UTF8String]);
+        return wxString(); // This can happen, see e.g. #12361.
 
-    resultAsWxString = wxStringWithNSString( resultAsString );
-    return resultAsWxString;
+    return wxStringWithNSString( resultAsString );
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
