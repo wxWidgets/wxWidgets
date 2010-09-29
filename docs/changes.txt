@@ -414,6 +414,7 @@ All (GUI):
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 - Consistency fixes for keyboard events across all major ports.
+- Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
 
 MSW:
 

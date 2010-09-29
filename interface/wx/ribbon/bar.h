@@ -101,6 +101,8 @@ public:
         Triggered when the right mouse button is pressed on a tab.
     @event{EVT_RIBBONBAR_TAB_RIGHT_UP(id, func)}
         Triggered when the right mouse button is released on a tab.
+    @event{EVT_RIBBONBAR_TAB_LEFT_DCLICK(id, func)}
+        Triggered when the left mouse button is double clicked on a tab.
     @endEventTable
 
     @library{wxribbon}
