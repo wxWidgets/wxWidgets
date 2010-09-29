@@ -185,7 +185,7 @@ double wxSpinCtrlGTKBase::DoGetIncrement() const
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
     double inc = 0;
-    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), NULL, &inc);
+    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), &inc, NULL);
     return inc;
 }
 
