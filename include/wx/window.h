@@ -1147,7 +1147,8 @@ public:
 
     // simply return the id of the selected item or wxID_NONE without
     // generating any events
-    int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos)
+    int GetPopupMenuSelectionFromUser(wxMenu& menu,
+                                      const wxPoint& pos = wxDefaultPosition)
         { return DoGetPopupMenuSelectionFromUser(menu, pos.x, pos.y); }
     int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
         { return DoGetPopupMenuSelectionFromUser(menu, x, y); }
