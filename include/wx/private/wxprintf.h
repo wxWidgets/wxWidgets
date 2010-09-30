@@ -831,42 +831,48 @@ struct wxPrintfConvSpecParser
             // special handling for specifications including asterisks: we need
             // to reserve an extra slot (or two if asterisks were used for both
             // width and precision) in specs array in this case
-            for ( const char *f = strchr(spec->m_szFlags, '*');
-                  f;
-                  f = strchr(f + 1, '*') )
+            if ( const char *f = strchr(spec->m_szFlags, '*') )
             {
-                if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
-                    break;
+                unsigned numAsterisks = 1;
+                if ( strchr(++f, '*') )
+                    numAsterisks++;
 
-                // TODO: we need to support specifiers of the form "%2$*1$s"
-                // (this is the same as "%*s") as if any positional arguments
-                // are used all asterisks must be positional as well but this
-                // requires a lot of changes in this code (basically we'd need
-                // to rewrite Parse() to return "*" and conversion itself as
-                // separate entries)
-                if ( posarg_present )
+                for ( unsigned n = 0; n < numAsterisks; n++ )
                 {
-                    wxFAIL_MSG
-                    (
-                        wxString::Format
+                    if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
+                        break;
+
+                    // TODO: we need to support specifiers of the form "%2$*1$s"
+                    // (this is the same as "%*s") as if any positional arguments
+                    // are used all asterisks must be positional as well but this
+                    // requires a lot of changes in this code (basically we'd need
+                    // to rewrite Parse() to return "*" and conversion itself as
+                    // separate entries)
+                    if ( posarg_present )
+                    {
+                        wxFAIL_MSG
                         (
-                            "Format string \"%s\" uses both positional "
-                            "parameters and '*' but this is not currently "
-                            "supported by this implementation, sorry.",
-                            fmt
-                        )
-                    );
+                            wxString::Format
+                            (
+                                "Format string \"%s\" uses both positional "
+                                "parameters and '*' but this is not currently "
+                                "supported by this implementation, sorry.",
+                                fmt
+                            )
+                        );
+                    }
+
+                    specs[nargs] = *spec;
+
+                    // make an entry for '*' and point to it from pspec
+                    spec->Init();
+                    spec->m_type = wxPAT_STAR;
+                    pspec[nargs - 1] = spec;
+
+                    spec = &specs[nargs];
                 }
-
-                specs[nargs] = *spec;
-
-                // make an entry for '*' and point to it from pspec
-                spec->Init();
-                spec->m_type = wxPAT_STAR;
-                pspec[nargs - 1] = spec;
-
-                spec = &specs[nargs];
             }
+
 
             // check if this is a positional or normal argument
             if ( spec->m_pos > 0 )
