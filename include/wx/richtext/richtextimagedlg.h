@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/dialog.h"
+
 #ifndef _RICHTEXTIMAGEDLG_H_
 #define _RICHTEXTIMAGEDLG_H_
 
@@ -16,16 +18,14 @@
  * Includes
  */
 #include "wx/richtext/richtextbuffer.h"
-////@begin includes
-#include "wx/statline.h"
-////@end includes
 
 /*!
  * Forward declarations
  */
 
-////@begin forward declarations
-////@end forward declarations
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 /*!
  * Control identifiers

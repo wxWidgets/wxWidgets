@@ -17,11 +17,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/button.h"
+    #include "wx/combobox.h"
+    #include "wx/textctrl.h"
 #endif
 
-////@begin includes
-////@end includes
+#include "wx/statline.h"
 
 #include "wx/richtext/richtextimagedlg.h"
 #include "wx/richtext/richtextctrl.h"
