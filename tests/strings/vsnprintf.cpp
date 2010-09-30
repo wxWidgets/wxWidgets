@@ -447,10 +447,9 @@ void VsnprintfTestCase::WrongFormatStrings()
     CPPUNIT_ASSERT(r != -1);
 #endif
 
-    // a missing positional arg: this should result in an error but not all
-    // implementations detect it (e.g. glibc doesn't)
-    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3);
-    CPPUNIT_ASSERT_EQUAL(-1, r);
+    // a missing positional arg should result in an assert
+    WX_ASSERT_FAILS_WITH_ASSERT(
+            wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3) );
 
     // positional and non-positionals in the same format string:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
