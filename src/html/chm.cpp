@@ -605,8 +605,11 @@ wxChmInputStream::CreateHHPStream()
             switch (code)
             {
                 case 0: // CONTENTS_FILE
-                    tmp = "Contents file=";
-                    hhc=true;
+                    if (len)
+                    {
+                        tmp = "Contents file=";
+                        hhc=true;
+                    }
                     break;
                 case 1: // INDEX_FILE
                     tmp = "Index file=";
@@ -635,9 +638,10 @@ wxChmInputStream::CreateHHPStream()
                         // LCID at position 0
                         wxUint32 dummy = *((wxUint32 *)(structptr+0)) ;
                         wxUint32 lcid = wxUINT32_SWAP_ON_BE( dummy ) ;
-                        wxString msg ;
-                        msg.Printf(_T("Language=0x%X\r\n"),lcid) ;
-                        out->Write(msg.c_str() , msg.length() ) ;
+                        char msg[64];
+                        int len = sprintf(msg, "Language=0x%X\r\n", lcid) ;
+                        if (len > 0)
+                            out->Write(msg, len) ;
                     }
                     break ;
                 default:
@@ -833,7 +837,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
                             left + _T("#chm:") + right,
                             mime,
                             GetAnchor(location),
-                            wxDateTime(wxFileModificationTime(left)));
+                            wxDateTime(leftFilename.GetModificationTime()));
     }
 
     delete s;
