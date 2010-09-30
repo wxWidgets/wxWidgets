@@ -181,11 +181,6 @@ void ListBaseTestCase::ItemClick()
 
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
-    EventCounter count2(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
-    EventCounter count3(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
-
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
     list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
@@ -193,6 +188,14 @@ void ListBaseTestCase::ItemClick()
     list->InsertItem(0, "Item 0");
     list->SetItem(0, 1, "first column");
     list->SetItem(0, 2, "second column");
+
+    list->InsertItem(1, "Item 1");
+    list->SetItemState(1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+
+    EventCounter count(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
+    EventCounter count1(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
+    EventCounter count2(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
+    EventCounter count3(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
