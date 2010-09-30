@@ -586,13 +586,20 @@ namespace
 #if !wxUSE_UTF8_LOCALE_ONLY
 int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 {
-    const wxWX2WCbuf buf = s.wc_str();
+    const wxCharBuffer buf(s.mb_str());
 
-    size_t len = wxConvLibc.FromWChar(out, outsize, buf);
-    if ( len != wxCONV_FAILED )
-        return len-1;
-    else
-        return wxConvLibc.FromWChar(NULL, 0, buf);
+    const size_t len = buf.length();
+    if ( outsize > len )
+    {
+        memcpy(out, buf, (len+1) * sizeof(char));
+    }
+    else // not enough space
+    {
+        memcpy(out, buf, (outsize-1) * sizeof(char));
+        out[outsize-1] = '\0';
+    }
+
+    return len;
 }
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
