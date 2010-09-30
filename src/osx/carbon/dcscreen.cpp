@@ -94,7 +94,7 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
 
     CGContextDrawImage(context, srcRect, image);
-    
+
     CGImageRelease(image);
 
     CGContextRestoreGState(context);

@@ -126,7 +126,7 @@ wxBitmap wxButton::DoGetBitmap(State which) const
 void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
     m_bitmaps[which] = bitmap;
-    
+
     if ( which == State_Normal )
         m_peer->SetBitmap(bitmap);
     else if ( which == State_Pressed )
@@ -167,13 +167,13 @@ void wxButton::Command (wxCommandEvent & WXUNUSED(event))
 void wxButton::OnEnterWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Current ) );       
+        m_peer->SetBitmap( DoGetBitmap( State_Current ) );
 }
 
 void wxButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Normal ) );       
+        m_peer->SetBitmap( DoGetBitmap( State_Normal ) );
 }
 
 bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )

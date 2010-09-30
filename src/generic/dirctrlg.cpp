@@ -1107,7 +1107,7 @@ wxString wxGenericDirCtrl::GetPath() const
             wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
             return data->m_path;
         }
-        
+
         return wxEmptyString;
     }
 

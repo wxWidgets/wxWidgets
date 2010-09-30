@@ -595,7 +595,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (sptr_t)buff);
         delete [] buff;
-        
+
 }
 
 // Add a set of markers to a line.
@@ -1190,7 +1190,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (sptr_t)buff);
         delete [] buff;
-     
+
 }
 
 // Clear all the registered images.

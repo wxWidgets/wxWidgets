@@ -142,7 +142,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         // the right insertion point
         if (m_strings)
             n = m_strings->Add(items[i]);
-            
+
         GTKInsertComboBoxTextItem( n, items[i] );
 
         m_clientData.Insert( NULL, n );

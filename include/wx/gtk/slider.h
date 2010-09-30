@@ -63,7 +63,7 @@ public:
     void GTKDisableEvents();
     void GTKEnableEvents();
     bool GTKEventsDisabled() const;
-    
+
     double m_pos;
     int m_scrollEventType;
     bool m_needThumbRelease;

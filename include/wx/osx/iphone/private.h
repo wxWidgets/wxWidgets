@@ -173,7 +173,7 @@ public :
 
     // FIXME: Does iPhone have a concept of inactive windows?
     virtual bool IsActive() { return true; }
-    
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     virtual bool InitialShowEventSent() { return m_initialShowSent; }

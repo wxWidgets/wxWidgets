@@ -148,7 +148,7 @@ static wxDragResult ConvertFromGTK(long action)
         case GDK_ACTION_MOVE:
             return wxDragMove;
     }
-    
+
     return wxDragNone;
 }
 
@@ -218,7 +218,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     wxDragResult suggested_action = drop_target->GTKFigureOutSuggestedAction();
 
     wxDragResult result = wxDragNone;
-        
+
     if (drop_target->m_firstMotion)
     {
         // the first "drag_motion" event substitutes a "drag_enter" event
@@ -237,18 +237,18 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
         result_action = GDK_ACTION_LINK;
     else
         result_action = GDK_ACTION_MOVE;
-        
+
     // is result action actually supported
     bool ret ((result_action != GDK_ACTION_DEFAULT) &&
               (context->actions & result_action));
-        
+
     if (ret)
         gdk_drag_status( context, result_action, time );
 
     // after this, invalidate the drop_target's GdkDragContext
     drop_target->GTKSetDragContext( NULL );
 
-    // this has to be done because GDK has no "drag_enter" event 
+    // this has to be done because GDK has no "drag_enter" event
     drop_target->m_firstMotion = false;
 
     return ret;
@@ -281,14 +281,14 @@ static gboolean target_drag_drop( GtkWidget *widget,
     {
         // cancel the whole thing
         gtk_drag_finish( context,
-                          FALSE,        // no success 
+                          FALSE,        // no success
                           FALSE,        // don't delete data on dropping side
                           time );
-                          
+
         drop_target->GTKSetDragContext( NULL );
-        
+
         drop_target->m_firstMotion = true;
-         
+
         return FALSE;
     }
 
@@ -436,7 +436,7 @@ wxDragResult wxDropTarget::GTKFigureOutSuggestedAction()
 {
     if (!m_dragContext)
         return wxDragError;
-    
+
     // GTK+ always supposes that we want to copy the data by default while we
     // might want to move it, so examine not only suggested_action - which is
     // only good if we don't have our own preferences - but also the actions

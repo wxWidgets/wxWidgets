@@ -253,7 +253,7 @@ wxRect operator*(const wxRect& r1, const wxRect& r2)
 }
 
 wxRealPoint::wxRealPoint(const wxPoint& pt)
- : x(pt.x), y(pt.y) 
+ : x(pt.x), y(pt.y)
 {
 }
 

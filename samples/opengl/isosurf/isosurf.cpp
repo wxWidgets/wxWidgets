@@ -232,7 +232,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
 
     wxLogMessage(wxT("Loaded %d vertices, %d triangles from '%s'"),
                  m_numverts, m_numverts-2, filename.c_str());
-                 
+
     // NOTE: for some reason under wxGTK the following is required to avoid that
     //       the surface gets rendered in a small rectangle in the top-left corner of the frame
     PostSizeEventToParent();

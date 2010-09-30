@@ -376,7 +376,7 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
     /* wxDataViewModel:: */ BeforeReset();
-    
+
     m_hash.Clear();
 
     // IDs are ordered until an item gets deleted or inserted
@@ -534,7 +534,7 @@ void wxDataViewVirtualListModel::Reset( unsigned int new_size )
     /* wxDataViewModel:: */ BeforeReset();
 
     m_size = new_size;
-    
+
     /* wxDataViewModel:: */ AfterReset();
 }
 
@@ -1487,11 +1487,11 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
       wxDataViewChoiceRenderer( choices, mode, alignment )
 {
 }
-                            
+
 wxControl* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
     wxVariant string_value = GetChoice( value.GetLong() );
-    
+
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
 
@@ -1510,13 +1510,13 @@ bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
     wxVariant string_value = GetChoice( value.GetLong() );
     return wxDataViewChoiceRenderer::SetValue( string_value );
 }
-    
+
 bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
 {
     wxVariant string_value;
     if (!wxDataViewChoiceRenderer::GetValue( string_value ))
         return false;
-            
+
     value = (long) GetChoices().Index( string_value.GetString() );
     return true;
 }

@@ -377,5 +377,5 @@ bool wxDir::Remove(const wxString &dir, int flags)
 {
     return wxFileName::Rmdir(dir, flags);
 }
-    
+
 #endif // wxUSE_LONGLONG

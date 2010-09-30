@@ -499,7 +499,7 @@ void wxFontRefData::MacFindFont()
                     {
                         CTFontSymbolicTraits remainingTraits = traits;
                         const CGAffineTransform* remainingTransform = NULL;
-                        
+
                         if( remainingTraits & kCTFontItalicTrait )
                         {
                             remainingTraits &= ~kCTFontItalicTrait;
@@ -515,19 +515,19 @@ void wxFontRefData::MacFindFont()
                                 }
                             }
                         }
-                        
+
                         if ( fontWithTraits == NULL )
                         {
                             fontWithTraits = CTFontCreateWithName( wxCFStringRef(m_info.m_faceName), m_info.m_pointSize, remainingTransform );
                         }
-                            
+
                     }
                     if ( fontWithTraits != NULL )
                         m_ctFont.reset(fontWithTraits);
                 }
             }
         }
-        
+
         m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
     }
 
@@ -886,10 +886,10 @@ NSFont* wxFont::OSXGetNSFont() const
 UIFont* wxFont::OSXGetUIFont() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-    
+
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return (M_FONTDATA->m_uiFont);
 }
 

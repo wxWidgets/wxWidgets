@@ -807,7 +807,7 @@ void MyFrame::OnDecSpacing(wxCommandEvent& WXUNUSED(event))
     {
         m_treeCtrl->SetSpacing( indent-5 );
         m_treeCtrl->Refresh();
-    } 
+    }
 }
 
 void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
@@ -1024,10 +1024,10 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         wxIcon icons[2];
         icons[0] = wxIcon(unchecked_xpm);
         icons[1] = wxIcon(checked_xpm);
-        
+
         int width  = icons[0].GetWidth(),
             height = icons[0].GetHeight();
-            
+
         // Make an state image list containing small icons
         states = new wxImageList(width, height, true);
 

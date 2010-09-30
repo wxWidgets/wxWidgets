@@ -281,7 +281,7 @@ private:
         ofItem:(id)item;
 
     -(id)
-    outlineView:(NSOutlineView*)outlineView 
+    outlineView:(NSOutlineView*)outlineView
         objectValueForTableColumn:(NSTableColumn*)tableColumn
         byItem:(id)item;
 

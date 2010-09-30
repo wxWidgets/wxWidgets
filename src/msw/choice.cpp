@@ -246,7 +246,7 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
     attrs.colBg = wnd->MSWGetThemeColour(L"EDIT",
-                                         EP_EDITTEXT, 
+                                         EP_EDITTEXT,
                                          ETS_NORMAL,
                                          ThemeColourBackground,
                                          wxSYS_COLOUR_WINDOW);

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextimagedlg.cpp
-// Purpose:     
+// Purpose:
 // Author:      Mingquan Yang
-// Modified by: 
+// Modified by:
 // Created:     Wed 02 Jun 2010 11:27:23 CST
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Mingquan Yang
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ void wxRichTextImageDialog::Init()
  */
 
 void wxRichTextImageDialog::CreateControls()
-{    
+{
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
@@ -354,14 +354,14 @@ void wxRichTextImageDialog::SetImageObject(wxRichTextImage* image, wxRichTextBuf
         {
             m_attr.m_width = image->GetImageCache().GetWidth();
             wxASSERT(m_attr.m_unitsW == wxRICHTEXT_PX);
-            
+
             m_attr.m_unitsW = wxRICHTEXT_PX;
         }
         if (m_attr.m_height == -1)
         {
             m_attr.m_height = image->GetImageCache().GetHeight();
             wxASSERT(m_attr.m_unitsH == wxRICHTEXT_PX);
-            
+
             m_attr.m_unitsH = wxRICHTEXT_PX;
         }
     }

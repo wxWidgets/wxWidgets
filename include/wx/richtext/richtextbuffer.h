@@ -256,19 +256,19 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObjectAttr
 public:
     wxRichTextAnchoredObjectAttr() { Init(); }
     wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr) { Copy(attr); }
-    
+
     void Init();
 
     void operator= (const wxRichTextAnchoredObjectAttr& attr) { Copy(attr); }
     void Copy(const wxRichTextAnchoredObjectAttr& attr);
-    
+
     /// Is this anchored? TODO: difference between anchored and floating?
     bool IsAnchored() const { return m_floating != wxRICHTEXT_FLOAT_NONE; }
 
     /// Is this floating?
     bool IsFloating() const { return m_floating != wxRICHTEXT_FLOAT_NONE; }
     void SetFloatingMode(int floating) { m_floating = floating; }
-    
+
     int GetAlignment() const { return m_align; }
     void SetAlignment(int align) { m_align = align; }
 
@@ -467,7 +467,7 @@ public:
 
     /// Dump to output stream for debugging
     virtual void Dump(wxTextOutputStream& stream);
-    
+
     /// Can we edit properties via a GUI?
     virtual bool CanEditProperties() const { return false; }
 
@@ -918,7 +918,7 @@ public:
 
     /// Invalidate the buffer. With no argument, invalidates whole buffer.
     void Invalidate(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
-    
+
     /// Gather information about floating objects. If untilObj is non-NULL,
     /// will stop getting information if the current object is this, since we
     /// will collect the rest later.
@@ -1264,7 +1264,7 @@ public:
     // Make an image block from the wxImage in the given
     // format.
     virtual bool MakeImageBlock(wxImage& image, wxBitmapType imageType, int quality = 80);
-    
+
     // Uses a const wxImage for efficiency, but can't set quality (only relevant for JPEG)
     virtual bool MakeImageBlockDefaultQuality(const wxImage& image, wxBitmapType imageType);
 

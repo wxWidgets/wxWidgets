@@ -26,17 +26,17 @@ public:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
     virtual int Run();
-    
+
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
     virtual void Exit(int rc = 0);
-    
+
     // return true if any events are available
     virtual bool Pending() const;
-    
+
     // dispatch a single event, return false if we should exit from the loop
     virtual bool Dispatch();
-    
+
     // same as Dispatch() but doesn't wait for longer than the specified (in
     // ms) timeout, return true if an event was processed, false if we should
     // exit the loop or -1 if timeout expired
@@ -45,7 +45,7 @@ public:
     // implement this to wake up the loop: usually done by posting a dummy event
     // to it (can be called from non main thread)
     virtual void WakeUp();
-    
+
     virtual bool YieldFor(long eventsToProcess);
 
 #if wxUSE_EVENTLOOP_SOURCE
@@ -60,23 +60,23 @@ protected:
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 
     virtual int DoDispatchTimeout(unsigned long timeout);
-    
+
     virtual void DoRun();
 
     virtual void DoStop();
-    
+
     // should we exit the loop?
     bool m_shouldExit;
 
     // the loop exit code
     int m_exitcode;
-    
+
     // cfrunloop
     CFRunLoopRef m_runLoop;
-    
+
     // runloop observer
     CFRunLoopObserverRef m_runLoopObserver;
-    
+
 private:
     // process all already pending events and dispatch a new one (blocking
     // until it appears in the event queue if necessary)
@@ -101,12 +101,12 @@ class WXDLLIMPEXP_CORE wxModalEventLoop : public wxGUIEventLoop
 public:
     wxModalEventLoop(wxWindow *modalWindow);
     wxModalEventLoop(WXWindow modalNativeWindow);
-    
+
 protected:
     virtual void DoRun();
-    
+
     virtual void DoStop();
-    
+
     // (in case) the modal window for this event loop
     wxNonOwnedWindow* m_modalWindow;
     WXWindow m_modalNativeWindow;

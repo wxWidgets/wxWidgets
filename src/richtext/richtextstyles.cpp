@@ -58,7 +58,7 @@ wxTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextSty
 {
     if (m_baseStyle.IsEmpty())
         return m_style;
-        
+
     // Collect the styles, detecting loops
     wxArrayString styleNames;
     wxList styles;
@@ -67,14 +67,14 @@ wxTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextSty
     {
         styles.Insert((wxObject*) def);
         styleNames.Add(def->GetName());
-        
+
         wxString baseStyleName = def->GetBaseStyle();
         if (!baseStyleName.IsEmpty() && styleNames.Index(baseStyleName) == wxNOT_FOUND)
             def = sheet->FindStyle(baseStyleName);
         else
             def = NULL;
     }
-    
+
     wxRichTextAttr attr;
     wxList::compatibility_iterator node = styles.GetFirst();
     while (node)
@@ -83,7 +83,7 @@ wxTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextSty
         attr.Apply(def->GetStyle(), NULL);
         node = node->GetNext();
     }
-    
+
     return attr;
 }
 

@@ -52,14 +52,14 @@ static MacWindowMap wxWinMacWindowList;
 wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
 {
     wxNonOwnedWindowImpl* impl = wxNonOwnedWindowImpl::FindFromWXWindow(win);
-    
+
     return ( impl != NULL ? impl->GetWXPeer() : NULL ) ;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::FindFromWXWindow (WXWindow window)
 {
     MacWindowMap::iterator node = wxWinMacWindowList.find(window);
-    
+
     return (node == wxWinMacWindowList.end()) ? NULL : node->second;
 }
 
@@ -81,7 +81,7 @@ void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *imp
     // adding NULL WindowRef is (first) surely a result of an error and
     // nothing else :-)
     wxCHECK_RET( window != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-    
+
     wxWinMacWindowList[window] = impl;
 }
 
@@ -151,9 +151,9 @@ bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
 {
     if ( parent )
         parent->AddChild(this);
-    
+
     SubclassWin(nativeWindow);
-    
+
     return true;
 }
 
@@ -174,8 +174,8 @@ void wxNonOwnedWindow::UnsubclassWin()
 
     if ( GetParent() )
         GetParent()->RemoveChild(this);
-    
-    wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;    
+
+    wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;
     wxDELETE(m_nowpeer);
     wxDELETE(m_peer);
     m_isNativeWindowWrapper = false;
@@ -200,7 +200,7 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 bool wxNonOwnedWindow::Destroy()
 {
     WillBeDestroyed();
-    
+
     return wxWindow::Destroy();
 }
 
@@ -266,9 +266,9 @@ void wxNonOwnedWindow::SetWindowStyleFlag(long flags)
 {
     if (flags == GetWindowStyleFlag())
         return;
-        
+
     wxWindow::SetWindowStyleFlag(flags);
-    
+
     if (m_nowpeer)
         m_nowpeer->SetWindowStyleFlag(flags);
 }
@@ -456,7 +456,7 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
 
     int left, top, w, h;
     m_nowpeer->GetContentArea(left, top, w, h);
-    
+
     if (width)
        *width = w ;
     if (height)
@@ -485,7 +485,7 @@ bool wxNonOwnedWindow::DoSetShape(const wxRegion& region)
                  wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
     m_shape = region;
-    
+
     // The empty region signifies that the shape
     // should be removed from the window.
     if ( region.IsEmpty() )

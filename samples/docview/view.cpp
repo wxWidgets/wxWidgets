@@ -88,7 +88,7 @@ void DrawingView::OnDraw(wxDC *dc)
           ++i )
     {
         const DoodleLines& lines = i->GetLines();
-        for ( DoodleLines::const_iterator j = lines.begin(); 
+        for ( DoodleLines::const_iterator j = lines.begin();
               j != lines.end();
               ++j )
         {

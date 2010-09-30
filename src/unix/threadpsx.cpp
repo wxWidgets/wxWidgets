@@ -1487,10 +1487,10 @@ wxThreadError wxThread::Delete(ExitCode *rc)
             }
             //else: can't wait for detached threads
     }
-    
+
     if (state == STATE_NEW)
         return wxTHREAD_MISC_ERROR;
-            // for coherency with the MSW implementation, signal the user that 
+            // for coherency with the MSW implementation, signal the user that
             // Delete() was called on a thread which didn't start to run yet.
 
     return wxTHREAD_NO_ERROR;

@@ -1917,7 +1917,7 @@ public:
         modifying the value of the editor control (usually by clearing
         it).  Currently, this can work with following properties:
         wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
-        
+
         @param enable
             Whether to enable or disable this behavior (it is disabled by
             default).

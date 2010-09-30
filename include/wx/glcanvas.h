@@ -229,7 +229,7 @@ public:
     wxGLAPI();
     ~wxGLAPI();
 
-    static void glFrustum(GLfloat left, GLfloat right, GLfloat bottom, 
+    static void glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
                             GLfloat top, GLfloat zNear, GLfloat zFar);
     static void glBegin(GLenum mode);
     static void glTexCoord2f(GLfloat s, GLfloat t);

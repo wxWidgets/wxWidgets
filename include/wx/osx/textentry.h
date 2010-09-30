@@ -32,11 +32,11 @@ class WXDLLIMPEXP_CORE wxTextEntry: public wxTextEntryBase
 {
 
 public:
-    wxTextEntry() 
+    wxTextEntry()
         : m_editable(true),
           m_maxLength(0)
     { }
-    
+
     virtual ~wxTextEntry() {};
 
     virtual bool IsEditable() const;
@@ -91,7 +91,7 @@ public:
 protected:
 
     virtual wxString DoGetValue() const;
-    
+
     bool  m_editable;
 
   // need to make this public because of the current implementation via callbacks

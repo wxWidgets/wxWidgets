@@ -93,7 +93,7 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
 {
     CGDisplayErr error = kCGErrorSuccess;
     CGDisplayCount onlineCount;
-    
+
     error = CGGetOnlineDisplayList(0,NULL,&onlineCount);
     if ( error == kCGErrorSuccess )
     {
@@ -108,7 +108,7 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
                 {
                     if ( CGDisplayMirrorsDisplay(onlineDisplays[i]) != kCGNullDirectDisplay )
                         continue;
-                    
+
                     if ( displays == NULL )
                         *displayCount += 1;
                     else
@@ -123,7 +123,7 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
             }
             delete[] onlineDisplays;
         }
-            
+
     }
     return error;
 }

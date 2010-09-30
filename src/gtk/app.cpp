@@ -513,8 +513,8 @@ void wxGUIAppTraits::MutexGuiLeave()
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 // Maemo-specific method: get the main program object
 HildonProgram *wxApp::GetHildonProgram()
-{ 
-    return hildon_program_get_instance(); 
+{
+    return hildon_program_get_instance();
 }
-    
+
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2

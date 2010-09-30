@@ -151,7 +151,7 @@ void wxTextEntry::Remove(long from, long to)
         EventsSuppressor noevents(this);
         GetTextPeer()->Remove( from , to );
     }
-    
+
     SendTextUpdatedEventIfAllowed();
 }
 

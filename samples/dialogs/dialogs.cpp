@@ -809,7 +809,7 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
                            wxCENTER |
                            wxNO_DEFAULT | wxYES_NO | wxCANCEL |
                            wxICON_INFORMATION);
-    
+
     wxString extmsg;
     if ( dialog.SetYesNoCancelLabels
         (
@@ -827,21 +827,21 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
         "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
     }
     dialog.SetExtendedMessage(extmsg);
-    
+
     switch ( dialog.ShowModal() )
     {
         case wxID_YES:
             wxLogStatus(wxT("You pressed \"Yes\""));
             break;
-            
+
         case wxID_NO:
             wxLogStatus(wxT("You pressed \"No\""));
             break;
-            
+
         case wxID_CANCEL:
             wxLogStatus(wxT("You pressed \"Cancel\""));
             break;
-            
+
         default:
             wxLogError(wxT("Unexpected wxMessageDialog return code!"));
     }
@@ -2695,7 +2695,7 @@ bool TestMessageBoxDialog::Create()
     };
 
    wxCOMPILE_TIME_ASSERT( WXSIZEOF(icons) == MsgDlgIcon_Max, IconMismatch );
-   
+
     m_icons = new wxRadioBox(this, wxID_ANY, "&Icon style",
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(icons), icons,

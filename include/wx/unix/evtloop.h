@@ -25,7 +25,7 @@ namespace wxPrivate
     class PipeIOHandler;
 }
 
-class WXDLLIMPEXP_BASE wxConsoleEventLoop 
+class WXDLLIMPEXP_BASE wxConsoleEventLoop
 #ifdef __WXOSX__
 : public wxCFEventLoop
 #else

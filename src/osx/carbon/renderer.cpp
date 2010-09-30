@@ -44,7 +44,7 @@ inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
     return win->MacGetCGContextRef() != NULL ||
            // wxMemoryDC's also have a valid CGContext.
-           dc.IsKindOf( CLASSINFO(wxMemoryDC) ); 
+           dc.IsKindOf( CLASSINFO(wxMemoryDC) );
 }
 
 
@@ -304,12 +304,12 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
         if ( hasMetal )
             HIThemeDrawBackground(&splitterRect, &bgdrawInfo, cgContext, kHIThemeOrientationNormal);
-        else 
+        else
         {
             CGContextSetFillColorWithColor(cgContext,win->GetBackgroundColour().GetCGColor());
             CGContextFillRect(cgContext,splitterRect);
         }
-        
+
         HIThemeSplitterDrawInfo drawInfo;
         drawInfo.version = 0;
         drawInfo.state = kThemeStateActive;

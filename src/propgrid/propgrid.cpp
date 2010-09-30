@@ -2554,7 +2554,7 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
     //
     // Return rect which encloses the given property range
     // (in logical grid coordinates)
-    // 
+    //
 
     int visTop = p1->GetY();
     int visBottom;
@@ -5189,7 +5189,7 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
         // Disable splitter auto-centering (but only if moved any -
         // otherwise we end up disabling auto-center even after a
         // recentering double-click).
-        int posDiff = abs(m_startingSplitterX - 
+        int posDiff = abs(m_startingSplitterX -
                           GetSplitterPosition(m_draggedSplitter));
 
         if ( posDiff > 1 )

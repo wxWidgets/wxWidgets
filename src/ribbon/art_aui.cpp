@@ -864,7 +864,7 @@ void wxRibbonAUIArtProvider::DrawGalleryBackground(
     dc.SetPen(m_gallery_border_pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-    
+
     DrawGalleryBackgroundCommon(dc, wnd, rect);
 }
 
@@ -1122,7 +1122,7 @@ void wxRibbonAUIArtProvider::DrawTool(
         avail_width -= 8;
         if(is_split_hybrid)
         {
-            dc.DrawLine(rect.x + avail_width + 1, rect.y, 
+            dc.DrawLine(rect.x + avail_width + 1, rect.y,
                 rect.x + avail_width + 1, rect.y + rect.height);
         }
         dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,

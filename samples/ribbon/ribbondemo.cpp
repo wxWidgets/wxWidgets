@@ -249,18 +249,18 @@ MyFrame::MyFrame()
         shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
         shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
 
-        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"), 
-                                        wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"),
+                                        wxNullBitmap, wxDefaultPosition, wxDefaultSize,
                                         wxRIBBON_PANEL_EXT_BUTTON);
 
         wxArrayString as;
         as.Add("Item 1");
         as.Add("Item 2");
-        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString, 
+        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
-        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString, 
+        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
-    
+
         sizer_panelcombo->SetMinSize(wxSize(150, -1));
         sizer_panelcombo2->SetMinSize(wxSize(150, -1));
 
@@ -360,7 +360,7 @@ wxRibbonGallery* MyFrame::PopulateColoursPanel(wxWindow* panel,
     else
         gallery = new wxRibbonGallery(panel, gallery_id);
     wxMemoryDC& dc = m_bitmap_creation_dc;
-    wxRibbonGalleryItem *def_item = 
+    wxRibbonGalleryItem *def_item =
         AddColourToGallery(gallery, wxT("Default"), dc, &def);
     gallery->SetSelection(def_item);
     AddColourToGallery(gallery, wxT("BLUE"), dc);

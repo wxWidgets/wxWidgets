@@ -73,7 +73,7 @@ bool wxPopupWindow::Show(bool show)
         event.SetEventObject(this);
         HandleWindowEvent(event);
     }
-        
+
     return true;
 }
 

@@ -2837,7 +2837,7 @@ void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 void wxRichTextCtrl::OnImage(wxCommandEvent& WXUNUSED(event))
 {
     if (GetCurrentObject() && GetCurrentObject()->CanEditProperties())
-        GetCurrentObject()->EditProperties(this, & GetBuffer());        
+        GetCurrentObject()->EditProperties(this, & GetBuffer());
     SetCurrentObject(NULL);
 }
 

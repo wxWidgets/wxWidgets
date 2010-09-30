@@ -397,7 +397,7 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display a text message explaining the situation. 
+    Display a text message explaining the situation.
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
@@ -802,7 +802,7 @@ public:
 
     /**
         Centers the splitter.
-        
+
         @param enableAutoResizing
             If @true, automatic column resizing is enabled (only applicapple
             if window style wxPG_SPLITTER_AUTO_CENTER is used).

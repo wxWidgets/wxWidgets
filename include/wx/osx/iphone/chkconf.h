@@ -94,7 +94,7 @@
 #endif
 
 #ifndef __WXUNIVERSAL__
-#undef wxUSE_SCROLLBAR 
+#undef wxUSE_SCROLLBAR
 #define wxUSE_SCROLLBAR 0
 #endif
 

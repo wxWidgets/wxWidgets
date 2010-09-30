@@ -161,7 +161,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
         const wxImage img(DrawDice(256, i + 1));
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.GetWidth(), img.GetHeight(), 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.GetWidth(), img.GetHeight(),
                      0, GL_RGB, GL_UNSIGNED_BYTE, img.GetData());
     }
 

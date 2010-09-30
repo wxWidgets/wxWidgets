@@ -270,7 +270,7 @@ public :
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
     virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
-    
+
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
     // is the clicked event sent AFTER the state already changed, so no additional
@@ -278,7 +278,7 @@ public :
     virtual bool        ButtonClickDidStateChange() = 0;
 
     virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
-    
+
     // Mechanism used to keep track of whether a change should send an event
     // Do SendEvents(false) when starting actions that would trigger programmatic events
     // and SendEvents(true) at the end of the block.
@@ -481,13 +481,13 @@ public :
                                     long extraStyle);
 
 #if wxOSX_USE_COCOA
-    static wxWidgetImplType*    CreateComboBox( wxComboBox* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+    static wxWidgetImplType*    CreateComboBox( wxComboBox* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
                                     wxMenu* menu,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long extraStyle);
 #endif
 
@@ -564,7 +564,7 @@ public:
     // accessing content
 
     virtual unsigned int    ListGetCount() const = 0;
-    
+
     virtual int             DoListHitTest( const wxPoint& inpoint ) const = 0;
 };
 
@@ -628,7 +628,7 @@ public :
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool WXUNUSED(check)) { }
-    
+
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
 private:
@@ -645,20 +645,20 @@ public :
     wxComboWidgetImpl() {}
 
     virtual ~wxComboWidgetImpl() {}
-  
+
     virtual int GetSelectedItem() const { return -1; };
     virtual void SetSelectedItem(int WXUNUSED(item)) {};
-    
+
     virtual int GetNumberOfItems() const { return -1; };
-    
+
     virtual void InsertItem(int WXUNUSED(pos), const wxString& WXUNUSED(item)) {}
-    
+
     virtual void RemoveItem(int WXUNUSED(pos)) {}
-    
+
     virtual void Clear() {}
-    
+
     virtual wxString GetStringAtIndex(int WXUNUSED(pos)) const { return wxEmptyString; }
-    
+
     virtual int FindString(const wxString& WXUNUSED(text)) const { return -1; }
 };
 
@@ -671,7 +671,7 @@ class wxButtonImpl
     public :
     wxButtonImpl(){}
     virtual ~wxButtonImpl(){}
-    
+
     virtual void SetPressedBitmap( const wxBitmap& bitmap ) = 0;
 } ;
 
@@ -759,11 +759,11 @@ public :
     virtual void SetExtraStyle( long WXUNUSED(exStyle) )
     {
     }
-    
+
     virtual void SetWindowStyleFlag( long WXUNUSED(style) )
     {
     }
-    
+
     virtual bool SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
     {
         return false ;
@@ -797,7 +797,7 @@ public :
     virtual bool IsFullScreen() const= 0;
 
     virtual void ShowWithoutActivating() { Show(true); }
-    
+
     virtual bool ShowFullScreen(bool show, long style)= 0;
 
     virtual void RequestUserAttention(int flags) = 0;
@@ -807,23 +807,23 @@ public :
     virtual void WindowToScreen( int *x, int *y ) = 0;
 
     virtual bool IsActive() = 0;
-    
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     static wxNonOwnedWindowImpl*
                 FindFromWXWindow(WXWindow window);
-    
+
     static void  RemoveAssociations( wxNonOwnedWindowImpl* impl);
-    
+
     static void  Associate( WXWindow window, wxNonOwnedWindowImpl *impl );
-    
+
     // static creation methods, must be implemented by all toolkits
 
     static wxNonOwnedWindowImpl* CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow native) ;
-    
+
     static wxNonOwnedWindowImpl* CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name  ) ;
-    
+
     virtual void SetModified(bool WXUNUSED(modified)) { }
     virtual bool IsModified() const { return false; }
 

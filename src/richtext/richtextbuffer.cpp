@@ -111,13 +111,13 @@ public:
     static int SearchAdjacentRect(const wxRichTextFloatRectMapArray& array, int point);
 
     static int GetWidthFromFloatRect(const wxRichTextFloatRectMapArray& array, int index, int startY, int endY);
-    
+
     static void FreeFloatRectMapArray(wxRichTextFloatRectMapArray& array);
 
     static void DrawFloat(const wxRichTextFloatRectMapArray& array, wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     static int HitTestFloat(const wxRichTextFloatRectMapArray& array, wxDC& WXUNUSED(dc), const wxPoint& pt, long& textPosition);
-    
+
 private:
     wxRichTextFloatRectMapArray m_left;
     wxRichTextFloatRectMapArray m_right;
@@ -267,7 +267,7 @@ void wxRichTextFloatCollector::CollectFloat(wxRichTextParagraph* para)
     while (node)
     {
         wxRichTextObject* floating = node->GetData();
-        
+
         if (floating->IsFloating())
         {
             wxRichTextAnchoredObject* anchor = wxDynamicCast(floating, wxRichTextAnchoredObject);
@@ -276,7 +276,7 @@ void wxRichTextFloatCollector::CollectFloat(wxRichTextParagraph* para)
                 CollectFloat(para, floating);
             }
         }
-            
+
         node = node->GetNext();
     }
 
@@ -369,7 +369,7 @@ int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& ar
         else
             return wxRICHTEXT_HITTEST_AFTER;
     }
-    
+
     return wxRICHTEXT_HITTEST_NONE;
 }
 
@@ -383,7 +383,7 @@ int wxRichTextFloatCollector::HitTest(wxDC& dc, const wxPoint& pt, long& textPos
     return ret;
 }
 
-// Helpers for efficiency 
+// Helpers for efficiency
 inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
 {
     // JACS: did I do this some time ago when testing? Should we re-enable it?
@@ -438,7 +438,7 @@ void wxRichTextAnchoredObjectAttr::Init()
 
     m_unitsW = wxRICHTEXT_PX;
     m_unitsH = wxRICHTEXT_PX;
-    
+
     // Unspecified to begin with (use actual image size)
     m_width = -1;
     m_height = -1;
@@ -952,7 +952,7 @@ bool wxRichTextParagraphLayoutBox::UpdateFloatingObjects(int width, wxRichTextOb
             m_floatCollector->CollectFloat(child);
         node = node->GetNext();
     }
-    
+
     return true;
 }
 
@@ -962,7 +962,7 @@ int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, const wxPoint& pt, long& tex
     int ret = wxRICHTEXT_HITTEST_NONE;
     if (m_floatCollector)
         ret = m_floatCollector->HitTest(dc, pt, textPosition);
-        
+
     if (ret == wxRICHTEXT_HITTEST_NONE)
         return wxRichTextCompositeObject::HitTest(dc, pt, textPosition);
     else
@@ -5002,7 +5002,7 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, w
             anchored->GetRangeSize(anchored->GetRange(), size, descent, dc, style);
             wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
             int pos = floatCollector->GetFitPosition(attr.m_floating, rect.y + attr.m_offset, size.y);
-        
+
             /* Update the offset */
             attr.m_offset = pos - rect.y;
             anchored->SetAnchoredAttr(attr);
@@ -7614,15 +7614,15 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
     {
         if (!m_imageBlock.IsOk())
             return false;
-            
+
         wxImage image;
         m_imageBlock.Load(image);
         if (!image.IsOk())
             return false;
-        
+
         int width = image.GetWidth();
         int height = image.GetHeight();
-        
+
         if (m_anchoredAttr.m_width != -1)
         {
             // Calculate the user specified length
@@ -7630,7 +7630,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
             {
                 width = ConvertTenthsMMToPixels(dc, m_anchoredAttr.m_width);
             }
-            else 
+            else
             {
                 width = m_anchoredAttr.m_width;
             }
@@ -7667,7 +7667,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
             m_imageCache = wxBitmap(img);
         }
     }
-    
+
     return m_imageCache.IsOk();
 }
 
@@ -7678,7 +7678,7 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
     // wxSize size = GetCachedSize();
     if (!LoadImageCache(dc))
         return false;
-    
+
     int y = rect.y + (rect.height - m_imageCache.GetHeight());
 
     dc.DrawBitmap(m_imageCache, rect.x, y, true);
@@ -7721,7 +7721,7 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
             partialExtents->Add(0);
         return false;
     }
-    
+
     int width = m_imageCache.GetWidth();
     int height = m_imageCache.GetHeight();
 
@@ -8063,7 +8063,7 @@ bool wxRichTextImageBlock::MakeImageBlockDefaultQuality(const wxImage& image, wx
 {
     if (imageType == wxBITMAP_TYPE_INVALID)
         return false; // Could not determine image type
-        
+
     return DoMakeImageBlock(image, imageType);
 }
 
@@ -8075,16 +8075,16 @@ bool wxRichTextImageBlock::DoMakeImageBlock(const wxImage& image, wxBitmapType i
     {
         return false;
     }
-    
+
     unsigned char* block = new unsigned char[memStream.GetSize()];
     if (!block)
         return NULL;
-        
+
     if (m_data)
         delete[] m_data;
     m_data = block;
-    
-    m_imageType = imageType;    
+
+    m_imageType = imageType;
     m_dataSize = memStream.GetSize();
 
     memStream.CopyTo(m_data, m_dataSize);

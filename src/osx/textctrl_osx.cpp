@@ -117,13 +117,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
     m_peer = wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate(pos, size) ;
-    
+
 #if wxOSX_USE_COCOA
     // under carbon everything can already be set before the MacPostControlCreate embedding takes place
     // but under cocoa for single line textfields this only works after everything has been set up
     GetTextPeer()->SetStringValue(str);
 #endif
-    
+
     // only now the embedding is correct and we can do a positioning update
 
     MacSuperChangedPosition() ;
@@ -206,7 +206,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
         if (size.x > 0 && size.y > 0)
             return size;
     }
-    
+
     int wText, hText;
 
     // these are the numbers from the HIG:
@@ -292,7 +292,7 @@ void wxTextCtrl::Copy()
 {
     if (CanCopy())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());        
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {
@@ -305,7 +305,7 @@ void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_CUT, GetId());        
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_CUT, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {
@@ -320,7 +320,7 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_PASTE, GetId());        
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_PASTE, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {

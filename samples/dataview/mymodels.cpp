@@ -348,7 +348,7 @@ void MyListModel::Prepend( const wxString &text )
 void MyListModel::DeleteItem( const wxDataViewItem &item )
 {
     unsigned int row = GetRow( item );
-    
+
     if (row >= m_textColValues.GetCount())
         return;
 

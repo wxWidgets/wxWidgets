@@ -24,7 +24,7 @@ protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 
     virtual void DoRun();
-    
+
     virtual void DoStop();
 
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;

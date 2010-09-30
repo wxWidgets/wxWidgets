@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextimagedlg.h
-// Purpose:     
+// Purpose:
 // Author:      Mingquan Yang
-// Modified by: 
+// Modified by:
 // Created:     Wed 02 Jun 2010 11:27:23 CST
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Mingquan Yang
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
  */
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextImageDialog: public wxDialog
-{    
+{
     DECLARE_DYNAMIC_CLASS( wxRichTextImageDialog )
     DECLARE_EVENT_TABLE()
 

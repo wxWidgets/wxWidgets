@@ -487,7 +487,7 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
 {
     // Make sure there is correct text (instead of unspecified value
     // indicator or hint text)
-    int flags = property->HasFlag(wxPG_PROP_READONLY) ? 
+    int flags = property->HasFlag(wxPG_PROP_READONLY) ?
         0 : wxPG_EDITABLE_VALUE;
     wxString correctText = property->GetValueAsString(flags);
 
@@ -499,7 +499,7 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
 
     tc->SetSelection(-1,-1);
 }
- 
+
 void wxPGTextCtrlEditor::OnFocus( wxPGProperty* property,
                                   wxWindow* wnd ) const
 {
@@ -1806,7 +1806,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
             m_labelEditor->Move(pos.x, r.y + offset);
         }
 
-        if ( m_wndEditor || m_wndEditor2 ) 
+        if ( m_wndEditor || m_wndEditor2 )
         {
             wxRect r = GetEditorWidgetRect(selected, 1);
 

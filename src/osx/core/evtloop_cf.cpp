@@ -221,7 +221,7 @@ void wxCFEventLoop::WakeUp()
 void wxMacWakeUp()
 {
     wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
-    
+
     if ( loop )
         loop->WakeUp();
 }
@@ -444,7 +444,7 @@ static size_t gs_nWaitingForGui = 0;
 
 void wxOSXThreadModuleOnInit()
 {
-    gs_critsectWaitingForGui = new wxCriticalSection();    
+    gs_critsectWaitingForGui = new wxCriticalSection();
     gs_critsectGui = new wxCriticalSection();
     gs_critsectGui->Enter();
 }
@@ -459,11 +459,11 @@ void wxOSXThreadModuleOnExit()
             gs_critsectGui->Enter();
             gs_bGuiOwnedByMainThread = true;
         }
-        
+
         gs_critsectGui->Leave();
         wxDELETE(gs_critsectGui);
     }
-    
+
     wxDELETE(gs_critsectWaitingForGui);
 }
 
@@ -479,18 +479,18 @@ void wxMutexGuiEnterImpl()
     // this would dead lock everything...
     wxASSERT_MSG( !wxThread::IsMain(),
                  wxT("main thread doesn't want to block in wxMutexGuiEnter()!") );
-    
+
     // the order in which we enter the critical sections here is crucial!!
-    
+
     // set the flag telling to the main thread that we want to do some GUI
     {
         wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
-        
+
         gs_nWaitingForGui++;
     }
-    
+
     wxWakeUpMainThread();
-    
+
     // now we may block here because the main thread will soon let us in
     // (during the next iteration of OnIdle())
     gs_critsectGui->Enter();
@@ -499,7 +499,7 @@ void wxMutexGuiEnterImpl()
 void wxMutexGuiLeaveImpl()
 {
     wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
-    
+
     if ( wxThread::IsMain() )
     {
         gs_bGuiOwnedByMainThread = false;
@@ -509,12 +509,12 @@ void wxMutexGuiLeaveImpl()
         // decrement the number of threads waiting for GUI access now
         wxASSERT_MSG( gs_nWaitingForGui > 0,
                      wxT("calling wxMutexGuiLeave() without entering it first?") );
-        
+
         gs_nWaitingForGui--;
-        
+
         wxWakeUpMainThread();
     }
-    
+
     gs_critsectGui->Leave();
 }
 
@@ -522,12 +522,12 @@ void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter()
 {
     wxASSERT_MSG( wxThread::IsMain(),
                  wxT("only main thread may call wxMutexGuiLeaveOrEnter()!") );
-    
+
     if ( !gs_critsectWaitingForGui )
         return;
-    
+
     wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
-    
+
     if ( gs_nWaitingForGui == 0 )
     {
         // no threads are waiting for GUI - so we may acquire the lock without
@@ -535,7 +535,7 @@ void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter()
         if ( !wxGuiOwnedByMainThread() )
         {
             gs_critsectGui->Enter();
-            
+
             gs_bGuiOwnedByMainThread = true;
         }
         //else: already have it, nothing to do

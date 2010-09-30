@@ -66,7 +66,7 @@ public:
                 const wxString& label,
                 const wxBitmap& bitmap,
                 const wxString& help_string = wxEmptyString);
-    
+
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,

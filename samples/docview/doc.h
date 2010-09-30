@@ -166,7 +166,7 @@ class wxTextDocument : public wxDocument
 public:
     wxTextDocument() : wxDocument() { }
 
-    virtual bool OnCreate(const wxString& path, long flags); 
+    virtual bool OnCreate(const wxString& path, long flags);
 
     virtual wxTextCtrl* GetTextCtrl() const = 0;
 

@@ -2071,12 +2071,12 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
                WXUNUSED_UNLESS_DEBUG( OSStatus status = ) m_dbImpl->GetItemPartBounds( id, kMinColumnId + column, kDataBrowserPropertyEnclosingPart, &enclosingRect );
                wxASSERT( status == noErr );
-              
+
                enclosingCGRect = CGRectMake(enclosingRect.left,
                                             enclosingRect.top,
                                             enclosingRect.right - enclosingRect.left,
                                             enclosingRect.bottom - enclosingRect.top);
-              
+
                if (column >= 0)
                {
                    if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
@@ -2085,7 +2085,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
                        if (lcItem->HasColumnInfo(column))
                        {
                            wxListItem* item = lcItem->GetColumnInfo(column);
-                          
+
                            if (item->GetMask() & wxLIST_MASK_IMAGE)
                            {
                                imgIndex = item->GetImage();
@@ -2101,9 +2101,9 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
                        }
                    }
                }
-          
+
                calculateCGDrawingBounds(enclosingCGRect, &iconCGRect, &textCGRect, (imgIndex != -1) );
-              
+
                if ( CGRectContainsPoint( iconCGRect, click_point ) )
                {
                    flags = wxLIST_HITTEST_ONITEMICON;

@@ -47,7 +47,7 @@ protected :
     virtual void            TransferPaperInfoTo( wxPrintData &data );
     virtual void            TransferResolutionTo( wxPrintData &data );
 
-    
+
     virtual void            UpdateFromPMState();
     virtual void            UpdateToPMState();
 

@@ -752,9 +752,9 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
                     {
                         OutputIndentation(stream, indent);
                         OutputString(stream, wxT("<") + objectName, convMem, convFile);
-                        
+
                         OutputString(stream, style + wxT(">"), convMem, convFile);
-                        
+
                         if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
                         {
                             OutputString(stream, wxT("\""), convMem, convFile);
@@ -763,7 +763,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
                         }
                         else
                             OutputStringEnt(stream, fragment, convMem, convFile);
-                        
+
                         OutputString(stream, wxT("</text>"), convMem, convFile);
                     }
                 }

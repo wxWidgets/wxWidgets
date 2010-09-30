@@ -226,7 +226,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
-    
+
     m_canvas = new MyCanvas(this);
 
 #if wxUSE_STATUSBAR
@@ -413,7 +413,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     PrepareDC( dc );
     dc.Clear();
-    
+
     dc.SetFont( m_font );
 
     for ( int y = 0; y < m_yChars; y++ )

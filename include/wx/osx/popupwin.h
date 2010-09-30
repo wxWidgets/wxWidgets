@@ -26,7 +26,7 @@ public:
         { (void)Create(parent, flags); }
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
-    
+
     virtual bool Show(bool show);
 
 protected:

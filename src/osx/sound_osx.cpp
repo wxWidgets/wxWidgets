@@ -2,7 +2,7 @@
 // Name:        src/osx/sound_osx.cpp
 // Purpose:     wxSound class common osx code
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     2009-09-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
@@ -35,20 +35,20 @@ public:
     : m_sound(snd)
     {
     }
-    
+
     virtual ~wxSoundTimer()
     {
         Stop();
         if (m_sound)
             m_sound->DoStop();
     }
-    
+
     void Notify()
     {
         if (m_sound)
             m_sound->SoundTask();
     }
-    
+
 protected:
     wxSoundData* m_sound;
 };
@@ -90,7 +90,7 @@ void wxSoundData::CreateAndStartTimer()
     m_pTimer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
 }
 
-wxSound::wxSound() 
+wxSound::wxSound()
 {
     Init();
 }
@@ -122,7 +122,7 @@ wxSound::~wxSound()
             break;
         }
     }
-    
+
     if (isPlaying)
         m_data->MarkForDeletion();
     else
@@ -142,7 +142,7 @@ bool wxSound::DoPlay(unsigned flags) const
         if ( !m_data->Play(flags) )
             s_soundsPlaying.pop_back();
     }
-    
+
     return false;
 }
 
@@ -166,7 +166,7 @@ void wxSound::SoundStopped(const wxSoundData* data)
     for ( wxVector<wxSoundData*>::iterator s = s_soundsPlaying.begin();
          s != s_soundsPlaying.end(); ++s )
     {
-        if ( (*s) == data ) 
+        if ( (*s) == data )
         {
             s_soundsPlaying.erase(s);
             break;

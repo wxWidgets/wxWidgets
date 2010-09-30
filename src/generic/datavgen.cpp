@@ -95,7 +95,7 @@ void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
     m_sort = false;
     m_sortAscending = true;
 }
-    
+
 void wxDataViewColumn::UpdateDisplay()
 {
     if (m_owner)
@@ -3815,7 +3815,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                         else if ( align & wxALIGN_BOTTOM )
                             rectItem.y += cell_rect.height - size.y;
                         // else: wxALIGN_TOP is the default
-                    }       
+                    }
                 }
 
                 wxPoint pos( event.GetPosition() );
@@ -4146,7 +4146,7 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
         if (column==col)
             return i;
     }
-    
+
     return wxNOT_FOUND;
 #else
     // This returns the position in pixels which is not what we want.
@@ -4248,9 +4248,9 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
         // Unselect all rows before select another in the single select mode
         if (m_clientArea->IsSingleSel())
             m_clientArea->SelectAllRows(false);
-            
+
         m_clientArea->SelectRow(row, true);
-        
+
         // Also set focus to the selected item
         m_clientArea->ChangeCurrentRow( row );
     }

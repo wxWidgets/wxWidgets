@@ -1044,7 +1044,7 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool ShowFullScreen(bool show, long style);
-    
+
     virtual void ShowWithoutActivating();
 
     virtual void RequestUserAttention(int flags);

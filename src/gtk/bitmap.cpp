@@ -794,7 +794,7 @@ bool wxBitmap::HasPixbuf() const
 void wxBitmap::SetPixbuf(GdkPixbuf* pixbuf)
 {
     UnRef();
-    
+
     if (!pixbuf)
         return;
 

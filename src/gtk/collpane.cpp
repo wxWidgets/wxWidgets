@@ -204,7 +204,7 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
-    
+
     // we should blend into our parent background
     const wxColour bg = parent->GetBackgroundColour();
     SetBackgroundColour(bg);
@@ -285,7 +285,7 @@ GdkWindow *wxCollapsiblePane::GTKGetWindow(wxArrayGdkWindows& windows) const
     windows.Add( m_widget->window );
 
     return NULL;
-} 
+}
 
 #endif // wxUSE_COLLPANE && !defined(__WXUNIVERSAL__)
 

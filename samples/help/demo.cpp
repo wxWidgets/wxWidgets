@@ -461,10 +461,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_embeddedHelpWindow = new wxHtmlHelpWindow;
     // m_embeddedHtmlHelp.UseConfig(config, rootPath); // Can set your own config object here
     m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);
-    
+
     m_embeddedHelpWindow->Create(this,
         wxID_ANY, wxDefaultPosition, GetClientSize(), wxTAB_TRAVERSAL|wxNO_BORDER, wxHF_DEFAULT_STYLE);
-        
+
     m_embeddedHtmlHelp.AddBook(wxFileName(wxT("doc.zip")));
     m_embeddedHtmlHelp.Display(wxT("Introduction"));
 #else

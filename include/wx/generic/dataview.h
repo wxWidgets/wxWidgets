@@ -79,7 +79,7 @@ public:
 private:
     // common part of all ctors
     void Init(int width, wxAlignment align, int flags);
-    
+
     void UpdateDisplay();
 
     wxString m_title;

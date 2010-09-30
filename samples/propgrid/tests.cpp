@@ -1131,7 +1131,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         InitPanel();
 
         const int trySplitterPos = 50;
-    
+
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
         pgman = m_pPropGridManager =
             new wxPropertyGridManager(m_panel, wxID_ANY,

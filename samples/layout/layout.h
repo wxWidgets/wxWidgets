@@ -103,10 +103,10 @@ class MySimpleSizerFrame : public wxFrame
 {
 public:
     MySimpleSizerFrame(const wxString &title, int x, int y );
-    
+
     void OnSetSmallSize( wxCommandEvent &event);
     void OnSetBigSize( wxCommandEvent &event);
-    
+
 private:
     wxTextCtrl  *m_target;
 
@@ -121,8 +121,8 @@ class MyNestedSizerFrame : public wxFrame
 {
 public:
     MyNestedSizerFrame(const wxString &title, int x, int y );
-    
-    
+
+
 private:
     wxTextCtrl  *m_target;
 };

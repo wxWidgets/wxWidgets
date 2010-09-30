@@ -116,7 +116,7 @@ _WX_DECLARE_TYPEINFO_CUSTOM(CLS, sm_wxClassInfo)
 
 #define wxTypeId(OBJ) (OBJ).GetWxTypeId()
 
-// Because abstract classes cannot be instantiated, we use 
+// Because abstract classes cannot be instantiated, we use
 // this macro to define pure virtual type interface for them.
 #define WX_DECLARE_ABSTRACT_TYPEINFO(CLS) \
 public: \

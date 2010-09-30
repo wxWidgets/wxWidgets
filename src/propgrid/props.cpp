@@ -2153,7 +2153,7 @@ void wxPGArrayEditorDialog::OnAddClick(wxCommandEvent& event)
     wxListCtrl* lc = m_elb->GetListCtrl();
     int newItemIndex = lc->GetItemCount() - 1;
 
-    if ( m_hasCustomNewAction ) 
+    if ( m_hasCustomNewAction )
     {
         wxString str;
         if ( OnCustomNewAction(&str) )

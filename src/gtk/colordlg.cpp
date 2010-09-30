@@ -54,7 +54,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 #if wxUSE_LIBHILDON
     m_widget = hildon_color_selector_new(parentGTK);
-#elif wxUSE_LIBHILDON2 // !wxUSE_LIBHILDON 
+#elif wxUSE_LIBHILDON2 // !wxUSE_LIBHILDON
     m_widget = hildon_color_chooser_dialog_new();
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     wxString title(_("Choose colour"));

@@ -214,7 +214,7 @@ void wxStaticText::SetLabel(const wxString& label)
     }
 #endif // SS_ENDELLIPSIS
 
-    // save the label in m_labelOrig with both the markup (if any) and 
+    // save the label in m_labelOrig with both the markup (if any) and
     // the mnemonics characters (if any)
     m_labelOrig = label;
 

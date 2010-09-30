@@ -248,7 +248,7 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
         Refresh();
     }
-    
+
     wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
 }
 
@@ -258,7 +258,7 @@ bool wxRibbonPanel::IsMinimised(wxSize at_size) const
         return false;
 
     return (at_size.GetX() <= m_minimised_size.GetX() &&
-        at_size.GetY() <= m_minimised_size.GetY()) || 
+        at_size.GetY() <= m_minimised_size.GetY()) ||
         at_size.GetX() < m_smallest_unminimised_size.GetX() ||
         at_size.GetY() < m_smallest_unminimised_size.GetY();
 }

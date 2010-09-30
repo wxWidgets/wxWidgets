@@ -44,9 +44,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
-    
+
     bool Create(wxWindow *parent, WXWindow nativeWindow);
-    
+
     virtual bool Destroy();
 
     virtual wxPoint GetClientAreaOrigin() const;
@@ -64,7 +64,7 @@ public:
     virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void Restore();
-    
+
     virtual bool IsActive();
 
     virtual void ShowWithoutActivating();

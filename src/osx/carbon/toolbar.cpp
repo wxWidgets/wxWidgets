@@ -1150,7 +1150,7 @@ void wxToolBar::MacUninstallNativeToolbar()
 {
     if (!m_macToolbar)
         return;
-        
+
     WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
     if (tlw)
         SetWindowToolbar( tlw, NULL );

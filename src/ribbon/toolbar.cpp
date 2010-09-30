@@ -596,7 +596,7 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
                 what = wxRIBBON_TOOLBAR_TOOL_DROPDOWN_HOVERED;
 
             new_hover->state |= what;
-            
+
             if(new_hover == m_active_tool)
             {
                 new_hover->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
