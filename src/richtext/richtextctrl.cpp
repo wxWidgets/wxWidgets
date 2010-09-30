@@ -300,12 +300,21 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     m_contextMenu->AppendSeparator();
     m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
 
+    long ids = wxNewId();
+    m_contextMenu->AppendSeparator();
+    m_contextMenu->Append(ids, _("&Properties"));
+
+    Connect(ids, wxEVT_UPDATE_UI, wxUpdateUIEventHandler(wxRichTextCtrl::OnUpdateImage));
+    Connect(ids, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxRichTextCtrl::OnImage));
+    m_imagePropertyId = ids;
     return true;
 }
 
 wxRichTextCtrl::~wxRichTextCtrl()
 {
     GetBuffer().RemoveEventHandler(this);
+    Disconnect(m_imagePropertyId, wxEVT_UPDATE_UI, wxUpdateUIEventHandler(wxRichTextCtrl::OnUpdateImage));
+    Disconnect(m_imagePropertyId, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxRichTextCtrl::OnImage));
 
     delete m_contextMenu;
 }
@@ -326,6 +335,7 @@ void wxRichTextCtrl::Init()
     m_fullLayoutSavedPosition = 0;
     m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
     m_caretPositionForDefaultStyle = -2;
+    m_currentObject = NULL;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -2387,34 +2397,34 @@ void wxRichTextCtrl::AppendText(const wxString& text)
 }
 
 /// Write an image at the current insertion point
-bool wxRichTextCtrl::WriteImage(const wxImage& image, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxImage& image, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     wxRichTextImageBlock imageBlock;
 
     wxImage image2 = image;
     if (imageBlock.MakeImageBlock(image2, bitmapType))
-        return WriteImage(imageBlock);
+        return WriteImage(imageBlock, attr);
 
     return false;
 }
 
-bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     wxRichTextImageBlock imageBlock;
 
     wxImage image;
     if (imageBlock.MakeImageBlock(filename, bitmapType, image, false))
-        return WriteImage(imageBlock);
+        return WriteImage(imageBlock, attr);
 
     return false;
 }
 
-bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock)
+bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAnchoredObjectAttr& attr)
 {
-    return GetBuffer().InsertImageWithUndo(m_caretPosition+1, imageBlock, this);
+    return GetBuffer().InsertImageWithUndo(m_caretPosition+1, imageBlock, this, NULL, attr);
 }
 
-bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     if (bitmap.Ok())
     {
@@ -2422,7 +2432,7 @@ bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType)
 
         wxImage image = bitmap.ConvertToImage();
         if (image.Ok() && imageBlock.MakeImageBlock(image, bitmapType))
-            return WriteImage(imageBlock);
+            return WriteImage(imageBlock, attr);
     }
 
     return false;
@@ -2824,12 +2834,41 @@ void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(GetLastPosition() > 0);
 }
 
+void wxRichTextCtrl::OnImage(wxCommandEvent& WXUNUSED(event))
+{
+    if (GetCurrentObject() && GetCurrentObject()->CanEditProperties())
+        GetCurrentObject()->EditProperties(this, & GetBuffer());        
+    SetCurrentObject(NULL);
+}
+
+void wxRichTextCtrl::OnUpdateImage(wxUpdateUIEvent& event)
+{
+    event.Enable(GetCurrentObject() != NULL && GetCurrentObject()->CanEditProperties());
+}
+
 void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
     if (event.GetEventObject() != this)
     {
         event.Skip();
         return;
+    }
+
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    dc.SetFont(GetFont());
+
+    long position = 0;
+    wxPoint pt = event.GetPosition();
+    wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
+    int hit = GetBuffer().HitTest(dc, logicalPt, position);
+    if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
+    {
+        m_currentObject = GetBuffer().GetLeafObjectAtPosition(position);
+    }
+    else
+    {
+        m_currentObject = NULL;
     }
 
     if (m_contextMenu)
@@ -2845,6 +2884,11 @@ bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxTextAttr& style)
 {
     return GetBuffer().SetStyle(range.ToInternal(), style);
+}
+
+void wxRichTextCtrl::SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& attr)
+{
+    GetBuffer().SetImageStyle(image, attr);
 }
 
 // extended style setting operation with flags including:

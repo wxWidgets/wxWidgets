@@ -813,8 +813,8 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 
         wxString style = CreateStyle(obj.GetAttributes(), false);
 
-        if (imageObj.GetImage().Ok() && !imageObj.GetImageBlock().Ok())
-            imageObj.MakeBlock();
+        //if (imageObj.GetImage().Ok() && !imageObj.GetImageBlock().Ok())
+        //    imageObj.MakeBlock();
 
         OutputIndentation(stream, indent);
         OutputString(stream, wxT("<") + objectName, convMem, convFile);

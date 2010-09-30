@@ -3596,6 +3596,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextsymboldlg.cpp
     src/richtext/richtextstyledlg.cpp
     src/richtext/richtextprint.cpp
+    src/richtext/richtextimagedlg.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
     wx/richtext/richtextctrl.h
@@ -3607,6 +3608,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtext/richtextsymboldlg.h
     wx/richtext/richtextstyledlg.h
     wx/richtext/richtextprint.h
+    wx/richtext/richtextimagedlg.h
 </set>
 
 

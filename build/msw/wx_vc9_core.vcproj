@@ -7336,6 +7336,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextimagedlg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>

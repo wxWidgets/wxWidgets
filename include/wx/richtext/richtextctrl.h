@@ -184,6 +184,10 @@ public:
     long GetSelectionAnchor() const { return m_selectionAnchor; }
     void SetSelectionAnchor(long anchor) { m_selectionAnchor = anchor; }
 
+    /// The wxRichTextObject object under mouse if any
+    wxRichTextObject* GetCurrentObject() const { return m_currentObject; }
+    void SetCurrentObject(wxRichTextObject* obj) { m_currentObject = obj; }
+
 // Operations
 
     // editing
@@ -221,6 +225,9 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
+
+    // Set an image style
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& style);
 
     // get the common set of styles for the range
     virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style);
@@ -309,17 +316,17 @@ public:
 
     /// Write an image at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Write a bitmap at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Load an image from file and write at the current insertion point.
-    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType);
+    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Write an image block at the current insertion point.
-    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock);
+    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Insert a newline (actually paragraph) at the current insertion point.
     virtual bool Newline();
@@ -621,6 +628,7 @@ public:
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
 
     void OnUpdateCut(wxUpdateUIEvent& event);
@@ -629,6 +637,7 @@ public:
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
+    void OnUpdateImage(wxUpdateUIEvent& event);
     void OnUpdateClear(wxUpdateUIEvent& event);
 
     // Show a context menu for Rich Edit controls (the standard
@@ -883,6 +892,9 @@ private:
     wxCursor                m_urlCursor;
 
     static wxArrayString    sm_availableFontNames;
+    /// The wxRichTextObject object under mouse if any
+    wxRichTextObject*       m_currentObject;
+    long                    m_imagePropertyId;
 };
 
 /*!

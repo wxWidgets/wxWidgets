@@ -78,6 +78,7 @@
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/richtext/richtextstyledlg.h"
 #include "wx/richtext/richtextprint.h"
+#include "wx/richtext/richtextimagedlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -145,6 +146,8 @@ public:
     void OnIndentLess(wxCommandEvent& event);
 
     void OnFont(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
+    void OnUpdateImage(wxUpdateUIEvent& event);
     void OnParagraph(wxCommandEvent& event);
     void OnFormat(wxCommandEvent& event);
     void OnUpdateFormat(wxUpdateUIEvent& event);
@@ -181,6 +184,7 @@ public:
     void OnPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
 
+    void OnInsertImage(wxCommandEvent& event);
 protected:
 
     // Forward command events to the current rich text control, if any
@@ -211,6 +215,7 @@ enum
     ID_FORMAT_ITALIC,
     ID_FORMAT_UNDERLINE,
     ID_FORMAT_FONT,
+    ID_FORMAT_IMAGE,
     ID_FORMAT_PARAGRAPH,
     ID_FORMAT_CONTENT,
 
@@ -218,6 +223,7 @@ enum
 
     ID_INSERT_SYMBOL,
     ID_INSERT_URL,
+    ID_INSERT_IMAGE,
 
     ID_FORMAT_ALIGN_LEFT,
     ID_FORMAT_ALIGN_CENTRE,
@@ -286,10 +292,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_FORMAT_ALIGN_RIGHT,  MyFrame::OnUpdateAlignRight)
 
     EVT_MENU(ID_FORMAT_FONT,  MyFrame::OnFont)
+    EVT_MENU(ID_FORMAT_IMAGE, MyFrame::OnImage)
     EVT_MENU(ID_FORMAT_PARAGRAPH,  MyFrame::OnParagraph)
     EVT_MENU(ID_FORMAT_CONTENT,  MyFrame::OnFormat)
     EVT_UPDATE_UI(ID_FORMAT_CONTENT,  MyFrame::OnUpdateFormat)
     EVT_UPDATE_UI(ID_FORMAT_FONT,  MyFrame::OnUpdateFormat)
+    EVT_UPDATE_UI(ID_FORMAT_IMAGE, MyFrame::OnUpdateImage)
     EVT_UPDATE_UI(ID_FORMAT_PARAGRAPH,  MyFrame::OnUpdateFormat)
     EVT_MENU(ID_FORMAT_INDENT_MORE,  MyFrame::OnIndentMore)
     EVT_MENU(ID_FORMAT_INDENT_LESS,  MyFrame::OnIndentLess)
@@ -305,6 +313,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
     EVT_MENU(ID_INSERT_URL,  MyFrame::OnInsertURL)
+    EVT_MENU(ID_INSERT_IMAGE, MyFrame::OnInsertImage)
 
     EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
     EVT_MENU(ID_FORMAT_BULLETS_AND_NUMBERING, MyFrame::OnBulletsAndNumbering)
@@ -621,6 +630,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_LINE_SPACING_DOUBLE, _("Double Line Spacing"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
+    formatMenu->Append(ID_FORMAT_IMAGE, _("Image Property"));
     formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
     formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
     formatMenu->AppendSeparator();
@@ -640,6 +650,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
     insertMenu->Append(ID_INSERT_URL, _("&URL..."));
+    insertMenu->Append(ID_INSERT_IMAGE, _("&Image..."));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -689,6 +700,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxEmptyString, wxBitmap(indentmore_xpm), _("Indent More"));
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxEmptyString, wxBitmap(font_xpm), _("Font"));
+    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxBitmap(font_xpm), _("Image Property"));
 
     wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
     toolBar->AddControl(combo);
@@ -742,6 +754,8 @@ void MyFrame::WriteInitialText()
 
     r.BeginSuppressUndo();
 
+    r.Freeze();
+
     r.BeginParagraphSpacing(0, 20);
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -767,6 +781,18 @@ void MyFrame::WriteInitialText()
     r.Newline();
 
     r.EndAlignment();
+
+    r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
+    wxRichTextAnchoredObjectAttr anchoredAttr;
+    anchoredAttr.m_floating = wxRICHTEXT_FLOAT_LEFT;
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
+    anchoredAttr.m_floating = wxRICHTEXT_FLOAT_RIGHT;
+    anchoredAttr.m_offset = 200;
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.EndAlignment();
+    r.Newline();
 
     r.WriteText(wxT("What can you do with this thing? "));
 
@@ -922,6 +948,8 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
+
+    r.Thaw();
 
     r.EndSuppressUndo();
 }
@@ -1154,6 +1182,27 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
+void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextRange range;
+    wxASSERT(m_richTextCtrl->HasSelection());
+
+    range = m_richTextCtrl->GetSelectionRange();
+    wxASSERT(range.ToInternal().GetLength() == 1);
+
+    wxRichTextImage* image = wxDynamicCast(m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart()), wxRichTextImage);
+    if (image)
+    {
+        wxRichTextImageDialog imageDlg(this);
+        imageDlg.SetImageObject(image, &m_richTextCtrl->GetBuffer());
+
+        if (imageDlg.ShowModal() == wxID_OK)
+        {
+            image = imageDlg.ApplyImageAttr();
+        }
+    }
+}
+
 void MyFrame::OnParagraph(wxCommandEvent& WXUNUSED(event))
 {
     wxRichTextRange range;
@@ -1195,6 +1244,25 @@ void MyFrame::OnFormat(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 {
     event.Enable(m_richTextCtrl->HasSelection());
+}
+
+void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
+{
+    wxRichTextRange range;
+    wxRichTextObject *obj;
+
+    range = m_richTextCtrl->GetSelectionRange();
+    if (range.ToInternal().GetLength() == 1)
+    {
+        obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
+        if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
+        {
+            event.Enable(true);
+            return;
+        }
+    }
+
+    event.Enable(false);
 }
 
 void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
@@ -1559,6 +1627,16 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
         m_richTextCtrl->WriteText(url);
         m_richTextCtrl->EndURL();
         m_richTextCtrl->EndStyle();
+    }
+}
+
+void MyFrame::OnInsertImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png");
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString path = dialog.GetPath();
+        m_richTextCtrl->WriteImage(path, wxBITMAP_TYPE_ANY);
     }
 }
 
