@@ -700,11 +700,16 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
         case wxPAT_PCHAR:
         case wxPAT_PWCHAR:
             {
-                wxArgNormalizedString arg(p->pad_str);
-                wxString s = arg;
-
-                if ( !arg.IsValid() && m_nMaxWidth >= 6 )
-                    s = wxT("(null)");
+                wxString s;
+                if ( !p->pad_str )
+                {
+                    if ( m_nMaxWidth >= 6 )
+                        s = wxT("(null)");
+                }
+                else if (m_type == wxPAT_PCHAR)
+                    s.assign(static_cast<const char *>(p->pad_str));
+                else // m_type == wxPAT_PWCHAR
+                    s.assign(static_cast<const wchar_t *>(p->pad_str));
 
                 typename wxPrintfStringHelper<CharType>::ConvertedType strbuf(
                         wxPrintfStringHelper<CharType>::Convert(s));
