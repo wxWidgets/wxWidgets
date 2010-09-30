@@ -814,7 +814,6 @@ void * wxFont::MacGetATSUStyle() const
     return M_FONTDATA->m_macATSUStyle;
 }
 
-#if WXWIN_COMPATIBILITY_2_8
 wxUint32 wxFont::MacGetATSUFontID() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
@@ -834,8 +833,6 @@ wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 
     return M_FONTDATA->m_info.m_atsuAdditionalQDStyles;
 }
-#endif
-
 #endif
 
 #if wxOSX_USE_CORE_TEXT
