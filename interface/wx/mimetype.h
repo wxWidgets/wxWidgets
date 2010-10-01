@@ -334,3 +334,83 @@ public:
                          const MessageParameters& params) const;
 };
 
+/**
+    Container of information about wxFileType.
+
+    This class simply stores information associated with the file type. It
+    doesn't do anything on its own and is used only to allow constructing
+    wxFileType from it (instead of specifying all the constituent pieces
+    separately) and also with wxMimeTypesManager::AddFallbacks().
+ */
+class wxFileTypeInfo
+{
+public:
+    /**
+        Default constructor creates an invalid file type info object.
+
+        Such invalid/empty object should be used to terminate the list of file
+        types passed to wxMimeTypesManager::AddFallbacks().
+     */
+    wxFileTypeInfo();
+
+    /**
+        Constructor specifying just the MIME type name.
+
+        Use the various setter methods below to fully initialize the object.
+
+        @since 2.9.2
+     */
+    wxFileTypeInfo(const wxString& mimeType);
+
+    /**
+        Constructor allowing to specify all the fields at once.
+
+        This is a vararg constructor taking an arbitrary number of extensions
+        after the first four required parameters. The list must be terminated
+        by @c wxNullPtr, notice that @c NULL can't be used here in portable
+        code (C++0x @c nullptr can be used as well if your compiler supports
+        it).
+     */
+    wxFileTypeInfo(const wxString& mimeType,
+                   const wxString& openCmd,
+                   const wxString& printCmd,
+                   const wxString& description,
+                   const wxString& extension,
+                   ...);
+
+    /**
+        Add another extension associated with this file type.
+
+        @since 2.9.2
+     */
+    void AddExtension(const wxString& ext);
+
+    /**
+        Set the file type description.
+
+        @since 2.9.2
+     */
+    void SetDescription(const wxString& description);
+
+    /**
+        Set the command to be used for opening files of this type.
+
+        @since 2.9.2
+     */
+    void SetOpenCommand(const wxString& command);
+
+    /**
+        Set the command to be used for printing files of this type.
+
+        @since 2.9.2
+     */
+    void SetPrintCommand(const wxString& command);
+
+    /**
+        Set the short description for the files of this type.
+
+        This is only used under MSW for some of the registry keys used for the
+        file type registration.
+     */
+    void SetShortDesc(const wxString& shortDesc);
+};

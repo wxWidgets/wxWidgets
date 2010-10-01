@@ -152,8 +152,16 @@ public:
     };
 
     // ctors
-        // a normal item
 
+    // Ctor specifying just the MIME type (which is mandatory), the other
+    // fields can be set later if needed.
+    wxFileTypeInfo(const wxString& mimeType)
+        : m_mimeType(mimeType)
+    {
+    }
+
+    // Ctor allowing to specify the values of all fields at once:
+    //
     // wxFileTypeInfo(const wxString& mimeType,
     //               const wxString& openCmd,
     //               const wxString& printCmd,
@@ -224,6 +232,16 @@ public:
     bool IsValid() const { return !m_mimeType.empty(); }
 
     // setters
+        // set the open/print commands
+    void SetOpenCommand(const wxString& command) { m_openCmd = command; }
+    void SetPrintCommand(const wxString& command) { m_printCmd = command; }
+
+        // set the description
+    void SetDescription(const wxString& desc) { m_desc = desc; }
+
+        // add another extension corresponding to this file type
+    void AddExtension(const wxString& ext) { m_exts.push_back(ext); }
+
         // set the icon info
     void SetIcon(const wxString& iconFile, int iconIndex = 0)
     {
