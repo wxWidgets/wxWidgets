@@ -15,6 +15,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/tglbtn.h"
+
+#ifdef wxHAS_BITMAPTOGGLEBUTTON
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
@@ -22,7 +26,6 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 #include "wx/artprov.h"
-#include "wx/tglbtn.h"
 
 class BitmapToggleButtonTestCase : public CppUnit::TestCase
 {
@@ -116,4 +119,6 @@ void BitmapToggleButtonTestCase::Value()
     CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
 }
 
-#endif
+#endif // wxHAS_BITMAPTOGGLEBUTTON
+
+#endif // wxUSE_TOGGLEBTN
