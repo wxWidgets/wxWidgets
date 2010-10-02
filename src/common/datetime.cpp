@@ -2361,12 +2361,13 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
     // used for calls to strftime() when we only deal with time
     struct tm tmTimeOnly;
+    memset(&tmTimeOnly, 0, sizeof(tmTimeOnly));
     tmTimeOnly.tm_hour = tm.hour;
     tmTimeOnly.tm_min = tm.min;
     tmTimeOnly.tm_sec = tm.sec;
     tmTimeOnly.tm_wday = 0;
     tmTimeOnly.tm_yday = 0;
-    tmTimeOnly.tm_mday = 1;         // any date will do
+    tmTimeOnly.tm_mday = 1;         // any date will do, use 1976-01-01
     tmTimeOnly.tm_mon = 0;
     tmTimeOnly.tm_year = 76;
     tmTimeOnly.tm_isdst = 0;        // no DST, we adjust for tz ourselves
