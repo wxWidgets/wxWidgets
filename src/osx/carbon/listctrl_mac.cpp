@@ -519,14 +519,6 @@ void wxListCtrlTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
-BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
-    EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
-    EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
-    EVT_MIDDLE_DOWN(wxListCtrl::OnMiddleDown)
-    EVT_RIGHT_DOWN(wxListCtrl::OnRightDown)
-    EVT_CHAR(wxListCtrl::OnChar)
-END_EVENT_TABLE()
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -561,7 +553,7 @@ void wxListCtrl::Init()
     m_bgColor = wxNullColour;
     m_textctrlWrapper = NULL;
     m_current = -1;
-    m_renameTimer = new wxListCtrlRenameTimer( this );
+    m_renameTimer = NULL;
 }
 
 class wxGenericListCtrlHook : public wxGenericListCtrl
@@ -618,7 +610,8 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
         (hitResult & wxLIST_HITTEST_ONITEMLABEL) &&
         HasFlag(wxLC_EDIT_LABELS) )
     {
-        m_renameTimer->Start( 100, true );
+        if ( m_renameTimer )
+            m_renameTimer->Start( 250, true );
     }
     else
     {
@@ -629,7 +622,7 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
 
 void wxListCtrl::OnDblClick(wxMouseEvent& event)
 {
-    if ( m_renameTimer->IsRunning() )
+    if ( m_renameTimer && m_renameTimer->IsRunning() )
         m_renameTimer->Stop();
     event.Skip();
 }
@@ -754,7 +747,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     else
     {
-         m_macIsUserPane = false;
+        m_macIsUserPane = false;
         if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
@@ -765,6 +758,14 @@ bool wxListCtrl::Create(wxWindow *parent,
         InstallControlEventHandler( m_peer->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, this,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
+
+        m_renameTimer = new wxListCtrlRenameTimer( this );
+        
+        Connect( wxID_ANY, wxEVT_CHAR, wxCharEventHandler(wxListCtrl::OnChar), NULL, this );
+        Connect( wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxListCtrl::OnLeftDown), NULL, this );
+        Connect( wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(wxListCtrl::OnDblClick), NULL, this );
+        Connect( wxID_ANY, wxEVT_MIDDLE_DOWN, wxMouseEventHandler(wxListCtrl::OnMiddleDown), NULL, this );
+        Connect( wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(wxListCtrl::OnRightDown), NULL, this );
     }
 
     return true;

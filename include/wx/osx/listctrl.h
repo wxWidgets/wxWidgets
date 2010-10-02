@@ -420,7 +420,6 @@ protected:
 private:
   int CalcColumnAutoWidth(int col) const;
 
-  DECLARE_EVENT_TABLE()
 };
 
 #endif
