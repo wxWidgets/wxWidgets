@@ -2664,9 +2664,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                 default:
                     // is it the format width?
-                    fmt.Empty();
-                    while ( *p == _T('-') || *p == _T('+') ||
-                            *p == _T(' ') || wxIsdigit(*p) )
+                    for( fmt.clear();
+                         *p == _T('-') || *p == _T('+') ||
+                           *p == _T(' ') || wxIsdigit(*p);
+                         ++p )
                     {
                         fmt += *p;
                     }
