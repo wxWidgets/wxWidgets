@@ -622,7 +622,8 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
         (hitResult & wxLIST_HITTEST_ONITEMLABEL) &&
         HasFlag(wxLC_EDIT_LABELS) )
     {
-        m_renameTimer->Start( 100, true );
+        if (!m_genericImpl)
+            m_renameTimer->Start( 100, true );
     }
     else
     {
