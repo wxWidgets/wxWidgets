@@ -139,9 +139,7 @@ private:
 #endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
-#if wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( WrongFormatStrings );
-#endif // wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( Miscellaneous );
         CPPUNIT_TEST( GlibcMisc1 );
         CPPUNIT_TEST( GlibcMisc2 );
@@ -168,9 +166,7 @@ private:
         void DoBigToSmallBuffer(T *buffer, int size);
     void BigToSmallBuffer();
 
-#if wxUSE_WXVSNPRINTF
     void WrongFormatStrings();
-#endif // wxUSE_WXVSNPRINTF
 
     // compares the expectedString and the result of wxVsnprintf() char by char
     // for all its lenght (not only for first expectedLen chars) and also
@@ -424,12 +420,6 @@ void VsnprintfTestCase::LongLong()
 }
 #endif
 
-// this test is only for our own implementation, the system implementation
-// doesn't always give errors for invalid format strings (e.g. glibc doesn't)
-// and as it's not required too (the behaviour is "undefined" according to the
-// spec), there is really no sense in testing for it
-#if wxUSE_WXVSNPRINTF
-
 void VsnprintfTestCase::WrongFormatStrings()
 {
     // test how wxVsnprintf() behaves with wrong format string:
@@ -455,8 +445,6 @@ void VsnprintfTestCase::WrongFormatStrings()
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
     CPPUNIT_ASSERT_EQUAL(-1, r);
 }
-
-#endif // wxUSE_WXVSNPRINTF
 
 // BigToSmallBuffer() test case helper:
 template<typename T>
