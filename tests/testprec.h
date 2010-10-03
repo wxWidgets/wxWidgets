@@ -81,15 +81,26 @@ extern void SetProcessEventFunc(ProcessEventFunc func);
 
 extern bool IsNetworkAvailable();
 
-// helper class setting the locale to "C" for its lifetime
-class CLocaleSetter
+// Helper class setting the locale to the given one for its lifetime.
+class LocaleSetter
 {
 public:
-    CLocaleSetter() : m_locOld(setlocale(LC_ALL, "C")) { }
-    ~CLocaleSetter() { setlocale(LC_ALL, m_locOld); }
+    LocaleSetter(const char *loc) : m_locOld(setlocale(LC_ALL, loc)) { }
+    ~LocaleSetter() { setlocale(LC_ALL, m_locOld); }
 
 private:
     const char * const m_locOld;
+
+    wxDECLARE_NO_COPY_CLASS(LocaleSetter);
+};
+
+// An even simpler helper for setting the locale to "C" one during its lifetime.
+class CLocaleSetter : private LocaleSetter
+{
+public:
+    CLocaleSetter() : LocaleSetter("C") { }
+
+private:
     wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
 };
 

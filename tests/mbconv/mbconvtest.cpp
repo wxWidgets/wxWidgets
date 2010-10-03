@@ -984,35 +984,23 @@ void MBConvTestCase::CP1252Tests()
 
 void MBConvTestCase::LibcTests()
 {
-    // There isn't a locale that all systems support (except "C"), so leave
-    // this one disabled for non-Windows systems for the moment, until
-    // a solution can be found.
-#ifdef __WXMSW__
+    // The locale name are OS-dependent so this test is done only under Windows
+    // when using MSVC (surprisingly it fails with MinGW, even though it's
+    // supposed to use the same CRT -- no idea why and unfortunately gdb is too
+    // flaky to debug it)
+#ifdef __VISUALC__
+    LocaleSetter loc("English_United States.1252");
 
-#ifdef __WXMSW__
-    setlocale( LC_ALL, "English_United States.1252" );
-    const unsigned char* systemMB = CP1252;
-    size_t systemMB_size = sizeof(CP1252);
-    const unsigned char* systemMB_utf8 = CP1252_utf8;
-    size_t systemMB_utf8_size = sizeof(CP1252_utf8);
-#else
-    setlocale( LC_ALL, "en_US.iso8859-1" );
-    const unsigned char* systemMB = iso8859_1;
-    size_t systemMB_size = sizeof(iso8859_1);
-    const unsigned char* systemMB_utf8 = iso8859_1_utf8;
-    size_t systemMB_utf8_size = sizeof(iso8859_1_utf8);
-#endif
     wxMBConvLibc convLibc;
     TestCoder(
-        (const char*)systemMB,
-        systemMB_size,
-        (const char*)systemMB_utf8,
-        systemMB_utf8_size,
+        (const char*)CP1252,
+        sizeof(CP1252),
+        (const char*)CP1252_utf8,
+        sizeof(CP1252_utf8),
         convLibc,
         1
         );
-
-#endif // __WXMSW__
+#endif // __VISUALC__
 }
 
 // verifies that the specified mb sequences decode to the specified wc sequence
