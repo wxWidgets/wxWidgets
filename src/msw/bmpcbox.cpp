@@ -131,6 +131,7 @@ void wxBitmapComboBox::RecreateControl()
     wxString value = GetValue();
     wxPoint pos = GetPosition();
     wxSize size = GetSize();
+    size.y = GetBestSize().y;
     wxArrayString strings = GetStrings();
 
     wxComboBox::DoClear();
@@ -176,6 +177,8 @@ void wxBitmapComboBox::RecreateControl()
     {
         SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     }
+
+    ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, 0, MeasureItem(0));
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
