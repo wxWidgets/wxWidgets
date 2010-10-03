@@ -548,7 +548,6 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 
     wxTextCtrl* tc = Text();
     wxChar ch;
-    long pos;
 
     bool isPrintable;
 
@@ -566,17 +565,16 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     switch (ch)
     {
         case WXK_DELETE:
-            // delete the character at the cursor
-            pos = tc->GetInsertionPoint();
-            if (pos < tc->GetLastPosition())
-                tc->Remove(pos, pos + 1);
+            // Delete the initial character when starting to edit with DELETE.
+            tc->Remove(0, 1);
             break;
 
         case WXK_BACK:
-            // delete the character before the cursor
-            pos = tc->GetInsertionPoint();
-            if (pos > 0)
+            // Delete the last character when starting to edit with BACKSPACE.
+            {
+                const long pos = tc->GetLastPosition();
                 tc->Remove(pos - 1, pos);
+            }
             break;
 
         default:
