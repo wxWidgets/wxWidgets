@@ -768,15 +768,14 @@ void MBConvTestCase::TestCoder(
     // so we should store the wide character version as UTF-8 and depend on
     // the UTF-8 converter's ability to decode it to platform specific wide characters
     // this test is invalid if the UTF-8 converter can't decode
-    wxWCharBuffer wideBuffer((size_t)0);
-    wideBuffer = DecodeUTF8( utf8Buffer, utf8Bytes );
-    size_t wideChars = wxWcslen( wideBuffer.data() );
+    const wxWCharBuffer wideBuffer(DecodeUTF8(utf8Buffer, utf8Bytes));
+    const size_t wideChars = wxWcslen(wideBuffer);
 
     TestDecoder
         (
         wideBuffer.data(),
         wideChars,
-        (const char*)multiBuffer,
+        multiBuffer,
         multiBytes,
         converter,
         sizeofNull
@@ -785,7 +784,7 @@ void MBConvTestCase::TestCoder(
         (
         wideBuffer.data(),
         wideChars,
-        (const char*)multiBuffer,
+        multiBuffer,
         multiBytes,
         converter,
         sizeofNull
