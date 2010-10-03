@@ -1040,7 +1040,12 @@ void MBConvTestCase::TestDecoder(
         0
         );
     // make sure the correct output length was calculated
-    CPPUNIT_ASSERT_EQUAL( wideChars, outputWritten );
+    WX_ASSERT_EQUAL_MESSAGE
+    (
+        ("while converting \"%s\"", multiBuffer),
+        wideChars,
+        outputWritten
+    );
 
     // convert the string
     size_t guardChars = 8; // to make sure we're not overrunning the output buffer
