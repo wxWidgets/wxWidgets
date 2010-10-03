@@ -32,7 +32,9 @@
 #define TEST_SNGLINST
 #define TEST_FTP
 #define TEST_INFO_FUNCTIONS
-#define TEST_REGEX
+#if wxUSE_REGEX
+    #define TEST_REGEX
+#endif
 #define TEST_DATETIME
 
 // ----------------------------------------------------------------------------

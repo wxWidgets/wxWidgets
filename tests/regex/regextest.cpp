@@ -36,6 +36,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_REGEX
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -393,3 +395,5 @@ void RegExTestSuite::add(
 
 
 #endif // wxHAS_REGEX_ADVANCED
+
+#endif // wxUSE_REGEX
