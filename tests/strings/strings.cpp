@@ -769,7 +769,7 @@ void StringTestCase::FromDouble()
         // NB: there are no standards about the minimum exponent width
         //     and newer MSVC versions use 3 digits as minimum exponent
         //     width while GNU libc uses 2 digits as minimum width...
-#ifdef __VISUALC__
+#ifdef wxUSING_VC_CRT_IO
         { -3e-10,           "-3e-010" },
 #else
         { -3e-10,           "-3e-10" },

@@ -26,6 +26,22 @@
     #endif
 #endif
 
+// Define wxUSING_VC_CRT_IO when using MSVC CRT STDIO library as its standard
+// functions give different results from glibc ones in several cases (of
+// course, any code relying on this is not portable and probably won't work,
+// i.e. will result in tests failures, with other platforms/compilers which
+// should have checks for them added as well).
+//
+// Notice that MinGW uses VC CRT by default but may use its own printf()
+// implementation if __USE_MINGW_ANSI_STDIO is defined. And finally also notice
+// that testing for __USE_MINGW_ANSI_STDIO directly results in a warning with
+// -Wundef if it involves an operation with undefined __MINGW_FEATURES__ so
+// test for the latter too to avoid it.
+#if defined(__VISUALC__) || \
+    (defined(__MINGW32__) && !defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO)
+    #define wxUSING_VC_CRT_IO
+#endif
+
 // thrown when assert fails in debug build
 class TestAssertFailure
 {
