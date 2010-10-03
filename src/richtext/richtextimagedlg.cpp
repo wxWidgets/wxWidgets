@@ -493,7 +493,7 @@ void wxRichTextImageDialog::OnRichtextimagedialogParaUpClick( wxCommandEvent& WX
     // Before editing this code, remove the block markers.
     wxRichTextRange range = m_image->GetRange();
     wxRichTextObjectList::compatibility_iterator iter = m_buffer->GetChildren().GetFirst();
-    if (iter == NULL)
+    if (!iter)
         return;
 
     while (iter)
@@ -504,7 +504,7 @@ void wxRichTextImageDialog::OnRichtextimagedialogParaUpClick( wxCommandEvent& WX
     }
 
     iter = iter->GetPrevious();
-    if (iter == NULL)
+    if (!iter)
         return;
 
     wxRichTextObject *obj = iter->GetData();
@@ -527,7 +527,7 @@ void wxRichTextImageDialog::OnRichtextimagedialogDownClick( wxCommandEvent& WXUN
     // Before editing this code, remove the block markers.
     wxRichTextRange range = m_image->GetRange();
     wxRichTextObjectList::compatibility_iterator iter = m_buffer->GetChildren().GetFirst();
-    if (iter == NULL)
+    if (!iter)
         return;
 
     while (iter)
@@ -538,7 +538,7 @@ void wxRichTextImageDialog::OnRichtextimagedialogDownClick( wxCommandEvent& WXUN
     }
 
     iter = iter->GetNext();
-    if (iter == NULL)
+    if (!iter)
         return;
 
     wxRichTextObject *obj = iter->GetData();
