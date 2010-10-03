@@ -38,7 +38,8 @@
 // -Wundef if it involves an operation with undefined __MINGW_FEATURES__ so
 // test for the latter too to avoid it.
 #if defined(__VISUALC__) || \
-    (defined(__MINGW32__) && !defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO)
+    (defined(__MINGW32__) && \
+     (!defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO))
     #define wxUSING_VC_CRT_IO
 #endif
 
