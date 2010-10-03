@@ -1800,7 +1800,9 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
         domain);
 
     if ( !cat )
+    {
         wxLogWarning(_("Resource '%s' is not a valid message catalog."), resname);
+    }
 
     return cat;
 }
@@ -1847,7 +1849,9 @@ wxArrayString wxResourceTranslationsLoader::GetAvailableTranslations(const wxStr
     {
         const DWORD err = GetLastError();
         if ( err != NO_ERROR && err != ERROR_RESOURCE_TYPE_NOT_FOUND )
+        {
             wxLogSysError(_("Couldn't enumerate translations"));
+        }
     }
 
     return data.langs;
