@@ -34,6 +34,21 @@
 //             http://www.gnu.org/software/libc/manual/html_node/Formatted-Output.html
 
 
+// Visual C++ run-time produces different results from glibc (not sure if this
+// was tested using other run-times to be honest) so adjust the test results in
+// some cases. Remember that while we test our own wxPrintf() code here, it
+// uses the system sprintf() for actual formatting so the results are still
+// different under different systems.
+//
+// Notice that MinGW uses VC CRT by default but may use its own printf()
+// implementation if __USE_MINGW_ANSI_STDIO is defined. And finally also notice
+// that testing for __USE_MINGW_ANSI_STDIO directly results in a warning with
+// -Wundef if it involves an operation with undefined __MINGW_FEATURES__ so
+// test for the latter too to avoid it.
+#if defined(__VISUALC__) || \
+    (defined(__MINGW32__) && !defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO)
+    #define USING_VC_CRT
+#endif
 
 // ----------------------------------------------------------------------------
 // global utilities for testing
@@ -72,6 +87,12 @@ int r;
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
     CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
+
+#define CMP3i(expected, fmt, y)                        \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
+    WX_ASSERT_MESSAGE( ("Expected \"%s\", got \"%s\"", expected, buf), \
+                       wxStricmp(expected, buf) == 0 );
 
 #define CMP2(expected, fmt)                           \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt));        \
@@ -236,13 +257,15 @@ void VsnprintfTestCase::P()
     //          printed as '(nil)'.
     //          MSVC always print them as %8X on 32 bit systems and as %16X
     //          on 64 bit systems
-    //          mingw32 uses MSVC CRT by default so uses the same rules
-#if defined(__VISUALC__) || (defined(__MINGW32__) && !__USE_MINGW_ANSI_STDIO)
+    //          mingw32 uses MSVC CRT in old versions but is own implementation
+    //          now which is somewhere in the middle as it uses %8x, so to
+    //          catch both cases we use case-insensitive comparison here.
+#ifdef USING_VC_CRT
     #if SIZEOF_VOID_P == 4
-        CMP3("00ABCDEF", "%p", (void*)0xABCDEF);
+        CMP3i("00ABCDEF", "%p", (void*)0xABCDEF);
         CMP3("00000000", "%p", (void*)NULL);
     #elif SIZEOF_VOID_P == 8
-        CMP3("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
+        CMP3i("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
         CMP3("0000000000000000", "%p", (void*)NULL);
     #endif
 #elif defined(__MINGW32__) 
@@ -604,7 +627,7 @@ void VsnprintfTestCase::GlibcMisc1()
 {
     CMP3("     ",    "%5.s", "xyz");
     CMP3("   33",    "%5.f", 33.3);
-#if defined(__VISUALC__)
+#ifdef USING_VC_CRT
     // see the previous notes about the minimum width of mantissa:
     CMP3("  3e+008", "%8.e", 33.3e7);
     CMP3("  3E+008", "%8.E", 33.3e7);
