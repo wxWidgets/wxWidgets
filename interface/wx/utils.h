@@ -190,8 +190,9 @@ bool wxGetEnv(const wxString& var, wxString* value);
     environment. wxSetEnv() will always update the first copy, which means that
     wxGetEnv(), which uses it directly, will always return the expected value
     after this call. But wxSetEnv() only updates the second copy for some
-    compilers/CRT implementations (currently only MSVC) and so using wxGetenv()
-    (notice the difference in case) may not return the updated value.
+    compilers/CRT implementations (currently only MSVC and MinGW which uses the
+    same MSVC CRT) and so using wxGetenv() (notice the difference in case) may
+    not return the updated value.
 
     @param var
         The environment variable to be set, must not contain @c '=' character.

@@ -627,7 +627,7 @@ bool wxDoSetEnv(const wxString& var, const wxChar *value)
     //
     // TODO: add checks for the other compilers (and update wxSetEnv()
     //       documentation in interface/wx/utils.h accordingly)
-#if defined(__VISUALC__)
+#if defined(__VISUALC__) || defined(__MINGW32__)
     // notice that Microsoft _putenv() has different semantics from POSIX
     // function with almost the same name: in particular it makes a copy of the
     // string instead of using it as part of environment so we can safely call
