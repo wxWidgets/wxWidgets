@@ -201,9 +201,6 @@ public:
     virtual bool DoSaveFile(const wxString& file = wxEmptyString,
                             int fileType = wxRICHTEXT_TYPE_ANY);
 
-    // implement the wxTextEntry pure virtual method
-    virtual wxWindow *GetEditableWindow() { return this; }
-
     /// Set the handler flags, controlling loading and saving
     void SetHandlerFlags(int flags) { GetBuffer().SetHandlerFlags(flags); }
 
@@ -825,6 +822,9 @@ public:
      virtual wxString DoGetValue() const;
 
 protected:
+    // implement the wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
+
      // FIXME: this does not work, it allows this code to compile but will fail
      //        during run-time
 #ifndef __WXUNIVERSAL__
@@ -835,7 +835,6 @@ protected:
     virtual WXWidget GetTextWidget() const { return NULL; }
 #endif
 #ifdef __WXGTK20__
-    virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
 #endif
