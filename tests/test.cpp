@@ -41,6 +41,7 @@
 #include "wx/afterstd.h"
 
 #include "wx/cmdline.h"
+#include <exception>
 #include <iostream>
 
 #ifdef __WXMSW__
@@ -104,16 +105,33 @@ static void TestAssertHandler(const wxString& file,
                               const wxString& cond,
                               const wxString& msg)
 {
-    // can't throw from other threads, die immediately
+    // Determine whether we can safely throw an exception to just make the test
+    // fail or whether we need to abort (in this case "msg" will contain the
+    // explanation why did we decide to do it).
+    wxString abortReason;
     if ( !wxIsMainThread() )
     {
-        wxPrintf("%s in a worker thread -- aborting.",
-                 FormatAssertMessage(file, line, func, cond, msg));
-        fflush(stdout);
-        _exit(-1);
+        // Exceptions thrown from worker threads are not caught currently and
+        // so we'd just die without any useful information -- abort instead.
+        abortReason = "in a worker thread";
+    }
+    else if ( uncaught_exception() )
+    {
+        // Throwing while already handling an exception would result in
+        // terminate() being called and we wouldn't get any useful information
+        // about why the test failed then.
+        abortReason = "while handling an exception";
+    }
+    else // Can "safely" throw from here.
+    {
+        throw TestAssertFailure(file, line, func, cond, msg);
     }
 
-    throw TestAssertFailure(file, line, func, cond, msg);
+    wxFprintf(stderr, "%s %s -- aborting.",
+              FormatAssertMessage(file, line, func, cond, msg),
+              abortReason);
+    fflush(stderr);
+    _exit(-1);
 }
 
 #endif // wxDEBUG_LEVEL
