@@ -209,7 +209,7 @@ public:
         m_watch.Pause();
         wxPrintf(GetResultStr(m_result));
         if (m_timing)
-            wxPrintf("  %6d ms", m_watch.Time());
+            wxPrintf("  %6ld ms", m_watch.Time());
         wxPrintf("\n");
     }
 
