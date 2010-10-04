@@ -71,7 +71,6 @@
 #endif
 
 // Compatibility
-//#define wxRichTextAttr wxTextAttr
 #define wxTextAttrEx wxTextAttr
 
 // Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a
@@ -274,7 +273,7 @@ enum wxTextBoxAttrPosition
 };
 
 // Dimension, including units and position
-class WXDLLIMPEXP_CORE wxTextAttrDimension
+class WXDLLIMPEXP_RICHTEXT wxTextAttrDimension
 {
 public:
     wxTextAttrDimension() { Reset(); }
@@ -313,7 +312,7 @@ public:
     wxTextAttrDimensionFlags    m_flags;
 };
 
-class WXDLLIMPEXP_CORE wxTextBoxAttrDimensions
+class WXDLLIMPEXP_RICHTEXT wxTextBoxAttrDimensions
 {
 public:
     void Reset() { m_left.Reset(); m_top.Reset(); m_right.Reset(); m_bottom.Reset(); }
@@ -385,7 +384,7 @@ enum wxTextBoxAttrCollapseMode
 };
 
 // Border
-class WXDLLIMPEXP_CORE wxTextBoxAttrBorder
+class WXDLLIMPEXP_RICHTEXT wxTextBoxAttrBorder
 {
 public:
     wxTextBoxAttrBorder() { Reset(); }
@@ -439,7 +438,7 @@ public:
 };
 
 // Borders
-class WXDLLIMPEXP_CORE wxTextBoxAttrBorders
+class WXDLLIMPEXP_RICHTEXT wxTextBoxAttrBorders
 {
 public:
     wxTextBoxAttrBorders() { }
@@ -484,7 +483,7 @@ public:
 // wxTextBoxAttr: a structure containing box attributes
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextBoxAttr
+class WXDLLIMPEXP_RICHTEXT wxTextBoxAttr
 {
 public:
     // ctors
