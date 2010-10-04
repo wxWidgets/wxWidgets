@@ -430,13 +430,13 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     if (labelCtrl)
         labelCtrl->SetLabel(def->GetName() + wxT(":"));
 
-    wxTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
+    wxRichTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
     wxFont font(m_previewCtrl->GetFont());
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttr normalParaAttr;
+    wxRichTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -455,7 +455,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
         int i;
         for (i = 0; i < 10; i++)
         {
-            wxTextAttr levelAttr = * listDef->GetLevelAttributes(i);
+            wxRichTextAttr levelAttr = * listDef->GetLevelAttributes(i);
             levelAttr.SetBulletNumber(1);
             m_previewCtrl->BeginStyle(levelAttr);
             m_previewCtrl->WriteText(wxString::Format(wxT("List level %d. "), i+1) + s_para2List);

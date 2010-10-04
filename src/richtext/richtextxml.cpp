@@ -284,7 +284,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttr attr;
+                wxRichTextAttr attr;
                 GetStyle(attr, child, false);
                 def->SetStyle(attr);
             }
@@ -306,7 +306,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttr attr;
+                wxRichTextAttr attr;
                 GetStyle(attr, child, false);
                 def->SetStyle(attr);
             }
@@ -328,7 +328,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttr attr;
+                wxRichTextAttr attr;
                 GetStyle(attr, child, false);
 
                 wxString styleLevel = child->GetAttribute(wxT("level"), wxEmptyString);
@@ -927,7 +927,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         int i;
         for (i = 0; i < 10; i ++)
         {
-            wxTextAttr* levelAttr = listDef->GetLevelAttributes(i);
+            wxRichTextAttr* levelAttr = listDef->GetLevelAttributes(i);
             if (levelAttr)
             {
                 wxString style = CreateStyle(def->GetStyle(), false);
@@ -975,7 +975,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
 }
 
 /// Create style parameters
-wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttr& attr, bool isPara)
+wxString wxRichTextXMLHandler::CreateStyle(const wxRichTextAttr& attr, bool isPara)
 {
     wxString str;
     if (attr.HasTextColour() && attr.GetTextColour().Ok())
@@ -1146,7 +1146,7 @@ bool wxRichTextFixFaceName(wxString& facename)
 }
 
 /// Get style parameters
-bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPara)
+bool wxRichTextXMLHandler::GetStyle(wxRichTextAttr& attr, wxXmlNode* node, bool isPara)
 {
     wxString fontFacename;
     int fontSize = 12;

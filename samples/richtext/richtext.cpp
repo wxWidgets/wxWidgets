@@ -783,13 +783,14 @@ void MyFrame::WriteInitialText()
     r.EndAlignment();
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
-    wxRichTextAnchoredObjectAttr anchoredAttr;
-    anchoredAttr.m_floating = wxRICHTEXT_FLOAT_LEFT;
+    wxRichTextAttr imageAttr;
+    imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_LEFT);
     r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
-    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
-    anchoredAttr.m_floating = wxRICHTEXT_FLOAT_RIGHT;
-    anchoredAttr.m_offset = 200;
-    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
+    imageAttr.GetTextBoxAttr().GetTop().SetValue(200);
+    imageAttr.GetTextBoxAttr().GetTop().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+    imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_RIGHT);
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
     r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
     r.EndAlignment();
     r.Newline();
@@ -884,7 +885,7 @@ void MyFrame::WriteInitialText()
     tabs.Add(600);
     tabs.Add(800);
     tabs.Add(1000);
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_TABS);
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
@@ -1162,7 +1163,7 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
     wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
     wxFontData fontData;
 
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1664,5 +1665,21 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().GetPrinting()->PageSetup();
+    wxDialog dialog(this, wxID_ANY, wxT("Testing"), wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE);
+
+    wxNotebook* nb = new wxNotebook(& dialog, wxID_ANY, wxPoint(5, 5), wxSize(300, 250));
+    wxPanel* panel = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    wxPanel* panel2 = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+
+    wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(panel, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    nb->AddPage(panel, wxT("Page 1"));
+
+    wxRichTextCtrl* richTextCtrl2 = new wxRichTextCtrl(panel2, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    nb->AddPage(panel2, wxT("Page 2"));
+
+    wxButton* button = new wxButton(& dialog, wxID_OK, wxT("OK"), wxPoint(5, 180));
+
+    dialog.ShowModal();
+
+//    wxGetApp().GetPrinting()->PageSetup();
 }

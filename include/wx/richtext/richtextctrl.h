@@ -86,7 +86,8 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleDefinition;
  * wxRichTextCtrl class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxTextCtrlBase,
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
+                                            public wxTextCtrlIface,
                                             public wxScrollHelper
 {
     DECLARE_CLASS( wxRichTextCtrl )
@@ -200,6 +201,9 @@ public:
     virtual bool DoSaveFile(const wxString& file = wxEmptyString,
                             int fileType = wxRICHTEXT_TYPE_ANY);
 
+    // implement the wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
+
     /// Set the handler flags, controlling loading and saving
     void SetHandlerFlags(int flags) { GetBuffer().SetHandlerFlags(flags); }
 
@@ -223,27 +227,32 @@ public:
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool SetStyle(long start, long end, const wxRichTextAttr& style);
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style);
+    virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
+    virtual bool GetStyle(long position, wxRichTextAttr& style);
 
     // Set an image style
-    void SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& style);
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextAttr& textAttr);
 
     // get the common set of styles for the range
     virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style);
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
     // extended style setting operation with flags including:
     // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
     // see richtextbuffer.h for more details.
-    virtual bool SetStyleEx(const wxRichTextRange& range, const wxTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyleEx(const wxRichTextRange& range, const wxRichTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the content (uncombined) attributes for this position.
-    virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
+    virtual bool GetUncombinedStyle(long position, wxRichTextAttr& style);
 
     virtual bool SetDefaultStyle(const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxRichTextAttr& style);
 
-    virtual const wxTextAttr& GetDefaultStyleEx() const { return GetDefaultStyle(); }
+    virtual const wxRichTextAttr& GetDefaultStyleEx() const;
 
-    virtual const wxTextAttr& GetDefaultStyle() const;
+    //virtual const wxTextAttr& GetDefaultStyle() const;
 
     /// Set list style
     virtual bool SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
@@ -316,17 +325,21 @@ public:
 
     /// Write an image at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG,
+                            const wxRichTextAttr& textAttr = wxRichTextAttr());
 
     /// Write a bitmap at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG,
+                            const wxRichTextAttr& textAttr = wxRichTextAttr());
 
     /// Load an image from file and write at the current insertion point.
-    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType,
+                            const wxRichTextAttr& textAttr = wxRichTextAttr());
 
     /// Write an image block at the current insertion point.
-    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock,
+                            const wxRichTextAttr& textAttr = wxRichTextAttr());
 
     /// Insert a newline (actually paragraph) at the current insertion point.
     virtual bool Newline();
@@ -335,12 +348,12 @@ public:
     virtual bool LineBreak();
 
     /// Set basic (overall) style
-    virtual void SetBasicStyle(const wxTextAttr& style) { GetBuffer().SetBasicStyle(style); }
+    virtual void SetBasicStyle(const wxRichTextAttr& style) { GetBuffer().SetBasicStyle(style); }
 
     /// Get basic (overall) style
-    virtual const wxTextAttr& GetBasicStyle() const { return GetBuffer().GetBasicStyle(); }
+    virtual const wxRichTextAttr& GetBasicStyle() const { return GetBuffer().GetBasicStyle(); }
 
-    virtual bool BeginStyle(const wxTextAttr& style) { return GetBuffer().BeginStyle(style); }
+    virtual bool BeginStyle(const wxRichTextAttr& style) { return GetBuffer().BeginStyle(style); }
 
     /// End the style
     virtual bool EndStyle() { return GetBuffer().EndStyle(); }
@@ -561,7 +574,7 @@ public:
     /// of the attributes are different within the range, the test fails. You
     /// can use this to implement, for example, bold button updating. style must have
     /// flags indicating which attributes are of interest.
-    virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
+    virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
     {
         return GetBuffer().HasCharacterAttributes(range.ToInternal(), style);
     }
@@ -570,7 +583,7 @@ public:
     /// of the attributes are different within the range, the test fails. You
     /// can use this to implement, for example, centering button updating. style must have
     /// flags indicating which attributes are of interest.
-    virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
+    virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
     {
         return GetBuffer().HasParagraphAttributes(range.ToInternal(), style);
     }
@@ -791,7 +804,7 @@ public:
 
     /// Convenience function that tells the control to start reflecting the default
     /// style, since the user is changing it.
-    void SetAndShowDefaultStyle(const wxTextAttr& attr)
+    void SetAndShowDefaultStyle(const wxRichTextAttr& attr)
     {
         SetDefaultStyle(attr);
         SetCaretPositionForDefaultStyle(GetCaretPosition());

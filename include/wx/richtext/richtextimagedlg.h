@@ -66,6 +66,12 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    /// Set the dimension into the value and units controls
+    void SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl);
+
+    /// Get the dimension from the value and units controls
+    void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl);
+    
 ////@begin wxRichTextImageDialog event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTIMAGEDIALOG_PARA_UP
@@ -89,7 +95,7 @@ public:
     static bool ShowToolTips();
 
     /// Set the image attribute
-    void SetImageAttr(const wxRichTextAnchoredObjectAttr& attr);
+    void SetImageAttr(const wxRichTextAttr& textAttr);
     wxRichTextImage* ApplyImageAttr();
 
     /// Set the anchored object
@@ -101,9 +107,9 @@ private:
     /// Convert CM to MM
     bool ConvertFromString(const wxString& string, int& ret, int scale);
 private:
-    wxRichTextAnchoredObjectAttr m_attr;
+    wxRichTextAttr m_textAttr;
+    
 ////@begin wxRichTextImageDialog member variables
-    wxComboBox* m_alignment;
     wxComboBox* m_float;
     wxTextCtrl* m_width;
     wxComboBox* m_unitsW;
@@ -116,7 +122,6 @@ private:
     /// Control identifiers
     enum {
         ID_WXRICHTEXTIMAGEPAGE = 10015,
-        ID_COMBOBOX_ALIGN = 10016,
         ID_RICHTEXTIMAGEDIALOG_FLOATING_MODE = 10017,
         ID_RICHTEXTIMAGEDIALOG_WIDTH = 10018,
         ID_RICHTEXTIMAGEDIALOG_UNITS_W = 10019,

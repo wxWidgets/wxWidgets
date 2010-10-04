@@ -340,7 +340,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 ////@end wxRichTextIndentsSpacingPage content construction
 }
 
-wxTextAttr* wxRichTextIndentsSpacingPage::GetAttributes()
+wxRichTextAttr* wxRichTextIndentsSpacingPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }
@@ -358,7 +358,7 @@ et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id m
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     TransferDataFromWindow();
-    wxTextAttr attr(*GetAttributes());
+    wxRichTextAttr attr(*GetAttributes());
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
        wxTEXT_ATTR_LINE_SPACING|
@@ -368,7 +368,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttr normalParaAttr;
+    wxRichTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -395,7 +395,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (m_alignmentLeft->GetValue())
         attr->SetAlignment(wxTEXT_ALIGNMENT_LEFT);
@@ -466,7 +466,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
 
     wxPanel::TransferDataToWindow();
 
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (attr->HasAlignment())
     {

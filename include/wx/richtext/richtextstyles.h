@@ -94,18 +94,18 @@ public:
     const wxString& GetBaseStyle() const { return m_baseStyle; }
 
     /// Sets and gets the style
-    void SetStyle(const wxTextAttr& style) { m_style = style; }
-    const wxTextAttr& GetStyle() const { return m_style; }
-    wxTextAttr& GetStyle() { return m_style; }
+    void SetStyle(const wxRichTextAttr& style) { m_style = style; }
+    const wxRichTextAttr& GetStyle() const { return m_style; }
+    wxRichTextAttr& GetStyle() { return m_style; }
 
     /// Gets the style combined with the base style
-    virtual wxTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
+    virtual wxRichTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
 
 protected:
     wxString        m_name;
     wxString        m_baseStyle;
     wxString        m_description;
-    wxTextAttr  m_style;
+    wxRichTextAttr  m_style;
 };
 
 /*!
@@ -206,9 +206,9 @@ public:
     virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextListStyleDefinition(*this); }
 
     /// Sets/gets the attributes for the given level
-    void SetLevelAttributes(int i, const wxTextAttr& attr);
-    wxTextAttr* GetLevelAttributes(int i);
-    const wxTextAttr* GetLevelAttributes(int i) const;
+    void SetLevelAttributes(int i, const wxRichTextAttr& attr);
+    wxRichTextAttr* GetLevelAttributes(int i);
+    const wxRichTextAttr* GetLevelAttributes(int i) const;
 
     /// Convenience function for setting the major attributes for a list level specification
     void SetAttributes(int i, int leftIndent, int leftSubIndent, int bulletStyle, const wxString& bulletSymbol = wxEmptyString);
@@ -218,15 +218,15 @@ public:
 
     /// Combine the base and list style with a paragraph style, using the given indent (from which
     /// an appropriate level is found)
-    wxTextAttr CombineWithParagraphStyle(int indent, const wxTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Combine the base and list style, using the given indent (from which
     /// an appropriate level is found)
-    wxTextAttr GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Combine the base and list style, using the given level from which
     /// an appropriate level is found)
-    wxTextAttr GetCombinedStyleForLevel(int level, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr GetCombinedStyleForLevel(int level, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Gets the number of available levels
     int GetLevelCount() const { return 10; }
@@ -237,7 +237,7 @@ public:
 protected:
 
     /// The styles for each level (up to 10)
-    wxTextAttr m_levelStyles[10];
+    wxRichTextAttr m_levelStyles[10];
 };
 
 /*!

@@ -316,7 +316,7 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (m_hasBulletStyle)
     {
@@ -404,7 +404,7 @@ bool wxRichTextBulletsPage::TransferDataToWindow()
 
     wxPanel::TransferDataToWindow();
 
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (attr->HasBulletStyle())
     {
@@ -522,7 +522,7 @@ et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id m
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     TransferDataFromWindow();
-    wxTextAttr attr(*GetAttributes());
+    wxRichTextAttr attr(*GetAttributes());
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|
        wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
@@ -532,7 +532,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttr normalParaAttr;
+    wxRichTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -556,7 +556,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     m_previewCtrl->Thaw();
 }
 
-wxTextAttr* wxRichTextBulletsPage::GetAttributes()
+wxRichTextAttr* wxRichTextBulletsPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }

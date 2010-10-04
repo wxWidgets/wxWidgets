@@ -52,7 +52,7 @@ public:
     virtual bool TransferDataToWindow();
 
     /// Gets the attributes associated with the main formatting dialog
-    wxTextAttr* GetAttributes();
+    wxRichTextAttr* GetAttributes();
 
 ////@begin wxRichTextStylePage event handler declarations
 

@@ -71,7 +71,7 @@ public:
     void UpdatePreview();
 
     /// Gets the attributes associated with the main formatting dialog
-    wxTextAttr* GetAttributes();
+    wxRichTextAttr* GetAttributes();
 
 ////@begin wxRichTextIndentsSpacingPage event handler declarations
 

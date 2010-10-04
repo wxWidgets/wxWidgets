@@ -75,7 +75,7 @@ public:
     void OnColourClicked( wxCommandEvent& event );
 
     /// Gets the attributes associated with the main formatting dialog
-    wxTextAttr* GetAttributes();
+    wxRichTextAttr* GetAttributes();
 
 ////@begin wxRichTextFontPage event handler declarations
 

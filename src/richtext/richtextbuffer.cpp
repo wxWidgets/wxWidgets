@@ -221,9 +221,9 @@ int wxRichTextFloatCollector::GetFitPosition(const wxRichTextFloatRectMapArray& 
 
 int wxRichTextFloatCollector::GetFitPosition(int direction, int start, int height) const
 {
-    if (direction == wxRICHTEXT_FLOAT_LEFT)
+    if (direction == wxTEXT_BOX_ATTR_FLOAT_LEFT)
         return GetFitPosition(m_left, start, height);
-    else if (direction == wxRICHTEXT_FLOAT_RIGHT)
+    else if (direction == wxTEXT_BOX_ATTR_FLOAT_RIGHT)
         return GetFitPosition(m_right, start, height);
     else
     {
@@ -235,21 +235,21 @@ int wxRichTextFloatCollector::GetFitPosition(int direction, int start, int heigh
 void wxRichTextFloatCollector::CollectFloat(wxRichTextParagraph* para, wxRichTextObject* floating)
 {
         int direction = floating->GetFloatDirection();
+
         wxPoint pos = floating->GetPosition();
         wxSize size = floating->GetCachedSize();
         wxRichTextFloatRectMap *map = new wxRichTextFloatRectMap(pos.y, pos.y + size.y, size.x, floating);
-
         switch (direction)
         {
-            case wxRICHTEXT_FLOAT_NONE:
+            case wxTEXT_BOX_ATTR_FLOAT_NONE:
                 delete map;
                 break;
-            case wxRICHTEXT_FLOAT_LEFT:
+            case wxTEXT_BOX_ATTR_FLOAT_LEFT:
                 // Just a not-enough simple assertion
                 wxASSERT (m_left.Index(map) == wxNOT_FOUND);
                 m_left.Add(map);
                 break;
-            case wxRICHTEXT_FLOAT_RIGHT:
+            case wxTEXT_BOX_ATTR_FLOAT_RIGHT:
                 wxASSERT (m_right.Index(map) == wxNOT_FOUND);
                 m_right.Add(map);
                 break;
@@ -271,7 +271,7 @@ void wxRichTextFloatCollector::CollectFloat(wxRichTextParagraph* para)
         if (floating->IsFloating())
         {
             wxRichTextAnchoredObject* anchor = wxDynamicCast(floating, wxRichTextAnchoredObject);
-            if (anchor && anchor->GetAnchoredAttr().IsAnchored())
+            if (anchor)
             {
                 CollectFloat(para, floating);
             }
@@ -429,34 +429,6 @@ inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
     dc.SetBrush(brush);
 }
 
-void wxRichTextAnchoredObjectAttr::Init()
-{
-    m_align = wxRICHTEXT_CENTRE;
-    m_floating = wxRICHTEXT_FLOAT_NONE;
-    m_offset = 0;
-    m_unitsOffset = wxRICHTEXT_PX;
-
-    m_unitsW = wxRICHTEXT_PX;
-    m_unitsH = wxRICHTEXT_PX;
-
-    // Unspecified to begin with (use actual image size)
-    m_width = -1;
-    m_height = -1;
-}
-
-void wxRichTextAnchoredObjectAttr::Copy(const wxRichTextAnchoredObjectAttr& attr)
-{
-    m_align = attr.m_align;
-    m_floating = attr.m_floating;
-    m_offset = attr.m_offset;
-    m_unitsOffset = attr.m_unitsOffset;
-
-    m_unitsW = attr.m_unitsW;
-    m_unitsH = attr.m_unitsH;
-    m_width = attr.m_width;
-    m_height = attr.m_height;
-}
-
 /*!
  * wxRichTextObject
  * This is the base for drawable objects.
@@ -531,6 +503,23 @@ int wxRichTextObject::ConvertTenthsMMToPixels(int ppi, int units)
     double pixels = ((double) units * (double)ppi) / 254.1;
 
     return (int) pixels;
+}
+
+// Convert units in pixels to tenths of a millimetre
+int wxRichTextObject::ConvertPixelsToTenthsMM(wxDC& dc, int pixels) const
+{
+    int p = pixels;
+    if (GetBuffer() && GetBuffer()->GetScale() != 1.0)
+        p = (int) (double(p) * GetBuffer()->GetScale());
+    return ConvertPixelsToTenthsMM(dc.GetPPI().x, p);
+}
+
+int wxRichTextObject::ConvertPixelsToTenthsMM(int ppi, int pixels)
+{
+    // There are ppi pixels in 254.1 "1/10 mm"
+    
+    int units = int( double(pixels) * 254.1 / (double) ppi );
+    return units;
 }
 
 /// Dump to output stream for debugging
@@ -1385,14 +1374,14 @@ wxSize wxRichTextParagraphLayoutBox::GetLineSizeAtPosition(long pos, bool caretP
 
 
 /// Convenience function to add a paragraph of text
-wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text, wxTextAttr* paraStyle)
+wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text, wxRichTextAttr* paraStyle)
 {
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
 
-    wxTextAttr defaultCharStyle;
-    wxTextAttr defaultParaStyle;
+    wxRichTextAttr defaultCharStyle;
+    wxRichTextAttr defaultParaStyle;
 
     // If the default style is a named paragraph style, don't apply any character formatting
     // to the initial text string.
@@ -1405,8 +1394,8 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
     else
         wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
-    wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
-    wxTextAttr* cStyle = & defaultCharStyle;
+    wxRichTextAttr* pStyle = paraStyle ? paraStyle : (wxRichTextAttr*) & defaultParaStyle;
+    wxRichTextAttr* cStyle = & defaultCharStyle;
 
     wxRichTextParagraph* para = new wxRichTextParagraph(text, this, pStyle, cStyle);
 
@@ -1419,14 +1408,14 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
 }
 
 /// Adds multiple paragraphs, based on newlines.
-wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text, wxTextAttr* paraStyle)
+wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text, wxRichTextAttr* paraStyle)
 {
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
 
-    wxTextAttr defaultCharStyle;
-    wxTextAttr defaultParaStyle;
+    wxRichTextAttr defaultCharStyle;
+    wxRichTextAttr defaultParaStyle;
 
     // If the default style is a named paragraph style, don't apply any character formatting
     // to the initial text string.
@@ -1439,8 +1428,8 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
     else
         wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
-    wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
-    wxTextAttr* cStyle = & defaultCharStyle;
+    wxRichTextAttr* pStyle = paraStyle ? paraStyle : (wxRichTextAttr*) & defaultParaStyle;
+    wxRichTextAttr* cStyle = & defaultCharStyle;
 
     wxRichTextParagraph* firstPara = NULL;
     wxRichTextParagraph* lastPara = NULL;
@@ -1495,14 +1484,14 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 }
 
 /// Convenience function to add an image
-wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxTextAttr* paraStyle)
+wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxRichTextAttr* paraStyle)
 {
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
 
-    wxTextAttr defaultCharStyle;
-    wxTextAttr defaultParaStyle;
+    wxRichTextAttr defaultCharStyle;
+    wxRichTextAttr defaultParaStyle;
 
     // If the default style is a named paragraph style, don't apply any character formatting
     // to the initial text string.
@@ -1515,8 +1504,8 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
     else
         wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
-    wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
-    wxTextAttr* cStyle = & defaultCharStyle;
+    wxRichTextAttr* pStyle = paraStyle ? paraStyle : (wxRichTextAttr*) & defaultParaStyle;
+    wxRichTextAttr* cStyle = & defaultCharStyle;
 
     wxRichTextParagraph* para = new wxRichTextParagraph(this, pStyle);
     AppendChild(para);
@@ -1541,7 +1530,7 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
     wxRichTextParagraph* para = GetParagraphAtPosition(position);
     if (para)
     {
-        wxTextAttrEx originalAttr = para->GetAttributes();
+        wxRichTextAttr originalAttr = para->GetAttributes();
 
         wxRichTextObjectList::compatibility_iterator node = m_children.Find(para);
 
@@ -1616,7 +1605,7 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             // Save empty paragraph attributes for appending later
             // These are character attributes deliberately set for a new paragraph. Without this,
             // we couldn't pass default attributes when appending a new paragraph.
-            wxTextAttrEx emptyParagraphAttributes;
+            wxRichTextAttr emptyParagraphAttributes;
 
             wxRichTextObjectList::compatibility_iterator objectNode = firstPara->GetChildren().GetFirst();
 
@@ -1892,7 +1881,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
             obj->DeleteRange(range);
 
             wxRichTextRange thisRange = obj->GetRange();
-            wxTextAttrEx thisAttr = obj->GetAttributes();
+            wxRichTextAttr thisAttr = obj->GetAttributes();
 
             // If the whole paragraph is within the range to delete,
             // delete the whole thing.
@@ -1924,7 +1913,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 
                 bool applyFinalParagraphStyle = firstPara && nextParagraph && nextParagraph != firstPara;
 
-                wxTextAttrEx nextParaAttr;
+                wxRichTextAttr nextParaAttr;
                 if (applyFinalParagraphStyle)
                 {
                     // Special case when deleting the end of a paragraph - use _this_ paragraph's style,
@@ -2102,7 +2091,7 @@ wxRichTextObject* wxRichTextParagraphLayoutBox::GetLeafObjectAtPosition(long pos
 }
 
 /// Set character or paragraph text attributes: apply character styles only to immediate text nodes
-bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const wxTextAttr& style, int flags)
+bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style, int flags)
 {
     bool characterStyle = false;
     bool paragraphStyle = false;
@@ -2120,7 +2109,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     bool removeStyle = ((flags & wxRICHTEXT_SETSTYLE_REMOVE) != 0);
 
     // Apply paragraph style first, if any
-    wxTextAttr wholeStyle(style);
+    wxRichTextAttr wholeStyle(style);
 
     if (!removeStyle && wholeStyle.HasParagraphStyleName() && GetStyleSheet())
     {
@@ -2130,7 +2119,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     }
 
     // Limit the attributes to be set to the content to only character attributes.
-    wxTextAttr characterAttributes(wholeStyle);
+    wxRichTextAttr characterAttributes(wholeStyle);
     characterAttributes.SetFlags(characterAttributes.GetFlags() & (wxTEXT_ATTR_CHARACTER));
 
     if (!removeStyle && characterAttributes.HasCharacterStyleName() && GetStyleSheet())
@@ -2200,7 +2189,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                         {
                             // Only apply attributes that will make a difference to the combined
                             // style as seen on the display
-                            wxTextAttr combinedAttr(para->GetCombinedAttributes());
+                            wxRichTextAttr combinedAttr(para->GetCombinedAttributes());
                             wxRichTextApplyStyle(newPara->GetAttributes(), wholeStyle, & combinedAttr);
                         }
                         else
@@ -2279,7 +2268,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                             {
                                 // Only apply attributes that will make a difference to the combined
                                 // style as seen on the display
-                                wxTextAttr combinedAttr(newPara->GetCombinedAttributes(child->GetAttributes()));
+                                wxRichTextAttr combinedAttr(newPara->GetCombinedAttributes(child->GetAttributes()));
                                 wxRichTextApplyStyle(child->GetAttributes(), characterAttributes, & combinedAttr);
                             }
                             else
@@ -2305,26 +2294,27 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     return true;
 }
 
-void wxRichTextParagraphLayoutBox::SetImageStyle(wxRichTextImage *image, const wxRichTextAnchoredObjectAttr& attr, int flags)
+void wxRichTextParagraphLayoutBox::SetImageStyle(wxRichTextImage *image, const wxRichTextAttr& textAttr, int flags)
 {
     bool withUndo = flags & wxRICHTEXT_SETSTYLE_WITH_UNDO;
     bool haveControl = (GetRichTextCtrl() != NULL);
     wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
     wxRichTextParagraph* para = GetParagraphAtPosition(image->GetRange().GetStart());
     wxRichTextAction *action = NULL;
-    wxRichTextAnchoredObjectAttr oldAttr = image->GetAnchoredAttr();
+    wxRichTextAttr oldTextAttr = image->GetAttributes();
 
     if (haveControl && withUndo)
     {
         action = new wxRichTextAction(NULL, _("Change Image Style"), wxRICHTEXT_CHANGE_STYLE, & GetRichTextCtrl()->GetBuffer(), GetRichTextCtrl());
         action->SetRange(image->GetRange().FromInternal());
         action->SetPosition(GetRichTextCtrl()->GetCaretPosition());
-        image->SetAnchoredAttr(attr);
+        image->SetAttributes(textAttr);
+        
         // Set the new attribute
         newPara = new wxRichTextParagraph(*para);
         action->GetNewParagraphs().AppendChild(newPara);
         // Change back to the old one
-        image->SetAnchoredAttr(oldAttr);
+        image->SetAttributes(oldTextAttr);
         action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
     }
     else
@@ -2335,19 +2325,19 @@ void wxRichTextParagraphLayoutBox::SetImageStyle(wxRichTextImage *image, const w
 }
 
 /// Get the text attributes for this position.
-bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttr& style)
+bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style)
 {
     return DoGetStyle(position, style, true);
 }
 
-bool wxRichTextParagraphLayoutBox::GetUncombinedStyle(long position, wxTextAttr& style)
+bool wxRichTextParagraphLayoutBox::GetUncombinedStyle(long position, wxRichTextAttr& style)
 {
     return DoGetStyle(position, style, false);
 }
 
 /// Implementation helper for GetStyle. If combineStyles is true, combine base, paragraph and
 /// context attributes.
-bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttr& style, bool combineStyles)
+bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxRichTextAttr& style, bool combineStyles)
 {
     wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
 
@@ -2396,434 +2386,9 @@ static bool wxHasStyle(long flags, long style)
 
 /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
 /// content.
-bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const wxTextAttr& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes, int& absentStyleAttributes, int& absentTextEffectAttributes)
+bool wxRichTextParagraphLayoutBox::CollectStyle(wxRichTextAttr& currentStyle, const wxRichTextAttr& style, wxRichTextAttr& clashingAttr, wxRichTextAttr& absentAttr)
 {
-    absentStyleAttributes |= (~style.GetFlags() & wxTEXT_ATTR_ALL);
-    absentTextEffectAttributes |= (~style.GetTextEffectFlags() & 0xFFFF);
-
-    if (style.HasFont())
-    {
-        if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
-        {
-            if (currentStyle.HasFontSize())
-            {
-                if (currentStyle.GetFontSize() != style.GetFontSize())
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_SIZE;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_SIZE);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontSize(style.GetFontSize());
-            }
-        }
-
-        if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
-        {
-            if (currentStyle.HasFontItalic())
-            {
-                if (currentStyle.GetFontStyle() != style.GetFontStyle())
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_ITALIC;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_ITALIC);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontStyle(style.GetFontStyle());
-            }
-        }
-
-        if (style.HasFontFamily() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FAMILY))
-        {
-            if (currentStyle.HasFontFamily())
-            {
-                if (currentStyle.GetFontFamily() != style.GetFontFamily())
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_FAMILY;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_FAMILY);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontFamily(style.GetFontFamily());
-            }
-        }
-
-        if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
-        {
-            if (currentStyle.HasFontWeight())
-            {
-                if (currentStyle.GetFontWeight() != style.GetFontWeight())
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_WEIGHT;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_WEIGHT);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontWeight(style.GetFontWeight());
-            }
-        }
-
-        if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FACE))
-        {
-            if (currentStyle.HasFontFaceName())
-            {
-                wxString faceName1(currentStyle.GetFontFaceName());
-                wxString faceName2(style.GetFontFaceName());
-
-                if (faceName1 != faceName2)
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_FACE;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_FACE);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontFaceName(style.GetFontFaceName());
-            }
-        }
-
-        if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
-        {
-            if (currentStyle.HasFontUnderlined())
-            {
-                if (currentStyle.GetFontUnderlined() != style.GetFontUnderlined())
-                {
-                    // Clash of style - mark as such
-                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_UNDERLINE;
-                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_UNDERLINE);
-                }
-            }
-            else
-            {
-                currentStyle.SetFontUnderlined(style.GetFontUnderlined());
-            }
-        }
-    }
-
-    if (style.HasTextColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TEXT_COLOUR))
-    {
-        if (currentStyle.HasTextColour())
-        {
-            if (currentStyle.GetTextColour() != style.GetTextColour())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_TEXT_COLOUR;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TEXT_COLOUR);
-            }
-        }
-        else
-            currentStyle.SetTextColour(style.GetTextColour());
-    }
-
-    if (style.HasBackgroundColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BACKGROUND_COLOUR))
-    {
-        if (currentStyle.HasBackgroundColour())
-        {
-            if (currentStyle.GetBackgroundColour() != style.GetBackgroundColour())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_BACKGROUND_COLOUR;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
-            }
-        }
-        else
-            currentStyle.SetBackgroundColour(style.GetBackgroundColour());
-    }
-
-    if (style.HasAlignment() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_ALIGNMENT))
-    {
-        if (currentStyle.HasAlignment())
-        {
-            if (currentStyle.GetAlignment() != style.GetAlignment())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_ALIGNMENT;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_ALIGNMENT);
-            }
-        }
-        else
-            currentStyle.SetAlignment(style.GetAlignment());
-    }
-
-    if (style.HasTabs() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TABS))
-    {
-        if (currentStyle.HasTabs())
-        {
-            if (!wxRichTextTabsEq(currentStyle.GetTabs(), style.GetTabs()))
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_TABS;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TABS);
-            }
-        }
-        else
-            currentStyle.SetTabs(style.GetTabs());
-    }
-
-    if (style.HasLeftIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LEFT_INDENT))
-    {
-        if (currentStyle.HasLeftIndent())
-        {
-            if (currentStyle.GetLeftIndent() != style.GetLeftIndent() || currentStyle.GetLeftSubIndent() != style.GetLeftSubIndent())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_LEFT_INDENT;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LEFT_INDENT);
-            }
-        }
-        else
-            currentStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
-    }
-
-    if (style.HasRightIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_RIGHT_INDENT))
-    {
-        if (currentStyle.HasRightIndent())
-        {
-            if (currentStyle.GetRightIndent() != style.GetRightIndent())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_RIGHT_INDENT;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_RIGHT_INDENT);
-            }
-        }
-        else
-            currentStyle.SetRightIndent(style.GetRightIndent());
-    }
-
-    if (style.HasParagraphSpacingAfter() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_AFTER))
-    {
-        if (currentStyle.HasParagraphSpacingAfter())
-        {
-            if (currentStyle.GetParagraphSpacingAfter() != style.GetParagraphSpacingAfter())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_AFTER;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_AFTER);
-            }
-        }
-        else
-            currentStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
-    }
-
-    if (style.HasParagraphSpacingBefore() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_BEFORE))
-    {
-        if (currentStyle.HasParagraphSpacingBefore())
-        {
-            if (currentStyle.GetParagraphSpacingBefore() != style.GetParagraphSpacingBefore())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_BEFORE;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_BEFORE);
-            }
-        }
-        else
-            currentStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
-    }
-
-    if (style.HasLineSpacing() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LINE_SPACING))
-    {
-        if (currentStyle.HasLineSpacing())
-        {
-            if (currentStyle.GetLineSpacing() != style.GetLineSpacing())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_LINE_SPACING;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LINE_SPACING);
-            }
-        }
-        else
-            currentStyle.SetLineSpacing(style.GetLineSpacing());
-    }
-
-    if (style.HasCharacterStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
-    {
-        if (currentStyle.HasCharacterStyleName())
-        {
-            if (currentStyle.GetCharacterStyleName() != style.GetCharacterStyleName())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_CHARACTER_STYLE_NAME;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_CHARACTER_STYLE_NAME);
-            }
-        }
-        else
-            currentStyle.SetCharacterStyleName(style.GetCharacterStyleName());
-    }
-
-    if (style.HasParagraphStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
-    {
-        if (currentStyle.HasParagraphStyleName())
-        {
-            if (currentStyle.GetParagraphStyleName() != style.GetParagraphStyleName())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARAGRAPH_STYLE_NAME);
-            }
-        }
-        else
-            currentStyle.SetParagraphStyleName(style.GetParagraphStyleName());
-    }
-
-    if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
-    {
-        if (currentStyle.HasListStyleName())
-        {
-            if (currentStyle.GetListStyleName() != style.GetListStyleName())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_LIST_STYLE_NAME;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LIST_STYLE_NAME);
-            }
-        }
-        else
-            currentStyle.SetListStyleName(style.GetListStyleName());
-    }
-
-    if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
-    {
-        if (currentStyle.HasBulletStyle())
-        {
-            if (currentStyle.GetBulletStyle() != style.GetBulletStyle())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_STYLE;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_STYLE);
-            }
-        }
-        else
-            currentStyle.SetBulletStyle(style.GetBulletStyle());
-    }
-
-    if (style.HasBulletNumber() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NUMBER))
-    {
-        if (currentStyle.HasBulletNumber())
-        {
-            if (currentStyle.GetBulletNumber() != style.GetBulletNumber())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NUMBER;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NUMBER);
-            }
-        }
-        else
-            currentStyle.SetBulletNumber(style.GetBulletNumber());
-    }
-
-    if (style.HasBulletText() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_TEXT))
-    {
-        if (currentStyle.HasBulletText())
-        {
-            if (currentStyle.GetBulletText() != style.GetBulletText())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_TEXT;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_TEXT);
-            }
-        }
-        else
-        {
-            currentStyle.SetBulletText(style.GetBulletText());
-            currentStyle.SetBulletFont(style.GetBulletFont());
-        }
-    }
-
-    if (style.HasBulletName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NAME))
-    {
-        if (currentStyle.HasBulletName())
-        {
-            if (currentStyle.GetBulletName() != style.GetBulletName())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NAME;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NAME);
-            }
-        }
-        else
-        {
-            currentStyle.SetBulletName(style.GetBulletName());
-        }
-    }
-
-    if (style.HasURL() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_URL))
-    {
-        if (currentStyle.HasURL())
-        {
-            if (currentStyle.GetURL() != style.GetURL())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_URL;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_URL);
-            }
-        }
-        else
-        {
-            currentStyle.SetURL(style.GetURL());
-        }
-    }
-
-    if (style.HasTextEffects() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_EFFECTS))
-    {
-        if (currentStyle.HasTextEffects())
-        {
-            // We need to find the bits in the new style that are different:
-            // just look at those bits that are specified by the new style.
-
-            // We need to remove the bits and flags that are not common between current style
-            // and new style. In so doing we need to take account of the styles absent from one or more of the
-            // previous styles.
-
-            int currentRelevantTextEffects = currentStyle.GetTextEffects() & style.GetTextEffectFlags();
-            int newRelevantTextEffects = style.GetTextEffects() & style.GetTextEffectFlags();
-
-            if (currentRelevantTextEffects != newRelevantTextEffects)
-            {
-                // Find the text effects that were different, using XOR
-                int differentEffects = currentRelevantTextEffects ^ newRelevantTextEffects;
-
-                // Clash of style - mark as such
-                multipleTextEffectAttributes |= differentEffects;
-                currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~differentEffects);
-            }
-        }
-        else
-        {
-            currentStyle.SetTextEffects(style.GetTextEffects());
-            currentStyle.SetTextEffectFlags(style.GetTextEffectFlags());
-        }
-
-        // Mask out the flags and values that cannot be common because they were absent in one or more objecrs
-        // that we've looked at so far
-        currentStyle.SetTextEffects(currentStyle.GetTextEffects() & ~absentTextEffectAttributes);
-        currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~absentTextEffectAttributes);
-
-        if (currentStyle.GetTextEffectFlags() == 0)
-            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_EFFECTS);
-    }
-
-    if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
-    {
-        if (currentStyle.HasOutlineLevel())
-        {
-            if (currentStyle.GetOutlineLevel() != style.GetOutlineLevel())
-            {
-                // Clash of style - mark as such
-                multipleStyleAttributes |= wxTEXT_ATTR_OUTLINE_LEVEL;
-                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_OUTLINE_LEVEL);
-            }
-        }
-        else
-            currentStyle.SetOutlineLevel(style.GetOutlineLevel());
-    }
+    currentStyle.CollectCommonAttributes(style, clashingAttr, absentAttr);
 
     return true;
 }
@@ -2832,18 +2397,12 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
 /// that attribute is not present within the flags.
 /// *** Note that this is not recursive, and so assumes that content inside a paragraph is not itself
 /// nested.
-bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style)
+bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style)
 {
-    style = wxTextAttr();
+    style = wxRichTextAttr();
 
-    // The attributes that aren't valid because of multiple styles within the range
-    long multipleStyleAttributes = 0;
-    int multipleTextEffectAttributes = 0;
-
-    int absentStyleAttributesPara = 0;
-    int absentStyleAttributesChar = 0;
-    int absentTextEffectAttributesPara = 0;
-    int absentTextEffectAttributesChar = 0;
+    wxRichTextAttr clashingAttr;
+    wxRichTextAttr absentAttrPara, absentAttrChar;
 
     wxRichTextObjectList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
@@ -2853,9 +2412,9 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
         {
             if (para->GetChildren().GetCount() == 0)
             {
-                wxTextAttr paraStyle = para->GetCombinedAttributes();
+                wxRichTextAttr paraStyle = para->GetCombinedAttributes();
 
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
+                CollectStyle(style, paraStyle, clashingAttr, absentAttrPara);
             }
             else
             {
@@ -2863,9 +2422,9 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                 paraRange.LimitTo(range);
 
                 // First collect paragraph attributes only
-                wxTextAttr paraStyle = para->GetCombinedAttributes();
+                wxRichTextAttr paraStyle = para->GetCombinedAttributes();
                 paraStyle.SetFlags(paraStyle.GetFlags() & wxTEXT_ATTR_PARAGRAPH);
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
+                CollectStyle(style, paraStyle, clashingAttr, absentAttrPara);
 
                 wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
 
@@ -2874,12 +2433,12 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                     wxRichTextObject* child = childNode->GetData();
                     if (!(child->GetRange().GetStart() > range.GetEnd() || child->GetRange().GetEnd() < range.GetStart()))
                     {
-                        wxTextAttr childStyle = para->GetCombinedAttributes(child->GetAttributes());
+                        wxRichTextAttr childStyle = para->GetCombinedAttributes(child->GetAttributes());
 
                         // Now collect character attributes only
                         childStyle.SetFlags(childStyle.GetFlags() & wxTEXT_ATTR_CHARACTER);
 
-                        CollectStyle(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesChar, absentTextEffectAttributesChar);
+                        CollectStyle(style, childStyle, clashingAttr, absentAttrChar);
                     }
 
                     childNode = childNode->GetNext();
@@ -2892,7 +2451,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
 }
 
 /// Set default style
-bool wxRichTextParagraphLayoutBox::SetDefaultStyle(const wxTextAttr& style)
+bool wxRichTextParagraphLayoutBox::SetDefaultStyle(const wxRichTextAttr& style)
 {
     m_defaultAttributes = style;
     return true;
@@ -2902,7 +2461,7 @@ bool wxRichTextParagraphLayoutBox::SetDefaultStyle(const wxTextAttr& style)
 /// of the attributes are different within the range, the test fails. You
 /// can use this to implement, for example, bold button updating. style must have
 /// flags indicating which attributes are of interest.
-bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
+bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
 {
     int foundCount = 0;
     int matchingCount = 0;
@@ -2934,9 +2493,9 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                     if (!childRange.IsOutside(range) && child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
                     {
                         foundCount ++;
-                        wxTextAttr textAttr = para->GetCombinedAttributes(child->GetAttributes());
+                        wxRichTextAttr textAttr = para->GetCombinedAttributes(child->GetAttributes());
 
-                        if (wxTextAttrEqPartial(textAttr, style, style.GetFlags()))
+                        if (wxTextAttrEqPartial(textAttr, style))
                             matchingCount ++;
                     }
 
@@ -2955,7 +2514,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
 /// of the attributes are different within the range, the test fails. You
 /// can use this to implement, for example, centering button updating. style must have
 /// flags indicating which attributes are of interest.
-bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
+bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
 {
     int foundCount = 0;
     int matchingCount = 0;
@@ -2974,12 +2533,12 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
 
             if (!para->GetRange().IsOutside(range))
             {
-                wxTextAttr textAttr = GetAttributes();
+                wxRichTextAttr textAttr = GetAttributes();
                 // Apply the paragraph style
                 wxRichTextApplyStyle(textAttr, para->GetAttributes());
 
                 foundCount ++;
-                if (wxTextAttrEqPartial(textAttr, style, style.GetFlags()))
+                if (wxTextAttrEqPartial(textAttr, style))
                     matchingCount ++;
             }
         }
@@ -3242,7 +2801,7 @@ bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wx
                     // Renumbering will need to be done when we promote/demote a paragraph.
 
                     // Apply the overall list style, and item style for this level
-                    wxTextAttr listStyle(def->GetCombinedStyleForLevel(thisLevel, styleSheet));
+                    wxRichTextAttr listStyle(def->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
                     // Now we need to do numbering
@@ -3417,7 +2976,7 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
                     }
 
                     // Apply the overall list style, and item style for this level
-                    wxTextAttr listStyle(defToUse->GetCombinedStyleForLevel(thisLevel, styleSheet));
+                    wxRichTextAttr listStyle(defToUse->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
                     // OK, we've (re)applied the style, now let's get the numbering right.
@@ -3528,7 +3087,7 @@ bool wxRichTextParagraphLayoutBox::PromoteList(int promoteBy, const wxRichTextRa
 
 /// Fills in the attributes for numbering a paragraph after previousParagraph. It also finds the
 /// position of the paragraph that it had to start looking from.
-bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxTextAttr& attr) const
+bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const
 {
     if (!previousParagraph->GetAttributes().HasFlag(wxTEXT_ATTR_BULLET_STYLE) || previousParagraph->GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE)
         return false;
@@ -3590,14 +3149,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraph, wxRichTextBox)
 
 wxArrayInt wxRichTextParagraph::sm_defaultTabs;
 
-wxRichTextParagraph::wxRichTextParagraph(wxRichTextObject* parent, wxTextAttr* style):
+wxRichTextParagraph::wxRichTextParagraph(wxRichTextObject* parent, wxRichTextAttr* style):
     wxRichTextBox(parent)
 {
     if (style)
         SetAttributes(*style);
 }
 
-wxRichTextParagraph::wxRichTextParagraph(const wxString& text, wxRichTextObject* parent, wxTextAttr* paraStyle, wxTextAttr* charStyle):
+wxRichTextParagraph::wxRichTextParagraph(const wxString& text, wxRichTextObject* parent, wxRichTextAttr* paraStyle, wxRichTextAttr* charStyle):
     wxRichTextBox(parent)
 {
     if (paraStyle)
@@ -3614,7 +3173,7 @@ wxRichTextParagraph::~wxRichTextParagraph()
 /// Draw the item
 bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int WXUNUSED(descent), int style)
 {
-    wxTextAttr attr = GetCombinedAttributes();
+    wxRichTextAttr attr = GetCombinedAttributes();
 
     // Draw the bullet, if any
     if (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE)
@@ -3624,7 +3183,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             int spaceBeforePara = ConvertTenthsMMToPixels(dc, attr.GetParagraphSpacingBefore());
             int leftIndent = ConvertTenthsMMToPixels(dc, attr.GetLeftIndent());
 
-            wxTextAttr bulletAttr(GetCombinedAttributes());
+            wxRichTextAttr bulletAttr(GetCombinedAttributes());
 
             // Combine with the font of the first piece of content, if one is specified
             if (GetChildren().GetCount() > 0)
@@ -3778,7 +3337,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     wxASSERT(collector);
     LayoutFloat(dc, rect, style, collector);
 
-    wxTextAttr attr = GetCombinedAttributes();
+    wxRichTextAttr attr = GetCombinedAttributes();
 
     // ClearLines();
 
@@ -4104,7 +3663,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 }
 
 /// Apply paragraph styles, such as centering, to wrapped lines
-void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRect& rect, wxDC& dc)
+void wxRichTextParagraph::ApplyParagraphStyle(const wxRichTextAttr& attr, const wxRect& rect, wxDC& dc)
 {
     if (!attr.HasAlignment())
         return;
@@ -4941,9 +4500,9 @@ bool wxRichTextParagraph::ClearUnusedLines(int lineCount)
 
 /// Get combined attributes of the base style, paragraph style and character style. We use this to dynamically
 /// retrieve the actual style.
-wxTextAttr wxRichTextParagraph::GetCombinedAttributes(const wxTextAttr& contentStyle) const
+wxRichTextAttr wxRichTextParagraph::GetCombinedAttributes(const wxRichTextAttr& contentStyle) const
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     wxRichTextBuffer* buf = wxDynamicCast(GetParent(), wxRichTextBuffer);
     if (buf)
     {
@@ -4958,9 +4517,9 @@ wxTextAttr wxRichTextParagraph::GetCombinedAttributes(const wxTextAttr& contentS
 }
 
 /// Get combined attributes of the base style and paragraph style.
-wxTextAttr wxRichTextParagraph::GetCombinedAttributes() const
+wxRichTextAttr wxRichTextParagraph::GetCombinedAttributes() const
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     wxRichTextBuffer* buf = wxDynamicCast(GetParent(), wxRichTextBuffer);
     if (buf)
     {
@@ -5000,17 +4559,36 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, w
             wxSize size;
             int descent, x = 0;
             anchored->GetRangeSize(anchored->GetRange(), size, descent, dc, style);
-            wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
-            int pos = floatCollector->GetFitPosition(attr.m_floating, rect.y + attr.m_offset, size.y);
+            
+            int offsetY = 0;
+            if (anchored->GetAttributes().GetTextBoxAttr().GetTop().IsPresent())
+            {
+                offsetY = anchored->GetAttributes().GetTextBoxAttr().GetTop().GetValue();
+                if (anchored->GetAttributes().GetTextBoxAttr().GetTop().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+                {
+                    offsetY = ConvertTenthsMMToPixels(dc, offsetY);
+                }
+            }
+            
+            int pos = floatCollector->GetFitPosition(anchored->GetAttributes().GetTextBoxAttr().GetFloatMode(), rect.y + offsetY, size.y);
 
             /* Update the offset */
-            attr.m_offset = pos - rect.y;
-            anchored->SetAnchoredAttr(attr);
+            int newOffsetY = pos - rect.y;
+            if (newOffsetY != offsetY)
+            {
+                if (anchored->GetAttributes().GetTextBoxAttr().GetTop().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+                    newOffsetY = ConvertPixelsToTenthsMM(dc, newOffsetY);
+                anchored->GetAttributes().GetTextBoxAttr().GetTop().SetValue(newOffsetY);
+            }
+            
+            // attr.m_offset = pos - rect.y;
+            //anchored->SetAnchoredAttr(attr);
 
-            if (attr.m_floating == wxRICHTEXT_FLOAT_LEFT)
+            if (anchored->GetAttributes().GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_FLOAT_LEFT)
                 x = 0;
-            else if (attr.m_floating == wxRICHTEXT_FLOAT_RIGHT)
+            else if (anchored->GetAttributes().GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_FLOAT_RIGHT)
                 x = rect.width - size.x;
+
             anchored->SetPosition(wxPoint(x, pos));
             anchored->SetCachedSize(size);
             floatCollector->CollectFloat(this, anchored);
@@ -5097,7 +4675,7 @@ wxRichTextRange wxRichTextLine::GetAbsoluteRange() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlainText, wxRichTextObject)
 
-wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject* parent, wxTextAttr* style):
+wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject* parent, wxRichTextAttr* style):
     wxRichTextObject(parent)
 {
     if (style)
@@ -5117,7 +4695,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
-    wxTextAttr textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
+    wxRichTextAttr textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
 
     int offset = GetRange().GetStart();
 
@@ -5273,7 +4851,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     return true;
 }
 
-bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected)
+bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected)
 {
     bool hasTabs = (str.Find(wxT('\t')) != wxNOT_FOUND);
 
@@ -5424,7 +5002,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
-    wxTextAttr textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
+    wxRichTextAttr textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
 
     // Always assume unformatted text, since at this level we have no knowledge
     // of line breaks - and we don't need it, since we'll calculate size within
@@ -5793,10 +5371,10 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-    wxTextAttr attr(GetDefaultStyle());
+    wxRichTextAttr attr(GetDefaultStyle());
 
-    wxTextAttr* p = NULL;
-    wxTextAttr paraAttr;
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
         paraAttr = GetStyleForNewParagraph(pos);
@@ -5836,8 +5414,8 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-    wxTextAttr* p = NULL;
-    wxTextAttr paraAttr;
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
         // Get appropriate paragraph style
@@ -5874,8 +5452,8 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-    wxTextAttr* p = NULL;
-    wxTextAttr paraAttr;
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
         paraAttr = GetStyleForNewParagraph(pos, false, true /* look for next paragraph style */);
@@ -5883,7 +5461,7 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
             p = & paraAttr;
     }
 
-    wxTextAttr attr(GetDefaultStyle());
+    wxRichTextAttr attr(GetDefaultStyle());
 
     wxRichTextParagraph* newPara = new wxRichTextParagraph(wxEmptyString, this, & attr);
     action->GetNewParagraphs().AppendChild(newPara);
@@ -5917,12 +5495,12 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     {
         // Check whether the default style merely reflects the paragraph/basic style,
         // in which case don't apply it.
-        wxTextAttrEx defaultStyle(GetDefaultStyle());
-        wxTextAttrEx toApply;
+        wxRichTextAttr defaultStyle(GetDefaultStyle());
+        wxRichTextAttr toApply;
         if (para)
         {
             wxRichTextAttr combinedAttr = para->GetCombinedAttributes();
-            wxTextAttrEx newAttr;
+            wxRichTextAttr newAttr;
             // This filters out attributes that are accounted for by the current
             // paragraph/basic style
             wxRichTextApplyStyle(toApply, defaultStyle, & combinedAttr);
@@ -5943,12 +5521,13 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
 }
 
 /// Submit command to insert the given image
-bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags, const wxRichTextAnchoredObjectAttr& floatAttr)
+bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags,
+                                            const wxRichTextAttr& textAttr)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Image"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-    wxTextAttr* p = NULL;
-    wxTextAttr paraAttr;
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
         paraAttr = GetStyleForNewParagraph(pos);
@@ -5956,7 +5535,7 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
             p = & paraAttr;
     }
 
-    wxTextAttr attr(GetDefaultStyle());
+    wxRichTextAttr attr(GetDefaultStyle());
 
     wxRichTextParagraph* newPara = new wxRichTextParagraph(this, & attr);
     if (p)
@@ -5964,7 +5543,8 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
 
     wxRichTextImage* imageObject = new wxRichTextImage(imageBlock, newPara);
     newPara->AppendChild(imageObject);
-    imageObject->SetAnchoredAttr(floatAttr);
+    imageObject->SetAttributes(textAttr);
+    //imageObject->SetAnchoredAttr(floatAttr);
     action->GetNewParagraphs().AppendChild(newPara);
     action->GetNewParagraphs().UpdateRanges();
 
@@ -5985,8 +5565,8 @@ bool wxRichTextBuffer::InsertObjectWithUndo(long pos, wxRichTextObject *object, 
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert object"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-    wxTextAttr* p = NULL;
-    wxTextAttr paraAttr;
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
         paraAttr = GetStyleForNewParagraph(pos);
@@ -5994,7 +5574,7 @@ bool wxRichTextBuffer::InsertObjectWithUndo(long pos, wxRichTextObject *object, 
             p = & paraAttr;
     }
 
-    wxTextAttr attr(GetDefaultStyle());
+    wxRichTextAttr attr(GetDefaultStyle());
 
     wxRichTextParagraph* newPara = new wxRichTextParagraph(this, & attr);
     if (p)
@@ -6018,12 +5598,12 @@ bool wxRichTextBuffer::InsertObjectWithUndo(long pos, wxRichTextObject *object, 
 /// Get the style that is appropriate for a new paragraph at this position.
 /// If the previous paragraph has a paragraph style name, look up the next-paragraph
 /// style.
-wxTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPosition, bool lookUpNewParaStyle) const
+wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPosition, bool lookUpNewParaStyle) const
 {
     wxRichTextParagraph* para = GetParagraphAtPosition(pos, caretPosition);
     if (para)
     {
-        wxTextAttr attr;
+        wxRichTextAttr attr;
         bool foundAttributes = false;
 
         // Look for a matching paragraph style
@@ -6085,7 +5665,7 @@ wxTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPositio
         return attr;
     }
     else
-        return wxTextAttr();
+        return wxRichTextAttr();
 }
 
 /// Submit command to delete this range
@@ -6199,12 +5779,12 @@ bool wxRichTextBuffer::EndSuppressUndo()
 }
 
 /// Begin using a style
-bool wxRichTextBuffer::BeginStyle(const wxTextAttr& style)
+bool wxRichTextBuffer::BeginStyle(const wxRichTextAttr& style)
 {
-    wxTextAttr newStyle(GetDefaultStyle());
+    wxRichTextAttr newStyle(GetDefaultStyle());
 
     // Save the old default style
-    m_attributeStack.Append((wxObject*) new wxTextAttr(GetDefaultStyle()));
+    m_attributeStack.Append((wxObject*) new wxRichTextAttr(GetDefaultStyle()));
 
     wxRichTextApplyStyle(newStyle, style);
     newStyle.SetFlags(style.GetFlags()|newStyle.GetFlags());
@@ -6224,7 +5804,7 @@ bool wxRichTextBuffer::EndStyle()
     }
 
     wxList::compatibility_iterator node = m_attributeStack.GetLast();
-    wxTextAttr* attr = (wxTextAttr*)node->GetData();
+    wxRichTextAttr* attr = (wxRichTextAttr*)node->GetData();
     m_attributeStack.Erase(node);
 
     SetDefaultStyle(*attr);
@@ -6245,14 +5825,14 @@ bool wxRichTextBuffer::EndAllStyles()
 void wxRichTextBuffer::ClearStyleStack()
 {
     for (wxList::compatibility_iterator node = m_attributeStack.GetFirst(); node; node = node->GetNext())
-        delete (wxTextAttr*) node->GetData();
+        delete (wxRichTextAttr*) node->GetData();
     m_attributeStack.Clear();
 }
 
 /// Begin using bold
 bool wxRichTextBuffer::BeginBold()
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFontWeight(wxFONTWEIGHT_BOLD);
 
     return BeginStyle(attr);
@@ -6261,7 +5841,7 @@ bool wxRichTextBuffer::BeginBold()
 /// Begin using italic
 bool wxRichTextBuffer::BeginItalic()
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFontStyle(wxFONTSTYLE_ITALIC);
 
     return BeginStyle(attr);
@@ -6270,7 +5850,7 @@ bool wxRichTextBuffer::BeginItalic()
 /// Begin using underline
 bool wxRichTextBuffer::BeginUnderline()
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFontUnderlined(true);
 
     return BeginStyle(attr);
@@ -6279,7 +5859,7 @@ bool wxRichTextBuffer::BeginUnderline()
 /// Begin using point size
 bool wxRichTextBuffer::BeginFontSize(int pointSize)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFontSize(pointSize);
 
     return BeginStyle(attr);
@@ -6288,7 +5868,7 @@ bool wxRichTextBuffer::BeginFontSize(int pointSize)
 /// Begin using this font
 bool wxRichTextBuffer::BeginFont(const wxFont& font)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFont(font);
 
     return BeginStyle(attr);
@@ -6297,7 +5877,7 @@ bool wxRichTextBuffer::BeginFont(const wxFont& font)
 /// Begin using this colour
 bool wxRichTextBuffer::BeginTextColour(const wxColour& colour)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR);
     attr.SetTextColour(colour);
 
@@ -6307,7 +5887,7 @@ bool wxRichTextBuffer::BeginTextColour(const wxColour& colour)
 /// Begin using alignment
 bool wxRichTextBuffer::BeginAlignment(wxTextAttrAlignment alignment)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_ALIGNMENT);
     attr.SetAlignment(alignment);
 
@@ -6317,7 +5897,7 @@ bool wxRichTextBuffer::BeginAlignment(wxTextAttrAlignment alignment)
 /// Begin left indent
 bool wxRichTextBuffer::BeginLeftIndent(int leftIndent, int leftSubIndent)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
     attr.SetLeftIndent(leftIndent, leftSubIndent);
 
@@ -6327,7 +5907,7 @@ bool wxRichTextBuffer::BeginLeftIndent(int leftIndent, int leftSubIndent)
 /// Begin right indent
 bool wxRichTextBuffer::BeginRightIndent(int rightIndent)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_RIGHT_INDENT);
     attr.SetRightIndent(rightIndent);
 
@@ -6343,7 +5923,7 @@ bool wxRichTextBuffer::BeginParagraphSpacing(int before, int after)
     if (after != 0)
         flags |= wxTEXT_ATTR_PARA_SPACING_AFTER;
 
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(flags);
     attr.SetParagraphSpacingBefore(before);
     attr.SetParagraphSpacingAfter(after);
@@ -6354,7 +5934,7 @@ bool wxRichTextBuffer::BeginParagraphSpacing(int before, int after)
 /// Begin line spacing
 bool wxRichTextBuffer::BeginLineSpacing(int lineSpacing)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
     attr.SetLineSpacing(lineSpacing);
 
@@ -6364,7 +5944,7 @@ bool wxRichTextBuffer::BeginLineSpacing(int lineSpacing)
 /// Begin numbered bullet
 bool wxRichTextBuffer::BeginNumberedBullet(int bulletNumber, int leftIndent, int leftSubIndent, int bulletStyle)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_LEFT_INDENT);
     attr.SetBulletStyle(bulletStyle);
     attr.SetBulletNumber(bulletNumber);
@@ -6376,7 +5956,7 @@ bool wxRichTextBuffer::BeginNumberedBullet(int bulletNumber, int leftIndent, int
 /// Begin symbol bullet
 bool wxRichTextBuffer::BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_LEFT_INDENT);
     attr.SetBulletStyle(bulletStyle);
     attr.SetLeftIndent(leftIndent, leftSubIndent);
@@ -6388,7 +5968,7 @@ bool wxRichTextBuffer::BeginSymbolBullet(const wxString& symbol, int leftIndent,
 /// Begin standard bullet
 bool wxRichTextBuffer::BeginStandardBullet(const wxString& bulletName, int leftIndent, int leftSubIndent, int bulletStyle)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_LEFT_INDENT);
     attr.SetBulletStyle(bulletStyle);
     attr.SetLeftIndent(leftIndent, leftSubIndent);
@@ -6405,7 +5985,7 @@ bool wxRichTextBuffer::BeginCharacterStyle(const wxString& characterStyle)
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterStyle);
         if (def)
         {
-            wxTextAttr attr = def->GetStyleMergedWithBase(GetStyleSheet());
+            wxRichTextAttr attr = def->GetStyleMergedWithBase(GetStyleSheet());
             return BeginStyle(attr);
         }
     }
@@ -6420,7 +6000,7 @@ bool wxRichTextBuffer::BeginParagraphStyle(const wxString& paragraphStyle)
         wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(paragraphStyle);
         if (def)
         {
-            wxTextAttr attr = def->GetStyleMergedWithBase(GetStyleSheet());
+            wxRichTextAttr attr = def->GetStyleMergedWithBase(GetStyleSheet());
             return BeginStyle(attr);
         }
     }
@@ -6435,7 +6015,7 @@ bool wxRichTextBuffer::BeginListStyle(const wxString& listStyle, int level, int 
         wxRichTextListStyleDefinition* def = GetStyleSheet()->FindListStyle(listStyle);
         if (def)
         {
-            wxTextAttr attr(def->GetCombinedStyleForLevel(level));
+            wxRichTextAttr attr(def->GetCombinedStyleForLevel(level));
 
             attr.SetBulletNumber(number);
 
@@ -6448,7 +6028,7 @@ bool wxRichTextBuffer::BeginListStyle(const wxString& listStyle, int level, int 
 /// Begin URL
 bool wxRichTextBuffer::BeginURL(const wxString& url, const wxString& characterStyle)
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
 
     if (!characterStyle.IsEmpty() && GetStyleSheet())
     {
@@ -6619,7 +6199,7 @@ bool wxRichTextBuffer::LoadFile(const wxString& filename, wxRichTextFileType typ
     wxRichTextFileHandler* handler = FindHandlerFilenameOrType(filename, type);
     if (handler)
     {
-        SetDefaultStyle(wxTextAttr());
+        SetDefaultStyle(wxRichTextAttr());
         handler->SetFlags(GetHandlerFlags());
         bool success = handler->LoadFile(this, filename);
         Invalidate(wxRICHTEXT_ALL);
@@ -6648,7 +6228,7 @@ bool wxRichTextBuffer::LoadFile(wxInputStream& stream, wxRichTextFileType type)
     wxRichTextFileHandler* handler = FindHandler(type);
     if (handler)
     {
-        SetDefaultStyle(wxTextAttr());
+        SetDefaultStyle(wxRichTextAttr());
         handler->SetFlags(GetHandlerFlags());
         bool success = handler->LoadFile(this, stream);
         Invalidate(wxRICHTEXT_ALL);
@@ -6918,7 +6498,7 @@ void wxRichTextBuffer::SetRenderer(wxRichTextRenderer* renderer)
     sm_renderer = renderer;
 }
 
-bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttr& bulletAttr, const wxRect& rect)
+bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& bulletAttr, const wxRect& rect)
 {
     if (bulletAttr.GetTextColour().Ok())
     {
@@ -6993,14 +6573,14 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, w
     return true;
 }
 
-bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttr& attr, const wxRect& rect, const wxString& text)
+bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, const wxString& text)
 {
     if (!text.empty())
     {
         wxFont font;
         if ((attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL) && !attr.GetBulletFont().IsEmpty() && attr.HasFont())
         {
-            wxTextAttr fontAttr;
+            wxRichTextAttr fontAttr;
             fontAttr.SetFontSize(attr.GetFontSize());
             fontAttr.SetFontStyle(attr.GetFontStyle());
             fontAttr.SetFontWeight(attr.GetFontWeight());
@@ -7045,7 +6625,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         return false;
 }
 
-bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(paragraph), wxDC& WXUNUSED(dc), const wxTextAttr& WXUNUSED(attr), const wxRect& WXUNUSED(rect))
+bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(paragraph), wxDC& WXUNUSED(dc), const wxRichTextAttr& WXUNUSED(attr), const wxRect& WXUNUSED(rect))
 {
     // Currently unimplemented. The intention is to store bitmaps by name in a media store associated
     // with the buffer. The store will allow retrieval from memory, disk or other means.
@@ -7495,88 +7075,24 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
     return true;
 }
 
-#if 0
-/*!
- * wxRichTextPlaceHoldingObject implementation
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject, wxRichTextObject)
-
-wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextAnchoredObject *real)
-                            : wxRichTextObject(parent), m_real(real)
-{
-}
-
-wxRichTextPlaceHoldingObject::~wxRichTextPlaceHoldingObject()
-{
-}
-
-bool wxRichTextPlaceHoldingObject::Draw(wxDC& WXUNUSED(dc), const wxRichTextRange& WXUNUSED(range), const wxRichTextRange& WXUNUSED(selectionrange), const wxRect& WXUNUSED(rect), int WXUNUSED(descent), int WXUNUSED(style))
-{
-    return true;
-}
-
-bool wxRichTextPlaceHoldingObject::Layout(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect), int WXUNUSED(style))
-{
-    SetCachedSize(wxSize(0, 0));
-    return true;
-}
-
-bool wxRichTextPlaceHoldingObject::GetRangeSize(const wxRichTextRange& WXUNUSED(range), wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags), wxPoint WXUNUSED(position), wxArrayInt* partialExtents) const
-{
-    size.x = size.y = 0;
-    if (partialExtents)
-        partialExtents->Add(0);
-    return true;
-}
-
-void wxRichTextPlaceHoldingObject::Copy(const wxRichTextPlaceHoldingObject& obj)
-{
-    wxRichTextObject::Copy(obj);
-    wxASSERT (obj.m_real);
-    wxRichTextObject* o = obj.m_real->Clone();
-    wxASSERT (o->IsFloatable());
-    wxRichTextAnchoredObject* anchor = wxDynamicCast(o, wxRichTextAnchoredObject);
-    wxASSERT (anchor);
-    anchor->SetPlaceHoldingObject(this);
-    m_real = anchor;
-}
-
-void wxRichTextPlaceHoldingObject::SetParent(wxRichTextObject* parent)
-{
-    wxRichTextObject::SetParent(parent);
-    if (m_real)
-    {
-        m_real->wxRichTextObject::SetParent(parent);
-    }
-
-}
-
-#endif
-
 /*!
  * wxRichTextAnchoredObject implementation
  */
 IMPLEMENT_CLASS(wxRichTextAnchoredObject, wxRichTextObject)
 
-wxRichTextAnchoredObject::wxRichTextAnchoredObject(wxRichTextObject* parent, const wxRichTextAnchoredObjectAttr& attr):
-    wxRichTextObject(parent), m_anchoredAttr(attr)
+wxRichTextAnchoredObject::wxRichTextAnchoredObject(wxRichTextObject* parent, const wxRichTextAttr& attr):
+    wxRichTextObject(parent)
 {
+    SetAttributes(attr);
 }
 
 wxRichTextAnchoredObject::~wxRichTextAnchoredObject()
 {
 }
 
-void wxRichTextAnchoredObject::SetAnchoredAttr(const wxRichTextAnchoredObjectAttr& attr)
-{
-    m_anchoredAttr = attr;
-}
-
 void wxRichTextAnchoredObject::Copy(const wxRichTextAnchoredObject& obj)
 {
     wxRichTextObject::Copy(obj);
-    m_anchoredAttr = obj.m_anchoredAttr;
 }
 
 void wxRichTextAnchoredObject::SetParent(wxRichTextObject* parent)
@@ -7591,7 +7107,7 @@ void wxRichTextAnchoredObject::SetParent(wxRichTextObject* parent)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextAnchoredObject)
 
-wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxTextAttr* charStyle):
+wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxRichTextAttr* charStyle):
     wxRichTextAnchoredObject(parent)
 {
     m_imageBlock.MakeImageBlockDefaultQuality(image, wxBITMAP_TYPE_PNG);
@@ -7599,7 +7115,7 @@ wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent,
         SetAttributes(*charStyle);
 }
 
-wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxTextAttr* charStyle):
+wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxRichTextAttr* charStyle):
     wxRichTextAnchoredObject(parent)
 {
     m_imageBlock = imageBlock;
@@ -7622,30 +7138,20 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
 
         int width = image.GetWidth();
         int height = image.GetHeight();
-
-        if (m_anchoredAttr.m_width != -1)
+        
+        if (GetAttributes().GetTextBoxAttr().GetWidth().IsPresent() && GetAttributes().GetTextBoxAttr().GetWidth().GetValue() > 0)
         {
-            // Calculate the user specified length
-            if (m_anchoredAttr.m_unitsW == wxRICHTEXT_MM)
-            {
-                width = ConvertTenthsMMToPixels(dc, m_anchoredAttr.m_width);
-            }
+            if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+                width = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetWidth().GetValue());
             else
-            {
-                width = m_anchoredAttr.m_width;
-            }
+                width = GetAttributes().GetTextBoxAttr().GetWidth().GetValue();
         }
-
-        if (m_anchoredAttr.m_height != -1)
+        if (GetAttributes().GetTextBoxAttr().GetHeight().IsPresent() && GetAttributes().GetTextBoxAttr().GetHeight().GetValue() > 0)
         {
-            if (m_anchoredAttr.m_unitsH == wxRICHTEXT_MM)
-            {
-                height = ConvertTenthsMMToPixels(dc, m_anchoredAttr.m_height);
-            }
+            if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+                height = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetHeight().GetValue());
             else
-            {
-                height = m_anchoredAttr.m_height;
-            }
+                height = GetAttributes().GetTextBoxAttr().GetHeight().GetValue();
         }
 
         if (image.GetWidth() == width && image.GetHeight() == height)
@@ -7763,15 +7269,15 @@ bool wxRichTextImage::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
  */
 
 /// Compare two attribute objects
-bool wxTextAttrEq(const wxTextAttr& attr1, const wxTextAttr& attr2)
+bool wxTextAttrEq(const wxRichTextAttr& attr1, const wxRichTextAttr& attr2)
 {
     return (attr1 == attr2);
 }
 
 // Partial equality test taking flags into account
-bool wxTextAttrEqPartial(const wxTextAttr& attr1, const wxTextAttr& attr2, int flags)
+bool wxTextAttrEqPartial(const wxRichTextAttr& attr1, const wxRichTextAttr& attr2)
 {
-    return attr1.EqPartial(attr2, flags);
+    return attr1.EqPartial(attr2);
 }
 
 /// Compare tabs
@@ -7789,33 +7295,33 @@ bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2)
     return true;
 }
 
-bool wxRichTextApplyStyle(wxTextAttr& destStyle, const wxTextAttr& style, wxTextAttr* compareWith)
+bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith)
 {
     return destStyle.Apply(style, compareWith);
 }
 
 // Remove attributes
-bool wxRichTextRemoveStyle(wxTextAttr& destStyle, const wxTextAttr& style)
+bool wxRichTextRemoveStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style)
 {
-    return wxTextAttr::RemoveStyle(destStyle, style);
+    return destStyle.RemoveStyle(style);
 }
 
 /// Combine two bitlists, specifying the bits of interest with separate flags.
 bool wxRichTextCombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB)
 {
-    return wxTextAttr::CombineBitlists(valueA, valueB, flagsA, flagsB);
+    return wxRichTextAttr::CombineBitlists(valueA, valueB, flagsA, flagsB);
 }
 
 /// Compare two bitlists
 bool wxRichTextBitlistsEqPartial(int valueA, int valueB, int flags)
 {
-    return wxTextAttr::BitlistsEqPartial(valueA, valueB, flags);
+    return wxRichTextAttr::BitlistsEqPartial(valueA, valueB, flags);
 }
 
 /// Split into paragraph and character styles
-bool wxRichTextSplitParaCharStyles(const wxTextAttr& style, wxTextAttr& parStyle, wxTextAttr& charStyle)
+bool wxRichTextSplitParaCharStyles(const wxRichTextAttr& style, wxRichTextAttr& parStyle, wxRichTextAttr& charStyle)
 {
-    return wxTextAttr::SplitParaCharStyles(style, parStyle, charStyle);
+    return wxRichTextAttr::SplitParaCharStyles(style, parStyle, charStyle);
 }
 
 /// Convert a decimal to Roman numerals
@@ -8382,12 +7888,12 @@ class wxRichTextFontTableData: public wxObjectRefData
 public:
     wxRichTextFontTableData() {}
 
-    wxFont FindFont(const wxTextAttr& fontSpec);
+    wxFont FindFont(const wxRichTextAttr& fontSpec);
 
     wxRichTextFontTableHashMap  m_hashMap;
 };
 
-wxFont wxRichTextFontTableData::FindFont(const wxTextAttr& fontSpec)
+wxFont wxRichTextFontTableData::FindFont(const wxRichTextAttr& fontSpec)
 {
     wxString facename(fontSpec.GetFontFaceName());
     wxString spec(wxString::Format(wxT("%d-%d-%d-%d-%s-%d"), fontSpec.GetFontSize(), fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), (int) fontSpec.GetFontUnderlined(), facename.c_str(), (int) fontSpec.GetFontEncoding()));
@@ -8433,7 +7939,7 @@ void wxRichTextFontTable::operator= (const wxRichTextFontTable& table)
     Ref(table);
 }
 
-wxFont wxRichTextFontTable::FindFont(const wxTextAttr& fontSpec)
+wxFont wxRichTextFontTable::FindFont(const wxRichTextAttr& fontSpec)
 {
     wxRichTextFontTableData* data = (wxRichTextFontTableData*) m_refData;
     if (data)
@@ -8448,6 +7954,964 @@ void wxRichTextFontTable::Clear()
     if (data)
         data->m_hashMap.clear();
 }
+
+// wxTextBoxAttr
+
+
+void wxTextBoxAttr::Reset()
+{
+    m_flags = 0;
+    m_floatMode = 0;
+    m_clearMode = 0;
+    m_collapseMode = 0;
+    
+    m_margins.Reset();
+    m_padding.Reset();
+    m_position.Reset();
+
+    m_width.Reset();
+    m_height.Reset();
+
+    m_border.Reset();
+    m_outline.Reset();
+}
+
+// Equality test
+bool wxTextBoxAttr::operator== (const wxTextBoxAttr& attr) const
+{
+    return (
+        m_flags == attr.m_flags &&
+        m_floatMode == attr.m_floatMode &&
+        m_clearMode == attr.m_clearMode &&
+        m_collapseMode == attr.m_collapseMode &&
+        
+        m_margins == attr.m_margins &&
+        m_padding == attr.m_padding &&
+        m_position == attr.m_position &&
+
+        m_width == attr.m_width &&
+        m_height == attr.m_height &&   
+
+        m_border == attr.m_border &&
+        m_outline == attr.m_outline
+        );
+}
+
+// Partial equality test
+bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr) const
+{
+    if (attr.HasFloatMode() && HasFloatMode() && (GetFloatMode() != attr.GetFloatMode()))
+        return false;
+
+    if (attr.HasClearMode() && HasClearMode() && (GetClearMode() != attr.GetClearMode()))
+        return false;
+
+    if (attr.HasCollapseBorders() && HasCollapseBorders() && (attr.GetCollapseBorders() != GetCollapseBorders()))
+        return false;
+
+    // Position
+
+    if (!m_position.EqPartial(attr.m_position))
+        return false;
+
+    // Margins
+
+    if (!m_margins.EqPartial(attr.m_margins))
+        return false;
+
+    // Padding
+
+    if (!m_padding.EqPartial(attr.m_padding))
+        return false;
+
+    // Border
+
+    if (!GetBorder().EqPartial(attr.GetBorder()))
+        return false;
+
+    // Outline
+
+    if (!GetOutline().EqPartial(attr.GetOutline()))
+        return false;
+
+    return true;
+}
+
+// Merges the given attributes. If compareWith
+// is non-NULL, then it will be used to mask out those attributes that are the same in style
+// and compareWith, for situations where we don't want to explicitly set inherited attributes.
+bool wxTextBoxAttr::Apply(const wxTextBoxAttr& attr, const wxTextBoxAttr* compareWith)
+{
+    if (attr.HasFloatMode())
+    {
+        if (!(compareWith && compareWith->HasFloatMode() && compareWith->GetFloatMode() == attr.GetFloatMode()))
+            SetFloatMode(attr.GetFloatMode());
+    }
+
+    if (attr.HasClearMode())
+    {
+        if (!(compareWith && compareWith->HasClearMode() && compareWith->GetClearMode() == attr.GetClearMode()))
+            SetClearMode(attr.GetClearMode());
+    }
+
+    if (attr.HasCollapseBorders())
+    {
+        if (!(compareWith && compareWith->HasCollapseBorders() && compareWith->GetCollapseBorders() == attr.GetCollapseBorders()))
+            SetCollapseBorders(true);
+    }
+    
+    m_margins.Apply(attr.m_margins, compareWith ? (& attr.m_margins) : (const wxTextBoxAttrDimensions*) NULL);
+    m_padding.Apply(attr.m_padding, compareWith ? (& attr.m_padding) : (const wxTextBoxAttrDimensions*) NULL);
+    m_position.Apply(attr.m_position, compareWith ? (& attr.m_position) : (const wxTextBoxAttrDimensions*) NULL);
+
+    m_width.Apply(attr.m_width, compareWith ? (& attr.m_width) : (const wxTextAttrDimension*) NULL);
+    m_height.Apply(attr.m_height, compareWith ? (& attr.m_height) : (const wxTextAttrDimension*) NULL);
+
+    m_border.Apply(attr.m_border, compareWith ? (& attr.m_border) : (const wxTextBoxAttrBorders*) NULL);
+    m_outline.Apply(attr.m_outline, compareWith ? (& attr.m_outline) : (const wxTextBoxAttrBorders*) NULL);
+
+    return true;
+}
+
+// Remove specified attributes from this object
+bool wxTextBoxAttr::RemoveStyle(const wxTextBoxAttr& attr)
+{
+    if (attr.HasFloatMode())
+        RemoveFlag(wxTEXT_BOX_ATTR_FLOAT);
+
+    if (attr.HasClearMode())
+        RemoveFlag(wxTEXT_BOX_ATTR_CLEAR);
+
+    if (attr.HasCollapseBorders())
+        RemoveFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+
+    m_margins.RemoveStyle(attr.m_margins);
+    m_padding.RemoveStyle(attr.m_padding);
+    m_position.RemoveStyle(attr.m_position);
+
+    if (attr.m_width.IsPresent())
+        m_width.Reset();
+    if (attr.m_height.IsPresent())
+        m_height.Reset();
+
+    m_border.RemoveStyle(attr.m_border);
+    m_outline.RemoveStyle(attr.m_outline);
+
+    return true;
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBoxAttr& clashingAttr, wxTextBoxAttr& absentAttr)
+{
+    if (attr.HasFloatMode())
+    {
+        if (!clashingAttr.HasFloatMode() && !absentAttr.HasFloatMode())
+        {
+            if (HasFloatMode())
+            {
+                if (GetFloatMode() != attr.GetFloatMode())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_FLOAT);
+                    RemoveFlag(wxTEXT_BOX_ATTR_FLOAT);
+                }
+            }
+            else
+                SetFloatMode(attr.GetFloatMode());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_FLOAT);
+        
+    if (attr.HasClearMode())
+    {
+        if (!clashingAttr.HasClearMode() && !absentAttr.HasClearMode())
+        {
+            if (HasClearMode())
+            {
+                if (GetClearMode() != attr.GetClearMode())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_CLEAR);
+                    RemoveFlag(wxTEXT_BOX_ATTR_CLEAR);
+                }
+            }
+            else
+                SetClearMode(attr.GetClearMode());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_CLEAR);
+
+    if (attr.HasCollapseBorders())
+    {
+        if (!clashingAttr.HasCollapseBorders() && !absentAttr.HasCollapseBorders())
+        {
+            if (HasCollapseBorders())
+            {
+                if (GetCollapseBorders() != attr.GetCollapseBorders())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+                    RemoveFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+                }
+            }
+            else
+                SetCollapseBorders(attr.GetCollapseBorders());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+        
+    m_margins.CollectCommonAttributes(attr.m_margins, clashingAttr.m_margins, absentAttr.m_margins);
+    m_padding.CollectCommonAttributes(attr.m_padding, clashingAttr.m_padding, absentAttr.m_padding);
+    m_position.CollectCommonAttributes(attr.m_position, clashingAttr.m_position, absentAttr.m_position);
+
+    m_width.CollectCommonAttributes(attr.m_width, clashingAttr.m_width, absentAttr.m_width);
+    m_height.CollectCommonAttributes(attr.m_height, clashingAttr.m_height, absentAttr.m_height);
+
+    m_border.CollectCommonAttributes(attr.m_border, clashingAttr.m_border, absentAttr.m_border);
+    m_outline.CollectCommonAttributes(attr.m_outline, clashingAttr.m_outline, absentAttr.m_outline);
+}
+
+// wxRichTextAttr
+
+void wxRichTextAttr::Copy(const wxRichTextAttr& attr)
+{
+    wxTextAttr::Copy(attr); 
+    
+    m_textBoxAttr = attr.m_textBoxAttr;
+}
+
+bool wxRichTextAttr::operator==(const wxRichTextAttr& attr) const
+{
+    if (!(wxTextAttr::operator==(attr)))
+        return false;
+        
+    return (m_textBoxAttr == attr.m_textBoxAttr);
+}
+
+// Partial equality test taking comparison object into account
+bool wxRichTextAttr::EqPartial(const wxRichTextAttr& attr) const
+{
+    if (!(wxTextAttr::EqPartial(attr)))
+        return false;
+        
+    return m_textBoxAttr.EqPartial(attr.m_textBoxAttr);
+}
+
+// Merges the given attributes. If compareWith
+// is non-NULL, then it will be used to mask out those attributes that are the same in style
+// and compareWith, for situations where we don't want to explicitly set inherited attributes.
+bool wxRichTextAttr::Apply(const wxRichTextAttr& style, const wxRichTextAttr* compareWith)
+{
+    wxTextAttr::Apply(style, compareWith);
+
+    return m_textBoxAttr.Apply(style.m_textBoxAttr, compareWith ? (& compareWith->m_textBoxAttr) : (const wxTextBoxAttr*) NULL);
+}
+
+// Remove specified attributes from this object
+bool wxRichTextAttr::RemoveStyle(const wxRichTextAttr& attr)
+{
+    wxTextAttr::RemoveStyle(*this, attr);
+
+    return m_textBoxAttr.RemoveStyle(attr.m_textBoxAttr);
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxRichTextAttr::CollectCommonAttributes(const wxRichTextAttr& attr, wxRichTextAttr& clashingAttr, wxRichTextAttr& absentAttr)
+{
+    wxTextAttrCollectCommonAttributes(*this, attr, clashingAttr, absentAttr);
+    
+    m_textBoxAttr.CollectCommonAttributes(attr.m_textBoxAttr, clashingAttr.m_textBoxAttr, absentAttr.m_textBoxAttr);
+}
+
+// Partial equality test
+bool wxTextBoxAttrBorder::EqPartial(const wxTextBoxAttrBorder& border) const
+{
+    if (border.HasStyle() && !HasStyle() && (border.GetStyle() != GetStyle()))
+        return false;
+
+    if (border.HasColour() && !HasColour() && (border.GetColourLong() != GetColourLong()))
+        return false;
+
+    if (border.HasWidth() && !HasWidth() && !(border.GetWidth() == GetWidth()))
+        return false;
+
+    return true;
+}
+
+// Apply border to 'this', but not if the same as compareWith
+bool wxTextBoxAttrBorder::Apply(const wxTextBoxAttrBorder& border, const wxTextBoxAttrBorder* compareWith)
+{
+    if (border.HasStyle())
+    {
+        if (!(compareWith && (border.GetStyle() == compareWith->GetStyle())))
+            SetStyle(border.GetStyle());
+    }
+    if (border.HasColour())
+    {
+        if (!(compareWith && (border.GetColourLong() == compareWith->GetColourLong())))
+            SetColour(border.GetColourLong());
+    }
+    if (border.HasWidth())
+    {
+        if (!(compareWith && (border.GetWidth() == compareWith->GetWidth())))
+            SetWidth(border.GetWidth());
+    }
+
+    return true;
+}
+
+// Remove specified attributes from this object
+bool wxTextBoxAttrBorder::RemoveStyle(const wxTextBoxAttrBorder& attr)
+{
+    if (attr.HasStyle() && HasStyle())
+        SetFlags(GetFlags() & ~wxTEXT_BOX_ATTR_BORDER_STYLE);
+    if (attr.HasColour() && HasColour())
+        SetFlags(GetFlags() & ~wxTEXT_BOX_ATTR_BORDER_COLOUR);
+    if (attr.HasWidth() && HasWidth())
+        m_borderWidth.Reset();
+
+    return true;
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextBoxAttrBorder::CollectCommonAttributes(const wxTextBoxAttrBorder& attr, wxTextBoxAttrBorder& clashingAttr, wxTextBoxAttrBorder& absentAttr)
+{
+    if (attr.HasStyle())
+    {
+        if (!clashingAttr.HasStyle() && !absentAttr.HasStyle())
+        {
+            if (HasStyle())
+            {
+                if (GetStyle() != attr.GetStyle())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_STYLE);
+                    RemoveFlag(wxTEXT_BOX_ATTR_BORDER_STYLE);
+                }
+            }
+            else
+                SetStyle(attr.GetStyle());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_STYLE);
+
+    if (attr.HasColour())
+    {
+        if (!clashingAttr.HasColour() && !absentAttr.HasColour())
+        {
+            if (HasColour())
+            {
+                if (GetColour() != attr.GetColour())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+                    RemoveFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+                }
+            }
+            else
+                SetColour(attr.GetColourLong());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+        
+    m_borderWidth.CollectCommonAttributes(attr.m_borderWidth, clashingAttr.m_borderWidth, absentAttr.m_borderWidth);
+}
+
+// Partial equality test
+bool wxTextBoxAttrBorders::EqPartial(const wxTextBoxAttrBorders& borders) const
+{
+    return m_left.EqPartial(borders.m_left) && m_right.EqPartial(borders.m_right) &&
+            m_top.EqPartial(borders.m_top) && m_bottom.EqPartial(borders.m_bottom);
+}
+
+// Apply border to 'this', but not if the same as compareWith
+bool wxTextBoxAttrBorders::Apply(const wxTextBoxAttrBorders& borders, const wxTextBoxAttrBorders* compareWith)
+{
+    m_left.Apply(borders.m_left, compareWith ? (& compareWith->m_left) : (const wxTextBoxAttrBorder*) NULL);
+    m_right.Apply(borders.m_right, compareWith ? (& compareWith->m_right) : (const wxTextBoxAttrBorder*) NULL);
+    m_top.Apply(borders.m_top, compareWith ? (& compareWith->m_top) : (const wxTextBoxAttrBorder*) NULL);
+    m_bottom.Apply(borders.m_bottom, compareWith ? (& compareWith->m_bottom) : (const wxTextBoxAttrBorder*) NULL);
+    return true;
+}
+
+// Remove specified attributes from this object
+bool wxTextBoxAttrBorders::RemoveStyle(const wxTextBoxAttrBorders& attr)
+{
+    m_left.RemoveStyle(attr.m_left);
+    m_right.RemoveStyle(attr.m_right);
+    m_top.RemoveStyle(attr.m_top);
+    m_bottom.RemoveStyle(attr.m_bottom);
+    return true;
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextBoxAttrBorders::CollectCommonAttributes(const wxTextBoxAttrBorders& attr, wxTextBoxAttrBorders& clashingAttr, wxTextBoxAttrBorders& absentAttr)
+{
+    m_left.CollectCommonAttributes(attr.m_left, clashingAttr.m_left, absentAttr.m_left);
+    m_right.CollectCommonAttributes(attr.m_right, clashingAttr.m_right, absentAttr.m_right);
+    m_top.CollectCommonAttributes(attr.m_top, clashingAttr.m_top, absentAttr.m_top);
+    m_bottom.CollectCommonAttributes(attr.m_bottom, clashingAttr.m_bottom, absentAttr.m_bottom);
+}
+
+// Set style of all borders
+void wxTextBoxAttrBorders::SetStyle(int style)
+{
+    m_left.SetStyle(style);
+    m_right.SetStyle(style);
+    m_top.SetStyle(style);
+    m_bottom.SetStyle(style);
+}
+
+// Set colour of all borders
+void wxTextBoxAttrBorders::SetColour(unsigned long colour)
+{
+    m_left.SetColour(colour);
+    m_right.SetColour(colour);
+    m_top.SetColour(colour);
+    m_bottom.SetColour(colour);
+}
+
+void wxTextBoxAttrBorders::SetColour(const wxColour& colour)
+{
+    m_left.SetColour(colour);
+    m_right.SetColour(colour);
+    m_top.SetColour(colour);
+    m_bottom.SetColour(colour);
+}
+
+// Set width of all borders
+void wxTextBoxAttrBorders::SetWidth(const wxTextAttrDimension& width)
+{
+    m_left.SetWidth(width);
+    m_right.SetWidth(width);
+    m_top.SetWidth(width);
+    m_bottom.SetWidth(width);
+}
+
+// Partial equality test
+bool wxTextAttrDimension::EqPartial(const wxTextAttrDimension& dim) const
+{
+    if (dim.IsPresent() && IsPresent() && !((*this) == dim))
+        return false;
+    else
+        return true;
+}
+
+bool wxTextAttrDimension::Apply(const wxTextAttrDimension& dim, const wxTextAttrDimension* compareWith)
+{
+    if (dim.IsPresent())
+    {
+        if (!(compareWith && dim == (*compareWith)))
+            (*this) = dim;
+    }
+
+    return true;
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextAttrDimension::CollectCommonAttributes(const wxTextAttrDimension& attr, wxTextAttrDimension& clashingAttr, wxTextAttrDimension& absentAttr)
+{
+    if (attr.IsPresent())
+    {
+        if (!clashingAttr.IsPresent() && !absentAttr.IsPresent())
+        {
+            if (IsPresent())
+            {
+                if (!((*this) == attr))
+                {
+                    clashingAttr.SetPresent(true);
+                    SetPresent(false);
+                }
+            }
+            else
+                (*this) = attr;
+        }
+    }
+    else
+        absentAttr.SetPresent(true);
+}
+
+// Partial equality test
+bool wxTextBoxAttrDimensions::EqPartial(const wxTextBoxAttrDimensions& dims) const
+{
+    if (!m_left.EqPartial(dims.m_left))
+        return false;
+
+    if (!m_right.EqPartial(dims.m_right))
+        return false;
+
+    if (!m_top.EqPartial(dims.m_top))
+        return false;
+
+    if (!m_bottom.EqPartial(dims.m_bottom))
+        return false;
+
+    return true;
+}
+
+// Apply border to 'this', but not if the same as compareWith
+bool wxTextBoxAttrDimensions::Apply(const wxTextBoxAttrDimensions& dims, const wxTextBoxAttrDimensions* compareWith)
+{
+    m_left.Apply(dims.m_left, compareWith ? (& compareWith->m_left) : (const wxTextAttrDimension*) NULL);
+    m_right.Apply(dims.m_right, compareWith ? (& compareWith->m_right): (const wxTextAttrDimension*) NULL);
+    m_top.Apply(dims.m_top, compareWith ? (& compareWith->m_top): (const wxTextAttrDimension*) NULL);
+    m_bottom.Apply(dims.m_bottom, compareWith ? (& compareWith->m_bottom): (const wxTextAttrDimension*) NULL);
+
+    return true;
+}
+
+// Remove specified attributes from this object
+bool wxTextBoxAttrDimensions::RemoveStyle(const wxTextBoxAttrDimensions& attr)
+{
+    if (attr.m_left.IsPresent())
+        m_left.Reset();
+    if (attr.m_right.IsPresent())
+        m_right.Reset();
+    if (attr.m_top.IsPresent())
+        m_top.Reset();
+    if (attr.m_bottom.IsPresent())
+        m_bottom.Reset();
+
+    return true;
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextBoxAttrDimensions::CollectCommonAttributes(const wxTextBoxAttrDimensions& attr, wxTextBoxAttrDimensions& clashingAttr, wxTextBoxAttrDimensions& absentAttr)
+{
+    m_left.CollectCommonAttributes(attr.m_left, clashingAttr.m_left, absentAttr.m_left);
+    m_right.CollectCommonAttributes(attr.m_right, clashingAttr.m_right, absentAttr.m_right);
+    m_top.CollectCommonAttributes(attr.m_top, clashingAttr.m_top, absentAttr.m_top);
+    m_bottom.CollectCommonAttributes(attr.m_bottom, clashingAttr.m_bottom, absentAttr.m_bottom);
+}
+
+// Collects the attributes that are common to a range of content, building up a note of
+// which attributes are absent in some objects and which clash in some objects.
+void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAttr& attr, wxTextAttr& clashingAttr, wxTextAttr& absentAttr)
+{
+    absentAttr.SetFlags(absentAttr.GetFlags() | (~attr.GetFlags() & wxTEXT_ATTR_ALL));
+    absentAttr.SetTextEffectFlags(absentAttr.GetTextEffectFlags() | (~attr.GetTextEffectFlags() & 0xFFFF));
+
+    long forbiddenFlags = clashingAttr.GetFlags()|absentAttr.GetFlags();
+
+    if (attr.HasFont())
+    {
+        if (attr.HasFontSize() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_SIZE))
+        {
+            if (currentStyle.HasFontSize())
+            {
+                if (currentStyle.GetFontSize() != attr.GetFontSize())
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_SIZE);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_SIZE);
+                }
+            }
+            else
+                currentStyle.SetFontSize(attr.GetFontSize());
+        }
+
+        if (attr.HasFontItalic() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_ITALIC))
+        {
+            if (currentStyle.HasFontItalic())
+            {
+                if (currentStyle.GetFontStyle() != attr.GetFontStyle())
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_ITALIC);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_ITALIC);
+                }
+            }
+            else
+                currentStyle.SetFontStyle(attr.GetFontStyle());
+        }
+
+        if (attr.HasFontFamily() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_FAMILY))
+        {
+            if (currentStyle.HasFontFamily())
+            {
+                if (currentStyle.GetFontFamily() != attr.GetFontFamily())
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_FAMILY);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_FAMILY);
+                }
+            }
+            else
+                currentStyle.SetFontFamily(attr.GetFontFamily());
+        }
+
+        if (attr.HasFontWeight() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_WEIGHT))
+        {
+            if (currentStyle.HasFontWeight())
+            {
+                if (currentStyle.GetFontWeight() != attr.GetFontWeight())
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_WEIGHT);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_WEIGHT);
+                }
+            }
+            else
+                currentStyle.SetFontWeight(attr.GetFontWeight());
+        }
+
+        if (attr.HasFontFaceName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_FACE))
+        {
+            if (currentStyle.HasFontFaceName())
+            {
+                wxString faceName1(currentStyle.GetFontFaceName());
+                wxString faceName2(attr.GetFontFaceName());
+
+                if (faceName1 != faceName2)
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_FACE);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_FACE);
+                }
+            }
+            else
+                currentStyle.SetFontFaceName(attr.GetFontFaceName());
+        }
+
+        if (attr.HasFontUnderlined() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_UNDERLINE))
+        {
+            if (currentStyle.HasFontUnderlined())
+            {
+                if (currentStyle.GetFontUnderlined() != attr.GetFontUnderlined())
+                {
+                    // Clash of attr - mark as such
+                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_UNDERLINE);
+                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_UNDERLINE);
+                }
+            }
+            else
+                currentStyle.SetFontUnderlined(attr.GetFontUnderlined());
+        }
+    }
+
+    if (attr.HasTextColour() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_TEXT_COLOUR))
+    {
+        if (currentStyle.HasTextColour())
+        {
+            if (currentStyle.GetTextColour() != attr.GetTextColour())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_TEXT_COLOUR);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_TEXT_COLOUR);
+            }
+        }
+        else
+            currentStyle.SetTextColour(attr.GetTextColour());
+    }
+
+    if (attr.HasBackgroundColour() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_BACKGROUND_COLOUR))
+    {
+        if (currentStyle.HasBackgroundColour())
+        {
+            if (currentStyle.GetBackgroundColour() != attr.GetBackgroundColour())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_BACKGROUND_COLOUR);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_BACKGROUND_COLOUR);
+            }
+        }
+        else
+            currentStyle.SetBackgroundColour(attr.GetBackgroundColour());
+    }
+
+    if (attr.HasAlignment() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_ALIGNMENT))
+    {
+        if (currentStyle.HasAlignment())
+        {
+            if (currentStyle.GetAlignment() != attr.GetAlignment())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_ALIGNMENT);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_ALIGNMENT);
+            }
+        }
+        else
+            currentStyle.SetAlignment(attr.GetAlignment());
+    }
+
+    if (attr.HasTabs() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_TABS))
+    {
+        if (currentStyle.HasTabs())
+        {
+            if (!wxRichTextTabsEq(currentStyle.GetTabs(), attr.GetTabs()))
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_TABS);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_TABS);
+            }
+        }
+        else
+            currentStyle.SetTabs(attr.GetTabs());
+    }
+
+    if (attr.HasLeftIndent() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_LEFT_INDENT))
+    {
+        if (currentStyle.HasLeftIndent())
+        {
+            if (currentStyle.GetLeftIndent() != attr.GetLeftIndent() || currentStyle.GetLeftSubIndent() != attr.GetLeftSubIndent())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_LEFT_INDENT);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_LEFT_INDENT);
+            }
+        }
+        else
+            currentStyle.SetLeftIndent(attr.GetLeftIndent(), attr.GetLeftSubIndent());
+    }
+
+    if (attr.HasRightIndent() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_RIGHT_INDENT))
+    {
+        if (currentStyle.HasRightIndent())
+        {
+            if (currentStyle.GetRightIndent() != attr.GetRightIndent())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_RIGHT_INDENT);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_RIGHT_INDENT);
+            }
+        }
+        else
+            currentStyle.SetRightIndent(attr.GetRightIndent());
+    }
+
+    if (attr.HasParagraphSpacingAfter() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_PARA_SPACING_AFTER))
+    {
+        if (currentStyle.HasParagraphSpacingAfter())
+        {
+            if (currentStyle.GetParagraphSpacingAfter() != attr.GetParagraphSpacingAfter())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_PARA_SPACING_AFTER);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_PARA_SPACING_AFTER);
+            }
+        }
+        else
+            currentStyle.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter());
+    }
+
+    if (attr.HasParagraphSpacingBefore() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_PARA_SPACING_BEFORE))
+    {
+        if (currentStyle.HasParagraphSpacingBefore())
+        {
+            if (currentStyle.GetParagraphSpacingBefore() != attr.GetParagraphSpacingBefore())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE);
+            }
+        }
+        else
+            currentStyle.SetParagraphSpacingBefore(attr.GetParagraphSpacingBefore());
+    }
+
+    if (attr.HasLineSpacing() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_LINE_SPACING))
+    {
+        if (currentStyle.HasLineSpacing())
+        {
+            if (currentStyle.GetLineSpacing() != attr.GetLineSpacing())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_LINE_SPACING);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_LINE_SPACING);
+            }
+        }
+        else
+            currentStyle.SetLineSpacing(attr.GetLineSpacing());
+    }
+
+    if (attr.HasCharacterStyleName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
+    {
+        if (currentStyle.HasCharacterStyleName())
+        {
+            if (currentStyle.GetCharacterStyleName() != attr.GetCharacterStyleName())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetCharacterStyleName(attr.GetCharacterStyleName());
+    }
+
+    if (attr.HasParagraphStyleName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
+    {
+        if (currentStyle.HasParagraphStyleName())
+        {
+            if (currentStyle.GetParagraphStyleName() != attr.GetParagraphStyleName())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetParagraphStyleName(attr.GetParagraphStyleName());
+    }
+
+    if (attr.HasListStyleName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_LIST_STYLE_NAME))
+    {
+        if (currentStyle.HasListStyleName())
+        {
+            if (currentStyle.GetListStyleName() != attr.GetListStyleName())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_LIST_STYLE_NAME);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_LIST_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetListStyleName(attr.GetListStyleName());
+    }
+
+    if (attr.HasBulletStyle() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_BULLET_STYLE))
+    {
+        if (currentStyle.HasBulletStyle())
+        {
+            if (currentStyle.GetBulletStyle() != attr.GetBulletStyle())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_BULLET_STYLE);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_BULLET_STYLE);
+            }
+        }
+        else
+            currentStyle.SetBulletStyle(attr.GetBulletStyle());
+    }
+
+    if (attr.HasBulletNumber() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_BULLET_NUMBER))
+    {
+        if (currentStyle.HasBulletNumber())
+        {
+            if (currentStyle.GetBulletNumber() != attr.GetBulletNumber())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_BULLET_NUMBER);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_BULLET_NUMBER);
+            }
+        }
+        else
+            currentStyle.SetBulletNumber(attr.GetBulletNumber());
+    }
+
+    if (attr.HasBulletText() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_BULLET_TEXT))
+    {
+        if (currentStyle.HasBulletText())
+        {
+            if (currentStyle.GetBulletText() != attr.GetBulletText())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_BULLET_TEXT);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_BULLET_TEXT);
+            }
+        }
+        else
+        {
+            currentStyle.SetBulletText(attr.GetBulletText());
+            currentStyle.SetBulletFont(attr.GetBulletFont());
+        }
+    }
+
+    if (attr.HasBulletName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_BULLET_NAME))
+    {
+        if (currentStyle.HasBulletName())
+        {
+            if (currentStyle.GetBulletName() != attr.GetBulletName())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_BULLET_NAME);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_BULLET_NAME);
+            }
+        }
+        else
+        {
+            currentStyle.SetBulletName(attr.GetBulletName());
+        }
+    }
+
+    if (attr.HasURL() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_URL))
+    {
+        if (currentStyle.HasURL())
+        {
+            if (currentStyle.GetURL() != attr.GetURL())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_URL);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_URL);
+            }
+        }
+        else
+        {
+            currentStyle.SetURL(attr.GetURL());
+        }
+    }
+
+    if (attr.HasTextEffects() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_EFFECTS))
+    {
+        if (currentStyle.HasTextEffects())
+        {
+            // We need to find the bits in the new attr that are different:
+            // just look at those bits that are specified by the new attr.
+
+            // We need to remove the bits and flags that are not common between current attr
+            // and new attr. In so doing we need to take account of the styles absent from one or more of the
+            // previous styles.
+
+            int currentRelevantTextEffects = currentStyle.GetTextEffects() & attr.GetTextEffectFlags();
+            int newRelevantTextEffects = attr.GetTextEffects() & attr.GetTextEffectFlags();
+
+            if (currentRelevantTextEffects != newRelevantTextEffects)
+            {
+                // Find the text effects that were different, using XOR
+                int differentEffects = currentRelevantTextEffects ^ newRelevantTextEffects;
+
+                // Clash of attr - mark as such
+                clashingAttr.SetTextEffectFlags(clashingAttr.GetTextEffectFlags() | differentEffects);
+                currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~differentEffects);
+            }
+        }
+        else
+        {
+            currentStyle.SetTextEffects(attr.GetTextEffects());
+            currentStyle.SetTextEffectFlags(attr.GetTextEffectFlags());
+        }
+
+        // Mask out the flags and values that cannot be common because they were absent in one or more objecrs
+        // that we've looked at so far
+        currentStyle.SetTextEffects(currentStyle.GetTextEffects() & ~absentAttr.GetTextEffectFlags());
+        currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~absentAttr.GetTextEffectFlags());
+
+        if (currentStyle.GetTextEffectFlags() == 0)
+            currentStyle.RemoveFlag(wxTEXT_ATTR_EFFECTS);
+    }
+
+    if (attr.HasOutlineLevel() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_OUTLINE_LEVEL))
+    {
+        if (currentStyle.HasOutlineLevel())
+        {
+            if (currentStyle.GetOutlineLevel() != attr.GetOutlineLevel())
+            {
+                // Clash of attr - mark as such
+                clashingAttr.AddFlag(wxTEXT_ATTR_OUTLINE_LEVEL);
+                currentStyle.RemoveFlag(wxTEXT_ATTR_OUTLINE_LEVEL);
+            }
+        }
+        else
+            currentStyle.SetOutlineLevel(attr.GetOutlineLevel());
+    }
+}
+
 
 #endif
     // wxUSE_RICHTEXT

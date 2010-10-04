@@ -188,9 +188,11 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             GetURL() == attr.GetURL();
 }
 
-// Partial equality test taking flags into account
-bool wxTextAttr::EqPartial(const wxTextAttr& attr, int flags) const
+// Partial equality test. Only returns false if an attribute doesn't match.
+bool wxTextAttr::EqPartial(const wxTextAttr& attr) const
 {
+    int flags = attr.GetFlags();
+    
     if ((flags & wxTEXT_ATTR_TEXT_COLOUR) && GetTextColour() != attr.GetTextColour())
         return false;
 

@@ -111,7 +111,6 @@ wxRichTextImageDialog::~wxRichTextImageDialog()
 void wxRichTextImageDialog::Init()
 {
 ////@begin wxRichTextImageDialog member initialisation
-    m_alignment = NULL;
     m_float = NULL;
     m_width = NULL;
     m_unitsW = NULL;
@@ -147,21 +146,8 @@ void wxRichTextImageDialog::CreateControls()
     wxFlexGridSizer* itemFlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
     itemBoxSizer3->Add(itemFlexGridSizer4, 0, wxALIGN_TOP|wxRIGHT, 5);
 
-    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText5->Show(false);
-    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxArrayString m_alignmentStrings;
-    m_alignmentStrings.Add(_("Left"));
-    m_alignmentStrings.Add(_("Centre"));
-    m_alignmentStrings.Add(_("Right"));
-    m_alignment = new wxComboBox( itemDialog1, ID_COMBOBOX_ALIGN, _("Left"), wxDefaultPosition, wxSize(80, -1), m_alignmentStrings, wxCB_READONLY );
-    m_alignment->SetStringSelection(_("Left"));
-    m_alignment->Show(false);
-    itemFlexGridSizer4->Add(m_alignment, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Floating mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText7, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Floating mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_floatStrings;
     m_floatStrings.Add(_("None"));
@@ -174,17 +160,17 @@ void wxRichTextImageDialog::CreateControls()
         m_float->SetToolTip(_("How the image will float relative to the text."));
     itemFlexGridSizer4->Add(m_float, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Width:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText9, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText7, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer4->Add(itemBoxSizer10, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer4->Add(itemBoxSizer8, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_width = new wxTextCtrl( itemDialog1, ID_RICHTEXTIMAGEDIALOG_WIDTH, wxEmptyString, wxDefaultPosition, wxSize(65, -1), 0 );
     m_width->SetHelpText(_("The image width to be shown - does not change the source image width."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_width->SetToolTip(_("The image width to be shown - does not change the source image width."));
-    itemBoxSizer10->Add(m_width, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer8->Add(m_width, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_unitsWStrings;
     m_unitsWStrings.Add(_("px"));
@@ -194,19 +180,19 @@ void wxRichTextImageDialog::CreateControls()
     m_unitsW->SetHelpText(_("Units for the image width."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_unitsW->SetToolTip(_("Units for the image width."));
-    itemBoxSizer10->Add(m_unitsW, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer8->Add(m_unitsW, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText13 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Height:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText13, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText11 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText11, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer4->Add(itemBoxSizer14, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer4->Add(itemBoxSizer12, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_height = new wxTextCtrl( itemDialog1, ID_RICHTEXTIMAGEDIALOG_HEIGHT, wxEmptyString, wxDefaultPosition, wxSize(65, -1), 0 );
     m_height->SetHelpText(_("The image height to be shown - does not change the source image height."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_height->SetToolTip(_("The image height to be shown - does not change the source image height."));
-    itemBoxSizer14->Add(m_height, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer12->Add(m_height, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_unitsHStrings;
     m_unitsHStrings.Add(_("px"));
@@ -216,20 +202,20 @@ void wxRichTextImageDialog::CreateControls()
     m_unitsH->SetHelpText(_("Units for the image height."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_unitsH->SetToolTip(_("Units for the image height."));
-    itemBoxSizer14->Add(m_unitsH, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer12->Add(m_unitsH, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText17 = new wxStaticText( itemDialog1, wxID_STATIC, _("Image Vertical &Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText17, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("Image Vertical &Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText15, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer4->Add(itemBoxSizer18, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer4->Add(itemBoxSizer16, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_offset = new wxTextCtrl( itemDialog1, ID_RICHTEXTIMAGEDIALOG_OFFSET, wxEmptyString, wxDefaultPosition, wxSize(65, -1), 0 );
     m_offset->SetMaxLength(10);
     m_offset->SetHelpText(_("The vertical offset relative to the paragraph."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_offset->SetToolTip(_("The vertical offset relative to the paragraph."));
-    itemBoxSizer18->Add(m_offset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer16->Add(m_offset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_unitsOffsetStrings;
     m_unitsOffsetStrings.Add(_("px"));
@@ -239,45 +225,45 @@ void wxRichTextImageDialog::CreateControls()
     m_unitsOffset->SetHelpText(_("Units for the image offset."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_unitsOffset->SetToolTip(_("Units for the image offset."));
-    itemBoxSizer18->Add(m_unitsOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer16->Add(m_unitsOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText21 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Move the image to:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText21, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText19 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Move the image to:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText19, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer22 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer4->Add(itemBoxSizer22, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer4->Add(itemBoxSizer20, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
-    wxButton* itemButton23 = new wxButton( itemDialog1, ID_RICHTEXTIMAGEDIALOG_PARA_UP, _("&Previous Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton23->SetHelpText(_("Moves the image to the previous paragraph."));
+    wxButton* itemButton21 = new wxButton( itemDialog1, ID_RICHTEXTIMAGEDIALOG_PARA_UP, _("&Previous Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton21->SetHelpText(_("Moves the image to the previous paragraph."));
     if (wxRichTextImageDialog::ShowToolTips())
-        itemButton23->SetToolTip(_("Moves the image to the previous paragraph."));
-    itemBoxSizer22->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        itemButton21->SetToolTip(_("Moves the image to the previous paragraph."));
+    itemBoxSizer20->Add(itemButton21, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton24 = new wxButton( itemDialog1, ID_RICHTEXTIMAGEDIALOG_DOWN, _("&Next Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton24->SetHelpText(_("Moves the image to the next paragraph."));
+    wxButton* itemButton22 = new wxButton( itemDialog1, ID_RICHTEXTIMAGEDIALOG_DOWN, _("&Next Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton22->SetHelpText(_("Moves the image to the next paragraph."));
     if (wxRichTextImageDialog::ShowToolTips())
-        itemButton24->SetToolTip(_("Moves the image to the next paragraph."));
-    itemBoxSizer22->Add(itemButton24, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
+        itemButton22->SetToolTip(_("Moves the image to the next paragraph."));
+    itemBoxSizer20->Add(itemButton22, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
 
-    wxStaticLine* itemStaticLine25 = new wxStaticLine( itemDialog1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    itemBoxSizer2->Add(itemStaticLine25, 0, wxGROW|wxALL, 5);
+    wxStaticLine* itemStaticLine23 = new wxStaticLine( itemDialog1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer2->Add(itemStaticLine23, 0, wxGROW|wxALL, 5);
 
-    wxStdDialogButtonSizer* itemStdDialogButtonSizer26 = new wxStdDialogButtonSizer;
+    wxStdDialogButtonSizer* itemStdDialogButtonSizer24 = new wxStdDialogButtonSizer;
 
-    itemBoxSizer2->Add(itemStdDialogButtonSizer26, 0, wxGROW|wxALL, 5);
+    itemBoxSizer2->Add(itemStdDialogButtonSizer24, 0, wxGROW|wxALL, 5);
     m_saveButton = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
     m_saveButton->SetHelpText(_("Click to confirm your changes."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_saveButton->SetToolTip(_("Click to confirm your changes."));
-    itemStdDialogButtonSizer26->AddButton(m_saveButton);
+    itemStdDialogButtonSizer24->AddButton(m_saveButton);
 
     m_cancelButton = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
     m_cancelButton->SetHelpText(_("Click to discard your changes."));
     if (wxRichTextImageDialog::ShowToolTips())
         m_cancelButton->SetToolTip(_("Click to discard your changes."));
-    itemStdDialogButtonSizer26->AddButton(m_cancelButton);
+    itemStdDialogButtonSizer24->AddButton(m_cancelButton);
 
-    itemStdDialogButtonSizer26->Realize();
+    itemStdDialogButtonSizer24->Realize();
 
 ////@end wxRichTextImageDialog content construction
 }
@@ -321,9 +307,10 @@ wxIcon wxRichTextImageDialog::GetIconResource( const wxString& name )
 /*!
  * Set the image attribute
  */
-void wxRichTextImageDialog::SetImageAttr(const wxRichTextAnchoredObjectAttr& attr)
+void wxRichTextImageDialog::SetImageAttr(const wxRichTextAttr& textAttr)
 {
-   m_attr = attr;
+   m_textAttr = textAttr;
+
    TransferDataToWindow();
 }
 
@@ -337,7 +324,7 @@ wxRichTextImage* wxRichTextImageDialog::ApplyImageAttr()
     TransferDataFromWindow();
     if (m_buffer->GetRichTextCtrl())
     {
-        m_buffer->GetRichTextCtrl()->SetImageStyle(image, m_attr);
+        m_buffer->GetRichTextCtrl()->SetImageStyle(image, m_textAttr);
     }
     return image;
 }
@@ -349,107 +336,77 @@ void wxRichTextImageDialog::SetImageObject(wxRichTextImage* image, wxRichTextBuf
     m_buffer = buffer;
     m_image = image;
     m_parent = parent;
-    SetImageAttr(image->GetAnchoredAttr());
+    SetImageAttr(image->GetAttributes());
     if (image->GetImageCache().IsOk())
     {
-        if (m_attr.m_width == -1)
+        if (!m_textAttr.GetTextBoxAttr().GetWidth().IsPresent() || m_textAttr.GetTextBoxAttr().GetWidth().GetValue() <= 0)
         {
-            m_attr.m_width = image->GetImageCache().GetWidth();
-            wxASSERT(m_attr.m_unitsW == wxRICHTEXT_PX);
-
-            m_attr.m_unitsW = wxRICHTEXT_PX;
+            m_textAttr.GetTextBoxAttr().GetWidth().SetValue(image->GetImageCache().GetWidth());
+            m_textAttr.GetTextBoxAttr().GetWidth().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
         }
-        if (m_attr.m_height == -1)
+        if (!m_textAttr.GetTextBoxAttr().GetHeight().IsPresent() || m_textAttr.GetTextBoxAttr().GetHeight().GetValue() <= 0)
         {
-            m_attr.m_height = image->GetImageCache().GetHeight();
-            wxASSERT(m_attr.m_unitsH == wxRICHTEXT_PX);
-
-            m_attr.m_unitsH = wxRICHTEXT_PX;
+            m_textAttr.GetTextBoxAttr().GetHeight().SetValue(image->GetImageCache().GetHeight());
+            m_textAttr.GetTextBoxAttr().GetHeight().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
         }
     }
 }
 
+void wxRichTextImageDialog::SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl)
+{
+    int unitsIdx = 0;
+    
+    if (!dim.IsPresent())
+    {
+        dim.SetValue(0);
+        dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+    }
+
+    if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+    {
+        unitsIdx = 1;
+        float value = float(dim.GetValue()) / 10.0;
+        valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
+    }
+    else
+    {
+        unitsIdx = 0;
+        valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
+    }
+
+    unitsCtrl->SetSelection(unitsIdx);
+}
+
+void wxRichTextImageDialog::GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl)
+{
+    if (unitsCtrl->GetSelection() == 1)
+        dim.SetUnits(wxTEXT_ATTR_UNITS_TENTHS_MM);
+    else
+        dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+
+    int value = 0;
+    if (ConvertFromString(valueCtrl->GetValue(), value, dim.GetUnits()))
+        dim.SetValue(value);
+}
+
 bool wxRichTextImageDialog::TransferDataToWindow()
 {
-    int remain = 100;
+    m_float->SetSelection(m_textAttr.GetTextBoxAttr().GetFloatMode());
 
-    m_alignment->SetSelection(m_attr.m_align);
-    m_float->SetSelection(m_attr.m_floating);
-
-    // Update scale
-    m_unitsW->SetSelection(m_attr.m_unitsW);
-    m_unitsH->SetSelection(m_attr.m_unitsH);
-    m_unitsOffset->SetSelection(m_attr.m_unitsOffset);
-
-    // Update metric
-    m_width->Clear();
-    if (m_attr.m_unitsW == wxRICHTEXT_MM)
-    {
-        int remainder = m_attr.m_width % remain;
-        *m_width << m_attr.m_width / remain;
-        if (remainder)
-        {
-            *m_width << '.' << remainder;
-        }
-    }
-    else
-    {
-        *m_width << m_attr.m_width;
-    }
-
-    m_height->Clear();
-    if (m_attr.m_unitsH == wxRICHTEXT_MM)
-    {
-        int remainder = m_attr.m_height % remain;
-        *m_height << m_attr.m_height / remain;
-        if (remainder)
-        {
-            *m_height << '.' << remainder;
-        }
-    }
-    else
-    {
-        *m_height << m_attr.m_height;
-    }
-
-    m_offset->Clear();
-    if (m_attr.m_unitsOffset == wxRICHTEXT_MM)
-    {
-        int remainder = m_attr.m_offset % remain;
-        *m_offset << m_attr.m_offset / remain;
-        if (remainder)
-        {
-            *m_offset << '.' << remainder;
-        }
-    }
-    else
-    {
-        *m_offset << m_attr.m_offset;
-    }
+    SetDimensionValue(m_textAttr.GetTextBoxAttr().GetWidth(), m_width, m_unitsW);
+    SetDimensionValue(m_textAttr.GetTextBoxAttr().GetHeight(), m_height, m_unitsH);    
+    SetDimensionValue(m_textAttr.GetTextBoxAttr().GetTop(), m_offset, m_unitsOffset);    
 
     return true;
 }
 
 bool wxRichTextImageDialog::TransferDataFromWindow()
 {
-    wxString width = m_width->GetValue();
-    wxString height = m_height->GetValue();
-    wxString offset = m_offset->GetValue();
-    int w, h, o;
+    m_textAttr.GetTextBoxAttr().SetFloatMode(m_float->GetSelection());
 
-    m_attr.m_align = m_alignment->GetSelection();
-    m_attr.m_floating = m_float->GetSelection();
-
-    m_attr.m_unitsW = m_unitsW->GetSelection();
-    m_attr.m_unitsH = m_unitsH->GetSelection();
-    m_attr.m_unitsOffset = m_unitsOffset->GetSelection();
-
-    if (ConvertFromString(width, w, m_attr.m_unitsW))
-        m_attr.m_width = w;
-    if (ConvertFromString(height, h, m_attr.m_unitsH))
-        m_attr.m_height = h;
-    if (ConvertFromString(offset, o, m_attr.m_unitsOffset))
-        m_attr.m_offset = o;
+    GetDimensionValue(m_textAttr.GetTextBoxAttr().GetWidth(), m_width, m_unitsW);
+    GetDimensionValue(m_textAttr.GetTextBoxAttr().GetHeight(), m_height, m_unitsH);    
+    GetDimensionValue(m_textAttr.GetTextBoxAttr().GetTop(), m_offset, m_unitsOffset);    
 
     return true;
 }
@@ -463,7 +420,7 @@ bool wxRichTextImageDialog::ConvertFromString(const wxString& string, int& ret, 
 
     for (unsigned int i = 0; i < string.Len() && remain; i++)
     {
-        if (!(chars[i] >= '0' && chars[i] <= '9') && !(scale == wxRICHTEXT_MM && chars[i] == '.'))
+        if (!(chars[i] >= '0' && chars[i] <= '9') && !(scale == wxTEXT_ATTR_UNITS_TENTHS_MM && chars[i] == '.'))
             return false;
 
         if (chars[i] == '.')
@@ -478,7 +435,7 @@ bool wxRichTextImageDialog::ConvertFromString(const wxString& string, int& ret, 
         ret = ret * 10 + chars[i] - '0';
     }
 
-    while (remain-- > 0 && scale == wxRICHTEXT_MM)
+    while (remain-- > 0 && scale == wxTEXT_ATTR_UNITS_TENTHS_MM)
         ret *= 10;
 
     return true;

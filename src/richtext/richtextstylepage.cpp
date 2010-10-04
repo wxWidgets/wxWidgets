@@ -245,7 +245,7 @@ bool wxRichTextStylePage::TransferDataToWindow()
     return true;
 }
 
-wxTextAttr* wxRichTextStylePage::GetAttributes()
+wxRichTextAttr* wxRichTextStylePage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }

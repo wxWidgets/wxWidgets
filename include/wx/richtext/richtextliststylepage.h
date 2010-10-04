@@ -65,7 +65,7 @@ public:
     virtual bool TransferDataToWindow();
 
     /// Get attributes for selected level
-    wxTextAttr* GetAttributesForSelection();
+    wxRichTextAttr* GetAttributesForSelection();
 
     /// Update for symbol-related controls
     void OnSymbolUpdate( wxUpdateUIEvent& event );
