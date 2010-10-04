@@ -300,7 +300,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     m_contextMenu->AppendSeparator();
     m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
 
-    long ids = wxNewId();
+    long ids = wxWindow::NewControlId();
     m_contextMenu->AppendSeparator();
     m_contextMenu->Append(ids, _("&Properties"));
 
