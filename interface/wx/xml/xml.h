@@ -184,6 +184,13 @@ public:
     int GetDepth(wxXmlNode* grandparent = NULL) const;
 
     /**
+        Returns a flag indicating whether encoding conversion is necessary when saving. The default is @false.
+
+        You can improve saving efficiency considerably by setting this value.
+    */
+    bool GetNoConversion() const;
+
+    /**
         Returns line number of the node in the input XML file or @c -1 if it is unknown.
     */
     int GetLineNumber() const;
@@ -301,7 +308,7 @@ public:
     /**
         Sets as first attribute the given wxXmlAttribute object.
 
-        The caller is responsible to delete any previously present attributes
+        The caller is responsible for deleting any previously present attributes
         attached to this node.
     */
     void SetAttributes(wxXmlAttribute* attr);
@@ -309,7 +316,7 @@ public:
     /**
         Sets as first child the given node.
 
-        The caller is responsible to delete any previously present children node.
+        The caller is responsible for deleting any previously present children node.
     */
     void SetChildren(wxXmlNode* child);
 
@@ -326,14 +333,21 @@ public:
     /**
         Sets as sibling the given node.
 
-        The caller is responsible to delete any previously present sibling node.
+        The caller is responsible for deleting any previously present sibling node.
     */
     void SetNext(wxXmlNode* next);
 
     /**
+        Sets a flag to indicate whether encoding conversion is necessary when saving. The default is @false.
+
+        You can improve saving efficiency considerably by setting this value.
+    */
+    void SetNoConversion(bool noconversion);
+
+    /**
         Sets as parent the given node.
 
-        The caller is responsible to delete any previously present parent node.
+        The caller is responsible for deleting any previously present parent node.
     */
     void SetParent(wxXmlNode* parent);
 

@@ -54,7 +54,8 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
     : m_type(type), m_name(name), m_content(content),
       m_attrs(attrs), m_parent(parent),
       m_children(NULL), m_next(next),
-      m_lineNo(lineNo)
+      m_lineNo(lineNo),
+      m_noConversion(false)
 {
     if (m_parent)
     {
@@ -74,7 +75,7 @@ wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
     : m_type(type), m_name(name), m_content(content),
       m_attrs(NULL), m_parent(NULL),
       m_children(NULL), m_next(NULL),
-      m_lineNo(lineNo)
+      m_lineNo(lineNo), m_noConversion(false)
 {}
 
 wxXmlNode::wxXmlNode(const wxXmlNode& node)
@@ -115,6 +116,7 @@ void wxXmlNode::DoCopy(const wxXmlNode& node)
     m_name = node.m_name;
     m_content = node.m_content;
     m_lineNo = node.m_lineNo;
+    m_noConversion = node.m_noConversion;
     m_children = NULL;
 
     wxXmlNode *n = node.m_children;
@@ -796,7 +798,14 @@ bool OutputString(wxOutputStream& stream,
     wxUnusedVar(convMem);
     if ( !convFile )
         convFile = &wxConvUTF8;
-
+#if 1
+    // JACS test
+    const wxWX2MBbuf buf(str.mb_str(*convFile));
+    if (!buf.length())
+        return false;
+    
+    stream.Write((const char*)buf, strlen((const char*)buf));
+#else
     const wxScopedCharBuffer buf(str.mb_str(*convFile));
     if ( !buf.length() )
     {
@@ -806,6 +815,8 @@ bool OutputString(wxOutputStream& stream,
     }
 
     stream.Write(buf, buf.length());
+#endif
+
 #else // !wxUSE_UNICODE
     if ( convFile && convMem )
     {
@@ -913,7 +924,13 @@ bool OutputNode(wxOutputStream& stream,
             break;
 
         case wxXML_TEXT_NODE:
-            rc = OutputEscapedString(stream, node->GetContent(),
+            if (node->GetNoConversion())
+            {
+                stream.Write(node->GetContent().c_str(), node->GetContent().Length());
+                rc = true;
+            }
+            else
+                rc = OutputEscapedString(stream, node->GetContent(),
                                      convMem, convFile,
                                      Escape_Text);
             break;
