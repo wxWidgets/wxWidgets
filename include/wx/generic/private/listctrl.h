@@ -402,7 +402,17 @@ public:
 
     wxTextCtrl *GetText() const { return m_text; }
 
-    void EndEdit( bool discardChanges );
+    // Different reasons for calling EndEdit():
+    //
+    // It was called because:
+    enum EndReason
+    {
+        End_Accept,     // user has accepted the changes.
+        End_Discard,    // user has cancelled editing.
+        End_Destroy     // the entire control is being destroyed.
+    };
+
+    void EndEdit(EndReason reason);
 
 protected:
     void OnChar( wxKeyEvent &event );

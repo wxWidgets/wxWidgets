@@ -1407,23 +1407,31 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
     m_text->PushEventHandler(this);
 }
 
-void wxListTextCtrlWrapper::EndEdit(bool discardChanges)
+void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 {
     m_aboutToFinish = true;
 
-    if ( discardChanges )
+    switch ( reason )
     {
-        m_owner->OnRenameCancelled(m_itemEdited);
+        case End_Accept:
+            // Notify the owner about the changes
+            AcceptChanges();
 
-        Finish( true );
-    }
-    else
-    {
-        // Notify the owner about the changes
-        AcceptChanges();
+            // Even if vetoed, close the control (consistent with MSW)
+            Finish( true );
+            break;
 
-        // Even if vetoed, close the control (consistent with MSW)
-        Finish( true );
+        case End_Discard:
+            m_owner->OnRenameCancelled(m_itemEdited);
+
+            Finish( true );
+            break;
+
+        case End_Destroy:
+            // Don't generate any notifications for the control being destroyed
+            // and don't set focus to it neither.
+            Finish(false);
+            break;
     }
 }
 
@@ -1462,11 +1470,11 @@ void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            EndEdit( false );
+            EndEdit( End_Accept );
             break;
 
         case WXK_ESCAPE:
-            EndEdit( true );
+            EndEdit( End_Discard );
             break;
 
         default:
@@ -1600,6 +1608,9 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
 wxListMainWindow::~wxListMainWindow()
 {
+    if ( m_textctrlWrapper )
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
+
     DoDeleteAllItems();
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
     WX_CLEAR_ARRAY(m_aColWidths);
@@ -2273,7 +2284,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     // listctrl because the order of events is different (or something like
     // that), so explicitly end the edit if it is active.
     if ( event.LeftDown() && m_textctrlWrapper )
-        m_textctrlWrapper->EndEdit( false );
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Accept);
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
