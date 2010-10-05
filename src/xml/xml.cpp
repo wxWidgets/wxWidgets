@@ -798,14 +798,7 @@ bool OutputString(wxOutputStream& stream,
     wxUnusedVar(convMem);
     if ( !convFile )
         convFile = &wxConvUTF8;
-#if 1
-    // JACS test
-    const wxWX2MBbuf buf(str.mb_str(*convFile));
-    if (!buf.length())
-        return false;
-    
-    stream.Write((const char*)buf, strlen((const char*)buf));
-#else
+
     const wxScopedCharBuffer buf(str.mb_str(*convFile));
     if ( !buf.length() )
     {
@@ -815,8 +808,6 @@ bool OutputString(wxOutputStream& stream,
     }
 
     stream.Write(buf, buf.length());
-#endif
-
 #else // !wxUSE_UNICODE
     if ( convFile && convMem )
     {
