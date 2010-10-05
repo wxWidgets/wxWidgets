@@ -1671,13 +1671,13 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     wxPanel* panel = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     wxPanel* panel2 = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
-    wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(panel, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    new wxRichTextCtrl(panel, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
     nb->AddPage(panel, wxT("Page 1"));
 
-    wxRichTextCtrl* richTextCtrl2 = new wxRichTextCtrl(panel2, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    new wxRichTextCtrl(panel2, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
     nb->AddPage(panel2, wxT("Page 2"));
 
-    wxButton* button = new wxButton(& dialog, wxID_OK, wxT("OK"), wxPoint(5, 180));
+    new wxButton(& dialog, wxID_OK, wxT("OK"), wxPoint(5, 180));
 
     dialog.ShowModal();
 
