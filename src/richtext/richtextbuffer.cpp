@@ -8656,6 +8656,16 @@ void wxTextAttrDimension::CollectCommonAttributes(const wxTextAttrDimension& att
         absentAttr.SetPresent(true);
 }
 
+wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(wxDC& dc, double scale, const wxSize& parentSize)
+{
+    m_ppi = dc.GetPPI().x; m_scale = scale; m_parentSize = parentSize;
+}
+
+wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(int ppi, double scale, const wxSize& parentSize)
+{
+    m_ppi = ppi; m_scale = scale; m_parentSize = parentSize;
+}
+
 int wxTextAttrDimensionConverter::ConvertTenthsMMToPixels(int units) const
 {
     return wxRichTextObject::ConvertTenthsMMToPixels(m_ppi, units, m_scale);

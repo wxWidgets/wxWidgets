@@ -372,11 +372,8 @@ public:
 class WXDLLIMPEXP_RICHTEXT wxTextAttrDimensionConverter
 {
 public:
-    wxTextAttrDimensionConverter(wxDC& dc, double scale = 1.0, const wxSize& parentSize = wxDefaultSize)
-    { m_ppi = dc.GetPPI().x; m_scale = scale; m_parentSize = parentSize; }
-
-    wxTextAttrDimensionConverter(int ppi, double scale = 1.0, const wxSize& parentSize = wxDefaultSize)
-    { m_ppi = ppi; m_scale = scale; m_parentSize = parentSize; }
+    wxTextAttrDimensionConverter(wxDC& dc, double scale = 1.0, const wxSize& parentSize = wxDefaultSize);
+    wxTextAttrDimensionConverter(int ppi, double scale = 1.0, const wxSize& parentSize = wxDefaultSize);
     
     int GetPixels(const wxTextAttrDimension& dim, int direction = wxHORIZONTAL) const;
     int GetTenthsMM(const wxTextAttrDimension& dim) const;
