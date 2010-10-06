@@ -34,6 +34,7 @@
 #include "wx/splitter.h"
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
+#include "wx/stopwatch.h"
 
 #if wxUSE_FILESYSTEM
 #include "wx/filesys.h"
@@ -1071,7 +1072,14 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 
         if (!path.empty())
         {
+            wxBusyCursor busy;
+            wxStopWatch stopwatch;
+
             m_richTextCtrl->SaveFile(path);
+
+            long t = stopwatch.Time();
+            wxLogDebug(wxT("Saving took %ldms"), t);
+            wxMessageBox(wxString::Format(wxT("Saving took %ldms"), t));
         }
     }
 }
