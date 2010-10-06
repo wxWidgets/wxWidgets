@@ -69,8 +69,8 @@ public:
             : m_name(name), m_value(value), m_next(next) {}
     virtual ~wxXmlAttribute() {}
 
-    wxString GetName() const { return m_name; }
-    wxString GetValue() const { return m_value; }
+    const wxString& GetName() const { return m_name; }
+    const wxString& GetValue() const { return m_value; }
     wxXmlAttribute *GetNext() const { return m_next; }
 
     void SetName(const wxString& name) { m_name = name; }
