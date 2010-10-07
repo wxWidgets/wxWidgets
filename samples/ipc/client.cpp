@@ -232,10 +232,8 @@ void MyFrame::EnableControls()
 
 void MyFrame::OnClose(wxCloseEvent& event)
 {
-    if (m_client)
-    {
-        wxDELETE(m_client);
-    }
+    wxDELETE(m_client);
+
     event.Skip();
 }
 
