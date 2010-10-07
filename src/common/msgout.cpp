@@ -118,7 +118,13 @@ void wxMessageOutputBest::Output(const wxString& str)
             return;
     }
 
-    ::MessageBox(NULL, str.t_str(), NULL, MB_ICONINFORMATION | MB_OK);
+    wxString title;
+    if ( wxTheApp )
+        title = wxTheApp->GetAppDisplayName();
+    else // Use some title to avoid default "Error"
+        title = _("Message");
+
+    ::MessageBox(NULL, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
     // TODO: use the native message box for the other ports too
     wxMessageOutputStderr::Output(str);
