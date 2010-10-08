@@ -825,6 +825,8 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     }
 
     wxFileName leftFilename = wxFileSystem::URLToFileName(left);
+    if (!leftFilename.FileExists())
+        return NULL;
 
     // Open a stream to read the content of the chm-file
     s = new wxChmInputStream(leftFilename.GetFullPath(), right, true);
