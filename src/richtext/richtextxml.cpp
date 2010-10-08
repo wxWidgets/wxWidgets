@@ -620,6 +620,11 @@ static inline void AddAttribute(wxString& str, const wxChar* name, const wxTextA
     }
 }
 
+static inline void AddAttribute(wxString& str, const wxString& name, const wxTextAttrDimension& dim)
+{
+    AddAttribute(str, name.c_str(), dim);
+}
+
 static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxTextAttrDimensions& dims)
 {
     if (dims.GetLeft().IsPresent())
