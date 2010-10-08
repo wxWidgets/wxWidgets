@@ -579,37 +579,37 @@ wxString wxRichTextXMLHandler::AttributeToXML(const wxString& str)
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const int& v)
+static inline void AddAttribute(wxString& str, const wxString& name, const int& v)
 {
     str << wxT(" ") << name << wxT("=\"") << wxString::Format(wxT("%d"), v) << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const long& v)
+static inline void AddAttribute(wxString& str, const wxString& name, const long& v)
 {
     str << wxT(" ") << name << wxT("=\"") << wxString::Format(wxT("%ld"), v) << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const double& v)
+static inline void AddAttribute(wxString& str, const wxString& name, const double& v)
 {
     str << wxT(" ") << name << wxT("=\"") << wxString::Format(wxT("%.2f"), (float) v) << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const wxChar* s)
+static inline void AddAttribute(wxString& str, const wxString& name, const wxChar* s)
 {
     str << wxT(" ") << name << wxT("=\"") << s << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const wxString& s)
+static inline void AddAttribute(wxString& str, const wxString& name, const wxString& s)
 {
     str << wxT(" ") << name << wxT("=\"") << s << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const wxColour& col)
+static inline void AddAttribute(wxString& str, const wxString& name, const wxColour& col)
 {
     str << wxT(" ") << name << wxT("=\"") << wxT("#") << ColourToHexString(col) << wxT("\"");
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* name, const wxTextAttrDimension& dim)
+static inline void AddAttribute(wxString& str, const wxString& name, const wxTextAttrDimension& dim)
 {
     if (dim.IsPresent())
     {
@@ -620,12 +620,7 @@ static inline void AddAttribute(wxString& str, const wxChar* name, const wxTextA
     }
 }
 
-static inline void AddAttribute(wxString& str, const wxString& name, const wxTextAttrDimension& dim)
-{
-    AddAttribute(str, name.c_str(), dim);
-}
-
-static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxTextAttrDimensions& dims)
+static inline void AddAttribute(wxString& str, const wxString& rootName, const wxTextAttrDimensions& dims)
 {
     if (dims.GetLeft().IsPresent())
         AddAttribute(str, rootName + wxString(wxT("-left")), dims.GetLeft());
@@ -637,7 +632,7 @@ static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxT
         AddAttribute(str, rootName + wxString(wxT("-bottom")), dims.GetBottom());
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxTextAttrBorder& border)
+static inline void AddAttribute(wxString& str, const wxString& rootName, const wxTextAttrBorder& border)
 {
     if (border.HasStyle())
         AddAttribute(str, rootName + wxString(wxT("-style")), border.GetStyle());
@@ -647,7 +642,7 @@ static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxT
         AddAttribute(str, rootName + wxString(wxT("-width")), border.GetWidth());
 }
 
-static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxTextAttrBorders& borders)
+static inline void AddAttribute(wxString& str, const wxString& rootName, const wxTextAttrBorders& borders)
 {
     AddAttribute(str, rootName + wxString(wxT("-left")), borders.GetLeft());
     AddAttribute(str, rootName + wxString(wxT("-right")), borders.GetRight());
@@ -660,32 +655,32 @@ static inline void AddAttribute(wxString& str, const wxChar* rootName, const wxT
 
 #if wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const int& v)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const int& v)
 {
     node->AddAttribute(name, MakeString(v));
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const long& v)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const long& v)
 {
     node->AddAttribute(name, MakeString(v));
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const double& v)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const double& v)
 {
     node->AddAttribute(name, MakeString(v));
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const wxString& s)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const wxString& s)
 {
     node->AddAttribute(name, s);
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const wxColour& col)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const wxColour& col)
 {
     node->AddAttribute(name, MakeString(col));
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const wxTextAttrDimension& dim)
+static inline void AddAttribute(wxXmlNode* node, const wxString& name, const wxTextAttrDimension& dim)
 {
     if (dim.IsPresent())
     {
@@ -694,7 +689,7 @@ static inline void AddAttribute(wxXmlNode* node, const wxChar* name, const wxTex
     }
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* rootName, const wxTextAttrDimensions& dims)
+static inline void AddAttribute(wxXmlNode* node, const wxString& rootName, const wxTextAttrDimensions& dims)
 {
     if (dims.GetLeft().IsPresent())
         AddAttribute(node, rootName + wxString(wxT("-left")), dims.GetLeft());
@@ -706,7 +701,7 @@ static inline void AddAttribute(wxXmlNode* node, const wxChar* rootName, const w
         AddAttribute(node, rootName + wxString(wxT("-bottom")), dims.GetBottom());
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* rootName, const wxTextAttrBorder& border)
+static inline void AddAttribute(wxXmlNode* node, const wxString& rootName, const wxTextAttrBorder& border)
 {
     if (border.HasStyle())
         AddAttribute(node, rootName + wxString(wxT("-style")), border.GetStyle());
@@ -716,7 +711,7 @@ static inline void AddAttribute(wxXmlNode* node, const wxChar* rootName, const w
         AddAttribute(node, rootName + wxString(wxT("-width")), border.GetWidth());
 }
 
-static inline void AddAttribute(wxXmlNode* node, const wxChar* rootName, const wxTextAttrBorders& borders)
+static inline void AddAttribute(wxXmlNode* node, const wxString& rootName, const wxTextAttrBorders& borders)
 {
     AddAttribute(node, rootName + wxString(wxT("-left")), borders.GetLeft());
     AddAttribute(node, rootName + wxString(wxT("-right")), borders.GetRight());
@@ -2336,9 +2331,10 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
             if (stream.GetSize() > 0)
             {
                 int size = stream.GetSize();
+#ifdef __WXDEBUG__
                 int size2 = stream.GetOutputStreamBuffer()->GetIntPosition();
                 wxASSERT(size == size2);
-
+#endif
                 unsigned char* data = new unsigned char[size];
                 stream.CopyTo(data, size);
                 strData = wxString((const char*) data, wxConvUTF8, size);
