@@ -722,8 +722,8 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
         if ( currentMouseWindow->HandleWindowEvent(wxevent) )
         {
-            if ((currentMouseWindowParent != NULL) &&
-                (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
+            if ( currentMouseWindowParent &&
+                 !currentMouseWindowParent->GetChildren().Member(currentMouseWindow) )
                 currentMouseWindow = NULL;
 
             result = noErr;
