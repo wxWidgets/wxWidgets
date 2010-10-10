@@ -306,6 +306,13 @@ public:
         return *this;
     }
 
+    // Used mostly internally to figure out if this cell is supposed
+    // to have default values when attached to a grid.
+    bool IsInvalid() const
+    {
+        return ( m_refData == NULL );
+    }
+
 private:
     virtual wxObjectRefData *CreateRefData() const
         { return new wxPGCellData(); }
@@ -2394,6 +2401,11 @@ protected:
     }
 
     void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
+
+    // Called when the property is being removed from the grid and/or
+    // page state (but *not* when it is also deleted).
+    void OnDetached(wxPropertyGridPageState* state,
+                    wxPropertyGrid* propgrid);
 
     // Call after fixed sub-properties added/removed after creation.
     // if oldSelInd >= 0 and < new max items, then selection is
