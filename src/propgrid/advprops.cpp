@@ -449,6 +449,7 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(DatePickerCtrl,
 
 wxPGDatePickerCtrlEditor::~wxPGDatePickerCtrlEditor()
 {
+    wxPG_EDITOR(DatePickerCtrl) = NULL;
 }
 
 wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
