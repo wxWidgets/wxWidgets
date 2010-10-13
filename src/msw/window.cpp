@@ -5648,12 +5648,12 @@ void
 MSWInitAnyKeyEvent(wxKeyEvent& event,
                    WXWPARAM wParam,
                    WXLPARAM lParam,
-                   const wxWindow *win /* may be NULL */)
+                   const wxWindowBase *win /* may be NULL */)
 {
     if ( win )
     {
         event.SetId(win->GetId());
-        event.SetEventObject(const_cast<wxWindow *>(win));
+        event.SetEventObject(const_cast<wxWindowBase *>(win));
     }
     else // No associated window.
     {
