@@ -36372,6 +36372,7 @@ ALL_GUI_DIST: ALL_DIST
 	fi
 	mkdir $(DISTDIR)/include/wx/meta
 	mkdir $(DISTDIR)/include/wx/generic
+	mkdir $(DISTDIR)/include/wx/generic/private
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
@@ -36387,6 +36388,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	$(CP_P) $(INCDIR)/wx/meta/*.h $(DISTDIR)/include/wx/meta
 	$(CP_P) $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
+	$(CP_P) $(INCDIR)/wx/generic/private/*.h $(DISTDIR)/include/wx/generic/private
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
@@ -36777,9 +36779,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
-	# copy files common to all samples in a general way
+	# copy files common to all samples in a general way (samples without
+	# Makefile.in in them are Windows-specific and shouldn't be included in
+	# Unix distribution)
 	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/opengl \
 		    -mindepth 1 -maxdepth 1 -type d -not -name .svn`; do \
+	    if [ ! -f $$s/Makefile.in ]; then continue; fi; \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
 	    $(CP_P) $$s/Makefile.in \
@@ -36799,8 +36804,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	# copy the rest, not covered by the above loop
 	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/animate
 	$(CP_P) $(SAMPDIR)/animate/throbber.gif $(DISTDIR)/samples/animate
-
-	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 	$(CP_P) $(SAMPDIR)/dialogs/tips.txt $(DISTDIR)/samples/dialogs
 
@@ -36857,7 +36860,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/xrc/rc
-	$(CP_P) $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/xrc/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
