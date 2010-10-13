@@ -570,9 +570,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
-	# copy files common to all samples in a general way
+	# copy files common to all samples in a general way (samples without
+	# Makefile.in in them are Windows-specific and shouldn't be included in
+	# Unix distribution)
 	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/opengl \
 		    -mindepth 1 -maxdepth 1 -type d -not -name .svn`; do \
+	    if [ ! -f $$s/Makefile.in ]; then continue; fi; \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
 	    $(CP_P) $$s/Makefile.in \
