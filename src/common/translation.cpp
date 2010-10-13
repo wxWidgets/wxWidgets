@@ -1790,7 +1790,7 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
                              resname,
                              GetResourceType(),
                              GetModule()) )
-        return false;
+        return NULL;
 
     wxLogTrace(TRACE_I18N,
                "Using catalog from Windows resource \"%s\".", resname);
