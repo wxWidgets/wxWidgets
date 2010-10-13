@@ -163,6 +163,7 @@ ALL_GUI_DIST: ALL_DIST
 	fi
 	mkdir $(DISTDIR)/include/wx/meta
 	mkdir $(DISTDIR)/include/wx/generic
+	mkdir $(DISTDIR)/include/wx/generic/private
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
@@ -178,6 +179,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	$(CP_P) $(INCDIR)/wx/meta/*.h $(DISTDIR)/include/wx/meta
 	$(CP_P) $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
+	$(CP_P) $(INCDIR)/wx/generic/private/*.h $(DISTDIR)/include/wx/generic/private
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
