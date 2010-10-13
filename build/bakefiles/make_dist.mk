@@ -596,8 +596,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/animate
 	$(CP_P) $(SAMPDIR)/animate/throbber.gif $(DISTDIR)/samples/animate
 
-	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
-
 	$(CP_P) $(SAMPDIR)/dialogs/tips.txt $(DISTDIR)/samples/dialogs
 
 	$(CP_P) $(SAMPDIR)/dnd/d_and_d.txt $(DISTDIR)/samples/dnd
@@ -653,7 +651,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/xrc/rc
-	$(CP_P) $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/xrc/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
