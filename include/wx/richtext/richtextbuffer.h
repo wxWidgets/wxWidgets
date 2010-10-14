@@ -1510,14 +1510,14 @@ protected:
  * TODO: a floating text box
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextBox: public wxRichTextParagraphLayoutBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextBox: public wxRichTextCompositeObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextBox)
 public:
 // Constructors
 
     wxRichTextBox(wxRichTextObject* parent = NULL);
-    wxRichTextBox(const wxRichTextBox& obj): wxRichTextParagraphLayoutBox() { Copy(obj); }
+    wxRichTextBox(const wxRichTextBox& obj): wxRichTextCompositeObject() { Copy(obj); }
 
 // Overrideables
 
@@ -1526,6 +1526,10 @@ public:
 
     /// Lay the item out
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+
+    /// Get/set the object size for the given range. Returns false if the range
+    /// is invalid for this object.
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
 // Accessors
 

@@ -6866,26 +6866,59 @@ bool wxRichTextStdRenderer::EnumerateStandardBulletNames(wxArrayString& bulletNa
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextBox, wxRichTextCompositeObject)
 
 wxRichTextBox::wxRichTextBox(wxRichTextObject* parent):
-    wxRichTextParagraphLayoutBox(parent)
+    wxRichTextCompositeObject(parent)
 {
 }
 
 /// Draw the item
-bool wxRichTextBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style)
+bool wxRichTextBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& WXUNUSED(rect), int descent, int style)
 {
-    return wxRichTextParagraphLayoutBox::Draw(dc, range, selectionRange, rect, descent, style);
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* child = node->GetData();
+
+        wxRect childRect = wxRect(child->GetPosition(), child->GetCachedSize());
+        child->Draw(dc, range, selectionRange, childRect, descent, style);
+
+        node = node->GetNext();
+    }
+    return true;
 }
 
 /// Lay the item out
 bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, int style)
 {
-    return wxRichTextParagraphLayoutBox::Layout(dc, rect, style);
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* child = node->GetData();
+        child->Layout(dc, rect, style);
+
+        node = node->GetNext();
+    }
+    m_dirty = false;
+    return true;
+
 }
 
 /// Copy
 void wxRichTextBox::Copy(const wxRichTextBox& obj)
 {
-    wxRichTextParagraphLayoutBox::Copy(obj);
+    wxRichTextCompositeObject::Copy(obj);
+}
+
+/// Get/set the size for the given range. Assume only has one child.
+bool wxRichTextBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents) const
+{
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    if (node)
+    {
+        wxRichTextObject* child = node->GetData();
+        return child->GetRangeSize(range, size, descent, dc, flags, position, partialExtents);
+    }
+    else
+        return false;
 }
 
 /*
