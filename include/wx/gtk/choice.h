@@ -77,8 +77,8 @@ public:
     virtual void SetColumns(int n=1);
     virtual int GetColumns() const;
 
-    virtual void DisableEvents();
-    virtual void EnableEvents();
+    virtual void GTKDisableEvents();
+    virtual void GTKEnableEvents();
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
