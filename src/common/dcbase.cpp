@@ -730,7 +730,6 @@ wxDCImpl::DoDrawPolyPolygon(int n,
 
     int      i, j, lastOfs;
     wxPoint* pts;
-    wxPen    pen;
 
     for (i = j = lastOfs = 0; i < n; i++)
     {
@@ -746,10 +745,11 @@ wxDCImpl::DoDrawPolyPolygon(int n,
         pts[j++] = pts[lastOfs];
     }
 
-    pen = GetPen();
-    SetPen(wxPen(*wxBLACK, 0, wxPENSTYLE_TRANSPARENT));
-    DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
-    SetPen(pen);
+    {
+        wxDCPenChanger setTransp(*m_owner, *wxTRANSPARENT_PEN);
+        DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
+    }
+
     for (i = j = 0; i < n; i++)
     {
         DoDrawLines(count[i], pts+j, xoffset, yoffset);
