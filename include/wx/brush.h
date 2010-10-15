@@ -55,6 +55,19 @@ public:
 
     virtual bool IsHatch() const
         { return (GetStyle()>=wxBRUSHSTYLE_FIRST_HATCH) && (GetStyle()<=wxBRUSHSTYLE_LAST_HATCH); }
+
+    // Convenient helpers for testing whether the brush is a transparent one:
+    // unlike GetStyle() == wxBRUSHSTYLE_TRANSPARENT, they work correctly even
+    // if the brush is invalid (they both return false in this case).
+    bool IsTransparent() const
+    {
+        return IsOk() && GetStyle() == wxBRUSHSTYLE_TRANSPARENT;
+    }
+
+    bool IsNonTransparent() const
+    {
+        return IsOk() && GetStyle() != wxBRUSHSTYLE_TRANSPARENT;
+    }
 };
 
 #if defined(__WXPALMOS__)

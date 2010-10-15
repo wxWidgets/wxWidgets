@@ -84,6 +84,19 @@ public:
     virtual wxPenCap GetCap() const = 0;
     virtual int GetWidth() const = 0;
     virtual int GetDashes(wxDash **ptr) const = 0;
+
+    // Convenient helpers for testing whether the pen is a transparent one:
+    // unlike GetStyle() == wxPENSTYLE_TRANSPARENT, they work correctly even if
+    // the pen is invalid (they both return false in this case).
+    bool IsTransparent() const
+    {
+        return IsOk() && GetStyle() == wxPENSTYLE_TRANSPARENT;
+    }
+
+    bool IsNonTransparent() const
+    {
+        return IsOk() && GetStyle() != wxPENSTYLE_TRANSPARENT;
+    }
 };
 
 #if defined(__WXPALMOS__)

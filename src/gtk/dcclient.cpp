@@ -477,7 +477,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    if ( m_pen.IsNonTransparent() )
     {
         if (m_gdkwindow)
             gdk_draw_line( m_gdkwindow, m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
@@ -491,7 +491,7 @@ void wxWindowDCImpl::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    if ( m_pen.IsNonTransparent() )
     {
         int w = 0;
         int h = 0;
@@ -589,7 +589,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
 
     if (m_gdkwindow)
     {
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -601,11 +601,11 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsNonTransparent() )
         {
             gdk_draw_arc( m_gdkwindow, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
 
-            if ((m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT) && (alpha2 - alpha1 != 360*64))
+            if ( m_brush.IsNonTransparent() && (alpha2 - alpha1 != 360*64) )
             {
                 gdk_draw_line( m_gdkwindow, m_penGC, xx1, yy1, xxc, yyc );
                 gdk_draw_line( m_gdkwindow, m_penGC, xxc, yyc, xx2, yy2 );
@@ -635,7 +635,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
         wxCoord start = wxCoord(sa * 64.0);
         wxCoord end = wxCoord((ea-sa) * 64.0);
 
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -647,7 +647,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsNonTransparent() )
             gdk_draw_arc( m_gdkwindow, m_penGC, FALSE, xx, yy, ww, hh, start, end );
     }
 
@@ -659,7 +659,7 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if ((m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT) && m_gdkwindow)
+    if ( m_pen.IsNonTransparent() && m_gdkwindow )
         gdk_draw_point( m_gdkwindow, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
 
     CalcBoundingBox (x, y);
@@ -669,8 +669,10 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
     if (n <= 0) return;
+
+    if ( m_pen.IsTransparent() )
+        return;
 
     //Check, if scaling is necessary
     const bool doScale =
@@ -730,7 +732,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
 
     if (m_gdkwindow)
     {
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -742,7 +744,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsNonTransparent() )
         {
 /*
             for (i = 0 ; i < n ; i++)
@@ -781,7 +783,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
 
     if (m_gdkwindow)
     {
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -793,7 +795,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if ( m_pen.IsOk() && m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT )
+        if ( m_pen.IsNonTransparent() )
         {
             if ((m_pen.GetWidth() == 2) && (m_pen.GetCap() == wxCAP_ROUND) &&
                 (m_pen.GetJoin() == wxJOIN_ROUND) && (m_pen.GetStyle() == wxPENSTYLE_SOLID))
@@ -857,7 +859,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
 
     // CMB: adjust size if outline is drawn otherwise the result is
     // 1 pixel too wide and high
-    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    if ( m_pen.IsNonTransparent() )
     {
         ww--;
         hh--;
@@ -872,7 +874,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
         if (dd > hh) dd = hh;
         rr = dd / 2;
 
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -889,7 +891,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsNonTransparent() )
         {
             gdk_draw_line( m_gdkwindow, m_penGC, xx+rr+1, yy, xx+ww-rr, yy );
             gdk_draw_line( m_gdkwindow, m_penGC, xx+rr+1, yy+hh, xx+ww-rr, yy+hh );
@@ -922,7 +924,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
 
     if (m_gdkwindow)
     {
-        if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+        if ( m_brush.IsNonTransparent() )
         {
             GdkGC* gc;
             bool originChanged;
@@ -930,7 +932,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
 
             // If the pen is transparent pen we increase the size
             // for better compatibility with other platforms.
-            if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT)
+            if ( m_pen.IsNonTransparent() )
             {
                 ++ww;
                 ++hh;
@@ -942,7 +944,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsNonTransparent() )
             gdk_draw_arc( m_gdkwindow, m_penGC, false, xx, yy, ww, hh, 0, 360*64 );
     }
 

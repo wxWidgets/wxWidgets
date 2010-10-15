@@ -1266,7 +1266,8 @@ bool wxGtkPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
 
 void wxGtkPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
 
     SetPen( m_pen );
     cairo_move_to ( m_cairo, XLOG2DEV(x1), YLOG2DEV(y1) );
@@ -1374,7 +1375,8 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
 void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
-    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
 
     SetPen( m_pen );
 
@@ -1387,7 +1389,9 @@ void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
+
 
     if (n <= 0) return;
 

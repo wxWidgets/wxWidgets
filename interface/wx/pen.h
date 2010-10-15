@@ -273,8 +273,42 @@ public:
 
     /**
         Returns @true if the pen is initialised.
+
+        Notice that an uninitialized pen object can't be queried for any pen
+        properties and all calls to the accessor methods on it will result in
+        an assert failure.
     */
     virtual bool IsOk() const;
+
+    /**
+        Returns @true if the pen is a valid non-transparent pen.
+
+        This method returns @true if the pen object is initialized and has a
+        non-transparent style. Notice that this should be used instead of
+        simply testing whether GetStyle() returns a style different from
+        wxPENSTYLE_TRANSPARENT if the pen may be invalid as GetStyle() would
+        assert in this case.
+
+        @see IsTransparent()
+
+        @since 2.9.2.
+     */
+    bool IsNonTransparent() const;
+
+    /**
+        Returns @true if the pen is transparent.
+
+        A transparent pen is simply a pen with wxPENSTYLE_TRANSPARENT style.
+
+        Notice that this function works even for non-initialized pens (for
+        which it returns @false) unlike tests of the form <code>GetStyle() ==
+        wxPENSTYLE_TRANSPARENT</code> which would assert if the pen is invalid.
+
+        @see IsNonTransparent()
+
+        @since 2.9.2.
+     */
+    bool IsTransparent() const;
 
     /**
         Sets the pen cap style, which may be one of @c wxCAP_ROUND, @c wxCAP_PROJECTING
