@@ -116,7 +116,7 @@ wxBase is a collection of C++ classes providing basic data structures (strings,
 lists, arrays), portable wrappers around many OS-specific funstions (file
 operations, time/date manipulations, threads, processes, sockets, shared
 library loading) as well as other utility classes (streams, archive and
-compression). wxBase currently supports Win32, most Unix variants (Linux, 
+compression). wxBase currently supports Win32, most Unix variants (Linux,
 FreeBSD, Solaris, HP-UX) and MacOS X (Carbon and Mach-0).
 
 %package -n %{wxbasename}-devel
@@ -127,23 +127,6 @@ Provides: wxBase-devel
 %description -n %{wxbasename}-devel
 wxBase library - non-GUI support classes of the wxWidgets toolkit,
 header files.
-
-%package contrib
-Summary: The GTK+ %{gtkver} port of the wxWidgets library, contributed libraries.
-Group: X11/Libraries
-Requires: %{name} = %{ver}
-
-%description contrib
-Contributed libraries for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
-
-%package contrib-devel
-Summary: The GTK+ %{gtkver} port of the wxWidgets library
-Group: X11/Libraries
-Requires: %{name}-contrib = %{ver}
-Requires: %{name}-devel = %{ver}
-
-%description contrib-devel
-Header files for contributed libraries for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
 
 %prep
 %setup -q -n wxGTK-%{ver}
@@ -171,9 +154,7 @@ cd obj-shared
 			      --with-opengl
 $MAKE
 
-cd contrib/src
-$MAKE
-cd ../../..
+cd ..
 
 mkdir obj-static
 cd obj-static
@@ -192,9 +173,7 @@ cd obj-static
 			      --with-opengl
 $MAKE
 
-cd contrib/src
-$MAKE
-cd ../../..
+cd ..
 
 make -C locale allmo
 
@@ -530,10 +509,6 @@ find $RPM_BUILD_ROOT%{_includedir}/wx-%{ver2} -type f | sed -e "s,$RPM_BUILD_ROO
 cp -f -r $RPM_BUILD_ROOT/_save_dir/* $RPM_BUILD_ROOT%{_includedir}
 rm -rf $RPM_BUILD_ROOT/_save_dir
 
-# contrib stuff:
-(cd obj-static/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
-(cd obj-shared/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
-
 # utils:
 (cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
 
@@ -588,18 +563,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 /sbin/ldconfig
 
 %postun gl
-/sbin/ldconfig
-
-%post contrib
-/sbin/ldconfig
-
-%postun contrib
-/sbin/ldconfig
-
-%post contrib-devel
-/sbin/ldconfig
-
-%postun contrib-devel
 /sbin/ldconfig
 
 %files
@@ -675,67 +638,3 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %files gl
 %defattr(-,root,root)
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so.*
-
-%files contrib
-%defattr(-,root,root)
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so.*
-
-# static libs
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.a
-
-%files contrib-devel
-%defattr(-,root,root)
-%dir %{_includedir}/wx-%{ver2}/wx/animate
-%{_includedir}/wx-%{ver2}/wx/animate/*
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/deprecated
-%{_includedir}/wx-%{ver2}/wx/deprecated/*
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/fl
-%{_includedir}/wx-%{ver2}/wx/fl/*
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/gizmos
-%{_includedir}/wx-%{ver2}/wx/gizmos/*
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/mmedia
-%{_includedir}/wx-%{ver2}/wx/mmedia/*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/ogl
-%{_includedir}/wx-%{ver2}/wx/ogl/*
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/plot
-%{_includedir}/wx-%{ver2}/wx/plot/*
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/stc
-%{_includedir}/wx-%{ver2}/wx/stc/*
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/svg
-%{_includedir}/wx-%{ver2}/wx/svg/*
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so
