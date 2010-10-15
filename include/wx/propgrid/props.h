@@ -148,7 +148,7 @@ enum wxPGNumericValidationConstants
 /**
     A more comprehensive numeric validator class.
 */
-class wxNumericPropertyValidator : public wxTextValidator
+class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
 {
 public:
     enum NumericType
