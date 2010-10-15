@@ -36347,6 +36347,7 @@ ALL_DIST: distrib_clean
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets/presets
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/presets/*.bkl $(DISTDIR)/build/bakefiles/wxpresets/presets
+	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/presets/wx_presets.py $(DISTDIR)/build/bakefiles/wxpresets/presets
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
