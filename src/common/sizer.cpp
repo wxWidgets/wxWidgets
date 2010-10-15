@@ -2526,29 +2526,6 @@ void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
     m_buttonCancel = button;
 }
 
-#ifdef __WXGTK20__
-
-namespace
-{
-
-// Returns true only if the button is non-NULL and has the given id and text
-// (possible translated).
-bool IsStdButtonWithStdText(wxButton *btn, wxWindowID id, const char *label)
-{
-    if ( !btn )
-        return false;
-
-    if ( btn->GetId() != id )
-        return false;
-
-    const wxString labelText = btn->GetLabelText();
-    return labelText == label || labelText == wxGetTranslation(label);
-}
-
-} // anonymous namespace
-
-#endif // __WXGTK20__
-
 void wxStdDialogButtonSizer::Realize()
 {
 #ifdef __WXMAC__
@@ -2591,12 +2568,9 @@ void wxStdDialogButtonSizer::Realize()
         Add(12, 40);
 #elif defined(__WXGTK20__)
         // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
-        // describes the margins and the buttons order but basically it is
+        // says that the correct button order is
         //
         //      [Help]                  [Alternative] [Cancel] [Affirmative]
-        //
-        // in general case but, somewhat confusingly, the native message box
-        // uses "No Yes Cancel" with these particular buttons so do we as well.
 
         // Flags ensuring that margins between the buttons are 6 pixels.
         const wxSizerFlags
@@ -2611,31 +2585,17 @@ void wxStdDialogButtonSizer::Realize()
         // Align the rest of the buttons to the right.
         AddStretchSpacer();
 
-        // "No Yes Cancel" is an exception to the general rule according to
-        // which the affirmative buttons goes after "Cancel" so treat it
-        // separately
-        if ( IsStdButtonWithStdText(m_buttonNegative, wxID_NO, "No") &&
-              IsStdButtonWithStdText(m_buttonAffirmative, wxID_YES, "Yes") &&
-               IsStdButtonWithStdText(m_buttonCancel, wxID_CANCEL, "Cancel") )
-        {
+        if (m_buttonNegative)
             Add(m_buttonNegative, flagsBtn);
-            Add(m_buttonAffirmative, flagsBtn);
+
+        if (m_buttonApply)
+            Add(m_buttonApply, flagsBtn);
+
+        if (m_buttonCancel)
             Add(m_buttonCancel, flagsBtn);
-        }
-        else // Use standard layout
-        {
-            if (m_buttonNegative)
-                Add(m_buttonNegative, flagsBtn);
 
-            if (m_buttonApply)
-                Add(m_buttonApply, flagsBtn);
-
-            if (m_buttonCancel)
-                Add(m_buttonCancel, flagsBtn);
-
-            if (m_buttonAffirmative)
-                Add(m_buttonAffirmative, flagsBtn);
-        }
+        if (m_buttonAffirmative)
+            Add(m_buttonAffirmative, flagsBtn);
 
         // Ensure that the right margin is 12 as well.
         AddSpacer(9);
