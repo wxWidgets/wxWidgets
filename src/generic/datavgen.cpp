@@ -2094,6 +2094,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 bool wxDataViewMainWindow::Cleared()
 {
     DestroyTree();
+    m_selection.Clear();
 
     SortPrepare();
     BuildTree( GetOwner()->GetModel() );
