@@ -27,6 +27,7 @@ class wxPGArrayEditorDialog;
 #include "wx/textctrl.h"
 #include "wx/button.h"
 #include "wx/listbox.h"
+#include "wx/valtext.h"
 
 // -----------------------------------------------------------------------
 
