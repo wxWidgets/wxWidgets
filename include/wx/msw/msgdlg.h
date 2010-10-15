@@ -59,8 +59,6 @@ private:
     // aren't available.
     int ShowMessageBox();
 
-    // used by ShowModal() to display a task dialog.
-    int ShowTaskDialog();
 
     WXHANDLE m_hook; // HHOOK used to position the message box
 

@@ -573,39 +573,29 @@ int wxMessageDialog::ShowMessageBox()
     return MSWTranslateReturnCode(msAns);
 }
 
-int wxMessageDialog::ShowTaskDialog()
-{
-#ifdef wxHAS_MSW_TASKDIALOG
-    TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-    if ( !taskDialogIndirect )
-        return wxID_CANCEL;
-
-    WinStruct<TASKDIALOGCONFIG> tdc;
-    wxMSWTaskDialogConfig wxTdc( *this );
-    wxTdc.MSWCommonTaskDialogInit( tdc );
-
-    int msAns;
-    HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
-    if ( FAILED(hr) )
-    {
-        wxLogApiError( "TaskDialogIndirect", hr );
-        return wxID_CANCEL;
-    }
-
-    return MSWTranslateReturnCode( msAns );
-#else
-    wxFAIL_MSG( "Task dialogs are unavailable." );
-
-    return wxID_CANCEL;
-#endif // wxHAS_MSW_TASKDIALOG
-}
-
-
-
 int wxMessageDialog::ShowModal()
 {
+#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
-        return ShowTaskDialog();
+    {
+        TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
+        wxCHECK_MSG( taskDialogIndirect, wxID_CANCEL, wxS("no task dialog?") );
+
+        WinStruct<TASKDIALOGCONFIG> tdc;
+        wxMSWTaskDialogConfig wxTdc( *this );
+        wxTdc.MSWCommonTaskDialogInit( tdc );
+
+        int msAns;
+        HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
+        if ( FAILED(hr) )
+        {
+            wxLogApiError( "TaskDialogIndirect", hr );
+            return wxID_CANCEL;
+        }
+
+        return MSWTranslateReturnCode( msAns );
+    }
+#endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
 }
@@ -758,19 +748,20 @@ wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
-    static TaskDialogIndirect_t s_TaskDialogIndirect = NULL;
+    // Initialize the function pointer to an invalid value different from NULL
+    // to avoid reloading comctl32.dll and trying to resolve it every time
+    // we're called if task dialog is not available (notice that this may
+    // happen even under Vista+ if we don't use comctl32.dll v6).
+    static const TaskDialogIndirect_t
+        INVALID_TASKDIALOG_FUNC = reinterpret_cast<TaskDialogIndirect_t>(-1);
+    static TaskDialogIndirect_t s_TaskDialogIndirect = INVALID_TASKDIALOG_FUNC;
 
     wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogIndirect);
 
-    if ( !s_TaskDialogIndirect )
+    if ( s_TaskDialogIndirect == INVALID_TASKDIALOG_FUNC )
     {
         wxLoadedDLL dllComCtl32("comctl32.dll");
         wxDL_INIT_FUNC(s_, TaskDialogIndirect, dllComCtl32);
-
-        // We must always succeed as this code is only executed under Vista and
-        // later which must have task dialog support.
-        wxASSERT_MSG( s_TaskDialogIndirect,
-                      "Task dialog support unexpectedly not available" );
     }
 
     return s_TaskDialogIndirect;
@@ -781,10 +772,14 @@ TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    return wxGetWinVersion() >= wxWinVersion_6;
-#else
+    if ( wxGetWinVersion() >= wxWinVersion_6 )
+    {
+        if ( wxMSWMessageDialog::GetTaskDialogIndirectFunc() )
+            return true;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
     return false;
-#endif
 }
 
 int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
