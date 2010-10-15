@@ -609,9 +609,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
 %files -n wx-i18n
@@ -626,9 +629,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so
 # static libs
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.a
@@ -636,8 +642,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxconfig}
