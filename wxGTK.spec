@@ -62,7 +62,7 @@ Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
 %if %{portname} == gtk2
-BuildRequires: gtk+-2.0-devel
+BuildRequires: gtk2-devel
 %else
 BuildRequires: gtk+-devel >= 1.2.0
 %endif
