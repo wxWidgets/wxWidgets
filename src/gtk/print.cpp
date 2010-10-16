@@ -36,6 +36,7 @@
 #include "wx/paper.h"
 
 #include <gtk/gtk.h>
+#include <gtk/gtkpagesetupunixdialog.h>
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -47,6 +48,8 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 #if wxUSE_LIBGNOMEPRINT
 #include "wx/gtk/gnome/gprint.h"
 #endif
+
+#include "wx/gtk/private/object.h"
 
 // Usefull to convert angles from/to Rad to/from Deg.
 static const double RAD2DEG  = 180.0 / M_PI;
@@ -668,6 +671,12 @@ int wxGtkPrintDialog::ShowModal()
     native->SetPrintConfig(newSettings);
     data.ConvertFromNative();
 
+    // Set PrintDialogData variables
+    m_printDialogData.SetPrintData(data);
+    m_printDialogData.SetCollate(data.GetCollate());
+    m_printDialogData.SetNoCopies(data.GetNoCopies());
+    m_printDialogData.SetPrintToFile(data.GetPrinterName() == "Print to File");
+
     // Same problem as a few lines before.
     switch (gtk_print_settings_get_print_pages(newSettings))
     {
@@ -745,43 +754,78 @@ int wxGtkPageSetupDialog::ShowModal()
         }
     }
 
-    // Now show the dialog.
-    GtkPageSetup* newPageSetup = gtk_print_run_page_setup_dialog (GTK_WINDOW(m_parent->m_widget),
-                                                           oldPageSetup,
-                                                           nativeData);
 
-    int ret;
-    if (newPageSetup != oldPageSetup)
+    // Set selected printer
+    gtk_print_settings_set(nativeData, "format-for-printer",
+                           gtk_print_settings_get_printer(nativeData));
+
+    // Create custom dialog
+    wxString title(GetTitle());
+    if ( title.empty() )
+        title = _("Page Setup");
+    GtkWidget *dlg = gtk_page_setup_unix_dialog_new(title, GTK_WINDOW(m_parent->m_widget));
+
+    gtk_page_setup_unix_dialog_set_print_settings(
+        GTK_PAGE_SETUP_UNIX_DIALOG(dlg), nativeData);
+    gtk_page_setup_unix_dialog_set_page_setup(
+        GTK_PAGE_SETUP_UNIX_DIALOG(dlg), oldPageSetup);
+
+    int result = gtk_dialog_run(GTK_DIALOG(dlg));
+    gtk_widget_hide(dlg);
+
+    switch ( result )
     {
-        native->SetPageSetupToSettings(nativeData, newPageSetup);
-        m_pageDialogData.GetPrintData().ConvertFromNative();
+        case GTK_RESPONSE_OK:
+        case GTK_RESPONSE_APPLY:
+            {
+                // Store Selected Printer Name
+                gtk_print_settings_set_printer
+                (
+                    nativeData,
+                    gtk_print_settings_get(nativeData, "format-for-printer")
+                );
 
-        // Store custom paper format if any.
-        if (m_pageDialogData.GetPrintData().GetPaperId() == wxPAPER_NONE)
-        {
-            gdouble ml,mr,mt,mb,pw,ph;
-            ml = gtk_page_setup_get_left_margin (newPageSetup, GTK_UNIT_MM);
-            mr = gtk_page_setup_get_right_margin (newPageSetup, GTK_UNIT_MM);
-            mt = gtk_page_setup_get_top_margin (newPageSetup, GTK_UNIT_MM);
-            mb = gtk_page_setup_get_bottom_margin (newPageSetup, GTK_UNIT_MM);
+                wxGtkObject<GtkPageSetup>
+                    newPageSetup(gtk_page_setup_unix_dialog_get_page_setup(
+                                        GTK_PAGE_SETUP_UNIX_DIALOG(dlg)));
+                native->SetPageSetupToSettings(nativeData, newPageSetup);
 
-            pw = gtk_page_setup_get_paper_width (newPageSetup, GTK_UNIT_MM);
-            ph = gtk_page_setup_get_paper_height (newPageSetup, GTK_UNIT_MM);
+                m_pageDialogData.GetPrintData().ConvertFromNative();
 
-            m_pageDialogData.SetMarginTopLeft( wxPoint( (int)(ml+0.5), (int)(mt+0.5)) );
-            m_pageDialogData.SetMarginBottomRight( wxPoint( (int)(mr+0.5), (int)(mb+0.5)) );
+                // Store custom paper format if any.
+                if ( m_pageDialogData.GetPrintData().GetPaperId() == wxPAPER_NONE )
+                {
+                    gdouble ml,mr,mt,mb,pw,ph;
+                    ml = gtk_page_setup_get_left_margin (newPageSetup, GTK_UNIT_MM);
+                    mr = gtk_page_setup_get_right_margin (newPageSetup, GTK_UNIT_MM);
+                    mt = gtk_page_setup_get_top_margin (newPageSetup, GTK_UNIT_MM);
+                    mb = gtk_page_setup_get_bottom_margin (newPageSetup, GTK_UNIT_MM);
 
-            m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
-        }
+                    pw = gtk_page_setup_get_paper_width (newPageSetup, GTK_UNIT_MM);
+                    ph = gtk_page_setup_get_paper_height (newPageSetup, GTK_UNIT_MM);
 
-        ret = wxID_OK;
+                    m_pageDialogData.SetMarginTopLeft(wxPoint((int)(ml+0.5),
+                                                              (int)(mt+0.5)));
+                    m_pageDialogData.SetMarginBottomRight(wxPoint((int)(mr+0.5),
+                                                                  (int)(mb+0.5)));
+
+                    m_pageDialogData.SetPaperSize(wxSize((int)(pw+0.5),
+                                                         (int)(ph+0.5)));
+                }
+
+                result = wxID_OK;
+            }
+            break;
+
+        default:
+        case GTK_RESPONSE_CANCEL:
+            result = wxID_CANCEL;
+            break;
     }
-    else
-    {
-        ret = wxID_CANCEL;
-    }
 
-    return ret;
+    gtk_widget_destroy(dlg);
+
+    return result;
 }
 
 //----------------------------------------------------------------------------
