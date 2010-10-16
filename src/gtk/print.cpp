@@ -222,11 +222,14 @@ IMPLEMENT_CLASS(wxGtkPrintNativeData, wxPrintNativeDataBase)
 wxGtkPrintNativeData::wxGtkPrintNativeData()
 {
     m_config = gtk_print_settings_new();
+    m_job = gtk_print_operation_new();
+    m_context = NULL;
 }
 
 wxGtkPrintNativeData::~wxGtkPrintNativeData()
 {
-    g_object_unref (m_config);
+    g_object_unref(m_job);
+    g_object_unref(m_config);
 }
 
 // Convert datas stored in m_config to a wxPrintData.
@@ -629,17 +632,19 @@ int wxGtkPrintDialog::ShowModal()
         gtk_print_settings_set_page_ranges (settings, range, 1);
     }
 
+    GtkPrintOperation * const printOp = native->GetPrintJob();
+
     // If the settings are OK, we restore it.
     if (settings != NULL)
-        gtk_print_operation_set_print_settings (native->GetPrintJob(), settings);
-    gtk_print_operation_set_default_page_setup (native->GetPrintJob(), native->GetPageSetupFromSettings(settings));
+        gtk_print_operation_set_print_settings (printOp, settings);
+    gtk_print_operation_set_default_page_setup (printOp, native->GetPageSetupFromSettings(settings));
 
     // Show the dialog if needed.
     GError* gError = NULL;
     if (GetShowDialog())
-        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
+        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
     else
-        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
+        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
 
     // Does everything went well?
     if (response == GTK_PRINT_OPERATION_RESULT_CANCEL)
@@ -654,7 +659,7 @@ int wxGtkPrintDialog::ShowModal()
     }
 
     // Now get the settings and save it.
-    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings (native->GetPrintJob());
+    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(printOp);
     native->SetPrintConfig(newSettings);
     data.ConvertFromNative();
 
@@ -832,9 +837,7 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
-    GtkPrintOperation *printOp = gtk_print_operation_new ();
-
-    native->SetPrintJob( printOp );
+    GtkPrintOperation * const printOp = native->GetPrintJob();
 
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
@@ -862,8 +865,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         sm_lastError = wxPRINTER_ERROR;
         wxFAIL_MSG(_("The print dialog returned an error."));
     }
-
-    g_object_unref (printOp);
 
     return (sm_lastError == wxPRINTER_NO_ERROR);
 }
