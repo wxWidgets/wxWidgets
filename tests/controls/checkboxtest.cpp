@@ -33,15 +33,19 @@ public:
 private:
     CPPUNIT_TEST_SUITE( CheckBoxTestCase );
         CPPUNIT_TEST( Check );
+#ifdef wxHAS_3STATE_CHECKBOX
         CPPUNIT_TEST( ThirdState );
         CPPUNIT_TEST( ThirdStateUser );
         CPPUNIT_TEST( InvalidStyles );
+#endif // wxHAS_3STATE_CHECKBOX
     CPPUNIT_TEST_SUITE_END();
 
     void Check();
+#ifdef wxHAS_3STATE_CHECKBOX
     void ThirdState();
     void ThirdStateUser();
     void InvalidStyles();
+#endif // wxHAS_3STATE_CHECKBOX
 
     // Initialize m_check with a new checkbox with the specified style
     //
@@ -107,9 +111,9 @@ void CheckBoxTestCase::Check()
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
 }
 
+#ifdef wxHAS_3STATE_CHECKBOX
 void CheckBoxTestCase::ThirdState()
 {
-#if !defined(__WXMGL__) && !defined(__WXPM__) && !defined(__WXGTK12__)
     wxDELETE(m_check);
     CreateCheckBox(wxCHK_3STATE);
 
@@ -124,12 +128,10 @@ void CheckBoxTestCase::ThirdState()
     m_check->Set3StateValue(wxCHK_UNDETERMINED);
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNDETERMINED, m_check->Get3StateValue());
-#endif
 }
 
 void CheckBoxTestCase::ThirdStateUser()
 {
-#if !defined(__WXMGL__) && !defined(__WXPM__) && !defined(__WXGTK12__)
     wxDELETE(m_check);
     CreateCheckBox(wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
 
@@ -144,7 +146,6 @@ void CheckBoxTestCase::ThirdStateUser()
     m_check->Set3StateValue(wxCHK_UNDETERMINED);
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNDETERMINED, m_check->Get3StateValue());
-#endif
 }
 
 void CheckBoxTestCase::InvalidStyles()
@@ -170,4 +171,6 @@ void CheckBoxTestCase::InvalidStyles()
     WX_ASSERT_FAILS_WITH_ASSERT( CreateCheckBox(wxCHK_ALLOW_3RD_STATE_FOR_USER) );
 }
 
-#endif //wxUSE_CHECKBOX
+#endif // wxHAS_3STATE_CHECKBOX
+
+#endif // wxUSE_CHECKBOX

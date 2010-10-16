@@ -192,6 +192,9 @@ the corresponding feature is available and not defined at all otherwise.
 Currently the following symbols exist:
 
 @beginDefList
+@itemdef{wxHAS_3STATE_CHECKBOX, Defined if wxCheckBox supports wxCHK_3STATE
+    flag, i.e. is capable of showing three states and not only the usual two.
+    Currently defined for almost all ports.}
 @itemdef{wxHAS_ATOMIC_OPS, Defined if wxAtomicInc() and wxAtomicDec() functions
     have an efficient (CPU-specific) implementation. Notice that the functions
     themselves are always available but can be prohibitively slow to use when

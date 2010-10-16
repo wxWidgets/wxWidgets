@@ -178,6 +178,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCheckBoxBase);
 };
 
+// Most ports support 3 state checkboxes so define this by default.
+#define wxHAS_3STATE_CHECKBOX
+
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/checkbox.h"
 #elif defined(__WXMSW__)
@@ -187,12 +190,14 @@ private:
 #elif defined(__WXGTK20__)
     #include "wx/gtk/checkbox.h"
 #elif defined(__WXGTK__)
+    #undef wxHAS_3STATE_CHECKBOX
     #include "wx/gtk1/checkbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/checkbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/checkbox.h"
 #elif defined(__WXPM__)
+    #undef wxHAS_3STATE_CHECKBOX
     #include "wx/os2/checkbox.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/checkbox.h"
@@ -200,5 +205,4 @@ private:
 
 #endif // wxUSE_CHECKBOX
 
-#endif
-    // _WX_CHECKBOX_H_BASE_
+#endif // _WX_CHECKBOX_H_BASE_
