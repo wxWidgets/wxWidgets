@@ -140,7 +140,7 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{_prefix} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
@@ -158,7 +158,7 @@ cd ..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{_prefix} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
