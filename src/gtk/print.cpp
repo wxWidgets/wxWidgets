@@ -389,6 +389,9 @@ bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
         data.SetPaperId( wxPAPER_FANFOLD_LGL_GERMAN);
     else
         data.SetPaperId(wxPAPER_NONE);
+
+    data.SetPrinterName(gtk_print_settings_get_printer(m_config));
+
     return true;
 }
 
@@ -536,6 +539,8 @@ bool wxGtkPrintNativeData::TransferFrom( const wxPrintData &data )
         case wxPAPER_NONE:
         default:                break;
     }
+
+    gtk_print_settings_set_printer(m_config, data.GetPrinterName());
 
     return true;
 }
