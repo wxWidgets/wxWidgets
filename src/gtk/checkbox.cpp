@@ -105,17 +105,13 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name )
 {
+    WXValidateStyle( &style );
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxCheckBox creation failed") );
         return false;
     }
-
-    wxASSERT_MSG( (style & wxCHK_ALLOW_3RD_STATE_FOR_USER) == 0 ||
-                  (style & wxCHK_3STATE) != 0,
-                  wxT("Using wxCHK_ALLOW_3RD_STATE_FOR_USER")
-                  wxT(" style flag for a 2-state checkbox is useless") );
 
     if ( style & wxALIGN_RIGHT )
     {

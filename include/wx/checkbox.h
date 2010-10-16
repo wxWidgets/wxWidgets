@@ -25,8 +25,12 @@
  * Determine whether to use a 3-state or 2-state
  * checkbox. 3-state enables to differentiate
  * between 'unchecked', 'checked' and 'undetermined'.
+ *
+ * In addition to the styles here it is also possible to specify just 0 which
+ * is treated the same as wxCHK_2STATE for compatibility (but using explicit
+ * flag is preferred).
  */
-#define wxCHK_2STATE           0x0000
+#define wxCHK_2STATE           0x4000
 #define wxCHK_3STATE           0x1000
 
 /*
@@ -127,6 +131,47 @@ protected:
     {
         wxFAIL;
         return wxCHK_UNCHECKED;
+    }
+
+    // Helper function to be called from derived classes Create()
+    // implementations: it checks that the style doesn't contain any
+    // incompatible bits and modifies it to be sane if it does.
+    static void WXValidateStyle(long *stylePtr)
+    {
+        long& style = *stylePtr;
+
+        if ( style == 0 )
+        {
+            // For compatibility we use absence of style flags as wxCHK_2STATE
+            // because wxCHK_2STATE used to have the value of 0 and some
+            // existing code may use 0 instead of it.
+            style = wxCHK_2STATE;
+        }
+        else if ( style & wxCHK_3STATE )
+        {
+            if ( style & wxCHK_2STATE )
+            {
+                wxFAIL_MSG( "wxCHK_2STATE and wxCHK_3STATE can't be used "
+                            "together" );
+                style &= ~wxCHK_3STATE;
+            }
+        }
+        else // No wxCHK_3STATE
+        {
+            if ( !(style & wxCHK_2STATE) )
+            {
+                wxFAIL_MSG( "Either wxCHK_2STATE or wxCHK_3STATE must be "
+                            "specified" );
+                style |= wxCHK_2STATE;
+            }
+
+            if ( style & wxCHK_ALLOW_3RD_STATE_FOR_USER )
+            {
+                wxFAIL_MSG( "wxCHK_ALLOW_3RD_STATE_FOR_USER doesn't make sense "
+                            "without wxCHK_3STATE" );
+                style &= ~wxCHK_ALLOW_3RD_STATE_FOR_USER;
+            }
+        }
     }
 
 private:

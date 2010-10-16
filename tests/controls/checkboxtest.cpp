@@ -35,11 +35,26 @@ private:
         CPPUNIT_TEST( Check );
         CPPUNIT_TEST( ThirdState );
         CPPUNIT_TEST( ThirdStateUser );
+        CPPUNIT_TEST( InvalidStyles );
     CPPUNIT_TEST_SUITE_END();
 
     void Check();
     void ThirdState();
     void ThirdStateUser();
+    void InvalidStyles();
+
+    // Initialize m_check with a new checkbox with the specified style
+    //
+    // This function always returns false just to make it more convenient to
+    // use inside WX_ASSERT_FAILS_WITH_ASSERT(), its return value doesn't have
+    // any meaning otherwise.
+    bool CreateCheckBox(long style)
+    {
+        m_check = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, "Check box",
+                                 wxDefaultPosition, wxDefaultSize, style);
+        return false;
+    }
+
 
     wxCheckBox* m_check;
 
@@ -96,8 +111,7 @@ void CheckBoxTestCase::ThirdState()
 {
 #if !defined(__WXMGL__) && !defined(__WXPM__) && !defined(__WXGTK12__)
     wxDELETE(m_check);
-    m_check = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, "Check box",
-                             wxDefaultPosition, wxDefaultSize, wxCHK_3STATE);
+    CreateCheckBox(wxCHK_3STATE);
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNCHECKED, m_check->Get3StateValue());
     CPPUNIT_ASSERT(m_check->Is3State());
@@ -117,9 +131,7 @@ void CheckBoxTestCase::ThirdStateUser()
 {
 #if !defined(__WXMGL__) && !defined(__WXPM__) && !defined(__WXGTK12__)
     wxDELETE(m_check);
-    m_check = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, "Check box",
-                             wxDefaultPosition, wxDefaultSize,
-                             wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
+    CreateCheckBox(wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNCHECKED, m_check->Get3StateValue());
     CPPUNIT_ASSERT(m_check->Is3State());
@@ -133,6 +145,29 @@ void CheckBoxTestCase::ThirdStateUser()
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNDETERMINED, m_check->Get3StateValue());
 #endif
+}
+
+void CheckBoxTestCase::InvalidStyles()
+{
+    // Check that using incompatible styles doesn't work.
+    wxDELETE( m_check );
+    WX_ASSERT_FAILS_WITH_ASSERT( CreateCheckBox(wxCHK_2STATE | wxCHK_3STATE) );
+#if !wxDEBUG_LEVEL
+    CPPUNIT_ASSERT( !m_check->Is3State() );
+    CPPUNIT_ASSERT( !m_check->Is3rdStateAllowedForUser() );
+#endif
+
+    wxDELETE( m_check );
+    WX_ASSERT_FAILS_WITH_ASSERT(
+        CreateCheckBox(wxCHK_2STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER) );
+#if !wxDEBUG_LEVEL
+    CPPUNIT_ASSERT( !m_check->Is3State() );
+    CPPUNIT_ASSERT( !m_check->Is3rdStateAllowedForUser() );
+#endif
+
+    // wxCHK_ALLOW_3RD_STATE_FOR_USER without wxCHK_3STATE doesn't work.
+    wxDELETE( m_check );
+    WX_ASSERT_FAILS_WITH_ASSERT( CreateCheckBox(wxCHK_ALLOW_3RD_STATE_FOR_USER) );
 }
 
 #endif //wxUSE_CHECKBOX
