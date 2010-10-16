@@ -4573,7 +4573,7 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
-    m_dragAllowMove = false;
+    m_dragAllowMove = wxDrag_CopyOnly;
 #if wxUSE_DRAG_AND_DROP
     m_dragResult = wxDragNone;
 #endif

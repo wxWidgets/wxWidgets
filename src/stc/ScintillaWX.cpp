@@ -283,7 +283,7 @@ void ScintillaWX::StartDrag() {
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
     evt.SetEventObject(stc);
     evt.SetDragText(dragText);
-    evt.SetDragAllowMove(true);
+    evt.SetDragAllowMove(wxDrag_DefaultMove);
     evt.SetPosition(wxMin(stc->GetSelectionStart(),
                           stc->GetSelectionEnd()));
     stc->GetEventHandler()->ProcessEvent(evt);
