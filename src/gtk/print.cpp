@@ -543,7 +543,7 @@ bool wxGtkPrintNativeData::TransferFrom( const wxPrintData &data )
         default:                break;
     }
 
-    gtk_print_settings_set_printer(m_config, data.GetPrinterName());
+    gtk_print_settings_set_printer(m_config, data.GetPrinterName().utf8_str());
 
     return true;
 }
@@ -763,7 +763,9 @@ int wxGtkPageSetupDialog::ShowModal()
     wxString title(GetTitle());
     if ( title.empty() )
         title = _("Page Setup");
-    GtkWidget *dlg = gtk_page_setup_unix_dialog_new(title, GTK_WINDOW(m_parent->m_widget));
+    GtkWidget *
+        dlg = gtk_page_setup_unix_dialog_new(title.utf8_str(),
+                                             GTK_WINDOW(m_parent->m_widget));
 
     gtk_page_setup_unix_dialog_set_print_settings(
         GTK_PAGE_SETUP_UNIX_DIALOG(dlg), nativeData);
