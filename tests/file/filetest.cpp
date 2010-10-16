@@ -71,7 +71,8 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
 {
     TestFile tf;
 
-    const wxString data = "Hello\0UTF";
+    // Explicit length is needed because of the embedded NUL.
+    const wxString data("Hello\0UTF!", 10);
 
     {
         wxFile fout(tf.GetName(), wxFile::write);
@@ -88,8 +89,8 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
         wxCharBuffer buf(len);
         CPPUNIT_ASSERT_EQUAL( len, fin.Read(buf.data(), len) );
 
-        wxWCharBuffer wbuf(conv.cMB2WC(buf));
-        CPPUNIT_ASSERT_EQUAL( data, wbuf );
+        wxString dataReadBack(buf, conv, len);
+        CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
     }
 }
 
