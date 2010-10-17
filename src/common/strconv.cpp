@@ -537,7 +537,7 @@ const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
         }
     }
 
-    return wxWCharBuffer();
+    return wxScopedWCharBuffer::CreateNonOwned(L"", 0);
 }
 
 const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
@@ -555,7 +555,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
         }
     }
 
-    return wxCharBuffer();
+    return wxScopedCharBuffer::CreateNonOwned("", 0);
 }
 
 // ----------------------------------------------------------------------------
