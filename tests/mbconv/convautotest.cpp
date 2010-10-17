@@ -54,7 +54,7 @@ private:
     //
     // the length of the string may need to be passed explicitly if it has
     // embedded NULs, otherwise it's not necessary
-    void TestFirstChar(const char *src, wchar_t wch, int len = wxNO_LEN);
+    void TestFirstChar(const char *src, wchar_t wch, size_t len = wxNO_LEN);
 
     void Empty();
     void Short();
@@ -89,7 +89,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConvAutoTestCase, "ConvAutoTestCase");
 // tests
 // ----------------------------------------------------------------------------
 
-void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch, int len)
+void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch, size_t len)
 {
     wxWCharBuffer wbuf = wxConvAuto().cMB2WC(src, len, NULL);
     CPPUNIT_ASSERT( wbuf );
