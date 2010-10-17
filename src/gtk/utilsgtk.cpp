@@ -116,12 +116,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 WXDLLIMPEXP_CORE wxCharBuffer
 wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
-    // Passing an empty string to cMB2WC() returns an invalid buffer, i.e. a
-    // buffer whose data is NULL and this can result in passing NULL to a GTK+
-    // function and a crash, so handle this case specially to avoid this.
-    if ( s.empty() )
-        return wxCharBuffer("");
-
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
