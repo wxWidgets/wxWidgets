@@ -71,27 +71,42 @@ static GdkPixmap* GetHatch(int style)
     const int i = style - wxBRUSHSTYLE_FIRST_HATCH;
     if (hatches[i] == NULL)
     {
+        // This macro creates a bitmap from an XBM file included above. Notice
+        // the need for the cast because gdk_bitmap_create_from_data() doesn't
+        // accept unsigned data but the arrays in XBM need to be unsigned to
+        // avoid warnings (and even errors in C+0x mode) from g++.
+#define CREATE_FROM_XBM_DATA(name) \
+        gdk_bitmap_create_from_data \
+        ( \
+            NULL, \
+            reinterpret_cast<gchar *>(name ## _bits), \
+            name ## _width, \
+            name ## _height \
+        )
+
         switch (style)
         {
         case wxBRUSHSTYLE_BDIAGONAL_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, bdiag_bits, bdiag_width, bdiag_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(bdiag);
             break;
         case wxBRUSHSTYLE_CROSSDIAG_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, cdiag_bits, cdiag_width, cdiag_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(cdiag);
             break;
         case wxBRUSHSTYLE_CROSS_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, cross_bits, cross_width, cross_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(cross);
             break;
         case wxBRUSHSTYLE_FDIAGONAL_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, fdiag_bits, fdiag_width, fdiag_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(fdiag);
             break;
         case wxBRUSHSTYLE_HORIZONTAL_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, horiz_bits, horiz_width, horiz_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(horiz);
             break;
         case wxBRUSHSTYLE_VERTICAL_HATCH:
-            hatches[i] = gdk_bitmap_create_from_data(NULL, verti_bits, verti_width, verti_height);
+            hatches[i] = CREATE_FROM_XBM_DATA(verti);
             break;
         }
+
+#undef CREATE_FROM_XBM_DATA
     }
     return hatches[i];
 }
