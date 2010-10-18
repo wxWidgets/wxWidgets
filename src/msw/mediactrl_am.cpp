@@ -2009,18 +2009,19 @@ wxLongLong wxAMMediaBackend::GetDuration()
 {
     double outDuration;
     HRESULT hr = GetAM()->get_Duration(&outDuration);
-    if(FAILED(hr))
+    switch ( hr )
     {
-        wxAMLOG(hr);
-        return 0;
+        default:
+            wxAMLOG(hr);
+            // fall through
+
+        case S_FALSE:
+            return 0;
+
+        case S_OK:
+            // outDuration is in seconds, we need milliseconds
+            return outDuration * 1000;
     }
-
-    // h,m,s,milli - outDuration is in 1 second (double)
-    outDuration *= 1000;
-    wxLongLong ll;
-    ll.Assign(outDuration);
-
-    return ll;
 }
 
 //---------------------------------------------------------------------------
