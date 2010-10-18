@@ -4568,6 +4568,11 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     SetScrollbars( wxPG_PIXELS_PER_UNIT, wxPG_PIXELS_PER_UNIT,
                    xAmount, yAmount, xPos, yPos, true );
 
+    // This may be needed in addition to calling SetScrollbars()
+    // when class inherits from wxScrollHelper instead of
+    // actual wxScrolled<T>.
+    AdjustScrollbars();
+
     // Must re-get size now
     GetClientSize(&width,&height);
 
