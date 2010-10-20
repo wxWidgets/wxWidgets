@@ -212,7 +212,9 @@ MyFrame::MyFrame()
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
-        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), 
+                                            wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+                                            wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddTool(wxID_ANY, align_left_xpm);
         toolbar->AddTool(wxID_ANY, align_center_xpm);
@@ -229,44 +231,60 @@ MyFrame::MyFrame()
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm);
-        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm);
+        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm, 
+                                "Align ribbonbar vertically\non the left\nfor demonstration purposes");
+        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm, 
+                                "Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)),
+                                "This is the Print button tooltip\ndemonstrating a tooltip");
         toolbar->SetRows(2, 3);
 
         wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
-        selection->AddButton(ID_SELECTION_EXPAND_V, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm), wxEmptyString);
+        selection->AddButton(ID_SELECTION_EXPAND_V, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm),
+                                "This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
         selection->AddButton(ID_SELECTION_EXPAND_H, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
         selection->AddButton(ID_SELECTION_CONTRACT, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
 
         wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"), wxBitmap(circle_small_xpm));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(ID_CIRCLE, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm));
+        shapes->AddButton(ID_CIRCLE, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm), 
+                            wxNullBitmap, wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
+                            "This is a tooltip for the circle button\ndemonstrating another tooltip");
         shapes->AddButton(ID_CROSS, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
         shapes->AddHybridButton(ID_TRIANGLE, wxT("Triangle"), wxBitmap(triangle_xpm));
         shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
         shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
 
-        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"),
-                                        wxNullBitmap, wxDefaultPosition, wxDefaultSize,
-                                        wxRIBBON_PANEL_EXT_BUTTON);
+        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"), 
+                                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+                                                    wxRIBBON_PANEL_DEFAULT_STYLE);
 
         wxArrayString as;
-        as.Add("Item 1");
-        as.Add("Item 2");
-        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
-        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize, as, wxCB_READONLY);
+        as.Add("Item 1 using a box sizer now");
+        as.Add("Item 2 using a box sizer now");
+        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, 
+                                                    wxEmptyString, 
+                                                    wxDefaultPosition, wxDefaultSize, 
+                                                    as, wxCB_READONLY);
 
+        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, 
+                                                    wxEmptyString, 
+                                                    wxDefaultPosition, wxDefaultSize, 
+                                                    as, wxCB_READONLY);
+
+        sizer_panelcombo->Select(0);
+        sizer_panelcombo2->Select(1);
         sizer_panelcombo->SetMinSize(wxSize(150, -1));
         sizer_panelcombo2->SetMinSize(wxSize(150, -1));
 
-        wxSizer* sizer_panelsizer = new wxWrapSizer(wxHORIZONTAL);
-        sizer_panelsizer->Add(sizer_panelcombo, 2, wxALL|wxEXPAND, 2);
-        sizer_panelsizer->Add(sizer_panelcombo2, 2, wxALL|wxEXPAND, 2);
+        //not using wxWrapSizer(wxHORIZONTAL) as it reports an incorrect min height
+        wxSizer* sizer_panelsizer = new wxBoxSizer(wxVERTICAL);
+        sizer_panelsizer->AddStretchSpacer(1);
+        sizer_panelsizer->Add(sizer_panelcombo, 0, wxALL|wxEXPAND, 2);
+        sizer_panelsizer->Add(sizer_panelcombo2, 0, wxALL|wxEXPAND, 2);
+        sizer_panelsizer->AddStretchSpacer(1);
         sizer_panel->SetSizer(sizer_panelsizer);
 
         wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);

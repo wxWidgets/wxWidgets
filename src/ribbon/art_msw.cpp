@@ -1144,12 +1144,27 @@ void wxRibbonMSWArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect&
 }
 
 void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
-        wxWindow* WXUNUSED(wnd), const wxRect& rect, wxRibbonPage* page,
+        wxWindow* wnd, const wxRect& rect, wxRibbonPage* page,
         wxPoint offset, bool hovered)
 {
-    wxRect background(page->GetSize());
-    page->AdjustRectToIncludeScrollButtons(&background);
-    background.height -= 2;
+    wxRect background;
+    // Expanded panels need a background - the expanded panel at
+    // best size may have a greater Y dimension higher than when 
+    // on the bar if it has a sizer. AUI art provider does not need this
+    // because it paints the panel without reference to its parent's size.
+    // Expanded panels use a wxFrame as parent (not a wxRibbonPage). 
+
+    if(wnd->GetSizer() && wnd->GetParent() != page)
+    {
+        background = wnd->GetParent()->GetSize();
+        offset = wxPoint(0,0);
+    }
+    else
+    {
+        background = page->GetSize();
+        page->AdjustRectToIncludeScrollButtons(&background);
+        background.height -= 2;
+    }
     // Page background isn't dependant upon the width of the page
     // (at least not the part of it intended to be painted by this
     // function). Set to wider than the page itself for when externally

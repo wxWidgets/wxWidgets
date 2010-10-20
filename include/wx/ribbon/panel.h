@@ -76,6 +76,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize GetPanelSizerBestSize() const;
+    wxSize  GetPanelSizerMinSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     wxSize GetMinNotMinimisedSize() const;
 
