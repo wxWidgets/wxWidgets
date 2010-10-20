@@ -255,6 +255,21 @@
                                     <bitmap>controls.xpm</bitmap>
                                 </object>
                             </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxCommandLinkButton:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxCommandLinkButton">
+                                    <label>Let's do it</label>
+                                    <note>Whatever it might be</note>
+                                </object>
+                            </object>
                         </object>
                     </object>
                 </object>

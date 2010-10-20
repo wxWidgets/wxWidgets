@@ -5711,6 +5711,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_clrpicker.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_cmdlinkbn.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_collpane.h">
 			</File>
 			<File

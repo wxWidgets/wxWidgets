@@ -78,6 +78,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_COMBOCTRL
     AddHandler(new wxComboCtrlXmlHandler);
 #endif
+#if wxUSE_COMMANDLINKBUTTON
+    AddHandler(new wxCommandLinkButtonXmlHandler);
+#endif
 #if wxUSE_DATEPICKCTRL
     AddHandler(new wxDateCtrlXmlHandler);
 #endif

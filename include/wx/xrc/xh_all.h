@@ -25,6 +25,7 @@
 #include "wx/xrc/xh_choic.h"
 #include "wx/xrc/xh_choicbk.h"
 #include "wx/xrc/xh_clrpicker.h"
+#include "wx/xrc/xh_cmdlinkbn.h"
 #include "wx/xrc/xh_collpane.h"
 #include "wx/xrc/xh_combo.h"
 #include "wx/xrc/xh_comboctrl.h"

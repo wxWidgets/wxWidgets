@@ -694,6 +694,23 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 Each @c choicebookpage has exactly one non-toplevel window as its child.
 
 
+@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
+
+The wxCommandLinkButton contains a main title-like @c label and an optional
+@c note for longer description. The main @c label and the @c note can be
+concatenated into a single string using a new line character between them
+(notice that the @c note part can have more new lines in it).
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    First line of text on the button, typically the label of an action that
+    will be made when the button is pressed. }
+@row3col{note, @ref overview_xrcformat_type_text,
+    Second line of text describing the action performed when the button is pressed.  }
+@endTable
+
+
 @subsubsection xrc_wxcollapsiblepane wxCollapsiblePane
 
 @beginTable

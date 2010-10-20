@@ -1107,6 +1107,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_cmdlinkbn.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_collpane.h"
 				>
 			</File>
@@ -1346,6 +1350,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_clrpicker.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_cmdlinkbn.cpp"
 				>
 			</File>
 			<File
