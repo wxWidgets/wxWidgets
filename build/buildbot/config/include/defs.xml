@@ -390,9 +390,25 @@ try()
 
 try ./test <xsl:value-of select="normalize-space($options)"/>
 
-if [ -n "$DISPLAY" -a -x test_gui ]; then
-    try ./test_gui <xsl:value-of select="normalize-space($guioptions)"/>
+test -x test_gui || exit $ERR
+
+if [ -z "$DISPLAY" ]; then
+    echo '$DISPLAY is not set, skipping GUI tests.'
+    exit $ERR
 fi
+
+echo 'Checking window manager:'
+WINDOW_MANAGER=$(xprop -root 32x '\n$0\n' _NET_SUPPORTING_WM_CHECK | grep ^0x)
+
+if [ -z "$WINDOW_MANAGER" ]; then
+    echo 'Window manager not present, skipping GUI tests.'
+    exit $ERR
+fi
+
+xprop -id $WINDOW_MANAGER 8s _NET_WM_NAME
+echo
+
+try ./test_gui <xsl:value-of select="normalize-space($guioptions)"/>
 
 exit $ERR
 </xsl:template>
