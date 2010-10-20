@@ -203,30 +203,10 @@
 
 
                 <object class="notebookpage">
-                    <label>wxBitmapButton</label>
-                    <object class="wxPanel" name="bitmapbutton">
-                        <object class="wxFlexGridSizer">
-                            <cols>1</cols>
-                            <rows>0</rows>
-                            <vgap>0</vgap>
-                            <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
-                            <object class="sizeritem">
-                                <flag>wxALIGN_CENTRE|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxBitmapButton" name="controls_bitmapbutton">
-                                    <bitmap>controls.xpm</bitmap>
-                                </object>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="notebookpage">
                     <label>wxButton</label>
                     <object class="wxPanel" name="button">
                         <object class="wxFlexGridSizer">
-                            <cols>2</cols>
+                            <cols>4</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
@@ -259,6 +239,20 @@
                                 <object class="wxButton" name="controls_flat_button">
                                     <style>wxNO_BORDER</style>
                                     <label>OK</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxBitmapButton</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBitmapButton" name="controls_bitmapbutton">
+                                    <bitmap>controls.xpm</bitmap>
                                 </object>
                             </object>
                         </object>
