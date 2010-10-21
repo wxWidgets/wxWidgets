@@ -1098,6 +1098,15 @@ public:
       iterator operator-(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
+      // As in UTF-8 case above, define comparison operators taking
+      // const_iterator too.
+      bool operator==(const const_iterator& i) const;
+      bool operator!=(const const_iterator& i) const;
+      bool operator<(const const_iterator& i) const;
+      bool operator>(const const_iterator& i) const;
+      bool operator<=(const const_iterator& i) const;
+      bool operator>=(const const_iterator& i) const;
+
   private:
       // for internal wxString use only:
       iterator(underlying_iterator ptr) : m_cur(ptr) {}
@@ -1124,6 +1133,11 @@ public:
         { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
+
+      // As in UTF-8 case above, we don't need comparison operators taking
+      // iterator because we have an implicit conversion from iterator to
+      // const_iterator so the operators declared by WX_STR_ITERATOR_IMPL will
+      // be used.
 
   private:
       // for internal wxString use only:
