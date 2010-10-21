@@ -1004,6 +1004,16 @@ public:
       iterator operator-(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
+      // Normal iterators need to be comparable with the const_iterators so
+      // declare the comparison operators and implement them below after the
+      // full const_iterator declaration.
+      bool operator==(const const_iterator& i) const;
+      bool operator!=(const const_iterator& i) const;
+      bool operator<(const const_iterator& i) const;
+      bool operator>(const const_iterator& i) const;
+      bool operator<=(const const_iterator& i) const;
+      bool operator>=(const const_iterator& i) const;
+
   private:
       iterator(wxString *wxstr, underlying_iterator ptr)
           : m_cur(ptr), m_node(wxstr, &m_cur) {}
@@ -1047,6 +1057,11 @@ public:
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
+
+      // Notice that comparison operators taking non-const iterator are not
+      // needed here because of the implicit conversion from non-const iterator
+      // to const ones ensure that the versions for const_iterator declared
+      // inside WX_STR_ITERATOR_IMPL can be used.
 
   private:
       // for internal wxString use only:
@@ -4045,6 +4060,21 @@ inline bool operator!=(const wxString& s, const wxUniChar& c) { return !s.IsSame
 inline bool operator!=(const wxString& s, const wxUniCharRef& c) { return !s.IsSameAs(c); }
 inline bool operator!=(const wxString& s, char c) { return !s.IsSameAs(c); }
 inline bool operator!=(const wxString& s, wchar_t c) { return !s.IsSameAs(c); }
+
+
+// wxString iterators comparisons
+inline bool wxString::iterator::operator==(const const_iterator& i) const
+    { return i == *this; }
+inline bool wxString::iterator::operator!=(const const_iterator& i) const
+    { return i != *this; }
+inline bool wxString::iterator::operator<(const const_iterator& i) const
+    { return i > *this; }
+inline bool wxString::iterator::operator>(const const_iterator& i) const
+    { return i < *this; }
+inline bool wxString::iterator::operator<=(const const_iterator& i) const
+    { return i >= *this; }
+inline bool wxString::iterator::operator>=(const const_iterator& i) const
+    { return i <= *this; }
 
 // comparison with C string in Unicode build
 #if wxUSE_UNICODE

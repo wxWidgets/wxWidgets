@@ -34,6 +34,7 @@ private:
     CPPUNIT_TEST_SUITE( StdStringTestCase );
         CPPUNIT_TEST( StdConstructors );
         CPPUNIT_TEST( StdIterators );
+        CPPUNIT_TEST( StdIteratorsCmp );
         CPPUNIT_TEST( StdAppend );
         CPPUNIT_TEST( StdAssign );
         CPPUNIT_TEST( StdCompare );
@@ -54,6 +55,7 @@ private:
 
     void StdConstructors();
     void StdIterators();
+    void StdIteratorsCmp();
     void StdAppend();
     void StdAssign();
     void StdCompare();
@@ -117,6 +119,30 @@ void StdStringTestCase::StdIterators()
     wxString::const_iterator i2;
     wxString::reverse_iterator i3;
     wxString::const_reverse_iterator i4;
+}
+
+void StdStringTestCase::StdIteratorsCmp()
+{
+    wxString s("foobar");
+    wxString::iterator i = s.begin();
+    wxString::const_iterator ci = s.begin();
+
+    CPPUNIT_ASSERT( i == ci );
+    CPPUNIT_ASSERT( i >= ci );
+    CPPUNIT_ASSERT( i <= ci );
+    CPPUNIT_ASSERT( ci == i );
+    CPPUNIT_ASSERT( ci >= i );
+    CPPUNIT_ASSERT( ci <= i );
+
+    ci++;
+
+    CPPUNIT_ASSERT( i != ci );
+    CPPUNIT_ASSERT( i < ci );
+    CPPUNIT_ASSERT( !(i > ci) );
+
+    CPPUNIT_ASSERT( ci != i );
+    CPPUNIT_ASSERT( ci > i );
+    CPPUNIT_ASSERT( !(ci < i) );
 }
 
 void StdStringTestCase::StdAppend()
