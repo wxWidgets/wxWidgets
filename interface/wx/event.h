@@ -1283,6 +1283,11 @@ enum wxKeyCategoryFlags
           event.Skip() in your @c wxEVT_KEY_DOWN handler. Not doing may also
           prevent accelerators defined using this key from working.
 
+    @note If a key is maintained in a pressed state, you will typically get a
+          lot of (automatically generated) key down events but only one key up
+          one at the end when the key is released so it is wrong to assume that
+          there is one up event corresponding to each down one.
+
     @note For Windows programmers: The key and char events in wxWidgets are
           similar to but slightly different from Windows @c WM_KEYDOWN and
           @c WM_CHAR events. In particular, Alt-x combination will generate a
