@@ -245,7 +245,6 @@ void ListBoxTestCase::ClickNotOnItem()
 
 void ListBoxTestCase::HitTest()
 {
-#if defined(__WXMSW__) || defined(__WXOSX__)
     wxArrayString testitems;
     testitems.Add("item 0");
     testitems.Add("item 1");
@@ -253,12 +252,14 @@ void ListBoxTestCase::HitTest()
 
     m_list->Append(testitems);
 
-    CPPUNIT_ASSERT(m_list->HitTest(wxPoint(10, 10)) != wxNOT_FOUND);
-    CPPUNIT_ASSERT(m_list->HitTest(10, 10) != wxNOT_FOUND);
-
-    CPPUNIT_ASSERT(m_list->HitTest(wxPoint(290, 190)) == wxNOT_FOUND);
-    CPPUNIT_ASSERT(m_list->HitTest(290, 190) == wxNOT_FOUND);
+#ifdef __WXGTK__
+    // The control needs to be realized for HitTest() to work.
+    wxYield();
 #endif
+
+    CPPUNIT_ASSERT_EQUAL( 0, m_list->HitTest(5, 5) );
+
+    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->HitTest(290, 190) );
 }
 
 #endif //wxUSE_LISTBOX
