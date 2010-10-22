@@ -414,7 +414,7 @@ bool wxBitmap::CopyFromDIB(const wxDIB& dib)
     if ( !hbitmap )
         return false;
 #else // ALWAYS_USE_DIB
-    HBITMAP hbitmap = ((wxDIB &)dib).Detach();  // const_cast
+    HBITMAP hbitmap = const_cast<wxDIB &>(dib).Detach();
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
 
     UnRef();
@@ -493,7 +493,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     else
     {
         // bits should already be in Windows standard format
-        data = (char *)bits;    // const_cast is harmless
+        data = const_cast<char *>(bits);
     }
 
     HBITMAP hbmp = ::CreateBitmap(width, height, 1, depth, data);

@@ -47,7 +47,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxMemoryInputStream, wxInputStream)
 wxMemoryInputStream::wxMemoryInputStream(const void *data, size_t len)
 {
     m_i_streambuf = new wxStreamBuffer(wxStreamBuffer::read);
-    m_i_streambuf->SetBufferIO((void *)data, len); // const_cast
+    m_i_streambuf->SetBufferIO(const_cast<void *>(data), len);
     m_i_streambuf->SetIntPosition(0); // seek to start pos
     m_i_streambuf->Fixed(true);
 

@@ -1180,28 +1180,28 @@ void wxThread::SetPriority(unsigned int prio)
 
 unsigned int wxThread::GetPriority() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return m_internal->GetPriority();
 }
 
 unsigned long wxThread::GetId() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return (unsigned long)m_internal->GetId();
 }
 
 bool wxThread::IsRunning() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return m_internal->GetState() == STATE_RUNNING;
 }
 
 bool wxThread::IsAlive() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return (m_internal->GetState() == STATE_RUNNING) ||
            (m_internal->GetState() == STATE_PAUSED);
@@ -1209,14 +1209,14 @@ bool wxThread::IsAlive() const
 
 bool wxThread::IsPaused() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return m_internal->GetState() == STATE_PAUSED;
 }
 
 bool wxThread::TestDestroy()
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return m_internal->GetState() == STATE_CANCELED;
 }

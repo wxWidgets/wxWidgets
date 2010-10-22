@@ -581,8 +581,7 @@ wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 
     if ( !HasElements() )
     {
-        // const_cast
-        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+        if ( !const_cast<wxNativeFontInfo *>(this)->FromXFontName(xFontName) )
             return wxEmptyString;
     }
 
@@ -639,8 +638,7 @@ wxString wxNativeFontInfo::GetXFontName() const
                 elt = wxT('*');
             }
 
-            // const_cast
-            ((wxNativeFontInfo *)this)->xFontName << wxT('-') << elt;
+            const_cast<wxNativeFontInfo *>(this)->xFontName << wxT('-') << elt;
         }
     }
 
@@ -658,8 +656,7 @@ wxNativeFontInfo::SetXFontComponent(wxXLFDField field, const wxString& value)
 
     if ( !HasElements() )
     {
-        // const_cast
-        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+        if ( !const_cast<wxNativeFontInfo *>(this)->FromXFontName(xFontName) )
         {
             wxFAIL_MSG( wxT("can't set font element for invalid XLFD") );
 

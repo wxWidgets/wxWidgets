@@ -3227,7 +3227,7 @@ void wxCSConv::CreateConvIfNeeded() const
 {
     if ( m_deferred )
     {
-        wxCSConv *self = (wxCSConv *)this; // const_cast
+        wxCSConv *self = const_cast<wxCSConv *>(this);
 
         // if we don't have neither the name nor the encoding, use the default
         // encoding for this system

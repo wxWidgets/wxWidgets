@@ -282,7 +282,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
                                          const wxString& strEntry)
 {
   m_bChanged = false;
-  m_pContainer = (wxConfigBase *)pContainer;
+  m_pContainer = const_cast<wxConfigBase *>(pContainer);
 
   // the path is everything which precedes the last slash
   wxString strPath = strEntry.BeforeLast(wxCONFIG_PATH_SEPARATOR);

@@ -1128,14 +1128,14 @@ void wxThread::SetPriority(unsigned int prio)
 
 unsigned int wxThread::GetPriority() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return m_internal->GetPriority();
 }
 
 unsigned long wxThread::GetId() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
 
     return (unsigned long)m_internal->GetId();
 }

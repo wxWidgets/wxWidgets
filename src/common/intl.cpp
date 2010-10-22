@@ -1024,7 +1024,7 @@ wxLocale::~wxLocale()
     wxSetLocale(m_pOldLocale);
 
     wxSetlocale(LC_ALL, m_pszOldLocale);
-    free((wxChar *)m_pszOldLocale);     // const_cast
+    free(const_cast<char *>(m_pszOldLocale));
 }
 
 

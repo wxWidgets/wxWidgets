@@ -95,7 +95,7 @@ void wxControlBase::Command(wxCommandEvent& event)
 
 void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 {
-    event.SetEventObject((wxControlBase *)this);    // const_cast
+    event.SetEventObject(const_cast<wxControlBase *>(this));
 
     // event.SetId(GetId()); -- this is usuall done in the event ctor
 

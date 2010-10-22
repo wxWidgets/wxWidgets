@@ -244,7 +244,7 @@ wxFileOffset wxFFile::Length() const
     wxCHECK_MSG( IsOpened(), wxInvalidOffset,
                  wxT("wxFFile::Length(): file is closed!") );
 
-    wxFFile& self = *(wxFFile *)this;   // const_cast
+    wxFFile& self = *const_cast<wxFFile *>(this);
 
     wxFileOffset posOld = Tell();
     if ( posOld != wxInvalidOffset )

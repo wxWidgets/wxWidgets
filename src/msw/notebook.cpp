@@ -785,7 +785,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( !strText.empty() )
     {
         tcItem.mask |= TCIF_TEXT;
-        tcItem.pszText = (wxChar *)strText.wx_str(); // const_cast
+        tcItem.pszText = const_cast<wxChar *>(strText.wx_str());
     }
 
     // hide the page: unless it is selected, it shouldn't be shown (and if it
