@@ -34,6 +34,7 @@
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestFailure.h>
+#include <cppunit/TestResultCollector.h>
 
 #ifdef __VISUALC__
     #pragma warning(default:4100)
@@ -617,7 +618,9 @@ int TestApp::OnRun()
     runner.eventManager().pushProtector(new wxUnitTestProtector);
 
     bool printProgress = !(verbose || m_detail || m_timing);
-    return runner.run("", false, true, printProgress) ? EXIT_SUCCESS : EXIT_FAILURE;
+    runner.run("", false, true, printProgress);
+
+    return runner.result().testFailures() == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 int TestApp::OnExit()
