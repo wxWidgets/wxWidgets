@@ -971,18 +971,33 @@ bool wxWindowBase::IsEnabled() const
 
 void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
 {
+    // Under some platforms there is no need to update the window state
+    // explicitly, it will become disabled when its parent is. On other ones we
+    // do need to disable all windows recursively though.
 #ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     DoEnable(enabled);
 #endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
     OnEnabled(enabled);
 
-    // If we are top-level then the logic doesn't apply - otherwise
-    // showing a modal dialog would result in total greying out (and ungreying
-    // out later) of everything which would be really ugly
-    if ( IsTopLevel() )
+    // Disabling a top level window is typically done when showing a modal
+    // dialog and we don't need to disable its children in this case, they will
+    // be logically disabled anyhow (i.e. their IsEnabled() will return false)
+    // and the TLW won't accept any input for them. Moreover, explicitly
+    // disabling them would look ugly as the entire TLW would be greyed out
+    // whenever a modal dialog is shown and no native applications under any
+    // platform behave like this.
+    if ( IsTopLevel() && !enabled )
         return;
 
+    // When disabling (or enabling back) a non-TLW window we need to
+    // recursively propagate the change of the state to its children, otherwise
+    // they would still show as enabled even though they wouldn't actually
+    // accept any input (at least under MSW where children don't accept input
+    // if any of the windows in their parent chain is enabled).
+    //
+    // Notice that we must do this even for wxHAS_NATIVE_ENABLED_MANAGEMENT
+    // platforms as we still need to call the children OnEnabled() recursively.
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -1000,14 +1015,10 @@ bool wxWindowBase::Enable(bool enable)
 
     m_isEnabled = enable;
 
+    // If we call DoEnable() from NotifyWindowOnEnableChange(), we don't need
+    // to do it from here.
 #ifdef wxHAS_NATIVE_ENABLED_MANAGEMENT
     DoEnable(enable);
-#else // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
-    wxWindowBase * const parent = GetParent();
-    if( !IsTopLevel() && parent && !parent->IsEnabled() )
-    {
-        return true;
-    }
 #endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
     NotifyWindowOnEnableChange(enable);
