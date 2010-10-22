@@ -15,7 +15,7 @@
     <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
-        <configure options="--enable-compat28"/>
+        <configure options="--enable-compat28 --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -27,7 +27,7 @@
     <scheduler>daily_0600</scheduler>
     <steps>
         <checkout/>
-        <configure options="--disable-shared"/>
+        <configure options="--disable-shared --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -51,7 +51,7 @@
     <scheduler>daily_0600</scheduler>
     <steps>
         <checkout/>
-        <configure options="--with-directfb"/>
+        <configure options="--with-directfb --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>

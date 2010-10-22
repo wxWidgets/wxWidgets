@@ -15,7 +15,7 @@
     <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
-        <configure options="--enable-stl"/>
+        <configure options="--enable-stl --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -39,7 +39,7 @@
     <scheduler>daily_0600</scheduler>
     <steps>
         <checkout/>
-        <configure options="--disable-unicode"/>
+        <configure options="--disable-unicode --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>
