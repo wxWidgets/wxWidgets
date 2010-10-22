@@ -970,17 +970,32 @@ void StringTestCase::BeforeAndAfter()
 {
     const wxString s(L"letter=\xe9;\xe7a=l\xe0");
 
-    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=') );
-    CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';') );
+    wxString r;
 
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=') );
-    CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';') );
+    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", r );
+
+    CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!', &r) );
+    CPPUNIT_ASSERT_EQUAL( "", r );
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
+
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"l\xe0", r );
+
+    CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!', &r) );
+    CPPUNIT_ASSERT_EQUAL( s, r );
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
+
 
     CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", s.AfterFirst('=') );
     CPPUNIT_ASSERT_EQUAL( "", s.AfterFirst('!') );
     CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterFirst(';') );
+
 
     CPPUNIT_ASSERT_EQUAL( L"l\xe0", s.AfterLast('=') );
     CPPUNIT_ASSERT_EQUAL( s, s.AfterLast('!') );

@@ -2210,11 +2210,13 @@ public:
       // get last nCount characters
   wxString Right(size_t nCount) const;
       // get all characters before the first occurrence of ch
-      // (returns the whole string if ch not found)
-  wxString BeforeFirst(wxUniChar ch) const;
+      // (returns the whole string if ch not found) and also put everything
+      // following the first occurrence of ch into rest if it's non-NULL
+  wxString BeforeFirst(wxUniChar ch, wxString *rest = NULL) const;
       // get all characters before the last occurrence of ch
-      // (returns empty string if ch not found)
-  wxString BeforeLast(wxUniChar ch) const;
+      // (returns empty string if ch not found) and also put everything
+      // following the last occurrence of ch into rest if it's non-NULL
+  wxString BeforeLast(wxUniChar ch, wxString *rest = NULL) const;
       // get all characters after the first occurrence of ch
       // (returns empty string if ch not found)
   wxString AfterFirst(wxUniChar ch) const;

@@ -1349,22 +1349,43 @@ wxString wxString::Left(size_t nCount) const
 
 // get all characters before the first occurrence of ch
 // (returns the whole string if ch not found)
-wxString wxString::BeforeFirst(wxUniChar ch) const
+wxString wxString::BeforeFirst(wxUniChar ch, wxString *rest) const
 {
   int iPos = Find(ch);
   if ( iPos == wxNOT_FOUND )
-      iPos = length();
+  {
+    iPos = length();
+    if ( rest )
+      rest->clear();
+  }
+  else
+  {
+    if ( rest )
+      rest->assign(*this, iPos + 1, npos);
+  }
+
   return wxString(*this, 0, iPos);
 }
 
 /// get all characters before the last occurrence of ch
 /// (returns empty string if ch not found)
-wxString wxString::BeforeLast(wxUniChar ch) const
+wxString wxString::BeforeLast(wxUniChar ch, wxString *rest) const
 {
   wxString str;
   int iPos = Find(ch, true);
-  if ( iPos != wxNOT_FOUND && iPos != 0 )
-    str = wxString(c_str(), iPos);
+  if ( iPos != wxNOT_FOUND )
+  {
+    if ( iPos != 0 )
+      str.assign(*this, 0, iPos);
+
+    if ( rest )
+      rest->assign(*this, iPos + 1, npos);
+  }
+  else
+  {
+    if ( rest )
+      *rest = *this;
+  }
 
   return str;
 }

@@ -403,6 +403,10 @@ Major new features in this release
 2.9.2:
 ------
 
+All:
+
+- Added "rest" argument to wxString::Before{First,Last}().
+
 All (GUI):
 
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
