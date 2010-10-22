@@ -430,7 +430,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     else // no multi-selection flags specified
     {
         m_windowStyle |= wxLB_SINGLE;
-        mode = GTK_SELECTION_SINGLE;
+
+        // Notice that we must use BROWSE and not GTK_SELECTION_SINGLE because
+        // the latter allows to not select any items at all while a single
+        // selection listbox is supposed to always have a selection (at least
+        // once the user selected something, it might not have any initially).
+        mode = GTK_SELECTION_BROWSE;
     }
 
     GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
