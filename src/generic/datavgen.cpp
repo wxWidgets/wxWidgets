@@ -3442,6 +3442,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
+    // set the focus to ourself if any of the mouse buttons are pressed
+    if(event.ButtonDown() && !HasFocus())
+        SetFocus();
+
     int x = event.GetX();
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
@@ -3711,8 +3715,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
     else if ((event.LeftDown() || simulateClick) && !hoverOverExpander)
     {
-        SetFocus();
-
         m_lineBeforeLastClicked = m_lineLastClicked;
         m_lineLastClicked = current;
 
