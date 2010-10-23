@@ -123,6 +123,9 @@ public:
         This function can be used to indicate to the child process that
         there is no more data to be read - usually, a filter program will only
         terminate when the input stream is closed.
+
+        Notice that GetOutputStream() will return @NULL after the output stream
+        is closed.
     */
     void CloseOutput();
 
@@ -167,7 +170,9 @@ public:
 
     /**
         It returns an output stream correspoding to the input stream of the subprocess.
-        If it is @NULL, you have not turned on the redirection.
+
+        If it is @NULL, you have not turned on the redirection or already
+        called CloseOutput().
 
         @see Redirect().
     */
