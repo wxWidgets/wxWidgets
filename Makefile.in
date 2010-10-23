@@ -36395,6 +36395,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
+	mkdir $(DISTDIR)/include/wx/persist
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/protocol
@@ -36411,13 +36412,14 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/ribbon/*.h $(DISTDIR)/include/wx/ribbon
+	$(CP_P) $(INCDIR)/wx/persist/*.h $(DISTDIR)/include/wx/persist
 	$(CP_P) $(INCDIR)/wx/propgrid/*.h $(DISTDIR)/include/wx/propgrid
 	$(CP_P) $(INCDIR)/wx/stc/*.h $(DISTDIR)/include/wx/stc
+	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 	$(CP_P) $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	$(CP_P) $(INCDIR)/wx/unix/private/*.h $(DISTDIR)/include/wx/unix/private
 	$(CP_P) $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	$(CP_P) $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
-	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
@@ -36451,7 +36453,7 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/src/aui
 	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
-	
+
 	mkdir $(DISTDIR)/src/ribbon
 	$(CP_P) $(RIBBONDIR)/*.cpp $(DISTDIR)/src/ribbon
 
@@ -36520,6 +36522,7 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
+	mkdir $(DISTDIR)/include/wx/persist
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/osx
@@ -36941,7 +36944,6 @@ INTL_DIST:
 	mkdir $(DISTDIR)/locale
 	$(CP_P) $(INTLDIR)/Makefile $(DISTDIR)/locale
 	$(CP_P) $(INTLDIR)/*.po $(DISTDIR)/locale
-	-$(CP_P) $(INTLDIR)/*.mo $(DISTDIR)/locale
 	subdirs=`cd $(INTLDIR) && ls */*.po | sed 's|/.*||' | uniq`; \
 	for dir in "$$subdirs"; do                                   \
 	    mkdir $(DISTDIR)/locale/$$dir;                           \
@@ -36976,6 +36978,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/interface/wx/html
 	mkdir $(DISTDIR)/interface/wx/msw
 	mkdir $(DISTDIR)/interface/wx/msw/ole
+	mkdir $(DISTDIR)/interface/wx/persist
 	mkdir $(DISTDIR)/interface/wx/protocol
 	mkdir $(DISTDIR)/interface/wx/propgrid
 	mkdir $(DISTDIR)/interface/wx/richtext
@@ -36989,6 +36992,7 @@ MANUAL_DIST:
 	$(CP_P) $(IFACEDIR)/wx/html/*.h $(DISTDIR)/interface/wx/html
 	$(CP_P) $(IFACEDIR)/wx/msw/*.h $(DISTDIR)/interface/wx/msw
 	$(CP_P) $(IFACEDIR)/wx/msw/ole/*.h $(DISTDIR)/interface/wx/msw/ole
+	$(CP_P) $(IFACEDIR)/wx/persist/*.h $(DISTDIR)/interface/wx/persist
 	$(CP_P) $(IFACEDIR)/wx/protocol/*.h $(DISTDIR)/interface/wx/protocol
 	$(CP_P) $(IFACEDIR)/wx/propgrid/*.h $(DISTDIR)/interface/wx/propgrid
 	$(CP_P) $(IFACEDIR)/wx/richtext/*.h $(DISTDIR)/interface/wx/richtext
