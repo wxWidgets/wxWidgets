@@ -29,23 +29,23 @@
 
 %if %{unicode}
     %define name		wx-%{portname}-unicode
-    %define wxconfig		%{portname}-unicode-release-%{ver2}
-    %define wxconfigstatic	%{portname}-unicode-release-static-%{ver2}
+    %define wxconfig		%{portname}-unicode-%{ver2}
+    %define wxconfigstatic	%{portname}-unicode-static-%{ver2}
     %define wxconfiglink	wx%{portname}u-%{ver2}-config
 %else
     %define name		wx-%{portname}-ansi
-    %define wxconfig		%{portname}-ansi-release-%{ver2}
-    %define wxconfigstatic	%{portname}-ansi-release-static-%{ver2}
+    %define wxconfig		%{portname}-ansi-%{ver2}
+    %define wxconfigstatic	%{portname}-ansi-static-%{ver2}
     %define wxconfiglink	wx%{portname}-%{ver2}-config
 %endif
 
 %if %{unicode}
     %define wxbasename		wx-base-unicode
-    %define wxbaseconfig	base-unicode-release-%{ver2}
+    %define wxbaseconfig	base-unicode-%{ver2}
     %define wxbaseconfiglink	wxbaseu-%{ver2}-config
 %else
     %define wxbasename		wx-base-ansi
-    %define wxbaseconfig	base-ansi-release-%{ver2}
+    %define wxbaseconfig	base-ansi-%{ver2}
     %define wxbaseconfiglink	wxbase-%{ver2}-config
 %endif
 

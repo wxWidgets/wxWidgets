@@ -7,7 +7,7 @@
 %define name       wx-%{portname}
 %define wxbasename wx-base
 
-%define wxconfig     %{portname}-ansi-release-%{ver2}
+%define wxconfig     %{portname}-ansi-%{ver2}
 %define wxconfiglink wx%{portname}-%{ver2}-config
 
 Summary: The Motif/Lesstif port of the wxWidgets library

@@ -13,12 +13,12 @@
 %if %{unicode}
     %define wxbasename   wx-base-unicode
     %define name         wx-%{portname}-unicode
-    %define wxconfig     %{portname}-unicode-release-%{ver2}
+    %define wxconfig     %{portname}-unicode-%{ver2}
     %define wxconfiglink wx%{portname}u-%{ver2}-config
 %else
     %define wxbasename   wx-base
     %define name         wx-%{portname}
-    %define wxconfig     %{portname}-ansi-release-%{ver2}
+    %define wxconfig     %{portname}-ansi-%{ver2}
     %define wxconfiglink wx%{portname}-%{ver2}-config
 %endif
 
