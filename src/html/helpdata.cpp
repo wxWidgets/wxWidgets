@@ -475,11 +475,10 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
         m_tempPath = path;
     else
     {
-        if (wxIsAbsolutePath(path)) m_tempPath = path;
-        else m_tempPath = wxGetCwd() + wxT("/") + path;
+        wxFileName fn(path);
+        fn.MakeAbsolute();
 
-        if (m_tempPath[m_tempPath.length() - 1] != wxT('/'))
-            m_tempPath << wxT('/');
+        m_tempPath = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
     }
 }
 
