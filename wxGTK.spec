@@ -151,7 +151,9 @@ cd obj-shared
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl
+			      --with-opengl \
+			      --with-gnomeprint \
+			      --enable-mediactrl
 $MAKE
 
 cd ..
@@ -170,7 +172,9 @@ cd obj-static
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl
+			      --with-opengl \
+			      --with-gnomeprint \
+			      --enable-mediactrl
 $MAKE
 
 cd ..
