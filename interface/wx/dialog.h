@@ -472,7 +472,7 @@ public:
         Sets the identifier to be used as OK button. When the button with this
         identifier is pressed, the dialog calls wxWindow::Validate() and
         wxWindow::TransferDataFromWindow() and, if they both return @true,
-        closes the dialog with wxID_OK return code.
+        closes the dialog with the affirmative id return code.
 
         Also, when the user presses a hardware OK button on the devices having
         one or the special OK button in the PocketPC title bar, an event with
