@@ -7808,6 +7808,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_toolbk.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_tree.h"
 				>
 			</File>

@@ -57,6 +57,41 @@
                                     </object>
                                 </object>
                 </object>
+
+                <object class="notebookpage">
+                    <label>wxToolbook</label>
+                    <object class="wxToolbook" name="controls_toolbook">
+                    <style>wxTBK_HORZ_LAYOUT</style>
+                        <size>350,280</size>
+                        <imagelist>
+                            <bitmap stock_id="wxART_QUESTION"/>
+                            <bitmap stock_id="wxART_INFORMATION"/>
+                            <bitmap stock_id="wxART_GO_HOME"/>
+                        </imagelist>
+                        <object class="toolbookpage">
+                            <label>Page 1</label>
+                            <image>0</image>
+                            <object class="wxButton" name="controls_toolbook_button1">
+                                <label>Button N1</label>
+                            </object>
+                        </object>
+                        <object class="toolbookpage">
+                            <label>Page 2</label>
+                            <image>1</image>
+                            <object class="wxButton" name="controls_toolbook_button2">
+                                <label>Button N2</label>
+                            </object>
+                        </object>
+                        <object class="toolbookpage">
+                            <label>Page 3</label>
+                            <image>2</image>
+                            <object class="wxButton" name="controls_toolbook_button3">
+                                <label>Button N3</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+
                 <object class="notebookpage">
                     <label>wxToolBar</label>
                     <object class="wxPanel" name="button">

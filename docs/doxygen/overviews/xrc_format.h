@@ -1666,6 +1666,29 @@ Example:
 @endcode
 
 
+@subsubsection xrc_wxtoolbook wxToolbook
+
+A toolbook can have one or more child objects of the @c toolbookpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage) and one child object of the @ref xrc_wximagelist class.
+@c toolbookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{image, integer,
+    The zero-based index of the image associated with the item
+    into the image list.}
+@row3col{selected, @ref overview_xrcformat_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c toolbookpage has exactly one non-toplevel window as its child.
+
+
 @subsubsection xrc_wxtreectrl wxTreeCtrl
 
 A treectrl can have one child object of the @ref xrc_wximagelist class.

@@ -948,6 +948,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_toolb.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_toolbk.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_tree.h">
 			</File>
 			<File
@@ -1131,6 +1134,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_toolb.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_toolbk.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_tree.cpp">

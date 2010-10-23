@@ -69,6 +69,7 @@
 #include "wx/xrc/xh_text.h"
 #include "wx/xrc/xh_tglbtn.h"
 #include "wx/xrc/xh_toolb.h"
+#include "wx/xrc/xh_toolbk.h"
 #include "wx/xrc/xh_tree.h"
 #include "wx/xrc/xh_treebk.h"
 #include "wx/xrc/xh_unkwn.h"

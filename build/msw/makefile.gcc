@@ -1186,6 +1186,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_text.o \
 	$(OBJS)\xrcdll_xh_tglbtn.o \
 	$(OBJS)\xrcdll_xh_toolb.o \
+	$(OBJS)\xrcdll_xh_toolbk.o \
 	$(OBJS)\xrcdll_xh_tree.o \
 	$(OBJS)\xrcdll_xh_treebk.o \
 	$(OBJS)\xrcdll_xh_unkwn.o \
@@ -1258,6 +1259,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_text.o \
 	$(OBJS)\xrclib_xh_tglbtn.o \
 	$(OBJS)\xrclib_xh_toolb.o \
+	$(OBJS)\xrclib_xh_toolbk.o \
 	$(OBJS)\xrclib_xh_tree.o \
 	$(OBJS)\xrclib_xh_treebk.o \
 	$(OBJS)\xrclib_xh_unkwn.o \
@@ -1638,6 +1640,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_text.o \
 	$(OBJS)\monodll_xh_tglbtn.o \
 	$(OBJS)\monodll_xh_toolb.o \
+	$(OBJS)\monodll_xh_toolbk.o \
 	$(OBJS)\monodll_xh_tree.o \
 	$(OBJS)\monodll_xh_treebk.o \
 	$(OBJS)\monodll_xh_unkwn.o \
@@ -2366,6 +2369,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_text.o \
 	$(OBJS)\monolib_xh_tglbtn.o \
 	$(OBJS)\monolib_xh_toolb.o \
+	$(OBJS)\monolib_xh_toolbk.o \
 	$(OBJS)\monolib_xh_tree.o \
 	$(OBJS)\monolib_xh_treebk.o \
 	$(OBJS)\monolib_xh_unkwn.o \
@@ -6834,6 +6838,9 @@ $(OBJS)\monodll_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
 $(OBJS)\monodll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_xh_toolbk.o: ../../src/xrc/xh_toolbk.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9073,6 +9080,9 @@ $(OBJS)\monolib_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_xh_toolbk.o: ../../src/xrc/xh_toolbk.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_tree.o: ../../src/xrc/xh_tree.cpp
@@ -14395,6 +14405,9 @@ $(OBJS)\xrcdll_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
 $(OBJS)\xrcdll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\xrcdll_xh_toolbk.o: ../../src/xrc/xh_toolbk.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\xrcdll_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14582,6 +14595,9 @@ $(OBJS)\xrclib_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\xrclib_xh_toolbk.o: ../../src/xrc/xh_toolbk.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_tree.o: ../../src/xrc/xh_tree.cpp

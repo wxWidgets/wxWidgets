@@ -754,6 +754,10 @@ SOURCE=..\..\include\wx\xrc\xh_toolb.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_toolbk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_tree.h
 # End Source File
 # Begin Source File
@@ -995,6 +999,10 @@ SOURCE=..\..\src\xrc\xh_tglbtn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_toolb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_toolbk.cpp
 # End Source File
 # Begin Source File
 

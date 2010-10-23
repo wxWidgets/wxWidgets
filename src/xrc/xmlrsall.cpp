@@ -188,6 +188,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_TOOLBAR
     AddHandler(new wxToolBarXmlHandler);
 #endif
+#if wxUSE_TOOLBOOK
+    AddHandler(new wxToolbookXmlHandler);
+#endif
 #if wxUSE_TREEBOOK
     AddHandler(new wxTreebookXmlHandler);
 #endif

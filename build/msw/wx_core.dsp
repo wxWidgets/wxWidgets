@@ -6997,6 +6997,10 @@ SOURCE=..\..\include\wx\xrc\xh_toolb.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_toolbk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_tree.h
 # End Source File
 # Begin Source File
