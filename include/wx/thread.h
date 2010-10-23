@@ -585,6 +585,19 @@ protected:
     // of this thread.
     virtual void *Entry() = 0;
 
+
+    // Callbacks which may be overridden by the derived class to perform some
+    // specific actions when the thread is deleted or killed. By default they
+    // do nothing.
+
+    // This one is called by Delete() before actually deleting the thread and
+    // is executed in the context of the thread that called Delete().
+    virtual void OnDelete() {}
+
+    // This one is called by Kill() before killing the thread and is executed
+    // in the context of the thread that called Kill().
+    virtual void OnKill() {}
+
 private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);

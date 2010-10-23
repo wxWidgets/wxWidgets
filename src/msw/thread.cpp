@@ -686,6 +686,8 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 
 wxThreadError wxThreadInternal::Kill()
 {
+    m_thread->OnKill();
+
     if ( !::TerminateThread(m_hThread, THREAD_ERROR_EXIT) )
     {
         wxLogSysError(_("Couldn't terminate thread"));
@@ -759,6 +761,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         Cancel();
     }
 
+    threadToDelete->OnDelete();
 
     // now wait for thread to finish
     if ( wxThread::IsMain() )

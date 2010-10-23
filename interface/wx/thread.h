@@ -455,6 +455,37 @@ public:
     virtual ExitCode Entry() = 0;
 
     /**
+        Callback called by Delete() before actually deleting the thread.
+
+        This function can be overridden by the derived class to perform some
+        specific task when the thread is gracefully destroyed. Notice that it
+        will be executed in the context of the thread that called Delete() and
+        <b>not</b> in this thread's context.
+
+        TestDestroy() will be true for the thread before OnDelete() gets
+        executed.
+
+        @since 2.9.2
+
+        @see OnKill()
+    */
+    virtual void OnDelete();
+
+    /**
+        Callback called by Kill() before actually killing the thread.
+
+        This function can be overridden by the derived class to perform some
+        specific task when the thread is terminated. Notice that it will be
+        executed in the context of the thread that called Kill() and <b>not</b>
+        in this thread's context.
+
+        @since 2.9.2
+
+        @see OnDelete()
+    */
+    virtual void OnKill();
+
+    /**
         @deprecated
         Use CreateThread() instead.
     */

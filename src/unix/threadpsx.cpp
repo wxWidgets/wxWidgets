@@ -1453,6 +1453,8 @@ wxThreadError wxThread::Delete(ExitCode *rc)
 
     m_critsect.Leave();
 
+    OnDelete();
+
     switch ( state )
     {
         case STATE_NEW:
@@ -1500,6 +1502,8 @@ wxThreadError wxThread::Kill()
 {
     wxCHECK_MSG( This() != this, wxTHREAD_MISC_ERROR,
                  wxT("a thread can't kill itself") );
+
+    OnKill();
 
     switch ( m_internal->GetState() )
     {

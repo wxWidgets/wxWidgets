@@ -406,6 +406,7 @@ Major new features in this release
 All:
 
 - Added "rest" argument to wxString::Before{First,Last}().
+- Added wxThread::OnKill() and OnDelete() callbacks.
 
 All (GUI):
 
