@@ -507,6 +507,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %if %{unicode}
     %{_libdir}/libwxregexu-%{ver2}.a
 %endif
+%{_libdir}/libwxscintilla-%{ver2}.a
 %dir %{_libdir}/wx
 %{_datadir}/aclocal/*.m4
 %{_datadir}/bakefile/presets/*
