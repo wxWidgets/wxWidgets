@@ -933,5 +933,5 @@ rpm: bzip-dist
 	-mkdir $(RPMTOP)/RPMS
 	-mkdir $(RPMTOP)/SRPMS
 	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
-	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
-	mv -f `find $(RPMTOP) -name "wx$(TOOLKIT)*.rpm"` .
+	rpmbuild -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
+	mv -f `find $(RPMTOP) -name "wx-*.rpm"` .
