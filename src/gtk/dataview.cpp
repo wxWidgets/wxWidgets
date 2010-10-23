@@ -3516,6 +3516,9 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
+    gint x, y;
+    gtk_widget_get_pointer(m_owner->GtkGetTreeView(), &x, &y);
+    event.SetPosition(x, y);
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
