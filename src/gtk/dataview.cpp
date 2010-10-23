@@ -4970,12 +4970,54 @@ void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
     gtk_tree_view_scroll_to_cell( GTK_TREE_VIEW(m_treeview), path, NULL, false, 0.0, 0.0 );
 }
 
-void wxDataViewCtrl::HitTest(const wxPoint& WXUNUSED(point),
+void wxDataViewCtrl::HitTest(const wxPoint& point,
                              wxDataViewItem& item,
                              wxDataViewColumn *& column) const
 {
-    item = wxDataViewItem(0);
-    column = NULL;
+    // gtk_tree_view_get_dest_row_at_pos() is the right one. But it does not tell the column.
+    // gtk_tree_view_get_path_at_pos() is the wrong function. It doesn't mind the header but returns column.
+    // See http://mail.gnome.org/archives/gtkmm-list/2005-January/msg00080.html
+    // So we have to use both of them.
+    // Friedrich Haase 2010-9-20
+    wxGtkTreePath path, pathScratch;
+    GtkTreeViewColumn* GtkColumn = NULL;
+    GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
+    gint cell_x = 0;
+    gint cell_y = 0;
+    
+    // cannot directly call GtkGetTreeView(), HitTest is const and so is this pointer
+    wxDataViewCtrl* ctrl = (wxDataViewCtrl*)this; // ugly workaround, ctrl is NOT const
+    GtkTreeView* treeView = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
+    
+    // is there possibly a better suited function to get the column?
+    gtk_tree_view_get_path_at_pos(                // and this is the wrong call but it delivers the column
+      treeView,
+      (int) point.x, (int) point.y,
+      pathScratch.ByRef(),
+      &GtkColumn,                                 // here we get the GtkColumn
+      &cell_x,
+      &cell_y );
+      
+    if ( GtkColumn != NULL )
+    {                                             
+        // we got GTK column
+        // the right call now which takes the header into account
+        gtk_tree_view_get_dest_row_at_pos( treeView, (int) point.x, (int) point.y, path.ByRef(), &pos);
+          
+        if (path)
+            item = wxDataViewItem(GTKPathToItem(path));
+        // else we got a GTK column but the position is not over an item, e.g. below last item
+        for ( unsigned int i=0, cols=GetColumnCount(); i<cols; ++i )  // search the wx column
+        {
+            wxDataViewColumn* col = GetColumn(i);
+            if ( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) == GtkColumn )
+            {
+                column = col;                      // here we get the wx column
+                break;
+            }
+        }
+    }
+    // else no column and thus no item, both null
 }
 
 wxRect
