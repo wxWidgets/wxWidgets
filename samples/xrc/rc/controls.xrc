@@ -935,7 +935,7 @@
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticBitmap" name="controls_staticbitmap">
-                                    <bitmap>appicon.xpm</bitmap>
+                                    <bitmap>stop.xpm</bitmap>
                                 </object>
                             </object>
                         </object>
