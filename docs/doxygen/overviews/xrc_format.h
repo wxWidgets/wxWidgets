@@ -934,7 +934,7 @@ The available properties are:
 @row3col{mask, @ref overview_xrcformat_type_bool,
      If masks should be created for all images (default: true).}
 @row3col{size, @ref overview_xrcformat_type_size,
-     The size of the images in the list (default: system default icon size)).}
+     The size of the images in the list (default: the size of the first bitmap).}
 @endTable
 
 Example:
