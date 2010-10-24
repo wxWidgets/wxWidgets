@@ -1433,7 +1433,8 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
                              exstyleReal & WS_EX_TOPMOST ? HWND_TOPMOST
                                                          : HWND_NOTOPMOST,
                              0, 0, 0, 0,
-                             SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED) )
+                             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE |
+                             SWP_FRAMECHANGED) )
         {
             wxLogLastError(wxT("SetWindowPos"));
         }
