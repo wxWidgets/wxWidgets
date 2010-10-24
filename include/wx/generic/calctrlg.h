@@ -202,12 +202,12 @@ private:
     // is this date shown?
     bool IsDateShown(const wxDateTime& date) const;
 
-    // is this date in the given range?
+    // is this date in the currently allowed range?
     bool IsDateInRange(const wxDateTime& date) const;
 
-    // range helpers
-    bool ChangeYear(wxDateTime* target) const;
-    bool ChangeMonth(wxDateTime* target) const;
+    // adjust the date to the currently allowed range, return true if it was
+    // changed
+    bool AdjustDateToRange(wxDateTime *date) const;
 
     // redraw the given date
     void RefreshDate(const wxDateTime& date);
