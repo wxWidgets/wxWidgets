@@ -19,6 +19,7 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
+#include "wx/hashmap.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -313,6 +314,17 @@ enum
     wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
 };
 
+// Map storing environment variables.
+typedef wxStringToStringHashMap wxEnvVariableHashMap;
+
+// Used to pass additional parameters for child process to wxExecute(). Could
+// be extended with other fields later.
+struct wxExecuteEnv
+{
+    wxString cwd;               // If empty, CWD is not changed.
+    wxEnvVariableHashMap env;   // If empty, environment is unchanged.
+};
+
 // Execute another program.
 //
 // If flags contain wxEXEC_SYNC, return -1 on failure and the exit code of the
@@ -320,27 +332,32 @@ enum
 // failure and the PID of the launched process if ok.
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL);
+                                wxProcess *process = NULL,
+                                const wxExecuteEnv *env = NULL);
 WXDLLIMPEXP_BASE long wxExecute(char **argv,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL);
+                                wxProcess *process = NULL,
+                                const wxExecuteEnv *env = NULL);
 #if wxUSE_UNICODE
 WXDLLIMPEXP_BASE long wxExecute(wchar_t **argv,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL);
+                                wxProcess *process = NULL,
+                                const wxExecuteEnv *env = NULL);
 #endif // wxUSE_UNICODE
 
 // execute the command capturing its output into an array line by line, this is
 // always synchronous
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 wxArrayString& output,
-                                int flags = 0);
+                                int flags = 0,
+                                const wxExecuteEnv *env = NULL);
 
 // also capture stderr (also synchronous)
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 wxArrayString& output,
                                 wxArrayString& error,
-                                int flags = 0);
+                                int flags = 0,
+                                const wxExecuteEnv *env = NULL);
 
 #if defined(__WXMSW__) && wxUSE_IPC
 // ask a DDE server to execute the DDE request with given parameters
@@ -478,6 +495,10 @@ inline bool wxSetEnv(const wxString& var, int value)
     return wxUnsetEnv(var);
 }
 #endif // WXWIN_COMPATIBILITY_2_8
+
+// Retrieve the complete environment by filling specified map.
+// Returns true on success or false if an error occurred.
+WXDLLIMPEXP_BASE bool wxGetEnvMap(wxEnvVariableHashMap *map);
 
 // ----------------------------------------------------------------------------
 // Network and username functions.

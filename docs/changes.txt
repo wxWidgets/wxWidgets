@@ -405,6 +405,7 @@ Major new features in this release
 
 All:
 
+- Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
 

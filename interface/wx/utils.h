@@ -158,6 +158,18 @@ void wxInfoMessageBox(wxWindow parent = NULL);
 //@{
 
 /**
+    A map type containing environment variables names and values.
+
+    This type is used with wxGetEnvMap() function and wxExecuteEnv structure
+    optionally passed to wxExecute().
+
+    @since 2.9.2
+
+    @header{wx/utils.h}
+*/
+typedef wxStringToStringHashMap wxEnvVariableHashMap;
+
+/**
     This is a macro defined as @c getenv() or its wide char version in Unicode
     mode.
 
@@ -218,6 +230,22 @@ bool wxSetEnv(const wxString& var, const wxString& value);
 */
 bool wxUnsetEnv(const wxString& var);
 
+/**
+    Fill a map with the complete content of current environment.
+
+    The map will contain the environment variable names as keys and their
+    values as values.
+
+    @param map
+        The environment map to fill, must be non-@NULL.
+    @return
+        @true if environment was successfully retrieved or @false otherwise.
+
+    @header{wx/utils.h}
+
+    @since 2.9.2
+*/
+bool wxGetEnvMap(wxEnvVariableHashMap *map);
 //@}
 
 
@@ -736,6 +764,36 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
 //@{
 
 /**
+    @struct wxExecuteEnv
+
+    This structure can optionally be passed to wxExecute() to specify
+    additional options to use for the child process.
+
+    @since 2.9.2
+
+    @header{wx/utils.h}
+*/
+struct wxExecuteEnv
+{
+    /**
+        The initial working directory for the new process.
+
+        If this field is empty, the current working directory of this process
+        is used.
+    */
+    wxString cwd;
+
+    /**
+        The environment variable map.
+
+        If the map is empty, the environment variables of the current process
+        are also used for the child one, otherwise only the variables defined
+        in this map are used.
+    */
+    wxEnvVariableHashMap env;
+};
+
+/**
     Executes another program in Unix or Windows.
 
     In the overloaded versions of this function, if @a flags parameter contains
@@ -800,6 +858,10 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
         their combination, in wxEXEC_SYNC case.
     @param callback
         An optional pointer to wxProcess.
+    @param env
+        An optional pointer to additional parameters for the child process,
+        such as its initial working directory and environment variables. This
+        parameter is available in wxWidgets 2.9.2 and later only.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
@@ -811,8 +873,8 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
     @endWxPerlOnly
 */
 long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL);
-
+                wxProcess* callback = NULL,
+                const wxExecuteEnv* env = NULL);
 //@}
 
 /** @addtogroup group_funcmacro_procctrl */
@@ -835,6 +897,10 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
         their combination, in wxEXEC_SYNC case.
     @param callback
         An optional pointer to wxProcess.
+    @param env
+        An optional pointer to additional parameters for the child process,
+        such as its initial working directory and environment variables. This
+        parameter is available in wxWidgets 2.9.2 and later only.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
@@ -846,9 +912,11 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
     @endWxPerlOnly
 */
 long wxExecute(char** argv, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL);
+                wxProcess* callback = NULL,
+                const wxExecuteEnv *env = NULL);
 long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL);
+                wxProcess* callback = NULL,
+                const wxExecuteEnv *env = NULL);
 //@}
 
 /** @addtogroup group_funcmacro_procctrl */
@@ -871,6 +939,10 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
         May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
         their combination. wxEXEC_SYNC is always implicitly added to the flags.
+    @param env
+        An optional pointer to additional parameters for the child process,
+        such as its initial working directory and environment variables. This
+        parameter is available in wxWidgets 2.9.2 and later only.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
@@ -883,7 +955,8 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
     where @c output in an array reference.
     @endWxPerlOnly
 */
-long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
+long wxExecute(const wxString& command, wxArrayString& output, int flags = 0,
+                const wxExecuteEnv *env = NULL);
 
 /**
     This is an overloaded version of wxExecute(const wxString&,int,wxProcess*),
@@ -904,6 +977,10 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
         May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
         their combination. wxEXEC_SYNC is always implicitly added to the flags.
+    @param env
+        An optional pointer to additional parameters for the child process,
+        such as its initial working directory and environment variables. This
+        parameter is available in wxWidgets 2.9.2 and later only.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
@@ -917,7 +994,8 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
     @endWxPerlOnly
 */
 long wxExecute(const wxString& command, wxArrayString& output,
-                wxArrayString& errors, int flags = 0);
+                wxArrayString& errors, int flags = 0,
+                const wxExecuteEnv *env = NULL);
 
 /**
     Returns the number uniquely identifying the current process in the system.
