@@ -648,8 +648,7 @@ wxDateTime wxGenericCalendarCtrl::GetStartDate() const
     wxDateTime date = wxDateTime(1, tm.mon, tm.year);
 
     // rewind back
-    date.SetToPrevWeekDay(GetWindowStyle() & wxCAL_MONDAY_FIRST
-                          ? wxDateTime::Mon : wxDateTime::Sun);
+    date.SetToPrevWeekDay(GetWeekStart());
 
     if ( GetWindowStyle() & wxCAL_SHOW_SURROUNDING_WEEKS )
     {
@@ -701,7 +700,7 @@ bool wxGenericCalendarCtrl::AdjustDateToRange(wxDateTime *date) const
 
 size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
 {
-    size_t retval = date.GetWeekOfMonth(GetWindowStyle() & wxCAL_MONDAY_FIRST
+    size_t retval = date.GetWeekOfMonth(HasFlag(wxCAL_MONDAY_FIRST)
                                    ? wxDateTime::Monday_First
                                    : wxDateTime::Sunday_First);
 
@@ -713,8 +712,7 @@ size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
         wxDateTime datetest = wxDateTime(1, tm.mon, tm.year);
 
         // rewind back
-        datetest.SetToPrevWeekDay(GetWindowStyle() & wxCAL_MONDAY_FIRST
-                              ? wxDateTime::Mon : wxDateTime::Sun);
+        datetest.SetToPrevWeekDay(GetWeekStart());
 
         if ( datetest.GetDay() == 1 )
         {
@@ -972,7 +970,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxPENSTYLE_SOLID));
         dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
-        bool startOnMonday = (GetWindowStyle() & wxCAL_MONDAY_FIRST) != 0;
+        bool startOnMonday = HasFlag(wxCAL_MONDAY_FIRST);
         for ( int wd = 0; wd < 7; wd++ )
         {
             size_t n;
@@ -1319,7 +1317,7 @@ bool wxGenericCalendarCtrl::GetDateCoord(const wxDateTime& date, int *day, int *
 
     if ( IsDateShown(date) )
     {
-        bool startOnMonday = ( GetWindowStyle() & wxCAL_MONDAY_FIRST ) != 0;
+        bool startOnMonday = HasFlag(wxCAL_MONDAY_FIRST);
 
         // Find day
         *day = date.GetWeekDay();
@@ -1530,7 +1528,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
                 *date += wxDateSpan::Week() * (( pos.y - m_rowOffset ) / m_heightRow - 1 );
             }
             if ( wd )
-                *wd = ( GetWindowStyle() & wxCAL_MONDAY_FIRST ) ? wxDateTime::Mon : wxDateTime::Sun;
+                *wd = GetWeekStart();
             return wxCAL_HITTEST_WEEK;
         }
         else    // early exit -> the rest of the function checks for clicks on days
@@ -1547,7 +1545,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
         {
             if ( wd )
             {
-                if ( GetWindowStyle() & wxCAL_MONDAY_FIRST )
+                if ( HasFlag(wxCAL_MONDAY_FIRST) )
                 {
                     wday = wday == 6 ? 0 : wday + 1;
                 }
@@ -1698,14 +1696,8 @@ void wxGenericCalendarCtrl::OnChar(wxKeyEvent& event)
         case WXK_RIGHT:
             if ( event.ControlDown() )
             {
-                wxDateTime
-                    target = m_date.SetToNextWeekDay(
-                                 GetWindowStyle() & wxCAL_MONDAY_FIRST
-                                 ? wxDateTime::Sun : wxDateTime::Sat);
-                if ( !IsDateInRange(target) )
-                {
-                    target = GetUpperDateLimit();
-                }
+                wxDateTime target = m_date.SetToNextWeekDay(GetWeekEnd());
+                AdjustDateToRange(&target);
                 SetDateAndNotify(target);
             }
             else
@@ -1715,14 +1707,8 @@ void wxGenericCalendarCtrl::OnChar(wxKeyEvent& event)
         case WXK_LEFT:
             if ( event.ControlDown() )
             {
-                wxDateTime
-                    target = m_date.SetToPrevWeekDay(
-                                 GetWindowStyle() & wxCAL_MONDAY_FIRST
-                                 ? wxDateTime::Mon : wxDateTime::Sun);
-                if ( !IsDateInRange(target) )
-                {
-                    target = GetLowerDateLimit();
-                }
+                wxDateTime target = m_date.SetToPrevWeekDay(GetWeekStart());
+                AdjustDateToRange(&target);
                 SetDateAndNotify(target);
             }
             else
