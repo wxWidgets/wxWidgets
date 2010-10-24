@@ -36,12 +36,19 @@
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
 {
-    // we need to initialize OLE library
+    HRESULT
 #ifdef __WXWINCE__
-    if ( FAILED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)) )
+     hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
 #else
-    if ( FAILED(::OleInitialize(NULL)) )
+     hr = ::OleInitialize(NULL);
 #endif
+
+    // RPC_E_CHANGED_MODE indicates that OLE had been already initialized
+    // before, albeit with different mode. Don't consider it to be an error as
+    // we don't actually care ourselves about the mode used so this allows the
+    // main application to call OleInitialize() on its own before we do if it
+    // needs non-default mode.
+    if ( hr != RPC_E_CHANGED_MODE && FAILED(hr) )
     {
         wxLogError(_("Cannot initialize OLE"));
 
