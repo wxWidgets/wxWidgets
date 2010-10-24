@@ -425,6 +425,7 @@ All (GUI):
 - Restore text drag-and-drop in wxSTC broken by Scintilla 2 update (Jens Lody).
 - Improve wxGTK print/page setup dialog (rafravago).
 - Added wxToolbook XRC handler (Andrea Zanellato).
+- Added wxDocManager::FindTemplate() (troelsk).
 
 MSW:
 

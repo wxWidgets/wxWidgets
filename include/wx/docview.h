@@ -414,6 +414,9 @@ public:
     void AssociateTemplate(wxDocTemplate *temp);
     void DisassociateTemplate(wxDocTemplate *temp);
 
+    // Find template from document class info, may return NULL.
+    wxDocTemplate* FindTemplate(const wxClassInfo* documentClassInfo);
+
     wxDocument *GetCurrentDocument() const;
 
     void SetMaxDocsOpen(int n) { m_maxDocsOpen = n; }
