@@ -115,9 +115,40 @@ wxObject* wxSizerXmlHandler::DoCreateResource()
 }
 
 
+wxSizer* wxSizerXmlHandler::DoCreateSizer(const wxString& name)
+{
+    if (name == wxT("wxBoxSizer"))
+        return Handle_wxBoxSizer();
+#if wxUSE_STATBOX
+    else if (name == wxT("wxStaticBoxSizer"))
+        return Handle_wxStaticBoxSizer();
+#endif
+    else if (name == wxT("wxGridSizer"))
+    {
+        if ( !ValidateGridSizerChildren() )
+            return NULL;
+        return Handle_wxGridSizer();
+    }
+    else if (name == wxT("wxFlexGridSizer"))
+    {
+        return Handle_wxFlexGridSizer();
+    }
+    else if (name == wxT("wxGridBagSizer"))
+    {
+        return Handle_wxGridBagSizer();
+    }
+    else if (name == wxT("wxWrapSizer"))
+    {
+        return Handle_wxWrapSizer();
+    }
+
+    ReportError(wxString::Format("unknown sizer class \"%s\"", name));
+    return NULL;
+}
 
 
-bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node)
+
+bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node) const
 {
     return (IsOfClass(node, wxT("wxBoxSizer"))) ||
            (IsOfClass(node, wxT("wxStaticBoxSizer"))) ||
@@ -195,9 +226,6 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
 
 wxObject* wxSizerXmlHandler::Handle_sizer()
 {
-    wxSizer *sizer = NULL;
-    wxFlexGridSizer *flexsizer = NULL;
-
     wxXmlNode *parentNode = m_node->GetParent();
 
     if ( !m_parentSizer &&
@@ -208,36 +236,8 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         return NULL;
     }
 
-    if (m_class == wxT("wxBoxSizer"))
-        sizer = Handle_wxBoxSizer();
-#if wxUSE_STATBOX
-    else if (m_class == wxT("wxStaticBoxSizer"))
-        sizer = Handle_wxStaticBoxSizer();
-#endif
-    else if (m_class == wxT("wxGridSizer"))
-    {
-        if ( !ValidateGridSizerChildren() )
-            return NULL;
-        sizer = Handle_wxGridSizer();
-    }
-    else if (m_class == wxT("wxFlexGridSizer"))
-    {
-        flexsizer = Handle_wxFlexGridSizer();
-        sizer = flexsizer;
-    }
-    else if (m_class == wxT("wxGridBagSizer"))
-    {
-        flexsizer = Handle_wxGridBagSizer();
-        sizer = flexsizer;
-    }
-    else if (m_class == wxT("wxWrapSizer"))
-    {
-        sizer = Handle_wxWrapSizer();
-    }
-    else
-    {
-        ReportError(wxString::Format("unknown sizer class \"%s\"", m_class));
-    }
+    // Create the sizer of the appropriate class.
+    wxSizer * const sizer = DoCreateSizer(m_class);
 
     // creation of sizer failed for some (already reported) reason, so exit:
     if ( !sizer )
@@ -259,7 +259,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     CreateChildren(m_parent, true/*only this handler*/);
 
     // set growable rows and cols for sizers which support this
-    if ( flexsizer )
+    if ( wxFlexGridSizer *flexsizer = wxDynamicCast(sizer, wxFlexGridSizer) )
     {
         SetGrowables(flexsizer, wxT("growablerows"), true);
         SetGrowables(flexsizer, wxT("growablecols"), false);
