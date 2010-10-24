@@ -2727,13 +2727,16 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
 
         // create the event
-        wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_MENU, this, item);
+        if ( item.IsOk() )
+        {
+            wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_MENU, this, item);
 
-        event.m_pointDrag = pt;
+            event.m_pointDrag = pt;
 
-        if ( HandleTreeEvent(event) )
-            processed = true;
-        //else: continue with generating wxEVT_CONTEXT_MENU in base class code
+            if ( HandleTreeEvent(event) )
+                processed = true;
+            //else: continue with generating wxEVT_CONTEXT_MENU in base class code
+        }
     }
     else if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {

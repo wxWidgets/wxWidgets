@@ -1571,13 +1571,14 @@ void MyTreeCtrl::OnItemStateClick(wxTreeEvent& event)
 void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
 {
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
+    wxCHECK_RET( itemId.IsOk(), "should have a valid item" );
+
+    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
     wxPoint clientpt = event.GetPoint();
     wxPoint screenpt = ClientToScreen(clientpt);
 
     wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
-                 item ? item->GetDesc() : wxT(""), screenpt.x, screenpt.y);
+                 item->GetDesc(), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);
     event.Skip();
@@ -1618,11 +1619,11 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
 void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 {
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
+    wxCHECK_RET( itemId.IsOk(), "should have a valid item" );
 
-    wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc()
-                                                        : wxT(""));
+    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+
+    wxLogMessage(wxT("Item \"%s\" right clicked"), item->GetDesc());
 
     event.Skip();
 }
