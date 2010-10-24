@@ -1555,9 +1555,10 @@ wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
     return NULL;
 }
 
+/* static */
 bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 {
-    return node->GetAttribute(wxT("class"), wxEmptyString) == classname;
+    return node->GetAttribute(wxT("class")) == classname;
 }
 
 
