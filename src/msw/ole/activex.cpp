@@ -1020,7 +1020,13 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
                 HRESULT hret =
                     cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
-                CHECK_HR(hret);
+
+                // Notice that the return value of CONNECT_E_NOCONNECTION is
+                // expected if the interface doesn't support connection points.
+                if ( hret != CONNECT_E_NOCONNECTION )
+                {
+                    CHECK_HR(hret);
+                }
 
                 if ( cp )
                 {
