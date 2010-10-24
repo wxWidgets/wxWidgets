@@ -682,9 +682,10 @@ commands through menu.
 
 @sampleabout{wxGLCanvas}
 
-@li @b cube Draws only a cube to demonstrate how to write a basic wxWidgets OpenGL program.
-@li @b isosurf Draws a surface by reading coordinates from a dat file.
-@li @b penguin Draws a rotatable penguin by reading data from a dxf file.
+@li @b cube Draws a cube to demonstrate how to write a basic wxWidgets OpenGL program.
+    Arrow keys rotate the cube. Space bar toggles spinning.
+@li @b isosurf Draws a surface by reading coordinates from a DAT file.
+@li @b penguin Draws a rotatable penguin by reading data from a DXF file.
 
 @sampledir{opengl}
 
