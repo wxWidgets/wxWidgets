@@ -144,8 +144,6 @@ bool wxDIB::Create(const wxBitmap& bmp)
     if ( !Create(GetHbitmapOf(bmp)) )
         return false;
 
-    m_hasAlpha = bmp.HasAlpha();
-
     return true;
 }
 
@@ -677,8 +675,8 @@ bool wxDIB::Create(const wxImage& image)
 
     // if we have alpha channel, we need to create a 32bpp RGBA DIB, otherwise
     // a 24bpp RGB is sufficient
-    m_hasAlpha = image.HasAlpha();
-    const int bpp = m_hasAlpha ? 32 : 24;
+    const bool hasAlpha = image.HasAlpha();
+    const int bpp = hasAlpha ? 32 : 24;
 
     if ( !Create(w, h, bpp) )
         return false;
@@ -688,8 +686,8 @@ bool wxDIB::Create(const wxImage& image)
     const int srcBytesPerLine = w * 3;
     const int dstBytesPerLine = GetLineSize(w, bpp);
     const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
-    const unsigned char *alpha = m_hasAlpha ? image.GetAlpha() + (h - 1)*w
-                                            : NULL;
+    const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
+                                          : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
     for ( int y = 0; y < h; y++ )
     {
@@ -754,9 +752,7 @@ wxImage wxDIB::ConvertToImage() const
     {
         // 32 bit bitmaps may be either 0RGB or ARGB and we don't know in
         // advance which one do we have so suppose we have alpha of them and
-        // get rid of it later if it turns out we didn't (in particular, don't
-        // trust m_hasAlpha which is not set correctly when the image was
-        // loaded from file).
+        // get rid of it later if it turns out we didn't.
         image.SetAlpha();
     }
 
