@@ -54,7 +54,7 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
     {\
         public:\
         LONG l;\
-        TAutoInitInt() : l(0) {}\
+        TAutoInitInt() : l(1) {}\
     };\
     TAutoInitInt refCount, lockCount;\
     static void _GetInterface(cls *self, REFIID iid, void **_interface, const char *&desc);\
@@ -928,7 +928,6 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // FrameSite
     m_frameSite = new FrameSite(m_realparent, this);
-    m_frameSite->AddRef();
     // oleClientSite
     hret = m_clientSite.QueryInterface(
         IID_IOleClientSite, (IDispatch *) m_frameSite);
@@ -1031,8 +1030,15 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
                 if ( cp )
                 {
-                    hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
-                                      &adviseCookie);
+                    wxActiveXEvents * const
+                        events = new wxActiveXEvents(this, ta->guid);
+                    hret = cp->Advise(events, &adviseCookie);
+
+                    // We don't need this object any more and cp will keep a
+                    // reference to it if it needs it, i.e. if Advise()
+                    // succeeded.
+                    events->Release();
+
                     CHECK_HR(hret);
                 }
             }
