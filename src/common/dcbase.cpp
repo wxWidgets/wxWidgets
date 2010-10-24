@@ -236,6 +236,12 @@ wxMemoryDC::wxMemoryDC(wxDC *dc)
 
 void wxMemoryDC::SelectObject(wxBitmap& bmp)
 {
+    if ( bmp.IsSameAs(GetSelectedBitmap()) )
+    {
+        // Nothing to do, this bitmap is already selected.
+        return;
+    }
+
     // make sure that the given wxBitmap is not sharing its data with other
     // wxBitmap instances as its contents will be modified by any drawing
     // operation done on this DC
