@@ -291,6 +291,8 @@ MyFrame::MyFrame()
     m_type = Type_Listbook;
 #elif wxUSE_TREEBOOK
     m_type = Type_Treebook;
+#elif wxUSE_TOOLBOOK
+    m_type = Type_Toolbook;
 #else
     #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
 #endif
