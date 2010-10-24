@@ -928,6 +928,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // FrameSite
     m_frameSite = new FrameSite(m_realparent, this);
+    m_frameSite->AddRef();
     // oleClientSite
     hret = m_clientSite.QueryInterface(
         IID_IOleClientSite, (IDispatch *) m_frameSite);
@@ -1030,8 +1031,6 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
                 if ( cp )
                 {
-                    IDispatch* disp;
-                    m_frameSite->QueryInterface(IID_IDispatch, (void**)&disp);
                     hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
                                       &adviseCookie);
                     CHECK_HR(hret);
