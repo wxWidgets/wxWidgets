@@ -311,7 +311,10 @@ void wxBookCtrlBase::OnSize(wxSizeEvent& event)
 
 wxSize wxBookCtrlBase::GetControllerSize() const
 {
-    if ( !m_bookctrl )
+    // For at least some book controls (e.g. wxChoicebook) it may make sense to
+    // (temporarily?) hide the controller and we shouldn't leave extra space
+    // for the hidden control in this case.
+    if ( !m_bookctrl || !m_bookctrl->IsShown() )
         return wxSize(0, 0);
 
     const wxSize sizeClient = GetClientSize(),
