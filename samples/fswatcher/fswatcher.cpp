@@ -23,6 +23,7 @@
 
 #include "wx/fswatcher.h"
 #include "wx/listctrl.h"
+#include "wx/cmdline.h"
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -31,9 +32,12 @@ public:
     MyFrame(const wxString& title);
     virtual ~MyFrame();
 
+    void AddDirectory(const wxString& dir);
+
+    bool CreateWatcherIfNecessary();
+
 private:
     // file system watcher creation
-    void OnEventLoopEnter();
     void CreateWatcher();
 
     // event handlers
@@ -52,8 +56,6 @@ private:
     wxListView *m_filesList;          // list of watched paths
     wxFileSystemWatcher* m_watcher;   // file system watcher
 
-    friend class MyApp;
-
     const static wxString LOG_FORMAT; // how to format events
 };
 
@@ -66,6 +68,9 @@ public:
     // 'Main program' equivalent: the program execution "starts" here
     virtual bool OnInit()
     {
+        if ( !wxApp::OnInit() )
+            return false;
+
         wxLog::AddTraceMask("EventSource");
         wxLog::AddTraceMask(wxTRACE_FSWATCHER);
 
@@ -79,11 +84,37 @@ public:
     // create the file system watcher here, because it needs an active loop
     virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop))
     {
-        m_frame->OnEventLoopEnter();
+        if ( m_frame->CreateWatcherIfNecessary() )
+        {
+            if ( !m_dirToWatch.empty() )
+                m_frame->AddDirectory(m_dirToWatch);
+        }
+    }
+
+    virtual void OnInitCmdLine(wxCmdLineParser& parser)
+    {
+        wxApp::OnInitCmdLine(parser);
+        parser.AddParam("directory to watch",
+                        wxCMD_LINE_VAL_STRING,
+                        wxCMD_LINE_PARAM_OPTIONAL);
+    }
+
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser)
+    {
+        if ( !wxApp::OnCmdLineParsed(parser) )
+            return false;
+
+        if ( parser.GetParamCount() )
+            m_dirToWatch = parser.GetParam();
+
+        return true;
     }
 
 private:
     MyFrame *m_frame;
+
+    // The directory to watch if specified on the command line.
+    wxString m_dirToWatch;
 };
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -235,14 +266,16 @@ MyFrame::~MyFrame()
     delete m_watcher;
 }
 
-void MyFrame::OnEventLoopEnter()
+bool MyFrame::CreateWatcherIfNecessary()
 {
     if (m_watcher)
-        return;
+        return false;
 
     CreateWatcher();
     Connect(wxEVT_FSWATCHER,
             wxFileSystemWatcherEventHandler(MyFrame::OnFileSystemEvent));
+
+    return true;
 }
 
 void MyFrame::CreateWatcher()
@@ -293,6 +326,11 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
     if ( dir.empty() )
         return;
 
+    AddDirectory(dir);
+}
+
+void MyFrame::AddDirectory(const wxString& dir)
+{
     wxLogDebug("Adding directory: '%s'", dir);
 
     if (!m_watcher->Add(wxFileName::DirName(dir), wxFSW_EVENT_ALL))
