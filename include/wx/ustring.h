@@ -200,17 +200,43 @@ public:
         return (wxUString &) base->assign( str, pos, n );
     }
 
-    wxUString &assign( wxChar32 ch )
-    {
-        std::basic_string<wxChar32> *base = this;
-        return (wxUString &) base->assign( (size_type) 1, ch );
-    }
+    // FIXME-VC6:  VC 6.0 stl does not support all types of assign functions
+    #ifdef __VISUALC6__
+        wxUString &assign( wxChar32 ch )
+        {
+            wxChar32 chh[1];
+            chh[0] = ch;
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &)base->assign(chh);
+        }
 
-    wxUString &assign( size_type n, wxChar32 ch )
-    {
-        std::basic_string<wxChar32> *base = this;
-        return (wxUString &) base->assign( n, ch );
-    }
+        wxUString &assign( size_type n, wxChar32 ch )
+        {
+            wxU32CharBuffer buffer(n);
+            wxChar32 *p = buffer.data();
+            size_type i;
+            for (i = 0; i < n; i++)
+            {
+               *p = ch;
+               p++;
+            }
+
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &)base->assign(buffer.data());
+        }
+    #else
+        wxUString &assign( wxChar32 ch )
+        {
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &) base->assign( (size_type) 1, ch );
+        }
+
+        wxUString &assign( size_type n, wxChar32 ch )
+        {
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &) base->assign( n, ch );
+        }
+    #endif // __VISUALC6__
 
     wxUString &assign( const wxScopedU32CharBuffer &buf )
     {
@@ -357,11 +383,29 @@ public:
         return (wxUString &) base->append( s, n );
     }
 
-    wxUString &append( size_type n, wxChar32 c )
-    {
-        std::basic_string<wxChar32> *base = this;
-        return (wxUString &) base->append( n, c );
-    }
+    // FIXME-VC6:  VC 6.0 stl does not support all types of append functions
+    #ifdef __VISUALC6__
+        wxUString &append( size_type n, wxChar32 c )
+        {
+            wxU32CharBuffer buffer(n);
+            wxChar32 *p = buffer.data();
+            size_type i;
+            for (i = 0; i < n; i++)
+            {
+               *p = c;
+               p++;
+            }
+
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &) base->append(buffer.data());
+        }
+    #else
+        wxUString &append( size_type n, wxChar32 c )
+        {
+            std::basic_string<wxChar32> *base = this;
+            return (wxUString &) base->append( n, c );
+        }
+    #endif // __VISUALC6__
 
     wxUString &append( wxChar32 c )
     {
