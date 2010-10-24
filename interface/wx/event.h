@@ -1386,8 +1386,19 @@ public:
     //@}
 
     /**
-        Returns the raw key code for this event. This is a platform-dependent scan code
-        which should only be used in advanced applications.
+        Returns the raw key code for this event.
+
+        The flags are platform-dependent and should only be used if the
+        functionality provided by other wxKeyEvent methods is insufficient.
+
+        Under MSW, the raw key code is the value of @c wParam parameter of the
+        corresponding message.
+
+        Under GTK, the raw key code is the @c keyval field of the corresponding
+        GDK event.
+
+        Under OS X, the raw key code is the @c keyCode field of the
+        corresponding NSEvent.
 
         @note Currently the raw key codes are not supported by all ports, use
               @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.
@@ -1395,8 +1406,18 @@ public:
     wxUint32 GetRawKeyCode() const;
 
     /**
-        Returns the low level key flags for this event. The flags are
-        platform-dependent and should only be used in advanced applications.
+        Returns the low level key flags for this event.
+
+        The flags are platform-dependent and should only be used if the
+        functionality provided by other wxKeyEvent methods is insufficient.
+
+        Under MSW, the raw flags are just the value of @c lParam parameter of
+        the corresponding message.
+
+        Under GTK, the raw flags contain the @c hardware_keycode field of the
+        corresponding GDK event.
+
+        Under OS X, the raw flags contain the modifiers state.
 
         @note Currently the raw key flags are not supported by all ports, use
               @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.

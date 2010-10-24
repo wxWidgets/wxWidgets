@@ -729,7 +729,7 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     }
 
     event.m_rawCode = (wxUint32) gdk_event->keyval;
-    event.m_rawFlags = 0;
+    event.m_rawFlags = gdk_event->hardware_keycode;
 
     wxGetMousePosition( &x, &y );
     win->ScreenToClient( &x, &y );
