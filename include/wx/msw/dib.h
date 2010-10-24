@@ -53,7 +53,7 @@ public:
 
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
-    bool Create(const wxBitmap& bmp);
+    bool Create(const wxBitmap& bmp) { return Create(GetHbitmapOf(bmp)); }
     bool Create(HBITMAP hbmp);
     bool Load(const wxString& filename);
 

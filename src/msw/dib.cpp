@@ -137,18 +137,10 @@ bool wxDIB::Create(int width, int height, int depth)
     return true;
 }
 
-bool wxDIB::Create(const wxBitmap& bmp)
-{
-    wxCHECK_MSG( bmp.Ok(), false, wxT("wxDIB::Create(): invalid bitmap") );
-
-    if ( !Create(GetHbitmapOf(bmp)) )
-        return false;
-
-    return true;
-}
-
 bool wxDIB::Create(HBITMAP hbmp)
 {
+    wxCHECK_MSG( hbmp, false, wxT("wxDIB::Create(): invalid bitmap") );
+
     // this bitmap could already be a DIB section in which case we don't need
     // to convert it to DIB
     DIBSECTION ds;
