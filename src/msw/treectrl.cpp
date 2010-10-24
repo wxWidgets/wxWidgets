@@ -1976,13 +1976,15 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
         if ( IsTreeEventAllowed(changingEvent) )
         {
+            TempSetter set(m_changingSelection);
+
             if ( !TreeView_SelectItem(GetHwnd(), HITEM(itemNew)) )
             {
                 wxLogLastError(wxT("TreeView_SelectItem"));
             }
             else // ok
             {
-                SetFocusedItem(item);
+                ::SetFocus(GetHwnd(), HITEM(item));
 
                 wxTreeEvent changedEvent(wxEVT_COMMAND_TREE_SEL_CHANGED,
                                          this, itemNew);
@@ -3512,7 +3514,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             //
             // to avoid such surprises, we force the generation of focus events
             // now, before we generate the selection change ones
-            SetFocus();
+            if ( !m_changingSelection )
+                SetFocus();
             break;
 
         // instead of explicitly checking for _WIN32_IE, check if the
