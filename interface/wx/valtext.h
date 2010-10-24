@@ -42,7 +42,7 @@ enum wxTextValidatorStyle
     wxFILTER_DIGITS,
 
     /// Non-numeric characters are filtered out.
-    /// Works like @c wxFILTER_SIMPLE_NUMBER but allows also decimal points,
+    /// Works like @c wxFILTER_DIGITS but allows also decimal points,
     /// minus/plus signs and the 'e' or 'E' character to input exponents.
     /// Note that this is not the same behaviour of wxString::IsNumber().
     wxFILTER_NUMERIC,
