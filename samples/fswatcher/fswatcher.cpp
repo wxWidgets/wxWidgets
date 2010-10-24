@@ -366,7 +366,7 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)
 {
     // TODO remove when code is rock-solid
-    wxLogDebug(wxTRACE_FSWATCHER, "*** %s ***", event.ToString());
+    wxLogTrace(wxTRACE_FSWATCHER, "*** %s ***", event.ToString());
     LogEvent(event);
 }
 
