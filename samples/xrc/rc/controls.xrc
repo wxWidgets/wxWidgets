@@ -19,11 +19,10 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>5</border>
-            <object class="wxNotebook" name="controls_notebook">
-                <usenotebooksizer>1</usenotebooksizer>
+            <object class="wxChoicebook" name="controls_book">
                 <size>550,250</size>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxAnimationCtrl</label>
                     <object class="wxPanel" name="animctrl">
                         <object class="wxFlexGridSizer">
@@ -55,7 +54,7 @@
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxButton</label>
                     <object class="wxPanel" name="button">
                         <object class="wxFlexGridSizer">
@@ -126,7 +125,7 @@
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxCalendarControl</label>
                     <object class="wxPanel" name="calendar">
                         <object class="wxFlexGridSizer">
@@ -146,7 +145,7 @@
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxCheckBox</label>
                     <object class="wxPanel" name="checkbox">
                         <object class="wxFlexGridSizer">
@@ -174,7 +173,7 @@
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxCheckListBox</label>
                     <object class="wxPanel" name="checklist">
                         <object class="wxFlexGridSizer">
@@ -202,7 +201,7 @@
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxChoice</label>
                     <object class="wxPanel" name="choice">
                         <object class="wxFlexGridSizer">
@@ -231,7 +230,7 @@
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxCollapsiblePane</label>
                     <object class="wxPanel" name="collpane">
                         <object class="wxFlexGridSizer">
@@ -279,7 +278,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxComboBox</label>
                     <object class="wxPanel" name="combobox">
                         <object class="wxFlexGridSizer">
@@ -333,7 +332,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxGauge</label>
                     <object class="wxPanel" name="gauge">
                         <object class="wxFlexGridSizer">
@@ -380,7 +379,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxFile/DirCtrl</label>
                     <object class="wxPanel" name="genericdirctrl">
                         <object class="wxFlexGridSizer">
@@ -417,7 +416,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxHtmlWindow</label>
                     <object class="wxPanel" name="htmlwindow">
                         <object class="wxFlexGridSizer">
@@ -446,7 +445,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxListBox</label>
                     <object class="wxPanel" name="listbox">
                         <object class="wxFlexGridSizer">
@@ -474,7 +473,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxSimpleHtmlListBox</label>
                     <object class="wxPanel" name="simplehtmllistbox">
                         <object class="wxFlexGridSizer">
@@ -502,7 +501,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxListCtrl</label>
                     <object class="wxPanel" name="listctrl">
                         <object class="wxBoxSizer">
@@ -564,7 +563,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxPanel</label>
                     <object class="wxPanel" name="panel">
                         <object class="wxFlexGridSizer">
@@ -585,7 +584,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxSplitterWindow</label>
                     <object class="wxPanel" name="panel">
                         <object class="wxFlexGridSizer">
@@ -613,7 +612,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxRadioButton</label>
                     <object class="wxPanel" name="radiobutton">
                         <object class="wxFlexGridSizer">
@@ -641,7 +640,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxRadioBox</label>
                     <object class="wxPanel" name="radiobox">
                         <object class="wxFlexGridSizer">
@@ -673,7 +672,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxScrollBar</label>
                     <object class="wxPanel" name="scrollbar">
                         <object class="wxFlexGridSizer">
@@ -697,7 +696,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxSlider</label>
                     <object class="wxPanel" name="slider">
                         <object class="wxFlexGridSizer">
@@ -744,7 +743,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxSpinButton</label>
                     <object class="wxPanel" name="spinbutton">
                         <object class="wxFlexGridSizer">
@@ -766,7 +765,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxSpinCtrl</label>
                     <object class="wxPanel" name="spinctrl">
                         <object class="wxFlexGridSizer">
@@ -788,7 +787,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxStaticBitmap</label>
                     <object class="wxPanel" name="staticbitmap">
                         <object class="wxFlexGridSizer">
@@ -808,7 +807,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxStaticBox</label>
                     <object class="wxPanel" name="staticbox">
                         <object class="wxFlexGridSizer">
@@ -829,7 +828,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxStaticLine</label>
                     <object class="wxPanel" name="staticline">
                         <object class="wxFlexGridSizer">
@@ -858,7 +857,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxStaticText</label>
                     <object class="wxPanel" name="statictext">
                         <object class="wxFlexGridSizer">
@@ -878,7 +877,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxTextCtrl</label>
                     <object class="wxPanel" name="textctrl">
                         <object class="wxFlexGridSizer">
@@ -954,7 +953,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxToolBar</label>
                     <object class="wxPanel" name="button">
                         <object class="wxFlexGridSizer">
@@ -1098,7 +1097,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxToolbook</label>
                     <object class="wxToolbook" name="controls_toolbook">
                     <style>wxTBK_HORZ_LAYOUT</style>
@@ -1132,7 +1131,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxTreebook</label>
                                 <object class="wxTreebook" name="controls_treebook">
                                     <size>350,280</size>
@@ -1168,7 +1167,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wxTreeCtrl</label>
                     <object class="wxPanel" name="treectrl">
                         <object class="wxFlexGridSizer">
@@ -1190,7 +1189,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>wx*PickerCtrl</label>
                     <object class="wxPanel" name="pickers">
                         <object class="wxFlexGridSizer">
@@ -1274,7 +1273,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
 
-                <object class="notebookpage">
+                <object class="choicebookpage">
                     <label>The Rest</label>
                     <object class="wxPanel" name="Rest">
                         <object class="wxFlexGridSizer">
@@ -1308,8 +1307,8 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
-                                <object class="wxStaticText" name="controls_notebook_statictextT">
-                                    <label>wxNotebook (This dialog uses one)</label>
+                                <object class="wxStaticText" name="controls_notebook_statictext">
+                                    <label>wxBookCtrl (This dialog uses wxChoicebook)</label>
                                 </object>
                             </object>
                             <object class="sizeritem">
