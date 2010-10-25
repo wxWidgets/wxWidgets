@@ -20,6 +20,7 @@
 #include "wx/list.h"
 #include "wx/filefn.h"
 #include "wx/hashmap.h"
+#include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -55,12 +56,33 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowList;
 
 // ----------------------------------------------------------------------------
-// Macros
+// Arithmetic functions
 // ----------------------------------------------------------------------------
 
-#define wxMax(a,b)            (((a) > (b)) ? (a) : (b))
-#define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
-#define wxClip(a,b,c)         (((a) < (b)) ? (b) : (((a) > (c)) ? (c) : (a)))
+template<typename T1, typename T2>
+inline typename wxImplicitConversionType<T1,T2>::value
+wxMax(T1 a, T2 b)
+{
+    return (a > b) ? a : b;
+}
+
+template<typename T1, typename T2>
+inline typename wxImplicitConversionType<T1,T2>::value
+wxMin(T1 a, T2 b)
+{
+    return (a < b) ? a : b;
+}
+
+template<typename T1, typename T2, typename T3>
+inline typename wxImplicitConversionType3<T1,T2,T3>::value
+wxClip(T1 a, T2 b, T3 c)
+{
+    return (a < b) ? b : ((a > c) ? c : a);
+}
+
+// ----------------------------------------------------------------------------
+// wxMemorySize
+// ----------------------------------------------------------------------------
 
 // wxGetFreeMemory can return huge amount of memory on 32-bit platforms as well
 // so to always use long long for its result type on all platforms which
