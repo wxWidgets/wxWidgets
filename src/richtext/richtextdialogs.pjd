@@ -160,6 +160,7 @@
         <string name="Use wxPropertyGrid">"Yes"</string>
         <string name="Use wxAUI">"Yes"</string>
         <string name="Use wxSTC">"Yes"</string>
+        <string name="Use wxRegEx">"sys"</string>
         <string name="Use wxRibbonControl">"Yes"</string>
         <string name="Executable name">"%EXECUTABLE%"</string>
         <string name="Program arguments">""</string>
@@ -1049,6 +1050,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -1211,6 +1213,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -1373,6 +1376,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -2234,6 +2238,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -3722,6 +3734,7 @@
                         <bool name="proxy-wxCB_DROPDOWN">0</bool>
                         <bool name="proxy-wxCB_READONLY">1</bool>
                         <bool name="proxy-wxCB_SORT">0</bool>
+                        <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                         <bool name="proxy-wxWANTS_CHARS">0</bool>
                         <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                         <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -4534,6 +4547,7 @@
                           <bool name="proxy-wxCB_DROPDOWN">0</bool>
                           <bool name="proxy-wxCB_READONLY">1</bool>
                           <bool name="proxy-wxCB_SORT">0</bool>
+                          <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                           <bool name="proxy-wxWANTS_CHARS">0</bool>
                           <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                           <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -6093,6 +6107,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -6391,6 +6406,7 @@
                       <bool name="proxy-wxCB_DROPDOWN">1</bool>
                       <bool name="proxy-wxCB_READONLY">0</bool>
                       <bool name="proxy-wxCB_SORT">0</bool>
+                      <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                       <bool name="proxy-wxWANTS_CHARS">0</bool>
                       <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                       <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -6625,6 +6641,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">1</bool>
                     <bool name="proxy-wxCB_READONLY">0</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -6790,6 +6807,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">1</bool>
                     <bool name="proxy-wxCB_READONLY">0</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -7167,7 +7185,6 @@
           <long name="proxy-Height">300</long>
           <bool name="proxy-AUI manager">0</bool>
           <string name="proxy-Event sources">""</string>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <document>
             <string name="title">"wxBoxSizer V"</string>
             <string name="type">"dialog-control-document"</string>
@@ -7181,14 +7198,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -7231,7 +7240,7 @@
                 <string name="proxy-type">"wbBoxSizerProxy"</string>
                 <string name="proxy-Orientation">"Horizontal"</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
                 <long name="proxy-Border">5</long>
@@ -7258,7 +7267,7 @@
                   <string name="proxy-Member variable name">""</string>
                   <string name="proxy-AlignH">"Centre"</string>
                   <string name="proxy-AlignV">"Expand"</string>
-                  <long name="proxy-Stretch factor">0</long>
+                  <long name="proxy-Stretch factor">1</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">0</bool>
                   <bool name="proxy-wxRIGHT">0</bool>
@@ -7421,7 +7430,6 @@
                     <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                     <string name="proxy-Custom arguments">""</string>
                     <string name="proxy-Custom ctor arguments">""</string>
-                    <bool name="proxy-wxTE_LINEWRAP">0</bool>
                   </document>
                   <document>
                     <string name="title">"wxStaticText: wxID_STATIC"</string>
@@ -7536,13 +7544,14 @@
                     <bool name="proxy-wxCB_DROPDOWN">1</bool>
                     <bool name="proxy-wxCB_READONLY">0</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
                     <string name="proxy-Custom styles">""</string>
                     <long name="proxy-X">-1</long>
                     <long name="proxy-Y">-1</long>
-                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Width">300</long>
                     <long name="proxy-Height">-1</long>
                     <string name="proxy-AlignH">"Expand"</string>
                     <string name="proxy-AlignV">"Centre"</string>
@@ -7672,13 +7681,14 @@
                     <bool name="proxy-wxCB_DROPDOWN">1</bool>
                     <bool name="proxy-wxCB_READONLY">0</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
                     <string name="proxy-Custom styles">""</string>
                     <long name="proxy-X">-1</long>
                     <long name="proxy-Y">-1</long>
-                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Width">300</long>
                     <long name="proxy-Height">-1</long>
                     <string name="proxy-AlignH">"Expand"</string>
                     <string name="proxy-AlignV">"Centre"</string>
@@ -8023,6 +8033,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -8185,6 +8196,7 @@
                     <bool name="proxy-wxCB_DROPDOWN">0</bool>
                     <bool name="proxy-wxCB_READONLY">1</bool>
                     <bool name="proxy-wxCB_SORT">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                     <bool name="proxy-wxWANTS_CHARS">0</bool>
                     <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                     <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -8697,6 +8709,7 @@
                   <bool name="proxy-wxCB_DROPDOWN">0</bool>
                   <bool name="proxy-wxCB_READONLY">1</bool>
                   <bool name="proxy-wxCB_SORT">0</bool>
+                  <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                   <bool name="proxy-wxWANTS_CHARS">0</bool>
                   <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -11660,6 +11673,7 @@
                           <bool name="proxy-wxCB_DROPDOWN">0</bool>
                           <bool name="proxy-wxCB_READONLY">1</bool>
                           <bool name="proxy-wxCB_SORT">0</bool>
+                          <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                           <bool name="proxy-wxWANTS_CHARS">0</bool>
                           <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                           <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -11958,6 +11972,7 @@
                             <bool name="proxy-wxCB_DROPDOWN">1</bool>
                             <bool name="proxy-wxCB_READONLY">0</bool>
                             <bool name="proxy-wxCB_SORT">0</bool>
+                            <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                             <bool name="proxy-wxWANTS_CHARS">0</bool>
                             <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                             <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -12192,6 +12207,7 @@
                           <bool name="proxy-wxCB_DROPDOWN">1</bool>
                           <bool name="proxy-wxCB_READONLY">0</bool>
                           <bool name="proxy-wxCB_SORT">0</bool>
+                          <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                           <bool name="proxy-wxWANTS_CHARS">0</bool>
                           <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                           <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -12357,6 +12373,7 @@
                           <bool name="proxy-wxCB_DROPDOWN">1</bool>
                           <bool name="proxy-wxCB_READONLY">0</bool>
                           <bool name="proxy-wxCB_SORT">0</bool>
+                          <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                           <bool name="proxy-wxWANTS_CHARS">0</bool>
                           <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                           <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -14621,6 +14638,7 @@
                                 <bool name="proxy-wxCB_DROPDOWN">0</bool>
                                 <bool name="proxy-wxCB_READONLY">1</bool>
                                 <bool name="proxy-wxCB_SORT">0</bool>
+                                <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                                 <bool name="proxy-wxWANTS_CHARS">0</bool>
                                 <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                                 <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -14738,6 +14756,16 @@
       </document>
       <document>
         <string name="title">"Images"</string>
+        <string name="type">"html-document"</string>
+        <string name="filename">""</string>
+        <string name="icon-name">"bitmapsfolder"</string>
+        <long name="is-transient">1</long>
+        <long name="owns-file">1</long>
+        <long name="title-mode">0</long>
+        <long name="locked">1</long>
+      </document>
+      <document>
+        <string name="title">"Resources"</string>
         <string name="type">"html-document"</string>
         <string name="filename">""</string>
         <string name="icon-name">"bitmapsfolder"</string>
