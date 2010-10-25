@@ -547,16 +547,28 @@ wxString wxGetCurrentDir()
 // Environment
 // ----------------------------------------------------------------------------
 
+#ifdef __WXOSX__
+    #include <crt_externs.h>
+#endif
+
 bool wxGetEnvMap(wxEnvVariableHashMap *map)
 {
     wxCHECK_MSG( map, false, wxS("output pointer can't be NULL") );
 
 #if defined(__VISUALC__)
     wxChar **env = _tenviron;
-#else // non-MSVC
+#elif defined(__WXOSX__)
+    // Under Mac shared libraries don't have access to the global environ
+    // variable so use this Mac-specific function instead as advised by
+    // environ(7) under Darwin
+    char ***penv = _NSGetEnviron();
+    if ( !penv )
+        return false;
+    char **env = *penv;
+#else // non-MSVC non-Mac
     // Not sure if other compilers have _tenviron so use the (more standard)
     // ANSI version only for them.
-    char ** env = environ;
+    char **env = environ;
 #endif
 
     if ( env )
