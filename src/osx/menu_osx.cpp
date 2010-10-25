@@ -533,7 +533,8 @@ void wxMenuBar::Init()
 #if !wxOSX_USE_CARBON
     if ( wxApp::s_macPreferencesMenuItemId != wxID_NONE )
     {
-        m_appleMenu->Append( wxApp::s_macPreferencesMenuItemId, "Preferences..." );
+        m_appleMenu->Append( wxApp::s_macPreferencesMenuItemId,
+                             "Preferences...\tCtrl+," );
         m_appleMenu->AppendSeparator();
     }
 
