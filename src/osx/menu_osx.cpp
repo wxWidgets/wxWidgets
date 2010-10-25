@@ -521,7 +521,12 @@ void wxMenuBar::Init()
     // recommended, sometimes these items really don't make sense.
     if ( wxApp::s_macAboutMenuItemId != wxID_NONE )
     {
-        m_appleMenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
+        wxString aboutLabel("About");
+        if ( wxTheApp )
+            aboutLabel << ' ' << wxTheApp->GetAppDisplayName();
+        else
+            aboutLabel << "...";
+        m_appleMenu->Append( wxApp::s_macAboutMenuItemId, aboutLabel);
         m_appleMenu->AppendSeparator();
     }
 
