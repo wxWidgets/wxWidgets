@@ -236,6 +236,7 @@ wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h
 wx/meta/if.h
+wx/meta/implicitconversion.h
 wx/meta/int2type.h
 wx/meta/movable.h
 wx/meta/pod.h

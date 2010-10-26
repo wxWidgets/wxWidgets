@@ -1419,6 +1419,9 @@
 				RelativePath="..\..\include\wx\meta\if.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\meta\implicitconversion.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\init.h">
 			</File>
 			<File
