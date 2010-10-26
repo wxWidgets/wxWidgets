@@ -1383,7 +1383,13 @@ public:
     #define wxStringToStdWstringRetType wxStdWideString
     wxStdWideString ToStdWstring() const
     {
+#if wxUSE_UNICODE_WCHAR
+        wxScopedWCharBuffer buf =
+            wxScopedWCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length());
+#else // !wxUSE_UNICODE_WCHAR
         wxScopedWCharBuffer buf(wc_str());
+#endif
+
         return wxStdWideString(buf.data(), buf.length());
     }
   #endif
