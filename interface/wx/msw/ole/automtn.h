@@ -93,8 +93,11 @@ public:
 
     /**
         Gets the IDispatch pointer.
+
+        Notice that the return value of this function is an untyped pointer but
+        it can be safely cast to @c IDispatch.
     */
-    IDispatch* GetDispatchPtr() const;
+    void* GetDispatchPtr() const;
 
     /**
         Retrieves the current object associated with a class id, and attaches the
