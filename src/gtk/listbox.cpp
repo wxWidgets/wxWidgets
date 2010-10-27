@@ -74,37 +74,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        * WXUNUSED(treeview),
 
     int sel = gtk_tree_path_get_indices(path)[0];
 
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-    event.SetEventObject( listbox );
-
-    if (listbox->IsSelected(sel))
-    {
-        GtkTreeEntry* entry = listbox->GTKGetEntry(sel);
-
-        if (entry)
-        {
-            event.SetInt(sel);
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject( (wxClientData*) gtk_tree_entry_get_userdata(entry) );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            g_object_unref (entry);
-        }
-        else
-        {
-            wxLogSysError(wxT("Internal error - could not get entry for double-click"));
-            event.SetInt(-1);
-        }
-    }
-    else
-    {
-        event.SetInt(-1);
-    }
-
-    listbox->HandleWindowEvent( event );
+    listbox->GTKOnActivated(sel);
 }
 }
 
@@ -151,27 +121,7 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
 
         if (index != wxNOT_FOUND)
         {
-            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-            event.SetEventObject( listbox );
-
-            GtkTreeEntry* entry = listbox->GTKGetEntry( index );
-
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-
-            event.SetInt( index );
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
-                                 );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            /* bool ret = */ listbox->HandleWindowEvent( event );
-
-            g_object_unref (entry);
+            listbox->GTKOnActivated(index);
 
 //          wxMac and wxMSW always invoke default action
 //          if (!ret)
@@ -721,6 +671,11 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 // selection
 // ----------------------------------------------------------------------------
 
+void wxListBox::GTKOnActivated(int item)
+{
+    SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, item, IsSelected(item));
+}
+
 void wxListBox::GTKOnSelectionChanged()
 {
     if ( HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED) )
@@ -729,44 +684,9 @@ void wxListBox::GTKOnSelectionChanged()
     }
     else // single selection
     {
-        const int index = GetSelection();
-        if ( !DoChangeSingleSelection(index) )
-            return;
-
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId() );
-        event.SetEventObject( this );
-
-        if (index == wxNOT_FOUND)
-        {
-            // indicate that this is a deselection
-            event.SetExtraLong( 0 );
-            event.SetInt( -1 );
-
-            HandleWindowEvent( event );
-
-            return;
-        }
-        else
-        {
-            GtkTreeEntry* entry = GTKGetEntry( index );
-
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-
-            event.SetInt( index );
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( HasClientObjectData() )
-                event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
-                                 );
-            else if ( HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            HandleWindowEvent( event );
-
-            g_object_unref (entry);
-        }
+        const int item = GetSelection();
+        if ( DoChangeSingleSelection(item) )
+            SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, item, true);
     }
 }
 
