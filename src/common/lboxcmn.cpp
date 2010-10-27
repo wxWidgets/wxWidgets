@@ -59,6 +59,14 @@ bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
     return true;
 }
 
+void wxListBoxBase::SetSelection(int n)
+{
+    if ( !HasMultipleSelection() )
+        DoChangeSingleSelection(n);
+
+    DoSetSelection(n, true);
+}
+
 void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
 {
     if ( HasMultipleSelection() )
@@ -112,6 +120,24 @@ bool wxListBoxBase::SendEvent(wxEventType evtType, int item, bool selected)
         event.SetClientData(GetClientData(item));
 
     return HandleWindowEvent(event);
+}
+
+bool wxListBoxBase::DoChangeSingleSelection(int item)
+{
+    // As we don't use m_oldSelections in single selection mode, we store the
+    // last item that we notified the user about in it in this case because we
+    // need to remember it to be able to filter out the dummy selection changes
+    // that we get when the user clicks on an already selected item.
+    if ( !m_oldSelections.empty() && *m_oldSelections.begin() == item )
+    {
+        // Same item as the last time.
+        return false;
+    }
+
+    m_oldSelections.clear();
+    m_oldSelections.push_back(item);
+
+    return true;
 }
 
 bool wxListBoxBase::CalcAndSendEvent()

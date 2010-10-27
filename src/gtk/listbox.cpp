@@ -119,49 +119,9 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 {
     if (g_blockEventsOnDrag) return;
 
-    if (listbox->HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED))
-    {
-        listbox->CalcAndSendEvent();
-    }
-    else // single selection
-    {
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-        event.SetEventObject( listbox );
-
-        int index = listbox->GetSelection();
-        if (index == wxNOT_FOUND)
-        {
-            // indicate that this is a deselection
-            event.SetExtraLong( 0 );
-            event.SetInt( -1 );
-
-            listbox->HandleWindowEvent( event );
-
-            return;
-        }
-        else
-        {
-            GtkTreeEntry* entry = listbox->GTKGetEntry( index );
-
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-
-            event.SetInt( index );
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
-                                 );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            listbox->HandleWindowEvent( event );
-
-            g_object_unref (entry);
-        }
-    }
+    listbox->GTKOnSelectionChanged();
 }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -760,6 +720,55 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 // ----------------------------------------------------------------------------
 // selection
 // ----------------------------------------------------------------------------
+
+void wxListBox::GTKOnSelectionChanged()
+{
+    if ( HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED) )
+    {
+        CalcAndSendEvent();
+    }
+    else // single selection
+    {
+        const int index = GetSelection();
+        if ( !DoChangeSingleSelection(index) )
+            return;
+
+        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId() );
+        event.SetEventObject( this );
+
+        if (index == wxNOT_FOUND)
+        {
+            // indicate that this is a deselection
+            event.SetExtraLong( 0 );
+            event.SetInt( -1 );
+
+            HandleWindowEvent( event );
+
+            return;
+        }
+        else
+        {
+            GtkTreeEntry* entry = GTKGetEntry( index );
+
+            // indicate that this is a selection
+            event.SetExtraLong( 1 );
+
+            event.SetInt( index );
+            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
+
+            if ( HasClientObjectData() )
+                event.SetClientObject(
+                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
+                                 );
+            else if ( HasClientUntypedData() )
+                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
+
+            HandleWindowEvent( event );
+
+            g_object_unref (entry);
+        }
+    }
+}
 
 int wxListBox::GetSelection() const
 {

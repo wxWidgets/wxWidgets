@@ -100,6 +100,8 @@ public:
     void GTKDisableEvents();
     void GTKEnableEvents();
 
+    void GTKOnSelectionChanged();
+
 protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int n);
