@@ -41,7 +41,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxNotebookNameStr);
+             const wxString& name = wxNotebookNameStr)
     { Create( parent, id, pos, size, style, name ); }
     // Create() function
   bool Create(wxWindow *parent,
