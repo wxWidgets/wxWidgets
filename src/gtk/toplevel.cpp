@@ -339,7 +339,6 @@ gtk_frame_map_callback( GtkWidget*,
                         wxTopLevelWindow *win )
 {
     const bool wasIconized = win->IsIconized();
-    win->SetIconizeState(false);
     if (wasIconized)
     {
         // Because GetClientSize() returns (0,0) when IsIconized() is true,
@@ -372,19 +371,25 @@ gtk_frame_map_callback( GtkWidget*,
 }
 
 //-----------------------------------------------------------------------------
-// "unmap_event" from m_widget
+// "window-state-event" from m_widget
 //-----------------------------------------------------------------------------
 
 extern "C" {
 static gboolean
-gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
-                          GdkEvent * WXUNUSED(event),
+gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
+                          GdkEventWindowState *event,
                           wxTopLevelWindow *win )
 {
-    // hiding the window doesn't count as minimizing it
-    if (win->IsShown())
-        win->SetIconizeState(true);
-    return false;
+    
+    if (event->changed_mask && GDK_WINDOW_STATE_ICONIFIED)
+    {
+        if (event->new_window_state && GDK_WINDOW_STATE_ICONIFIED)
+            win->SetIconizeState(true);
+        else
+            win->SetIconizeState(false);
+    }
+    
+    return FALSE;
 }
 }
 
@@ -594,11 +599,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect (m_widget, "realize",
                       G_CALLBACK (gtk_frame_realized_callback), this);
 
-    // map and unmap for iconized state
+    // for some reported size corrections
     g_signal_connect (m_widget, "map_event",
                       G_CALLBACK (gtk_frame_map_callback), this);
-    g_signal_connect (m_widget, "unmap_event",
-                      G_CALLBACK (gtk_frame_unmap_callback), this);
+
+    // for iconized state
+    g_signal_connect (m_widget, "window_state_event",
+                      G_CALLBACK (gtk_frame_window_state_callback), this);
+
 
     // for wxMoveEvent
     g_signal_connect (m_widget, "configure_event",
