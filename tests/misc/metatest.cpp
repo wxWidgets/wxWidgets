@@ -36,11 +36,13 @@ private:
         CPPUNIT_TEST( IsPod );
         CPPUNIT_TEST( IsMovable );
         CPPUNIT_TEST( ImplicitConversion );
+        CPPUNIT_TEST( MinMax );
     CPPUNIT_TEST_SUITE_END();
 
     void IsPod();
     void IsMovable();
     void ImplicitConversion();
+    void MinMax();
 
     DECLARE_NO_COPY_CLASS(MetaProgrammingTestCase)
 };
@@ -77,13 +79,6 @@ void MetaProgrammingTestCase::IsMovable()
 
 void MetaProgrammingTestCase::ImplicitConversion()
 {
-    // wxImplicitConversionType<> is used to implement wxMax(). We test it
-    // indirectly through that here.
-
-    // test that wxMax(1.1,1) returns float, not long int
-    float f = wxMax(1.1f, 1l);
-    CPPUNIT_ASSERT_EQUAL( 1.1f, f);
-
 #ifndef wxNO_RTTI
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<char,int>::value) == typeid(int));
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<int,unsigned>::value) == typeid(unsigned));
@@ -91,4 +86,20 @@ void MetaProgrammingTestCase::ImplicitConversion()
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<wxLongLong_t,float>::value) == typeid(float));
 #endif
 #endif // !wxNO_RTTI
+}
+
+void MetaProgrammingTestCase::MinMax()
+{
+    // test that wxMax(1.1,1) returns float, not long int
+    float f = wxMax(1.1f, 1l);
+    CPPUNIT_ASSERT_EQUAL( 1.1f, f);
+
+    // test that comparing signed and unsigned correctly returns unsigned: this
+    // may seem counterintuitive in this case but this is consistent with the
+    // standard C conversions
+    CPPUNIT_ASSERT_EQUAL( 1, wxMin(-1, 1u) );
+
+    CPPUNIT_ASSERT_EQUAL( -1., wxClip(-1.5, -1, 1) );
+    CPPUNIT_ASSERT_EQUAL( 0, wxClip(0, -1, 1) );
+    CPPUNIT_ASSERT_EQUAL( 1, wxClip(2l, -1, 1) );
 }
