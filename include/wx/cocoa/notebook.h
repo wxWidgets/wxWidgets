@@ -56,7 +56,7 @@ protected:
 // ------------------------------------------------------------------------
 public:
     // set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     int SetSelection(size_t nPage);
     // get the currently selected page
     int GetSelection() const;

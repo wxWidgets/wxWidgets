@@ -355,16 +355,16 @@ wxListbook::InsertPage(size_t n,
 
     // some page should be selected: either this one or the first one if there
     // is still no selection
-    int selNew = -1;
+    int selNew = wxNOT_FOUND;
     if ( bSelect )
         selNew = n;
-    else if ( m_selection == -1 )
+    else if ( m_selection == wxNOT_FOUND )
         selNew = 0;
 
     if ( selNew != m_selection )
         page->Hide();
 
-    if ( selNew != -1 )
+    if ( selNew != wxNOT_FOUND )
         SetSelection(selNew);
 
     UpdateSize();
@@ -387,7 +387,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
             int sel = m_selection - 1;
             if (page_count == 1)
                 sel = wxNOT_FOUND;
-            else if ((page_count == 2) || (sel == -1))
+            else if ((page_count == 2) || (sel == wxNOT_FOUND))
                 sel = 0;
 
             // force sel invalid if deleting current page - don't try to hide it

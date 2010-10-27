@@ -204,7 +204,7 @@ public:
                             int imageId = -1) = 0;
 
     // set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     //
     // NB: this function will generate PAGE_CHANGING/ED events
     virtual int SetSelection(size_t n) = 0;
@@ -217,7 +217,7 @@ public:
     void AdvanceSelection(bool forward = true)
     {
         int nPage = GetNextPage(forward);
-        if ( nPage != -1 )
+        if ( nPage != wxNOT_FOUND )
         {
             // cast is safe because of the check above
             SetSelection((size_t)nPage);
@@ -353,7 +353,7 @@ class WXDLLIMPEXP_CORE wxBookCtrlEvent : public wxNotifyEvent
 {
 public:
     wxBookCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
-                        int nSel = -1, int nOldSel = -1)
+                        int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
         : wxNotifyEvent(commandType, winid)
     {
         m_nSel = nSel;
@@ -370,10 +370,10 @@ public:
     virtual wxEvent *Clone() const { return new wxBookCtrlEvent(*this); }
 
     // accessors
-        // the currently selected page (-1 if none)
+        // the currently selected page (wxNOT_FOUND if none)
     int GetSelection() const { return m_nSel; }
     void SetSelection(int nSel) { m_nSel = nSel; }
-        // the page that was selected before the change (-1 if none)
+        // the page that was selected before the change (wxNOT_FOUND if none)
     int GetOldSelection() const { return m_nOldSel; }
     void SetOldSelection(int nOldSel) { m_nOldSel = nOldSel; }
 

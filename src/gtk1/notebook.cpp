@@ -227,7 +227,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
         int sel = notebook->GetSelection();
-        if (sel == -1)
+        if (sel == wxNOT_FOUND)
             return TRUE;
         wxGtkNotebookPage *nb_page = notebook->GetNotebookPage(sel);
         wxCHECK_MSG( nb_page, FALSE, wxT("invalid selection in wxNotebook") );
@@ -362,9 +362,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
 int wxNotebook::GetSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid notebook") );
 
-    if ( m_selection == -1 )
+    if ( m_selection == wxNOT_FOUND )
     {
         GList *nb_pages = GTK_NOTEBOOK(m_widget)->children;
 
@@ -417,7 +417,7 @@ wxGtkNotebookPage* wxNotebook::GetNotebookPage( int page ) const
 
 int wxNotebook::DoSetSelection( size_t page, int flags )
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid notebook") );
 
     wxCHECK_MSG( page < m_pagesData.GetCount(), -1, wxT("invalid notebook index") );
 
@@ -597,10 +597,10 @@ bool wxNotebook::DeleteAllPages()
 
 wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 {
-    if ( m_selection != -1 && (size_t)m_selection >= page )
+    if ( m_selection != wxNOT_FOUND && (size_t)m_selection >= page )
     {
         // the index will become invalid after the page is deleted
-        m_selection = -1;
+        m_selection = wxNOT_FOUND;
     }
 
     wxNotebookPage *client = wxNotebookBase::DoRemovePage(page);

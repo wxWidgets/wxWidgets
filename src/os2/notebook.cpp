@@ -429,7 +429,7 @@ wxNotebookPage* wxNotebook::DoRemovePage ( size_t nPage )
         }
         else // nothing changes for the currently selected page
         {
-            nSelNew = -1;
+            nSelNew = wxNOT_FOUND;
 
             //
             // We still must refresh the current page: this needs to be done
@@ -440,7 +440,7 @@ wxNotebookPage* wxNotebook::DoRemovePage ( size_t nPage )
             m_pages[m_nSelection]->Refresh();
         }
 
-        if (nSelNew != -1)
+        if (nSelNew != wxNOT_FOUND)
         {
             //
             // m_nSelection must be always valid so reset it before calling
@@ -653,14 +653,14 @@ bool wxNotebook::InsertPage ( size_t          nPage,
     // Some page should be selected: either this one or the first one if there is
     // still no selection
     //
-    int nSelNew = -1;
+    int nSelNew = wxNOT_FOUND;
 
     if (bSelect)
         nSelNew = nPage;
     else if ( m_nSelection == -1 )
         nSelNew = 0;
 
-    if (nSelNew != -1)
+    if (nSelNew != wxNOT_FOUND)
         SetSelection(nSelNew);
 
     InvalidateBestSize();
