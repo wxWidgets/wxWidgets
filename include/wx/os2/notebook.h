@@ -70,11 +70,6 @@ public:
     int ChangeSelection(size_t nPage);
 
     //
-    // Get the currently selected page
-    //
-    inline int      GetSelection(void) const { return m_nSelection; }
-
-    //
     // Set/Get the title of a page
     //
     bool     SetPageText( size_t             nPage
@@ -192,8 +187,6 @@ protected:
     //
     // Helper functions
     //
-
-    int                     m_nSelection; // The current selection (-1 if none)
 
 private:
     wxArrayLong                     m_alPageId;

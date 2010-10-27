@@ -556,11 +556,6 @@ bool wxTreebook::SetPageImage(size_t n, int imageId)
     return true;
 }
 
-int wxTreebook::GetSelection() const
-{
-   return m_selection;
-}
-
 int wxTreebook::DoSetSelection(size_t pagePos, int flags)
 {
     wxCHECK_MSG( IS_VALID_PAGE(pagePos), wxNOT_FOUND,

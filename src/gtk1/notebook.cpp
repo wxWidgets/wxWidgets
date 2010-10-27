@@ -107,7 +107,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
         // make wxNotebook::GetSelection() return the correct (i.e. consistent
         // with wxBookCtrlEvent::GetSelection()) value even though the page is
         // not really changed in GTK+
-        notebook->m_selection = page;
+        notebook->SetSelection(page);
     }
     else
     {
@@ -121,7 +121,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
             // make wxNotebook::GetSelection() return the correct (i.e. consistent
             // with wxBookCtrlEvent::GetSelection()) value even though the page is
             // not really changed in GTK+
-            notebook->m_selection = page;
+            notebook->SetSelection(page);
 
             notebook->SendPageChangedEvent(old);
         }
@@ -292,7 +292,6 @@ void wxNotebook::Init()
     m_inSwitchPage = false;
 
     m_imageList = NULL;
-    m_selection = -1;
     m_themeEnabled = true;
 }
 
@@ -375,8 +374,8 @@ int wxNotebook::GetSelection() const
             gpointer cur = notebook->cur_page;
             if ( cur != NULL )
             {
-                wxConstCast(this, wxNotebook)->m_selection =
-                    g_list_index( nb_pages, cur );
+                const_cast<wxNotebook *>(this)->
+                    SetSelection(g_list_index( nb_pages, cur ));
             }
         }
     }

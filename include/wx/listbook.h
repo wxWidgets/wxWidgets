@@ -39,10 +39,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
 class WXDLLIMPEXP_CORE wxListbook : public wxBookCtrlBase
 {
 public:
-    wxListbook()
-    {
-        Init();
-    }
+    wxListbook() { }
 
     wxListbook(wxWindow *parent,
                wxWindowID id,
@@ -51,8 +48,6 @@ public:
                long style = 0,
                const wxString& name = wxEmptyString)
     {
-        Init();
-
         (void)Create(parent, id, pos, size, style, name);
     }
 
@@ -66,7 +61,6 @@ public:
 
 
     // overridden base class methods
-    virtual int GetSelection() const;
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
     virtual int GetPageImage(size_t n) const;
@@ -101,13 +95,7 @@ protected:
     void OnListSelected(wxListEvent& event);
     void OnSize(wxSizeEvent& event);
 
-    // the currently selected page or wxNOT_FOUND if none
-    int m_selection;
-
 private:
-    // common part of all constructors
-    void Init();
-
     // this should be called when we need to be relaid out
     void UpdateSize();
 

@@ -64,7 +64,6 @@ END_EVENT_TABLE()
 
 void wxToolbook::Init()
 {
-    m_selection = wxNOT_FOUND;
     m_needsRealizing = false;
 }
 
@@ -200,11 +199,6 @@ void wxToolbook::SetImageList(wxImageList *imageList)
 // ----------------------------------------------------------------------------
 // selection
 // ----------------------------------------------------------------------------
-
-int wxToolbook::GetSelection() const
-{
-    return m_selection;
-}
 
 wxBookCtrlEvent* wxToolbook::CreatePageChangingEvent() const
 {

@@ -89,8 +89,6 @@ public:
     // selected one (or wxNOT_FOUND on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
   int SetSelection(size_t nPage);
-    // get the currently selected page
-  int GetSelection() const { return m_nSelection; }
 
     // changes selected page without sending events
   int ChangeSelection(size_t nPage);
@@ -199,7 +197,7 @@ protected:
   void Init();
 
   // hides the currently shown page and shows the given one (if not -1) and
-  // updates m_nSelection accordingly
+  // updates m_selection accordingly
   void UpdateSelection(int selNew);
 
   // remove one page from the notebook, without deleting
@@ -236,8 +234,6 @@ protected:
   bool m_hasSubclassedUpdown;
 #endif // __WXWINCE__
 
-  // the current selection (-1 if none)
-  int m_nSelection;
 
   wxNotebookPageInfoList m_pageInfos;
 

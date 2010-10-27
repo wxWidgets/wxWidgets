@@ -61,10 +61,11 @@ static void event_after(GtkNotebook*, GdkEvent*, wxNotebook*);
 
 extern "C" {
 static void
-switch_page_after(GtkWidget* widget, GtkNotebookPage*, guint, wxNotebook* win)
+switch_page_after(GtkNotebook* widget, GtkNotebookPage*, guint, wxNotebook* win)
 {
     g_signal_handlers_block_by_func(widget, (void*)switch_page_after, win);
-    win->SendPageChangedEvent(win->m_oldSelection);
+
+    win->GTKOnPageChanged();
 }
 }
 
@@ -245,11 +246,20 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
         g_signal_handlers_unblock_by_func(m_widget, (void*)switch_page, this);
     }
 
+    m_selection = page;
+
     wxNotebookPage *client = GetPage(page);
     if ( client )
         client->SetFocus();
 
     return selOld;
+}
+
+void wxNotebook::GTKOnPageChanged()
+{
+    m_selection = gtk_notebook_get_current_page(GTK_NOTEBOOK(m_widget));
+
+    SendPageChangedEvent(m_oldSelection);
 }
 
 bool wxNotebook::SetPageText( size_t page, const wxString &text )

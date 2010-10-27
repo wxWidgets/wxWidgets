@@ -240,7 +240,6 @@ const wxNotebookPageInfoList& wxNotebook::GetPageInfos() const
 void wxNotebook::Init()
 {
     m_imageList = NULL;
-    m_nSelection = wxNOT_FOUND;
 
 #if wxUSE_UXTHEME
     m_hbrBackground = NULL;
@@ -451,24 +450,24 @@ int wxNotebook::SetSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-    if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
+    if ( m_selection == wxNOT_FOUND || nPage != (size_t)m_selection )
     {
         if ( SendPageChangingEvent(nPage) )
         {
             // program allows the page change
-            SendPageChangedEvent(m_nSelection, nPage);
+            SendPageChangedEvent(m_selection, nPage);
 
             TabCtrl_SetCurSel(GetHwnd(), nPage);
         }
     }
 
-    return m_nSelection;
+    return m_selection;
 }
 
 void wxNotebook::UpdateSelection(int selNew)
 {
-    if ( m_nSelection != wxNOT_FOUND )
-        m_pages[m_nSelection]->Show(false);
+    if ( m_selection != wxNOT_FOUND )
+        m_pages[m_selection]->Show(false);
 
     if ( selNew != wxNOT_FOUND )
     {
@@ -486,16 +485,16 @@ void wxNotebook::UpdateSelection(int selNew)
     if ( ::IsWindowVisible(GetHwnd()) )
         SetFocus();
 
-    m_nSelection = selNew;
+    m_selection = selNew;
 }
 
 int wxNotebook::ChangeSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-    const int selOld = m_nSelection;
+    const int selOld = m_selection;
 
-    if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
+    if ( m_selection == wxNOT_FOUND || nPage != (size_t)m_selection )
     {
         TabCtrl_SetCurSel(GetHwnd(), nPage);
 
@@ -697,7 +696,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     if ( m_pages.IsEmpty() )
     {
         // no selection any more, the notebook becamse empty
-        m_nSelection = wxNOT_FOUND;
+        m_selection = wxNOT_FOUND;
     }
     else // notebook still not empty
     {
@@ -708,22 +707,22 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
             // Because it could be that the slection index changed
             // we need to update it.
             // Note: this does not mean the selection it self changed.
-            m_nSelection = selNew;
-            m_pages[m_nSelection]->Refresh();
+            m_selection = selNew;
+            m_pages[m_selection]->Refresh();
         }
-        else if (int(nPage) == m_nSelection)
+        else if (int(nPage) == m_selection)
         {
             // The selection was deleted.
 
             // Determine new selection.
-            if (m_nSelection == int(GetPageCount()))
-                selNew = m_nSelection - 1;
+            if (m_selection == int(GetPageCount()))
+                selNew = m_selection - 1;
             else
-                selNew = m_nSelection;
+                selNew = m_selection;
 
-            // m_nSelection must be always valid so reset it before calling
+            // m_selection must be always valid so reset it before calling
             // SetSelection()
-            m_nSelection = wxNOT_FOUND;
+            m_selection = wxNOT_FOUND;
             SetSelection(selNew);
         }
         else
@@ -747,7 +746,7 @@ bool wxNotebook::DeleteAllPages()
 
     TabCtrl_DeleteAllItems(GetHwnd());
 
-    m_nSelection = wxNOT_FOUND;
+    m_selection = wxNOT_FOUND;
 
     InvalidateBestSize();
     return true;
@@ -837,10 +836,10 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     // if the inserted page is before the selected one, we must update the
     // index of the selected page
-    if ( int(nPage) <= m_nSelection )
+    if ( int(nPage) <= m_selection )
     {
         // one extra page added
-        m_nSelection++;
+        m_selection++;
     }
 
     // some page should be selected: either this one or the first one if there
@@ -848,7 +847,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     int selNew = wxNOT_FOUND;
     if ( bSelect )
         selNew = nPage;
-    else if ( m_nSelection == wxNOT_FOUND )
+    else if ( m_selection == wxNOT_FOUND )
         selNew = 0;
 
     if ( selNew != wxNOT_FOUND )
@@ -1149,14 +1148,14 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             // page but only if entering notebook page (i.e. direction is
             // backwards (Shift-TAB) comething from out-of-notebook, or
             // direction is forward (TAB) from ourselves),
-            if ( m_nSelection != wxNOT_FOUND &&
+            if ( m_selection != wxNOT_FOUND &&
                     (!event.GetDirection() || isFromSelf) )
             {
                 // so that the page knows that the event comes from it's parent
                 // and is being propagated downwards
                 event.SetEventObject(this);
 
-                wxWindow *page = m_pages[m_nSelection];
+                wxWindow *page = m_pages[m_selection];
                 if ( !page->HandleWindowEvent(event) )
                 {
                     page->SetFocus();
@@ -1451,7 +1450,7 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   }
 
   event.SetSelection(TabCtrl_GetCurSel(GetHwnd()));
-  event.SetOldSelection(m_nSelection);
+  event.SetOldSelection(m_selection);
   event.SetEventObject(this);
   event.SetInt(idCtrl);
 

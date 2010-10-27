@@ -64,11 +64,6 @@ END_EVENT_TABLE()
 // wxChoicebook creation
 // ----------------------------------------------------------------------------
 
-void wxChoicebook::Init()
-{
-    m_selection = wxNOT_FOUND;
-}
-
 bool
 wxChoicebook::Create(wxWindow *parent,
                      wxWindowID id,
@@ -165,11 +160,6 @@ void wxChoicebook::SetImageList(wxImageList *imageList)
 // selection
 // ----------------------------------------------------------------------------
 
-int wxChoicebook::GetSelection() const
-{
-    return m_selection;
-}
-
 wxBookCtrlEvent* wxChoicebook::CreatePageChangingEvent() const
 {
     return new wxBookCtrlEvent(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
@@ -254,7 +244,6 @@ wxWindow *wxChoicebook::DoRemovePage(size_t page)
 
 bool wxChoicebook::DeleteAllPages()
 {
-    m_selection = wxNOT_FOUND;
     GetChoiceCtrl()->Clear();
     return wxBookCtrlBase::DeleteAllPages();
 }

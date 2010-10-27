@@ -39,10 +39,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGI
 class WXDLLIMPEXP_CORE wxChoicebook : public wxBookCtrlBase
 {
 public:
-    wxChoicebook()
-    {
-        Init();
-    }
+    wxChoicebook() { }
 
     wxChoicebook(wxWindow *parent,
                  wxWindowID id,
@@ -51,8 +48,6 @@ public:
                  long style = 0,
                  const wxString& name = wxEmptyString)
     {
-        Init();
-
         (void)Create(parent, id, pos, size, style, name);
     }
 
@@ -65,7 +60,6 @@ public:
                 const wxString& name = wxEmptyString);
 
 
-    virtual int GetSelection() const;
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
     virtual int GetPageImage(size_t n) const;
@@ -102,13 +96,7 @@ protected:
     // event handlers
     void OnChoiceSelected(wxCommandEvent& event);
 
-    // the currently selected page or wxNOT_FOUND if none
-    int m_selection;
-
 private:
-    // common part of all constructors
-    void Init();
-
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoicebook)
 };

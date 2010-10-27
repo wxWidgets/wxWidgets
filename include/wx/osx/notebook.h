@@ -34,7 +34,7 @@ public:
   // ctors
   // -----
     // default for dynamic class
-  wxNotebook();
+  wxNotebook() { }
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
              wxWindowID id,
@@ -42,6 +42,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxNotebookNameStr);
+    { Create( parent, id, pos, size, style, name ); }
     // Create() function
   bool Create(wxWindow *parent,
               wxWindowID id,
@@ -58,8 +59,6 @@ public:
     // selected one (or wxNOT_FOUND on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
   int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
-    // get the currently selected page
-  int GetSelection() const { return m_nSelection; }
 
     // changes selected page without sending events
   int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
@@ -134,8 +133,6 @@ protected:
 
   // the icon indices
   wxArrayInt m_images;
-
-  int m_nSelection;           // the current selection (-1 if none)
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()

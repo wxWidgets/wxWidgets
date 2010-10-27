@@ -85,11 +85,6 @@ END_EVENT_TABLE()
 // wxListbook creation
 // ----------------------------------------------------------------------------
 
-void wxListbook::Init()
-{
-    m_selection = wxNOT_FOUND;
-}
-
 bool
 wxListbook::Create(wxWindow *parent,
                    wxWindowID id,
@@ -311,11 +306,6 @@ void wxListbook::UpdateSelectedPage(size_t newsel)
     GetListView()->Focus(newsel);
 }
 
-int wxListbook::GetSelection() const
-{
-    return m_selection;
-}
-
 wxBookCtrlEvent* wxListbook::CreatePageChangingEvent() const
 {
     return new wxBookCtrlEvent(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
@@ -410,8 +400,6 @@ bool wxListbook::DeleteAllPages()
     GetListView()->DeleteAllItems();
     if (!wxBookCtrlBase::DeleteAllPages())
         return false;
-
-    m_selection = -1;
 
     UpdateSize();
 

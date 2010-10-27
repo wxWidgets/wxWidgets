@@ -110,6 +110,9 @@ public:
     // common part of all ctors
     void Init();
 
+    // Called by GTK event handler when the current page is definitely changed.
+    void GTKOnPageChanged();
+
     // helper function
     wxGtkNotebookPage* GetNotebookPage(int page) const;
 

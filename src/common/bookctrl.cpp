@@ -53,6 +53,7 @@ END_EVENT_TABLE()
 
 void wxBookCtrlBase::Init()
 {
+    m_selection = wxNOT_FOUND;
     m_bookctrl = NULL;
     m_imageList = NULL;
     m_ownsImageList = false;

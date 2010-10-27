@@ -65,8 +65,6 @@ public:
   int SetSelection(size_t nPage);
     // cycle thru the tabs
   //  void AdvanceSelection(bool bForward = true);
-    // get the currently selected page
-  int GetSelection() const { return m_nSelection; }
 
     // changes selected page without sending events
   int ChangeSelection(size_t nPage);
@@ -148,8 +146,6 @@ protected:
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
-
-  int m_nSelection;           // the current selection (-1 if none)
 
   wxTabView*   m_tabView;
 

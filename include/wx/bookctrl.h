@@ -106,7 +106,7 @@ public:
     }
 
     // get the currently selected page or wxNOT_FOUND if none
-    virtual int GetSelection() const = 0;
+    int GetSelection() const { return m_selection; }
 
     // set/get the title of a page
     virtual bool SetPageText(size_t n, const wxString& strText) = 0;
@@ -181,6 +181,7 @@ public:
     // remove all pages and delete them
     virtual bool DeleteAllPages()
     {
+        m_selection = wxNOT_FOUND;
         DoInvalidateBestSize();
         WX_CLEAR_ARRAY(m_pages);
         return true;
@@ -332,6 +333,11 @@ protected:
     // the margin around the choice control
     int m_controlMargin;
 
+    // The currently selected page (in range 0..m_pages.size()-1 inclusive) or
+    // wxNOT_FOUND if none (this can normally only be the case for an empty
+    // control without any pages).
+    int m_selection;
+
 private:
 
     // common part of all ctors
@@ -342,6 +348,7 @@ private:
 
     DECLARE_ABSTRACT_CLASS(wxBookCtrlBase)
     wxDECLARE_NO_COPY_CLASS(wxBookCtrlBase);
+
     DECLARE_EVENT_TABLE()
 };
 
