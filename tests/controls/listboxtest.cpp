@@ -226,6 +226,13 @@ void ListBoxTestCase::ClickNotOnItem()
 
     m_list->Append(testitems);
 
+    // It is important to set a valid selection: if the control doesn't have
+    // any, clicking anywhere in it, even outside of any item, selects the
+    // first item in the control under GTK resulting in a selection changed
+    // event. This is not a wx bug, just the native platform behaviour so
+    // simply avoid it by starting with a valid selection.
+    m_list->SetSelection(0);
+
     m_list->Update();
     m_list->Refresh();
 
