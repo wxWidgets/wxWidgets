@@ -1108,7 +1108,7 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
             nB = (wxUint8)(nB1 + ((nB2 - nB1) * nGradient / 100));
 
             //set the pixel
-            m_pen = wxColour(nR,nG,nB);
+            SetPen(wxColour(nR,nG,nB));
             DoDrawPoint(x + rect.GetLeft(), y + rect.GetTop());
         }
     }
