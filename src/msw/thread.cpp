@@ -761,7 +761,8 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         Cancel();
     }
 
-    threadToDelete->OnDelete();
+    if ( threadToDelete )
+        threadToDelete->OnDelete();
 
     // now wait for thread to finish
     if ( wxThread::IsMain() )
