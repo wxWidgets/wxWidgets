@@ -140,14 +140,18 @@ protected:
     {
         long& style = *stylePtr;
 
-        if ( style == 0 )
+        if ( !(style & (wxCHK_2STATE | wxCHK_3STATE)) )
         {
             // For compatibility we use absence of style flags as wxCHK_2STATE
             // because wxCHK_2STATE used to have the value of 0 and some
-            // existing code may use 0 instead of it.
-            style = wxCHK_2STATE;
+            // existing code uses 0 instead of it. Moreover, some code even
+            // uses some non-0 style, e.g. wxBORDER_XXX, but doesn't specify
+            // neither wxCHK_2STATE nor wxCHK_3STATE -- to avoid breaking it,
+            // assume (much more common) 2 state checkbox by default.
+            style |= wxCHK_2STATE;
         }
-        else if ( style & wxCHK_3STATE )
+
+        if ( style & wxCHK_3STATE )
         {
             if ( style & wxCHK_2STATE )
             {
@@ -158,13 +162,6 @@ protected:
         }
         else // No wxCHK_3STATE
         {
-            if ( !(style & wxCHK_2STATE) )
-            {
-                wxFAIL_MSG( "Either wxCHK_2STATE or wxCHK_3STATE must be "
-                            "specified" );
-                style |= wxCHK_2STATE;
-            }
-
             if ( style & wxCHK_ALLOW_3RD_STATE_FOR_USER )
             {
                 wxFAIL_MSG( "wxCHK_ALLOW_3RD_STATE_FOR_USER doesn't make sense "
