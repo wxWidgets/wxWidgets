@@ -380,16 +380,10 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
                           GdkEventWindowState *event,
                           wxTopLevelWindow *win )
 {
-    
-    if (event->changed_mask && GDK_WINDOW_STATE_ICONIFIED)
-    {
-        if (event->new_window_state && GDK_WINDOW_STATE_ICONIFIED)
-            win->SetIconizeState(true);
-        else
-            win->SetIconizeState(false);
-    }
-    
-    return FALSE;
+    if (event->changed_mask & GDK_WINDOW_STATE_ICONIFIED)
+        win->SetIconizeState((event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) != 0);
+
+    return false;
 }
 }
 
