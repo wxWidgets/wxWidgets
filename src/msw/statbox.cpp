@@ -430,11 +430,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
             wxUxThemeHandle hTheme(this, L"BUTTON");
             if ( hTheme )
             {
-                // GetThemeFont() expects its parameter to be LOGFONTW and not
-                // LOGFONTA even in ANSI programs and will happily corrupt
-                // memory after the struct end if we pass a LOGFONTA (which is
-                // smaller) to it!
-                LOGFONTW lfw;
+                wxUxThemeFont themeFont;
                 if ( wxUxThemeEngine::Get()->GetThemeFont
                                              (
                                                 hTheme,
@@ -442,24 +438,10 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
                                                 BP_GROUPBOX,
                                                 GBS_NORMAL,
                                                 TMT_FONT,
-                                                (LOGFONT *)&lfw
+                                                themeFont.GetPtr()
                                              ) == S_OK )
                 {
-#if wxUSE_UNICODE
-                    // ok, no conversion necessary
-                    const LOGFONT& lf = lfw;
-#else // !wxUSE_UNICODE
-                    // most of the fields are the same in LOGFONTA and LOGFONTW
-                    LOGFONT lf;
-                    memcpy(&lf, &lfw, sizeof(lf));
-
-                    // but the face name must be converted
-                    WideCharToMultiByte(CP_ACP, 0, lfw.lfFaceName, -1,
-                                        lf.lfFaceName, sizeof(lf.lfFaceName),
-                                        NULL, NULL);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
-                    font.Init(lf);
+                    font.Init(themeFont.GetLOGFONT());
                     if ( font )
                         selFont.Init(hdc, font);
                 }
