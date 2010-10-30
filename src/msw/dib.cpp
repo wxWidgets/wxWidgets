@@ -658,7 +658,7 @@ wxPalette *wxDIB::CreatePalette() const
 
 #if wxUSE_IMAGE
 
-bool wxDIB::Create(const wxImage& image)
+bool wxDIB::Create(const wxImage& image, PixelFormat pf)
 {
     wxCHECK_MSG( image.Ok(), false, wxT("invalid wxImage in wxDIB ctor") );
 
@@ -683,27 +683,46 @@ bool wxDIB::Create(const wxImage& image)
     unsigned char *dstLineStart = (unsigned char *)m_data;
     for ( int y = 0; y < h; y++ )
     {
-        // copy one DIB line
+        // Copy one DIB line. Note that RGB components order is reversed in
+        // Windows bitmaps compared to wxImage and is actually BGR.
         unsigned char *dst = dstLineStart;
         if ( alpha )
         {
-            for ( int x = 0; x < w; x++ )
+            switch ( pf )
             {
-                // RGB order is reversed, and we need to premultiply
-                // all channels by alpha value for use with ::AlphaBlend.
-                const unsigned char a = *alpha++;
-                *dst++ = (unsigned char)((src[2] * a + 127) / 255);
-                *dst++ = (unsigned char)((src[1] * a + 127) / 255);
-                *dst++ = (unsigned char)((src[0] * a + 127) / 255);
-                *dst++ = a;
-                src += 3;
+                case PixelFormat_PreMultiplied:
+                    // Pre-multiply pixel values so that the DIB could be used
+                    // with ::AlphaBlend().
+                    for ( int x = 0; x < w; x++ )
+                    {
+                        const unsigned char a = *alpha++;
+                        *dst++ = (unsigned char)((src[2] * a + 127) / 255);
+                        *dst++ = (unsigned char)((src[1] * a + 127) / 255);
+                        *dst++ = (unsigned char)((src[0] * a + 127) / 255);
+                        *dst++ = a;
+                        src += 3;
+                    }
+                    break;
+
+                case PixelFormat_NotPreMultiplied:
+                    // Just copy pixel data without changing it.
+                    for ( int x = 0; x < w; x++ )
+                    {
+                        *dst++ = src[2];
+                        *dst++ = src[1];
+                        *dst++ = src[0];
+
+                        *dst++ = *alpha++;
+                        src += 3;
+                    }
+                    break;
             }
+
         }
         else // no alpha channel
         {
             for ( int x = 0; x < w; x++ )
             {
-                // RGB order is reversed.
                 *dst++ = src[2];
                 *dst++ = src[1];
                 *dst++ = src[0];
