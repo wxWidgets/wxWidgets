@@ -3205,23 +3205,20 @@ int wxDataViewColumn::GetWidth() const
 
 void wxDataViewColumn::SetWidth( int width )
 {
-    if (width < 0)
+    if ( width == wxCOL_WIDTH_AUTOSIZE )
     {
-#if 1
-        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
-
-        // TODO find a better calculation
-        gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), wxDVC_DEFAULT_WIDTH );
-#else
-        // this is unpractical for large numbers of items and disables
-        // user resizing, which is totally unexpected
+        // NB: this disables user resizing
         gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_AUTOSIZE );
-#endif
     }
     else
     {
-        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
+        if ( width == wxCOL_WIDTH_DEFAULT )
+        {
+            // TODO find a better calculation
+            width = wxDVC_DEFAULT_WIDTH;
+        }
 
+        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
         gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), width );
     }
 }

@@ -17,6 +17,7 @@
 #include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/icon.h"
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_FWD_ADV wxDataViewMainWindow;
 class WXDLLIMPEXP_FWD_ADV wxDataViewHeaderWindow;
@@ -56,7 +57,7 @@ public:
     virtual wxString GetTitle() const { return m_title; }
 
     virtual void SetWidth(int width) { m_width = width; UpdateDisplay(); }
-    virtual int GetWidth() const { return m_width; }
+    virtual int GetWidth() const;
 
     virtual void SetMinWidth(int minWidth) { m_minWidth = minWidth; UpdateDisplay(); }
     virtual int GetMinWidth() const { return m_minWidth; }
@@ -206,10 +207,7 @@ protected:
 public:     // utility functions not part of the API
 
     // returns the "best" width for the idx-th column
-    unsigned int GetBestColumnWidth(int WXUNUSED(idx)) const
-    {
-        return GetClientSize().GetWidth() / GetColumnCount();
-    }
+    unsigned int GetBestColumnWidth(int idx) const;
 
     // called by header window after reorder
     void ColumnMoved( wxDataViewColumn* col, unsigned int new_pos );
@@ -232,7 +230,13 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
+    void InvalidateColBestWidths();
+    void InvalidateColBestWidth(int idx);
+
     wxDataViewColumnList      m_cols;
+    // cached column best widths or 0 if not computed, values are for
+    // respective columns from m_cols and the arrays have same size
+    wxVector<int>             m_colsBestWidths;
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;
     wxDataViewHeaderWindow   *m_headerArea;

@@ -88,12 +88,28 @@ static bool g_asending = true;
 
 void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
 {
-    m_width = width == wxCOL_WIDTH_DEFAULT ? wxDVC_DEFAULT_WIDTH : width;
+    m_width = width;
     m_minWidth = 0;
     m_align = align;
     m_flags = flags;
     m_sort = false;
     m_sortAscending = true;
+}
+
+int wxDataViewColumn::GetWidth() const
+{
+    switch ( m_width )
+    {
+        case wxCOL_WIDTH_DEFAULT:
+            return wxDVC_DEFAULT_WIDTH;
+
+        case wxCOL_WIDTH_AUTOSIZE:
+            wxCHECK_MSG( m_owner, wxDVC_DEFAULT_WIDTH, "no owner control" );
+            return m_owner->GetBestColumnWidth(m_owner->GetColumnIndex(this));
+
+        default:
+            return m_width;
+    }
 }
 
 void wxDataViewColumn::UpdateDisplay()
@@ -1930,6 +1946,8 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
+    GetOwner()->InvalidateColBestWidths();
+
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
@@ -1972,6 +1990,8 @@ static void DestroyTreeHelper( wxDataViewTreeNode * node);
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
+    GetOwner()->InvalidateColBestWidths();
+
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
@@ -2050,6 +2070,8 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
+    GetOwner()->InvalidateColBestWidths();
+
     SortPrepare();
     g_model->Resort();
 
@@ -2066,6 +2088,8 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 
 bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned int col )
 {
+    GetOwner()->InvalidateColBestWidth(col);
+
     // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
 /*#define MAX_VIRTUAL_WIDTH       100000
 
@@ -2093,6 +2117,8 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
 bool wxDataViewMainWindow::Cleared()
 {
+    GetOwner()->InvalidateColBestWidths();
+
     DestroyTree();
     m_selection.Clear();
 
@@ -3879,6 +3905,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
         GetModel()->RemoveNotifier( m_notifier );
 
     m_cols.Clear();
+    m_colsBestWidths.clear();
 }
 
 void wxDataViewCtrl::Init()
@@ -4029,6 +4056,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Append( col );
+    m_colsBestWidths.push_back(0);
     OnColumnsCountChanged();
     return true;
 }
@@ -4039,6 +4067,7 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( col );
+    m_colsBestWidths.insert(m_colsBestWidths.begin(), 0);
     OnColumnsCountChanged();
     return true;
 }
@@ -4049,6 +4078,7 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( pos, col );
+    m_colsBestWidths.insert(m_colsBestWidths.begin() + pos, 0);
     OnColumnsCountChanged();
     return true;
 }
@@ -4111,6 +4141,44 @@ int wxDataViewCtrl::GetColumnIndex(const wxDataViewColumn *column) const
     return wxNOT_FOUND;
 }
 
+unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
+{
+    if ( m_colsBestWidths[idx] != 0 )
+        return m_colsBestWidths[idx];
+
+    const unsigned count = m_clientArea->GetRowCount();
+    wxDataViewColumn *column = GetColumn(idx);
+    wxDataViewRenderer *renderer =
+        const_cast<wxDataViewRenderer*>(column->GetRenderer());
+
+    int max_width = 0;
+
+    if ( m_headerArea )
+    {
+        max_width = m_headerArea->GetTextExtent(column->GetTitle()).x;
+
+        // Labels on native MSW header are indented on both sides
+        max_width += wxRendererNative::Get().GetHeaderButtonMargin(m_headerArea);
+    }
+
+    for ( unsigned row = 0; row < count; row++ )
+    {
+        wxDataViewItem item = m_clientArea->GetItemByRow(row);
+
+        wxVariant value;
+        GetModel()->GetValue(value, item, column->GetModelColumn());
+        renderer->SetValue(value);
+
+        max_width = (unsigned)wxMax((int)max_width, renderer->GetSize().x);
+    }
+
+    if ( max_width > 0 )
+        max_width += 2 * PADDING_RIGHTLEFT;
+
+    const_cast<wxDataViewCtrl*>(this)->m_colsBestWidths[idx] = max_width;
+    return max_width;
+}
+
 void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
                                 unsigned int WXUNUSED(new_pos))
 {
@@ -4126,6 +4194,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
     if (!ret)
         return false;
 
+    m_colsBestWidths.erase(m_colsBestWidths.begin() + GetColumnIndex(column));
     m_cols.Erase(ret);
     OnColumnsCountChanged();
 
@@ -4135,8 +4204,29 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 bool wxDataViewCtrl::ClearColumns()
 {
     m_cols.Clear();
+    m_colsBestWidths.clear();
     OnColumnsCountChanged();
     return true;
+}
+
+void wxDataViewCtrl::InvalidateColBestWidth(int idx)
+{
+    m_colsBestWidths[idx] = 0;
+
+    if ( m_headerArea )
+        m_headerArea->UpdateColumn(idx);
+}
+
+void wxDataViewCtrl::InvalidateColBestWidths()
+{
+    m_colsBestWidths.clear();
+    m_colsBestWidths.resize(m_cols.size());
+
+    if ( m_headerArea )
+    {
+        // this updates visual appearance of columns 0 and up, not just 0
+        m_headerArea->UpdateColumn(0);
+    }
 }
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const

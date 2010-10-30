@@ -22,7 +22,10 @@
 enum
 {
     // special value for column width meaning unspecified/default
-    wxCOL_WIDTH_DEFAULT = -1
+    wxCOL_WIDTH_DEFAULT = -1,
+
+    // size the column automatically to fit all values
+    wxCOL_WIDTH_AUTOSIZE = -2
 };
 
 // bit masks for the various column attributes

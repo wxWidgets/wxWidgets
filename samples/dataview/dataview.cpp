@@ -622,16 +622,18 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             // the various columns
             m_ctrl[1]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
-                                        wxDATAVIEW_CELL_EDITABLE);
+                                        wxDATAVIEW_CELL_EDITABLE,
+                                        wxCOL_WIDTH_AUTOSIZE);
             m_ctrl[1]->AppendIconTextColumn("icon",
                                             MyListModel::Col_IconText,
-                                            wxDATAVIEW_CELL_EDITABLE);
+                                            wxDATAVIEW_CELL_EDITABLE,
+                                            wxCOL_WIDTH_AUTOSIZE);
 
             m_attributes =
                 new wxDataViewColumn("attributes",
                                      new wxDataViewTextRenderer,
                                      MyListModel::Col_TextWithAttr,
-                                     80,
+                                     wxCOL_WIDTH_AUTOSIZE,
                                      wxALIGN_RIGHT,
                                      wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
             m_ctrl[1]->AppendColumn( m_attributes );

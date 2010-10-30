@@ -9,9 +9,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Special value used for column width meaning unspecified or default.
+    Column width special values.
  */
-enum { wxCOL_WIDTH_DEFAULT = -1 };
+enum
+{
+    /// Special value used for column width meaning unspecified or default.
+    wxCOL_WIDTH_DEFAULT = -1,
+
+    /// Size the column automatically to fit all values.
+    wxCOL_WIDTH_AUTOSIZE = -2
+};
 
 /**
     Bit flags used as wxHeaderColumn flags.
@@ -77,7 +84,8 @@ public:
         Returns the current width of the column.
 
         @return
-            Width of the column in pixels, never wxCOL_WIDTH_DEFAULT.
+            Width of the column in pixels, never wxCOL_WIDTH_DEFAULT or
+            wxCOL_WIDTH_AUTOSIZE.
     */
     virtual int GetWidth() const = 0;
 
@@ -199,8 +207,9 @@ public:
         Set the column width.
 
         @param width
-            The column width in pixels or the special wxCOL_WIDTH_DEFAULT value
-            meaning to use default width.
+            The column width in pixels or the special wxCOL_WIDTH_DEFAULT
+            (meaning to use default width) or wxCOL_WIDTH_AUTOSIZE (size to
+            fit the content) value.
      */
     virtual void SetWidth(int width) = 0;
 
