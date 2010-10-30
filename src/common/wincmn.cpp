@@ -2479,7 +2479,7 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // using them.
 wxSize wxWindowBase::GetDlgUnitBase() const
 {
-    const wxWindow *parent = wxGetTopLevelParent((wxWindow*)this);
+    const wxWindowBase * const parent = wxGetTopLevelParent((wxWindow*)this);
 
     if ( !parent->m_font.IsOk() )
     {
