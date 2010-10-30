@@ -197,6 +197,8 @@ public:
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
+    virtual int GetHeaderButtonMargin(wxWindow *win);
+
 private:
     // wrapper of DrawFrameControl()
     void DoDrawFrameControl(UINT type,
@@ -515,6 +517,11 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
     HDLAYOUT hdl = { &parentRect, &wp };
 
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
+}
+
+int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+{
+    return 10;
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl

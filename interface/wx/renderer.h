@@ -204,6 +204,8 @@ public:
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
+    virtual int GetHeaderButtonMargin(wxWindow *win);
+
     virtual void DrawTreeItemButton(wxWindow *win, wxDC& dc,
                                     const wxRect& rect, int flags = 0);
 
@@ -493,6 +495,14 @@ public:
         available, or a generic height based on the @a win window's font.
     */
     virtual int GetHeaderButtonHeight(wxWindow* win) = 0;
+
+    /**
+        Returns the horizontal margin on the left and right sides of header
+        button's label.
+
+        @since 2.9.2
+     */
+    virtual int GetHeaderButtonMargin(wxWindow *win) = 0;
 
     /**
         Get the splitter parameters, see wxSplitterRenderParams.

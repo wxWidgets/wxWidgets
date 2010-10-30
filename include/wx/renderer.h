@@ -200,6 +200,9 @@ public:
     // height if available, or a generic height based on the window's font.
     virtual int GetHeaderButtonHeight(wxWindow *win) = 0;
 
+    // Returns the margin on left and right sides of header button's label
+    virtual int GetHeaderButtonMargin(wxWindow *win) = 0;
+
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -400,6 +403,9 @@ public:
 
     virtual int GetHeaderButtonHeight(wxWindow *win)
         { return m_rendererNative.GetHeaderButtonHeight(win); }
+
+    virtual int GetHeaderButtonMargin(wxWindow *win)
+        { return m_rendererNative.GetHeaderButtonMargin(win); }
 
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,

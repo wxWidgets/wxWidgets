@@ -56,6 +56,8 @@ public:
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
+    virtual int GetHeaderButtonMargin(wxWindow *win);
+
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -224,6 +226,12 @@ int wxRendererGTK::GetHeaderButtonHeight(wxWindow *WXUNUSED(win))
     GTK_WIDGET_GET_CLASS(button)->size_request(button, &req);
 
     return req.height;
+}
+
+int wxRendererGTK::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+{
+    wxFAIL_MSG( "GetHeaderButtonMargin() not implemented" );
+    return -1;
 }
 
 
