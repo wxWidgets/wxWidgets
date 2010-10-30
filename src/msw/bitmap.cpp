@@ -1633,6 +1633,21 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
     if ( bmp.HasAlpha() )
     {
+        HBITMAP hbmp;
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+        // CreateIconIndirect() requires non-pre-multiplied pixel data on input
+        // as it does pre-multiplication internally itself so we need to create
+        // a special DIB in such format to pass to it. This is inefficient but
+        // better than creating an icon with wrong colours.
+        AutoHBITMAP hbmpRelease;
+        hbmp = wxDIB(bmp.ConvertToImage(),
+                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+#else // !(wxUSE_WXDIB && wxUSE_IMAGE)
+        hbmp = GetHbitmapOf(bmp);
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+
         // Create an empty mask bitmap.
         // it doesn't seem to work if we mess with the mask at all.
         HBITMAP hMonoBitmap = CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL);
@@ -1647,7 +1662,7 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         }
 
         iconInfo.hbmMask = hMonoBitmap;
-        iconInfo.hbmColor = GetHbitmapOf(bmp);
+        iconInfo.hbmColor = hbmp;
 
         HICON hicon = ::CreateIconIndirect(&iconInfo);
 
