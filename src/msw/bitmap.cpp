@@ -1650,7 +1650,8 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
         // Create an empty mask bitmap.
         // it doesn't seem to work if we mess with the mask at all.
-        HBITMAP hMonoBitmap = CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL);
+        AutoHBITMAP
+            hMonoBitmap(CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL));
 
         ICONINFO iconInfo;
         wxZeroMemory(iconInfo);
@@ -1664,11 +1665,7 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         iconInfo.hbmMask = hMonoBitmap;
         iconInfo.hbmColor = hbmp;
 
-        HICON hicon = ::CreateIconIndirect(&iconInfo);
-
-        ::DeleteObject(hMonoBitmap);
-
-        return hicon;
+        return ::CreateIconIndirect(&iconInfo);
     }
 
     wxMask* mask = bmp.GetMask();
@@ -1689,7 +1686,8 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         iconInfo.yHotspot = hotSpotY;
     }
 
-    iconInfo.hbmMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+    AutoHBITMAP hbmpMask(wxInvertMask((HBITMAP)mask->GetMaskBitmap()));
+    iconInfo.hbmMask = hbmpMask;
     iconInfo.hbmColor = GetHbitmapOf(bmp);
 
     // black out the transparent area to preserve background colour, because
@@ -1714,9 +1712,6 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         // we created the mask, now delete it
         delete mask;
     }
-
-    // delete the inverted mask bitmap we created as well
-    ::DeleteObject(iconInfo.hbmMask);
 
     return hicon;
 }

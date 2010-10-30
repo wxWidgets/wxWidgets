@@ -159,15 +159,13 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
         hbmp = GetHbitmapOf(bitmap);
 
-    HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
+    AutoHBITMAP hbmpMask(GetMaskForImage(bitmap, mask));
 
     int index = ImageList_Add(GetHImageList(), hbmp, hbmpMask);
     if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
     }
-
-    ::DeleteObject(hbmpMask);
 
     return index;
 }
@@ -237,17 +235,15 @@ bool wxImageList::Replace(int index,
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
         hbmp = GetHbitmapOf(bitmap);
 
-    HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
+    AutoHBITMAP hbmpMask(GetMaskForImage(bitmap, mask));
 
-    bool ok = ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) != 0;
-    if ( !ok )
+    if ( !ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) )
     {
         wxLogLastError(wxT("ImageList_Replace()"));
+        return false;
     }
 
-    ::DeleteObject(hbmpMask);
-
-    return ok;
+    return true;
 }
 
 // Replaces a bitmap and mask from an icon.
