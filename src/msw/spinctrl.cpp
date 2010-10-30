@@ -29,6 +29,7 @@
 #include "wx/spinctrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/hashmap.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/textctrl.h"
@@ -129,11 +130,27 @@ END_EVENT_TABLE()
 // font size?)
 static const int MARGIN_BETWEEN = 1;
 
+
+// ---------------------------------------------------------------------------
+// global vars
+// ---------------------------------------------------------------------------
+
+namespace
+{
+
+// Global hash used to find the spin control corresponding to the given buddy
+// text control HWND.
+WX_DECLARE_HASH_MAP(HWND, wxSpinCtrl *,
+                    wxPointerHash, wxPointerEqual,
+                    SpinForTextCtrl);
+
+SpinForTextCtrl gs_spinForTextCtrl;
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
-
-wxArraySpins wxSpinCtrl::ms_allSpins;
 
 // ----------------------------------------------------------------------------
 // wnd proc for the buddy text ctrl
@@ -144,7 +161,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
                                             WPARAM wParam,
                                             LPARAM lParam)
 {
-    wxSpinCtrl *spin = (wxSpinCtrl *)wxGetWindowUserData(hwnd);
+    wxSpinCtrl * const spin = wxSpinCtrl::GetSpinForTextCtrl(hwnd);
 
     // forward some messages (mostly the key and focus ones) to the spin ctrl
     switch ( message )
@@ -170,7 +187,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
             spin->MSWWindowProc(message, wParam, lParam);
 
             // The control may have been deleted at this point, so check.
-            if ( !::IsWindow(hwnd) || wxGetWindowUserData(hwnd) != spin )
+            if ( !::IsWindow(hwnd) )
                 return 0;
             break;
 
@@ -198,12 +215,12 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
 /* static */
 wxSpinCtrl *wxSpinCtrl::GetSpinForTextCtrl(WXHWND hwndBuddy)
 {
-    wxSpinCtrl *spin = (wxSpinCtrl *)wxGetWindowUserData((HWND)hwndBuddy);
-
-    int i = ms_allSpins.Index(spin);
-
-    if ( i == wxNOT_FOUND )
+    const SpinForTextCtrl::const_iterator
+        it = gs_spinForTextCtrl.find(hwndBuddy);
+    if ( it == gs_spinForTextCtrl.end() )
         return NULL;
+
+    wxSpinCtrl * const spin = it->second;
 
     // sanity check
     wxASSERT_MSG( spin->m_hwndBuddy == hwndBuddy,
@@ -399,7 +416,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     wxSpinButtonBase::SetRange(min, max);
 
     // subclass the text ctrl to be able to intercept some events
-    wxSetWindowUserData(GetBuddyHwnd(), this);
+    gs_spinForTextCtrl[GetBuddyHwnd()] = this;
+
     m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
                                                 wxBuddyTextWndProc);
 
@@ -441,24 +459,16 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         m_oldValue = initial;
     }
 
-    // do it after finishing with m_hwndBuddy creation to avoid generating
-    // initial wxEVT_COMMAND_TEXT_UPDATED message
-    ms_allSpins.Add(this);
-
     return true;
 }
 
 wxSpinCtrl::~wxSpinCtrl()
 {
-    ms_allSpins.Remove(this);
-
-    // This removes spurious memory leak reporting
-    if (ms_allSpins.GetCount() == 0)
-        ms_allSpins.Clear();
-
     // destroy the buddy window because this pointer which wxBuddyTextWndProc
     // uses will not soon be valid any more
-    ::DestroyWindow(GetBuddyHwnd());
+    ::DestroyWindow( GetBuddyHwnd() );
+
+    gs_spinForTextCtrl.erase(GetBuddyHwnd());
 }
 
 // ----------------------------------------------------------------------------

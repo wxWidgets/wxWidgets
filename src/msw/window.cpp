@@ -90,6 +90,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_RADIOBOX
+    #include "wx/radiobox.h"
+#endif // wxUSE_RADIOBOX
+
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
@@ -6547,7 +6551,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
             // do it as well, win would be already non NULL
             if ( ::SendMessage(hwnd, WM_GETDLGCODE, 0, 0) & DLGC_RADIOBUTTON )
             {
-                win = (wxWindow *)wxGetWindowUserData(hwnd);
+                win = wxRadioBox::GetFromRadioButtonHWND(hwnd);
             }
             //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
 #endif // wxUSE_RADIOBOX
