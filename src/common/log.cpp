@@ -852,7 +852,7 @@ wxLogChain::wxLogChain(wxLog *logger)
 
 wxLogChain::~wxLogChain()
 {
-    delete m_logOld;
+    wxLog::SetActiveTarget(m_logOld);
 
     if ( m_logNew != this )
         delete m_logNew;
