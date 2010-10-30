@@ -1553,14 +1553,8 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         if (column == expander)
             width -= indent;
 
-        wxVariant value;
         wxDataViewItem item = GetItemByRow( row );
-        model->GetValue( value, item, column->GetModelColumn());
-        cell->SetValue( value );
-
-        wxDataViewItemAttr attr;
-        model->GetAttr(item, column->GetModelColumn(), attr);
-        cell->SetAttr(attr);
+        cell->PrepareForItem(model, item, column->GetModelColumn());
 
         wxRect item_rect(x, 0, width, height);
         item_rect.Deflate(PADDING_RIGHTLEFT, 0);
@@ -1742,7 +1736,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         for (unsigned int item = item_start; item < item_last; item++)
         {
             // get the cell value and set it into the renderer
-            wxVariant value;
             wxDataViewTreeNode *node = NULL;
             wxDataViewItem dataitem;
 
@@ -1763,12 +1756,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dataitem = wxDataViewItem( wxUIntToPtr(item+1) );
             }
 
-            model->GetValue( value, dataitem, col->GetModelColumn());
-            cell->SetValue( value );
-
-            wxDataViewItemAttr attr;
-            model->GetAttr(dataitem, col->GetModelColumn(), attr);
-            cell->SetAttr(attr);
+            cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // update cell_rect
             cell_rect.y = GetLineStart( item );
@@ -2520,14 +2508,7 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 
                 wxDataViewRenderer *renderer =
                     const_cast<wxDataViewRenderer*>(column->GetRenderer());
-
-                wxVariant value;
-                model->GetValue( value, item, column->GetModelColumn() );
-                renderer->SetValue( value );
-
-                wxDataViewItemAttr attr;
-                model->GetAttr(item, column->GetModelColumn(), attr);
-                renderer->SetAttr(attr);
+                renderer->PrepareForItem(model, item, column->GetModelColumn());
 
                 height = wxMax( height, renderer->GetSize().y );
             }
@@ -2588,14 +2569,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 
             wxDataViewRenderer *renderer =
                 const_cast<wxDataViewRenderer*>(column->GetRenderer());
-
-            wxVariant value;
-            model->GetValue( value, item, column->GetModelColumn() );
-            renderer->SetValue( value );
-
-            wxDataViewItemAttr attr;
-            model->GetAttr(item, column->GetModelColumn(), attr);
-            renderer->SetAttr(attr);
+            renderer->PrepareForItem(model, item, column->GetModelColumn());
 
             height = wxMax( height, renderer->GetSize().y );
         }
@@ -2646,14 +2620,7 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 
             wxDataViewRenderer *renderer =
                 const_cast<wxDataViewRenderer*>(column->GetRenderer());
-
-            wxVariant value;
-            model->GetValue( value, item, column->GetModelColumn() );
-            renderer->SetValue( value );
-
-            wxDataViewItemAttr attr;
-            model->GetAttr(item, column->GetModelColumn(), attr);
-            renderer->SetAttr(attr);
+            renderer->PrepareForItem(model, item, column->GetModelColumn());
 
             height = wxMax( height, renderer->GetSize().y );
         }
@@ -3820,13 +3787,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
             {
                 // notify cell about click
-                wxVariant value;
-                model->GetValue( value, item, col->GetModelColumn() );
-                custom->SetValue( value );
-
-                wxDataViewItemAttr attr;
-                model->GetAttr(item, col->GetModelColumn(), attr);
-                custom->SetAttr(attr);
+                custom->PrepareForItem(model, item, col->GetModelColumn());
 
                 wxRect cell_rect( xpos, GetLineStart( current ),
                                   col->GetWidth(), GetLineHeight( current ) );
@@ -4179,13 +4140,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     {
         wxDataViewItem item = m_clientArea->GetItemByRow(row);
 
-        wxVariant value;
-        GetModel()->GetValue(value, item, column->GetModelColumn());
-        renderer->SetValue(value);
-
-        wxDataViewItemAttr attr;
-        GetModel()->GetAttr(item, column->GetModelColumn(), attr);
-        renderer->SetAttr(attr);
+        renderer->PrepareForItem(GetModel(), item, column->GetModelColumn());
 
         max_width = (unsigned)wxMax((int)max_width, renderer->GetSize().x);
     }

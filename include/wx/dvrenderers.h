@@ -118,6 +118,10 @@ public:
 
     wxString GetVariantType() const             { return m_variantType; }
 
+    // helper that calls SetValue and SetAttr:
+    void PrepareForItem(const wxDataViewModel *model,
+                        const wxDataViewItem& item, unsigned column);
+
     // renderer properties:
     virtual void SetMode( wxDataViewCellMode mode ) = 0;
     virtual wxDataViewCellMode GetMode() const = 0;

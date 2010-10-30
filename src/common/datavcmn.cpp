@@ -779,6 +779,20 @@ bool wxDataViewRendererBase::FinishEditing()
     return true;
 }
 
+void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
+                                            const wxDataViewItem& item,
+                                            unsigned column)
+{
+    wxVariant value;
+    model->GetValue(value, item, column);
+    SetValue(value);
+
+    wxDataViewItemAttr attr;
+    model->GetAttr(item, column, attr);
+    SetAttr(attr);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxDataViewCustomRendererBase
 // ----------------------------------------------------------------------------
