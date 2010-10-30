@@ -40,6 +40,7 @@
 #include "wx/imaglist.h"
 #include "wx/dc.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/dib.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -139,9 +140,28 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // 'bitmap' and 'mask'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
+    HBITMAP hbmp;
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+    // wxBitmap normally stores alpha in pre-multiplied format but
+    // ImageList_Draw() does pre-multiplication internally so we need to undo
+    // the pre-multiplication here. Converting back and forth like this is, of
+    // course, very inefficient but it's better than wrong appearance so we do
+    // this for now until a better way can be found.
+    AutoHBITMAP hbmpRelease;
+    if ( bitmap.HasAlpha() )
+    {
+        hbmp = wxDIB(bitmap.ConvertToImage(),
+                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+    }
+    else
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+        hbmp = GetHbitmapOf(bitmap);
+
     HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
 
-    int index = ImageList_Add(GetHImageList(), GetHbitmapOf(bitmap), hbmpMask);
+    int index = ImageList_Add(GetHImageList(), hbmp, hbmpMask);
     if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
@@ -157,8 +177,23 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
+    HBITMAP hbmp;
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+    // See the comment in overloaded Add() above.
+    AutoHBITMAP hbmpRelease;
+    if ( bitmap.HasAlpha() )
+    {
+        hbmp = wxDIB(bitmap.ConvertToImage(),
+                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+    }
+    else
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+        hbmp = GetHbitmapOf(bitmap);
+
     int index = ImageList_AddMasked(GetHImageList(),
-                                    GetHbitmapOf(bitmap),
+                                    hbmp,
                                     wxColourToRGB(maskColour));
     if ( index == -1 )
     {
@@ -184,12 +219,27 @@ int wxImageList::Add(const wxIcon& icon)
 // Note that wxImageList creates new bitmaps, so you may delete
 // 'bitmap' and 'mask'.
 bool wxImageList::Replace(int index,
-                          const wxBitmap& bitmap, const wxBitmap& mask)
+                          const wxBitmap& bitmap,
+                          const wxBitmap& mask)
 {
+    HBITMAP hbmp;
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+    // See the comment in Add() above.
+    AutoHBITMAP hbmpRelease;
+    if ( bitmap.HasAlpha() )
+    {
+        hbmp = wxDIB(bitmap.ConvertToImage(),
+                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+    }
+    else
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+        hbmp = GetHbitmapOf(bitmap);
+
     HBITMAP hbmpMask = GetMaskForImage(bitmap, mask);
 
-    bool ok = ImageList_Replace(GetHImageList(), index,
-                                GetHbitmapOf(bitmap), hbmpMask) != 0;
+    bool ok = ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) != 0;
     if ( !ok )
     {
         wxLogLastError(wxT("ImageList_Replace()"));
