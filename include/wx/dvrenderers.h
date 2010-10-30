@@ -267,6 +267,10 @@ public:
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
 
+protected:
+    // helper for GetSize() implementations, respects attributes
+    wxSize GetTextExtent(const wxString& str) const;
+
 private:
     wxDataViewItemAttr m_attr;
 

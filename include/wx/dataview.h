@@ -172,6 +172,9 @@ public:
 
     bool IsDefault() const { return !(HasColour() || HasFont()); }
 
+    // Return the font based on the given one with this attribute applied to it.
+    wxFont GetEffectiveFont(const wxFont& font) const;
+
 private:
     wxColour m_colour;
     bool     m_bold;

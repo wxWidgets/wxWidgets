@@ -70,6 +70,24 @@ private:
 } // anonymous namespace
 
 // ---------------------------------------------------------
+// wxDataViewItemAttr
+// ---------------------------------------------------------
+
+wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
+{
+    if ( !HasFont() )
+        return font;
+
+    wxFont f(font);
+    if ( GetBold() )
+        f.MakeBold();
+    if ( GetItalic() )
+        f.MakeItalic();
+    return f;
+}
+
+
+// ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
 
@@ -826,17 +844,26 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
 
     wxDCFontChanger changeFont(*dc);
     if ( m_attr.HasFont() )
-    {
-        wxFont font(dc->GetFont());
-        if ( m_attr.GetBold() )
-            font.MakeBold();
-        if ( m_attr.GetItalic() )
-            font.MakeItalic();
-
-        changeFont.Set(font);
-    }
+        changeFont.Set(m_attr.GetEffectiveFont(dc->GetFont()));
 
     Render(rectItem, dc, state);
+}
+
+wxSize wxDataViewCustomRendererBase::GetTextExtent(const wxString& str) const
+{
+    const wxDataViewCtrl *view = GetView();
+
+    if ( m_attr.HasFont() )
+    {
+        wxFont font(m_attr.GetEffectiveFont(view->GetFont()));
+        wxSize size;
+        view->GetTextExtent(str, &size.x, &size.y, NULL, NULL, &font);
+        return size;
+    }
+    else
+    {
+        return view->GetTextExtent(str);
+    }
 }
 
 void
