@@ -2319,7 +2319,9 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 
     if (m_dbImpl)
     {
-        m_dbImpl->SetScrollPosition(dx, dy);
+        // Notice that the parameter order is correct here: first argument is
+        // the "top" displacement, second one is the "left" one.
+        m_dbImpl->SetScrollPosition(dy, dx);
     }
     return true;
 }
