@@ -48,6 +48,7 @@
 #include "wx/imaglist.h"
 #include "wx/headerctrl.h"
 #include "wx/dnd.h"
+#include "wx/stopwatch.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -4121,35 +4122,136 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     if ( m_colsBestWidths[idx] != 0 )
         return m_colsBestWidths[idx];
 
-    const unsigned count = m_clientArea->GetRowCount();
+    const int count = m_clientArea->GetRowCount();
     wxDataViewColumn *column = GetColumn(idx);
     wxDataViewRenderer *renderer =
         const_cast<wxDataViewRenderer*>(column->GetRenderer());
 
-    int max_width = 0;
+    class MaxWidthCalculator
+    {
+    public:
+        MaxWidthCalculator(wxDataViewMainWindow *clientArea,
+                           wxDataViewRenderer *renderer,
+                           const wxDataViewModel *model,
+                           unsigned column)
+            : m_width(0),
+              m_clientArea(clientArea),
+              m_renderer(renderer),
+              m_model(model),
+              m_column(column)
+        {
+        }
+
+        void UpdateWithWidth(int width)
+        {
+            m_width = wxMax(m_width, width);
+        }
+
+        void UpdateWithRow(int row)
+        {
+            wxDataViewItem item = m_clientArea->GetItemByRow(row);
+            m_renderer->PrepareForItem(m_model, item, m_column);
+            m_width = wxMax(m_width, m_renderer->GetSize().x);
+        }
+
+        int GetMaxWidth() const { return m_width; }
+
+    private:
+        int m_width;
+        wxDataViewMainWindow *m_clientArea;
+        wxDataViewRenderer *m_renderer;
+        const wxDataViewModel *m_model;
+        unsigned m_column;
+    };
+
+    MaxWidthCalculator calculator(m_clientArea, renderer,
+                                  GetModel(), column->GetModelColumn());
 
     if ( m_headerArea )
     {
-        max_width = m_headerArea->GetTextExtent(column->GetTitle()).x;
-
+        int header_width = m_headerArea->GetTextExtent(column->GetTitle()).x;
         // Labels on native MSW header are indented on both sides
-        max_width += wxRendererNative::Get().GetHeaderButtonMargin(m_headerArea);
+        header_width +=
+            wxRendererNative::Get().GetHeaderButtonMargin(m_headerArea);
+        calculator.UpdateWithWidth(header_width);
     }
 
-    for ( unsigned row = 0; row < count; row++ )
+    // The code below deserves some explanation. For very large controls, we
+    // simply can't afford to calculate sizes for all items, it takes too
+    // long. So the best we can do is to check the first and the last N/2
+    // items in the control for some sufficiently large N and calculate best
+    // sizes from that. That can result in the calculated best width being too
+    // small for some outliers, but it's better to get slightly imperfect
+    // result than to wait several seconds after every update. To avoid highly
+    // visible miscalculations, we also include all currently visible items
+    // no matter what.  Finally, the value of N is determined dynamically by
+    // measuring how much time we spent on the determining item widths so far.
+
+#if wxUSE_STOPWATCH
+    int top_part_end = count;
+    static const long CALC_TIMEOUT = 20/*ms*/;
+    // don't call wxStopWatch::Time() too often
+    static const unsigned CALC_CHECK_FREQ = 100;
+    wxStopWatch timer;
+#else
+    // use some hard-coded limit, that's the best we can do without timer
+    int top_part_end = wxMin(500, count);
+#endif // wxUSE_STOPWATCH/!wxUSE_STOPWATCH
+
+    int row = 0;
+
+    for ( row = 0; row < top_part_end; row++ )
     {
-        wxDataViewItem item = m_clientArea->GetItemByRow(row);
-
-        renderer->PrepareForItem(GetModel(), item, column->GetModelColumn());
-
-        max_width = (unsigned)wxMax((int)max_width, renderer->GetSize().x);
+#if wxUSE_STOPWATCH
+        if ( row % CALC_CHECK_FREQ == CALC_CHECK_FREQ-1 &&
+             timer.Time() > CALC_TIMEOUT )
+            break;
+#endif // wxUSE_STOPWATCH
+        calculator.UpdateWithRow(row);
     }
 
+    // row is the first unmeasured item now; that's out value of N/2
+
+    if ( row < count )
+    {
+        top_part_end = row;
+
+        // add bottom N/2 items now:
+        const int bottom_part_start = wxMax(row, count - row);
+        for ( row = bottom_part_start; row < count; row++ )
+        {
+            calculator.UpdateWithRow(row);
+        }
+
+        // finally, include currently visible items in the calculation:
+        const wxPoint origin = CalcUnscrolledPosition(wxPoint(0, 0));
+        int first_visible = m_clientArea->GetLineAt(origin.y);
+        int last_visible = m_clientArea->GetLineAt(origin.y + GetClientSize().y);
+
+        first_visible = wxMax(first_visible, top_part_end);
+        last_visible = wxMin(bottom_part_start, last_visible);
+
+        for ( row = first_visible; row < last_visible; row++ )
+        {
+            calculator.UpdateWithRow(row);
+        }
+
+        wxLogTrace("dataview",
+                   "determined best size from %d top, %d bottom plus %d more visible items out of %d total",
+                   top_part_end,
+                   count - bottom_part_start,
+                   wxMax(0, last_visible - first_visible),
+                   count);
+    }
+
+    int max_width = calculator.GetMaxWidth();
     if ( max_width > 0 )
         max_width += 2 * PADDING_RIGHTLEFT;
 
     const_cast<wxDataViewCtrl*>(this)->m_colsBestWidths[idx] = max_width;
     return max_width;
+
+    #undef MEASURE_ITEM
 }
 
 void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
