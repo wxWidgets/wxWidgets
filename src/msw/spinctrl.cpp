@@ -604,9 +604,11 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
     int value = GetValue();
     const wxRect btnRect = wxRectFromRECT(wxGetWindowRect(GetHwnd()));
 
-    // destroy the old spin button
+    // destroy the old spin button after detaching it from this wxWindow object
+    // (notice that m_hWnd will be reset by UnsubclassWin() so save it first)
+    const HWND hwndOld = GetHwnd();
     UnsubclassWin();
-    if ( !::DestroyWindow(GetHwnd()) )
+    if ( !::DestroyWindow(hwndOld) )
     {
         wxLogLastError(wxT("DestroyWindow"));
     }
