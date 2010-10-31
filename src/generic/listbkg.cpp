@@ -343,19 +343,8 @@ wxListbook::InsertPage(size_t n,
         GetListView()->Focus(m_selection);
     }
 
-    // some page should be selected: either this one or the first one if there
-    // is still no selection
-    int selNew = wxNOT_FOUND;
-    if ( bSelect )
-        selNew = n;
-    else if ( m_selection == wxNOT_FOUND )
-        selNew = 0;
-
-    if ( selNew != m_selection )
+    if ( !DoSetSelectionAfterInsertion(n, bSelect) )
         page->Hide();
-
-    if ( selNew != wxNOT_FOUND )
-        SetSelection(selNew);
 
     UpdateSize();
 

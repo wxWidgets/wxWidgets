@@ -252,6 +252,17 @@ protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
+    // After the insertion of the page in the method InsertPage, calling this
+    // method sets the selection to the given page or the first one if there is
+    // still no selection. The "selection changed" event is sent only if
+    // bSelect is true, so when it is false, no event is sent even if the
+    // selection changed from wxNOT_FOUND to 0 when inserting the first page.
+    //
+    // Returns true if the selection was set to the specified page (explicitly
+    // because of bSelect == true or implicitly because it's the first page) or
+    // false otherwise.
+    bool DoSetSelectionAfterInsertion(size_t n, bool bSelect);
+
     // set the selection to the given page, sending the events (which can
     // possibly prevent the page change from taking place) if SendEvent flag is
     // included

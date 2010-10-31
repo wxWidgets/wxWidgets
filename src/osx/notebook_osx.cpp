@@ -240,16 +240,7 @@ bool wxNotebook::InsertPage(size_t nPage,
         m_peer->SetValue( m_selection + 1 ) ;
     }
 
-    // some page should be selected: either this one or the first one if there
-    // is still no selection
-    int selNew = wxNOT_FOUND;
-    if ( bSelect )
-        selNew = nPage;
-    else if ( m_selection == wxNOT_FOUND )
-        selNew = 0;
-
-    if ( selNew != wxNOT_FOUND )
-        SetSelection( selNew );
+    DoSetSelectionAfterInsertion(nPage, bSelect);
 
     InvalidateBestSize();
 
