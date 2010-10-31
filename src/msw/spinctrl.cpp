@@ -594,15 +594,14 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
     // window normally, but we recreate the updown control and reassign its
     // buddy.
 
+    // Get the position before changing the parent as it would be offset after
+    // changing it.
+    const wxRect rect = GetRect();
+
     if ( !wxWindowBase::Reparent(newParent) )
         return false;
 
     newParent->GetChildren().DeleteObject(this);
-
-    // preserve the old values
-    const wxSize size = GetSize();
-    int value = GetValue();
-    const wxRect btnRect = wxRectFromRECT(wxGetWindowRect(GetHwnd()));
 
     // destroy the old spin button after detaching it from this wxWindow object
     // (notice that m_hWnd will be reset by UnsubclassWin() so save it first)
@@ -615,13 +614,17 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
 
     // create and initialize the new one
     if ( !wxSpinButton::Create(GetParent(), GetId(),
-                               btnRect.GetPosition(), btnRect.GetSize(),
+                               rect.GetPosition(), rect.GetSize(),
                                GetWindowStyle(), GetName()) )
         return false;
 
-    SetValue(value);
+    // reapply our values to wxSpinButton
+    wxSpinButton::SetValue(GetValue());
     SetRange(m_min, m_max);
-    SetInitialSize(size);
+
+    // also set the size again with wxSIZE_ALLOW_MINUS_ONE flag: this is
+    // necessary if our original position used -1 for either x or y
+    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 
     // associate it with the buddy control again
     ::SetParent(GetBuddyHwnd(), GetHwndOf(GetParent()));
