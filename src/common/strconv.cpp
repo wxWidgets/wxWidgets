@@ -2113,7 +2113,7 @@ public:
 
     virtual wxMBConv *Clone() const
     {
-        wxMBConv_iconv *p = new wxMBConv_iconv(m_name.ToAscii());
+        wxMBConv_iconv *p = new wxMBConv_iconv(m_name);
         p->m_minMBCharWidth = m_minMBCharWidth;
         return p;
     }
@@ -2143,7 +2143,7 @@ private:
 
 
     // name of the encoding handled by this conversion
-    wxString m_name;
+    const char *m_name;
 
     // cached result of GetMBNulLen(); set to 0 meaning "unknown"
     // initially
@@ -2167,7 +2167,7 @@ wxString wxMBConv_iconv::ms_wcCharsetName;
 bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
 wxMBConv_iconv::wxMBConv_iconv(const char *name)
-              : m_name(name)
+              : m_name(wxStrdup(name))
 {
     m_minMBCharWidth = 0;
 
@@ -2284,6 +2284,8 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
 
 wxMBConv_iconv::~wxMBConv_iconv()
 {
+    free(const_cast<char *>(m_name));
+
     if ( m2w != ICONV_T_INVALID )
         iconv_close(m2w);
     if ( w2m != ICONV_T_INVALID )
