@@ -40,7 +40,7 @@ wxMenu::wxMenu(const wxString& title, long style)
 
 
 
-static wxMenuItem *GetMenuItem( wxMenu *menu, size_t position )
+static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
 {
     // FindItemByPosition() is doing the same test, but we want to prevent
     // the warning message it prints when an illegal index is used.
@@ -52,8 +52,8 @@ static wxMenuItem *GetMenuItem( wxMenu *menu, size_t position )
 }
 
 
-static void InsertMenuItemAction( wxMenu *menu, wxMenuItem *previousItem,
-    wxMenuItem *item, wxMenuItem *successiveItem )
+static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previousItem,
+    const wxMenuItem *item, const wxMenuItem *successiveItem )
 {
     QMenu *qtMenu = menu->GetHandle();
     QAction *itemAction = item->GetHandle();
@@ -87,8 +87,8 @@ wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
     // Get the previous/successive items *before* we call the base class methods,
     // because afterwards it is less clear where these items end up:
 
-    wxMenuItem *previousItem = GetMenuItem( this, GetMenuItemCount() - 1 );
-    wxMenuItem *successiveItem = GetMenuItem( this, GetMenuItemCount() );
+    wxMenuItem *previousItem = GetMenuItemAt( this, GetMenuItemCount() - 1 );
+    wxMenuItem *successiveItem = GetMenuItemAt( this, GetMenuItemCount() );
 
     if ( wxMenuBase::DoAppend( item ) == NULL )
         return NULL;
@@ -104,8 +104,8 @@ wxMenuItem *wxMenu::DoInsert(size_t insertPosition, wxMenuItem *item)
     // Get the previous/successive items *before* we call the base class methods,
     // because afterwards it is less clear where these items end up:
 
-    wxMenuItem *previousItem = GetMenuItem( this, insertPosition - 1 );
-    wxMenuItem *successiveItem = GetMenuItem( this, insertPosition );
+    wxMenuItem *previousItem = GetMenuItemAt( this, insertPosition - 1 );
+    wxMenuItem *successiveItem = GetMenuItemAt( this, insertPosition );
 
     if ( wxMenuBase::DoInsert( insertPosition, item ) == NULL )
         return NULL;
@@ -179,15 +179,12 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 }
 
 
-static QAction *GetActionAt( QWidget *qtWidget, size_t pos )
+static QAction *GetActionAt( const QWidget *qtWidget, size_t pos )
 {
-    QAction *qtAction = NULL;
     QList< QAction * > actions = qtWidget->actions();
-    if ( !actions.empty() )
-        qtAction = actions.at( pos );
-
-    return qtAction;
+    return pos < static_cast< unsigned >( actions.size() ) ? actions.at( pos ) : NULL;
 }
+
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
@@ -197,7 +194,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     // Override the stored menu title with the given one:
 
     QMenu *qtMenu = SetTitle( menu, title );
-    m_qtMenuBar->insertMenu( GetActionAt( m_qtMenuBar, pos ), qtMenu );
+    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    m_qtMenuBar->insertMenu( qtAction, qtMenu );
 
     return true;
 }
