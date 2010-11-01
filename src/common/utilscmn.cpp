@@ -560,7 +560,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 #elif defined(__VMS)
    // Now this routine wil give false for OpenVMS
    // TODO : should we do something with logicals?
-    char **env;
+    char **env=NULL;
 #elif defined(__WXOSX__)
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
