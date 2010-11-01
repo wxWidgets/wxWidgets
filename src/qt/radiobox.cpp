@@ -103,49 +103,95 @@ bool wxRadioBox::Create(wxWindow *parent,
     return true;
 }
 
+static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
+{
+    // At first glance it might look like QButtonGroup::button( id ) would be a
+    // better way to retrieve the button via an index. But even without looking
+    // at the implementation of it, we can assume that it probably takes a linear
+    // search algorithm because we can assign arbitrary IDs.
 
+    QList< QAbstractButton * > buttons = group->buttons();
+    return n < static_cast< unsigned >( buttons.size() ) ? buttons.at( n ) : NULL;
+}
+
+#define INVALID_INDEX_MESSAGE wxT( "invalid radio box index" )
+
+#define CHECK_BUTTON( button, rc ) \
+    wxCHECK_MSG( button != NULL, rc, INVALID_INDEX_MESSAGE )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    return false;
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    CHECK_BUTTON( qtButton, false );
+
+    qtButton->setEnabled( enable );
+    return true;
 }
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    return false;
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    CHECK_BUTTON( qtButton, false );
+
+    qtButton->setVisible( show );
+    return true;
 }
 
 bool wxRadioBox::IsItemEnabled(unsigned int n) const
 {
-    return false;
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    CHECK_BUTTON( qtButton, false );
+
+    return qtButton->isEnabled();
 }
 
 bool wxRadioBox::IsItemShown(unsigned int n) const
 {
-    return false;
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    CHECK_BUTTON( qtButton, false );
+
+    return qtButton->isVisible();
 }
 
 unsigned wxRadioBox::GetCount() const
 {
-    return 0;
+    QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
+    return buttons.size();
 }
 
 wxString wxRadioBox::GetString(unsigned int n) const
 {
-    return wxString();
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    CHECK_BUTTON( qtButton, wxEmptyString );
+
+    return wxQtConvertString( qtButton->text() );
 }
 
 void wxRadioBox::SetString(unsigned int n, const wxString& s)
 {
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    wxCHECK_RET( qtButton != NULL, INVALID_INDEX_MESSAGE );
+
+    qtButton->setText( wxQtConvertString( s ));
 }
 
 void wxRadioBox::SetSelection(int n)
 {
+    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+    wxCHECK_RET( qtButton != NULL, INVALID_INDEX_MESSAGE );
+    qtButton->setChecked( true );
 }
 
 int wxRadioBox::GetSelection() const
 {
-    return 0;
+    QAbstractButton *qtButton = m_qtButtonGroup->checkedButton();
+    if ( qtButton != NULL )
+    {
+        QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
+        return buttons.indexOf( qtButton );
+    }
+    else
+        return wxNOT_FOUND;
 }
 
 QGroupBox *wxRadioBox::GetHandle() const
