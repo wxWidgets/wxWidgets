@@ -27,6 +27,7 @@
 
 #include "wx/msw/private/msgdlg.h"
 #include "wx/progdlg.h"
+#include "wx/evtloop.h"
 
 using namespace wxMSWMessageDialog;
 
@@ -86,7 +87,7 @@ public:
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
 
-    wxGenericProgressDialog::ProgressDialogState m_state;
+    wxProgressDialog::State m_state;
     bool m_progressBarMarquee;
     bool m_skipped;
 
@@ -100,16 +101,14 @@ public:
 class wxProgressDialogTaskRunner : public wxThread
 {
 public:
-    wxProgressDialogTaskRunner(wxWindow* parent)
-        : wxThread(wxTHREAD_JOINABLE),
-          m_parent(parent)
+    wxProgressDialogTaskRunner()
+        : wxThread(wxTHREAD_JOINABLE)
         { }
 
     wxProgressDialogSharedData* GetSharedDataObject()
         { return &m_sharedData; }
 
 private:
-    wxWindow* m_parent;
     wxProgressDialogSharedData m_sharedData;
 
     virtual void* Entry();
@@ -121,17 +120,36 @@ private:
                                                    LONG_PTR dwRefData);
 };
 
-// ============================================================================
-// Helper functions
-// ============================================================================
-
 namespace
 {
 
-bool UsesCloseButtonOnly(long style)
+// A custom event loop which runs until the state of the dialog becomes
+// "Dismissed".
+class wxProgressDialogModalLoop : public wxEventLoop
 {
-    return !((style & wxPD_CAN_ABORT) || (style & wxPD_AUTO_HIDE));
-}
+public:
+    wxProgressDialogModalLoop(wxProgressDialogSharedData& data)
+        : m_data(data)
+    {
+    }
+
+protected:
+    virtual void OnNextIteration()
+    {
+        wxCriticalSectionLocker locker(m_data.m_cs);
+
+        if ( m_data.m_state == wxProgressDialog::Dismissed )
+            Exit();
+    }
+
+    wxProgressDialogSharedData& m_data;
+
+    wxDECLARE_NO_COPY_CLASS(wxProgressDialogModalLoop);
+};
+
+// ============================================================================
+// Helper functions
+// ============================================================================
 
 BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
 {
@@ -248,7 +266,7 @@ void PerformNotificationUpdates(HWND hwnd,
     // Is the progress finished?
     if ( sharedData->m_notifications & wxSPDD_FINISHED )
     {
-        sharedData->m_state = wxGenericProgressDialog::Finished;
+        sharedData->m_state = wxProgressDialog::Finished;
 
         if ( !(sharedData->m_style & wxPD_AUTO_HIDE) )
         {
@@ -274,15 +292,17 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     int maximum,
                                     wxWindow *parent,
                                     int style )
-    : wxGenericProgressDialog(parent, maximum, style),
+    : wxGenericProgressDialog(parent, style),
       m_taskDialogRunner(NULL),
       m_sharedData(NULL),
       m_message(message),
       m_title(title)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
+        SetMaximum(maximum);
+
         Show();
         DisableOtherWindows();
 
@@ -319,55 +339,67 @@ wxProgressDialog::~wxProgressDialog()
 bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-
-        // Do nothing in canceled state.
-        if ( !DoNativeBeforeUpdate(skip) )
-            return false;
-
-        value /= m_factor;
-
-        wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
-
-        m_sharedData->m_value = value;
-        m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
-
-        if ( !newmsg.empty() )
         {
-            m_message = newmsg;
-            m_sharedData->m_message = newmsg;
-            m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
-        }
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
-        if ( m_sharedData->m_progressBarMarquee )
-        {
-            m_sharedData->m_progressBarMarquee = false;
-            m_sharedData->m_notifications |= wxSPDD_PBMARQUEE_CHANGED;
-        }
+            // Do nothing in canceled state.
+            if ( !DoNativeBeforeUpdate(skip) )
+                return false;
 
-        UpdateExpandedInformation( value );
+            value /= m_factor;
 
-        // Has the progress bar finished?
-        if ( value == m_maximum )
-        {
-            if ( m_state == Finished )
-                return true;
+            wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
+            m_sharedData->m_value = value;
+            m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
+
+            if ( !newmsg.empty() )
+            {
+                m_message = newmsg;
+                m_sharedData->m_message = newmsg;
+                m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
+            }
+
+            if ( m_sharedData->m_progressBarMarquee )
+            {
+                m_sharedData->m_progressBarMarquee = false;
+                m_sharedData->m_notifications |= wxSPDD_PBMARQUEE_CHANGED;
+            }
+
+            UpdateExpandedInformation( value );
+
+            // If we didn't just reach the finish, all we have to do is to
+            // return true if the dialog wasn't cancelled and false otherwise.
+            if ( value != m_maximum || m_state == Finished )
+                return m_sharedData->m_state != Canceled;
+
+
+            // On finishing, the dialog without wxPD_AUTO_HIDE style becomes a
+            // modal one meaning that we must block here until the user
+            // dismisses it.
             m_state = Finished;
             m_sharedData->m_state = Finished;
             m_sharedData->m_notifications |= wxSPDD_FINISHED;
-            if( !HasFlag(wxPD_AUTO_HIDE) && newmsg.empty() )
+            if ( HasPDFlag(wxPD_AUTO_HIDE) )
+                return true;
+
+            if ( newmsg.empty() )
             {
                 // Provide the finishing message if the application didn't.
                 m_message = _("Done.");
                 m_sharedData->m_message = m_message;
                 m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
             }
-        }
+        } // unlock m_sharedData->m_cs
 
-        return m_sharedData->m_state != Canceled;
+        // We only get here when we need to wait for the dialog to terminate so
+        // do just this by running a custom event loop until the dialog is
+        // dismissed.
+        wxProgressDialogModalLoop loop(*m_sharedData);
+        loop.Run();
+        return true;
     }
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -377,7 +409,7 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
@@ -412,7 +444,7 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         if ( m_sharedData->m_skipped  )
         {
@@ -442,7 +474,7 @@ void wxProgressDialog::Resume()
     wxGenericProgressDialog::Resume();
 
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         HWND hwnd;
 
@@ -454,7 +486,8 @@ void wxProgressDialog::Resume()
             // it now.
             m_sharedData->m_notifications |= wxSPDD_ENABLE_SKIP;
 
-            if ( !UsesCloseButtonOnly(m_windowStyle) )
+            // Also re-enable "Cancel" itself
+            if ( HasPDFlag(wxPD_CAN_ABORT) )
                 m_sharedData->m_notifications |= wxSPDD_ENABLE_ABORT;
 
             hwnd = m_sharedData->m_hwnd;
@@ -478,7 +511,7 @@ void wxProgressDialog::Resume()
 int wxProgressDialog::GetValue() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_value;
@@ -491,7 +524,7 @@ int wxProgressDialog::GetValue() const
 wxString wxProgressDialog::GetMessage() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
         return m_message;
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -500,23 +533,27 @@ wxString wxProgressDialog::GetMessage() const
 
 void wxProgressDialog::SetRange(int maximum)
 {
-    wxGenericProgressDialog::SetRange( maximum );
-
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
+        SetMaximum(maximum);
+
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
         m_sharedData->m_range = maximum;
         m_sharedData->m_notifications |= wxSPDD_RANGE_CHANGED;
+
+        return;
     }
 #endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::SetRange( maximum );
 }
 
 bool wxProgressDialog::WasSkipped() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         if ( !m_sharedData )
         {
@@ -535,7 +572,7 @@ bool wxProgressDialog::WasSkipped() const
 bool wxProgressDialog::WasCancelled() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_state == Canceled;
@@ -548,7 +585,7 @@ bool wxProgressDialog::WasCancelled() const
 void wxProgressDialog::SetTitle(const wxString& title)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         m_title = title;
 
@@ -567,7 +604,7 @@ void wxProgressDialog::SetTitle(const wxString& title)
 wxString wxProgressDialog::GetTitle() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
         return m_title;
 #endif // wxHAS_MSW_TASKDIALOG
 
@@ -577,7 +614,7 @@ wxString wxProgressDialog::GetTitle() const
 bool wxProgressDialog::Show(bool show)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeProgressDialog() )
+    if ( HasNativeTaskDialog() )
     {
         // The dialog can't be hidden at all and showing it again after it had
         // been shown before doesn't do anything.
@@ -586,7 +623,7 @@ bool wxProgressDialog::Show(bool show)
 
         // We're showing the dialog for the first time, create the thread that
         // will manage it.
-        m_taskDialogRunner = new wxProgressDialogTaskRunner(GetParent());
+        m_taskDialogRunner = new wxProgressDialogTaskRunner;
         m_sharedData = m_taskDialogRunner->GetSharedDataObject();
 
         // Initialize shared data.
@@ -594,21 +631,23 @@ bool wxProgressDialog::Show(bool show)
         m_sharedData->m_message = m_message;
         m_sharedData->m_range = m_maximum;
         m_sharedData->m_state = Uncancelable;
-        m_sharedData->m_style = m_windowStyle;
+        m_sharedData->m_style = GetPDStyle();
 
-        if ( HasFlag(wxPD_CAN_ABORT) )
+        if ( HasPDFlag(wxPD_CAN_ABORT) )
         {
             m_sharedData->m_state = Continue;
             m_sharedData->m_labelCancel = _("Cancel");
         }
-        else if ( !HasFlag(wxPD_AUTO_HIDE) )
+        else // Dialog can't be cancelled.
         {
+            // We still must have at least a single button in the dialog so
+            // just don't call it "Cancel" in this case.
             m_sharedData->m_labelCancel = _("Close");
         }
 
-        if ( m_windowStyle & (wxPD_ELAPSED_TIME
-                              | wxPD_ESTIMATED_TIME
-                              | wxPD_REMAINING_TIME) )
+        if ( HasPDFlag(wxPD_ELAPSED_TIME |
+                         wxPD_ESTIMATED_TIME |
+                            wxPD_REMAINING_TIME) )
         {
             // Use a non-empty string just to have the collapsible pane shown.
             m_sharedData->m_expandedInformation = " ";
@@ -627,32 +666,12 @@ bool wxProgressDialog::Show(bool show)
             return false;
         }
 
-        if ( !HasFlag(wxPD_APP_MODAL) )
-            GetParent()->Disable();
-        //else: otherwise all windows will be disabled by m_taskDialogRunner
-
         // Do not show the underlying dialog.
         return false;
     }
 #endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::Show( show );
-}
-
-bool wxProgressDialog::HasNativeProgressDialog() const
-{
-#ifdef wxHAS_MSW_TASKDIALOG
-    // For a native implementation task dialogs are required, which
-    // also require at least one button to be present so the flags needs
-    // to be checked as well to see if this is the case.
-    return HasNativeTaskDialog()
-           && ((m_windowStyle & (wxPD_CAN_SKIP | wxPD_CAN_ABORT))
-               || !(m_windowStyle & wxPD_AUTO_HIDE));
-#else // !wxHAS_MSW_TASKDIALOG
-    // This shouldn't be even called in !wxHAS_MSW_TASKDIALOG case but as we
-    // still must define the function as returning something, return false.
-    return false;
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 void wxProgressDialog::UpdateExpandedInformation(int value)
@@ -676,14 +695,14 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
     wxString expandedInformation;
 
     // Calculate the three different timing values.
-    if ( m_windowStyle & wxPD_ELAPSED_TIME )
+    if ( HasPDFlag(wxPD_ELAPSED_TIME) )
     {
         expandedInformation << GetElapsedLabel()
                             << " "
                             << GetFormattedTime(elapsedTime);
     }
 
-    if ( m_windowStyle & wxPD_ESTIMATED_TIME )
+    if ( HasPDFlag(wxPD_ESTIMATED_TIME) )
     {
         if ( !expandedInformation.empty() )
             expandedInformation += "\n";
@@ -693,7 +712,7 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
                             << GetFormattedTime(realEstimatedTime);
     }
 
-    if ( m_windowStyle & wxPD_REMAINING_TIME )
+    if ( HasPDFlag(wxPD_REMAINING_TIME) )
     {
         if ( !expandedInformation.empty() )
             expandedInformation += "\n";
@@ -746,16 +765,10 @@ void* wxProgressDialogTaskRunner::Entry()
 
         // Use a Cancel button when requested or use a Close button when
         // the dialog does not automatically hide.
-        if ( (m_sharedData.m_style & wxPD_CAN_ABORT)
-             || !(m_sharedData.m_style & wxPD_AUTO_HIDE) )
-        {
-            wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
-                                       m_sharedData.m_labelCancel );
-        }
+        wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
+                                   m_sharedData.m_labelCancel );
 
-        tdc.dwFlags |= TDF_CALLBACK_TIMER
-                       | TDF_SHOW_PROGRESS_BAR
-                       | TDF_SHOW_MARQUEE_PROGRESS_BAR;
+        tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
         if ( !m_sharedData.m_expandedInformation.empty() )
         {
@@ -772,6 +785,10 @@ void* wxProgressDialogTaskRunner::Entry()
     HRESULT hr = taskDialogIndirect(&tdc, &msAns, NULL, NULL);
     if ( FAILED(hr) )
         wxLogApiError( "TaskDialogIndirect", hr );
+
+    // If the main thread is waiting for us to exit inside the event loop in
+    // Update(), wake it up so that it checks our status again.
+    wxWakeUpIdle();
 
     return NULL;
 }
@@ -804,7 +821,9 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                            0,
                            MAKELPARAM(0, sharedData->m_range) );
 
-            if ( UsesCloseButtonOnly(sharedData->m_style) )
+            // If we can't be aborted, the "Close" button will only be enabled
+            // when the progress ends (and not even then with wxPD_AUTO_HIDE).
+            if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
                 ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE );
             break;
 
@@ -817,27 +836,33 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     return TRUE;
 
                 case IDCANCEL:
-                    if ( sharedData->m_state
-                            == wxGenericProgressDialog::Finished )
+                    if ( sharedData->m_state == wxProgressDialog::Finished )
                     {
+                        // If the main thread is waiting for us, tell it that
+                        // we're gone (and if it doesn't wait, it's harmless).
+                        sharedData->m_state = wxProgressDialog::Dismissed;
+
+                        // Let Windows close the dialog.
                         return FALSE;
                     }
 
                     // Close button on the window triggers an IDCANCEL press,
                     // don't allow it when it should only be possible to close
                     // a finished dialog.
-                    if ( !UsesCloseButtonOnly(sharedData->m_style) )
+                    if ( sharedData->m_style & wxPD_CAN_ABORT )
                     {
-                        wxCHECK_MSG( sharedData->m_state ==
-                                        wxGenericProgressDialog::Continue,
-                                    TRUE,
-                                    "Dialog not in a cancelable state!");
+                        wxCHECK_MSG
+                        (
+                            sharedData->m_state == wxProgressDialog::Continue,
+                            TRUE,
+                            "Dialog not in a cancelable state!"
+                        );
 
                         ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
                         ::SendMessage(hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE);
 
                         sharedData->m_timeStop = wxGetCurrentTime();
-                        sharedData->m_state = wxGenericProgressDialog::Canceled;
+                        sharedData->m_state = wxProgressDialog::Canceled;
                     }
 
                     return TRUE;
@@ -847,22 +872,19 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_TIMER:
             PerformNotificationUpdates(hwnd, sharedData);
 
-            // End dialog in three different cases:
-            // 1. Progress finished and dialog should automatically hide.
-            // 2. The wxProgressDialog object was destructed and should
-            //    automatically hide.
-            // 3. The dialog was canceled and wxProgressDialog object
-            //    was destroyed.
-            bool isCanceled =
-                sharedData->m_state == wxGenericProgressDialog::Canceled;
-            bool isFinished =
-                sharedData->m_state == wxGenericProgressDialog::Finished;
-            bool wasDestroyed =
-                (sharedData->m_notifications & wxSPDD_DESTROYED) != 0;
-            bool shouldAutoHide = (sharedData->m_style & wxPD_AUTO_HIDE) != 0;
+            /*
+                Decide whether we should end the dialog. This is done if either
+                the dialog object itself was destroyed or if the progress
+                finished and we were configured to hide automatically without
+                waiting for the user to dismiss us.
 
-            if ( (shouldAutoHide && (isFinished || wasDestroyed))
-                 || (wasDestroyed && isCanceled) )
+                Notice that we do not close the dialog if it was cancelled
+                because it's up to the user code in the main thread to decide
+                whether it really wants to cancel the dialog.
+             */
+            if ( (sharedData->m_notifications & wxSPDD_DESTROYED) ||
+                    (sharedData->m_state == wxProgressDialog::Finished &&
+                        sharedData->m_style & wxPD_AUTO_HIDE) )
             {
                 ::EndDialog( hwnd, IDCLOSE );
             }

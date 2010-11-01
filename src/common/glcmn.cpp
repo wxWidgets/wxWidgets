@@ -59,7 +59,7 @@ bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
     // that SetCurrent() can only be called for a shown window, so check for it
     wxASSERT_MSG( IsShownOnScreen(), wxT("can't make hidden GL canvas current") );
 
-    
+
     return context.SetCurrent(*static_cast<const wxGLCanvas *>(this));
 }
 
@@ -70,14 +70,14 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
         return false;
 
 #ifdef wxHAS_OPENGL_ES
-    wxGLAPI::glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.), 
+    wxGLAPI::glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.),
                 (GLfloat) (col.Blue() / 256.));
 #else
     GLboolean isRGBA;
     glGetBooleanv(GL_RGBA_MODE, &isRGBA);
     if ( isRGBA )
     {
-        glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.), 
+        glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.),
                 (GLfloat) (col.Blue() / 256.));
     }
     else // indexed colour
@@ -184,7 +184,7 @@ bool SetState( int flag, bool desired )
         if ( desired )
             glEnableClientState(flag);
         else
-            glDisableClientState(flag);            
+            glDisableClientState(flag);
     }
     return former;
 }
@@ -194,7 +194,7 @@ void RestoreState( int flag, bool desired )
     if ( desired )
         glEnableClientState(flag);
     else
-        glDisableClientState(flag);            
+        glDisableClientState(flag);
 }
 #endif
 
@@ -209,7 +209,7 @@ wxGLAPI::~wxGLAPI()
 {
 }
 
-void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom, 
+void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
                             GLfloat top, GLfloat zNear, GLfloat zFar)
 {
 #if wxUSE_OPENGL_EMULATION
@@ -226,12 +226,12 @@ void wxGLAPI::glBegin(GLenum mode)
     {
         wxFAIL_MSG("nested glBegin");
     }
-    
+
     s_mode = mode;
     s_texCoordsUsed = false;
     s_colorsUsed = false;
     s_normalsUsed = false;
-    
+
     s_texCoords.clear();
     s_normals.clear();
     s_colors.clear();
@@ -248,7 +248,7 @@ void wxGLAPI::glTexCoord2f(GLfloat s, GLfloat t)
     {
         wxFAIL_MSG("glTexCoord2f called outside glBegin/glEnd");
     }
-    
+
     else
     {
         s_texCoordsUsed = true;
@@ -271,16 +271,16 @@ void wxGLAPI::glVertex3f(GLfloat x, GLfloat y, GLfloat z)
     {
         s_texCoords.push_back(s_currentTexCoord[0]);
         s_texCoords.push_back(s_currentTexCoord[1]);
-        
+
         s_normals.push_back(s_currentNormal[0]);
         s_normals.push_back(s_currentNormal[1]);
         s_normals.push_back(s_currentNormal[2]);
-        
+
         s_colors.push_back(s_currentColor[0]);
         s_colors.push_back(s_currentColor[1]);
         s_colors.push_back(s_currentColor[2]);
         s_colors.push_back(s_currentColor[3]);
-        
+
         s_vertices.push_back(x);
         s_vertices.push_back(y);
         s_vertices.push_back(z);
@@ -298,9 +298,9 @@ void wxGLAPI::glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz)
     else
     {
         s_normalsUsed = true;
-        s_currentNormal[0] = nx;   
-        s_currentNormal[1] = ny;   
-        s_currentNormal[2] = nz;   
+        s_currentNormal[0] = nx;
+        s_currentNormal[1] = ny;
+        s_currentNormal[2] = nz;
     }
 #else
     ::glNormal3f(nx,ny,nz);
@@ -328,7 +328,7 @@ void wxGLAPI::glColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 void wxGLAPI::glColor3f(GLfloat r, GLfloat g, GLfloat b)
 {
 #if wxUSE_OPENGL_EMULATION
-    glColor4f(r,g,b,1.0); 
+    glColor4f(r,g,b,1.0);
 #else
     ::glColor3f(r,g,b);
 #endif
@@ -341,34 +341,34 @@ void wxGLAPI::glEnd()
     bool formerNormals = SetState( GL_NORMAL_ARRAY, s_normalsUsed );
     bool formerTexCoords = SetState( GL_TEXTURE_COORD_ARRAY, s_texCoordsUsed );
     bool formerVertex = glIsEnabled(GL_VERTEX_ARRAY);
-    
+
     if( !formerVertex )
         glEnableClientState(GL_VERTEX_ARRAY);
-    
+
     if ( s_colorsUsed )
         glColorPointer( 4, GL_FLOAT, 0, &s_colors[0] );
-    
+
     if ( s_normalsUsed )
         glNormalPointer( GL_FLOAT, 0, &s_normals[0] );
-    
+
     if ( s_texCoordsUsed )
         glTexCoordPointer( 2, GL_FLOAT, 0, &s_texCoords[0] );
-    
+
     glVertexPointer(3, GL_FLOAT, 0, &s_vertices[0]);
     glDrawArrays( s_mode, 0, s_vertices.size() / 3 );
-    
+
     if ( s_colorsUsed != formerColors )
         RestoreState( GL_COLOR_ARRAY, formerColors );
-    
+
     if ( s_normalsUsed != formerNormals )
         RestoreState( GL_NORMAL_ARRAY, formerColors );
-    
+
     if ( s_texCoordsUsed != formerTexCoords )
         RestoreState( GL_TEXTURE_COORD_ARRAY, formerColors );
-    
+
     if( !formerVertex )
         glDisableClientState(GL_VERTEX_ARRAY);
-    
+
     s_mode = 0xFF;
 #else
     ::glEnd();

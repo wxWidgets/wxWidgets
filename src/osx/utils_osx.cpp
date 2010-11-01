@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: utils.cpp 54886 2008-07-31 13:02:53Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
     OSStatus err = LSOpenCFURLRef( curl , NULL );
-    
+
     if (err == noErr)
     {
         return true;

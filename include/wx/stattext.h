@@ -80,12 +80,12 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    // calls only RemoveMarkup() on the original label 
+    // calls only RemoveMarkup() on the original label
     // if the wxST_MARKUP style is set
     // (but unlike GetLabelText won't remove mnemonics)
     virtual wxString GetLabelWithoutMarkup() const;
 
-    // just calls RemoveMarkup() & Ellipsize() on the original label 
+    // just calls RemoveMarkup() & Ellipsize() on the original label
     // if the wxST_MARKUP & wxST_ELLIPSIZE_* styles are set
     // (but unlike GetLabelText won't remove mnemonics)
     virtual wxString GetEllipsizedLabelWithoutMarkup() const;

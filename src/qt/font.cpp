@@ -275,3 +275,9 @@ QFont wxFont::GetHandle() const
 {
     return M_FONTDATA;
 }
+
+wxFontFamily wxFont::DoGetFamily() const
+{
+    return wxFONTFAMILY_DEFAULT;
+}
+

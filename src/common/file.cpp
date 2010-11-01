@@ -415,8 +415,7 @@ wxFileOffset wxFile::Length() const
 
     wxFileOffset iRc = Tell();
     if ( iRc != wxInvalidOffset ) {
-        // have to use const_cast :-(
-        wxFileOffset iLen = ((wxFile *)this)->SeekEnd();
+        wxFileOffset iLen = const_cast<wxFile *>(this)->SeekEnd();
         if ( iLen != wxInvalidOffset ) {
             // restore old position
             if ( ((wxFile *)this)->Seek(iRc) == wxInvalidOffset ) {

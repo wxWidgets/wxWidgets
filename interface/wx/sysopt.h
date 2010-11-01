@@ -197,8 +197,8 @@ public:
     /**
         Sets an option. The function is case-insensitive to @a name.
     */
-    void SetOption(const wxString& name, const wxString& value);
-    void SetOption(const wxString& name, int value);
+    static void SetOption(const wxString& name, const wxString& value);
+    static void SetOption(const wxString& name, int value);
     //@}
 };
 

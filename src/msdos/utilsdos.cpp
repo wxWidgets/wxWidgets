@@ -314,7 +314,8 @@ bool wxShell(const wxString& command /*=wxEmptyString*/)
     return result == 0;
 }
 
-long wxExecute(const wxString& command, int flags, wxProcess *process)
+long wxExecute(const wxString& command, int flags, wxProcess *process,
+        const wxExecuteEnv *env)
 {
     // FIXME: shouldn't depend on wxCmdLineParser
     wxArrayString args(wxCmdLineParser::ConvertStringToArgs(command));
@@ -439,7 +440,8 @@ wxString wxRedirectableFd::Release()
 
 // wxExecute implementation
 //
-long wxExecute(wxChar **argv, int flags, wxProcess *process)
+long wxExecute(wxChar **argv, int flags, wxProcess *process,
+        const wxString* cwd, const wxEnvVariableHashMap* env)
 {
 #if wxUSE_STREAMS
     const int STDIN = 0;

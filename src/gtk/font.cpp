@@ -333,10 +333,8 @@ wxString wxFont::GetFaceName() const
     return M_FONTDATA->m_nativeFontInfo.GetFaceName();
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( IsOk(), wxFONTFAMILY_MAX, wxT("invalid font") );
-
     return M_FONTDATA->m_nativeFontInfo.GetFamily();
 }
 

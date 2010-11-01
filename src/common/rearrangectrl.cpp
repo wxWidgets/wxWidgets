@@ -134,11 +134,11 @@ void wxRearrangeList::Swap(int pos1, int pos2)
     // first the label
     const wxString stringTmp = GetString(pos1);
     SetString(pos1, GetString(pos2));
-    Check(pos1, IsChecked(pos2));
+    SetString(pos2, stringTmp);
 
     // then the checked state
     const bool checkedTmp = IsChecked(pos1);
-    SetString(pos2, stringTmp);
+    Check(pos1, IsChecked(pos2));
     Check(pos2, checkedTmp);
 
     // and finally the client data, if necessary

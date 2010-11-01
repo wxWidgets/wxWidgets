@@ -94,10 +94,11 @@ def doMacLipoBuild(arch, buildDir, installDir,
             del os.environ[key]
 
 
-def macFixupInstallNames(destdir, prefix):
+def macFixupInstallNames(destdir, prefix, buildDir=None):
     # When an installdir is used then the install_names embedded in
     # the dylibs are not correct.  Reset the IDs and the dependencies
     # to use just the prefix.
+    print "**** macFixupInstallNames(%s, %s, %s)" % (destdir, prefix, buildDir)
     pwd = os.getcwd()
     os.chdir(destdir+prefix+'/lib')
     dylibs = glob.glob('*.dylib')     # ('*[0-9].[0-9].[0-9].[0-9]*.dylib')
@@ -107,8 +108,12 @@ def macFixupInstallNames(destdir, prefix):
         print cmd
         os.system(cmd)
         for dep in dylibs:
-            cmd = 'install_name_tool -change %s/lib/%s %s/lib/%s %s/lib/%s' % \
-                  (destdir+prefix,dep,  prefix,dep,  destdir+prefix,lib)
+            if buildDir is not None:
+                cmd = 'install_name_tool -change %s/lib/%s %s/lib/%s %s/lib/%s' % \
+                      (buildDir,dep,  prefix,dep,  destdir+prefix,lib)
+            else:
+                cmd = 'install_name_tool -change %s/lib/%s %s/lib/%s %s/lib/%s' % \
+                      (destdir+prefix,dep,  prefix,dep,  destdir+prefix,lib)
             print cmd
             os.system(cmd)        
     os.chdir(pwd)
@@ -147,9 +152,11 @@ def main(scriptName, args):
         "install"    : (False, "Install the toolkit to the installdir directory, or the default dir."),
         "installdir" : ("", "Directory where built wxWidgets will be installed"),
         "mac_universal_binary" : (False, "Build Mac version as a universal binary"),
+        "mac_arch"   : ("", "Build just the specified architecture on Mac"),
         "mac_lipo"   : (False, "EXPERIMENTAL: Create a universal binary by merging a PPC and Intel build together."),
         "mac_framework" : (False, "Install the Mac build as a framework"),
         "no_config"  : (False, "Turn off configure step on autoconf builds"),
+        "config_only": (False, "Only run the configure step and then exit"),
         "rebake"     : (False, "Regenerate Bakefile and autoconf files"),
         "unicode"    : (False, "Build the library with unicode support"),
         "wxpython"   : (False, "Build the wxWidgets library with all options needed by wxPython"),
@@ -180,6 +187,8 @@ def main(scriptName, args):
     prefixDir = options.prefix
     
     if toolkit == "autoconf":
+        if not buildDir:
+            buildDir = os.getcwd()
         configure_opts = []
         if options.features != "":
             configure_opts.extend(options.features.split(" "))
@@ -192,13 +201,17 @@ def main(scriptName, args):
             
         if options.mac_universal_binary: 
             configure_opts.append("--enable-universal_binary")
+            configure_opts.append("--without-macosx-sdk") # don't let configure default it
             
         if options.cocoa:
-            configure_opts.append("--with-cocoa")
+            configure_opts.append("--with-old_cocoa")
             
         if options.osx_cocoa:
             configure_opts.append("--with-osx_cocoa")
-        
+
+        if  options.mac_arch: 
+            configure_opts.append("--enable-macosx_arch=%s" % options.mac_arch)
+            
         wxpy_configure_opts = [
                             "--with-opengl",
                             "--enable-sound",
@@ -256,11 +269,16 @@ def main(scriptName, args):
             exitIfError(wxBuilder.configure(dir=wxRootDir, options=configure_opts), 
                         "Error running configure")
             os.chdir(olddir)
+
+        if options.config_only:
+            print "Exiting after configure"
+            return
     
     elif toolkit in ["msvc", "msvcProject"]:
         flags = {}
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
-    
+
+        print "creating wx/msw/setup.h from setup0.h"
         if options.unicode:
             flags["wxUSE_UNICODE"] = "1"
             if VERSION < (2,9):
@@ -271,26 +289,21 @@ def main(scriptName, args):
     
         if options.wxpython:
             flags["wxDIALOG_UNIT_COMPATIBILITY "] = "0"
-            flags["wxUSE_DEBUG_CONTEXT"] = "1"
-            flags["wxUSE_MEMORY_TRACING"] = "1"
+            flags["wxUSE_DEBUGREPORT"] = "0"
             flags["wxUSE_DIALUP_MANAGER"] = "0"
+            flags["wxUSE_GRAPHICS_CONTEXT"] = "1"
+            flags["wxUSE_DISPLAY"] = "1"
             flags["wxUSE_GLCANVAS"] = "1"
             flags["wxUSE_POSTSCRIPT"] = "1"
             flags["wxUSE_AFM_FOR_POSTSCRIPT"] = "0"
-            flags["wxUSE_DISPLAY"] = "1"
-            flags["wxUSE_DEBUGREPORT"] = "0"
-            flags["wxUSE_GRAPHICS_CONTEXT"] = "1"
             flags["wxUSE_DATEPICKCTRL_GENERIC"] = "1"
+
             if VERSION < (2,9):
                 flags["wxUSE_DIB_FOR_BITMAP"] = "1"
 
             if VERSION >= (2,9):
                 flags["wxUSE_UIACTIONSIMULATOR"] = "1"
                 
-            # setup the wxPython 'hybrid' build
-            if not options.debug:
-                flags["wxUSE_MEMORY_TRACING"] = "0"
-                flags["wxUSE_DEBUG_CONTEXT"] = "0"
     
         mswIncludeDir = os.path.join(wxRootDir, "include", "wx", "msw")
         setup0File = os.path.join(mswIncludeDir, "setup0.h")
@@ -320,12 +333,8 @@ def main(scriptName, args):
                 args.append("MONOLITHIC=0")
                 args.append("USE_OPENGL=1")
                 args.append("USE_GDIPLUS=1")
-                args.append("CXXFLAGS=/D__NO_VC_CRTDBG__")
                 
                 if not options.debug:
-                    # "Hybrid" build, not really release or debug
-                    args.append("DEBUG_FLAG=1")
-                    args.append("WXDEBUGFLAG=h")
                     args.append("BUILD=release")
                 else:
                     args.append("BUILD=debug")
@@ -499,7 +508,7 @@ def main(scriptName, args):
         prefix = options.prefix
         if not prefix:
             prefix = '/usr/local'
-        macFixupInstallNames(options.installdir, prefix)
+        macFixupInstallNames(options.installdir, prefix)#, buildDir)
 
         
         

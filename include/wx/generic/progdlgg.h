@@ -15,8 +15,10 @@
 #include "wx/dialog.h"
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 class WXDLLIMPEXP_FWD_CORE wxGauge;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
 
 /*
     Progress dialog which shows a moving progress bar.
@@ -55,17 +57,18 @@ public:
 
     // This enum is an implementation detail and should not be used
     // by user code.
-    enum ProgressDialogState
+    enum State
     {
         Uncancelable = -1,   // dialog can't be canceled
         Canceled,            // can be cancelled and, in fact, was
         Continue,            // can be cancelled but wasn't
-        Finished             // finished, waiting to be removed from screen
+        Finished,            // finished, waiting to be removed from screen
+        Dismissed            // was closed by user after finishing
     };
 
 protected:
     // This ctor is used by the native MSW implementation only.
-    wxGenericProgressDialog(wxWindow *parent, int maximum, int style);
+    wxGenericProgressDialog(wxWindow *parent, int style);
 
     void Create(const wxString& title,
                 const wxString& message,
@@ -73,11 +76,25 @@ protected:
                 wxWindow *parent,
                 int style);
 
+    // Update just the m_maximum field, this is used by public SetRange() but,
+    // unlike it, doesn't update the controls state. This makes it useful for
+    // both this class and its derived classes that don't use m_gauge to
+    // display progress.
+    void SetMaximum(int maximum);
+
     // Return the labels to use for showing the elapsed/estimated/remaining
     // times respectively.
     static wxString GetElapsedLabel() { return _("Elapsed time:"); }
     static wxString GetEstimatedLabel() { return _("Estimated time:"); }
     static wxString GetRemainingLabel() { return _("Remaining time:"); }
+
+
+    // Similar to wxWindow::HasFlag() but tests for a presence of a wxPD_XXX
+    // flag in our (separate) flags instead of using m_windowStyle.
+    bool HasPDFlag(int flag) const { return (m_pdStyle & flag) != 0; }
+
+    // Return the progress dialog style. Prefer to use HasPDFlag() if possible.
+    int GetPDStyle() const { return m_pdStyle; }
 
 
     // Updates estimated times from a given progress bar value and stores the
@@ -111,7 +128,7 @@ protected:
 
 
     // continue processing or not (return value for Update())
-    ProgressDialogState m_state;
+    State m_state;
 
     // the maximum value
     int m_maximum;
@@ -134,7 +151,7 @@ private:
     static void SetTimeLabel(unsigned long val, wxStaticText *label);
 
     // common part of all ctors
-    void Init(wxWindow *parent, int maximum, int style);
+    void Init(wxWindow *parent, int style);
 
     // create the label with given text and another one to show the time nearby
     // as the next windows in the sizer, returns the created control
@@ -168,6 +185,12 @@ private:
     // parent top level window (may be NULL)
     wxWindow *m_parentTop;
 
+    // Progress dialog styles: this is not the same as m_windowStyle because
+    // wxPD_XXX constants clash with the existing TLW styles so to be sure we
+    // don't have any conflicts we just use a separate variable for storing
+    // them.
+    int m_pdStyle;
+
     // skip some portion
     bool m_skip;
 
@@ -190,11 +213,13 @@ private:
     int m_ctdelay;
     unsigned long m_display_estimated;
 
-    bool m_hasAbortButton,
-         m_hasSkipButton;
-
     // for wxPD_APP_MODAL case
-    class WXDLLIMPEXP_FWD_CORE wxWindowDisabler *m_winDisabler;
+    wxWindowDisabler *m_winDisabler;
+
+    // Temporary event loop created by the dialog itself if there is no
+    // currently active loop when it is created.
+    wxEventLoop *m_tempEventLoop;
+
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);

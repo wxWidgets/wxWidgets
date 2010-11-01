@@ -1814,14 +1814,15 @@ enum wxBorder
 
 /*
  * wxSpinButton flags.
- * Note that a wxSpinCtrl is sometimes defined as
- * a wxTextCtrl, and so the flags must be different
- * from wxTextCtrl's.
+ * Note that a wxSpinCtrl is sometimes defined as a wxTextCtrl, and so the
+ * flags shouldn't overlap with wxTextCtrl flags that can be used for a single
+ * line controls (currently we reuse wxTE_CHARWRAP and wxTE_RICH2 neither of
+ * which makes sense for them).
  */
 #define wxSP_HORIZONTAL       wxHORIZONTAL /*  4 */
 #define wxSP_VERTICAL         wxVERTICAL   /*  8 */
-#define wxSP_ARROW_KEYS       0x1000
-#define wxSP_WRAP             0x2000
+#define wxSP_ARROW_KEYS       0x4000
+#define wxSP_WRAP             0x8000
 
 /*
  * wxTabCtrl flags
@@ -2290,9 +2291,11 @@ enum wxDataFormatId
     wxDF_MAX
 };
 
-/*  Virtual keycodes */
+/* Key codes */
 enum wxKeyCode
 {
+    WXK_NONE    =    0,
+
     WXK_BACK    =    8, // backspace
     WXK_TAB     =    9,
     WXK_RETURN  =    13,

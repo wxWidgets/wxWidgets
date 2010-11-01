@@ -2375,6 +2375,10 @@ public:
         The parameter @a menu is the menu to show.
         The parameter @a pos (or the parameters @a x and @a y) is the
         position at which to show the menu in client coordinates.
+        It is recommended to not explicitly specify coordinates when
+        calling this method in response to mouse click, because some of
+        the ports (namely, wxGTK) can do a better job of positioning
+        the menu in that case.
 
         @return
              The selected menu item id or @c wxID_NONE if none selected or an
@@ -2382,7 +2386,8 @@ public:
 
         @since 2.9.0
     */
-    int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos);
+    int GetPopupMenuSelectionFromUser(wxMenu& menu,
+                                      const wxPoint& pos = wxDefaultPosition);
 
     /**
         @overload

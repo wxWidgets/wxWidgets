@@ -34,15 +34,19 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( FileTestCase );
+#if wxUSE_UNICODE
         CPPUNIT_TEST( RoundTripUTF8 );
         CPPUNIT_TEST( RoundTripUTF16 );
         CPPUNIT_TEST( RoundTripUTF32 );
+#endif // wxUSE_UNICODE
         CPPUNIT_TEST( TempFile );
     CPPUNIT_TEST_SUITE_END();
 
+#if wxUSE_UNICODE
     void RoundTripUTF8() { DoRoundTripTest(wxConvUTF8); }
     void RoundTripUTF16() { DoRoundTripTest(wxMBConvUTF16()); }
     void RoundTripUTF32() { DoRoundTripTest(wxMBConvUTF32()); }
+#endif // wxUSE_UNICODE
 
     void DoRoundTripTest(const wxMBConv& conv);
     void TempFile();
@@ -61,11 +65,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileTestCase, "FileTestCase" );
 // tests implementation
 // ----------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+
 void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
 {
     TestFile tf;
 
-    const wxString data = "Hello\0UTF";
+    // Explicit length is needed because of the embedded NUL.
+    const wxString data("Hello\0UTF!", 10);
 
     {
         wxFile fout(tf.GetName(), wxFile::write);
@@ -82,17 +89,12 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
         wxCharBuffer buf(len);
         CPPUNIT_ASSERT_EQUAL( len, fin.Read(buf.data(), len) );
 
-        wxWCharBuffer wbuf(conv.cMB2WC(buf));
-#if wxUSE_UNICODE
-        CPPUNIT_ASSERT_EQUAL( data, wbuf );
-#else // !wxUSE_UNICODE
-        CPPUNIT_ASSERT
-        (
-            memcmp(wbuf, L"Hello\0UTF", data.length()*sizeof(wchar_t)) == 0
-        );
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+        wxString dataReadBack(buf, conv, len);
+        CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
     }
 }
+
+#endif // wxUSE_UNICODE
 
 void FileTestCase::TempFile()
 {

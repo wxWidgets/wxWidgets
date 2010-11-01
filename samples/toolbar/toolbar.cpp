@@ -642,7 +642,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_extraToolBar = new wxToolBar(m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_TEXT|wxTB_FLAT|wxTB_TOP);
     PopulateToolbar(m_extraToolBar);
 #endif
-    
+
     m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);

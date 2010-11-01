@@ -442,27 +442,30 @@ private:
 bool wxMacLaunch(char **argv);
 #endif
 
-long wxExecute(const wxString& command, int flags, wxProcess *process)
+long wxExecute(const wxString& command, int flags, wxProcess *process,
+        const wxExecuteEnv *env)
 {
     ArgsArray argv(wxCmdLineParser::ConvertStringToArgs(command,
                                                         wxCMD_LINE_SPLIT_UNIX));
 
-    return wxExecute(argv, flags, process);
+    return wxExecute(argv, flags, process, env);
 }
 
 #if wxUSE_UNICODE
 
-long wxExecute(wchar_t **wargv, int flags, wxProcess *process)
+long wxExecute(wchar_t **wargv, int flags, wxProcess *process,
+        const wxExecuteEnv *env)
 {
     ArgsArray argv(wargv);
 
-    return wxExecute(argv, flags, process);
+    return wxExecute(argv, flags, process, env);
 }
 
 #endif // wxUSE_UNICODE
 
 // wxExecute: the real worker function
-long wxExecute(char **argv, int flags, wxProcess *process)
+long wxExecute(char **argv, int flags, wxProcess *process,
+        const wxExecuteEnv *env)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
     // case we return 0 which is never a valid PID
@@ -575,6 +578,40 @@ long wxExecute(char **argv, int flags, wxProcess *process)
             pipeIn.Close();
             pipeOut.Close();
             pipeErr.Close();
+        }
+
+        // Process additional options if we have any
+        if ( env )
+        {
+            // Change working directory if it is specified
+            if ( !env->cwd.empty() )
+                wxSetWorkingDirectory(env->cwd);
+
+            // Change environment if needed.
+            //
+            // NB: We can't use execve() currently because we allow using
+            //     non full paths to wxExecute(), i.e. we want to search for
+            //     the program in PATH. However it just might be simpler/better
+            //     to do the search manually and use execve() envp parameter to
+            //     set up the environment of the child process explicitly
+            //     instead of doing what we do below.
+            if ( !env->env.empty() )
+            {
+                wxEnvVariableHashMap oldenv;
+                wxGetEnvMap(&oldenv);
+
+                // Remove unwanted variables
+                wxEnvVariableHashMap::const_iterator it;
+                for ( it = oldenv.begin(); it != oldenv.end(); ++it )
+                {
+                    if ( env->env.find(it->first) == env->env.end() )
+                        wxUnsetEnv(it->first);
+                }
+
+                // And add the new ones (possibly replacing the old values)
+                for ( it = env->env.begin(); it != env->env.end(); ++it )
+                    wxSetEnv(it->first, it->second);
+            }
         }
 
         execvp(*argv, argv);

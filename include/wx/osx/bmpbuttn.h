@@ -40,7 +40,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 protected:
-    
+
     virtual wxSize DoGetBestSize() const;
 
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)

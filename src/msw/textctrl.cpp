@@ -434,6 +434,8 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
                 {
                     // yes, class name for version 4.1 really is 5.0
                     windowClass = wxT("RICHEDIT50W");
+
+                    m_verRichEdit = 4;
                 }
                 else if ( wxRichEditModule::Load(wxRichEditModule::Version_2or3) )
                 {
@@ -2363,16 +2365,15 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     if ( !wxTextCtrlBase::SetFont(font) )
         return false;
 
-    if ( IsRich() )
+    if ( GetRichVersion() >= 4 )
     {
-        // Using WM_SETFONT doesn't work reliably with rich edit controls: as
-        // an example, if we set a fixed width font for a richedit 4.1 control,
-        // it's used for the ASCII characters but inserting any non-ASCII ones
-        // switches the font to a proportional one, whether it's done
-        // programmatically or not. So just use EM_SETCHARFORMAT for this too.
+        // Using WM_SETFONT is not enough with RichEdit 4.1: it does work but
+        // for ASCII characters only and inserting a non-ASCII one into it
+        // later reverts to the default font so use EM_SETCHARFORMAT to change
+        // the default font for it.
         wxTextAttr attr;
         attr.SetFont(font);
-        SetDefaultStyle(attr);
+        SetStyle(-1, -1, attr);
     }
 
     return true;
@@ -2382,46 +2383,8 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 {
-    if ( !IsRich() )
-    {
-        // can't do it with normal text control
-        return false;
-    }
-
-    // the richedit 1.0 doesn't handle setting background colour, so don't
-    // even try to do anything if it's the only thing we want to change
-    if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
-        !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
-    {
-        // nothing to do: return true if there was really nothing to do and
-        // false if we failed to set bg colour
-        return !style.HasBackgroundColour();
-    }
-
-    // order the range if needed
-    if ( start > end )
-    {
-        long tmp = start;
-        start = end;
-        end = tmp;
-    }
-
-    // we can only change the format of the selection, so select the range we
-    // want and restore the old selection later
-    long startOld, endOld;
-    GetSelection(&startOld, &endOld);
-
-    // but do we really have to change the selection?
-    bool changeSel = start != startOld || end != endOld;
-
-    if ( changeSel )
-    {
-        DoSetSelection(start, end, SetSel_NoScroll);
-    }
-
     // initialize CHARFORMAT struct
 #if wxUSE_RICHEDIT2
     CHARFORMAT2 cf;
@@ -2503,17 +2466,37 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     }
 #endif // wxUSE_RICHEDIT2
 
-    // do format the selection
-    bool ok = ::SendMessage(GetHwnd(), EM_SETCHARFORMAT,
-                            SCF_SELECTION, (LPARAM)&cf) != 0;
-    if ( !ok )
+    // Apply the style either to the selection or to the entire control.
+    WPARAM selMode;
+    if ( start != -1 || end != -1 )
     {
-        wxLogDebug(wxT("SendMessage(EM_SETCHARFORMAT, SCF_SELECTION) failed"));
+        DoSetSelection(start, end, SetSel_NoScroll);
+        selMode = SCF_SELECTION;
+    }
+    else
+    {
+        selMode = SCF_ALL;
     }
 
-    // now do the paragraph formatting
+    if ( !::SendMessage(GetHwnd(), EM_SETCHARFORMAT, selMode, (LPARAM)&cf) )
+    {
+        wxLogLastError(wxT("SendMessage(EM_SETCHARFORMAT)"));
+        return false;
+    }
+
+    return true;
+}
+
+bool wxTextCtrl::MSWSetParaFormat(const wxTextAttr& style, long start, long end)
+{
+#if wxUSE_RICHEDIT2
     PARAFORMAT2 pf;
+#else
+    PARAFORMAT pf;
+#endif
+
     wxZeroMemory(pf);
+
     // we can't use PARAFORMAT2 with RichEdit 1.0, so pretend it is a simple
     // PARAFORMAT in that case
 #if wxUSE_RICHEDIT2
@@ -2588,16 +2571,54 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     if ( pf.dwMask )
     {
-        // do format the selection
-        bool ok = ::SendMessage(GetHwnd(), EM_SETPARAFORMAT,
-                                0, (LPARAM) &pf) != 0;
-        if ( !ok )
+        // Do format the selection.
+        DoSetSelection(start, end, SetSel_NoScroll);
+
+        if ( !::SendMessage(GetHwnd(), EM_SETPARAFORMAT, 0, (LPARAM) &pf) )
         {
-            wxLogDebug(wxT("SendMessage(EM_SETPARAFORMAT, 0) failed"));
+            wxLogLastError(wxT("SendMessage(EM_SETPARAFORMAT)"));
+
+            return false;
         }
     }
 
-    if ( changeSel )
+    return true;
+}
+
+bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+{
+    if ( !IsRich() )
+    {
+        // can't do it with normal text control
+        return false;
+    }
+
+    // the richedit 1.0 doesn't handle setting background colour, so don't
+    // even try to do anything if it's the only thing we want to change
+    if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
+        !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
+        !style.HasTabs() )
+    {
+        // nothing to do: return true if there was really nothing to do and
+        // false if we failed to set bg colour
+        return !style.HasBackgroundColour();
+    }
+
+    // order the range if needed
+    if ( start > end )
+        wxSwap(start, end);
+
+    // we can only change the format of the selection, so select the range we
+    // want and restore the old selection later, after MSWSetXXXFormat()
+    // functions (possibly) change it.
+    long startOld, endOld;
+    GetSelection(&startOld, &endOld);
+
+    bool ok = MSWSetCharFormat(style, start, end);
+    if ( !MSWSetParaFormat(style, start, end) )
+        ok = false;
+
+    if ( start != startOld || end != endOld )
     {
         // restore the original selection
         DoSetSelection(startOld, endOld, SetSel_NoScroll);

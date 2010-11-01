@@ -106,7 +106,7 @@ public:
     }
 
     // get the currently selected page or wxNOT_FOUND if none
-    virtual int GetSelection() const = 0;
+    int GetSelection() const { return m_selection; }
 
     // set/get the title of a page
     virtual bool SetPageText(size_t n, const wxString& strText) = 0;
@@ -181,6 +181,7 @@ public:
     // remove all pages and delete them
     virtual bool DeleteAllPages()
     {
+        m_selection = wxNOT_FOUND;
         DoInvalidateBestSize();
         WX_CLEAR_ARRAY(m_pages);
         return true;
@@ -204,7 +205,7 @@ public:
                             int imageId = -1) = 0;
 
     // set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     //
     // NB: this function will generate PAGE_CHANGING/ED events
     virtual int SetSelection(size_t n) = 0;
@@ -217,7 +218,7 @@ public:
     void AdvanceSelection(bool forward = true)
     {
         int nPage = GetNextPage(forward);
-        if ( nPage != -1 )
+        if ( nPage != wxNOT_FOUND )
         {
             // cast is safe because of the check above
             SetSelection((size_t)nPage);
@@ -250,6 +251,17 @@ protected:
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    // After the insertion of the page in the method InsertPage, calling this
+    // method sets the selection to the given page or the first one if there is
+    // still no selection. The "selection changed" event is sent only if
+    // bSelect is true, so when it is false, no event is sent even if the
+    // selection changed from wxNOT_FOUND to 0 when inserting the first page.
+    //
+    // Returns true if the selection was set to the specified page (explicitly
+    // because of bSelect == true or implicitly because it's the first page) or
+    // false otherwise.
+    bool DoSetSelectionAfterInsertion(size_t n, bool bSelect);
 
     // set the selection to the given page, sending the events (which can
     // possibly prevent the page change from taking place) if SendEvent flag is
@@ -332,6 +344,11 @@ protected:
     // the margin around the choice control
     int m_controlMargin;
 
+    // The currently selected page (in range 0..m_pages.size()-1 inclusive) or
+    // wxNOT_FOUND if none (this can normally only be the case for an empty
+    // control without any pages).
+    int m_selection;
+
 private:
 
     // common part of all ctors
@@ -342,6 +359,7 @@ private:
 
     DECLARE_ABSTRACT_CLASS(wxBookCtrlBase)
     wxDECLARE_NO_COPY_CLASS(wxBookCtrlBase);
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -353,7 +371,7 @@ class WXDLLIMPEXP_CORE wxBookCtrlEvent : public wxNotifyEvent
 {
 public:
     wxBookCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
-                        int nSel = -1, int nOldSel = -1)
+                        int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
         : wxNotifyEvent(commandType, winid)
     {
         m_nSel = nSel;
@@ -370,10 +388,10 @@ public:
     virtual wxEvent *Clone() const { return new wxBookCtrlEvent(*this); }
 
     // accessors
-        // the currently selected page (-1 if none)
+        // the currently selected page (wxNOT_FOUND if none)
     int GetSelection() const { return m_nSel; }
     void SetSelection(int nSel) { m_nSel = nSel; }
-        // the page that was selected before the change (-1 if none)
+        // the page that was selected before the change (wxNOT_FOUND if none)
     int GetOldSelection() const { return m_nOldSel; }
     void SetOldSelection(int nOldSel) { m_nOldSel = nOldSel; }
 

@@ -667,11 +667,20 @@ void wxListLineData::SetAttr(wxListItemAttr *attr)
     item->SetAttr(attr);
 }
 
-bool wxListLineData::SetAttributes(wxDC *dc,
-                                   const wxListItemAttr *attr,
-                                   bool highlighted)
+void wxListLineData::ApplyAttributes(wxDC *dc,
+                                     const wxRect& rectHL,
+                                     bool highlighted,
+                                     bool current)
 {
-    wxWindow *listctrl = m_owner->GetParent();
+    const wxListItemAttr * const attr = GetAttr();
+
+    wxWindow * const listctrl = m_owner->GetParent();
+
+    const bool hasFocus = listctrl->HasFocus()
+#if defined(__WXMAC__) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
+                && IsControlActive( (ControlRef)listctrl->GetHandle() )
+#endif
+                ;
 
     // fg colour
 
@@ -680,20 +689,16 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     // arithmetics on wxColour, unfortunately)
     wxColour colText;
     if ( highlighted )
-#ifdef __WXMAC__
     {
-        if (m_owner->HasFocus()
-#if !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)m_owner->GetHandle() )
-#endif
-        )
+#ifdef __WXMAC__
+        if ( hasFocus )
             colText = *wxWHITE;
         else
             colText = *wxBLACK;
-    }
 #else
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 #endif
+    }
     else if ( attr && attr->HasTextColour() )
         colText = attr->GetTextColour();
     else
@@ -710,45 +715,25 @@ bool wxListLineData::SetAttributes(wxDC *dc,
 
     dc->SetFont(font);
 
-    // bg colour
-    bool hasBgCol = attr && attr->HasBackgroundColour();
-    if ( highlighted || hasBgCol )
+    // background
+    if ( highlighted )
     {
-        if ( highlighted )
-            dc->SetBrush( *m_owner->GetHighlightBrush() );
-        else
-            dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
-
-        dc->SetPen( *wxTRANSPARENT_PEN );
-
-        return true;
-    }
-
-    return false;
-}
-
-void wxListLineData::Draw( wxDC *dc )
-{
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
-
-    bool highlighted = IsHighlighted();
-
-    wxListItemAttr *attr = GetAttr();
-
-    if ( SetAttributes(dc, attr, highlighted) )
-    {
-        int flags = 0;
-        if (highlighted)
-            flags |= wxCONTROL_SELECTED;
-        if (m_owner->HasFocus()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-            && IsControlActive( (ControlRef)m_owner->GetHandle() )
-#endif
-        )
+        // Use the renderer method to ensure that the selected items use the
+        // native look.
+        int flags = wxCONTROL_SELECTED;
+        if ( hasFocus )
             flags |= wxCONTROL_FOCUSED;
+        if (current)
+           flags |= wxCONTROL_CURRENT;
         wxRendererNative::Get().
-            DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
+            DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
+    }
+    else if ( attr && attr->HasBackgroundColour() )
+    {
+        // Draw the background using the items custom background colour.
+        dc->SetBrush(attr->GetBackgroundColour());
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->DrawRectangle(rectHL);
     }
 
     // just for debugging to better see where the items are
@@ -759,6 +744,14 @@ void wxListLineData::Draw( wxDC *dc )
     dc->SetPen(*wxGREEN_PEN);
     dc->DrawRectangle( m_gi->m_rectIcon );
 #endif
+}
+
+void wxListLineData::Draw(wxDC *dc, bool current)
+{
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
+    wxCHECK_RET( node, wxT("no subitems at all??") );
+
+    ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
 
     wxListItemData *item = node->GetData();
     if (item->HasImage())
@@ -788,18 +781,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
     //       GetAttr() and move these lines into the loop below
-    wxListItemAttr *attr = GetAttr();
-    if ( SetAttributes(dc, attr, highlighted) )
-    {
-        int flags = 0;
-        if (highlighted)
-            flags |= wxCONTROL_SELECTED;
-        if (m_owner->HasFocus())
-            flags |= wxCONTROL_FOCUSED;
-        if (current)
-           flags |= wxCONTROL_CURRENT;
-        wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
-    }
+
+    ApplyAttributes(dc, rectHL, highlighted, current);
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
             yMid = rect.y + rect.height/2;
@@ -821,7 +804,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         int xOld = x;
         x += width;
 
-        const int wText = width - 8;
+        width -= 8;
+        const int wText = width;
         wxDCClipper clipper(*dc, xOld, rect.y, wText, rect.height);
 
         if ( item->HasImage() )
@@ -837,7 +821,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         }
 
         if ( item->HasText() )
-            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, wText);
+            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, width);
     }
 }
 
@@ -1424,23 +1408,31 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
     m_text->PushEventHandler(this);
 }
 
-void wxListTextCtrlWrapper::EndEdit(bool discardChanges)
+void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 {
     m_aboutToFinish = true;
 
-    if ( discardChanges )
+    switch ( reason )
     {
-        m_owner->OnRenameCancelled(m_itemEdited);
+        case End_Accept:
+            // Notify the owner about the changes
+            AcceptChanges();
 
-        Finish( true );
-    }
-    else
-    {
-        // Notify the owner about the changes
-        AcceptChanges();
+            // Even if vetoed, close the control (consistent with MSW)
+            Finish( true );
+            break;
 
-        // Even if vetoed, close the control (consistent with MSW)
-        Finish( true );
+        case End_Discard:
+            m_owner->OnRenameCancelled(m_itemEdited);
+
+            Finish( true );
+            break;
+
+        case End_Destroy:
+            // Don't generate any notifications for the control being destroyed
+            // and don't set focus to it neither.
+            Finish(false);
+            break;
     }
 }
 
@@ -1479,11 +1471,11 @@ void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            EndEdit( false );
+            EndEdit( End_Accept );
             break;
 
         case WXK_ESCAPE:
-            EndEdit( true );
+            EndEdit( End_Discard );
             break;
 
         default:
@@ -1617,6 +1609,9 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
 wxListMainWindow::~wxListMainWindow()
 {
+    if ( m_textctrlWrapper )
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
+
     DoDeleteAllItems();
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
     WX_CLEAR_ARRAY(m_aColWidths);
@@ -2110,7 +2105,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         size_t count = GetItemCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            GetLine(i)->Draw( &dc );
+            GetLine(i)->Draw( &dc, i == m_current );
         }
     }
 
@@ -2290,7 +2285,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     // listctrl because the order of events is different (or something like
     // that), so explicitly end the edit if it is active.
     if ( event.LeftDown() && m_textctrlWrapper )
-        m_textctrlWrapper->EndEdit( false );
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Accept);
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
@@ -2699,6 +2694,16 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
 
+    // send a list event
+    wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, parent->GetId() );
+    le.m_itemIndex = m_current;
+    if (HasCurrent())
+        GetLine(m_current)->GetItem( 0, le.m_item );
+    le.m_code = event.GetKeyCode();
+    le.SetEventObject( parent );
+    if (parent->GetEventHandler()->ProcessEvent( le ))
+        return;
+
     event.Skip();
 }
 
@@ -2717,17 +2722,6 @@ void wxListMainWindow::OnKeyUp( wxKeyEvent &event )
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
     wxWindow *parent = GetParent();
-
-    // send a list_key event up
-    if ( HasCurrent() )
-    {
-        wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
-        le.m_itemIndex = m_current;
-        GetLine(m_current)->GetItem( 0, le.m_item );
-        le.m_code = event.GetKeyCode();
-        le.SetEventObject( parent );
-        parent->GetEventHandler()->ProcessEvent( le );
-    }
 
     // propagate the char event upwards
     wxKeyEvent ke(event);
@@ -5067,12 +5061,22 @@ bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 
 void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
 {
-    m_mainWin->DoClientToScreen(x, y);
+    // It's not clear whether this can be called before m_mainWin is created
+    // but it seems better to be on the safe side and check.
+    if ( m_mainWin )
+        m_mainWin->DoClientToScreen(x, y);
+    else
+        wxControl::DoClientToScreen(x, y);
 }
 
 void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
 {
-    m_mainWin->DoScreenToClient(x, y);
+    // At least in wxGTK/Univ build this method can be called before m_mainWin
+    // is created so avoid crashes in this case.
+    if ( m_mainWin )
+        m_mainWin->DoScreenToClient(x, y);
+    else
+        wxControl::DoScreenToClient(x, y);
 }
 
 void wxGenericListCtrl::SetFocus()

@@ -164,7 +164,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
 {
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
-    
+
     wxSize papersize = wxDefaultSize;
     const wxPaperSize paperId = data.GetPaperId();
     if ( paperId != wxPAPER_NONE && wxThePrintPaperDatabase )
@@ -180,16 +180,16 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
     {
         papersize = data.GetPaperSize();
     }
-    
+
     if ( papersize != wxDefaultSize )
     {
         papersize.x = (wxInt32) (papersize.x * mm2pt);
         papersize.y = (wxInt32) (papersize.y * mm2pt);
-        
+
         double height, width;
         PMPaperGetHeight(m_macPaper, &height);
         PMPaperGetWidth(m_macPaper, &width);
-        
+
         if ( fabs( width - papersize.x ) >= 5 ||
             fabs( height - papersize.y ) >= 5 )
         {
@@ -218,7 +218,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                     const PMPaperMargins margins = { 0.0, 0.0, 0.0, 0.0 };
                     wxString id, name(wxT("Custom paper"));
                     id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
-                    
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
                     if ( PMPaperCreateCustom != NULL)
                     {
@@ -246,7 +246,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
             }
         }
     }
-    
+
     PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
     PMSetCollate(m_macPrintSettings, data.GetCollate());
     if ( data.IsOrientationReversed() )
@@ -255,7 +255,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
     else
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
                          kPMLandscape : kPMPortrait , false ) ;
-    
+
     PMDuplexMode mode = 0 ;
     switch( data.GetDuplex() )
     {
@@ -271,8 +271,8 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
             break ;
     }
     PMSetDuplex(  m_macPrintSettings, mode ) ;
-    
-    
+
+
     if ( data.IsOrientationReversed() )
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
                          kPMReverseLandscape : kPMReversePortrait , false ) ;
@@ -305,7 +305,7 @@ void wxOSXPrintData::TransferResolutionFrom( const wxPrintData &data )
             PMSetResolution( m_macPageFormat, &res);
 #endif
         }
-        
+
         free(resolutions);
     }
 }
@@ -315,10 +315,10 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     TransferPrinterNameFrom(data);
     TransferPaperInfoFrom(data);
     TransferResolutionFrom(data);
-    
+
     // after setting the new resolution the format has to be updated, otherwise the page rect remains
     // at the 'old' scaling
-    
+
     PMSessionValidatePageFormat(m_macPrintSession,
                                 m_macPageFormat, kPMDontWantBoolean);
     PMSessionValidatePrintSettings(m_macPrintSession,
@@ -355,7 +355,7 @@ void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
     err = PMGetCopies( m_macPrintSettings , &copies ) ;
     if ( err == noErr )
         data.SetNoCopies( copies ) ;
-    
+
     PMOrientation orientation ;
     err = PMGetOrientation(  m_macPageFormat , &orientation ) ;
     if ( err == noErr )
@@ -371,12 +371,12 @@ void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
             data.SetOrientationReversed( orientation == kPMReverseLandscape );
         }
     }
-    
+
     Boolean collate;
     if (PMGetCollate(m_macPrintSettings, &collate) == noErr)
         data.SetCollate(collate);
-    
-    
+
+
     PMDuplexMode mode = 0 ;
     PMGetDuplex(  m_macPrintSettings, &mode ) ;
     switch( mode )
@@ -392,11 +392,11 @@ void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
             data.SetDuplex(wxDUPLEX_SIMPLEX);
             break ;
     }
-    
+
     double height, width;
     PMPaperGetHeight(m_macPaper, &height);
     PMPaperGetWidth(m_macPaper, &width);
-    
+
     wxSize sz((int)(width * pt2mm + 0.5 ) ,
               (int)(height * pt2mm + 0.5 ));
     data.SetPaperSize(sz);
@@ -445,7 +445,7 @@ void wxOSXPrintData::TransferResolutionTo( wxPrintData &data )
                 data.SetQuality((((i + 1) * 3) / resCount) + wxPRINT_QUALITY_DRAFT);
         }
         free(resolutions);
-    }    
+    }
 }
 
 bool wxOSXPrintData::TransferTo( wxPrintData &data )

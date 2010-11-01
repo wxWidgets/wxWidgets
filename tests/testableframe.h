@@ -2,7 +2,7 @@
 // Name:        testableframe.h
 // Purpose:     An improved wxFrame for unit-testing
 // Author:      Steven Lamerton
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,6 +20,9 @@ public:
 
     //wxEVT_ANY get the count for all events or a type can be specified
     int GetEventCount(wxEventType type = wxEVT_ANY);
+
+    //Used to clear an event count, after disconnecting a counter for example
+    void ClearEventCount(wxEventType type);
 
 private:
     wxLongToLongHashMap m_count;

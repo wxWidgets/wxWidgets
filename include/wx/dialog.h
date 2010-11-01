@@ -133,9 +133,16 @@ public:
     // platforms which have hardware buttons replacing OK/Cancel and such)
     wxSizer *CreateButtonSizer(long flags);
 
+    // returns a sizer containing the given one and a static line separating it
+    // from the preceding elements if it's appropriate for the current platform
+    wxSizer *CreateSeparatedSizer(wxSizer *sizer);
+
     // returns the sizer containing CreateButtonSizer() below a separating
     // static line for the platforms which use static lines for items
     // separation (i.e. not Mac)
+    //
+    // this is just a combination of CreateButtonSizer() and
+    // CreateSeparatedSizer()
     wxSizer *CreateSeparatedButtonSizer(long flags);
 
 #if wxUSE_BUTTON
@@ -241,6 +248,13 @@ private:
     // helper of GetParentForModalDialog(): returns the passed in window if it
     // can be used as our parent or NULL if it can't
     wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;
+
+    // Helper of OnCharHook() and OnCloseWindow(): find the appropriate button
+    // for closing the dialog and send a click event for it.
+    //
+    // Return true if we found a button to close the dialog and "clicked" it or
+    // false otherwise.
+    bool SendCloseButtonClickEvent();
 
     // handle Esc key presses
     void OnCharHook(wxKeyEvent& event);

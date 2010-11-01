@@ -56,17 +56,15 @@ public:
 
   // accessors
   // ---------
-  // Find the position of the wxNotebookPage, -1 if not found.
+  // Find the position of the wxNotebookPage, wxNOT_FOUND if not found.
   int FindPagePosition(wxNotebookPage* page) const;
 
     // set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
   int SetSelection(size_t nPage);
     // cycle thru the tabs
   //  void AdvanceSelection(bool bForward = true);
-    // get the currently selected page
-  int GetSelection() const { return m_nSelection; }
 
     // changes selected page without sending events
   int ChangeSelection(size_t nPage);
@@ -148,8 +146,6 @@ protected:
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
-
-  int m_nSelection;           // the current selection (-1 if none)
 
   wxTabView*   m_tabView;
 

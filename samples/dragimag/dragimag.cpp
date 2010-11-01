@@ -142,7 +142,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
         m_currentlyHighlighted = (DragShape*) NULL;
 
         m_draggedShape = (DragShape*) NULL;
-        
+
         Refresh(true);
     }
     else if (event.Dragging() && m_dragMode != TEST_DRAG_NONE)
@@ -230,7 +230,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             if (mustUnhighlightOld || mustHighlightNew)
                 m_dragImage->Hide();
-            
+
             // Now with the drag image switched off, we can change the window contents.
             if (mustUnhighlightOld)
                 m_currentlyHighlighted = (DragShape*) NULL;
@@ -475,7 +475,7 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
 
         dc.Blit(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight(),
             & memDC, 0, 0, wxCOPY, true);
-            
+
         if (highlight)
         {
             dc.SetPen(*wxWHITE_PEN);

@@ -1030,13 +1030,17 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxPGProperty* p;
 
         wxPGProperty* origParent =
-            pgman->GetProperty(wxT("Window Styles"))->GetParent();
+            pgman->GetProperty("Window Styles")->GetParent();
 
-        p = pgman->RemoveProperty(wxT("Window Styles"));
+        // For testing purposes, let's set some custom cell colours
+        p = pgman->GetProperty("Window Styles");
+        p->SetCell(2, wxPGCell("style"));
+        p = pgman->RemoveProperty("Window Styles");
         pgman->Refresh();
         pgman->Update();
 
         pgman->AppendIn(origParent, p);
+        wxASSERT( p->GetCell(2).GetText() == "style");
         pgman->Refresh();
         pgman->Update();
     }
@@ -1131,7 +1135,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         InitPanel();
 
         const int trySplitterPos = 50;
-    
+
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
         pgman = m_pPropGridManager =
             new wxPropertyGridManager(m_panel, wxID_ANY,

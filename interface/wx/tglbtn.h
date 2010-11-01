@@ -106,8 +106,14 @@ public:
 /**
     @class wxBitmapToggleButton
 
-    wxBitmapToggleButton is a wxToggleButton
-    that contains a bitmap instead of text.
+    wxBitmapToggleButton is a wxToggleButton that contains a bitmap instead of
+    text.
+
+    This class is not available in all ports currently (although it is
+    available in the major ones), test for @c wxHAS_BITMAPTOGGLEBUTTON to
+    determine whether it can be used (in addition for possibly testing for
+    @c wxUSE_TOGGLEBTN which can be set to 0 to explicitly disable support for
+    this class and wxToggleButton).
 
     This control emits an update UI event.
 

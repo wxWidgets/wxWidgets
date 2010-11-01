@@ -1082,12 +1082,10 @@ int wxFont::GetPointSize() const
     return M_FONTDATA->GetPointSize();
 } // end of wxFont::GetPointSize
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( Ok(), wxFONTFAMILY_MAX, wxT("invalid font") );
-
     return M_FONTDATA->GetFamily();
-} // end of wxFont::GetFamily
+} // end of wxFont::DoGetFamily
 
 wxFontStyle wxFont::GetStyle() const
 {

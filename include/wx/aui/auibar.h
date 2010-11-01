@@ -616,6 +616,7 @@ protected: // handlers
     void OnMiddleUp(wxMouseEvent& evt);
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
+    void OnCaptureLost(wxMouseCaptureLostEvent& evt);
     void OnSetCursor(wxSetCursorEvent& evt);
 
 protected:
@@ -656,6 +657,10 @@ protected:
     wxOrientation m_orientation;
     wxSize m_horzHintSize;
     wxSize m_vertHintSize;
+
+private:
+    // Common part of OnLeaveWindow() and OnCaptureLost().
+    void DoResetMouseState();
 
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxAuiToolBar)

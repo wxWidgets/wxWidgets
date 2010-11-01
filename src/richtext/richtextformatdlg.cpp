@@ -130,7 +130,7 @@ bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTe
 }
 
 /// Set the attributes and optionally update the display
-bool wxRichTextFormattingDialog::SetStyle(const wxTextAttr& style, bool update)
+bool wxRichTextFormattingDialog::SetStyle(const wxRichTextAttr& style, bool update)
 {
     m_attributes = style;
     if (update)
@@ -462,7 +462,7 @@ wxRichTextFormattingDialog* wxRichTextFormattingDialog::GetDialog(wxWindow* win)
 
 
 // Helper for pages to get the attributes
-wxTextAttr* wxRichTextFormattingDialog::GetDialogAttributes(wxWindow* win)
+wxRichTextAttr* wxRichTextFormattingDialog::GetDialogAttributes(wxWindow* win)
 {
     wxRichTextFormattingDialog* dialog = GetDialog(win);
     if (dialog)

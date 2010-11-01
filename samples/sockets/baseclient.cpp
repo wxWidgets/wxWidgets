@@ -306,9 +306,9 @@ Client::OnExit()
     return 0;
 }
 
-// Create buffer to be sent by client. Buffer contains test indicator 
+// Create buffer to be sent by client. Buffer contains test indicator
 // message size and place for data
-// msgsize parameter contains size of data in bytes and 
+// msgsize parameter contains size of data in bytes and
 // if input value does not fit into 250 bytes then
 // on exit is updated to new value that is multiply of 1024 bytes
 char*
@@ -318,7 +318,7 @@ Client::CreateBuffer(int* msgsize)
     char* buf;
     //if message should have more than 256 bytes then set it as
     //test3 for compatibility with GUI server sample
-    if ((*msgsize) > 250) 
+    if ((*msgsize) > 250)
     {
         //send at least one kb of data
         int size = (*msgsize)/1024 + 1;

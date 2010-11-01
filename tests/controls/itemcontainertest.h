@@ -39,6 +39,7 @@ protected:
         CPPUNIT_TEST( ClientData ); \
         CPPUNIT_TEST( VoidData ); \
         CPPUNIT_TEST( Set ); \
+        CPPUNIT_TEST( SetSelection ); \
         CPPUNIT_TEST( SetString )
 
     void Append();
@@ -49,6 +50,7 @@ protected:
     void ClientData();
     void VoidData();
     void Set();
+    void SetSelection();
     void SetString();
 
 private:

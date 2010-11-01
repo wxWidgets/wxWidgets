@@ -18,6 +18,7 @@
 
 #include "wx/thread.h"
 #include "wx/dcclient.h"
+#include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/tooltip.h"
 #include "wx/datetime.h"
@@ -396,7 +397,7 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display a text message explaining the situation. 
+    Display a text message explaining the situation.
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
@@ -712,8 +713,9 @@ enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
     @library{wxpropgrid}
     @category{propgrid}
 */
-class WXDLLIMPEXP_PROPGRID
-    wxPropertyGrid : public wxScrolledWindow, public wxPropertyGridInterface
+class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxControl,
+                                            public wxScrollHelper,
+                                            public wxPropertyGridInterface
 {
     friend class wxPropertyGridEvent;
     friend class wxPropertyGridPageState;
@@ -735,7 +737,7 @@ public:
 #endif
 
     /** The default constructor. The styles to be used are styles valid for
-        the wxWindow and wxScrolledWindow.
+        the wxWindow.
 
         @see @link wndflags Additional Window Styles @endlink
     */
@@ -800,7 +802,7 @@ public:
 
     /**
         Centers the splitter.
-        
+
         @param enableAutoResizing
             If @true, automatic column resizing is enabled (only applicapple
             if window style wxPG_SPLITTER_AUTO_CENTER is used).
@@ -1039,7 +1041,7 @@ public:
 
         @param pt
             Coordinates in the virtual grid space. You may need to use
-            wxScrolledWindow::CalcScrolledPosition() for translating
+            wxScrolled<T>::CalcScrolledPosition() for translating
             wxPropertyGrid client coordinates into something this member
             function can use.
     */
@@ -1751,9 +1753,6 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual bool SetFont( const wxFont& font );
-#if wxPG_SUPPORT_TOOLTIPS
-    void SetToolTip( const wxString& tipString );
-#endif
     virtual void Freeze();
     virtual void SetExtraStyle( long exStyle );
     virtual void Thaw();
@@ -1841,12 +1840,7 @@ protected:
     /** Current cursor id. */
     int                 m_curcursor;
 
-    /**
-        This captionFont is made equal to the font of the wxScrolledWindow.
-
-        As extra the bold face is set on it when this is wanted by the user
-        (see flags)
-     */
+    // Caption font. Same as normal font plus bold style.
     wxFont              m_captionFont;
 
     int                 m_fontHeight;  // Height of the font.
@@ -2113,7 +2107,7 @@ protected:
     void CorrectEditorWidgetPosY();
 
     int DoDrawItems( wxDC& dc,
-                     const wxRect* drawRect,
+                     const wxRect* itemsRect,
                      bool isBuffered ) const;
 
     /** Draws an expand/collapse (ie. +/-) button.
@@ -2125,7 +2119,7 @@ protected:
     void DrawItems( wxDC& dc,
                     unsigned int topItemY,
                     unsigned int bottomItemY,
-                    const wxRect* drawRect = NULL );
+                    const wxRect* itemsRect = NULL );
 
     // Translate wxKeyEvent to wxPG_ACTION_XXX
     int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;

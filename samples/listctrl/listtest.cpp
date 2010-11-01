@@ -283,7 +283,7 @@ MyFrame::MyFrame(const wxChar *title)
 
 #ifdef __WXMSW__
     // this is useful to know specially when debugging :)
-    wxLogMessage("Your version of comctl32.dll is: %d", 
+    wxLogMessage("Your version of comctl32.dll is: %d",
                  wxApp::GetComCtl32Version());
 #endif
 

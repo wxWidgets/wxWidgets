@@ -1016,10 +1016,8 @@ bool wxFont::IsUsingSizeInPixels() const
     return M_FONTDATA->IsUsingSizeInPixels();
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
-    wxCHECK_MSG( IsOk(), wxFONTFAMILY_MAX, wxT("invalid font") );
-
     return M_FONTDATA->GetFamily();
 }
 

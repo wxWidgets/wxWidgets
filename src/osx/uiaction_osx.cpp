@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
-// RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton
 //              (c) 2010 Vadim Zeitlin
@@ -58,17 +58,6 @@ CGPoint GetMousePosition()
     pos.y = y;
 
     return pos;
-}
-
-bool SendCharCode(CGKeyCode keycode, bool isDown)
-{
-    wxCFRef<CGEventRef>
-        event(CGEventCreateKeyboardEvent(NULL, keycode, isDown));
-    if ( !event )
-        return false;
-
-    CGEventPost(kCGHIDEventTap, event);
-    return true;
 }
 
 CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
@@ -239,32 +228,17 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
+bool
+wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
-    if (isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            SendCharCode(kVK_Shift, true);
-        if (modifiers & wxMOD_ALT)
-            SendCharCode(kVK_Option, true);
-        if (modifiers & wxMOD_CMD)
-            SendCharCode(kVK_Command, true);
-    }
-
     CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
-    if ( !SendCharCode(cgcode, isDown) )
+
+    wxCFRef<CGEventRef>
+        event(CGEventCreateKeyboardEvent(NULL, cgcode, isDown));
+    if ( !event )
         return false;
 
-    if(!isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            SendCharCode(kVK_Shift, false);
-        if (modifiers & wxMOD_ALT)
-            SendCharCode(kVK_Option, false);
-        if (modifiers & wxMOD_CMD)
-            SendCharCode(kVK_Command, false);
-    }
-
+    CGEventPost(kCGHIDEventTap, event);
     return true;
 }
 

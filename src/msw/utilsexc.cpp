@@ -610,7 +610,8 @@ wxExecuteDDE(const wxString& ddeServer,
 
 #endif // wxUSE_IPC
 
-long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
+long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
+               const wxExecuteEnv *env)
 {
     wxCHECK_MSG( !cmd.empty(), 0, wxT("empty command in wxExecute") );
 
@@ -800,6 +801,55 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     wxString arguments = command.AfterFirst(wxT(' '));
 #endif
 
+    wxWxCharBuffer envBuffer;
+    bool useCwd = false;
+    if ( env )
+    {
+        useCwd = !env->cwd.empty();
+
+        // Translate environment variable map into NUL-terminated list of
+        // NUL-terminated strings.
+        if ( !env->env.empty() )
+        {
+#if wxUSE_UNICODE
+            // Environment variables can contain non-ASCII characters. We could
+            // check for it and not use this flag if everything is really ASCII
+            // only but there doesn't seem to be any reason to do it so just
+            // assume Unicode by default.
+            dwFlags |= CREATE_UNICODE_ENVIRONMENT;
+#endif // wxUSE_UNICODE
+
+            wxEnvVariableHashMap::const_iterator it;
+
+            size_t envSz = 1; // ending '\0'
+            for ( it = env->env.begin(); it != env->env.end(); ++it )
+            {
+                // Add size of env variable name and value, and '=' char and
+                // ending '\0'
+                envSz += it->first.length() + it->second.length() + 2;
+            }
+
+            envBuffer.extend(envSz);
+
+            wxChar *p = envBuffer.data();
+            for ( it = env->env.begin(); it != env->env.end(); ++it )
+            {
+                const wxString line = it->first + wxS("=") + it->second;
+
+                // Include the trailing NUL which will always terminate the
+                // buffer returned by t_str().
+                const size_t len = line.length() + 1;
+
+                wxTmemcpy(p, line.t_str(), len);
+
+                p += len;
+            }
+
+            // And another NUL to terminate the list of NUL-terminated strings.
+            *p = 0;
+        }
+    }
+
     bool ok = ::CreateProcess
                 (
                     // WinCE requires appname to be non null
@@ -818,8 +868,10 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
                  NULL,               //   the process and its main thread
                  redirect,           // inherit handles if we use pipes
                  dwFlags,            // process creation flags
-                 NULL,               // environment (use the same)
-                 NULL,               // current directory (use the same)
+                 envBuffer.data(),   // environment (may be NULL which is fine)
+                 useCwd              // initial working directory
+                    ? const_cast<wxChar *>(env->cwd.wx_str())
+                    : NULL,          //     (or use the same)
                  &si,                // startup info (unused here)
                  &pi                 // process info
                 ) != 0;
@@ -1039,7 +1091,8 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 }
 
 template <typename CharType>
-long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler)
+long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler,
+                   const wxExecuteEnv *env)
 {
     wxString command;
     command.reserve(1024);
@@ -1078,19 +1131,21 @@ long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler)
         command += ' ';
     }
 
-    return wxExecute(command, flags, handler);
+    return wxExecute(command, flags, handler, env);
 }
 
-long wxExecute(char **argv, int flags, wxProcess *handler)
+long wxExecute(char **argv, int flags, wxProcess *handler,
+               const wxExecuteEnv *env)
 {
-    return wxExecuteImpl(argv, flags, handler);
+    return wxExecuteImpl(argv, flags, handler, env);
 }
 
 #if wxUSE_UNICODE
 
-long wxExecute(wchar_t **argv, int flags, wxProcess *handler)
+long wxExecute(wchar_t **argv, int flags, wxProcess *handler,
+               const wxExecuteEnv *env)
 {
-    return wxExecuteImpl(argv, flags, handler);
+    return wxExecuteImpl(argv, flags, handler, env);
 }
 
 #endif // wxUSE_UNICODE

@@ -89,14 +89,14 @@ wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
     panel->SetHelpText( wxT( "Panel with some Radio Buttons" ) );
 #endif
 
-    wxString animals[] = 
+    wxString animals[] =
       { wxT("Fox"), wxT("Hare"), wxT("Rabbit"),
         wxT("Sabre-toothed tiger"), wxT("T Rex") };
 
     wxRadioBox *radiobox1 = new wxRadioBox(panel, wxID_ANY, wxT("Choose one"),
         wxDefaultPosition, wxDefaultSize, 5, animals, 2, wxRA_SPECIFY_ROWS);
 
-    wxString computers[] = 
+    wxString computers[] =
       { wxT("Amiga"), wxT("Commodore 64"), wxT("PET"),
         wxT("Another") };
 
@@ -121,7 +121,7 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
 #endif
 
     (void) new wxStaticText( panel, wxID_ANY,
-                             wxT("This page intentionally left blank"), 
+                             wxT("This page intentionally left blank"),
                              wxPoint(10, 10) );
 
     return panel;
@@ -154,7 +154,7 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 
     panel->SetBackgroundColour( wxColour( wxT("MAROON") ) );
     (void) new wxStaticText( panel, wxID_ANY,
-                             wxT("This page has been inserted, not added."), 
+                             wxT("This page has been inserted, not added."),
                              wxPoint(10, 10) );
 
     return panel;
@@ -291,6 +291,8 @@ MyFrame::MyFrame()
     m_type = Type_Listbook;
 #elif wxUSE_TREEBOOK
     m_type = Type_Treebook;
+#elif wxUSE_TOOLBOOK
+    m_type = Type_Toolbook;
 #else
     #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
 #endif
@@ -579,7 +581,7 @@ void MyFrame::RecreateBook()
     m_sizerFrame->Layout();
 }
 
-void MyFrame::AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, 
+void MyFrame::AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag,
                                       const wxChar * flagName) const
 {
     if( (flags & flag) == flag )

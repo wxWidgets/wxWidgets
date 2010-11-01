@@ -70,7 +70,6 @@ public:
 
 
     // implement base class virtuals
-    virtual int GetSelection() const;
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
     virtual int GetPageImage(size_t n) const;
@@ -109,9 +108,6 @@ protected:
 
     wxBookCtrlEvent* CreatePageChangingEvent() const;
     void MakeChangedEvent(wxBookCtrlEvent &event);
-
-    // the currently selected page or wxNOT_FOUND if none
-    int m_selection;
 
     // whether the toolbar needs to be realized
     bool m_needsRealizing;

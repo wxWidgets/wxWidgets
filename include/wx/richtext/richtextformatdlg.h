@@ -138,7 +138,7 @@ public:
     virtual bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range);
 
     /// Set the attributes and optionally update the display
-    virtual bool SetStyle(const wxTextAttr& style, bool update = true);
+    virtual bool SetStyle(const wxRichTextAttr& style, bool update = true);
 
     /// Set the style definition and optionally update the display
     virtual bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef, wxRichTextStyleSheet* sheet, bool update = true);
@@ -156,9 +156,9 @@ public:
     virtual bool ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
 
     /// Gets and sets the attributes
-    const wxTextAttr& GetAttributes() const { return m_attributes; }
-    wxTextAttr& GetAttributes() { return m_attributes; }
-    void SetAttributes(const wxTextAttr& attr) { m_attributes = attr; }
+    const wxRichTextAttr& GetAttributes() const { return m_attributes; }
+    wxRichTextAttr& GetAttributes() { return m_attributes; }
+    void SetAttributes(const wxRichTextAttr& attr) { m_attributes = attr; }
 
     /// Transfers the data and from to the window
     virtual bool TransferDataToWindow();
@@ -183,7 +183,7 @@ public:
     static wxRichTextFormattingDialog* GetDialog(wxWindow* win);
 
     /// Helper for pages to get the attributes
-    static wxTextAttr* GetDialogAttributes(wxWindow* win);
+    static wxRichTextAttr* GetDialogAttributes(wxWindow* win);
 
     /// Helper for pages to get the style
     static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
@@ -200,7 +200,7 @@ public:
 protected:
 
     wxImageList*                                m_imageList;
-    wxTextAttr                              m_attributes;
+    wxRichTextAttr                              m_attributes;
     wxRichTextStyleDefinition*                  m_styleDefinition;
     wxRichTextStyleSheet*                       m_styleSheet;
     wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids

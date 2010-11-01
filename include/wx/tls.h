@@ -22,10 +22,10 @@
 #if !wxUSE_THREADS
     #define wxHAS_COMPILER_TLS
     #define wxTHREAD_SPECIFIC_DECL
-// __thread keyword is supported if configure detected it or when using mingw32
-// >= 4.3 which is known to have it too
-#elif defined(HAVE___THREAD_KEYWORD) || \
-        (defined(__MINGW32__) && wxCHECK_GCC_VERSION(4, 3))
+// __thread keyword is not supported correctly by MinGW, at least in some
+// configurations, see http://sourceforge.net/support/tracker.php?aid=2837047
+// and when in doubt we prefer to not use it at all.
+#elif defined(HAVE___THREAD_KEYWORD) && !defined(__MINGW32__)
     #define wxHAS_COMPILER_TLS
     #define wxTHREAD_SPECIFIC_DECL __thread
 // MSVC has its own version which might be supported by some other Windows

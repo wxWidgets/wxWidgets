@@ -215,16 +215,23 @@ void wxMessageDialog::GTKCreateMsgDialog()
     {
         if ( addButtons )
         {
+            // Add the buttons in the correct order which is, according to
+            // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
+            // the following one:
+            //
+            // [Help]                  [Alternative] [Cancel] [Affirmative]
+
             gtk_dialog_add_button(dlg, wxGTK_CONV(GetNoLabel()),
                                   GTK_RESPONSE_NO);
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
-                                  GTK_RESPONSE_YES);
 
             if ( m_dialogStyle & wxCANCEL )
             {
                 gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
                                       GTK_RESPONSE_CANCEL);
             }
+
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
+                                  GTK_RESPONSE_YES);
         }
 
         // it'd probably be harmless to call gtk_dialog_set_default_response()

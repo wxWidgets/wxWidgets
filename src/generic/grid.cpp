@@ -5892,8 +5892,8 @@ void wxGrid::EnableCellEditControl( bool enable )
 
 bool wxGrid::IsCurrentCellReadOnly() const
 {
-    // const_cast
-    wxGridCellAttr* attr = ((wxGrid *)this)->GetCellAttr(m_currentCellCoords);
+    wxGridCellAttr*
+        attr = const_cast<wxGrid *>(this)->GetCellAttr(m_currentCellCoords);
     bool readonly = attr->IsReadOnly();
     attr->DecRef();
 
@@ -7259,11 +7259,18 @@ void wxGrid::ClearAttrCache()
     }
 }
 
+void wxGrid::RefreshAttr(int row, int col)
+{
+    if ( m_attrCache.row == row && m_attrCache.col == col )
+        ClearAttrCache();
+}
+
+
 void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
 {
     if ( attr != NULL )
     {
-        wxGrid *self = (wxGrid *)this;  // const_cast
+        wxGrid * const self = const_cast<wxGrid *>(this);
 
         self->ClearAttrCache();
         self->m_attrCache.row = row;
@@ -8157,7 +8164,7 @@ void wxGrid::AutoSizeColLabelSize( int col )
 
 wxSize wxGrid::DoGetBestSize() const
 {
-    wxGrid *self = (wxGrid *)this;  // const_cast
+    wxGrid * const self = const_cast<wxGrid *>(this);
 
     // we do the same as in AutoSize() here with the exception that we don't
     // change the column/row sizes, only calculate them

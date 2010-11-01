@@ -26,6 +26,23 @@
     #endif
 #endif
 
+// Define wxUSING_VC_CRT_IO when using MSVC CRT STDIO library as its standard
+// functions give different results from glibc ones in several cases (of
+// course, any code relying on this is not portable and probably won't work,
+// i.e. will result in tests failures, with other platforms/compilers which
+// should have checks for them added as well).
+//
+// Notice that MinGW uses VC CRT by default but may use its own printf()
+// implementation if __USE_MINGW_ANSI_STDIO is defined. And finally also notice
+// that testing for __USE_MINGW_ANSI_STDIO directly results in a warning with
+// -Wundef if it involves an operation with undefined __MINGW_FEATURES__ so
+// test for the latter too to avoid it.
+#if defined(__VISUALC__) || \
+    (defined(__MINGW32__) && \
+     (!defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO))
+    #define wxUSING_VC_CRT_IO
+#endif
+
 // thrown when assert fails in debug build
 class TestAssertFailure
 {
@@ -81,14 +98,42 @@ extern void SetProcessEventFunc(ProcessEventFunc func);
 
 extern bool IsNetworkAvailable();
 
-// helper class setting the locale to "C" for its lifetime
-class CLocaleSetter
+// Helper class setting the locale to the given one for its lifetime.
+class LocaleSetter
 {
 public:
-    CLocaleSetter() : m_locOld(setlocale(LC_ALL, "C")) { }
-    ~CLocaleSetter() { setlocale(LC_ALL, m_locOld); }
+    LocaleSetter(const char *loc) : m_locOld(setlocale(LC_ALL, loc)) { }
+    ~LocaleSetter() { setlocale(LC_ALL, m_locOld); }
 
 private:
     const char * const m_locOld;
+
+    wxDECLARE_NO_COPY_CLASS(LocaleSetter);
+};
+
+// An even simpler helper for setting the locale to "C" one during its lifetime.
+class CLocaleSetter : private LocaleSetter
+{
+public:
+    CLocaleSetter() : LocaleSetter("C") { }
+
+private:
     wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
 };
+
+// Macro that can be used to register the test with the given name in both the
+// global unnamed registry so that it is ran by default and a registry with the
+// same name as this test to allow running just this test individually.
+//
+// Notice that the name shouldn't include the "TestCase" suffix, it's added
+// automatically by this macro.
+//
+// Implementation note: CPPUNIT_TEST_SUITE_[NAMED_]REGISTRATION macros can't be
+// used here because they both declare the variable with the same name (as the
+// "unique" name they generate is based on the line number which is the same
+// for both calls inside the macro), so we need to do it manually.
+#define wxREGISTER_UNIT_TEST(name) \
+    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
+        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterRegistry__ ); \
+    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
+        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterNamedRegistry__ )(#name "TestCase")

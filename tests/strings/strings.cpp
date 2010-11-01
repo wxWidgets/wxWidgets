@@ -455,6 +455,10 @@ void StringTestCase::Compare()
     CPPUNIT_ASSERT( s1 != neq2 );
     CPPUNIT_ASSERT( s1 != neq3 );
     CPPUNIT_ASSERT( s1 != neq4 );
+
+    CPPUNIT_ASSERT( wxString("\n").Cmp(" ") < 0 );
+    CPPUNIT_ASSERT( wxString("'").Cmp("!") > 0 );
+    CPPUNIT_ASSERT( wxString("!").Cmp("z") < 0 );
 }
 
 void StringTestCase::CompareNoCase()
@@ -502,6 +506,10 @@ void StringTestCase::CompareNoCase()
     CPPUNIT_CNCNEQ_ASSERT( s1, neq );
     CPPUNIT_CNCNEQ_ASSERT( s1, neq2 );
     CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
+
+    CPPUNIT_ASSERT( wxString("\n").CmpNoCase(" ") < 0 );
+    CPPUNIT_ASSERT( wxString("'").CmpNoCase("!") > 0);
+    CPPUNIT_ASSERT( wxString("!").Cmp("Z") < 0 );
 }
 
 void StringTestCase::Contains()
@@ -761,7 +769,7 @@ void StringTestCase::FromDouble()
         // NB: there are no standards about the minimum exponent width
         //     and newer MSVC versions use 3 digits as minimum exponent
         //     width while GNU libc uses 2 digits as minimum width...
-#ifdef __VISUALC__
+#ifdef wxUSING_VC_CRT_IO
         { -3e-10,           "-3e-010" },
 #else
         { -3e-10,           "-3e-10" },
@@ -962,17 +970,32 @@ void StringTestCase::BeforeAndAfter()
 {
     const wxString s(L"letter=\xe9;\xe7a=l\xe0");
 
-    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=') );
-    CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';') );
+    wxString r;
 
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=') );
-    CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';') );
+    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", r );
+
+    CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!', &r) );
+    CPPUNIT_ASSERT_EQUAL( "", r );
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
+
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"l\xe0", r );
+
+    CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!', &r) );
+    CPPUNIT_ASSERT_EQUAL( s, r );
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';', &r) );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
+
 
     CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", s.AfterFirst('=') );
     CPPUNIT_ASSERT_EQUAL( "", s.AfterFirst('!') );
     CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterFirst(';') );
+
 
     CPPUNIT_ASSERT_EQUAL( L"l\xe0", s.AfterLast('=') );
     CPPUNIT_ASSERT_EQUAL( s, s.AfterLast('!') );

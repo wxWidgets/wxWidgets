@@ -27,6 +27,7 @@ class wxPGArrayEditorDialog;
 #include "wx/textctrl.h"
 #include "wx/button.h"
 #include "wx/listbox.h"
+#include "wx/valtext.h"
 
 // -----------------------------------------------------------------------
 
@@ -143,6 +144,29 @@ enum wxPGNumericValidationConstants
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_VALIDATORS
+
+/**
+    A more comprehensive numeric validator class.
+*/
+class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
+{
+public:
+    enum NumericType
+    {
+        Signed = 0,
+        Unsigned,
+        Float
+    };
+
+    wxNumericPropertyValidator( NumericType numericType, int base = 10 );
+    virtual ~wxNumericPropertyValidator() { }
+    virtual bool Validate(wxWindow* parent);
+};
+
+#endif // wxUSE_VALIDATORS
+
+
 /** @class wxIntProperty
     @ingroup classes
     Basic property with integer value.
@@ -257,6 +281,7 @@ public:
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
+    virtual wxValidator* DoGetValidator () const;
     virtual bool IntToValue( wxVariant& variant,
                              int number,
                              int argFlags = 0 ) const;
@@ -302,6 +327,7 @@ public:
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                  wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+    static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator () const;
 
 protected:

@@ -218,12 +218,8 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 }
 
-wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
+wxSizer *wxDialogBase::CreateSeparatedSizer(wxSizer *sizer)
 {
-    wxSizer *sizer = CreateButtonSizer(flags);
-    if ( !sizer )
-        return NULL;
-
     // Mac Human Interface Guidelines recommend not to use static lines as
     // grouping elements
 #if wxUSE_STATLINE && !defined(__WXMAC__)
@@ -235,6 +231,15 @@ wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
 #endif // wxUSE_STATLINE
 
     return sizer;
+}
+
+wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
+{
+    wxSizer *sizer = CreateButtonSizer(flags);
+    if ( !sizer )
+        return NULL;
+
+    return CreateSeparatedSizer(sizer);
 }
 
 #if wxUSE_BUTTON
@@ -372,6 +377,32 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
 #endif // wxUSE_BUTTON/!wxUSE_BUTTON
 }
 
+bool wxDialogBase::SendCloseButtonClickEvent()
+{
+    int idCancel = GetEscapeId();
+    switch ( idCancel )
+    {
+        case wxID_NONE:
+            // The user doesn't want this dialog to close "implicitly".
+            break;
+
+        case wxID_ANY:
+            // this value is special: it means translate Esc to wxID_CANCEL
+            // but if there is no such button, then fall back to wxID_OK
+            if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
+                return true;
+            idCancel = GetAffirmativeId();
+            // fall through
+
+        default:
+            // translate Esc to button press for the button with given id
+            if ( EmulateButtonClickIfPresent(idCancel) )
+                return true;
+    }
+
+    return false;
+}
+
 bool wxDialogBase::IsEscapeKey(const wxKeyEvent& event)
 {
     // for most platforms, Esc key is used to close the dialogs
@@ -383,25 +414,10 @@ void wxDialogBase::OnCharHook(wxKeyEvent& event)
 {
     if ( event.GetKeyCode() == WXK_ESCAPE )
     {
-        int idCancel = GetEscapeId();
-        switch ( idCancel )
+        if ( SendCloseButtonClickEvent() )
         {
-            case wxID_NONE:
-                // don't handle Esc specially at all
-                break;
-
-            case wxID_ANY:
-                // this value is special: it means translate Esc to wxID_CANCEL
-                // but if there is no such button, then fall back to wxID_OK
-                if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
-                    return;
-                idCancel = GetAffirmativeId();
-                // fall through
-
-            default:
-                // translate Esc to button press for the button with given id
-                if ( EmulateButtonClickIfPresent(idCancel) )
-                    return;
+            // Skip the call to event.Skip() below, we did handle this key.
+            return;
         }
     }
 
@@ -475,23 +491,9 @@ wxDialogModality wxDialogBase::GetModality() const
 void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // We'll send a Cancel message by default, which may close the dialog.
+
     // Check for looping if the Cancel event handler calls Close().
-
-    // Note that if a cancel button and handler aren't present in the dialog,
-    // nothing will happen when you close the dialog via the window manager, or
-    // via Close(). We wouldn't want to destroy the dialog by default, since
-    // the dialog may have been created on the stack. However, this does mean
-    // that calling dialog->Close() won't delete the dialog unless the handler
-    // for wxID_CANCEL does so. So use Destroy() if you want to be sure to
-    // destroy the dialog. The default OnCancel (above) simply ends a modal
-    // dialog, and hides a modeless dialog.
-
-    int idCancel = GetEscapeId();
-    if ( idCancel == wxID_NONE )
-        return;
-    if ( idCancel == wxID_ANY )
-        idCancel = wxID_CANCEL;
-
+    //
     // VZ: this is horrible and MT-unsafe. Can't we reuse some of these global
     //     lists here? don't dare to change it now, but should be done later!
     static wxList closing;
@@ -501,9 +503,17 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     closing.Append(this);
 
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, idCancel);
-    cancelEvent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog
+    if ( !SendCloseButtonClickEvent() )
+    {
+        // If the handler didn't close the dialog (e.g. because there is no
+        // button with matching id) we still want to close it when the user
+        // clicks the "x" button in the title bar, otherwise we shouldn't even
+        // have put it there.
+        //
+        // Notice that using wxID_CLOSE might have been a better choice but we
+        // use wxID_CANCEL for compatibility reasons.
+        EndDialog(wxID_CANCEL);
+    }
 
     closing.DeleteObject(this);
 }

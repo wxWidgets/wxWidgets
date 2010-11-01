@@ -192,20 +192,36 @@ namespace
 class MenuDrawData
 {
 public:
-
-    struct Margins
+    // Wrapper around standard MARGINS structure providing some helper
+    // functions and automatically initializing the margin fields to 0.
+    struct Margins : MARGINS
     {
-        int left;
-        int right;
-        int top;
-        int bottom;
-
         Margins()
-            : left(0),
-              right(0),
-              top(0),
-              bottom(0)
-        {}
+        {
+            cxLeftWidth =
+            cxRightWidth =
+            cyTopHeight =
+            cyBottomHeight = 0;
+        }
+
+        int GetTotalX() const { return cxLeftWidth + cxRightWidth; }
+        int GetTotalY() const { return cyTopHeight + cyBottomHeight; }
+
+        void ApplyTo(RECT& rect) const
+        {
+            rect.top += cyTopHeight;
+            rect.left += cxLeftWidth;
+            rect.right -= cyTopHeight;
+            rect.bottom -= cyBottomHeight;
+        }
+
+        void UnapplyFrom(RECT& rect) const
+        {
+            rect.top -= cyTopHeight;
+            rect.left -= cxLeftWidth;
+            rect.right += cyTopHeight;
+            rect.bottom += cyBottomHeight;
+        }
     };
 
     Margins ItemMargin;         // popup item margins
@@ -318,22 +334,22 @@ void MenuDrawData::Init()
 
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPITEM, 0,
                                TMT_CONTENTMARGINS, NULL,
-                               reinterpret_cast<MARGINS*>(&ItemMargin));
+                               &ItemMargin);
 
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPCHECK, 0,
                                TMT_CONTENTMARGINS, NULL,
-                               reinterpret_cast<MARGINS*>(&CheckMargin));
+                               &CheckMargin);
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPCHECKBACKGROUND, 0,
                                TMT_CONTENTMARGINS, NULL,
-                               reinterpret_cast<MARGINS*>(&CheckBgMargin));
+                               &CheckBgMargin);
 
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPSUBMENU, 0,
                                TMT_CONTENTMARGINS, NULL,
-                               reinterpret_cast<MARGINS*>(&ArrowMargin));
+                               &ArrowMargin);
 
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPSEPARATOR, 0,
                                TMT_SIZINGMARGINS, NULL,
-                               reinterpret_cast<MARGINS*>(&SeparatorMargin));
+                               &SeparatorMargin);
 
         theme->GetThemePartSize(hTheme, NULL, MENU_POPUPCHECK, 0,
                                 NULL, TS_TRUE, &CheckSize);
@@ -351,50 +367,45 @@ void MenuDrawData::Init()
 
         Offset = -14;
 
-        wxNativeFontInfo fontInfo;
-        theme->GetThemeSysFont(hTheme, TMT_MENUFONT, &fontInfo.lf);
-        Font = wxFont(fontInfo);
+        wxUxThemeFont themeFont;
+        theme->GetThemeSysFont(hTheme, TMT_MENUFONT, themeFont.GetPtr());
+        Font = wxFont(themeFont.GetLOGFONT());
 
         Theme = true;
 
         // native menu doesn't uses the vertical margins
-        ItemMargin.top = ItemMargin.bottom = 0;
+        ItemMargin.cyTopHeight =
+        ItemMargin.cyBottomHeight = 0;
 
         // native menu uses small top margin for separator
-        if ( SeparatorMargin.top >= 2 )
-            SeparatorMargin.top -= 2;
+        if ( SeparatorMargin.cyTopHeight >= 2 )
+            SeparatorMargin.cyTopHeight -= 2;
     }
     else
 #endif // wxUSE_UXTHEME
     {
         const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics();
 
-        ItemMargin = Margins();
-
-        CheckMargin.left =
-        CheckMargin.right  = ::GetSystemMetrics(SM_CXEDGE);
-        CheckMargin.top =
-        CheckMargin.bottom = ::GetSystemMetrics(SM_CYEDGE);
-
-        CheckBgMargin = Margins();
+        CheckMargin.cxLeftWidth =
+        CheckMargin.cxRightWidth  = ::GetSystemMetrics(SM_CXEDGE);
+        CheckMargin.cyTopHeight =
+        CheckMargin.cyBottomHeight = ::GetSystemMetrics(SM_CYEDGE);
 
         CheckSize.cx = ::GetSystemMetrics(SM_CXMENUCHECK);
         CheckSize.cy = ::GetSystemMetrics(SM_CYMENUCHECK);
-
-        ArrowMargin = Margins();
 
         ArrowSize = CheckSize;
 
         // separator height with margins
         int sepFullSize = metrics.iMenuHeight / 2;
 
-        SeparatorMargin.left =
-        SeparatorMargin.right = 1;
-        SeparatorMargin.top =
-        SeparatorMargin.bottom = sepFullSize / 2 - 1;
+        SeparatorMargin.cxLeftWidth =
+        SeparatorMargin.cxRightWidth = 1;
+        SeparatorMargin.cyTopHeight =
+        SeparatorMargin.cyBottomHeight = sepFullSize / 2 - 1;
 
         SeparatorSize.cx = 1;
-        SeparatorSize.cy = sepFullSize - SeparatorMargin.top - SeparatorMargin.bottom;
+        SeparatorSize.cy = sepFullSize - SeparatorMargin.GetTotalY();
 
         TextBorder = 0;
         AccelBorder = 8;
@@ -745,15 +756,15 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 
     if ( IsOwnerDrawn() )
     {
-        *width  = data->ItemMargin.left + data->ItemMargin.right;
-        *height = data->ItemMargin.top  + data->ItemMargin.bottom;
+        *width  = data->ItemMargin.GetTotalX();
+        *height = data->ItemMargin.GetTotalY();
 
         if ( IsSeparator() )
         {
             *width  += data->SeparatorSize.cx
-                     + data->SeparatorMargin.left + data->SeparatorMargin.right;
+                     + data->SeparatorMargin.GetTotalX();
             *height += data->SeparatorSize.cy
-                     + data->SeparatorMargin.top + data->SeparatorMargin.bottom;
+                     + data->SeparatorMargin.GetTotalY();
             return true;
         }
 
@@ -775,7 +786,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
             *width += w + data->ArrowBorder;
 
         *width += data->Offset;
-        *width += data->ArrowMargin.left + data->ArrowSize.cx + data->ArrowMargin.right;
+        *width += data->ArrowMargin.GetTotalX() + data->ArrowSize.cx;
     }
     else // don't draw the text, just the bitmap (if any)
     {
@@ -794,9 +805,9 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         // bitmap in menu (GetMarginWidth()) unless std check mark is wider,
         // then it's is set to std mark's width
         int imgWidth = wxMax(GetMarginWidth(), data->CheckSize.cx)
-                     + data->CheckMargin.left + data->CheckMargin.right;
+                     + data->CheckMargin.GetTotalX();
 
-        *width += imgWidth + data->CheckBgMargin.left + data->CheckBgMargin.right;
+        *width += imgWidth + data->CheckBgMargin.GetTotalX();
     }
 
     if ( m_bmpChecked.IsOk() || m_bmpChecked.IsOk() )
@@ -808,7 +819,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 
         if ( IsOwnerDrawn() )
         {
-            heightBmp += data->CheckMargin.top + data->CheckMargin.bottom;
+            heightBmp += data->CheckMargin.GetTotalY();
         }
         else
         {
@@ -822,7 +833,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
     }
 
     // make sure that this item is at least as tall as the system menu height
-    const size_t menuHeight = data->CheckMargin.top + data->CheckMargin.bottom
+    const size_t menuHeight = data->CheckMargin.GetTotalY()
                             + data->CheckSize.cy;
     if (*height < menuHeight)
         *height = menuHeight;
@@ -856,32 +867,21 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         DWORD colBack = wxColourToPalRGB(colBack1);
 
         // calculate metrics of item parts
-        RECT rcSelection;
-        RECT rcSeparator;
-        RECT rcGutter;
-        RECT rcText;
+        RECT rcSelection = rect;
+        data->ItemMargin.ApplyTo(rcSelection);
 
-        SetRect(&rcSelection,
-                rect.left   + data->ItemMargin.left,
-                rect.top    + data->ItemMargin.top,
-                rect.right  - data->ItemMargin.right,
-                rect.bottom - data->ItemMargin.bottom);
+        RECT rcSeparator = rcSelection;
+        data->SeparatorMargin.ApplyTo(rcSeparator);
 
-        SetRect(&rcSeparator,
-                rcSelection.left   + data->SeparatorMargin.left,
-                rcSelection.top    + data->SeparatorMargin.top,
-                rcSelection.right  - data->SeparatorMargin.right,
-                rcSelection.bottom - data->SeparatorMargin.bottom);
-
-        CopyRect(&rcGutter, &rcSelection);
-        rcGutter.right = data->ItemMargin.left
-                       + data->CheckBgMargin.left
-                       + data->CheckMargin.left
+        RECT rcGutter = rcSelection;
+        rcGutter.right = data->ItemMargin.cxLeftWidth
+                       + data->CheckBgMargin.cxLeftWidth
+                       + data->CheckMargin.cxLeftWidth
                        + imgWidth
-                       + data->CheckMargin.right
-                       + data->CheckBgMargin.right;
+                       + data->CheckMargin.cxRightWidth
+                       + data->CheckBgMargin.cxRightWidth;
 
-        CopyRect(&rcText, &rcSelection);
+        RECT rcText = rcSelection;
         rcText.left = rcGutter.right + data->TextBorder;
 
         // we draw the text label vertically centered, but this results in it
@@ -998,9 +998,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                  (stat & wxODDisabled) && !(stat & wxODSelected) )
                 flags |= DSS_DISABLED;
 
-            int x = rcText.right - data->ArrowMargin.left
+            int x = rcText.right - data->ArrowMargin.GetTotalX()
                                  - data->ArrowSize.cx
-                                 - data->ArrowMargin.right
                                  - data->ArrowBorder;
 
             // right align accel on FullTheme menu, left otherwise
@@ -1025,19 +1024,19 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     RECT rcImg;
     SetRect(&rcImg,
-            rect.left   + data->ItemMargin.left
-                        + data->CheckBgMargin.left
-                        + data->CheckMargin.left,
-            rect.top    + data->ItemMargin.top
-                        + data->CheckBgMargin.top
-                        + data->CheckMargin.top,
-            rect.left   + data->ItemMargin.left
-                        + data->CheckBgMargin.left
-                        + data->CheckMargin.left
+            rect.left   + data->ItemMargin.cxLeftWidth
+                        + data->CheckBgMargin.cxLeftWidth
+                        + data->CheckMargin.cxLeftWidth,
+            rect.top    + data->ItemMargin.cyTopHeight
+                        + data->CheckBgMargin.cyTopHeight
+                        + data->CheckMargin.cyTopHeight,
+            rect.left   + data->ItemMargin.cxLeftWidth
+                        + data->CheckBgMargin.cxLeftWidth
+                        + data->CheckMargin.cxLeftWidth
                         + imgWidth,
-            rect.bottom - data->ItemMargin.bottom
-                        - data->CheckBgMargin.bottom
-                        - data->CheckMargin.bottom);
+            rect.bottom - data->ItemMargin.cyBottomHeight
+                        - data->CheckBgMargin.cyBottomHeight
+                        - data->CheckMargin.cyBottomHeight);
 
     if ( IsCheckable() && !m_bmpChecked.Ok() )
     {
@@ -1154,12 +1153,8 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
         const MenuDrawData* data = MenuDrawData::Get();
 
         // rect for background must be without check margins
-        RECT rcBg;
-        SetRect(&rcBg,
-                rc->left   - data->CheckMargin.left,
-                rc->top    - data->CheckMargin.top,
-                rc->right  + data->CheckMargin.right,
-                rc->bottom + data->CheckMargin.bottom);
+        RECT rcBg = *rc;
+        data->CheckMargin.UnapplyFrom(rcBg);
 
         POPUPCHECKBACKGROUNDSTATES stateCheckBg = (stat & wxODDisabled)
                                                     ? MCB_DISABLED

@@ -306,6 +306,13 @@ public:
         return *this;
     }
 
+    // Used mostly internally to figure out if this cell is supposed
+    // to have default values when attached to a grid.
+    bool IsInvalid() const
+    {
+        return ( m_refData == NULL );
+    }
+
 private:
     virtual wxObjectRefData *CreateRefData() const
         { return new wxPGCellData(); }
@@ -1917,7 +1924,7 @@ public:
         modifying the value of the editor control (usually by clearing
         it).  Currently, this can work with following properties:
         wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
-        
+
         @param enable
             Whether to enable or disable this behavior (it is disabled by
             default).
@@ -2394,6 +2401,11 @@ protected:
     }
 
     void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
+
+    // Called when the property is being removed from the grid and/or
+    // page state (but *not* when it is also deleted).
+    void OnDetached(wxPropertyGridPageState* state,
+                    wxPropertyGrid* propgrid);
 
     // Call after fixed sub-properties added/removed after creation.
     // if oldSelInd >= 0 and < new max items, then selection is

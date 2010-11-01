@@ -12,6 +12,8 @@
 #ifndef _WX_GENERIC_MSGDLGG_H_
 #define _WX_GENERIC_MSGDLGG_H_
 
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+
 class WXDLLIMPEXP_CORE wxGenericMessageDialog : public wxMessageDialogBase
 {
 public:
@@ -37,6 +39,12 @@ protected:
     virtual void AddMessageDialogDetails(wxSizer *WXUNUSED(sizer)) { }
 
 private:
+    // Creates and returns a standard button sizer using the style of this
+    // dialog and the custom labels, if any.
+    //
+    // May return NULL on smart phone platforms not using buttons at all.
+    wxSizer *CreateMsgDlgButtonSizer();
+
     wxPoint m_pos;
     bool m_created;
 

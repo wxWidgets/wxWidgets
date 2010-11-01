@@ -44,14 +44,14 @@ class OpenUserDataRec
 {
 public:
     OpenUserDataRec( wxFileDialog* dialog );
-    
+
     bool FilterCallback( AEDesc *theItem, void *info, NavFilterModes filterMode );
     void EventProc( NavEventCallbackMessage inSelector, NavCBRecPtr ioParams );
 
     int GetCurrentFilter() const {return m_currentfilter;}
     CFArrayRef GetMenuItems() const { return m_menuitems;}
-    
-     
+
+
 private:
     void EventProcCBEvent( NavCBRecPtr ioParams );
     void EventProcCBEventMouseDown( NavCBRecPtr ioParams);
@@ -61,7 +61,7 @@ private:
     void EventProcCBAdjustRect( NavCBRecPtr ioParams );
     bool CheckFile( const wxString &filename , OSType type);
     void MakeUserDataRec( const wxString& filter);
-    
+
     wxFileDialog*       m_dialog;
     int                 m_currentfilter;
     wxString            m_defaultLocation;
@@ -80,13 +80,13 @@ OpenUserDataRec::OpenUserDataRec( wxFileDialog* d)
     m_dialog = d;
     m_controlAdded = false;
     m_saveMode = m_dialog->HasFdFlag(wxFD_SAVE);
-    
+
     m_defaultLocation = m_dialog->GetDirectory();
     MakeUserDataRec(m_dialog->GetWildcard());
     m_currentfilter = m_dialog->GetFilterIndex();
-    
+
     m_menuitems = NULL;
-    
+
     size_t numFilters = m_extensions.GetCount();
     if (numFilters)
     {
@@ -133,7 +133,7 @@ void OpenUserDataRec::EventProcCBEvent(NavCBRecPtr callBackParms)
             EventProcCBEventMouseDown(callBackParms);
             break;
         }
-    }            
+    }
 }
 
 void OpenUserDataRec::EventProcCBEventMouseDown(NavCBRecPtr callBackParms)
@@ -141,17 +141,17 @@ void OpenUserDataRec::EventProcCBEventMouseDown(NavCBRecPtr callBackParms)
     EventRecord *evt = callBackParms->eventData.eventDataParms.event;
     Point where = evt->where;
     QDGlobalToLocalPoint(GetWindowPort(callBackParms->window), &where);
-    
+
     ControlRef whichControl = FindControlUnderMouse(where, callBackParms->window, NULL);
     if (whichControl != NULL)
     {
         ControlKind theKind;
         GetControlKind(whichControl, &theKind);
-        
+
         // Moving the focus if we clicked in an focusable control
-        if ((theKind.kind == kControlKindEditUnicodeText) || 
-            (theKind.kind == kControlKindEditText) || 
-            (theKind.kind == kControlKindDataBrowser) || 
+        if ((theKind.kind == kControlKindEditUnicodeText) ||
+            (theKind.kind == kControlKindEditText) ||
+            (theKind.kind == kControlKindDataBrowser) ||
             (theKind.kind == kControlKindListBox))
         {
             ControlRef currentlyFocusedControl;
@@ -175,7 +175,7 @@ void OpenUserDataRec::EventProcCBStart(NavCBRecPtr ioParams)
         if (noErr == ::AECreateDesc(typeFSRef, &theFile, sizeof(FSRef), &theLocation))
             ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
     }
-    
+
     if( m_extensions.GetCount() > 0 )
     {
         NavMenuItemSpec  menuItem;
@@ -184,37 +184,37 @@ void OpenUserDataRec::EventProcCBStart(NavCBRecPtr ioParams)
         menuItem.menuType = m_currentfilter;
         ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
     }
-    
+
     if (m_dialog->GetExtraControl())
     {
         m_controlAdded = true;
         ControlRef ref = m_dialog->GetExtraControl()->GetPeer()->GetControlRef();
         NavCustomControl(ioParams->context, kNavCtlAddControl, ref);
     }
-    
+
 }
 
 void OpenUserDataRec::EventProcCBPopupMenuSelect(NavCBRecPtr ioParams)
 {
     NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
     const size_t numFilters = m_extensions.GetCount();
-    
+
     if ( menu->menuType < numFilters )
     {
         m_currentfilter = menu->menuType ;
         if ( m_saveMode )
         {
             int i = menu->menuType ;
-            
+
             // isolate the first extension string
             wxString firstExtension = m_extensions[i].BeforeFirst('|').BeforeFirst(';');
-            
+
             wxString extension = firstExtension.AfterLast('.') ;
             wxString sfilename ;
-            
+
             wxCFStringRef cfString( wxCFRetain( NavDialogGetSaveFileName( ioParams->context ) ) );
             sfilename = cfString.AsString() ;
-            
+
             int pos = sfilename.Find('.', true) ;
             if ( pos != wxNOT_FOUND && extension != wxT("*") )
             {
@@ -229,21 +229,21 @@ void OpenUserDataRec::EventProcCBPopupMenuSelect(NavCBRecPtr ioParams)
 void OpenUserDataRec::EventProcCBCustomize(NavCBRecPtr ioParams)
 {
     wxWindow* control = m_dialog->GetExtraControl();
-    
+
     if ( control )
     {
         SInt16 neededRight, neededBottom;
-        
+
         wxSize size = m_dialog->GetExtraControl()->GetSize();
         neededRight = ioParams->customRect.left + size.x;
         neededBottom = ioParams->customRect.top + size.y;
-        
+
         if (ioParams->customRect.right == 0 && ioParams->customRect.bottom == 0)
         {
             ioParams->customRect.right = neededRight;
             ioParams->customRect.bottom = neededBottom;
         }
-        else 
+        else
         {
             if ( ioParams->customRect.right != m_lastRight )
             {
@@ -264,10 +264,10 @@ void OpenUserDataRec::EventProcCBCustomize(NavCBRecPtr ioParams)
 void OpenUserDataRec::EventProcCBAdjustRect(NavCBRecPtr ioParams)
 {
     wxWindow* control = m_dialog->GetExtraControl();
-    
+
     if ( control && m_controlAdded)
     {
-        control->SetSize(ioParams->customRect.left , ioParams->customRect.top, 
+        control->SetSize(ioParams->customRect.left , ioParams->customRect.top,
                          ioParams->customRect.right - ioParams->customRect.left,
                          ioParams->customRect.bottom - ioParams->customRect.top);
     }
@@ -387,19 +387,19 @@ bool OpenUserDataRec::FilterCallback(
         // check if a folder is a package before deciding what to do.
         NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
         FSRef fsref;
-        
+
         if ( theInfo->isFolder )
         {
             // check bundle bit (using Finder Services - used by OS9 on some bundles)
             FSCatalogInfo catalogInfo;
             if (FSGetCatalogInfo (&fsref, kFSCatInfoFinderInfo, &catalogInfo, NULL, NULL, NULL) != noErr)
                 return true;
-            
+
             // Check bundle item (using Launch Services - used by OS-X through info.plist or APP)
             LSItemInfoRecord lsInfo;
             if (LSCopyItemInfoForRef(&fsref, kLSRequestBasicFlagsOnly, &lsInfo ) != noErr)
                 return true;
-            
+
             // If it's not a bundle, then it's a normal folder and it passes our filter
             FileInfo *fileInfo = (FileInfo *) catalogInfo.finderInfo;
             if ( !(fileInfo->finderFlags & kHasBundle) &&
@@ -416,7 +416,7 @@ bool OpenUserDataRec::FilterCallback(
             }
         }
     }
-    
+
     return true;
 }
 
@@ -467,7 +467,7 @@ wxFileDialog::wxFileDialog(
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 {
     wxTopLevelWindow::Create( GetParent(), nativeWindow );
-    
+
     if (HasExtraControlCreator())
     {
         CreateExtraControl();
@@ -478,7 +478,7 @@ int wxFileDialog::ShowModal()
 {
     m_paths.Empty();
     m_fileNames.Empty();
-    
+
     OSErr err;
     NavDialogCreationOptions dialogCreateOptions;
 
@@ -497,9 +497,9 @@ int wxFileDialog::ShowModal()
     NavDialogRef dialog;
     NavObjectFilterUPP navFilterUPP = NULL;
     OpenUserDataRec myData( this );
-            
+
     dialogCreateOptions.popupExtension = myData.GetMenuItems();
-    
+
     if (HasFdFlag(wxFD_SAVE))
     {
         dialogCreateOptions.optionFlags |= kNavDontAutoTranslate;
@@ -537,9 +537,9 @@ int wxFileDialog::ShowModal()
             (void *) &myData, // inClientData
             &dialog );
     }
-    
+
     SetupExtraControls(NavDialogGetWindow(dialog));
-    
+
     if (err == noErr)
     {
         wxDialog::OSXBeginModalDialog();
@@ -602,6 +602,7 @@ int wxFileDialog::ShowModal()
         m_dir = wxPathOnly(m_path);
     }
 
+    UnsubclassWin();
     ::NavDisposeReply(&navReply);
     ::NavDialogDispose(dialog);
 

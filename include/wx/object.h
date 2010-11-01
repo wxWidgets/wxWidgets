@@ -131,7 +131,7 @@ public:
     }
 
     wxDECLARE_CLASS_INFO_ITERATORS();
-    
+
 private:
     const wxChar            *m_className;
     int                      m_objectSize;
@@ -233,7 +233,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 #define wxIMPLEMENT_CLASS(name, basename)                                     \
     wxIMPLEMENT_ABSTRACT_CLASS(name, basename)
-    
+
 #define wxIMPLEMENT_CLASS2(name, basename1, basename2)                        \
     IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)
 

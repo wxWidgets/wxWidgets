@@ -456,6 +456,8 @@ void wxAuiDefaultToolBarArt::DrawDropDownButton(
         dc.SetPen(wxPen(m_highlight_colour));
         dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 140)));
         dc.DrawRectangle(button_rect);
+
+        dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 170)));
         dc.DrawRectangle(dropdown_rect);
     }
     else if (item.GetState() & wxAUI_BUTTON_STATE_HOVER ||
@@ -824,6 +826,7 @@ BEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_MIDDLE_UP(wxAuiToolBar::OnMiddleUp)
     EVT_MOTION(wxAuiToolBar::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiToolBar::OnLeaveWindow)
+    EVT_MOUSE_CAPTURE_LOST(wxAuiToolBar::OnCaptureLost)
     EVT_SET_CURSOR(wxAuiToolBar::OnSetCursor)
 END_EVENT_TABLE()
 
@@ -2570,33 +2573,45 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
             return;
         }
 
-        SetPressedItem(m_action_item);
+        UnsetToolTip();
 
         // fire the tool dropdown event
         wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_action_item->id);
         e.SetEventObject(this);
         e.SetToolId(m_action_item->id);
-        e.SetDropDownClicked(false);
 
         int mouse_x = evt.GetX();
         wxRect rect = m_action_item->sizer_item->GetRect();
-
-        if (m_action_item->dropdown &&
-            mouse_x >= (rect.x+rect.width-BUTTON_DROPDOWN_WIDTH-1) &&
-            mouse_x < (rect.x+rect.width))
-        {
-            e.SetDropDownClicked(true);
-        }
+        const bool dropDownHit = m_action_item->dropdown &&
+                                 mouse_x >= (rect.x+rect.width-BUTTON_DROPDOWN_WIDTH-1) &&
+                                 mouse_x < (rect.x+rect.width);
+        e.SetDropDownClicked(dropDownHit);
 
         e.SetClickPoint(evt.GetPosition());
         e.SetItemRect(rect);
-        GetEventHandler()->ProcessEvent(e);
+
+        // we only set the 'pressed button' state if we hit the actual button
+        // and not just the drop-down
+        SetPressedItem(dropDownHit ? 0 : m_action_item);
+
+        if(dropDownHit)
+        {
+            m_action_pos = wxPoint(-1,-1);
+            m_action_item = NULL;
+        }
+
+        if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
+            CaptureMouse();
+
         DoIdleUpdate();
     }
 }
 
 void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 {
+    if (!HasCapture())
+        return;
+
     SetPressedItem(NULL);
 
     wxAuiToolBarItem* hit_item = FindToolByPosition(evt.GetX(), evt.GetY());
@@ -2605,14 +2620,15 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         SetHoverItem(hit_item);
     }
 
-
     if (m_dragging)
     {
-        // reset drag and drop member variables
-        m_dragging = false;
-        m_action_pos = wxPoint(-1,-1);
-        m_action_item = NULL;
-        return;
+        // TODO: it would make sense to send out an 'END_DRAG' event here,
+        // otherwise a client would never know what to do with the 'BEGIN_DRAG'
+        // event
+
+        // OnCaptureLost() will be called now and this will reset all our state
+        // tracking variables
+        ReleaseMouse();
     }
     else
     {
@@ -2623,14 +2639,12 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         {
             UnsetToolTip();
 
+            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
+            e.SetEventObject(this);
+
             if (hit_item->kind == wxITEM_CHECK || hit_item->kind == wxITEM_RADIO)
             {
-                bool toggle = false;
-
-                if (m_action_item->state & wxAUI_BUTTON_STATE_CHECKED)
-                    toggle = false;
-                else
-                    toggle = true;
+                const bool toggle = !(m_action_item->state & wxAUI_BUTTON_STATE_CHECKED);
 
                 ToggleTool(m_action_item->id, toggle);
 
@@ -2638,26 +2652,21 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
                 Refresh(false);
                 Update();
 
-                wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
-                e.SetEventObject(this);
-                e.SetInt (toggle);
-                GetEventHandler()->ProcessEvent(e);
-                DoIdleUpdate();
+                e.SetInt(toggle);
             }
-            else
-            {
-                wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
-                e.SetEventObject(this);
-                GetEventHandler()->ProcessEvent(e);
-                DoIdleUpdate();
-            }
-        }
-    }
 
-    // reset drag and drop member variables
-    m_dragging = false;
-    m_action_pos = wxPoint(-1,-1);
-    m_action_item = NULL;
+            // we have to release the mouse *before* sending the event, because
+            // we don't know what a handler might do. It could open up a popup
+            // menu for example and that would make us lose our capture anyway.
+
+            ReleaseMouse();
+
+            GetEventHandler()->ProcessEvent(e);
+            DoIdleUpdate();
+        }
+        else
+            ReleaseMouse();
+    }
 }
 
 void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
@@ -2687,15 +2696,14 @@ void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
     m_action_pos = wxPoint(evt.GetX(), evt.GetY());
     m_action_item = FindToolByPosition(evt.GetX(), evt.GetY());
 
-    if (m_action_item)
+    if (m_action_item && m_action_item->state & wxAUI_BUTTON_STATE_DISABLED)
     {
-        if (m_action_item->state & wxAUI_BUTTON_STATE_DISABLED)
-        {
-            m_action_pos = wxPoint(-1,-1);
-            m_action_item = NULL;
-            return;
-        }
+        m_action_pos = wxPoint(-1,-1);
+        m_action_item = NULL;
+        return;
     }
+
+    UnsetToolTip();
 }
 
 void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
@@ -2767,6 +2775,8 @@ void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
             return;
         }
     }
+
+    UnsetToolTip();
 }
 
 void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
@@ -2794,82 +2804,104 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
 {
+    const bool button_pressed = HasCapture();
+
     // start a drag event
-    if (!m_dragging &&
-        m_action_item != NULL &&
-        m_action_pos != wxPoint(-1,-1) &&
-        abs(evt.m_x - m_action_pos.x) + abs(evt.m_y - m_action_pos.y) > 5)
+    if (!m_dragging && button_pressed &&
+        abs(evt.GetX() - m_action_pos.x) + abs(evt.GetY() - m_action_pos.y) > 5)
     {
-        UnsetToolTip();
-
-        m_dragging = true;
-
+        // TODO: sending this event only makes sense if there is an 'END_DRAG'
+        // event sent sometime in the future (see OnLeftUp())
         wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, GetId());
         e.SetEventObject(this);
         e.SetToolId(m_action_item->id);
-        GetEventHandler()->ProcessEvent(e);
+        m_dragging = GetEventHandler()->ProcessEvent(e) && !e.GetSkipped();
+
         DoIdleUpdate();
-        return;
     }
+
+    if(m_dragging)
+        return;
 
     wxAuiToolBarItem* hit_item = FindToolByPosition(evt.GetX(), evt.GetY());
-    if (hit_item)
+    if(button_pressed)
     {
-        if (!(hit_item->state & wxAUI_BUTTON_STATE_DISABLED))
-            SetHoverItem(hit_item);
+        // if we have a button pressed we want it to be shown in 'depressed'
+        // state unless we move the mouse outside the button, then we want it
+        // to show as just 'highlighted'
+        if (hit_item == m_action_item)
+            SetPressedItem(m_action_item);
         else
-            SetHoverItem(NULL);
-    }
-    else
-    {
-        // no hit item, remove any hit item
-        SetHoverItem(hit_item);
-    }
-
-    // figure out tooltips
-    wxAuiToolBarItem* packing_hit_item;
-    packing_hit_item = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
-    if (packing_hit_item)
-    {
-        if (packing_hit_item != m_tip_item)
         {
-            m_tip_item = packing_hit_item;
-
-            if ( !packing_hit_item->short_help.empty() )
-                SetToolTip(packing_hit_item->short_help);
-            else
-                UnsetToolTip();
+            SetPressedItem(NULL);
+            SetHoverItem(m_action_item);
         }
     }
     else
     {
-        UnsetToolTip();
-        m_tip_item = NULL;
-    }
-
-    // if we've pressed down an item and we're hovering
-    // over it, make sure it's state is set to pressed
-    if (m_action_item)
-    {
-        if (m_action_item == hit_item)
-            SetPressedItem(m_action_item);
+        if (hit_item && (hit_item->state & wxAUI_BUTTON_STATE_DISABLED))
+            SetHoverItem(NULL);
         else
-            SetPressedItem(NULL);
-    }
+            SetHoverItem(hit_item);
 
-    // figure out the dropdown button state (are we hovering or pressing it?)
-    RefreshOverflowState();
+        // tooltips handling
+        wxAuiToolBarItem* packing_hit_item;
+        packing_hit_item = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
+        if (packing_hit_item)
+        {
+            if (packing_hit_item != m_tip_item)
+            {
+                m_tip_item = packing_hit_item;
+
+                if ( !packing_hit_item->short_help.empty() )
+                    SetToolTip(packing_hit_item->short_help);
+                else
+                    UnsetToolTip();
+            }
+        }
+        else
+        {
+            UnsetToolTip();
+            m_tip_item = NULL;
+        }
+
+        // figure out the dropdown button state (are we hovering or pressing it?)
+        RefreshOverflowState();
+    }
 }
 
-void wxAuiToolBar::OnLeaveWindow(wxMouseEvent& WXUNUSED(evt))
+void wxAuiToolBar::DoResetMouseState()
 {
     RefreshOverflowState();
     SetHoverItem(NULL);
     SetPressedItem(NULL);
 
     m_tip_item = NULL;
+
+    // we have to reset those here, because the mouse-up handlers which do
+    // it usually won't be called if we let go of a mouse button while we
+    // are outside of the window
+    m_action_pos = wxPoint(-1,-1);
+    m_action_item = NULL;
 }
 
+void wxAuiToolBar::OnLeaveWindow(wxMouseEvent& evt)
+{
+    if(HasCapture())
+    {
+        evt.Skip();
+        return;
+    }
+
+    DoResetMouseState();
+}
+
+void wxAuiToolBar::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt))
+{
+    m_dragging = false;
+
+    DoResetMouseState();
+}
 
 void wxAuiToolBar::OnSetCursor(wxSetCursorEvent& evt)
 {

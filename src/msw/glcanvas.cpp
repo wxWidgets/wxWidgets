@@ -493,11 +493,20 @@ static int ChoosePixelFormatARB(HDC hdc, const int *attribList)
 
     int pf;
     UINT numFormats = 0;
+
     if ( !wglChoosePixelFormatARB(hdc, iAttributes, NULL, 1, &pf, &numFormats) )
     {
         wxLogLastError(wxT("wglChoosePixelFormatARB"));
         return 0;
     }
+
+    // Although TRUE is returned if no matching formats are found (see
+    // http://www.opengl.org/registry/specs/ARB/wgl_pixel_format.txt), pf is
+    // not initialized in this case so we need to check for numFormats being
+    // not 0 explicitly (however this is not an error so don't call
+    // wxLogLastError() here).
+    if ( !numFormats )
+        pf = 0;
 
     return pf;
 }

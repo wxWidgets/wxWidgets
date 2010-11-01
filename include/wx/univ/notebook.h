@@ -64,7 +64,6 @@ public:
     // --------------------------------------
 
     virtual int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
-    virtual int GetSelection() const { return (int) m_sel; }
 
     // changes selected page without sending events
     int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
@@ -209,9 +208,6 @@ protected:
 
     // the pages titles
     wxArrayString m_titles;
-
-    // the current selection
-    size_t m_sel;
 
     // the spin button to change the pages
     wxSpinButton *m_spinbtn;

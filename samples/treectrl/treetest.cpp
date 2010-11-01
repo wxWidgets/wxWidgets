@@ -807,7 +807,7 @@ void MyFrame::OnDecSpacing(wxCommandEvent& WXUNUSED(event))
     {
         m_treeCtrl->SetSpacing( indent-5 );
         m_treeCtrl->Refresh();
-    } 
+    }
 }
 
 void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
@@ -1024,10 +1024,10 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         wxIcon icons[2];
         icons[0] = wxIcon(unchecked_xpm);
         icons[1] = wxIcon(checked_xpm);
-        
+
         int width  = icons[0].GetWidth(),
             height = icons[0].GetHeight();
-            
+
         // Make an state image list containing small icons
         states = new wxImageList(width, height, true);
 
@@ -1571,13 +1571,14 @@ void MyTreeCtrl::OnItemStateClick(wxTreeEvent& event)
 void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
 {
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
+    wxCHECK_RET( itemId.IsOk(), "should have a valid item" );
+
+    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
     wxPoint clientpt = event.GetPoint();
     wxPoint screenpt = ClientToScreen(clientpt);
 
     wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
-                 item ? item->GetDesc() : wxT(""), screenpt.x, screenpt.y);
+                 item->GetDesc(), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);
     event.Skip();
@@ -1618,11 +1619,11 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
 void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 {
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
+    wxCHECK_RET( itemId.IsOk(), "should have a valid item" );
 
-    wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc()
-                                                        : wxT(""));
+    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+
+    wxLogMessage(wxT("Item \"%s\" right clicked"), item->GetDesc());
 
     event.Skip();
 }

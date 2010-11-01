@@ -214,7 +214,7 @@ public:
     virtual int GetPointSize() const = 0;
     virtual wxSize GetPixelSize() const;
     virtual bool IsUsingSizeInPixels() const;
-    virtual wxFontFamily GetFamily() const = 0;
+    wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
     virtual wxFontWeight GetWeight() const = 0;
     virtual bool GetUnderlined() const = 0;
@@ -263,6 +263,10 @@ public:
 protected:
     // the function called by both overloads of SetNativeFontInfo()
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+
+    // The function called by public GetFamily(): it can return
+    // wxFONTFAMILY_UNKNOWN unlike the public method (see comment there).
+    virtual wxFontFamily DoGetFamily() const = 0;
 
 private:
     // the currently default encoding: by default, it's the default system

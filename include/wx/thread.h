@@ -585,6 +585,19 @@ protected:
     // of this thread.
     virtual void *Entry() = 0;
 
+
+    // Callbacks which may be overridden by the derived class to perform some
+    // specific actions when the thread is deleted or killed. By default they
+    // do nothing.
+
+    // This one is called by Delete() before actually deleting the thread and
+    // is executed in the context of the thread that called Delete().
+    virtual void OnDelete() {}
+
+    // This one is called by Kill() before killing the thread and is executed
+    // in the context of the thread that called Kill().
+    virtual void OnKill() {}
+
 private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);
@@ -811,7 +824,7 @@ public:
 
 #if wxUSE_THREADS
 
-#if defined(__WXMSW__) || defined(__OS2__) || defined(__EMX__)
+#if defined(__WXMSW__) || defined(__OS2__) || defined(__EMX__) || defined(__WXOSX__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread
@@ -823,9 +836,11 @@ public:
     // wakes up the main thread if it's sleeping inside ::GetMessage()
     extern void WXDLLIMPEXP_BASE wxWakeUpMainThread();
 
+#ifndef __WXOSX__
     // return true if the main thread is waiting for some other to terminate:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLIMPEXP_BASE wxIsWaitingForThread();
+#endif
 #endif // MSW, OS/2
 
 #endif // wxUSE_THREADS

@@ -141,7 +141,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         if ( menu )
             tool->SetDropdownMenu(menu);
 #endif
-        
+
         return m_toolbar; // must return non-NULL
     }
 

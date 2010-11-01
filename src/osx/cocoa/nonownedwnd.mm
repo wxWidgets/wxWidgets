@@ -19,9 +19,19 @@
 
 #include "wx/osx/private.h"
 
+NSScreen* wxOSXGetMenuScreen()
+{
+    if ( [NSScreen screens] == nil )
+        return [NSScreen mainScreen];
+    else 
+    {
+        return [[NSScreen screens] objectAtIndex:0];
+    }
+}
+
 NSRect wxToNSRect( NSView* parent, const wxRect& r )
 {
-    NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int y = r.y;
     int x = r.x ;
     if ( parent == NULL || ![ parent isFlipped ] )
@@ -31,7 +41,7 @@ NSRect wxToNSRect( NSView* parent, const wxRect& r )
 
 wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
 {
-    NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int y = (int)rect.origin.y;
     int x = (int)rect.origin.x;
     if ( parent == NULL || ![ parent isFlipped ] )
@@ -41,7 +51,7 @@ wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
 
 NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
 {
-    NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int x = p.x ;
     int y = p.y;
     if ( parent == NULL || ![ parent isFlipped ] )
@@ -51,7 +61,7 @@ NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
 
 wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 {
-    NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int x = (int)p.x;
     int y = (int)p.y;
     if ( parent == NULL || ![ parent isFlipped ] )

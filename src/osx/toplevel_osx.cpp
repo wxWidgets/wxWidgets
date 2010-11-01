@@ -88,9 +88,9 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 {
     if ( !wxNonOwnedWindow::Create(parent, nativeWindow ) )
         return false;
-    
+
     wxTopLevelWindows.Append(this);
-    
+
     return true;
 }
 
@@ -124,7 +124,7 @@ bool wxTopLevelWindowMac::IsMaximized() const
 {
     if ( m_nowpeer == NULL )
         return false;
-    
+
     return m_nowpeer->IsMaximized();
 }
 
@@ -180,7 +180,7 @@ void wxTopLevelWindowMac::ShowWithoutActivating()
         return;
 
     m_nowpeer->ShowWithoutActivating();
-    
+
     // TODO: Should we call EVT_SIZE here?
 }
 

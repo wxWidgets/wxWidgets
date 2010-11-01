@@ -30,7 +30,7 @@ void wxDialog::EndWindowModal()
 
 void wxDialog::DoShowWindowModal()
 {
-    // If someone wants to add support for this to wxOSX Carbon, here would 
+    // If someone wants to add support for this to wxOSX Carbon, here would
     // be the place to start: http://trac.wxwidgets.org/ticket/9459
     // Unfortunately, supporting sheets in Carbon isn't as straightforward
     // as with Cocoa, so it will probably take some tweaking.

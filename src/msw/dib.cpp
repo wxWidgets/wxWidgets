@@ -137,20 +137,10 @@ bool wxDIB::Create(int width, int height, int depth)
     return true;
 }
 
-bool wxDIB::Create(const wxBitmap& bmp)
-{
-    wxCHECK_MSG( bmp.Ok(), false, wxT("wxDIB::Create(): invalid bitmap") );
-
-    if ( !Create(GetHbitmapOf(bmp)) )
-        return false;
-
-    m_hasAlpha = bmp.HasAlpha();
-
-    return true;
-}
-
 bool wxDIB::Create(HBITMAP hbmp)
 {
+    wxCHECK_MSG( hbmp, false, wxT("wxDIB::Create(): invalid bitmap") );
+
     // this bitmap could already be a DIB section in which case we don't need
     // to convert it to DIB
     DIBSECTION ds;
@@ -668,7 +658,7 @@ wxPalette *wxDIB::CreatePalette() const
 
 #if wxUSE_IMAGE
 
-bool wxDIB::Create(const wxImage& image)
+bool wxDIB::Create(const wxImage& image, PixelFormat pf)
 {
     wxCHECK_MSG( image.Ok(), false, wxT("invalid wxImage in wxDIB ctor") );
 
@@ -677,8 +667,8 @@ bool wxDIB::Create(const wxImage& image)
 
     // if we have alpha channel, we need to create a 32bpp RGBA DIB, otherwise
     // a 24bpp RGB is sufficient
-    m_hasAlpha = image.HasAlpha();
-    const int bpp = m_hasAlpha ? 32 : 24;
+    const bool hasAlpha = image.HasAlpha();
+    const int bpp = hasAlpha ? 32 : 24;
 
     if ( !Create(w, h, bpp) )
         return false;
@@ -688,32 +678,51 @@ bool wxDIB::Create(const wxImage& image)
     const int srcBytesPerLine = w * 3;
     const int dstBytesPerLine = GetLineSize(w, bpp);
     const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
-    const unsigned char *alpha = m_hasAlpha ? image.GetAlpha() + (h - 1)*w
-                                            : NULL;
+    const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
+                                          : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
     for ( int y = 0; y < h; y++ )
     {
-        // copy one DIB line
+        // Copy one DIB line. Note that RGB components order is reversed in
+        // Windows bitmaps compared to wxImage and is actually BGR.
         unsigned char *dst = dstLineStart;
         if ( alpha )
         {
-            for ( int x = 0; x < w; x++ )
+            switch ( pf )
             {
-                // RGB order is reversed, and we need to premultiply
-                // all channels by alpha value for use with ::AlphaBlend.
-                const unsigned char a = *alpha++;
-                *dst++ = (unsigned char)((src[2] * a + 127) / 255);
-                *dst++ = (unsigned char)((src[1] * a + 127) / 255);
-                *dst++ = (unsigned char)((src[0] * a + 127) / 255);
-                *dst++ = a;
-                src += 3;
+                case PixelFormat_PreMultiplied:
+                    // Pre-multiply pixel values so that the DIB could be used
+                    // with ::AlphaBlend().
+                    for ( int x = 0; x < w; x++ )
+                    {
+                        const unsigned char a = *alpha++;
+                        *dst++ = (unsigned char)((src[2] * a + 127) / 255);
+                        *dst++ = (unsigned char)((src[1] * a + 127) / 255);
+                        *dst++ = (unsigned char)((src[0] * a + 127) / 255);
+                        *dst++ = a;
+                        src += 3;
+                    }
+                    break;
+
+                case PixelFormat_NotPreMultiplied:
+                    // Just copy pixel data without changing it.
+                    for ( int x = 0; x < w; x++ )
+                    {
+                        *dst++ = src[2];
+                        *dst++ = src[1];
+                        *dst++ = src[0];
+
+                        *dst++ = *alpha++;
+                        src += 3;
+                    }
+                    break;
             }
+
         }
         else // no alpha channel
         {
             for ( int x = 0; x < w; x++ )
             {
-                // RGB order is reversed.
                 *dst++ = src[2];
                 *dst++ = src[1];
                 *dst++ = src[0];
@@ -748,20 +757,23 @@ wxImage wxDIB::ConvertToImage() const
         return wxNullImage;
     }
 
-    if ( m_hasAlpha )
+    const int bpp = GetDepth();
+    bool hasAlpha = false;
+    if ( bpp == 32 )
     {
+        // 32 bit bitmaps may be either 0RGB or ARGB and we don't know in
+        // advance which one do we have so suppose we have alpha of them and
+        // get rid of it later if it turns out we didn't.
         image.SetAlpha();
     }
 
     // this is the same loop as in Create() just above but with copy direction
     // reversed
-    const int bpp = GetDepth();
     const int dstBytesPerLine = w * 3;
     const int srcBytesPerLine = GetLineSize(w, bpp);
     unsigned char *dst = image.GetData() + ((h - 1) * dstBytesPerLine);
     unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() + (h - 1)*w
                                             : NULL;
-    const bool is32bit = bpp == 32;
     const unsigned char *srcLineStart = (unsigned char *)GetData();
     for ( int y = 0; y < h; y++ )
     {
@@ -773,20 +785,19 @@ wxImage wxDIB::ConvertToImage() const
             dst[1] = *src++;
             dst[0] = *src++;
 
-            if ( is32bit )
+            if ( bpp == 32 )
             {
-                if ( alpha )
+                // wxImage uses non premultiplied alpha so undo
+                // premultiplication done in Create() above
+                const unsigned char a = *src;
+                *alpha++ = a;
+                if ( a > 0 )
                 {
-                    // wxImage uses non premultiplied alpha so undo
-                    // premultiplication done in Create() above
-                    const unsigned char a = *src;
-                    *alpha++ = a;
-                    if ( a > 0 )
-                    {
-                        dst[0] = (dst[0] * 255) / a;
-                        dst[1] = (dst[1] * 255) / a;
-                        dst[2] = (dst[2] * 255) / a;
-                    }
+                    dst[0] = (dst[0] * 255) / a;
+                    dst[1] = (dst[1] * 255) / a;
+                    dst[2] = (dst[2] * 255) / a;
+
+                    hasAlpha = true;
                 }
 
                 src++;
@@ -803,6 +814,9 @@ wxImage wxDIB::ConvertToImage() const
         // and to the next one in the DIB
         srcLineStart += srcBytesPerLine;
     }
+
+    if ( !hasAlpha && image.HasAlpha() )
+        image.ClearAlpha();
 
     return image;
 }

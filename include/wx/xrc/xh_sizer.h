@@ -27,13 +27,16 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
+protected:
+    virtual wxSizer* DoCreateSizer(const wxString& name);
+    virtual bool IsSizerNode(wxXmlNode *node) const;
+
 private:
     bool m_isInside;
     bool m_isGBS;
 
     wxSizer *m_parentSizer;
 
-    bool IsSizerNode(wxXmlNode *node);
 
     wxObject* Handle_sizeritem();
     wxObject* Handle_spacer();

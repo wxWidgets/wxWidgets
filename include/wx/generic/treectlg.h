@@ -211,6 +211,7 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+    void OnKeyDown( wxKeyEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnGetToolTip( wxTreeEvent &event );

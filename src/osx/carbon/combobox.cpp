@@ -676,7 +676,7 @@ wxTextWidgetImpl* wxComboBox::GetTextPeer() const
 {
     if (m_text)
         return m_text->GetTextPeer();
-    
+
     return NULL;
 }
 

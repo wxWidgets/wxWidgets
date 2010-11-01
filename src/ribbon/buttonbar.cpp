@@ -258,7 +258,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddHybridButton(
     return AddButton(button_id, label, bitmap, help_string,
         wxRIBBON_BUTTON_HYBRID);
 }
-    
+
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 int button_id,
                 const wxString& label,
@@ -585,7 +585,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             bitmap_small = &base->bitmap_small_disabled;
         }
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
-        
+
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
             base->state | button.size, base->label, *bitmap, *bitmap_small);
     }

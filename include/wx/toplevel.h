@@ -200,10 +200,10 @@ public:
 
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
-    
+
     // shows the window, but doesn't activate it. If the base code is being run,
     // it means the port doesn't implement this method yet and so alert the user.
-    virtual void ShowWithoutActivating() { 
+    virtual void ShowWithoutActivating() {
         wxFAIL_MSG("ShowWithoutActivating not implemented on this platform.");
     }
 
@@ -300,7 +300,7 @@ public:
     // a different API for SetSizeHints
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
-    
+
     virtual void OSXSetModified(bool modified) { m_modified = modified; }
     virtual bool OSXIsModified() const { return m_modified; }
 
@@ -347,7 +347,7 @@ protected:
 
     // a temporary override of m_winDefault, use the latter if NULL
     wxWindowRef m_winTmpDefault;
-    
+
     bool m_modified;
 
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);

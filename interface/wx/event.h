@@ -1181,63 +1181,112 @@ enum wxKeyCategoryFlags
 
     This event class contains information about key press and release events.
 
-    Notice that there are three different kinds of keyboard events in wxWidgets:
-    key down and up events and char events. The difference between the first two
-    is clear - the first corresponds to a key press and the second to a key
-    release - otherwise they are identical. Just note that if the key is
-    maintained in a pressed state you will typically get a lot of (automatically
-    generated) down events but only one up so it is wrong to assume that there is
-    one up event corresponding to each down one.
+    The main information carried by this event is the key being pressed or
+    released. It can be accessed using either GetKeyCode() function or
+    GetUnicodeKey(). For the printable characters, the latter should be used as
+    it works for any keys, including non-Latin-1 characters that can be entered
+    when using national keyboard layouts. GetKeyCode() should be used to handle
+    special characters (such as cursor arrows keys or @c HOME or @c INS and so
+    on) which correspond to ::wxKeyCode enum elements above the @c WXK_START
+    constant. While GetKeyCode() also returns the character code for Latin-1
+    keys for compatibility, it doesn't work for Unicode characters in general
+    and will return @c WXK_NONE for any non-Latin-1 ones. For this reason, it's
+    recommended to always use GetUnicodeKey() and only fall back to GetKeyCode()
+    if GetUnicodeKey() returned @c WXK_NONE meaning that the event corresponds
+    to a non-printable special keys.
 
-    Both key down and up events provide untranslated key codes while the char
-    event carries the translated one. The untranslated code for alphanumeric
-    keys is always an upper case value. For the other keys it is one of @c
-    WXK_XXX values from the ::wxKeyCode enumeration. The translated key is, in
-    general, the character the user expects to appear as the result of the key
-    combination when typing the text into a text entry zone, for example.
+    While both of these functions can be used with the events of @c
+    wxEVT_KEY_DOWN, @c wxEVT_KEY_UP and @c wxEVT_CHAR types, the values
+    returned by them are different for the first two events and the last one.
+    For the latter, the key returned corresponds to the character that would
+    appear in e.g. a text zone if the user pressed the key in it. As such, its
+    value depends on the current state of the Shift key and, for the letters,
+    on the state of Caps Lock modifier. For example, if @c A key is pressed
+    without Shift being held down, wxKeyEvent of type @c wxEVT_CHAR generated
+    for this key press will return (from either GetKeyCode() or GetUnicodeKey()
+    as their meanings coincide for ASCII characters) key code of 97
+    corresponding the ASCII value of @c a. And if the same key is pressed but
+    with Shift being held (or Caps Lock being active), then the key could would
+    be 65, i.e. ASCII value of capital @c A.
 
-    A few examples to clarify this (all assume that CAPS LOCK is unpressed
-    and the standard US keyboard): when the @c 'A' key is pressed, the key down
-    event key code is equal to @c ASCII A == 65. But the char event key code
-    is @c ASCII a == 97. On the other hand, if you press both SHIFT and
-    @c 'A' keys simultaneously , the key code in key down event will still be
-    just @c 'A' while the char event key code parameter will now be @c 'A'
-    as well.
+    However for the key down and up events the returned key code will instead
+    be @c A independently of the state of the modifier keys i.e. it depends
+    only on physical key being pressed and is not translated to its logical
+    representation using the current keyboard state. Such untranslated key
+    codes are defined as follows:
+        - For the letters they correspond to the @e upper case value of the
+        letter.
+        - For the other alphanumeric keys (e.g. @c 7 or @c +), the untranslated
+        key code corresponds to the character produced by the key when it is
+        pressed without Shift. E.g. in standard US keyboard layout the
+        untranslated key code for the key @c =/+ in the upper right corner of
+        the keyboard is 61 which is the ASCII value of @c =.
+        - For the rest of the keys (i.e. special non-printable keys) it is the
+        same as the normal key code as no translation is used anyhow.
 
-    Although in this simple case it is clear that the correct key code could be
-    found in the key down event handler by checking the value returned by
-    wxKeyEvent::ShiftDown(), in general you should use @c EVT_CHAR if you need
-    the translated key as for non-alphanumeric keys the translation is
-    keyboard-layout dependent and can only be done properly by the system
-    itself.
+    Notice that the first rule applies to all Unicode letters, not just the
+    usual Latin-1 ones. However for non-Latin-1 letters only GetUnicodeKey()
+    can be used to retrieve the key code as GetKeyCode() just returns @c
+    WXK_NONE in this case.
 
-    Another kind of translation is done when the control key is pressed: for
-    example, for CTRL-A key press the key down event still carries the
-    same key code @c 'a' as usual but the char event will have key code of 1,
-    the ASCII value of this key combination.
+    To summarize: you should handle @c wxEVT_CHAR if you need the translated
+    key and @c wxEVT_KEY_DOWN if you only need the value of the key itself,
+    independent of the current keyboard state.
 
-    Notice that while pressing any key will generate a key down event (except
-    in presence of IME perhaps) a few special keys don't generate a char event:
-    currently, Shift, Control (or Command), Alt (or Menu or Meta) and Caps, Num
-    and Scroll Lock keys don't do it. For all the other keys you have the
-    choice about whether to choose key down or char event for handling it and
-    either can be used. However it is advised to use char events only for the
-    keys that are supposed to generate characters on screen and key down events
-    for all the rest.
+    @note Not all key down events may be generated by the user. As an example,
+        @c wxEVT_KEY_DOWN with @c = key code can be generated using the
+        standard US keyboard layout but not using the German one because the @c
+        = key corresponds to Shift-0 key combination in this layout and the key
+        code for it is @c 0, not @c =. Because of this you should avoid
+        requiring your users to type key events that might be impossible to
+        enter on their keyboard.
 
 
-    You may discover how the other keys on your system behave interactively by
-    running the @ref page_samples_keyboard wxWidgets sample and pressing some
-    keys in it.
+    Another difference between key and char events is that another kind of
+    translation is done for the latter ones when the Control key is pressed:
+    char events for ASCII letters in this case carry codes corresponding to the
+    ASCII value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
+    26 for Ctrl-Z. This is convenient for terminal-like applications and can be
+    completely ignored by all the other ones (if you need to handle Ctrl-A it
+    is probably a better idea to use the key event rather than the char one).
+    Notice that currently no translation is done for the presses of @c [, @c
+    \\, @c ], @c ^ and @c _ keys which might be mapped to ASCII values from 27
+    to 31.
 
-    @b Tip: be sure to call @c event.Skip() for events that you don't process in
-    key event function, otherwise menu shortcuts may cease to work under Windows.
+    Finally, modifier keys only generate key events but no char events at all.
+    The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
+    @c WXK_WINDOWS_XXX from ::wxKeyCode enum.
+
+    Modifier keys events are special in one additional aspect: usually the
+    keyboard state associated with a key press is well defined, e.g.
+    wxKeyboardState::ShiftDown() returns @c true only if the Shift key was held
+    pressed when the key that generated this event itself was pressed. There is
+    an ambiguity for the key press events for Shift key itself however. By
+    convention, it is considered to be already pressed when it is pressed and
+    already released when it is released. In other words, @c wxEVT_KEY_DOWN
+    event for the Shift key itself will have @c wxMOD_SHIFT in GetModifiers()
+    and ShiftDown() will return true while the @c wxEVT_KEY_UP event for Shift
+    itself will not have @c wxMOD_SHIFT in its modifiers and ShiftDown() will
+    return false.
+
+
+    @b Tip: You may discover the key codes and modifiers generated by all the
+        keys on your system interactively by running the @ref
+        page_samples_keyboard wxWidgets sample and pressing some keys in it.
 
     @note If a key down (@c EVT_KEY_DOWN) event is caught and the event handler
           does not call @c event.Skip() then the corresponding char event
-          (@c EVT_CHAR) will not happen.
-          This is by design and enables the programs that handle both types of
-          events to be a bit simpler.
+          (@c EVT_CHAR) will not happen. This is by design and enables the
+          programs that handle both types of events to avoid processing the
+          same key twice. As a consequence, if you do not want to suppress the
+          @c wxEVT_CHAR events for the keys you handle, always call @c
+          event.Skip() in your @c wxEVT_KEY_DOWN handler. Not doing may also
+          prevent accelerators defined using this key from working.
+
+    @note If a key is maintained in a pressed state, you will typically get a
+          lot of (automatically generated) key down events but only one key up
+          one at the end when the key is released so it is wrong to assume that
+          there is one up event corresponding to each down one.
 
     @note For Windows programmers: The key and char events in wxWidgets are
           similar to but slightly different from Windows @c WM_KEYDOWN and
@@ -1272,14 +1321,49 @@ public:
     wxKeyEvent(wxEventType keyEventType = wxEVT_NULL);
 
     /**
-        Returns the virtual key code. ASCII events return normal ASCII values,
-        while non-ASCII events return values such as @b WXK_LEFT for the left
-        cursor key. See ::wxKeyCode for a full list of the virtual key codes.
+        Returns the key code of the key that generated this event.
 
-        Note that in Unicode build, the returned value is meaningful only if
-        the user entered a character that can be represented in current
-        locale's default charset. You can obtain the corresponding Unicode
-        character using GetUnicodeKey().
+        ASCII symbols return normal ASCII values, while events from special
+        keys such as "left cursor arrow" (@c WXK_LEFT) return values outside of
+        the ASCII range. See ::wxKeyCode for a full list of the virtual key
+        codes.
+
+        Note that this method returns a meaningful value only for special
+        non-alphanumeric keys or if the user entered a character that can be
+        represented in current locale's default charset. Otherwise, e.g. if the
+        user enters a Japanese character in a program not using Japanese
+        locale, this method returns @c WXK_NONE and GetUnicodeKey() should be
+        used to obtain the corresponding Unicode character.
+
+        Using GetUnicodeKey() is in general the right thing to do if you are
+        interested in the characters typed by the user, GetKeyCode() should be
+        only used for special keys (for which GetUnicodeKey() returns @c
+        WXK_NONE). To handle both kinds of keys you might write:
+        @code
+            void MyHandler::OnChar(wxKeyEvent& event)
+            {
+                if ( event.GetUnicodeKey() != WXK_NONE )
+                {
+                    // It's a printable character
+                    wxLogMessage("You pressed '%c'", event.GetUnicodeKey());
+                }
+                else
+                {
+                    // It's a special key, deal with all the known ones:
+                    switch ( keycode )
+                    {
+                        case WXK_LEFT:
+                        case WXK_RIGHT:
+                            ... move cursor ...
+                            break;
+
+                        case WXK_F1:
+                            ... give help ...
+                            break;
+                    }
+                }
+            }
+        @endcode
     */
     int GetKeyCode() const;
 
@@ -1302,8 +1386,19 @@ public:
     //@}
 
     /**
-        Returns the raw key code for this event. This is a platform-dependent scan code
-        which should only be used in advanced applications.
+        Returns the raw key code for this event.
+
+        The flags are platform-dependent and should only be used if the
+        functionality provided by other wxKeyEvent methods is insufficient.
+
+        Under MSW, the raw key code is the value of @c wParam parameter of the
+        corresponding message.
+
+        Under GTK, the raw key code is the @c keyval field of the corresponding
+        GDK event.
+
+        Under OS X, the raw key code is the @c keyCode field of the
+        corresponding NSEvent.
 
         @note Currently the raw key codes are not supported by all ports, use
               @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.
@@ -1311,8 +1406,18 @@ public:
     wxUint32 GetRawKeyCode() const;
 
     /**
-        Returns the low level key flags for this event. The flags are
-        platform-dependent and should only be used in advanced applications.
+        Returns the low level key flags for this event.
+
+        The flags are platform-dependent and should only be used if the
+        functionality provided by other wxKeyEvent methods is insufficient.
+
+        Under MSW, the raw flags are just the value of @c lParam parameter of
+        the corresponding message.
+
+        Under GTK, the raw flags contain the @c hardware_keycode field of the
+        corresponding GDK event.
+
+        Under OS X, the raw flags contain the modifiers state.
 
         @note Currently the raw key flags are not supported by all ports, use
               @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.
@@ -1323,7 +1428,8 @@ public:
         Returns the Unicode character corresponding to this key event.
 
         If the key pressed doesn't have any character value (e.g. a cursor key)
-        this method will return 0.
+        this method will return @c WXK_NONE. In this case you should use
+        GetKeyCode() to retrieve the value of the key.
 
         This function is only available in Unicode build, i.e. when
         @c wxUSE_UNICODE is 1.

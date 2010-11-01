@@ -242,6 +242,12 @@ wxMemoryDC::wxMemoryDC(wxDC *dc)
 
 void wxMemoryDC::SelectObject(wxBitmap& bmp)
 {
+    if ( bmp.IsSameAs(GetSelectedBitmap()) )
+    {
+        // Nothing to do, this bitmap is already selected.
+        return;
+    }
+
     // make sure that the given wxBitmap is not sharing its data with other
     // wxBitmap instances as its contents will be modified by any drawing
     // operation done on this DC
@@ -736,7 +742,6 @@ wxDCImpl::DoDrawPolyPolygon(int n,
 
     int      i, j, lastOfs;
     wxPoint* pts;
-    wxPen    pen;
 
     for (i = j = lastOfs = 0; i < n; i++)
     {
@@ -752,10 +757,11 @@ wxDCImpl::DoDrawPolyPolygon(int n,
         pts[j++] = pts[lastOfs];
     }
 
-    pen = GetPen();
-    SetPen(wxPen(*wxBLACK, 0, wxPENSTYLE_TRANSPARENT));
-    DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
-    SetPen(pen);
+    {
+        wxDCPenChanger setTransp(*m_owner, *wxTRANSPARENT_PEN);
+        DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
+    }
+
     for (i = j = 0; i < n; i++)
     {
         DoDrawLines(count[i], pts+j, xoffset, yoffset);
@@ -1075,40 +1081,49 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
 
     //Radius
-    wxInt32 cx = rect.GetWidth() / 2;
-    wxInt32 cy = rect.GetHeight() / 2;
-    wxInt32 nRadius;
+    double cx = rect.GetWidth() / 2;
+    double cy = rect.GetHeight() / 2;
+    double dRadius;
     if (cx < cy)
-        nRadius = cx;
+        dRadius = cx;
     else
-        nRadius = cy;
+        dRadius = cy;
 
     //Offset of circle
-    wxInt32 nCircleOffX = circleCenter.x - (rect.GetWidth() / 2);
-    wxInt32 nCircleOffY = circleCenter.y - (rect.GetHeight() / 2);
+    double ptX, ptY;
+    ptX = circleCenter.x;
+    ptY = circleCenter.y;
+    double nCircleOffX = ptX - cx;
+    double nCircleOffY = ptY - cy;
+
+    double dGradient;
+    double dx, dy;
 
     for ( wxInt32 x = 0; x < rect.GetWidth(); x++ )
     {
         for ( wxInt32 y = 0; y < rect.GetHeight(); y++ )
         {
             //get color difference
-            wxInt32 nGradient = ((nRadius -
-                                  (wxInt32)sqrt(
-                                    pow((double)(x - cx - nCircleOffX), 2) +
-                                    pow((double)(y - cy - nCircleOffY), 2)
-                                  )) * 100) / nRadius;
+            dx = x;
+            dy = y;
+
+            dGradient = ((dRadius - sqrt(  (dx - cx - nCircleOffX) * (dx - cx - nCircleOffX)
+                                          +(dy - cy - nCircleOffY) * (dy - cy - nCircleOffY)
+                                         )
+                         ) * 100
+                        ) / dRadius;
 
             //normalize Gradient
-            if (nGradient < 0 )
-                nGradient = 0;
+            if (dGradient < 0)
+                dGradient = 0.0;
 
             //get dest colors
-            nR = (wxUint8)(nR1 + ((nR2 - nR1) * nGradient / 100));
-            nG = (wxUint8)(nG1 + ((nG2 - nG1) * nGradient / 100));
-            nB = (wxUint8)(nB1 + ((nB2 - nB1) * nGradient / 100));
+            nR = (wxUint8)(nR1 + ((nR2 - nR1) * dGradient / 100));
+            nG = (wxUint8)(nG1 + ((nG2 - nG1) * dGradient / 100));
+            nB = (wxUint8)(nB1 + ((nB2 - nB1) * dGradient / 100));
 
             //set the pixel
-            m_pen = wxColour(nR,nG,nB);
+            SetPen(wxColour(nR,nG,nB));
             DoDrawPoint(x + rect.GetLeft(), y + rect.GetTop());
         }
     }

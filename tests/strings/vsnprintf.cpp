@@ -34,7 +34,6 @@
 //             http://www.gnu.org/software/libc/manual/html_node/Formatted-Output.html
 
 
-
 // ----------------------------------------------------------------------------
 // global utilities for testing
 // ----------------------------------------------------------------------------
@@ -72,6 +71,12 @@ int r;
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
     CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
+
+#define CMP3i(expected, fmt, y)                        \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
+    WX_ASSERT_MESSAGE( ("Expected \"%s\", got \"%s\"", expected, buf), \
+                       wxStricmp(expected, buf) == 0 );
 
 #define CMP2(expected, fmt)                           \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt));        \
@@ -139,9 +144,7 @@ private:
 #endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
-#if wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( WrongFormatStrings );
-#endif // wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( Miscellaneous );
         CPPUNIT_TEST( GlibcMisc1 );
         CPPUNIT_TEST( GlibcMisc2 );
@@ -168,9 +171,7 @@ private:
         void DoBigToSmallBuffer(T *buffer, int size);
     void BigToSmallBuffer();
 
-#if wxUSE_WXVSNPRINTF
     void WrongFormatStrings();
-#endif // wxUSE_WXVSNPRINTF
 
     // compares the expectedString and the result of wxVsnprintf() char by char
     // for all its lenght (not only for first expectedLen chars) and also
@@ -235,24 +236,31 @@ void VsnprintfTestCase::O()
 
 void VsnprintfTestCase::P()
 {
-    // WARNING: printing of pointers is not fully standard.
-    //          GNU prints them as %#x except for NULL pointers which are
-    //          printed as '(nil)'.
-    //          MSVC always print them as %8X on 32 bit systems and as %16X
-    //          on 64 bit systems
-    //          mingw32 uses MSVC CRT by default so uses the same rules
-#if defined(__VISUALC__) || (defined(__MINGW32__) && !__USE_MINGW_ANSI_STDIO)
+    // The exact format used for "%p" is not specified by the standard and so
+    // varies among different platforms, so we need to expect different results
+    // here (remember that while we test our own wxPrintf() code here, it uses
+    // the system sprintf() for actual formatting so the results are still
+    // different under different systems).
+
+#ifdef wxUSING_VC_CRT_IO
+    // MSVC always prints pointers as %8X on 32 bit systems and as %16X on 64
+    // bit systems.
     #if SIZEOF_VOID_P == 4
-        CMP3("00ABCDEF", "%p", (void*)0xABCDEF);
+        CMP3i("00ABCDEF", "%p", (void*)0xABCDEF);
         CMP3("00000000", "%p", (void*)NULL);
     #elif SIZEOF_VOID_P == 8
-        CMP3("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
+        CMP3i("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
         CMP3("0000000000000000", "%p", (void*)NULL);
     #endif
 #elif defined(__MINGW32__) 
+    // mingw32 uses MSVC CRT in old versions but is own implementation now
+    // which is somewhere in the middle as it uses %8x, so to catch both cases
+    // we use case-insensitive comparison here.
     CMP3("0xabcdef", "%p", (void*)0xABCDEF); 
     CMP3("0", "%p", (void*)NULL); 
 #elif defined(__GNUG__)
+    // glibc prints pointers as %#x except for NULL pointers which are printed
+    // as '(nil)'.
     CMP3("0xabcdef", "%p", (void*)0xABCDEF);
     CMP3("(nil)", "%p", (void*)NULL);
 #endif
@@ -424,12 +432,6 @@ void VsnprintfTestCase::LongLong()
 }
 #endif
 
-// this test is only for our own implementation, the system implementation
-// doesn't always give errors for invalid format strings (e.g. glibc doesn't)
-// and as it's not required too (the behaviour is "undefined" according to the
-// spec), there is really no sense in testing for it
-#if wxUSE_WXVSNPRINTF
-
 void VsnprintfTestCase::WrongFormatStrings()
 {
     // test how wxVsnprintf() behaves with wrong format string:
@@ -447,17 +449,14 @@ void VsnprintfTestCase::WrongFormatStrings()
     CPPUNIT_ASSERT(r != -1);
 #endif
 
-    // a missing positional arg: this should result in an error but not all
-    // implementations detect it (e.g. glibc doesn't)
-    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3);
-    CPPUNIT_ASSERT_EQUAL(-1, r);
+    // a missing positional arg should result in an assert
+    WX_ASSERT_FAILS_WITH_ASSERT(
+            wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3) );
 
     // positional and non-positionals in the same format string:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
     CPPUNIT_ASSERT_EQUAL(-1, r);
 }
-
-#endif // wxUSE_WXVSNPRINTF
 
 // BigToSmallBuffer() test case helper:
 template<typename T>
@@ -617,7 +616,7 @@ void VsnprintfTestCase::GlibcMisc1()
 {
     CMP3("     ",    "%5.s", "xyz");
     CMP3("   33",    "%5.f", 33.3);
-#if defined(__VISUALC__)
+#ifdef wxUSING_VC_CRT_IO
     // see the previous notes about the minimum width of mantissa:
     CMP3("  3e+008", "%8.e", 33.3e7);
     CMP3("  3E+008", "%8.E", 33.3e7);

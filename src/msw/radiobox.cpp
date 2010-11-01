@@ -29,6 +29,7 @@
 #include "wx/radiobox.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/hashmap.h"
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/settings.h"
@@ -110,12 +111,33 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
 // global vars
 // ---------------------------------------------------------------------------
 
+namespace
+{
+
 // the pointer to standard radio button wnd proc
-static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
+WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
+
+// Hash allowing to find wxRadioBox containing the given radio button by its
+// HWND. This is used by (subclassed) radio button window proc to find the
+// radio box it belongs to.
+WX_DECLARE_HASH_MAP(HWND, wxRadioBox *,
+                    wxPointerHash, wxPointerEqual,
+                    RadioBoxFromButton);
+
+RadioBoxFromButton gs_boxFromButton;
+
+} // anonymous namespace
 
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+/* static */
+wxRadioBox* wxRadioBox::GetFromRadioButtonHWND(WXHWND hwnd)
+{
+    const RadioBoxFromButton::const_iterator it = gs_boxFromButton.find(hwnd);
+    return it == gs_boxFromButton.end() ? NULL : it->second;
+}
 
 // ---------------------------------------------------------------------------
 // wxRadioBox creation
@@ -253,9 +275,23 @@ wxRadioBox::~wxRadioBox()
 {
     SendDestroyEvent();
 
+    // Unsubclass all the radio buttons and remove their soon-to-be-invalid
+    // HWNDs from the global map. Notice that we need to unsubclass because
+    // otherwise we'd need the entries in gs_boxFromButton for the buttons
+    // being deleted to handle the messages generated during their destruction.
+    for ( size_t item = 0; item < m_radioButtons->GetCount(); item++ )
+    {
+        HWND hwnd = m_radioButtons->Get(item);
+
+        wxSetWindowProc(hwnd, reinterpret_cast<WNDPROC>(s_wndprocRadioBtn));
+        gs_boxFromButton.erase(hwnd);
+    }
+
     delete m_radioButtons;
+
     if ( m_dummyHwnd )
         DestroyWindow((HWND)m_dummyHwnd);
+
     delete[] m_radioWidth;
     delete[] m_radioHeight;
 }
@@ -270,7 +306,8 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
         s_wndprocRadioBtn = (WXFARPROC)wxGetWindowProc(hwndBtn);
 
     wxSetWindowProc(hwndBtn, wxRadioBtnWndProc);
-    wxSetWindowUserData(hwndBtn, this);
+
+    gs_boxFromButton[hwndBtn] = this;
 }
 
 // ----------------------------------------------------------------------------
@@ -745,6 +782,10 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
+
+    wxRadioBox * const radiobox = wxRadioBox::GetFromRadioButtonHWND(hwnd);
+    wxCHECK_MSG( radiobox, 0, wxT("Should have the associated radio box") );
+
     switch ( message )
     {
         case WM_GETDLGCODE:
@@ -760,10 +801,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
         case WM_KEYDOWN:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
-
-                wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
-
                 bool processed = true;
 
                 wxDirection dir;
@@ -819,10 +856,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
         case WM_SETFOCUS:
         case WM_KILLFOCUS:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
-
-                wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
-
                 // if we don't do this, no focus events are generated for the
                 // radiobox and, besides, we need to notify the parent about
                 // the focus change, otherwise the focus handling logic in
@@ -837,10 +870,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 #ifndef __WXWINCE__
         case WM_HELP:
             {
-                wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
-
-                wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
-
                 bool processed = false;
 
                 wxEvtHandler * const handler = radiobox->GetEventHandler();

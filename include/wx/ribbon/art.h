@@ -629,7 +629,7 @@ protected:
     wxColour m_button_bar_active_background_top_colour;
     wxColour m_button_bar_active_background_top_gradient_colour;
     wxColour m_gallery_button_background_colour;
-    wxColour m_gallery_button_background_gradient_colour;    
+    wxColour m_gallery_button_background_gradient_colour;
     wxColour m_gallery_button_hover_background_colour;
     wxColour m_gallery_button_hover_background_gradient_colour;
     wxColour m_gallery_button_active_background_colour;

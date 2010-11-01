@@ -237,6 +237,24 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         return 0;
     }
 
+    if ( nMsg == WM_UPDATEUISTATE )
+    {
+        // DefWindowProc() redraws just the static box text when it gets this
+        // message and it does it using the standard (blue in standard theme)
+        // colour and not our own label colour that we use in PaintForeground()
+        // resulting in the label mysteriously changing the colour when e.g.
+        // "Alt" is pressed anywhere in the window, see #12497.
+        //
+        // To avoid this we simply refresh the window forcing our own code
+        // redrawing the label in the correct colour to be called. This is
+        // inefficient but there doesn't seem to be anything else we can do.
+        //
+        // Notice that the problem is XP-specific and doesn't arise under later
+        // systems.
+        if ( m_hasFgCol && wxGetWinVersion() == wxWinVersion_XP )
+            Refresh();
+    }
+
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
@@ -412,11 +430,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
             wxUxThemeHandle hTheme(this, L"BUTTON");
             if ( hTheme )
             {
-                // GetThemeFont() expects its parameter to be LOGFONTW and not
-                // LOGFONTA even in ANSI programs and will happily corrupt
-                // memory after the struct end if we pass a LOGFONTA (which is
-                // smaller) to it!
-                LOGFONTW lfw;
+                wxUxThemeFont themeFont;
                 if ( wxUxThemeEngine::Get()->GetThemeFont
                                              (
                                                 hTheme,
@@ -424,24 +438,10 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
                                                 BP_GROUPBOX,
                                                 GBS_NORMAL,
                                                 TMT_FONT,
-                                                (LOGFONT *)&lfw
+                                                themeFont.GetPtr()
                                              ) == S_OK )
                 {
-#if wxUSE_UNICODE
-                    // ok, no conversion necessary
-                    const LOGFONT& lf = lfw;
-#else // !wxUSE_UNICODE
-                    // most of the fields are the same in LOGFONTA and LOGFONTW
-                    LOGFONT lf;
-                    memcpy(&lf, &lfw, sizeof(lf));
-
-                    // but the face name must be converted
-                    WideCharToMultiByte(CP_ACP, 0, lfw.lfFaceName, -1,
-                                        lf.lfFaceName, sizeof(lf.lfFaceName),
-                                        NULL, NULL);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
-                    font.Init(lf);
+                    font.Init(themeFont.GetLOGFONT());
                     if ( font )
                         selFont.Init(hdc, font);
                 }
@@ -494,18 +494,32 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
             PaintBackground(dc, dimensions);
         }
 
+        UINT drawTextFlags = DT_SINGLELINE | DT_VCENTER;
+
+        // determine the state of UI queues to draw the text correctly under XP
+        // and later systems
+        static const bool isXPorLater = wxGetWinVersion() >= wxWinVersion_XP;
+        if ( isXPorLater )
+        {
+            if ( ::SendMessage(GetHwnd(), WM_QUERYUISTATE, 0, 0) &
+                    UISF_HIDEACCEL )
+            {
+                drawTextFlags |= DT_HIDEPREFIX;
+            }
+        }
+
         // now draw the text
         if ( !rtl )
         {
             RECT rc2 = { x, 0, x + width, y };
             ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       DT_SINGLELINE | DT_VCENTER);
+                       drawTextFlags);
         }
         else // RTL
         {
             RECT rc2 = { x, 0, x - width, y };
             ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       DT_SINGLELINE | DT_VCENTER | DT_RTLREADING);
+                       drawTextFlags | DT_RTLREADING);
         }
     }
 }

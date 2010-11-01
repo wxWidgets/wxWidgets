@@ -39,7 +39,7 @@
         else \
             ind = 0; \
         list->InsertItem(index, wxT(#id), ind); \
-        list->SetItemData(index, (long)id); \
+        list->SetItemPtrData(index, wxPtrToUInt(id)); \
         index++; \
     }
 

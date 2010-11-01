@@ -1107,7 +1107,7 @@ wxString wxGenericDirCtrl::GetPath() const
             wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
             return data->m_path;
         }
-        
+
         return wxEmptyString;
     }
 
@@ -1395,16 +1395,33 @@ void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
 {
     int sel = GetSelection();
 
-    wxString currentPath = m_dirCtrl->GetPath();
+    if (m_dirCtrl->HasFlag(wxDIRCTRL_MULTIPLE))
+    {
+        wxArrayString paths;
+        m_dirCtrl->GetPaths(paths);
 
-    m_dirCtrl->SetFilterIndex(sel);
+        m_dirCtrl->SetFilterIndex(sel);
 
-    // If the filter has changed, the view is out of date, so
-    // collapse the tree.
-    m_dirCtrl->ReCreateTree();
+        // If the filter has changed, the view is out of date, so
+        // collapse the tree.
+        m_dirCtrl->ReCreateTree();
 
-    // Try to restore the selection, or at least the directory
-    m_dirCtrl->ExpandPath(currentPath);
+        // Expand and select the previously selected paths
+        for (unsigned int i = 0; i < paths.GetCount(); i++)
+        {
+            m_dirCtrl->ExpandPath(paths.Item(i));
+        }
+    }
+    else
+    {
+        wxString currentPath = m_dirCtrl->GetPath();
+
+        m_dirCtrl->SetFilterIndex(sel);
+        m_dirCtrl->ReCreateTree();
+
+        // Try to restore the selection, or at least the directory
+        m_dirCtrl->ExpandPath(currentPath);
+    }
 }
 
 void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilter)

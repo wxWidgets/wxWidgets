@@ -55,9 +55,6 @@
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    0
 
-    // If 1, then setting empty tooltip actually hides it
-    #define wxPG_ALLOW_EMPTY_TOOLTIPS   1
-
     #define wxPG_NAT_BUTTON_BORDER_ANY          1
     #define wxPG_NAT_BUTTON_BORDER_X            1
     #define wxPG_NAT_BUTTON_BORDER_Y            1
@@ -94,9 +91,6 @@
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    1
 
-    // If 1, then setting empty tooltip actually hides it
-    #define wxPG_ALLOW_EMPTY_TOOLTIPS   0
-
     #define wxPG_NAT_BUTTON_BORDER_ANY      1
     #define wxPG_NAT_BUTTON_BORDER_X        1
     #define wxPG_NAT_BUTTON_BORDER_Y        1
@@ -131,9 +125,6 @@
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    0
 
-    // If 1, then setting empty tooltip actually hides it
-    #define wxPG_ALLOW_EMPTY_TOOLTIPS   1
-
     #define wxPG_NAT_BUTTON_BORDER_ANY      0
     #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
@@ -167,9 +158,6 @@
 
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    1
-
-    // If 1, then setting empty tooltip actually hides it
-    #define wxPG_ALLOW_EMPTY_TOOLTIPS   0
 
     #define wxPG_NAT_BUTTON_BORDER_ANY      0
     #define wxPG_NAT_BUTTON_BORDER_X        0

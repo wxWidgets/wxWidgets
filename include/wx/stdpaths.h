@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_BASE wxStandardPaths;
 class WXDLLIMPEXP_BASE wxStandardPathsBase
 {
 public:
-    // possible resources categorires
+    // possible resources categories
     enum ResourceCat
     {
         // no special category

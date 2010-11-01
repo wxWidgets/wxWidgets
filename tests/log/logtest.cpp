@@ -342,17 +342,24 @@ void LogTestCase::CompatLogger2()
 void LogTestCase::SysError()
 {
     wxString s;
-    wxLogSysError("Success");
-    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
-    CPPUNIT_ASSERT( s.StartsWith("error 0") );
 
     wxLogSysError(17, "Error");
     CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Error (", &s) );
-    CPPUNIT_ASSERT( s.StartsWith("error 17") );
+    WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 17") );
+
+    // The last error code seems to be set somewhere in MinGW CRT as its value
+    // is just not what we expect (ERROR_INVALID_PARAMETER instead of 0 and 0
+    // instead of ERROR_FILE_NOT_FOUND) so exclude the tests which rely on last
+    // error being preserved for this compiler.
+#ifndef __MINGW32__
+    wxLogSysError("Success");
+    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
+    WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 0") );
 
     wxOpen("no-such-file", 0, 0);
     wxLogSysError("Not found");
     CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Not found (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 2") );
+#endif // __MINGW32__
 }
 

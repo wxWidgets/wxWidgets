@@ -317,13 +317,11 @@ static int my_sort( int *v1, int *v2 )
    return *v1-*v2;
 }
 
-#define INITIAL_NUMBER_OF_ITEMS 100000
+#define INITIAL_NUMBER_OF_ITEMS 10000
 
 MyListModel::MyListModel() :
         wxDataViewVirtualListModel( INITIAL_NUMBER_OF_ITEMS )
 {
-    m_virtualItems = INITIAL_NUMBER_OF_ITEMS;
-
     // the first 100 items are really stored in this model;
     // all the others are synthesized on request
     static const unsigned NUMBER_REAL_ITEMS = 100;
@@ -350,6 +348,7 @@ void MyListModel::Prepend( const wxString &text )
 void MyListModel::DeleteItem( const wxDataViewItem &item )
 {
     unsigned int row = GetRow( item );
+
     if (row >= m_textColValues.GetCount())
         return;
 
@@ -392,8 +391,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 
 void MyListModel::AddMany()
 {
-    m_virtualItems += 1000;
-    Reset( m_textColValues.GetCount() + m_virtualItems );
+    Reset( GetCount()+1000 );
 }
 
 void MyListModel::GetValueByRow( wxVariant &variant,

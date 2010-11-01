@@ -5,7 +5,7 @@
 // Author:      Robin Dunn
 // Created:     9-Dec-2006
 // Id:          $Id$
-// Copyright:   (c) 2006 
+// Copyright:   (c) 2006
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -87,14 +87,14 @@ protected:
     void OnSearch(wxCommandEvent& event);
 
     wxMenu* CreateTestMenu();
-    
+
     // (re)create the control
     void CreateControl();
 
     // reset the control parameters
     void Reset();
-    
-    
+
+
     wxSearchCtrl*       m_srchCtrl;
     wxCheckBox*         m_searchBtnCheck;
     wxCheckBox*         m_cancelBtnCheck;
@@ -153,7 +153,7 @@ void SearchCtrlWidgetsPage::CreateContent()
     m_menuBtnCheck   = new wxCheckBox(this, ID_MENU_CB,   wxT("Search menu"));
 
     m_searchBtnCheck->SetValue(true);
-    
+
     box->Add(m_searchBtnCheck, 0, wxALL, 5);
     box->Add(m_cancelBtnCheck, 0, wxALL, 5);
     box->Add(m_menuBtnCheck,   0, wxALL, 5);
@@ -171,13 +171,13 @@ void SearchCtrlWidgetsPage::CreateControl()
         m_srchCtrl->Destroy();
 
     int style = 0;
-    
+
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   wxSize(150, -1), style);
 }
 
 void SearchCtrlWidgetsPage::Reset()
-{    
+{
 }
 
 
@@ -193,7 +193,7 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
         wxString tipText = wxString::Format(wxT("tip %i"),i);
         menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_NORMAL);
     }
-//     target->Connect( 
+//     target->Connect(
 //         ID_SEARCHMENU,
 //         ID_SEARCHMENU+SEARCH_MENU_SIZE,
 //         wxEVT_COMMAND_MENU_SELECTED,
@@ -215,7 +215,7 @@ void SearchCtrlWidgetsPage::OnToggleSearchButton(wxCommandEvent&)
 void SearchCtrlWidgetsPage::OnToggleCancelButton(wxCommandEvent&)
 {
     m_srchCtrl->ShowCancelButton( m_cancelBtnCheck->GetValue() );
-        
+
 }
 
 void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)

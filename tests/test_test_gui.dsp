@@ -353,6 +353,10 @@ SOURCE=.\controls\itemcontainertest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\keyboard.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\label.cpp
 # End Source File
 # Begin Source File

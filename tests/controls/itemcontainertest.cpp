@@ -14,6 +14,8 @@
     #include "wx/ctrlsub.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopeguard.h"
+
 #include "itemcontainertest.h"
 
 void ItemContainerTestCase::Append()
@@ -242,4 +244,39 @@ void ItemContainerTestCase::SetString()
 #ifndef __WXOSX__
     CPPUNIT_ASSERT_EQUAL("", container->GetString(2));
 #endif
+}
+
+void ItemContainerTestCase::SetSelection()
+{
+    wxItemContainer * const container = GetContainer();
+
+    container->Append("first");
+    container->Append("second");
+
+    // This class is used to check that SetSelection() doesn't generate any
+    // events, as documented.
+    class CommandEventHandler : public wxEvtHandler
+    {
+    public:
+        virtual bool ProcessEvent(wxEvent& event)
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "unexpected command event from SetSelection",
+                !event.IsCommandEvent()
+            );
+
+            return wxEvtHandler::ProcessEvent(event);
+        }
+    } h;
+
+    wxWindow * const win = GetContainerWindow();
+    win->PushEventHandler(&h);
+    wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
+
+    container->SetSelection(0);
+    CPPUNIT_ASSERT_EQUAL( 0, container->GetSelection() );
+
+    container->SetSelection(1);
+    CPPUNIT_ASSERT_EQUAL( 1, container->GetSelection() );
 }

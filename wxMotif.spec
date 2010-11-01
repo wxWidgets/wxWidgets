@@ -7,7 +7,7 @@
 %define name       wx-%{portname}
 %define wxbasename wx-base
 
-%define wxconfig     %{portname}-ansi-release-%{ver2}
+%define wxconfig     %{portname}-ansi-%{ver2}
 %define wxconfiglink wx%{portname}-%{ver2}-config
 
 Summary: The Motif/Lesstif port of the wxWidgets library
@@ -59,23 +59,6 @@ Requires: %{name}-devel = %{ver}
 %description static
 Static libraries for wxMotif. You need them if you want to link statically against wxMotif.
 
-%package contrib
-Summary: Contrib libraries for wxMotif
-Group: X11/Libraries
-Requires: %{name} = %{ver}
-
-%description contrib
-Contrib libraries for wxMotif
-
-%package contrib-devel
-Summary: Contrib libraries for wxMotif
-Group: X11/Libraries
-Requires: %{name}-contrib = %{ver}
-Requires: %{name}-devel = %{ver}
-
-%description contrib-devel
-Header files for contributed libraries for wxMotif.
-
 %prep
 %setup -q -n wxMotif-%{ver}
 
@@ -90,10 +73,7 @@ mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{pref} --with-motif --with-opengl
 $MAKE
-
-cd contrib/src
-$MAKE
-cd ../../..
+cd ..
 
 mkdir obj-static
 cd obj-static
@@ -256,6 +236,7 @@ wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h
 wx/meta/if.h
+wx/meta/implicitconversion.h
 wx/meta/int2type.h
 wx/meta/movable.h
 wx/meta/pod.h
@@ -297,10 +278,6 @@ done
 # list of all core headers:
 find $RPM_BUILD_ROOT%{_includedir}/wx-%{ver2} -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >core-headers.files
 
-# contrib stuff:
-(cd obj-shared/contrib/src; make prefix=$RPM_BUILD_ROOT%{pref} install)
-(cd obj-shared/utils/wxrc; make prefix=$RPM_BUILD_ROOT%{pref} install)
-
 # remove wxBase files so that RPM doesn't complain about unpackaged files:
 rm -f $RPM_BUILD_ROOT%{_libdir}/libwx_base*
 rm -f $RPM_BUILD_ROOT%{_datadir}/aclocal/*
@@ -341,18 +318,6 @@ rm -f %{_bindir}/%{wxconfiglink}
 %postun gl
 /sbin/ldconfig
 
-%post contrib
-/sbin/ldconfig
-
-%postun contrib
-/sbin/ldconfig
-
-%post contrib-devel
-/sbin/ldconfig
-
-%postun contrib-devel
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
@@ -385,52 +350,3 @@ rm -f %{_bindir}/%{wxconfiglink}
 %defattr (-,root,root)
 %{_libdir}/libwx_%{portname}*_*-%{ver2}.a
 
-%files contrib
-%defattr(-,root,root)
-%{_libdir}/libwx_%{portname}*_animate-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_deprecated-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_fl-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_gizmos-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_mmedia-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_ogl-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_plot-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_stc-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_svg-%{ver2}.so.*
-
-%files contrib-devel
-%defattr(-,root,root)
-%dir %{_includedir}/wx-%{ver2}/wx/animate
-%{_includedir}/wx-%{ver2}/wx/animate/*
-%{_libdir}/libwx_%{portname}*_animate-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/deprecated
-%{_includedir}/wx-%{ver2}/wx/deprecated/*
-%{_libdir}/libwx_%{portname}*_deprecated-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/fl
-%{_includedir}/wx-%{ver2}/wx/fl/*
-%{_libdir}/libwx_%{portname}*_fl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/gizmos
-%{_includedir}/wx-%{ver2}/wx/gizmos/*
-%{_libdir}/libwx_%{portname}*_gizmos-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/mmedia
-%{_includedir}/wx-%{ver2}/wx/mmedia/*
-%{_libdir}/libwx_%{portname}*_mmedia-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/ogl
-%{_includedir}/wx-%{ver2}/wx/ogl/*
-%{_libdir}/libwx_%{portname}*_ogl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/plot
-%{_includedir}/wx-%{ver2}/wx/plot/*
-%{_libdir}/libwx_%{portname}*_plot-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/stc
-%{_includedir}/wx-%{ver2}/wx/stc/*
-%{_libdir}/libwx_%{portname}*_stc-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/svg
-%{_includedir}/wx-%{ver2}/wx/svg/*
-%{_libdir}/libwx_%{portname}*_svg-%{ver2}.so

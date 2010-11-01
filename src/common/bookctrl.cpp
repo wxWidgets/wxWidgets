@@ -53,6 +53,7 @@ END_EVENT_TABLE()
 
 void wxBookCtrlBase::Init()
 {
+    m_selection = wxNOT_FOUND;
     m_bookctrl = NULL;
     m_imageList = NULL;
     m_ownsImageList = false;
@@ -311,7 +312,10 @@ void wxBookCtrlBase::OnSize(wxSizeEvent& event)
 
 wxSize wxBookCtrlBase::GetControllerSize() const
 {
-    if ( !m_bookctrl )
+    // For at least some book controls (e.g. wxChoicebook) it may make sense to
+    // (temporarily?) hide the controller and we shouldn't leave extra space
+    // for the hidden control in this case.
+    if ( !m_bookctrl || !m_bookctrl->IsShown() )
         return wxSize(0, 0);
 
     const wxSize sizeClient = GetClientSize(),
@@ -465,6 +469,19 @@ int wxBookCtrlBase::GetNextPage(bool forward) const
     }
 
     return nPage;
+}
+
+bool wxBookCtrlBase::DoSetSelectionAfterInsertion(size_t n, bool bSelect)
+{
+    if ( bSelect )
+        SetSelection(n);
+    else if ( m_selection == wxNOT_FOUND )
+        ChangeSelection(0);
+    else // We're not going to select this page.
+        return false;
+
+    // Return true to indicate that we selected this page.
+    return true;
 }
 
 int wxBookCtrlBase::DoSetSelection(size_t n, int flags)

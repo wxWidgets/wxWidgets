@@ -275,9 +275,10 @@ public:
     }
 
     // draw the line on the given DC in icon/list mode
-    void Draw( wxDC *dc );
+    void Draw( wxDC *dc, bool current );
 
-    // the same in report mode
+    // the same in report mode: it needs more parameters as we don't store
+    // everything in the item in report mode
     void DrawInReportMode( wxDC *dc,
                            const wxRect& rect,
                            const wxRect& rectHL,
@@ -291,11 +292,12 @@ private:
     // get the mode (i.e. style)  of the list control
     inline int GetMode() const;
 
-    // prepare the DC for drawing with these item's attributes, return true if
-    // we need to draw the items background to highlight it, false otherwise
-    bool SetAttributes(wxDC *dc,
-                       const wxListItemAttr *attr,
-                       bool highlight);
+    // Apply this item attributes to the given DC: set the text font and colour
+    // and also erase the background appropriately.
+    void ApplyAttributes(wxDC *dc,
+                         const wxRect& rectHL,
+                         bool highlighted,
+                         bool current);
 
     // draw the text on the DC with the correct justification; also add an
     // ellipsis if the text is too large to fit in the current width
@@ -400,7 +402,17 @@ public:
 
     wxTextCtrl *GetText() const { return m_text; }
 
-    void EndEdit( bool discardChanges );
+    // Different reasons for calling EndEdit():
+    //
+    // It was called because:
+    enum EndReason
+    {
+        End_Accept,     // user has accepted the changes.
+        End_Discard,    // user has cancelled editing.
+        End_Destroy     // the entire control is being destroyed.
+    };
+
+    void EndEdit(EndReason reason);
 
 protected:
     void OnChar( wxKeyEvent &event );

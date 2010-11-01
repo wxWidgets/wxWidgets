@@ -232,7 +232,7 @@ void wxStaticText::DoSetLabel(const wxString& str)
 {
     // this function looks like GTKSetLabelForLabel() but here we just want to modify
     // the GTK control without altering any internal wxStaticText variable
-    
+
     const wxString labelGTK = GTKConvertMnemonics(str);
     gtk_label_set_text_with_mnemonic(GTK_LABEL(m_widget), wxGTK_CONV(labelGTK));
 }

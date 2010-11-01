@@ -73,8 +73,8 @@ public:
     void SetPressedBitmap( const wxBitmap& WXUNUSED(bitmap) )
     {
         // not implemented under Carbon
-    }    
-    
+    }
+
 private:
     // helper function: returns true if the given bitmap is of one of standard
     // sizes supported by OS X icons

@@ -1934,6 +1934,8 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     // We can actually delete it now
     if ( doDelete )
         delete item;
+    else
+        item->OnDetached(this, pg);
 
     m_itemsAdded = 1; // Not a logical assignment (but required nonetheless).
 

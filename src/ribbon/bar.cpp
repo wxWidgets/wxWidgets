@@ -38,6 +38,7 @@ wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_DOWN, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
 
 IMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl)
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
@@ -53,6 +54,7 @@ BEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_PAINT(wxRibbonBar::OnPaint)
   EVT_RIGHT_DOWN(wxRibbonBar::OnMouseRightDown)
   EVT_RIGHT_UP(wxRibbonBar::OnMouseRightUp)
+  EVT_LEFT_DCLICK(wxRibbonBar::OnMouseDoubleClick)
   EVT_SIZE(wxRibbonBar::OnSize)
 END_EVENT_TABLE()
 
@@ -900,6 +902,11 @@ void wxRibbonBar::OnMouseRightDown(wxMouseEvent& evt)
 void wxRibbonBar::OnMouseRightUp(wxMouseEvent& evt)
 {
     DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP);
+}
+
+void wxRibbonBar::OnMouseDoubleClick(wxMouseEvent& evt)
+{
+    DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK);
 }
 
 void wxRibbonBar::DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type)

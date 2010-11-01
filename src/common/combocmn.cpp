@@ -235,10 +235,10 @@ static inline bool IsPopupWinTypePerfect( wxByte popupWinType )
 #else
     return ( popupWinType == POPUPWIN_GENERICTLW
         #if POPUPWIN_IS_PERFECT
-             || popupWinType == POPUPWIN_WXPOPUPWINDOW 
+             || popupWinType == POPUPWIN_WXPOPUPWINDOW
         #endif
         #if TRANSIENT_POPUPWIN_IS_PERFECT
-             || popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW 
+             || popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW
         #endif
             );
 #endif
@@ -1202,7 +1202,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
             // There is special custom paint area - it is better to
             // use some margin with the wxTextCtrl.
             m_text->SetMargins(m_marginLeft);
-            x = m_tcArea.x + m_widthCustomPaint + 
+            x = m_tcArea.x + m_widthCustomPaint +
                 m_marginLeft + textCtrlXAdjust;
         }
 
@@ -2092,17 +2092,24 @@ void wxComboCtrlBase::OnButtonClick()
 {
     // Derived classes can override this method for totally custom
     // popup action
-    if ( !IsPopupWindowState(Visible) )
+    switch ( GetPopupWindowState() )
     {
-        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
+        case Hidden:
+        {
+            wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+            event.SetEventObject(this);
+            HandleWindowEvent(event);
 
-        ShowPopup();
-    }
-    else
-    {
-        HidePopup(true);
+            ShowPopup();
+            break;
+        }
+
+        case Animating:
+        case Visible:
+        {
+            HidePopup(true);
+            break;
+        }
     }
 }
 

@@ -123,8 +123,13 @@ public:
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
+
     // implementation only from now on
     // -------------------------------
+
+    // This function can be used to check if the given radio button HWND
+    // belongs to one of our radio boxes. If it doesn't, NULL is returned.
+    static wxRadioBox *GetFromRadioButtonHWND(WXHWND hwnd);
 
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     void Command(wxCommandEvent& event);

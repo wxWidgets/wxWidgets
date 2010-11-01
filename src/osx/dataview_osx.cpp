@@ -2,7 +2,7 @@
 // Name:        src/osx/dataview_osx.cpp
 // Purpose:     wxDataViewCtrl native mac implementation
 // Author:
-// Id:          $Id: dataview_osx.cpp 58317 2009-01-27
+// Id:          $Id$
 // Copyright:   (c) 2009
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

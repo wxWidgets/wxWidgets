@@ -43,11 +43,11 @@ private:
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
         CPPUNIT_TEST( HitTest );
-        CPPUNIT_TEST( Sort );
-        //We also run all tests as an ownerdrawn list box we do not need to
+        //We also run all tests as an ownerdrawn list box.  We do not need to
         //run the wxITEM_CONTAINER_TESTS as they are tested with wxCheckListBox
 #ifdef __WXMSW__
         CPPUNIT_TEST( PseudoTest_OwnerDrawn );
+        CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
@@ -100,7 +100,7 @@ void ListBoxTestCase::tearDown()
 
 void ListBoxTestCase::Sort()
 {
-#if !defined(__WXGTK__) && !defined(__WXOSX__)
+#ifndef __WXOSX__
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize, 0, 0,
@@ -226,6 +226,13 @@ void ListBoxTestCase::ClickNotOnItem()
 
     m_list->Append(testitems);
 
+    // It is important to set a valid selection: if the control doesn't have
+    // any, clicking anywhere in it, even outside of any item, selects the
+    // first item in the control under GTK resulting in a selection changed
+    // event. This is not a wx bug, just the native platform behaviour so
+    // simply avoid it by starting with a valid selection.
+    m_list->SetSelection(0);
+
     m_list->Update();
     m_list->Refresh();
 
@@ -245,7 +252,6 @@ void ListBoxTestCase::ClickNotOnItem()
 
 void ListBoxTestCase::HitTest()
 {
-#if defined(__WXMSW__) || defined(__WXOSX__)
     wxArrayString testitems;
     testitems.Add("item 0");
     testitems.Add("item 1");
@@ -253,12 +259,14 @@ void ListBoxTestCase::HitTest()
 
     m_list->Append(testitems);
 
-    CPPUNIT_ASSERT(m_list->HitTest(wxPoint(10, 10)) != wxNOT_FOUND);
-    CPPUNIT_ASSERT(m_list->HitTest(10, 10) != wxNOT_FOUND);
-
-    CPPUNIT_ASSERT(m_list->HitTest(wxPoint(290, 190)) == wxNOT_FOUND);
-    CPPUNIT_ASSERT(m_list->HitTest(290, 190) == wxNOT_FOUND);
+#ifdef __WXGTK__
+    // The control needs to be realized for HitTest() to work.
+    wxYield();
 #endif
+
+    CPPUNIT_ASSERT_EQUAL( 0, m_list->HitTest(5, 5) );
+
+    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->HitTest(290, 190) );
 }
 
 #endif //wxUSE_LISTBOX

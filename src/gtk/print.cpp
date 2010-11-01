@@ -3,7 +3,7 @@
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
-// RCS-ID:      $Id: print.cpp,v 1 2007-08-25 05:44:44 PC Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 wxWidgets development team
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@
 #include "wx/paper.h"
 
 #include <gtk/gtk.h>
+#include <gtk/gtkpagesetupunixdialog.h>
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -47,6 +48,8 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 #if wxUSE_LIBGNOMEPRINT
 #include "wx/gtk/gnome/gprint.h"
 #endif
+
+#include "wx/gtk/private/object.h"
 
 // Usefull to convert angles from/to Rad to/from Deg.
 static const double RAD2DEG  = 180.0 / M_PI;
@@ -222,11 +225,14 @@ IMPLEMENT_CLASS(wxGtkPrintNativeData, wxPrintNativeDataBase)
 wxGtkPrintNativeData::wxGtkPrintNativeData()
 {
     m_config = gtk_print_settings_new();
+    m_job = gtk_print_operation_new();
+    m_context = NULL;
 }
 
 wxGtkPrintNativeData::~wxGtkPrintNativeData()
 {
-    g_object_unref (m_config);
+    g_object_unref(m_job);
+    g_object_unref(m_config);
 }
 
 // Convert datas stored in m_config to a wxPrintData.
@@ -386,6 +392,9 @@ bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
         data.SetPaperId( wxPAPER_FANFOLD_LGL_GERMAN);
     else
         data.SetPaperId(wxPAPER_NONE);
+
+    data.SetPrinterName(gtk_print_settings_get_printer(m_config));
+
     return true;
 }
 
@@ -534,6 +543,8 @@ bool wxGtkPrintNativeData::TransferFrom( const wxPrintData &data )
         default:                break;
     }
 
+    gtk_print_settings_set_printer(m_config, data.GetPrinterName().utf8_str());
+
     return true;
 }
 
@@ -629,17 +640,19 @@ int wxGtkPrintDialog::ShowModal()
         gtk_print_settings_set_page_ranges (settings, range, 1);
     }
 
+    GtkPrintOperation * const printOp = native->GetPrintJob();
+
     // If the settings are OK, we restore it.
     if (settings != NULL)
-        gtk_print_operation_set_print_settings (native->GetPrintJob(), settings);
-    gtk_print_operation_set_default_page_setup (native->GetPrintJob(), native->GetPageSetupFromSettings(settings));
+        gtk_print_operation_set_print_settings (printOp, settings);
+    gtk_print_operation_set_default_page_setup (printOp, native->GetPageSetupFromSettings(settings));
 
     // Show the dialog if needed.
     GError* gError = NULL;
     if (GetShowDialog())
-        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
+        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
     else
-        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
+        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
 
     // Does everything went well?
     if (response == GTK_PRINT_OPERATION_RESULT_CANCEL)
@@ -654,9 +667,15 @@ int wxGtkPrintDialog::ShowModal()
     }
 
     // Now get the settings and save it.
-    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings (native->GetPrintJob());
+    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(printOp);
     native->SetPrintConfig(newSettings);
     data.ConvertFromNative();
+
+    // Set PrintDialogData variables
+    m_printDialogData.SetPrintData(data);
+    m_printDialogData.SetCollate(data.GetCollate());
+    m_printDialogData.SetNoCopies(data.GetNoCopies());
+    m_printDialogData.SetPrintToFile(data.GetPrinterName() == "Print to File");
 
     // Same problem as a few lines before.
     switch (gtk_print_settings_get_print_pages(newSettings))
@@ -735,43 +754,80 @@ int wxGtkPageSetupDialog::ShowModal()
         }
     }
 
-    // Now show the dialog.
-    GtkPageSetup* newPageSetup = gtk_print_run_page_setup_dialog (GTK_WINDOW(m_parent->m_widget),
-                                                           oldPageSetup,
-                                                           nativeData);
 
-    int ret;
-    if (newPageSetup != oldPageSetup)
+    // Set selected printer
+    gtk_print_settings_set(nativeData, "format-for-printer",
+                           gtk_print_settings_get_printer(nativeData));
+
+    // Create custom dialog
+    wxString title(GetTitle());
+    if ( title.empty() )
+        title = _("Page Setup");
+    GtkWidget *
+        dlg = gtk_page_setup_unix_dialog_new(title.utf8_str(),
+                                             GTK_WINDOW(m_parent->m_widget));
+
+    gtk_page_setup_unix_dialog_set_print_settings(
+        GTK_PAGE_SETUP_UNIX_DIALOG(dlg), nativeData);
+    gtk_page_setup_unix_dialog_set_page_setup(
+        GTK_PAGE_SETUP_UNIX_DIALOG(dlg), oldPageSetup);
+
+    int result = gtk_dialog_run(GTK_DIALOG(dlg));
+    gtk_widget_hide(dlg);
+
+    switch ( result )
     {
-        native->SetPageSetupToSettings(nativeData, newPageSetup);
-        m_pageDialogData.GetPrintData().ConvertFromNative();
+        case GTK_RESPONSE_OK:
+        case GTK_RESPONSE_APPLY:
+            {
+                // Store Selected Printer Name
+                gtk_print_settings_set_printer
+                (
+                    nativeData,
+                    gtk_print_settings_get(nativeData, "format-for-printer")
+                );
 
-        // Store custom paper format if any.
-        if (m_pageDialogData.GetPrintData().GetPaperId() == wxPAPER_NONE)
-        {
-            gdouble ml,mr,mt,mb,pw,ph;
-            ml = gtk_page_setup_get_left_margin (newPageSetup, GTK_UNIT_MM);
-            mr = gtk_page_setup_get_right_margin (newPageSetup, GTK_UNIT_MM);
-            mt = gtk_page_setup_get_top_margin (newPageSetup, GTK_UNIT_MM);
-            mb = gtk_page_setup_get_bottom_margin (newPageSetup, GTK_UNIT_MM);
+                wxGtkObject<GtkPageSetup>
+                    newPageSetup(gtk_page_setup_unix_dialog_get_page_setup(
+                                        GTK_PAGE_SETUP_UNIX_DIALOG(dlg)));
+                native->SetPageSetupToSettings(nativeData, newPageSetup);
 
-            pw = gtk_page_setup_get_paper_width (newPageSetup, GTK_UNIT_MM);
-            ph = gtk_page_setup_get_paper_height (newPageSetup, GTK_UNIT_MM);
+                m_pageDialogData.GetPrintData().ConvertFromNative();
 
-            m_pageDialogData.SetMarginTopLeft( wxPoint( (int)(ml+0.5), (int)(mt+0.5)) );
-            m_pageDialogData.SetMarginBottomRight( wxPoint( (int)(mr+0.5), (int)(mb+0.5)) );
+                // Store custom paper format if any.
+                if ( m_pageDialogData.GetPrintData().GetPaperId() == wxPAPER_NONE )
+                {
+                    gdouble ml,mr,mt,mb,pw,ph;
+                    ml = gtk_page_setup_get_left_margin (newPageSetup, GTK_UNIT_MM);
+                    mr = gtk_page_setup_get_right_margin (newPageSetup, GTK_UNIT_MM);
+                    mt = gtk_page_setup_get_top_margin (newPageSetup, GTK_UNIT_MM);
+                    mb = gtk_page_setup_get_bottom_margin (newPageSetup, GTK_UNIT_MM);
 
-            m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
-        }
+                    pw = gtk_page_setup_get_paper_width (newPageSetup, GTK_UNIT_MM);
+                    ph = gtk_page_setup_get_paper_height (newPageSetup, GTK_UNIT_MM);
 
-        ret = wxID_OK;
+                    m_pageDialogData.SetMarginTopLeft(wxPoint((int)(ml+0.5),
+                                                              (int)(mt+0.5)));
+                    m_pageDialogData.SetMarginBottomRight(wxPoint((int)(mr+0.5),
+                                                                  (int)(mb+0.5)));
+
+                    m_pageDialogData.SetPaperSize(wxSize((int)(pw+0.5),
+                                                         (int)(ph+0.5)));
+                }
+
+                result = wxID_OK;
+            }
+            break;
+
+        default:
+        case GTK_RESPONSE_CANCEL:
+            result = wxID_CANCEL;
+            break;
     }
-    else
-    {
-        ret = wxID_CANCEL;
-    }
 
-    return ret;
+    gtk_widget_destroy(dlg);
+
+    return result;
 }
 
 //----------------------------------------------------------------------------
@@ -832,9 +888,7 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
-    GtkPrintOperation *printOp = gtk_print_operation_new ();
-
-    native->SetPrintJob( printOp );
+    GtkPrintOperation * const printOp = native->GetPrintJob();
 
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
@@ -862,8 +916,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         sm_lastError = wxPRINTER_ERROR;
         wxFAIL_MSG(_("The print dialog returned an error."));
     }
-
-    g_object_unref (printOp);
 
     return (sm_lastError == wxPRINTER_NO_ERROR);
 }
@@ -1266,7 +1318,8 @@ bool wxGtkPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
 
 void wxGtkPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
 
     SetPen( m_pen );
     cairo_move_to ( m_cairo, XLOG2DEV(x1), YLOG2DEV(y1) );
@@ -1374,7 +1427,8 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
 void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
-    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
 
     SetPen( m_pen );
 
@@ -1387,7 +1441,9 @@ void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
+    if ( m_pen.IsTransparent() )
+        return;
+
 
     if (n <= 0) return;
 

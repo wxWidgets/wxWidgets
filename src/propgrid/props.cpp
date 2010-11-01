@@ -143,6 +143,78 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 }
 
 // -----------------------------------------------------------------------
+// wxNumericPropertyValidator
+// -----------------------------------------------------------------------
+
+#if wxUSE_VALIDATORS
+
+wxNumericPropertyValidator::
+    wxNumericPropertyValidator( NumericType numericType, int base )
+    : wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST)
+{
+    wxArrayString arr;
+    arr.Add(wxS("0"));
+    arr.Add(wxS("1"));
+    arr.Add(wxS("2"));
+    arr.Add(wxS("3"));
+    arr.Add(wxS("4"));
+    arr.Add(wxS("5"));
+    arr.Add(wxS("6"));
+    arr.Add(wxS("7"));
+
+    if ( base >= 10 )
+    {
+        arr.Add(wxS("8"));
+        arr.Add(wxS("9"));
+        if ( base >= 16 )
+        {
+            arr.Add(wxS("a")); arr.Add(wxS("A"));
+            arr.Add(wxS("b")); arr.Add(wxS("B"));
+            arr.Add(wxS("c")); arr.Add(wxS("C"));
+            arr.Add(wxS("d")); arr.Add(wxS("D"));
+            arr.Add(wxS("e")); arr.Add(wxS("E"));
+            arr.Add(wxS("f")); arr.Add(wxS("F"));
+        }
+    }
+
+    if ( numericType == Signed )
+    {
+        arr.Add(wxS("+"));
+        arr.Add(wxS("-"));
+    }
+    else if ( numericType == Float )
+    {
+        arr.Add(wxS("+"));
+        arr.Add(wxS("-"));
+        arr.Add(wxS("."));
+        arr.Add(wxS("e"));
+    }
+
+    SetIncludes(arr);
+}
+
+bool wxNumericPropertyValidator::Validate(wxWindow* parent)
+{
+    if ( !wxTextValidator::Validate(parent) )
+        return false;
+
+    wxWindow* wnd = GetWindow();
+    if ( !wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+        return true;
+
+    // Do not allow zero-length string
+    wxTextCtrl* tc = static_cast<wxTextCtrl*>(wnd);
+    wxString text = tc->GetValue();
+
+    if ( !text.length() )
+        return false;
+
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
+
+// -----------------------------------------------------------------------
 // wxIntProperty
 // -----------------------------------------------------------------------
 
@@ -376,9 +448,8 @@ wxValidator* wxIntProperty::GetClassValidator()
 #if wxUSE_VALIDATORS
     WX_PG_DOGETVALIDATOR_ENTRY()
 
-    // Atleast wxPython 2.6.2.1 required that the string argument is given
-    static wxString v;
-    wxTextValidator* validator = new wxTextValidator(wxFILTER_NUMERIC,&v);
+    wxValidator* validator = new wxNumericPropertyValidator(
+                                    wxNumericPropertyValidator::Signed);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
@@ -529,6 +600,21 @@ bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& valida
                                      &validationInfo,
                                      wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE,
                                      wxS("%llu"));
+}
+
+wxValidator* wxUIntProperty::DoGetValidator() const
+{
+#if wxUSE_VALIDATORS
+    WX_PG_DOGETVALIDATOR_ENTRY()
+
+    wxValidator* validator = new wxNumericPropertyValidator(
+                                    wxNumericPropertyValidator::Unsigned,
+                                    m_realBase);
+
+    WX_PG_DOGETVALIDATOR_EXIT(validator)
+#else
+    return NULL;
+#endif
 }
 
 bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
@@ -701,9 +787,24 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     return false;
 }
 
+wxValidator*
+wxFloatProperty::GetClassValidator()
+{
+#if wxUSE_VALIDATORS
+    WX_PG_DOGETVALIDATOR_ENTRY()
+
+    wxValidator* validator = new wxNumericPropertyValidator(
+                                    wxNumericPropertyValidator::Float);
+
+    WX_PG_DOGETVALIDATOR_EXIT(validator)
+#else
+    return NULL;
+#endif
+}
+
 wxValidator* wxFloatProperty::DoGetValidator() const
 {
-    return wxIntProperty::GetClassValidator();
+    return GetClassValidator();
 }
 
 // -----------------------------------------------------------------------
@@ -2153,7 +2254,7 @@ void wxPGArrayEditorDialog::OnAddClick(wxCommandEvent& event)
     wxListCtrl* lc = m_elb->GetListCtrl();
     int newItemIndex = lc->GetItemCount() - 1;
 
-    if ( m_hasCustomNewAction ) 
+    if ( m_hasCustomNewAction )
     {
         wxString str;
         if ( OnCustomNewAction(&str) )

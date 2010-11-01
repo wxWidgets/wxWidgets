@@ -134,10 +134,12 @@ static wxMutex *gs_mutexDeleteThread = NULL;
 // gs_nThreadsBeingDeleted will have been deleted
 static wxCondition *gs_condAllDeleted = NULL;
 
+#ifndef __WXOSX__
 // this mutex must be acquired before any call to a GUI function
 // (it's not inside #if wxUSE_GUI because this file is compiled as part
 // of wxBase)
 static wxMutex *gs_mutexGui = NULL;
+#endif
 
 // when we wait for a thread to exit, we're blocking on a condition which the
 // thread signals in its SignalExit() method -- but this condition can't be a
@@ -972,7 +974,17 @@ void wxThreadInternal::Wait()
     // if the thread we're waiting for is waiting for the GUI mutex, we will
     // deadlock so make sure we release it temporarily
     if ( wxThread::IsMain() )
+    {
+#ifdef __WXOSX__
+        // give the thread we're waiting for chance to do the GUI call
+        // it might be in, we don't do this conditionally as the to be waited on
+        // thread might have to acquire the mutex later but before terminating
+        if ( wxGuiOwnedByMainThread() )
+            wxMutexGuiLeave();
+#else
         wxMutexGuiLeave();
+#endif
+    }
 
     wxLogTrace(TRACE_THREADS,
                wxT("Starting to wait for thread %p to exit."),
@@ -1002,9 +1014,11 @@ void wxThreadInternal::Wait()
         }
     }
 
+#ifndef __WXOSX__
     // reacquire GUI mutex
     if ( wxThread::IsMain() )
         wxMutexGuiEnter();
+#endif
 }
 
 void wxThreadInternal::Pause()
@@ -1439,6 +1453,8 @@ wxThreadError wxThread::Delete(ExitCode *rc)
 
     m_critsect.Leave();
 
+    OnDelete();
+
     switch ( state )
     {
         case STATE_NEW:
@@ -1473,10 +1489,10 @@ wxThreadError wxThread::Delete(ExitCode *rc)
             }
             //else: can't wait for detached threads
     }
-    
+
     if (state == STATE_NEW)
         return wxTHREAD_MISC_ERROR;
-            // for coherency with the MSW implementation, signal the user that 
+            // for coherency with the MSW implementation, signal the user that
             // Delete() was called on a thread which didn't start to run yet.
 
     return wxTHREAD_NO_ERROR;
@@ -1486,6 +1502,8 @@ wxThreadError wxThread::Kill()
 {
     wxCHECK_MSG( This() != this, wxTHREAD_MISC_ERROR,
                  wxT("a thread can't kill itself") );
+
+    OnKill();
 
     switch ( m_internal->GetState() )
     {
@@ -1671,6 +1689,11 @@ bool wxThread::IsPaused() const
 // wxThreadModule
 //--------------------------------------------------------------------
 
+#ifdef __WXOSX__
+void wxOSXThreadModuleOnInit();
+void wxOSXThreadModuleOnExit();
+#endif
+
 class wxThreadModule : public wxModule
 {
 public:
@@ -1697,8 +1720,12 @@ bool wxThreadModule::OnInit()
 
     gs_mutexAllThreads = new wxMutex();
 
+#ifdef __WXOSX__
+    wxOSXThreadModuleOnInit();
+#else
     gs_mutexGui = new wxMutex();
     gs_mutexGui->Lock();
+#endif
 
     gs_mutexDeleteThread = new wxMutex();
     gs_condAllDeleted = new wxCondition(*gs_mutexDeleteThread);
@@ -1751,9 +1778,13 @@ void wxThreadModule::OnExit()
 
     delete gs_mutexAllThreads;
 
+#ifdef __WXOSX__
+    wxOSXThreadModuleOnExit();
+#else
     // destroy GUI mutex
     gs_mutexGui->Unlock();
     delete gs_mutexGui;
+#endif
 
     // and free TLD slot
     (void)pthread_key_delete(gs_keySelf);
@@ -1801,6 +1832,8 @@ static void DeleteThread(wxThread *This)
     }
 }
 
+#ifndef __WXOSX__
+
 void wxMutexGuiEnterImpl()
 {
     gs_mutexGui->Lock();
@@ -1810,6 +1843,8 @@ void wxMutexGuiLeaveImpl()
 {
     gs_mutexGui->Unlock();
 }
+
+#endif
 
 // ----------------------------------------------------------------------------
 // include common implementation code

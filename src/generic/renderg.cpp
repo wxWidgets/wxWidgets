@@ -67,6 +67,8 @@ public:
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
+    virtual int GetHeaderButtonMargin(wxWindow *win);
+
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -443,6 +445,11 @@ int wxRendererGeneric::GetHeaderButtonHeight(wxWindow *win)
         win->GetTextExtent(wxT("Hg"), &w, &h, &d);
 
     return h + d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
+}
+
+int wxRendererGeneric::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+{
+    return 5;
 }
 
 

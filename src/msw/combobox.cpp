@@ -300,7 +300,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             // fall through
 
         case WM_SYSCHAR:
-            return HandleChar(wParam, lParam, true /* isASCII */);
+            return HandleChar(wParam, lParam);
 
         case WM_SYSKEYDOWN:
         case WM_KEYDOWN:

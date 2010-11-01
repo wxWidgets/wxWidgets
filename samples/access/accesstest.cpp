@@ -431,7 +431,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
             accessibleFrame->Release();
             return;
         }
-        
+
 
         long obtained = 0;
         VARIANT *var = new VARIANT[childCount];
@@ -441,7 +441,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
             VariantInit(& (var[i]));
             var[i].vt = VT_DISPATCH;
         }
-        
+
         if (S_OK == AccessibleChildren(accessibleFrame, 0, childCount, var, &obtained))
         {
             for (i = 0; i < childCount; i++)
@@ -452,7 +452,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
                     if (var[i].pdispVal->QueryInterface(IID_IAccessible, (LPVOID*) & childAccessible) == S_OK)
                     {
                         var[i].pdispVal->Release();
-                        
+
                         wxString name, role;
                         GetInfo(childAccessible, 0, name, role);
                         wxString str;
@@ -565,10 +565,10 @@ void MyFrame::GetInfo(IAccessible* accessible, int id, wxString& name, wxString&
     VariantInit(& var);
     var.vt = VT_I4;
     var.lVal = id;
-    
+
     BSTR bStrName = 0;
     HRESULT hResult = accessible->get_accName(var, & bStrName);
-    
+
     if (hResult == S_OK)
     {
         name = wxConvertStringFromOle(bStrName);
@@ -578,23 +578,23 @@ void MyFrame::GetInfo(IAccessible* accessible, int id, wxString& name, wxString&
     {
         name = wxT("NO NAME");
     }
-    
+
     VARIANT varRole;
     VariantInit(& varRole);
-    
+
     hResult = accessible->get_accRole(var, & varRole);
-    
+
     if (hResult == S_OK && varRole.vt == VT_I4)
     {
         wxChar buf[256];
         GetRoleText(varRole.lVal, buf, 256);
-        
+
         role = buf;
     }
     else
     {
         role = wxT("NO ROLE");
-    }    
+    }
 }
 
 /*
@@ -717,14 +717,14 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     return wxACC_FALSE;
             }
             break;
-            
+
         case wxNAVDIR_LASTCHILD:
             {
                 if (fromId == 2)
                     return wxACC_FALSE;
             }
             break;
-            
+
         case wxNAVDIR_LEFT:
             {
                 if (splitter->GetSplitMode() != wxSPLIT_HORIZONTAL)
@@ -748,7 +748,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             // below line is not executed due to earlier return
             break;
             #endif
-            
+
         case wxNAVDIR_NEXT:
             {
                 if (fromId == 1)
@@ -769,7 +769,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             // below line is not executed due to earlier return
             break;
             #endif
-            
+
         case wxNAVDIR_PREVIOUS:
             {
                 if (fromId == 3)
@@ -790,7 +790,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             // below line is not executed due to earlier return
             break;
             #endif
-            
+
         case wxNAVDIR_RIGHT:
             {
                 if (splitter->GetSplitMode() != wxSPLIT_HORIZONTAL)
@@ -809,13 +809,13 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     }
                 }
                 // Can't go right spatially if split horizontally.
-                return wxACC_FALSE;           
+                return wxACC_FALSE;
             }
             #if 0
             // below line is not executed due to earlier return
             break;
             #endif
-            
+
         case wxNAVDIR_UP:
             {
                 if (splitter->GetSplitMode() != wxSPLIT_VERTICAL)
@@ -834,14 +834,14 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                 }
 
                 // Can't go up spatially if split vertically.
-                return wxACC_FALSE;           
+                return wxACC_FALSE;
                 #if 0
                 // below line is not executed due to earlier return
                 break;
                 #endif
             }
         }
-        
+
     }
     // Let the framework handle the other cases.
     return wxACC_NOT_IMPLEMENTED;

@@ -29,9 +29,8 @@
            Causes the progress dialog to disappear from screen as soon as the
            maximum value of the progress meter has been reached.
            If this style is not present, the dialog will become a modal dialog
-           (see wxDialog::ShowModal) once the maximum value has been reached;
-           this results in processing of pending events and may cause
-           unwanted re-entrancies.
+           (see wxDialog::ShowModal) once the maximum value has been reached
+           and wait for the user to dismiss it.
     @style{wxPD_SMOOTH}
            Causes smooth progress of the gauge control (uses a wxGauge with the
            @c wxGA_SMOOTH style).
@@ -173,6 +172,13 @@ public:
         dialog or ask the user for the confirmation and if the abort is not confirmed
         the dialog may be resumed with Resume() function.
 
+        If @a value is the maximum value for the dialog, the behaviour of the
+        function depends on whether @c wxPD_AUTO_HIDE was used when the dialog
+        was created. If it was, the dialog is hidden and the function returns
+        immediately. If it was not, the dialog becomes a modal dialog and waits
+        for the user to dismiss it, meaning that this function does not return
+        until this happens.
+
         Notice that you may want to call Fit() to change the dialog size to
         conform to the length of the new message if desired. The dialog does
         not do this automatically.
@@ -180,8 +186,6 @@ public:
         @param value
             The new value of the progress meter. It should be less than or equal to
             the maximum value given to the constructor.
-            See @c wxPD_AUTO_HIDE style for more info about the behaviour of
-            wxProgressDialog when @a value is the maximum value given in the ctor.
         @param newmsg
             The new messages for the progress dialog text, if it is
             empty (which is the default) the message is not changed.

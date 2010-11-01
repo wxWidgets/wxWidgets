@@ -69,8 +69,8 @@ public:
             : m_name(name), m_value(value), m_next(next) {}
     virtual ~wxXmlAttribute() {}
 
-    wxString GetName() const { return m_name; }
-    wxString GetValue() const { return m_value; }
+    const wxString& GetName() const { return m_name; }
+    const wxString& GetValue() const { return m_value; }
     wxXmlAttribute *GetNext() const { return m_next; }
 
     void SetName(const wxString& name) { m_name = name; }
@@ -104,7 +104,7 @@ class WXDLLIMPEXP_XML wxXmlNode
 public:
     wxXmlNode()
         : m_attrs(NULL), m_parent(NULL), m_children(NULL), m_next(NULL),
-          m_lineNo(-1)
+          m_lineNo(-1), m_noConversion(false)
     {
     }
 
@@ -171,6 +171,10 @@ public:
     void SetAttributes(wxXmlAttribute *attr) { m_attrs = attr; }
     virtual void AddAttribute(wxXmlAttribute *attr);
 
+    // If true, don't do encoding conversion to improve efficiency - node content is ACII text
+    bool GetNoConversion() const { return m_noConversion; }
+    void SetNoConversion(bool noconversion) { m_noConversion = noconversion; }
+
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( inline wxXmlAttribute *GetProperties() const );
     wxDEPRECATED( inline bool GetPropVal(const wxString& propName,
@@ -210,6 +214,7 @@ private:
     wxXmlAttribute *m_attrs;
     wxXmlNode *m_parent, *m_children, *m_next;
     int m_lineNo; // line number in original file, or -1
+    bool m_noConversion; // don't do encoding conversion - node is plain text
 
     void DoCopy(const wxXmlNode& node);
 };

@@ -1115,6 +1115,7 @@ enable_permissive
 enable_no_deps
 enable_vararg_macros
 enable_universal_binary
+enable_macosx_arch
 enable_compat26
 enable_compat28
 enable_rpath
@@ -2019,7 +2020,8 @@ Optional Features:
   --enable-permissive     compile code disregarding strict ANSI
   --enable-no_deps        create code without dependency information
   --disable-vararg_macros don't use vararg macros, even if they are supported
-  --enable-universal_binary  create Mac PowerPC and Intel Universal binary
+  --enable-universal_binary  create universal binary with Mac PPC and i386 (and x86_64 if using Cocoa) architectures
+  --enable-macosx_arch=ARCH  build for just the specified architecture
   --enable-compat26       enable wxWidgets 2.6 compatibility
   --disable-compat28      disable wxWidgets 2.8 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
@@ -4043,6 +4045,7 @@ DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
+DEFAULT_wxUSE_MAC_ARCH=no
 
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
@@ -6435,6 +6438,7 @@ fi
 $as_echo "$result" >&6; }
 
 
+
           enablestring=
           { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-universal_binary" >&5
 $as_echo_n "checking for --${enablestring:-enable}-universal_binary... " >&6; }
@@ -6454,6 +6458,27 @@ fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wxUSE_UNIVERSAL_BINARY" >&5
 $as_echo "$wxUSE_UNIVERSAL_BINARY" >&6; }
+
+
+          enablestring=
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-macosx_arch" >&5
+$as_echo_n "checking for --${enablestring:-enable}-macosx_arch... " >&6; }
+          # Check whether --enable-macosx_arch was given.
+if test "${enable_macosx_arch+set}" = set; then :
+  enableval=$enable_macosx_arch;
+                          wx_cv_use_macosx_arch="wxUSE_MAC_ARCH='$enableval'"
+
+else
+
+                          wx_cv_use_macosx_arch='wxUSE_MAC_ARCH='$DEFAULT_wxUSE_MAC_ARCH
+
+fi
+
+
+          eval "$wx_cv_use_macosx_arch"
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wxUSE_MAC_ARCH" >&5
+$as_echo "$wxUSE_MAC_ARCH" >&6; }
 
 
 
@@ -18510,6 +18535,11 @@ if test "$wxUSE_MAC" = 1; then
 
 retest_macosx_linking=no
 
+OSX_ARCH_OPTS=""
+if test "x$wxUSE_MAC_ARCH" != xno; then
+    OSX_ARCH_OPTS="-arch $wxUSE_MAC_ARCH"
+fi
+
     if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
                         if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
             # Implicitly turn on the new --with-macosx-sdk using the default
@@ -18540,18 +18570,27 @@ See \`config.log' for more details." "$LINENO" 5; }
 $as_echo "$as_me: WARNING: Please use --with-macosx-sdk=PATH and --enable-universal_binary without an argument" >&2;}
             fi
         fi
-                OSX_UNIV_OPTS="-arch ppc -arch i386"
-        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
-        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
-        OBJCXXFLAGS="$OSX_UNIV_OPTS $OBJCXXFLAGS"
-        OBJCFLAGS="$OSX_UNIV_OPTS $OBJCFLAGS"
-        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
+                OSX_ARCH_OPTS="-arch ppc -arch i386"
+	if test "$wxUSE_OSX_COCOA" = 1; then
+            OSX_ARCH_OPTS="$OSX_ARCH_OPTS -arch x86_64"
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for universal binary architectures" >&5
+$as_echo_n "checking for universal binary architectures... " >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $OSX_ARCH_OPTS" >&5
+$as_echo "$OSX_ARCH_OPTS" >&6; }
+
                                                                                                                 retest_macosx_linking=yes
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling precompiled headers due to universal binary build." >&5
 $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary build." >&2;}
         bk_use_pch=no
     fi
+
+CXXFLAGS="$OSX_ARCH_OPTS $CXXFLAGS"
+CFLAGS="$OSX_ARCH_OPTS $CFLAGS"
+OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
+OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
+LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
@@ -22425,14 +22464,10 @@ fi
 
 
 
-            case "${host}" in
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
+    case "${host}" in
         x86_64-*-mingw32* )
-                        LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
-
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
-        ;;
-        * )
-            LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
         ;;
     esac
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
@@ -23349,7 +23384,7 @@ rm -f core conftest.err conftest.$ac_objext \
                                         wx_cv_lib_gtk=none
                 else
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
-                    wx_cv_libs_gtk=`echo $GTK_LIBS | sed -e 's/ -l[^ ]*cairo[^ ]*//g'`
+                    wx_cv_libs_gtk=$GTK_LIBS
                 fi
 
 

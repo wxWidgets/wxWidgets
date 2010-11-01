@@ -301,7 +301,7 @@ int wxNotebook::GetSelection() const
 {
     NSTabViewItem *selectedItem = [GetNSTabView() selectedTabViewItem];
     if(!selectedItem)
-        return -1;
+        return wxNOT_FOUND;
     return [GetNSTabView() indexOfTabViewItem:selectedItem];
 }
 

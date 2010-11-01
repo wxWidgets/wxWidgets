@@ -385,7 +385,7 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     dc.DrawRoundedRectangle(wxRectFromPRectangle(rc), cornerSize);
     return;
 #else
-    
+
 #ifdef wxHAS_RAW_BITMAP
 
     // TODO:  do something with cornerSize

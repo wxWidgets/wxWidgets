@@ -36,11 +36,25 @@
 #include "wx/statline.h"
 #include "wx/imaglist.h"
 
-// FIXME: native OS X wxListCtrl hangs if this code is used for it so disable
-//        it for now
-#if !defined(__WXMAC__)
-    #define CAN_USE_REPORT_VIEW
+#include "wx/sysopt.h"
+
+namespace
+{
+
+// FIXME: This function exists because native OS X wxListCtrl seems to have
+// problems with report view, either imperfect display or reported hanging, so
+// disable it for now (but it should be fixed, and this function removed).
+bool CanUseReportView()
+{
+#if defined(__WXMAC__) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
+    if (wxSystemOptions::GetOptionInt(wxMAC_ALWAYS_USE_GENERIC_LISTCTRL) == 0)
+        return false;
+    else
 #endif
+        return true;
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -70,11 +84,6 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // wxListbook creation
 // ----------------------------------------------------------------------------
-
-void wxListbook::Init()
-{
-    m_selection = wxNOT_FOUND;
-}
 
 bool
 wxListbook::Create(wxWindow *parent,
@@ -109,16 +118,12 @@ wxListbook::Create(wxWindow *parent,
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxLC_SINGLE_SEL |
-#ifdef CAN_USE_REPORT_VIEW
-                    GetListCtrlReportViewFlags()
-#else // !CAN_USE_REPORT_VIEW
-                    GetListCtrlIconViewFlags()
-#endif // CAN_USE_REPORT_VIEW/!CAN_USE_REPORT_VIEW
+                    (CanUseReportView() ? GetListCtrlReportViewFlags()
+                                        : GetListCtrlIconViewFlags())
                  );
 
-#ifdef CAN_USE_REPORT_VIEW
-    GetListView()->InsertColumn(0, wxT("Pages"));
-#endif // CAN_USE_REPORT_VIEW
+    if ( CanUseReportView() )
+        GetListView()->InsertColumn(0, wxT("Pages"));
 
 #ifdef __WXMSW__
     // On XP with themes enabled the GetViewRect used in GetControllerSize() to
@@ -142,14 +147,10 @@ long wxListbook::GetListCtrlIconViewFlags() const
     return (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP) | wxLC_ICON;
 }
 
-#ifdef CAN_USE_REPORT_VIEW
-
 long wxListbook::GetListCtrlReportViewFlags() const
 {
     return wxLC_REPORT | wxLC_NO_HEADER;
 }
-
-#endif // CAN_USE_REPORT_VIEW
 
 // ----------------------------------------------------------------------------
 // wxListbook geometry management
@@ -258,37 +259,38 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
-#ifdef CAN_USE_REPORT_VIEW
-    wxListView * const list = GetListView();
-
-    // If imageList presence has changed, we update the list control view
-    if ( (imageList != NULL) != (GetImageList() != NULL) )
+    if ( CanUseReportView() )
     {
-        // Preserve the selection which is lost when changing the mode
-        const int oldSel = GetSelection();
+        wxListView * const list = GetListView();
 
-        // Update the style to use icon view for images, report view otherwise
-        long style = wxLC_SINGLE_SEL;
-        if ( imageList )
+        // If imageList presence has changed, we update the list control view
+        if ( (imageList != NULL) != (GetImageList() != NULL) )
         {
-            style |= GetListCtrlIconViewFlags();
-        }
-        else // no image list
-        {
-            style |= GetListCtrlReportViewFlags();
+            // Preserve the selection which is lost when changing the mode
+            const int oldSel = GetSelection();
+
+            // Update the style to use icon view for images, report view otherwise
+            long style = wxLC_SINGLE_SEL;
+            if ( imageList )
+            {
+                style |= GetListCtrlIconViewFlags();
+            }
+            else // no image list
+            {
+                style |= GetListCtrlReportViewFlags();
+            }
+
+            list->SetWindowStyleFlag(style);
+            if ( !imageList )
+                list->InsertColumn(0, wxT("Pages"));
+
+            // Restore selection
+            if ( oldSel != wxNOT_FOUND )
+                SetSelection(oldSel);
         }
 
-        list->SetWindowStyleFlag(style);
-        if ( !imageList )
-            list->InsertColumn(0, wxT("Pages"));
-
-        // Restore selection
-        if ( oldSel != wxNOT_FOUND )
-           SetSelection(oldSel);
+        list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
     }
-
-    list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
-#endif // CAN_USE_REPORT_VIEW
 
     wxBookCtrlBase::SetImageList(imageList);
 }
@@ -302,11 +304,6 @@ void wxListbook::UpdateSelectedPage(size_t newsel)
     m_selection = newsel;
     GetListView()->Select(newsel);
     GetListView()->Focus(newsel);
-}
-
-int wxListbook::GetSelection() const
-{
-    return m_selection;
 }
 
 wxBookCtrlEvent* wxListbook::CreatePageChangingEvent() const
@@ -346,19 +343,8 @@ wxListbook::InsertPage(size_t n,
         GetListView()->Focus(m_selection);
     }
 
-    // some page should be selected: either this one or the first one if there
-    // is still no selection
-    int selNew = -1;
-    if ( bSelect )
-        selNew = n;
-    else if ( m_selection == -1 )
-        selNew = 0;
-
-    if ( selNew != m_selection )
+    if ( !DoSetSelectionAfterInsertion(n, bSelect) )
         page->Hide();
-
-    if ( selNew != -1 )
-        SetSelection(selNew);
 
     UpdateSize();
 
@@ -380,7 +366,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
             int sel = m_selection - 1;
             if (page_count == 1)
                 sel = wxNOT_FOUND;
-            else if ((page_count == 2) || (sel == -1))
+            else if ((page_count == 2) || (sel == wxNOT_FOUND))
                 sel = 0;
 
             // force sel invalid if deleting current page - don't try to hide it
@@ -403,8 +389,6 @@ bool wxListbook::DeleteAllPages()
     GetListView()->DeleteAllItems();
     if (!wxBookCtrlBase::DeleteAllPages())
         return false;
-
-    m_selection = -1;
 
     UpdateSize();
 

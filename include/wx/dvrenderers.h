@@ -118,6 +118,10 @@ public:
 
     wxString GetVariantType() const             { return m_variantType; }
 
+    // helper that calls SetValue and SetAttr:
+    void PrepareForItem(const wxDataViewModel *model,
+                        const wxDataViewItem& item, unsigned column);
+
     // renderer properties:
     virtual void SetMode( wxDataViewCellMode mode ) = 0;
     virtual wxDataViewCellMode GetMode() const = 0;
@@ -269,6 +273,10 @@ public:
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
 
+protected:
+    // helper for GetSize() implementations, respects attributes
+    wxSize GetTextExtent(const wxString& str) const;
+
 private:
     wxDataViewItemAttr m_attr;
 
@@ -355,10 +363,10 @@ public:
     wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                               int alignment = wxDVR_DEFAULT_ALIGNMENT );
-                            
+
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
-    
+
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
 };

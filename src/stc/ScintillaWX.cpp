@@ -283,7 +283,7 @@ void ScintillaWX::StartDrag() {
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
     evt.SetEventObject(stc);
     evt.SetDragText(dragText);
-    evt.SetDragAllowMove(true);
+    evt.SetDragFlags(wxDrag_DefaultMove);
     evt.SetPosition(wxMin(stc->GetSelectionStart(),
                           stc->GetSelectionEnd()));
     stc->GetEventHandler()->ProcessEvent(evt);
@@ -297,7 +297,7 @@ void ScintillaWX::StartDrag() {
         source.SetData(data);
         dropWentOutside = true;
         inDragDrop = ddDragging;
-        result = source.DoDragDrop(evt.GetDragAllowMove());
+        result = source.DoDragDrop(evt.GetDragFlags());
         if (result == wxDragMove && dropWentOutside)
             ClearSelection();
         inDragDrop = ddNone;

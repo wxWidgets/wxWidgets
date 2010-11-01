@@ -67,6 +67,17 @@
 #include "wx/filename.h"    // For wxFileName::GetName()
 #include "wx/config.h"      // for native wxConfig
 
+// Under MSW we have several different backends but when linking statically
+// they may be discarded by the linker (this definitely happens with MSVC) so
+// force linking them. You don't have to do this in your code if you don't plan
+// to use them, of course.
+#if defined(__WXMSW__) && !defined(WXUSINGDLL)
+    #include "wx/link.h"
+    wxFORCE_LINK_MODULE(wxmediabackend_am)
+    wxFORCE_LINK_MODULE(wxmediabackend_qt)
+    wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
+#endif // static wxMSW build
+
 #ifndef __WXMSW__
     #include "../sample.xpm"
 #endif
@@ -75,12 +86,6 @@
 // Bail out if the user doesn't want one of the
 // things we need
 // ----------------------------------------------------------------------------
-
-// RN:  I'm not sure why this is here - even minimal doesn't check for
-//      wxUSE_GUI.  I may have added it myself though...
-#if !wxUSE_GUI
-#error "This is a GUI sample"
-#endif
 
 #if !wxUSE_MEDIACTRL || !wxUSE_MENUS || !wxUSE_SLIDER || !wxUSE_TIMER || \
     !wxUSE_NOTEBOOK || !wxUSE_LISTCTRL

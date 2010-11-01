@@ -694,6 +694,23 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 Each @c choicebookpage has exactly one non-toplevel window as its child.
 
 
+@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
+
+The wxCommandLinkButton contains a main title-like @c label and an optional
+@c note for longer description. The main @c label and the @c note can be
+concatenated into a single string using a new line character between them
+(notice that the @c note part can have more new lines in it).
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    First line of text on the button, typically the label of an action that
+    will be made when the button is pressed. }
+@row3col{note, @ref overview_xrcformat_type_text,
+    Second line of text describing the action performed when the button is pressed.  }
+@endTable
+
+
 @subsubsection xrc_wxcollapsiblepane wxCollapsiblePane
 
 @beginTable
@@ -917,7 +934,7 @@ The available properties are:
 @row3col{mask, @ref overview_xrcformat_type_bool,
      If masks should be created for all images (default: true).}
 @row3col{size, @ref overview_xrcformat_type_size,
-     The size of the images in the list (default: system default icon size)).}
+     The size of the images in the list (default: the size of the first bitmap).}
 @endTable
 
 Example:
@@ -1647,6 +1664,29 @@ Example:
 </object>
 
 @endcode
+
+
+@subsubsection xrc_wxtoolbook wxToolbook
+
+A toolbook can have one or more child objects of the @c toolbookpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage) and one child object of the @ref xrc_wximagelist class.
+@c toolbookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{image, integer,
+    The zero-based index of the image associated with the item
+    into the image list.}
+@row3col{selected, @ref overview_xrcformat_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c toolbookpage has exactly one non-toplevel window as its child.
 
 
 @subsubsection xrc_wxtreectrl wxTreeCtrl

@@ -39,6 +39,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -152,22 +153,16 @@ bool wxCheckBox::Create(wxWindow *parent,
 {
     Init();
 
+    WXValidateStyle(&style);
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
     long msStyle = WS_TABSTOP;
 
     if ( style & wxCHK_3STATE )
-    {
         msStyle |= BS_3STATE;
-    }
     else
-    {
-        wxASSERT_MSG( !Is3rdStateAllowedForUser(),
-            wxT("Using wxCH_ALLOW_3RD_STATE_FOR_USER")
-            wxT(" style flag for a 2-state checkbox is useless") );
         msStyle |= BS_CHECKBOX;
-    }
 
     if ( style & wxALIGN_RIGHT )
     {

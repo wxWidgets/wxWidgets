@@ -196,7 +196,7 @@ void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 #ifdef __WXOSX__
     // as subpanels might have a transparent background we must erase the background
-    // at least on OSX, otherwise traces of the sash will remain 
+    // at least on OSX, otherwise traces of the sash will remain
     // test with: splitter sample->replace right window
     dc.Clear();
 #endif

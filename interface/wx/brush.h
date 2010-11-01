@@ -172,11 +172,46 @@ public:
     virtual bool IsHatch() const;
 
     /**
-        Returns @true if the brush is initialised. It will return @false if the default
-        constructor has been used (for example, the brush is a member of a class, or
-        @NULL has been assigned to it).
+        Returns @true if the brush is initialised.
+
+        Notice that an uninitialized brush object can't be queried for any
+        brush properties and all calls to the accessor methods on it will
+        result in an assert failure.
     */
     virtual bool IsOk() const;
+
+    /**
+        Returns @true if the brush is a valid non-transparent brush.
+
+        This method returns @true if the brush object is initialized and has a
+        non-transparent style. Notice that this should be used instead of
+        simply testing whether GetStyle() returns a style different from
+        wxBRUSHSTYLE_TRANSPARENT if the brush may be invalid as GetStyle()
+        would assert in this case.
+
+        @see IsTransparent()
+
+        @since 2.9.2.
+     */
+    bool IsNonTransparent() const;
+
+    /**
+        Returns @true if the brush is transparent.
+
+        A transparent brush is simply a brush with wxBRUSHSTYLE_TRANSPARENT
+        style.
+
+        Notice that this function works even for non-initialized brushs (for
+        which it returns @false) unlike tests of the form <code>GetStyle() ==
+        wxBRUSHSTYLE_TRANSPARENT</code> which would assert if the brush is
+        invalid.
+
+        @see IsNonTransparent()
+
+        @since 2.9.2.
+     */
+    bool IsTransparent() const;
+
 
     //@{
     /**

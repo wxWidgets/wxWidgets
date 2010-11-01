@@ -70,6 +70,24 @@ private:
 } // anonymous namespace
 
 // ---------------------------------------------------------
+// wxDataViewItemAttr
+// ---------------------------------------------------------
+
+wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
+{
+    if ( !HasFont() )
+        return font;
+
+    wxFont f(font);
+    if ( GetBold() )
+        f.MakeBold();
+    if ( GetItalic() )
+        f.MakeItalic();
+    return f;
+}
+
+
+// ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
 
@@ -235,6 +253,36 @@ bool wxDataViewModel::Cleared()
     return ret;
 }
 
+bool wxDataViewModel::BeforeReset()
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->BeforeReset())
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::AfterReset()
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->AfterReset())
+            ret = false;
+    }
+
+    return ret;
+}
+
 void wxDataViewModel::Resort()
 {
     wxDataViewModelNotifiers::iterator iter;
@@ -345,6 +393,8 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
+    /* wxDataViewModel:: */ BeforeReset();
+
     m_hash.Clear();
 
     // IDs are ordered until an item gets deleted or inserted
@@ -357,7 +407,7 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
 
     m_nextFreeID = new_size + 1;
 
-    /* wxDataViewModel:: */ Cleared();
+    /* wxDataViewModel:: */ AfterReset();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
@@ -499,9 +549,11 @@ wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_siz
 
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
+    /* wxDataViewModel:: */ BeforeReset();
+
     m_size = new_size;
 
-    /* wxDataViewModel:: */ Cleared();
+    /* wxDataViewModel:: */ AfterReset();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()
@@ -727,6 +779,20 @@ bool wxDataViewRendererBase::FinishEditing()
     return true;
 }
 
+void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
+                                            const wxDataViewItem& item,
+                                            unsigned column)
+{
+    wxVariant value;
+    model->GetValue(value, item, column);
+    SetValue(value);
+
+    wxDataViewItemAttr attr;
+    model->GetAttr(item, column, attr);
+    SetAttr(attr);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxDataViewCustomRendererBase
 // ----------------------------------------------------------------------------
@@ -792,17 +858,26 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
 
     wxDCFontChanger changeFont(*dc);
     if ( m_attr.HasFont() )
-    {
-        wxFont font(dc->GetFont());
-        if ( m_attr.GetBold() )
-            font.MakeBold();
-        if ( m_attr.GetItalic() )
-            font.MakeItalic();
-
-        changeFont.Set(font);
-    }
+        changeFont.Set(m_attr.GetEffectiveFont(dc->GetFont()));
 
     Render(rectItem, dc, state);
+}
+
+wxSize wxDataViewCustomRendererBase::GetTextExtent(const wxString& str) const
+{
+    const wxDataViewCtrl *view = GetView();
+
+    if ( m_attr.HasFont() )
+    {
+        wxFont font(m_attr.GetEffectiveFont(view->GetFont()));
+        wxSize size;
+        view->GetTextExtent(str, &size.x, &size.y, NULL, NULL, &font);
+        return size;
+    }
+    else
+    {
+        return view->GetTextExtent(str);
+    }
 }
 
 void
@@ -1453,11 +1528,11 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
       wxDataViewChoiceRenderer( choices, mode, alignment )
 {
 }
-                            
+
 wxControl* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
     wxVariant string_value = GetChoice( value.GetLong() );
-    
+
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
 
@@ -1476,13 +1551,13 @@ bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
     wxVariant string_value = GetChoice( value.GetLong() );
     return wxDataViewChoiceRenderer::SetValue( string_value );
 }
-    
+
 bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
 {
     wxVariant string_value;
     if (!wxDataViewChoiceRenderer::GetValue( string_value ))
         return false;
-            
+
     value = (long) GetChoices().Index( string_value.GetString() );
     return true;
 }

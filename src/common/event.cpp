@@ -733,9 +733,9 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 wxKeyEvent::wxKeyEvent(wxEventType type)
 {
     m_eventType = type;
-    m_keyCode = 0;
+    m_keyCode = WXK_NONE;
 #if wxUSE_UNICODE
-    m_uniChar = 0;
+    m_uniChar = WXK_NONE;
 #endif
 }
 

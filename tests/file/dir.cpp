@@ -182,13 +182,13 @@ void DirTestCase::DirExists()
         { "$USER_DOCS_DIR\\", true },
         { "$USER_DOCS_DIR\\\\", true },
         { "..\\..", true },
-        { "c:", true },
-        { "c:\\", true },
-        { "c:\\\\", true },
+        { "$MSW_DRIVE", true },
+        { "$MSW_DRIVE\\", true },
+        { "$MSW_DRIVE\\\\", true },
         { "\\\\non_existent_share\\file", false },
-        { "c:\\a\\directory\\which\\does\\not\\exist", false },
-        { "c:\\a\\directory\\which\\does\\not\\exist\\", false },
-        { "c:\\a\\directory\\which\\does\\not\\exist\\\\", false },
+        { "$MSW_DRIVE\\a\\directory\\which\\does\\not\\exist", false },
+        { "$MSW_DRIVE\\a\\directory\\which\\does\\not\\exist\\", false },
+        { "$MSW_DRIVE\\a\\directory\\which\\does\\not\\exist\\\\", false },
         { "test.exe", false }            // not a directory!
 #elif defined(__UNIX__)
         { "../..", true },
@@ -202,11 +202,21 @@ void DirTestCase::DirExists()
 #endif
     };
 
+#ifdef __WXMSW__
+    wxString homedrive = wxGetenv("HOMEDRIVE");
+    if ( homedrive.empty() )
+        homedrive = "c:";
+#endif // __WXMSW__
+
     for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
     {
         wxString dirname = testData[n].dirname;
         dirname.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
-        
+
+#ifdef __WXMSW__
+        dirname.Replace("$MSW_DRIVE", homedrive);
+#endif // __WXMSW__
+
         std::string errDesc = wxString::Format("failed on directory '%s'", dirname).ToStdString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc, testData[n].shouldExist, wxDir::Exists(dirname));
 

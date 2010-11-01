@@ -74,20 +74,20 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 {
     m_err = noErr ;
     wxOSXPrintData *native = (wxOSXPrintData*) data->GetNativeData() ;
-    
+
     PMRect rPage;
     m_err = PMGetAdjustedPageRect(native->GetPageFormat(), &rPage);
     if ( m_err != noErr )
         return;
-    
+
     m_maxX = wxCoord(rPage.right - rPage.left) ;
     m_maxY = wxCoord(rPage.bottom - rPage.top);
-    
+
     PMResolution res;
     PMPrinter printer;
     m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
     if ( m_err == noErr )
-    {    
+    {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
         if ( PMPrinterGetOutputResolution != NULL )
         {
@@ -112,7 +112,7 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 #endif
         }
     }
-    
+
     m_maxX = wxCoord((double)m_maxX * res.hRes / 72.0);
     m_maxY = wxCoord((double)m_maxY * res.vRes / 72.0);
 
@@ -179,7 +179,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
 #endif
         }
     }
-    
+
     m_maxX = wxCoord((double)m_maxX * res.hRes / 72.0);
     m_maxY = wxCoord((double)m_maxY * res.vRes / 72.0);
 
@@ -231,7 +231,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         // Core Graphics initially has the lower left of the paper as 0,0
         if ( !m_err )
             CGContextTranslateCTM( pageContext , (CGFloat) -paperRect.left , (CGFloat) paperRect.bottom ) ;
-        
+
         // since this is a non-critical error, we set the flag back
         m_err = noErr ;
 

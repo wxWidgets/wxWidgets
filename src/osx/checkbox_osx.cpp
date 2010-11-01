@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id: checkbox.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     m_labelOrig = m_label = label ;
 
+    WXValidateStyle( &style );
     m_peer = wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
 
     MacPostControlCreate(pos, size) ;

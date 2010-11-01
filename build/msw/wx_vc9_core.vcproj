@@ -7324,6 +7324,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextimagedlg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>
@@ -7612,6 +7616,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_cmdlinkbn.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_collpane.h"
 				>
 			</File>
@@ -7781,6 +7789,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_toolb.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_toolbk.h"
 				>
 			</File>
 			<File

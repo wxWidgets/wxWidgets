@@ -4573,8 +4573,8 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
-    m_dragAllowMove = false;
 #if wxUSE_DRAG_AND_DROP
+    m_dragFlags = wxDrag_CopyOnly;
     m_dragResult = wxDragNone;
 #endif
 }
@@ -4608,9 +4608,9 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_x =            event.m_x;
     m_y =            event.m_y;
 
-    m_dragText =     event.m_dragText;
-    m_dragAllowMove =event.m_dragAllowMove;
 #if wxUSE_DRAG_AND_DROP
+    m_dragText =     event.m_dragText;
+    m_dragFlags =    event.m_dragFlags;
     m_dragResult =   event.m_dragResult;
 #endif
 }

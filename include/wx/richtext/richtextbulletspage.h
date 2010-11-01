@@ -69,7 +69,7 @@ public:
     virtual bool TransferDataToWindow();
 
     /// Gets the attributes associated with the main formatting dialog
-    wxTextAttr* GetAttributes();
+    wxRichTextAttr* GetAttributes();
 
     /// Update for symbol-related controls
     void OnSymbolUpdate( wxUpdateUIEvent& event );

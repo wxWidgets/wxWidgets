@@ -153,7 +153,7 @@ wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
             hue += 120.0;
         }
         else // Max == blue
-        { 
+        {
             hue = 60.0 * (red - green) / (Max - Min);
             hue += 240.0;
         }

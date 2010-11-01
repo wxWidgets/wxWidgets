@@ -60,7 +60,7 @@ static void DispatchAndReleaseEvent(EventRef theEvent)
 int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 {
     wxMacAutoreleasePool autoreleasepool;
-    
+
     EventRef event;
     OSStatus status = ReceiveNextEvent(0, NULL, timeout/1000, true, &event);
     switch ( status )
@@ -126,7 +126,7 @@ void wxModalEventLoop::DoRun()
 
     WindowGroupRef windowGroup = NULL;
     WindowGroupRef formerParentGroup = NULL;
-    
+
     // make sure modal dialogs are in the right layer so that they are not covered
     if ( m_modalWindow != NULL )
     {
@@ -143,7 +143,7 @@ void wxModalEventLoop::DoRun()
     }
 
     m_modalWindow->SetFocus();
-    
+
     RunAppModalLoopForWindow(m_modalNativeWindow);
 
     if ( resetGroupParent )

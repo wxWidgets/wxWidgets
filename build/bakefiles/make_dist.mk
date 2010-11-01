@@ -138,6 +138,7 @@ ALL_DIST: distrib_clean
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets/presets
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/presets/*.bkl $(DISTDIR)/build/bakefiles/wxpresets/presets
+	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/presets/wx_presets.py $(DISTDIR)/build/bakefiles/wxpresets/presets
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
@@ -163,10 +164,12 @@ ALL_GUI_DIST: ALL_DIST
 	fi
 	mkdir $(DISTDIR)/include/wx/meta
 	mkdir $(DISTDIR)/include/wx/generic
+	mkdir $(DISTDIR)/include/wx/generic/private
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
+	mkdir $(DISTDIR)/include/wx/persist
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/protocol
@@ -178,17 +181,19 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	$(CP_P) $(INCDIR)/wx/meta/*.h $(DISTDIR)/include/wx/meta
 	$(CP_P) $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
+	$(CP_P) $(INCDIR)/wx/generic/private/*.h $(DISTDIR)/include/wx/generic/private
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/ribbon/*.h $(DISTDIR)/include/wx/ribbon
+	$(CP_P) $(INCDIR)/wx/persist/*.h $(DISTDIR)/include/wx/persist
 	$(CP_P) $(INCDIR)/wx/propgrid/*.h $(DISTDIR)/include/wx/propgrid
 	$(CP_P) $(INCDIR)/wx/stc/*.h $(DISTDIR)/include/wx/stc
+	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 	$(CP_P) $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	$(CP_P) $(INCDIR)/wx/unix/private/*.h $(DISTDIR)/include/wx/unix/private
 	$(CP_P) $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	$(CP_P) $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
-	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
@@ -222,7 +227,7 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/src/aui
 	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
-	
+
 	mkdir $(DISTDIR)/src/ribbon
 	$(CP_P) $(RIBBONDIR)/*.cpp $(DISTDIR)/src/ribbon
 
@@ -291,6 +296,7 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
+	mkdir $(DISTDIR)/include/wx/persist
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/osx
@@ -568,9 +574,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
-	# copy files common to all samples in a general way
+	# copy files common to all samples in a general way (samples without
+	# Makefile.in in them are Windows-specific and shouldn't be included in
+	# Unix distribution)
 	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/opengl \
 		    -mindepth 1 -maxdepth 1 -type d -not -name .svn`; do \
+	    if [ ! -f $$s/Makefile.in ]; then continue; fi; \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
 	    $(CP_P) $$s/Makefile.in \
@@ -590,8 +599,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	# copy the rest, not covered by the above loop
 	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/animate
 	$(CP_P) $(SAMPDIR)/animate/throbber.gif $(DISTDIR)/samples/animate
-
-	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 	$(CP_P) $(SAMPDIR)/dialogs/tips.txt $(DISTDIR)/samples/dialogs
 
@@ -648,7 +655,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/xrc/rc
-	$(CP_P) $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/xrc/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
@@ -712,7 +718,6 @@ INTL_DIST:
 	mkdir $(DISTDIR)/locale
 	$(CP_P) $(INTLDIR)/Makefile $(DISTDIR)/locale
 	$(CP_P) $(INTLDIR)/*.po $(DISTDIR)/locale
-	-$(CP_P) $(INTLDIR)/*.mo $(DISTDIR)/locale
 	subdirs=`cd $(INTLDIR) && ls */*.po | sed 's|/.*||' | uniq`; \
 	for dir in "$$subdirs"; do                                   \
 	    mkdir $(DISTDIR)/locale/$$dir;                           \
@@ -747,6 +752,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/interface/wx/html
 	mkdir $(DISTDIR)/interface/wx/msw
 	mkdir $(DISTDIR)/interface/wx/msw/ole
+	mkdir $(DISTDIR)/interface/wx/persist
 	mkdir $(DISTDIR)/interface/wx/protocol
 	mkdir $(DISTDIR)/interface/wx/propgrid
 	mkdir $(DISTDIR)/interface/wx/richtext
@@ -760,6 +766,7 @@ MANUAL_DIST:
 	$(CP_P) $(IFACEDIR)/wx/html/*.h $(DISTDIR)/interface/wx/html
 	$(CP_P) $(IFACEDIR)/wx/msw/*.h $(DISTDIR)/interface/wx/msw
 	$(CP_P) $(IFACEDIR)/wx/msw/ole/*.h $(DISTDIR)/interface/wx/msw/ole
+	$(CP_P) $(IFACEDIR)/wx/persist/*.h $(DISTDIR)/interface/wx/persist
 	$(CP_P) $(IFACEDIR)/wx/protocol/*.h $(DISTDIR)/interface/wx/protocol
 	$(CP_P) $(IFACEDIR)/wx/propgrid/*.h $(DISTDIR)/interface/wx/propgrid
 	$(CP_P) $(IFACEDIR)/wx/richtext/*.h $(DISTDIR)/interface/wx/richtext
@@ -926,5 +933,5 @@ rpm: bzip-dist
 	-mkdir $(RPMTOP)/RPMS
 	-mkdir $(RPMTOP)/SRPMS
 	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
-	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
-	mv -f `find $(RPMTOP) -name "wx$(TOOLKIT)*.rpm"` .
+	rpmbuild -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
+	mv -f `find $(RPMTOP) -name "wx-*.rpm"` .

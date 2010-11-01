@@ -1334,14 +1334,14 @@ void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (from == -1 && to == -1)
-    {
-        from = 0;
-        to = GetValue().length();
-    }
-
     if ( IsMultiLine() )
     {
+        if (from == -1 && to == -1)
+        {
+            from = 0;
+            to = GetValue().length();
+        }
+
         GtkTextIter fromi, toi;
         gtk_text_buffer_get_iter_at_offset( m_buffer, &fromi, from );
         gtk_text_buffer_get_iter_at_offset( m_buffer, &toi, to );
@@ -1692,7 +1692,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     gint l = gtk_text_buffer_get_char_count( m_buffer );
 
     wxCHECK_MSG( position >= 0 && position <= l, false,
-                 _T("invalid range in wxTextCtrl::GetStyle") );
+                 wxT("invalid range in wxTextCtrl::GetStyle") );
 
     GtkTextIter positioni;
     gtk_text_buffer_get_iter_at_offset(m_buffer, &positioni, position);

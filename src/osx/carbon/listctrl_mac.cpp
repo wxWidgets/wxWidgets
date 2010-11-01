@@ -519,14 +519,6 @@ void wxListCtrlTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
-BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
-    EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
-    EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
-    EVT_MIDDLE_DOWN(wxListCtrl::OnMiddleDown)
-    EVT_RIGHT_DOWN(wxListCtrl::OnRightDown)
-    EVT_CHAR(wxListCtrl::OnChar)
-END_EVENT_TABLE()
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -561,7 +553,7 @@ void wxListCtrl::Init()
     m_bgColor = wxNullColour;
     m_textctrlWrapper = NULL;
     m_current = -1;
-    m_renameTimer = new wxListCtrlRenameTimer( this );
+    m_renameTimer = NULL;
 }
 
 class wxGenericListCtrlHook : public wxGenericListCtrl
@@ -618,7 +610,8 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
         (hitResult & wxLIST_HITTEST_ONITEMLABEL) &&
         HasFlag(wxLC_EDIT_LABELS) )
     {
-        m_renameTimer->Start( 100, true );
+        if ( m_renameTimer )
+            m_renameTimer->Start( 250, true );
     }
     else
     {
@@ -629,7 +622,7 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
 
 void wxListCtrl::OnDblClick(wxMouseEvent& event)
 {
-    if ( m_renameTimer->IsRunning() )
+    if ( m_renameTimer && m_renameTimer->IsRunning() )
         m_renameTimer->Stop();
     event.Skip();
 }
@@ -754,7 +747,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     else
     {
-         m_macIsUserPane = false;
+        m_macIsUserPane = false;
         if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
@@ -765,6 +758,14 @@ bool wxListCtrl::Create(wxWindow *parent,
         InstallControlEventHandler( m_peer->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, this,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
+
+        m_renameTimer = new wxListCtrlRenameTimer( this );
+        
+        Connect( wxID_ANY, wxEVT_CHAR, wxCharEventHandler(wxListCtrl::OnChar), NULL, this );
+        Connect( wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxListCtrl::OnLeftDown), NULL, this );
+        Connect( wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(wxListCtrl::OnDblClick), NULL, this );
+        Connect( wxID_ANY, wxEVT_MIDDLE_DOWN, wxMouseEventHandler(wxListCtrl::OnMiddleDown), NULL, this );
+        Connect( wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(wxListCtrl::OnRightDown), NULL, this );
     }
 
     return true;
@@ -2071,12 +2072,12 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
                WXUNUSED_UNLESS_DEBUG( OSStatus status = ) m_dbImpl->GetItemPartBounds( id, kMinColumnId + column, kDataBrowserPropertyEnclosingPart, &enclosingRect );
                wxASSERT( status == noErr );
-              
+
                enclosingCGRect = CGRectMake(enclosingRect.left,
                                             enclosingRect.top,
                                             enclosingRect.right - enclosingRect.left,
                                             enclosingRect.bottom - enclosingRect.top);
-              
+
                if (column >= 0)
                {
                    if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
@@ -2085,7 +2086,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
                        if (lcItem->HasColumnInfo(column))
                        {
                            wxListItem* item = lcItem->GetColumnInfo(column);
-                          
+
                            if (item->GetMask() & wxLIST_MASK_IMAGE)
                            {
                                imgIndex = item->GetImage();
@@ -2101,9 +2102,9 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
                        }
                    }
                }
-          
+
                calculateCGDrawingBounds(enclosingCGRect, &iconCGRect, &textCGRect, (imgIndex != -1) );
-              
+
                if ( CGRectContainsPoint( iconCGRect, click_point ) )
                {
                    flags = wxLIST_HITTEST_ONITEMICON;
@@ -2318,7 +2319,9 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 
     if (m_dbImpl)
     {
-        m_dbImpl->SetScrollPosition(dx, dy);
+        // Notice that the parameter order is correct here: first argument is
+        // the "top" displacement, second one is the "left" one.
+        m_dbImpl->SetScrollPosition(dy, dx);
     }
     return true;
 }

@@ -186,7 +186,7 @@ void wxFileDialogBase::SetPath(const wxString& path)
     wxString ext;
     wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
     if ( !ext.empty() )
-        m_fileName << _T('.') << ext;
+        m_fileName << wxT('.') << ext;
     m_path = path;
 }
 

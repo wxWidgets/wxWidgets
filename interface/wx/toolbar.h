@@ -373,7 +373,7 @@ public:
         Enables or disables the tool.
 
         @param toolId
-            Tool to enable or disable.
+            ID of the tool to enable or disable, as passed to AddTool().
         @param enable
             If @true, enables the tool, otherwise disables it.
 
@@ -453,7 +453,7 @@ public:
         Get any client data associated with the tool.
 
         @param toolId
-            Id of the tool, as passed to AddTool().
+            ID of the tool in question, as passed to AddTool().
 
         @return Client data, or @NULL if there is none.
     */
@@ -463,7 +463,7 @@ public:
         Called to determine whether a tool is enabled (responds to user input).
 
         @param toolId
-            Id of the tool in question.
+            ID of the tool in question, as passed to AddTool().
 
         @return @true if the tool is enabled, @false otherwise.
 
@@ -475,7 +475,7 @@ public:
         Returns the long help for the given tool.
 
         @param toolId
-            The tool in question.
+            ID of the tool in question, as passed to AddTool().
 
         @see SetToolLongHelp(), SetToolShortHelp()
     */
@@ -491,6 +491,9 @@ public:
     /**
         Returns the tool position in the toolbar, or @c wxNOT_FOUND if the tool
         is not found.
+
+        @param toolId
+            ID of the tool in question, as passed to AddTool().
     */
     virtual int GetToolPos(int toolId) const;
 
@@ -505,7 +508,7 @@ public:
         Returns the short help for the given tool.
 
         @param toolId
-            The tool in question.
+            ID of the tool in question, as passed to AddTool().
 
         @see GetToolLongHelp(), SetToolShortHelp()
     */
@@ -523,7 +526,7 @@ public:
         Gets the on/off state of a toggle tool.
 
         @param toolId
-            The tool in question.
+            ID of the tool in question, as passed to AddTool().
 
         @return @true if the tool is toggled on, @false otherwise.
 
@@ -728,6 +731,9 @@ public:
 
     /**
         Sets the client data associated with the tool.
+
+        @param id
+            ID of the tool in question, as passed to AddTool().
     */
     virtual void SetToolClientData(int id, wxObject* clientData);
 
@@ -735,6 +741,9 @@ public:
         Sets the bitmap to be used by the tool with the given ID when the tool
         is in a disabled state. This can only be used on Button tools, not
         controls.
+
+        @param id
+            ID of the tool in question, as passed to AddTool().
 
         @note The native toolbar classes on the main platforms all synthesize
             the disabled bitmap from the normal bitmap, so this function will
@@ -747,7 +756,7 @@ public:
         Sets the long help for the given tool.
 
         @param toolId
-            The tool in question.
+            ID of the tool in question, as passed to AddTool().
         @param helpString
             A string for the long help.
 
@@ -761,6 +770,9 @@ public:
     /**
         Sets the bitmap to be used by the tool with the given ID. This can only
         be used on Button tools, not controls.
+
+        @param id
+            ID of the tool in question, as passed to AddTool().
     */
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
 
@@ -792,7 +804,7 @@ public:
         Sets the short help for the given tool.
 
         @param toolId
-            The tool in question.
+            ID of the tool in question, as passed to AddTool().
         @param helpString
             The string for the short help.
 
@@ -808,7 +820,7 @@ public:
         Toggles a tool on or off. This does not cause any event to get emitted.
 
         @param toolId
-            Tool in question.
+            ID of the tool in question, as passed to AddTool().
         @param toggle
             If @true, toggles the tool on, otherwise toggles it off.
 

@@ -168,6 +168,11 @@ protected:
     wxArrayPtrVoid m_itemsClientData;
 
 private:
+#ifdef __WXOSX_CARBON__
+    // It needs to call our CalcAndSendEvent().
+    friend class wxMacDataBrowserListControl;
+#endif // Carbon
+
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()
 };

@@ -528,7 +528,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextStyleSheet* styleSheet = wxRichTextFormattingDialog::GetDialog(this)->GetStyleSheet();
 
-    wxTextAttr attr((const wxTextAttr &)(styleSheet ? def->GetStyle() : def->GetStyleMergedWithBase(styleSheet)));
+    wxRichTextAttr attr((const wxRichTextAttr &)(styleSheet ? def->GetStyle() : def->GetStyleMergedWithBase(styleSheet)));
 
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
@@ -539,7 +539,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttr normalParaAttr;
+    wxRichTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -556,7 +556,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     int i;
     for (i = 0; i < 10; i++)
     {
-        wxTextAttr levelAttr = * def->GetLevelAttributes(i);
+        wxRichTextAttr levelAttr = * def->GetLevelAttributes(i);
         levelAttr.SetBulletNumber(1);
         m_previewCtrl->BeginStyle(levelAttr);
         m_previewCtrl->WriteText(wxString::Format(wxT("List level %d. "), i+1) + s_para2);
@@ -581,7 +581,7 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
 
     m_currentLevel = m_levelCtrl->GetValue();
 
-    wxTextAttr* attr = GetAttributesForSelection();
+    wxRichTextAttr* attr = GetAttributesForSelection();
 
     if (m_alignmentLeft->GetValue())
         attr->SetAlignment(wxTEXT_ALIGNMENT_LEFT);
@@ -719,7 +719,7 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
 
     wxPanel::TransferDataToWindow();
 
-    wxTextAttr* attr = GetAttributesForSelection();
+    wxRichTextAttr* attr = GetAttributesForSelection();
 
     if (attr->HasAlignment())
     {
@@ -875,7 +875,7 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
 }
 
 /// Get attributes for selected level
-wxTextAttr* wxRichTextListStylePage::GetAttributesForSelection()
+wxRichTextAttr* wxRichTextListStylePage::GetAttributesForSelection()
 {
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
@@ -1280,7 +1280,7 @@ void wxRichTextListStylePage::OnStandardBulletUpdate( wxUpdateUIEvent& event )
 
 void wxRichTextListStylePage::OnChooseFontClick( wxCommandEvent& WXUNUSED(event) )
 {
-    wxTextAttr* attr = GetAttributesForSelection();
+    wxRichTextAttr* attr = GetAttributesForSelection();
 
     int pages = wxRICHTEXT_FORMAT_FONT;
     wxRichTextFormattingDialog formatDlg;

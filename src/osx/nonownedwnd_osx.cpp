@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxNonOwnedWindow
 // Author:      Stefan Csomor
 // Created:     2008-03-24
-// RCS-ID:      $Id: nonownedwnd.cpp 50329 2007-11-29 17:00:58Z VS $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor 2008
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -52,14 +52,14 @@ static MacWindowMap wxWinMacWindowList;
 wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
 {
     wxNonOwnedWindowImpl* impl = wxNonOwnedWindowImpl::FindFromWXWindow(win);
-    
+
     return ( impl != NULL ? impl->GetWXPeer() : NULL ) ;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::FindFromWXWindow (WXWindow window)
 {
     MacWindowMap::iterator node = wxWinMacWindowList.find(window);
-    
+
     return (node == wxWinMacWindowList.end()) ? NULL : node->second;
 }
 
@@ -81,7 +81,7 @@ void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *imp
     // adding NULL WindowRef is (first) surely a result of an error and
     // nothing else :-)
     wxCHECK_RET( window != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-    
+
     wxWinMacWindowList[window] = impl;
 }
 
@@ -149,16 +149,38 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 
 bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
 {
-    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, nativeWindow );
+    if ( parent )
+        parent->AddChild(this);
+
+    SubclassWin(nativeWindow);
+
+    return true;
+}
+
+void wxNonOwnedWindow::SubclassWin(WXWindow nativeWindow)
+{
+    wxASSERT_MSG( !m_isNativeWindowWrapper, wxT("subclassing window twice?") );
+    wxASSERT_MSG( m_nowpeer == NULL, wxT("window already was created") );
+
+    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, GetParent(), nativeWindow );
     m_isNativeWindowWrapper = true;
     wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
     m_peer = wxWidgetImpl::CreateContentView(this);
-
-    if ( parent )
-        parent->AddChild(this);
-    
-    return true;
 }
+
+void wxNonOwnedWindow::UnsubclassWin()
+{
+    wxASSERT_MSG( m_isNativeWindowWrapper, wxT("window was not subclassed") );
+
+    if ( GetParent() )
+        GetParent()->RemoveChild(this);
+
+    wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;
+    wxDELETE(m_nowpeer);
+    wxDELETE(m_peer);
+    m_isNativeWindowWrapper = false;
+}
+
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
@@ -178,7 +200,7 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 bool wxNonOwnedWindow::Destroy()
 {
     WillBeDestroyed();
-    
+
     return wxWindow::Destroy();
 }
 
@@ -244,9 +266,9 @@ void wxNonOwnedWindow::SetWindowStyleFlag(long flags)
 {
     if (flags == GetWindowStyleFlag())
         return;
-        
+
     wxWindow::SetWindowStyleFlag(flags);
-    
+
     if (m_nowpeer)
         m_nowpeer->SetWindowStyleFlag(flags);
 }
@@ -434,7 +456,7 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
 
     int left, top, w, h;
     m_nowpeer->GetContentArea(left, top, w, h);
-    
+
     if (width)
        *width = w ;
     if (height)
@@ -463,7 +485,7 @@ bool wxNonOwnedWindow::DoSetShape(const wxRegion& region)
                  wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
     m_shape = region;
-    
+
     // The empty region signifies that the shape
     // should be removed from the window.
     if ( region.IsEmpty() )

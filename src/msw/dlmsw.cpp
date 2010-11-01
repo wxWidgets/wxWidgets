@@ -79,16 +79,6 @@ public:
         wxVersionDLL *verDLL;
     };
 
-    // the declared type of the first EnumModulesProc() parameter changed in
-    // recent SDK versions and is no PCSTR instead of old PSTR, we know that
-    // it's const in version 11 and non-const in version 8 included with VC8
-    // (and earlier), suppose that it's only changed in version 11
-    #if defined(API_VERSION_NUMBER) && API_VERSION_NUMBER >= 11
-        typedef PCSTR NameStr_t;
-    #else
-        typedef PSTR NameStr_t;
-    #endif
-
     // TODO: fix EnumerateLoadedModules() to use EnumerateLoadedModules64()
     #ifdef __WIN64__
         typedef DWORD64 DWORD_32_64;
@@ -97,7 +87,7 @@ public:
     #endif
 
     static BOOL CALLBACK
-    EnumModulesProc(NameStr_t name, DWORD_32_64 base, ULONG size, void *data);
+    EnumModulesProc(PCSTR name, DWORD_32_64 base, ULONG size, void *data);
 };
 
 // ============================================================================
@@ -184,7 +174,7 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
 
 /* static */
 BOOL CALLBACK
-wxDynamicLibraryDetailsCreator::EnumModulesProc(NameStr_t name,
+wxDynamicLibraryDetailsCreator::EnumModulesProc(PCSTR name,
                                                 DWORD_32_64 base,
                                                 ULONG size,
                                                 void *data)
@@ -280,9 +270,15 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
         params.dlls = &dlls;
         params.verDLL = &verDLL;
 
+        // Note that the cast of EnumModulesProc is needed because the type of
+        // PENUMLOADED_MODULES_CALLBACK changed: in old SDK versions its first
+        // argument was non-const PSTR while now it's PCSTR. By explicitly
+        // casting to whatever the currently used headers require we ensure
+        // that the code compilers in any case.
         if ( !wxDbgHelpDLL::EnumerateLoadedModules
                             (
                                 ::GetCurrentProcess(),
+                                (PENUMLOADED_MODULES_CALLBACK)
                                 wxDynamicLibraryDetailsCreator::EnumModulesProc,
                                 &params
                             ) )

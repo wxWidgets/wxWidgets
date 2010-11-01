@@ -415,6 +415,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_windowtest.obj &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
+	$(OBJS)\test_gui_keyboard.obj &
 	$(OBJS)\test_gui_fonttest.obj &
 	$(OBJS)\test_gui_image.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
@@ -886,6 +887,9 @@ $(OBJS)\test_gui_clone.obj :  .AUTODEPEND .\events\clone.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_propagation.obj :  .AUTODEPEND .\events\propagation.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_keyboard.obj :  .AUTODEPEND .\events\keyboard.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_fonttest.obj :  .AUTODEPEND .\font\fonttest.cpp

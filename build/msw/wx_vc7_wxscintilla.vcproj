@@ -22,12 +22,13 @@
 			IntermediateDirectory="vc_mswud\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -48,7 +49,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -58,7 +59,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
@@ -78,12 +79,13 @@
 			IntermediateDirectory="vc_mswu\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -101,7 +103,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -111,7 +113,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
@@ -131,12 +133,13 @@
 			IntermediateDirectory="vc_mswunivud\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -157,7 +160,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -167,7 +170,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"/>
 			<Tool
@@ -187,12 +190,13 @@
 			IntermediateDirectory="vc_mswunivu\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -210,7 +214,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -220,7 +224,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"/>
 			<Tool
@@ -240,12 +244,13 @@
 			IntermediateDirectory="vc_mswuddll\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -266,7 +271,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -276,7 +281,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
@@ -296,12 +301,13 @@
 			IntermediateDirectory="vc_mswudll\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -319,7 +325,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -329,7 +335,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
@@ -349,12 +355,13 @@
 			IntermediateDirectory="vc_mswunivuddll\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -375,7 +382,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -385,7 +392,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"/>
 			<Tool
@@ -405,12 +412,13 @@
 			IntermediateDirectory="vc_mswunivudll\wxscintilla"
 			ConfigurationType="4"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -428,7 +436,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -438,7 +446,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"/>
 			<Tool

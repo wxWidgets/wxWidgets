@@ -49,7 +49,7 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n) { DoSetSelection(n, true); }
+    virtual void SetSelection(int n);
     void SetSelection(int n, bool select) { DoSetSelection(n, select); }
     void Deselect(int n) { DoSetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
@@ -96,11 +96,6 @@ public:
     int HitTest(int x, int y) const { return DoListHitTest(wxPoint(x, y)); }
 
 
-    // For generating events in multiple and extended mode: compare the current
-    // selections with the previously recorded ones (in m_oldSelections) and
-    // send the appropriate event if they differ, otherwise just return false.
-    bool CalcAndSendEvent();
-
 protected:
     virtual void DoSetFirstItem(int n) = 0;
 
@@ -110,6 +105,17 @@ protected:
     virtual int DoListHitTest(const wxPoint& WXUNUSED(point)) const
         { return wxNOT_FOUND; }
 
+    // Helper for the code generating events in single selection mode: updates
+    // m_oldSelections and return true if the selection really changed.
+    // Otherwise just returns false.
+    bool DoChangeSingleSelection(int item);
+
+    // Helper for generating events in multiple and extended mode: compare the
+    // current selections with the previously recorded ones (in
+    // m_oldSelections) and send the appropriate event if they differ,
+    // otherwise just return false.
+    bool CalcAndSendEvent();
+
     // Send a listbox (de)selection or double click event.
     //
     // Returns true if the event was processed.
@@ -117,6 +123,9 @@ protected:
 
     // Array storing the indices of all selected items that we already notified
     // the user code about for multi selection list boxes.
+    //
+    // For single selection list boxes, we reuse this array to store the single
+    // currently selected item, this is used by DoChangeSingleSelection().
     //
     // TODO-OPT: wxSelectionStore would be more efficient for big list boxes.
     wxArrayInt m_oldSelections;

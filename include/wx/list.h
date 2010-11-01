@@ -767,6 +767,9 @@ private:
         virtual nodetype *Find(const wxListKey& key) const                  \
             { return (nodetype *)wxListBase::Find(key); }                   \
                                                                             \
+        bool Member(const Tbase *object) const                              \
+            { return Find(object) != NULL; }                                \
+                                                                            \
         int IndexOf(Tbase *object) const                                    \
             { return wxListBase::IndexOf(object); }                         \
                                                                             \
@@ -1190,7 +1193,6 @@ public:
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
-    bool Member(wxObject *object) const { return Find(object) != NULL; }
 #endif // !wxUSE_STL
 };
 

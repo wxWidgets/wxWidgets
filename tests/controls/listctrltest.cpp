@@ -46,10 +46,12 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );
         wxLIST_BASE_TESTS();
+        CPPUNIT_TEST( EditLabel );
         WXUISIM_TEST( ColumnClick );
         WXUISIM_TEST( ColumnDrag );
     CPPUNIT_TEST_SUITE_END();
 
+    void EditLabel();
 #if wxUSE_UIACTIONSIMULATOR
     // Column events are only supported in wxListCtrl currently so we test them
     // here rather than in ListBaseTest
@@ -83,6 +85,13 @@ void ListCtrlTestCase::tearDown()
 {
     delete m_list;
     m_list = NULL;
+}
+
+void ListCtrlTestCase::EditLabel()
+{
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertItem(0, "foo");
+    m_list->EditLabel(0);
 }
 
 #if wxUSE_UIACTIONSIMULATOR

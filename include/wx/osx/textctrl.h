@@ -99,7 +99,7 @@ public:
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
-    
+
     // Implementation
     // --------------
     virtual void Command(wxCommandEvent& event);

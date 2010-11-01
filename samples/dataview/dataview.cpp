@@ -294,7 +294,7 @@ enum
     ID_ADD_MANY         = 203,
     ID_HIDE_ATTRIBUTES  = 204,
     ID_SHOW_ATTRIBUTES  = 205,
-    
+
     // Fourth page.
     ID_DELETE_TREE_ITEM = 400,
     ID_DELETE_ALL_TREE_ITEMS = 401,
@@ -360,9 +360,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_DRAG_AND_DROP
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
-    
+
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnAttrHeaderClick)
-    
+
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
@@ -622,16 +622,18 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             // the various columns
             m_ctrl[1]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
-                                        wxDATAVIEW_CELL_EDITABLE);
+                                        wxDATAVIEW_CELL_EDITABLE,
+                                        wxCOL_WIDTH_AUTOSIZE);
             m_ctrl[1]->AppendIconTextColumn("icon",
                                             MyListModel::Col_IconText,
-                                            wxDATAVIEW_CELL_EDITABLE);
-                                            
-            m_attributes = 
+                                            wxDATAVIEW_CELL_EDITABLE,
+                                            wxCOL_WIDTH_AUTOSIZE);
+
+            m_attributes =
                 new wxDataViewColumn("attributes",
                                      new wxDataViewTextRenderer,
                                      MyListModel::Col_TextWithAttr,
-                                     80,
+                                     wxCOL_WIDTH_AUTOSIZE,
                                      wxALIGN_RIGHT,
                                      wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
             m_ctrl[1]->AppendColumn( m_attributes );
@@ -1195,7 +1197,7 @@ void MyFrame::OnDeleteTreeItem(wxCommandEvent& WXUNUSED(event))
     wxDataViewItem selected = ctrl->GetSelection();
     if (!selected.IsOk())
         return;
-        
+
     ctrl->DeleteItem(selected);
 }
 

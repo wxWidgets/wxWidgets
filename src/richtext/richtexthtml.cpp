@@ -101,8 +101,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         wxTextOutputStream str(stream, wxEOL_NATIVE);
 #endif
 
-        wxTextAttr currentParaStyle = buffer->GetAttributes();
-        wxTextAttr currentCharStyle = buffer->GetAttributes();
+        wxRichTextAttr currentParaStyle = buffer->GetAttributes();
+        wxRichTextAttr currentCharStyle = buffer->GetAttributes();
 
         if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
             str << wxT("<html><head></head><body>\n");
@@ -123,7 +123,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
             if (para)
             {
-                wxTextAttr paraStyle(para->GetCombinedAttributes());
+                wxRichTextAttr paraStyle(para->GetCombinedAttributes());
 
                 BeginParagraphFormatting(currentParaStyle, paraStyle, str);
 
@@ -134,7 +134,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                     wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
                     if (textObj && !textObj->IsEmpty())
                     {
-                        wxTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
+                        wxRichTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
                         BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
 
                         wxString text = textObj->GetText();
@@ -184,7 +184,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     return true;
 }
 
-void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, const wxTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& str)
+void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, const wxRichTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& str)
 {
     wxString style;
 
@@ -219,7 +219,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttr& currentSt
         str << wxT("<a href=\"") << thisStyle.GetURL() << wxT("\">");
 }
 
-void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, const wxTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::EndCharacterFormatting(const wxRichTextAttr& WXUNUSED(currentStyle), const wxRichTextAttr& thisStyle, const wxRichTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& stream)
 {
     if (thisStyle.HasURL())
         stream << wxT("</a>");
@@ -239,7 +239,7 @@ void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttr& WXUNUSED(cu
 }
 
 /// Begin paragraph formatting
-void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, wxTextOutputStream& str)
+void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxRichTextAttr& WXUNUSED(currentStyle), const wxRichTextAttr& thisStyle, wxTextOutputStream& str)
 {
     if (thisStyle.HasPageBreak())
     {
@@ -367,7 +367,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
 }
 
 /// End paragraph formatting
-void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::EndParagraphFormatting(const wxRichTextAttr& WXUNUSED(currentStyle), const wxRichTextAttr& thisStyle, wxTextOutputStream& stream)
 {
     if (thisStyle.HasFont())
         stream << wxT("</font>");
@@ -405,7 +405,7 @@ void wxRichTextHTMLHandler::CloseLists(int level, wxTextOutputStream& str)
 }
 
 /// Output font tag
-void wxRichTextHTMLHandler::OutputFont(const wxTextAttr& style, wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::OutputFont(const wxRichTextAttr& style, wxTextOutputStream& stream)
 {
     if (style.HasFont())
     {
@@ -416,7 +416,7 @@ void wxRichTextHTMLHandler::OutputFont(const wxTextAttr& style, wxTextOutputStre
     }
 }
 
-int wxRichTextHTMLHandler::TypeOfList( const wxTextAttr& thisStyle, wxString& tag )
+int wxRichTextHTMLHandler::TypeOfList( const wxRichTextAttr& thisStyle, wxString& tag )
 {
     // We can use number attribute of li tag but not all the browsers support it.
     // also wxHtmlWindow doesn't support type attribute.
@@ -444,7 +444,7 @@ int wxRichTextHTMLHandler::TypeOfList( const wxTextAttr& thisStyle, wxString& ta
         return 0;
 }
 
-wxString wxRichTextHTMLHandler::GetAlignment( const wxTextAttr& thisStyle )
+wxString wxRichTextHTMLHandler::GetAlignment( const wxRichTextAttr& thisStyle )
 {
     switch( thisStyle.GetAlignment() )
     {
@@ -470,20 +470,27 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
 #if wxUSE_FILESYSTEM
     if (GetFlags() & wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY)
     {
+#if 0
         if (!image->GetImage().Ok() && image->GetImageBlock().GetData())
             image->LoadFromBlock();
         if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
             image->MakeBlock();
+#endif
 
-        if (image->GetImage().Ok())
+        if (image->GetImageBlock().IsOk())
         {
-            wxString ext(image->GetImageBlock().GetExtension());
-            wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext));
-            wxMemoryFSHandler::AddFile(tempFilename, image->GetImage(), image->GetImageBlock().GetImageType());
+            wxImage img;
+            image->GetImageBlock().Load(img);
+            if (img.IsOk())
+            {
+                wxString ext(image->GetImageBlock().GetExtension());
+                wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext));
+                wxMemoryFSHandler::AddFile(tempFilename, img, image->GetImageBlock().GetImageType());
 
-            m_imageLocations.Add(tempFilename);
+                m_imageLocations.Add(tempFilename);
 
-            str << wxT("memory:") << tempFilename;
+                str << wxT("memory:") << tempFilename;
+            }
         }
         else
             str << wxT("memory:?");
@@ -492,12 +499,14 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
     }
     else if (GetFlags() & wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_FILES)
     {
+#if 0
         if (!image->GetImage().Ok() && image->GetImageBlock().GetData())
             image->LoadFromBlock();
         if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
             image->MakeBlock();
+#endif
 
-        if (image->GetImage().Ok())
+        if (image->GetImageBlock().Ok())
         {
             wxString tempDir(GetTempDir());
             if (tempDir.IsEmpty())
@@ -522,14 +531,17 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
         str << wxT("data:");
         str << GetMimeType(image->GetImageBlock().GetImageType());
         str << wxT(";base64,");
-
+#if 0
         if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
             image->MakeBlock();
+#endif
+        if (image->GetImageBlock().Ok())
+        {
+            wxChar* data = b64enc( image->GetImageBlock().GetData(), image->GetImageBlock().GetDataSize() );
+            str << data;
 
-        wxChar* data = b64enc( image->GetImageBlock().GetData(), image->GetImageBlock().GetDataSize() );
-        str << data;
-
-        delete[] data;
+            delete[] data;
+        }
     }
 
     str << wxT("\" />");

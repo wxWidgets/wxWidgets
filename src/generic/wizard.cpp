@@ -563,11 +563,8 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
             m_sizerBmpAndPage->Detach(m_page);
     }
 
-    // set the new page
-    m_page = page;
-
     // is this the end?
-    if ( !m_page )
+    if ( !page )
     {
         // terminate successfully
         if ( IsModal() )
@@ -582,11 +579,17 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
         // and notify the user code (this is especially useful for modeless
         // wizards)
-        wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), false, 0);
+        wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), false, m_page);
         (void)GetEventHandler()->ProcessEvent(event);
+
+        m_page = NULL;
 
         return true;
     }
+
+    // notice that we change m_page only here so that wxEVT_WIZARD_FINISHED
+    // event above could still use the correct (i.e. old) value of m_page
+    m_page = page;
 
     // position and show the new page
     (void)m_page->TransferDataToWindow();

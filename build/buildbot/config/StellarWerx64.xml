@@ -27,7 +27,7 @@
     <scheduler>daily_0700</scheduler>
     <steps>
         <checkout/>
-        <configure options="--with-x11"/>
+        <configure options="--with-x11 --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>

@@ -42,6 +42,7 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/keyboard.h"
 
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
   #include <ole2.h>
@@ -1465,7 +1466,7 @@ bool wxListCtrl::DeleteItem(long item)
 bool wxListCtrl::DeleteAllItems()
 {
     // Calling ListView_DeleteAllItems() will always generate an event but we
-    // shouldn't do it if the control is empty 
+    // shouldn't do it if the control is empty
     return !GetItemCount() || ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
@@ -2237,22 +2238,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
 
-                // delete the associated internal data
-                if ( wxMSWListItemData *data = MSWGetItemData(iItem) )
-                {
-                    const unsigned count = m_internalData.size();
-                    for ( unsigned n = 0; n < count; n++ )
-                    {
-                        if ( m_internalData[n] == data )
-                        {
-                            m_internalData.erase(m_internalData.begin() + n);
-                            wxDELETE(data);
-                            break;
-                        }
-                    }
-
-                    wxASSERT_MSG( !data, "invalid internal data pointer?" );
-                }
                 break;
 
             case LVN_INSERTITEM:
@@ -2340,10 +2325,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
 
-                        // wxCharCodeMSWToWX() returns 0 if the key is an ASCII
-                        // value which should be used as is
-                        int code = wxCharCodeMSWToWX(wVKey);
-                        event.m_code = code ? code : wVKey;
+                        event.m_code = wxMSWKeyboard::VKToWX(wVKey);
+
+                        if ( event.m_code == WXK_NONE )
+                        {
+                            // We can't translate this to a standard key code,
+                            // until support for Unicode key codes is added to
+                            // wxListEvent we just ignore them.
+                            return false;
+                        }
                     }
 
                     event.m_itemIndex =
@@ -2602,6 +2592,27 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // with the real one
             m_count = 0;
             return true;
+
+        case LVN_DELETEITEM:
+            // Delete the associated internal data. Notice that this can be
+            // done only after the event has been handled as the data could be
+            // accessed during the handling of the event.
+            if ( wxMSWListItemData *data = MSWGetItemData(event.m_itemIndex) )
+            {
+                const unsigned count = m_internalData.size();
+                for ( unsigned n = 0; n < count; n++ )
+                {
+                    if ( m_internalData[n] == data )
+                    {
+                        m_internalData.erase(m_internalData.begin() + n);
+                        wxDELETE(data);
+                        break;
+                    }
+                }
+
+                wxASSERT_MSG( !data, "invalid internal data pointer?" );
+            }
+            break;
 
         case LVN_ENDLABELEDITA:
         case LVN_ENDLABELEDITW:

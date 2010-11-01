@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
-// RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton
 //              (c) 2010 Vadim Zeitlin
@@ -16,8 +16,9 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
-
 #include "wx/msw/wrapwin.h"
+
+#include "wx/msw/private/keyboard.h"
 
 namespace
 {
@@ -39,11 +40,6 @@ DWORD EventTypeForMouseButton(int button, bool isDown)
             wxFAIL_MSG("Unsupported button passed in.");
             return (DWORD)-1;
     }
-}
-
-void DoSimulateKbdEvent(DWORD vk, bool isDown)
-{
-    keybd_event(vk, 0, isDown ? 0 : KEYEVENTF_KEYUP, 0);
 }
 
 } // anonymous namespace
@@ -76,30 +72,19 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
+bool
+wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
 {
-    if (isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            DoSimulateKbdEvent(VK_SHIFT, true);
-        if (modifiers & wxMOD_ALT)
-            DoSimulateKbdEvent(VK_MENU, true);
-        if (modifiers & wxMOD_CMD)
-            DoSimulateKbdEvent(VK_CONTROL, true);
-    }
+    bool isExtended;
+    DWORD vkkeycode = wxMSWKeyboard::WXToVK(keycode, &isExtended);
 
-    DWORD vkkeycode = wxCharCodeWXToMSW(keycode);
-    keybd_event(vkkeycode, 0, isDown ? 0 : KEYEVENTF_KEYUP, 0);
+    DWORD flags = 0;
+    if ( isExtended )
+        flags |= KEYEVENTF_EXTENDEDKEY;
+    if ( !isDown )
+        flags |= KEYEVENTF_KEYUP;
 
-    if (!isDown)
-    {
-        if (modifiers & wxMOD_SHIFT)
-            DoSimulateKbdEvent(VK_SHIFT, false);
-        if (modifiers & wxMOD_ALT)
-            DoSimulateKbdEvent(VK_MENU, false);
-        if (modifiers & wxMOD_CMD)
-            DoSimulateKbdEvent(VK_CONTROL, false);
-    }
+    keybd_event(vkkeycode, 0, flags, 0);
 
     return true;
 }

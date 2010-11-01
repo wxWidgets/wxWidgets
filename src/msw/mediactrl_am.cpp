@@ -2009,18 +2009,19 @@ wxLongLong wxAMMediaBackend::GetDuration()
 {
     double outDuration;
     HRESULT hr = GetAM()->get_Duration(&outDuration);
-    if(FAILED(hr))
+    switch ( hr )
     {
-        wxAMLOG(hr);
-        return 0;
+        default:
+            wxAMLOG(hr);
+            // fall through
+
+        case S_FALSE:
+            return 0;
+
+        case S_OK:
+            // outDuration is in seconds, we need milliseconds
+            return outDuration * 1000;
     }
-
-    // h,m,s,milli - outDuration is in 1 second (double)
-    outDuration *= 1000;
-    wxLongLong ll;
-    ll.Assign(outDuration);
-
-    return ll;
 }
 
 //---------------------------------------------------------------------------
@@ -2258,8 +2259,9 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 // End of wxAMMediaBackend
 //---------------------------------------------------------------------------
 
-// in source file that contains stuff you don't directly use
-#include "wx/html/forcelnk.h"
-FORCE_LINK_ME(wxmediabackend_am)
+// Allow the user code to use wxFORCE_LINK_MODULE() to ensure that this object
+// file is not discarded by the linker.
+#include "wx/link.h"
+wxFORCE_LINK_THIS_MODULE(wxmediabackend_am)
 
 #endif // wxUSE_MEDIACTRL && wxUSE_ACTIVEX

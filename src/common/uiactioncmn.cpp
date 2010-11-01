@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
 // Modified by:
 // Created:     2010-03-06
-// RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton
 //              (c) 2010 Vadim Zeitlin
@@ -50,8 +50,6 @@ wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
 bool
 wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
 {
-    wxASSERT_MSG( !(modifiers & wxMOD_CONTROL),
-        "wxMOD_CONTROL is not implemented, use wxMOD_CMD instead" );
     wxASSERT_MSG( (modifiers & wxMOD_ALTGR) != wxMOD_ALTGR,
         "wxMOD_ALTGR is not implemented" );
     wxASSERT_MSG( !(modifiers & wxMOD_META ),
@@ -59,10 +57,28 @@ wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
     wxASSERT_MSG( !(modifiers & wxMOD_WIN ),
         "wxMOD_WIN is not implemented" );
 
-    return DoKey(keycode, modifiers, isDown);
+    if ( isDown )
+        SimulateModifiers(modifiers, true);
+
+    bool rc = DoKey(keycode, modifiers, isDown);
+
+    if ( !isDown )
+        SimulateModifiers(modifiers, false);
+
+    return rc;
 }
 
-bool  wxUIActionSimulator::Char(int keycode, int modifiers)
+void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)
+{
+    if ( modifiers & wxMOD_SHIFT )
+        DoKey(WXK_SHIFT, modifiers, isDown);
+    if ( modifiers & wxMOD_ALT )
+        DoKey(WXK_ALT, modifiers, isDown);
+    if ( modifiers & wxMOD_CONTROL )
+        DoKey(WXK_CONTROL, modifiers, isDown);
+}
+
+bool wxUIActionSimulator::Char(int keycode, int modifiers)
 {
     Key(keycode, modifiers, true);
     Key(keycode, modifiers, false);

@@ -1910,6 +1910,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\meta\implicitconversion.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\init.h"
 				>
 			</File>

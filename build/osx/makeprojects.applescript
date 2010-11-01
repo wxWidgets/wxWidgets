@@ -184,6 +184,14 @@ on populateProject(theProject)
 	tell application "Xcode"
 		quit
 	end tell
+	do shell script (osxBuildFolder as text) & "fix_xcode_ids.py \"" & (POSIX path of projectFile as Unicode text) & "\""
+	-- reopen again to let Xcode sort identifiers
+	tell application "Xcode"
+		open projectFile
+	end tell
+	tell application "Xcode"
+		quit
+	end tell
 end populateProject
 
 on makeProject(theProject)

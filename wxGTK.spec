@@ -29,23 +29,23 @@
 
 %if %{unicode}
     %define name		wx-%{portname}-unicode
-    %define wxconfig		%{portname}-unicode-release-%{ver2}
-    %define wxconfigstatic	%{portname}-unicode-release-static-%{ver2}
+    %define wxconfig		%{portname}-unicode-%{ver2}
+    %define wxconfigstatic	%{portname}-unicode-static-%{ver2}
     %define wxconfiglink	wx%{portname}u-%{ver2}-config
 %else
     %define name		wx-%{portname}-ansi
-    %define wxconfig		%{portname}-ansi-release-%{ver2}
-    %define wxconfigstatic	%{portname}-ansi-release-static-%{ver2}
+    %define wxconfig		%{portname}-ansi-%{ver2}
+    %define wxconfigstatic	%{portname}-ansi-static-%{ver2}
     %define wxconfiglink	wx%{portname}-%{ver2}-config
 %endif
 
 %if %{unicode}
     %define wxbasename		wx-base-unicode
-    %define wxbaseconfig	base-unicode-release-%{ver2}
+    %define wxbaseconfig	base-unicode-%{ver2}
     %define wxbaseconfiglink	wxbaseu-%{ver2}-config
 %else
     %define wxbasename		wx-base-ansi
-    %define wxbaseconfig	base-ansi-release-%{ver2}
+    %define wxbaseconfig	base-ansi-%{ver2}
     %define wxbaseconfiglink	wxbase-%{ver2}-config
 %endif
 
@@ -62,7 +62,7 @@ Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
 %if %{portname} == gtk2
-BuildRequires: gtk+-2.0-devel
+BuildRequires: gtk2-devel
 %else
 BuildRequires: gtk+-devel >= 1.2.0
 %endif
@@ -116,7 +116,7 @@ wxBase is a collection of C++ classes providing basic data structures (strings,
 lists, arrays), portable wrappers around many OS-specific funstions (file
 operations, time/date manipulations, threads, processes, sockets, shared
 library loading) as well as other utility classes (streams, archive and
-compression). wxBase currently supports Win32, most Unix variants (Linux, 
+compression). wxBase currently supports Win32, most Unix variants (Linux,
 FreeBSD, Solaris, HP-UX) and MacOS X (Carbon and Mach-0).
 
 %package -n %{wxbasename}-devel
@@ -127,23 +127,6 @@ Provides: wxBase-devel
 %description -n %{wxbasename}-devel
 wxBase library - non-GUI support classes of the wxWidgets toolkit,
 header files.
-
-%package contrib
-Summary: The GTK+ %{gtkver} port of the wxWidgets library, contributed libraries.
-Group: X11/Libraries
-Requires: %{name} = %{ver}
-
-%description contrib
-Contributed libraries for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
-
-%package contrib-devel
-Summary: The GTK+ %{gtkver} port of the wxWidgets library
-Group: X11/Libraries
-Requires: %{name}-contrib = %{ver}
-Requires: %{name}-devel = %{ver}
-
-%description contrib-devel
-Header files for contributed libraries for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
 
 %prep
 %setup -q -n wxGTK-%{ver}
@@ -157,7 +140,7 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{_prefix} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
@@ -168,16 +151,16 @@ cd obj-shared
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl
+			      --with-opengl \
+			      --with-gnomeprint \
+			      --enable-mediactrl
 $MAKE
 
-cd contrib/src
-$MAKE
-cd ../../..
+cd ..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{_prefix} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
@@ -189,12 +172,12 @@ cd obj-static
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl
+			      --with-opengl \
+			      --with-gnomeprint \
+			      --enable-mediactrl
 $MAKE
 
-cd contrib/src
-$MAKE
-cd ../../..
+cd ..
 
 make -C locale allmo
 
@@ -351,6 +334,7 @@ wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h
 wx/meta/if.h
+wx/meta/implicitconversion.h
 wx/meta/int2type.h
 wx/meta/movable.h
 wx/meta/pod.h
@@ -385,138 +369,10 @@ wx/xml/xml.h
 wx/xtixml.h
 EOF
 # --- wxBase headers list ends here ---
-cat <<EOF >wxbase-headers.paths
-%{_includedir}/wx-%{ver2}/wx/afterstd.h
-%{_includedir}/wx-%{ver2}/wx/app.h
-%{_includedir}/wx-%{ver2}/wx/apptrait.h
-%{_includedir}/wx-%{ver2}/wx/archive.h
-%{_includedir}/wx-%{ver2}/wx/arrimpl.cpp
-%{_includedir}/wx-%{ver2}/wx/arrstr.h
-%{_includedir}/wx-%{ver2}/wx/beforestd.h
-%{_includedir}/wx-%{ver2}/wx/buffer.h
-%{_includedir}/wx-%{ver2}/wx/build.h
-%{_includedir}/wx-%{ver2}/wx/chkconf.h
-%{_includedir}/wx-%{ver2}/wx/clntdata.h
-%{_includedir}/wx-%{ver2}/wx/cmdline.h
-%{_includedir}/wx-%{ver2}/wx/confbase.h
-%{_includedir}/wx-%{ver2}/wx/config.h
-%{_includedir}/wx-%{ver2}/wx/containr.h
-%{_includedir}/wx-%{ver2}/wx/convauto.h
-%{_includedir}/wx-%{ver2}/wx/datetime.h
-%{_includedir}/wx-%{ver2}/wx/datstrm.h
-%{_includedir}/wx-%{ver2}/wx/dde.h
-%{_includedir}/wx-%{ver2}/wx/debug.h
-%{_includedir}/wx-%{ver2}/wx/defs.h
-%{_includedir}/wx-%{ver2}/wx/dir.h
-%{_includedir}/wx-%{ver2}/wx/dlimpexp.h
-%{_includedir}/wx-%{ver2}/wx/dynarray.h
-%{_includedir}/wx-%{ver2}/wx/dynlib.h
-%{_includedir}/wx-%{ver2}/wx/dynload.h
-%{_includedir}/wx-%{ver2}/wx/encconv.h
-%{_includedir}/wx-%{ver2}/wx/event.h
-%{_includedir}/wx-%{ver2}/wx/except.h
-%{_includedir}/wx-%{ver2}/wx/features.h
-%{_includedir}/wx-%{ver2}/wx/ffile.h
-%{_includedir}/wx-%{ver2}/wx/file.h
-%{_includedir}/wx-%{ver2}/wx/fileconf.h
-%{_includedir}/wx-%{ver2}/wx/filefn.h
-%{_includedir}/wx-%{ver2}/wx/filename.h
-%{_includedir}/wx-%{ver2}/wx/filesys.h
-%{_includedir}/wx-%{ver2}/wx/fontenc.h
-%{_includedir}/wx-%{ver2}/wx/fontmap.h
-%{_includedir}/wx-%{ver2}/wx/fs_mem.h
-%{_includedir}/wx-%{ver2}/wx/fs_zip.h
-%{_includedir}/wx-%{ver2}/wx/hash.h
-%{_includedir}/wx-%{ver2}/wx/hashmap.h
-%{_includedir}/wx-%{ver2}/wx/hashset.h
-%{_includedir}/wx-%{ver2}/wx/html/forcelnk.h
-%{_includedir}/wx-%{ver2}/wx/iconloc.h
-%{_includedir}/wx-%{ver2}/wx/init.h
-%{_includedir}/wx-%{ver2}/wx/intl.h
-%{_includedir}/wx-%{ver2}/wx/iosfwrap.h
-%{_includedir}/wx-%{ver2}/wx/ioswrap.h
-%{_includedir}/wx-%{ver2}/wx/ipc.h
-%{_includedir}/wx-%{ver2}/wx/ipcbase.h
-%{_includedir}/wx-%{ver2}/wx/isql.h
-%{_includedir}/wx-%{ver2}/wx/isqlext.h
-%{_includedir}/wx-%{ver2}/wx/link.h
-%{_includedir}/wx-%{ver2}/wx/list.h
-%{_includedir}/wx-%{ver2}/wx/listimpl.cpp
-%{_includedir}/wx-%{ver2}/wx/log.h
-%{_includedir}/wx-%{ver2}/wx/longlong.h
-%{_includedir}/wx-%{ver2}/wx/math.h
-%{_includedir}/wx-%{ver2}/wx/memconf.h
-%{_includedir}/wx-%{ver2}/wx/memory.h
-%{_includedir}/wx-%{ver2}/wx/memtext.h
-%{_includedir}/wx-%{ver2}/wx/mimetype.h
-%{_includedir}/wx-%{ver2}/wx/module.h
-%{_includedir}/wx-%{ver2}/wx/msgout.h
-%{_includedir}/wx-%{ver2}/wx/mstream.h
-%{_includedir}/wx-%{ver2}/wx/object.h
-%{_includedir}/wx-%{ver2}/wx/platform.h
-%{_includedir}/wx-%{ver2}/wx/power.h
-%{_includedir}/wx-%{ver2}/wx/process.h
-%{_includedir}/wx-%{ver2}/wx/ptr_scpd.h
-%{_includedir}/wx-%{ver2}/wx/recguard.h
-%{_includedir}/wx-%{ver2}/wx/regex.h
-%{_includedir}/wx-%{ver2}/wx/scopeguard.h
-%{_includedir}/wx-%{ver2}/wx/snglinst.h
-%{_includedir}/wx-%{ver2}/wx/sstream.h
-%{_includedir}/wx-%{ver2}/wx/stack.h
-%{_includedir}/wx-%{ver2}/wx/stackwalk.h
-%{_includedir}/wx-%{ver2}/wx/stdpaths.h
-%{_includedir}/wx-%{ver2}/wx/stockitem.h
-%{_includedir}/wx-%{ver2}/wx/stopwatch.h
-%{_includedir}/wx-%{ver2}/wx/strconv.h
-%{_includedir}/wx-%{ver2}/wx/stream.h
-%{_includedir}/wx-%{ver2}/wx/string.h
-%{_includedir}/wx-%{ver2}/wx/sysopt.h
-%{_includedir}/wx-%{ver2}/wx/textbuf.h
-%{_includedir}/wx-%{ver2}/wx/textfile.h
-%{_includedir}/wx-%{ver2}/wx/thread.h
-%{_includedir}/wx-%{ver2}/wx/thrimpl.cpp
-%{_includedir}/wx-%{ver2}/wx/timer.h
-%{_includedir}/wx-%{ver2}/wx/tokenzr.h
-%{_includedir}/wx-%{ver2}/wx/txtstrm.h
-%{_includedir}/wx-%{ver2}/wx/types.h
-%{_includedir}/wx-%{ver2}/wx/uri.h
-%{_includedir}/wx-%{ver2}/wx/utils.h
-%{_includedir}/wx-%{ver2}/wx/variant.h
-%{_includedir}/wx-%{ver2}/wx/vector.h
-%{_includedir}/wx-%{ver2}/wx/version.h
-%{_includedir}/wx-%{ver2}/wx/volume.h
-%{_includedir}/wx-%{ver2}/wx/wfstream.h
-%{_includedir}/wx-%{ver2}/wx/wx.h
-%{_includedir}/wx-%{ver2}/wx/wxchar.h
-%{_includedir}/wx-%{ver2}/wx/wxprec.h
-%{_includedir}/wx-%{ver2}/wx/xti.h
-%{_includedir}/wx-%{ver2}/wx/xtistrm.h
-%{_includedir}/wx-%{ver2}/wx/zipstrm.h
-%{_includedir}/wx-%{ver2}/wx/zstream.h
-%{_includedir}/wx-%{ver2}/wx/fs_inet.h
-%{_includedir}/wx-%{ver2}/wx/gsocket.h
-%{_includedir}/wx-%{ver2}/wx/protocol/file.h
-%{_includedir}/wx-%{ver2}/wx/protocol/ftp.h
-%{_includedir}/wx-%{ver2}/wx/protocol/http.h
-%{_includedir}/wx-%{ver2}/wx/protocol/protocol.h
-%{_includedir}/wx-%{ver2}/wx/sckaddr.h
-%{_includedir}/wx-%{ver2}/wx/sckipc.h
-%{_includedir}/wx-%{ver2}/wx/sckstrm.h
-%{_includedir}/wx-%{ver2}/wx/socket.h
-%{_includedir}/wx-%{ver2}/wx/url.h
-%{_includedir}/wx-%{ver2}/wx/xml/xml.h
-%{_includedir}/wx-%{ver2}/wx/xtixml.h
-%{_includedir}/wx-%{ver2}/wx/unix/apptbase.h
-%{_includedir}/wx-%{ver2}/wx/unix/apptrait.h
-%{_includedir}/wx-%{ver2}/wx/unix/execute.h
-%{_includedir}/wx-%{ver2}/wx/unix/gsockunx.h
-%{_includedir}/wx-%{ver2}/wx/unix/mimetype.h
-%{_includedir}/wx-%{ver2}/wx/unix/pipe.h
-%{_includedir}/wx-%{ver2}/wx/unix/private.h
-%{_includedir}/wx-%{ver2}/wx/unix/stackwalk.h
-%{_includedir}/wx-%{ver2}/wx/unix/stdpaths.h
-EOF
-# --- wxBase headers list ends here ---
+
+# --- wxBase headers list with paths ---
+sed -e 's@^@%{_includedir}/wx-%{ver2}/@' wxbase-headers.files > wxbase-headers.paths
+
 
 # temporarily remove base headers
 mkdir $RPM_BUILD_ROOT/_save_dir
@@ -529,10 +385,6 @@ find $RPM_BUILD_ROOT%{_includedir}/wx-%{ver2} -type f | sed -e "s,$RPM_BUILD_ROO
 # move base headers (actually all headers) back again
 cp -f -r $RPM_BUILD_ROOT/_save_dir/* $RPM_BUILD_ROOT%{_includedir}
 rm -rf $RPM_BUILD_ROOT/_save_dir
-
-# contrib stuff:
-(cd obj-static/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
-(cd obj-shared/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
 
 # utils:
 (cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
@@ -590,18 +442,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %postun gl
 /sbin/ldconfig
 
-%post contrib
-/sbin/ldconfig
-
-%postun contrib
-/sbin/ldconfig
-
-%post contrib-devel
-/sbin/ldconfig
-
-%postun contrib-devel
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
@@ -609,9 +449,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
 %files -n wx-i18n
@@ -626,9 +469,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so
 # static libs
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.a
@@ -636,8 +482,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_richtext-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxconfig}
@@ -658,6 +508,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %if %{unicode}
     %{_libdir}/libwxregexu-%{ver2}.a
 %endif
+%{_libdir}/libwxscintilla-%{ver2}.a
 %dir %{_libdir}/wx
 %{_datadir}/aclocal/*.m4
 %{_datadir}/bakefile/presets/*
@@ -665,67 +516,3 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %files gl
 %defattr(-,root,root)
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so.*
-
-%files contrib
-%defattr(-,root,root)
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so.*
-
-# static libs
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.a
-
-%files contrib-devel
-%defattr(-,root,root)
-%dir %{_includedir}/wx-%{ver2}/wx/animate
-%{_includedir}/wx-%{ver2}/wx/animate/*
-%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/deprecated
-%{_includedir}/wx-%{ver2}/wx/deprecated/*
-%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/fl
-%{_includedir}/wx-%{ver2}/wx/fl/*
-%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/gizmos
-%{_includedir}/wx-%{ver2}/wx/gizmos/*
-%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so
-%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/mmedia
-%{_includedir}/wx-%{ver2}/wx/mmedia/*
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/ogl
-%{_includedir}/wx-%{ver2}/wx/ogl/*
-%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/plot
-%{_includedir}/wx-%{ver2}/wx/plot/*
-%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/stc
-%{_includedir}/wx-%{ver2}/wx/stc/*
-%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so
-
-%dir %{_includedir}/wx-%{ver2}/wx/svg
-%{_includedir}/wx-%{ver2}/wx/svg/*
-%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so

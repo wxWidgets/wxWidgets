@@ -723,7 +723,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord xxx2 = (wxCoord) (xxc+ray);
     wxCoord yyy2 = (wxCoord) (yyc+ray);
 
-    if ( m_brush.IsOk() && m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
+    if ( m_brush.IsNonTransparent() )
     {
         // Have to add 1 to bottom-right corner of rectangle
         // to make semi-circles look right (crooked line otherwise).
@@ -931,7 +931,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     // (i.e. drawn with a transparent pen) one pixel smaller in both directions
     // and we want them to have the same size regardless of which pen is used
 #ifndef __WXWINCE__
-    if ( m_pen.IsOk() && m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( m_pen.IsTransparent() )
     {
         x2dev++;
         y2dev++;
@@ -965,7 +965,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     // Windows draws the filled rectangles without outline (i.e. drawn with a
     // transparent pen) one pixel smaller in both directions and we want them
     // to have the same size regardless of which pen is used - adjust
-    if ( m_pen.IsOk() && m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( m_pen.IsTransparent() )
     {
         x2++;
         y2++;

@@ -228,14 +228,10 @@ void InteractiveOutputTestCase::TestMimeAssociate()
 #ifdef TEST_MIME
     wxPuts(wxT("*** Testing creation of filetype association ***\n"));
 
-    wxFileTypeInfo ftInfo(
-                            wxT("application/x-xyz"),
-                            wxT("xyzview '%s'"), // open cmd
-                            wxT(""),             // print cmd
-                            wxT("XYZ File"),     // description
-                            wxT(".xyz"),         // extensions
-                            wxNullPtr           // end of extensions
-                         );
+    wxFileTypeInfo ftInfo("application/x-xyz");
+    ftInfo.SetOpenCommand("xyzview '%s'");
+    ftInfo.SetDescription("XYZ File");
+    ftInfo.AddExtension(".xyz");
     ftInfo.SetShortDesc(wxT("XYZFile")); // used under Win32 only
 
     wxFileType *ft = wxTheMimeTypesManager->Associate(ftInfo);

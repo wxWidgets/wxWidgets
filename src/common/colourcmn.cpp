@@ -150,7 +150,7 @@ wxString wxColourBase::GetAsString(long flags) const
 }
 
 // static
-void wxColourBase::MakeMono(unsigned char* r, unsigned char* g, unsigned char* b, 
+void wxColourBase::MakeMono(unsigned char* r, unsigned char* g, unsigned char* b,
                             bool on)
 {
     *r = *g = *b = on ? 255 : 0;
@@ -173,7 +173,7 @@ void wxColourBase::MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b
 }
 
 // static
-void wxColourBase::MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b, 
+void wxColourBase::MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b,
                                 unsigned char brightness)
 {
     //MakeGrey(r, g, b, brightness); // grey no-blend version
@@ -185,7 +185,7 @@ void wxColourBase::MakeDisabled(unsigned char* r, unsigned char* g, unsigned cha
 // AlphaBlend is used by ChangeLightness and MakeDisabled
 
 // static
-unsigned char wxColourBase::AlphaBlend(unsigned char fg, unsigned char bg, 
+unsigned char wxColourBase::AlphaBlend(unsigned char fg, unsigned char bg,
                                        double alpha)
 {
     double result = bg + (alpha * (fg - bg));

@@ -1570,8 +1570,8 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
 
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
-    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxScopedCharBuffer data(text.utf8_str());
+    pango_layout_set_text(layout, data, data.length());
 
     // Measure layout.
     int w,h;
@@ -1675,8 +1675,8 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
     else
         pango_layout_set_font_description(layout, m_fontdesc);
 
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxScopedCharBuffer data(string.utf8_str());
+    pango_layout_set_text(layout, data, data.length());
 
     // Measure text.
     int w,h;

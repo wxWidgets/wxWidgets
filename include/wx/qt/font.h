@@ -74,6 +74,7 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxFontFamily DoGetFamily() const;
 
     DECLARE_DYNAMIC_CLASS( wxFont )
 

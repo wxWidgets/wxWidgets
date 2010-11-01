@@ -22,6 +22,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
 #include "wx/display.h"
+#include "wx/sizer.h"
 
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
@@ -110,7 +111,7 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     SetLabel(label);
 
     m_minimised_size = wxDefaultSize; // Unknown / none
-    m_smallest_unminimised_size = wxSize(INT_MAX, INT_MAX); // Unknown / none
+    m_smallest_unminimised_size = wxDefaultSize;// Unknown / none for IsFullySpecified()
     m_preferred_expand_direction = wxSOUTH;
     m_expanded_dummy = NULL;
     m_expanded_panel = NULL;
@@ -233,11 +234,13 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
     // will refuse to grow any larger while in limbo between minimised and non.
 
     bool minimised = (m_flags & wxRIBBON_PANEL_NO_AUTO_MINIMISE) == 0 &&
-        IsMinimised(wxSize(width, height));
+        IsMinimised(wxSize(width, height)); // check if would be at this size
     if(minimised != m_minimised)
     {
         m_minimised = minimised;
-
+        // Note that for sizers, this routine disallows the use of mixed shown 
+        // and hidden controls
+        // TODO ? use some list of user set invisible children to restore status.
         for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                   node;
                   node = node->GetNext())
@@ -247,17 +250,29 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
         Refresh();
     }
-    
+
     wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
 }
 
+// Checks if panel would be minimised at (client size) at_size
 bool wxRibbonPanel::IsMinimised(wxSize at_size) const
 {
+    if(GetSizer())
+    {
+        // we have no information on size change direction 
+        // so check both
+        wxSize size = GetMinNotMinimisedSize();
+        if(size.x > at_size.x || size.y > at_size.y)
+            return true;
+
+        return false;
+    }
+
     if(!m_minimised_size.IsFullySpecified())
         return false;
 
     return (at_size.GetX() <= m_minimised_size.GetX() &&
-        at_size.GetY() <= m_minimised_size.GetY()) || 
+        at_size.GetY() <= m_minimised_size.GetY()) ||
         at_size.GetX() < m_smallest_unminimised_size.GetX() ||
         at_size.GetY() < m_smallest_unminimised_size.GetY();
 }
@@ -301,45 +316,69 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
         return m_expanded_panel->DoGetNextSmallerSize(direction, relative_to);
     }
 
-    // TODO: Check for, and delegate to, a sizer
-
-    // Simple (and common) case of single ribbon child
-    if(GetChildren().GetCount() == 1)
+    if(m_art != NULL)
     {
-        wxWindow* child = GetChildren().Item(0)->GetData();
-        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
-        if(m_art != NULL && ribbon_child != NULL)
+        wxClientDC dc((wxRibbonPanel*) this);
+        wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
+        wxSize smaller(-1, -1);
+        bool minimise = false;
+
+        if(GetSizer())
         {
-            wxClientDC dc((wxRibbonPanel*) this);
-            wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
-            wxSize smaller = ribbon_child->GetNextSmallerSize(direction, child_relative);
-            if(smaller == child_relative)
+            // Get smallest non minimised size
+            smaller = GetMinSize();
+            // and adjust to child_relative for parent page
+            if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
             {
-                if(CanAutoMinimise())
-                {
-                    wxSize minimised = m_minimised_size;
-                    switch(direction)
-                    {
-                    case wxHORIZONTAL:
-                        minimised.SetHeight(relative_to.GetHeight());
-                        break;
-                    case wxVERTICAL:
-                        minimised.SetWidth(relative_to.GetWidth());
-                        break;
-                    default:
-                        break;
-                    }
-                    return minimised;
-                }
-                else
-                {
-                    return relative_to;
-                }
+                 minimise = (child_relative.y <= smaller.y);
+                 if(smaller.x < child_relative.x)
+                    smaller.x = child_relative.x;
             }
             else
             {
-                return m_art->GetPanelSize(dc, this, smaller, NULL);
+                minimise = (child_relative.x <= smaller.x);
+                if(smaller.y < child_relative.y)
+                    smaller.y = child_relative.y;
             }
+        }
+        else if(GetChildren().GetCount() == 1)
+        {
+            // Simple (and common) case of single ribbon child or Sizer
+            wxWindow* child = GetChildren().Item(0)->GetData();
+            wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
+            if(ribbon_child != NULL)
+            {
+                smaller = ribbon_child->GetNextSmallerSize(direction, child_relative);                
+                minimise = (smaller == child_relative);
+            }
+        }
+
+        if(minimise)
+        {
+            if(CanAutoMinimise())
+            {
+                wxSize minimised = m_minimised_size;
+                switch(direction)
+                {
+                case wxHORIZONTAL:
+                    minimised.SetHeight(relative_to.GetHeight());
+                    break;
+                case wxVERTICAL:
+                    minimised.SetWidth(relative_to.GetWidth());
+                    break;
+                default:
+                    break;
+                }
+                return minimised;
+            }
+            else
+            {
+                return relative_to;
+            }
+        }
+        else if(smaller.IsFullySpecified()) // Use fallback if !(sizer/child = 1)
+        {
+            return m_art->GetPanelSize(dc, this, smaller, NULL);
         }
     }
 
@@ -398,25 +437,47 @@ wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
         }
     }
 
-    // TODO: Check for, and delegate to, a sizer
-
-    // Simple (and common) case of single ribbon child
-    if(GetChildren().GetCount() == 1)
+    if(m_art != NULL)
     {
-        wxWindow* child = GetChildren().Item(0)->GetData();
-        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
-        if(ribbon_child != NULL)
+        wxClientDC dc((wxRibbonPanel*) this);
+        wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
+        wxSize larger(-1, -1);
+
+        if(GetSizer())
         {
-            wxClientDC dc((wxRibbonPanel*) this);
-            wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
-            wxSize larger = ribbon_child->GetNextLargerSize(direction, child_relative);
+            // We could just let the sizer expand in flow direction but see comment 
+            // in IsSizingContinuous()
+            larger = GetPanelSizerBestSize();
+            // and adjust for page in non flow direction
+            if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+            {
+                 if(larger.x != child_relative.x)
+                    larger.x = child_relative.x;
+            }
+            else if(larger.y != child_relative.y)
+            {
+                larger.y = child_relative.y;
+            }
+        }
+        else if(GetChildren().GetCount() == 1)
+        {
+            // Simple (and common) case of single ribbon child
+            wxWindow* child = GetChildren().Item(0)->GetData();
+            wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
+            if(ribbon_child != NULL)
+            {
+                larger = ribbon_child->GetNextLargerSize(direction, child_relative);
+            }
+        }
+
+        if(larger.IsFullySpecified()) // Use fallback if !(sizer/child = 1)
+        {
             if(larger == child_relative)
             {
                 return relative_to;
             }
             else
             {
-                wxClientDC dc((wxRibbonPanel*) this);
                 return m_art->GetPanelSize(dc, this, larger, NULL);
             }
         }
@@ -467,11 +528,15 @@ wxSize wxRibbonPanel::GetMinSize() const
 
 wxSize wxRibbonPanel::GetMinNotMinimisedSize() const
 {
-    // TODO: Ask sizer
-
-    // Common case of no sizer and single child taking up the entire panel
-    if(GetChildren().GetCount() == 1)
+    // Ask sizer if present
+    if(GetSizer())
     {
+        wxClientDC dc((wxRibbonPanel*) this);
+        return m_art->GetPanelSize(dc, this, GetPanelSizerMinSize(), NULL);
+    }
+    else if(GetChildren().GetCount() == 1)
+    {
+        // Common case of single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
         wxClientDC dc((wxRibbonPanel*) this);
         return m_art->GetPanelSize(dc, this, child->GetMinSize(), NULL);
@@ -480,13 +545,47 @@ wxSize wxRibbonPanel::GetMinNotMinimisedSize() const
     return wxRibbonControl::GetMinSize();
 }
 
+wxSize wxRibbonPanel::GetPanelSizerMinSize() const
+{
+    // Called from Realize() to set m_smallest_unminimised_size and from other
+    // functions to get the minimum size.
+    // The panel will be invisible when minimised and sizer calcs will be 0
+    // Uses m_smallest_unminimised_size in preference to GetSizer()->CalcMin()
+    // to eliminate flicker.
+
+    // Check if is visible and not previously calculated
+    if(IsShown() && !m_smallest_unminimised_size.IsFullySpecified())
+    {
+         return GetSizer()->CalcMin();
+    }
+    // else use previously calculated m_smallest_unminimised_size
+    wxClientDC dc((wxRibbonPanel*) this);
+    return m_art->GetPanelClientSize(dc, 
+                                    this, 
+                                    m_smallest_unminimised_size,
+                                    NULL);
+}
+
+wxSize wxRibbonPanel::GetPanelSizerBestSize() const
+{
+    wxSize size = GetPanelSizerMinSize();
+    // TODO allow panel to increase its size beyond minimum size
+    // by steps similarly to ribbon control panels (preferred for aesthetics)
+    // or continuously.
+    return size;
+}
+
 wxSize wxRibbonPanel::DoGetBestSize() const
 {
-    // TODO: Ask sizer
-
-    // Common case of no sizer and single child taking up the entire panel
-    if(GetChildren().GetCount() == 1)
+    // Ask sizer if present
+    if( GetSizer())
     {
+        wxClientDC dc((wxRibbonPanel*) this);
+        return m_art->GetPanelSize(dc, this, GetPanelSizerBestSize(), NULL);
+    }
+    else if(GetChildren().GetCount() == 1)
+    {
+        // Common case of no sizer and single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
         wxClientDC dc((wxRibbonPanel*) this);
         return m_art->GetPanelSize(dc, this, child->GetBestSize(), NULL);
@@ -515,8 +614,13 @@ bool wxRibbonPanel::Realize()
     }
 
     wxSize minimum_children_size(0, 0);
-    // TODO: Ask sizer if there is one
-    if(GetChildren().GetCount() == 1)
+
+    // Ask sizer if there is one present
+    if(GetSizer())
+    {
+        minimum_children_size = GetPanelSizerMinSize();
+    }
+    else if(GetChildren().GetCount() == 1)
     {
         minimum_children_size = GetChildren().GetFirst()->GetData()->GetMinSize();
     }
@@ -577,15 +681,20 @@ bool wxRibbonPanel::Layout()
         return true;
     }
 
-    // TODO: Delegate to a sizer
+    // Get wxRibbonPanel client size
+    wxPoint position;
+    wxClientDC dc(this);
+    wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
 
-    // Common case of no sizer and single child taking up the entire panel
-    if(GetChildren().GetCount() == 1)
+    // If there is a sizer, use it
+    if(GetSizer())
     {
+        GetSizer()->SetDimension(position, size); // SetSize and Layout()
+    }
+    else if(GetChildren().GetCount() == 1)
+    {
+        // Common case of no sizer and single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxPoint position;
-        wxClientDC dc(this);
-        wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
         child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
     }
     return true;
@@ -656,7 +765,13 @@ bool wxRibbonPanel::ShowExpanded()
         child->Show();
     }
 
-    // TODO: Move sizer to new panel
+    // Move sizer to new panel
+    if(GetSizer())    
+    {
+        wxSizer* sizer = GetSizer();
+        SetSizer(NULL, false); 
+        m_expanded_panel->SetSizer(sizer);
+    }
 
     m_expanded_panel->Realize();
     Refresh();
@@ -777,7 +892,13 @@ bool wxRibbonPanel::HideExpanded()
         child->Hide();
     }
 
-    // TODO: Move sizer back
+    // Move sizer back
+    if(GetSizer())
+    {
+        wxSizer* sizer = GetSizer();
+        SetSizer(NULL, false);
+        m_expanded_dummy->SetSizer(sizer);
+    }
 
     m_expanded_dummy->m_expanded_panel = NULL;
     m_expanded_dummy->Realize();

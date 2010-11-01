@@ -400,6 +400,7 @@ DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 dnl Mac/Cocoa users need to enable building universal binaries explicitly
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
+DEFAULT_wxUSE_MAC_ARCH=no
 
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
@@ -721,7 +722,9 @@ WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ 
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
-WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary  create Mac PowerPC and Intel Universal binary]], wxUSE_UNIVERSAL_BINARY)
+
+WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary  create universal binary with Mac PPC and i386 (and x86_64 if using Cocoa) architectures ]], wxUSE_UNIVERSAL_BINARY)
+WX_ARG_ENABLE_PARAM(macosx_arch,      [[  --enable-macosx_arch=ARCH  build for just the specified architecture]], wxUSE_MAC_ARCH)
 
 WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6)
 WX_ARG_DISABLE(compat28,     [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8)
@@ -1120,6 +1123,11 @@ if test "$wxUSE_MAC" = 1; then
 
 retest_macosx_linking=no
 
+OSX_ARCH_OPTS=""
+if test "x$wxUSE_MAC_ARCH" != xno; then
+    OSX_ARCH_OPTS="-arch $wxUSE_MAC_ARCH"
+fi
+
 dnl Support the old --enable-universal_binary in case anyone was using it.
     if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
         dnl --enable-universal_binary uses a default SDK (currently 10.4u)
@@ -1149,12 +1157,13 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
             fi
         fi
         dnl FIXME: I think it would be better to put this into CC, CXX, and LD rather than the flags.
-        OSX_UNIV_OPTS="-arch ppc -arch i386"
-        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
-        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
-        OBJCXXFLAGS="$OSX_UNIV_OPTS $OBJCXXFLAGS"
-        OBJCFLAGS="$OSX_UNIV_OPTS $OBJCFLAGS"
-        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
+        OSX_ARCH_OPTS="-arch ppc -arch i386"
+	if test "$wxUSE_OSX_COCOA" = 1; then
+            OSX_ARCH_OPTS="$OSX_ARCH_OPTS -arch x86_64"
+        fi
+        AC_MSG_CHECKING([for universal binary architectures])
+	AC_MSG_RESULT([$OSX_ARCH_OPTS])
+
         dnl NOTE: Only the compiler driver needs arch flags.  The link editor
         dnl is incapable of using them but the compiler driver (which we use
         dnl as LD when building dynamic libraries) uses them to invoke the
@@ -1177,6 +1186,12 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
         AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
         bk_use_pch=no
     fi
+
+CXXFLAGS="$OSX_ARCH_OPTS $CXXFLAGS"
+CFLAGS="$OSX_ARCH_OPTS $CFLAGS"
+OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
+OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
+LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 
 dnl Set up the Mac OS X SDK.  We do this early so configure tests will occur
 dnl with the SDK in place.
@@ -2833,20 +2848,13 @@ if test "$USE_WIN32" = 1 ; then
     ],
     [ ])
 
-    dnl --- FIXME: This is still a somewhat random list of libs,
-    dnl ---        some of them should probably be included conditionally.
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
     case "${host}" in
         x86_64-*-mingw32* )
-            dnl --- For mingw-w64 lctl3d32's name has changed
-            LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
-
             dnl we need to define this to embed the manifest for correct
             dnl platform from wx/msw/wx.rc (this is not needed for x86 which is
             dnl the default in wx/msw/rcdefs.h)
             WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
-        ;;
-        * )
-            LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
         ;;
     esac
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
@@ -2973,7 +2981,7 @@ if test "$wxUSE_GUI" = "yes"; then
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
                     wx_cv_cflags_gtk=$GTK_CFLAGS
-                    wx_cv_libs_gtk=`echo $GTK_LIBS | sed -e 's/ -l[[^ ]]*cairo[[^ ]]*//g'`
+                    wx_cv_libs_gtk=$GTK_LIBS
                 fi
             ]
         )

@@ -573,39 +573,29 @@ int wxMessageDialog::ShowMessageBox()
     return MSWTranslateReturnCode(msAns);
 }
 
-int wxMessageDialog::ShowTaskDialog()
-{
-#ifdef wxHAS_MSW_TASKDIALOG
-    TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-    if ( !taskDialogIndirect )
-        return wxID_CANCEL;
-
-    WinStruct<TASKDIALOGCONFIG> tdc;
-    wxMSWTaskDialogConfig wxTdc( *this );
-    wxTdc.MSWCommonTaskDialogInit( tdc );
-
-    int msAns;
-    HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
-    if ( FAILED(hr) )
-    {
-        wxLogApiError( "TaskDialogIndirect", hr );
-        return wxID_CANCEL;
-    }
-
-    return MSWTranslateReturnCode( msAns );
-#else
-    wxFAIL_MSG( "Task dialogs are unavailable." );
-
-    return wxID_CANCEL;
-#endif // wxHAS_MSW_TASKDIALOG
-}
-
-
-
 int wxMessageDialog::ShowModal()
 {
+#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
-        return ShowTaskDialog();
+    {
+        TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
+        wxCHECK_MSG( taskDialogIndirect, wxID_CANCEL, wxS("no task dialog?") );
+
+        WinStruct<TASKDIALOGCONFIG> tdc;
+        wxMSWTaskDialogConfig wxTdc( *this );
+        wxTdc.MSWCommonTaskDialogInit( tdc );
+
+        int msAns;
+        HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
+        if ( FAILED(hr) )
+        {
+            wxLogApiError( "TaskDialogIndirect", hr );
+            return wxID_CANCEL;
+        }
+
+        return MSWTranslateReturnCode( msAns );
+    }
+#endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
 }
@@ -623,6 +613,28 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
     caption = dlg.GetCaption();
     message = dlg.GetMessage();
     extendedMessage = dlg.GetExtendedMessage();
+
+    // Before wxMessageDialog added support for extended message it was common
+    // practice to have long multiline texts in the message box with the first
+    // line playing the role of the main message and the rest of the extended
+    // one. Try to detect such usage automatically here by synthesizing the
+    // extended message on our own if it wasn't given.
+    if ( extendedMessage.empty() )
+    {
+        // Check if there is a blank separating line after the first line (this
+        // is not the same as searching for "\n\n" as we want the automatically
+        // recognized main message be single line to avoid embarrassing false
+        // positives).
+        const size_t posNL = message.find('\n');
+        if ( posNL != wxString::npos &&
+                posNL < message.length() - 1 &&
+                    message[posNL + 1 ] == '\n' )
+        {
+            extendedMessage.assign(message, posNL + 2, wxString::npos);
+            message.erase(posNL);
+        }
+    }
+
     iconId = dlg.GetEffectiveIcon();
     style = dlg.GetMessageDialogStyle();
     useCustomLabels = dlg.HasCustomLabels();
@@ -643,8 +655,23 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
-    tdc.pszMainInstruction = message.wx_str();
-    tdc.pszContent = extendedMessage.wx_str();
+
+    // If we have both the main and extended messages, just use them as
+    // intended. However if only one message is given we normally use it as the
+    // content and not as the main instruction because the latter is supposed
+    // to stand out compared to the former and doesn't look good if there is
+    // nothing for it to contrast with. Finally, notice that the extended
+    // message we use here might be automatically extracted from the main
+    // message in our ctor, see comment there.
+    if ( !extendedMessage.empty() )
+    {
+        tdc.pszMainInstruction = message.wx_str();
+        tdc.pszContent = extendedMessage.wx_str();
+    }
+    else
+    {
+        tdc.pszContent = message.wx_str();
+    }
 
     // set an icon to be used, if possible
     switch ( iconId )
@@ -721,19 +748,20 @@ wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
-    static TaskDialogIndirect_t s_TaskDialogIndirect = NULL;
+    // Initialize the function pointer to an invalid value different from NULL
+    // to avoid reloading comctl32.dll and trying to resolve it every time
+    // we're called if task dialog is not available (notice that this may
+    // happen even under Vista+ if we don't use comctl32.dll v6).
+    static const TaskDialogIndirect_t
+        INVALID_TASKDIALOG_FUNC = reinterpret_cast<TaskDialogIndirect_t>(-1);
+    static TaskDialogIndirect_t s_TaskDialogIndirect = INVALID_TASKDIALOG_FUNC;
 
     wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogIndirect);
 
-    if ( !s_TaskDialogIndirect )
+    if ( s_TaskDialogIndirect == INVALID_TASKDIALOG_FUNC )
     {
         wxLoadedDLL dllComCtl32("comctl32.dll");
         wxDL_INIT_FUNC(s_, TaskDialogIndirect, dllComCtl32);
-
-        // We must always succeed as this code is only executed under Vista and
-        // later which must have task dialog support.
-        wxASSERT_MSG( s_TaskDialogIndirect,
-                      "Task dialog support unexpectedly not available" );
     }
 
     return s_TaskDialogIndirect;
@@ -744,10 +772,14 @@ TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    return wxGetWinVersion() >= wxWinVersion_6;
-#else
+    if ( wxGetWinVersion() >= wxWinVersion_6 )
+    {
+        if ( wxMSWMessageDialog::GetTaskDialogIndirectFunc() )
+            return true;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
     return false;
-#endif
 }
 
 int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)

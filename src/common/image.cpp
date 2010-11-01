@@ -2327,7 +2327,7 @@ int wxImage::GetImageCount( wxInputStream &stream, wxBitmapType type )
 
     if ( !handler )
     {
-        wxLogWarning(_("No image handler for type %ld defined."), type);
+        wxLogWarning(_("No image handler for type %d defined."), type);
         return false;
     }
 
@@ -2337,7 +2337,7 @@ int wxImage::GetImageCount( wxInputStream &stream, wxBitmapType type )
     }
     else
     {
-        wxLogError(_("Image file is not of type %ld."), type);
+        wxLogError(_("Image file is not of type %d."), type);
         return 0;
     }
 }
@@ -2405,13 +2405,13 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
     handler = FindHandler(type);
     if ( !handler )
     {
-        wxLogWarning( _("No image handler for type %ld defined."), type );
+        wxLogWarning( _("No image handler for type %d defined."), type );
         return false;
     }
 
     if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
-        wxLogError(_("Image file is not of type %ld."), type);
+        wxLogError(_("Image file is not of type %d."), type);
         return false;
     }
 

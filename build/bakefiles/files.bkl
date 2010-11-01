@@ -783,6 +783,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/zstream.h
     wx/meta/convertible.h
     wx/meta/if.h
+    wx/meta/implicitconversion.h
     wx/meta/int2type.h
     wx/meta/movable.h
     wx/meta/pod.h
@@ -3541,6 +3542,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_choic.cpp
     src/xrc/xh_choicbk.cpp
     src/xrc/xh_clrpicker.cpp
+    src/xrc/xh_cmdlinkbn.cpp
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
@@ -3586,6 +3588,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_text.cpp
     src/xrc/xh_tglbtn.cpp
     src/xrc/xh_toolb.cpp
+    src/xrc/xh_toolbk.cpp
     src/xrc/xh_tree.cpp
     src/xrc/xh_treebk.cpp
     src/xrc/xh_unkwn.cpp
@@ -3607,6 +3610,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_choic.h
     wx/xrc/xh_choicbk.h
     wx/xrc/xh_clrpicker.h
+    wx/xrc/xh_cmdlinkbn.h
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
@@ -3651,6 +3655,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_text.h
     wx/xrc/xh_tglbtn.h
     wx/xrc/xh_toolb.h
+    wx/xrc/xh_toolbk.h
     wx/xrc/xh_tree.h
     wx/xrc/xh_treebk.h
     wx/xrc/xh_unkwn.h
@@ -3825,6 +3830,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextsymboldlg.cpp
     src/richtext/richtextstyledlg.cpp
     src/richtext/richtextprint.cpp
+    src/richtext/richtextimagedlg.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
     wx/richtext/richtextctrl.h
@@ -3836,6 +3842,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtext/richtextsymboldlg.h
     wx/richtext/richtextstyledlg.h
     wx/richtext/richtextprint.h
+    wx/richtext/richtextimagedlg.h
 </set>
 
 

@@ -114,7 +114,6 @@ public:
     virtual int GetPointSize() const;
     virtual wxSize GetPixelSize() const;
     virtual bool IsUsingSizeInPixels() const;
-    virtual wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
@@ -159,6 +158,7 @@ protected:
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+    virtual wxFontFamily DoGetFamily() const;
 
     // implement wxObject virtuals which are used by AllocExclusive()
     virtual wxGDIRefData *CreateGDIRefData() const;

@@ -347,7 +347,7 @@ public:
     bool HandleMouseMove(int x, int y, WXUINT flags);
     bool HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam);
 
-    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = false);
+    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
 #if wxUSE_ACCEL
@@ -571,9 +571,21 @@ protected:
                              const wxString& ttip);
 #endif // wxUSE_TOOLTIPS
 
-    // the helper functions used by HandleChar/KeyXXX methods
-    wxKeyEvent CreateKeyEvent(wxEventType evType, int id,
-                              WXLPARAM lParam = 0, WXWPARAM wParam = 0) const;
+    // This is used by CreateKeyEvent() and also for wxEVT_CHAR[_HOOK] event
+    // creation. Notice that this method doesn't initialize wxKeyEvent
+    // m_keyCode and m_uniChar fields.
+    void InitAnyKeyEvent(wxKeyEvent& event,
+                         WXWPARAM wParam,
+                         WXLPARAM lParam) const;
+
+    // Helper functions used by HandleKeyXXX() methods and some derived
+    // classes, wParam and lParam have the same meaning as in WM_KEY{DOWN,UP}.
+    //
+    // NB: evType here must be wxEVT_KEY_{DOWN,UP} as wParam here contains the
+    //     virtual key code, not character!
+    wxKeyEvent CreateKeyEvent(wxEventType evType,
+                              WXWPARAM wParam,
+                              WXLPARAM lParam = 0) const;
 
 
     // default OnEraseBackground() implementation, return true if we did erase
@@ -635,18 +647,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWindowMSW);
     DECLARE_EVENT_TABLE()
 };
-
-// ----------------------------------------------------------------------------
-// inline functions
-// ----------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
-// global functions
-// ---------------------------------------------------------------------------
-
-// kbd code translation
-WXDLLIMPEXP_CORE int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam = 0);
-WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id);
 
 // window creation helper class: before creating a new HWND, instantiate an
 // object of this class on stack - this allows to process the messages sent to

@@ -94,6 +94,18 @@ public:
     virtual ~StaticWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_statText; }
+    virtual Widgets GetWidgets() const
+    {
+        Widgets widgets;
+        widgets.push_back(m_sizerStatBox->GetStaticBox());
+        widgets.push_back(m_statText);
+        widgets.push_back(m_statMarkup);
+#if wxUSE_STATLINE
+        widgets.push_back(m_statLine);
+#endif // wxUSE_STATLINE
+
+        return widgets;
+    }
     virtual void RecreateWidget() { CreateStatic(); }
 
     // lazy creation of the content
@@ -296,7 +308,7 @@ void StaticWidgetsPage::CreateContent()
     // NB: must be done _before_ calling CreateStatic()
     Reset();
 
-    m_textBox->SetValue(wxT("This is a box"));
+    m_textBox->SetValue(wxT("This is a &box"));
     m_textLabel->SetValue(wxT("And this is a\n\tlabel inside the box with a &mnemonic.\n")
                           wxT("Only this text is affected by the ellipsize settings."));
     m_textLabelWithMarkup->SetValue(wxT("Another label, this time <b>decorated</b> ")

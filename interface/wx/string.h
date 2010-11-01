@@ -783,14 +783,32 @@ public:
     /**
         Gets all characters before the first occurrence of @e ch.
         Returns the whole string if @a ch is not found.
+
+        @param ch The character to look for.
+        @param rest Filled with the part of the string following the first
+            occurrence of @a ch or cleared if it was not found. The same string
+            is returned by AfterFirst() but it is more efficient to use this
+            output parameter if both the "before" and "after" parts are needed
+            than calling both functions one after the other. This parameter is
+            available in wxWidgets version 2.9.2 and later only.
+        @return Part of the string before the first occurrence of @a ch.
     */
-    wxString BeforeFirst(wxUniChar ch) const;
+    wxString BeforeFirst(wxUniChar ch, wxString *rest = NULL) const;
 
     /**
         Gets all characters before the last occurrence of @e ch.
         Returns the empty string if @a ch is not found.
+
+        @param ch The character to look for.
+        @param rest Filled with the part of the string following the last
+            occurrence of @a ch or the copy of this string if it was not found.
+            The same string is returned by AfterLast() but it is more efficient
+            to use this output parameter if both the "before" and "after" parts
+            are needed than calling both functions one after the other. This
+            parameter is available in wxWidgets version 2.9.2 and later only.
+        @return Part of the string before the last occurrence of @a ch.
     */
-    wxString BeforeLast(wxUniChar ch) const;
+    wxString BeforeLast(wxUniChar ch, wxString *rest = NULL) const;
 
     //@}
 

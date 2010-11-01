@@ -1,10 +1,34 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgqueue.h
+// Name:        wx/msgqueue.h
 // Purpose:     interface of wxMessageQueue<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Error codes for wxMessageQueue<> operations.
+
+    This enum contains the possible return value of wxMessageQueue<> methods.
+
+    @since 2.9.0
+    @category{threading}
+ */
+enum wxMessageQueueError
+{
+    /// Indicates that the operation completed successfully.
+    wxMSGQUEUE_NO_ERROR = 0,
+
+    /**
+        Indicates that no messages were received before timeout expired.
+
+        This return value is only used by wxMessageQueue<>::ReceiveTimeout().
+     */
+    wxMSGQUEUE_TIMEOUT,
+
+    /// Some unexpected (and fatal) error has occurred.
+    wxMSGQUEUE_MISC_ERROR
+};
 
 /**
     wxMessageQueue allows passing messages between threads.

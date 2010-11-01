@@ -1894,6 +1894,20 @@ void wxDocManager::DisassociateTemplate(wxDocTemplate *temp)
     m_templates.DeleteObject(temp);
 }
 
+wxDocTemplate* wxDocManager::FindTemplate(const wxClassInfo* classinfo)
+{
+   for ( wxList::compatibility_iterator node = m_templates.GetFirst();
+         node;
+         node = node->GetNext() )
+   {
+      wxDocTemplate* t = wxStaticCast(node->GetData(), wxDocTemplate);
+      if ( t->GetDocClassInfo() == classinfo )
+         return t;
+   }
+
+   return NULL;
+}
+
 // Add and remove a document from the manager's list
 void wxDocManager::AddDocument(wxDocument *doc)
 {

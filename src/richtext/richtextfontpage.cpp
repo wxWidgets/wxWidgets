@@ -304,7 +304,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (m_faceListBox->GetSelection() != wxNOT_FOUND)
     {
@@ -429,7 +429,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
     wxPanel::TransferDataToWindow();
 
     m_dontUpdate = true;
-    wxTextAttr* attr = GetAttributes();
+    wxRichTextAttr* attr = GetAttributes();
 
     if (attr->HasFontFaceName())
     {
@@ -564,7 +564,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
     return true;
 }
 
-wxTextAttr* wxRichTextFontPage::GetAttributes()
+wxRichTextAttr* wxRichTextFontPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }
@@ -572,7 +572,7 @@ wxTextAttr* wxRichTextFontPage::GetAttributes()
 /// Updates the font preview
 void wxRichTextFontPage::UpdatePreview()
 {
-    wxTextAttr attr;
+    wxRichTextAttr attr;
 
     if (m_colourPresent)
         m_previewCtrl->SetForegroundColour(m_colourCtrl->GetBackgroundColour());

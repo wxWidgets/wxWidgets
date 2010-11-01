@@ -488,7 +488,7 @@ bool wxFont::IsUsingSizeInPixels() const
     return false;
 }
 
-wxFontFamily wxFont::GetFamily() const
+wxFontFamily wxFont::DoGetFamily() const
 {
     return wxFONTFAMILY_ROMAN;
 }

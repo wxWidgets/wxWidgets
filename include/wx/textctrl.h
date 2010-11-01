@@ -298,8 +298,8 @@ public:
     // Equality test
     bool operator== (const wxTextAttr& attr) const;
 
-    // Partial equality test taking flags into account
-    bool EqPartial(const wxTextAttr& attr, int flags) const;
+    // Partial equality test
+    bool EqPartial(const wxTextAttr& attr) const;
 
     // Get attributes from font.
     bool GetFontAttributes(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
@@ -411,6 +411,8 @@ public:
     bool HasOutlineLevel() const { return HasFlag(wxTEXT_ATTR_OUTLINE_LEVEL); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
+    void RemoveFlag(long flag) { m_flags &= ~flag; }
+    void AddFlag(long flag) { m_flags |= flag; }
 
     // Is this a character style?
     bool IsCharacterStyle() const { return HasFlag(wxTEXT_ATTR_CHARACTER); }
@@ -422,11 +424,11 @@ public:
         return GetFlags() == 0;
     }
 
-    // Merges the given attributes. Does not affect 'this'. If compareWith
+    // Merges the given attributes. If compareWith
     // is non-NULL, then it will be used to mask out those attributes that are the same in style
     // and compareWith, for situations where we don't want to explicitly set inherited attributes.
     bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = NULL);
-
+    
     // merges the attributes of the base and the overlay objects and returns
     // the result; the parameter attributes take precedence
     //

@@ -39,6 +39,16 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// control ids
+enum
+{
+    SpinTimer = wxID_HIGHEST + 1
+};
+
+// ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
 
@@ -161,7 +171,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
         const wxImage img(DrawDice(256, i + 1));
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.GetWidth(), img.GetHeight(), 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.GetWidth(), img.GetHeight(),
                      0, GL_RGB, GL_UNSIGNED_BYTE, img.GetData());
     }
 
@@ -283,6 +293,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas)
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
+    EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
 END_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent)
@@ -292,10 +303,11 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent)
     // viewport settings.
     : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */,
                  wxDefaultPosition, wxDefaultSize,
-                 wxFULL_REPAINT_ON_RESIZE)
+                 wxFULL_REPAINT_ON_RESIZE),
+      m_xangle(30.0),
+      m_yangle(30.0),
+      m_spinTimer(this,SpinTimer)
 {
-    m_xangle =
-    m_yangle = 30;
 }
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -318,44 +330,52 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     SwapBuffers();
 }
 
-void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
+void TestGLCanvas::Spin(float xSpin, float ySpin)
 {
-    float *p = NULL;
+    m_xangle += xSpin;
+    m_yangle += ySpin;
 
-    bool inverse = false;
+    Refresh(false);
+}
+
+void TestGLCanvas::OnKeyDown(wxKeyEvent& event)
+{
+    float angle = 5.0;
 
     switch ( event.GetKeyCode() )
     {
         case WXK_RIGHT:
-            inverse = true;
-            // fall through
+            Spin( 0.0, -angle );
+            break;
 
         case WXK_LEFT:
-            // rotate around Y axis
-            p = &m_yangle;
+            Spin( 0.0, angle );
             break;
 
         case WXK_DOWN:
-            inverse = true;
-            // fall through
+            Spin( -angle, 0.0 );
+            break;
 
         case WXK_UP:
-            // rotate around X axis
-            p = &m_xangle;
+            Spin( angle, 0.0 );
+            break;
+
+        case WXK_SPACE:
+            if ( m_spinTimer.IsRunning() )
+                m_spinTimer.Stop();
+            else
+                m_spinTimer.Start( 25 );
             break;
 
         default:
             event.Skip();
             return;
     }
+}
 
-    float angle = 5;
-    if ( inverse )
-        angle = -angle;
-
-    *p += angle;
-
-    Refresh(false);
+void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
+{
+    Spin(0.0, 4.0);
 }
 
 

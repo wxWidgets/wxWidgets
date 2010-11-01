@@ -185,7 +185,7 @@ double wxSpinCtrlGTKBase::DoGetIncrement() const
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
     double inc = 0;
-    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), NULL, &inc);
+    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), &inc, NULL);
     return inc;
 }
 
@@ -257,7 +257,12 @@ void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
     wxCHECK_RET( m_widget, "invalid spin button" );
 
     GtkDisableEvents();
-    gtk_spin_button_set_increments( GTK_SPIN_BUTTON(m_widget), inc, 10*inc);
+
+    // Preserve the old page value when changing just the increment.
+    double page = 10*inc;
+    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), NULL, &page);
+
+    gtk_spin_button_set_increments( GTK_SPIN_BUTTON(m_widget), inc, page);
     GtkEnableEvents();
 }
 

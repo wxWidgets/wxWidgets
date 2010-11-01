@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by: Stefan Csomor
 // Created:     2009-01-01
-// RCS-ID:      $Id: sound.cpp 61475 2009-07-20 16:47:54Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,21 +38,21 @@ public:
     wxOSXAudioToolboxSoundData(const wxString& fileName);
 
     ~wxOSXAudioToolboxSoundData();
-    
+
     virtual bool Play(unsigned flags);
 
     virtual void DoStop();
 protected:
     static void CompletionCallback(SystemSoundID  mySSID, void * soundRef);
     void SoundCompleted();
-    
-    SystemSoundID m_soundID;    
+
+    SystemSoundID m_soundID;
     wxString m_sndname; //file path
 };
 
 wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(const wxString& fileName) :
     m_soundID(NULL)
-{                                            
+{
     m_sndname = fileName;
 }
 
@@ -66,9 +66,9 @@ wxOSXAudioToolboxSoundData::CompletionCallback(SystemSoundID WXUNUSED(mySSID),
                                                void * soundRef)
 {
     wxOSXAudioToolboxSoundData* data = (wxOSXAudioToolboxSoundData*) soundRef;
-    
+
     data->SoundCompleted();
-    
+
     if (data->IsMarkedForDeletion())
         delete data;
 }
@@ -79,10 +79,10 @@ void wxOSXAudioToolboxSoundData::SoundCompleted()
     {
         if (m_flags & wxSOUND_LOOP)
             AudioServicesPlaySystemSound(m_soundID);
-        else 
+        else
             Stop();
     }
-    else 
+    else
     {
         Stop();
         CFRunLoopStop(CFRunLoopGetCurrent());
@@ -96,7 +96,7 @@ void wxOSXAudioToolboxSoundData::DoStop()
     {
         AudioServicesDisposeSystemSoundID (m_soundID);
         m_soundID = NULL;
-        
+
         wxSound::SoundStopped(this);
     }
 }
@@ -106,7 +106,7 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     Stop();
 
     m_flags = flags;
-    
+
     wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(m_sndname)));
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
@@ -120,12 +120,12 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
 
     if ( sync )
     {
-        while( m_soundID ) 
+        while( m_soundID )
         {
             CFRunLoopRun();
         }
     }
-            
+
     return true;
 }
 
@@ -139,7 +139,7 @@ bool wxSound::Create(int WXUNUSED(size), const wxByte* WXUNUSED(data))
 bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     wxCHECK_MSG( !isResource, false, "not implemented" );
-    
+
     m_data = new wxOSXAudioToolboxSoundData(fileName);
     return true;
 }

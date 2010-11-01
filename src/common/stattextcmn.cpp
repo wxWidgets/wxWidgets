@@ -169,7 +169,7 @@ void wxStaticTextBase::SetLabelText(const wxString& text)
 wxString wxStaticTextBase::GetLabelText(const wxString& label)
 {
     wxString ret = RemoveMarkup(label);
-        // always remove the markup (this function is static 
+        // always remove the markup (this function is static
         // and cannot check for wxST_MARKUP presence/absence)
 
     return RemoveMnemonics(ret);

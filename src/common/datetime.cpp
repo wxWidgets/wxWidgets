@@ -508,8 +508,12 @@ wxDateTime::Tm::Tm()
 {
     year = (wxDateTime_t)wxDateTime::Inv_Year;
     mon = wxDateTime::Inv_Month;
-    mday = 0;
-    hour = min = sec = msec = 0;
+    mday =
+    yday = 0;
+    hour =
+    min =
+    sec =
+    msec = 0;
     wday = wxDateTime::Inv_WeekDay;
 }
 
@@ -1612,6 +1616,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     // construct Tm from these values
     Tm tm;
     tm.year = (int)year;
+    tm.yday = (wxDateTime_t)(dayOfYear - 1); // use C convention for day number
     tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
     tm.mday = (wxDateTime_t)day;
     tm.msec = (wxDateTime_t)(timeOnly % 1000);

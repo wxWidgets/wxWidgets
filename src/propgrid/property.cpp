@@ -499,6 +499,23 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     wxPGProperty* parent = m_parent;
     bool parentIsRoot = parent->IsKindOf(CLASSINFO(wxPGRootProperty));
 
+    //
+    // Convert invalid cells to default ones in this grid
+    for ( unsigned int i=0; i<m_cells.size(); i++ )
+    {
+        wxPGCell& cell = m_cells[i];
+        if ( cell.IsInvalid() )
+        {
+            const wxPGCell& propDefCell = propgrid->GetPropertyDefaultCell();
+            const wxPGCell& catDefCell = propgrid->GetCategoryDefaultCell();
+
+            if ( !HasFlag(wxPG_PROP_CATEGORY) )
+                cell = propDefCell;
+            else
+                cell = catDefCell;
+        }
+    }
+
     m_parentState = pageState;
 
 #if wxPG_COMPATIBILITY_1_4
@@ -618,6 +635,27 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
 
         if ( propgrid && (propgrid->GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
             SetFlagRecursively(wxPG_PROP_AUTO_UNSPECIFIED, true);
+    }
+}
+
+void wxPGProperty::OnDetached(wxPropertyGridPageState* WXUNUSED(state),
+                              wxPropertyGrid* propgrid)
+{
+    if ( propgrid )
+    {
+        const wxPGCell& propDefCell = propgrid->GetPropertyDefaultCell();
+        const wxPGCell& catDefCell = propgrid->GetCategoryDefaultCell();
+
+        // Make default cells invalid
+        for ( unsigned int i=0; i<m_cells.size(); i++ )
+        {
+            wxPGCell& cell = m_cells[i];
+            if ( cell.IsSameAs(propDefCell) ||
+                 cell.IsSameAs(catDefCell) )
+            {
+                cell.UnRef();
+            }
+        }
     }
 }
 
@@ -1525,14 +1563,17 @@ void wxPGProperty::EnsureCells( unsigned int column )
         wxPropertyGrid* pg = GetGrid();
         wxPGCell defaultCell;
 
-        // Work around possible VC6 bug by using intermediate variables
-        const wxPGCell& propDefCell = pg->GetPropertyDefaultCell();
-        const wxPGCell& catDefCell = pg->GetCategoryDefaultCell();
+        if ( pg )
+        {
+            // Work around possible VC6 bug by using intermediate variables
+            const wxPGCell& propDefCell = pg->GetPropertyDefaultCell();
+            const wxPGCell& catDefCell = pg->GetCategoryDefaultCell();
 
-        if ( !HasFlag(wxPG_PROP_CATEGORY) )
-            defaultCell = propDefCell;
-        else
-            defaultCell = catDefCell;
+            if ( !HasFlag(wxPG_PROP_CATEGORY) )
+                defaultCell = propDefCell;
+            else
+                defaultCell = catDefCell;
+        }
 
         // TODO: Replace with resize() call
         unsigned int cellCountMax = column+1;

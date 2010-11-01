@@ -142,7 +142,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         // the right insertion point
         if (m_strings)
             n = m_strings->Add(items[i]);
-            
+
         GTKInsertComboBoxTextItem( n, items[i] );
 
         m_clientData.Insert( NULL, n );
@@ -168,7 +168,7 @@ void wxChoice::DoClear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
 
-    DisableEvents();
+    GTKDisableEvents();
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
@@ -179,7 +179,7 @@ void wxChoice::DoClear()
     if (m_strings)
         m_strings->Clear();
 
-    EnableEvents();
+    GTKEnableEvents();
 
     InvalidateBestSize();
 }
@@ -299,12 +299,12 @@ void wxChoice::SetSelection( int n )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
 
-    DisableEvents();
+    GTKDisableEvents();
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     gtk_combo_box_set_active( combobox, n );
 
-    EnableEvents();
+    GTKEnableEvents();
 }
 
 void wxChoice::SetColumns(int n)
@@ -321,13 +321,13 @@ int wxChoice::GetColumns() const
 }
 
 
-void wxChoice::DisableEvents()
+void wxChoice::GTKDisableEvents()
 {
     g_signal_handlers_block_by_func(m_widget,
                                 (gpointer) gtk_choice_changed_callback, this);
 }
 
-void wxChoice::EnableEvents()
+void wxChoice::GTKEnableEvents()
 {
     g_signal_handlers_unblock_by_func(m_widget,
                                 (gpointer) gtk_choice_changed_callback, this);

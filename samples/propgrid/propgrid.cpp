@@ -1646,7 +1646,7 @@ void FormMain::PopulateWithExamples ()
     mdc.DrawLine(0, 0, 60, 15);
     mdc.SelectObject(wxNullBitmap);
     pg->SetPropertyImage( wxT("StringPropertyWithBitmap"), myTestBitmap );
- 
+
 
     // this value array would be optional if values matched string indexes
     //long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX, wxMAXIMIZE_BOX };

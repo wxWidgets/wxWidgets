@@ -192,10 +192,15 @@ the corresponding feature is available and not defined at all otherwise.
 Currently the following symbols exist:
 
 @beginDefList
+@itemdef{wxHAS_3STATE_CHECKBOX, Defined if wxCheckBox supports wxCHK_3STATE
+    flag, i.e. is capable of showing three states and not only the usual two.
+    Currently defined for almost all ports.}
 @itemdef{wxHAS_ATOMIC_OPS, Defined if wxAtomicInc() and wxAtomicDec() functions
     have an efficient (CPU-specific) implementation. Notice that the functions
     themselves are always available but can be prohibitively slow to use when
     implemented in a generic way, using a critical section.}
+@itemdef{wxHAS_BITMAPTOGGLEBUTTON, Defined in @c wx/tglbtn.h if
+    wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in

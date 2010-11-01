@@ -1001,7 +1001,7 @@ void wxMacControl::GetPosition( int &x, int &y ) const
         x -= (int)parent.origin.x;
         y -= (int)parent.origin.y;
     }
-    
+
 }
 
 void wxMacControl::GetSize( int &width, int &height ) const
@@ -1358,7 +1358,7 @@ bool wxMacControl::SetBackgroundStyle(wxBackgroundStyle style)
         OSStatus err = HIViewChangeFeatures(m_controlRef , kHIViewIsOpaque , 0);
         verify_noerr( err );
     }
-    
+
     return true ;
 }
 
@@ -1431,7 +1431,7 @@ void wxMacControl::GetRectInWindowCoords( Rect *r )
         OffsetRect( r , (short) hiPoint.x , (short) hiPoint.y ) ;
     }
 }
-        
+
 void wxMacControl::GetBestRect( wxRect *rect ) const
 {
     short   baselineoffset;
@@ -1561,6 +1561,6 @@ wxWidgetImplType* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     // the root control level handler
     if ( !now->IsNativeWindowWrapper() )
         contentview->InstallEventHandler() ;
-    
+
     return contentview;
 }

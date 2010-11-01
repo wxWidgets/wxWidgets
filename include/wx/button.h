@@ -110,7 +110,7 @@ public:
     void SetBitmapMargins(wxCoord x, wxCoord y) { DoSetBitmapMargins(x, y); }
     void SetBitmapMargins(const wxSize& sz) { DoSetBitmapMargins(sz.x, sz.y); }
     wxSize GetBitmapMargins() { return DoGetBitmapMargins(); }
-    
+
     // set the image position relative to the text, i.e. wxLEFT means that the
     // image is to the left of the text (this is the default)
     void SetBitmapPosition(wxDirection dir);

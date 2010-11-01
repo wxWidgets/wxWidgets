@@ -43,6 +43,8 @@
     #include "wx/choicdlg.h"
 
     #include "wx/button.h"
+    #include "wx/checkbox.h"
+    #include "wx/stattext.h"
     #include "wx/textctrl.h"
     #include "wx/listbox.h"
 
@@ -571,6 +573,8 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
+    m_pidLast = pid;
+
     static const wxString signalNames[] =
     {
         wxT("Just test (SIGNONE)"),
@@ -591,9 +595,11 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
         wxT("Terminate (SIGTERM)"),
     };
 
+    static int s_sigLast = wxSIGNONE;
     int sig = wxGetSingleChoiceIndex(wxT("How to kill the process?"),
                                      wxT("Exec question"),
                                      WXSIZEOF(signalNames), signalNames,
+                                     s_sigLast,
                                      this);
     switch ( sig )
     {
@@ -624,8 +630,11 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
             break;
     }
 
-    if ( sig == 0 )
+    s_sigLast = sig;
+
+    if ( sig == wxSIGNONE )
     {
+        // This simply calls Kill(wxSIGNONE) but using it is more convenient.
         if ( wxProcess::Exists(pid) )
         {
             wxLogStatus(wxT("Process %ld is running."), pid);
@@ -660,6 +669,147 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
+// execution options dialog
+// ----------------------------------------------------------------------------
+
+enum ExecQueryDialogID
+{
+    TEXT_EXECUTABLE,
+    TEXT_CWD,
+    TEXT_ENVIRONMENT
+};
+
+class ExecQueryDialog : public wxDialog
+{
+public:
+    ExecQueryDialog(const wxString& cmd);
+
+    wxString GetExecutable() const
+    {
+        return m_executable->GetValue();
+    }
+
+    wxString GetWorkDir() const
+    {
+        return m_useCWD->GetValue() ? m_cwdtext->GetValue() : wxString();
+    }
+
+    void GetEnvironment(wxEnvVariableHashMap& env);
+
+private:
+    void OnUpdateWorkingDirectoryUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_useCWD->GetValue());
+    }
+
+    void OnUpdateEnvironmentUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_useEnv->GetValue());
+    }
+
+    wxTextCtrl* m_executable;
+    wxTextCtrl* m_cwdtext;
+    wxTextCtrl* m_envtext;
+    wxCheckBox* m_useCWD;
+    wxCheckBox* m_useEnv;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
+    EVT_UPDATE_UI(TEXT_CWD, ExecQueryDialog::OnUpdateWorkingDirectoryUI)
+    EVT_UPDATE_UI(TEXT_ENVIRONMENT, ExecQueryDialog::OnUpdateEnvironmentUI)
+END_EVENT_TABLE()
+
+ExecQueryDialog::ExecQueryDialog(const wxString& cmd)
+    : wxDialog(NULL, wxID_ANY, DIALOG_TITLE,
+               wxDefaultPosition, wxDefaultSize,
+               wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+    wxSizer* globalSizer = new wxBoxSizer(wxVERTICAL);
+
+    m_executable = new wxTextCtrl(this, TEXT_EXECUTABLE, wxString());
+    m_cwdtext = new wxTextCtrl(this, TEXT_CWD, wxString());
+    m_envtext = new wxTextCtrl(this, TEXT_ENVIRONMENT, wxString(),
+                               wxDefaultPosition, wxSize(300, 200),
+                               wxTE_MULTILINE|wxHSCROLL);
+
+    const wxSizerFlags flagsExpand = wxSizerFlags().Expand().Border();
+    globalSizer->Add(new wxStaticText(this, wxID_ANY, "Enter the command: "),
+                     flagsExpand);
+    globalSizer->Add(m_executable, flagsExpand);
+
+    m_useCWD = new wxCheckBox(this, wxID_ANY, "Working directory: ");
+    globalSizer->Add(m_useCWD, flagsExpand);
+    globalSizer->Add(m_cwdtext, flagsExpand);
+
+    m_useEnv = new wxCheckBox(this, wxID_ANY, "Environment: ");
+    globalSizer->Add(m_useEnv, flagsExpand);
+    globalSizer->Add(m_envtext, wxSizerFlags(flagsExpand).Proportion(1));
+
+    globalSizer->Add(CreateStdDialogButtonSizer(wxOK|wxCANCEL), flagsExpand);
+    SetSizerAndFit(globalSizer);
+
+
+    m_executable->SetValue(cmd);
+    m_cwdtext->SetValue(wxGetCwd());
+    wxEnvVariableHashMap env;
+    if ( wxGetEnvMap(&env) )
+    {
+        for ( wxEnvVariableHashMap::iterator it = env.begin();
+              it != env.end();
+              ++it )
+        {
+            m_envtext->AppendText(it->first + '=' + it->second + '\n');
+        }
+    }
+    m_useCWD->SetValue(false);
+    m_useEnv->SetValue(false);
+}
+
+void ExecQueryDialog::GetEnvironment(wxEnvVariableHashMap& env)
+{
+    env.clear();
+    if ( m_useEnv->GetValue() )
+    {
+        wxString name,
+                 value;
+
+        const int nb = m_envtext->GetNumberOfLines();
+        for ( int l = 0; l < nb; l++ )
+        {
+            const wxString line = m_envtext->GetLineText(l).Trim();
+
+            if ( !line.empty() )
+            {
+                name = line.BeforeFirst('=', &value);
+                if ( name.empty() )
+                {
+                    wxLogWarning("Skipping invalid environment line \"%s\".", line);
+                    continue;
+                }
+
+                env[name] = value;
+            }
+        }
+    }
+}
+
+static bool QueryExec(wxString& cmd, wxExecuteEnv& env)
+{
+    ExecQueryDialog dialog(cmd);
+
+    if ( dialog.ShowModal() != wxID_OK )
+        return false;
+
+    cmd = dialog.GetExecutable();
+    env.cwd = dialog.GetWorkDir();
+    dialog.GetEnvironment(env.env);
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
 // event handlers: exec menu
 // ----------------------------------------------------------------------------
 
@@ -687,16 +837,14 @@ void MyFrame::DoAsyncExec(const wxString& cmd)
 
 void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 {
-    wxString cmd = wxGetTextFromUser(wxT("Enter the command: "),
-                                     DIALOG_TITLE,
-                                     m_cmdLast);
-
-    if ( !cmd )
+    wxString cmd;
+    wxExecuteEnv env;
+    if ( !QueryExec(cmd, env) )
         return;
 
     wxLogStatus( wxT("'%s' is running please wait..."), cmd.c_str() );
 
-    int code = wxExecute(cmd, wxEXEC_SYNC);
+    int code = wxExecute(cmd, wxEXEC_SYNC, NULL, &env);
 
     wxLogStatus(wxT("Process '%s' terminated with exit code %d."),
         cmd.c_str(), code);

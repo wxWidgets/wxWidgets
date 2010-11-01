@@ -61,18 +61,13 @@ public:
 
     //
     // Set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
     //
     int      SetSelection(size_t nPage);
 
     // changes selected page without sending events
     int ChangeSelection(size_t nPage);
-
-    //
-    // Get the currently selected page
-    //
-    inline int      GetSelection(void) const { return m_nSelection; }
 
     //
     // Set/Get the title of a page
@@ -192,8 +187,6 @@ protected:
     //
     // Helper functions
     //
-
-    int                     m_nSelection; // The current selection (-1 if none)
 
 private:
     wxArrayLong                     m_alPageId;

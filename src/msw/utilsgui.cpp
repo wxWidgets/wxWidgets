@@ -374,7 +374,6 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = document.wx_str();
-    sei.lpVerb = wxT("open");
 #ifdef __WXWINCE__
     sei.nShow = SW_SHOWNORMAL; // SW_SHOWDEFAULT not defined under CE (#10216)
 #else

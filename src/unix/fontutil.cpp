@@ -53,8 +53,8 @@
     #include "wx/x11/private.h"
     #include "wx/gtk/private/string.h"
 
-    #define wxPANGO_CONV(s) (wxConvUTF8.cWX2MB((s)))
-    #define wxPANGO_CONV_BACK(s) (wxConvUTF8.cMB2WX((s)))
+    #define wxPANGO_CONV(s) s.utf8_str()
+    #define wxPANGO_CONV_BACK(s) wxString::FromUTF8Unchecked(s)
 #endif
 
 // ----------------------------------------------------------------------------
@@ -581,8 +581,7 @@ wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 
     if ( !HasElements() )
     {
-        // const_cast
-        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+        if ( !const_cast<wxNativeFontInfo *>(this)->FromXFontName(xFontName) )
             return wxEmptyString;
     }
 
@@ -639,8 +638,7 @@ wxString wxNativeFontInfo::GetXFontName() const
                 elt = wxT('*');
             }
 
-            // const_cast
-            ((wxNativeFontInfo *)this)->xFontName << wxT('-') << elt;
+            const_cast<wxNativeFontInfo *>(this)->xFontName << wxT('-') << elt;
         }
     }
 
@@ -658,8 +656,7 @@ wxNativeFontInfo::SetXFontComponent(wxXLFDField field, const wxString& value)
 
     if ( !HasElements() )
     {
-        // const_cast
-        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+        if ( !const_cast<wxNativeFontInfo *>(this)->FromXFontName(xFontName) )
         {
             wxFAIL_MSG( wxT("can't set font element for invalid XLFD") );
 

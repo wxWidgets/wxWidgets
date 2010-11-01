@@ -36,11 +36,9 @@ enum wxFontFamily
     /// See also wxFont::IsFixedWidth() for an easy way to test for monospace property.
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
 
-    /// Returned by wxFont::GetFamily() when the face name of the font cannot
-    /// be classified into one of the previous wxFontFamily values.
-    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX,
-
-    wxFONTFAMILY_MAX
+    /// Invalid font family value, returned by wxFont::GetFamily() when the
+    /// font is invalid for example.
+    wxFONTFAMILY_UNKNOWN
 };
 
 /**
@@ -422,16 +420,17 @@ public:
     virtual wxString GetFaceName() const;
 
     /**
-        Gets the font family.
+        Gets the font family if possible.
+
         As described in ::wxFontFamily docs the returned value acts as a rough,
         basic classification of the main font properties (look, spacing).
 
         If the current font face name is not recognized by wxFont or by the
-        underlying system, @c wxFONTFAMILY_UNKNOWN is returned.
+        underlying system, @c wxFONTFAMILY_DEFAULT is returned.
 
-        Note that currently this function is rather unreliable (@c wxFONTFAMILY_UNKNOWN
-        is returned in too many cases) and not particularly useful.
-        Font families mostly make sense only for font creation; see SetFamily().
+        Note that currently this function is not very precise and so not
+        particularly useful. Font families mostly make sense only for font
+        creation, see SetFamily().
 
         @see SetFamily()
     */

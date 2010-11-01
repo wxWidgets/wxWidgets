@@ -16,10 +16,10 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
- 
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
- 
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 
                     // kill the last '\n'
                     input[wxStrlen(input) - 1] = 0;
-                    
+
                     if (wxStrcmp(input, "quit") == 0)
                         break;
 

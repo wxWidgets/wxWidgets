@@ -486,13 +486,27 @@ enum wxDataFormatId
 /**
     Virtual keycodes used by wxKeyEvent and some other wxWidgets functions.
 
-    Note that the range @c 33 - @c 126 is reserved for the standard ASCII
-    characters and that the range @c 128 - @c 255 is reserved for the
-    extended ASCII characters (which are not really standard and thus should
-    be avoid in portable apps!).
+    Note that the range <code>0..255</code> corresponds to the characters of
+    the current locale, in particular the <code>32..127</code> subrange is for
+    the ASCII symbols, and all the special key values such as @c WXK_END lie
+    above this range.
 */
 enum wxKeyCode
 {
+    /**
+        No key.
+
+        This value is returned by wxKeyEvent::GetKeyCode() if there is no
+        non-Unicode representation for the pressed key (e.g. a Cyrillic letter
+        was entered when not using a Cyrillic locale) and by
+        wxKeyEvent::GetUnicodeKey() if there is no Unicode representation for
+        the key (this happens for the special, non printable, keys only, e.g.
+        WXK_HOME).
+
+        @since 2.9.2 (you can simply use 0 with previous versions).
+     */
+    WXK_NONE    =    0,
+
     WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
@@ -502,9 +516,11 @@ enum wxKeyCode
     WXK_DELETE  =    127,
 
     /**
-        These are, by design, not compatible with unicode characters.
-        If you want to get a unicode character from a key event, use
-        wxKeyEvent::GetUnicodeKey instead.
+        Special key values.
+
+        These are, by design, not compatible with Unicode characters.
+        If you want to get a Unicode character from a key event, use
+        wxKeyEvent::GetUnicodeKey() instead.
     */
     WXK_START   = 300,
     WXK_LBUTTON,

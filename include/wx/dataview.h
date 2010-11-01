@@ -126,6 +126,10 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
 
+    // some platforms, such as GTK+, may need a two step procedure for ::Reset()
+    virtual bool BeforeReset() { return true; }
+    virtual bool AfterReset() { return Cleared(); }
+
     virtual void Resort() = 0;
 
     void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
@@ -167,6 +171,9 @@ public:
     bool GetItalic() const { return m_italic; }
 
     bool IsDefault() const { return !(HasColour() || HasFont()); }
+
+    // Return the font based on the given one with this attribute applied to it.
+    wxFont GetEffectiveFont(const wxFont& font) const;
 
 private:
     wxColour m_colour;
@@ -245,7 +252,12 @@ public:
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
 
-    // delegatd action
+    // some platforms, such as GTK+, may need a two step procedure for ::Reset()
+    bool BeforeReset();
+    bool AfterReset();
+
+
+    // delegated action
     virtual void Resort();
 
     void AddNotifier( wxDataViewModelNotifier *notifier );
@@ -296,6 +308,8 @@ public:
     // helper methods provided by list models only
     virtual unsigned GetRow( const wxDataViewItem &item ) const = 0;
 
+    // returns the number of rows
+    virtual unsigned int GetCount() const = 0;
 
     // implement some base class pure virtual directly
     virtual wxDataViewItem
@@ -329,6 +343,7 @@ public:
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
+
 
     virtual bool IsListModel() const { return true; }
 };
@@ -1141,7 +1156,7 @@ public:
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const;
     int GetChildCount( const wxDataViewItem& parent ) const;
-    
+
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const;
     void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );

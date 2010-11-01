@@ -80,6 +80,7 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name)
 {
+    WXValidateStyle( &style );
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 

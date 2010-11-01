@@ -1493,18 +1493,13 @@ wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
     wxXmlNode * const oldnode = m_node;
     m_node = imagelist_node;
 
-    // size
+    // Get the size if we have it, otherwise we will use the size of the first
+    // list element.
     wxSize size = GetSize();
-    size.SetDefaults(wxSize(wxSystemSettings::GetMetric(wxSYS_ICON_X),
-                            wxSystemSettings::GetMetric(wxSYS_ICON_Y)));
 
-    // mask: true by default
-    bool mask = HasParam(wxT("mask")) ? GetBool(wxT("mask"), true) : true;
-
-    // now we have everything we need to create the image list
-    wxImageList *imagelist = new wxImageList(size.x, size.y, mask);
-
-    // add images
+    // Start adding images, we'll create the image list when adding the first
+    // one.
+    wxImageList * imagelist = NULL;
     wxString parambitmap = wxT("bitmap");
     if ( HasParam(parambitmap) )
     {
@@ -1513,8 +1508,21 @@ wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
         {
             if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == parambitmap)
             {
+                wxIcon icon = GetIcon(n);
+                if ( !imagelist )
+                {
+                    // We need the real image list size to create it.
+                    if ( size == wxDefaultSize )
+                        size = icon.GetSize();
+
+                    // We use the mask by default.
+                    bool mask = !HasParam(wxS("mask")) || GetBool(wxS("mask"));
+
+                    imagelist = new wxImageList(size.x, size.y, mask);
+                }
+
                 // add icon instead of bitmap to keep the bitmap mask
-                imagelist->Add(GetIcon(n));
+                imagelist->Add(icon);
             }
             n = n->GetNext();
         }
@@ -1547,9 +1555,10 @@ wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
     return NULL;
 }
 
+/* static */
 bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 {
-    return node->GetAttribute(wxT("class"), wxEmptyString) == classname;
+    return node->GetAttribute(wxT("class")) == classname;
 }
 
 

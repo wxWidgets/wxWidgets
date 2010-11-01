@@ -181,7 +181,7 @@ public :
 
     virtual void                controlAction(WXWidget slf, void* _cmd, void* sender);
     virtual void                controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
-    
+
     // for wxTextCtrl-derived classes, put here since they don't all derive
     // from the same pimpl class.
     virtual void                controlTextDidChange();
@@ -259,7 +259,7 @@ public :
     virtual void WindowToScreen( int *x, int *y );
 
     virtual bool IsActive();
-    
+
     virtual void SetModified(bool modified);
     virtual bool IsModified() const;
 
@@ -272,6 +272,7 @@ protected :
 
 #ifdef __OBJC__
 
+    WXDLLIMPEXP_CORE NSScreen* wxOSXGetMenuScreen();
     WXDLLIMPEXP_CORE NSRect wxToNSRect( NSView* parent, const wxRect& r );
     WXDLLIMPEXP_CORE wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
     WXDLLIMPEXP_CORE NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );

@@ -286,10 +286,10 @@ public:
     wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                               int alignment = wxDVR_DEFAULT_ALIGNMENT );
-                            
+
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
-    
+
 private:
     virtual void GtkOnTextEdited(const gchar *itempath, const wxString& str);
 };

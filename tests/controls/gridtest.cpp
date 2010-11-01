@@ -238,7 +238,7 @@ void GridTestCase::CellSelect()
 
 void GridTestCase::LabelClick()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -263,9 +263,6 @@ void GridTestCase::LabelClick()
     sim.MouseDblClick();
     wxYield();
 
-    //A double click event sends a single click event first
-    //test to ensure this still happens in the future
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_CLICK));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_DCLICK));
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
@@ -292,7 +289,7 @@ void GridTestCase::LabelClick()
 
 void GridTestCase::SortClick()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     m_grid->SetSortingColumn(0);
 
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
@@ -312,8 +309,6 @@ void GridTestCase::SortClick()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
-
-    m_grid->SetSortingColumn(wxNOT_FOUND);
 #endif
 }
 

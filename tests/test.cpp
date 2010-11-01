@@ -34,6 +34,7 @@
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestFailure.h>
+#include <cppunit/TestResultCollector.h>
 
 #ifdef __VISUALC__
     #pragma warning(default:4100)
@@ -41,6 +42,7 @@
 #include "wx/afterstd.h"
 
 #include "wx/cmdline.h"
+#include <exception>
 #include <iostream>
 
 #ifdef __WXMSW__
@@ -104,16 +106,33 @@ static void TestAssertHandler(const wxString& file,
                               const wxString& cond,
                               const wxString& msg)
 {
-    // can't throw from other threads, die immediately
+    // Determine whether we can safely throw an exception to just make the test
+    // fail or whether we need to abort (in this case "msg" will contain the
+    // explanation why did we decide to do it).
+    wxString abortReason;
     if ( !wxIsMainThread() )
     {
-        wxPrintf("%s in a worker thread -- aborting.",
-                 FormatAssertMessage(file, line, func, cond, msg));
-        fflush(stdout);
-        _exit(-1);
+        // Exceptions thrown from worker threads are not caught currently and
+        // so we'd just die without any useful information -- abort instead.
+        abortReason = "in a worker thread";
+    }
+    else if ( uncaught_exception() )
+    {
+        // Throwing while already handling an exception would result in
+        // terminate() being called and we wouldn't get any useful information
+        // about why the test failed then.
+        abortReason = "while handling an exception";
+    }
+    else // Can "safely" throw from here.
+    {
+        throw TestAssertFailure(file, line, func, cond, msg);
     }
 
-    throw TestAssertFailure(file, line, func, cond, msg);
+    wxFprintf(stderr, "%s %s -- aborting.",
+              FormatAssertMessage(file, line, func, cond, msg),
+              abortReason);
+    fflush(stderr);
+    _exit(-1);
 }
 
 #endif // wxDEBUG_LEVEL
@@ -209,7 +228,7 @@ public:
         m_watch.Pause();
         wxPrintf(GetResultStr(m_result));
         if (m_timing)
-            wxPrintf("  %6d ms", m_watch.Time());
+            wxPrintf("  %6ld ms", m_watch.Time());
         wxPrintf("\n");
     }
 
@@ -599,7 +618,9 @@ int TestApp::OnRun()
     runner.eventManager().pushProtector(new wxUnitTestProtector);
 
     bool printProgress = !(verbose || m_detail || m_timing);
-    return runner.run("", false, true, printProgress) ? EXIT_SUCCESS : EXIT_FAILURE;
+    runner.run("", false, true, printProgress);
+
+    return runner.result().testFailures() == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 int TestApp::OnExit()

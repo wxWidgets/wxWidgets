@@ -69,8 +69,8 @@ int wxMessageDialog::ShowModal()
     //
     // if the extended text is not empty we ignore the caption
     // and use the message and the extended message
-    
-    
+
+
     wxString msgtitle,msgtext;
     if(m_extendedMessage.IsEmpty())
     {
@@ -266,7 +266,7 @@ int wxMessageDialog::ShowModal()
             }
         }
     }
-    
+
     SetReturnCode(resultbutton);
 
     return resultbutton;

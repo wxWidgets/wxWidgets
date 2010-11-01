@@ -48,6 +48,8 @@ public:
     int GetWidth() const;
     int GetHeight() const;
 
+    wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
+
     WX_NSImage GetNSImage() const;
     bool CreateFromXpm(const char* const* bits);
 

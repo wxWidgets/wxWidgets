@@ -41,7 +41,9 @@ private:
         CPPUNIT_TEST( FocusEvent );
         CPPUNIT_TEST( Mouse );
         CPPUNIT_TEST( Properties );
+#if wxUSE_TOOLTIPS
         CPPUNIT_TEST( ToolTip );
+#endif // wxUSE_TOOLTIPS
         CPPUNIT_TEST( Help );
         CPPUNIT_TEST( Parent );
         CPPUNIT_TEST( Siblings );
@@ -58,7 +60,9 @@ private:
     void FocusEvent();
     void Mouse();
     void Properties();
+#if wxUSE_TOOLTIPS
     void ToolTip();
+#endif // wxUSE_TOOLTIPS
     void Help();
     void Parent();
     void Siblings();
@@ -185,11 +189,9 @@ void WindowTestCase::Mouse()
 
 void WindowTestCase::Properties()
 {
-#ifndef __WXGTK__
     m_window->SetLabel("label");
 
     CPPUNIT_ASSERT_EQUAL("label", m_window->GetLabel());
-#endif
 
     m_window->SetName("name");
 
@@ -203,6 +205,7 @@ void WindowTestCase::Properties()
     CPPUNIT_ASSERT_EQUAL(wxID_HIGHEST + 10, m_window->GetId());
 }
 
+#if wxUSE_TOOLTIPS
 void WindowTestCase::ToolTip()
 {
     CPPUNIT_ASSERT(!m_window->GetToolTip());
@@ -224,6 +227,7 @@ void WindowTestCase::ToolTip()
     CPPUNIT_ASSERT_EQUAL(tip, m_window->GetToolTip());
     CPPUNIT_ASSERT_EQUAL("other tip", m_window->GetToolTipText());
 }
+#endif // wxUSE_TOOLTIPS
 
 void WindowTestCase::Help()
 {
@@ -370,15 +374,11 @@ void WindowTestCase::FindWindowBy()
 {
     m_window->SetId(wxID_HIGHEST + 1);
     m_window->SetName("name");
-#ifndef __WXGTK__
     m_window->SetLabel("label");
-#endif
 
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowById(wxID_HIGHEST + 1));
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByName("name"));
-#ifndef __WXGTK__
     CPPUNIT_ASSERT_EQUAL(m_window, wxWindow::FindWindowByLabel("label"));
-#endif
 
     CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL),
                          wxWindow::FindWindowById(wxID_HIGHEST + 3));

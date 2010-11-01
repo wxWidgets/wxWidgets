@@ -354,10 +354,10 @@ void LifeFrame::UpdateInfoText()
 {
     wxString msg;
 
-    msg.Printf(_(" Generation: %u (T: %u ms),  Population: %u "),
+    msg.Printf(_(" Generation: %lu (T: %lu ms),  Population: %lu "),
                m_tics,
                m_topspeed? 0 : m_interval,
-               m_life->GetNumCells());
+               static_cast<unsigned long>(m_life->GetNumCells()));
     m_text->SetLabel(msg);
 }
 

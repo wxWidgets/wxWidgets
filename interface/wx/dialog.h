@@ -248,8 +248,29 @@ public:
 
         @note Just like CreateButtonSizer(), this function may return @NULL if
               no buttons were created.
+
+        This is a combination of CreateButtonSizer() and
+        CreateSeparatedSizer().
     */
     wxSizer* CreateSeparatedButtonSizer(long flags);
+
+    /**
+        Returns the sizer containing the given one with a separating
+        wxStaticLine if necessarily.
+
+        This function is useful for creating the sizer containing footer-like
+        contents in dialog boxes. It will add a separating static line only if
+        it conforms to the current platform convention (currently it is not
+        added under Mac where the use of static lines for grouping is
+        discouraged and is added elsewhere).
+
+        @since 2.9.2
+
+        @param sizer The sizer to wrap, must be non-@NULL.
+        @return The sizer wrapping the input one or possibly the input sizer
+            itself if no wrapping is necessary.
+     */
+    wxSizer *CreateSeparatedSizer(wxSizer *sizer);
 
     /**
         Creates a wxStdDialogButtonSizer with standard buttons. @a flags is a
@@ -451,7 +472,7 @@ public:
         Sets the identifier to be used as OK button. When the button with this
         identifier is pressed, the dialog calls wxWindow::Validate() and
         wxWindow::TransferDataFromWindow() and, if they both return @true,
-        closes the dialog with wxID_OK return code.
+        closes the dialog with the affirmative id return code.
 
         Also, when the user presses a hardware OK button on the devices having
         one or the special OK button in the PocketPC title bar, an event with

@@ -2567,46 +2567,38 @@ void wxStdDialogButtonSizer::Realize()
         // Extra space around and at the right
         Add(12, 40);
 #elif defined(__WXGTK20__)
-        Add(0, 0, 0, wxLEFT, 9);
+        // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
+        // says that the correct button order is
+        //
+        //      [Help]                  [Alternative] [Cancel] [Affirmative]
+
+        // Flags ensuring that margins between the buttons are 6 pixels.
+        const wxSizerFlags
+            flagsBtn = wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT, 3);
+
+        // Margin around the entire sizer button should be 12.
+        AddSpacer(9);
+
         if (m_buttonHelp)
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+            Add(m_buttonHelp, flagsBtn);
 
-        // extra whitespace between help and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0);
+        // Align the rest of the buttons to the right.
+        AddStretchSpacer();
 
-        if (m_buttonNegative){
-            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
-        }
+        if (m_buttonNegative)
+            Add(m_buttonNegative, flagsBtn);
 
         if (m_buttonApply)
-        {
-            // according to HIG, in explicit apply windows the order is:
-            // [ Help                     Apply   Cancel   OK ]
+            Add(m_buttonApply, flagsBtn);
 
-            Add((wxWindow*)m_buttonApply,
-                0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+        if (m_buttonCancel)
+            Add(m_buttonCancel, flagsBtn);
 
-            if (m_buttonCancel)
-                Add((wxWindow*)m_buttonCancel,
-                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+        if (m_buttonAffirmative)
+            Add(m_buttonAffirmative, flagsBtn);
 
-            if (m_buttonAffirmative)
-                Add((wxWindow*)m_buttonAffirmative,
-                     0, wxALIGN_CENTRE | wxLEFT, 6);
-        }
-        else
-        {
-            // without an Apply button, have the buttons representing
-            // affirmative and negative close to each other.
-
-            if (m_buttonAffirmative)
-                Add((wxWindow*)m_buttonAffirmative,
-                    0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
-
-            if (m_buttonCancel)
-                Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT, 6);
-        }
-
+        // Ensure that the right margin is 12 as well.
+        AddSpacer(9);
 #elif defined(__WXMSW__)
         // Windows
 

@@ -38,6 +38,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
+#include "wx/thread.h"
 
 #if wxUSE_GUI
     #include "wx/nonownedwnd.h"
@@ -178,9 +179,7 @@ void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), in
         else
         {
 #if wxUSE_THREADS
-            wxMutexGuiLeave();
-            wxMilliSleep(20);
-            wxMutexGuiEnter();
+            wxMutexGuiLeaveOrEnter();
 #endif
         }
     }
@@ -222,7 +221,7 @@ void wxCFEventLoop::WakeUp()
 void wxMacWakeUp()
 {
     wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
-    
+
     if ( loop )
         loop->WakeUp();
 }
@@ -420,3 +419,139 @@ void wxCFEventLoop::Exit(int rc)
     m_shouldExit = true;
     DoStop();
 }
+
+// TODO Move to thread_osx.cpp
+
+#if wxUSE_THREADS
+
+// ----------------------------------------------------------------------------
+// GUI Serialization copied from MSW implementation
+// ----------------------------------------------------------------------------
+
+// if it's false, some secondary thread is holding the GUI lock
+static bool gs_bGuiOwnedByMainThread = true;
+
+// critical section which controls access to all GUI functions: any secondary
+// thread (i.e. except the main one) must enter this crit section before doing
+// any GUI calls
+static wxCriticalSection *gs_critsectGui = NULL;
+
+// critical section which protects gs_nWaitingForGui variable
+static wxCriticalSection *gs_critsectWaitingForGui = NULL;
+
+// number of threads waiting for GUI in wxMutexGuiEnter()
+static size_t gs_nWaitingForGui = 0;
+
+void wxOSXThreadModuleOnInit()
+{
+    gs_critsectWaitingForGui = new wxCriticalSection();
+    gs_critsectGui = new wxCriticalSection();
+    gs_critsectGui->Enter();
+}
+
+
+void wxOSXThreadModuleOnExit()
+{
+    if ( gs_critsectGui )
+    {
+        if ( !wxGuiOwnedByMainThread() )
+        {
+            gs_critsectGui->Enter();
+            gs_bGuiOwnedByMainThread = true;
+        }
+
+        gs_critsectGui->Leave();
+        wxDELETE(gs_critsectGui);
+    }
+
+    wxDELETE(gs_critsectWaitingForGui);
+}
+
+
+// wake up the main thread
+void WXDLLIMPEXP_BASE wxWakeUpMainThread()
+{
+    wxMacWakeUp();
+}
+
+void wxMutexGuiEnterImpl()
+{
+    // this would dead lock everything...
+    wxASSERT_MSG( !wxThread::IsMain(),
+                 wxT("main thread doesn't want to block in wxMutexGuiEnter()!") );
+
+    // the order in which we enter the critical sections here is crucial!!
+
+    // set the flag telling to the main thread that we want to do some GUI
+    {
+        wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
+
+        gs_nWaitingForGui++;
+    }
+
+    wxWakeUpMainThread();
+
+    // now we may block here because the main thread will soon let us in
+    // (during the next iteration of OnIdle())
+    gs_critsectGui->Enter();
+}
+
+void wxMutexGuiLeaveImpl()
+{
+    wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
+
+    if ( wxThread::IsMain() )
+    {
+        gs_bGuiOwnedByMainThread = false;
+    }
+    else
+    {
+        // decrement the number of threads waiting for GUI access now
+        wxASSERT_MSG( gs_nWaitingForGui > 0,
+                     wxT("calling wxMutexGuiLeave() without entering it first?") );
+
+        gs_nWaitingForGui--;
+
+        wxWakeUpMainThread();
+    }
+
+    gs_critsectGui->Leave();
+}
+
+void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter()
+{
+    wxASSERT_MSG( wxThread::IsMain(),
+                 wxT("only main thread may call wxMutexGuiLeaveOrEnter()!") );
+
+    if ( !gs_critsectWaitingForGui )
+        return;
+
+    wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
+
+    if ( gs_nWaitingForGui == 0 )
+    {
+        // no threads are waiting for GUI - so we may acquire the lock without
+        // any danger (but only if we don't already have it)
+        if ( !wxGuiOwnedByMainThread() )
+        {
+            gs_critsectGui->Enter();
+
+            gs_bGuiOwnedByMainThread = true;
+        }
+        //else: already have it, nothing to do
+    }
+    else
+    {
+        // some threads are waiting, release the GUI lock if we have it
+        if ( wxGuiOwnedByMainThread() )
+            wxMutexGuiLeave();
+        //else: some other worker thread is doing GUI
+    }
+}
+
+bool WXDLLIMPEXP_BASE wxGuiOwnedByMainThread()
+{
+    return gs_bGuiOwnedByMainThread;
+}
+
+#endif

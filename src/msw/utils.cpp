@@ -627,7 +627,7 @@ bool wxDoSetEnv(const wxString& var, const wxChar *value)
     //
     // TODO: add checks for the other compilers (and update wxSetEnv()
     //       documentation in interface/wx/utils.h accordingly)
-#if defined(__VISUALC__)
+#if defined(__VISUALC__) || defined(__MINGW32__)
     // notice that Microsoft _putenv() has different semantics from POSIX
     // function with almost the same name: in particular it makes a copy of the
     // string instead of using it as part of environment so we can safely call
@@ -708,11 +708,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
         wxKillAllChildren(pid, sig, krc);
 
     // get the process handle to operate on
-    HANDLE hProcess = ::OpenProcess(SYNCHRONIZE |
-                                    PROCESS_TERMINATE |
-                                    PROCESS_QUERY_INFORMATION,
-                                    FALSE, // not inheritable
-                                    (DWORD)pid);
+    DWORD dwAccess = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
+    if ( sig == wxSIGKILL )
+        dwAccess |= PROCESS_TERMINATE;
+
+    HANDLE hProcess = ::OpenProcess(dwAccess, FALSE, (DWORD)pid);
     if ( hProcess == NULL )
     {
         if ( krc )
@@ -729,6 +729,12 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     }
 
     wxON_BLOCK_EXIT1(::CloseHandle, hProcess);
+
+    // Default timeout for waiting for the process termination after killing
+    // it. It should be long enough to allow the process to terminate even on a
+    // busy system but short enough to avoid blocking the main thread for too
+    // long.
+    DWORD waitTimeout = 500; // ms
 
     bool ok = true;
     switch ( sig )
@@ -751,10 +757,14 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
             break;
 
         case wxSIGNONE:
-            // do nothing, we just want to test for process existence
-            if ( krc )
-                *krc = wxKILL_OK;
-            return 0;
+            // Opening the process handle may succeed for a process even if it
+            // doesn't run any more (typically because open handles to it still
+            // exist elsewhere, possibly in this process itself if we're
+            // killing a child process) so we still need check if it hasn't
+            // terminated yet but, unlike when killing it, we don't need to
+            // wait for any time at all.
+            waitTimeout = 0;
+            break;
 
         default:
             // any other signal means "terminate"
@@ -799,18 +809,22 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     }
 
     // the return code
-    DWORD rc wxDUMMY_INITIALIZE(0);
     if ( ok )
     {
         // as we wait for a short time, we can use just WaitForSingleObject()
         // and not MsgWaitForMultipleObjects()
-        switch ( ::WaitForSingleObject(hProcess, 500 /* msec */) )
+        switch ( ::WaitForSingleObject(hProcess, waitTimeout) )
         {
             case WAIT_OBJECT_0:
-                // process terminated
-                if ( !::GetExitCodeProcess(hProcess, &rc) )
+                // Process terminated: normally this indicates that we
+                // successfully killed it but when testing for the process
+                // existence, this means failure.
+                if ( sig == wxSIGNONE )
                 {
-                    wxLogLastError(wxT("GetExitCodeProcess"));
+                    if ( krc )
+                        *krc = wxKILL_NO_PROCESS;
+
+                    ok = false;
                 }
                 break;
 
@@ -823,10 +837,15 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                 // fall through
 
             case WAIT_TIMEOUT:
-                if ( krc )
-                    *krc = wxKILL_ERROR;
+                // Process didn't terminate: normally this is a failure but not
+                // when we're just testing for its existence.
+                if ( sig != wxSIGNONE )
+                {
+                    if ( krc )
+                        *krc = wxKILL_ERROR;
 
-                rc = STILL_ACTIVE;
+                    ok = false;
+                }
                 break;
         }
     }
@@ -834,7 +853,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
     // the return code is the same as from Unix kill(): 0 if killed
     // successfully or -1 on error
-    if ( !ok || rc == STILL_ACTIVE )
+    if ( !ok )
         return -1;
 
     if ( krc )

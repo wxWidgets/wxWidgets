@@ -29,17 +29,24 @@
     #define WM_CONTEXTMENU      0x007B
 #endif
 
-// Needed by toplevel.cpp
-#ifndef WM_UPDATEUISTATE
-    #define WM_UPDATEUISTATE    0x0128
-#endif
-
 #ifndef WM_CHANGEUISTATE
     #define WM_CHANGEUISTATE    0x0127
 #endif
 
+#ifndef WM_UPDATEUISTATE
+    #define WM_UPDATEUISTATE    0x0128
+#endif
+
+#ifndef WM_QUERYUISTATE
+    #define WM_QUERYUISTATE     0x0129
+#endif
+
 #ifndef WM_PRINTCLIENT
     #define WM_PRINTCLIENT 0x318
+#endif
+
+#ifndef DT_HIDEPREFIX
+    #define DT_HIDEPREFIX 0x00100000
 #endif
 
 // Needed by toplevel.cpp

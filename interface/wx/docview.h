@@ -364,6 +364,27 @@ public:
     void AssociateTemplate(wxDocTemplate* temp);
 
     /**
+        Search for a particular document template.
+
+        Example:
+        @code
+           // creating a document instance of the specified document type:
+           m_doc = (MyDoc*)docManager->FindTemplate(CLASSINFO(MyDoc))->
+                        CreateDocument(wxEmptyString, wxDOC_SILENT);
+        @endcode
+
+        @param classinfo
+            Class info of a document class for which a wxDocTemplate had been
+            previously created.
+
+        @return
+            Pointer to a wxDocTemplate, or @NULL if none found.
+
+        @since 2.9.2
+     */
+    wxDocTemplate* FindTemplate(const wxClassInfo* classinfo);
+
+    /**
         Closes the specified document.
 
         If @a force is @true, the document is closed even if it has unsaved

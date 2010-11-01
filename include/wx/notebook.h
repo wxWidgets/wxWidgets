@@ -96,8 +96,8 @@ public:
     bool SendPageChangingEvent(int nPage);
 
     // sends the event about page change from old to new (or GetSelection() if
-    // new is -1)
-    void SendPageChangedEvent(int nPageOld, int nPageNew = -1);
+    // new is wxNOT_FOUND)
+    void SendPageChangedEvent(int nPageOld, int nPageNew = wxNOT_FOUND);
 
     // wxBookCtrlBase overrides this method to return false but we do need
     // focus because we have tabs

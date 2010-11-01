@@ -544,6 +544,59 @@ wxString wxGetCurrentDir()
 #endif // 0
 
 // ----------------------------------------------------------------------------
+// Environment
+// ----------------------------------------------------------------------------
+
+#ifdef __WXOSX__
+    #include <crt_externs.h>
+#endif
+
+bool wxGetEnvMap(wxEnvVariableHashMap *map)
+{
+    wxCHECK_MSG( map, false, wxS("output pointer can't be NULL") );
+
+#if defined(__VISUALC__)
+    wxChar **env = _tenviron;
+#elif defined(__VMS)
+   // Now this routine wil give false for OpenVMS
+   // TODO : should we do something with logicals?
+    char **env;
+#elif defined(__WXOSX__)
+    // Under Mac shared libraries don't have access to the global environ
+    // variable so use this Mac-specific function instead as advised by
+    // environ(7) under Darwin
+    char ***penv = _NSGetEnviron();
+    if ( !penv )
+        return false;
+    char **env = *penv;
+#else // non-MSVC non-Mac
+    // Not sure if other compilers have _tenviron so use the (more standard)
+    // ANSI version only for them.
+    char **env = environ;
+#endif
+
+    if ( env )
+    {
+        wxString name,
+                 value;
+        while ( *env )
+        {
+            const wxString var(*env);
+
+            name = var.BeforeFirst(wxS('='), &value);
+
+            (*map)[name] = value;
+
+            env++;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
 // wxExecute
 // ----------------------------------------------------------------------------
 
@@ -590,13 +643,14 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
 static long wxDoExecuteWithCapture(const wxString& command,
                                    wxArrayString& output,
                                    wxArrayString* error,
-                                   int flags)
+                                   int flags,
+                                   const wxExecuteEnv *env)
 {
     // create a wxProcess which will capture the output
     wxProcess *process = new wxProcess;
     process->Redirect();
 
-    long rc = wxExecute(command, wxEXEC_SYNC | flags, process);
+    long rc = wxExecute(command, wxEXEC_SYNC | flags, process, env);
 
 #if wxUSE_STREAMS
     if ( rc != -1 )
@@ -621,17 +675,19 @@ static long wxDoExecuteWithCapture(const wxString& command,
     return rc;
 }
 
-long wxExecute(const wxString& command, wxArrayString& output, int flags)
+long wxExecute(const wxString& command, wxArrayString& output, int flags,
+               const wxExecuteEnv *env)
 {
-    return wxDoExecuteWithCapture(command, output, NULL, flags);
+    return wxDoExecuteWithCapture(command, output, NULL, flags, env);
 }
 
 long wxExecute(const wxString& command,
                wxArrayString& output,
                wxArrayString& error,
-               int flags)
+               int flags,
+               const wxExecuteEnv *env)
 {
-    return wxDoExecuteWithCapture(command, output, &error, flags);
+    return wxDoExecuteWithCapture(command, output, &error, flags, env);
 }
 
 // ----------------------------------------------------------------------------

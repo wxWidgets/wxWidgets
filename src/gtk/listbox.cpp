@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/treeentry_gtk.h"
 
 #if wxUSE_TOOLTIPS
@@ -56,6 +57,31 @@ extern bool           g_blockEventsOnScroll;
 
 #define WXLISTBOX_DATACOLUMN    WXLISTBOX_DATACOLUMN_ARG(this)
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Return the entry for the given listbox item.
+//
+// Return value must be released by caller if non-NULL.
+GtkTreeEntry *
+GetEntry(GtkListStore *store, GtkTreeIter *iter, const wxListBox *listbox)
+{
+    GtkTreeEntry* entry;
+    gtk_tree_model_get(GTK_TREE_MODEL(store),
+                       iter,
+                       WXLISTBOX_DATACOLUMN_ARG(listbox),
+                       &entry,
+                       -1);
+
+    return entry;
+}
+
+} // anonymous namespace
+
 //-----------------------------------------------------------------------------
 // "row-activated"
 //-----------------------------------------------------------------------------
@@ -74,37 +100,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        * WXUNUSED(treeview),
 
     int sel = gtk_tree_path_get_indices(path)[0];
 
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-    event.SetEventObject( listbox );
-
-    if (listbox->IsSelected(sel))
-    {
-        GtkTreeEntry* entry = listbox->GTKGetEntry(sel);
-
-        if (entry)
-        {
-            event.SetInt(sel);
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject( (wxClientData*) gtk_tree_entry_get_userdata(entry) );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            g_object_unref (entry);
-        }
-        else
-        {
-            wxLogSysError(wxT("Internal error - could not get entry for double-click"));
-            event.SetInt(-1);
-        }
-    }
-    else
-    {
-        event.SetInt(-1);
-    }
-
-    listbox->HandleWindowEvent( event );
+    listbox->GTKOnActivated(sel);
 }
 }
 
@@ -119,49 +115,9 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 {
     if (g_blockEventsOnDrag) return;
 
-    if (listbox->HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED))
-    {
-        listbox->CalcAndSendEvent();
-    }
-    else // single selection
-    {
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-        event.SetEventObject( listbox );
-
-        int index = listbox->GetSelection();
-        if (index == wxNOT_FOUND)
-        {
-            // indicate that this is a deselection
-            event.SetExtraLong( 0 );
-            event.SetInt( -1 );
-
-            listbox->HandleWindowEvent( event );
-
-            return;
-        }
-        else
-        {
-            GtkTreeEntry* entry = listbox->GTKGetEntry( index );
-
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-
-            event.SetInt( index );
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
-                                 );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            listbox->HandleWindowEvent( event );
-
-            g_object_unref (entry);
-        }
-    }
+    listbox->GTKOnSelectionChanged();
 }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -191,27 +147,7 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
 
         if (index != wxNOT_FOUND)
         {
-            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-            event.SetEventObject( listbox );
-
-            GtkTreeEntry* entry = listbox->GTKGetEntry( index );
-
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-
-            event.SetInt( index );
-            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-            if ( listbox->HasClientObjectData() )
-                event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
-                                 );
-            else if ( listbox->HasClientUntypedData() )
-                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-
-            /* bool ret = */ listbox->HandleWindowEvent( event );
-
-            g_object_unref (entry);
+            listbox->GTKOnActivated(index);
 
 //          wxMac and wxMSW always invoke default action
 //          if (!ret)
@@ -263,29 +199,16 @@ static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
                                       GtkTreeIter  *b,
                                       wxListBox    *listbox)
 {
-    GtkTreeEntry* entry;
-    GtkTreeEntry* entry2;
+    wxGtkObject<GtkTreeEntry> entry1(GetEntry(listbox->m_liststore, a, listbox));
+    wxCHECK_MSG(entry1, 0, wxT("Could not get first entry"));
 
-    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
-                             a,
-                             WXLISTBOX_DATACOLUMN_ARG(listbox),
-                             &entry, -1);
-    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
-                             b,
-                             WXLISTBOX_DATACOLUMN_ARG(listbox),
-                             &entry2, -1);
-    wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
-    wxCHECK_MSG(entry2, 0, wxT("Could not get entry2"));
+    wxGtkObject<GtkTreeEntry> entry2(GetEntry(listbox->m_liststore, b, listbox));
+    wxCHECK_MSG(entry2, 0, wxT("Could not get second entry"));
 
     //We compare collate keys here instead of calling g_utf8_collate
     //as it is rather slow (and even the docs reccommend this)
-    int ret = strcmp(gtk_tree_entry_get_collate_key(entry),
-                     gtk_tree_entry_get_collate_key(entry2)) >= 0;
-
-    g_object_unref (entry);
-    g_object_unref (entry2);
-
-    return ret;
+    return strcmp(gtk_tree_entry_get_collate_key(entry1),
+                  gtk_tree_entry_get_collate_key(entry2)) >= 0;
 }
 }
 
@@ -300,21 +223,13 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
                                                  GtkTreeIter* iter,
                                                  wxListBox* listbox)
 {
-    GtkTreeEntry* entry;
-
-    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
-                             iter,
-                             WXLISTBOX_DATACOLUMN_ARG(listbox),
-                             &entry, -1);
+    wxGtkObject<GtkTreeEntry>
+        entry(GetEntry(listbox->m_liststore, iter, listbox));
     wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
+
     wxGtkString keycollatekey(g_utf8_collate_key(key, -1));
 
-    int ret = strcmp(keycollatekey,
-                     gtk_tree_entry_get_collate_key(entry));
-
-    g_object_unref (entry);
-
-    return ret != 0;
+    return strcmp(keycollatekey, gtk_tree_entry_get_collate_key(entry)) != 0;
 }
 }
 
@@ -430,7 +345,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     else // no multi-selection flags specified
     {
         m_windowStyle |= wxLB_SINGLE;
-        mode = GTK_SELECTION_SINGLE;
+
+        // Notice that we must use BROWSE and not GTK_SELECTION_SINGLE because
+        // the latter allows to not select any items at all while a single
+        // selection listbox is supposed to always have a selection (at least
+        // once the user selected something, it might not have any initially).
+        mode = GTK_SELECTION_BROWSE;
     }
 
     GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
@@ -540,7 +460,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     const unsigned int numItems = items.GetCount();
     for ( unsigned int i = 0; i < numItems; ++i )
     {
-        GtkTreeEntry* entry = gtk_tree_entry_new();
+        wxGtkObject<GtkTreeEntry> entry(gtk_tree_entry_new());
         gtk_tree_entry_set_label(entry, wxGTK_CONV(items[i]));
         gtk_tree_entry_set_destroy_func(entry,
                 (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
@@ -550,8 +470,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         gtk_list_store_insert_before(m_liststore, &itercur, pIter);
 
         GTKSetItem(itercur, entry);
-
-        g_object_unref (entry);
 
         if (clientData)
             AssignNewItemClientData(GTKGetIndexFor(itercur), clientData, i, type);
@@ -636,12 +554,7 @@ GtkTreeEntry *wxListBox::GTKGetEntry(unsigned n) const
     if ( !GTKGetIteratorFor(n, &iter) )
         return NULL;
 
-
-    GtkTreeEntry* entry = NULL;
-    gtk_tree_model_get(GTK_TREE_MODEL(m_liststore), &iter,
-                       WXLISTBOX_DATACOLUMN, &entry, -1);
-
-    return entry;
+    return GetEntry(m_liststore, &iter, this);
 }
 
 void wxListBox::GTKSetItem(GtkTreeIter& iter, const GtkTreeEntry *entry)
@@ -670,12 +583,10 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
     wxCHECK_MSG( IsValid(n), NULL,
                  wxT("Invalid index passed to GetItemClientData") );
 
-    GtkTreeEntry* entry = GTKGetEntry(n);
+    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
-    void* userdata = gtk_tree_entry_get_userdata( entry );
-    g_object_unref (entry);
-    return userdata;
+    return gtk_tree_entry_get_userdata( entry );
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
@@ -683,11 +594,10 @@ void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
     wxCHECK_RET( IsValid(n),
                  wxT("Invalid index passed to SetItemClientData") );
 
-    GtkTreeEntry* entry = GTKGetEntry(n);
+    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_RET(entry, wxT("could not get entry"));
 
     gtk_tree_entry_set_userdata( entry, clientData );
-    g_object_unref (entry);
 }
 
 // ----------------------------------------------------------------------------
@@ -718,13 +628,10 @@ wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_treeview != NULL, wxEmptyString, wxT("invalid listbox") );
 
-    GtkTreeEntry* entry = GTKGetEntry(n);
+    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_MSG( entry, wxEmptyString, wxT("wrong listbox index") );
 
-    wxString label = wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) );
-
-    g_object_unref (entry);
-    return label;
+    return wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) );
 }
 
 unsigned int wxListBox::GetCount() const
@@ -755,6 +662,25 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 // ----------------------------------------------------------------------------
 // selection
 // ----------------------------------------------------------------------------
+
+void wxListBox::GTKOnActivated(int item)
+{
+    SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, item, IsSelected(item));
+}
+
+void wxListBox::GTKOnSelectionChanged()
+{
+    if ( HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED) )
+    {
+        CalcAndSendEvent();
+    }
+    else // single selection
+    {
+        const int item = GetSelection();
+        if ( DoChangeSingleSelection(item) )
+            SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, item, true);
+    }
+}
 
 int wxListBox::GetSelection() const
 {

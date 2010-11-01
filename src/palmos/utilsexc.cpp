@@ -87,12 +87,14 @@ static bool wxExecuteDDE(const wxString& ddeServer,
 
 #endif // wxUSE_IPC
 
-long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
+long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
+    const wxExecuteEnv *env)
 {
     return 0;
 }
 
-long wxExecute(wxChar **argv, int flags, wxProcess *handler)
+long wxExecute(wxChar **argv, int flags, wxProcess *handler,
+    const wxExecuteEnv *env)
 {
     return 0;
 }

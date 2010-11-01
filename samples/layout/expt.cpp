@@ -4,9 +4,9 @@
  * the original, so abandoned.
 
  Example:
- 
+
   wxConstrain(frame->panel,
-  
+
     ( leftOf   (frame->panel) = leftOf   (frame),
       topOf    (frame->panel) = topOf    (frame),
       rightOf  (frame->panel) = rightOf  (frame),
@@ -70,7 +70,7 @@ class wxConstraintOp: public wxObject
 
   wxConstraintOp operator = (const wxConstraintOp& arg2);
   wxConstraintOp operator = (const int value);
-  
+
   friend wxConstraintOp operator % (const int perCent, const wxConstraintOp& arg2);
   friend wxConstraintOp operator + (wxConstraintOp& arg1, int margin);
   friend wxConstraintOp operator - (wxConstraintOp& arg1, int margin);

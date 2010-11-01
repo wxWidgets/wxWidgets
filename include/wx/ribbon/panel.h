@@ -23,7 +23,7 @@ enum wxRibbonPanelOption
     wxRIBBON_PANEL_NO_AUTO_MINIMISE    = 1 << 0,
     wxRIBBON_PANEL_EXT_BUTTON        = 1 << 3,
     wxRIBBON_PANEL_MINIMISE_BUTTON    = 1 << 4,
-    
+
     wxRIBBON_PANEL_DEFAULT_STYLE = 0,
 };
 
@@ -76,6 +76,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize GetPanelSizerBestSize() const;
+    wxSize  GetPanelSizerMinSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     wxSize GetMinNotMinimisedSize() const;
 

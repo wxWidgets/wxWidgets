@@ -2,7 +2,7 @@
 # Name:       misc/scripts/update_doc_utils.py
 # Purpose:    base utilities for others update_doc_*.py scripts
 # Created:    2007-08-1
-# RCS-ID:     $Id: makeunixtags.sh 46320 2007-06-04 11:02:29Z VZ $
+# RCS-ID:     $Id$
 # Copyright:  (c) 2007 Francesco Montorsi
 # Licence:    wxWindows licence
 ##############################################################################

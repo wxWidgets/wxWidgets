@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/dcmemory.h"
+    #include "wx/intl.h"
     #include "wx/panel.h"
     #include "wx/textctrl.h"
     #include "wx/valtext.h"
@@ -202,66 +203,15 @@ private:
         return m_combo->GetParent()->HasFlag(flag);
     }
 
-    // it expands "%x" format and changes %y to %Y if wxDP_SHOWCENTURY flag
-    // is given. If the locale format can't be easily analyzed (e.g. when
-    // the month is given as a name, not number), "%x" is returned
+    // Return the format to be used for the dates shown by the control. This
+    // functions honours wxDP_SHOWCENTURY flag.
     wxString GetLocaleDateFormat() const
     {
-        wxString x_format(wxT("%x"));
-        wxString fmt;
-        int year_cnt = 0, month_cnt = 0, day_cnt = 0;
+        wxString fmt = wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT);
+        if ( HasDPFlag(wxDP_SHOWCENTURY) )
+            fmt.Replace("%y", "%Y");
 
-        wxDateTime dt;
-        dt.ParseFormat(wxT("2003-10-17"), wxT("%Y-%m-%d"));
-        wxString str(dt.Format(x_format));
-
-        const wxChar *p = str.c_str();
-        while ( *p )
-        {
-            if (wxIsdigit(*p))
-            {
-                int n=wxAtoi(p);
-                if (n == dt.GetDay())
-                {
-                    fmt.Append(wxT("%d"));
-                    day_cnt++;
-                    p += 2;
-                }
-                else if (n == (int)dt.GetMonth()+1)
-                {
-                    fmt.Append(wxT("%m"));
-                    month_cnt++;
-                    p += 2;
-                }
-                else if (n == dt.GetYear())
-                {
-                    fmt.Append(wxT("%Y"));
-                    year_cnt++;
-                    p += 4;
-                }
-                else if (n == (dt.GetYear() % 100))
-                {
-                    if ( HasDPFlag(wxDP_SHOWCENTURY) )
-                        fmt.Append(wxT("%Y"));
-                    else
-                        fmt.Append(wxT("%y"));
-                    year_cnt++;
-                    p += 2;
-                }
-                else
-                    // this shouldn't happen
-                    return x_format;
-            }
-            else {
-                fmt.Append(*p);
-                p++;
-            }
-        }
-
-        if (year_cnt == 1 && month_cnt == 1 && day_cnt == 1)
-            return fmt;
-
-        return x_format;
+        return fmt;
     }
 
     bool SetFormat(const wxString& fmt)

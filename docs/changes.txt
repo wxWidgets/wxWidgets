@@ -403,6 +403,12 @@ Major new features in this release
 2.9.2:
 ------
 
+All:
+
+- Added cwd and env arguments to wxExecute() (Emilien Kia).
+- Added "rest" argument to wxString::Before{First,Last}().
+- Added wxThread::OnKill() and OnDelete() callbacks.
+
 All (GUI):
 
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
@@ -413,6 +419,13 @@ All (GUI):
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
+- Consistency fixes for keyboard events across all major ports.
+- Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
+- Fix display of right aligned columns in wxGenericListCtrl (jl).
+- Restore text drag-and-drop in wxSTC broken by Scintilla 2 update (Jens Lody).
+- Improve wxGTK print/page setup dialog (rafravago).
+- Added wxToolbook XRC handler (Andrea Zanellato).
+- Added wxDocManager::FindTemplate() (troelsk).
 
 MSW:
 

@@ -215,12 +215,7 @@ public:
         : m_handler( handler ), m_method( method )
         { }
 
-    virtual void operator()(wxEvtHandler *handler, wxEvent& event)
-    {
-        wxEvtHandler * const realHandler = m_handler ? m_handler : handler;
-
-        (realHandler->*m_method)(event);
-    }
+    virtual void operator()(wxEvtHandler *handler, wxEvent& event);
 
     virtual bool IsMatching(const wxEventFunctor& functor) const
     {
@@ -3338,6 +3333,17 @@ private:
 };
 
 WX_DEFINE_ARRAY_WITH_DECL_PTR(wxEvtHandler *, wxEvtHandlerArray, class WXDLLIMPEXP_BASE);
+
+
+// Define an inline method of wxObjectEventFunctor which couldn't be defined
+// before wxEvtHandler declaration: at least Sun CC refuses to compile function
+// calls through pointer to member for forward-declared classes (see #12452).
+inline void wxObjectEventFunctor::operator()(wxEvtHandler *handler, wxEvent& event)
+{
+    wxEvtHandler * const realHandler = m_handler ? m_handler : handler;
+
+    (realHandler->*m_method)(event);
+}
 
 // ----------------------------------------------------------------------------
 // wxEventConnectionRef represents all connections between two event handlers

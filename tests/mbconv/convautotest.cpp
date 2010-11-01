@@ -51,7 +51,10 @@ private:
 
     // real test function: check that converting the src multibyte string to
     // wide char using wxConvAuto yields wch as the first result
-    void TestFirstChar(const char *src, wchar_t wch);
+    //
+    // the length of the string may need to be passed explicitly if it has
+    // embedded NULs, otherwise it's not necessary
+    void TestFirstChar(const char *src, wchar_t wch, size_t len = wxNO_LEN);
 
     void Empty();
     void Short();
@@ -86,16 +89,16 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConvAutoTestCase, "ConvAutoTestCase");
 // tests
 // ----------------------------------------------------------------------------
 
-void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch)
+void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch, size_t len)
 {
-    wxWCharBuffer wbuf = wxConvAuto().cMB2WC(src);
+    wxWCharBuffer wbuf = wxConvAuto().cMB2WC(src, len, NULL);
     CPPUNIT_ASSERT( wbuf );
     CPPUNIT_ASSERT_EQUAL( wch, *wbuf );
 }
 
 void ConvAutoTestCase::Empty()
 {
-    TestFirstChar("", wxT('\0'));
+    CPPUNIT_ASSERT( !wxConvAuto().cMB2WC("") );
 }
 
 void ConvAutoTestCase::Short()
@@ -110,22 +113,22 @@ void ConvAutoTestCase::None()
 
 void ConvAutoTestCase::UTF32LE()
 {
-    TestFirstChar("\xff\xfe\0\0A\0\0\0", wxT('A'));
+    TestFirstChar("\xff\xfe\0\0A\0\0\0", wxT('A'), 8);
 }
 
 void ConvAutoTestCase::UTF32BE()
 {
-    TestFirstChar("\0\0\xfe\xff\0\0\0B", wxT('B'));
+    TestFirstChar("\0\0\xfe\xff\0\0\0B", wxT('B'), 8);
 }
 
 void ConvAutoTestCase::UTF16LE()
 {
-    TestFirstChar("\xff\xfeZ\0", wxT('Z'));
+    TestFirstChar("\xff\xfeZ\0", wxT('Z'), 4);
 }
 
 void ConvAutoTestCase::UTF16BE()
 {
-    TestFirstChar("\xfe\xff\0Y", wxT('Y'));
+    TestFirstChar("\xfe\xff\0Y", wxT('Y'), 4);
 }
 
 void ConvAutoTestCase::UTF8()

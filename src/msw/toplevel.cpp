@@ -1279,6 +1279,17 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
     return (os_type == wxOS_WINDOWS_NT && ver_major >= 5);
 }
 
+void wxTopLevelWindowMSW::DoEnable(bool enable)
+{
+    wxTopLevelWindowBase::DoEnable(enable);
+
+    // Enabling or disabling a window may change its appearance. Unfortunately,
+    // in at least some situation, toplevel windows don't repaint themselves,
+    // so we have to issue explicit refresh to avoid rendering artifacts.
+    //
+    // TODO: find out just what exactly is wrong here
+    Refresh();
+}
 
 void wxTopLevelWindowMSW::DoFreeze()
 {

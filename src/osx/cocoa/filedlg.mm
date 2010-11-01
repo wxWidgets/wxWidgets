@@ -275,6 +275,7 @@ int wxFileDialog::ShowModal()
         returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
         ModalFinishedCallback(sPanel, returnCode);
 
+        UnsubclassWin();
         [sPanel setAccessoryView:nil];
     }
     else
@@ -295,6 +296,7 @@ int wxFileDialog::ShowModal()
 
         ModalFinishedCallback(oPanel, returnCode);
         
+        UnsubclassWin();
         [oPanel setAccessoryView:nil];
         
         if ( types != nil )

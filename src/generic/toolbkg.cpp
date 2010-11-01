@@ -64,7 +64,6 @@ END_EVENT_TABLE()
 
 void wxToolbook::Init()
 {
-    m_selection = wxNOT_FOUND;
     m_needsRealizing = false;
 }
 
@@ -201,11 +200,6 @@ void wxToolbook::SetImageList(wxImageList *imageList)
 // selection
 // ----------------------------------------------------------------------------
 
-int wxToolbook::GetSelection() const
-{
-    return m_selection;
-}
-
 wxBookCtrlEvent* wxToolbook::CreatePageChangingEvent() const
 {
     return new wxBookCtrlEvent(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
@@ -235,13 +229,13 @@ void wxToolbook::Realize()
         GetToolBar()->Realize();
     }
 
-    if (m_selection == -1)
+    if (m_selection == wxNOT_FOUND)
         m_selection = 0;
 
     if (GetPageCount() > 0)
     {
         int sel = m_selection;
-        m_selection = -1;
+        m_selection = wxNOT_FOUND;
         SetSelection(sel);
     }
 
@@ -352,7 +346,7 @@ wxWindow *wxToolbook::DoRemovePage(size_t page)
             int sel = m_selection - 1;
             if (page_count == 1)
                 sel = wxNOT_FOUND;
-            else if ((page_count == 2) || (sel == -1))
+            else if ((page_count == 2) || (sel == wxNOT_FOUND))
                 sel = 0;
 
             // force sel invalid if deleting current page - don't try to hide it

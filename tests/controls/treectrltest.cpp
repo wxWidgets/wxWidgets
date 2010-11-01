@@ -321,7 +321,7 @@ void TreeCtrlTestCase::KeyDown()
     sim.Text("aAbB");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
 }
 
 #if !defined(__WXGTK__)

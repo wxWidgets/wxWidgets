@@ -80,15 +80,15 @@ protected:
     virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 
     /// Output character formatting
-    void BeginCharacterFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, const wxTextAttr& paraStyle, wxTextOutputStream& stream );
-    void EndCharacterFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, const wxTextAttr& paraStyle, wxTextOutputStream& stream );
+    void BeginCharacterFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, const wxRichTextAttr& paraStyle, wxTextOutputStream& stream );
+    void EndCharacterFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, const wxRichTextAttr& paraStyle, wxTextOutputStream& stream );
 
     /// Output paragraph formatting
-    void BeginParagraphFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, wxTextOutputStream& stream);
-    void EndParagraphFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, wxTextOutputStream& stream);
+    void BeginParagraphFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, wxTextOutputStream& stream);
+    void EndParagraphFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, wxTextOutputStream& stream);
 
     /// Output font tag
-    void OutputFont(const wxTextAttr& style, wxTextOutputStream& stream);
+    void OutputFont(const wxRichTextAttr& style, wxTextOutputStream& stream);
 
     /// Closes lists to level (-1 means close all)
     void CloseLists(int level, wxTextOutputStream& str);
@@ -106,13 +106,13 @@ protected:
     const wxChar* GetMimeType(int imageType);
 
     /// Gets the html equivalent of the specified value
-    wxString GetAlignment(const wxTextAttr& thisStyle);
+    wxString GetAlignment(const wxRichTextAttr& thisStyle);
 
     /// Generates &nbsp; array for indentations
     wxString SymbolicIndent(long indent);
 
     /// Finds the html equivalent of the specified bullet
-    int TypeOfList(const wxTextAttr& thisStyle, wxString& tag);
+    int TypeOfList(const wxRichTextAttr& thisStyle, wxString& tag);
 #endif
 
 // Data members

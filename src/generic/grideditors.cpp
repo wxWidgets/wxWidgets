@@ -338,13 +338,15 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     bool ctrl = event.ControlDown();
-    bool alt  = event.AltDown();
+    bool alt;
 
 #ifdef __WXMAC__
     // On the Mac the Alt key is more like shift and is used for entry of
     // valid characters, so check for Ctrl and Meta instead.
     alt = event.MetaDown();
-#endif
+#else // !__WXMAC__
+    alt = event.AltDown();
+#endif // __WXMAC__/!__WXMAC__
 
     // Assume it's not a valid char if ctrl or alt is down, but if both are
     // down then it may be because of an AltGr key combination, so let them
@@ -353,14 +355,10 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
         return false;
 
 #if wxUSE_UNICODE
-    // if the unicode key code is not really a unicode character (it may
-    // be a function key or etc., the platforms appear to always give us a
-    // small value in this case) then fallback to the ASCII key code but
-    // don't do anything for function keys or etc.
-    if ( event.GetUnicodeKey() > 127 && event.GetKeyCode() > 127 )
+    if ( static_cast<int>(event.GetUnicodeKey()) == WXK_NONE )
         return false;
 #else
-    if ( event.GetKeyCode() > 255 )
+    if ( event.GetKeyCode() > WXK_START )
         return false;
 #endif
 
@@ -530,7 +528,15 @@ void wxGridCellTextEditor::DoReset(const wxString& startValue)
 
 bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
 {
-    return wxGridCellEditor::IsAcceptedKey(event);
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_DELETE:
+        case WXK_BACK:
+            return true;
+
+        default:
+            return wxGridCellEditor::IsAcceptedKey(event);
+    }
 }
 
 void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
@@ -541,35 +547,39 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     // a valid character, so not a whole lot of testing needs to be done.
 
     wxTextCtrl* tc = Text();
-    wxChar ch;
-    long pos;
+    int ch;
+
+    bool isPrintable;
 
 #if wxUSE_UNICODE
     ch = event.GetUnicodeKey();
-    if (ch <= 127)
-        ch = (wxChar)event.GetKeyCode();
-#else
-    ch = (wxChar)event.GetKeyCode();
-#endif
+    if ( ch != WXK_NONE )
+        isPrintable = true;
+    else
+#endif // wxUSE_UNICODE
+    {
+        ch = event.GetKeyCode();
+        isPrintable = ch >= WXK_SPACE && ch < WXK_START;
+    }
 
     switch (ch)
     {
         case WXK_DELETE:
-            // delete the character at the cursor
-            pos = tc->GetInsertionPoint();
-            if (pos < tc->GetLastPosition())
-                tc->Remove(pos, pos + 1);
+            // Delete the initial character when starting to edit with DELETE.
+            tc->Remove(0, 1);
             break;
 
         case WXK_BACK:
-            // delete the character before the cursor
-            pos = tc->GetInsertionPoint();
-            if (pos > 0)
+            // Delete the last character when starting to edit with BACKSPACE.
+            {
+                const long pos = tc->GetLastPosition();
                 tc->Remove(pos - 1, pos);
+            }
             break;
 
         default:
-            tc->WriteText(ch);
+            if ( isPrintable )
+                tc->WriteText(static_cast<wxChar>(ch));
             break;
     }
 }

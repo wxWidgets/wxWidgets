@@ -50,7 +50,7 @@ public:
   // ---------
 
     // set the currently selected page, return the index of the previously
-    // selected one (or -1 on error)
+    // selected one (or wxNOT_FOUND on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
     int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     // get the currently selected page
@@ -109,6 +109,9 @@ public:
 
     // common part of all ctors
     void Init();
+
+    // Called by GTK event handler when the current page is definitely changed.
+    void GTKOnPageChanged();
 
     // helper function
     wxGtkNotebookPage* GetNotebookPage(int page) const;

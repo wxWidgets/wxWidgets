@@ -95,7 +95,7 @@ void wxControlBase::Command(wxCommandEvent& event)
 
 void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 {
-    event.SetEventObject((wxControlBase *)this);    // const_cast
+    event.SetEventObject(const_cast<wxControlBase *>(this));
 
     // event.SetId(GetId()); -- this is usuall done in the event ctor
 
@@ -298,7 +298,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 // NOTE: the following piece of code works also when len == 1
 
                 // start the removal process from the middle of the string
-                // i.e. separe the string in three parts: 
+                // i.e. separe the string in three parts:
                 // - the first one to preserve, valid range [0;initialCharToRemove-1] or the empty range if initialCharToRemove==0
                 // - the second one to remove, valid range [initialCharToRemove;endCharToRemove]
                 // - the third one to preserve, valid range [endCharToRemove+1;len-1] or the empty range if endCharToRemove==len-1
@@ -317,9 +317,9 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                         if (initialCharToRemove >= 2)
                             widthPx = charOffsetsPx[initialCharToRemove-1] - charOffsetsPx[initialCharToRemove-2];
                         else
-                            widthPx = charOffsetsPx[initialCharToRemove-1];     
+                            widthPx = charOffsetsPx[initialCharToRemove-1];
                                 // the (initialCharToRemove-1)-th character is the first char of the string
-                        
+
                         wxASSERT(widthPx >= 0);     // widthPx is zero for e.g. tab characters
 
                         // mark the (initialCharToRemove-1)-th character as removable
@@ -394,7 +394,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     int removedPx;
     if (initialCharToRemove >= 1)
         removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1] - charOffsetsPx[initialCharToRemove-1];
-    else 
+    else
         removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1];
     wxASSERT(removedPx >= excessPx);
 

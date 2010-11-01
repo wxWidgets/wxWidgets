@@ -4,7 +4,7 @@
 // Author:      Neil Perkins
 // Modified by:
 // Created:     2010-05-15
-// RCS-ID:      $Id: mimetype.cpp 54734 2008-07-21 01:33:51Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Neil Perkins
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -592,38 +592,38 @@ bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
 // The remaining functionality has not yet been implemented for OS X
 /////////////////////////////////////////////////////////////////////////////
 
-wxFileTypeImpl::wxFileTypeImpl() 
+wxFileTypeImpl::wxFileTypeImpl()
 {
 }
 
-wxFileTypeImpl::~wxFileTypeImpl() 
+wxFileTypeImpl::~wxFileTypeImpl()
 {
 }
 
 // Query wxMimeTypesManagerImple to get real information for a file type
-bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions) const 
-{ 
-    return m_manager->GetExtensions( m_uti, extensions ); 
+bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions) const
+{
+    return m_manager->GetExtensions( m_uti, extensions );
 }
 
-bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const 
-{ 
-    return m_manager->GetMimeType( m_uti, mimeType ); 
+bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
+{
+    return m_manager->GetMimeType( m_uti, mimeType );
 }
 
-bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const 
-{ 
-    return m_manager->GetMimeTypes( m_uti, mimeTypes ); 
+bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
+{
+    return m_manager->GetMimeTypes( m_uti, mimeTypes );
 }
 
-bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const 
-{ 
-    return m_manager->GetIcon( m_uti, iconLoc ); 
+bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
+{
+    return m_manager->GetIcon( m_uti, iconLoc );
 }
 
-bool wxFileTypeImpl::GetDescription(wxString *desc) const 
-{ 
-    return m_manager->GetDescription( m_uti, desc ); 
+bool wxFileTypeImpl::GetDescription(wxString *desc) const
+{
+    return m_manager->GetDescription( m_uti, desc );
 }
 
 bool wxFileTypeImpl::GetOpenCommand(wxString *WXUNUSED(openCmd), const wxFileType::MessageParameters& WXUNUSED(params)) const

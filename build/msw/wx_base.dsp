@@ -1315,6 +1315,10 @@ SOURCE=..\..\include\wx\meta\if.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\meta\implicitconversion.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\init.h
 # End Source File
 # Begin Source File

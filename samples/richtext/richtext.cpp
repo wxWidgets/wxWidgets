@@ -34,6 +34,7 @@
 #include "wx/splitter.h"
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
+#include "wx/stopwatch.h"
 
 #if wxUSE_FILESYSTEM
 #include "wx/filesys.h"
@@ -78,6 +79,7 @@
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/richtext/richtextstyledlg.h"
 #include "wx/richtext/richtextprint.h"
+#include "wx/richtext/richtextimagedlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -145,6 +147,8 @@ public:
     void OnIndentLess(wxCommandEvent& event);
 
     void OnFont(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
+    void OnUpdateImage(wxUpdateUIEvent& event);
     void OnParagraph(wxCommandEvent& event);
     void OnFormat(wxCommandEvent& event);
     void OnUpdateFormat(wxUpdateUIEvent& event);
@@ -181,6 +185,7 @@ public:
     void OnPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
 
+    void OnInsertImage(wxCommandEvent& event);
 protected:
 
     // Forward command events to the current rich text control, if any
@@ -211,6 +216,7 @@ enum
     ID_FORMAT_ITALIC,
     ID_FORMAT_UNDERLINE,
     ID_FORMAT_FONT,
+    ID_FORMAT_IMAGE,
     ID_FORMAT_PARAGRAPH,
     ID_FORMAT_CONTENT,
 
@@ -218,6 +224,7 @@ enum
 
     ID_INSERT_SYMBOL,
     ID_INSERT_URL,
+    ID_INSERT_IMAGE,
 
     ID_FORMAT_ALIGN_LEFT,
     ID_FORMAT_ALIGN_CENTRE,
@@ -286,10 +293,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_FORMAT_ALIGN_RIGHT,  MyFrame::OnUpdateAlignRight)
 
     EVT_MENU(ID_FORMAT_FONT,  MyFrame::OnFont)
+    EVT_MENU(ID_FORMAT_IMAGE, MyFrame::OnImage)
     EVT_MENU(ID_FORMAT_PARAGRAPH,  MyFrame::OnParagraph)
     EVT_MENU(ID_FORMAT_CONTENT,  MyFrame::OnFormat)
     EVT_UPDATE_UI(ID_FORMAT_CONTENT,  MyFrame::OnUpdateFormat)
     EVT_UPDATE_UI(ID_FORMAT_FONT,  MyFrame::OnUpdateFormat)
+    EVT_UPDATE_UI(ID_FORMAT_IMAGE, MyFrame::OnUpdateImage)
     EVT_UPDATE_UI(ID_FORMAT_PARAGRAPH,  MyFrame::OnUpdateFormat)
     EVT_MENU(ID_FORMAT_INDENT_MORE,  MyFrame::OnIndentMore)
     EVT_MENU(ID_FORMAT_INDENT_LESS,  MyFrame::OnIndentLess)
@@ -305,6 +314,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
     EVT_MENU(ID_INSERT_URL,  MyFrame::OnInsertURL)
+    EVT_MENU(ID_INSERT_IMAGE, MyFrame::OnInsertImage)
 
     EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
     EVT_MENU(ID_FORMAT_BULLETS_AND_NUMBERING, MyFrame::OnBulletsAndNumbering)
@@ -621,6 +631,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_LINE_SPACING_DOUBLE, _("Double Line Spacing"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
+    formatMenu->Append(ID_FORMAT_IMAGE, _("Image Property"));
     formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
     formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
     formatMenu->AppendSeparator();
@@ -640,6 +651,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
     insertMenu->Append(ID_INSERT_URL, _("&URL..."));
+    insertMenu->Append(ID_INSERT_IMAGE, _("&Image..."));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -689,6 +701,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxEmptyString, wxBitmap(indentmore_xpm), _("Indent More"));
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxEmptyString, wxBitmap(font_xpm), _("Font"));
+    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxBitmap(font_xpm), _("Image Property"));
 
     wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
     toolBar->AddControl(combo);
@@ -742,6 +755,8 @@ void MyFrame::WriteInitialText()
 
     r.BeginSuppressUndo();
 
+    r.Freeze();
+
     r.BeginParagraphSpacing(0, 20);
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -767,6 +782,19 @@ void MyFrame::WriteInitialText()
     r.Newline();
 
     r.EndAlignment();
+
+    r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
+    wxRichTextAttr imageAttr;
+    imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_LEFT);
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
+    imageAttr.GetTextBoxAttr().GetTop().SetValue(200);
+    imageAttr.GetTextBoxAttr().GetTop().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+    imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_RIGHT);
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
+    r.WriteText(wxString(wxT("This is a simple test for a floating right image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side.")));
+    r.EndAlignment();
+    r.Newline();
 
     r.WriteText(wxT("What can you do with this thing? "));
 
@@ -858,7 +886,7 @@ void MyFrame::WriteInitialText()
     tabs.Add(600);
     tabs.Add(800);
     tabs.Add(1000);
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_TABS);
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
@@ -922,6 +950,8 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
+
+    r.Thaw();
 
     r.EndSuppressUndo();
 }
@@ -1042,7 +1072,14 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 
         if (!path.empty())
         {
+            wxBusyCursor busy;
+            wxStopWatch stopwatch;
+
             m_richTextCtrl->SaveFile(path);
+
+            long t = stopwatch.Time();
+            wxLogDebug(wxT("Saving took %ldms"), t);
+            wxMessageBox(wxString::Format(wxT("Saving took %ldms"), t));
         }
     }
 }
@@ -1134,7 +1171,7 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
     wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
     wxFontData fontData;
 
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1152,6 +1189,27 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
         }
     }
 #endif
+}
+
+void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextRange range;
+    wxASSERT(m_richTextCtrl->HasSelection());
+
+    range = m_richTextCtrl->GetSelectionRange();
+    wxASSERT(range.ToInternal().GetLength() == 1);
+
+    wxRichTextImage* image = wxDynamicCast(m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart()), wxRichTextImage);
+    if (image)
+    {
+        wxRichTextImageDialog imageDlg(this);
+        imageDlg.SetImageObject(image, &m_richTextCtrl->GetBuffer());
+
+        if (imageDlg.ShowModal() == wxID_OK)
+        {
+            image = imageDlg.ApplyImageAttr();
+        }
+    }
 }
 
 void MyFrame::OnParagraph(wxCommandEvent& WXUNUSED(event))
@@ -1195,6 +1253,25 @@ void MyFrame::OnFormat(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 {
     event.Enable(m_richTextCtrl->HasSelection());
+}
+
+void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
+{
+    wxRichTextRange range;
+    wxRichTextObject *obj;
+
+    range = m_richTextCtrl->GetSelectionRange();
+    if (range.ToInternal().GetLength() == 1)
+    {
+        obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
+        if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
+        {
+            event.Enable(true);
+            return;
+        }
+    }
+
+    event.Enable(false);
 }
 
 void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
@@ -1562,6 +1639,16 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnInsertImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png");
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString path = dialog.GetPath();
+        m_richTextCtrl->WriteImage(path, wxBITMAP_TYPE_ANY);
+    }
+}
+
 void MyFrame::OnURL(wxTextUrlEvent& event)
 {
     wxMessageBox(event.GetString());
@@ -1586,5 +1673,21 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().GetPrinting()->PageSetup();
+    wxDialog dialog(this, wxID_ANY, wxT("Testing"), wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE);
+
+    wxNotebook* nb = new wxNotebook(& dialog, wxID_ANY, wxPoint(5, 5), wxSize(300, 250));
+    wxPanel* panel = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    wxPanel* panel2 = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+
+    new wxRichTextCtrl(panel, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    nb->AddPage(panel, wxT("Page 1"));
+
+    new wxRichTextCtrl(panel2, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
+    nb->AddPage(panel2, wxT("Page 2"));
+
+    new wxButton(& dialog, wxID_OK, wxT("OK"), wxPoint(5, 180));
+
+    dialog.ShowModal();
+
+//    wxGetApp().GetPrinting()->PageSetup();
 }

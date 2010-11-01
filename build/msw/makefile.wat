@@ -148,6 +148,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_choic.obj &
 	$(OBJS)\monodll_xh_choicbk.obj &
 	$(OBJS)\monodll_xh_clrpicker.obj &
+	$(OBJS)\monodll_xh_cmdlinkbn.obj &
 	$(OBJS)\monodll_xh_collpane.obj &
 	$(OBJS)\monodll_xh_combo.obj &
 	$(OBJS)\monodll_xh_comboctrl.obj &
@@ -191,6 +192,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_text.obj &
 	$(OBJS)\monodll_xh_tglbtn.obj &
 	$(OBJS)\monodll_xh_toolb.obj &
+	$(OBJS)\monodll_xh_toolbk.obj &
 	$(OBJS)\monodll_xh_tree.obj &
 	$(OBJS)\monodll_xh_treebk.obj &
 	$(OBJS)\monodll_xh_unkwn.obj &
@@ -231,6 +233,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtextsymboldlg.obj &
 	$(OBJS)\monodll_richtextstyledlg.obj &
 	$(OBJS)\monodll_richtextprint.obj &
+	$(OBJS)\monodll_richtextimagedlg.obj &
 	$(OBJS)\monodll_stc.obj &
 	$(OBJS)\monodll_PlatWX.obj &
 	$(OBJS)\monodll_ScintillaWX.obj
@@ -877,6 +880,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_choic.obj &
 	$(OBJS)\monolib_xh_choicbk.obj &
 	$(OBJS)\monolib_xh_clrpicker.obj &
+	$(OBJS)\monolib_xh_cmdlinkbn.obj &
 	$(OBJS)\monolib_xh_collpane.obj &
 	$(OBJS)\monolib_xh_combo.obj &
 	$(OBJS)\monolib_xh_comboctrl.obj &
@@ -920,6 +924,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_text.obj &
 	$(OBJS)\monolib_xh_tglbtn.obj &
 	$(OBJS)\monolib_xh_toolb.obj &
+	$(OBJS)\monolib_xh_toolbk.obj &
 	$(OBJS)\monolib_xh_tree.obj &
 	$(OBJS)\monolib_xh_treebk.obj &
 	$(OBJS)\monolib_xh_unkwn.obj &
@@ -960,6 +965,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtextsymboldlg.obj &
 	$(OBJS)\monolib_richtextstyledlg.obj &
 	$(OBJS)\monolib_richtextprint.obj &
+	$(OBJS)\monolib_richtextimagedlg.obj &
 	$(OBJS)\monolib_stc.obj &
 	$(OBJS)\monolib_PlatWX.obj &
 	$(OBJS)\monolib_ScintillaWX.obj
@@ -3443,7 +3449,8 @@ WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
 	-i=$(SETUPHDIR) -i=..\..\include $(__wxscintilla_usingdll_p) -d__WXMSW__ &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) $(__UNICODE_DEFINE_p) $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_AutoComplete.obj &
 	$(OBJS)\wxscintilla_CallTip.obj &
@@ -4389,6 +4396,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_choic.obj &
 	$(OBJS)\xrcdll_xh_choicbk.obj &
 	$(OBJS)\xrcdll_xh_clrpicker.obj &
+	$(OBJS)\xrcdll_xh_cmdlinkbn.obj &
 	$(OBJS)\xrcdll_xh_collpane.obj &
 	$(OBJS)\xrcdll_xh_combo.obj &
 	$(OBJS)\xrcdll_xh_comboctrl.obj &
@@ -4432,6 +4440,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_text.obj &
 	$(OBJS)\xrcdll_xh_tglbtn.obj &
 	$(OBJS)\xrcdll_xh_toolb.obj &
+	$(OBJS)\xrcdll_xh_toolbk.obj &
 	$(OBJS)\xrcdll_xh_tree.obj &
 	$(OBJS)\xrcdll_xh_treebk.obj &
 	$(OBJS)\xrcdll_xh_unkwn.obj &
@@ -4461,6 +4470,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_choic.obj &
 	$(OBJS)\xrclib_xh_choicbk.obj &
 	$(OBJS)\xrclib_xh_clrpicker.obj &
+	$(OBJS)\xrclib_xh_cmdlinkbn.obj &
 	$(OBJS)\xrclib_xh_collpane.obj &
 	$(OBJS)\xrclib_xh_combo.obj &
 	$(OBJS)\xrclib_xh_comboctrl.obj &
@@ -4504,6 +4514,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_text.obj &
 	$(OBJS)\xrclib_xh_tglbtn.obj &
 	$(OBJS)\xrclib_xh_toolb.obj &
+	$(OBJS)\xrclib_xh_toolbk.obj &
 	$(OBJS)\xrclib_xh_tree.obj &
 	$(OBJS)\xrclib_xh_treebk.obj &
 	$(OBJS)\xrclib_xh_unkwn.obj &
@@ -4644,7 +4655,8 @@ RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_richtextformatdlg.obj &
 	$(OBJS)\richtextdll_richtextsymboldlg.obj &
 	$(OBJS)\richtextdll_richtextstyledlg.obj &
-	$(OBJS)\richtextdll_richtextprint.obj
+	$(OBJS)\richtextdll_richtextprint.obj &
+	$(OBJS)\richtextdll_richtextimagedlg.obj
 RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -4664,7 +4676,8 @@ RICHTEXTLIB_OBJECTS =  &
 	$(OBJS)\richtextlib_richtextformatdlg.obj &
 	$(OBJS)\richtextlib_richtextsymboldlg.obj &
 	$(OBJS)\richtextlib_richtextstyledlg.obj &
-	$(OBJS)\richtextlib_richtextprint.obj
+	$(OBJS)\richtextlib_richtextprint.obj &
+	$(OBJS)\richtextlib_richtextimagedlg.obj
 STCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -6944,6 +6957,9 @@ $(OBJS)\monodll_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
 $(OBJS)\monodll_xh_clrpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_clrpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_cmdlinkbn.obj :  .AUTODEPEND ..\..\src\xrc\xh_cmdlinkbn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7073,6 +7089,9 @@ $(OBJS)\monodll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 $(OBJS)\monodll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_toolbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7191,6 +7210,9 @@ $(OBJS)\monodll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtexts
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
@@ -9174,6 +9196,9 @@ $(OBJS)\monolib_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
 $(OBJS)\monolib_xh_clrpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_clrpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xh_cmdlinkbn.obj :  .AUTODEPEND ..\..\src\xrc\xh_cmdlinkbn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9303,6 +9328,9 @@ $(OBJS)\monolib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 $(OBJS)\monolib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xh_toolbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9421,6 +9449,9 @@ $(OBJS)\monolib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtexts
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
@@ -14473,6 +14504,9 @@ $(OBJS)\xrcdll_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
 $(OBJS)\xrcdll_xh_clrpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_clrpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_cmdlinkbn.obj :  .AUTODEPEND ..\..\src\xrc\xh_cmdlinkbn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14602,6 +14636,9 @@ $(OBJS)\xrcdll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 $(OBJS)\xrcdll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_toolbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14657,6 +14694,9 @@ $(OBJS)\xrclib_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_clrpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_clrpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_cmdlinkbn.obj :  .AUTODEPEND ..\..\src\xrc\xh_cmdlinkbn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
@@ -14786,6 +14826,9 @@ $(OBJS)\xrclib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_toolbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
@@ -15013,6 +15056,9 @@ $(OBJS)\richtextdll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richt
 $(OBJS)\richtextdll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
+$(OBJS)\richtextdll_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
 $(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
@@ -15041,6 +15087,9 @@ $(OBJS)\richtextlib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richt
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\stcdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

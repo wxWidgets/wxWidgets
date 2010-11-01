@@ -50,6 +50,8 @@ public:
     void SetDepth(int d);
     void SetOk(bool isOk);
 
+    wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
+
     WXHICON GetHICON() const;
 
 protected:

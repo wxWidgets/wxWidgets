@@ -414,7 +414,7 @@ bool wxBitmap::CopyFromDIB(const wxDIB& dib)
     if ( !hbitmap )
         return false;
 #else // ALWAYS_USE_DIB
-    HBITMAP hbitmap = ((wxDIB &)dib).Detach();  // const_cast
+    HBITMAP hbitmap = const_cast<wxDIB &>(dib).Detach();
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
 
     UnRef();
@@ -493,7 +493,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     else
     {
         // bits should already be in Windows standard format
-        data = (char *)bits;    // const_cast is harmless
+        data = const_cast<char *>(bits);
     }
 
     HBITMAP hbmp = ::CreateBitmap(width, height, 1, depth, data);
@@ -1633,9 +1633,25 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
     if ( bmp.HasAlpha() )
     {
+        HBITMAP hbmp;
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+        // CreateIconIndirect() requires non-pre-multiplied pixel data on input
+        // as it does pre-multiplication internally itself so we need to create
+        // a special DIB in such format to pass to it. This is inefficient but
+        // better than creating an icon with wrong colours.
+        AutoHBITMAP hbmpRelease;
+        hbmp = wxDIB(bmp.ConvertToImage(),
+                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+#else // !(wxUSE_WXDIB && wxUSE_IMAGE)
+        hbmp = GetHbitmapOf(bmp);
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+
         // Create an empty mask bitmap.
         // it doesn't seem to work if we mess with the mask at all.
-        HBITMAP hMonoBitmap = CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL);
+        AutoHBITMAP
+            hMonoBitmap(CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL));
 
         ICONINFO iconInfo;
         wxZeroMemory(iconInfo);
@@ -1647,13 +1663,9 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         }
 
         iconInfo.hbmMask = hMonoBitmap;
-        iconInfo.hbmColor = GetHbitmapOf(bmp);
+        iconInfo.hbmColor = hbmp;
 
-        HICON hicon = ::CreateIconIndirect(&iconInfo);
-
-        ::DeleteObject(hMonoBitmap);
-
-        return hicon;
+        return ::CreateIconIndirect(&iconInfo);
     }
 
     wxMask* mask = bmp.GetMask();
@@ -1674,7 +1686,8 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         iconInfo.yHotspot = hotSpotY;
     }
 
-    iconInfo.hbmMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+    AutoHBITMAP hbmpMask(wxInvertMask((HBITMAP)mask->GetMaskBitmap()));
+    iconInfo.hbmMask = hbmpMask;
     iconInfo.hbmColor = GetHbitmapOf(bmp);
 
     // black out the transparent area to preserve background colour, because
@@ -1699,9 +1712,6 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         // we created the mask, now delete it
         delete mask;
     }
-
-    // delete the inverted mask bitmap we created as well
-    ::DeleteObject(iconInfo.hbmMask);
 
     return hicon;
 }

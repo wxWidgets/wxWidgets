@@ -24,6 +24,7 @@
     #include "wx/bitmap.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/toplevel.h"
 #endif
 
@@ -37,11 +38,13 @@
     #include "wx/mstream.h"
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+
 // check if we're currently in a paint event
 inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
-    wxUnusedVar(dc);
-    return ( win->MacGetCGContextRef() != NULL );
+    return win->MacGetCGContextRef() != NULL ||
+           // wxMemoryDC's also have a valid CGContext.
+           dc.IsKindOf( CLASSINFO(wxMemoryDC) );
 }
 
 
@@ -58,6 +61,8 @@ public:
         wxHeaderButtonParams* params = NULL );
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
+
+    virtual int GetHeaderButtonMargin(wxWindow *win);
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton( wxWindow *win,
@@ -222,6 +227,12 @@ int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
     return -1;
 }
 
+int wxRendererMac::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+{
+    wxFAIL_MSG( "GetHeaderButtonMargin() not implemented" );
+    return -1;
+}
+
 void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     wxDC& dc,
     const wxRect& rect,
@@ -301,12 +312,12 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
         if ( hasMetal )
             HIThemeDrawBackground(&splitterRect, &bgdrawInfo, cgContext, kHIThemeOrientationNormal);
-        else 
+        else
         {
             CGContextSetFillColorWithColor(cgContext,win->GetBackgroundColour().GetCGColor());
             CGContextFillRect(cgContext,splitterRect);
         }
-        
+
         HIThemeSplitterDrawInfo drawInfo;
         drawInfo.version = 0;
         drawInfo.state = kThemeStateActive;

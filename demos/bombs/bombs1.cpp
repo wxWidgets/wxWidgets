@@ -131,7 +131,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
                     dc->SetBrush(*focusedBrush);
                 else if (m_game->IsSelected(x,y))
                     dc->SetBrush(*wxWHITE_BRUSH);
-                else 
+                else
                     dc->SetBrush(*yellowBrush);
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
@@ -163,7 +163,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 
     wxString msg;
     msg.Printf(wxT("%d bombs, %u marked, %d remaining cells"),
-               m_game->GetNumBombs(), m_game->GetNumMarkedCells(), 
+               m_game->GetNumBombs(), m_game->GetNumMarkedCells(),
                m_game->GetNumRemainingCells() );
 
 #if wxUSE_LOG && wxUSE_STATUSBAR
