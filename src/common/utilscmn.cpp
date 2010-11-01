@@ -557,6 +557,10 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 
 #if defined(__VISUALC__)
     wxChar **env = _tenviron;
+#elif defined(__VMS)
+   // Now this routine wil give false for OpenVMS
+   // TODO : should we do something with logicals?
+    char **env;
 #elif defined(__WXOSX__)
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
