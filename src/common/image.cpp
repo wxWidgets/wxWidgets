@@ -2020,7 +2020,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
 bool wxImage::ConvertAlphaToMask(unsigned char threshold)
 {
     if ( !HasAlpha() )
-        return true;
+        return false;
 
     unsigned char mr, mg, mb;
     if ( !FindFirstUnusedColour(&mr, &mg, &mb) )
@@ -2029,17 +2029,16 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
         return false;
     }
 
-    ConvertAlphaToMask(mr, mg, mb, threshold);
-    return true;
+    return ConvertAlphaToMask(mr, mg, mb, threshold);
 }
 
-void wxImage::ConvertAlphaToMask(unsigned char mr,
+bool wxImage::ConvertAlphaToMask(unsigned char mr,
                                  unsigned char mg,
                                  unsigned char mb,
                                  unsigned char threshold)
 {
     if ( !HasAlpha() )
-        return;
+        return false;
 
     AllocExclusive();
 
@@ -2070,6 +2069,8 @@ void wxImage::ConvertAlphaToMask(unsigned char mr,
 
     M_IMGDATA->m_alpha = NULL;
     M_IMGDATA->m_staticAlpha = false;
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

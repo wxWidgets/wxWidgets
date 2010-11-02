@@ -815,7 +815,7 @@ public:
         FindFirstUnusedColour() by this function, see the overload below if you
         this is not appropriate.
 
-        @return @false if FindFirstUnusedColour returns @false, @true otherwise.
+        @return Returns @true on success, @false on error.
     */
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
@@ -841,8 +841,9 @@ public:
             are set. Pixels with the alpha values above the threshold are
             considered to be opaque.
 
+        @return Returns @true on success, @false on error.
      */
-    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
+    bool ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
     /**

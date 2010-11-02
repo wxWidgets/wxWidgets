@@ -388,7 +388,7 @@ public:
     // automatically or using the specified colour for the mask), if it has
     // any, does nothing otherwise:
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
-    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
+    bool ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
 
