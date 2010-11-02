@@ -52,6 +52,16 @@ public:
         return true;
     }
 
+    // switch the given end of the pipe to non-blocking IO
+    bool MakeNonBlocking(Direction which)
+    {
+        const int flags = fcntl(m_fds[which], F_GETFL, 0);
+        if ( flags == -1 )
+            return false;
+
+        return fcntl(m_fds[which], F_SETFL, flags | O_NONBLOCK) == 0;
+    }
+
     // return TRUE if we were created successfully
     bool IsOk() const { return m_fds[Read] != INVALID_FD; }
 

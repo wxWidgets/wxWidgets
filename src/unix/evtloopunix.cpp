@@ -88,17 +88,14 @@ bool PipeIOHandler::Create()
         return false;
     }
 
-    const int fdRead = GetReadFd();
-
-    int flags = fcntl(fdRead, F_GETFL, 0);
-    if ( flags == -1 || fcntl(fdRead, F_SETFL, flags | O_NONBLOCK) == -1 )
+    if ( !m_pipe.MakeNonBlocking(wxPipe::Read) )
     {
         wxLogSysError(_("Failed to switch wake up pipe to non-blocking mode"));
         return false;
     }
 
     wxLogTrace(TRACE_EVENTS, wxT("Wake up pipe (%d, %d) created"),
-               fdRead, m_pipe[wxPipe::Write]);
+               m_pipe[wxPipe::Read], m_pipe[wxPipe::Write]);
 
     return true;
 }
