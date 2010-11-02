@@ -1319,6 +1319,7 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
       m_vgap( vgap ),
       m_hgap( hgap )
 {
+    wxASSERT(cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
@@ -1327,6 +1328,7 @@ wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
       m_vgap( gap.GetHeight() ),
       m_hgap( gap.GetWidth() )
 {
+    wxASSERT(cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
@@ -1335,6 +1337,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
       m_vgap( vgap ),
       m_hgap( hgap )
 {
+    wxASSERT(rows >= 0 && cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
@@ -1343,6 +1346,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
       m_vgap( gap.GetHeight() ),
       m_hgap( gap.GetWidth() )
 {
+    wxASSERT(rows >= 0 && cols >= 0);
 }
 
 wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
