@@ -651,6 +651,19 @@ long wxExecute(char **argv, int flags, wxProcess *process,
 
         if ( process && process->IsRedirected() )
         {
+            // Avoid deadlocks which could result from trying to write to the
+            // child input pipe end while the child itself is writing to its
+            // output end and waiting for us to read from it.
+            if ( !pipeIn.MakeNonBlocking(wxPipe::Write) )
+            {
+                // This message is not terrible useful for the user but what
+                // else can we do? Also, should we fail here or take the risk
+                // to continue and deadlock? Currently we choose the latter but
+                // it might not be the best idea.
+                wxLogSysError(_("Failed to set up non-blocking pipe, "
+                                "the program might hang."));
+            }
+
             wxOutputStream *inStream =
                 new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
 
