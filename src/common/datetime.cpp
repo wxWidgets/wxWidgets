@@ -137,30 +137,22 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_TIMEZONE wxGetTimeZone()
     #elif defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
-    #elif defined(__WXWINCE__) && defined(__VISUALC8__)
-        // _timezone is not present in dynamic run-time library
-        #if 0
-        // Solution (1): use the function equivalent of _timezone
+    #elif wxCHECK_VISUALC_VERSION(8)
+        // While _timezone is still present in (some versions of) VC CRT, it's
+        // deprecated and _get_timezone() should be used instead.
         static long wxGetTimeZone()
         {
-            long t;
-            _get_timezone(& t);
+            // The type of _get_timezone() parameter seems to have changed
+            // between VC8 and VC9.
+            #ifdef __VISUALC8__
+                int t;
+            #else
+                long t;
+            #endif
+            _get_timezone(&t);
             return t;
         }
         #define WX_TIMEZONE wxGetTimeZone()
-        #elif 1
-        // Solution (2): using GetTimeZoneInformation
-        static long wxGetTimeZone()
-        {
-            TIME_ZONE_INFORMATION tzi;
-            ::GetTimeZoneInformation(&tzi);
-            return tzi.Bias; // x 60
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #else
-        // Old method using _timezone: this symbol doesn't exist in the dynamic run-time library (i.e. using /MD)
-        #define WX_TIMEZONE _timezone
-        #endif
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
