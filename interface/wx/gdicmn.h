@@ -266,10 +266,10 @@ public:
         This method is the opposite from Inflate(): Deflate(a, b) is equivalent
         to Inflate(-a, -b). Please refer to Inflate() for full description.
     */
-    void Deflate(wxCoord dx, wxCoord dy);
-    void Deflate(const wxSize& diff);
-    void Deflate(wxCoord diff);
-    wxRect Deflate(wxCoord dx, wxCoord dy) const;
+    wxRect& Deflate(wxCoord dx, wxCoord dy);
+    wxRect& Deflate(const wxSize& diff);
+    wxRect& Deflate(wxCoord diff);
+    wxRect  Deflate(wxCoord dx, wxCoord dy) const;
     //@}
 
     /**
@@ -374,9 +374,9 @@ public:
 
         @see Deflate()
     */
-    void Inflate(wxCoord dx, wxCoord dy);
-    void Inflate(const wxSize& diff);
-    void Inflate(wxCoord diff);
+    wxRect& Inflate(wxCoord dx, wxCoord dy);
+    wxRect& Inflate(const wxSize& diff);
+    wxRect& Inflate(wxCoord diff);
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
     //@}
 
