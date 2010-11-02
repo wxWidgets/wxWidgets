@@ -4859,6 +4859,9 @@ void
 wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                                  int bottomRow, int rightCol)
 {
+    MakeCellVisible(m_selectedBlockCorner);
+    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
+
     if ( m_selection )
     {
         switch ( m_selection->GetSelectionMode() )
@@ -4894,9 +4897,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 return;
         }
     }
-
-    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
-    MakeCellVisible(m_selectedBlockCorner);
 
     EnsureFirstLessThanSecond(topRow, bottomRow);
     EnsureFirstLessThanSecond(leftCol, rightCol);
