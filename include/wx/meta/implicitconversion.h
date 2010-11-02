@@ -42,7 +42,7 @@ struct TypeHierarchy
     template<> struct TypeHierarchy<type>               \
     {                                                   \
         enum { level = level_num };                     \
-    };
+    }
 
 WX_TYPE_HIERARCHY_LEVEL( 1, char);
 WX_TYPE_HIERARCHY_LEVEL( 2, unsigned char);
