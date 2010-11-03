@@ -3623,6 +3623,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
                 le.SetItem( item );
+                le.SetColumn( col->GetModelColumn() );
+                le.SetDataViewColumn( col );
                 le.SetEventObject(parent);
                 le.SetModel(GetOwner()->GetModel());
 
@@ -3693,6 +3695,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         wxWindow *parent = GetParent();
         wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
         le.SetItem( item );
+        le.SetColumn( col->GetModelColumn() );
+        le.SetDataViewColumn( col );
         le.SetEventObject(parent);
         le.SetModel(GetOwner()->GetModel());
         le.SetValue(value);
