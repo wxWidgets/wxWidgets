@@ -119,7 +119,6 @@ private:
 
     void OnContextMenu( wxDataViewEvent &event );
 
-    void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
     void OnHideAttributes( wxCommandEvent &event);
@@ -358,8 +357,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_DROP_POSSIBLE( ID_MUSIC_CTRL, MyFrame::OnDropPossible )
     EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
 #endif // wxUSE_DRAG_AND_DROP
-
-    EVT_RIGHT_UP(MyFrame::OnRightClick)
 
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnAttrHeaderClick)
 
@@ -1087,12 +1084,6 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, Column position: %d", pos );
-}
-
-void MyFrame::OnRightClick( wxMouseEvent &event )
-{
-    wxLogMessage( "wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d",
-                 event.GetX(), event.GetY() );
 }
 
 void MyFrame::OnDataViewChar(wxKeyEvent& event)
