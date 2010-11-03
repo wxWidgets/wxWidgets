@@ -1893,8 +1893,8 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
             ;
     }
 
-    wxDataViewTreeNodes nodes = node->GetNodes();
-    wxDataViewTreeLeaves leaves = node->GetChildren();
+    const wxDataViewTreeNodes& nodes = node->GetNodes();
+    const wxDataViewTreeLeaves& leaves = node->GetChildren();
 
     int len_nodes = nodes.GetCount();
     int len = leaves.GetCount();
