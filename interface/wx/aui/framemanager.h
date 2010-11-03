@@ -573,11 +573,22 @@ public:
     /**
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
         managed frame.
+
+        @see IsDockable()
     */
     bool IsBottomDockable() const;
 
     /**
-        IsDocked() returns @true if the pane is docked.
+        Returns @true if the pane can be docked at any side.
+
+        @see IsTopDockable(), IsBottomDockable(), IsLeftDockable(), IsRightDockable()
+
+        @since 2.9.2
+    */
+    bool IsDockable() const;
+
+    /**
+        IsDocked() returns @true if the pane is currently docked.
     */
     bool IsDocked() const;
 
@@ -600,6 +611,8 @@ public:
     /**
         IsLeftDockable() returns @true if the pane can be docked on the left of the
         managed frame.
+
+        @see IsDockable()
     */
     bool IsLeftDockable() const;
 
@@ -623,6 +636,8 @@ public:
     /**
         IsRightDockable() returns @true if the pane can be docked on the right of the
         managed frame.
+
+        @see IsDockable()
     */
     bool IsRightDockable() const;
 
@@ -639,6 +654,8 @@ public:
     /**
         IsTopDockable() returns @true if the pane can be docked at the top of the
         managed frame.
+
+        @see IsDockable()
     */
     bool IsTopDockable() const;
 

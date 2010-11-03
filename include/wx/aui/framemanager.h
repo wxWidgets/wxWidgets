@@ -239,6 +239,11 @@ public:
     bool IsBottomDockable() const { return HasFlag(optionBottomDockable); }
     bool IsLeftDockable() const { return HasFlag(optionLeftDockable); }
     bool IsRightDockable() const { return HasFlag(optionRightDockable); }
+    bool IsDockable() const
+    {
+        return HasFlag(optionTopDockable | optionBottomDockable |
+                        optionLeftDockable | optionRightDockable);
+    }
     bool IsFloatable() const { return HasFlag(optionFloatable); }
     bool IsMovable() const { return HasFlag(optionMovable); }
     bool IsDestroyOnClose() const { return HasFlag(optionDestroyOnClose); }
