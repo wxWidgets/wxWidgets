@@ -1425,6 +1425,11 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
     switch ( index )
     {
+        case wxLOCALE_THOUSANDS_SEP:
+            if ( ::GetLocaleInfo(lcid, LOCALE_STHOUSAND, buf, WXSIZEOF(buf)) )
+                str = buf;
+            break;
+
         case wxLOCALE_DECIMAL_POINT:
             if ( ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buf, WXSIZEOF(buf)) )
                 str = buf;
