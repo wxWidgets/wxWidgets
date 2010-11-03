@@ -1273,7 +1273,7 @@ void wxDataViewRenameTimer::Notify()
 //-----------------------------------------------------------------------------
 
 // The tree building helper, declared firstly
-static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item,
+static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewItem & item,
                              wxDataViewTreeNode * node);
 
 int LINKAGEMODE wxDataViewSelectionCmp( unsigned int row1, unsigned int row2 )
@@ -2969,28 +2969,26 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
 wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
 {
-    wxDataViewModel * model = GetOwner()->GetModel();
+    const wxDataViewModel * model = GetOwner()->GetModel();
     if( model == NULL )
         return NULL;
 
     if (!item.IsOk())
         return m_root;
 
-    // Compose the a parent-chain of the finding item
-    ItemList list;
-    list.DeleteContents( true );
+    // Compose the parent-chain for the item we are looking for
+    wxVector<wxDataViewItem> parentChain;
     wxDataViewItem it( item );
     while( it.IsOk() )
     {
-        wxDataViewItem * pItem = new wxDataViewItem( it );
-        list.Insert( pItem );
-        it = model->GetParent( it );
+        parentChain.push_back(it);
+        it = model->GetParent(it);
     }
 
     // Find the item along the parent-chain.
     // This algorithm is designed to speed up the node-finding method
-    wxDataViewTreeNode * node = m_root;
-    for( ItemList::const_iterator iter = list.begin(); iter !=list.end(); iter++ )
+    wxDataViewTreeNode* node = m_root;
+    for( unsigned iter = parentChain.size()-1; iter>=0; --iter )
     {
         if( node->HasChildren() )
         {
@@ -3000,18 +2998,18 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 ::BuildTreeHelper(model, node->GetItem(), node);
             }
 
-            wxDataViewTreeNodes nodes = node->GetNodes();
-            unsigned int i;
+            const wxDataViewTreeNodes& nodes = node->GetNodes();
             bool found = false;
 
-            for (i = 0; i < nodes.GetCount(); i ++)
+            for (unsigned i = 0; i < nodes.GetCount(); ++i)
             {
-                if (nodes[i]->GetItem() == (**iter))
+                wxDataViewTreeNode* currentNode = nodes[i];
+                if (currentNode->GetItem() == parentChain[iter])
                 {
-                    if (nodes[i]->GetItem() == item)
-                    return nodes[i];
+                    if (currentNode->GetItem() == item)
+                        return currentNode;
 
-                    node = nodes[i];
+                    node = currentNode;
                     found = true;
                     break;
                 }
@@ -3131,7 +3129,7 @@ int wxDataViewMainWindow::RecalculateCount()
 class ItemToRowJob : public DoJob
 {
 public:
-    ItemToRowJob(const wxDataViewItem& item_, ItemList::const_iterator iter)
+    ItemToRowJob(const wxDataViewItem& item_, wxVector<wxDataViewItem>::reverse_iterator iter)
         : m_iter(iter),
         item(item_)
     {
@@ -3147,7 +3145,7 @@ public:
             return DoJob::OK;
         }
 
-        if( node->GetItem() == **m_iter )
+        if( node->GetItem() == *m_iter )
         {
             m_iter++;
             return DoJob::CONT;
@@ -3173,7 +3171,7 @@ public:
         { return ret -1; }
 
 private:
-    ItemList::const_iterator  m_iter;
+    wxVector<wxDataViewItem>::reverse_iterator m_iter;
     wxDataViewItem item;
     int ret;
 
@@ -3194,27 +3192,27 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
         if( !item.IsOk() )
             return -1;
 
-        // Compose the a parent-chain of the finding item
-        ItemList list;
-        wxDataViewItem * pItem;
-        list.DeleteContents( true );
+        // Compose the parent-chain of the item we are looking for
+        wxVector<wxDataViewItem> parentChain;
         wxDataViewItem it( item );
         while( it.IsOk() )
         {
-            pItem = new wxDataViewItem( it );
-            list.Insert( pItem );
-            it = model->GetParent( it );
+            parentChain.push_back(it);
+            it = model->GetParent(it);
         }
-        pItem = new wxDataViewItem( );
-        list.Insert( pItem );
 
-        ItemToRowJob job( item, list.begin() );
-        Walker(m_root , job );
+        // add an 'invalid' item to represent our 'invisible' root node
+        parentChain.push_back(wxDataViewItem());
+
+        // the parent chain was created by adding the deepest parent first.
+        // so if we want to start at the root node, we have to iterate backwards through the vector
+        ItemToRowJob job( item, parentChain.rbegin() );
+        Walker( m_root, job );
         return job.GetResult();
     }
 }
 
-static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item,
+static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewItem & item,
                              wxDataViewTreeNode * node)
 {
     if( !model->IsContainer( item ) )
