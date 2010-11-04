@@ -65,6 +65,78 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
 // hide the ugly cast
 #define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
 
+// ----------------------------------------------------------------------------
+// helper classes for temporarily changing HDC parameters
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// This class just stores an HDC.
+class HDCHandler
+{
+protected:
+    HDCHandler(HDC hdc) : m_hdc(hdc) { }
+
+    const HDC m_hdc;
+};
+
+class HDCTextColChanger : HDCHandler
+{
+public:
+    HDCTextColChanger(HDC hdc, COLORREF col)
+        : HDCHandler(hdc),
+          m_colOld(::SetTextColor(hdc, col))
+    {
+    }
+
+    ~HDCTextColChanger()
+    {
+        ::SetTextColor(m_hdc, m_colOld);
+    }
+
+private:
+    COLORREF m_colOld;
+};
+
+class HDCBgColChanger : HDCHandler
+{
+public:
+    HDCBgColChanger(HDC hdc, COLORREF col)
+        : HDCHandler(hdc),
+          m_colOld(::SetBkColor(hdc, col))
+    {
+    }
+
+    ~HDCBgColChanger()
+    {
+        ::SetBkColor(m_hdc, m_colOld);
+    }
+
+private:
+    COLORREF m_colOld;
+};
+
+class HDCBgModeChanger : HDCHandler
+{
+public:
+    HDCBgModeChanger(HDC hdc, int mode)
+        : HDCHandler(hdc),
+          m_modeOld(::SetBkMode(hdc, mode))
+    {
+    }
+
+    ~HDCBgModeChanger()
+    {
+        ::SetBkMode(m_hdc, m_modeOld);
+    }
+
+private:
+    int m_modeOld;
+};
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -860,11 +932,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         wxFont font;
         GetFontToUse(font);
 
-        wxColour colText1, colBack1;
-        GetColourToUse(stat, colText1, colBack1);
-
-        DWORD colText = wxColourToPalRGB(colText1);
-        DWORD colBack = wxColourToPalRGB(colBack1);
+        wxColour colText, colBack;
+        GetColourToUse(stat, colText, colBack);
 
         // calculate metrics of item parts
         RECT rcSelection = rect;
@@ -942,7 +1011,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 return true;
             }
 
-            AutoHBRUSH hbr(colBack);
+            AutoHBRUSH hbr(colBack.GetPixel());
             SelectInHDC selBrush(hdc, hbr);
             ::FillRect(hdc, &rcSelection, hbr);
         }
@@ -951,21 +1020,20 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         // draw text label
         // using native API because it recognizes '&'
 
-        COLORREF colOldText = ::SetTextColor(hdc, colText);
-        COLORREF colOldBack = ::SetBkColor(hdc, colBack);
-
-        int prevMode = SetBkMode(hdc, TRANSPARENT);
+        HDCTextColChanger changeTextCol(hdc, colText.GetPixel());
+        HDCBgColChanger changeBgCol(hdc, colBack.GetPixel());
+        HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
 
         SelectInHDC selFont(hdc, GetHfontOf(font));
 
 
-        // item text name without menemonic for calculating size
+        // item text name without mnemonic for calculating size
         wxString text = GetName();
 
         SIZE textSize;
         ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &textSize);
 
-        // item text name with menemonic
+        // item text name with mnemonic
         text = GetItemLabel().BeforeFirst('\t');
 
         int flags = DST_PREFIXTEXT;
@@ -1013,10 +1081,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             ::DrawState(hdc, NULL, NULL, (LPARAM)accel.wx_str(),
                         accel.length(), x, y, 0, 0, flags);
         }
-
-        ::SetBkMode(hdc, prevMode);
-        ::SetBkColor(hdc, colOldBack);
-        ::SetTextColor(hdc, colOldText);
     }
 
 
@@ -1103,9 +1167,9 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
     const COLORREF colBlack = RGB(0, 0, 0);
     const COLORREF colWhite = RGB(255, 255, 255);
 
-    COLORREF colOldText = ::SetTextColor(hdc, colBlack);
-    COLORREF colOldBack = ::SetBkColor(hdc, colWhite);
-    int prevMode = SetBkMode(hdc, TRANSPARENT);
+    HDCTextColChanger changeTextCol(hdc, colBlack);
+    HDCBgColChanger changeBgCol(hdc, colWhite);
+    HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
 
     // memory DC for color bitmap
     MemoryHDC hdcMem(hdc);
@@ -1132,10 +1196,6 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
         ::BitBlt(hdc, x, y, cx, cy, hdcCheckMask, 0, 0, SRCAND);
         ::BitBlt(hdc, x, y, cx, cy, hdcMem, 0, 0, SRCPAINT);
     }
-
-    ::SetBkMode(hdc, prevMode);
-    ::SetBkColor(hdc, colOldBack);
-    ::SetTextColor(hdc, colOldText);
 }
 
 } // anonymous namespace
