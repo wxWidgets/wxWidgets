@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 May 2008                                                         *
+# Date : 4 November 2010                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -122,6 +122,7 @@ inphand.obj : inphand.cpp
 listbox.obj : listbox.cpp
 menu.obj : menu.cpp
 notebook.obj : notebook.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(INTSIGNCHANGE) notebook.cpp
 radiobut.obj : radiobut.cpp
 scrarrow.obj : scrarrow.cpp
 scrolbar.obj : scrolbar.cpp
