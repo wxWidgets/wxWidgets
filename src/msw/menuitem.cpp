@@ -959,7 +959,11 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             rcText.top--;
 
 #if wxUSE_UXTHEME
-        wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
+        // If a custom background colour is explicitly specified, we should use
+        // it instead of the default theme background.
+        wxUxThemeEngine* const theme = GetBackgroundColour().IsOk()
+                                        ? NULL
+                                        : MenuDrawData::GetUxThemeEngine();
         if ( theme )
         {
             POPUPITEMSTATES state;
