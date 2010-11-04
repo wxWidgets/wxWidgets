@@ -959,7 +959,7 @@ protected:
     //@{
 
     /**
-        Called to created log a new record.
+        Called to log a new record.
 
         Any log message created by wxLogXXX() functions is passed to this
         method of the active log target. The default implementation prepends
