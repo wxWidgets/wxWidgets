@@ -142,13 +142,7 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         // deprecated and _get_timezone() should be used instead.
         static long wxGetTimeZone()
         {
-            // The type of _get_timezone() parameter seems to have changed
-            // between VC8 and VC9.
-            #ifdef __VISUALC8__
-                int t;
-            #else
-                long t;
-            #endif
+            long t;
             _get_timezone(&t);
             return t;
         }
