@@ -17,7 +17,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_UIACTIONSIMULATOR
+// FIXME: As all the other tests involving wxUIActionSimulator, this one is
+//        broken under OS X, the test window siply never gets any events.
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -39,7 +41,7 @@ class KeyboardTestWindow : public wxWindow
 {
 public:
     KeyboardTestWindow(wxWindow *parent)
-        : wxWindow(parent, wxID_ANY)
+        : wxWindow(parent, wxID_ANY, wxPoint(0, 0), parent->GetClientSize())
     {
         Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(KeyboardTestWindow::OnKeyDown));
         Connect(wxEVT_CHAR, wxKeyEventHandler(KeyboardTestWindow::OnChar));
