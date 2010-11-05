@@ -387,8 +387,8 @@ bool g_lastButtonWasFakeRight = false ;
 // see http://lists.apple.com/archives/cocoa-dev/2007/Feb/msg00050.html
 
 @interface NSEvent (DeviceDelta)
-- (float)deviceDeltaX;
-- (float)deviceDeltaY;
+- (CGFloat)deviceDeltaX;
+- (CGFloat)deviceDeltaY;
 @end
 
 void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
