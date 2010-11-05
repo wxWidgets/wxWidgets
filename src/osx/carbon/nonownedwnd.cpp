@@ -323,17 +323,13 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
         charBuf[ numChars - 1 ] = 0;
 
-#if SIZEOF_WCHAR_T == 2
-        uniChar = charBuf[0] ;
-#else
         wxMBConvUTF16 converter ;
         converter.MB2WC( uniChar , (const char*)charBuf , 2 ) ;
-#endif
 
         if ( numChars * 2 > 4 )
             delete[] charBuf ;
     }
-#endif
+#endif // wxUSE_UNICODE
 
     GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
