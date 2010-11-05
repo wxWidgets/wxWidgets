@@ -784,11 +784,33 @@ BOOL wxOSX_isFlipped(NSView* self, SEL _cmd)
     return impl->isFlipped(self, _cmd) ? YES:NO;
 }
 
+typedef void (*wxOSX_DrawRectHandlerPtr)(NSView* self, SEL _cmd, NSRect rect);
+
 void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return;
+
+#ifdef wxUSE_THREADS
+    // OS X starts a NSUIHeartBeatThread for animating the default button in a
+    // dialog. This causes a drawRect of the active dialog from outside the
+    // main UI thread. This causes an occasional crash since the wx drawing
+    // objects (like wxPen) are not thread safe.
+    //
+    // Notice that NSUIHeartBeatThread seems to be undocumented and doing
+    // [NSWindow setAllowsConcurrentViewDrawing:NO] does not affect it.
+    if ( !wxThread::IsMain() )
+    {
+      // just call the superclass handler, we don't need any custom wx drawing
+      // here and it seems to work fine:
+      wxOSX_DrawRectHandlerPtr
+          superimpl = (wxOSX_DrawRectHandlerPtr)
+                        [[self superclass] instanceMethodForSelector:_cmd];
+      superimpl(self, _cmd, rect);
+      return;
+    }
+#endif // wxUSE_THREADS
 
     return impl->drawRect(&rect, self, _cmd);
 }
@@ -960,7 +982,6 @@ typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
 typedef BOOL (*wxOSX_ResetCursorRectsHandlerPtr)(NSView* self, SEL _cmd);
-typedef void (*wxOSX_DrawRectHandlerPtr)(NSView* self, SEL _cmd, NSRect rect);
 
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
