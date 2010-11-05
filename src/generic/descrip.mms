@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 November 2010                                                     *
+# Date : 4 November 2010                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -296,6 +296,7 @@ headerctrlg.obj : headerctrlg.cpp
 grideditors.obj : grideditors.cpp
 infobar.obj : infobar.cpp
 datavgen.obj : datavgen.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(UNSCOMZER) datavgen.cpp
 dbgrptg.obj : dbgrptg.cpp
 dragimgg.obj : dragimgg.cpp
 richmsgdlgg.obj : richmsgdlgg.cpp
