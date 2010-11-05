@@ -23,14 +23,21 @@ wxColour::wxColour(WX_NSColor col)
 {
     size_t noComp = [col numberOfComponents];
 
-    CGFloat *components = NULL;
-    if ( noComp >= 1 && noComp <= 4 )
+    CGFloat components[4];
+    CGFloat *p;
+    if ( noComp < 1 || noComp > WXSIZEOF(components) )
     {
         // TODO verify whether we really are on a RGB color space
         m_alpha = wxALPHA_OPAQUE;
         [col getComponents: components];
+        p = components;
     }
-    InitFromComponents(const_cast<const CGFloat*>(components), noComp);
+    else // Unsupported colour format.
+    {
+        p = NULL;
+    }
+
+    InitFromComponents(components, noComp);
 }
 
 WX_NSColor wxColour::OSXGetNSColor()
