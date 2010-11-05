@@ -9,7 +9,7 @@
     Bakefiles.local.bkgen file in this directory and add <enable-formats>
     into it:
          <?xml version="1.0" ?>
-         <bakefile-gen>
+         <bakefile-gen xmlns="http://www.bakefile.org/schema/bakefile-gen">
              <enable-formats>dmars</enable-formats>
          </bakefile-gen>
 
