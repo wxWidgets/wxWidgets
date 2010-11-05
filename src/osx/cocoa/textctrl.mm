@@ -253,31 +253,6 @@ protected :
         impl->controlTextDidChange();
 }
 
-typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl *control, NSTextView* textView, SEL commandSelector);
-
-- (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
-{
-    wxUnusedVar(textView);
-    wxUnusedVar(control);
-    if (commandSelector == @selector(insertNewline:))
-    {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-        if ( impl  )
-        {
-            wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
-            {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
-                event.SetEventObject( wxpeer );
-                event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-                wxpeer->HandleWindowEvent( event );
-            }
-        }
-    }
-
-    return NO;
-}
-
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
