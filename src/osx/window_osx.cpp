@@ -1585,6 +1585,12 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
                                int range, bool refresh)
 {
 #if wxUSE_SCROLLBAR
+    // Updating scrollbars when window is being deleted is useless and
+    // currently results in asserts in client-to-screen coordinates conversion
+    // code which is used by DoUpdateScrollbarVisibility() so just skip it.
+    if ( m_isBeingDeleted )
+        return;
+
     if ( orient == wxHORIZONTAL && m_hScrollBar )
         m_hScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
     else if ( orient == wxVERTICAL && m_vScrollBar )
