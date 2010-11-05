@@ -199,11 +199,21 @@ bool shouldHandleSelector(SEL selector)
 {
 }
 
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
 - (void)sendEvent:(NSEvent *)event;
 @end
 
 @implementation wxNSPanel
+
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+{
+    wxNonOwnedWindowCocoaImpl* impl = (wxNonOwnedWindowCocoaImpl*) wxNonOwnedWindowImpl::FindFromWXWindow( self );
+    if (impl && impl->IsFullScreen())
+        return frameRect;
+    else
+        return [super constrainFrameRect:frameRect toScreen:screen];
+}
 
 - (BOOL)canBecomeKeyWindow
 {
@@ -787,7 +797,14 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         data->m_formerFrame = [m_macWindow frame];
         CGDisplayCapture( kCGDirectMainDisplay );
         [m_macWindow setLevel:CGShieldingWindowLevel()];
-        [m_macWindow setFrame:[[NSScreen mainScreen] frame] display:YES];
+        NSRect screenframe = [[NSScreen mainScreen] frame];
+        NSRect frame = NSMakeRect (0, 0, 100, 100);
+        NSRect contentRect;
+        contentRect = [NSWindow contentRectForFrameRect: frame
+                                styleMask: NSTitledWindowMask];
+        screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
+        screenframe.size.height += (frame.size.height - contentRect.size.height);
+        [m_macWindow setFrame:screenframe display:YES];
     }
     else if ( m_macFullScreenData != NULL )
     {
