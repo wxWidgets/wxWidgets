@@ -537,7 +537,11 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         else
             [m_toolbarItem setImage:m_bmpNormal.GetNSImage()];
     }
+    else
 #endif
+    {
+        [(NSButton*)m_controlHandle setState:(toggle ? NSOnState : NSOffState)];
+    }
 }
 
 wxToolBarTool::wxToolBarTool(
@@ -1268,7 +1272,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
                 [v setBezelStyle:NSRegularSquareBezelStyle];
                 [v setBordered:NO];
-                [v setButtonType: ( tool->CanBeToggled() ? NSOnOffButton : NSMomentaryPushInButton )];
+                [v setButtonType: ( tool->CanBeToggled() ? NSToggleButton : NSMomentaryPushInButton )];
                 [v setImplementation:tool];
 
                 controlHandle = v;
