@@ -253,6 +253,42 @@ protected :
         impl->controlTextDidChange();
 }
 
+- (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
+{
+    wxUnusedVar(textView);
+    wxUnusedVar(control);
+    
+    BOOL handled = NO;
+
+    // send back key events wx' common code knows how to handle
+    
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl  )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
+        {
+            if (commandSelector == @selector(insertNewline:))
+            {
+                [textView insertNewlineIgnoringFieldEditor:self];
+                handled = YES;
+            }
+            else if ( commandSelector == @selector(insertTab:))
+            {
+                [textView insertTabIgnoringFieldEditor:self];
+                handled = YES;
+            }
+            else if ( commandSelector == @selector(insertBacktab:))
+            {
+                [textView insertTabIgnoringFieldEditor:self];
+                handled = YES;
+            }
+        }
+    }
+    
+    return handled;
+}
+
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
