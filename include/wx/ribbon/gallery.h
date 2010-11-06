@@ -69,6 +69,7 @@ public:
     virtual bool Layout();
 
     virtual bool ScrollLines(int lines);
+    bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
 protected:
@@ -84,8 +85,10 @@ protected:
     void OnMouseLeave(wxMouseEvent& evt);
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
+    void OnMouseDClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
+    int GetScrollLineSize() const;
 
     virtual wxSize DoGetBestSize() const;
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,

@@ -239,6 +239,18 @@ public:
             direction, @false if it did not scroll.
     */
     virtual bool ScrollLines(int lines);
+    
+    /**
+        Scroll the gallery contents by some fine-grained amount.
+
+        @param pixels
+          Positive values scroll toward the end of the gallery, while negative
+          values scroll toward the start.
+
+        @return @true if the gallery scrolled at least one pixel in the given
+            direction, @false if it did not scroll.
+    */
+    bool ScrollPixels(int pixels);
 
     /**
         Scroll the gallery to ensure that the given item is visible.
