@@ -2409,12 +2409,22 @@ struct XRCID_record
 
 static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
-static int XRCID_Lookup(const char *str_id, int value_if_not_found = wxID_NONE)
+// Extremely simplistic hash function which probably ought to be replaced with
+// wxStringHash::stringHash().
+static inline unsigned XRCIdHash(const char *str_id)
 {
-    unsigned int index = 0;
+    unsigned index = 0;
 
     for (const char *c = str_id; *c != '\0'; c++) index += (unsigned int)*c;
     index %= XRCID_TABLE_SIZE;
+
+    return index;
+}
+
+static int XRCID_Lookup(const char *str_id, int value_if_not_found = wxID_NONE)
+{
+    const unsigned index = XRCIdHash(str_id);
+
 
     XRCID_record *oldrec = NULL;
     for (XRCID_record *rec = XRCID_Records[index]; rec; rec = rec->next)
@@ -2619,10 +2629,7 @@ wxString wxXmlResource::FindXRCIDById(int numId)
 /* static */
 void wxIdRangeManager::RemoveXRCIDEntry(const char *str_id)
 {
-    int index = 0;
-
-    for (const char *c = str_id; *c != '\0'; c++) index += (int)*c;
-    index %= XRCID_TABLE_SIZE;
+    const unsigned index = XRCIdHash(str_id);
 
     XRCID_record **p_previousrec = &XRCID_Records[index];
     for (XRCID_record *rec = XRCID_Records[index]; rec; rec = rec->next)
