@@ -217,7 +217,7 @@ For example, "my_dlg" in this snippet:
 @endcode
 is identical to:
 @code
-<object_ref ref="template" name="my_dlg">
+<object class="wxDialog" name="my_dlg">
     <title>My dialog</title>
     <size>400,400</size>
     <centered>1</centered>
@@ -1798,7 +1798,7 @@ transitions must be handled programatically.
 
 Sizers are handled slightly differently in XRC resources than they are in
 wxWindow hierarchy. wxWindow's sizers hierarchy is parallel to the wxWindow
-children hieararchy: child windows are children of their parent window and
+children hierarchy: child windows are children of their parent window and
 the sizer (or sizers) form separate hierarchy attached to the window with
 wxWindow::SetSizer().
 
@@ -1974,7 +1974,7 @@ class-specific properties. All classes support the following properties:
 
 @subsection overview_xrcformat_wxstddialogbuttonsizer wxStdDialogButtonSizer
 
-Unlike other sizers, wxStdDialogButtonSizer doesn't have neither @c sizeritem
+Unlike other sizers, wxStdDialogButtonSizer has neither @c sizeritem
 nor @c spacer children. Instead, it has one or more children of the
 @c button pseudo-class. @c button objects have no properties and they must
 always have exactly one child of the @c wxButton class or a class derived from
@@ -2045,7 +2045,7 @@ should be processed on. It is filtered out and ignored on any other platforms.
 Possible elemental values are:
 @beginDefList
 @itemdef{ @c win, Windows }
-@itemdef{ @c mac, Mac OS X (or Mac Classic in wxWidgets version supporting it }
+@itemdef{ @c mac, Mac OS X (or Mac Classic in wxWidgets version supporting it) }
 @itemdef{ @c unix, Any Unix platform @em except OS X }
 @itemdef{ @c os2, OS/2 }
 @endDefList
@@ -2147,7 +2147,7 @@ Child elements of @c \<object\> are handled by the custom handler and there are
 no limitations on them imposed by XRC format.
 
 This is the only mechanism that works for toplevel objects -- custom controls
-are accessible using type-unsafe wxXmlResource::LoadObject() method.
+are accessible using the type-unsafe wxXmlResource::LoadObject() method.
 
 
 

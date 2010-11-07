@@ -538,10 +538,10 @@ The not very clearly named internat sample demonstrates the wxWidgets
 internationalization (i18n for short from now on) features. To be more
 precise, it only shows localization support, i.e. support for translating the
 program messages into another language while true i18n would also involve
-changing the other aspects of the programs behaviour.
+changing the other aspects of the program's behaviour.
 
 More information about this sample can be found in the @c readme.txt file in
-its directory. Please also see the @ref overview_i18n.
+its directory. Please also see the @ref overview_i18n overview.
 
 @sampledir{internat}
 
@@ -664,9 +664,9 @@ a good starting point for learning how to use wxWidgets.
 This samples shows wxBookCtrl family of controls.
 Although initially it was written to demonstrate wxNotebook
 only, it can now be also used to see wxListbook,
-wxChoicebook and wxTreebook in action.
+wxChoicebook, wxTreebook and wxToolbook in action.
 Test each of the controls, their orientation, images and pages using
-commands through menu.
+commands through the menu.
 
 @sampledir{notebook}
 
@@ -922,8 +922,8 @@ wxClipboard and to paste text from it. The GTK version will
 use the so called PRIMARY SELECTION, which is the pseudo clipboard under X and
 best known from pasting text to the XTerm program.
 
-Last not least: some of the text controls have tooltips and the sample also shows
-how tooltips can be centrally disabled and their latency controlled.
+Last but not least: some of the text controls have tooltips and the sample also
+shows how tooltips can be centrally disabled and their latency controlled.
 
 @sampledir{text}
 
@@ -1062,7 +1062,19 @@ features supported:
 
 @section page_samples_xrc XRC Sample
 
-@sampleabout{@ref overview_xrc}
+This sample shows how to use the various features of the @ref overview_xrc to
+create the gui of your program. It starts by loading and showing a frame and
+other resources. From its menu or toolbar you can then run the following dialogs:
+
+@li A non-derived wxDialog
+@li A derived dialog
+@li A dialog containing a large number of controls
+@li An uncentred dialog
+@li A dialog demonstrating the use of object references and ID ranges
+@li A dialog that contains a custom class
+@li A dialog with platform-specific features
+@li A dialog demonstrating wxArtProvider
+@li A dialog saying "VARIABLE EXPANSION ISN'T IMPLEMENTED CURRENTLY" :/
 
 @sampledir{xrc}
 
