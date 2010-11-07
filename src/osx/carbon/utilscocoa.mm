@@ -244,7 +244,11 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
                     remainingTraits &= ~NSBoldFontMask;
                 }
             }
-            if ( remainingTraits & NSItalicFontMask)
+            // the code below causes crashes, because fontDescriptorWithMatrix is not returning a valid font descriptor
+            // it adds a NSCTFontMatrixAttribute as well which cannot be disposed of correctly by the autorelease pool
+            // so at the moment we have to disable this and cannot synthesize italic fonts if they are not available on the system
+#if 0
+            if ( remainingTraits & NSItalicFontMask )
             {
                 if ( nsFontWithTraits == nil )
                     nsFontWithTraits = nsFont;
@@ -260,6 +264,7 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
                         nsFontWithTraits = f;
                 }
             }
+#endif
             if ( nsFontWithTraits != nil )
                 nsFont = nsFontWithTraits;
         }
