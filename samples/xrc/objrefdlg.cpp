@@ -31,7 +31,7 @@
 #include "objrefdlg.h"
 
 //-----------------------------------------------------------------------------
-// Remaining headers: Needed wx headers, then wx/contrib headers, then application headers
+// Needed wx headers,
 //-----------------------------------------------------------------------------
 
 #include "wx/xrc/xmlres.h"              // XRC XML resouces
@@ -86,8 +86,9 @@ ObjrefDialog::ObjrefDialog(wxWindow* parent)
 
 ObjrefDialog::~ObjrefDialog()
 {
-    // Select page 0. Otherwise if the Calc page were selected, when it's removed the Icons page is selected
-    // and sets the log target again in idle time, *after* myframe restores the old one!
+    // Select page 0. Otherwise if the Calc page were selected, when it's
+    // removed the Icons page is selected and sets the log target again in idle
+    // time, *after* myframe restores the old one!
     nb->ChangeSelection(0);
 }
 
@@ -105,13 +106,14 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
                 nb->SetPageText(copy_page, "Page 1 copy");
 
                 wxNotebookPage *page = nb->GetPage(copy_page);
-                wxTextCtrl *text = XRCCTRL(*page, "description_text", wxTextCtrl);
+                wxTextCtrl *
+                    text = XRCCTRL(*page, "description_text", wxTextCtrl);
                 text->ChangeValue(
-                    wxString("This is a duplicate of page 1, using an object reference. ")
-                    + wxString("It was created by this very simple xml:\n\n")
-                    + wxString("<object class=\"notebookpage\">\n\t<object_ref ref=\"page1\"/>\n")
-                    + wxString("\t<label>Page 1 copy</label>\n</object>")
-                    + wxString("\n\n(Then I'm cheating by inserting this text programmatically.)")
+                    "This is a duplicate of page 1, using an object reference. "
+                    "It was created by this very simple xml:\n\n"
+                    "<object class=\"notebookpage\">\n\t<object_ref ref=\"page1\"/>\n"
+                    "\t<label>Page 1 copy</label>\n</object>"
+                    "\n\n(Then I'm cheating by inserting this text programmatically.)"
                                 );
                 break;
             }
@@ -141,11 +143,13 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
     }
 }
 
-// There are undoubtedly simpler ways of doing all this, but we're demonstrating the use of ID ranges
+// There are undoubtedly simpler ways of doing all this, but we're
+// demonstrating the use of ID ranges
 void ObjrefDialog::OnUpdateUIFirst(wxUpdateUIEvent& event)
 {
     // The checkbox with the XRCID 'check[0]' controls this row of icons
-    wxCheckBox *chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[0]", wxCheckBox);
+    wxCheckBox *
+        chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[0]", wxCheckBox);
     if (chk)
         event.Enable(chk->IsChecked());
 
@@ -154,16 +158,22 @@ void ObjrefDialog::OnUpdateUIFirst(wxUpdateUIEvent& event)
     if (chk->IsChecked() != checked)
     {
         checked = chk->IsChecked();
-        wxLogMessage("Row one has been %s by check[0], XRCID = %i", checked ? "enabled" : "disabled", XRCID("check[0]"));
-        wxLogMessage("XRCIDs: first_row[start] = %i, first_row[0] = %i, first_row[1] = %i, first_row[2] = %i, first_row[end] = %i",
-            XRCID("first_row[start]"), XRCID("first_row[0]"), XRCID("first_row[1]"), XRCID("first_row[2]"), XRCID("first_row[end]"));
+        wxLogMessage("Row one has been %s by check[0], XRCID = %i",
+                     checked ? "enabled" : "disabled", XRCID("check[0]"));
+        wxLogMessage("XRCIDs: first_row[start] = %i, first_row[0] = %i, "
+                     "first_row[1] = %i, first_row[2] = %i, "
+                     "first_row[end] = %i",
+                     XRCID("first_row[start]"), XRCID("first_row[0]"),
+                     XRCID("first_row[1]"), XRCID("first_row[2]"),
+                     XRCID("first_row[end]"));
     }
 }
 
 void ObjrefDialog::OnUpdateUISecond(wxUpdateUIEvent& event)
 {
     // The checkbox with the XRCID 'check[1]' controls this row of icons
-    wxCheckBox *chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[1]", wxCheckBox);
+    wxCheckBox *
+        chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[1]", wxCheckBox);
     if (chk)
         event.Enable(chk->IsChecked());
 
@@ -172,16 +182,22 @@ void ObjrefDialog::OnUpdateUISecond(wxUpdateUIEvent& event)
     if (chk->IsChecked() != checked)
     {
         checked = chk->IsChecked();
-        wxLogMessage("Row two has been %s by check[1], XRCID = %i", checked ? "enabled" : "disabled", XRCID("check[1]"));
-        wxLogMessage("XRCIDs: second_row[start] = %i, second_row[0] = %i, second_row[1] = %i, second_row[2] = %i, second_row[end] = %i",
-            XRCID("second_row[start]"), XRCID("second_row[0]"), XRCID("second_row[1]"), XRCID("second_row[2]"), XRCID("second_row[end]"));
+        wxLogMessage("Row two has been %s by check[1], XRCID = %i",
+                     checked ? "enabled" : "disabled", XRCID("check[1]"));
+        wxLogMessage("XRCIDs: second_row[start] = %i, second_row[0] = %i, "
+                     "second_row[1] = %i, second_row[2] = %i, "
+                     "second_row[end] = %i",
+                     XRCID("second_row[start]"), XRCID("second_row[0]"),
+                     XRCID("second_row[1]"), XRCID("second_row[2]"),
+                     XRCID("second_row[end]"));
     }
 }
 
 void ObjrefDialog::OnUpdateUIThird(wxUpdateUIEvent& event)
 {
     // The checkbox with the XRCID 'check[2]' controls this row of icons
-    wxCheckBox *chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[2]", wxCheckBox);
+    wxCheckBox *
+        chk = XRCCTRL(*(nb->GetPage(icons_page)), "check[2]", wxCheckBox);
     if (chk)
         event.Enable(chk->IsChecked());
 
@@ -190,9 +206,14 @@ void ObjrefDialog::OnUpdateUIThird(wxUpdateUIEvent& event)
     if (chk->IsChecked() != checked)
     {
         checked = chk->IsChecked();
-        wxLogMessage("Row three has been %s by check[2], XRCID = %i", checked ? "enabled" : "disabled", XRCID("check[2]"));
-        wxLogMessage("XRCIDs: third_row[start] = %i, third_row[0] = %i, third_row[1] = %i, third_row[2] = %i, third_row[end] = %i",
-            XRCID("third_row[start]"), XRCID("third_row[0]"), XRCID("third_row[1]"), XRCID("third_row[2]"), XRCID("third_row[end]"));
+        wxLogMessage("Row three has been %s by check[2], XRCID = %i",
+                     checked ? "enabled" : "disabled", XRCID("check[2]"));
+        wxLogMessage("XRCIDs: third_row[start] = %i, third_row[0] = %i, "
+                     "third_row[1] = %i, third_row[2] = %i, "
+                     "third_row[end] = %i",
+                     XRCID("third_row[start]"), XRCID("third_row[0]"),
+                     XRCID("third_row[1]"), XRCID("third_row[2]"),
+                     XRCID("third_row[end]"));
     }
 }
 
@@ -209,7 +230,8 @@ void ObjrefDialog::OnNumeralClick(wxCommandEvent& event)
     }
     else if (operator_expected == true)
     {
-        // If we've just finished one calculation, and now a digit is entered, clear
+        // If we've just finished one calculation, and now a digit is entered,
+        // clear
         ClearCalculator();
         result_txt->Clear();
     }
@@ -231,7 +253,8 @@ void ObjrefDialog::OnOperatorClick(wxCommandEvent& event)
     // We carefully used "operators[end]" as the name of the Clear button
     if (event.GetId() == XRCID("operators[end]"))
     {
-        wxLogMessage("You clicked operators[%i], XRCID %i, 'Clear'", ID, event.GetId());
+        wxLogMessage("You clicked operators[%i], XRCID %d, 'Clear'",
+                     ID, event.GetId());
         return ClearCalculator();
     }
 
@@ -243,7 +266,8 @@ void ObjrefDialog::OnOperatorClick(wxCommandEvent& event)
         case operator_divide:
             if (current!=0 || previous!=0)
             {
-                // We're in the middle of a complex calculation, so do the first bit
+                // We're in the middle of a complex calculation, so do the
+                // first bit
                 Calculate();
             }
             curr_operator = (CalcOperator)ID;
@@ -251,7 +275,8 @@ void ObjrefDialog::OnOperatorClick(wxCommandEvent& event)
 
         case operator_equals:
             Calculate();
-            wxLogMessage("You clicked operators[%i], XRCID %i, giving a '%c'", ID, event.GetId(), symbols[ID]);
+            wxLogMessage("You clicked operators[%i], XRCID %i, giving a '%c'",
+                         ID, event.GetId(), symbols[ID]);
             curr_operator = operator_equals;
             // Flag that the next entry should be an operator, not a digit
             operator_expected = true;
@@ -260,7 +285,8 @@ void ObjrefDialog::OnOperatorClick(wxCommandEvent& event)
 
     (*result_txt) << ' ' << symbols[ID] << ' ';
 
-    wxLogMessage("You clicked operators[%i], XRCID %i, giving a '%c'", ID, event.GetId(), symbols[ID]);
+    wxLogMessage("You clicked operators[%i], XRCID %i, giving a '%c'",
+                 ID, event.GetId(), symbols[ID]);
 }
 
 void ObjrefDialog::Calculate()

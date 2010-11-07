@@ -37,8 +37,22 @@ public:
     ~ObjrefDialog();
 
 private:
-    enum PageNumbers { first_page, copy_page, icons_page, calc_page };
-    enum CalcOperator { operator_plus, operator_minus, operator_multiply, operator_divide, operator_equals };
+    enum PageNumbers
+    {
+        first_page,
+        copy_page,
+        icons_page,
+        calc_page
+    };
+
+    enum CalcOperator
+    {
+        operator_plus,
+        operator_minus,
+        operator_multiply,
+        operator_divide,
+        operator_equals
+    };
 
     void OnNotebookPageChanged( wxNotebookEvent &event );
     void OnUpdateUIFirst(wxUpdateUIEvent& event);
