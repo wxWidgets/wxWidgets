@@ -122,7 +122,6 @@ static bool HasTroubleWithNonTopTabs()
 WX_DEFINE_LIST( wxNotebookPageInfoList )
 
 BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
-    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 
@@ -456,6 +455,8 @@ int wxNotebook::SetSelection(size_t nPage)
         {
             // program allows the page change
             SendPageChangedEvent(m_selection, nPage);
+
+            UpdateSelection(nPage);
 
             TabCtrl_SetCurSel(GetHwnd(), nPage);
         }
@@ -1082,18 +1083,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
-{
-    // is it our tab control?
-    if ( event.GetEventObject() == this )
-    {
-        UpdateSelection(event.GetSelection());
-    }
-
-    // we want to give others a chance to process this message as well
-    event.Skip();
-}
-
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
     if ( event.IsWindowChange() ) {
@@ -1446,6 +1435,9 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   event.SetInt(idCtrl);
 
   bool processed = HandleWindowEvent(event);
+  if ( hdr->code == TCN_SELCHANGE )
+      UpdateSelection(event.GetSelection());
+
   *result = !event.IsAllowed();
   return processed;
 }
