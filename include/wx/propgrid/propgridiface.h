@@ -1385,7 +1385,8 @@ private:
     {
         if ( !m_pState )
             return NULL;
-        return static_cast<const wxPropertyGrid*>(m_pState->GetGrid());
+
+        return m_pState->GetGrid();
     }
 
     friend class wxPropertyGrid;

@@ -331,16 +331,38 @@
    test for old versions of Borland C, normally need at least 5.82, Turbo
    explorer, available for free at http://www.turboexplorer.com/downloads
 */
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x550)
-#   error "wxWidgets requires a newer version of Borland, we recommend upgrading to 5.82 (Turbo Explorer). You may at your own risk remove this line and try building but be prepared to get build errors."
-#endif /* __BORLANDC__ */
 
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x582) && (__BORLANDC__ > 0x559)
-#   ifndef _USE_OLD_RW_STL
-#       error "wxWidgets is incompatible with default Borland C++ 5.6 STL library, please add -D_USE_OLD_RW_STL to your bcc32.cfg to use RogueWave STL implementation."
-#   endif
-#endif /* __BORLANDC__ */
 
+/*
+    Older versions of Borland C have some compiler bugs that need
+    workarounds. Mostly pertains to the free command line compiler 5.5.1.
+*/
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+    /*
+        The Borland free compiler is unable to handle overloaded enum
+        comparisons under certain conditions e.g. when any class has a
+        conversion ctor for an integral type and there's an overload to
+        compare between an integral type and that class type.
+    */
+#   define wxCOMPILER_NO_OVERLOAD_ON_ENUM
+
+    /*
+        This is needed to overcome bugs in 5.5.1 STL, linking errors will
+        result if it is not defined.
+     */
+#   define _RWSTD_COMPILE_INSTANTIATE
+
+    /*
+        Preprocessor in older Borland compilers have major problems
+        concatenating with ##. Specifically, if the string operands being
+        concatenated have special meaning (e.g L"str", 123i64 etc)
+        then ## will not concatenate the operands correctly.
+
+        As a workaround, define wxPREPEND* and wxAPPEND* without using
+        wxCONCAT_HELPER.
+    */
+#   define wxCOMPILER_BROKEN_CONCAT_OPER
+#endif /* __BORLANDC__ */
 
 /*
    Define Watcom-specific macros.

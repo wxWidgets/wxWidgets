@@ -1056,9 +1056,19 @@ typedef wxUint32 wxDword;
         #define wxULongLong_t unsigned wxLongLong_t
     #endif
 
-    /*  these macros allow to define 64 bit constants in a portable way */
-    #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
-    #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
+    /*
+        wxLL() and wxULL() macros allow to define 64 bit constants in a
+        portable way.
+     */
+    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
+        #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
+        #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
+    #else
+        // Currently only Borland compiler has broken concatenation operator
+        // and this compiler is known to use [u]i64 suffix.
+        #define wxLL(x) wxAPPEND_i64(x)
+        #define wxULL(x) wxAPPEND_ui64(x)
+    #endif
 
     typedef wxLongLong_t wxInt64;
     typedef wxULongLong_t wxUint64;

@@ -378,6 +378,11 @@ extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 // compilers as it compares elements of different enums
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
 
+// Unfortunately some compilers have ambiguity issues when enum comparisons are
+// overloaded so we have to disable the overloads in this case, see
+// wxCOMPILER_NO_OVERLOAD_ON_ENUM definition in wx/platform.h for more details.
+#ifndef wxCOMPILER_NO_OVERLOAD_ON_ENUM
+
 inline bool operator==(wxFontFamily s, wxDeprecatedGUIConstants t)
 { return static_cast<int>(s) == static_cast<int>(t); }
 inline bool operator!=(wxFontFamily s, wxDeprecatedGUIConstants t)
@@ -390,6 +395,8 @@ inline bool operator==(wxFontWeight s, wxDeprecatedGUIConstants t)
 { return static_cast<int>(s) == static_cast<int>(t); }
 inline bool operator!=(wxFontWeight s, wxDeprecatedGUIConstants t)
 { return !(s == t); }
+
+#endif // // wxCOMPILER_NO_OVERLOAD_ON_ENUM
 
 #endif // FUTURE_WXWIN_COMPATIBILITY_3_0
 
