@@ -123,7 +123,7 @@ public:
     int Find(const wxString& rangename) const;
     // Removes, if it exists, an entry from the XRCID table. Used in id-ranges
     // to replace defunct or statically-initialised entries with current values
-    static void RemoveXRCIDEntry(const char *str_id);
+    static void RemoveXRCIDEntry(const wxString& idstr);
 
 protected:
     wxIdRange* FindRangeForItem(const wxXmlNode* node,
@@ -1185,9 +1185,11 @@ void wxIdRange::Finalise(const wxXmlNode* node)
 
         // Use the second parameter of GetXRCID to force it to take the value i
         wxXmlResource::GetXRCID(m_name + wxString::Format("[%i]", i-m_start), i);
-        wxLogTrace("xrcrange","integer = %i %s now returns %i", i,
-            m_name + wxString::Format("[%i]", i-m_start).mb_str(),
-                XRCID(m_name + wxString::Format("[%i]", i-m_start).mb_str()));
+        wxLogTrace("xrcrange",
+                   "integer = %i %s now returns %i",
+                   i,
+                   m_name + wxString::Format("[%i]", i-m_start),
+                   XRCID((m_name + wxString::Format("[%i]", i-m_start)).mb_str()));
     }
     // and these special ones
     wxIdRangeManager::RemoveXRCIDEntry(m_name + "[start]");
@@ -2627,8 +2629,10 @@ wxString wxXmlResource::FindXRCIDById(int numId)
 }
 
 /* static */
-void wxIdRangeManager::RemoveXRCIDEntry(const char *str_id)
+void wxIdRangeManager::RemoveXRCIDEntry(const wxString& idstr)
 {
+    const char *str_id = idstr.mb_str();
+
     const unsigned index = XRCIdHash(str_id);
 
     XRCID_record **p_previousrec = &XRCID_Records[index];
