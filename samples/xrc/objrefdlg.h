@@ -52,8 +52,6 @@ private:
     wxNotebook *nb;
     wxTextCtrl *text;
     wxTextCtrl *result_txt;
-    bool iconspage_bound;
-    bool calcpage_bound;
     int current;
     int previous;
     bool operator_expected;

@@ -47,9 +47,41 @@ ObjrefDialog::ObjrefDialog(wxWindow* parent)
 
     nb = XRCCTRL(*this, "objref_notebook", wxNotebook);
     wxCHECK_RET(nb, "failed to find objref_notebook");
-    nb->Bind(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, &ObjrefDialog::OnNotebookPageChanged, this);
-    iconspage_bound = false;
-    calcpage_bound = false;
+
+    // Connect different event handlers.
+    nb->Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+                wxNotebookEventHandler(ObjrefDialog::OnNotebookPageChanged),
+                NULL, this);
+
+    // We want to direct UpdateUI events for the ID range 'first_row' to
+    // OnUpdateUIFirst(). We could achieve this using first_row[0] and
+    // first_row[2], but what if a fourth column were added? It's safer to use
+    // the 'typedefs' for the two ends of the range:
+    wxNotebookPage *page = nb->GetPage(icons_page);
+    page->Connect(XRCID("first_row[start]"), XRCID("first_row[end]"),
+                  wxEVT_UPDATE_UI,
+                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUIFirst),
+                  NULL, this);
+    page->Connect(XRCID("second_row[start]"), XRCID("second_row[end]"),
+                  wxEVT_UPDATE_UI,
+                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUISecond),
+                  NULL, this);
+    page->Connect(XRCID("third_row[start]"), XRCID("third_row[end]"),
+                  wxEVT_UPDATE_UI,
+                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUIThird),
+                  NULL, this);
+
+    // Connect the id ranges, using the [start] and [end] 'typedefs'
+    page = nb->GetPage(calc_page);
+    page->Connect(XRCID("digits[start]"), XRCID("digits[end]"),
+                  wxEVT_COMMAND_BUTTON_CLICKED,
+                  wxCommandEventHandler(ObjrefDialog::OnNumeralClick),
+                  NULL, this);
+    page->Connect(XRCID("operators[start]"), XRCID("operators[end]"),
+                  wxEVT_COMMAND_BUTTON_CLICKED,
+                  wxCommandEventHandler(ObjrefDialog::OnOperatorClick),
+                  NULL, this);
+
 }
 
 ObjrefDialog::~ObjrefDialog()
@@ -87,22 +119,6 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
         case icons_page:
             {
                 wxNotebookPage *page = nb->GetPage(icons_page);
-                if (!iconspage_bound)
-                {
-                    iconspage_bound = true;
-                    // We want to direct UpdateUI events for the ID range 'first_row' to OnUpdateUIFirst().
-                    // We could achieve this using first_row[0] and first_row[2], but what if a fourth
-                    // column were added? It's safer to use the 'typedefs' for the two ends of the range:
-                    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUIFirst,
-                        this, XRCID("first_row[start]"), XRCID("first_row[end]"));
-                    // Similarly for the other two rows
-                    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUISecond,
-                        this, XRCID("second_row[start]"), XRCID("second_row[end]"));
-                    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUIThird,
-                        this, XRCID("third_row[start]"), XRCID("third_row[end]"));
-
-                }
-
                 text = XRCCTRL(*page, "log_text", wxTextCtrl);
                 if (text)
                     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
@@ -112,16 +128,6 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
         case calc_page:
             {
                 wxNotebookPage *page = nb->GetPage(calc_page);
-                if (!calcpage_bound)
-                {
-                    calcpage_bound = true;
-                    // Bind the id ranges, using the [start] and [end] 'typedefs'
-                    page->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &ObjrefDialog::OnNumeralClick,
-                        this, XRCID("digits[start]"), XRCID("digits[end]"));
-                    page->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &ObjrefDialog::OnOperatorClick,
-                        this, XRCID("operators[start]"), XRCID("operators[end]"));
-                }
-
                 result_txt = XRCCTRL(*page, "result", wxTextCtrl);
                 text = XRCCTRL(*page, "log_text", wxTextCtrl);
                 if (text)
