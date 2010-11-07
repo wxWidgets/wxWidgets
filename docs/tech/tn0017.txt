@@ -62,7 +62,9 @@ II. Writing tests with CppUnit
     event type. It disconnects again once it is out of scope. It simply reduces
     the amount of typing required to count events.
 
-3. add a '<sources>' tag for your source file to tests/test.bkl
+3. add a '<sources>' tag for your source file to tests/test.bkl. Make sure it's
+   in the correct section: the one starting '<exe id="test_gui"' for a gui test,
+   the one starting '<exe id="test" template="wx_sample_console' otherwise.
 
 
 III. Running the tests
@@ -76,16 +78,17 @@ III. Running the tests
 2. Build the test program using one of the make/project files in the tests
    subdirectory.
 
-3. Run the test program with no arguments to run the default set of tests
-   (which are all those registered with CPPUNIT_TEST_SUITE_REGISTRATION).
+3. Run the test program by using the command 'test' for the console tests,
+   'test_gui' for the gui ones. With no arguments, all the default set of tests
+   (all those registered with CPPUNIT_TEST_SUITE_REGISTRATION) are run.
    Or to list the test suites without running them:
-      test -l
+      test -l   or   test_gui -l
 
 4. Tests that have been registered under a name using
    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION can also be run separately. For
    example:
-      test MBConvTestCase
-   or to list the tests:
+      test_gui ButtonTestCase
+   or to list the tests done by a particular testcase:
       test -L MBConvTestCase
 
 5. Fault navigation.
