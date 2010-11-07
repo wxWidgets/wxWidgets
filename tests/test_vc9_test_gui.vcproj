@@ -1123,6 +1123,10 @@
 				RelativePath=".\controls\windowtest.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\xml\xrctest.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

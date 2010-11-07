@@ -427,7 +427,8 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_boxsizer.obj &
 	$(OBJS)\test_gui_clientsize.obj &
-	$(OBJS)\test_gui_setsize.obj
+	$(OBJS)\test_gui_setsize.obj &
+	$(OBJS)\test_gui_xrctest.obj
 
 
 all : $(OBJS)
@@ -928,3 +929,5 @@ $(OBJS)\test_gui_clientsize.obj :  .AUTODEPEND .\window\clientsize.cpp
 $(OBJS)\test_gui_setsize.obj :  .AUTODEPEND .\window\setsize.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_xrctest.obj :  .AUTODEPEND .\xml\xrctest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<

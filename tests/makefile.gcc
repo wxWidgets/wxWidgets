@@ -185,7 +185,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_boxsizer.o \
 	$(OBJS)\test_gui_clientsize.o \
-	$(OBJS)\test_gui_setsize.o
+	$(OBJS)\test_gui_setsize.o \
+	$(OBJS)\test_gui_xrctest.o
 
 ### Conditionally set variables: ###
 
@@ -868,6 +869,9 @@ $(OBJS)\test_gui_clientsize.o: ./window/clientsize.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_setsize.o: ./window/setsize.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_xrctest.o: ./xml/xrctest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean data fr

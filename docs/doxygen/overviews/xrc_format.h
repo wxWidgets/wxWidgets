@@ -31,6 +31,7 @@ Table of contents:
 - @ref overview_xrcformat_sizers
 - @ref overview_xrcformat_other_objects
 - @ref overview_xrcformat_platform
+- @ref overview_xrcformat_idranges
 - @ref overview_xrcformat_extending
     - @ref overview_xrcformat_extending_subclass
     - @ref overview_xrcformat_extending_unknown
@@ -2059,6 +2060,64 @@ Examples:
 @endcode
 
 
+
+@section overview_xrcformat_idranges ID Ranges
+
+Usually you won't care what value the XRCID macro returns for the ID of an
+object. Sometimes though it is convenient to have a range of IDs that are
+guaranteed to be consecutive. An example of this would be connecting a group of
+similar controls to the same event handler.
+
+The following XRC fragment 'declares' an ID range called  @em foo and another
+called @em bar; each with some items.
+
+@code
+    <object class="wxButton" name="foo[start]">
+    <object class="wxButton" name="foo[end]">
+    <object class="wxButton" name="foo[2]">
+    ...
+    <object class="wxButton" name="bar[0]">
+    <object class="wxButton" name="bar[2]">
+    <object class="wxButton" name="bar[1]">
+    ...
+<ids-range name="foo" />
+<ids-range name="bar" size="30" start="10000" />
+@endcode
+
+For the range foo, no @em size or @em start parameters were given, so the size
+will be calculated from the number of range items, and IDs allocated by
+wxWindow::NewControlId (so they'll be negative). Range bar asked for a size of
+30, so this will be its minimum size: should it have more items, the range will
+automatically expand to fit them. It specified a start ID of 10000, so
+XRCID("bar[0]") will be 10000, XRCID("bar[1]") 10001 etc. Note that if you
+choose to supply a start value it must be positive, and it's your
+responsibility to avoid clashes.
+
+For every ID range, the first item can be referenced either as
+<em>rangename</em>[0] or <em>rangename</em>[start]. Similarly
+<em>rangename</em>[end] is the last item. Using [start] and [end] is more
+descriptive in e.g. a Bind() event range or a @em for loop, and they don't have
+to be altered whenever the number of items changes.
+
+Whether a range has positive or negative IDs, [start] is always a smaller
+number than [end]; so code like this works as expected:
+
+@code
+for (int n=XRCID("foo[start]"); n < XRCID("foo[end]"); ++n)
+    ...
+@endcode
+
+ID ranges can be seen in action in the <em>objref</em> dialog section of the
+@sample{xrc}.
+
+@note
+@li All the items in an ID range must be contained in the same XRC file.
+@li You can't use an ID range in a situation where static initialisation
+occurs; in particular, they won't work as expected in an event table. This is
+because the event table's IDs are set to their integer values before the XRC
+file is loaded, and aren't subsequently altered when the XRCID value changes.
+
+@since 2.9.2
 
 @section overview_xrcformat_extending Extending the XRC Format
 

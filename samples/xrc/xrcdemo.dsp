@@ -264,6 +264,10 @@ SOURCE=.\myframe.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\objrefdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
@@ -285,6 +289,10 @@ SOURCE=.\derivdlg.h
 # Begin Source File
 
 SOURCE=.\myframe.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\objrefdlg.h
 # End Source File
 # Begin Source File
 

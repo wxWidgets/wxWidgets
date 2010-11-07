@@ -499,6 +499,10 @@ SOURCE=.\controls\treectrltest.cpp
 
 SOURCE=.\controls\windowtest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\xml\xrctest.cpp
+# End Source File
 # End Group
 # End Target
 # End Project

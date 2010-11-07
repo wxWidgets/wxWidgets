@@ -391,6 +391,8 @@ private:
 
     friend class wxXmlResourceHandler;
     friend class wxXmlResourceModule;
+    friend class wxIdRangeManager;
+    friend class wxIdRange;
 
     static wxXmlSubclassFactories *ms_subclassFactories;
 

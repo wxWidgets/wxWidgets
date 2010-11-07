@@ -47,6 +47,7 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
+#include "wx/hashset.h"
 
 
 class wxXmlResourceDataRecord
@@ -69,6 +70,69 @@ public:
 class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
 {
     // this is a class so that it can be forward-declared
+};
+
+WX_DECLARE_HASH_SET(int, wxIntegerHash, wxIntegerEqual, wxHashSetInt);
+
+class wxIdRange // Holds data for a particular rangename
+{
+protected:
+    wxIdRange(const wxXmlNode* node,
+              const wxString& rname,
+              const wxString& startno,
+              const wxString& rsize);
+
+    // Note the existence of an item within the range
+    void NoteItem(const wxXmlNode* node, const wxString& item);
+
+    // The manager is telling us that it's finished adding items
+    void Finalise(const wxXmlNode* node);
+
+    wxString GetName() const { return m_name; }
+    bool IsFinalised() const { return m_finalised; }
+
+    const wxString m_name;
+    int m_start;
+    int m_end;
+    unsigned int m_size;
+    bool m_item_end_found;
+    bool m_finalised;
+    wxHashSetInt m_indices;
+
+    friend class wxIdRangeManager;
+};
+
+class wxIdRangeManager
+{
+public:
+    ~wxIdRangeManager();
+    // Gets the global resources object or creates one if none exists.
+    static wxIdRangeManager *Get();
+
+    // Sets the global resources object and returns a pointer to the previous
+    // one (may be NULL).
+    static wxIdRangeManager *Set(wxIdRangeManager *res);
+
+    // Create a new IDrange from this node
+    void AddRange(const wxXmlNode* node);
+    // Tell the IdRange that this item exists, and should be pre-allocated an ID
+    void NotifyRangeOfItem(const wxXmlNode* node, const wxString& item) const;
+    // Tells all IDranges that they're now complete, and can create their IDs
+    void FinaliseRanges(const wxXmlNode* node) const;
+    // Searches for a known IdRange matching 'name', returning its index or -1
+    int Find(const wxString& rangename) const;
+    // Removes, if it exists, an entry from the XRCID table. Used in id-ranges
+    // to replace defunct or statically-initialised entries with current values
+    static void RemoveXRCIDEntry(const char *str_id);
+
+protected:
+    wxIdRange* FindRangeForItem(const wxXmlNode* node,
+                                const wxString& item,
+                                wxString& value) const;
+    wxVector<wxIdRange*> m_IdRanges;
+
+private:
+    static wxIdRangeManager *ms_instance;
 };
 
 namespace
@@ -520,7 +584,31 @@ static void ProcessPlatformProperty(wxXmlNode *node)
     }
 }
 
+static void PreprocessForIdRanges(wxXmlNode *rootnode)
+{
+    // First go through the top level, looking for the names of ID ranges
+    // as processing items is a lot easier if names are already known
+    wxXmlNode *c = rootnode->GetChildren();
+    while (c)
+    {
+        if (c->GetName() == wxT("ids-range"))
+            wxIdRangeManager::Get()->AddRange(c);
+        c = c->GetNext();
+    }
 
+    // Next, examine every 'name' for the '[' that denotes an ID in a range
+    c = rootnode->GetChildren();
+    while (c)
+    {
+        wxString name = c->GetAttribute(wxT("name"));
+        if (name.find('[') != wxString::npos)
+            wxIdRangeManager::Get()->NotifyRangeOfItem(rootnode, name);
+
+        // Do any children by recursion, then proceed to the next sibling
+        PreprocessForIdRanges(c);
+        c = c->GetNext();
+    }
+}
 
 bool wxXmlResource::UpdateResources()
 {
@@ -631,6 +719,8 @@ bool wxXmlResource::UpdateResources()
                 }
 
                 ProcessPlatformProperty(rec->Doc->GetRoot());
+                PreprocessForIdRanges(rec->Doc->GetRoot());
+                wxIdRangeManager::Get()->FinaliseRanges(rec->Doc->GetRoot());
 #if wxUSE_DATETIME
 #if wxUSE_FILESYSTEM
                 rec->Time = file->GetModificationTime();
@@ -744,7 +834,7 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
                                           bool recursive,
                                           wxString *path) const
 {
-    // ensure everything is up-to-date: this is needed to support on-remand
+    // ensure everything is up-to-date: this is needed to support on-demand
     // reloading of XRC files
     const_cast<wxXmlResource *>(this)->UpdateResources();
 
@@ -914,6 +1004,329 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
         )
     );
     return NULL;
+}
+
+wxIdRange::wxIdRange(const wxXmlNode* node,
+                     const wxString& rname,
+                     const wxString& startno,
+                     const wxString& rsize)
+    : m_name(rname),
+      m_start(0),
+      m_size(0),
+      m_item_end_found(0),
+      m_finalised(0)
+{
+    long l;
+    if ( startno.ToLong(&l) )
+    {
+        if ( l >= 0 )
+        {
+            m_start = l;
+        }
+        else
+        {
+            wxXmlResource::Get()->ReportError
+            (
+                node,
+                "a negative id-range start parameter was given"
+            );
+        }
+    }
+    else
+    {
+        wxXmlResource::Get()->ReportError
+        (
+            node,
+            "the id-range start parameter was malformed"
+        );
+    }
+
+    unsigned long ul;
+    if ( rsize.ToULong(&ul) )
+    {
+        m_size = ul;
+    }
+    else
+    {
+        wxXmlResource::Get()->ReportError
+        (
+            node,
+            "the id-range size parameter was malformed"
+        );
+    }
+}
+
+void wxIdRange::NoteItem(const wxXmlNode* node, const wxString& item)
+{
+    // Nothing gets added here, but the existence of each item is noted
+    // thus getting an accurate count. 'item' will be either an integer e.g.
+    // [0] [123]: will eventually create an XRCID as start+integer or [start]
+    // or [end] which are synonyms for [0] or [range_size-1] respectively.
+    wxString content(item.Mid(1, item.length()-2));
+
+    // Check that basename+item wasn't foo[]
+    if (content.empty())
+    {
+        wxXmlResource::Get()->ReportError(node, "an empty id-range item found");
+        return;
+    }
+
+    if (content=="start")
+    {
+        // "start" means [0], so store that in the set
+        if (m_indices.count(0) == 0)
+        {
+            m_indices.insert(0);
+        }
+        else
+        {
+            wxXmlResource::Get()->ReportError
+            (
+                node,
+                "duplicate id-range item found"
+            );
+        }
+    }
+    else if (content=="end")
+    {
+        // We can't yet be certain which XRCID this will be equivalent to, so
+        // just note that there's an item with this name, in case we need to
+        // inc the range size
+        m_item_end_found = true;
+    }
+    else
+    {
+        // Anything else will be an integer, or rubbish
+        unsigned long l;
+        if ( content.ToULong(&l) )
+        {
+            if (m_indices.count(l) == 0)
+            {
+                m_indices.insert(l);
+                // Check that this item wouldn't fall outside the current range
+                // extent
+                if (l >= m_size)
+                {
+                    m_size = l + 1;
+                }
+            }
+            else
+            {
+                wxXmlResource::Get()->ReportError
+                (
+                    node,
+                    "duplicate id-range item found"
+                );
+            }
+
+        }
+        else
+        {
+            wxXmlResource::Get()->ReportError
+            (
+                node,
+                "an id-range item had a malformed index"
+            );
+        }
+    }
+}
+
+void wxIdRange::Finalise(const wxXmlNode* node)
+{
+    wxCHECK_RET( !IsFinalised(),
+                 "Trying to finalise an already-finalised range" );
+
+    // Now we know about all the items, we can get an accurate range size
+    // Expand any requested range-size if there were more items than would fit
+    m_size = wxMax(m_size, m_indices.size());
+
+    // If an item is explicitly called foo[end], ensure it won't clash with
+    // another item
+    if ( m_item_end_found && m_indices.count(m_size-1) )
+        ++m_size;
+    if (m_size == 0)
+    {
+        // This will happen if someone creates a range but no items in this xrc
+        // file Report the error and abort, but don't finalise, in case items
+        // appear later
+        wxXmlResource::Get()->ReportError
+        (
+            node,
+            "trying to create an empty id-range"
+        );
+        return;
+    }
+
+    if (m_start==0)
+    {
+        // This is the usual case, where the user didn't specify a start ID
+        // So get the range using NewControlId().
+        //
+        // NB: negative numbers, but NewControlId already returns the most
+        //     negative
+        m_start = wxWindow::NewControlId(m_size);
+        wxCHECK_RET( m_start != wxID_NONE,
+                     "insufficient IDs available to create range" );
+        m_end = m_start + m_size - 1;
+    }
+    else
+    {
+        // The user already specified a start value, which must be positive
+        m_end = m_start + m_size - 1;
+    }
+
+    // Create the XRCIDs
+    for (int i=m_start; i <= m_end; ++i)
+    {
+        // First clear any pre-existing XRCID
+        // Necessary for wxXmlResource::Unload() followed by Load()
+        wxIdRangeManager::RemoveXRCIDEntry(
+                m_name + wxString::Format("[%i]", i-m_start));
+
+        // Use the second parameter of GetXRCID to force it to take the value i
+        wxXmlResource::GetXRCID(m_name + wxString::Format("[%i]", i-m_start), i);
+        wxLogTrace("xrcrange","integer = %i %s now returns %i", i,
+            m_name + wxString::Format("[%i]", i-m_start).mb_str(),
+                XRCID(m_name + wxString::Format("[%i]", i-m_start).mb_str()));
+    }
+    // and these special ones
+    wxIdRangeManager::RemoveXRCIDEntry(m_name + "[start]");
+    wxXmlResource::GetXRCID(m_name + "[start]", m_start);
+    wxIdRangeManager::RemoveXRCIDEntry(m_name + "[end]");
+    wxXmlResource::GetXRCID(m_name + "[end]", m_end);
+    wxLogTrace("xrcrange","%s[start] = %i  %s[end] = %i",
+            m_name.mb_str(),XRCID(wxString(m_name+"[start]").mb_str()),
+                m_name.mb_str(),XRCID(wxString(m_name+"[end]").mb_str()));
+
+    m_finalised = true;
+}
+
+wxIdRangeManager *wxIdRangeManager::ms_instance = NULL;
+
+/*static*/ wxIdRangeManager *wxIdRangeManager::Get()
+{
+    if ( !ms_instance )
+        ms_instance = new wxIdRangeManager;
+    return ms_instance;
+}
+
+/*static*/ wxIdRangeManager *wxIdRangeManager::Set(wxIdRangeManager *res)
+{
+    wxIdRangeManager *old = ms_instance;
+    ms_instance = res;
+    return old;
+}
+
+wxIdRangeManager::~wxIdRangeManager()
+{
+    for ( wxVector<wxIdRange*>::iterator i = m_IdRanges.begin();
+          i != m_IdRanges.end(); ++i )
+    {
+        delete *i;
+    }
+    m_IdRanges.clear();
+
+    delete ms_instance;
+}
+
+void wxIdRangeManager::AddRange(const wxXmlNode* node)
+{
+    wxString name = node->GetAttribute("name");
+    wxString start = node->GetAttribute("start", "0");
+    wxString size = node->GetAttribute("size", "0");
+    if (name.empty())
+    {
+        wxXmlResource::Get()->ReportError
+        (
+            node,
+            "xrc file contains an id-range without a name"
+        );
+        return;
+    }
+
+    int index = Find(name);
+    if (index == wxNOT_FOUND)
+    {
+        wxLogTrace("xrcrange",
+                   "Adding ID range, name=%s start=%s size=%s",
+                   name, start, size);
+
+        m_IdRanges.push_back(new wxIdRange(node, name, start, size));
+    }
+    else
+    {
+        // There was already a range with this name. Let's hope this is
+        // from an Unload()/(re)Load(), not an unintentional duplication
+        wxLogTrace("xrcrange",
+                   "Replacing ID range, name=%s start=%s size=%s",
+                   name, start, size);
+
+        wxIdRange* oldrange = m_IdRanges.at(index);
+        m_IdRanges.at(index) = new wxIdRange(node, name, start, size);
+        delete oldrange;
+    }
+}
+
+wxIdRange *
+wxIdRangeManager::FindRangeForItem(const wxXmlNode* node,
+                                   const wxString& item,
+                                   wxString& value) const
+{
+    wxString basename = item.BeforeFirst('[');
+    wxCHECK_MSG( !basename.empty(), NULL,
+                 "an id-range item without a range name" );
+
+    int index = Find(basename);
+    if (index == wxNOT_FOUND)
+    {
+        // Don't assert just because we've found an unexpected foo[123]
+        // Someone might just want such a name, nothing to do with ranges
+        return NULL;
+    }
+
+    value = item.Mid(basename.Len());
+    if (value.at(value.length()-1)==']')
+    {
+        return m_IdRanges.at(index);
+    }
+    wxXmlResource::Get()->ReportError(node, "a malformed id-range item");
+    return NULL;
+}
+
+void
+wxIdRangeManager::NotifyRangeOfItem(const wxXmlNode* node,
+                                    const wxString& item) const
+{
+    wxString value;
+    wxIdRange* range = FindRangeForItem(node, item, value);
+    if (range)
+        range->NoteItem(node, value);
+}
+
+int wxIdRangeManager::Find(const wxString& rangename) const
+{
+    for ( int i=0; i < (int)m_IdRanges.size(); ++i )
+    {
+        if (m_IdRanges.at(i)->GetName() == rangename)
+            return i;
+    }
+
+    return wxNOT_FOUND;
+}
+
+void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node) const
+{
+    for ( wxVector<wxIdRange*>::const_iterator i = m_IdRanges.begin();
+          i != m_IdRanges.end(); ++i )
+    {
+        // Check if this range has already been finalised. Quite possible,
+        // as  FinaliseRanges() gets called for each .xrc file loaded
+        if (!(*i)->IsFinalised())
+        {
+            wxLogTrace("xrcrange", "Finalising ID range %s", (*i)->GetName());
+            (*i)->Finalise(node);
+        }
+    }
 }
 
 
@@ -2203,6 +2616,33 @@ wxString wxXmlResource::FindXRCIDById(int numId)
     return wxString();
 }
 
+/* static */
+void wxIdRangeManager::RemoveXRCIDEntry(const char *str_id)
+{
+    int index = 0;
+
+    for (const char *c = str_id; *c != '\0'; c++) index += (int)*c;
+    index %= XRCID_TABLE_SIZE;
+
+    XRCID_record **p_previousrec = &XRCID_Records[index];
+    for (XRCID_record *rec = XRCID_Records[index]; rec; rec = rec->next)
+    {
+        if (wxStrcmp(rec->key, str_id) == 0)
+        {
+            // Found the item to be removed so delete its record; but first
+            // replace it in the table with any rec->next (usually == NULL)
+            (*p_previousrec) = rec->next;
+            free(rec->key);
+            delete rec;
+            return;
+        }
+        else
+        {
+            (*p_previousrec) = rec;
+        }
+    }
+}
+
 static void CleanXRCID_Record(XRCID_record *rec)
 {
     if (rec)
@@ -2254,6 +2694,7 @@ public:
     void OnExit()
     {
         delete wxXmlResource::Set(NULL);
+        delete wxIdRangeManager::Set(NULL);
         if(wxXmlResource::ms_subclassFactories)
         {
             for ( wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();

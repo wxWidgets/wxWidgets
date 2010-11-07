@@ -9,12 +9,14 @@
             myframe.cpp
             derivdlg.cpp
             custclas.cpp
+            objrefdlg.cpp
         </sources>
         <headers>
             derivdlg.h
             xrcdemo.h
             myframe.h
             custclas.h
+            objrefdlg.h
         </headers>
         <wx-lib>xrc</wx-lib>
         <wx-lib>html</wx-lib>
@@ -33,6 +35,7 @@
             derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
             fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif
             resource.xrc toolbar.xrc uncenter.xpm
+            objref.xrc objrefdlg.xpm
             uncenter.xrc update.gif variable.xpm variable.xrc
             throbber.gif stop.xpm
         </files>

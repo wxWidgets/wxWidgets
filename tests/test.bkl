@@ -194,6 +194,7 @@
             sizers/boxsizer.cpp
             window/clientsize.cpp
             window/setsize.cpp
+            xml/xrctest.cpp
         </sources>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
