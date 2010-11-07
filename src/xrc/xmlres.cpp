@@ -90,7 +90,7 @@ const char *ATTR_INPUT_FILENAME = "__wx:filename";
 
 // helper to get filename corresponding to an XML node
 wxString
-GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
+GetFileNameFromNode(const wxXmlNode *node, const wxXmlResourceDataRecords& files)
 {
     // this loop does two things: it looks for ATTR_INPUT_FILENAME among
     // parents and if it isn't used, it finds the root of the XML tree 'node'
@@ -1944,7 +1944,7 @@ void wxXmlResourceHandler::ReportParamError(const wxString& param,
     m_resource->ReportError(GetParamNode(param), message);
 }
 
-void wxXmlResource::ReportError(wxXmlNode *context, const wxString& message)
+void wxXmlResource::ReportError(const wxXmlNode *context, const wxString& message)
 {
     if ( !context )
     {
@@ -1960,7 +1960,7 @@ void wxXmlResource::ReportError(wxXmlNode *context, const wxString& message)
     DoReportError(filename, context, message);
 }
 
-void wxXmlResource::DoReportError(const wxString& xrcFile, wxXmlNode *position,
+void wxXmlResource::DoReportError(const wxString& xrcFile, const wxXmlNode *position,
                                   const wxString& message)
 {
     const int line = position ? position->GetLineNumber() : -1;

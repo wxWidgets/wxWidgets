@@ -388,7 +388,7 @@ protected:
 
         @see wxXmlResourceHandler::ReportError(), DoReportError()
      */
-    void ReportError(wxXmlNode *context, const wxString& message);
+    void ReportError(const wxXmlNode *context, const wxString& message);
 
     /**
         Implementation of XRC resources errors reporting.
@@ -416,7 +416,7 @@ protected:
 
         @see ReportError()
     */
-    virtual void DoReportError(const wxString& xrcFile, wxXmlNode *position,
+    virtual void DoReportError(const wxString& xrcFile, const wxXmlNode *position,
                                const wxString& message);
 };
 

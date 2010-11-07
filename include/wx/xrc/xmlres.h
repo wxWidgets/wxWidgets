@@ -293,10 +293,10 @@ public:
 
 protected:
     // reports input error at position 'context'
-    void ReportError(wxXmlNode *context, const wxString& message);
+    void ReportError(const wxXmlNode *context, const wxString& message);
 
     // override this in derived class to customize errors reporting
-    virtual void DoReportError(const wxString& xrcFile, wxXmlNode *position,
+    virtual void DoReportError(const wxString& xrcFile, const wxXmlNode *position,
                                const wxString& message);
 
     // Scans the resources list for unloaded files and loads them. Also reloads
