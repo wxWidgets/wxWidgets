@@ -959,6 +959,13 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
+    if(kind == wxRIBBON_BUTTON_TOGGLE)
+    {
+        kind = wxRIBBON_BUTTON_NORMAL;
+        if(state & wxRIBBON_BUTTONBAR_BUTTON_TOGGLED)
+            state ^= wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+    }
+
     if(state & (wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK
         | wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK))
     {

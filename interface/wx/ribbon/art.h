@@ -174,6 +174,12 @@ enum wxRibbonButtonKind
         menu, and one which causes a generic action.
     */
     wxRIBBON_BUTTON_HYBRID    = wxRIBBON_BUTTON_NORMAL | wxRIBBON_BUTTON_DROPDOWN,
+    
+    /**
+        Normal button or tool with a clickable area which toggles the button
+        between a pressed and unpressed state.
+    */
+    wxRIBBON_BUTTON_TOGGLE    = 1 << 2
 };
 
 /**
