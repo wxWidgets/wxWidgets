@@ -2638,7 +2638,7 @@ void wxIdRangeManager::RemoveXRCIDEntry(const char *str_id)
         }
         else
         {
-            (*p_previousrec) = rec;
+            p_previousrec = &rec;
         }
     }
 }
