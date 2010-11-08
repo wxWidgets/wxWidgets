@@ -2641,16 +2641,14 @@ void wxIdRangeManager::RemoveXRCIDEntry(const wxString& idstr)
         if (wxStrcmp(rec->key, str_id) == 0)
         {
             // Found the item to be removed so delete its record; but first
-            // replace it in the table with any rec->next (usually == NULL)
-            (*p_previousrec) = rec->next;
+            // remove it from the linked list.
+            *p_previousrec = rec->next;
             free(rec->key);
             delete rec;
             return;
         }
-        else
-        {
-            p_previousrec = &rec;
-        }
+
+        p_previousrec = &rec->next;
     }
 }
 
