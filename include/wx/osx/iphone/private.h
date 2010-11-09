@@ -14,8 +14,6 @@
 #ifndef _WX_PRIVATE_IPHONE_H_
 #define _WX_PRIVATE_IPHONE_H_
 
-#include "wx/osx/core/private.h"
-
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
 #endif

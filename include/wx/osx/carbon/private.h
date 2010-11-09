@@ -14,10 +14,6 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
-#include "wx/osx/core/private.h"
-
-#include <Carbon/Carbon.h>
-
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef UInt32 URefCon;
 typedef SInt32 SRefCon;
@@ -941,16 +937,6 @@ UPP Get##x()                                \
         sHandler = New##UPP( x );           \
     return sHandler;                        \
 }
-
-//---------------------------------------------------------------------------
-// wxMac string conversions
-//---------------------------------------------------------------------------
-
-// filefn.cpp
-
-WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
-WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
-WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
 //---------------------------------------------------------------------------
 // cocoa bridging utilities

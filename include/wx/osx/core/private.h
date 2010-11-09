@@ -32,12 +32,20 @@
     #define wxOSX_10_6_AND_LATER(x)
 #endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if !wxUSE_GUI || wxOSX_USE_COCOA_OR_CARBON
+
+// Carbon functions are currently still used in wxOSX/Cocoa too (including
+// wxBase part of it).
+#include <Carbon/Carbon.h>
 
 WXDLLIMPEXP_BASE long UMAGetSystemVersion() ;
 
 void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , unsigned char * to );
 wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from );
+
+WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
+WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
+WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
 #endif
 

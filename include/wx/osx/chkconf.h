@@ -41,7 +41,8 @@
  * to configure the build otherwise and give error messages
  */
 
-#if !wxUSE_GRAPHICS_CONTEXT || ( defined( wxMAC_USE_CORE_GRAPHICS ) && !wxMAC_USE_CORE_GRAPHICS )
+#if wxUSE_GUI && (!wxUSE_GRAPHICS_CONTEXT || \
+    ( defined( wxMAC_USE_CORE_GRAPHICS ) && !wxMAC_USE_CORE_GRAPHICS ))
 #   error "OS X builds use CoreGraphics in this wx version, you cannot turn back to QuickDraw completely"
 #endif
 
