@@ -946,11 +946,6 @@ UPP Get##x()                                \
 // wxMac string conversions
 //---------------------------------------------------------------------------
 
-void wxMacSetupConverters();
-void wxMacCleanupConverters();
-
-// utils.cpp
-
 // filefn.cpp
 
 WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
