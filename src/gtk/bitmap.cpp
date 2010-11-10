@@ -672,6 +672,8 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
     else
 #endif
     {
+        wxUnusedVar(type); // The type is detected automatically by GDK.
+
         UnRef();
         GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(name.fn_str(), NULL);
         if (pixbuf)

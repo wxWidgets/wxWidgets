@@ -1307,6 +1307,8 @@ bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
 
     return hasIO;
 #else // !HAS_PIPE_INPUT_STREAM
+    wxUnusedVar(execData);
+
     return false;
 #endif // HAS_PIPE_INPUT_STREAM/!HAS_PIPE_INPUT_STREAM
 }
