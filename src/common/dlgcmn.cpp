@@ -633,6 +633,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
         else
 #endif // wxUSE_BOOKCTRL
         {
+#if wxUSE_BUTTON
             // If we have an arbitrary dialog, create a scrolling area for the main content, and a button sizer
             // for the main buttons.
             wxScrolledWindow* scrolledWindow = CreateScrolledWindow(dialog);
@@ -679,6 +680,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
             scrolledWindow->SetSizer(oldSizer);
 
             FitWithScrolling(dialog, scrolledWindow);
+#endif // wxUSE_BUTTON
         }
     }
 
@@ -692,6 +694,8 @@ wxScrolledWindow* wxStandardDialogLayoutAdapter::CreateScrolledWindow(wxWindow* 
     wxScrolledWindow* scrolledWindow = new wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxVSCROLL|wxHSCROLL|wxBORDER_NONE);
     return scrolledWindow;
 }
+
+#if wxUSE_BUTTON
 
 /// Find and remove the button sizer, if any
 wxSizer* wxStandardDialogLayoutAdapter::FindButtonSizer(bool stdButtonSizer, wxDialog* dialog, wxSizer* sizer, int& retBorder, int accumlatedBorder)
@@ -789,6 +793,8 @@ bool wxStandardDialogLayoutAdapter::FindLooseButtons(wxDialog* dialog, wxStdDial
     }
     return true;
 }
+
+#endif // wxUSE_BUTTON
 
 /// Reparent the controls to the scrolled window
 void wxStandardDialogLayoutAdapter::ReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer)
