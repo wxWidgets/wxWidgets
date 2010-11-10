@@ -439,17 +439,13 @@
 #   endif
 #endif /* !defined(wxUSE_BUTTON) */
 
-/*
-    This one is special, it's only used under wxGTK currently so don't require
-    pre-defining it.
- */
 #ifndef wxUSE_CAIRO
-#   ifdef __WXGTK210__
-#        define wxUSE_CAIRO 1
-#    else
-#        define wxUSE_CAIRO 0
-#    endif
-#endif
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_BUTTON must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_CAIRO 0
+#   endif
+#endif /* !defined(wxUSE_CAIRO) */
 
 #ifndef wxUSE_CALENDARCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR

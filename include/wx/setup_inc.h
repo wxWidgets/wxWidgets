@@ -685,6 +685,19 @@
 #   define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
+// Enable wxGraphicsContext implementation using Cairo library.
+//
+// This is not needed under Windows and detected automatically by configure
+// under other systems, however you may set this to 1 manually if you installed
+// Cairo under Windows yourself and prefer to use it instead the native GDI+
+// implementation.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_CAIRO 0
+
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------

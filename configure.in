@@ -7498,11 +7498,21 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
         PKG_CHECK_MODULES(CAIRO, cairo,
             [wx_has_graphics=1],
             [AC_MSG_WARN([Cairo library not found])]
         )
+        if test "$wx_has_graphics" = 1; then
+            AC_DEFINE(wxUSE_CAIRO)
+
+            dnl We don't need to do this for wxGTK as we already get Cairo
+            dnl flags as part of GTK+ ones.
+            if test "$wxUSE_GTK" != 1; then
+                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+            fi
+        fi
     else
         dnl assume it's ok, add more checks here if needed
         wx_has_graphics=1
