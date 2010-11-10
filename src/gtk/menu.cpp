@@ -719,6 +719,11 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
+    // Destroying a menu generates a "hide" signal even if it's not shown
+    // currently, so disconnect it to avoid dummy wxEVT_MENU_CLOSE events
+    // generation.
+    g_signal_handlers_disconnect_by_func(m_menu, (gpointer)menu_hide, this);
+
     // see wxMenu::Init
     g_object_unref(m_menu);
 
