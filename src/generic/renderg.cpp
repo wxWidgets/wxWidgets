@@ -398,6 +398,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
         // truncate and add an ellipsis (...) if the text is too wide.
         const int availWidth = rect.width - labelWidth;
+#if wxUSE_CONTROLS
         if ( tw > availWidth )
         {
             label = wxControl::Ellipsize(label,
@@ -408,6 +409,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
             tw = dc.GetTextExtent(label).x;
         }
         else // enough space, we can respect alignment
+#endif // wxUSE_CONTROLS
         {
             switch (params->m_labelAlignment)
             {
