@@ -98,6 +98,7 @@ protected:
     void OnAppendMenuItem(wxCommandEvent& event);
     void OnAppendSubMenu(wxCommandEvent& event);
     void OnDeleteMenuItem(wxCommandEvent& event);
+    void OnDeleteSubMenu(wxCommandEvent& event);
     void OnInsertMenuItem(wxCommandEvent& event);
     void OnCheckMenuItem(wxCommandEvent& event);
     void OnEnableMenuItem(wxCommandEvent& event);
@@ -223,6 +224,7 @@ enum
     Menu_Menu_AppendSub,
     Menu_Menu_Insert,
     Menu_Menu_Delete,
+    Menu_Menu_DeleteSub,
     Menu_Menu_Enable,
     Menu_Menu_Check,
     Menu_Menu_GetLabel,
@@ -293,6 +295,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Menu_AppendSub, MyFrame::OnAppendSubMenu)
     EVT_MENU(Menu_Menu_Insert,    MyFrame::OnInsertMenuItem)
     EVT_MENU(Menu_Menu_Delete,    MyFrame::OnDeleteMenuItem)
+    EVT_MENU(Menu_Menu_DeleteSub, MyFrame::OnDeleteSubMenu)
     EVT_MENU(Menu_Menu_Enable,    MyFrame::OnEnableMenuItem)
     EVT_MENU(Menu_Menu_Check,     MyFrame::OnCheckMenuItem)
     EVT_MENU(Menu_Menu_GetLabel,  MyFrame::OnGetLabelMenuItem)
@@ -515,6 +518,8 @@ MyFrame::MyFrame()
                      wxT("Insert a menu item in head of the last menu"));
     menuMenu->Append(Menu_Menu_Delete, wxT("&Delete menu item\tAlt-D"),
                      wxT("Delete the last menu item from the last menu"));
+    menuMenu->Append(Menu_Menu_DeleteSub, wxT("Delete last &submenu\tAlt-K"),
+                     wxT("Delete the last submenu from the last menu"));
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_Enable, wxT("&Enable menu item\tAlt-E"),
                      wxT("Enable or disable the last menu item"), true);
@@ -575,9 +580,9 @@ MyFrame::MyFrame()
     wxLog::DisableTimestamp();
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_textctrl));
 
-    wxLogMessage(wxT("Brief explanations: the commands or the \"Menu\" menu ")
+    wxLogMessage(wxT("Brief explanations: the commands in the \"Menu\" menu ")
                  wxT("append/insert/delete items to/from the last menu.\n")
-                 wxT("The commands from \"Menubar\" menu work with the ")
+                 wxT("The commands in the \"Menubar\" menu work with the ")
                  wxT("menubar itself.\n\n")
                  wxT("Right click the band below to test popup menus.\n"));
 #endif
@@ -840,6 +845,24 @@ void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
     {
         menu->Destroy(menu->GetMenuItems().Item(count - 1)->GetData());
     }
+}
+
+void MyFrame::OnDeleteSubMenu(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuBar *menubar = GetMenuBar();
+    wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 2);
+
+    for ( int n = menu->GetMenuItemCount() - 1; n >=0 ; --n )
+    {
+        wxMenuItem* item = menu->FindItemByPosition(n);
+        if (item->IsSubMenu())
+        {
+            menu->Destroy(item);
+            return;
+        }
+    }
+
+    wxLogWarning(wxT("No submenu to delete!"));
 }
 
 void MyFrame::OnInsertMenuItem(wxCommandEvent& WXUNUSED(event))
