@@ -44,7 +44,7 @@ public:
 
     // our specific methods
     Mode GetMode() const { return m_mode; }
-    wxFrame *CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas);
+    wxFrame *CreateChildFrame(wxView *view, bool isCanvas);
 
     // these accessors should only be called in single document mode, otherwise
     // the pointers are NULL and an assert is triggered

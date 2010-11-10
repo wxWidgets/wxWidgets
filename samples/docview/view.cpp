@@ -41,36 +41,30 @@ END_EVENT_TABLE()
 
 // What to do when a view is created. Creates actual
 // windows for displaying the view.
-bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
+bool DrawingView::OnCreate(wxDocument *doc, long flags)
 {
+    if ( !wxView::OnCreate(doc, flags) )
+        return false;
+
     MyApp& app = wxGetApp();
     if ( app.GetMode() != MyApp::Mode_Single )
     {
         // create a new window and canvas inside it
-        m_frame = app.CreateChildFrame(doc, this, true);
-        m_frame->SetTitle("Drawing View");
-
-        m_canvas = new MyCanvas(this, m_frame);
-        m_frame->Show(true);
+        wxFrame* frame = app.CreateChildFrame(this, true);
+        wxASSERT(frame == GetFrame());
+        m_canvas = new MyCanvas(this);
     }
     else // single document mode
     {
         // reuse the existing window and canvas
-        m_frame = wxStaticCast(app.GetTopWindow(), wxFrame);
         m_canvas = app.GetMainWindowCanvas();
         m_canvas->SetView(this);
-
-        // Associate the appropriate frame with this view.
-        SetFrame(m_frame);
-
-        // Make sure the document manager knows that this is the
-        // current view.
-        Activate(true);
 
         // Initialize the edit menu Undo and Redo items
         doc->GetCommandProcessor()->SetEditMenu(app.GetMainWindowEditMenu());
         doc->GetCommandProcessor()->Initialize();
     }
+    GetFrame()->Show();
 
     return true;
 }
@@ -126,17 +120,17 @@ bool DrawingView::OnClose(bool deleteWindow)
         m_canvas->ResetView();
         m_canvas = NULL;
 
-        if ( m_frame )
-            m_frame->SetTitle(wxTheApp->GetAppDisplayName());
+        if (GetFrame())
+            wxStaticCast(GetFrame(), wxFrame)->SetTitle(wxTheApp->GetAppDisplayName());
     }
     else // not single window mode
     {
         if ( deleteWindow )
-            wxDELETE(m_frame);
+        {
+            GetFrame()->Destroy();
+            SetFrame(NULL);
+        }
     }
-
-    SetFrame(NULL);
-
     return true;
 }
 
@@ -159,17 +153,17 @@ BEGIN_EVENT_TABLE(TextEditView, wxView)
     EVT_MENU(wxID_SELECTALL, TextEditView::OnSelectAll)
 END_EVENT_TABLE()
 
-bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags))
+bool TextEditView::OnCreate(wxDocument *doc, long flags)
 {
-    m_frame = wxGetApp().CreateChildFrame(doc, this, false);
-    m_text = new wxTextCtrl(m_frame, wxID_ANY, "",
-                            wxPoint(0, 0), m_frame->GetClientSize(),
+    if ( !wxView::OnCreate(doc, flags) )
+        return false;
+
+    wxFrame* frame = wxGetApp().CreateChildFrame(this, false);
+    wxASSERT(frame == GetFrame());
+    m_text = new wxTextCtrl(frame, wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
                             wxTE_MULTILINE);
-
-    m_frame->SetTitle("Text View");
-    m_frame->Show(true);
-
-    Activate(true);
+    frame->Show();
 
     return true;
 }
@@ -193,9 +187,11 @@ bool TextEditView::OnClose(bool deleteWindow)
     else // not single window mode
     {
         if ( deleteWindow )
-            wxDELETE(m_frame);
+        {
+            GetFrame()->Destroy();
+            SetFrame(NULL);
+        }
     }
-
     return true;
 }
 
@@ -209,7 +205,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxView *view, wxWindow *parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxPoint(0, 0), parent->GetClientSize())
+    : wxScrolledWindow(parent ? parent : view->GetFrame())
 {
     m_view = view;
     m_currentSegment = NULL;
@@ -287,12 +283,11 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 // ----------------------------------------------------------------------------
 
 // Define a constructor for my canvas
-ImageCanvas::ImageCanvas(wxView* view, wxWindow* parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxPoint(0, 0), parent->GetClientSize())
+ImageCanvas::ImageCanvas(wxView* view)
+    : wxScrolledWindow(view->GetFrame())
 {
-    SetScrollRate( 10, 10 );
-
     m_view = view;
+    SetScrollRate( 10, 10 );
 }
 
 // Define the repainting behaviour
@@ -313,13 +308,16 @@ ImageDocument* ImageView::GetDocument()
     return wxStaticCast(wxView::GetDocument(), ImageDocument);
 }
 
-bool ImageView::OnCreate(wxDocument* doc, long WXUNUSED(flags))
+bool ImageView::OnCreate(wxDocument* doc, long flags)
 {
-    m_frame = wxGetApp().CreateChildFrame(doc, this, false);
-    m_frame->SetTitle("Image View");
-    m_canvas = new ImageCanvas(this, m_frame);
-    m_frame->Show(true);
-    Activate(true);
+    if ( !wxView::OnCreate(doc, flags) )
+        return false;
+
+    wxFrame* frame = wxGetApp().CreateChildFrame(this, false);
+    wxASSERT(frame == GetFrame());
+    m_canvas = new ImageCanvas(this);
+    frame->Show();
+
     return true;
 }
 
@@ -356,7 +354,10 @@ bool ImageView::OnClose(bool deleteWindow)
     else // not single window mode
     {
         if ( deleteWindow )
-            wxDELETE(m_frame);
+        {
+            GetFrame()->Destroy();
+            SetFrame(NULL);
+        }
     }
     return true;
 }
