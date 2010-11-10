@@ -6535,7 +6535,11 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                     delete richTextBuffer;
                 }
             }
-            else if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_UNICODETEXT))
+            else if (wxTheClipboard->IsSupported(wxDF_TEXT)
+#if wxUSE_UNICODE
+                        || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
+#endif // wxUSE_UNICODE
+                    )
             {
                 wxTextDataObject data;
                 wxTheClipboard->GetData(data);
@@ -6599,9 +6603,12 @@ bool wxRichTextBuffer::CanPasteFromClipboard() const
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
-        if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_UNICODETEXT) ||
-            wxTheClipboard->IsSupported(wxDataFormat(wxRichTextBufferDataObject::GetRichTextBufferFormatId())) ||
-            wxTheClipboard->IsSupported(wxDF_BITMAP))
+        if (wxTheClipboard->IsSupported(wxDF_TEXT)
+#if wxUSE_UNICODE
+                || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
+#endif // wxUSE_UNICODE
+                || wxTheClipboard->IsSupported(wxDataFormat(wxRichTextBufferDataObject::GetRichTextBufferFormatId()))
+                || wxTheClipboard->IsSupported(wxDF_BITMAP))
         {
             canPaste = true;
         }
