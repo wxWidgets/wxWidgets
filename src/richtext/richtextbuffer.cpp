@@ -3607,7 +3607,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     wxArrayInt partialExtents;
 
     wxSize paraSize;
-    int paraDescent;
+    int paraDescent = 0;
 
     // This calculates the partial text extents
     GetRangeSize(GetRange(), paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0), & partialExtents);
