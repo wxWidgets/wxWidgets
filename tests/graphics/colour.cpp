@@ -63,12 +63,18 @@ void ColourTestCase::GetSetRGB()
     CPPUNIT_ASSERT_EQUAL( 0xdd, (int)c.Red() );
     CPPUNIT_ASSERT_EQUAL( 0xcc, (int)c.Green() );
     CPPUNIT_ASSERT_EQUAL( 0xbb, (int)c.Blue() );
+
+    // wxX11 doesn't support alpha at all currently.
+#ifndef __WXX11__
     CPPUNIT_ASSERT_EQUAL( 0xaa, (int)c.Alpha() );
+#endif // __WXX11__
 
     // FIXME: at least under wxGTK wxColour ctor doesn't take alpha channel
     //        into account: bug or feature?
     //CPPUNIT_ASSERT_EQUAL( wxColour(0xaabbccdd), c );
     CPPUNIT_ASSERT_EQUAL( 0xbbccdd, c.GetRGB() );
+#ifndef __WXX11__
     CPPUNIT_ASSERT_EQUAL( 0xaabbccdd, c.GetRGBA() );
+#endif // __WXX11__
 }
 
