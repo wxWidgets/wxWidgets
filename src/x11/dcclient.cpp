@@ -1658,7 +1658,9 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
                                 wxCoord *descent, wxCoord *externalLeading,
                                 const wxFont *font ) const
 {
-    wxCHECK_RET( IsOk(), wxT("invalid dc") );
+    // Do not test for DC validity here, querying text extents is supposed to
+    // work even with a non-initialized wxMemoryDC. And the code below does
+    // actually work in this case.
 
     if (string.empty())
     {
@@ -1721,7 +1723,8 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
 
 wxCoord wxWindowDCImpl::GetCharWidth() const
 {
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid dc") );
+    // Do not test for DC validity here for the same reasons as in
+    // DoGetTextExtent() above.
 
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
@@ -1755,7 +1758,8 @@ wxCoord wxWindowDCImpl::GetCharWidth() const
 
 wxCoord wxWindowDCImpl::GetCharHeight() const
 {
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid dc") );
+    // Do not test for DC validity here for the same reasons as in
+    // DoGetTextExtent() above.
 
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
