@@ -1102,7 +1102,7 @@ public:
             This sequence of operations ensures that the source's transparent
             area need not be black, and logical functions are supported.
             @n @b Note: on Windows, blitting with masks can be speeded up
-            considerably by compiling wxWidgets with the wxUSE_DC_CACHE option
+            considerably by compiling wxWidgets with the wxUSE_DC_CACHEING option
             enabled. You can also influence whether MaskBlt or the explicit
             mask blitting code above is used, by using wxSystemOptions and
             setting the @c no-maskblt option to 1.
@@ -1173,7 +1173,7 @@ public:
             This sequence of operations ensures that the source's transparent
             area need not be black, and logical functions are supported.
             @n @b Note: on Windows, blitting with masks can be speeded up
-            considerably by compiling wxWidgets with the wxUSE_DC_CACHE option
+            considerably by compiling wxWidgets with the wxUSE_DC_CACHEING option
             enabled. You can also influence whether MaskBlt or the explicit
             mask blitting code above is used, by using wxSystemOptions and
             setting the @c no-maskblt option to 1.
