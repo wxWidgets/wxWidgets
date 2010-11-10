@@ -508,6 +508,9 @@ public:
 
     /**
         Returns disabled (dimmed) version of the bitmap.
+
+        This method is not available when <code>wxUSE_IMAGE == 0</code>.
+
         @since 2.9.0
     */
     wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;

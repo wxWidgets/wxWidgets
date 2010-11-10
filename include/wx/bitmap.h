@@ -19,11 +19,11 @@
 #include "wx/string.h"
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
+#include "wx/image.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 
@@ -168,15 +168,15 @@ public:
 
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
+
+    // Convert to disabled (dimmed) bitmap.
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 #endif // wxUSE_IMAGE
 
     virtual wxMask *GetMask() const = 0;
     virtual void SetMask(wxMask *mask) = 0;
 
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const = 0;
-
-    // Convert to disabled (dimmed) bitmap.
-    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
                           const wxPalette *palette = NULL) const = 0;
@@ -271,6 +271,20 @@ protected:
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/os2/bitmap.h"
 #endif
+
+#if wxUSE_IMAGE
+inline
+wxBitmap
+#if wxUSE_BITMAP_BASE
+wxBitmapBase::
+#else
+wxBitmap::
+#endif
+ConvertToDisabled(unsigned char brightness) const
+{
+    return ConvertToImage().ConvertToDisabled(brightness);
+}
+#endif // wxUSE_IMAGE
 
 // we must include generic mask.h after wxBitmap definition
 #if defined(__WXMGL__) || defined(__WXDFB__)

@@ -25,7 +25,6 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 class WXDLLIMPEXP_FWD_CORE wxControl;
-class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // ----------------------------------------------------------------------------
@@ -149,6 +148,7 @@ public:
     virtual ~wxBitmap();
 
     wxImage ConvertToImage() const;
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap(const wxRect& rRect) const;
