@@ -327,6 +327,7 @@ void URITestCase::Unescaping()
     CPPUNIT_ASSERT_EQUAL( unescaped, wxURI::Unescape(escaped) );
 
 
+#if wxUSE_UNICODE
     escaped = "http://ru.wikipedia.org/wiki/"
               "%D0%A6%D0%B5%D0%BB%D0%BE%D0%B5_%D1%87%D0%B8%D1%81%D0%BB%D0%BE";
 
@@ -338,6 +339,7 @@ void URITestCase::Unescaping()
                             "\xD1\x87\xD0\xB8\xD1\x81\xD0\xBB\xD0\xBE"
                           ),
                           unescaped );
+#endif // wxUSE_UNICODE
 }
 
 void URITestCase::FileScheme()
