@@ -34,6 +34,10 @@
 bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, int height, wxImage& image);
 #endif
 
+static WXPixmap wxGetSubPixmap( WXDisplay* xdisplay, WXPixmap xpixmap,
+                                int x, int y, int width, int height,
+                                int depth );
+
 #if wxUSE_XPM
 #if wxHAVE_LIB_XPM
 #include <X11/xpm.h>
@@ -53,6 +57,24 @@ wxMask::wxMask()
 {
     m_bitmap = NULL;
     m_display = NULL;
+}
+
+wxMask::wxMask(const wxMask& mask)
+{
+    m_display = mask.m_display;
+    if ( !mask.m_bitmap )
+    {
+        m_bitmap = NULL;
+        return;
+    }
+
+    m_size = mask.m_size;
+
+    // Duplicate the mask bitmap using the existing wxGetSubPixmap() function.
+    // There are probably/surely better ways to do it.
+    m_bitmap = wxGetSubPixmap(m_display, mask.m_bitmap,
+                              0, 0, m_size.x, m_size.y,
+                              1);
 }
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
@@ -82,6 +104,8 @@ wxMask::~wxMask()
 bool wxMask::Create( const wxBitmap& bitmap,
                      const wxColour& colour )
 {
+    m_size = bitmap.GetSize();
+
 #if !wxUSE_NANOX
     if (m_bitmap)
     {
