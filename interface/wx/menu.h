@@ -386,8 +386,9 @@ public:
 
     A menu item has an integer ID associated with it which can be used to
     identify the selection, or to change the menu item in some way. A menu item
-    with a special identifier -1 is a separator item and doesn't have an
-    associated command but just makes a separator line appear in the menu.
+    with a special identifier @e wxID_SEPARATOR is a separator item and doesn't
+    have an associated command but just makes a separator line appear in the
+    menu.
 
     @note
     Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
@@ -646,7 +647,7 @@ public:
         @param id
             Id of the menu item to be deleted.
 
-        @see FindItem(), Deletes(), Remove()
+        @see FindItem(), Delete(), Remove()
     */
     bool Destroy(int id);
 
@@ -658,7 +659,7 @@ public:
         @param item
             Menu item to be deleted.
 
-        @see FindItem(), Deletes(), Remove()
+        @see FindItem(), Delete(), Remove()
     */
     bool Destroy(wxMenuItem* item);
 
