@@ -441,7 +441,7 @@
 
 #ifndef wxUSE_CAIRO
 #   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_BUTTON must be defined, please read comment near the top of this file."
+#       error "wxUSE_CAIRO must be defined, please read comment near the top of this file."
 #   else
 #       define wxUSE_CAIRO 0
 #   endif
