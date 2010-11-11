@@ -869,10 +869,14 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
         return GetCharForCode(code);
 }
 
-wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type),
+wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType type,
                                 const wxString& url) const
 {
-    return m_FS ? m_FS->OpenFile(url) : NULL;
+    int flags = wxFS_READ;
+    if (type == wxHTML_URL_IMAGE)
+        flags |= wxFS_SEEKABLE;
+
+    return m_FS ? m_FS->OpenFile(url, flags) : NULL;
 
 }
 
