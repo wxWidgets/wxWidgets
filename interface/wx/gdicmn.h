@@ -623,7 +623,7 @@ public:
 
         @since 2.9.2
     */
-    void SetDefaults(const wxSize& sizeDefault);
+    void SetDefaults(const wxPoint& pt);
     //@}
 
     /**
@@ -640,7 +640,7 @@ public:
 /**
     Global instance of a wxPoint initialized with values (-1,-1).
 */
-wxPoint wxDefaultPosition;
+const wxPoint wxDefaultPosition;
 
 
 /**
@@ -948,7 +948,7 @@ public:
 /**
     Global instance of a wxSize object initialized to (-1,-1).
 */
-wxSize wxDefaultSize;
+const wxSize wxDefaultSize;
 
 
 
