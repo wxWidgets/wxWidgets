@@ -99,6 +99,12 @@ typedef pid_t GPid;
 #endif
 #endif
 
+#ifdef VMS_GTK2
+#define wxUSE_CAIRO 1
+#else
+#define wxUSE_CAIRO 0
+#endif
+
 /*
  * Define to 1 for Unix[-like] system
  */
