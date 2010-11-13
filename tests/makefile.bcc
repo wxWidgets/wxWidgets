@@ -177,6 +177,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_toolbooktest.obj \
 	$(OBJS)\test_gui_treebooktest.obj \
 	$(OBJS)\test_gui_treectrltest.obj \
+	$(OBJS)\test_gui_virtlistctrltest.obj \
 	$(OBJS)\test_gui_windowtest.obj \
 	$(OBJS)\test_gui_clone.obj \
 	$(OBJS)\test_gui_propagation.obj \
@@ -842,6 +843,9 @@ $(OBJS)\test_gui_treebooktest.obj: .\controls\treebooktest.cpp
 
 $(OBJS)\test_gui_treectrltest.obj: .\controls\treectrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\treectrltest.cpp
+
+$(OBJS)\test_gui_virtlistctrltest.obj: .\controls\virtlistctrltest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\virtlistctrltest.cpp
 
 $(OBJS)\test_gui_windowtest.obj: .\controls\windowtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\windowtest.cpp

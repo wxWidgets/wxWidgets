@@ -501,6 +501,10 @@ SOURCE=.\controls\treectrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\virtlistctrltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\windowtest.cpp
 # End Source File
 # Begin Source File

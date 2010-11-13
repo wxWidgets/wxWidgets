@@ -412,6 +412,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_toolbooktest.obj &
 	$(OBJS)\test_gui_treebooktest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
+	$(OBJS)\test_gui_virtlistctrltest.obj &
 	$(OBJS)\test_gui_windowtest.obj &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
@@ -880,6 +881,9 @@ $(OBJS)\test_gui_treebooktest.obj :  .AUTODEPEND .\controls\treebooktest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_virtlistctrltest.obj :  .AUTODEPEND .\controls\virtlistctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_windowtest.obj :  .AUTODEPEND .\controls\windowtest.cpp

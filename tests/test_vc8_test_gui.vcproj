@@ -1152,6 +1152,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\virtlistctrltest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\windowtest.cpp"
 				>
 			</File>
