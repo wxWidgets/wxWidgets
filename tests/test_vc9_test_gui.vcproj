@@ -1012,6 +1012,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\menu\menu.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\notebooktest.cpp"
 				>
 			</File>

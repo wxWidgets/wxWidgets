@@ -178,6 +178,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_image.o \
 	$(OBJS)\test_gui_rawbmp.o \
 	$(OBJS)\test_gui_htmlwindow.o \
+	$(OBJS)\test_gui_menu.o \
 	$(OBJS)\test_gui_guifuncs.o \
 	$(OBJS)\test_gui_selstoretest.o \
 	$(OBJS)\test_gui_garbage.o \
@@ -845,6 +846,9 @@ $(OBJS)\test_gui_rawbmp.o: ./image/rawbmp.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_htmlwindow.o: ./html/htmlwindow.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_menu.o: ./menu/menu.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_guifuncs.o: ./misc/guifuncs.cpp

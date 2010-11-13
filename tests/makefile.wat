@@ -420,6 +420,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_image.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
+	$(OBJS)\test_gui_menu.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
 	$(OBJS)\test_gui_garbage.obj &
@@ -905,6 +906,9 @@ $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp
 $(OBJS)\test_gui_htmlwindow.obj :  .AUTODEPEND .\html\htmlwindow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_menu.obj :  .AUTODEPEND .\menu\menu.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_guifuncs.obj :  .AUTODEPEND .\misc\guifuncs.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
@@ -931,3 +935,4 @@ $(OBJS)\test_gui_setsize.obj :  .AUTODEPEND .\window\setsize.cpp
 
 $(OBJS)\test_gui_xrctest.obj :  .AUTODEPEND .\xml\xrctest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+

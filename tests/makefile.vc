@@ -180,6 +180,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_image.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
+	$(OBJS)\test_gui_menu.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
 	$(OBJS)\test_gui_garbage.obj \
@@ -992,6 +993,9 @@ $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 $(OBJS)\test_gui_htmlwindow.obj: .\html\htmlwindow.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\html\htmlwindow.cpp
 
+$(OBJS)\test_gui_menu.obj: .\menu\menu.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\menu\menu.cpp
+
 $(OBJS)\test_gui_guifuncs.obj: .\misc\guifuncs.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\guifuncs.cpp
 
@@ -1018,3 +1022,4 @@ $(OBJS)\test_gui_setsize.obj: .\window\setsize.cpp
 
 $(OBJS)\test_gui_xrctest.obj: .\xml\xrctest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\xml\xrctest.cpp
+

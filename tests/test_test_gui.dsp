@@ -385,6 +385,10 @@ SOURCE=.\graphics\measuring.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\menu\menu.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\notebooktest.cpp
 # End Source File
 # Begin Source File
