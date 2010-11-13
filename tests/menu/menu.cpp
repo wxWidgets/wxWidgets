@@ -33,9 +33,9 @@ namespace
 
 enum
 {
-    MenuTestCase_Quit = wxID_EXIT,
-    MenuTestCase_About = wxID_ABOUT,
-    MenuTestCase_First = 10000
+    MenuTestCase_Foo = 10000,
+    MenuTestCase_Bar,
+    MenuTestCase_First
 };
 
 void PopulateMenu(wxMenu* menu, const wxString& name,  size_t& itemcount)
@@ -137,16 +137,15 @@ void MenuTestCase::CreateFrame()
     subMenu->AppendSubMenu(subsubMenu, "Subsubmen&u", "Test a subsubmenu");
 
     PopulateMenu(fileMenu, "Filemenu item ", itemcount);
-    // Add a 'real' item too, for future tests
-    fileMenu->Append(MenuTestCase_Quit, "E&xit\tAlt-X", "Quit this program");
+
+    fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
 
 
     PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
-    helpMenu->Append(MenuTestCase_About, "&About...\tF1",
-                     "(Would normally) Show about dialog");
+    helpMenu->Append(MenuTestCase_Bar, "Bar");
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
 
-    // +2 for E&xit and &About, +2 for the 2 submenus
+    // +2 for "Foo" and "Bar", +2 for the 2 submenus
     m_itemCount = itemcount + 4;
 
     // Use an arraystring here, to help with future tests
@@ -169,13 +168,13 @@ void MenuTestCase::FindInMenubar()
     CPPUNIT_ASSERT( bar->FindMenu("&Fail") == wxNOT_FOUND );
 
     // Find by menu name plus item name:
-    CPPUNIT_ASSERT( bar->FindMenuItem("File", "Exit") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( bar->FindMenuItem("&File", "E&xit") != wxNOT_FOUND );
+    CPPUNIT_ASSERT( bar->FindMenuItem("File", "Foo") != wxNOT_FOUND );
+    CPPUNIT_ASSERT( bar->FindMenuItem("&File", "&Foo") != wxNOT_FOUND );
     // and using the menu title
     int index = bar->FindMenu("&File");
     CPPUNIT_ASSERT( index != wxNOT_FOUND );
     wxString menutitle = bar->GetMenuLabel(index);
-    CPPUNIT_ASSERT( bar->FindMenuItem(menutitle, "E&xit") != wxNOT_FOUND );
+    CPPUNIT_ASSERT( bar->FindMenuItem(menutitle, "&Foo") != wxNOT_FOUND );
 
     // Find by position:
     for (size_t n=0; n < bar->GetMenuCount(); ++n)
@@ -186,11 +185,11 @@ void MenuTestCase::FindInMenubar()
     // Find by id:
     wxMenu* menu = NULL;
     wxMenuItem* item = NULL;
-    item = bar->FindItem(MenuTestCase_Quit, &menu);
+    item = bar->FindItem(MenuTestCase_Foo, &menu);
     CPPUNIT_ASSERT( item );
     CPPUNIT_ASSERT( menu );
     // Check that the correct menu was found
-    CPPUNIT_ASSERT( menu->FindChildItem(MenuTestCase_Quit) );
+    CPPUNIT_ASSERT( menu->FindChildItem(MenuTestCase_Foo) );
 
     // Find submenu item:
     item = bar->FindItem(m_submenuItemId, &menu);
@@ -208,8 +207,8 @@ void MenuTestCase::FindInMenu()
 
     // Find by name:
     wxMenu* menuFind = bar->GetMenu(0);
-    CPPUNIT_ASSERT( menuFind->FindItem("Exit") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( menuFind->FindItem("E&xit") != wxNOT_FOUND );
+    CPPUNIT_ASSERT( menuFind->FindItem("Foo") != wxNOT_FOUND );
+    CPPUNIT_ASSERT( menuFind->FindItem("&Foo") != wxNOT_FOUND );
     // and for submenus
     wxMenu* menuHelp = bar->GetMenu(1);
     CPPUNIT_ASSERT( menuHelp->FindItem("Submenu") != wxNOT_FOUND );
@@ -222,8 +221,8 @@ void MenuTestCase::FindInMenu()
     }
 
     // Find by id:
-    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_About) );
-    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Quit) == NULL );
+    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Bar) );
+    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Foo) == NULL );
 
     for (size_t n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
