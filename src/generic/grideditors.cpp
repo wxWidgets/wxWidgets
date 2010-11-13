@@ -1506,7 +1506,6 @@ void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 
     Combo()->SetSelection(m_index);
-    Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
 
 }
