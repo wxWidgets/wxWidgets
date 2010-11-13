@@ -428,6 +428,7 @@ All (GUI):
 - Added wxToolbook XRC handler (Andrea Zanellato).
 - Added wxDocManager::FindTemplate() (troelsk).
 - Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
+- Fixed resizing columns in wxGrid when they were reordered.
 
 MSW:
 

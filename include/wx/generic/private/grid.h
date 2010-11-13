@@ -544,8 +544,10 @@ public:
     //
     // NB: currently this is always identity for the rows as reordering is only
     //     implemented for the lines
-    virtual int GetLineAt(const wxGrid *grid, int line) const = 0;
+    virtual int GetLineAt(const wxGrid *grid, int pos) const = 0;
 
+    // Return the index of the line just before the given one.
+    virtual int GetLineBefore(const wxGrid* grid, int line) const = 0;
 
     // Get the row or column label window
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const = 0;
@@ -614,6 +616,9 @@ public:
     virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int line) const
         { return line; } // TODO: implement row reordering
 
+    virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const
+        { return line ? line - 1 : line; }
+
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridRowLabelWindow(); }
     virtual int GetHeaderWindowSize(wxGrid *grid) const
@@ -674,6 +679,9 @@ public:
 
     virtual int GetLineAt(const wxGrid *grid, int line) const
         { return grid->GetColAt(line); }
+
+    virtual int GetLineBefore(const wxGrid* grid, int line) const
+        { return grid->GetColAt(wxMax(0, grid->GetColPos(line) - 1)); }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridColLabelWindow(); }

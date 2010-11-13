@@ -6281,7 +6281,9 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
         else if ( line > 0 &&
                     pos - oper.GetLineStartPos(this,
                                                line) < WXGRID_LABEL_EDGE_ZONE )
-            return line - 1;
+        {
+            return oper.GetLineBefore(this, line);
+        }
     }
 
     return -1;
