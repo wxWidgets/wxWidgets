@@ -30,7 +30,9 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
+    m_win->m_scrollPos[wxWindow::ScrollDir_Horz] =
     m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value = xPos;
+    m_win->m_scrollPos[wxWindow::ScrollDir_Vert] =
     m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value = yPos;
     base_type::SetScrollbars(
         pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, noRefresh);
