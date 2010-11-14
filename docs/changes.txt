@@ -410,6 +410,10 @@ All:
 - Added wxThread::OnKill() and OnDelete() callbacks.
 - Added wxFile::GetLastError() and ClearLastError() (ryazanov).
 
+Unix:
+
+- Fix spurious errors when writing to child process pipe (ryazanov).
+
 All (GUI):
 
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).

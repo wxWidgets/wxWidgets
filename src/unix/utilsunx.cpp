@@ -337,6 +337,45 @@ bool wxPipeInputStream::CanRead() const
     }
 }
 
+size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t size)
+{
+    // We need to suppress error logging here, because on writing to a pipe
+    // which is full, wxFile::Write reports a system error. However, this is
+    // not an extraordinary situation, and it should not be reported to the
+    // user (but if really needed, the program can recognize it by checking
+    // whether LastRead() == 0.) Other errors will be reported below.
+    size_t ret;
+    {
+        wxLogNull logNo;
+        ret = m_file->Write(buffer, size);
+    }
+
+    switch ( m_file->GetLastError() )
+    {
+       // pipe is full
+#ifdef EAGAIN
+       case EAGAIN:
+#endif
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+       case EWOULDBLOCK:
+#endif
+           // do not treat it as an error
+           m_file->ClearLastError();
+           // fall through
+
+       // no error
+       case 0:
+           break;
+
+       // some real error
+       default:
+           wxLogSysError(_("Can't write to child process's stdin"));
+           m_lasterror = wxSTREAM_WRITE_ERROR;
+    }
+
+    return ret;
+}
+
 #endif // HAS_PIPE_STREAMS
 
 // ----------------------------------------------------------------------------
@@ -662,10 +701,11 @@ long wxExecute(char **argv, int flags, wxProcess *process,
                 // it might not be the best idea.
                 wxLogSysError(_("Failed to set up non-blocking pipe, "
                                 "the program might hang."));
+                wxLog::FlushActive();
             }
 
             wxOutputStream *inStream =
-                new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
+                new wxPipeOutputStream(pipeIn.Detach(wxPipe::Write));
 
             const int fdOut = pipeOut.Detach(wxPipe::Read);
             wxPipeInputStream *outStream = new wxPipeInputStream(fdOut);
