@@ -598,12 +598,6 @@ long wxExecute(char **argv, int flags, wxProcess *process,
         }
 #endif // !__VMS
 
-        // reading side can be safely closed but we should keep the write one
-        // opened, it will be only closed when the process terminates resulting
-        // in a read notification to the parent
-        execData.pipeEndProcDetect.Detach(wxPipe::Write);
-        execData.pipeEndProcDetect.Close();
-
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
         {
@@ -618,6 +612,39 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             pipeOut.Close();
             pipeErr.Close();
         }
+
+        // Close all (presumably accidentally) inherited file descriptors to
+        // avoid descriptor leaks. This means that we don't allow inheriting
+        // them purposefully but this seems like a lesser evil in wx code.
+        // Ideally we'd provide some flag to indicate that none (or some?) of
+        // the descriptors do not need to be closed but for now this is better
+        // than never closing them at all as wx code never used FD_CLOEXEC.
+
+        // Note that while the reading side of the end process detection pipe
+        // can be safely closed, we should keep the write one opened, it will
+        // be only closed when the process terminates resulting in a read
+        // notification to the parent
+        const int fdEndProc = execData.pipeEndProcDetect.Detach(wxPipe::Write);
+        execData.pipeEndProcDetect.Close();
+
+        // TODO: Iterating up to FD_SETSIZE is both inefficient (because it may
+        //       be quite big) and incorrect (because in principle we could
+        //       have more opened descriptions than this number). Unfortunately
+        //       there is no good portable solution for closing all descriptors
+        //       above a certain threshold but non-portable solutions exist for
+        //       most platforms, see [http://stackoverflow.com/questions/899038/
+        //          getting-the-highest-allocated-file-descriptor]
+        for ( int fd = 0; fd < (int)FD_SETSIZE; ++fd )
+        {
+            if ( fd != STDIN_FILENO  &&
+                 fd != STDOUT_FILENO &&
+                 fd != STDERR_FILENO &&
+                 fd != fdEndProc )
+            {
+                close(fd);
+            }
+        }
+
 
         // Process additional options if we have any
         if ( env )
