@@ -59,15 +59,15 @@
 #   include <sys/select.h>
 #endif
 
-#define HAS_PIPE_INPUT_STREAM (wxUSE_STREAMS && wxUSE_FILE)
+#define HAS_PIPE_STREAMS (wxUSE_STREAMS && wxUSE_FILE)
 
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_STREAMS
 
 // define this to let wxexec.cpp know that we know what we're doing
 #define _WX_USED_BY_WXEXECUTE_
 #include "../common/execcmn.cpp"
 
-#endif // HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS
 
 #if defined(__MWERKS__) && defined(__MACH__)
     #ifndef WXWIN_OS_DESCRIPTION
@@ -297,7 +297,7 @@ bool wxShutdown(int flags)
 // wxStream classes to support IO redirection in wxExecute
 // ----------------------------------------------------------------------------
 
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_STREAMS
 
 bool wxPipeInputStream::CanRead() const
 {
@@ -337,7 +337,7 @@ bool wxPipeInputStream::CanRead() const
     }
 }
 
-#endif // HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS
 
 // ----------------------------------------------------------------------------
 // wxShell
@@ -643,7 +643,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
 
         // prepare for IO redirection
 
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_STREAMS
         // the input buffer bufOut is connected to stdout, this is why it is
         // called bufOut and not bufIn
         wxStreamTempInputBuffer bufOut,
@@ -684,7 +684,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             execData.fdOut = fdOut;
             execData.fdErr = fdErr;
         }
-#endif // HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS
 
         if ( pipeIn.IsOk() )
         {
@@ -1296,7 +1296,7 @@ int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
 
 bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
 {
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_STREAMS
     bool hasIO = false;
 
     if ( execData.bufOut && execData.bufOut->Update() )
@@ -1306,11 +1306,11 @@ bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
         hasIO = true;
 
     return hasIO;
-#else // !HAS_PIPE_INPUT_STREAM
+#else // !HAS_PIPE_STREAMS
     wxUnusedVar(execData);
 
     return false;
-#endif // HAS_PIPE_INPUT_STREAM/!HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS/!HAS_PIPE_STREAMS
 }
 
 // helper classes/functions used by WaitForChild()
@@ -1360,7 +1360,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxEndHandler);
 };
 
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_STREAMS
 
 // class for monitoring our ends of child stdout/err, should be constructed
 // with the FD and stream from wxExecuteData and will do nothing if they're
@@ -1389,7 +1389,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxRedirectedIOHandler);
 };
 
-#endif // HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS
 
 // helper function which calls waitpid() and analyzes the result
 int DoWaitForChild(int pid, int flags = 0)
@@ -1470,7 +1470,7 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
     }
     //else: synchronous execution case
 
-#if HAS_PIPE_INPUT_STREAM && wxUSE_SOCKETS
+#if HAS_PIPE_STREAMS && wxUSE_SOCKETS
     wxProcess * const process = execData.process;
     if ( process && process->IsRedirected() )
     {
@@ -1494,7 +1494,7 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
         }
     }
     //else: no IO redirection, just block waiting for the child to exit
-#endif // HAS_PIPE_INPUT_STREAM
+#endif // HAS_PIPE_STREAMS
 
     return DoWaitForChild(execData.pid);
 }
