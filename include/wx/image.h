@@ -347,6 +347,7 @@ public:
                    bool interpolating = true, wxPoint * offset_after_rotation = NULL) const;
 
     wxImage Rotate90( bool clockwise = true ) const;
+    wxImage Rotate180() const;
     wxImage Mirror( bool horizontally = true ) const;
 
     // replace one colour with another

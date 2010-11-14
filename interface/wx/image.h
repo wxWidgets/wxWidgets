@@ -729,6 +729,13 @@ public:
     wxImage Rotate90(bool clockwise = true) const;
 
     /**
+        Returns a copy of the image rotated by 180 degrees.
+
+        @since 2.9.2
+    */
+    wxImage Rotate180() const;
+
+    /**
         Rotates the hue of each pixel in the image by @e angle, which is a double in
         the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0
         corresponds to +360 degrees.

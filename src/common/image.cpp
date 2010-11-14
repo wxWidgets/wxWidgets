@@ -1128,6 +1128,62 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     return image;
 }
 
+wxImage wxImage::Rotate180() const
+{
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxS("invalid image") );
+
+    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
+
+    unsigned char *data = image.GetData();
+    unsigned char *alpha = NULL;
+
+    wxCHECK_MSG( data, image, wxS("unable to create image") );
+
+    if ( M_IMGDATA->m_alpha != NULL )
+    {
+        image.SetAlpha();
+        alpha = image.GetAlpha();
+        wxCHECK_MSG( alpha, image, wxS("unable to create alpha channel") );
+    }
+
+    if ( M_IMGDATA->m_hasMask )
+        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+
+    long height = M_IMGDATA->m_height;
+    long width  = M_IMGDATA->m_width;
+
+    const unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data = data + width * height * 3;
+
+    for (long j = 0; j < height; j++)
+    {
+        for (long i = 0; i < width; i++)
+        {
+            target_data -= 3;
+            memcpy( target_data, source_data, 3 );
+            source_data += 3;
+        }
+    }
+
+    if ( alpha )
+    {
+        const unsigned char *src_alpha = M_IMGDATA->m_alpha;
+        unsigned char *dest_alpha = alpha + width * height;
+
+        for (long j = 0; j < height; ++j)
+        {
+            for (long i = 0; i < width; ++i)
+            {
+                *(--dest_alpha) = *(src_alpha++);
+            }
+        }
+    }
+
+    return image;
+}
+
 wxImage wxImage::Mirror( bool horizontally ) const
 {
     wxImage image;
