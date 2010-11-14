@@ -1154,6 +1154,18 @@ wxImage wxImage::Rotate180() const
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
 
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
+    {
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
+                        width - 1 - GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X));
+    }
+
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) )
+    {
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,
+                        height - 1 - GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y));
+    }
+
     const unsigned char *source_data = M_IMGDATA->m_data;
     unsigned char *target_data = data + width * height * 3;
 
