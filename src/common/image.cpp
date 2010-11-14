@@ -1068,25 +1068,35 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     unsigned char *source_data = M_IMGDATA->m_data;
     unsigned char *target_data;
     unsigned char *alpha_data = 0 ;
-    unsigned char *source_alpha = 0 ;
+    unsigned char *source_alpha = M_IMGDATA->m_alpha;
     unsigned char *target_alpha = 0 ;
 
-    if (M_IMGDATA->m_hasMask)
+    if ( source_alpha )
     {
+        image.SetAlpha();
+        alpha_data = image.GetAlpha();
+        wxCHECK_MSG( alpha_data, image, wxS("unable to create alpha channel") );
+    }
+
+    if ( M_IMGDATA->m_hasMask )
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
-    }
-    else
-    {
-        source_alpha = M_IMGDATA->m_alpha ;
-        if ( source_alpha )
-        {
-            image.SetAlpha() ;
-            alpha_data = image.GetAlpha() ;
-        }
-    }
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
+
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
+    {
+        int hot_x = GetOptionInt( wxIMAGE_OPTION_CUR_HOTSPOT_X );
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,
+                        clockwise ? hot_x : width - 1 - hot_x);
+    }
+
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) )
+    {
+        int hot_y = GetOptionInt( wxIMAGE_OPTION_CUR_HOTSPOT_Y );
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
+                        clockwise ? height - 1 - hot_y : hot_y);
+    }
 
     for (long j = 0; j < height; j++)
     {
