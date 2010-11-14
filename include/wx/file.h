@@ -49,11 +49,11 @@ public:
   // ctors
   // -----
     // def ctor
-  wxFile() { m_fd = fd_invalid; m_error = false; }
+  wxFile() { m_fd = fd_invalid; m_lasterror = 0; }
     // open specified file (may fail, use IsOpened())
   wxFile(const wxString& fileName, OpenMode mode = read);
     // attach to (already opened) file
-  wxFile(int lfd) { m_fd = lfd; m_error = false; }
+  wxFile(int lfd) { m_fd = lfd; m_lasterror = 0; }
 
   // open/close
     // create a new file (with the default value of bOverwrite, it will fail if
@@ -65,7 +65,7 @@ public:
   bool Close();  // Close is a NOP if not opened
 
   // assign an existing file descriptor and get it back from wxFile object
-  void Attach(int lfd) { Close(); m_fd = lfd; m_error = false; }
+  void Attach(int lfd) { Close(); m_fd = lfd; m_lasterror = 0; }
   void Detach()       { m_fd = fd_invalid;  }
   int  fd() const { return m_fd; }
 
@@ -95,9 +95,14 @@ public:
     // is end of file reached?
   bool Eof() const;
     // has an error occurred?
-  bool Error() const { return m_error; }
+  bool Error() const { return m_lasterror != 0; }
+    // get last errno
+  int GetLastError() const { return m_lasterror; }
+    // reset error state
+  void ClearLastError() { m_lasterror = 0; }
     // type such as disk or pipe
   wxFileKind GetKind() const { return wxGetFileKind(m_fd); }
+
 
   // dtor closes the file if opened
   ~wxFile() { Close(); }
@@ -109,8 +114,16 @@ private:
   wxFile(const wxFile&);
   wxFile& operator=(const wxFile&);
 
+  // Copy the value of errno into m_lasterror if rc == -1 and return true in
+  // this case (indicating that we've got an error). Otherwise return false.
+  //
+  // Notice that we use the possibly 64 bit wxFileOffset instead of int here so
+  // that it works for checking the result of functions such as tell() too.
+  bool CheckForError(wxFileOffset rc) const;
+
+
   int m_fd; // file descriptor or INVALID_FD if not opened
-  bool m_error; // error memory
+  int m_lasterror; // errno value of last error
 };
 
 // ----------------------------------------------------------------------------

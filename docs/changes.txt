@@ -408,6 +408,7 @@ All:
 - Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
+- Added wxFile::GetLastError() and ClearLastError() (ryazanov).
 
 All (GUI):
 

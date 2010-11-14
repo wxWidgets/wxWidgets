@@ -88,6 +88,10 @@
 
 #include  <stdio.h>       // SEEK_xxx constants
 
+#ifndef __WXWINCE__
+    #include <errno.h>
+#endif
+
 // Windows compilers don't have these constants
 #ifndef W_OK
     enum
@@ -176,9 +180,25 @@ bool wxFile::Access(const wxString& name, OpenMode mode)
 wxFile::wxFile(const wxString& fileName, OpenMode mode)
 {
     m_fd = fd_invalid;
-    m_error = false;
+    m_lasterror = 0;
 
     Open(fileName, mode);
+}
+
+bool wxFile::CheckForError(wxFileOffset rc) const
+{
+    if ( rc != -1 )
+        return false;
+
+    const_cast<wxFile *>(this)->m_lasterror =
+#ifndef __WXWINCE__
+                                                errno
+#else
+                                                ::GetLastError()
+#endif
+                                                ;
+
+    return true;
 }
 
 // create the file, fail if it already exists and bOverwrite
@@ -190,7 +210,7 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL),
                      accessMode );
-    if ( fd == -1 )
+    if ( CheckForError(fd) )
     {
         wxLogSysError(_("can't create file '%s'"), fileName);
         return false;
@@ -242,7 +262,7 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 
     int fd = wxOpen( fileName, flags, accessMode);
 
-    if ( fd == -1 )
+    if ( CheckForError(fd) )
     {
         wxLogSysError(_("can't open file '%s'"), fileName);
         return false;
@@ -256,7 +276,7 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 bool wxFile::Close()
 {
     if ( IsOpened() ) {
-        if (wxClose(m_fd) == -1)
+        if ( CheckForError(wxClose(m_fd)) )
         {
             wxLogSysError(_("can't close file descriptor %d"), m_fd);
             m_fd = fd_invalid;
@@ -280,7 +300,7 @@ ssize_t wxFile::Read(void *pBuf, size_t nCount)
 
     ssize_t iRc = wxRead(m_fd, pBuf, nCount);
 
-    if ( iRc == -1 )
+    if ( CheckForError(iRc) )
     {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
         return wxInvalidOffset;
@@ -296,10 +316,9 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 
     ssize_t iRc = wxWrite(m_fd, pBuf, nCount);
 
-    if ( iRc == -1 )
+    if ( CheckForError(iRc) )
     {
         wxLogSysError(_("can't write to file descriptor %d"), m_fd);
-        m_error = true;
         iRc = 0;
     }
 
@@ -329,7 +348,7 @@ bool wxFile::Flush()
     // call it then
     if ( IsOpened() && GetKind() == wxFILE_KIND_DISK )
     {
-        if ( wxFsync(m_fd) == -1 )
+        if ( CheckForError(wxFsync(m_fd)) )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
             return false;
@@ -371,7 +390,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     }
 
     wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
-    if ( iRc == wxInvalidOffset )
+    if ( CheckForError(iRc) )
     {
         wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
     }
@@ -385,7 +404,7 @@ wxFileOffset wxFile::Tell() const
     wxASSERT( IsOpened() );
 
     wxFileOffset iRc = wxTell(m_fd);
-    if ( iRc == wxInvalidOffset )
+    if ( CheckForError(iRc) )
     {
         wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
     }
@@ -429,6 +448,7 @@ wxFileOffset wxFile::Length() const
 
     if ( iRc == wxInvalidOffset )
     {
+        // last error was already set by Tell()
         wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);
     }
 
