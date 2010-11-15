@@ -688,12 +688,14 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf)
         unsigned char *dst = dstLineStart;
         if ( alpha )
         {
+            int x;
+
             switch ( pf )
             {
                 case PixelFormat_PreMultiplied:
                     // Pre-multiply pixel values so that the DIB could be used
                     // with ::AlphaBlend().
-                    for ( int x = 0; x < w; x++ )
+                    for ( x = 0; x < w; x++ )
                     {
                         const unsigned char a = *alpha++;
                         *dst++ = (unsigned char)((src[2] * a + 127) / 255);
@@ -706,7 +708,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf)
 
                 case PixelFormat_NotPreMultiplied:
                     // Just copy pixel data without changing it.
-                    for ( int x = 0; x < w; x++ )
+                    for ( x = 0; x < w; x++ )
                     {
                         *dst++ = src[2];
                         *dst++ = src[1];
