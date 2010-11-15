@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 September 2006                                                   *
+# Date : 15 November 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -53,13 +53,15 @@ all :
 .endif
 
 .ifdef __WXMOTIF__
-xrcdemo.exe : xrcdemo.obj,custclas.obj,derivdlg.obj,myframe.obj
-	cxxlink xrcdemo,custclas.obj,derivdlg.obj,myframe.obj,[--.lib]vms/opt
+xrcdemo.exe : xrcdemo.obj,custclas.obj,derivdlg.obj,myframe.obj,objrefdlg.obj
+	cxxlink xrcdemo,custclas.obj,derivdlg.obj,myframe.obj,objrefdlg.obj,\
+	[--.lib]vms/opt
 .else
 .ifdef __WXGTK__
-xrcdemo_gtk.exe : xrcdemo.obj,custclas.obj,derivdlg.obj,myframe.obj
+xrcdemo_gtk.exe : xrcdemo.obj,custclas.obj,derivdlg.obj,myframe.obj,\
+	objrefdlg.obj
 	cxxlink/exec=xrcdemo_gtk.exe xrcdemo,custclas.obj,derivdlg.obj,\
-	myframe.obj,[--.lib]vms_gtk/opt
+	myframe.obj,objrefdlg.obj,[--.lib]vms_gtk/opt
 .else
 .ifdef __WXGTK2__
 xrcdemo_gtk2.exe : xrcdemo.obj,custclas.obj,derivdlg.obj,myframe.obj
@@ -79,3 +81,4 @@ xrcdemo.obj : xrcdemo.cpp
 custclas.obj : custclas.cpp
 derivdlg.obj : derivdlg.cpp
 myframe.obj : myframe.cpp
+objrefdlg.obj : objrefdlg.cpp
