@@ -470,13 +470,13 @@
 #define wxUSE_DIALUP_MANAGER   1
 
 // Compile in classes for run-time DLL loading and function calling.
-// Required by wxUSE_DIALUP_MANAGER.
-//
-// This setting is for Win32 only
+// Required by wxUSE_DIALUP_MANAGER and used by many other wxMSW classes so
+// disabling it can result in a loss of a lot of functionality, don't do it
+// unless you really know what you are doing.
 //
 // Default is 1.
 //
-// Recommended setting: 1
+// Recommended setting: 1 (you should never disable this for wxMSW).
 #define wxUSE_DYNLIB_CLASS    1
 
 // experimental, don't use for now
