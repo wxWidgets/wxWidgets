@@ -83,6 +83,7 @@ private:
         CPPUNIT_TEST( FindInMenubar );
         CPPUNIT_TEST( FindInMenu );
         CPPUNIT_TEST( Count );
+        CPPUNIT_TEST( Labels );
     CPPUNIT_TEST_SUITE_END();
 
     void CreateFrame();
@@ -90,6 +91,7 @@ private:
     void FindInMenubar();
     void FindInMenu();
     void Count();
+    void Labels();
 
     wxFrame* m_frame;
 
@@ -170,10 +172,13 @@ void MenuTestCase::FindInMenubar()
     // Find by menu name plus item name:
     CPPUNIT_ASSERT( bar->FindMenuItem("File", "Foo") != wxNOT_FOUND );
     CPPUNIT_ASSERT( bar->FindMenuItem("&File", "&Foo") != wxNOT_FOUND );
-    // and using the menu title
+    // and using the menu label
     int index = bar->FindMenu("&File");
     CPPUNIT_ASSERT( index != wxNOT_FOUND );
-    wxString menutitle = bar->GetMenuLabel(index);
+    wxString menulabel = bar->GetMenuLabel(index);
+    CPPUNIT_ASSERT( bar->FindMenuItem(menulabel, "&Foo") != wxNOT_FOUND );
+    // and title
+    wxString menutitle = bar->GetMenu(index)->GetTitle();
     CPPUNIT_ASSERT( bar->FindMenuItem(menutitle, "&Foo") != wxNOT_FOUND );
 
     // Find by position:
@@ -195,7 +200,7 @@ void MenuTestCase::FindInMenubar()
     item = bar->FindItem(m_submenuItemId, &menu);
     CPPUNIT_ASSERT( item );
     CPPUNIT_ASSERT( menu );
-    // and, for completeness, a submenu one:
+    // and, for completeness, a subsubmenu one:
     item = bar->FindItem(m_subsubmenuItemId, &menu);
     CPPUNIT_ASSERT( item );
     CPPUNIT_ASSERT( menu );
@@ -263,4 +268,39 @@ void MenuTestCase::Count()
         RecursivelyCountMenuItems(bar->GetMenu(n), count);
     }
     CPPUNIT_ASSERT_EQUAL( count, m_itemCount );
+}
+
+void MenuTestCase::Labels()
+{
+    wxMenuBar* bar = m_frame->GetMenuBar();
+    CPPUNIT_ASSERT( bar );
+    wxMenu* filemenu;
+    wxMenuItem* itemFoo = bar->FindItem(MenuTestCase_Foo, &filemenu);
+    CPPUNIT_ASSERT( itemFoo );
+    CPPUNIT_ASSERT( filemenu );
+
+    // These return labels including mnemonics/accelerators:
+
+    // wxMenuBar
+    CPPUNIT_ASSERT_EQUAL( "&File", bar->GetMenuLabel(0) );
+    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", bar->GetLabel(MenuTestCase_Foo) );
+
+    // wxMenu
+    CPPUNIT_ASSERT_EQUAL( "&File", filemenu->GetTitle() );
+    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", filemenu->GetLabel(MenuTestCase_Foo) );
+
+    // wxMenuItem
+    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", itemFoo->GetItemLabel() );
+
+    // These return labels stripped of mnemonics/accelerators:
+
+    // wxMenuBar
+    CPPUNIT_ASSERT_EQUAL( "File", bar->GetMenuLabelText(0) );
+
+    // wxMenu
+    CPPUNIT_ASSERT_EQUAL( "Foo", filemenu->GetLabelText(MenuTestCase_Foo) );
+
+    // wxMenuItem
+    CPPUNIT_ASSERT_EQUAL( "Foo", itemFoo->GetItemLabelText() );
+    CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
 }

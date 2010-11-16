@@ -333,7 +333,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (wxMenuItem::GetLabelText(wxConvertMnemonicsFromGTK(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
+    if (wxMenuItem::GetLabelText(menu->GetTitle()) == wxMenuItem::GetLabelText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -426,7 +426,7 @@ wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return wxConvertMnemonicsFromGTK(menu->GetTitle());
+    return menu->GetTitle();
 }
 
 void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
@@ -745,6 +745,11 @@ void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
 wxLayoutDirection wxMenu::GetLayoutDirection() const
 {
     return wxWindow::GTKGetLayout(m_owner);
+}
+
+const wxString wxMenu::GetTitle() const
+{
+    return wxConvertMnemonicsFromGTK(wxMenuBase::GetTitle());
 }
 
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
