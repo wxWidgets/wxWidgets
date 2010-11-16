@@ -40,7 +40,9 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
-#include "wx/msw/enhmeta.h"
+#if wxUSE_ENH_METAFILE
+    #include "wx/msw/enhmeta.h"
+#endif
 #include "wx/dcgraph.h"
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
@@ -1630,9 +1632,13 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
 
+#if wxUSE_PRINTING_ARCHITECTURE
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+#endif
 
+#if wxUSE_ENH_METAFILE
     virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
+#endif
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -1758,6 +1764,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
     return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
@@ -1765,7 +1772,9 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
     wxSize sz = dc.GetSize();
     return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
+#endif
 
+#if wxUSE_ENH_METAFILE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
@@ -1773,6 +1782,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
     wxSize sz = dc.GetSize();
     return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
+#endif
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
