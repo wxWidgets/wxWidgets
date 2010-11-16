@@ -138,8 +138,6 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
                 ClearCalculator();
                 break;
             }
-
-         default: return;
     }
 }
 
@@ -255,7 +253,8 @@ void ObjrefDialog::OnOperatorClick(wxCommandEvent& event)
     {
         wxLogMessage("You clicked operators[%i], XRCID %d, 'Clear'",
                      ID, event.GetId());
-        return ClearCalculator();
+        ClearCalculator();
+        return;
     }
 
     switch(ID)

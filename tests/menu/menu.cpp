@@ -215,7 +215,8 @@ void MenuTestCase::FindInMenu()
     CPPUNIT_ASSERT( menuHelp->FindItem("Sub&menu") != wxNOT_FOUND );
 
     // Find by position:
-    for (size_t n=0; n < menuHelp->GetMenuItemCount(); ++n)
+    size_t n;
+    for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
         CPPUNIT_ASSERT( menuHelp->FindItemByPosition(n) );
     }
@@ -224,7 +225,7 @@ void MenuTestCase::FindInMenu()
     CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Bar) );
     CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Foo) == NULL );
 
-    for (size_t n=0; n < menuHelp->GetMenuItemCount(); ++n)
+    for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
         size_t locatedAt;
         wxMenuItem* itemByPos = menuHelp->FindItemByPosition(n);
@@ -235,7 +236,7 @@ void MenuTestCase::FindInMenu()
     }
 
     // Find submenu item:
-    for (size_t n=0; n < menuHelp->GetMenuItemCount(); ++n)
+    for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
         wxMenuItem* item = menuHelp->FindItemByPosition(n);
         if (item->IsSubMenu())
