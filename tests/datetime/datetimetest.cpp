@@ -973,6 +973,7 @@ void DateTimeTestCase::TestDateParse()
         { "29 Feb 2006" },
         { "31/04/06" },
         { "bloordyblop" },
+        { "2 .  .    " },
     };
 
     // special cases
