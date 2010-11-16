@@ -357,7 +357,7 @@ void wxToolTip::Remove(WXHWND hWnd, unsigned int id, const wxRect& rc)
 
 void wxToolTip::DoRemove(WXHWND hWnd)
 {
-    if ( hWnd == m_window->GetHWND() )
+    if ( m_window && hWnd == m_window->GetHWND() )
     {
         // Remove the tooltip from the main window.
         Remove(hWnd, m_id, m_rect);
@@ -567,14 +567,10 @@ void wxToolTip::DoSetTip(WXHWND hWnd)
 
 void wxToolTip::DoForAllWindows(void (wxToolTip::*func)(WXHWND))
 {
-    if ( !m_window )
+    if ( m_window )
     {
-        wxASSERT_MSG( !m_others,
-                      wxS("Can't have other windows without the main one.") );
-        return;
+        (this->*func)(m_window->GetHWND());
     }
-
-    (this->*func)(m_window->GetHWND());
 
     if ( m_others )
     {
