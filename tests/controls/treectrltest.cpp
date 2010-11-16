@@ -595,6 +595,7 @@ void TreeCtrlTestCase::KeyNavigation()
 
     m_tree->SelectItem(m_root);
 
+    m_tree->SetFocus();
     sim.Char(WXK_RIGHT);
     wxYield();
 
