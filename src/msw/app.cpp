@@ -297,6 +297,8 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 
 #ifndef __WXWINCE__
 
+#if wxUSE_DYNLIB_CLASS
+
 #include <wx/dynlib.h>
 
 namespace
@@ -572,6 +574,20 @@ bool wxGUIAppTraits::WriteToStderr(const wxString& text)
 {
     return s_consoleStderr.IsOkToUse() && s_consoleStderr.Write(text);
 }
+
+#else // !wxUSE_DYNLIB_CLASS
+
+bool wxGUIAppTraits::CanUseStderr()
+{
+    return false;
+}
+
+bool wxGUIAppTraits::WriteToStderr(const wxString& WXUNUSED(text))
+{
+    return false;
+}
+
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
 #endif // !__WXWINCE__
 

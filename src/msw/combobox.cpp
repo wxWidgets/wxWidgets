@@ -438,6 +438,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
+#if wxUSE_DYNLIB_CLASS
 #if defined(WINVER) && WINVER >= 0x0500
     typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
     static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
@@ -455,7 +456,8 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
         (*s_pfnGetComboBoxInfo)(GetHwnd(), &info);
         return info.hwndItem;
     }
-#endif
+#endif // WINVER >= 0x0500
+#endif // wxUSE_DYNLIB_CLASS
 
     if (HasFlag(wxCB_SIMPLE))
     {
