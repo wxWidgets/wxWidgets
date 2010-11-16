@@ -61,9 +61,26 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VirtListCtrlTestCase, "VirtListCtrlTestCa
 
 void VirtListCtrlTestCase::setUp()
 {
-    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxPoint(0, 0), wxSize(400, 200),
-                            wxLC_REPORT | wxLC_VIRTUAL);
+    // Define a class overriding OnGetItemText() which must be overridden for
+    // any virtual list control.
+    class VirtListCtrl : public wxListCtrl
+    {
+    public:
+        VirtListCtrl()
+            : wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                         wxPoint(0, 0), wxSize(400, 200),
+                         wxLC_REPORT | wxLC_VIRTUAL)
+        {
+        }
+
+    protected:
+        virtual wxString OnGetItemText(long item, long column) const
+        {
+            return wxString::Format("Row %ld, col %ld", item, column);
+        }
+    };
+
+    m_list = new VirtListCtrl;
 }
 
 void VirtListCtrlTestCase::tearDown()
