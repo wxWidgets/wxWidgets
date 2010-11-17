@@ -781,9 +781,6 @@ public:
     /**
         Returns the title of the menu.
 
-        @remarks This is relevant only to popup menus, use
-                 wxMenuBar::GetMenuLabel for the menus in the menubar.
-
         @see SetTitle()
     */
     const wxString& GetTitle() const;
@@ -953,8 +950,9 @@ public:
         @param title
             The title to set.
 
-        @remarks This is relevant only to popup menus, use
-                 wxMenuBar::SetLabelTop for the menus in the menubar.
+        @remarks Notice that you can only call this method directly for the
+            popup menus, to change the title of a menu that is part of a menu
+            bar you need to use wxMenuBar::SetLabelTop().
 
         @see GetTitle()
     */
