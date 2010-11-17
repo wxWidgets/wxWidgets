@@ -747,7 +747,7 @@ wxLayoutDirection wxMenu::GetLayoutDirection() const
     return wxWindow::GTKGetLayout(m_owner);
 }
 
-const wxString wxMenu::GetTitle() const
+wxString wxMenu::GetTitle() const
 {
     return wxConvertMnemonicsFromGTK(wxMenuBase::GetTitle());
 }

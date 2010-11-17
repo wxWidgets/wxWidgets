@@ -79,7 +79,7 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     // Returns the title, with mnemonics translated to wx format
-    const wxString GetTitle() const;
+    wxString GetTitle() const;
 
     // TODO: virtual void SetTitle(const wxString& title);
 

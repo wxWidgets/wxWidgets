@@ -964,7 +964,7 @@ wxMenu::~wxMenu()
    }
 }
 
-const wxString wxMenu::GetTitle() const
+wxString wxMenu::GetTitle() const
 {
     return wxConvertMnemonicsFromGTK(wxMenuBase::GetTitle());
 }

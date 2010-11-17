@@ -74,7 +74,7 @@ public:
     virtual wxMenuItem* DoRemove(wxMenuItem *item);
 
     // Returns the title, with mnemonics translated to wx format
-    const wxString GetTitle() const;
+    wxString GetTitle() const;
 
     // TODO: virtual void SetTitle(const wxString& title);
 
