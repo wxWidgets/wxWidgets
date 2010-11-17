@@ -1128,7 +1128,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
 wxImage wxImage::Rotate180() const
 {
-    wxImage image( MakeEmptyClone( false ));
+    wxImage image(MakeEmptyClone());
 
     wxCHECK( image.Ok(), image );
 
