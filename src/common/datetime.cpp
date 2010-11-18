@@ -519,9 +519,17 @@ wxDateTime::Tm::Tm(const struct tm& tm, const TimeZone& tz)
 
 bool wxDateTime::Tm::IsValid() const
 {
+    if ( mon == wxDateTime::Inv_Month )
+        return false;
+
+    // We need to check this here to avoid crashing in GetNumOfDaysInMonth() if
+    // somebody passed us "(wxDateTime::Month)1000".
+    wxCHECK_MSG( mon >= wxDateTime::Jan && mon < wxDateTime::Inv_Month, false,
+                 wxS("Invalid month value") );
+
     // we allow for the leap seconds, although we don't use them (yet)
     return (year != wxDateTime::Inv_Year) && (mon != wxDateTime::Inv_Month) &&
-           (mday <= GetNumOfDaysInMonth(year, mon)) &&
+           (mday > 0 && mday <= GetNumOfDaysInMonth(year, mon)) &&
            (hour < 24) && (min < 60) && (sec < 62) && (msec < 1000);
 }
 
