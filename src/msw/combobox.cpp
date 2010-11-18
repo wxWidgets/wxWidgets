@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/dynlib.h"
 #include "wx/wupdlock.h"
 #include "wx/msw/private.h"
 
