@@ -468,15 +468,21 @@ public:
     virtual int OnRun();
 
     /**
-        This function is called when an unhandled C++ exception occurs inside
-        OnRun() (the exceptions which occur during the program startup and shutdown
-        might not be caught at all). Notice that by now the main event loop has been
-        terminated and the program will exit, if you want to prevent this from happening
-        (i.e. continue running after catching an exception) you need to override
-        OnExceptionInMainLoop().
+        This function is called when an unhandled C++ exception occurs in user
+        code called by wxWidgets.
 
-        The default implementation shows information about the exception in debug build
-        but does nothing in the release build.
+        Any unhandled exceptions thrown from (overridden versions of) OnInit()
+        and OnExit() methods as well as any exceptions thrown from inside the
+        main loop and re-thrown by OnUnhandledException() will result in a call
+        to this function.
+
+        By the time this function is called, the program is already about to
+        exit and the exception can't be handled nor ignored any more, override
+        OnUnhandledException() or use explicit @c try/catch blocks around
+        OnInit() body to be able to handle the exception earlier.
+
+        The default implementation dumps information about the exception using
+        wxMessageOutputBest.
     */
     virtual void OnUnhandledException();
 
