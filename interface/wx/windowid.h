@@ -39,7 +39,7 @@ public:
 
         @return The value of the first ID in the sequence, or wxID_NONE.
     */
-    static wxWindowID ReserveControlId(int count = 1);
+    static wxWindowID ReserveId(int count = 1);
 
     /**
         Called directly by wxWindow::UnreserveControlId(), this function will
@@ -54,6 +54,6 @@ public:
 
         @return The value of the first ID in the sequence, or wxID_NONE.
     */
-    static wxWindowID UnreserveControlId(wxWindowID id, int count = 1);
+    static void UnreserveId(wxWindowID id, int count = 1);
 };
 

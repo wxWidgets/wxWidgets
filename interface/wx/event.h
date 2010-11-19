@@ -1621,6 +1621,9 @@ public:
         the window itself for the current position in that case.
     */
     int GetPosition() const;
+
+    void SetOrientation(int orient);
+    void SetPosition(int pos);    
 };
 
 
@@ -2728,7 +2731,7 @@ public:
     /**
         Constructor.
     */
-    wxContextMenuEvent(wxEventType id = wxEVT_NULL, int id = 0,
+    wxContextMenuEvent(wxEventType type = wxEVT_NULL, int id = 0,
                        const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -2835,6 +2838,8 @@ public:
         Warning: the window pointer may be @NULL!
     */
     wxWindow *GetWindow() const;
+
+    void SetWindow(wxWindow *win);
 };
 
 
@@ -2917,6 +2922,35 @@ public:
     */
     wxMouseCaptureLostEvent(wxWindowID windowId = 0);
 };
+
+
+
+class wxDisplayChangedEvent : public wxEvent
+{
+public:
+    wxDisplayChangedEvent();
+};
+
+
+class wxPaletteChangedEvent : public wxEvent
+{
+public:
+    wxPaletteChangedEvent(wxWindowID winid = 0);
+
+    void SetChangedWindow(wxWindow* win);
+    wxWindow* GetChangedWindow() const;
+};
+
+
+class wxQueryNewPaletteEvent : public wxEvent
+{
+public:
+    wxQueryNewPaletteEvent(wxWindowID winid = 0);
+    
+    void SetPaletteRealized(bool realized);
+    bool GetPaletteRealized();
+};
+
 
 
 
@@ -3233,6 +3267,10 @@ public:
         Returns the position of the scrollbar.
     */
     int GetPosition() const;
+
+    
+    void SetOrientation(int orient);
+    void SetPosition(int pos);    
 };
 
 /**
@@ -3286,21 +3324,6 @@ public:
         Constructor.
     */
     wxIdleEvent();
-
-    /**
-        Returns @true if it is appropriate to send idle events to this window.
-
-        This function looks at the mode used (see wxIdleEvent::SetMode),
-        and the wxWS_EX_PROCESS_IDLE style in @a window to determine whether idle
-        events should be sent to this window now.
-
-        By default this will always return @true because the update mode is initially
-        wxIDLE_PROCESS_ALL. You can change the mode to only send idle events to
-        windows with the wxWS_EX_PROCESS_IDLE extra window style set.
-
-        @see SetMode()
-    */
-    static bool CanSend(wxWindow* window);
 
     /**
         Static function returning a value specifying how wxWidgets will send idle
@@ -3694,7 +3717,7 @@ public:
     /**
         Constructor.
     */
-    wxMenuEvent(wxEventType id = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
 
     /**
         Returns the menu which is being opened or closed. This method should only be
@@ -3846,6 +3869,10 @@ public:
         Returns the position of the window generating the move change event.
     */
     wxPoint GetPosition() const;
+
+    wxRect GetRect() const;
+    void SetRect(const wxRect& rect);
+    void SetPosition(const wxPoint& pos);    
 };
 
 
@@ -3893,6 +3920,10 @@ public:
         such as wxFrame to find the size available for the window contents.
     */
     wxSize GetSize() const;
+    void SetSize(wxSize size);
+
+    wxRect GetRect() const;
+    void SetRect(wxRect rect);
 };
 
 
@@ -3980,6 +4011,8 @@ typedef int wxEventType;
     no type assigned.
 */
 wxEventType wxEVT_NULL;
+
+wxEventType wxEVT_ANY;
 
 /**
     Generates a new unique event type.
@@ -4172,6 +4205,131 @@ void wxPostEvent(wxEvtHandler* dest, const wxEvent& event);
         ownership of it.
  */
 void wxQueueEvent(wxEvtHandler* dest, wxEvent *event);
+
+
+
+wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
+wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
+wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
+wxEventType wxEVT_COMMAND_LISTBOX_SELECTED;
+wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
+wxEventType wxEVT_COMMAND_MENU_SELECTED;
+wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
+wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
+wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
+wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED;
+wxEventType wxEVT_COMMAND_VLBOX_SELECTED;
+wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
+wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
+wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
+wxEventType wxEVT_COMMAND_TOOL_ENTER;
+wxEventType wxEVT_COMMAND_COMBOBOX_DROPDOWN;
+wxEventType wxEVT_COMMAND_COMBOBOX_CLOSEUP;
+wxEventType wxEVT_COMMAND_THREAD;
+wxEventType wxEVT_LEFT_DOWN;
+wxEventType wxEVT_LEFT_UP;
+wxEventType wxEVT_MIDDLE_DOWN;
+wxEventType wxEVT_MIDDLE_UP;
+wxEventType wxEVT_RIGHT_DOWN;
+wxEventType wxEVT_RIGHT_UP;
+wxEventType wxEVT_MOTION;
+wxEventType wxEVT_ENTER_WINDOW;
+wxEventType wxEVT_LEAVE_WINDOW;
+wxEventType wxEVT_LEFT_DCLICK;
+wxEventType wxEVT_MIDDLE_DCLICK;
+wxEventType wxEVT_RIGHT_DCLICK;
+wxEventType wxEVT_SET_FOCUS;
+wxEventType wxEVT_KILL_FOCUS;
+wxEventType wxEVT_CHILD_FOCUS;
+wxEventType wxEVT_MOUSEWHEEL;
+wxEventType wxEVT_AUX1_DOWN;
+wxEventType wxEVT_AUX1_UP;
+wxEventType wxEVT_AUX1_DCLICK;
+wxEventType wxEVT_AUX2_DOWN;
+wxEventType wxEVT_AUX2_UP;
+wxEventType wxEVT_AUX2_DCLICK;
+wxEventType wxEVT_CHAR;
+wxEventType wxEVT_CHAR_HOOK;
+wxEventType wxEVT_NAVIGATION_KEY;
+wxEventType wxEVT_KEY_DOWN;
+wxEventType wxEVT_KEY_UP;
+wxEventType wxEVT_HOTKEY;
+wxEventType wxEVT_SET_CURSOR;
+wxEventType wxEVT_SCROLL_TOP;
+wxEventType wxEVT_SCROLL_BOTTOM;
+wxEventType wxEVT_SCROLL_LINEUP;
+wxEventType wxEVT_SCROLL_LINEDOWN;
+wxEventType wxEVT_SCROLL_PAGEUP;
+wxEventType wxEVT_SCROLL_PAGEDOWN;
+wxEventType wxEVT_SCROLL_THUMBTRACK;
+wxEventType wxEVT_SCROLL_THUMBRELEASE;
+wxEventType wxEVT_SCROLL_CHANGED;
+wxEventType wxEVT_SPIN_UP;
+wxEventType wxEVT_SPIN_DOWN;
+wxEventType wxEVT_SPIN;
+wxEventType wxEVT_SCROLLWIN_TOP;
+wxEventType wxEVT_SCROLLWIN_BOTTOM;
+wxEventType wxEVT_SCROLLWIN_LINEUP;
+wxEventType wxEVT_SCROLLWIN_LINEDOWN;
+wxEventType wxEVT_SCROLLWIN_PAGEUP;
+wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
+wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
+wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
+wxEventType wxEVT_SIZE;
+wxEventType wxEVT_MOVE;
+wxEventType wxEVT_CLOSE_WINDOW;
+wxEventType wxEVT_END_SESSION;
+wxEventType wxEVT_QUERY_END_SESSION;
+wxEventType wxEVT_ACTIVATE_APP;
+wxEventType wxEVT_ACTIVATE;
+wxEventType wxEVT_CREATE;
+wxEventType wxEVT_DESTROY;
+wxEventType wxEVT_SHOW;
+wxEventType wxEVT_ICONIZE;
+wxEventType wxEVT_MAXIMIZE;
+wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
+wxEventType wxEVT_MOUSE_CAPTURE_LOST;
+wxEventType wxEVT_PAINT;
+wxEventType wxEVT_ERASE_BACKGROUND;
+wxEventType wxEVT_NC_PAINT;
+wxEventType wxEVT_MENU_OPEN;
+wxEventType wxEVT_MENU_CLOSE;
+wxEventType wxEVT_MENU_HIGHLIGHT;
+wxEventType wxEVT_CONTEXT_MENU;
+wxEventType wxEVT_SYS_COLOUR_CHANGED;
+wxEventType wxEVT_DISPLAY_CHANGED;
+wxEventType wxEVT_QUERY_NEW_PALETTE;
+wxEventType wxEVT_PALETTE_CHANGED;
+wxEventType wxEVT_JOY_BUTTON_DOWN;
+wxEventType wxEVT_JOY_BUTTON_UP;
+wxEventType wxEVT_JOY_MOVE;
+wxEventType wxEVT_JOY_ZMOVE;
+wxEventType wxEVT_DROP_FILES;
+wxEventType wxEVT_INIT_DIALOG;
+wxEventType wxEVT_IDLE;
+wxEventType wxEVT_UPDATE_UI;
+wxEventType wxEVT_SIZING;
+wxEventType wxEVT_MOVING;
+wxEventType wxEVT_MOVE_START;
+wxEventType wxEVT_MOVE_END;
+wxEventType wxEVT_HIBERNATE;
+wxEventType wxEVT_COMMAND_TEXT_COPY;
+wxEventType wxEVT_COMMAND_TEXT_CUT;
+wxEventType wxEVT_COMMAND_TEXT_PASTE;
+wxEventType wxEVT_COMMAND_LEFT_CLICK;
+wxEventType wxEVT_COMMAND_LEFT_DCLICK;
+wxEventType wxEVT_COMMAND_RIGHT_CLICK;
+wxEventType wxEVT_COMMAND_RIGHT_DCLICK;
+wxEventType wxEVT_COMMAND_SET_FOCUS;
+wxEventType wxEVT_COMMAND_KILL_FOCUS;
+wxEventType wxEVT_COMMAND_ENTER;
+wxEventType wxEVT_HELP;
+wxEventType wxEVT_DETAILED_HELP;
+wxEventType wxEVT_COMMAND_TEXT_UPDATED;
+wxEventType wxEVT_COMMAND_TOOL_CLICKED;
+
+
 
 //@}
 
