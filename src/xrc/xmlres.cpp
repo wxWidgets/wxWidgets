@@ -48,16 +48,45 @@
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
 #include "wx/hashset.h"
+#include "wx/scopedptr.h"
 
+namespace
+{
+
+// Helper function to get modification time of either a wxFileSystem URI or
+// just a normal file name, depending on the build.
+#if wxUSE_DATETIME
+
+wxDateTime GetXRCFileModTime(const wxString& filename)
+{
+#if wxUSE_FILESYSTEM
+    wxFileSystem fsys;
+    wxScopedPtr<wxFSFile> file(fsys.OpenFile(filename));
+
+    return file ? file->GetModificationTime() : wxDateTime();
+#else // wxUSE_FILESYSTEM
+    return wxDateTime(wxFileModificationTime(filename));
+#endif // wxUSE_FILESYSTEM
+}
+
+#endif // wxUSE_DATETIME
+
+} // anonymous namespace
 
 class wxXmlResourceDataRecord
 {
 public:
-    wxXmlResourceDataRecord() : Doc(NULL) {
+    // Ctor takes ownership of the document pointer.
+    wxXmlResourceDataRecord(const wxString& File_,
+                            wxXmlDocument *Doc_
+                           )
+        : File(File_), Doc(Doc_)
+    {
 #if wxUSE_DATETIME
-        Time = wxDateTime::Now();
+        Time = GetXRCFileModTime(File);
 #endif
     }
+
     ~wxXmlResourceDataRecord() {delete Doc;}
 
     wxString File;
@@ -65,6 +94,8 @@ public:
 #if wxUSE_DATETIME
     wxDateTime Time;
 #endif
+
+    wxDECLARE_NO_COPY_CLASS(wxXmlResourceDataRecord);
 };
 
 class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
@@ -314,6 +345,8 @@ bool wxXmlResource::Load(const wxString& filemask_)
 {
     wxString filemask = ConvertFileNameToURL(filemask_);
 
+    bool allOK = true;
+
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
 #   define wxXmlFindFirst  fsys.FindFirst(filemask, wxFILE)
@@ -335,14 +368,16 @@ bool wxXmlResource::Load(const wxString& filemask_)
         if ( IsArchive(fnd) )
         {
             if ( !Load(fnd + wxT("#zip:*.xrc")) )
-                return false;
+                allOK = false;
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
-            wxXmlResourceDataRecord *drec = new wxXmlResourceDataRecord;
-            drec->File = fnd;
-            Data().push_back(drec);
+            wxXmlDocument * const doc = DoLoadFile(fnd);
+            if ( !doc )
+                allOK = false;
+            else
+                Data().push_back(new wxXmlResourceDataRecord(fnd, doc));
         }
 
         fnd = wxXmlFindNext;
@@ -350,7 +385,7 @@ bool wxXmlResource::Load(const wxString& filemask_)
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
 
-    return UpdateResources();
+    return allOK;
 }
 
 bool wxXmlResource::Unload(const wxString& filename)
@@ -613,12 +648,84 @@ static void PreprocessForIdRanges(wxXmlNode *rootnode)
 bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
-    bool modif;
-#   if wxUSE_FILESYSTEM
-    wxFSFile *file = NULL;
-    wxUnusedVar(file);
+
+    for ( wxXmlResourceDataRecords::iterator i = Data().begin();
+          i != Data().end(); ++i )
+    {
+        wxXmlResourceDataRecord* const rec = *i;
+
+        // Check if we need to reload this one.
+
+        // We never do it if this flag is specified.
+        if ( m_flags & wxXRC_NO_RELOADING )
+            continue;
+
+        // Otherwise check its modification time if we can.
+#if wxUSE_DATETIME
+        const wxDateTime lastModTime = GetXRCFileModTime(rec->File);
+
+        if ( lastModTime.IsValid() && lastModTime <= rec->Time )
+#else // !wxUSE_DATETIME
+        // Never reload the file contents: we can't know whether it changed or
+        // not in this build configuration and it would be unexpected and
+        // counter-productive to get a performance hit (due to constant
+        // reloading of XRC files) in a minimal wx build which is presumably
+        // used because of resource constraints of the current platform.
+#endif // wxUSE_DATETIME/!wxUSE_DATETIME
+        {
+            // No need to reload, the file wasn't modified since we did it
+            // last.
+            continue;
+        }
+
+        wxXmlDocument * const doc = DoLoadFile(rec->File);
+        if ( !doc )
+        {
+            // Notice that we keep the old XML document: it seems better to
+            // preserve it instead of throwing it away if we have nothing to
+            // replace it with.
+            rt = false;
+            continue;
+        }
+
+        // Replace the old resource contents with the new one.
+        delete rec->Doc;
+        rec->Doc = doc;
+
+        // And, now that we loaded it successfully, update the last load time.
+#if wxUSE_DATETIME
+        rec->Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
+#endif // wxUSE_DATETIME
+    }
+
+    return rt;
+}
+
+wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
+{
+    wxLogTrace(wxT("xrc"), wxT("opening file '%s'"), filename);
+
+    wxInputStream *stream = NULL;
+
+#if wxUSE_FILESYSTEM
     wxFileSystem fsys;
-#   endif
+    wxScopedPtr<wxFSFile> file(fsys.OpenFile(filename));
+    if (file)
+    {
+        // Notice that we don't have ownership of the stream in this case, it
+        // remains owned by wxFSFile.
+        stream = file->GetStream();
+    }
+#else // !wxUSE_FILESYSTEM
+    wxFileInputStream fstream(filename);
+    stream = &fstream;
+#endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
+
+    if ( !stream || !stream->IsOk() )
+    {
+        wxLogError(_("Cannot open resources file '%s'."), filename);
+        return NULL;
+    }
 
     wxString encoding(wxT("UTF-8"));
 #if !wxUSE_UNICODE && wxUSE_INTL
@@ -631,115 +738,43 @@ bool wxXmlResource::UpdateResources()
     }
 #endif
 
-    for ( wxXmlResourceDataRecords::iterator i = Data().begin();
-          i != Data().end(); ++i )
+    wxScopedPtr<wxXmlDocument> doc(new wxXmlDocument);
+    if (!doc->Load(*stream, encoding))
     {
-        wxXmlResourceDataRecord* const rec = *i;
-
-        modif = (rec->Doc == NULL);
-
-        if (!modif && !(m_flags & wxXRC_NO_RELOADING))
-        {
-#           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(rec->File);
-#           if wxUSE_DATETIME
-            modif = file && file->GetModificationTime() > rec->Time;
-#           else // wxUSE_DATETIME
-            modif = true;
-#           endif // wxUSE_DATETIME
-            if (!file)
-            {
-                wxLogError(_("Cannot open file '%s'."), rec->File);
-                rt = false;
-            }
-            wxDELETE(file);
-            wxUnusedVar(file);
-#           else // wxUSE_FILESYSTEM
-#           if wxUSE_DATETIME
-            modif = wxDateTime(wxFileModificationTime(rec->File)) > rec->Time;
-#           else // wxUSE_DATETIME
-            modif = true;
-#           endif // wxUSE_DATETIME
-#           endif // wxUSE_FILESYSTEM
-        }
-
-        if (modif)
-        {
-            wxLogTrace(wxT("xrc"), wxT("opening file '%s'"), rec->File);
-
-            wxInputStream *stream = NULL;
-
-#           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(rec->File);
-            if (file)
-                stream = file->GetStream();
-#           else
-            stream = new wxFileInputStream(rec->File);
-#           endif
-
-            if (stream)
-            {
-                delete rec->Doc;
-                rec->Doc = new wxXmlDocument;
-            }
-            if (!stream || !stream->IsOk() || !rec->Doc->Load(*stream, encoding))
-            {
-                wxLogError(_("Cannot load resources from file '%s'."),
-                           rec->File);
-                wxDELETE(rec->Doc);
-                rt = false;
-            }
-            else if (rec->Doc->GetRoot()->GetName() != wxT("resource"))
-            {
-                ReportError
-                (
-                    rec->Doc->GetRoot(),
-                    "invalid XRC resource, doesn't have root node <resource>"
-                );
-                wxDELETE(rec->Doc);
-                rt = false;
-            }
-            else
-            {
-                long version;
-                int v1, v2, v3, v4;
-                wxString verstr = rec->Doc->GetRoot()->GetAttribute(
-                                      wxT("version"), wxT("0.0.0.0"));
-                if (wxSscanf(verstr.c_str(), wxT("%i.%i.%i.%i"),
-                    &v1, &v2, &v3, &v4) == 4)
-                    version = v1*256*256*256+v2*256*256+v3*256+v4;
-                else
-                    version = 0;
-                if (m_version == -1)
-                    m_version = version;
-                if (m_version != version)
-                {
-                    wxLogError("Resource files must have same version number.");
-                    rt = false;
-                }
-
-                ProcessPlatformProperty(rec->Doc->GetRoot());
-                PreprocessForIdRanges(rec->Doc->GetRoot());
-                wxIdRangeManager::Get()->FinaliseRanges(rec->Doc->GetRoot());
-#if wxUSE_DATETIME
-#if wxUSE_FILESYSTEM
-                rec->Time = file->GetModificationTime();
-#else // wxUSE_FILESYSTEM
-                rec->Time = wxDateTime(wxFileModificationTime(rec->File));
-#endif // wxUSE_FILESYSTEM
-#endif // wxUSE_DATETIME
-            }
-
-#           if wxUSE_FILESYSTEM
-                wxDELETE(file);
-                wxUnusedVar(file);
-#           else
-                wxDELETE(stream);
-#           endif
-        }
+        wxLogError(_("Cannot load resources from file '%s'."), filename);
+        return NULL;
     }
 
-    return rt;
+    wxXmlNode * const root = doc->GetRoot();
+    if (root->GetName() != wxT("resource"))
+    {
+        ReportError
+        (
+            root,
+            "invalid XRC resource, doesn't have root node <resource>"
+        );
+        return NULL;
+    }
+
+    long version;
+    int v1, v2, v3, v4;
+    wxString verstr = root->GetAttribute(wxT("version"), wxT("0.0.0.0"));
+    if (wxSscanf(verstr, wxT("%i.%i.%i.%i"), &v1, &v2, &v3, &v4) == 4)
+        version = v1*256*256*256+v2*256*256+v3*256+v4;
+    else
+        version = 0;
+    if (m_version == -1)
+        m_version = version;
+    if (m_version != version)
+    {
+        wxLogWarning("Resource files must have same version number.");
+    }
+
+    ProcessPlatformProperty(root);
+    PreprocessForIdRanges(root);
+    wxIdRangeManager::Get()->FinaliseRanges(root);
+
+    return doc.release();
 }
 
 wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
