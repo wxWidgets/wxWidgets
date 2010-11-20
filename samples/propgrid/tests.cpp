@@ -752,6 +752,16 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             wxLogDebug("Did not match: Car.Convertible=%s", pgman->GetPropertyValueAsString("Car.Convertible").c_str());
             RT_FAILURE();
         }
+
+        // SetPropertyValueString for special cases such as wxColour
+        pgman->SetPropertyValueString("ColourProperty", "(123,4,255)");
+        col << pgman->GetPropertyValue("ColourProperty");
+        if ( col != wxColour(123, 4, 255) )
+            RT_FAILURE();
+        pgman->SetPropertyValueString("ColourProperty", "#FE860B");
+        col << pgman->GetPropertyValue("ColourProperty");
+        if ( col != wxColour(254, 134, 11) )
+            RT_FAILURE();
     }
 
     {
