@@ -131,10 +131,13 @@ void FontTestCase::GetSet()
 
         test.SetFamily( wxFONTFAMILY_ROMAN );
         CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT( wxFONTFAMILY_ROMAN == test.GetFamily() ||
-                        wxFONTFAMILY_UNKNOWN == test.GetFamily() );
-            // note that there is always the possibility that GetFamily() returns
-            // wxFONTFAMILY_UNKNOWN so that we consider it as a valid return value
+
+        // note that there is always the possibility that GetFamily() returns
+        // wxFONTFAMILY_DEFAULT (meaning "unknown" in this case) so that we
+        // consider it as a valid return value
+        const wxFontFamily family = test.GetFamily();
+        if ( family != wxFONTFAMILY_DEFAULT )
+            CPPUNIT_ASSERT_EQUAL( wxFONTFAMILY_ROMAN, family );
 
 
         // test Get/SetEncoding()
