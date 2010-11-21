@@ -149,16 +149,7 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     delete htmlwin;
 */
     // test wxXmlResource
-    bool loaded = wxXmlResource::Get()->Load(fullname);
-    wxXmlResource::Get()->Unload(fullname);
-    if ( loaded )
-    {
-        CPPUNIT_FAIL
-        (
-            wxString::Format("Unexpectedly succeeded loading XRC from '%s'",
-                             fullname).ToStdString()
-        );
-    }
+    CPPUNIT_ASSERT( wxXmlResource::Get()->Load(fullname) == false );
 }
 
 void GarbageTestCase::DoLoadStream(wxInputStream& stream)
