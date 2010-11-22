@@ -135,8 +135,6 @@ bool wxStatusBar::Create(wxWindow *parent,
     // cache the DC instance used by DoUpdateStatusText:
     m_pDC = new wxClientDC(this);
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
-
     // we must refresh the frame size when the statusbar is created, because
     // its client area might change
     //
