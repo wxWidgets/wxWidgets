@@ -103,14 +103,14 @@ WXDWORD wxStatusBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     // is not given
     if ( !(style & wxSTB_SIZEGRIP) )
     {
-        *exstyle |= CCS_TOP;
+        msStyle |= CCS_TOP;
     }
     else
     {
 #ifndef __WXWINCE__
         // may be some versions of comctl32.dll do need it - anyhow, it won't
         // do any harm
-        *exstyle |= SBARS_SIZEGRIP;
+       msStyle |= SBARS_SIZEGRIP;
 #endif
     }
 
