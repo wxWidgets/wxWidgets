@@ -129,7 +129,6 @@ void wxSplitterWindow::Init()
     m_sashStart = 0;
     m_sashPosition = m_requestedSashPosition = 0;
     m_sashGravity = 0.0;
-    m_sashSize = -1; // -1 means use the native sash size
     m_lastSize = wxSize(0,0);
     m_checkRequestedSashPosition = false;
     m_minimumPaneSize = 0;
@@ -491,7 +490,7 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
 
 int wxSplitterWindow::GetSashSize() const
 {
-    return m_sashSize > -1 ? m_sashSize : wxRendererNative::Get().GetSplitterParams(this).widthSash;
+    return wxRendererNative::Get().GetSplitterParams(this).widthSash;
 }
 
 int wxSplitterWindow::GetBorderSize() const

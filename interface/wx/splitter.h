@@ -137,6 +137,18 @@ public:
     int GetSashPosition() const;
 
     /**
+        Returns the sash size in pixels.
+
+        The size of the sash is its width for a vertically split window and its
+        height for a horizontally split one. Its other direction is the same as
+        the client size of the window in the corresponding direction.
+
+        The sash size is platform-dependent because it conforms to the current
+        platform look-and-feel and cannot be changed.
+     */
+    int GetSashSize() const;
+
+    /**
         Gets the split mode.
 
         @see SetSplitMode(), SplitVertically(), SplitHorizontally().
@@ -284,15 +296,6 @@ public:
         @see GetSashPosition()
     */
     void SetSashPosition(int position, bool redraw = true);
-
-    /**
-        Sets the sash size. Normally, the sash size is determined according to the
-        metrics
-        of each platform, but the application can override this, for example to show
-        a thin sash that the user is not expected to drag. If @a size is more -1,
-        the custom sash size will be used.
-    */
-    void SetSashSize(int size);
 
     /**
         Sets the split mode.
