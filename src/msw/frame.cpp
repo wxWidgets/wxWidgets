@@ -295,7 +295,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         wxStatusBar *statbar = GetStatusBar();
         if ( statbar && statbar->IsShown() )
         {
-            *y -= statbar->GetClientSize().y;
+            *y -= statbar->GetSize().y;
         }
     }
 #endif // wxUSE_STATUSBAR
