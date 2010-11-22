@@ -83,7 +83,7 @@ public:
 
     @see wxStatusBarPane, wxFrame, @ref page_samples_statbar
 */
-class wxStatusBar : public wxWindow
+class wxStatusBar : public wxControl
 {
 public:
     /**

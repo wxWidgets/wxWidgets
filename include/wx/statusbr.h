@@ -16,7 +16,7 @@
 
 #if wxUSE_STATUSBAR
 
-#include "wx/window.h"
+#include "wx/control.h"
 #include "wx/list.h"
 #include "wx/dynarray.h"
 
@@ -106,7 +106,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxStatusBarPane, wxStatusBarPaneArray);
 // wxStatusBar: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxStatusBarBase : public wxWindow
+class WXDLLIMPEXP_CORE wxStatusBarBase : public wxControl
 {
 public:
     wxStatusBarBase();
