@@ -142,6 +142,10 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         // deprecated and _get_timezone() should be used instead.
         static long wxGetTimeZone()
         {
+            // We must initialize the time zone information before using it
+            // (this will be done only once internally).
+            _tzset();
+
             long t;
             _get_timezone(&t);
             return t;
