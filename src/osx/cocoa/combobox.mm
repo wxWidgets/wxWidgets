@@ -144,9 +144,13 @@ wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
 
 int wxNSComboBoxControl::FindString(const wxString& text) const
 {
-    int result = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-    if (result == NSNotFound)
+    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+
+    int result;
+    if (nsresult == NSNotFound)
         result = wxNOT_FOUND;
+    else
+        result = (int) nsresult;
     return result;
 }
 
