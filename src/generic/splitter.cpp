@@ -94,11 +94,6 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     // allow TABbing from one window to the other
     style |= wxTAB_TRAVERSAL;
 
-    // we draw our border ourselves to blend the sash with it
-    style &= ~wxBORDER_MASK;
-    style |= wxBORDER_NONE;
-
-
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
