@@ -84,29 +84,15 @@ wxStatusBar::wxStatusBar()
     m_pDC = NULL;
 }
 
-bool wxStatusBar::Create(wxWindow *parent,
-                         wxWindowID id,
-                         long style,
-                         const wxString& name)
+WXDWORD wxStatusBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    wxCHECK_MSG( parent, false, "status bar must have a parent" );
-
-    SetName(name);
-    SetWindowStyleFlag(style);
-    SetParent(parent);
-
-    parent->AddChild(this);
-
-    m_windowId = id == wxID_ANY ? NewControlId() : id;
-
-    DWORD wstyle = WS_CHILD | WS_VISIBLE;
-
-    if ( style & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
+    WXDWORD msStyle = wxStatusBarBase::MSWGetStyle(style, exstyle);
 
     // wxSTB_SIZEGRIP is part of our default style but it doesn't make sense to
     // show size grip if this is the status bar of a non-resizeable TLW so turn
     // it off in such case
+    wxWindow * const parent = GetParent();
+    wxCHECK_MSG( parent, msStyle, wxS("Status bar must have a parent") );
     if ( parent->IsTopLevel() && !parent->HasFlag(wxRESIZE_BORDER) )
         style &= ~wxSTB_SIZEGRIP;
 
@@ -117,44 +103,37 @@ bool wxStatusBar::Create(wxWindow *parent,
     // is not given
     if ( !(style & wxSTB_SIZEGRIP) )
     {
-        wstyle |= CCS_TOP;
+        *exstyle |= CCS_TOP;
     }
     else
     {
 #ifndef __WXWINCE__
         // may be some versions of comctl32.dll do need it - anyhow, it won't
         // do any harm
-        wstyle |= SBARS_SIZEGRIP;
+        *exstyle |= SBARS_SIZEGRIP;
 #endif
     }
 
-    m_hWnd = CreateWindow
-             (
-                STATUSCLASSNAME,
-                wxT(""),
-                wstyle,
-                0, 0, 0, 0,
-                GetHwndOf(parent),
-                (HMENU)wxUIntToPtr(m_windowId.GetValue()),
-                wxGetInstance(),
-                NULL
-             );
-    if ( m_hWnd == 0 )
-    {
-        wxLogSysError(_("Failed to create a status bar."));
+    return msStyle;
+}
 
+bool wxStatusBar::Create(wxWindow *parent,
+                         wxWindowID id,
+                         long style,
+                         const wxString& name)
+{
+    if ( !CreateControl(parent, id, wxDefaultPosition, wxDefaultSize,
+                        style, wxDefaultValidator, name) )
         return false;
-    }
+
+    if ( !MSWCreateControl(STATUSCLASSNAME, wxString(),
+                           wxDefaultPosition, wxDefaultSize) )
+        return false;
 
     SetFieldsCount(1);
-    SubclassWin(m_hWnd);
 
     // cache the DC instance used by DoUpdateStatusText:
-    // NOTE: create the DC before calling InheritAttributes() since
-    //       it may result in a call to our SetFont()
     m_pDC = new wxClientDC(this);
-
-    InheritAttributes();
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
 
