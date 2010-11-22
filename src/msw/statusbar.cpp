@@ -213,8 +213,11 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     widthAvailable -= extraWidth*(count - 1);   // extra space between fields
     widthAvailable -= MSWGetMetrics().textMargin;   // and for the last field
 
-    if ( HasFlag(wxSTB_SIZEGRIP) )
-        widthAvailable -= MSWGetMetrics().gripWidth;
+    // Deal with the grip: we shouldn't overflow onto the space occupied by it
+    // so the effectively available space is smaller.
+    const int gripWidth = HasFlag(wxSTB_SIZEGRIP) ? MSWGetMetrics().gripWidth
+                                                  : 0;
+    widthAvailable -= gripWidth;
 
     // distribute the available space (client width) among the various fields:
 
@@ -231,6 +234,11 @@ void wxStatusBar::MSWUpdateFieldsWidths()
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
     }
+
+    // The total width of the panes passed to Windows must be equal to the
+    // total width available, including the grip. Otherwise we get an extra
+    // separator line just before it.
+    pWidths[count - 1] += gripWidth;
 
     if ( !StatusBar_SetParts(GetHwnd(), count, pWidths) )
     {
@@ -428,14 +436,6 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 #endif
 
     wxCopyRECTToRect(r, rect);
-
-    // Windows seems to under-report the size of the last field rectangle,
-    // presumably in order to prevent the buggy applications from overflowing
-    // onto the size grip but we want to return the real size to wx users
-    if ( HasFlag(wxSTB_SIZEGRIP) && i == (int)m_panes.GetCount() - 1 )
-    {
-        rect.width += MSWGetMetrics().gripWidth - MSWGetBorderWidth();
-    }
 
     return true;
 }
