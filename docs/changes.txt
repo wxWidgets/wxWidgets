@@ -169,6 +169,12 @@ Changes in behaviour not resulting in compilation errors, please read this!
   regardless of whether the flag was specified or not. This only affects
   legacy ANSI builds.
 
+- wxNotebook::GetSelection() returns the new page index when called from
+  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event handler in wxMSW, not the old one.
+  The new behaviour is consistent with wxGTK and more logical but different
+  from the previous versions. Using wxNotebookEvent::GetSelection() instead of
+  querying the notebook selection avoids the problem and is recommended.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

@@ -454,11 +454,13 @@ int wxNotebook::SetSelection(size_t nPage)
         if ( SendPageChangingEvent(nPage) )
         {
             // program allows the page change
-            SendPageChangedEvent(m_selection, nPage);
+            const int selectionOld = m_selection;
 
             UpdateSelection(nPage);
 
             TabCtrl_SetCurSel(GetHwnd(), nPage);
+
+            SendPageChangedEvent(selectionOld, nPage);
         }
     }
 
