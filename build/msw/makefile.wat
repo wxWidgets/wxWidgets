@@ -3455,8 +3455,8 @@ WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
 	-i=$(SETUPHDIR) -i=..\..\include $(__wxscintilla_usingdll_p) -d__WXMSW__ &
-	$(__WXUNIV_DEFINE_p) $(__UNICODE_DEFINE_p) $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_AutoComplete.obj &
 	$(OBJS)\wxscintilla_CallTip.obj &

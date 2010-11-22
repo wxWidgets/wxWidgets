@@ -51,6 +51,7 @@
         <define>$(wxscintilla_usingdll)</define>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
