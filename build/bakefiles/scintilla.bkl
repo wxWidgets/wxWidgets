@@ -39,7 +39,7 @@
     </template>
 
     <set var="wxscintilla_usingdll">
-        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
+        <if cond="SHARED=='1'">WXUSINGDLL</if>
     </set>
 
     <lib id="wxscintilla" template="3rdparty_lib,wxscintilla_cppflags"

@@ -81,10 +81,8 @@ __wxtiff___depname =
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
 !endif
 __wxscintilla_usingdll_p =
-!ifeq MONOLITHIC 0
 !ifeq SHARED 1
 __wxscintilla_usingdll_p = -dWXUSINGDLL
-!endif
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0

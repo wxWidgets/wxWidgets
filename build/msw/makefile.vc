@@ -1716,7 +1716,7 @@ __RUNTIME_LIBS_100 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_100 = $(__THREADSFLAG)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+!if "$(SHARED)" == "1"
 __wxscintilla_usingdll_p = /DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"

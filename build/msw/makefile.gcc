@@ -1532,10 +1532,8 @@ endif
 ifeq ($(USE_GUI),1)
 __wxtiff___depname = $(LIBDIRNAME)\libwxtiff$(WXDEBUGFLAG).a
 endif
-ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 __wxscintilla_usingdll_p = -DWXUSINGDLL
-endif
 endif
 ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
