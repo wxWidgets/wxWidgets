@@ -79,6 +79,11 @@ public:
     // returns the choice control
     wxChoice* GetChoiceCtrl() const { return (wxChoice*)m_bookctrl; }
 
+    // Override this to return true because the part of parent window
+    // background between our controlling wxChoice and the page area should
+    // show through.
+    virtual bool HasTransparentBackground() { return true; }
+
 protected:
     virtual void DoSetWindowVariant(wxWindowVariant variant);
 
