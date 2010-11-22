@@ -600,6 +600,19 @@ int wxMessageDialog::ShowModal()
     return ShowMessageBox();
 }
 
+void wxMessageDialog::DoCentre(int dir)
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    // Task dialog is always centered on its parent window and trying to center
+    // it manually doesn't work because its HWND is not created yet so don't
+    // even try as this would only result in (debug) error messages.
+    if ( HasNativeTaskDialog() )
+        return;
+#endif // wxHAS_MSW_TASKDIALOG
+
+    return wxMessageDialogBase::DoCentre(dir);
+}
+
 // ----------------------------------------------------------------------------
 // Helpers of the wxMSWMessageDialog namespace
 // ----------------------------------------------------------------------------
