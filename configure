@@ -29286,10 +29286,10 @@ fi
                         LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
-                WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+                WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 
         WIN32INSTALL=win32install
 
@@ -52165,7 +52165,7 @@ echo "$as_me: error: Required windres program not found" >&2;}
    { (exit 1); exit 1; }; }
     fi
 
-    RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
+    RESCOMP="$WINDRES"
 fi
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
