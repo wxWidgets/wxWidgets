@@ -3542,13 +3542,19 @@ bool wxPropertyGrid::DoEditorValidate()
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
+bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 {
+    //
+    // NB: We should return true if the event was recognized as
+    //     a dedicated wxPropertyGrid event, and as such was
+    //     either properly handled or ignored.
+    //
+
     // It is possible that this handler receives event even before
     // the control has been properly initialized. Let's skip the
     // event handling in that case.
     if ( !m_pState )
-        return;
+        return false;
 
     // Don't care about the event if it originated from the
     // 'label editor'. In this function we only care about the
@@ -3556,7 +3562,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     if ( m_labelEditor && event.GetId() == m_labelEditor->GetId() )
     {
         event.Skip();
-        return;
+        return true;
     }
 
     wxPGProperty* selected = GetSelection();
@@ -3570,10 +3576,10 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
           // similar is currently doing something (showing a
           // message box, for instance).
           m_processedEvent )
-        return;
+        return true;
 
     if ( m_iFlags & wxPG_FL_IN_HANDLECUSTOMEDITOREVENT )
-        return;
+        return true;
 
     wxVariant pendingValue(selected->GetValueRef());
     wxWindow* wnd = GetEditorControl();
@@ -3597,7 +3603,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             wxString newTcValue = tc->GetValue();
             if ( m_prevTcValue == newTcValue )
-                return;
+                return true;
             m_prevTcValue = newTcValue;
         }
         else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
@@ -3606,7 +3612,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             wxString newTcValue = cc->GetTextCtrl()->GetValue();
             if ( m_prevTcValue == newTcValue )
-                return;
+                return true;
             m_prevTcValue = newTcValue;
         }
     }
@@ -3615,6 +3621,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     bool validationFailure = false;
     bool buttonWasHandled = false;
+    bool result = false;
 
     //
     // Try common button handling
@@ -3642,6 +3649,8 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             if ( editor->OnEvent( this, selected, editorWnd, event ) )
             {
+                result = true;
+
                 // If changes, validate them
                 if ( DoEditorValidate() )
                 {
@@ -3715,12 +3724,15 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         // Let unhandled button click events go to the parent
         if ( !buttonWasHandled && event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
         {
+            result = true;
             wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED,GetId());
             GetEventHandler()->AddPendingEvent(evt);
         }
     }
 
     ClearInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
+
+    return result;
 }
 
 // -----------------------------------------------------------------------
@@ -3894,7 +3906,16 @@ private:
         // Always skip
         event.Skip();
 
-        m_propGrid->HandleCustomEditorEvent(event);
+        if ( m_propGrid->HandleCustomEditorEvent(event) )
+            return true;
+
+        //
+        // NB: We should return true if the event was recognized as
+        //     a dedicated wxPropertyGrid event, and as such was
+        //     either properly handled or ignored.
+        //
+        if ( m_propGrid->IsMainButtonEvent(event) )
+            return true;
 
         //
         // NB: On wxMSW, a wxTextCtrl with wxTE_PROCESS_ENTER
