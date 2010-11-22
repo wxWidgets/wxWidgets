@@ -19,8 +19,7 @@
 // wxStatusBarUniv: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxStatusBarUniv : public wxStatusBarBase,
-                                         public wxInputConsumer
+class WXDLLIMPEXP_CORE wxStatusBarUniv : public wxStatusBarBase
 {
 public:
     wxStatusBarUniv() { Init(); }
