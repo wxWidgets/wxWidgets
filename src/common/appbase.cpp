@@ -370,6 +370,9 @@ bool wxAppConsoleBase::ProcessIdle()
     wxLog::FlushActive();
 #endif
 
+    // Garbage collect all objects previously scheduled for destruction.
+    DeletePendingObjects();
+
     return event.MoreRequested();
 }
 
@@ -509,9 +512,6 @@ void wxAppConsoleBase::ProcessPendingEvents()
 
         wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
     }
-
-    // Garbage collect all objects previously scheduled for destruction.
-    DeletePendingObjects();
 }
 
 void wxAppConsoleBase::DeletePendingEvents()

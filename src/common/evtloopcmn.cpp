@@ -139,7 +139,7 @@ int wxEventLoopManual::Run()
 
                 // generate and process idle events for as long as we don't
                 // have anything else to do
-                while ( !Pending() && ProcessIdle() )
+                while ( !Pending() && ProcessIdle() && !m_shouldExit )
                     ;
 
                 // if the "should exit" flag is set, the loop should terminate
