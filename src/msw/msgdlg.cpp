@@ -610,7 +610,7 @@ void wxMessageDialog::DoCentre(int dir)
         return;
 #endif // wxHAS_MSW_TASKDIALOG
 
-    return wxMessageDialogBase::DoCentre(dir);
+    wxMessageDialogBase::DoCentre(dir);
 }
 
 // ----------------------------------------------------------------------------
