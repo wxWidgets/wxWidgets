@@ -117,44 +117,18 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #include <wtime.h>
 #endif
 
-#if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
-    #if defined(__WXPALMOS__)
-        #define WX_GMTOFF_IN_TM
-    #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
-        #define WX_TIMEZONE _timezone
-    #elif defined(__MWERKS__)
-        long wxmw_timezone = 28800;
-        #define WX_TIMEZONE wxmw_timezone
-    #elif defined(__DJGPP__) || defined(__WINE__)
-        #include <sys/timeb.h>
-        #include <values.h>
-        static long wxGetTimeZone()
-        {
-            struct timeb tb;
-            ftime(&tb);
-            return tb.timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-    #elif defined(__DARWIN__)
-        #define WX_GMTOFF_IN_TM
-    #elif wxCHECK_VISUALC_VERSION(8)
-        // While _timezone is still present in (some versions of) VC CRT, it's
-        // deprecated and _get_timezone() should be used instead.
-        static long wxGetTimeZone()
-        {
-            // We must initialize the time zone information before using it
-            // (this will be done only once internally).
-            _tzset();
+#if defined(__DJGPP__) || defined(__WINE__)
+    #include <sys/timeb.h>
+    #include <values.h>
+#endif
 
-            long t;
-            _get_timezone(&t);
-            return t;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-    #else // unknown platform - try timezone
-        #define WX_TIMEZONE timezone
+#ifndef WX_GMTOFF_IN_TM
+    // Define it for some systems which don't (always) use configure but are
+    // known to have tm_gmtoff field.
+    #if defined(__WXPALMOS__) || defined(__DARWIN__)
+        #define WX_GMTOFF_IN_TM
     #endif
-#endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
+#endif
 
 // NB: VC8 safe time functions could/should be used for wxMSW as well probably
 #if defined(__WXWINCE__) && defined(__VISUALC8__)
@@ -380,8 +354,33 @@ int GetTimeZone()
         gmtoffset = -tm.tm_gmtoff;
     }
     return (int)gmtoffset;
-#else // !WX_GMTOFF_IN_TM
+#elif defined(__DJGPP__) || defined(__WINE__)
+    struct timeb tb;
+    ftime(&tb);
+    return tb.timezone*60;
+#elif defined(__VISUALC__)
+    // We must initialize the time zone information before using it (this will
+    // be done only once internally).
+    _tzset();
+
+    // Starting with VC++ 8 timezone variable is deprecated and is not even
+    // available in some standard library version so use the new function for
+    // accessing it instead.
+    #if wxCHECK_VISUALC_VERSION(8)
+        long t;
+        _get_timezone(&t);
+        return t;
+    #else // VC++ < 8
+        return timezone;
+    #endif
+#elif defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
     return WX_TIMEZONE;
+#elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
+    return _timezone;
+#elif defined(__MWERKS__)
+    return 28800;
+#else // unknown platform -- assume it has timezone
+    return timezone;
 #endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
 }
 
