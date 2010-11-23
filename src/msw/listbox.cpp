@@ -351,7 +351,11 @@ void wxListBox::DoSetSelection(int N, bool select)
 
     if ( HasMultipleSelection() )
     {
-        SendMessage(GetHwnd(), LB_SETSEL, select, N);
+        // Setting selection to -1 should deselect everything.
+        const bool deselectAll = N == wxNOT_FOUND;
+        SendMessage(GetHwnd(), LB_SETSEL,
+                    deselectAll ? FALSE : select,
+                    deselectAll ? -1 : N);
     }
     else
     {
