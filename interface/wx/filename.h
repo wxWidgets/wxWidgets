@@ -962,9 +962,16 @@ public:
                       int flags = 0);
 
     /**
-        Normalize the path. With the default flags value, the path will be
-        made absolute, without any ".." and "." and all environment
-        variables will be expanded in it.
+        Normalize the path.
+
+        With the default flags value, the path will be made absolute, without
+        any ".." and "." and all environment variables will be expanded in it.
+
+        Notice that in some rare cases normalizing a valid path may result in
+        an invalid wxFileName object. E.g. normalizing "./" path using
+        wxPATH_NORM_DOTS but not wxPATH_NORM_ABSOLUTE will result in a
+        completely empty and thus invalid object. As long as there is a non
+        empty file name the result of normalization will be valid however.
 
         @param flags
             The kind of normalization to do with the file name. It can be
