@@ -1091,33 +1091,45 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     unsigned char *data = image.GetData();
     const unsigned char *source_data = M_IMGDATA->m_data;
     unsigned char *target_data;
-    unsigned char *alpha_data = image.GetAlpha();
-    const unsigned char *source_alpha = M_IMGDATA->m_alpha;
-    unsigned char *target_alpha = 0 ;
 
     for (long j = 0; j < height; j++)
     {
         for (long i = 0; i < width; i++)
         {
-            if (clockwise)
+            if ( clockwise )
             {
                 target_data = data + (((i+1)*height) - j - 1)*3;
-                if (source_alpha)
-                    target_alpha = alpha_data + (((i+1)*height) - j - 1);
             }
             else
             {
                 target_data = data + ((height*(width-1)) + j - (i*height))*3;
-                if (source_alpha)
-                    target_alpha = alpha_data + ((height*(width-1)) + j - (i*height));
             }
             memcpy( target_data, source_data, 3 );
             source_data += 3;
+        }
+    }
 
-            if (source_alpha)
+    const unsigned char *source_alpha = M_IMGDATA->m_alpha;
+
+    if ( source_alpha )
+    {
+        unsigned char *alpha_data = image.GetAlpha();
+        unsigned char *target_alpha = 0 ;
+
+        for (long j = 0; j < height; j++)
+        {
+            for (long i = 0; i < width; i++)
             {
-                memcpy( target_alpha, source_alpha, 1 );
-                source_alpha += 1;
+                if ( clockwise )
+                {
+                    target_alpha = alpha_data + (((i+1)*height) - j - 1);
+                }
+                else
+                {
+                    target_alpha = alpha_data + ((height*(width-1)) + j - (i*height));
+                }
+
+                *target_alpha = *source_alpha++;
             }
         }
     }
