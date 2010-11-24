@@ -2376,8 +2376,20 @@ bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
     const unsigned maxWidth = GetOptionInt(wxIMAGE_OPTION_MAX_WIDTH),
                    maxHeight = GetOptionInt(wxIMAGE_OPTION_MAX_HEIGHT);
 
+    // Preserve the original stream position if possible to rewind back to it
+    // if we failed to load the file -- maybe the next handler that we try can
+    // succeed after us then.
+    wxFileOffset posOld = wxInvalidOffset;
+    if ( stream.IsSeekable() )
+        posOld = stream.TellI();
+
     if ( !handler.LoadFile(this, stream, true/*verbose*/, index) )
+    {
+        if ( posOld != wxInvalidOffset )
+            stream.SeekI(posOld);
+
         return false;
+    }
 
     // rescale the image to the specified size if needed
     if ( maxWidth || maxHeight )
