@@ -25,6 +25,12 @@
     @c wxCMD_LINE_NEEDS_SEPARATOR can be specified to require a separator (either
     a colon, an equal sign or white space) between the option name and its
     value. By default, no separator is required.
+
+    @c wxCMD_LINE_SWITCH_NEGATABLE can be specified if you want to allow the
+    user to specify the switch in both normal form and in negated one (e.g.
+    /R-). You will need to use wxCmdLineParser::FoundSwitch() to distinguish
+    between the normal and negated forms of the switch. This flag is new since
+    wxWidgets 2.9.2.
 */
 enum wxCmdLineEntryFlags
 {
@@ -32,7 +38,8 @@ enum wxCmdLineEntryFlags
     wxCMD_LINE_PARAM_OPTIONAL   = 0x02, ///< The parameter may be omitted.
     wxCMD_LINE_PARAM_MULTIPLE   = 0x04, ///< The parameter may be repeated.
     wxCMD_LINE_OPTION_HELP      = 0x08, ///< This option is a help request.
-    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10  ///< Must have a separator before the value.
+    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10, ///< Must have a separator before the value.
+    wxCMD_LINE_SWITCH_NEGATABLE = 0x20  ///< This switch can be negated (e.g. /S-)
 };
 
 /**
@@ -68,6 +75,24 @@ enum wxCmdLineEntryType
     
     wxCMD_LINE_NONE     ///< Use this to terminate the list.
 };
+
+/**
+    The state of a switch as returned by wxCmdLineParser::FoundSwitch().
+
+    @since 2.9.2
+*/
+enum wxCmdLineSwitchState
+{
+    /// The switch was found in negated form, i.e. followed by a '-'.
+    wxCMD_SWITCH_OFF,
+
+    /// The switch was not found at all on the command line.
+    wxCMD_SWITCH_NOT_FOUND
+
+    /// The switch was found (and was not negated)
+    wxCMD_SWITCH_ON
+};
+
 
 /**
     Flags determining wxCmdLineParser::ConvertStringToArgs() behaviour.
@@ -388,6 +413,26 @@ public:
         Returns @true if the given switch was found, @false otherwise.
     */
     bool Found(const wxString& name) const;
+
+    /**
+        Returns whether the switch was found on the command line and whether it
+        was negated.
+
+        This method can be used for any kind of switch but is especially useful
+        for switches that can be negated, i.e. were added with
+        wxCMD_LINE_SWITCH_NEGATABLE flag, as otherwise Found() is simpler to
+        use.
+
+        However Found() doesn't allow to distinguish between switch specified
+        normally, i.e. without dash following it, and negated switch, i.e. with
+        the following dash. This method will return @c wxCMD_SWITCH_ON or @c
+        wxCMD_SWITCH_OFF depending on whether the switch was negated or not.
+        And if the switch was not found at all, @c wxCMD_SWITCH_NOT_FOUND is
+        returned.
+
+        @since 2.9.2
+    */
+    wxCmdLineSwitchState FoundSwitch(const wxString& name) const;
 
     /**
         Returns true if an option taking a string value was found and stores

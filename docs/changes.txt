@@ -415,6 +415,7 @@ All:
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
 - Added wxFile::GetLastError() and ClearLastError() (ryazanov).
+- Added negatable command line switches (Armel Asselin).
 
 Unix:
 

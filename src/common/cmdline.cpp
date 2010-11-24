@@ -107,6 +107,7 @@ struct wxCmdLineOption
         flags = fl;
 
         m_hasVal = false;
+        m_isNegated = false;
     }
 
     // can't use union easily here, so just store all possible data fields, we
@@ -144,6 +145,9 @@ struct wxCmdLineOption
     void SetHasValue(bool hasValue = true) { m_hasVal = hasValue; }
     bool HasValue() const { return m_hasVal; }
 
+    void SetNegated() { m_isNegated = true; }
+    bool IsNegated() const { return m_isNegated; }
+
 public:
     wxCmdLineEntryType kind;
     wxString shortName,
@@ -154,6 +158,7 @@ public:
 
 private:
     bool m_hasVal;
+    bool m_isNegated;
 
     double m_doubleVal;
     long m_longVal;
@@ -519,17 +524,22 @@ void wxCmdLineParser::AddUsageText(const wxString& text)
 
 bool wxCmdLineParser::Found(const wxString& name) const
 {
+    return FoundSwitch(name) != wxCMD_SWITCH_NOT_FOUND;
+}
+
+wxCmdLineSwitchState wxCmdLineParser::FoundSwitch(const wxString& name) const
+{
     int i = m_data->FindOption(name);
     if ( i == wxNOT_FOUND )
         i = m_data->FindOptionByLongName(name);
 
-    wxCHECK_MSG( i != wxNOT_FOUND, false, wxT("unknown switch") );
+    wxCHECK_MSG( i != wxNOT_FOUND, wxCMD_SWITCH_NOT_FOUND, wxT("unknown switch") );
 
     wxCmdLineOption& opt = m_data->m_options[(size_t)i];
     if ( !opt.HasValue() )
-        return false;
+        return wxCMD_SWITCH_NOT_FOUND;
 
-    return true;
+    return opt.IsNegated() ? wxCMD_SWITCH_OFF : wxCMD_SWITCH_ON;
 }
 
 bool wxCmdLineParser::Found(const wxString& name, wxString *value) const
@@ -755,6 +765,14 @@ int wxCmdLineParser::Parse(bool showUsage)
                     if ( m_data->m_options[(size_t)optInd].kind
                             == wxCMD_LINE_SWITCH )
                     {
+                        // if the switch is negatable and it is just followed
+                        // by '-' the '-' is considered to be part of this
+                        // switch
+                        if ( (m_data->m_options[(size_t)optInd].flags &
+                                    wxCMD_LINE_SWITCH_NEGATABLE) &&
+                                arg[len] == '-' )
+                            ++len;
+
                         // pretend that all the rest of the argument is the
                         // next argument, in fact
                         wxString arg2 = arg[0u];
@@ -792,7 +810,10 @@ int wxCmdLineParser::Parse(bool showUsage)
             if ( opt.kind == wxCMD_LINE_SWITCH )
             {
                 // we must check that there is no value following the switch
-                if ( p != arg.end() )
+                bool negated = (opt.flags & wxCMD_LINE_SWITCH_NEGATABLE) &&
+                                    p != arg.end() && *p == '-';
+
+                if ( !negated && p != arg.end() )
                 {
                     errorMsg << wxString::Format(_("Unexpected characters following option '%s'."), name.c_str())
                              << wxT('\n');
@@ -802,6 +823,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                 {
                     // nothing more to do
                     opt.SetHasValue();
+                    if ( negated )
+                        opt.SetNegated();
 
                     if ( opt.flags & wxCMD_LINE_OPTION_HELP )
                     {
@@ -1095,7 +1118,7 @@ wxString wxCmdLineParser::GetUsageString() const
     for ( n = 0; n < count; n++ )
     {
         wxCmdLineOption& opt = m_data->m_options[n];
-        wxString option;
+        wxString option, negator;
 
         if ( opt.kind != wxCMD_LINE_USAGE_TEXT )
         {
@@ -1105,13 +1128,16 @@ wxString wxCmdLineParser::GetUsageString() const
                 usage << wxT('[');
             }
 
+            if ( opt.flags & wxCMD_LINE_SWITCH_NEGATABLE )
+                negator = wxT("[-]");
+
             if ( !opt.shortName.empty() )
             {
-                usage << chSwitch << opt.shortName;
+                usage << chSwitch << opt.shortName << negator;
             }
             else if ( areLongOptionsEnabled && !opt.longName.empty() )
             {
-                usage << wxT("--") << opt.longName;
+                usage << wxT("--") << opt.longName << negator;
             }
             else
             {
@@ -1145,6 +1171,7 @@ wxString wxCmdLineParser::GetUsageString() const
                 option << (!opt.longName ? wxT(':') : wxT('=')) << val;
             }
 
+            usage << negator;
             if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
             {
                 usage << wxT(']');
