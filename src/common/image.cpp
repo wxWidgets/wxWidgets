@@ -29,7 +29,6 @@
     #include "wx/colour.h"
 #endif
 
-#include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/xpmdecod.h"
 
@@ -2198,21 +2197,18 @@ bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
 #if HAS_FILE_STREAMS
-    if (wxFileExists(filename))
+    wxImageFileInputStream stream(filename);
+    if ( stream.IsOk() )
     {
-        wxImageFileInputStream stream(filename);
         wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, type, index);
+        if ( LoadFile(bstream, type, index) )
+            return true;
     }
-    else
-    {
-        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
-        return false;
-    }
-#else // !HAS_FILE_STREAMS
-    return false;
+    wxLogError(_("Failed to load image from file \"%s\"."), filename);
 #endif // HAS_FILE_STREAMS
+
+    return false;
 }
 
 bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
@@ -2220,21 +2216,18 @@ bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
 #if HAS_FILE_STREAMS
-    if (wxFileExists(filename))
+    wxImageFileInputStream stream(filename);
+    if ( stream.IsOk() )
     {
-        wxImageFileInputStream stream(filename);
         wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, mimetype, index);
+        if ( LoadFile(bstream, mimetype, index) )
+            return true;
     }
-    else
-    {
-        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
-        return false;
-    }
-#else // !HAS_FILE_STREAMS
-    return false;
+    wxLogError(_("Failed to load image from file \"%s\"."), filename);
 #endif // HAS_FILE_STREAMS
+
+    return false;
 }
 
 
@@ -2420,6 +2413,17 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 
     if ( type == wxBITMAP_TYPE_ANY )
     {
+        if ( !stream.IsSeekable() )
+        {
+            // The error message about image data format being unknown below
+            // would be misleading in this case as we are not even going to try
+            // any handlers because CanRead() never does anything for not
+            // seekable stream, so try to be more precise here.
+            wxLogError(_("Can't automatically determine the image format "
+                         "for non-seekable input."));
+            return false;
+        }
+
         const wxList& list = GetHandlers();
         for ( wxList::compatibility_iterator node = list.GetFirst();
               node;
@@ -2430,7 +2434,7 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
                  return true;
         }
 
-        wxLogWarning( _("No handler found for image type.") );
+        wxLogWarning( _("Unknown image data format.") );
 
         return false;
     }
@@ -2445,7 +2449,7 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 
     if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
-        wxLogError(_("Image file is not of type %d."), type);
+        wxLogError(_("This is not a %s."), handler->GetName());
         return false;
     }
 
@@ -2468,7 +2472,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
-        wxLogError(_("Image file is not of type %s."), mimetype);
+        wxLogError(_("Image is not of type %s."), mimetype);
         return false;
     }
 
@@ -2868,15 +2872,15 @@ int wxImageHandler::GetImageCount( wxInputStream& stream )
 
 bool wxImageHandler::CanRead( const wxString& name )
 {
-    if (wxFileExists(name))
+    wxImageFileInputStream stream(name);
+    if ( !stream.IsOk() )
     {
-        wxImageFileInputStream stream(name);
-        return CanRead(stream);
+        wxLogError(_("Failed to check format of image file \"%s\"."), name);
+
+        return false;
     }
 
-    wxLogError( _("Can't check image format of file '%s': file does not exist."), name.c_str() );
-
-    return false;
+    return CanRead(stream);
 }
 
 bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
