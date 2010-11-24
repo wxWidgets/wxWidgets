@@ -3469,13 +3469,17 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         xpos += c->GetWidth();
     }
     if (!col)
+    {
+        event.Skip();
         return;
+    }
 
     wxDataViewRenderer *cell = col->GetRenderer();
     unsigned int current = GetLineAt( y );
     if ((current >= GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
+        event.Skip();
         return;
     }
 
