@@ -93,6 +93,42 @@ public:
     void AddTranslator(const wxString& translator);
 
     /**
+        Get the name of the program.
+
+        @return Name of the program
+        @see SetName()
+    */
+    const wxString& GetName() const;
+
+    /**
+        Returns @true if a description string has been specified.
+
+        @see GetDescription()
+    */
+    bool HasDescription() const;
+
+    /**
+        Get the description string.
+
+        @return The description string, free-form.
+    */
+    const wxString& GetDescription();
+
+    /**
+        Returns @true if a copyright string has been specified.
+
+        @see GetCopyright()
+    */
+    bool HasCopyright() const;
+
+    /**
+        Get the copyright string.
+
+        @return The copyright string
+    */
+    const wxString& GetCopyright() const;
+
+    /**
         Sets the the list of artists to be shown in the program credits.
 
         @see AddArtist()
