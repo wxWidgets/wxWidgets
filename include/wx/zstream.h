@@ -16,6 +16,7 @@
 #if wxUSE_ZLIB && wxUSE_STREAMS
 
 #include "wx/stream.h"
+#include "wx/versioninfo.h"
 
 // Compression level
 enum wxZlibCompressionLevels {
@@ -137,6 +138,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxGzipClassFactory)
 };
+
+WXDLLIMPEXP_BASE wxVersionInfo wxGetZlibVersionInfo();
 
 #endif
   // wxUSE_ZLIB && wxUSE_STREAMS

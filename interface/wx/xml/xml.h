@@ -645,5 +645,13 @@ public:
         Deep copies the given document.
     */
     wxXmlDocument& operator=(const wxXmlDocument& doc);
+
+    /**
+       Get expat library version information.
+
+       @since 2.9.2
+       @see wxVersionInfo
+    */
+    static wxVersionInfo GetLibraryVersionInfo();
 };
 

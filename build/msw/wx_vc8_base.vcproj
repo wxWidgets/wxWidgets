@@ -2202,6 +2202,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\versioninfo.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\volume.h"
 				>
 			</File>

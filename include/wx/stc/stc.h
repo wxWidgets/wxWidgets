@@ -4240,6 +4240,8 @@ public:
         return wxTextAreaBase::HitTest(pt, col, row);
     }
 
+    static wxVersionInfo GetLibraryVersionInfo();
+
 protected:
     virtual wxString DoGetValue() const { return GetText(); }
     virtual wxWindow *GetEditableWindow() { return this; }

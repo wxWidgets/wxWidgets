@@ -20,6 +20,7 @@
 #include "wx/list.h"
 #include "wx/filefn.h"
 #include "wx/hashmap.h"
+#include "wx/versioninfo.h"
 #include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI
@@ -139,6 +140,8 @@ WXDLLIMPEXP_BASE void wxBell();
 // Show wxWidgets information
 WXDLLIMPEXP_CORE void wxInfoMessageBox(wxWindow* parent);
 #endif // wxUSE_MSGDLG
+
+WXDLLIMPEXP_BASE wxVersionInfo wxGetLibraryVersionInfo();
 
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();

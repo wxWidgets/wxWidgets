@@ -1607,6 +1607,10 @@ SOURCE=..\..\include\wx\version.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\versioninfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\volume.h
 # End Source File
 # Begin Source File

@@ -538,6 +538,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/variant.h
     wx/vector.h
     wx/version.h
+    wx/versioninfo.h
     wx/volume.h
     wx/weakref.h
     wx/wfstream.h

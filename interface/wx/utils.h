@@ -145,10 +145,19 @@ void wxBell();
     doesn't otherwise handle this event.
 
     @since 2.9.0
-
+    @see wxGetLibraryVersionInfo()
     @header{wx/utils.h}
 */
-void wxInfoMessageBox(wxWindow parent = NULL);
+void wxInfoMessageBox(wxWindow* parent);
+
+/**
+    Get wxWidgets version information.
+
+    @since 2.9.2
+    @see wxVersionInfo
+    @header{wx/utils.h}
+*/
+wxVersionInfo wxGetLibraryVersionInfo();
 
 //@}
 

@@ -220,6 +220,7 @@ wx/utils.h
 wx/variant.h
 wx/vector.h
 wx/version.h
+wx/versioninfo.h
 wx/volume.h
 wx/weakref.h
 wx/wfstream.h

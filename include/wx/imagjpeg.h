@@ -19,6 +19,7 @@
 #if wxUSE_LIBJPEG
 
 #include "wx/image.h"
+#include "wx/versioninfo.h"
 
 class WXDLLIMPEXP_CORE wxJPEGHandler: public wxImageHandler
 {
@@ -32,6 +33,8 @@ public:
         m_type = wxBITMAP_TYPE_JPEG;
         m_mime = wxT("image/jpeg");
     }
+
+    static wxVersionInfo GetLibraryVersionInfo();
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );

@@ -25,6 +25,7 @@
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
 
 #include "wx/imagtiff.h"
+#include "wx/versioninfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -626,5 +627,28 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 }
 
 #endif  // wxUSE_STREAMS
+
+/*static*/ wxVersionInfo wxTIFFHandler::GetLibraryVersionInfo()
+{
+    int major,
+        minor,
+        micro;
+
+    const wxString ver(::TIFFGetVersion());
+    if ( wxSscanf(ver, "LIBTIFF, Version %d.%d.%d", &major, &micro, &micro) != 3 )
+    {
+        wxLogDebug("Unrecognized libtiff version string \"%s\"", ver);
+
+        major =
+        minor =
+        micro = 0;
+    }
+
+    wxString copyright;
+    const wxString desc = ver.BeforeFirst('\n', &copyright);
+    copyright.Replace("\n", "");
+
+    return wxVersionInfo("libtiff", major, minor, micro, desc, copyright);
+}
 
 #endif  // wxUSE_LIBTIFF

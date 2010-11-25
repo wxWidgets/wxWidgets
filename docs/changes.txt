@@ -416,6 +416,7 @@ All:
 - Added wxThread::OnKill() and OnDelete() callbacks.
 - Added wxFile::GetLastError() and ClearLastError() (ryazanov).
 - Added negatable command line switches (Armel Asselin).
+- Added wxVersionInfo and various GetLibraryVersionInfo() functions (troelsk).
 
 Unix:
 

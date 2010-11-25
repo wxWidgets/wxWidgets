@@ -254,6 +254,20 @@ public:
             Handler name.
     */
     void SetName(const wxString& name);
+
+    /**
+        Retrieve the version information about the image library used by this
+        handler.
+
+        This method is not present in wxImageHandler class itself but is
+        present in a few of the classes deriving from it, currently
+        wxJPEGHandler, wxPNGHandler and wxTIFFHandler. It returns the
+        information about the version of the image library being used for the
+        corresponding handler implementation.
+
+        @since 2.9.2
+     */
+     static wxVersionInfo GetLibraryVersionInfo();
 };
 
 

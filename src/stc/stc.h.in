@@ -38,6 +38,7 @@
 #include "wx/control.h"
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
+#include "wx/versioninfo.h"
 
 #include "wx/textentry.h"
 #if wxUSE_TEXTCTRL
@@ -437,6 +438,8 @@ public:
     {
         return wxTextAreaBase::HitTest(pt, col, row);
     }
+
+    static wxVersionInfo GetLibraryVersionInfo();
 
 protected:
     virtual wxString DoGetValue() const { return GetText(); }

@@ -25,6 +25,7 @@
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
 #include "wx/imagpng.h"
+#include "wx/versioninfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -901,5 +902,19 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 #endif /* VC++ */
 
 #endif  // wxUSE_STREAMS
+
+/*static*/ wxVersionInfo wxPNGHandler::GetLibraryVersionInfo()
+{
+    // The version string seems to always have a leading space and a trailing
+    // new line, get rid of them both.
+    wxString str = png_get_header_version(NULL) + 1;
+    str.Replace("\n", "");
+
+    return wxVersionInfo("libpng",
+                         PNG_LIBPNG_VER_MAJOR,
+                         PNG_LIBPNG_VER_MINOR,
+                         PNG_LIBPNG_VER_RELEASE,
+                         str);
+}
 
 #endif  // wxUSE_LIBPNG

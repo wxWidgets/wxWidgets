@@ -52,6 +52,7 @@
 #include "wx/uri.h"
 #include "wx/mimetype.h"
 #include "wx/config.h"
+#include "wx/versioninfo.h"
 
 #if defined(__WXWINCE__) && wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -1356,7 +1357,7 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     return wxCANCEL;
 }
 
-void wxInfoMessageBox(wxWindow* parent)
+wxVersionInfo wxGetLibraryVersionInfo()
 {
     // don't translate these strings, they're for diagnostics purposes only
     wxString msg;
@@ -1389,7 +1390,20 @@ void wxInfoMessageBox(wxWindow* parent)
                             GTK_MICRO_VERSION);
 #endif // __WXGTK__
 
-    msg += wxS("\nCopyright (c) 1995-2010 wxWidgets team");
+    return wxVersionInfo(wxS("wxWidgets"),
+                         wxMAJOR_VERSION,
+                         wxMINOR_VERSION,
+                         wxRELEASE_NUMBER,
+                         msg,
+                         wxS("Copyright (c) 1995-2010 wxWidgets team"));
+}
+
+void wxInfoMessageBox(wxWindow* parent)
+{
+    wxVersionInfo info = wxGetLibraryVersionInfo();
+    wxString msg = info.ToString();
+
+    msg << wxS("\n") << info.GetCopyright();
 
     wxMessageBox(msg, wxT("wxWidgets information"),
                  wxICON_INFORMATION | wxOK,

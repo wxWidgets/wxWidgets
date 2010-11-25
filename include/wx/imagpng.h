@@ -19,6 +19,7 @@
 #if wxUSE_LIBPNG
 
 #include "wx/image.h"
+#include "wx/versioninfo.h"
 
 #define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
@@ -45,6 +46,8 @@ public:
         m_type = wxBITMAP_TYPE_PNG;
         m_mime = wxT("image/png");
     }
+
+    static wxVersionInfo GetLibraryVersionInfo();
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );

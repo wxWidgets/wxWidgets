@@ -3153,5 +3153,12 @@ public:
     */
     void SwapMainAnchorCaret();
     
+    /**
+       Get Scintilla library version information.
+
+       @since 2.9.2
+       @see wxVersionInfo
+    */
+    static wxVersionInfo GetLibraryVersionInfo();
 };
 
