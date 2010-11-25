@@ -1124,7 +1124,7 @@
 //
 // Recommended setting: default or 0 for everything for portable programs.
 #define wxUSE_METAFILE              1
-#define wxUSE_ENH_METAFILE          1
+#define wxUSE_ENH_METAFILE          0
 #define wxUSE_WIN_METAFILES_ALWAYS  0
 
 // ----------------------------------------------------------------------------
