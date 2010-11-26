@@ -3906,8 +3906,7 @@ private:
         // Always skip
         event.Skip();
 
-        if ( m_propGrid->HandleCustomEditorEvent(event) )
-            return true;
+        m_propGrid->HandleCustomEditorEvent(event);
 
         //
         // NB: We should return true if the event was recognized as
