@@ -38,6 +38,7 @@
 #include "wx/control.h"
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
+#include "wx/versioninfo.h"
 
 #include "wx/textentry.h"
 #if wxUSE_TEXTCTRL

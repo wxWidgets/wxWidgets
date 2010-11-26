@@ -635,7 +635,7 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
         micro;
 
     const wxString ver(::TIFFGetVersion());
-    if ( wxSscanf(ver, "LIBTIFF, Version %d.%d.%d", &major, &micro, &micro) != 3 )
+    if ( wxSscanf(ver, "LIBTIFF, Version %d.%d.%d", &major, &minor, &micro) != 3 )
     {
         wxLogDebug("Unrecognized libtiff version string \"%s\"", ver);
 
