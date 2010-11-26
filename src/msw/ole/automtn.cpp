@@ -88,15 +88,12 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     if (!m_dispatchPtr)
         return false;
 
-    // nonConstMember is necessary because the wxString class doesn't have enough consts...
-    wxString nonConstMember(member);
-
-    int ch = nonConstMember.Find('.');
+    int ch = member.Find('.');
     if (ch != -1)
     {
         // Use dot notation to get the next object
-        wxString member2(nonConstMember.Left((size_t) ch));
-        wxString rest(nonConstMember.Right(nonConstMember.length() - ch - 1));
+        wxString member2(member.Left((size_t) ch));
+        wxString rest(member.Right(member.length() - ch - 1));
         wxAutomationObject obj;
         if (!GetObject(obj, member2))
             return false;
