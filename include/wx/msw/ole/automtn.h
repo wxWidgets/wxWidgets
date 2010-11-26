@@ -43,11 +43,11 @@ public:
     bool IsOk() const { return m_dispatchPtr != NULL; }
 
     // Get a dispatch pointer from the current object associated
-    // with a class id, such as "Excel.Application"
-    bool GetInstance(const wxString& classId) const;
+    // with a ProgID, such as "Excel.Application"
+    bool GetInstance(const wxString& progId) const;
 
     // Get a dispatch pointer from a new instance of the the class
-    bool CreateInstance(const wxString& classId) const;
+    bool CreateInstance(const wxString& progId) const;
 
     // Low-level invocation function. Pass either an array of variants,
     // or an array of pointers to variants.

@@ -490,8 +490,8 @@ bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& prop
 }
 
 // Get a dispatch pointer from the current object associated
-// with a class id
-bool wxAutomationObject::GetInstance(const wxString& classId) const
+// with a ProgID
+bool wxAutomationObject::GetInstance(const wxString& progId) const
 {
     if (m_dispatchPtr)
         return false;
@@ -500,12 +500,12 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
     CLSID clsId;
     IUnknown * pUnk = NULL;
 
-    wxBasicString unicodeName(classId);
+    wxBasicString unicodeName(progId);
 
     hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
+        ShowException(progId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
     }
@@ -513,7 +513,7 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
     hr = GetActiveObject(clsId, NULL, &pUnk);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
+        ShowException(progId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot find an active object"));
         return false;
     }
@@ -521,7 +521,7 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
     hr = pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
+        ShowException(progId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot find IDispatch interface"));
         return false;
     }
@@ -530,8 +530,8 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
 }
 
 // Get a dispatch pointer from a new object associated
-// with the given class id
-bool wxAutomationObject::CreateInstance(const wxString& classId) const
+// with the given ProgID
+bool wxAutomationObject::CreateInstance(const wxString& progId) const
 {
     if (m_dispatchPtr)
         return false;
@@ -539,12 +539,12 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
     HRESULT hr;
     CLSID clsId;
 
-    wxBasicString unicodeName(classId);
+    wxBasicString unicodeName(progId);
 
     hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
+        ShowException(progId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
     }
@@ -558,7 +558,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
                                 (void**)&m_dispatchPtr);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
+        ShowException(progId, hr, NULL, 0);
         wxLogWarning(wxT("Could not start an instance of this class."));
         return false;
     }

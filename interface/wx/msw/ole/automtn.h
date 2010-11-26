@@ -75,11 +75,11 @@ public:
     //@}
 
     /**
-        Creates a new object based on the class id, returning @true if the object was
+        Creates a new object based on the ProgID, returning @true if the object was
         successfully created,
         or @false if not.
     */
-    bool CreateInstance(const wxString& classId) const;
+    bool CreateInstance(const wxString& progId) const;
 
     /**
         Checks if the object is in a valid state.
@@ -100,16 +100,17 @@ public:
     void* GetDispatchPtr() const;
 
     /**
-        Retrieves the current object associated with a class id, and attaches the
-        IDispatch pointer
-        to this object. Returns @true if a pointer was successfully retrieved, @false
+        Retrieves the current object associated with the specified ProgID, and
+        attaches the IDispatch pointer to this object.
+
+        Returns @true if a pointer was successfully retrieved, @false
         otherwise.
         Note that this cannot cope with two instances of a given OLE object being
         active simultaneously,
         such as two copies of Excel running. Which object is referenced cannot
         currently be specified.
     */
-    bool GetInstance(const wxString& classId) const;
+    bool GetInstance(const wxString& progId) const;
 
     /**
         Retrieves a property from this object, assumed to be a dispatch pointer, and
