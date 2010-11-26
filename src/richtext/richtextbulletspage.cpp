@@ -318,11 +318,24 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
 
     wxTextAttrEx* attr = GetAttributes();
 
+    int index = m_styleListBox->GetSelection();
+    if (index < 1)
+    {
+        m_hasBulletStyle = false;
+        m_hasBulletNumber = false;
+        m_hasBulletSymbol = false;
+        attr->SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_NONE);
+        attr->SetFlags(attr->GetFlags() & ~(wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME));
+    }
+    else
+    {
+        m_hasBulletStyle = true;
+    }
+
     if (m_hasBulletStyle)
     {
         long bulletStyle = wxRICHTEXT_BULLETINDEX_NONE;
 
-        int index = m_styleListBox->GetSelection();
         if (index == wxRICHTEXT_BULLETINDEX_ARABIC)
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_ARABIC;
 
