@@ -7,6 +7,35 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Automation object creation flags.
+
+    These flags can be used with wxAutomationObject::GetInstance().
+
+    @since 2.9.2
+*/
+enum wxAutomationInstanceFlags
+{
+    /**
+        Only use the existing instance, never create a new one.
+
+        This flag can be used to forbid the creation of a new instance if none
+        is currently running.
+     */
+    wxAutomationInstance_UseExistingOnly = 0,
+
+    /**
+        Create a new instance if there are no existing ones.
+
+        This flag corresponds to the default behaviour of
+        wxAutomationObject::GetInstance() and means that if getting an existing
+        instance failed, we should call wxAutomationObject::CreateInstance() to
+        create a new one.
+     */
+    wxAutomationInstance_CreateIfNeeded = 1
+};
+
+
+/**
     @class wxAutomationObject
 
     The @b wxAutomationObject class represents an OLE automation object containing
@@ -103,14 +132,23 @@ public:
         Retrieves the current object associated with the specified ProgID, and
         attaches the IDispatch pointer to this object.
 
+        If attaching to an existing object failed and @a flags includes
+        wxAutomationInstance_CreateIfNeeded flag, a new object will be created.
+
         Returns @true if a pointer was successfully retrieved, @false
         otherwise.
+
         Note that this cannot cope with two instances of a given OLE object being
         active simultaneously,
         such as two copies of Excel running. Which object is referenced cannot
         currently be specified.
+
+        @param progId COM ProgID, e.g. "Excel.Application"
+        @param flags The creation flags (this parameters was added in wxWidgets
+            2.9.2)
     */
-    bool GetInstance(const wxString& progId) const;
+    bool GetInstance(const wxString& progId,
+                     int flags = wxAutomationInstance_CreateIfNeeded) const;
 
     /**
         Retrieves a property from this object, assumed to be a dispatch pointer, and
