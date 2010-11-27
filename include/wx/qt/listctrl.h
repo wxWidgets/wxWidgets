@@ -100,7 +100,7 @@ public:
     bool SetItemColumnImage(long item, long column, int image);
 
     // Gets the item text
-    wxString GetItemText(long item) const;
+    wxString GetItemText(long item, int col = 0) const;
 
     // Sets the item text
     void SetItemText(long item, const wxString& str);

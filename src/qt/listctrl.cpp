@@ -144,7 +144,7 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
     return false;
 }
 
-wxString wxListCtrl::GetItemText(long item) const
+wxString wxListCtrl::GetItemText(long item, int col) const
 {
     return wxString();
 }
