@@ -27,8 +27,12 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
         const wxString& help, wxItemKind kind, wxMenu *subMenu)
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
-    m_qtAction = new wxQtAction( this, wxQtConvertString( text ), parentMenu->GetHandle() );
+    m_qtAction = new wxQtAction( this, parentMenu, text );
     m_qtAction->setStatusTip( wxQtConvertString( help ));
+
+    if ( subMenu != NULL )
+        m_qtAction->setMenu( subMenu->GetHandle() );
+
     if ( id == wxID_SEPARATOR )
         m_qtAction->setSeparator( true );
 
@@ -133,9 +137,9 @@ QAction *wxMenuItem::GetHandle() const
 
 //=============================================================================
 
-wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *parent )
-    : QAction( text, parent ),
-      wxQtSignalForwarder< wxMenuItem >( menuItem )
+wxQtAction::wxQtAction( wxMenuItem *signalHandler, wxMenu *parent, const wxString &text )
+    : QAction( wxQtConvertString( text ), parent->GetHandle() ),
+      wxQtSignalForwarder< wxMenuItem >( signalHandler )
 {
     connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
 }

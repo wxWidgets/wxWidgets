@@ -55,7 +55,7 @@ class WXDLLIMPEXP_CORE wxQtAction : public QAction, public wxQtSignalForwarder< 
     Q_OBJECT
 
 public:
-    wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *parent );
+    wxQtAction( wxMenuItem *signalHandler, wxMenu *parent, const wxString &text );
 
 private Q_SLOTS:
     void OnActionTriggered( bool checked );
