@@ -511,6 +511,8 @@ public:
             Array of strings to insert.
         @param pos
             Position to insert the items before, zero based.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxArrayString& items, unsigned int pos);
 
@@ -527,6 +529,8 @@ public:
         @param clientData
             Array of client data pointers of the same size as @a items to
             associate with the new items.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxArrayString& items, unsigned int pos,
                 void **clientData);
@@ -544,6 +548,8 @@ public:
         @param clientData
             Array of client data pointers of the same size as @a items to
             associate with the new items.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxArrayString& items, unsigned int pos,
                 wxClientData **clientData);
@@ -560,6 +566,8 @@ public:
             Array of strings of size @a n.
         @param pos
             Position to insert the items before, zero based.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(unsigned int n, const wxString* items,
                 unsigned int pos);
@@ -579,6 +587,8 @@ public:
         @param clientData
             Array of client data pointers of size @a n to associate with the
             new items.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(unsigned int n, const wxString* items,
                 unsigned int pos,
@@ -599,6 +609,8 @@ public:
         @param clientData
             Array of client data pointers of size @a n to associate with the
             new items.
+        @return The return value is the index of the last inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(unsigned int n, const wxString* items,
                 unsigned int pos,

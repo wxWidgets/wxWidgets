@@ -47,23 +47,21 @@ void ItemContainerTestCase::Insert()
 {
     wxItemContainer * const container = GetContainer();
 
-    container->Insert("item 0", 0);
-
+    CPPUNIT_ASSERT_EQUAL( 0, container->Insert("item 0", 0) );
     CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
 
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    container->Insert(testitems, 0);
+    CPPUNIT_ASSERT_EQUAL( 1, container->Insert(testitems, 0) );
 
     CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(0));
     CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(1));
 
     wxString arritems[] = { "item 3", "item 4" };
 
-    container->Insert(2, arritems, 1);
-
+    CPPUNIT_ASSERT_EQUAL( 2, container->Insert(2, arritems, 1) );
     CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(1));
     CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(2));
 }
