@@ -11,6 +11,9 @@
 
 #include "wx/display.h"
 #include "wx/display_impl.h"
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
+#include "wx/qt/converter.h"
 
 class wxDisplayImplQt : public wxDisplayImpl
 {
@@ -32,7 +35,7 @@ wxDisplayImplQt::wxDisplayImplQt( unsigned n )
 
 wxRect wxDisplayImplQt::GetGeometry() const
 {
-    return wxRect();
+    return wxQtConvertRect( QApplication::desktop()->screenGeometry( GetIndex() ));
 }
 
 wxString wxDisplayImplQt::GetName() const
@@ -47,7 +50,11 @@ wxArrayVideoModes wxDisplayImplQt::GetModes(const wxVideoMode& mode) const
 
 wxVideoMode wxDisplayImplQt::GetCurrentMode() const
 {
-    return wxVideoMode();
+    int width = QApplication::desktop()->width();
+    int height = QApplication::desktop()->height();
+    int depth = QApplication::desktop()->depth();
+
+    return wxVideoMode( width, height, depth );
 }
 
 bool wxDisplayImplQt::ChangeMode(const wxVideoMode& mode)
@@ -80,12 +87,12 @@ wxDisplayImpl *wxDisplayFactoryQt::CreateDisplay(unsigned n)
 
 unsigned wxDisplayFactoryQt::GetCount()
 {
-    return 0;
+    return QApplication::desktop()->screenCount();
 }
 
 int wxDisplayFactoryQt::GetFromPoint(const wxPoint& pt)
 {
-    return 0;
+    return QApplication::desktop()->screenNumber( wxQtConvertPoint( pt ));
 }
 
 //##############################################################################
