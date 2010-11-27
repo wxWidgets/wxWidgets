@@ -43,14 +43,14 @@ Q_DECLARE_METATYPE( wxWindow * )
 
 static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 
-static void SetWindowPointerProperty( QObject *qtObject, wxWindow *window )
+static void StoreWindowPointer( QObject *qtObject, wxWindow *window )
 {
     QVariant variant;
     qVariantSetValue( variant, window );
     qtObject->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
 }
 
-static wxWindow *GetWindowPointerProperty( const QObject *qtObject )
+static wxWindow *RetrieveWindowPointer( const QObject *qtObject )
 {
     QVariant variant = qtObject->property( WINDOW_POINTER_PROPERTY_NAME );
     return qVariantValue< wxWindow * >( variant );
@@ -65,7 +65,7 @@ static wxWindow *s_capturedWindow = NULL;
     wxWindow *window = NULL;
     QWidget *qtWidget = QApplication::focusWidget();
     if ( qtWidget != NULL )
-        window = GetWindowPointerProperty( qtWidget );
+        window = RetrieveWindowPointer( qtWidget );
 
     return window;
 }
@@ -118,7 +118,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     if ( GetHandle() == NULL )
         m_qtWindow = wxQtCreateWidget< wxQtWidget >( this, parent );
 
-    SetWindowPointerProperty( GetHandle(), this );
+    StoreWindowPointer( GetHandle(), this );
 
     // Create layout for built-in scrolling bars
     if ( QtGetScrollBarsContainer() )

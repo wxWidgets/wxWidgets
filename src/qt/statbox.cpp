@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/statbox.h"
+#include "wx/qt/groupbox_qt.h"
 
 wxStaticBox::wxStaticBox()
 {
@@ -22,6 +23,7 @@ wxStaticBox::wxStaticBox(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
+    Create( parent, id, label, pos, size, style, name );
 }
 
 bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
@@ -31,6 +33,16 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    return false;
+    if ( !CreateControl( parent, id, pos, size, style, wxDefaultValidator, name ))
+        return false;
+
+    m_qtGroupBox = new wxQtGroupBox( parent, label );
+
+    return true;
+}
+
+QGroupBox *wxStaticBox::GetHandle() const
+{
+    return m_qtGroupBox;
 }
 

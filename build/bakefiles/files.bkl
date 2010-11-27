@@ -359,6 +359,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/fontdlg.h
     wx/qt/frame.h
     wx/qt/gauge.h
+    wx/qt/groupbox_qt.h
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/qt/listbox.h
@@ -456,6 +457,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/frame.moc.cpp
     src/qt/gauge.cpp
     src/qt/graphics.cpp
+    src/qt/groupbox_qt.cpp
+    src/qt/groupbox_qt.moc.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp

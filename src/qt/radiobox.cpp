@@ -87,7 +87,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     if ( !CreateControl( parent, id, pos, size, style, val, name ))
         return false;
 
-    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
+    m_qtGroupBox = new wxQtGroupBox( parent, title );
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
     if ( style & wxRA_SPECIFY_ROWS )

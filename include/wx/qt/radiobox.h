@@ -10,8 +10,8 @@
 #define _WX_QT_RADIOBOX_H_
 
 #include "wx/qt/pointer_qt.h"
+#include "wx/qt/groupbox_qt.h"
 #include <QtGui/QButtonGroup>
-#include <QtGui/QGroupBox>
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -81,7 +81,7 @@ public:
 
 private:
     // The 'visual' group box:
-    wxQtPointer< QGroupBox > m_qtGroupBox;
+    wxQtPointer< wxQtGroupBox > m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:
     wxQtPointer< QButtonGroup > m_qtButtonGroup;
