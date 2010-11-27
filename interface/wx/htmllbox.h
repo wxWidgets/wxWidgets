@@ -201,7 +201,8 @@ protected:
 
     @see wxSimpleHtmlListBox::Create
 */
-class wxSimpleHtmlListBox : public wxHtmlListBox
+class wxSimpleHtmlListBox : public wxHtmlListBox,
+                            public wxItemContainer
 {
 public:
     /**
