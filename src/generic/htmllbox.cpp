@@ -686,7 +686,7 @@ int wxSimpleHtmlListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
     UpdateCount();
 
-    return pos;
+    return pos - 1;
 }
 
 void wxSimpleHtmlListBox::SetString(unsigned int n, const wxString& s)
