@@ -252,54 +252,6 @@ public:
 
 
     /**
-        @name Mac-specific functions
-    */
-    //@{
-
-    /**
-        Called in response of an "open-application" Apple event.
-        Override this to create a new document in your app.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacNewFile();
-
-    /**
-        Called in response of an "open-document" Apple event.
-
-        You need to override this method in order to open a document file after the
-        user double clicked on it or if the document file was dropped on either the
-        running application or the application icon in Finder.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacOpenFile(const wxString& fileName);
-
-    /**
-        Called in response of a "get-url" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacOpenURL(const wxString& url);
-
-    /**
-        Called in response of a "print-document" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacPrintFile(const wxString& fileName);
-
-    /**
-        Called in response of a "reopen-application" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacReopenApp();
-
-    //@}
-
-
-    /**
         @name Callbacks for application-wide "events"
     */
     //@{
@@ -848,6 +800,66 @@ public:
             visual and abort the app if none is found.
     */
     void SetUseBestVisual(bool flag, bool forceTrueColour = false);
+
+
+    /**
+        @name Mac-specific functions
+    */
+    //@{
+
+    /**
+        Called in response of an "open-application" Apple event.
+        Override this to create a new document in your app.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacNewFile();
+
+    /**
+        Called in response of an "open-document" Apple event.
+
+        You need to override this method in order to open a document file after the
+        user double clicked on it or if the document file was dropped on either the
+        running application or the application icon in Finder.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacOpenFile(const wxString& fileName);
+
+    /**
+        Called in response of a "get-url" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacOpenURL(const wxString& url);
+
+    /**
+        Called in response of a "print-document" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacPrintFile(const wxString& fileName);
+
+    /**
+        Called in response of a "reopen-application" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacReopenApp();
+
+
+    static long GetMacAboutMenuItemId();
+    static long GetMacPreferencesMenuItemId();
+    static long GetMacExitMenuItemId();
+    static wxString GetMacHelpMenuTitleName();
+
+    static void SetMacAboutMenuItemId(long val);
+    static void SetMacPreferencesMenuItemId(long val);
+    static void SetMacExitMenuItemId(long val);
+    static void SetMacHelpMenuTitleName(const wxString& val);
+
+    //@}
+
 };
 
 
