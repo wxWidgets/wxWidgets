@@ -337,6 +337,10 @@ SOURCE=.\controls\headerctrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\htmllboxtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\htmlwindow.cpp
 # End Source File
 # Begin Source File

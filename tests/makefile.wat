@@ -388,6 +388,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_gaugetest.obj &
 	$(OBJS)\test_gui_gridtest.obj &
 	$(OBJS)\test_gui_headerctrltest.obj &
+	$(OBJS)\test_gui_htmllboxtest.obj &
 	$(OBJS)\test_gui_hyperlinkctrltest.obj &
 	$(OBJS)\test_gui_itemcontainertest.obj &
 	$(OBJS)\test_gui_label.obj &
@@ -809,6 +810,9 @@ $(OBJS)\test_gui_gridtest.obj :  .AUTODEPEND .\controls\gridtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_headerctrltest.obj :  .AUTODEPEND .\controls\headerctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_htmllboxtest.obj :  .AUTODEPEND .\controls\htmllboxtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_hyperlinkctrltest.obj :  .AUTODEPEND .\controls\hyperlinkctrltest.cpp
