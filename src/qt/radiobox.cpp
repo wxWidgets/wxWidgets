@@ -65,11 +65,11 @@ bool wxRadioBox::Create(wxWindow *parent,
 }
 
 
-template < typename QtButton >
+template < typename Button >
 static void AddChoices( QButtonGroup *qtButtonGroup, int count, const wxString choices[] )
 {
     while ( count-- > 0 )
-        qtButtonGroup->addButton( new QtButton( wxQtConvertString( *choices++ )));
+        qtButtonGroup->addButton( new Button( wxQtConvertString( *choices++ )));
 }
 
 
@@ -105,10 +105,9 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
 {
-    // At first glance it might look like QButtonGroup::button( id ) would be a
-    // better way to retrieve the button via an index. But even without looking
-    // at the implementation of it, we can assume that it probably takes a linear
-    // search algorithm because we can assign arbitrary IDs.
+    // It might be possible to coerce QButtonGroup::setId() and QButtonGroup::button( id )
+    // to retrieve the button via an index. But for now the approach via QButtonGroup::buttons()
+    // should be fast enough.
 
     QList< QAbstractButton * > buttons = group->buttons();
     return n < static_cast< unsigned >( buttons.size() ) ? buttons.at( n ) : NULL;

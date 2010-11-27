@@ -398,87 +398,87 @@ void wxWindow::SetWindowStyleFlag( long style )
 {
     wxWindowBase::SetWindowStyleFlag( style );
     
-    wxMISSING_IMPLEMENTATION( "wxWANTS_CHARS, wxTAB_TRAVERSAL" );
-    // wxFULL_REPAINT_ON_RESIZE: Qt::WResizeNoErase (marked obsolete)
-    // wxTRANSPARENT_WINDOW, wxCLIP_CHILDREN: Used in window for
-    //   performance, apparently not needed.
-    
-    // wxWANTS_CHARS: Need to reimplement event() 
-    //   See: http://doc.qt.nokia.com/latest/qwidget.html#events
-    // wxTAB_TRAVERSAL: reimplement focusNextPrevChild()          
-   
-    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-    
-    // For this to work Qt::CustomizeWindowHint must be set (done in Create())
-    if ( HasFlag( wxCAPTION ) )
-    {
-        // Enable caption bar and all buttons. This behavious
-        // is overwritten by subclasses (wxTopLevelWindow).
-        qtFlags |= Qt::WindowTitleHint;
-        qtFlags |= Qt::WindowSystemMenuHint;
-        qtFlags |= Qt::WindowMinMaxButtonsHint;
-        qtFlags |= Qt::WindowCloseButtonHint;
-    }
-    else
-    {
-        // Disable caption bar, include all buttons to be effective
-        qtFlags &= ~Qt::WindowTitleHint;
-        qtFlags &= ~Qt::WindowSystemMenuHint;
-        qtFlags &= ~Qt::WindowMinMaxButtonsHint;
-        qtFlags &= ~Qt::WindowCloseButtonHint;
-    }
-    
-    GetHandle()->setWindowFlags( qtFlags );
-    
-    // Validate border styles
-    int numberOfBorderStyles = 0;
-    if ( HasFlag( wxBORDER_NONE ))
-        numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_STATIC ))
-        numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_SIMPLE ))
-        numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_RAISED ))
-        numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_SUNKEN ))
-        numberOfBorderStyles++;
-    if ( HasFlag( wxBORDER_THEME ))
-        numberOfBorderStyles++;
-    wxCHECK_RET( numberOfBorderStyles <= 1, "Only one border style can be specified" );
-    
-    // Borders only supported for QFrame's
-    QFrame *qtFrame = qobject_cast< QFrame* >( QtGetContainer() );
-    wxCHECK_RET( numberOfBorderStyles == 0 || qtFrame,
-                 "Borders not supported for this window type (not QFrame)" );
-    
-    if ( HasFlag( wxBORDER_NONE ) )
-    {
-        qtFrame->setFrameStyle( QFrame::NoFrame );
-    }
-    else if ( HasFlag( wxBORDER_STATIC ) )
-    {
-        wxMISSING_IMPLEMENTATION( "wxBORDER_STATIC" );
-    }
-    else if ( HasFlag( wxBORDER_SIMPLE ) )
-    {
-        qtFrame->setFrameStyle( QFrame::Panel );
-        qtFrame->setFrameShadow( QFrame::Plain );
-    }
-    else if ( HasFlag( wxBORDER_RAISED ) )
-    {
-        qtFrame->setFrameStyle( QFrame::Panel );
-        qtFrame->setFrameShadow( QFrame::Raised );
-    }
-    else if ( HasFlag( wxBORDER_SUNKEN ) )
-    {
-        qtFrame->setFrameStyle( QFrame::Panel );
-        qtFrame->setFrameShadow( QFrame::Sunken );
-    }
-    else if ( HasFlag( wxBORDER_THEME ) )
-    {
-        qtFrame->setFrameStyle( QFrame::StyledPanel );
-        qtFrame->setFrameShadow( QFrame::Plain );
-    }
+//    wxMISSING_IMPLEMENTATION( "wxWANTS_CHARS, wxTAB_TRAVERSAL" );
+//    // wxFULL_REPAINT_ON_RESIZE: Qt::WResizeNoErase (marked obsolete)
+//    // wxTRANSPARENT_WINDOW, wxCLIP_CHILDREN: Used in window for
+//    //   performance, apparently not needed.
+//
+//    // wxWANTS_CHARS: Need to reimplement event()
+//    //   See: http://doc.qt.nokia.com/latest/qwidget.html#events
+//    // wxTAB_TRAVERSAL: reimplement focusNextPrevChild()
+//
+//    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+//
+//    // For this to work Qt::CustomizeWindowHint must be set (done in Create())
+//    if ( HasFlag( wxCAPTION ) )
+//    {
+//        // Enable caption bar and all buttons. This behavious
+//        // is overwritten by subclasses (wxTopLevelWindow).
+//        qtFlags |= Qt::WindowTitleHint;
+//        qtFlags |= Qt::WindowSystemMenuHint;
+//        qtFlags |= Qt::WindowMinMaxButtonsHint;
+//        qtFlags |= Qt::WindowCloseButtonHint;
+//    }
+//    else
+//    {
+//        // Disable caption bar, include all buttons to be effective
+//        qtFlags &= ~Qt::WindowTitleHint;
+//        qtFlags &= ~Qt::WindowSystemMenuHint;
+//        qtFlags &= ~Qt::WindowMinMaxButtonsHint;
+//        qtFlags &= ~Qt::WindowCloseButtonHint;
+//    }
+//
+//    GetHandle()->setWindowFlags( qtFlags );
+//
+//    // Validate border styles
+//    int numberOfBorderStyles = 0;
+//    if ( HasFlag( wxBORDER_NONE ))
+//        numberOfBorderStyles++;
+//    if ( HasFlag( wxBORDER_STATIC ))
+//        numberOfBorderStyles++;
+//    if ( HasFlag( wxBORDER_SIMPLE ))
+//        numberOfBorderStyles++;
+//    if ( HasFlag( wxBORDER_RAISED ))
+//        numberOfBorderStyles++;
+//    if ( HasFlag( wxBORDER_SUNKEN ))
+//        numberOfBorderStyles++;
+//    if ( HasFlag( wxBORDER_THEME ))
+//        numberOfBorderStyles++;
+//    wxCHECK_RET( numberOfBorderStyles <= 1, "Only one border style can be specified" );
+//
+//    // Borders only supported for QFrame's
+//    QFrame *qtFrame = qobject_cast< QFrame* >( QtGetContainer() );
+//    wxCHECK_RET( numberOfBorderStyles == 0 || qtFrame,
+//                 "Borders not supported for this window type (not QFrame)" );
+//
+//    if ( HasFlag( wxBORDER_NONE ) )
+//    {
+//        qtFrame->setFrameStyle( QFrame::NoFrame );
+//    }
+//    else if ( HasFlag( wxBORDER_STATIC ) )
+//    {
+//        wxMISSING_IMPLEMENTATION( "wxBORDER_STATIC" );
+//    }
+//    else if ( HasFlag( wxBORDER_SIMPLE ) )
+//    {
+//        qtFrame->setFrameStyle( QFrame::Panel );
+//        qtFrame->setFrameShadow( QFrame::Plain );
+//    }
+//    else if ( HasFlag( wxBORDER_RAISED ) )
+//    {
+//        qtFrame->setFrameStyle( QFrame::Panel );
+//        qtFrame->setFrameShadow( QFrame::Raised );
+//    }
+//    else if ( HasFlag( wxBORDER_SUNKEN ) )
+//    {
+//        qtFrame->setFrameStyle( QFrame::Panel );
+//        qtFrame->setFrameShadow( QFrame::Sunken );
+//    }
+//    else if ( HasFlag( wxBORDER_THEME ) )
+//    {
+//        qtFrame->setFrameStyle( QFrame::StyledPanel );
+//        qtFrame->setFrameShadow( QFrame::Plain );
+//    }
 }
 
 void wxWindow::SetExtraStyle( long exStyle )

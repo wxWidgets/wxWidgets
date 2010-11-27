@@ -380,6 +380,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/scrolbar.h
     wx/qt/slider.h
     wx/qt/spinbutt.h
+    wx/qt/spinctrl.h
     wx/qt/statbmp.h
     wx/qt/statbox.h
     wx/qt/statline.h
@@ -480,6 +481,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/settings.cpp
     src/qt/slider.cpp
     src/qt/spinbutt.cpp
+    src/qt/spinctrl.cpp
     src/qt/statbmp.cpp
     src/qt/statbox.cpp
     src/qt/statline.cpp

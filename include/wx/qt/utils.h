@@ -22,6 +22,9 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 #define wxMISSING_IMPLEMENTATION( feature )\
     wxMissingImplementation( __FILE__, __LINE__, feature )
 
+#define wxMISSING_FUNCTION() \
+    wxMISSING_IMPLEMENTATION( __WXFUNCTION__ )
+
 template< typename QtWidget, typename WxWindow >
     QtWidget *wxQtCreateWidget( WxWindow *window, wxWindow *parent )
     {
