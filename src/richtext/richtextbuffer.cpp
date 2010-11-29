@@ -5429,6 +5429,8 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
+    int relativeX = position.x - GetParent()->GetPosition().x;
+
     wxTextAttrEx textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
 
     // Always assume unformatted text, since at this level we have no knowledge
@@ -5519,9 +5521,9 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     textExtents.Add(oldWidth + p[j]);
 
                 if (textExtents.GetCount() > 0)
-                    absoluteWidth = textExtents[textExtents.GetCount()-1] + position.x;
+                    absoluteWidth = textExtents[textExtents.GetCount()-1] + relativeX;
                 else
-                    absoluteWidth = position.x;
+                    absoluteWidth = relativeX;
             }
             else
 #endif
@@ -5550,7 +5552,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                     notFound = false;
 
-                    width = nextTabPos - position.x;
+                    width = nextTabPos - relativeX;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
                     if (g_UseGlobalPartialTextExtents)
