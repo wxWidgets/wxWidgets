@@ -2,7 +2,10 @@
 # Copyright (C) 2008 Glenn Randers-Pehrson
 # Copyright (C) 2000 Cosmin Truta
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # Location of the zlib library and include files
 ZLIBINC = ../zlib
@@ -31,9 +34,9 @@ A=.a
 EXE=
 
 # Variables
-OBJS = png$(O) pngerror$(O) pngget$(O) pngmem$(O) pngpread$(O) \
-       pngread$(O) pngrio$(O) pngrtran$(O) pngrutil$(O) pngset$(O) \
-       pngtrans$(O) pngwio$(O) pngwrite$(O) pngwtran$(O) pngwutil$(O)
+OBJS =  png$(O) pngerror$(O) pngget$(O) pngmem$(O) pngpread$(O) \
+	pngread$(O) pngrio$(O) pngrtran$(O) pngrutil$(O) pngset$(O) \
+	pngtrans$(O) pngwio$(O) pngwrite$(O) pngwtran$(O) pngwutil$(O)
 
 # Targets
 all: static
@@ -61,20 +64,20 @@ pngtest$(EXE): pngtest$(O) libpng$(A)
 clean:
 	$(RM_F) *$(O) libpng$(A) pngtest$(EXE) pngout.png
 
-png$(O): png.h pngconf.h
-pngerror$(O): png.h pngconf.h
-pngget$(O): png.h pngconf.h
-pngmem$(O): png.h pngconf.h
-pngpread$(O): png.h pngconf.h
-pngread$(O): png.h pngconf.h
-pngrio$(O): png.h pngconf.h
-pngrtran$(O): png.h pngconf.h
-pngrutil$(O): png.h pngconf.h
-pngset$(O): png.h pngconf.h
-pngtest$(O): png.h pngconf.h
-pngtrans$(O): png.h pngconf.h
-pngwio$(O): png.h pngconf.h
-pngwrite$(O): png.h pngconf.h
-pngwtran$(O): png.h pngconf.h
-pngwutil$(O): png.h pngconf.h
+png$(O):      png.h pngconf.h pngpriv.h
+pngerror$(O): png.h pngconf.h pngpriv.h
+pngget$(O):   png.h pngconf.h pngpriv.h
+pngmem$(O):   png.h pngconf.h pngpriv.h
+pngpread$(O): png.h pngconf.h pngpriv.h
+pngread$(O):  png.h pngconf.h pngpriv.h
+pngrio$(O):   png.h pngconf.h pngpriv.h
+pngrtran$(O): png.h pngconf.h pngpriv.h
+pngrutil$(O): png.h pngconf.h pngpriv.h
+pngset$(O):   png.h pngconf.h pngpriv.h
+pngtrans$(O): png.h pngconf.h pngpriv.h
+pngwio$(O):   png.h pngconf.h pngpriv.h
+pngwrite$(O): png.h pngconf.h pngpriv.h
+pngwtran$(O): png.h pngconf.h pngpriv.h
+pngwutil$(O): png.h pngconf.h pngpriv.h
 
+pngtest$(O):  png.h pngconf.h

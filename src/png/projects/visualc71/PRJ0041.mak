@@ -1,5 +1,5 @@
 # Prevent "Cannot find missing dependency..." warnings while compiling
-# pngw32.rc (PRJ0041).
+# pngwin.rc (PRJ0041).
 
 all: $(IntDir)\alloc.h \
 	 $(IntDir)\fp.h \

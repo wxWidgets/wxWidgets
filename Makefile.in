@@ -104,7 +104,6 @@ WXPNG_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
 	wxpng_pngerror.o \
-	wxpng_pnggccrd.o \
 	wxpng_pngget.o \
 	wxpng_pngmem.o \
 	wxpng_pngpread.o \
@@ -114,7 +113,6 @@ WXPNG_OBJECTS =  \
 	wxpng_pngrutil.o \
 	wxpng_pngset.o \
 	wxpng_pngtrans.o \
-	wxpng_pngvcrd.o \
 	wxpng_pngwio.o \
 	wxpng_pngwrite.o \
 	wxpng_pngwtran.o \
@@ -14486,9 +14484,6 @@ wxpng_png.o: $(srcdir)/src/png/png.c
 wxpng_pngerror.o: $(srcdir)/src/png/pngerror.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngerror.c
 
-wxpng_pnggccrd.o: $(srcdir)/src/png/pnggccrd.c
-	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pnggccrd.c
-
 wxpng_pngget.o: $(srcdir)/src/png/pngget.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngget.c
 
@@ -14515,9 +14510,6 @@ wxpng_pngset.o: $(srcdir)/src/png/pngset.c
 
 wxpng_pngtrans.o: $(srcdir)/src/png/pngtrans.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngtrans.c
-
-wxpng_pngvcrd.o: $(srcdir)/src/png/pngvcrd.c
-	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngvcrd.c
 
 wxpng_pngwio.o: $(srcdir)/src/png/pngwio.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngwio.c

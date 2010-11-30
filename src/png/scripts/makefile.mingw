@@ -3,13 +3,20 @@
 #   of the library, and builds two copies of pngtest: one
 #   statically linked and one dynamically linked.
 #
-# Built from makefile.cygwin
 # Copyright (C) 2002, 2006, 2008 Soren Anderson, Charles Wilson,
 #    and Glenn Randers-Pehrson, based on makefile for linux-elf w/mmx by:
 # Copyright (C) 1998-2000, 2007 Greg Roelofs
 # Copyright (C) 1996, 1997 Andreas Dilger
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
+# Built from makefile.cygwin
+
+# This makefile expects to be run under the MSYS shell (part of
+# the MINGW project) and not under CMD.EXE which does not provide
+# "cat" or "sed".
 
 # This makefile intends to support building outside the src directory
 # if desired. When invoking it, specify an argument to SRCDIR on the
@@ -58,24 +65,13 @@ WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 	-Wmissing-declarations -Wtraditional -Wcast-align \
 	-Wstrict-prototypes -Wmissing-prototypes #-Wconversion
 
-### if you don't need thread safety, but want the asm accel
-#CFLAGS= $(strip $(MINGW_CCFLAGS) -DPNG_THREAD_UNSAFE_OK \
-#	$(addprefix -I,$(ZLIBINC)) -W -Wall -O $(ALIGN) -funroll-loops \
-#	-fomit-frame-pointer)  # $(WARNMORE) -g -DPNG_DEBUG=5
-### if you need thread safety and want (minimal) asm accel
-#CFLAGS= $(strip $(MINGW_CCFLAGS) $(addprefix -I,$(ZLIBINC)) \
-#	-W -Wall -O $(ALIGN) -funroll-loops \
-#	-fomit-frame-pointer)  # $(WARNMORE) -g -DPNG_DEBUG=5
-### Normal (non-asm) compilation
 CFLAGS= $(strip $(MINGW_CCFLAGS) $(addprefix -I,$(ZLIBINC)) \
-        -W -Wall -O3 $(ALIGN) -funroll-loops -DPNG_NO_MMX_CODE \
+        -W -Wall -O3 $(ALIGN) -funroll-loops \
 	-fomit-frame-pointer) # $(WARNMORE) -g -DPNG_DEBUG=5
 
-LIBNAME = libpng12
-PNGMAJ = 0
-MINGDLL = 12
-PNGMIN = 1.2.34
-PNGVER = $(PNGMAJ).$(PNGMIN)
+LIBNAME = libpng14
+PNGMAJ = 14
+MINGDLL = 14
 
 SHAREDLIB=libpng$(MINGDLL).dll
 STATLIB=libpng.a
@@ -135,7 +131,7 @@ libpng.pc: scripts/libpng.pc.in
 	-e s!@libdir@!$(LIBPATH)! \
 	-e s!@includedir@!$(INCPATH)! \
 	-e s!@includedir@!$(INCPATH)! \
-	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
+	-e s!-lpng14!-lpng14\ -lz\ -lm! > libpng.pc
 
 libpng-config: scripts/libpng-config-head.in scripts/libpng-config-body.in
 	@echo -e Making $(LIBNAME) libpng-config file for this libpng \
@@ -157,7 +153,7 @@ $(STATLIB): $(OBJS)
 	$(AR) rc $@ $(OBJS)
 	$(RANLIB) $@
 
-$(SHAREDDEF): scripts/pngw32.def
+$(SHAREDDEF): scripts/pngwin.def
 	cat $< | sed -e '1{G;s/^\(.*\)\(\n\)/EXPORTS/;};2,/^EXPORTS/d' | \
 	sed -e 's/\([^;]*\);/;/' > $@
 
@@ -242,16 +238,16 @@ test-dd:
 	echo
 	echo Testing installed dynamic shared library in $(DL).
 	$(CC) -I$(DI) $(CFLAGS) \
-	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
+	   `$(BINPATH)/libpng14-config --cflags` pngtest.c \
 	   -L$(DL) -L$(ZLIBLIB) \
-	   -o pngtestd `$(BINPATH)/libpng12-config --ldflags`
+	   -o pngtestd `$(BINPATH)/libpng14-config --ldflags`
 	./pngtestd pngtest.png
 
 test-installed:
 	$(CC) $(CFLAGS) \
-	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
+	   `$(BINPATH)/libpng14-config --cflags` pngtest.c \
 	   -L$(ZLIBLIB) \
-	   -o pngtesti$(EXE) `$(BINPATH)/libpng12-config --ldflags`
+	   -o pngtesti$(EXE) `$(BINPATH)/libpng14-config --ldflags`
 	./pngtesti$(EXE) pngtest.png
 
 clean:
@@ -267,23 +263,20 @@ writelock:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-png.o png.pic.o:		png.h pngconf.h png.c
-pngerror.o pngerror.pic.o:	png.h pngconf.h pngerror.c
-pngrio.o pngrio.pic.o:		png.h pngconf.h pngrio.c
-pngwio.o pngwio.pic.o:		png.h pngconf.h pngwio.c
-pngmem.o pngmem.pic.o:		png.h pngconf.h pngmem.c
-pngset.o pngset.pic.o:		png.h pngconf.h pngset.c
-pngget.o pngget.pic.o:		png.h pngconf.h pngget.c
-pngread.o pngread.pic.o:	png.h pngconf.h pngread.c
-pngrtran.o pngrtran.pic.o:	png.h pngconf.h pngrtran.c
-pngrutil.o pngrutil.pic.o:	png.h pngconf.h pngrutil.c
-pngtrans.o pngtrans.pic.o:	png.h pngconf.h pngtrans.c
-pngwrite.o pngwrite.pic.o:	png.h pngconf.h pngwrite.c
-pngwtran.o pngwtran.pic.o:	png.h pngconf.h pngwtran.c
-pngwutil.o pngwutil.pic.o:	png.h pngconf.h pngwutil.c
-pngpread.o pngpread.pic.o:	png.h pngconf.h pngpread.c
+png.o png.pic.o:		png.h pngconf.h pngpriv.h png.c
+pngerror.o pngerror.pic.o:	png.h pngconf.h pngpriv.h pngerror.c
+pngrio.o pngrio.pic.o:		png.h pngconf.h pngpriv.h pngrio.c
+pngwio.o pngwio.pic.o:		png.h pngconf.h pngpriv.h pngwio.c
+pngmem.o pngmem.pic.o:		png.h pngconf.h pngpriv.h pngmem.c
+pngset.o pngset.pic.o:		png.h pngconf.h pngpriv.h pngset.c
+pngget.o pngget.pic.o:		png.h pngconf.h pngpriv.h pngget.c
+pngread.o pngread.pic.o:	png.h pngconf.h pngpriv.h pngread.c
+pngrtran.o pngrtran.pic.o:	png.h pngconf.h pngpriv.h pngrtran.c
+pngrutil.o pngrutil.pic.o:	png.h pngconf.h pngpriv.h pngrutil.c
+pngtrans.o pngtrans.pic.o:	png.h pngconf.h pngpriv.h pngtrans.c
+pngwrite.o pngwrite.pic.o:	png.h pngconf.h pngpriv.h pngwrite.c
+pngwtran.o pngwtran.pic.o:	png.h pngconf.h pngpriv.h pngwtran.c
+pngwutil.o pngwutil.pic.o:	png.h pngconf.h pngpriv.h pngwutil.c
+pngpread.o pngpread.pic.o:	png.h pngconf.h pngpriv.h pngpread.c
 
 pngtest.o pngtest.pic.o:	png.h pngconf.h pngtest.c
-
-
-

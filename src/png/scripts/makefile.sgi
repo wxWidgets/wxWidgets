@@ -1,21 +1,20 @@
-# makefile for libpng.a and libpng12.so, SGI IRIX with 'cc'
-# Copyright (C) 2001-2002, 2006, 2007 Glenn Randers-Pehrson
+# makefile for libpng.a and libpng14.so, SGI IRIX with 'cc'
+# Copyright (C) 2001-2002, 2006, 2007, 2010 Glenn Randers-Pehrson
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # Library name:
-LIBNAME=libpng12
-PNGMAJ = 0
-PNGMIN = 1.2.34
-PNGVER = $(PNGMAJ).$(PNGMIN)
+LIBNAME=libpng14
+PNGMAJ = 14
 
 # Shared library names:
 LIBSO=$(LIBNAME).so
 LIBSOMAJ=$(LIBNAME).so.$(PNGMAJ)
-LIBSOVER=$(LIBNAME).so.$(PNGVER)
+LIBSOREL=$(LIBSOMAJ).$(RELEASE)
 OLDSO=libpng.so
-OLDSOMAJ=libpng.so.3
-OLDSOVER=libpng.so.3.$(PNGMIN)
 
 # Utilities:
 AR_RC=ar rc
@@ -25,7 +24,7 @@ LN_SF=ln -sf
 RANLIB=echo
 RM_F=/bin/rm -f
 
-# Where make install puts libpng.a, libpng12.so, and libpng12/png.h
+# Where make install puts libpng.a, libpng14.so, and libpng14/png.h
 # Prefix must be a full pathname.
 
 prefix=/usr/local
@@ -45,14 +44,12 @@ ABI=
 
 WARNMORE=-fullwarn
 # Note: -KPIC is the default anyhow
-#CFLAGS= $(ABI) -I$(ZLIBINC) -O $(WARNMORE) -KPIC -DPNG_NO_MMX_CODE # -g -DPNG_DEBUG=5
-CFLAGS=$(ABI) -I$(ZLIBINC) -O $(WARNMORE) -DPNG_NO_MMX_CODE
-LDFLAGS_A=$(ABI) -L. -L$(ZLIBLIB) -lpng12 -lz -lm
+#CFLAGS= $(ABI) -I$(ZLIBINC) -O $(WARNMORE) -KPIC # -g -DPNG_DEBUG=5
+CFLAGS=$(ABI) -I$(ZLIBINC) -O $(WARNMORE)
+LDFLAGS_A=$(ABI) -L. -L$(ZLIBLIB) -lpng14 -lz -lm
 LDFLAGS=$(ABI) -L. -L$(ZLIBLIB) -lpng -lz -lm
 LDSHARED=cc $(ABI) -shared -soname $(LIBSOMAJ) \
   -set_version sgi$(PNGMAJ).0
-LDLEGACY=cc $(ABI) -shared -soname $(OLDSOMAJ) \
-  -set_version sgi$3.0
 # See "man dso" for info about shared objects
 
 INCPATH=$(prefix)/include
@@ -86,40 +83,31 @@ libpng.a: $(OBJS)
 	$(AR_RC) $@ $(OBJS)
 	$(RANLIB) $@
 
-shared: $(LIBSOVER)
-
 libpng.pc:
 	cat scripts/libpng.pc.in | sed -e s!@prefix@!$(prefix)! \
 	-e s!@exec_prefix@!$(exec_prefix)! \
 	-e s!@libdir@!$(LIBPATH)! \
 	-e s!@includedir@!$(INCPATH)! \
-	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
+	-e s!-lpng14!-lpng14\ -lz\ -lm! > libpng.pc
 
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
 	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
-	echo cppflags=\"-DPNG_NO_MMX_CODE\"; \
 	echo ccopts=\"$(ABI)\"; \
 	echo ldopts=\"$(ABI)\"; \
 	echo L_opts=\"-L$(LIBPATH)\"; \
 	echo libdir=\"$(LIBPATH)\"; \
-	echo libs=\"-lpng12 -lz -lm\"; \
+	echo libs=\"-lpng14 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
 
 $(LIBSO): $(LIBSOMAJ)
 	$(LN_SF) $(LIBSOMAJ) $(LIBSO)
 
-$(LIBSOMAJ): $(LIBSOVER)
-	$(LN_SF) $(LIBSOVER) $(LIBSOMAJ)
-
-$(LIBSOVER): $(OBJS)
+$(LIBSOMAJ): $(OBJS)
 	$(LDSHARED) -o $@ $(OBJS)
 	$(RM_F) $(LIBSO) $(LIBSOMAJ)
-
-$(OLDSOVER): $(OBJS)
-	$(LDLEGACY) -o $@ $(OBJS)
 
 pngtest: pngtest.o libpng.a
 	$(CC) -o pngtest $(CFLAGS) pngtest.o $(LDFLAGS)
@@ -145,23 +133,16 @@ install-static: install-headers libpng.a
 	-@$(RM_F) $(DL)/libpng.a
 	(cd $(DL); $(LN_SF) $(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBSOVER) libpng.pc \
-	$(OLDSOVER)
+install-shared: install-headers $(LIBSOMAJ) libpng.pc
 	-@if [ ! -d $(DL) ]; then $(MKDIR_P) $(DL); fi
-	-@$(RM_F) $(DL)/$(LIBSOVER)* $(DL)/$(LIBSO)
-	-@$(RM_F) $(DL)/$(LIBSOMAJ)
+	-@$(RM_F) $(DL)/$(LIBSO)
+	-@$(RM_F) $(DL)/$(LIBSOREL)
 	-@$(RM_F) $(DL)/$(OLDSO)
-	-@$(RM_F) $(DL)/$(OLDSOMAJ)
-	-@$(RM_F) $(DL)/$(OLDSOVER)*
-	cp $(LIBSOVER) $(DL)
-	cp $(OLDSOVER) $(DL)
-	chmod 755 $(DL)/$(LIBSOVER)
-	chmod 755 $(DL)/$(OLDSOVER)
+	cp $(LIBSOMAJ) $(DL)/$(LIBSOREL)
+	chmod 755 $(DL)/$(LIBSOREL)
 	(cd $(DL); \
-	$(LN_SF) $(OLDSOVER) $(OLDSOMAJ); \
-	$(LN_SF) $(OLDSOMAJ) $(OLDSO); \
-	$(LN_SF) $(LIBSOVER) $(LIBSOMAJ); \
-	$(LN_SF) $(LIBSOMAJ) $(LIBSO))
+	$(LN_SF) $(LIBSOREL) $(LIBSO); \
+	$(LN_SF) $(LIBSO) $(OLDSO))
 	-@if [ ! -d $(DL)/pkgconfig ]; then $(MKDIR_P) $(DL)/pkgconfig; fi
 	-@$(RM_F) $(DL)/pkgconfig/$(LIBNAME).pc
 	-@$(RM_F) $(DL)/pkgconfig/libpng.pc
@@ -217,7 +198,6 @@ test-installed:
 clean:
 	$(RM_F) *.o libpng.a pngtest pngtesti pngout.png libpng.pc libpng-config \
 	$(LIBSO) $(LIBSOMAJ)* \
-	$(OLDSOVER) \
 	so_locations
 
 DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO
@@ -226,20 +206,20 @@ writelock:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-png.o: png.h pngconf.h
-pngerror.o: png.h pngconf.h
-pngrio.o: png.h pngconf.h
-pngwio.o: png.h pngconf.h
-pngmem.o: png.h pngconf.h
-pngset.o: png.h pngconf.h
-pngget.o: png.h pngconf.h
-pngread.o: png.h pngconf.h
-pngrtran.o: png.h pngconf.h
-pngrutil.o: png.h pngconf.h
-pngtest.o: png.h pngconf.h
-pngtrans.o: png.h pngconf.h
-pngwrite.o: png.h pngconf.h
-pngwtran.o: png.h pngconf.h
-pngwutil.o: png.h pngconf.h
-pngpread.o: png.h pngconf.h
+png.o: png.h pngconf.h pngpriv.h
+pngerror.o: png.h pngconf.h pngpriv.h
+pngrio.o: png.h pngconf.h pngpriv.h
+pngwio.o: png.h pngconf.h pngpriv.h
+pngmem.o: png.h pngconf.h pngpriv.h
+pngset.o: png.h pngconf.h pngpriv.h
+pngget.o: png.h pngconf.h pngpriv.h
+pngread.o: png.h pngconf.h pngpriv.h
+pngrtran.o: png.h pngconf.h pngpriv.h
+pngrutil.o: png.h pngconf.h pngpriv.h
+pngtrans.o: png.h pngconf.h pngpriv.h
+pngwrite.o: png.h pngconf.h pngpriv.h
+pngwtran.o: png.h pngconf.h pngpriv.h
+pngwutil.o: png.h pngconf.h pngpriv.h
+pngpread.o: png.h pngconf.h pngpriv.h
 
+pngtest.o: png.h pngconf.h

@@ -71,7 +71,6 @@ WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_40)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \
-	$(OBJS)\wxpng_pnggccrd.obj \
 	$(OBJS)\wxpng_pngget.obj \
 	$(OBJS)\wxpng_pngmem.obj \
 	$(OBJS)\wxpng_pngpread.obj \
@@ -81,7 +80,6 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngrutil.obj \
 	$(OBJS)\wxpng_pngset.obj \
 	$(OBJS)\wxpng_pngtrans.obj \
-	$(OBJS)\wxpng_pngvcrd.obj \
 	$(OBJS)\wxpng_pngwio.obj \
 	$(OBJS)\wxpng_pngwrite.obj \
 	$(OBJS)\wxpng_pngwtran.obj \
@@ -5708,9 +5706,6 @@ $(OBJS)\wxpng_png.obj: ..\..\src\png\png.c
 $(OBJS)\wxpng_pngerror.obj: ..\..\src\png\pngerror.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngerror.c
 
-$(OBJS)\wxpng_pnggccrd.obj: ..\..\src\png\pnggccrd.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pnggccrd.c
-
 $(OBJS)\wxpng_pngget.obj: ..\..\src\png\pngget.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngget.c
 
@@ -5737,9 +5732,6 @@ $(OBJS)\wxpng_pngset.obj: ..\..\src\png\pngset.c
 
 $(OBJS)\wxpng_pngtrans.obj: ..\..\src\png\pngtrans.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngtrans.c
-
-$(OBJS)\wxpng_pngvcrd.obj: ..\..\src\png\pngvcrd.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngvcrd.c
 
 $(OBJS)\wxpng_pngwio.obj: ..\..\src\png\pngwio.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngwio.c

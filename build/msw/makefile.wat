@@ -3342,7 +3342,6 @@ WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_png.obj &
 	$(OBJS)\wxpng_pngerror.obj &
-	$(OBJS)\wxpng_pnggccrd.obj &
 	$(OBJS)\wxpng_pngget.obj &
 	$(OBJS)\wxpng_pngmem.obj &
 	$(OBJS)\wxpng_pngpread.obj &
@@ -3352,7 +3351,6 @@ WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_pngrutil.obj &
 	$(OBJS)\wxpng_pngset.obj &
 	$(OBJS)\wxpng_pngtrans.obj &
-	$(OBJS)\wxpng_pngvcrd.obj &
 	$(OBJS)\wxpng_pngwio.obj &
 	$(OBJS)\wxpng_pngwrite.obj &
 	$(OBJS)\wxpng_pngwtran.obj &
@@ -5537,9 +5535,6 @@ $(OBJS)\wxpng_png.obj :  .AUTODEPEND ..\..\src\png\png.c
 $(OBJS)\wxpng_pngerror.obj :  .AUTODEPEND ..\..\src\png\pngerror.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
-$(OBJS)\wxpng_pnggccrd.obj :  .AUTODEPEND ..\..\src\png\pnggccrd.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
-
 $(OBJS)\wxpng_pngget.obj :  .AUTODEPEND ..\..\src\png\pngget.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
@@ -5565,9 +5560,6 @@ $(OBJS)\wxpng_pngset.obj :  .AUTODEPEND ..\..\src\png\pngset.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngtrans.obj :  .AUTODEPEND ..\..\src\png\pngtrans.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
-
-$(OBJS)\wxpng_pngvcrd.obj :  .AUTODEPEND ..\..\src\png\pngvcrd.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngwio.obj :  .AUTODEPEND ..\..\src\png\pngwio.c

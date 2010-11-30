@@ -1,21 +1,20 @@
 # makefile for libpng on DEC Alpha Unix
-# Copyright (C) 2000-2002, 2006 Glenn Randers-Pehrson
+# Copyright (C) 2000-2002, 2006, 2010 Glenn Randers-Pehrson
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # Library name:
-PNGMAJ = 0
-PNGMIN = 1.2.34
-PNGVER = $(PNGMAJ).$(PNGMIN)
-LIBNAME = libpng12
+PNGMAJ = 14
+LIBNAME = libpng14
 
 # Shared library names:
 LIBSO=$(LIBNAME).so
 LIBSOMAJ=$(LIBNAME).so.$(PNGMAJ)
-LIBSOVER=$(LIBNAME).so.$(PNGVER)
+LIBSOREL=$(LIBSOMAJ).$(RELEASE)
 OLDSO=libpng.so
-OLDSOMAJ=libpng.so.3
-OLDSOVER=libpng.so.3.$(PNGMIN)
 
 # Utilities:
 AR_RC=ar rc
@@ -72,7 +71,7 @@ libpng.pc:
 	-e s!@exec_prefix@!$(exec_prefix)! \
 	-e s!@libdir@!$(LIBPATH)! \
 	-e s!@includedir@!$(INCPATH)! \
-	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
+	-e s!-lpng14!-lpng14\ -lz\ -lm! > libpng.pc
 
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
@@ -80,23 +79,16 @@ libpng-config:
 	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
 	echo ccopts=\"-std\"; \
 	echo L_opts=\"-L$(LIBPATH)\"; \
-	echo libs=\"-lpng12 -lz -lm\"; \
+	echo libs=\"-lpng14 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
 
 $(LIBSO): $(LIBSOMAJ)
 	$(LN_SF) $(LIBSOMAJ) $(LIBSO)
 
-$(LIBSOMAJ): $(LIBSOVER)
-	$(LN_SF) $(LIBSOVER) $(LIBSOMAJ)
-
-$(LIBSOVER): $(OBJS)
+$(LIBSOMAJ): $(OBJS)
 	$(CC) -shared -o $@ $(OBJS) -L$(ZLIBLIB) \
 	-soname $(LIBSOMAJ)
-
-$(OLDSOVER): $(OBJS)
-	$(CC) -shared -o $@ $(OBJS) -L$(ZLIBLIB) \
-	-soname $(OLDSOMAJ)
 
 pngtest: pngtest.o libpng.a
 	$(CC) -o pngtest $(CFLAGS) pngtest.o $(LDFLAGS)
@@ -120,29 +112,22 @@ install-static: install-headers libpng.a
 	-@/bin/rm -f $(DL)/libpng.a
 	(cd $(DL); $(LN_SF)(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBSOVER) libpng.pc \
-	$(OLDSOVER)
+install-shared: install-headers $(LIBSOMAJ) libpng.pc
 	-@if [ ! -d $(DL) ]; then $(MKDIR_P) $(DL); fi
-	-@/bin/rm -f $(DL)/$(LIBSOVER)* $(DL)/$(LIBSO)
-	-@/bin/rm -f $(DL)/$(LIBSOMAJ)
-	-@/bin/rm -f $(DL)/$(OLDSO)
-	-@/bin/rm -f $(DL)/$(OLDSOMAJ)
-	-@/bin/rm -f $(DL)/$(OLDSOVER)*
-	cp $(LIBSOVER) $(DL)
-	cp $(OLDSOVER) $(DL)
-	chmod 755 $(DL)/$(LIBSOVER)
-	chmod 755 $(DL)/$(OLDSOVER)
+	-@$(RM_F) $(DL)/$(LIBSO)
+	-@$(RM_F) $(DL)/$(LIBSOREL)
+	-@$(RM_F) $(DL)/$(OLDSO)
+	cp $(LIBSOMAJ) $(DL)/$(LIBSOREL)
+	chmod 755 $(DL)/$(LIBSOREL)
 	(cd $(DL); \
-	$(LN_SF) $(OLDSOVER) $(OLDSOMAJ); \
-	$(LN_SF) $(OLDSOMAJ) $(OLDSO); \
-	$(LN_SF)(LIBSOVER) $(LIBSOMAJ); \
-	$(LN_SF)(LIBSOMAJ) $(LIBSO))
+	$(LN_SF) $(LIBSOREL) $(LIBSO); \
+	$(LN_SF) $(LIBSO) $(OLDSO))
 	-@if [ ! -d $(DL)/pkgconfig ]; then $(MKDIR_P) $(DL)/pkgconfig; fi
-	-@/bin/rm -f $(DL)/pkgconfig/$(LIBNAME).pc
-	-@/bin/rm -f $(DL)/pkgconfig/libpng.pc
+	-@$(RM_F) $(DL)/pkgconfig/$(LIBNAME).pc
+	-@$(RM_F) $(DL)/pkgconfig/libpng.pc
 	cp libpng.pc $(DL)/pkgconfig/$(LIBNAME).pc
 	chmod 644 $(DL)/pkgconfig/$(LIBNAME).pc
-	(cd $(DL)/pkgconfig; $(LN_SF)(LIBNAME).pc libpng.pc)
+	(cd $(DL)/pkgconfig; $(LN_SF) $(LIBNAME).pc libpng.pc)
 
 install-man: libpng.3 libpngpf.3 png.5
 	-@if [ ! -d $(DM) ]; then $(MKDIR_P) $(DM); fi
@@ -190,25 +175,24 @@ test-installed:
 clean:
 	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png \
 	libpng-config $(LIBSO) $(LIBSOMAJ)* \
-	$(OLDSOVER) \
 	libpng.pc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-png.o: png.h pngconf.h
-pngerror.o: png.h pngconf.h
-pngrio.o: png.h pngconf.h
-pngwio.o: png.h pngconf.h
-pngmem.o: png.h pngconf.h
-pngset.o: png.h pngconf.h
-pngget.o: png.h pngconf.h
-pngread.o: png.h pngconf.h
-pngrtran.o: png.h pngconf.h
-pngrutil.o: png.h pngconf.h
-pngtest.o: png.h pngconf.h
-pngtrans.o: png.h pngconf.h
-pngwrite.o: png.h pngconf.h
-pngwtran.o: png.h pngconf.h
-pngwutil.o: png.h pngconf.h
-pngpread.o: png.h pngconf.h
+png.o: png.h pngconf.h pngpriv.h
+pngerror.o: png.h pngconf.h pngpriv.h
+pngrio.o: png.h pngconf.h pngpriv.h
+pngwio.o: png.h pngconf.h pngpriv.h
+pngmem.o: png.h pngconf.h pngpriv.h
+pngset.o: png.h pngconf.h pngpriv.h
+pngget.o: png.h pngconf.h pngpriv.h
+pngread.o: png.h pngconf.h pngpriv.h
+pngrtran.o: png.h pngconf.h pngpriv.h
+pngrutil.o: png.h pngconf.h pngpriv.h
+pngtrans.o: png.h pngconf.h pngpriv.h
+pngwrite.o: png.h pngconf.h pngpriv.h
+pngwtran.o: png.h pngconf.h pngpriv.h
+pngwutil.o: png.h pngconf.h pngpriv.h
+pngpread.o: png.h pngconf.h pngpriv.h
 
+pngtest.o: png.h pngconf.h

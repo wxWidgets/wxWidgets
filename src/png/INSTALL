@@ -1,5 +1,5 @@
 
-Installing libpng version 1.2.34 - December 18, 2008
+Installing libpng version 1.4.4 - September 23, 2010
 
 On Unix/Linux and similar systems, you can simply type
 
@@ -25,27 +25,29 @@ Instead, you can use one of the custom-built makefiles in the
     make test
     make install
 
+The files that are presently available in the scripts directory
+are listed and described in scripts/README.txt.
+
 Or you can use one of the "projects" in the "projects" directory.
-
-If you want to use "cmake" (see www.cmake.org), copy CMakeLists.txt
-from the "scripts" directory to this directory and type
-
-   cmake . [-DPNG_MMX=YES] -DCMAKE_INSTALL_PREFIX=/path
-   make
-   make install
 
 Before installing libpng, you must first install zlib, if it
 is not already on your system.  zlib can usually be found
 wherever you got libpng.  zlib can be placed in another directory,
 at the same level as libpng.
 
+If you want to use "cmake" (see www.cmake.org), type
+
+   cmake . -DCMAKE_INSTALL_PREFIX=/path
+   make
+   make install
+
 If your system already has a preinstalled zlib you will still need
 to have access to the zlib.h and zconf.h include files that
 correspond to the version of zlib that's installed.
 
 You can rename the directories that you downloaded (they
-might be called "libpng-1.2.34" or "lpng109" and "zlib-1.2.1"
-or "zlib121") so that you have directories called "zlib" and "libpng".
+might be called "libpng-1.4.4" or "libpng14" and "zlib-1.2.3"
+or "zlib123") so that you have directories called "zlib" and "libpng".
 
 Your directory structure should look like this:
 
@@ -55,19 +57,27 @@ Your directory structure should look like this:
           README
           *.h
           *.c
+          CMakeLists.txt    =>  "cmake" script
+          configuration files:
+             configure.ac, configure, Makefile.am, Makefile.in,
+             autogen.sh, config.guess, ltmain.sh, missing,
+             aclocal.m4, config.h.in, config.sub,
+             depcomp, install-sh, test-pngtest.sh
           contrib
              gregbook
+             pngminim
              pngminus
              pngsuite
              visupng
           projects
-             beos
-             c5builder (Borland)
+             cbuilder5 (Borland)
              visualc6 (msvc)
-             netware.txt
-             wince.txt
+             visualc71
+             vstudio
+             xcode
           scripts
              makefile.*
+             *.def (module definition files)
           pngtest.png
           etc.
       zlib
@@ -82,79 +92,12 @@ distribution of libpng.  It is available in both tar.gz (UNIX style line
 endings) and zip (DOS style line endings) formats.
 
 If you are building libpng with MSVC, you can enter the
-libpng projects\visualc6 directory and follow the instructions in
-projects\visualc6\README.txt.
+libpng projects\visualc6 or visualc71 directory and follow the instructions
+in README.txt.
 
-You can build libpng for WindowsCE by downloading and installing
-the projects\wince directory as instructed in the projects\wince.txt file, and
-then following the instructions in the README* files.  Similarly, you can
-build libpng for Netware or Beos as instructed in projects\netware.txt
-or projects\beos.
-
-Else enter the zlib directory and follow the instructions in zlib/README,
+Otherwise enter the zlib directory and follow the instructions in zlib/README,
 then come back here and run "configure" or choose the appropriate
 makefile.sys in the scripts directory.
-
-The files that are presently available in the scripts directory
-include
-
- CMakeLists.txt    =>  "cmake" script
- makefile.std      =>  Generic UNIX makefile (cc, creates static libpng.a)
- makefile.elf      =>  Linux/ELF makefile symbol versioning,
-                       gcc, creates libpng12.so.0.1.2.34)
- makefile.linux    =>  Linux/ELF makefile
-                       (gcc, creates libpng12.so.0.1.2.34)
- makefile.gcc      =>  Generic makefile (gcc, creates static libpng.a)
- makefile.knr      =>  Archaic UNIX Makefile that converts files with
-                       ansi2knr (Requires ansi2knr.c from
-                       ftp://ftp.cs.wisc.edu/ghost)
- makefile.aix      =>  AIX/gcc makefile
- makefile.cygwin   =>  Cygwin/gcc makefile
- makefile.darwin   =>  Darwin makefile, can use on MacosX
- makefile.dec      =>  DEC Alpha UNIX makefile
- makefile.freebsd  =>  FreeBSD makefile
- makefile.hpgcc    =>  HPUX makefile using gcc
- makefile.hpux     =>  HPUX (10.20 and 11.00) makefile
- makefile.hp64     =>  HPUX (10.20 and 11.00) makefile, 64-bit
- makefile.ibmc     =>  IBM C/C++ version 3.x for Win32 and OS/2 (static)
- makefile.intel    =>  Intel C/C++ version 4.0 and later
- libpng.icc        =>  Project file for IBM VisualAge/C++ version 4.0 or later
- makefile.netbsd   =>  NetBSD/cc makefile, uses PNGGCCRD, makes libpng.so.
- makefile.ne12bsd  =>  NetBSD/cc makefile, uses PNGGCCRD,
-                       makes libpng12.so
- makefile.openbsd  =>  OpenBSD makefile
- makefile.sgi      =>  Silicon Graphics IRIX makefile (cc, creates static lib)
- makefile.sggcc    =>  Silicon Graphics (gcc,
-                       creates libpng12.so.0.1.2.34)
- makefile.sunos    =>  Sun makefile
- makefile.solaris  =>  Solaris 2.X makefile (gcc,
-                       creates libpng12.so.0.1.2.34)
- makefile.solaris-x86 =>  Solaris/intelMMX 2.X makefile (gcc,
-                       creates libpng12.so.0.1.2.34)
- makefile.so9      =>  Solaris 9 makefile (gcc,
-                       creates libpng12.so.0.1.2.34)
- makefile.32sunu   =>  Sun Ultra 32-bit makefile
- makefile.64sunu   =>  Sun Ultra 64-bit makefile
- makefile.sco      =>  For SCO OSr5  ELF and Unixware 7 with Native cc
- makefile.mips     =>  MIPS makefile
- makefile.acorn    =>  Acorn makefile
- makefile.amiga    =>  Amiga makefile
- smakefile.ppc     =>  AMIGA smakefile for SAS C V6.58/7.00 PPC compiler
-                       (Requires SCOPTIONS, copied from scripts/SCOPTIONS.ppc)
- makefile.atari    =>  Atari makefile
- makefile.beos     =>  BEOS makefile for X86
- makefile.bor      =>  Borland makefile (uses bcc)
- makefile.bc32     =>  32-bit Borland C++ (all modules compiled in C mode)
- makefile.tc3      =>  Turbo C 3.0 makefile
- makefile.dj2      =>  DJGPP 2 makefile
- makefile.msc      =>  Microsoft C makefile
- makefile.vcwin32  =>  makefile for Microsoft Visual C++ 4.0 and later
- makefile.os2      =>  OS/2 Makefile (gcc and emx, requires pngos2.def)
- pngos2.def        =>  OS/2 module definition file used by makefile.os2
- makefile.watcom   =>  Watcom 10a+ Makefile, 32-bit flat memory model
- makevms.com       =>  VMS build script
- descrip.mms       =>  VMS makefile for MMS or MMK
- SCOPTIONS.ppc     =>  Used with smakefile.ppc
 
 Copy the file (or files) that you need from the
 scripts directory into this directory, for example
@@ -185,9 +128,11 @@ run "make install".
 
 If you encounter a compiler error message complaining about the
 lines
+
       __png.h__ already includes setjmp.h;
       __dont__ include it again.;
-This means you have compiled another module that includes setjmp.h,
+
+this means you have compiled another module that includes setjmp.h,
 which is hazardous because the two modules might not include exactly
 the same setjmp.h.  If you are sure that you know what you are doing
 and that they are exactly the same, then you can comment out or
@@ -197,23 +142,3 @@ instead, as demonstrated in contrib/visupng of the libpng distribution.
 Further information can be found in the README and libpng.txt
 files, in the individual makefiles, in png.h, and the manual pages
 libpng.3 and png.5.
-
-
-Using the ./configure script -- 16 December 2002.
-=================================================
-
-
-The ./configure script should work compatibly with what scripts/makefile.*
-did, however there are some options you need to add to configure explicitly,
-which previously was done semi-automatically (if you didn't edit
-scripts/makefile.* yourself, that is)
-
-
-CFLAGS="-Wall -O -funroll-loops \
--malign-loops=2 -malign-functions=2" ./configure --prefix=/usr/include \
---with-pkgconfigdir=/usr/lib/pkgconfig --includedir=/usr/include
-
-You can alternatively specify --includedir=/usr/include, /usr/local/include,
-/usr/include/png12, or whatever.
-
-

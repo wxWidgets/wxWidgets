@@ -66,7 +66,6 @@ WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.o \
 	$(OBJS)\wxpng_pngerror.o \
-	$(OBJS)\wxpng_pnggccrd.o \
 	$(OBJS)\wxpng_pngget.o \
 	$(OBJS)\wxpng_pngmem.o \
 	$(OBJS)\wxpng_pngpread.o \
@@ -76,7 +75,6 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngrutil.o \
 	$(OBJS)\wxpng_pngset.o \
 	$(OBJS)\wxpng_pngtrans.o \
-	$(OBJS)\wxpng_pngvcrd.o \
 	$(OBJS)\wxpng_pngwio.o \
 	$(OBJS)\wxpng_pngwrite.o \
 	$(OBJS)\wxpng_pngwtran.o \
@@ -5278,9 +5276,6 @@ $(OBJS)\wxpng_png.o: ../../src/png/png.c
 $(OBJS)\wxpng_pngerror.o: ../../src/png/pngerror.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxpng_pnggccrd.o: ../../src/png/pnggccrd.c
-	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\wxpng_pngget.o: ../../src/png/pngget.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
@@ -5306,9 +5301,6 @@ $(OBJS)\wxpng_pngset.o: ../../src/png/pngset.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxpng_pngtrans.o: ../../src/png/pngtrans.c
-	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxpng_pngvcrd.o: ../../src/png/pngvcrd.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxpng_pngwio.o: ../../src/png/pngwio.c

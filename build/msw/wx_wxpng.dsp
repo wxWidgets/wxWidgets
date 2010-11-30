@@ -243,10 +243,6 @@ SOURCE=..\..\src\png\pngerror.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pnggccrd.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\png\pngget.c
 # End Source File
 # Begin Source File
@@ -280,10 +276,6 @@ SOURCE=..\..\src\png\pngset.c
 # Begin Source File
 
 SOURCE=..\..\src\png\pngtrans.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\png\pngvcrd.c
 # End Source File
 # Begin Source File
 

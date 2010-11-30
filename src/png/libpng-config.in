@@ -4,7 +4,10 @@
 # provides configuration info for libpng.
 
 # Copyright (C) 2002, 2004, 2006, 2007 Glenn Randers-Pehrson
-# For conditions of distribution and use, see copyright notice in png.h
+
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # Modeled after libxml-config.
 
@@ -19,7 +22,7 @@ I_opts="-I${includedir}"
 L_opts="-L${libdir}"
 R_opts=""
 cppflags=""
-ccopts="@LIBPNG_NO_MMX@"
+ccopts=""
 ldopts=""
 
 usage()

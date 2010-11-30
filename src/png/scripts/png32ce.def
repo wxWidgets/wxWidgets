@@ -2,16 +2,26 @@
 ; LIBPNG module definition file for Windows
 ;------------------------------------------
 
-LIBRARY
+LIBRARY lpngce
+
+ png_memcpy_check
+ png_memset_check
+ png_set_quantize
+ png_read_init_3
+ png_write_init_3
+ png_set_strip_error_numbers
+ png_get_uint_32
+ png_get_uint_16
+ png_get_int_32
 
 EXPORTS
-;Version 1.2.34
+;Version 1.4.4
   png_build_grayscale_palette  @1
-  png_check_sig        @2
+;  png_check_sig        @2
   png_chunk_error      @3
   png_chunk_warning      @4
-  png_convert_from_struct_tm   @5
-  png_convert_from_time_t    @6
+;  png_convert_from_struct_tm   @5
+;  png_convert_from_time_t    @6
   png_create_info_struct     @7
   png_create_read_struct     @8
   png_create_write_struct    @9
@@ -45,7 +55,7 @@ EXPORTS
   png_get_image_width  @37
   png_get_interlace_type  @38
   png_get_io_ptr    @39
-  ; png_get_libpng_ver  @40
+  png_get_libpng_ver  @40
   png_get_oFFs    @41
   png_get_pCAL    @42
   png_get_pHYs    @43
@@ -74,9 +84,8 @@ EXPORTS
   png_get_y_offset_pixels  @66
   png_get_y_pixels_per_meter  @67
   png_malloc    @68
-  png_memcpy_check    @69
-  png_memset_check    @70
-; png_permit_empty_plte is deprecated
+;  png_memcpy_check    @69
+;  png_memset_check    @70
   png_permit_empty_plte  @71
   png_process_data    @72
   png_progressive_combine_row  @73
@@ -104,7 +113,7 @@ EXPORTS
   png_set_compression_strategy  @94
   png_set_compression_window_bits  @95
   png_set_crc_action  @96
-  png_set_dither    @97
+  png_set_quantize    @97
   png_set_error_fn    @98
   png_set_expand    @99
   png_set_filler    @100
@@ -114,8 +123,7 @@ EXPORTS
   png_set_gAMA    @104
   png_set_gAMA_fixed  @105
   png_set_gamma    @106
-; png_set_gray_1_2_4_to_8 is deprecated
-  png_set_gray_1_2_4_to_8  @107
+  png_set_gray_1_2_4_to_8  @107 ; deprecated
   png_set_gray_to_rgb  @108
   png_set_hIST    @109
   png_set_iCCP    @110
@@ -179,47 +187,45 @@ EXPORTS
   png_read_init_2    @166
   png_write_init_2    @167
   png_access_version_number  @168
-; png_sig_bytes    @169
-; Removed from version 1.2.20
-; png_libpng_ver    @170
-;
+;  png_sig_bytes    @169
+;  png_libpng_ver    @170
   png_init_io    @171
   png_convert_to_rfc1123     @172
   png_set_invalid  @173
 ; Added at version 1.0.12
-; For compatibility with 1.0.7-1.0.11
-; png_info_init @174
-  png_read_init_3    @175
-  png_write_init_3    @176
+; For compatiblity with 1.0.7-1.0.11
+  png_info_init @174
+;  png_read_init_3    @175
+;  png_write_init_3    @176
   png_info_init_3 @177
   png_destroy_struct  @178
 ; Added at version 1.2.0
 ; For use with PNG_USER_MEM_SUPPORTED
-  png_destroy_struct_2  @179
-  png_create_read_struct_2 @180
-  png_create_write_struct_2 @181
-  png_malloc_default @182
-  png_free_default @183
+; png_destroy_struct_2  @179
+; png_create_read_struct_2 @180
+; png_create_write_struct_2 @181
+; png_malloc_default @182
+; png_free_default @183
 ; MNG features
-  png_permit_mng_features  @184
+; png_permit_mng_features  @184
 ; MMX support
-  png_mmx_support  @185
+; png_mmx_support  @185
 ; png_get_mmx_flagmask  @186
-  png_get_asm_flagmask  @187
-  png_get_asm_flags  @188
+; png_get_asm_flagmask  @187
+; png_get_asm_flags  @188
 ; png_get_mmx_bitdepth_threshold  @189
 ; png_get_mmx_rowbytes_threshold  @190
-  png_set_asm_flags  @191
+; png_set_asm_flags  @191
 ; png_init_mmx_flags  @192
 ; Strip error numbers
-  png_set_strip_error_numbers @193
+; png_set_strip_error_numbers @193
 ; Added at version 1.2.2
-  png_handle_as_unknown @194
-; Added at version 1.2.2 and deleted from 1.2.3
+  png_handle_as_unknown @179
+  png_zalloc @180
+  png_zfree @181
+; png_handle_as_unknown @194
 ; png_zalloc @195
 ; png_zfree @196
-; Added at version 1.2.4
-  png_malloc_warn @195
 ; Added at version 1.2.6
   png_malloc_warn @195
   png_get_user_height_max @196
@@ -228,11 +234,26 @@ EXPORTS
 ; Added at version 1.2.7
   png_set_add_alpha @199
 ; Added at version 1.2.9
-  png_get_uint_32 @200
+;  png_get_uint_32 @200
   png_save_uint_32 @201
-  png_get_uint_16 @202
+;  png_get_uint_16 @202
   png_save_uint_16 @203
-  png_get_int_32 @204
+;  png_get_int_32 @204
   png_save_int_32 @205
   png_get_uint_31 @206
   png_set_expand_gray_1_2_4_to_8  @207
+; Added at version 1.2.41
+  png_write_sig @208
+  png_benign_error @209
+  png_benign_chunk_error @210
+  png_set_benign_error @211
+  png_get_io_chunk_name @212
+  png_get_io_state @213
+  png_get_chunk_cache_max @215
+  png_set_chunk_cache_max @216
+  png_check_cHRM_fixed @217
+  png_calloc @218
+  png_set_longjmp_fn @219
+; Added at version 1.4.1
+  png_get_chunk_malloc_max @220
+  png_set_chunk_malloc_max @221

@@ -6,10 +6,9 @@ CCflags = -c -depend !Depend -IC:,Zlib: -g -throwback  -DRISCOS  -fnah
 C++flags = -c -depend !Depend -IC: -throwback
 Linkflags = -aif -c++ -o $@
 ObjAsmflags = -throwback -NoCache -depend !Depend
-CMHGflags = 
+CMHGflags =
 LibFileflags = -c -l -o $@
 Squeezeflags = -o $@
-
 
 # Final targets:
 @.libpng-lib:   @.o.png @.o.pngerror @.o.pngrio @.o.pngwio @.o.pngmem \

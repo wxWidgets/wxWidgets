@@ -1,7 +1,10 @@
 # Commodore Amiga Makefile
 # makefile for libpng and SAS C V6.5x compiler
 # Copyright (C) 1995-2000 Wolf Faust
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 #
 # Note: Use #define PNG_READ_BIG_ENDIAN_SUPPORTED in pngconf.h
 #
