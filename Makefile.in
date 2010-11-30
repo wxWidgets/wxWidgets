@@ -5268,7 +5268,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_listbox.o \
 	monodll_gtk_mdi.o \
 	monodll_gtk_menu.o \
-	monodll_mnemonics.o \
+	monodll_gtk_mnemonics.o \
 	monodll_gtk_msgdlg.o \
 	monodll_gtk_nativewin.o \
 	monodll_gtk_notebook.o \
@@ -7145,7 +7145,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_listbox.o \
 	monolib_gtk_mdi.o \
 	monolib_gtk_menu.o \
-	monolib_mnemonics.o \
+	monolib_gtk_mnemonics.o \
 	monolib_gtk_msgdlg.o \
 	monolib_gtk_nativewin.o \
 	monolib_gtk_notebook.o \
@@ -9206,7 +9206,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_listbox.o \
 	coredll_gtk_mdi.o \
 	coredll_gtk_menu.o \
-	coredll_mnemonics.o \
+	coredll_gtk_mnemonics.o \
 	coredll_gtk_msgdlg.o \
 	coredll_gtk_nativewin.o \
 	coredll_gtk_notebook.o \
@@ -10751,7 +10751,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_listbox.o \
 	corelib_gtk_mdi.o \
 	corelib_gtk_menu.o \
-	corelib_mnemonics.o \
+	corelib_gtk_mnemonics.o \
 	corelib_gtk_msgdlg.o \
 	corelib_gtk_nativewin.o \
 	corelib_gtk_notebook.o \
@@ -15629,7 +15629,7 @@ monodll_gtk_mdi.o: $(srcdir)/src/gtk/mdi.cpp $(MONODLL_ODEP)
 monodll_gtk_menu.o: $(srcdir)/src/gtk/menu.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/menu.cpp
 
-monodll_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONODLL_ODEP)
+monodll_gtk_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 monodll_gtk_msgdlg.o: $(srcdir)/src/gtk/msgdlg.cpp $(MONODLL_ODEP)
@@ -15738,7 +15738,7 @@ monodll_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
 
 monodll_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mnemonics.cpp
 
 monodll_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
@@ -20861,7 +20861,7 @@ monolib_gtk_mdi.o: $(srcdir)/src/gtk/mdi.cpp $(MONOLIB_ODEP)
 monolib_gtk_menu.o: $(srcdir)/src/gtk/menu.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/menu.cpp
 
-monolib_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONOLIB_ODEP)
+monolib_gtk_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 monolib_gtk_msgdlg.o: $(srcdir)/src/gtk/msgdlg.cpp $(MONOLIB_ODEP)
@@ -20969,8 +20969,8 @@ monolib_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(MONOLIB_ODEP)
 monolib_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
 
-monolib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
+monolib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/mnemonics.cpp
 
 monolib_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
@@ -26810,7 +26810,7 @@ coredll_gtk_mdi.o: $(srcdir)/src/gtk/mdi.cpp $(COREDLL_ODEP)
 coredll_gtk_menu.o: $(srcdir)/src/gtk/menu.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/menu.cpp
 
-coredll_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(COREDLL_ODEP)
+coredll_gtk_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 coredll_gtk_msgdlg.o: $(srcdir)/src/gtk/msgdlg.cpp $(COREDLL_ODEP)
@@ -26918,8 +26918,8 @@ coredll_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(COREDLL_ODEP)
 coredll_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
 
-coredll_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
+coredll_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/mnemonics.cpp
 
 coredll_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
@@ -30734,7 +30734,7 @@ corelib_gtk_mdi.o: $(srcdir)/src/gtk/mdi.cpp $(CORELIB_ODEP)
 corelib_gtk_menu.o: $(srcdir)/src/gtk/menu.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/menu.cpp
 
-corelib_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(CORELIB_ODEP)
+corelib_gtk_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 corelib_gtk_msgdlg.o: $(srcdir)/src/gtk/msgdlg.cpp $(CORELIB_ODEP)
@@ -30842,8 +30842,8 @@ corelib_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(CORELIB_ODEP)
 corelib_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
 
-corelib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
+corelib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/mnemonics.cpp
 
 corelib_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp

@@ -1312,6 +1312,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/listbox.cpp
     src/gtk1/mdi.cpp
     src/gtk1/menu.cpp
+    src/gtk1/mnemonics.cpp
     src/gtk1/notebook.cpp
     src/gtk1/radiobox.cpp
     src/gtk1/radiobut.cpp
