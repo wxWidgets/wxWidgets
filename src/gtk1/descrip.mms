@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 December 2008                                                     *
+# Date : 29 Novemer 2010                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -90,7 +90,7 @@ OBJECTS0= \
 	toolbar.obj,\
 	textctrl.obj,\
 	tglbtn.obj,\
-	msgdlg.obj
+	msgdlg.obj,mnemonics.obj
 
 SOURCES =\
 	app.cpp,\
@@ -154,7 +154,7 @@ SOURCES =\
 	utilsgtk.cpp,\
 	utilsres.cpp,\
         win_gtk.c,\
-	window.cpp
+	window.cpp,mnemonics.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -230,3 +230,4 @@ utilsgtk.obj : utilsgtk.cpp
 utilsres.obj : utilsres.cpp
 win_gtk.obj : win_gtk.c
 window.obj : window.cpp
+mnemonics.obj : mnemonics.cpp

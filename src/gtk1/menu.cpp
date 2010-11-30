@@ -25,6 +25,7 @@
 #endif // wxUSE_ACCEL
 
 #include "wx/gtk1/private.h"
+#include "wx/gtk1/private/mnemonics.h"
 
 #include <gdk/gdkkeysyms.h>
 

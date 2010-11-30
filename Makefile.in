@@ -5218,6 +5218,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_gtk1_listbox.o \
 	monodll_gtk1_mdi.o \
 	monodll_gtk1_menu.o \
+	monodll_gtk1_mnemonics.o \
 	monodll_gtk1_notebook.o \
 	monodll_gtk1_radiobox.o \
 	monodll_gtk1_radiobut.o \
@@ -7094,6 +7095,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk1_listbox.o \
 	monolib_gtk1_mdi.o \
 	monolib_gtk1_menu.o \
+	monolib_gtk1_mnemonics.o \
 	monolib_gtk1_notebook.o \
 	monolib_gtk1_radiobox.o \
 	monolib_gtk1_radiobut.o \
@@ -9154,6 +9156,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk1_listbox.o \
 	coredll_gtk1_mdi.o \
 	coredll_gtk1_menu.o \
+	coredll_gtk1_mnemonics.o \
 	coredll_gtk1_notebook.o \
 	coredll_gtk1_radiobox.o \
 	coredll_gtk1_radiobut.o \
@@ -10698,6 +10701,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk1_listbox.o \
 	corelib_gtk1_mdi.o \
 	corelib_gtk1_menu.o \
+	corelib_gtk1_mnemonics.o \
 	corelib_gtk1_notebook.o \
 	corelib_gtk1_radiobox.o \
 	corelib_gtk1_radiobut.o \
@@ -15732,6 +15736,9 @@ monodll_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(MONODLL_ODEP)
 
 monodll_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
+
+monodll_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
 
 monodll_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
@@ -20961,6 +20968,9 @@ monolib_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(MONOLIB_ODEP)
 
 monolib_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
+
+monolib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
 
 monolib_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
@@ -26908,6 +26918,9 @@ coredll_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(COREDLL_ODEP)
 coredll_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
 
+coredll_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
+
 coredll_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
 
@@ -30828,6 +30841,9 @@ corelib_gtk1_mdi.o: $(srcdir)/src/gtk1/mdi.cpp $(CORELIB_ODEP)
 
 corelib_gtk1_menu.o: $(srcdir)/src/gtk1/menu.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/menu.cpp
+
+corelib_gtk1_mnemonics.o: $(srcdir)/src/gtk1/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/mmnemonics.cpp
 
 corelib_gtk1_notebook.o: $(srcdir)/src/gtk1/notebook.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/notebook.cpp
