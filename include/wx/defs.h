@@ -2117,6 +2117,13 @@ enum wxStandardID
     wxID_MDI_WINDOW_NEXT,
     wxID_MDI_WINDOW_LAST = wxID_MDI_WINDOW_NEXT,
 
+    /* OS X system menu ids */
+    wxID_OSX_MENU_FIRST = 5250,
+    wxID_OSX_HIDE = wxID_OSX_MENU_FIRST,
+    wxID_OSX_HIDEOTHERS,
+    wxID_OSX_SHOWALL,
+    wxID_OSX_MENU_LAST = wxID_OSX_SHOWALL,
+    
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
 

@@ -35,7 +35,10 @@
     wxUnusedVar(sender);
     if ( impl )
     {
-        impl->GetWXPeer()->GetMenu()->HandleCommandProcess(impl->GetWXPeer());
+        wxMenuItem* menuitem = impl->GetWXPeer();
+        if ( menuitem->GetMenu()->HandleCommandProcess(menuitem) == false )
+        {
+        }
      }
 }
 
@@ -212,6 +215,8 @@ public :
             wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
 
     }
+    
+    bool DoDefault();
 
     void * GetHMenuItem() { return m_osxMenuItem; }
 
@@ -226,6 +231,29 @@ wxMenuItemCocoaImpl::~wxMenuItemCocoaImpl()
     [m_osxMenuItem release];
 }
 
+bool wxMenuItemCocoaImpl::DoDefault()
+{
+    bool handled=false;
+    int menuid = m_peer->GetId();
+    
+    NSApplication *theNSApplication = [NSApplication sharedApplication];
+    if (menuid == wxID_OSX_HIDE)
+    {
+        [theNSApplication hide:nil];
+        handled=true;
+    }
+    else if (menuid == wxID_OSX_HIDEOTHERS)
+    {
+        [theNSApplication hideOtherApplications:nil];
+        handled=true;
+    }
+    else if (menuid == wxID_OSX_SHOWALL)
+    {
+        [theNSApplication unhideAllApplications:nil];
+        handled=true;
+    }
+    return handled;
+}
 
 wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
                        int WXUNUSED(id),

@@ -149,7 +149,9 @@ public :
                        const wxString& strHelp,
                        wxItemKind kind,
                        wxMenu *pSubMenu );
-
+    
+    // handle OS specific menu items if they weren't handled during normal processing
+    virtual bool DoDefault() {} ;
 protected :
     wxMenuItem* m_peer;
 
