@@ -151,7 +151,7 @@ public :
                        wxMenu *pSubMenu );
     
     // handle OS specific menu items if they weren't handled during normal processing
-    virtual bool DoDefault() {} ;
+    virtual bool DoDefault() { return false; }
 protected :
     wxMenuItem* m_peer;
 
