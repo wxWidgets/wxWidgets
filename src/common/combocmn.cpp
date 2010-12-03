@@ -673,7 +673,8 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
     //     wxEVT_SET_FOCUSes (since m_text->SetFocus is called
     //     from combo's focus event handler), they should be quite
     //     harmless.
-    wxFocusEvent evt2(event.GetEventType(),m_combo->GetId());
+    wxFocusEvent evt2(event);
+    evt2.SetId(m_combo->GetId());
     evt2.SetEventObject(m_combo);
     m_combo->GetEventHandler()->ProcessEvent(evt2);
 
