@@ -761,14 +761,9 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
     //     ctor when wxTR_HIDE_ROOT was specified
 
     if (!m_rootId.IsOk())
-
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
-    if ( m_treeCtrl->GetChildrenCount(parentId, false) == 0 )
-    {
-        m_treeCtrl->SetItemHasChildren(parentId, false);
-    }
 }
 
 void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
@@ -892,6 +887,10 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         filenames.Sort(wxDirCtrlStringCompareFunction);
     }
 
+    // Now we really know whether we have any children so tell the tree control
+    // about it.
+    m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+
     // Add the sorted dirs
     size_t i;
     for (i = 0; i < dirs.GetCount(); i++)
@@ -911,7 +910,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         // assume that it does have children by default as it can take a long
         // time to really check for this (think remote drives...)
         //
-        // and if we're wrong, we'll correct it later in OnExpandItem() if
+        // and if we're wrong, we'll correct the icon later if
         // the user really tries to open this item
         m_treeCtrl->SetItemHasChildren(id);
     }
