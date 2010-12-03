@@ -788,7 +788,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
     m_treeCtrl->Thaw();
 }
 
-void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
+void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 {
     wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
 
@@ -933,6 +933,12 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
         }
     }
+}
+
+void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
+{
+    // ExpandDir() will not actually expand the tree node, just populate it
+    PopulateNode(parentId);
 }
 
 void wxGenericDirCtrl::ReCreateTree()
