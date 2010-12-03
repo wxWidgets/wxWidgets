@@ -183,6 +183,7 @@
             image/image.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
+            menu/accelentry.cpp
             menu/menu.cpp
             misc/guifuncs.cpp
             misc/selstoretest.cpp

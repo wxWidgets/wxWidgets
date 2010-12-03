@@ -202,6 +202,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_image.o \
 	test_gui_rawbmp.o \
 	test_gui_htmlwindow.o \
+	test_gui_accelentry.o \
 	test_gui_menu.o \
 	test_gui_guifuncs.o \
 	test_gui_selstoretest.o \
@@ -828,6 +829,9 @@ test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 
 test_gui_htmlwindow.o: $(srcdir)/html/htmlwindow.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/html/htmlwindow.cpp
+
+test_gui_accelentry.o: $(srcdir)/menu/accelentry.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/menu/accelentry.cpp
 
 test_gui_menu.o: $(srcdir)/menu/menu.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/menu/menu.cpp

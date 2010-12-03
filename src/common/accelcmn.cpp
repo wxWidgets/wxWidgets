@@ -160,17 +160,19 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
     wxString label = text;
     label.Trim(true);  // the initial \t must be preserved so don't strip leading whitespaces
 
+    // If we're passed the entire menu item label instead of just the
+    // accelerator, skip the label part and only look after the TAB.
     // check for accelerators: they are given after '\t'
     int posTab = label.Find(wxT('\t'));
     if ( posTab == wxNOT_FOUND )
-    {
-        return false;
-    }
+        posTab = 0;
+    else
+        posTab++;
 
     // parse the accelerator string
     int accelFlags = wxACCEL_NORMAL;
     wxString current;
-    for ( size_t n = (size_t)posTab + 1; n < label.length(); n++ )
+    for ( size_t n = (size_t)posTab; n < label.length(); n++ )
     {
         if ( (label[n] == '+') || (label[n] == '-') )
         {

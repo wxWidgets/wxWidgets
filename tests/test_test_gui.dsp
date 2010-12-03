@@ -235,6 +235,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\menu\accelentry.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\asserthelper.cpp
 # End Source File
 # Begin Source File

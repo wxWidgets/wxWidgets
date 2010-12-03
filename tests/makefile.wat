@@ -422,6 +422,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_image.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
+	$(OBJS)\test_gui_accelentry.obj &
 	$(OBJS)\test_gui_menu.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
@@ -912,6 +913,9 @@ $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_htmlwindow.obj :  .AUTODEPEND .\html\htmlwindow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_accelentry.obj :  .AUTODEPEND .\menu\accelentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_menu.obj :  .AUTODEPEND .\menu\menu.cpp
