@@ -1089,24 +1089,37 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     }
 
     unsigned char *data = image.GetData();
-    const unsigned char *source_data = M_IMGDATA->m_data;
     unsigned char *target_data;
 
-    for (long j = 0; j < height; j++)
+    // we rotate the image in 21-pixel (63-byte) wide strips
+    // to make better use of cpu cache - memory transfers
+    // (note: while much better than single-pixel "strips",
+    //  our vertical strips will still generally straddle cachelines)
+    for (long ii = 0; ii < width; )
     {
-        for (long i = 0; i < width; i++)
+        long next_ii = wxMin(ii + 21, width);
+
+        for (long j = 0; j < height; j++)
         {
-            if ( clockwise )
+            const unsigned char *source_data
+                                     = M_IMGDATA->m_data + (j*width + ii)*3;
+
+            for (long i = ii; i < next_ii; i++)
             {
-                target_data = data + (((i+1)*height) - j - 1)*3;
+                if ( clockwise )
+                {
+                    target_data = data + (((i+1)*height) - j - 1)*3;
+                }
+                else
+                {
+                    target_data = data + ((height*(width - 1 - i)) + j)*3;
+                }
+                memcpy( target_data, source_data, 3 );
+                source_data += 3;
             }
-            else
-            {
-                target_data = data + ((height*(width-1)) + j - (i*height))*3;
-            }
-            memcpy( target_data, source_data, 3 );
-            source_data += 3;
         }
+
+        ii = next_ii;
     }
 
     const unsigned char *source_alpha = M_IMGDATA->m_alpha;
