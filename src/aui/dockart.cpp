@@ -190,6 +190,28 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_caption_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 #endif
 
+    // default metric values
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
+    SInt32 height;
+    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height );
+    m_sash_size = height;
+#elif defined(__WXGTK__)
+    m_sash_size = wxRendererNative::Get().GetSplitterParams(NULL).widthSash;
+#else
+    m_sash_size = 4;
+#endif
+    m_caption_size = 17;
+    m_border_size = 1;
+    m_button_size = 14;
+    m_gripper_size = 9;
+    m_gradient_type = wxAUI_GRADIENT_VERTICAL;
+
+    InitBitmaps();
+}
+
+void
+wxAuiDefaultDockArt::InitBitmaps ()
+{
     // some built in bitmaps
 #if defined( __WXMAC__ )
      static const unsigned char close_bits[]={
@@ -256,22 +278,6 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 
     m_inactive_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
     m_active_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
-
-    // default metric values
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    SInt32 height;
-    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height );
-    m_sash_size = height;
-#elif defined(__WXGTK__)
-    m_sash_size = wxRendererNative::Get().GetSplitterParams(NULL).widthSash;
-#else
-    m_sash_size = 4;
-#endif
-    m_caption_size = 17;
-    m_border_size = 1;
-    m_button_size = 14;
-    m_gripper_size = 9;
-    m_gradient_type = wxAUI_GRADIENT_VERTICAL;
 }
 
 int wxAuiDefaultDockArt::GetMetric(int id)
@@ -344,6 +350,8 @@ void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
             break;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
+
+    InitBitmaps();
 }
 
 void wxAuiDefaultDockArt::SetFont(int id, const wxFont& font)

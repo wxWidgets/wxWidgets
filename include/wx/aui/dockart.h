@@ -134,6 +134,8 @@ protected:
 
     void DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active);
 
+    void InitBitmaps();
+
 protected:
 
     wxPen m_border_pen;
