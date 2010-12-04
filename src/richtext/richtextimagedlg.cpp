@@ -16,6 +16,9 @@
 #pragma hdrstop
 #endif
 
+
+#if wxUSE_RICHTEXT
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/combobox.h"
@@ -508,3 +511,4 @@ void wxRichTextImageDialog::OnRichtextimagedialogDownClick( wxCommandEvent& WXUN
     m_image->SetRange(wxRichTextRange(rg.GetEnd(), rg.GetEnd()));
 }
 
+#endif
