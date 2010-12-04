@@ -271,7 +271,9 @@ protected :
 // wxUITextViewControl
 //
 
-wxUITextViewControl::wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* v) : wxWidgetIPhoneImpl(wxPeer, v)
+wxUITextViewControl::wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* v) : 
+    wxWidgetIPhoneImpl(wxPeer, v),
+    wxTextWidgetImpl(wxPeer)
 {
     m_textView = v;
     wxUITextViewDelegate* d = [[wxUITextViewDelegate alloc] init];
