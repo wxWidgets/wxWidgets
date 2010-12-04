@@ -549,7 +549,9 @@ wxString wxGetCurrentDir()
 // ----------------------------------------------------------------------------
 
 #ifdef __WXOSX__
+#if wxOSX_USE_COCOA_OR_CARBON
     #include <crt_externs.h>
+#endif
 #endif
 
 bool wxGetEnvMap(wxEnvVariableHashMap *map)
@@ -563,6 +565,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
    // TODO : should we do something with logicals?
     char **env=NULL;
 #elif defined(__WXOSX__)
+#if wxOSX_USE_COCOA_OR_CARBON
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
     // environ(7) under Darwin
@@ -570,6 +573,10 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
     if ( !penv )
         return false;
     char **env = *penv;
+#else
+    char **env=NULL;
+    // todo translate NSProcessInfo environment into map
+#endif
 #else // non-MSVC non-Mac
     // Not sure if other compilers have _tenviron so use the (more standard)
     // ANSI version only for them.
