@@ -560,6 +560,16 @@ void wxFrame::OnInternalIdle()
 
 #if wxUSE_MENUS_NATIVE
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
+
+    // UpdateMenuBarSize may return a height of zero on some
+    // systems (e.g. Ubuntu 11.04 Alpha as of 2010-12-06),
+    // when the menubar widget has not been fully realized.
+    // Update the menu bar size again at this point, otherwise
+    // the menu would not be visible at all.
+    if (!m_menuBarHeight)
+    {
+        UpdateMenuBarSize();
+    }
 #endif // wxUSE_MENUS_NATIVE
 #if wxUSE_TOOLBAR
     if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
