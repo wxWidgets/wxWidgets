@@ -182,6 +182,7 @@ public:
     WXWindow            MacGetTopLevelWindowRef() const ;
     wxNonOwnedWindow*   MacGetTopLevelWindow() const ;
 
+    virtual long        MacGetWXBorderSize() const;
     virtual long        MacGetLeftBorderSize() const ;
     virtual long        MacGetRightBorderSize() const ;
     virtual long        MacGetTopBorderSize() const ;

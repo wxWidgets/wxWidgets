@@ -2263,7 +2263,7 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
     }
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const
+long wxWindowMac::MacGetWXBorderSize() const
 {
     if ( IsTopLevel() )
         return 0 ;
@@ -2297,22 +2297,65 @@ long wxWindowMac::MacGetLeftBorderSize() const
     return border ;
 }
 
+long wxWindowMac::MacGetLeftBorderSize() const
+{
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+ 
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= left;
+    }
+    
+    return border;
+}
+
+
 long wxWindowMac::MacGetRightBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= right;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacGetTopBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= top;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacGetBottomBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= bottom;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )

@@ -30,7 +30,11 @@ wxSize wxButton::DoGetBestSize() const
     m_peer->GetBestRect(&r);
 
     wxSize sz = r.GetSize();
-
+    sz.x  = sz.x  + MacGetLeftBorderSize() +
+    MacGetRightBorderSize();
+    sz.y = sz.y + MacGetTopBorderSize() +
+    MacGetBottomBorderSize();
+    
     const int wBtnStd = GetDefaultSize().x;
 
     if ( (sz.x < wBtnStd) && !HasFlag(wxBU_EXACTFIT) )
@@ -41,7 +45,7 @@ wxSize wxButton::DoGetBestSize() const
 
 wxSize wxButton::GetDefaultSize()
 {
-    return wxSize(84, 23);
+    return wxSize(84, 20);
 }
 
 @implementation wxNSButton
@@ -124,6 +128,43 @@ public:
         [button setButtonType:NSMomentaryChangeButton];
     }
 
+    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+    {
+        left = top = right = bottom = 0;
+        NSControlSize size = NSRegularControlSize;
+        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
+            size = (NSControlSize) [m_osxView controlSize];
+        else if ([m_osxView respondsToSelector:@selector(cell)])
+        {
+            id cell = [(id)m_osxView cell];
+            if ([cell respondsToSelector:@selector(controlSize)])
+                size = [cell controlSize];
+        }
+        
+        if ( [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
+        {
+            switch( size )
+            {
+                case NSRegularControlSize:
+                    left = right = 6;
+                    top = 4;
+                    bottom = 8;
+                    break;
+                case NSSmallControlSize:
+                    left = right = 5;
+                    top = 4;
+                    bottom = 7;
+                    break;
+                case NSMiniControlSize:
+                    left = right = 1;
+                    top = 0;
+                    bottom = 2;
+                    break;
+            }
+        }
+    }
+    
+    
 private:
     NSButton *GetNSButton() const
     {
