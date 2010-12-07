@@ -1146,7 +1146,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 #if OSX_DEBUG_DRAWING
     CGContextBeginPath( context );
     CGContextMoveToPoint(context, 0, 0);
-    NSRect bounds = [self bounds];
+    NSRect bounds = [slf bounds];
     CGContextAddLineToPoint(context, 10, 0);
     CGContextMoveToPoint(context, 0, 0);
     CGContextAddLineToPoint(context, 0, 10);
