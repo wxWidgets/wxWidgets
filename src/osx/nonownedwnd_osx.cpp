@@ -467,7 +467,9 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
         return;
 
     int left, top, w, h;
-    // perhaps we should do this for all ?
+    // under iphone with a translucent status bar the m_nowpeer returns the
+    // inner area, while the content area extends under the translucent
+    // status bar, therefore we use the content view's area
 #ifdef __WXOSX_IPHONE__
     m_peer->GetContentArea(left, top, w, h);
 #else
