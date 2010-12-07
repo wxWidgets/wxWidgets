@@ -2558,7 +2558,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
-    src/osx/iphone/glcanvas.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm
@@ -3460,6 +3459,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OPENGL_SRC_PLATFORM" hints="files">
     <if cond="TOOLKIT=='OSX_CARBON'">src/osx/carbon/glcanvas.cpp src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='OSX_COCOA'">src/osx/cocoa/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
+    <if cond="TOOLKIT=='OSX_IPHONE'">src/osx/iphone/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp
