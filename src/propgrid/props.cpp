@@ -713,6 +713,25 @@ void wxPropertyGrid::DoubleToString(wxString& target,
         if ( new_len != target.length() )
             target.resize(new_len);
     }
+
+    // Remove sign from zero
+    if ( target.length() >= 2 && target[0] == wxS('-') )
+    {
+        bool isZero = true;
+        wxString::const_iterator i = target.begin() + 1;
+
+        for ( ; i != target.end(); i++ )
+        {
+            if ( *i != wxS('0') && *i != wxS('.') )
+            {
+                isZero = false;
+                break;
+            }
+        }
+
+        if ( isZero )
+            target.erase(target.begin());
+    }
 }
 
 wxString wxFloatProperty::ValueToString( wxVariant& value,
