@@ -1547,11 +1547,11 @@ public:
 
     /** Standardized double-to-string conversion.
     */
-    static void DoubleToString( wxString& target,
-                                double value,
-                                int precision,
-                                bool removeZeroes,
-                                wxString* precTemplate );
+    static const wxString& DoubleToString( wxString& target,
+                                           double value,
+                                           int precision,
+                                           bool removeZeroes,
+                                           wxString* precTemplate = NULL );
 
     /**
         Call this from wxPGProperty::OnEvent() to cause property value to be

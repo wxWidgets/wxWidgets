@@ -666,11 +666,11 @@ wxFloatProperty::~wxFloatProperty() { }
 
 // This helper method provides standard way for floating point-using
 // properties to convert values to string.
-void wxPropertyGrid::DoubleToString(wxString& target,
-                                    double value,
-                                    int precision,
-                                    bool removeZeroes,
-                                    wxString* precTemplate)
+const wxString& wxPropertyGrid::DoubleToString(wxString& target,
+                                               double value,
+                                               int precision,
+                                               bool removeZeroes,
+                                               wxString* precTemplate)
 {
     if ( precision >= 0 )
     {
@@ -722,7 +722,7 @@ void wxPropertyGrid::DoubleToString(wxString& target,
 
         for ( ; i != target.end(); i++ )
         {
-            if ( *i != wxS('0') && *i != wxS('.') )
+            if ( *i != wxS('0') && *i != wxS('.') && *i != wxS(',') )
             {
                 isZero = false;
                 break;
@@ -732,6 +732,8 @@ void wxPropertyGrid::DoubleToString(wxString& target,
         if ( isZero )
             target.erase(target.begin());
     }
+
+    return target;
 }
 
 wxString wxFloatProperty::ValueToString( wxVariant& value,
