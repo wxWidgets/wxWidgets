@@ -712,6 +712,11 @@ void wxSlider::SetValue(int value)
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
+    // Remember the old logical value if we need to update the physical control
+    // value after changing its range in wxSL_INVERSE case (and avoid an
+    // unnecessary call to GetValue() otherwise as it's just not needed).
+    const int valueOld = HasFlag(wxSL_INVERSE) ? GetValue() : 0;
+
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
 
@@ -724,6 +729,14 @@ void wxSlider::SetRange(int minValue, int maxValue)
                         Format(ValueInvertOrNot(m_rangeMin)).wx_str());
         ::SetWindowText((*m_labels)[SliderLabel_Max],
                         Format(ValueInvertOrNot(m_rangeMax)).wx_str());
+    }
+
+    // When emulating wxSL_INVERSE style in wxWidgets, we need to update the
+    // value after changing the range to ensure that the value seen by the user
+    // code, i.e. the one returned by GetValue(), does not change.
+    if ( HasFlag(wxSL_INVERSE) )
+    {
+        ::SendMessage(GetHwnd(), TBM_SETPOS, TRUE, ValueInvertOrNot(valueOld));
     }
 }
 
