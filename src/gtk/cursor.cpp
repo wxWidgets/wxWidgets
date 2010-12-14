@@ -36,6 +36,11 @@ public:
     virtual bool IsOk() const { return m_cursor != NULL; }
 
     GdkCursor *m_cursor;
+
+private:
+    // There is no way to copy m_cursor so we can't implement a copy ctor
+    // properly.
+    wxDECLARE_NO_COPY_CLASS(wxCursorRefData);
 };
 
 wxCursorRefData::wxCursorRefData()
@@ -348,9 +353,17 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
     return new wxCursorRefData;
 }
 
-wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxCursor::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxCursorRefData(*static_cast<const wxCursorRefData *>(data));
+    // TODO: We can't clone GDK cursors at the moment. To do this we'd need
+    //       to remember the original data from which the cursor was created
+    //       (i.e. standard cursor type or the bitmap) or use
+    //       gdk_cursor_get_cursor_type() (which is in 2.22+ only) and
+    //       gdk_cursor_get_image().
+    wxFAIL_MSG( wxS("Cloning cursors is not implemented in wxGTK.") );
+
+    return new wxCursorRefData;
 }
 
 //-----------------------------------------------------------------------------
