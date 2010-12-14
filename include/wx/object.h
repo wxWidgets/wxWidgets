@@ -422,6 +422,12 @@ protected:
 private:
     // our refcount:
     int m_count;
+
+    // It doesn't make sense to copy the reference counted objects, a new ref
+    // counter should be created for a new object instead and compilation
+    // errors in the code using wxRefCounter due to the lack of copy ctor often
+    // indicate a problem, e.g. a forgotten copy ctor implementation somewhere.
+    wxDECLARE_NO_COPY_CLASS(wxRefCounter);
 };
 
 // ----------------------------------------------------------------------------
