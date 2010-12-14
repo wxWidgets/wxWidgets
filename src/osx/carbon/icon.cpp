@@ -50,6 +50,9 @@ private:
     IconRef m_iconRef;
     int m_width;
     int m_height;
+
+    // We can (easily) copy m_iconRef so we don't implement the copy ctor.
+    wxDECLARE_NO_COPY_CLASS(wxIconRefData);
 };
 
 
@@ -124,9 +127,12 @@ wxGDIRefData *wxIcon::CreateGDIRefData() const
     return new wxIconRefData;
 }
 
-wxGDIRefData *wxIcon::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxIcon::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxIconRefData(*static_cast<const wxIconRefData *>(data));
+    wxFAIL_MSG( wxS("Cloning icons is not implemented in wxCarbon.") );
+
+    return new wxIconRefData;
 }
 
 WXHICON wxIcon::GetHICON() const

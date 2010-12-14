@@ -76,6 +76,11 @@ private:
 
     int m_width ;
     int m_height ;
+
+
+    // Our m_pdfDoc field can't be easily (deep) copied and so we don't define a
+    // copy ctor.
+    wxDECLARE_NO_COPY_CLASS(wxMetafileRefData);
 };
 
 wxMetafileRefData::wxMetafileRefData(CFDataRef data) :
@@ -175,9 +180,12 @@ wxGDIRefData *wxMetaFile::CreateGDIRefData() const
     return new wxMetafileRefData;
 }
 
-wxGDIRefData *wxMetaFile::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxMetaFile::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxMetafileRefData(*static_cast<const wxMetafileRefData *>(data));
+    wxFAIL_MSG( wxS("Cloning metafiles is not implemented in wxCarbon.") );
+
+    return new wxMetafileRefData;
 }
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
