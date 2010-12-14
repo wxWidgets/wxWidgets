@@ -298,7 +298,7 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
 
         default:
             wxLogDebug( "Unrecognised keycode %d", code );
-            keycode = -1;
+            keycode = static_cast<CGKeyCode>(-1);
     }
 
     return keycode;
