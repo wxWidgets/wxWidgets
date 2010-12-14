@@ -1556,7 +1556,19 @@ public:
 
     /**
         Register an image handler.
-        See @ref image_handlers for a list of the available handlers.
+
+        Typical example of use:
+        @code
+            wxImage::AddHandler(new wxPNGHandler);
+        @endcode
+
+        See @ref image_handlers for a list of the available handlers. You can
+        also use ::wxInitAllImageHandlers() to add handlers for all the image
+        formats supported by wxWidgets at once.
+
+        @param handler
+            A heap-allocated handler object which will be deleted by wxImage
+            if it is removed later by RemoveHandler() or at program shutdown.
     */
     static void AddHandler(wxImageHandler* handler);
 
@@ -1648,7 +1660,8 @@ public:
 
     /**
         Finds the handler with the given name, and removes it.
-        The handler is not deleted.
+
+        The handler is also deleted.
 
         @param name
             The handler name.
@@ -1760,9 +1773,14 @@ wxImage wxNullImage;
 //@{
 
 /**
-    Initializes all available image handlers. For a list of available handlers,
-    see wxImage.
-    If you don't need/want all image handlers loaded
+    Initializes all available image handlers.
+
+    This function call wxImage::AddHandler() for all the available image
+    handlers (see @ref image_handlers for the full list). Calling it is the
+    simplest way to initialize wxImage but it creates and registers even the
+    handlers your program may not use. If you want to avoid the overhead of
+    doing this you need to call wxImage::AddHandler() manually just for the
+    handlers that you do want to use.
 
     @see wxImage, wxImageHandler
 
