@@ -7844,7 +7844,7 @@ bool wxRichTextImageBlock::DoMakeImageBlock(const wxImage& image, wxBitmapType i
 
     unsigned char* block = new unsigned char[memStream.GetSize()];
     if (!block)
-        return NULL;
+        return false;
 
     if (m_data)
         delete[] m_data;
