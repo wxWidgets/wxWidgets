@@ -119,7 +119,10 @@ public:
             ToString(), i.e. contain the accelerator itself only, or have the
             format of a full menu item text with i.e. <code>Label TAB
             Accelerator</code>. In the latter case, the part of the string
-            before the TAB is ignored.
+            before the TAB is ignored. Notice that the latter format is only
+            supported for the compatibility with the previous wxWidgets
+            versions and the new code should pass only the accelerator string
+            itself to this function.
 
         @return @true if the given string correctly initialized this object
                 (i.e. if IsOk() returns true after this call)

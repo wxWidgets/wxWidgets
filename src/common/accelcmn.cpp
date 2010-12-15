@@ -158,11 +158,13 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 {
     // the parser won't like trailing spaces
     wxString label = text;
-    label.Trim(true);  // the initial \t must be preserved so don't strip leading whitespaces
+    label.Trim(true);
 
-    // If we're passed the entire menu item label instead of just the
-    // accelerator, skip the label part and only look after the TAB.
-    // check for accelerators: they are given after '\t'
+    // For compatibility with the old wx versions which accepted (and actually
+    // even required) a TAB character in the string passed to this function we
+    // ignore anything up to the first TAB. Notice however that the correct
+    // input consists of just the accelerator itself and nothing else, this is
+    // done for compatibility and compatibility only.
     int posTab = label.Find(wxT('\t'));
     if ( posTab == wxNOT_FOUND )
         posTab = 0;
@@ -274,9 +276,18 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 /* static */
 wxAcceleratorEntry *wxAcceleratorEntry::Create(const wxString& str)
 {
+    const wxString accelStr = str.AfterFirst('\t');
+    if ( accelStr.empty() )
+    {
+        // It's ok to pass strings not containing any accelerators at all to
+        // this function, wxMenuItem code does it and we should just return
+        // NULL in this case.
+        return NULL;
+    }
+
     int flags,
         keyCode;
-    if ( !ParseAccel(str, &flags, &keyCode) )
+    if ( !ParseAccel(accelStr, &flags, &keyCode) )
         return NULL;
 
     return new wxAcceleratorEntry(flags, keyCode);
