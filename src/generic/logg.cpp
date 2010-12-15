@@ -610,6 +610,11 @@ wxLogWindow::wxLogWindow(wxWindow *pParent,
                          bool bShow,
                          bool bDoPass)
 {
+    // Initialize it to NULL to ensure that we don't crash if any log messages
+    // are generated before the frame is fully created (while this doesn't
+    // happen normally, it might, in principle).
+    m_pLogFrame = NULL;
+
     PassMessages(bDoPass);
 
     m_pLogFrame = new wxLogFrame(pParent, this, szTitle);
