@@ -35,10 +35,10 @@
     #include "wx/layout.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
-    #include "wx/unix/utilsx11.h"
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/unix/utilsx11.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
