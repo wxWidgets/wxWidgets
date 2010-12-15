@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 10 May 2010                                                         *
+# Date : 15 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -217,7 +217,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
 		arcfind.obj,tarstrm.obj,datavcmn.obj,debugrpt.obj,\
-		translation.obj,languageinfo.obj,filehistorycmn.obj
+		translation.obj,languageinfo.obj,filehistorycmn.obj,\
+		stdstream.obj,uiactioncmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -416,7 +417,7 @@ SOURCES = \
 		xtistrm.cpp,\
 		xtixml.cpp,\
 		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.cpp,arcfind.cpp,\
-		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp
+		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp,uiactioncmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -669,3 +670,5 @@ debugrpt.obj : debugrpt.cpp
 translation.obj : translation.cpp
 languageinfo.obj : languageinfo.cpp
 filehistorycmn.obj : filehistorycmn.cpp
+stdstream.obj : stdstream.cpp
+uiactioncmn.obj : uiactioncmn.cpp

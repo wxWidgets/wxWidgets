@@ -7,6 +7,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef WX_ARCHIVETEST_INCLUDED
+#define WX_ARCHIVETEST_INCLUDED 1
+
 #define WX_TEST_ARCHIVE_ITERATOR
 
 #include "wx/archive.h"
@@ -271,3 +274,5 @@ private:
 
     void AddCmd(wxArrayString& cmdlist, const wxString& cmd);
 };
+
+#endif

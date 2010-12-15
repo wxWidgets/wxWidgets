@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 September 2008                                                    *
+# Date : 14 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -66,6 +66,8 @@ all : $(SOURCES)
 .endif
 .endif
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
 
 dockart.obj : dockart.cpp
 floatpane.obj : floatpane.cpp

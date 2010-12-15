@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 November 2010                                                     *
+# Date : 15 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -144,7 +144,9 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [--]
+	set default [--.tests]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)/ignore=warning
+	set default [-]
 
 gtk2 : [.include.wx]setup.h
 	@gnome$root:[000000]glib2

@@ -1,3 +1,6 @@
+#ifndef WX_TESTPREC_INCLUDED
+#define WX_TESTPREC_INCLUDED 1
+
 #include "wx/wxprec.h"
 #include "wx/cppunit.h"
 
@@ -137,3 +140,5 @@ private:
         CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterRegistry__ ); \
     static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
         CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterNamedRegistry__ )(#name "TestCase")
+
+#endif

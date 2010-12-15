@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 November 2010                                                     *
+# Date : 15 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -94,7 +94,7 @@ OBJECTS = \
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
-		richmsgdlgg.obj,commandlinkbuttong.obj
+		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -166,7 +166,7 @@ SOURCES = \
 		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp\
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
-		commandlinkbuttong.cpp
+		commandlinkbuttong.cpp,spinctlg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -301,3 +301,4 @@ dbgrptg.obj : dbgrptg.cpp
 dragimgg.obj : dragimgg.cpp
 richmsgdlgg.obj : richmsgdlgg.cpp
 commandlinkbuttong.obj : commandlinkbuttong.cpp
+spinctlg.obj : spinctlg.cpp

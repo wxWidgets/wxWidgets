@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 1 April 2010                                                        *
+# Date : 14 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -81,6 +81,8 @@ all : $(SOURCES)
 	set def [.scintilla.src]
 	$(MMS)$(MMSQUALIFIERS)
 	set def [--]
+
+$(OBJECTS) : [--.include.wx]setup.h
 
 PlatWX.obj : PlatWX.cpp
 ScintillaWX.obj : ScintillaWX.cpp
