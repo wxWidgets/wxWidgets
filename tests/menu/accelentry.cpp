@@ -67,10 +67,13 @@ void AccelEntryTestCase::Create()
     CheckAccelEntry(*pa, 'Z', wxACCEL_CTRL);
 
 
+    // There must be a TAB in the string passed to Create()
     pa.reset(wxAcceleratorEntry::Create("Shift-Q"));
+    CPPUNIT_ASSERT( !pa );
+
+    pa.reset(wxAcceleratorEntry::Create("Bar\tShift-Q"));
     CPPUNIT_ASSERT( pa );
     CPPUNIT_ASSERT( pa->IsOk() );
-
     CheckAccelEntry(*pa, 'Q', wxACCEL_SHIFT);
 
 
