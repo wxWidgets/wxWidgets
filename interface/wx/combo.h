@@ -320,7 +320,8 @@ struct wxComboCtrlFeatures
     @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup,
          wxCommandEvent
 */
-class wxComboCtrl : public wxControl
+class wxComboCtrl : public wxControl,
+                    public wxTextEntry
 {
 public:
     /**

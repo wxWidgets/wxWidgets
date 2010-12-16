@@ -191,12 +191,12 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
                                   pos,
                                   size,
                                   style | wxFULL_REPAINT_ON_RESIZE,
-                                  wxDefaultValidator,
+                                  validator,
                                   name) )
         return false;
 
     // Create textctrl, if necessary
-    CreateTextCtrl( tcBorder, validator );
+    CreateTextCtrl( tcBorder );
 
     // Add keyboard input handlers for main control and textctrl
     InstallInputHandlers();
@@ -408,19 +408,7 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
             tc->RemoveEventHandler(m_textEvtHandler);
             delete m_textEvtHandler;
 
-#if wxUSE_VALIDATORS
-            wxValidator* pValidator = tc->GetValidator();
-            if ( pValidator )
-            {
-                pValidator = (wxValidator*) pValidator->Clone();
-                CreateTextCtrl( tcCreateStyle, *pValidator );
-                delete pValidator;
-            }
-            else
-#endif
-            {
-                CreateTextCtrl( tcCreateStyle, wxDefaultValidator );
-            }
+            CreateTextCtrl( tcCreateStyle );
 
             InstallInputHandlers();
         }

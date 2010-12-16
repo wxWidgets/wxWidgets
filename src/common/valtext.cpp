@@ -33,6 +33,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/combo.h"
+
 // ----------------------------------------------------------------------------
 // global helpers
 // ----------------------------------------------------------------------------
@@ -125,8 +127,16 @@ wxTextEntry *wxTextValidator::GetTextEntry()
     }
 #endif
 
+#if wxUSE_COMBOCTRL
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboCtrl)))
+    {
+        return (wxComboCtrl*)m_validatorWindow;
+    }
+#endif
+
     wxFAIL_MSG(
-        wxT("wxTextValidator can only be used with wxTextCtrl or wxComboBox")
+        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
+        "or wxComboCtrl"
     );
 
     return NULL;

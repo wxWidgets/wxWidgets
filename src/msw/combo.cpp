@@ -187,7 +187,7 @@ bool wxComboCtrl::Create(wxWindow *parent,
                            pos,
                            size,
                            style | wxFULL_REPAINT_ON_RESIZE,
-                           wxDefaultValidator,
+                           validator,
                            name) )
         return false;
 
@@ -203,7 +203,7 @@ bool wxComboCtrl::Create(wxWindow *parent,
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
 
     // Create textctrl, if necessary
-    CreateTextCtrl( wxNO_BORDER, validator );
+    CreateTextCtrl( wxNO_BORDER );
 
     // Add keyboard input handlers for main control and textctrl
     InstallInputHandlers();

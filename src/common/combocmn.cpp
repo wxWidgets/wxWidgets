@@ -963,7 +963,7 @@ void wxComboCtrlBase::InstallInputHandlers()
 }
 
 void
-wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
+wxComboCtrlBase::CreateTextCtrl(int style)
 {
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
@@ -990,7 +990,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         m_text = new wxComboCtrlTextCtrl();
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
-                       style, validator);
+                       style);
         m_text->SetHint(m_hintText);
     }
 }
@@ -1390,25 +1390,6 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
     }
 }
 #endif // wxUSE_TOOLTIPS
-
-#if wxUSE_VALIDATORS
-void wxComboCtrlBase::SetValidator(const wxValidator& validator)
-{
-    wxTextCtrl* textCtrl = GetTextCtrl();
-
-    if ( textCtrl )
-        textCtrl->SetValidator( validator );
-    else
-        wxControl::SetValidator( validator );
-}
-
-wxValidator* wxComboCtrlBase::GetValidator()
-{
-    wxTextCtrl* textCtrl = GetTextCtrl();
-
-    return textCtrl ? textCtrl->GetValidator() : wxControl::GetValidator();
-}
-#endif // wxUSE_VALIDATORS
 
 bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 {
@@ -2564,10 +2545,10 @@ void wxComboCtrlBase::SetTextCtrlStyle( int style )
 }
 
 // ----------------------------------------------------------------------------
-// methods forwarded to wxTextCtrl
+// wxTextEntry interface
 // ----------------------------------------------------------------------------
 
-wxString wxComboCtrlBase::GetValue() const
+wxString wxComboCtrlBase::DoGetValue() const
 {
     if ( m_text )
         return m_text->GetValue();
@@ -2649,12 +2630,6 @@ void wxComboCtrlBase::SetInsertionPoint(long pos)
         m_text->SetInsertionPoint(pos);
 }
 
-void wxComboCtrlBase::SetInsertionPointEnd()
-{
-    if ( m_text )
-        m_text->SetInsertionPointEnd();
-}
-
 long wxComboCtrlBase::GetInsertionPoint() const
 {
     if ( m_text )
@@ -2677,6 +2652,14 @@ void wxComboCtrlBase::Replace(long from, long to, const wxString& value)
         m_text->Replace(from, to, value);
 }
 
+void wxComboCtrlBase::WriteText(const wxString& text)
+{
+    if ( m_text )
+        m_text->WriteText(text);
+    else
+        SetText(m_valueString + text);
+}
+
 void wxComboCtrlBase::Remove(long from, long to)
 {
     if ( m_text )
@@ -2689,10 +2672,58 @@ void wxComboCtrlBase::SetSelection(long from, long to)
         m_text->SetSelection(from, to);
 }
 
+void wxComboCtrlBase::GetSelection(long *from, long *to) const
+{
+    if ( m_text )
+    {
+        m_text->GetSelection(from, to);
+    }
+    else
+    {
+        *from = 0;
+        *to = 0;
+    }
+}
+
+bool wxComboCtrlBase::IsEditable() const
+{
+    if ( m_text )
+        return m_text->IsEditable();
+    return false;
+}
+
+void wxComboCtrlBase::SetEditable(bool editable)
+{
+    if ( m_text )
+        m_text->SetEditable(editable);
+}
+
 void wxComboCtrlBase::Undo()
 {
     if ( m_text )
         m_text->Undo();
+}
+
+void wxComboCtrlBase::Redo()
+{
+    if ( m_text )
+        m_text->Redo();
+}
+
+bool wxComboCtrlBase::CanUndo() const
+{
+    if ( m_text )
+        return m_text->CanUndo();
+
+    return false;
+}
+
+bool wxComboCtrlBase::CanRedo() const
+{
+    if ( m_text )
+        return m_text->CanRedo();
+
+    return false;
 }
 
 bool wxComboCtrlBase::SetHint(const wxString& hint)

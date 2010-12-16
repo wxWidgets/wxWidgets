@@ -45,6 +45,7 @@
 #include "wx/control.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
+#include "wx/textentry.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxComboPopup;
@@ -139,13 +140,14 @@ struct wxComboCtrlFeatures
 };
 
 
-class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl,
+                                         public wxTextEntry
 {
     friend class wxComboPopup;
     friend class wxComboPopupEvtHandler;
 public:
     // ctors and such
-    wxComboCtrlBase() : wxControl() { Init(); }
+    wxComboCtrlBase() : wxControl(), wxTextEntry() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -196,26 +198,38 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool SetFont(const wxFont& font);
-#if wxUSE_VALIDATORS
-    virtual void SetValidator(const wxValidator &validator);
-    virtual wxValidator *GetValidator();
-#endif // wxUSE_VALIDATORS
 
     // wxTextCtrl methods - for readonly combo they should return
     // without errors.
-    virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
+
+    // wxTextEntry methods - we basically need to override all of them
+    virtual void WriteText(const wxString& text);
+
+    virtual void Replace(long from, long to, const wxString& value);
+    virtual void Remove(long from, long to);
+
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
+
     virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
     virtual long GetLastPosition() const;
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
+
     virtual void SetSelection(long from, long to);
-    virtual void Undo();
+    virtual void GetSelection(long *from, long *to) const;
+
+    virtual bool IsEditable() const;
+    virtual void SetEditable(bool editable);
+
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
 
     // This method sets the text without affecting list selection
     // (ie. wxComboPopup::SetStringValue doesn't get called).
@@ -387,21 +401,6 @@ public:
     const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
     const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
 
-    // Hint functions mirrored from TextEntryBase
-    virtual bool SetHint(const wxString& hint);
-    virtual wxString GetHint() const;
-
-    // Margins functions mirrored from TextEntryBase
-    // (wxComboCtrl does not inherit from wxTextEntry, but may embed a
-    // wxTextCtrl, so we need these). Also note that these functions
-    // have replaced SetTextIndent() in wxWidgets 2.9.1 and later.
-    bool SetMargins(const wxPoint& pt)
-        { return DoSetMargins(pt); }
-    bool SetMargins(wxCoord left, wxCoord top = -1)
-        { return DoSetMargins(wxPoint(left, top)); }
-    wxPoint GetMargins() const
-        { return DoGetMargins(); }
-
     // Set custom style flags for embedded wxTextCtrl. Usually must be used
     // with two-step creation, before Create() call.
     void SetTextCtrlStyle( int style );
@@ -463,7 +462,7 @@ protected:
 
     // Creates wxTextCtrl.
     //   extraStyle: Extra style parameters
-    void CreateTextCtrl( int extraStyle, const wxValidator& validator );
+    void CreateTextCtrl( int extraStyle );
 
     // Installs standard input handler to combo (and optionally to the textctrl)
     void InstallInputHandlers();
@@ -557,6 +556,10 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
+
+    // protected wxTextEntry methods
+    virtual wxString DoGetValue() const;
+    virtual wxWindow *GetEditableWindow() { return this; }
 
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
