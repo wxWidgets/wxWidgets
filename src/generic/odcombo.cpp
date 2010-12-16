@@ -996,6 +996,11 @@ void wxOwnerDrawnComboBox::DoClear()
     SetValue(wxEmptyString);
 }
 
+void wxOwnerDrawnComboBox::Clear()
+{
+    DoClear();
+}
+
 void wxOwnerDrawnComboBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxOwnerDrawnComboBox::Delete") );

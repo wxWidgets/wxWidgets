@@ -317,8 +317,9 @@ public:
     virtual void Select(int n);
     virtual int GetSelection() const;
 
-    // Override this just to maintain consistency with virtual methods
+    // Override these just to maintain consistency with virtual methods
     // between classes.
+    virtual void Clear();
     virtual void GetSelection(long *from, long *to) const;
 
     virtual void SetSelection(int n) { Select(n); }
