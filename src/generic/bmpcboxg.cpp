@@ -128,7 +128,7 @@ bool wxBitmapComboBox::Create(wxWindow *parent,
 
 wxBitmapComboBox::~wxBitmapComboBox()
 {
-    Clear();
+    DoClear();
 }
 
 // ----------------------------------------------------------------------------
