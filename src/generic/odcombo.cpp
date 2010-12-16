@@ -1070,6 +1070,11 @@ int wxOwnerDrawnComboBox::GetSelection() const
     return GetVListBoxComboPopup()->GetSelection();
 }
 
+void wxOwnerDrawnComboBox::GetSelection(long *from, long *to) const
+{
+    return wxComboCtrl::GetSelection(from, to);
+}
+
 int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
                                         unsigned int pos,
                                         void **clientData,
