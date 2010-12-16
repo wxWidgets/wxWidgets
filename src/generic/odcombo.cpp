@@ -1077,7 +1077,7 @@ int wxOwnerDrawnComboBox::GetSelection() const
 
 void wxOwnerDrawnComboBox::GetSelection(long *from, long *to) const
 {
-    return wxComboCtrl::GetSelection(from, to);
+    wxComboCtrl::GetSelection(from, to);
 }
 
 int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
