@@ -409,6 +409,12 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Default float-to-text precision is 6 decimals, but this can be changed
     by modifying wxPG_FLOAT_PRECISION attribute.
 
+    Note that when displaying the value, sign is omitted if the resulting
+    textual representation is effectively zero (for example, -0.0001 with
+    precision of 3 will become 0.0 instead of -0.0). This behavior is unlike 
+    what C standard library does, but should result in better end-user
+    experience in almost all cases.
+
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
