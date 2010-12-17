@@ -390,6 +390,17 @@ public:
     virtual void Cut();
 
     /**
+        Dismisses the popup window.
+
+        Notice that calling this function will generate a
+        wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+
+        @since 2.9.2
+    */
+    virtual void Dismiss();
+
+
+    /**
         Enables or disables popup animation, if any, depending on the value of
         the argument.
     */
@@ -525,6 +536,8 @@ public:
         @param generateEvent
             Set this to @true in order to generate
             wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+
+        @deprecated Use Dismiss() instead.
     */
     virtual void HidePopup(bool generateEvent=false);
 
@@ -560,6 +573,16 @@ public:
         Pastes text from the clipboard to the text field.
     */
     virtual void Paste();
+
+    /**
+        Shows the popup portion of the combo control.
+
+        Notice that calling this function will generate a
+        wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+
+        @since 2.9.2
+    */
+    virtual void Popup();
 
     /**
         Removes the text between the two positions in the combo control text
@@ -777,6 +800,8 @@ public:
 
     /**
         Show the popup.
+
+        @deprecated Use Popup() instead.
     */
     virtual void ShowPopup();
 

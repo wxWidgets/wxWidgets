@@ -2078,11 +2078,7 @@ void wxComboCtrlBase::OnButtonClick()
     {
         case Hidden:
         {
-            wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
-            event.SetEventObject(this);
-            HandleWindowEvent(event);
-
-            ShowPopup();
+            Popup();
             break;
         }
 
@@ -2093,6 +2089,15 @@ void wxComboCtrlBase::OnButtonClick()
             break;
         }
     }
+}
+
+void wxComboCtrlBase::Popup()
+{
+    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+
+    ShowPopup();
 }
 
 void wxComboCtrlBase::ShowPopup()

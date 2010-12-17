@@ -160,7 +160,17 @@ public:
 
     virtual ~wxComboCtrlBase();
 
-    // show/hide popup window
+    // Show/hide popup window (wxComboBox-compatible methods)
+    virtual void Popup();
+    virtual void Dismiss()
+    {
+        HidePopup(true);
+    }
+
+    // Show/hide popup window.
+    // TODO: Maybe deprecate in favor of Popup()/Dismiss().
+    //       However, these functions are still called internally
+    //       so it is not straightforward.
     virtual void ShowPopup();
     virtual void HidePopup(bool generateEvent=false);
 
