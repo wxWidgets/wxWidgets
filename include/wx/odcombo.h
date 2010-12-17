@@ -272,11 +272,11 @@ public:
 
     wxOwnerDrawnComboBox(wxWindow *parent,
                          wxWindowID id,
-                         const wxString& value,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         const wxArrayString& choices,
-                         long style,
+                         const wxString& value = wxEmptyString,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         const wxArrayString& choices = wxArrayString(),
+                         long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = wxComboBoxNameStr);
 
