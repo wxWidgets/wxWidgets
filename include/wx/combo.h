@@ -199,14 +199,32 @@ public:
     virtual bool Show(bool show = true);
     virtual bool SetFont(const wxFont& font);
 
-    // wxTextCtrl methods - for readonly combo they should return
-    // without errors.
-    virtual void SetValue(const wxString& value);
+    //
+    // wxTextEntry methods
+    //
+    // NB: We basically need to override all of them because there is
+    //     no guarantee how platform-specific wxTextEntry is implemented.
+    //
+    virtual void SetValue(const wxString& value)
+        { wxTextEntryBase::SetValue(value); }
+    virtual void ChangeValue(const wxString& value)
+        { wxTextEntryBase::ChangeValue(value); }
 
-    // wxTextEntry methods - we basically need to override all of them
     virtual void WriteText(const wxString& text);
+    virtual void AppendText(const wxString& text)
+        { wxTextEntryBase::AppendText(text); }
 
+    virtual wxString GetValue() const
+        { return wxTextEntryBase::GetValue(); }
+
+    virtual wxString GetRange(long from, long to) const
+        { return wxTextEntryBase::GetRange(from, to); }
+
+    // Replace() and DoSetValue() need to be fully re-implemented since
+    // EventSuppressor utility class does not work with the way
+    // wxComboCtrl is implemented.
     virtual void Replace(long from, long to, const wxString& value);
+
     virtual void Remove(long from, long to);
 
     virtual void Copy();
@@ -237,7 +255,13 @@ public:
 
     // This method sets value and also optionally sends EVT_TEXT
     // (needed by combo popups)
-    void SetValueWithEvent(const wxString& value, bool withEvent = true);
+    wxDEPRECATED( void SetValueWithEvent(const wxString& value,
+                                         bool withEvent = true) );
+
+    // Changes value of the control as if user had done it by selecting an
+    // item from a combo box drop-down list. Needs to be public so that
+    // derived popup classes can call it.
+    void SetValueByUser(const wxString& value);
 
     //
     // Popup customization methods
@@ -464,6 +488,10 @@ protected:
     //   extraStyle: Extra style parameters
     void CreateTextCtrl( int extraStyle );
 
+    // Called when text was changed programmatically
+    // (e.g. from WriteText())
+    void OnSetValue(const wxString& value);
+
     // Installs standard input handler to combo (and optionally to the textctrl)
     void InstallInputHandlers();
 
@@ -558,6 +586,7 @@ protected:
 #endif
 
     // protected wxTextEntry methods
+    virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const;
     virtual wxWindow *GetEditableWindow() { return this; }
 

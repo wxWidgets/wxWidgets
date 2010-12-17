@@ -2388,7 +2388,7 @@ void wxComboCtrlBase::HidePopup(bool generateEvent)
 
     // transfer value and show it in textctrl, if any
     if ( !IsPopupWindowState(Animating) )
-        SetValue( m_popupInterface->GetStringValue() );
+        SetValueByUser( m_popupInterface->GetStringValue() );
 
     m_winPopup->Hide();
 
@@ -2555,18 +2555,16 @@ wxString wxComboCtrlBase::DoGetValue() const
     return m_valueString;
 }
 
-void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
+void wxComboCtrlBase::SetValueWithEvent(const wxString& value,
+                                        bool withEvent)
 {
-    if ( m_text )
-    {
-        if ( !withEvent )
-            m_ignoreEvtText++;
+    DoSetValue(value, withEvent ? SetValue_SendEvent : 0);
+}
 
-        m_text->SetValue(value);
-
-        if ( !(m_iFlags & wxCC_NO_TEXT_AUTO_SELECT) )
-            m_text->SelectAll();
-    }
+void wxComboCtrlBase::OnSetValue(const wxString& value)
+{
+    // Note: before wxComboCtrl inherited from wxTextEntry,
+    //       this code used to be in SetValueWithEvent().
 
     // Since wxComboPopup may want to paint the combo as well, we need
     // to set the string value here (as well as sometimes in ShowPopup).
@@ -2583,9 +2581,20 @@ void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
     Refresh();
 }
 
-void wxComboCtrlBase::SetValue(const wxString& value)
+void wxComboCtrlBase::SetValueByUser(const wxString& value)
 {
-    SetValueWithEvent(value, false);
+    // NB: Order of function calls is important here. Otherwise
+    //     the SelectAll() may not work.
+
+    if ( m_text )
+    {
+        m_text->SetValue(value);
+
+        if ( !(m_iFlags & wxCC_NO_TEXT_AUTO_SELECT) )
+            m_text->SelectAll();
+    }
+
+    OnSetValue(value);
 }
 
 // In this SetValue variant wxComboPopup::SetStringValue is not called
@@ -2646,24 +2655,48 @@ long wxComboCtrlBase::GetLastPosition() const
     return 0;
 }
 
-void wxComboCtrlBase::Replace(long from, long to, const wxString& value)
-{
-    if ( m_text )
-        m_text->Replace(from, to, value);
-}
-
 void wxComboCtrlBase::WriteText(const wxString& text)
 {
     if ( m_text )
+    {
         m_text->WriteText(text);
+        OnSetValue(m_text->GetValue());
+    }
     else
-        SetText(m_valueString + text);
+    {
+        OnSetValue(text);
+    }
+}
+
+void wxComboCtrlBase::DoSetValue(const wxString& value, int flags)
+{
+    if ( m_text )
+    {
+        if ( flags & SetValue_SendEvent )
+            m_text->SetValue(value);
+        else
+            m_text->ChangeValue(value);
+    }
+
+    OnSetValue(value);
+}
+
+void wxComboCtrlBase::Replace(long from, long to, const wxString& value)
+{
+    if ( m_text )
+    {
+        m_text->Replace(from, to, value);
+        OnSetValue(m_text->GetValue());
+    }
 }
 
 void wxComboCtrlBase::Remove(long from, long to)
 {
     if ( m_text )
+    {
         m_text->Remove(from, to);
+        OnSetValue(m_text->GetValue());
+    }
 }
 
 void wxComboCtrlBase::SetSelection(long from, long to)

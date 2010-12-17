@@ -228,7 +228,7 @@ void wxVListBoxComboPopup::DismissWithEvent()
         m_stringValue = wxEmptyString;
 
     if ( m_stringValue != m_combo->GetValue() )
-        m_combo->SetValueWithEvent(m_stringValue);
+        m_combo->SetValueByUser(m_stringValue);
 
     m_value = selection;
 
