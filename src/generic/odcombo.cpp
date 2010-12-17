@@ -371,7 +371,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
         return true;
 
     if ( value >= 0 )
-        m_combo->SetValue(m_strings[value]);
+        m_combo->ChangeValue(m_strings[value]);
 
     // The m_combo->SetValue() call above sets m_value to the index of this
     // string. But if there are more identical string, the index is of the
@@ -993,6 +993,8 @@ void wxOwnerDrawnComboBox::DoClear()
 
     GetVListBoxComboPopup()->Clear();
 
+    // NB: This really needs to be SetValue() instead of ChangeValue(),
+    //     as wxTextEntry API expects an event to be sent.
     SetValue(wxEmptyString);
 }
 
@@ -1006,7 +1008,7 @@ void wxOwnerDrawnComboBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxOwnerDrawnComboBox::Delete") );
 
     if ( GetSelection() == (int) n )
-        SetValue(wxEmptyString);
+        ChangeValue(wxEmptyString);
 
     GetVListBoxComboPopup()->Delete(n);
 }
@@ -1060,7 +1062,7 @@ void wxOwnerDrawnComboBox::Select(int n)
 
     // Refresh text portion in control
     if ( m_text )
-        m_text->SetValue( str );
+        m_text->ChangeValue( str );
     else
         m_valueString = str;
 
