@@ -1731,6 +1731,7 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
     wxDataViewRendererBase( varianttype, mode, align )
 {
     m_renderer = NULL;
+    m_mode = mode;
 
     // we haven't changed them yet
     m_usingDefaultAttrs = true;
@@ -2945,6 +2946,19 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     }
     // else: no custom attributes specified and we're already using the default
     //       ones -- nothing to do
+    
+    // deal with disabled items
+    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn());
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &gvalue, enabled );
+    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
+    g_value_unset( &gvalue );
+
+    if (enabled)
+        cell->SetMode( cell->GtkGetMode() );
+    else
+        cell->SetMode( wxDATAVIEW_CELL_INERT );
 }
 
 } // extern "C"

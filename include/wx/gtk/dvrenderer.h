@@ -77,6 +77,8 @@ public:
     // specific attributes: can return NULL if this renderer doesn't render any
     // text
     virtual GtkCellRendererText *GtkGetTextRenderer() const { return NULL; }
+    
+    wxDataViewCellMode GtkGetMode() { return m_mode; }
 
 protected:
     virtual void GtkOnCellChanged(const wxVariant& value,
@@ -84,8 +86,9 @@ protected:
                                   unsigned col);
 
 
-    GtkCellRenderer   *m_renderer;
-    int                m_alignment;
+    GtkCellRenderer    *m_renderer;
+    int                 m_alignment;
+    wxDataViewCellMode  m_mode;
 
     // true if we hadn't changed any visual attributes or restored them since
     // doing this
