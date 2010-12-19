@@ -798,9 +798,9 @@ void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFlo
     {
         // Start
         out[0] = stops.comps[0].red;
-        out[1] = stops.comps[1].green;
-        out[2] = stops.comps[2].blue;
-        out[3] = stops.comps[3].alpha;
+        out[1] = stops.comps[0].green;
+        out[2] = stops.comps[0].blue;
+        out[3] = stops.comps[0].alpha;
     }
     else if (f >= 1.0)
     {
