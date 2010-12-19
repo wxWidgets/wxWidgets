@@ -166,6 +166,12 @@ void wxSlider::SetValue(int value)
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
+    // Changing the range preserves the value of the native control but may
+    // change our logical value if we're inverting the native value to get it
+    // as ValueInvertOrNot() depends on the range so preserve it before
+    // changing the range.
+    const int valueOld = GetValue();
+
     wxString value;
 
     m_rangeMin = minValue;
@@ -196,6 +202,9 @@ void wxSlider::SetRange(int minValue, int maxValue)
         SetValue(m_rangeMin);
     else if(currentValue > m_rangeMax)
         SetValue(m_rangeMax);
+
+    // Ensure that our value didn't change.
+    SetValue(valueOld);
 }
 
 // For trackbars only
