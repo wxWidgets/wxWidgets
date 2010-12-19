@@ -244,6 +244,17 @@ bool MyMusicTreeModel::SetValue( const wxVariant &variant,
     return false;
 }
 
+bool MyMusicTreeModel::IsEnabled( const wxDataViewItem &item,
+                                  unsigned int col ) const
+{
+    wxASSERT(item.IsOk());
+
+    MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
+
+    // disable Beethoven's ratings, his pieces can only be good
+    return !(col == 3 && node->m_artist.EndsWith("Beethoven"));
+}
+
 wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
 {
     // the invisible root node has no parent
@@ -524,4 +535,15 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
     }
 
     return false;
+}
+
+
+// ----------------------------------------------------------------------------
+// MyListStoreDerivedModel
+// ----------------------------------------------------------------------------
+
+bool MyListStoreDerivedModel::IsEnabledByRow(unsigned int row, unsigned int col) const
+{
+    // disabled the last two checkboxes
+    return !(col == 0 && 8 <= row && row <= 9);
 }

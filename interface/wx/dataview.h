@@ -168,6 +168,32 @@ public:
                          wxDataViewItemAttr& attr) const;
 
     /**
+        Override this to indicate that the item should be disabled.
+
+        Disabled items are displayed differently (e.g. grayed out) and cannot
+        be interacted with.
+
+        The base class version always returns @true, thus making all items
+        enabled by default.
+
+        @param item
+            The item whose enabled status is requested.
+        @param col
+            The column of the item whose enabled status is requested.
+        @return
+            @true if this item should be enabled, @false otherwise.
+
+        @note Currently disabling items is fully implemented only for the
+              native control implementation in wxOSX/Cocoa. This feature is
+              partially supported in the generic version but not in wxGTK or
+              wxOSX/Carbon native implementations.
+
+        @since 2.9.2
+    */
+    virtual bool IsEnabled(const wxDataViewItem &item,
+                           unsigned int col) const;
+
+    /**
         Override this so the control can query the child items of an item.
         Returns the number of items.
     */
@@ -370,6 +396,28 @@ public:
     */
     virtual bool GetAttrByRow(unsigned int row, unsigned int col,
                          wxDataViewItemAttr& attr) const;
+
+    /**
+        Override this if you want to disable specific items.
+
+        The base class version always returns @true, thus making all items
+        enabled by default.
+
+        @param row
+            The row of the item whose enabled status is requested.
+        @param col
+            The column of the item whose enabled status is requested.
+        @return
+            @true if the item at this row and column should be enabled,
+            @false otherwise.
+
+        @note See wxDataViewModel::IsEnabled() for the current status of
+              support for disabling the items under different platforms.
+
+        @since 2.9.2
+    */
+    virtual bool IsEnabledByRow(unsigned int row,
+                                unsigned int col) const;
 
     /**
         Returns the number of items (i.e. rows) in the list.

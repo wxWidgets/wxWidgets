@@ -845,7 +845,8 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     int flags = 0;
     if (m_toggle)
         flags |= wxCONTROL_CHECKED;
-    if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
+    if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE ||
+        GetEnabled() == false)
         flags |= wxCONTROL_DISABLED;
 
     // check boxes we draw must always have the same, standard size (if it's
@@ -868,7 +869,10 @@ void wxDataViewToggleRenderer::WXOnActivate(wxDataViewModel *model,
                                             const wxDataViewItem & item,
                                             unsigned int col)
 {
-    model->ChangeValue(!valueOld.GetBool(), item, col);
+    if (model->IsEnabled(item, col))
+    {
+        model->ChangeValue(!valueOld.GetBool(), item, col);
+    }
 }
 
 wxSize wxDataViewToggleRenderer::GetSize() const

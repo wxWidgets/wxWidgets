@@ -1695,6 +1695,9 @@ outlineView:(NSOutlineView*)outlineView
     model->GetAttr(dvItem, colIdx, attr);
     renderer->OSXApplyAttr(attr);
 
+    // set the state (enabled/disabled) of the item
+    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
+
     // and finally do draw it
     renderer->MacRender();
 }
@@ -2485,6 +2488,11 @@ void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
 
     if ( colText )
         [(id)cell setTextColor:colText];
+}
+
+void wxDataViewRenderer::OSXApplyEnabled(bool enabled)
+{
+    [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)

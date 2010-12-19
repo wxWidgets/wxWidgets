@@ -653,6 +653,10 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                                         wxDefaultSize, style );
             m_ctrl[2] = lc;
 
+            MyListStoreDerivedModel* page2_model = new MyListStoreDerivedModel();
+            lc->AssociateModel(page2_model);
+            page2_model->DecRef();
+
             lc->AppendToggleColumn( "Toggle" );
             lc->AppendTextColumn( "Text" );
             lc->AppendProgressColumn( "Progress" );

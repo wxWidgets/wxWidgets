@@ -116,6 +116,8 @@ public:
 
     virtual void SetAttr(const wxDataViewItemAttr& WXUNUSED(attr)) { }
 
+    virtual void SetEnabled(bool WXUNUSED(enabled)) { }
+
     wxString GetVariantType() const             { return m_variantType; }
 
     // helper that calls SetValue and SetAttr:
@@ -261,6 +263,11 @@ public:
     virtual void SetAttr(const wxDataViewItemAttr& attr) { m_attr = attr; }
     const wxDataViewItemAttr& GetAttr() const { return m_attr; }
 
+    // Store the enabled state of the item so that it can be accessed from
+    // Render() via GetEnabled() if needed.
+    virtual void SetEnabled(bool enabled) { m_enabled = enabled; }
+    bool GetEnabled() const { return m_enabled; }
+
 
     // Implementation only from now on
 
@@ -277,6 +284,7 @@ protected:
 
 private:
     wxDataViewItemAttr m_attr;
+    bool m_enabled;
 
     wxDECLARE_NO_COPY_CLASS(wxDataViewCustomRendererBase);
 };

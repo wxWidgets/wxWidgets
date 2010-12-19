@@ -87,6 +87,9 @@ public:
     // called to ensure that the given attribute will be used for rendering the
     // next cell (which had been already associated with this renderer before)
     virtual void OSXApplyAttr(const wxDataViewItemAttr& attr);
+
+    // called to set the state of the next cell to be rendered
+    virtual void OSXApplyEnabled(bool enabled);
 #endif // Cocoa
 
 private:

@@ -234,6 +234,13 @@ public:
         return false;
     }
 
+    // Override this if you want to disable specific items
+    virtual bool IsEnabled(const wxDataViewItem &WXUNUSED(item),
+                           unsigned int WXUNUSED(col)) const
+    {
+        return true;
+    }
+
     // define hierachy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
     virtual bool IsContainer( const wxDataViewItem &item ) const = 0;
@@ -304,6 +311,12 @@ public:
         return false;
     }
 
+    virtual bool IsEnabledByRow(unsigned int WXUNUSED(row),
+                                unsigned int WXUNUSED(col)) const
+    {
+        return true;
+    }
+
 
     // helper methods provided by list models only
     virtual unsigned GetRow( const wxDataViewItem &item ) const = 0;
@@ -342,6 +355,11 @@ public:
                          wxDataViewItemAttr &attr) const
     {
         return GetAttrByRow( GetRow(item), col, attr );
+    }
+
+    virtual bool IsEnabled(const wxDataViewItem &item, unsigned int col) const
+    {
+        return IsEnabledByRow( GetRow(item), col );
     }
 
 
