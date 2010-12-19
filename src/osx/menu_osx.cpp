@@ -567,12 +567,9 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 {
     Init();
 
-    m_titles.Alloc(count);
-
     for ( size_t i = 0; i < count; i++ )
     {
         m_menus.Append(menus[i]);
-        m_titles.Add(titles[i]);
 
         menus[i]->Attach(this);
         Append( menus[i], titles[i] );
@@ -823,11 +820,6 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
-    m_titles[pos] = label;
-
-    if ( !IsAttached() )
-        return;
-
     GetMenu(pos)->SetTitle( label ) ;
 }
 
@@ -836,22 +828,7 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
                  wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
-    return m_titles[pos];
-}
-
-int wxMenuBar::FindMenu(const wxString& title)
-{
-    wxString menuTitle = wxStripMenuCodes(title);
-
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; i < count; i++ )
-    {
-        wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuTitle == title )
-            return i;
-    }
-
-    return wxNOT_FOUND;
+    return GetMenu(pos)->GetTitle();
 }
 
 // ---------------------------------------------------------------------------
@@ -866,8 +843,6 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     if ( !menuOld )
         return NULL;
 
-    m_titles[pos] = title;
-
     wxMenuItem* item = m_rootMenu->FindItemByPosition(pos+firstMenuPos);
     m_rootMenu->Remove(item);
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
@@ -879,8 +854,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
-
-    m_titles.Insert(title, pos);
 
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
 
@@ -896,8 +869,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     wxMenuItem* item = m_rootMenu->FindItemByPosition(pos+firstMenuPos);
     m_rootMenu->Remove(item);
 
-    m_titles.RemoveAt(pos);
-
     return menu;
 }
 
@@ -909,9 +880,8 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Append(menu, title) )
         return false;
 
-    m_titles.Add(title);
-
     m_rootMenu->AppendSubMenu(menu, title);
+    menu->SetTitle(title);
 
     return true;
 }
@@ -926,37 +896,4 @@ void wxMenuBar::Attach(wxFrame *frame)
     wxMenuBarBase::Attach( frame ) ;
 }
 
-// ---------------------------------------------------------------------------
-// wxMenuBar searching for menu items
-// ---------------------------------------------------------------------------
-
-// Find the itemString in menuString, and return the item id or wxNOT_FOUND
-int wxMenuBar::FindMenuItem(const wxString& menuString,
-                            const wxString& itemString) const
-{
-    wxString menuLabel = wxStripMenuCodes(menuString);
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; i < count; i++ )
-    {
-        wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuLabel == title )
-            return GetMenu(i)->FindItem(itemString);
-    }
-
-    return wxNOT_FOUND;
-}
-
-wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
-{
-    if ( itemMenu )
-        *itemMenu = NULL;
-
-    wxMenuItem *item = NULL;
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; !item && (i < count); i++ )
-        item = GetMenu(i)->FindItem(id, itemMenu);
-
-    return item;
-}
-
-#endif
+#endif // wxUSE_MENUS

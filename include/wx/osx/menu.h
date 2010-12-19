@@ -126,10 +126,6 @@ public:
     virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
     virtual wxMenu *Remove(size_t pos);
 
-    virtual int FindMenuItem(const wxString& menuString,
-                             const wxString& itemString) const;
-    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
-
     virtual void EnableTop( size_t pos, bool flag );
     virtual void SetMenuLabel( size_t pos, const wxString& label );
     virtual wxString GetMenuLabel( size_t pos ) const;
@@ -141,7 +137,6 @@ public:
     }
 
     // implementation from now on
-    int  FindMenu(const wxString& title);
     void Detach();
 
         // returns TRUE if we're attached to a frame
@@ -169,7 +164,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    wxArrayString   m_titles;
     static bool     s_macAutoWindowMenu ;
     static WXHMENU  s_macWindowMenuHandle ;
 
