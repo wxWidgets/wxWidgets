@@ -57,18 +57,6 @@ static const int idMenuTitle = -3;
 
 // Construct a menu with optional title (then use append)
 
-static
-wxMenu *
-_wxMenuAt(const wxMenuList &menuList, size_t pos)
-{
-    wxMenuList::compatibility_iterator menuIter = menuList.GetFirst();
-
-    while (pos-- > 0)
-        menuIter = menuIter->GetNext();
-
-    return menuIter->GetData() ;
-}
-
 void wxMenu::Init()
 {
     m_doBreak = false;
@@ -776,7 +764,7 @@ void wxMenuBar::MacInstallMenuBar()
             UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , m_titles[i], GetFont().GetEncoding()  ) ;
             menu->MacBeforeDisplay(false) ;
 
-            ::InsertMenu(MAC_WXHMENU(_wxMenuAt(m_menus, i)->GetHMenu()), 0);
+            ::InsertMenu(MAC_WXHMENU(GetMenu(i)->GetHMenu()), 0);
         }
     }
 
@@ -840,7 +828,7 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
     if ( !IsAttached() )
         return;
 
-    _wxMenuAt(m_menus, pos)->SetTitle( label ) ;
+    GetMenu(pos)->SetTitle( label ) ;
 }
 
 wxString wxMenuBar::GetMenuLabel(size_t pos) const
@@ -952,7 +940,7 @@ int wxMenuBar::FindMenuItem(const wxString& menuString,
     {
         wxString title = wxStripMenuCodes(m_titles[i]);
         if ( menuLabel == title )
-            return _wxMenuAt(m_menus, i)->FindItem(itemString);
+            return GetMenu(i)->FindItem(itemString);
     }
 
     return wxNOT_FOUND;
@@ -966,7 +954,7 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
     wxMenuItem *item = NULL;
     size_t count = GetMenuCount();
     for ( size_t i = 0; !item && (i < count); i++ )
-        item = _wxMenuAt(m_menus, i)->FindItem(id, itemMenu);
+        item = GetMenu(i)->FindItem(id, itemMenu);
 
     return item;
 }
