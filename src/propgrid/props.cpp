@@ -186,8 +186,10 @@ wxNumericPropertyValidator::
     {
         arr.Add(wxS("+"));
         arr.Add(wxS("-"));
-        arr.Add(wxS("."));
         arr.Add(wxS("e"));
+
+        // Use locale-specific decimal point
+        arr.Add(wxString::Format("%g", 1.1)[1]);
     }
 
     SetIncludes(arr);
