@@ -81,7 +81,9 @@ public:
 protected:
 
     // Dummies for platform-specific wxTextEntry implementations
-#if defined(__WXGTK__)
+#if defined(__WXUNIVERSAL__)
+    // Looks like there's nothing we need to override here
+#elif defined(__WXGTK__)
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
 #elif defined(__WXMAC__)
