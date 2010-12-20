@@ -93,6 +93,7 @@ public:
     virtual void OnComboCharEvent( wxKeyEvent& event );
     virtual void OnComboDoubleClick();
     virtual bool LazyCreate();
+    virtual bool FindItem(const wxString& item, wxString* trueItem);
 
     // Item management
     void SetSelection( int item );

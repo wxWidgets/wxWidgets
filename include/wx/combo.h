@@ -774,6 +774,13 @@ public:
     // Gets displayed string representation of the value.
     virtual wxString GetStringValue() const = 0;
 
+    // Called to check if the popup - when an item container - actually
+    // has matching item. Case-sensitivity checking etc. is up to the
+    // implementation. If the found item matched the string, but is
+    // different, it should be written back to pItem. Default implementation
+    // always return true and does not alter trueItem.
+    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
+
     // This is called to custom paint in the combo control itself (ie. not the popup).
     // Default implementation draws value as string.
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );

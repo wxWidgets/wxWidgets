@@ -642,6 +642,16 @@ int wxVListBoxComboPopup::FindString(const wxString& s, bool bCase) const
     return m_strings.Index(s, bCase);
 }
 
+bool wxVListBoxComboPopup::FindItem(const wxString& item, wxString* trueItem)
+{
+    int idx = m_strings.Index(item, false);
+    if ( idx == wxNOT_FOUND )
+        return false;
+    if ( trueItem != NULL )
+        *trueItem = m_strings[idx];
+    return true;
+}
+
 unsigned int wxVListBoxComboPopup::GetCount() const
 {
     return m_strings.GetCount();

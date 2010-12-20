@@ -590,6 +590,12 @@ void wxComboPopup::SetStringValue( const wxString& WXUNUSED(value) )
 {
 }
 
+bool wxComboPopup::FindItem(const wxString& WXUNUSED(item),
+                            wxString* WXUNUSED(trueItem))
+{
+    return true;
+}
+
 bool wxComboPopup::LazyCreate()
 {
     return false;
@@ -2575,12 +2581,26 @@ void wxComboCtrlBase::OnSetValue(const wxString& value)
     // to set the string value here (as well as sometimes in ShowPopup).
     if ( m_valueString != value )
     {
-        m_valueString = value;
+        bool found = true;
+        wxString trueValue = value;
 
-        EnsurePopupControl();
+        // Conform to wxComboBox behavior: read-only control can only accept
+        // valid list items and empty string
+        if ( m_popupInterface && HasFlag(wxCB_READONLY) && value.length() )
+        {
+            found = m_popupInterface->FindItem(value,
+                                               &trueValue);
+        }
 
-        if (m_popupInterface)
-            m_popupInterface->SetStringValue(value);
+        if ( found )
+        {
+            m_valueString = trueValue;
+
+            EnsurePopupControl();
+
+            if ( m_popupInterface )
+                m_popupInterface->SetStringValue(trueValue);
+        }
     }
 
     Refresh();

@@ -42,6 +42,25 @@ public:
     void Dismiss();
 
     /**
+        Implement to customize matching of value string to an item container
+        entry.
+        
+        @param item
+            String entered, usually by user or from SetValue() call.
+            
+        @param trueItem
+            When item matches an entry, but the entry's string representation
+            is not exactly the same (case mismatch, for example), then the
+            true item string should be written back to here, if it is not
+            a NULL pointer.
+
+        @remarks
+            Default implementation always return true and does not alter
+            trueItem.
+    */
+    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
+
+    /**
         The derived class may implement this to return adjusted size for the
         popup control, according to the variables given.
 
@@ -86,7 +105,7 @@ public:
         Useful in conjunction with LazyCreate().
     */
     bool IsCreated() const;
-
+    
     /**
         The derived class may implement this to return @true if it wants to
         delay call to Create() until the popup is shown for the first time. It
