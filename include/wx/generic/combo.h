@@ -84,8 +84,10 @@ protected:
 #if defined(__WXUNIVERSAL__)
     // Looks like there's nothing we need to override here
 #elif defined(__WXGTK__)
+#if defined(__WXGTK20__)
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
+#endif
 #elif defined(__WXMAC__)
     // Looks like there's nothing we need to override here
 #elif defined(__WXPM__)
