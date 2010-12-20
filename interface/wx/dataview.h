@@ -185,8 +185,8 @@ public:
 
         @note Currently disabling items is fully implemented only for the
               native control implementation in wxOSX/Cocoa. This feature is
-              partially supported in the generic version but not in wxGTK or
-              wxOSX/Carbon native implementations.
+              only partially supported in the generic version (wxMSW) and
+              currently not supported by the wxOSX/Carbon implementation.
 
         @since 2.9.2
     */

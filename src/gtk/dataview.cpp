@@ -2930,6 +2930,22 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     cell->SetValue( value );
 
+    // deal with disabled items
+    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn() );
+
+    // a) this sets the appearance to disabled grey    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &gvalue, enabled );
+    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
+    g_value_unset( &gvalue );
+
+    // b) this actually disables the control/renderer
+    if (enabled)
+        cell->SetMode( cell->GtkGetMode() );
+    else
+        cell->SetMode( wxDATAVIEW_CELL_INERT );
+        
 
     // deal with attributes: if the renderer doesn't support them at all, we
     // don't even need to query the model for them
@@ -2947,18 +2963,6 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     // else: no custom attributes specified and we're already using the default
     //       ones -- nothing to do
     
-    // deal with disabled items
-    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn());
-    GValue gvalue = { 0, };
-    g_value_init( &gvalue, G_TYPE_BOOLEAN );
-    g_value_set_boolean( &gvalue, enabled );
-    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
-    g_value_unset( &gvalue );
-
-    if (enabled)
-        cell->SetMode( cell->GtkGetMode() );
-    else
-        cell->SetMode( wxDATAVIEW_CELL_INERT );
 }
 
 } // extern "C"
