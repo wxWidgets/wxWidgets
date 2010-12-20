@@ -31,7 +31,10 @@ class WXDLLIMPEXP_FWD_CORE wxListBox;
 // wxComboBox: a combination of text control and a listbox
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxComboBox : public wxComboCtrl, public wxComboBoxBase
+// NB: Normally we'd like wxComboBox to inherit from wxComboBoxBase, but here
+//     we can't really do that since both wxComboBoxBase and wxComboCtrl inherit
+//     from wxTextCtrl.
+class WXDLLIMPEXP_CORE wxComboBox : public wxComboCtrl, public wxItemContainer
 {
 public:
     // ctors and such
@@ -117,6 +120,15 @@ public:
     virtual bool CanPaste() const;
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
+
+    // override these methods to disambiguate between two base classes versions
+    virtual void Clear()
+    {
+        wxComboCtrl::Clear();
+        wxItemContainer::Clear();
+    }
+
+    bool IsEmpty() const { return wxItemContainer::IsEmpty(); }
 
     // wxControlWithItems methods
     virtual void DoClear();
