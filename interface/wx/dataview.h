@@ -184,9 +184,10 @@ public:
             @true if this item should be enabled, @false otherwise.
 
         @note Currently disabling items is fully implemented only for the
-              native control implementation in wxOSX/Cocoa. This feature is
-              only partially supported in the generic version (wxMSW) and
-              currently not supported by the wxOSX/Carbon implementation.
+              native control implementation in wxOSX/Cocoa and wxGTK. 
+              This feature is only partially supported in the generic
+              version (used by wxMSW) and not supported by the wxOSX/Carbon
+              implementation.
 
         @since 2.9.2
     */
