@@ -178,6 +178,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_listctrltest.o \
 	test_gui_listviewtest.o \
 	test_gui_notebooktest.o \
+	test_gui_ownerdrawncomboboxtest.o \
 	test_gui_pickerbasetest.o \
 	test_gui_pickertest.o \
 	test_gui_radioboxtest.o \
@@ -757,6 +758,9 @@ test_gui_listviewtest.o: $(srcdir)/controls/listviewtest.cpp $(TEST_GUI_ODEP)
 
 test_gui_notebooktest.o: $(srcdir)/controls/notebooktest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/notebooktest.cpp
+
+test_gui_ownerdrawncomboboxtest.o: $(srcdir)/controls/ownerdrawncomboboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/ownerdrawncomboboxtest.cpp
 
 test_gui_pickerbasetest.o: $(srcdir)/controls/pickerbasetest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/pickerbasetest.cpp

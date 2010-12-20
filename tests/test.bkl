@@ -159,6 +159,7 @@
             controls/listctrltest.cpp
             controls/listviewtest.cpp
             controls/notebooktest.cpp
+            controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
             controls/radioboxtest.cpp

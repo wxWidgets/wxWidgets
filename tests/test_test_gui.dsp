@@ -401,6 +401,10 @@ SOURCE=.\controls\notebooktest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\ownerdrawncomboboxtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\pickerbasetest.cpp
 # End Source File
 # Begin Source File

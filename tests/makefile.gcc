@@ -156,6 +156,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_listctrltest.o \
 	$(OBJS)\test_gui_listviewtest.o \
 	$(OBJS)\test_gui_notebooktest.o \
+	$(OBJS)\test_gui_ownerdrawncomboboxtest.o \
 	$(OBJS)\test_gui_pickerbasetest.o \
 	$(OBJS)\test_gui_pickertest.o \
 	$(OBJS)\test_gui_radioboxtest.o \
@@ -783,6 +784,9 @@ $(OBJS)\test_gui_listviewtest.o: ./controls/listviewtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_notebooktest.o: ./controls/notebooktest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_ownerdrawncomboboxtest.o: ./controls/ownerdrawncomboboxtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_pickerbasetest.o: ./controls/pickerbasetest.cpp

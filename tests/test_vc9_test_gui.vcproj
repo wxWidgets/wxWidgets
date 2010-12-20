@@ -1028,6 +1028,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\ownerdrawncomboboxtest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\pickerbasetest.cpp"
 				>
 			</File>
