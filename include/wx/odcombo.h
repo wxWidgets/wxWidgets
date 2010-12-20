@@ -165,7 +165,6 @@ protected:
     // filter mouse move events happening outside the list box
     // move selection with cursor
     void OnMouseMove(wxMouseEvent& event);
-    void OnMouseWheel(wxMouseEvent& event);
     void OnKey(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnLeftClick(wxMouseEvent& event);
