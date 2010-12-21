@@ -294,7 +294,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             if (child->GetName() == wxT("style"))
             {
                 wxTextAttrEx attr;
-                GetStyle(attr, child, false);
+                GetStyle(attr, child, true);
                 def->SetStyle(attr);
             }
             child = child->GetNext();
@@ -316,7 +316,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             if (child->GetName() == wxT("style"))
             {
                 wxTextAttrEx attr;
-                GetStyle(attr, child, false);
+                GetStyle(attr, child, true);
 
                 wxString styleLevel = child->GetPropVal(wxT("level"), wxEmptyString);
                 if (styleLevel.IsEmpty())
@@ -895,13 +895,13 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         OutputIndentation(stream, level);
 
         if (!listDef->GetNextStyle().IsEmpty())
-            baseStyleProp << wxT(" basestyle=\"") << listDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << listDef->GetNextStyle() << wxT("\"");
 
         OutputString(stream, wxT("<liststyle") + baseStyleProp + descrProp + wxT(">"), convMem, convFile);
 
         level ++;
 
-        wxString style = CreateStyle(def->GetStyle(), false);
+        wxString style = CreateStyle(def->GetStyle(), true);
 
         OutputIndentation(stream, level);
         OutputString(stream, wxT("<style ") + style + wxT(">"), convMem, convFile);
@@ -915,7 +915,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
             wxRichTextAttr* levelAttr = listDef->GetLevelAttributes(i);
             if (levelAttr)
             {
-                wxString style = CreateStyle(def->GetStyle(), false);
+                wxString style = CreateStyle(*levelAttr, true);
                 wxString levelStr = wxString::Format(wxT(" level=\"%d\" "), (i+1));
 
                 OutputIndentation(stream, level);
@@ -936,7 +936,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         OutputIndentation(stream, level);
 
         if (!paraDef->GetNextStyle().IsEmpty())
-            baseStyleProp << wxT(" basestyle=\"") << paraDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << paraDef->GetNextStyle() << wxT("\"");
 
         OutputString(stream, wxT("<paragraphstyle") + baseStyleProp + descrProp + wxT(">"), convMem, convFile);
 
