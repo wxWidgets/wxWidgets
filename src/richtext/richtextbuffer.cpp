@@ -5117,7 +5117,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr,
             dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 
-    wxCoord x_orig = x;
+    wxCoord x_orig = GetParent()->GetPosition().x;
     while (hasTabs)
     {
         // the string has a tab
@@ -5216,6 +5216,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
+    int relativeX = position.x - GetParent()->GetPosition().x;
 
     wxRichTextAttr textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
 
@@ -5302,9 +5303,9 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     partialExtents->Add(oldWidth + p[j]);
 
                 if (partialExtents->GetCount() > 0)
-                    absoluteWidth = (*partialExtents)[(*partialExtents).GetCount()-1] + position.x;
+                    absoluteWidth = (*partialExtents)[(*partialExtents).GetCount()-1] + relativeX;
                 else
-                    absoluteWidth = position.x;
+                    absoluteWidth = relativeX;
             }
             else
             {
@@ -5331,7 +5332,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     }
 
                     notFound = false;
-                    width = nextTabPos - position.x;
+                    width = nextTabPos - relativeX;
 
                     if (partialExtents)
                         partialExtents->Add(width);
