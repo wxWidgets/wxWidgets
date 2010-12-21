@@ -4634,7 +4634,8 @@ void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int colu
 
     wxRect itemRect = GetItemRect(item, col);
     wxDataViewRenderer* renderer = col->GetRenderer();
-    renderer->StartEditing(item, itemRect);
+    if (renderer->GetMode() == wxDATAVIEW_CELL_EDITABLE)
+        renderer->StartEditing(item, itemRect);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL
