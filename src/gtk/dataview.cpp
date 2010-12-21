@@ -231,7 +231,7 @@ public:
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
-    bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     bool Cleared();
     bool BeforeReset();
     bool AfterReset();
@@ -1490,7 +1490,7 @@ public:
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemChanged( const wxDataViewItem &item );
-    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     virtual bool Cleared();
     virtual void Resort();
     virtual bool BeforeReset();
@@ -1591,7 +1591,7 @@ bool wxGtkDataViewModelNotifier::ItemChanged( const wxDataViewItem &item )
     return true;
 }
 
-bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsigned int model_col )
+bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsigned int model_column )
 {
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
     wxDataViewCtrl *ctrl = m_internal->GetOwner();
@@ -1601,7 +1601,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
     for (index = 0; index < ctrl->GetColumnCount(); index++)
     {
         wxDataViewColumn *column = ctrl->GetColumn( index );
-        if (column->GetModelColumn() == model_col)
+        if (column->GetModelColumn() == model_column)
         {
             GtkTreeView *widget = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
             GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
@@ -1624,7 +1624,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
 
-            m_internal->ValueChanged( item, model_col );
+            m_internal->ValueChanged( item, model_column );
 
             return true;
         }
@@ -3705,13 +3705,13 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
     return true;
 }
 
-bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int col )
+bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
-    event.SetColumn( col );
-    event.SetDataViewColumn( GetOwner()->GetColumn(col) );
+    event.SetColumn( view_column );
+    event.SetDataViewColumn( GetOwner()->GetColumn(view_column) );
     event.SetItem( item );
     m_owner->HandleWindowEvent( event );
 

@@ -435,7 +435,7 @@ public:
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
-    bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     bool Cleared();
     void Resort()
     {
@@ -2073,9 +2073,23 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     return true;
 }
 
-bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned int col )
+bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned int model_column )
 {
-    GetOwner()->InvalidateColBestWidth(col);
+    int view_column = -1;
+    unsigned int n_col = m_owner->GetColumnCount();
+    for (unsigned i = 0; i < n_col; i++)
+    {
+        wxDataViewColumn *column = m_owner->GetColumn( i );
+        if (column->GetModelColumn() == model_column)
+        {
+            view_column = (int) i;
+            break;
+        }
+    }
+    if (view_column == -1)
+        return false;
+
+    GetOwner()->InvalidateColBestWidth(view_column);
 
     // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
 /*#define MAX_VIRTUAL_WIDTH       100000
@@ -2095,8 +2109,8 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     le.SetEventObject(parent);
     le.SetModel(GetOwner()->GetModel());
     le.SetItem(item);
-    le.SetColumn(col);
-    le.SetDataViewColumn(GetOwner()->GetColumn(col));
+    le.SetColumn(view_column);
+    le.SetDataViewColumn(GetOwner()->GetColumn(view_column));
     parent->GetEventHandler()->ProcessEvent(le);
 
     return true;
@@ -2154,6 +2168,8 @@ void wxDataViewMainWindow::RecalculateDisplay()
 
 void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
+    m_underMouse = NULL;
+
     wxWindow::ScrollWindow( dx, dy, rect );
 
     if (GetOwner()->m_headerArea)
@@ -2162,6 +2178,8 @@ void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 void wxDataViewMainWindow::ScrollTo( int rows, int column )
 {
+    m_underMouse = NULL;
+
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
     int sy = GetLineStart( rows )/y;
