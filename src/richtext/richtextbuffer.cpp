@@ -5330,7 +5330,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
             dc.SetBackgroundMode(wxTRANSPARENT);
     }
 
-    wxCoord x_orig = x;
+    wxCoord x_orig = GetParent()->GetPosition().x;
     while (hasTabs)
     {
         // the string has a tab
