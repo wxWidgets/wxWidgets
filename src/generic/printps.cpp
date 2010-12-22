@@ -330,14 +330,16 @@ void wxPostScriptPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        wxSize ScreenPixels = wxGetDisplaySize();
-        wxSize ScreenMM = wxGetDisplaySizeMM();
-
         int resolution = 600;  // TODO, this is correct, but get this from wxPSDC somehow
 
-        m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
-                                         (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-        m_previewPrintout->SetPPIPrinter( resolution, resolution );
+        const wxSize screenPPI = wxGetDisplayPPI();
+        int logPPIScreenX = screenPPI.GetWidth();
+        int logPPIScreenY = screenPPI.GetHeight();
+        int logPPIPrinterX = resolution;
+        int logPPIPrinterY = resolution;
+
+        m_previewPrintout->SetPPIScreen( logPPIScreenX, logPPIScreenY );
+        m_previewPrintout->SetPPIPrinter( logPPIPrinterX, logPPIPrinterY );
 
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
         sizeDevUnits.x = (wxCoord)((float)sizeDevUnits.x * resolution / 72.0);
@@ -362,8 +364,8 @@ void wxPostScriptPrintPreview::DetermineScaling()
         m_previewPrintout->SetPaperRectPixels(wxRect(0, 0, m_pageWidth, m_pageHeight));
 
         // At 100%, the page should look about page-size on the screen.
-        m_previewScaleX = (float)0.8 * 72.0 / (float)resolution;
-        m_previewScaleY = m_previewScaleX;
+        m_previewScaleX = float(logPPIScreenX) / logPPIPrinterX;
+        m_previewScaleY = float(logPPIScreenY) / logPPIPrinterY;
     }
 }
 
