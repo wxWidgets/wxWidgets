@@ -233,7 +233,7 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display a text message explaining the situation. 
+    Display a text message explaining the situation.
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
@@ -320,11 +320,32 @@ public:
 enum wxPG_KEYBOARD_ACTIONS
 {
     wxPG_ACTION_INVALID = 0,
+
+    /** Select the next property. */
     wxPG_ACTION_NEXT_PROPERTY,
+
+    /** Select the previous property. */
     wxPG_ACTION_PREV_PROPERTY,
+
+    /** Expand the selected property, if it has child items. */
     wxPG_ACTION_EXPAND_PROPERTY,
+
+    /** Collapse the selected property, if it has child items. */
     wxPG_ACTION_COLLAPSE_PROPERTY,
+
+    /** Cancel and undo any editing done in the currently active property
+        editor.
+    */
     wxPG_ACTION_CANCEL_EDIT,
+
+    /** Move focus to the editor control of the currently selected
+        property.
+    */
+    wxPG_ACTION_EDIT,
+
+    /** Causes editor's button (if any) to be pressed. */
+    wxPG_ACTION_PRESS_BUTTON,
+
     wxPG_ACTION_MAX
 };
 
@@ -1074,7 +1095,7 @@ public:
         control over wxPropertyGrid behavior.
     */
     //@{
-    
+
     /**
         Override in derived class to display error messages in custom manner
         (these message usually only result from validation failure).

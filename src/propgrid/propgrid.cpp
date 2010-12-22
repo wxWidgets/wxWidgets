@@ -5687,6 +5687,12 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
         wxPGProperty* p = selected;
 
+        if ( action == wxPG_ACTION_EDIT && !editorFocused )
+        {
+            DoSelectProperty( p, wxPG_SEL_FOCUS );
+            wasHandled = true;
+        }
+
         // Travel and expand/collapse
         int selectDir = -2;
 

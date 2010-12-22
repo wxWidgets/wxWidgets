@@ -524,12 +524,32 @@ private:
 enum wxPG_KEYBOARD_ACTIONS
 {
     wxPG_ACTION_INVALID = 0,
+
+    /** Select the next property. */
     wxPG_ACTION_NEXT_PROPERTY,
+
+    /** Select the previous property. */
     wxPG_ACTION_PREV_PROPERTY,
+
+    /** Expand the selected property, if it has child items. */
     wxPG_ACTION_EXPAND_PROPERTY,
+
+    /** Collapse the selected property, if it has child items. */
     wxPG_ACTION_COLLAPSE_PROPERTY,
+
+    /** Cancel and undo any editing done in the currently active property
+        editor.
+    */
     wxPG_ACTION_CANCEL_EDIT,
-    wxPG_ACTION_PRESS_BUTTON,  // Causes editor button (if any) to be pressed
+
+    /** Move focus to the editor control of the currently selected
+        property.
+    */
+    wxPG_ACTION_EDIT,
+
+    /** Causes editor's button (if any) to be pressed. */
+    wxPG_ACTION_PRESS_BUTTON,
+
     wxPG_ACTION_MAX
 };
 
