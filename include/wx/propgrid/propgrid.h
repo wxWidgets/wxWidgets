@@ -782,8 +782,12 @@ public:
         @endcode
 
         @param action
-            Which action to trigger. See @link pgactions List of list of
-            wxPropertyGrid actions@endlink.
+            Which action to trigger. See @ref propgrid_keyboard_actions.
+        @param keycode
+            Which keycode triggers the action.
+        @param modifiers
+            Which key event modifiers, in addition to keycode, are needed to
+            trigger the action.
     */
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
 
