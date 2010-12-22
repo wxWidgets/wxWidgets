@@ -450,6 +450,10 @@ All (GUI):
 - Fixed resizing columns in wxGrid when they were reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
 
+GTK:
+
+- Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
+
 MSW:
 
 - Native implementation of wxHyperlinkCtrl and wxProgressDialog under modern
