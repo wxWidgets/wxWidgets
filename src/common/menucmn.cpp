@@ -114,9 +114,7 @@ wxMenuItemBase::~wxMenuItemBase()
 
 wxAcceleratorEntry *wxMenuItemBase::GetAccel() const
 {
-    const wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
-
-    return accel.empty() ? NULL : wxAcceleratorEntry::Create(accel);
+    return wxAcceleratorEntry::Create(GetItemLabel());
 }
 
 void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
