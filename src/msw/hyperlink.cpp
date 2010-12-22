@@ -54,7 +54,10 @@ namespace
 {
     bool HasNativeHyperlinkCtrl()
     {
-        return wxGetWinVersion() >= wxWinVersion_XP;
+        // Notice that we really must test comctl32.dll version and not the OS
+        // version here as even under Vista/7 we could be not using the v6 e.g.
+        // if the program doesn't have the correct manifest for some reason.
+        return wxApp::GetComCtl32Version() >= 600;
     }
 
     wxString GetLabelForSysLink(const wxString& text, const wxString& url)
@@ -150,7 +153,7 @@ wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
 {
     // LM_GETIDEALSIZE only exists under Vista so use the generic version even
     // when using the native control under XP
-    if ( wxGetWinVersion() < wxWinVersion_6 )
+    if ( !HasNativeHyperlinkCtrl() || (wxGetWinVersion() < wxWinVersion_6) )
         return wxGenericHyperlinkCtrl::DoGetBestClientSize();
 
     SIZE idealSize;
