@@ -123,12 +123,17 @@ public:
     virtual int GetSelection() const = 0;
 
     /**
-        Selects the item with the specified string in the control. This doesn't
-        cause any command events to be emitted.
+        Selects the item with the specified string in the control.
+
+        This method doesn't cause any command events to be emitted.
+
+        Notice that this method is case-insensitive, i.e. the string is
+        compared with all the elements of the control case-insensitively and
+        the first matching entry is selected, even if it doesn't have exactly
+        the same case as this string and there is an exact match afterwards.
 
         @param string
             The string to select.
-
         @return @true if the specified string has been selected, @false if it
                 wasn't found in the control.
     */

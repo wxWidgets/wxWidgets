@@ -105,22 +105,27 @@ void ItemContainerTestCase::ItemSelection()
     testitems.Add("item 0");
     testitems.Add("item 1");
     testitems.Add("item 2");
-    testitems.Add("item 3");
+    testitems.Add("ITEM 2"); // The same as the last one except for case.
 
     container->Append(testitems);
 
     container->SetSelection(wxNOT_FOUND);
-
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("", container->GetStringSelection());
 
     container->SetSelection(1);
-
     CPPUNIT_ASSERT_EQUAL(1, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("item 1", container->GetStringSelection());
 
-    container->SetStringSelection("item 2");
+    CPPUNIT_ASSERT( container->SetStringSelection("item 2") );
+    CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
 
+    // Check that selecting a non-existent item fails.
+    CPPUNIT_ASSERT( !container->SetStringSelection("bloordyblop") );
+
+    // Check that SetStringSelection() is case-insensitive.
+    CPPUNIT_ASSERT( container->SetStringSelection("ITEM 2") );
     CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
 }
