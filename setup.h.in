@@ -981,6 +981,9 @@
 /* Define if you have wcsdup function  */
 #undef HAVE_WCSDUP
 
+/* Define if you have wcsftime() function  */
+#undef HAVE_WCSFTIME
+
 /* Define if you have strnlen() function */
 #undef HAVE_STRNLEN
 

@@ -4249,7 +4249,7 @@ if test "$WCSLEN_FOUND" = 1; then
     AC_DEFINE(HAVE_WCSLEN)
 fi
 
-AC_CHECK_FUNCS([wcsdup strnlen wcsnlen wcscasecmp wcsncasecmp])
+AC_CHECK_FUNCS([wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp])
 
 dnl On HP-UX aCC need this define to find mbstrtowcs() &c
 dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
