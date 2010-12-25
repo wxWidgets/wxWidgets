@@ -46,8 +46,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent)
 // constants
 // ----------------------------------------------------------------------------
 
-// the margin between the text control and the spin
-static const wxCoord MARGIN = 2;
+// The margin between the text control and the spin: the value here is the same
+// as the margin between the spin button and its "buddy" text control in wxMSW
+// so the generic control looks similarly to the native one there, we might
+// need to use different value for the other platforms (and maybe even
+// determine it dynamically?).
+static const wxCoord MARGIN = 1;
 
 #define SPINCTRLBUT_MAX 32000 // large to avoid wrap around trouble
 
