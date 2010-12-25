@@ -13,7 +13,7 @@
 
     It can be displayed as static list with editable or read-only text field;
     or a drop-down list with text field; or a drop-down list without a text
-    field.
+    field depending on the platform and presence of wxCB_READONLY style.
 
     A combobox permits a single selection only. Combobox items are numbered
     from zero.
@@ -22,17 +22,19 @@
     wxOwnerDrawnComboBox, wxComboPopup and the ready-to-use wxBitmapComboBox.
 
     Please refer to wxTextEntry documentation for the description of methods
-    operating with the text entry part of the combobox.
+    operating with the text entry part of the combobox and to wxItemContainer
+    for the methods operating with the list of strings.
 
     @beginStyleTable
     @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
     @style{wxCB_DROPDOWN}
-           Creates a combobox with a drop-down list.
+           Creates a combobox with a drop-down list. MSW and Motif only.
     @style{wxCB_READONLY}
-           Same as wxCB_DROPDOWN but only the strings specified as the combobox
-           choices can be selected, it is impossible to select (even from a
-           program) a string which is not in the choices list.
+           A combobox with this style behaves like a wxChoice (and may look in
+           the same way as well, although this is platform-dependent), i.e. it
+           allows the user to choose from the list of options but doesn't allow
+           to enter a value not present in the list.
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
