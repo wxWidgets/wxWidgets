@@ -1664,11 +1664,10 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #include <stdio.h>
     ]
 )
-if test "$ac_cv_sizeof_wchar_t" != 0; then
-    wxUSE_WCHAR_T=yes
-else
-    wxUSE_WCHAR_T=no
+if test "$ac_cv_sizeof_wchar_t" = 0; then
+    AC_MSG_ERROR([wxWidgets requires wchar_t support.])
 fi
+AC_DEFINE(wxUSE_WCHAR_T)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -2748,17 +2747,6 @@ fi
 dnl ------------------------------------------------------------------------
 dnl Check for expat libraries
 dnl ------------------------------------------------------------------------
-
-if test "$wxUSE_WCHAR_T" != "yes"; then
-    if test "$wxUSE_EXPAT" != "no"; then
-        AC_MSG_WARN([wxWidgets requires wchar_t to use expat, disabling])
-        wxUSE_EXPAT=no
-    fi
-    if test "$wxUSE_XML" != "no"; then
-        AC_MSG_WARN([wxWidgets requires wchar_t to use xml, disabling])
-        wxUSE_XML=no
-    fi
-fi
 
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
@@ -4241,50 +4229,43 @@ dnl ---------------------------------------------------------------------------
 dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
-dnl don't check for wchar_t functions if we haven't got wchar_t itself
-if test "$wxUSE_WCHAR_T" = "yes"; then
-    AC_DEFINE(wxUSE_WCHAR_T)
+dnl check for wcslen in all possible places
+WCSLEN_FOUND=0
+WCHAR_LINK=
+AC_CHECK_FUNCS(wcslen, WCSLEN_FOUND=1)
 
-    dnl check for wcslen in all possible places
-    WCSLEN_FOUND=0
-    WCHAR_LINK=
-    AC_CHECK_FUNCS(wcslen, WCSLEN_FOUND=1)
-
-    if test "$WCSLEN_FOUND" = 0; then
-        if test "$TOOLKIT" = "MSW"; then
-            AC_CHECK_LIB(msvcrt, wcslen, WCHAR_OK=1)
-        else
-            AC_CHECK_LIB(w, wcslen, [
-                            WCHAR_LINK=" -lw"
-                            WCSLEN_FOUND=1
-                        ])
-        fi
+if test "$WCSLEN_FOUND" = 0; then
+    if test "$TOOLKIT" = "MSW"; then
+        AC_CHECK_LIB(msvcrt, wcslen, WCHAR_OK=1)
+    else
+        AC_CHECK_LIB(w, wcslen, [
+                        WCHAR_LINK=" -lw"
+                        WCSLEN_FOUND=1
+                    ])
     fi
-
-    if test "$WCSLEN_FOUND" = 1; then
-        AC_DEFINE(HAVE_WCSLEN)
-    fi
-
-    AC_CHECK_FUNCS([wcsdup strnlen wcsnlen wcscasecmp wcsncasecmp])
-
-    dnl On HP-UX aCC need this define to find mbstrtowcs() &c
-    dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
-    dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
-    dnl flags when g++ is configured, it will declare it's own).
-    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
-    fi
-
-    dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
-    dnl libc versions if possible. AC_CHECK_FUNCS only checks it's in the
-    dnl library, not the header, so do a header check for mbstate_t first.
-    AC_CHECK_TYPES([mbstate_t],
-                   [AC_CHECK_FUNCS(wcsrtombs)],
-                   [],
-                   [#include <wchar.h>])
-else
-    AC_MSG_WARN([Wide character support is unavailable])
 fi
+
+if test "$WCSLEN_FOUND" = 1; then
+    AC_DEFINE(HAVE_WCSLEN)
+fi
+
+AC_CHECK_FUNCS([wcsdup strnlen wcsnlen wcscasecmp wcsncasecmp])
+
+dnl On HP-UX aCC need this define to find mbstrtowcs() &c
+dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
+dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
+dnl flags when g++ is configured, it will declare it's own).
+if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
+    CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
+fi
+
+dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
+dnl libc versions if possible. AC_CHECK_FUNCS only checks it's in the
+dnl library, not the header, so do a header check for mbstate_t first.
+AC_CHECK_TYPES([mbstate_t],
+               [AC_CHECK_FUNCS(wcsrtombs)],
+               [],
+               [#include <wchar.h>])
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
 dnl

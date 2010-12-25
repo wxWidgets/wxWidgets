@@ -23919,11 +23919,15 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-if test "$ac_cv_sizeof_wchar_t" != 0; then
-    wxUSE_WCHAR_T=yes
-else
-    wxUSE_WCHAR_T=no
+if test "$ac_cv_sizeof_wchar_t" = 0; then
+    { { echo "$as_me:$LINENO: error: wxWidgets requires wchar_t support." >&5
+echo "$as_me: error: wxWidgets requires wchar_t support." >&2;}
+   { (exit 1); exit 1; }; }
 fi
+cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WCHAR_T 1
+_ACEOF
+
 
 { echo "$as_me:$LINENO: checking for va_copy" >&5
 echo $ECHO_N "checking for va_copy... $ECHO_C" >&6; }
@@ -28787,19 +28791,6 @@ echo "$as_me: WARNING: system tiff library not found, will use built-in instead"
     fi
 fi
 
-
-if test "$wxUSE_WCHAR_T" != "yes"; then
-    if test "$wxUSE_EXPAT" != "no"; then
-        { echo "$as_me:$LINENO: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&5
-echo "$as_me: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&2;}
-        wxUSE_EXPAT=no
-    fi
-    if test "$wxUSE_XML" != "no"; then
-        { echo "$as_me:$LINENO: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&5
-echo "$as_me: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&2;}
-        wxUSE_XML=no
-    fi
-fi
 
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
@@ -35905,14 +35896,8 @@ _ACEOF
 fi
 
 
-if test "$wxUSE_WCHAR_T" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_WCHAR_T 1
-_ACEOF
-
-
-        WCSLEN_FOUND=0
-    WCHAR_LINK=
+WCSLEN_FOUND=0
+WCHAR_LINK=
 
 for ac_func in wcslen
 do
@@ -36008,9 +35993,9 @@ fi
 done
 
 
-    if test "$WCSLEN_FOUND" = 0; then
-        if test "$TOOLKIT" = "MSW"; then
-            { echo "$as_me:$LINENO: checking for wcslen in -lmsvcrt" >&5
+if test "$WCSLEN_FOUND" = 0; then
+    if test "$TOOLKIT" = "MSW"; then
+        { echo "$as_me:$LINENO: checking for wcslen in -lmsvcrt" >&5
 echo $ECHO_N "checking for wcslen in -lmsvcrt... $ECHO_C" >&6; }
 if test "${ac_cv_lib_msvcrt_wcslen+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -36075,8 +36060,8 @@ if test $ac_cv_lib_msvcrt_wcslen = yes; then
   WCHAR_OK=1
 fi
 
-        else
-            { echo "$as_me:$LINENO: checking for wcslen in -lw" >&5
+    else
+        { echo "$as_me:$LINENO: checking for wcslen in -lw" >&5
 echo $ECHO_N "checking for wcslen in -lw... $ECHO_C" >&6; }
 if test "${ac_cv_lib_w_wcslen+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -36139,20 +36124,20 @@ fi
 echo "${ECHO_T}$ac_cv_lib_w_wcslen" >&6; }
 if test $ac_cv_lib_w_wcslen = yes; then
 
-                            WCHAR_LINK=" -lw"
-                            WCSLEN_FOUND=1
+                        WCHAR_LINK=" -lw"
+                        WCSLEN_FOUND=1
 
 fi
 
-        fi
     fi
+fi
 
-    if test "$WCSLEN_FOUND" = 1; then
-        cat >>confdefs.h <<\_ACEOF
+if test "$WCSLEN_FOUND" = 1; then
+    cat >>confdefs.h <<\_ACEOF
 #define HAVE_WCSLEN 1
 _ACEOF
 
-    fi
+fi
 
 
 
@@ -36253,11 +36238,11 @@ fi
 done
 
 
-                    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
-    fi
+if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
+    CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
+fi
 
-                { echo "$as_me:$LINENO: checking for mbstate_t" >&5
+{ echo "$as_me:$LINENO: checking for mbstate_t" >&5
 echo $ECHO_N "checking for mbstate_t... $ECHO_C" >&6; }
 if test "${ac_cv_type_mbstate_t+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -36413,10 +36398,6 @@ done
 
 fi
 
-else
-    { echo "$as_me:$LINENO: WARNING: Wide character support is unavailable" >&5
-echo "$as_me: WARNING: Wide character support is unavailable" >&2;}
-fi
 
 
 
