@@ -270,7 +270,7 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
     // position the subcontrols inside the client area
     wxSize sizeBtn = m_spinButton->GetSize();
 
-    wxCoord wText = width - sizeBtn.x;
+    wxCoord wText = width - sizeBtn.x - MARGIN;
     m_textCtrl->SetSize(x, y, wText, height);
     m_spinButton->SetSize(x + wText + MARGIN, y, wxDefaultCoord, height);
 }
