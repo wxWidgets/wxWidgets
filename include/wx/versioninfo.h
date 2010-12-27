@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxVersionInfo class
 // Author:      Troels K
 // Created:     2010-11-22
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,9 +20,9 @@
 class wxVersionInfo
 {
 public:
-    wxVersionInfo(const wxString& name,
-                  int major,
-                  int minor,
+    wxVersionInfo(const wxString& name = wxString(),
+                  int major = 0,
+                  int minor = 0,
                   int micro = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString())

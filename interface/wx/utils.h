@@ -106,7 +106,7 @@ public:
 
     @header{wx/utils.h}
 */
-void wxBeginBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
+void wxBeginBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR);
 
 /**
     Changes the cursor back to the original cursor, for all windows in the
@@ -1070,8 +1070,8 @@ unsigned long wxGetProcessId();
 
     @header{wx/utils.h}
 */
-int wxKill(long pid, int sig = wxSIGTERM,
-            wxKillError rc = NULL, int flags = 0);
+int wxKill(long pid, wxSignal sig = wxSIGTERM,
+            wxKillError* rc = NULL, int flags = wxKILL_NOCHILDREN);
 
 /**
     Executes a command in an interactive shell window. If no command is
@@ -1081,7 +1081,7 @@ int wxKill(long pid, int sig = wxSIGTERM,
 
     @header{wx/utils.h}
 */
-bool wxShell(const wxString& command = NULL);
+bool wxShell(const wxString& command = wxEmptyString);
 
 /**
     This function shuts down or reboots the computer depending on the value of

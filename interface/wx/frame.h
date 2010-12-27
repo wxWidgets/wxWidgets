@@ -436,5 +436,10 @@ public:
         Associates a toolbar with the frame.
     */
     virtual void SetToolBar(wxToolBar* toolBar);
+
+
+    void PushStatusText(const wxString &text, int number = 0);
+    void PopStatusText(int number = 0);
+
 };
 

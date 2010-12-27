@@ -131,5 +131,5 @@ public:
 /**
     An empty, "null" wxValidator instance.
 */
-wxValidator wxDefaultValidator;
+const wxValidator wxDefaultValidator;
 
