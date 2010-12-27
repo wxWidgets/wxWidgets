@@ -128,7 +128,7 @@ public:
     */
     int GetToolId() const
     {
-        return m_id;
+        return m_toolId;
     }
 
     /** Do any member initialization in this method.
@@ -176,7 +176,9 @@ protected:
 
     wxPropertyGridManager*  m_manager;
 
-    int                     m_id;  // toolbar index
+    // Toolbar tool id. Note that this is only valid when the tool bar
+    // exists.
+    int                     m_toolId;
 
 private:
     bool                    m_isDefault; // is this base page object?
@@ -688,15 +690,15 @@ protected:
 
     int             m_splitterHeight;
 
-    int             m_nextTbInd;
-
     int             m_dragOffset;
 
     wxCursor        m_cursorSizeNS;
 
     int             m_nextDescBoxSize;
 
-    wxWindowID      m_baseId;
+    // Toolbar tool ids for categorized and alphabetic mode selectors.
+    int             m_categorizedModeToolId;
+    int             m_alphabeticModeToolId;
 
     unsigned char   m_dragStatus;
 
