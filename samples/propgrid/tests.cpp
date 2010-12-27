@@ -879,6 +879,27 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        RT_START_TEST(DoubleToString)
+
+        // Locale-specific decimal separator
+        wxString sep = wxString::Format("%g", 1.1)[1];
+
+        wxString s;
+
+        if ( wxPropertyGrid::DoubleToString(s, 123.123, 2, true) !=
+                wxString::Format("123%s12", sep.c_str()) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -123.123, 4, false) !=
+                wxString::Format("-123%s1230", sep.c_str()) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -0.02, 1, false) !=
+                wxString::Format("0%s0", sep) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != "0" )
+            RT_FAILURE();
+    }
+
+    {
         wxPropertyGridPage* page1;
         wxPropertyGridPage* page2;
         wxPropertyGridPage* page3;
