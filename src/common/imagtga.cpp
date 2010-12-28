@@ -650,9 +650,70 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 }
 
 static
-int SaveTGA(wxImage* WXUNUSED(image), wxOutputStream& WXUNUSED(stream))
+int SaveTGA(const wxImage& image, wxOutputStream *stream)
 {
-    wxLogError(wxT("Saving in TGA format is not implemented."));
+    bool hasAlpha = image.HasAlpha();
+    unsigned bytesPerPixel = 3 + (hasAlpha ? 1 : 0);
+    wxSize size = image.GetSize();
+    size_t scanlineSize = size.x * bytesPerPixel;
+    unsigned char *scanlineData = (unsigned char *) malloc(scanlineSize);
+    if (!scanlineData)
+    {
+        return wxTGA_MEMERR;
+    }
+
+    wxON_BLOCK_EXIT1(free, scanlineData);
+
+    // Compose and write the TGA header
+    unsigned char hdr[HDR_SIZE];
+    (void) memset(&hdr, 0, HDR_SIZE);
+
+    hdr[HDR_COLORTYPE] = wxTGA_UNMAPPED;
+    hdr[HDR_IMAGETYPE] = 2 /* Uncompressed truecolour */;
+
+    hdr[HDR_WIDTH] =  size.x & 0xFF;
+    hdr[HDR_WIDTH + 1] =  (size.x >> 8) & 0xFF;
+
+    hdr[HDR_HEIGHT] =  size.y & 0xFF;
+    hdr[HDR_HEIGHT + 1] =  (size.y >> 8) & 0xFF;
+
+    hdr[HDR_BPP] = hasAlpha ? 32 : 24;
+    hdr[HDR_ORIENTATION] = 1 << 5; // set bit to indicate top-down order
+    if (hasAlpha)
+    {
+        hdr[HDR_ORIENTATION] |= 8; // number of alpha bits
+    }
+
+    if ( !stream->Write(hdr, HDR_SIZE) )
+    {
+        return wxTGA_IOERR;
+    }
+
+
+    // Write image data, converting RGB to BGR and adding alpha if applicable
+
+    unsigned char *src = image.GetData();
+    unsigned char *alpha = image.GetAlpha();
+    for (int y = 0; y < size.y; ++y)
+    {
+        unsigned char *dst = scanlineData;
+        for (int x = 0; x < size.x; ++x)
+        {
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
+            if (alpha)
+            {
+                dst[3] = *(alpha++);
+            }
+            src += 3;
+            dst += bytesPerPixel;
+        }
+        if ( !stream->Write(scanlineData, scanlineSize) )
+        {
+            return wxTGA_IOERR;
+        }
+    }
 
     return wxTGA_OK;
 }
@@ -712,7 +773,7 @@ bool wxTGAHandler::LoadFile(wxImage* image,
 
 bool wxTGAHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool verbose)
 {
-    int error = SaveTGA(image, stream);
+    int error = SaveTGA(*image, &stream);
 
     if ( error != wxTGA_OK )
     {
@@ -720,12 +781,12 @@ bool wxTGAHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool verbose
         {
             switch ( error )
             {
-                case wxTGA_INVFORMAT:
-                    wxLogError(wxT("TGA: invalid image."));
-                    break;
-
                 case wxTGA_MEMERR:
                     wxLogError(wxT("TGA: couldn't allocate memory."));
+                    break;
+
+                case wxTGA_IOERR:
+                    wxLogError(wxT("TGA: couldn't write image data."));
                     break;
 
                 default:

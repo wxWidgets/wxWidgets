@@ -449,6 +449,7 @@ All (GUI):
 - Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
 - Fixed resizing columns in wxGrid when they were reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
+- Added support for saving TGA files.
 
 GTK:
 

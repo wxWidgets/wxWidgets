@@ -874,13 +874,14 @@ static
 void CompareImage(const wxImageHandler& handler, const wxImage& expected)
 {
     bool testAlpha = expected.HasAlpha();
-    if (testAlpha && type != wxBITMAP_TYPE_PNG)
+    wxBitmapType type = handler.GetType();
+    if (testAlpha
+        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA) )
     {
         // don't test images with alpha if this handler doesn't support alpha
         return;
     }
 
-    wxBitmapType type = handler.GetType();
     if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
         || type == wxBITMAP_TYPE_TIF)
     {
@@ -900,14 +901,6 @@ void CompareImage(const wxImageHandler& handler, const wxImage& expected)
         // saving images, or if it failed to save.
         return;
     }
-
-    if ( !memOut.GetSize() )
-    {
-        // A handler that does not support saving can return true during
-        // SaveFile, in that case the stream is empty.
-        return;
-    }
-
 
     wxMemoryInputStream memIn(memOut);
     CPPUNIT_ASSERT(memIn.IsOk());

@@ -318,9 +318,9 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     channel with wxImage::HasAlpha. Currently the BMP, PNG, and TIFF format
     handlers have full alpha channel support for loading so if you want to use
     alpha you have to use one of these formats. If you initialize the image
-    alpha channel yourself using wxImage::SetAlpha, you should save it in PNG
-    format to avoid losing it as this is the only handler that currently
-    supports saving with alpha. 
+    alpha channel yourself using wxImage::SetAlpha, you should save it in
+    either PNG or TGA format to avoid losing it as these are the only handlers
+    that currently support saving with alpha.
 
 
     @section image_handlers Available image handlers
@@ -337,7 +337,7 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     - wxPCXHandler: For loading and saving (see below).
     - wxPNMHandler: For loading and saving (see below).
     - wxTIFFHandler: For loading (including alpha support) and saving.
-    - wxTGAHandler: For loading only.
+    - wxTGAHandler: For loading and saving. Includes alpha support.
     - wxIFFHandler: For loading only.
     - wxXPMHandler: For loading and saving.
     - wxICOHandler: For loading and saving.
