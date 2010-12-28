@@ -870,12 +870,97 @@ void ImageTestCase::CompareLoadedImage()
 
 }
 
+static
+void CompareImage(const wxImageHandler& handler, const wxImage& expected)
+{
+    bool testAlpha = expected.HasAlpha();
+    if (testAlpha && type != wxBITMAP_TYPE_PNG)
+    {
+        // don't test images with alpha if this handler doesn't support alpha
+        return;
+    }
+
+    wxBitmapType type = handler.GetType();
+    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
+        || type == wxBITMAP_TYPE_TIF)
+    {
+        /*
+        TIFF is skipped because the memory stream can't be loaded. Libtiff
+        looks for a TIFF directory at offset 120008 while the memory
+        stream size is only 120008 bytes (when saving as a file
+        the file size is 120280 bytes).
+        */
+        return;
+    }
+
+    wxMemoryOutputStream memOut;
+    if ( !expected.SaveFile(memOut, type) )
+    {
+        // Unfortunately we can't know if the handler just doesn't support
+        // saving images, or if it failed to save.
+        return;
+    }
+
+    if ( !memOut.GetSize() )
+    {
+        // A handler that does not support saving can return true during
+        // SaveFile, in that case the stream is empty.
+        return;
+    }
+
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage actual(memIn);
+    CPPUNIT_ASSERT(actual.IsOk());
+
+    CPPUNIT_ASSERT( actual.GetSize() == expected.GetSize() );
+
+    WX_ASSERT_MESSAGE
+    (
+        ("Compare test '%s' for saving failed", handler.GetExtension()),
+
+        memcmp(actual.GetData(), expected.GetData(),
+            expected.GetWidth() * expected.GetHeight() * 3) == 0
+    );
+
+    if (!testAlpha)
+    {
+        return;
+    }
+
+
+    CPPUNIT_ASSERT( actual.HasAlpha() );
+
+    WX_ASSERT_MESSAGE
+    (
+        ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
+
+        memcmp(actual.GetAlpha(), expected.GetAlpha(),
+            expected.GetWidth() * expected.GetHeight()) == 0
+    );
+}
+
 void ImageTestCase::CompareSavedImage()
 {
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
+    CPPUNIT_ASSERT( !expected24.HasAlpha() );
 
-    const size_t dataLen = expected24.GetWidth() * expected24.GetHeight() * 3;
+    // Create an image with alpha based on the loaded image
+    wxImage expected32(expected24);
+    expected32.SetAlpha();
+
+    int width = expected32.GetWidth();
+    int height = expected32.GetHeight();
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            expected32.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
+        }
+    }
 
     const wxList& list = wxImage::GetHandlers();
     for ( wxList::compatibility_iterator node = list.GetFirst();
@@ -883,49 +968,8 @@ void ImageTestCase::CompareSavedImage()
     {
         wxImageHandler *handler = (wxImageHandler *) node->GetData();
 
-        wxBitmapType type = handler->GetType();
-        if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
-            || type == wxBITMAP_TYPE_TIF)
-        {
-            /*
-            TIFF is skipped because the memory stream can't be loaded. Libtiff
-            looks for a TIFF directory at offset 120008 while the memory
-            stream size is only 120008 bytes (when saving as a file
-            the file size is 120280 bytes).
-            */
-            continue;
-        }
-
-        wxMemoryOutputStream memOut;
-        if ( !expected24.SaveFile(memOut, type) )
-        {
-            // Unfortunately we can't know if the handler just doesn't support
-            // saving images, or if it failed to save.
-            continue;
-        }
-
-        if ( !memOut.GetSize() )
-        {
-            // A handler that does not support saving can return true during
-            // SaveFile, in that case the stream is empty.
-            continue;
-        }
-
-        wxMemoryInputStream memIn(memOut);
-        CPPUNIT_ASSERT(memIn.IsOk());
-
-        wxImage actual24(memIn);
-        CPPUNIT_ASSERT(actual24.IsOk());
-
-        CPPUNIT_ASSERT( actual24.GetSize() == expected24.GetSize() );
-
-        WX_ASSERT_MESSAGE
-        (
-            ("Compare test '%s' for saving failed", handler->GetExtension()),
-
-            memcmp(actual24.GetData(), expected24.GetData(),
-                dataLen) == 0
-        );
+        CompareImage(*handler, expected24);
+        CompareImage(*handler, expected32);
     }
 }
 
