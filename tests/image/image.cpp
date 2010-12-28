@@ -33,20 +33,21 @@
 struct testData {
     const char* file;
     wxBitmapType type;
+    unsigned bitDepth;
 } g_testfiles[] =
 {
-    { "horse.ico", wxBITMAP_TYPE_ICO },
-    { "horse.xpm", wxBITMAP_TYPE_XPM },
-    { "horse.png", wxBITMAP_TYPE_PNG },
-    { "horse.ani", wxBITMAP_TYPE_ANI },
-    { "horse.bmp", wxBITMAP_TYPE_BMP },
-    { "horse.cur", wxBITMAP_TYPE_CUR },
-    { "horse.gif", wxBITMAP_TYPE_GIF },
-    { "horse.jpg", wxBITMAP_TYPE_JPEG },
-    { "horse.pcx", wxBITMAP_TYPE_PCX },
-    { "horse.pnm", wxBITMAP_TYPE_PNM },
-    { "horse.tga", wxBITMAP_TYPE_TGA },
-    { "horse.tif", wxBITMAP_TYPE_TIF }
+    { "horse.ico", wxBITMAP_TYPE_ICO, 4 },
+    { "horse.xpm", wxBITMAP_TYPE_XPM, 8 },
+    { "horse.png", wxBITMAP_TYPE_PNG, 24 },
+    { "horse.ani", wxBITMAP_TYPE_ANI, 24 },
+    { "horse.bmp", wxBITMAP_TYPE_BMP, 8 },
+    { "horse.cur", wxBITMAP_TYPE_CUR, 1 },
+    { "horse.gif", wxBITMAP_TYPE_GIF, 8 },
+    { "horse.jpg", wxBITMAP_TYPE_JPEG, 24 },
+    { "horse.pcx", wxBITMAP_TYPE_PCX, 8 },
+    { "horse.pnm", wxBITMAP_TYPE_PNM, 24 },
+    { "horse.tga", wxBITMAP_TYPE_TGA, 8 },
+    { "horse.tif", wxBITMAP_TYPE_TIF, 8 }
 };
 
 
@@ -66,12 +67,16 @@ private:
         CPPUNIT_TEST( LoadFromZipStream );
         CPPUNIT_TEST( LoadFromFile );
         CPPUNIT_TEST( SizeImage );
+        CPPUNIT_TEST( CompareLoadedImage );
+        CPPUNIT_TEST( CompareSavedImage );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
     void LoadFromZipStream();
     void LoadFromFile();
     void SizeImage();
+    void CompareLoadedImage();
+    void CompareSavedImage();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -823,6 +828,105 @@ void ImageTestCase::SizeImage()
          memcmp(actual.GetData(), expected.GetData(), data_len) == 0
        );
    }
+}
+
+void ImageTestCase::CompareLoadedImage()
+{
+    wxImage expected8("horse.xpm");
+    CPPUNIT_ASSERT( expected8.IsOk() );
+
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+
+    const size_t dataLen = expected8.GetWidth() * expected8.GetHeight() * 3;
+
+    for (size_t i=0; i<WXSIZEOF(g_testfiles); i++)
+    {
+        if ( !(g_testfiles[i].bitDepth == 8 || g_testfiles[i].bitDepth == 24)
+            || g_testfiles[i].type == wxBITMAP_TYPE_JPEG /*skip lossy JPEG*/)
+        {
+            continue;
+        }
+
+        wxImage actual(g_testfiles[i].file);
+
+        if ( actual.GetSize() != expected8.GetSize() )
+        {
+            continue;
+        }
+
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Compare test '%s' for loading failed", g_testfiles[i].file),
+
+            memcmp(actual.GetData(),
+                (g_testfiles[i].bitDepth == 8)
+                    ? expected8.GetData()
+                    : expected24.GetData(),
+                dataLen) == 0
+        );
+    }
+
+}
+
+void ImageTestCase::CompareSavedImage()
+{
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+
+    const size_t dataLen = expected24.GetWidth() * expected24.GetHeight() * 3;
+
+    const wxList& list = wxImage::GetHandlers();
+    for ( wxList::compatibility_iterator node = list.GetFirst();
+        node; node = node->GetNext() )
+    {
+        wxImageHandler *handler = (wxImageHandler *) node->GetData();
+
+        wxBitmapType type = handler->GetType();
+        if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
+            || type == wxBITMAP_TYPE_TIF)
+        {
+            /*
+            TIFF is skipped because the memory stream can't be loaded. Libtiff
+            looks for a TIFF directory at offset 120008 while the memory
+            stream size is only 120008 bytes (when saving as a file
+            the file size is 120280 bytes).
+            */
+            continue;
+        }
+
+        wxMemoryOutputStream memOut;
+        if ( !expected24.SaveFile(memOut, type) )
+        {
+            // Unfortunately we can't know if the handler just doesn't support
+            // saving images, or if it failed to save.
+            continue;
+        }
+
+        if ( !memOut.GetSize() )
+        {
+            // A handler that does not support saving can return true during
+            // SaveFile, in that case the stream is empty.
+            continue;
+        }
+
+        wxMemoryInputStream memIn(memOut);
+        CPPUNIT_ASSERT(memIn.IsOk());
+
+        wxImage actual24(memIn);
+        CPPUNIT_ASSERT(actual24.IsOk());
+
+        CPPUNIT_ASSERT( actual24.GetSize() == expected24.GetSize() );
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Compare test '%s' for saving failed", handler->GetExtension()),
+
+            memcmp(actual24.GetData(), expected24.GetData(),
+                dataLen) == 0
+        );
+    }
 }
 
 #endif //wxUSE_IMAGE
