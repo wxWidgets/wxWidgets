@@ -39,6 +39,16 @@
 // For memcpy
 #include <string.h>
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_ICO_CUR
+
+static bool CanReadICOOrCUR(wxInputStream *stream, wxUint16 resourceType);
+
+#endif // wxUSE_ICO_CUR
+
 //-----------------------------------------------------------------------------
 // wxBMPHandler
 //-----------------------------------------------------------------------------
@@ -1424,12 +1434,8 @@ int wxICOHandler::DoGetImageCount(wxInputStream& stream)
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
-    unsigned char hdr[4];
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
-        return false;
+    return CanReadICOOrCUR(&stream, 1 /*for identifying an icon*/);
 
-    // hdr[2] is one for an icon and two for a cursor
-    return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0';
 }
 
 #endif // wxUSE_STREAMS
@@ -1445,12 +1451,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
-    unsigned char hdr[4];
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
-        return false;
-
-    // hdr[2] is one for an icon and two for a cursor
-    return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0';
+    return CanReadICOOrCUR(&stream, 2 /*for identifying a cursor*/);
 }
 
 #endif // wxUSE_STREAMS
@@ -1487,6 +1488,19 @@ int wxANIHandler::DoGetImageCount(wxInputStream& stream)
         return wxNOT_FOUND;
 
     return decoder.GetFrameCount();
+}
+
+static bool CanReadICOOrCUR(wxInputStream *stream, wxUint16 resourceType)
+{
+    ICONDIR iconDir;
+    if ( !stream->Read(&iconDir, sizeof(iconDir)) )     // it's ok to modify the stream position here
+    {
+        return false;
+    }
+
+    return !iconDir.idReserved // reserved, must be 0
+        && wxUINT16_SWAP_ON_BE(iconDir.idType) == resourceType // either 1 or 2
+        && iconDir.idCount; // must contain at least one image
 }
 
 #endif // wxUSE_STREAMS
