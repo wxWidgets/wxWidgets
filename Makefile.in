@@ -5496,7 +5496,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_dialog.o \
 	monodll_iphone_evtloop.o \
 	monodll_iphone_gauge.o \
-	monodll_glcanvas.o \
 	monodll_iphone_msgdlg.o \
 	monodll_iphone_nonownedwnd.o \
 	monodll_iphone_scrolbar.o \
@@ -7373,7 +7372,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_dialog.o \
 	monolib_iphone_evtloop.o \
 	monolib_iphone_gauge.o \
-	monolib_glcanvas.o \
 	monolib_iphone_msgdlg.o \
 	monolib_iphone_nonownedwnd.o \
 	monolib_iphone_scrolbar.o \
@@ -9434,7 +9432,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_dialog.o \
 	coredll_iphone_evtloop.o \
 	coredll_iphone_gauge.o \
-	coredll_glcanvas.o \
 	coredll_iphone_msgdlg.o \
 	coredll_iphone_nonownedwnd.o \
 	coredll_iphone_scrolbar.o \
@@ -10979,7 +10976,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_dialog.o \
 	corelib_iphone_evtloop.o \
 	corelib_iphone_gauge.o \
-	corelib_glcanvas.o \
 	corelib_iphone_msgdlg.o \
 	corelib_iphone_nonownedwnd.o \
 	corelib_iphone_scrolbar.o \
@@ -12650,6 +12646,8 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_OSX_CARBON@	= gldll_carbon_glcanvas.o gldll_glcanvas_osx.o
 @COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= gldll_osx_cocoa_glcanvas.o gldll_glcanvas_osx.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_OSX_IPHONE@	= gldll_iphone_glcanvas.o gldll_glcanvas_osx.o
 @COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_os2_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_msw_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = \
@@ -12688,6 +12686,8 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_OSX_CARBON@	= gllib_carbon_glcanvas.o gllib_glcanvas_osx.o
 @COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= gllib_osx_cocoa_glcanvas.o gllib_glcanvas_osx.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
+@COND_TOOLKIT_OSX_IPHONE@	= gllib_iphone_glcanvas.o gllib_glcanvas_osx.o
 @COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_os2_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_msw_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
@@ -16184,9 +16184,6 @@ monodll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONODLL_ODEP)
 
 monodll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
-
-monodll_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
 monodll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
@@ -21416,9 +21413,6 @@ monolib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONOLIB_ODEP)
 
 monolib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
-
-monolib_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
 monolib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
@@ -27366,9 +27360,6 @@ coredll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(COREDLL_ODEP)
 coredll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
-coredll_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
-
 coredll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
@@ -31289,9 +31280,6 @@ corelib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(CORELIB_ODEP)
 
 corelib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
-
-corelib_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
 corelib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
@@ -36147,6 +36135,9 @@ gldll_carbon_glcanvas.o: $(srcdir)/src/osx/carbon/glcanvas.cpp $(GLDLL_ODEP)
 gldll_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
+gldll_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
 gldll_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
 
@@ -36164,6 +36155,9 @@ gldll_os2_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLDLL_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_OSX_IPHONE@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
@@ -36198,6 +36192,9 @@ gllib_carbon_glcanvas.o: $(srcdir)/src/osx/carbon/glcanvas.cpp $(GLLIB_ODEP)
 gllib_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
+gllib_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
 gllib_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
 
@@ -36215,6 +36212,9 @@ gllib_os2_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLLIB_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_OSX_IPHONE@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
