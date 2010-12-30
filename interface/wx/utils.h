@@ -150,12 +150,18 @@ void wxBell();
 */
 void wxInfoMessageBox(wxWindow* parent);
 
+//@}
+
+/** @addtogroup group_funcmacro_version */
+//@{
+
 /**
     Get wxWidgets version information.
 
     @since 2.9.2
     @see wxVersionInfo
     @header{wx/utils.h}
+    @library{wxcore}
 */
 wxVersionInfo wxGetLibraryVersionInfo();
 
