@@ -66,6 +66,8 @@ typedef wxString wxArtID;
 #define wxART_GO_DOWN              wxART_MAKE_ART_ID(wxART_GO_DOWN)
 #define wxART_GO_TO_PARENT         wxART_MAKE_ART_ID(wxART_GO_TO_PARENT)
 #define wxART_GO_HOME              wxART_MAKE_ART_ID(wxART_GO_HOME)
+#define wxART_GOTO_FIRST           wxART_MAKE_ART_ID(wxART_GOTO_FIRST)
+#define wxART_GOTO_LAST            wxART_MAKE_ART_ID(wxART_GOTO_LAST)
 #define wxART_FILE_OPEN            wxART_MAKE_ART_ID(wxART_FILE_OPEN)
 #define wxART_FILE_SAVE            wxART_MAKE_ART_ID(wxART_FILE_SAVE)
 #define wxART_FILE_SAVE_AS         wxART_MAKE_ART_ID(wxART_FILE_SAVE_AS)
@@ -100,6 +102,9 @@ typedef wxString wxArtID;
 
 #define wxART_UNDO                 wxART_MAKE_ART_ID(wxART_UNDO)
 #define wxART_REDO                 wxART_MAKE_ART_ID(wxART_REDO)
+
+#define wxART_PLUS                 wxART_MAKE_ART_ID(wxART_PLUS)
+#define wxART_MINUS                wxART_MAKE_ART_ID(wxART_MINUS)
 
 #define wxART_CLOSE                wxART_MAKE_ART_ID(wxART_CLOSE)
 #define wxART_QUIT                 wxART_MAKE_ART_ID(wxART_QUIT)

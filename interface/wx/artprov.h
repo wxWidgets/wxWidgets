@@ -79,10 +79,12 @@ typedef class wxString wxArtID;
      @li wxART_GO_BACK
      @li wxART_GO_FORWARD
      @li wxART_GO_UP
-    </td><td>
      @li wxART_GO_DOWN
      @li wxART_GO_TO_PARENT
      @li wxART_GO_HOME
+     @li wxART_GOTO_FIRST (since 2.9.2)
+     </td><td>
+     @li wxART_GOTO_LAST (since 2.9.2)
      @li wxART_PRINT
      @li wxART_HELP
      @li wxART_TIP
@@ -96,11 +98,11 @@ typedef class wxString wxArtID;
      @li wxART_NORMAL_FILE
      @li wxART_TICK_MARK
      @li wxART_CROSS_MARK
-    </td><td>
      @li wxART_MISSING_IMAGE
      @li wxART_NEW
      @li wxART_FILE_OPEN
      @li wxART_FILE_SAVE
+     </td><td>
      @li wxART_FILE_SAVE_AS
      @li wxART_DELETE
      @li wxART_COPY
@@ -108,6 +110,8 @@ typedef class wxString wxArtID;
      @li wxART_PASTE
      @li wxART_UNDO
      @li wxART_REDO
+     @li wxART_PLUS (since 2.9.2)
+     @li wxART_MINUS (since 2.9.2)
      @li wxART_CLOSE
      @li wxART_QUIT
      @li wxART_FIND
