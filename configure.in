@@ -928,6 +928,7 @@ fi
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
+WX_ARG_FEATURE(artstd,      [  --enable-artstd         use standard XPM icons in wxArtProvider], wxUSE_ARTPROVIDER_STD)
 WX_ARG_FEATURE(arttango,    [  --enable-arttango       use Tango icons in wxArtProvider], wxUSE_ARTPROVIDER_TANGO)
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
@@ -7145,6 +7146,10 @@ dnl please keep the settings below in alphabetical order
 if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     AC_DEFINE(wxUSE_ACCESSIBILITY)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then
+    AC_DEFINE(wxUSE_ARTPROVIDER_STD)
 fi
 
 if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then

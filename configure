@@ -1806,6 +1806,7 @@ Optional Features:
   --disable-controls      disable compilation of all standard controls
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
+  --enable-artstd         use standard XPM icons in wxArtProvider
   --enable-arttango       use Tango icons in wxArtProvider
   --enable-bmpbutton      use wxBitmapButton class
   --enable-bmpcombobox    use wxBitmapComboBox class
@@ -9893,6 +9894,50 @@ fi
             fi
           else
             result=$wxUSE_ANIMATIONCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-artstd" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-artstd... $ECHO_C" >&6; }
+          # Check whether --enable-artstd was given.
+if test "${enable_artstd+set}" = set; then
+  enableval=$enable_artstd;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=yes'
+                          else
+                            wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=no'
+                          fi
+
+else
+
+                          wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=${'DEFAULT_wxUSE_ARTPROVIDER_STD":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_artstd"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_ARTPROVIDER_STD = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_ARTPROVIDER_STD
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47573,6 +47618,13 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ARTPROVIDER_STD 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then

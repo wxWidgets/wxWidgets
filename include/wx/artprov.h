@@ -201,8 +201,10 @@ public:
 
 protected:
     friend class wxArtProviderModule;
+#if wxUSE_ARTPROVIDER_STD
     // Initializes default provider
     static void InitStdProvider();
+#endif // wxUSE_ARTPROVIDER_STD
     // Initializes Tango-based icon provider
 #if wxUSE_ARTPROVIDER_TANGO
     static void InitTangoProvider();

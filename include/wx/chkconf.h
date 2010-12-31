@@ -407,6 +407,14 @@
 #   endif
 #endif /* !defined(wxUSE_ANIMATIONCTRL) */
 
+#ifndef wxUSE_ARTPROVIDER_STD
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ARTPROVIDER_STD must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ARTPROVIDER_STD 0
+#   endif
+#endif /* !defined(wxUSE_ARTPROVIDER_STD) */
+
 #ifndef wxUSE_ARTPROVIDER_TANGO
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ARTPROVIDER_TANGO must be defined, please read comment near the top of this file."

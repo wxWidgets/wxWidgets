@@ -67,6 +67,7 @@ library:
 @itemdef{wxUSE_ACCEL, Use wxAcceleratorTable/Entry classes and support for them in wxMenu, wxMenuBar.}
 @itemdef{wxUSE_AFM_FOR_POSTSCRIPT, In wxPostScriptDC class use AFM (adobe font metrics) file for character widths.}
 @itemdef{wxUSE_ANIMATIONCTRL, Use wxAnimationCtrl class.}
+@itemdef{wxUSE_ARTPROVIDER_STD, Use standard low quality icons in wxArtProvider.}
 @itemdef{wxUSE_ARTPROVIDER_TANGO, Use Tango icons in wxArtProvider.}
 @itemdef{wxUSE_ANY, Use wxAny class.}
 @itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines; see src/common/extended.c file.}

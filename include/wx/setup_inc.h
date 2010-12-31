@@ -908,6 +908,19 @@
 // wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
 #define wxUSE_ACCEL 1
 
+// Use the standard art provider. The icons returned by this provider are
+// embedded into the library as XPMs so disabling it reduces the library size
+// somewhat but this should only be done if you use your own custom art
+// provider returning the icons or never use any icons not provided by the
+// native art provider (which might not be implemented at all for some
+// platforms) or by the Tango icons provider (if it's not itself disabled
+// below).
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you use your own custom art provider.
+#define wxUSE_ARTPROVIDER_STD 1
+
 // Use art provider providing Tango icons: this art provider has higher quality
 // icons than the default ones using smaller size XPM icons without
 // transparency but the embedded PNG icons add to the library size.

@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ARTPROVIDER_STD
+
 #ifndef WX_PRECOMP
     #include "wx/image.h"
 #endif
@@ -246,3 +248,5 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
 
     return bmp;
 }
+
+#endif // wxUSE_ARTPROVIDER_STD
