@@ -40,10 +40,10 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
-#include "wx/dcgraph.h"
 #if wxUSE_ENH_METAFILE
     #include "wx/msw/enhmeta.h"
 #endif
+#include "wx/dcgraph.h"
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
@@ -97,8 +97,6 @@ inline Color wxColourToColor(const wxColour& col)
 //-----------------------------------------------------------------------------
 // wxGraphicsPath implementation
 //-----------------------------------------------------------------------------
-
-class wxGDIPlusContext;
 
 class wxGDIPlusPathData : public wxGraphicsPathData
 {
@@ -291,10 +289,7 @@ private :
 class wxGDIPlusFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusFontData( wxGraphicsRenderer* renderer,
-                       const wxGDIPlusContext* gc,
-                       const wxFont &font,
-                       const wxColour& col );
+    wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
     ~wxGDIPlusFontData();
 
     virtual Brush* GetGDIPlusBrush() { return m_textBrush; }
@@ -307,8 +302,7 @@ private :
 class wxGDIPlusContext : public wxGraphicsContext
 {
 public:
-    wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc );
-    wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height );
+    wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc , wxDouble width, wxDouble height );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr);
     wxGDIPlusContext();
@@ -360,20 +354,11 @@ public:
     virtual void PushState();
     virtual void PopState();
 
-    // sets the font of this context
-    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
-
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
     virtual bool ShouldOffset() const;
     virtual void GetSize( wxDouble* width, wxDouble *height );
-
-    Graphics* GetGraphics() const { return m_context; }
-    bool IsPrinting() const { return m_isPrinting; }
-
-    // utility to setup page scale etc for printing
-    void SetupForPrinting();
 
 private:
     void    Init();
@@ -385,15 +370,12 @@ private:
                                   const wxGraphicsBrush& backgroundBrush);
 
     Graphics* m_context;
-
     GraphicsStates m_stateStack;
     GraphicsState m_state1;
     GraphicsState m_state2;
 
     wxDouble m_width;
     wxDouble m_height;
-
-    bool m_isPrinting;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
@@ -414,108 +396,8 @@ public:
     }
 
 private:
-    HDC m_hdc;
+    HDC m_hdc ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusMeasuringContext)
-} ;
-
-//-----------------------------------------------------------------------------
-// wxGDIPlusRenderer declaration
-//-----------------------------------------------------------------------------
-
-class wxGDIPlusRenderer : public wxGraphicsRenderer
-{
-public :
-    wxGDIPlusRenderer()
-    {
-        m_loaded = -1;
-        m_gditoken = 0;
-    }
-
-    virtual ~wxGDIPlusRenderer()
-    {
-        if ( m_loaded == 1 )
-        {
-            Unload();
-        }
-    }
-
-    // Context
-
-    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
-
-    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
-
-#if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
-#endif
-
-#if wxUSE_ENH_METAFILE
-    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
-#endif
-
-    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
-
-    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
-
-    virtual wxGraphicsContext * CreateContext( wxWindow* window );
-
-    virtual wxGraphicsContext * CreateMeasuringContext();
-
-    // Path
-
-    virtual wxGraphicsPath CreatePath();
-
-    // Matrix
-
-    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0);
-
-
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
-
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
-
-    virtual wxGraphicsBrush
-    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                              wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops);
-
-    virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
-                              wxDouble radius,
-                              const wxGraphicsGradientStops& stops);
-
-    // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
-
-    // stub: should not be called directly
-    virtual wxGraphicsFont CreateFont( const wxFont& WXUNUSED(font),
-                                       const wxColour& WXUNUSED(col) )
-        { wxFAIL; return wxNullGraphicsFont; }
-
-    // this is used to really create the font
-    wxGraphicsFont CreateGDIPlusFont( const wxGDIPlusContext* gc,
-                                      const wxFont &font,
-                                      const wxColour &col );
-
-    // create a graphics bitmap from a native bitmap
-    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
-
-    // create a subimage from a native image representation
-    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
-
-protected :
-    bool EnsureIsLoaded();
-    void Load();
-    void Unload();
-    friend class wxGDIPlusRendererModule;
-
-private :
-    int m_loaded;
-    ULONG_PTR m_gditoken;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusRenderer)
 } ;
 
 //-----------------------------------------------------------------------------
@@ -824,13 +706,14 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
-wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
-                                      const wxGDIPlusContext* gc,
-                                      const wxFont &font,
-                                      const wxColour& col )
-    : wxGraphicsObjectRefData( renderer )
+wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font,
+                             const wxColour& col ) : wxGraphicsObjectRefData( renderer )
 {
+    m_textBrush = NULL;
+    m_font = NULL;
+
     wxWCharBuffer s = font.GetFaceName().wc_str( *wxConvUI );
+    int size = font.GetPointSize();
     int style = FontStyleRegular;
     if ( font.GetStyle() == wxFONTSTYLE_ITALIC )
         style |= FontStyleItalic;
@@ -838,29 +721,7 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
         style |= FontStyleUnderline;
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
-
-    if ( gc->IsPrinting() )
-    {
-        Graphics* context = gc->GetGraphics();
-
-        Unit fontUnit = context->GetPageUnit();
-        // if fontUnit is UnitDisplay, then specify UnitPixel, otherwise
-        // you'll get a "InvalidParameter" from GDI+
-        if ( fontUnit == UnitDisplay )
-            fontUnit = UnitPixel;
-
-        REAL points = font.GetPointSize();
-        REAL size = points * (100.0 / 72.0);
-
-        // NB: font unit should match context's unit. We can use UnitPixel,
-        //     as that is what the print context should use.
-        m_font = new Font( s, size, style, fontUnit );
-    }
-    else
-    {
-        m_font = new Font( s, font.GetPointSize(), style );
-    }
-
+    m_font = new Font( s , size , style );
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
 
@@ -1243,31 +1104,13 @@ public :
     bool m_offset;
 } ;
 
-wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height )
+wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
     : wxGraphicsContext(renderer)
 {
     Init();
-
-    m_context = new Graphics(hdc);
+    m_context = new Graphics( hdc);
     m_width = width;
     m_height = height;
-
-    SetDefaults();
-}
-
-wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
-    : wxGraphicsContext(renderer)
-{
-    Init();
-
-    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    HDC hdc = (HDC) msw->GetHDC();
-
-    m_context = new Graphics(hdc);
-    wxSize sz = dc.GetSize();
-    m_width = sz.x;
-    m_height = sz.y;
-
     SetDefaults();
 }
 
@@ -1302,7 +1145,6 @@ void wxGDIPlusContext::Init()
     m_state2= 0;
     m_height = 0;
     m_width = 0;
-    m_isPrinting = false;
 }
 
 void wxGDIPlusContext::SetDefaults()
@@ -1312,11 +1154,6 @@ void wxGDIPlusContext::SetDefaults()
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
-}
-
-void wxGDIPlusContext::SetupForPrinting()
-{
-    //m_context->SetPageUnit(UnitDocument);
 
     // Setup page scale, based on DPI ratio.
     // Antecedent should be 100dpi when the default page unit (UnitDisplay)
@@ -1325,8 +1162,6 @@ void wxGDIPlusContext::SetupForPrinting()
     // DCs (that is, any other than wxPrinterDC or wxEnhMetaFileDC).
     REAL dpiRatio = 100.0 / m_context->GetDpiY();
     m_context->SetPageScale(dpiRatio);
-
-    m_isPrinting = true;
 }
 
 wxGDIPlusContext::~wxGDIPlusContext()
@@ -1600,15 +1435,6 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-wxGraphicsFont wxGDIPlusContext::CreateFont( const wxFont &font,
-                                             const wxColour &col ) const
-{
-    wxGDIPlusRenderer* renderer =
-        static_cast<wxGDIPlusRenderer*>(GetRenderer());
-    return renderer->CreateGDIPlusFont(this, font, col);
-}
-
-
 void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
                                         wxDouble x, wxDouble y,
                                         const wxGraphicsBrush& brush)
@@ -1650,12 +1476,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
 
     f->GetFamily(&ffamily) ;
 
-    REAL factorY; 
-    if ( !IsPrinting() )
-        factorY = m_context->GetDpiY() / 72.0;
-    else
-        // when printing the page scaling already does the trick
-        factorY = 1.0;
+    REAL factorY = m_context->GetDpiY() / 72.0 ;
 
     REAL rDescent = ffamily.GetCellDescent(FontStyleRegular) *
         f->GetSize() / ffamily.GetEmHeight(FontStyleRegular);
@@ -1784,6 +1605,97 @@ void wxGDIPlusContext::GetSize( wxDouble* width, wxDouble *height )
     *width = m_width;
     *height = m_height;
 }
+//-----------------------------------------------------------------------------
+// wxGDIPlusRenderer declaration
+//-----------------------------------------------------------------------------
+
+class wxGDIPlusRenderer : public wxGraphicsRenderer
+{
+public :
+    wxGDIPlusRenderer()
+    {
+        m_loaded = -1;
+        m_gditoken = 0;
+    }
+
+    virtual ~wxGDIPlusRenderer()
+    {
+        if ( m_loaded == 1 )
+        {
+            Unload();
+        }
+    }
+
+    // Context
+
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
+
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+#endif
+
+#if wxUSE_ENH_METAFILE
+    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
+#endif
+
+    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
+
+    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
+
+    virtual wxGraphicsContext * CreateContext( wxWindow* window );
+
+    virtual wxGraphicsContext * CreateMeasuringContext();
+
+    // Path
+
+    virtual wxGraphicsPath CreatePath();
+
+    // Matrix
+
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+        wxDouble tx=0.0, wxDouble ty=0.0);
+
+
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
+
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
+
+    virtual wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops);
+
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops);
+    // sets the font
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
+
+    // create a graphics bitmap from a native bitmap
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
+
+    // create a subimage from a native image representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
+
+protected :
+    bool EnsureIsLoaded();
+    void Load();
+    void Unload();
+    friend class wxGDIPlusRendererModule;
+
+private :
+    int m_loaded;
+    ULONG_PTR m_gditoken;
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusRenderer)
+} ;
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusRenderer implementation
@@ -1847,16 +1759,18 @@ void wxGDIPlusRenderer::Unload()
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
-    context->SetupForPrinting();
-    return context;
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 #endif
 
@@ -1864,16 +1778,18 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
-    context->SetupForPrinting();
-    return context;
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 #endif
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
@@ -1979,16 +1895,14 @@ wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
     return p;
 }
 
-wxGraphicsFont
-wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
-                                      const wxFont &font,
-                                      const wxColour &col )
+// sets the font
+wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
     if ( font.Ok() )
     {
         wxGraphicsFont p;
-        p.SetRefData(new wxGDIPlusFontData( this, gc, font, col ));
+        p.SetRefData(new wxGDIPlusFontData( this , font, col ));
         return p;
     }
     else
