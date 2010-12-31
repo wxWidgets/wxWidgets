@@ -30,7 +30,7 @@
                 export DYLD_LIBRARY_PATH=../lib
                 cd tests &amp;&amp;
                 ./test -t &amp;&amp;
-                ./test_gui.app/Contents/MacOS/test_gui -t
+                open ./test_gui.app
             </command>
         </copy-with-defaults>
     </test>
