@@ -27,6 +27,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/image.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
