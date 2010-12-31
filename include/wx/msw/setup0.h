@@ -470,13 +470,13 @@
 #define wxUSE_DIALUP_MANAGER   1
 
 // Compile in classes for run-time DLL loading and function calling.
-// Required by wxUSE_DIALUP_MANAGER and used by many other wxMSW classes so
-// disabling it can result in a loss of a lot of functionality, don't do it
-// unless you really know what you are doing.
+// Required by wxUSE_DIALUP_MANAGER.
+//
+// This setting is for Win32 only
 //
 // Default is 1.
 //
-// Recommended setting: 1 (you should never disable this for wxMSW).
+// Recommended setting: 1
 #define wxUSE_DYNLIB_CLASS    1
 
 // experimental, don't use for now
@@ -911,6 +911,15 @@
 
 // wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
 #define wxUSE_ACCEL 1
+
+// Use art provider providing Tango icons: this art provider has higher quality
+// icons than the default ones using smaller size XPM icons without
+// transparency but the embedded PNG icons add to the library size.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be turned off to reduce the library size.
+#define wxUSE_ARTPROVIDER_TANGO 1
 
 // Hotkey support (currently Windows only)
 #define wxUSE_HOTKEY 1

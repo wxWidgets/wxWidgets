@@ -441,6 +441,9 @@ public:
     bool OnInit()
     {
         wxArtProvider::InitStdProvider();
+#if wxUSE_ARTPROVIDER_TANGO
+        wxArtProvider::InitTangoProvider();
+#endif // wxUSE_ARTPROVIDER_TANGO
         wxArtProvider::InitNativeProvider();
         return true;
     }

@@ -268,6 +268,10 @@ SOURCE=..\..\src\common\artstd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\arttango.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\bmpbase.cpp
 # End Source File
 # Begin Source File

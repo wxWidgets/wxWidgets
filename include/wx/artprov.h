@@ -203,6 +203,10 @@ protected:
     friend class wxArtProviderModule;
     // Initializes default provider
     static void InitStdProvider();
+    // Initializes Tango-based icon provider
+#if wxUSE_ARTPROVIDER_TANGO
+    static void InitTangoProvider();
+#endif // wxUSE_ARTPROVIDER_TANGO
     // Initializes platform's native provider, if available (e.g. GTK2)
     static void InitNativeProvider();
     // Destroy caches & all providers

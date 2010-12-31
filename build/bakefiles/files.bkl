@@ -646,6 +646,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/appcmn.cpp
     src/common/artprov.cpp
     src/common/artstd.cpp
+    src/common/arttango.cpp
     src/common/bmpbase.cpp
     src/common/bookctrl.cpp
     src/common/btncmn.cpp

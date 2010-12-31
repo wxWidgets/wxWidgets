@@ -389,6 +389,7 @@ DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
 dnl automatic features
+DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
@@ -452,6 +453,7 @@ if test "$wxUSE_ALL_FEATURES" = "no"; then
     dnl reset all the options with default value of auto if all features are to
     dnl be disabled because we can't have an option with default value of
     dnl "auto-or-no-if-wxUSE_ALL_FEATURES-is-disabled"
+    DEFAULT_wxUSE_ARTPROVIDER_TANGO=no
     DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
@@ -926,6 +928,7 @@ fi
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
+WX_ARG_FEATURE(arttango,    [  --enable-arttango       use Tango icons in wxArtProvider], wxUSE_ARTPROVIDER_TANGO)
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
 WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
@@ -7142,6 +7145,23 @@ dnl please keep the settings below in alphabetical order
 if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     AC_DEFINE(wxUSE_ACCESSIBILITY)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then
+    dnl Tango-based art provider is not needed in GTK-based ports as the
+    dnl native art provider completely replaces it.
+    if test "$wxUSE_GTK" != 1; then
+        dnl It also requires support for memory-mapped PNG images.
+        if test "$wxUSE_LIBPNG" != no -a \
+                "$wxUSE_IMAGE" = yes -a \
+                "$wxUSE_STREAMS" = yes; then
+            wxUSE_ARTPROVIDER_TANGO="yes"
+        fi
+    fi
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "yes"; then
+    AC_DEFINE(wxUSE_ARTPROVIDER_TANGO)
 fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then

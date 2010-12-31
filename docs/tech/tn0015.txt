@@ -22,8 +22,8 @@ when adding new bitmap/icon.
 First of all, you have to add new wxArtID constant to include/wx/artprov.h.
 Look for "Art IDs" and add new definition to the list, e.g.
     #define wxART_MY_BITMAP     wxART_MAKE_ART_ID(wxART_MY_BITMAP)
-    
-Add it to docs/latex/wx/artprov.tex, too.
+
+Add it to interface/wx/artprov.h, too.
 
 It may happen that the intended use of the new resource doesn't fit into any
 of defined client categories (search for "Art clients" in the header). In case
@@ -46,7 +46,7 @@ currently only used by the generic file dialog. Remember that wxArtProvider
 can be used by users, not only the library.
 
 Finally, wxDefaultArtProvider in $(wx)/src/common/artstd.cpp must be updated.
-This consists of two steps: 
+This consists of two steps:
 
   a) add #include line for your XPM file, e.g. #include "../../art/my_bmp.xpm"
   b) add ART(...) line to wxDefaultArtProvider::CreateBitmap(). The first
@@ -57,6 +57,35 @@ That's all. The bitmap is now available to wxArtProvider users.
 
 Note: there's no difference between icons and bitmaps, always treat them as
 bitmaps inside wx(Default)ArtProvider.
+
+1b. Adding Tango version of the resource.
+-----------------------------------------
+
+While all the bitmaps are provided in XPM format so that they are available in
+all builds of wxWidgets, we also provide most of them in PNG format with full
+transparency support that is not available in XPM. Another advantage of the PNG
+versions is that the icons used are those of the Tango project and so have the
+consistent look, unlike the XPM ones.
+
+So if you an icon exists in http://tango.freedesktop.org/Tango_Icon_Gallery you
+should add it too. For this you need to:
+
+1. Convert the PNG to a C array of bytes suitable for inclusion in the code.
+   This is done using misc/scripts/png2c.py script, e.g. if the variable "f"
+   contains the name of the icon you want to add and you have installed Tango
+   icons in a standard location under a Linux system:
+
+    ./misc/scripts/png2c.py -s /usr/share/icons/Tango/{16x16,24x24}/*/$f.png >
+        art/tango/${f//-/_}.h
+
+   Of course, the same command may be ran with different paths under Windows.
+   Just remember to add both 16 and 24 pixel versions of the bitmap to the
+   header and use the "-s" option to embed the image size in its array name.
+
+2. Add #include for the newly created file to src/common/arttango.cpp.
+
+3. Add an entry to s_allBitmaps array in the same file.
+
 
 2. Accessing the resource
 -------------------------

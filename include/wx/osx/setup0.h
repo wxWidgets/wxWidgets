@@ -913,6 +913,15 @@
 // wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
 #define wxUSE_ACCEL 1
 
+// Use art provider providing Tango icons: this art provider has higher quality
+// icons than the default ones using smaller size XPM icons without
+// transparency but the embedded PNG icons add to the library size.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be turned off to reduce the library size.
+#define wxUSE_ARTPROVIDER_TANGO 1
+
 // Hotkey support (currently Windows only)
 #define wxUSE_HOTKEY 1
 

@@ -1806,6 +1806,7 @@ Optional Features:
   --disable-controls      disable compilation of all standard controls
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
+  --enable-arttango       use Tango icons in wxArtProvider
   --enable-bmpbutton      use wxBitmapButton class
   --enable-bmpcombobox    use wxBitmapComboBox class
   --enable-button         use wxButton class
@@ -2982,6 +2983,7 @@ DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
+DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
@@ -3282,7 +3284,8 @@ echo "${ECHO_T}$result" >&6; }
 
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
-                    DEFAULT_wxUSE_MEDIACTRL=no
+                    DEFAULT_wxUSE_ARTPROVIDER_TANGO=no
+    DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
 
@@ -9890,6 +9893,50 @@ fi
             fi
           else
             result=$wxUSE_ANIMATIONCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-arttango" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-arttango... $ECHO_C" >&6; }
+          # Check whether --enable-arttango was given.
+if test "${enable_arttango+set}" = set; then
+  enableval=$enable_arttango;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=yes'
+                          else
+                            wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=no'
+                          fi
+
+else
+
+                          wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=${'DEFAULT_wxUSE_ARTPROVIDER_TANGO":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_arttango"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_ARTPROVIDER_TANGO = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_ARTPROVIDER_TANGO
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47526,6 +47573,23 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then
+            if test "$wxUSE_GTK" != 1; then
+                if test "$wxUSE_LIBPNG" != no -a \
+                "$wxUSE_IMAGE" = yes -a \
+                "$wxUSE_STREAMS" = yes; then
+            wxUSE_ARTPROVIDER_TANGO="yes"
+        fi
+    fi
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ARTPROVIDER_TANGO 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then

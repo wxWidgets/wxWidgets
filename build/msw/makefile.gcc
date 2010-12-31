@@ -1800,6 +1800,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
+	$(OBJS)\monodll_arttango.o \
 	$(OBJS)\monodll_bmpbase.o \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_btncmn.o \
@@ -2049,6 +2050,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
+	$(OBJS)\monodll_arttango.o \
 	$(OBJS)\monodll_bmpbase.o \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_btncmn.o \
@@ -2528,6 +2530,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
+	$(OBJS)\monolib_arttango.o \
 	$(OBJS)\monolib_bmpbase.o \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_btncmn.o \
@@ -2777,6 +2780,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
+	$(OBJS)\monolib_arttango.o \
 	$(OBJS)\monolib_bmpbase.o \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_btncmn.o \
@@ -3154,6 +3158,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
+	$(OBJS)\coredll_arttango.o \
 	$(OBJS)\coredll_bmpbase.o \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_btncmn.o \
@@ -3403,6 +3408,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
+	$(OBJS)\coredll_arttango.o \
 	$(OBJS)\coredll_bmpbase.o \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_btncmn.o \
@@ -3665,6 +3671,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
+	$(OBJS)\corelib_arttango.o \
 	$(OBJS)\corelib_bmpbase.o \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_btncmn.o \
@@ -3914,6 +3921,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
+	$(OBJS)\corelib_arttango.o \
 	$(OBJS)\corelib_bmpbase.o \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_btncmn.o \
@@ -7271,6 +7279,11 @@ $(OBJS)\monodll_artstd.o: ../../src/common/artstd.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_arttango.o: ../../src/common/arttango.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_bmpbase.o: ../../src/common/bmpbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9513,6 +9526,11 @@ $(OBJS)\monolib_artstd.o: ../../src/common/artstd.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_arttango.o: ../../src/common/arttango.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_bmpbase.o: ../../src/common/bmpbase.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11746,6 +11764,11 @@ $(OBJS)\coredll_artstd.o: ../../src/common/artstd.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_arttango.o: ../../src/common/arttango.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_bmpbase.o: ../../src/common/bmpbase.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13052,6 +13075,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_artstd.o: ../../src/common/artstd.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_arttango.o: ../../src/common/arttango.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

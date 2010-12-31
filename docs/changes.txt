@@ -450,6 +450,7 @@ All (GUI):
 - Fixed resizing columns in wxGrid when they were reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
 - Added support for saving TGA files.
+- Added wxArtProvider returning higher quality icons from Tango project.
 
 GTK:
 

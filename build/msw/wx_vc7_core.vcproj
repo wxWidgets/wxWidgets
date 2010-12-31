@@ -547,6 +547,9 @@
 				RelativePath="..\..\src\common\artstd.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\arttango.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\bmpbase.cpp">
 			</File>
 			<File

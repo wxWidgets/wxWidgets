@@ -407,6 +407,14 @@
 #   endif
 #endif /* !defined(wxUSE_ANIMATIONCTRL) */
 
+#ifndef wxUSE_ARTPROVIDER_TANGO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ARTPROVIDER_TANGO must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ARTPROVIDER_TANGO 0
+#   endif
+#endif /* !defined(wxUSE_ARTPROVIDER_TANGO) */
+
 #ifndef wxUSE_AUTOID_MANAGEMENT
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_AUTOID_MANAGEMENT must be defined, please read comment near the top of this file."
@@ -1615,6 +1623,17 @@
 #endif /* wxUSE_FILEDLG */
 
 /* common dependencies */
+#if wxUSE_ARTPROVIDER_TANGO
+#   if !(wxUSE_STREAMS && wxUSE_IMAGE && wxUSE_LIBPNG)
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Tango art provider requires wxImage with streams and PNG support"
+#       else
+#           undef wxUSE_ARTPROVIDER_TANGO
+#           define wxUSE_ARTPROVIDER_TANGO 0
+#       endif
+#   endif
+#endif /* wxUSE_ARTPROVIDER_TANGO */
+
 #if wxUSE_CALENDARCTRL
 #   if !(wxUSE_SPINBTN && wxUSE_COMBOBOX)
 #       ifdef wxABORT_ON_CONFIG_ERROR
