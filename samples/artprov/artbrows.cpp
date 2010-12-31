@@ -50,12 +50,13 @@
 static void FillClients(wxChoice *choice)
 {
     ART_CLIENT(wxART_OTHER)
+    ART_CLIENT(wxART_BUTTON)
     ART_CLIENT(wxART_TOOLBAR)
     ART_CLIENT(wxART_MENU)
     ART_CLIENT(wxART_FRAME_ICON)
     ART_CLIENT(wxART_CMN_DIALOG)
     ART_CLIENT(wxART_HELP_BROWSER)
-    ART_CLIENT(wxART_MESSAGE_BOX)
+    ART_CLIENT(wxART_MESSAGE_BOX) // Keep this last, it's the initial shown one
 }
 
 static void FillBitmaps(wxImageList *images, wxListCtrl *list,
@@ -164,7 +165,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     SetSizerAndFit(sizer);
 
-    choice->SetSelection(6/*wxART_MESSAGE_BOX*/);
+    choice->SetSelection(choice->GetCount() - 1);
     SetArtClient(wxART_MESSAGE_BOX);
 }
 
