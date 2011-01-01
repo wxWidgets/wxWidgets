@@ -179,6 +179,16 @@ void wxGUIEventLoop::DoRun()
 void wxGUIEventLoop::DoStop()
 {
     [NSApp stop:0];
+    // only calling stop: is not enough when called from a runloop-observer,
+    // therefore add a dummy event, to make sure the runloop gets another round
+    NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined 
+                                        location:NSMakePoint(0.0, 0.0) 
+                                   modifierFlags:0 
+                                       timestamp:0 
+                                    windowNumber:0 
+                                         context:nil
+                                         subtype:0 data1:0 data2:0]; 
+    [NSApp postEvent:event atStart:FALSE];
 }
 
 CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
