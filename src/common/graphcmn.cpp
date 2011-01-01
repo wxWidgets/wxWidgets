@@ -872,11 +872,13 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 }
 #endif
 
+#ifdef __WXMSW__
 #if wxUSE_ENH_METAFILE
 /* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxEnhMetaFileDC& dc)
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
+#endif
 #endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
