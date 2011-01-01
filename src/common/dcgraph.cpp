@@ -677,7 +677,7 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
     wxGraphicsPath path = m_graphicContext->CreatePath();
 
     wxPointList::compatibility_iterator node = points->GetFirst();
-    if (node == wxPointList::compatibility_iterator())
+    if ( !node )
         // empty list
         return;
 
