@@ -6992,6 +6992,11 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, w
 
         dc.DrawPolygon(3, pts);
     }
+    else if (bulletAttr.GetBulletName() == wxT("standard/circle-outline"))
+    {
+        wxCheckSetBrush(dc, *wxTRANSPARENT_BRUSH);
+        dc.DrawEllipse(x, y, bulletWidth, bulletHeight);
+    }
     else // "standard/circle", and catch-all
     {
         dc.DrawEllipse(x, y, bulletWidth, bulletHeight);
@@ -7059,6 +7064,7 @@ bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(parag
 bool wxRichTextStdRenderer::EnumerateStandardBulletNames(wxArrayString& bulletNames)
 {
     bulletNames.Add(wxTRANSLATE("standard/circle"));
+    bulletNames.Add(wxTRANSLATE("standard/circle-outline"));
     bulletNames.Add(wxTRANSLATE("standard/square"));
     bulletNames.Add(wxTRANSLATE("standard/diamond"));
     bulletNames.Add(wxTRANSLATE("standard/triangle"));
