@@ -12,9 +12,9 @@
 #ifndef _WX_GENERIC_DATECTRL_H_
 #define _WX_GENERIC_DATECTRL_H_
 
-#include "wx/calctrl.h"
-#include "wx/combo.h"
+class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
+class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase

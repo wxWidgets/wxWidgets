@@ -34,9 +34,10 @@
     #include "wx/valtext.h"
 #endif
 
-#include "wx/datectrl.h"
-#include "wx/generic/datectrl.h"
+#include "wx/calctrl.h"
+#include "wx/combo.h"
 
+#include "wx/datectrl.h"
 
 // ----------------------------------------------------------------------------
 // constants
