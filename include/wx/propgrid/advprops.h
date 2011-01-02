@@ -203,7 +203,8 @@ public:
         Override in derived class to customize how colours are printed as
         strings.
     */
-    virtual wxString ColourToString( const wxColour& col, int index ) const;
+    virtual wxString ColourToString( const wxColour& col, int index,
+                                     int argFlags = 0 ) const;
 
     /** Returns index of entry that triggers colour picker dialog
         (default is last).

@@ -1259,12 +1259,18 @@ void FormMain::PopulateWithExamples ()
 #endif
 
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
-    //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
     pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
     pg->GetProperty(wxT("ColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
         wxT("editor of this property to wxPGEditor_ComboBox)"));
+
+    pid = pg->Append( new wxColourProperty("ColourPropertyWithAlpha",
+                                           wxPG_LABEL,
+                                           wxColour(15, 200, 95, 128)) );
+    pg->SetPropertyAttribute("ColourPropertyWithAlpha", "HasAlpha", true);
+    pg->SetPropertyHelpString("ColourPropertyWithAlpha",
+        "Attribute \"HasAlpha\" is set to true for this property.");
 
     //
     // This demonstrates using alternative editor for colour property

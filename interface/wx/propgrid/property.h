@@ -173,6 +173,12 @@
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
+/**
+    wxColourProperty and its kind: Set to True in order to support editing
+    alpha colour component.
+*/
+#define wxPG_COLOUR_HAS_ALPHA               wxS("HasAlpha")
+
 /** @}
 */
 
@@ -526,6 +532,9 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Represents wxColour. wxButton is used to trigger a colour picker dialog.
     There are various sub-classing opportunities with this class. See
     below in wxSystemColourProperty section for details.
+
+    Setting "HasAlpha" attribute to @true for this property allows user to
+    edit the alpha colour component.
 
     @subsection wxFontProperty
 

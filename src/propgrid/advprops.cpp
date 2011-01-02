@@ -1143,15 +1143,35 @@ wxColour wxSystemColourProperty::GetColour( int index ) const
     return wxSystemSettings::GetColour( (wxSystemColour)index );
 }
 
-wxString wxSystemColourProperty::ColourToString( const wxColour& col, int index ) const
+wxString wxSystemColourProperty::ColourToString( const wxColour& col,
+                                                 int index,
+                                                 int argFlags ) const
 {
+
     if ( index == wxNOT_FOUND )
-        return wxString::Format(wxT("(%i,%i,%i)"),
-                                (int)col.Red(),
-                                (int)col.Green(),
-                                (int)col.Blue());
+    {
+
+        if ( (argFlags & wxPG_FULL_VALUE) ||
+             GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) )
+        {
+            return wxString::Format(wxS("(%i,%i,%i,%i)"),
+                                    (int)col.Red(),
+                                    (int)col.Green(),
+                                    (int)col.Blue(),
+                                    (int)col.Alpha());
+        }
+        else
+        {
+            return wxString::Format(wxS("(%i,%i,%i)"),
+                                    (int)col.Red(),
+                                    (int)col.Green(),
+                                    (int)col.Blue());
+        }
+    }
     else
+    {
         return m_choices.GetLabel(index);
+    }
 }
 
 wxString wxSystemColourProperty::ValueToString( wxVariant& value,
@@ -1178,7 +1198,7 @@ wxString wxSystemColourProperty::ValueToString( wxVariant& value,
         index = m_choices.Index(val.m_type);
     }
 
-    return ColourToString(val.m_colour, index);
+    return ColourToString(val.m_colour, index, argFlags);
 }
 
 
@@ -1383,13 +1403,32 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
     if ( colStr != custColName )
     {
-        // Convert (R,G,B) to rgb(R,G,B)
         if ( colStr.Find(wxS("(")) == 0 )
         {
-            colStr = wxS("rgb") + colStr;
+            // Eliminate whitespace
+            colStr.Replace(wxS(" "), wxEmptyString);
+
+            int commaCount = colStr.Freq(wxS(','));
+            if ( commaCount == 2 )
+            {
+                // Convert (R,G,B) to rgb(R,G,B)
+                colStr = wxS("rgb") + colStr;
+            }
+            else if ( commaCount == 3 )
+            {
+                // We have int alpha, CSS format that wxColour takes as
+                // input processes float alpha. So, let's parse the colour
+                // ourselves instead of trying to convert it to a format
+                // that wxColour::FromString() understands.
+                int r = -1, g = -1, b = -1, a = -1;
+                wxSscanf(colStr, wxS("(%i,%i,%i,%i)"), &r, &g, &b, &a);
+                customColour.Set(r, g, b, a);
+                conversionSuccess = customColour.IsOk();
+            }
         }
 
-        conversionSuccess = customColour.Set(colStr);
+        if ( !conversionSuccess )
+            conversionSuccess = customColour.Set(colStr);
     }
 
     if ( !conversionSuccess && m_choices.GetCount() &&
