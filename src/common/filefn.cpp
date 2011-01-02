@@ -735,16 +735,7 @@ wxChar *wxFileNameFromPath (wxChar *path)
 
 wxString wxFileNameFromPath (const wxString& path)
 {
-    wxString name, ext;
-    wxFileName::SplitPath(path, NULL, &name, &ext);
-
-    wxString fullname = name;
-    if ( !ext.empty() )
-    {
-        fullname << wxFILE_SEP_EXT << ext;
-    }
-
-    return fullname;
+    return wxFileName(path).GetFullName();
 }
 
 // Return just the directory, or NULL if no directory
