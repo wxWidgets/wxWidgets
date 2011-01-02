@@ -169,10 +169,9 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(_("wxHtmlWindow testing application"),
         wxDefaultPosition, wxSize(640, 480));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
+    // Show it
     frame->Show(true);
-    SetTopWindow(frame);
+
     wxFileSystem::AddHandler(new MyVFS);
 
     // success: wxApp::OnRun() will be called which will enter the main message

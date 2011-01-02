@@ -160,8 +160,6 @@ bool MyApp::OnInit()
 
     frame->Show(true);
 
-    SetTopWindow(frame);
-
     return true;
 }
 

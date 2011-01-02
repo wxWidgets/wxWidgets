@@ -152,11 +152,8 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(_("Printing test"),
         wxDefaultPosition, wxSize(640, 480));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
+    // Show it
     frame->Show(true);
-    SetTopWindow(frame);
-
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the

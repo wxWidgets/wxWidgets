@@ -119,7 +119,6 @@ bool MyApp::OnInit()
     // create the main program window
     MyFrame *frame = new MyFrame;
     frame->Show(true);
-    SetTopWindow(frame);
 
     // use our config object...
     if ( pConfig->Read(wxT("/Controls/Check"), 1l) != 0 ) {

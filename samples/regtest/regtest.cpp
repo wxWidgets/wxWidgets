@@ -326,8 +326,6 @@ bool RegApp::OnInit()
     RegFrame *frame = new RegFrame(NULL, wxT("wxRegTest"), 50, 50, 600, 350);
     frame->Show(true);
 
-    SetTopWindow(frame);
-
     return true;
 }
 

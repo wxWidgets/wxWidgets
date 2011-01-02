@@ -324,7 +324,6 @@ bool MyApp::OnInit()
 #endif // !USE_SIMPLE_HELP_PROVIDER
 
     frame->Show(true);
-    SetTopWindow(frame);
 
     // initialise the help system: this means that we'll use doc.hlp file under
     // Windows and that the HTML docs are in the subdirectory doc for platforms

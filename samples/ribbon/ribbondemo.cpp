@@ -139,7 +139,6 @@ bool MyApp::OnInit()
         return false;
 
     wxFrame* frame = new MyFrame;
-    SetTopWindow(frame);
     frame->Show();
 
     return true;

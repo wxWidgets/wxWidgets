@@ -231,7 +231,6 @@ bool MyApp::OnInit()
     frame->Centre();
     frame->Show();
 
-    SetTopWindow(frame);
     return true;
 }
 

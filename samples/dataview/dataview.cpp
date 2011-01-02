@@ -242,7 +242,6 @@ bool MyApp::OnInit()
 
     MyFrame *frame =
         new MyFrame(NULL, "wxDataViewCtrl sample", 40, 40, 1000, 540);
-    SetTopWindow(frame);
 
     frame->Show(true);
     return true;

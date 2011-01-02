@@ -102,8 +102,6 @@ bool MyApp::OnInit()
                                  wxDEFAULT_FRAME_STYLE);
     frame->Show(true);
 
-    SetTopWindow(frame);
-
     return true;
 }
 

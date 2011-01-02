@@ -347,9 +347,8 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(wxT("Drawing sample"),
                                  wxDefaultPosition, wxSize(550, 840));
 
-    // Show it and tell the application that it's our main window
+    // Show it
     frame->Show(true);
-    SetTopWindow(frame);
 
     if ( !LoadImages() )
     {

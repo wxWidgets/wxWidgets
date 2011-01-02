@@ -123,8 +123,6 @@ bool MyApp::OnInit(void)
     frame->Centre(wxBOTH);
     frame->Show();
 
-    SetTopWindow(frame);
-
     return true;
 }
 

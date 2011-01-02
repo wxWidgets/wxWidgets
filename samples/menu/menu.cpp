@@ -365,8 +365,6 @@ bool MyApp::OnInit()
     frame->SetStatusText(wxT("Welcome to wxWidgets menu sample"));
 #endif // wxUSE_STATUSBAR
 
-    SetTopWindow(frame);
-
     return true;
 }
 

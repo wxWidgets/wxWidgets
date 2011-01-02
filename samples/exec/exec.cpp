@@ -413,9 +413,8 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(wxT("Exec wxWidgets sample"),
                                  wxDefaultPosition, wxSize(500, 140));
 
-    // Show it and tell the application that it's our main window
+    // Show it
     frame->Show(true);
-    SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the

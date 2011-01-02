@@ -89,8 +89,6 @@ bool MyApp::OnInit()
     frame->CenterOnScreen();
     frame->Show(true);
 
-    SetTopWindow(frame);
-
     return true;
 }
 

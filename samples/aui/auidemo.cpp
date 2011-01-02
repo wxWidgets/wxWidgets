@@ -570,7 +570,6 @@ bool MyApp::OnInit()
                                  wxT("wxAUI Sample Application"),
                                  wxDefaultPosition,
                                  wxSize(800, 600));
-    SetTopWindow(frame);
     frame->Show();
 
     return true;

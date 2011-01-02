@@ -47,7 +47,6 @@ bool MyApp::OnInit()
 
     // Create the main window
     MyFrame *frame = new MyFrame();
-    SetTopWindow(frame);
 
     // Problem with generic wxNotebook implementation whereby it doesn't size
     // properly unless you set the size again

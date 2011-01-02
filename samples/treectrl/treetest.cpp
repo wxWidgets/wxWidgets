@@ -198,7 +198,6 @@ bool MyApp::OnInit()
 
     // Show the frame
     frame->Show(true);
-    SetTopWindow(frame);
 
     return true;
 }

@@ -190,9 +190,8 @@ bool MyApp::OnInit()
   // Create the main application window
   MyFrame *frame = new MyFrame();
 
-  // Show it and tell the application that it's our main window
+  // Show it
   frame->Show(true);
-  SetTopWindow(frame);
 
   // success
   return true;

@@ -136,7 +136,7 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame((wxFrame *) NULL, wxT("Validator Test"),
                                  50, 50, 300, 250);
     frame->Show(true);
-    SetTopWindow(frame);
+
     return true;
 }
 
