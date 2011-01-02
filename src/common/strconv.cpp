@@ -2183,7 +2183,7 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
         {
 #if SIZEOF_WCHAR_T == 4
             wxT("UCS-4"),
-#elif SIZEOF_WCHAR_T = 2
+#elif SIZEOF_WCHAR_T == 2
             wxT("UCS-2"),
 #endif
             NULL
