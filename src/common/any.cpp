@@ -471,7 +471,10 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplwxString)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstCharPtr)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstWchar_tPtr)
 
+#if wxUSE_DATETIME
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
+#endif // wxUSE_DATETIME
+
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxObject*>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxArrayString>)
 
