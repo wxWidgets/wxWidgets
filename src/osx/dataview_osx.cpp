@@ -88,7 +88,7 @@ wxOSXDataViewModelNotifier::wxOSXDataViewModelNotifier(wxDataViewCtrl* initDataV
                            :m_DataViewCtrlPtr(initDataViewCtrlPtr)
 {
   if (initDataViewCtrlPtr == NULL)
-    wxFAIL_MSG(_("Pointer to dataview control must not be NULL"));
+    wxFAIL_MSG("Pointer to dataview control must not be NULL");
 }
 
 bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataViewItem const& item)
@@ -96,7 +96,7 @@ bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataV
   bool noFailureFlag;
 
 
-  wxCHECK_MSG(item.IsOk(),false,_("Added item is invalid."));
+  wxCHECK_MSG(item.IsOk(),false,"Added item is invalid.");
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,item);
   AdjustRowHeight(item);
   return noFailureFlag;
@@ -117,8 +117,8 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
 
 bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
 {
-  wxCHECK_MSG(item.IsOk(),             false,_("Changed item is invalid."));
-  wxCHECK_MSG(GetOwner() != NULL,false,_("Owner not initialized."));
+  wxCHECK_MSG(item.IsOk(),             false,"Changed item is invalid.");
+  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
    // sent the equivalent wxWidget event:
@@ -165,7 +165,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
   bool noFailureFlag;
 
 
-  wxCHECK_MSG(item.IsOk(),false,_("To be deleted item is invalid."));
+  wxCHECK_MSG(item.IsOk(),false,"To be deleted item is invalid.");
  // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
@@ -198,8 +198,8 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
 
 bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsigned int col)
 {
-  wxCHECK_MSG(item.IsOk(),             false,_("Passed item is invalid."));
-  wxCHECK_MSG(GetOwner() != NULL,false,_("Owner not initialized."));
+  wxCHECK_MSG(item.IsOk(),             false,"Passed item is invalid.");
+  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
     wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
@@ -355,7 +355,7 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
 
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,false,_("Pointer to native control must not be NULL."));
+  wxCHECK_MSG(dataViewWidgetPtr != NULL,false,"Pointer to native control must not be NULL.");
   if (wxDataViewCtrlBase::AssociateModel(model) && dataViewWidgetPtr->AssociateModel(model))
   {
     if (model != NULL)
@@ -381,12 +381,12 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
  // first, some error checking:
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,                                         false,_("Pointer to native control must not be NULL."));
-  wxCHECK_MSG(columnPtr != NULL,                                                 false,_("Column pointer must not be NULL."));
-  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,_("Column does not have a renderer."));
-  wxCHECK_MSG(GetModel() != NULL,                                          false,_("No model associated with control."));
+  wxCHECK_MSG(dataViewWidgetPtr != NULL,                                         false,"Pointer to native control must not be NULL.");
+  wxCHECK_MSG(columnPtr != NULL,                                                 false,"Column pointer must not be NULL.");
+  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,"Column does not have a renderer.");
+  wxCHECK_MSG(GetModel() != NULL,                                          false,"No model associated with control.");
   wxCHECK_MSG((columnPtr->GetModelColumn() >= 0) &&
-              (columnPtr->GetModelColumn() < GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
+              (columnPtr->GetModelColumn() < GetModel()->GetColumnCount()),false,"Column's model column has no equivalent in the associated model.");
 
  // add column to wxWidget's internal structure:
   if (wxDataViewCtrlBase::InsertColumn(pos,columnPtr))
@@ -409,7 +409,7 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
       m_ColumnPtrs.Remove(columnPtr);
       delete columnPtr;
      // and send a message in debug mode:
-      wxFAIL_MSG(_("Column could not be added to native control."));
+      wxFAIL_MSG("Column could not be added to native control.");
      // failed:
       return false;
     }
@@ -418,7 +418,7 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   {
    // clean-up:
     delete columnPtr;
-    wxFAIL_MSG(_("Could not add column to internal structures."));
+    wxFAIL_MSG("Could not add column to internal structures.");
    // failed:
     return false;
   }
@@ -607,7 +607,7 @@ void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
   wxDataViewItemArray items;
 
 
-  wxCHECK_RET(GetModel() != NULL,_("Model pointer not initialized."));
+  wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
   noOfChildren = GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
