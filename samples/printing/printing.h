@@ -87,10 +87,10 @@ public:
     MyPrintout(MyFrame* frame, const wxString &title = wxT("My printout"))
         : wxPrintout(title) { m_frame=frame; }
 
-    bool OnPrintPage(int page);
-    bool HasPage(int page);
-    bool OnBeginDocument(int startPage, int endPage);
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
+    virtual bool OnPrintPage(int page);
+    virtual bool HasPage(int page);
+    virtual bool OnBeginDocument(int startPage, int endPage);
+    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
 
     void DrawPageOne();
     void DrawPageTwo();
