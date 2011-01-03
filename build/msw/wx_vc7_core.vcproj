@@ -5069,6 +5069,9 @@
 				RelativePath="..\..\include\wx\commandlinkbutton.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\compositewin.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\control.h">
 			</File>
 			<File

@@ -5965,6 +5965,10 @@ SOURCE=..\..\include\wx\commandlinkbutton.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\compositewin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\control.h
 # End Source File
 # Begin Source File

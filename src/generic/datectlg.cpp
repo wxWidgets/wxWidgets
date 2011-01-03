@@ -378,6 +378,14 @@ wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
     return m_combo->GetBestSize();
 }
 
+wxWindowList wxDatePickerCtrlGeneric::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_combo);
+    parts.push_back(m_popup);
+    return parts;
+}
+
 // ----------------------------------------------------------------------------
 // wxDatePickerCtrlGeneric API
 // ----------------------------------------------------------------------------
