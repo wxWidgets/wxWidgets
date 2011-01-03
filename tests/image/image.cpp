@@ -24,6 +24,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/image.h"
+#include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
 #include "wx/mstream.h"
@@ -870,11 +871,33 @@ void ImageTestCase::CompareLoadedImage()
 
 }
 
-static
-void CompareImage(const wxImageHandler& handler, const wxImage& expected)
+enum
 {
-    bool testAlpha = expected.HasAlpha();
+    wxIMAGE_HAVE_ALPHA = (1 << 0),
+    wxIMAGE_HAVE_PALETTE = (1 << 1)
+};
+
+static
+void CompareImage(const wxImageHandler& handler, const wxImage& image,
+    int properties = 0, const wxImage *compareTo = NULL)
+{
     wxBitmapType type = handler.GetType();
+
+    const bool testPalette = (properties & wxIMAGE_HAVE_PALETTE) != 0;
+    /*
+    This is getting messy and should probably be transformed into a table
+    with image format features before it gets hairier.
+    */
+    if ( testPalette
+        && ( !(type == wxBITMAP_TYPE_BMP
+                || type == wxBITMAP_TYPE_GIF
+                || type == wxBITMAP_TYPE_PNG)
+            || type == wxBITMAP_TYPE_XPM) )
+    {
+        return;
+    }
+
+    const bool testAlpha = (properties & wxIMAGE_HAVE_ALPHA) != 0;
     if (testAlpha
         && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA) )
     {
@@ -895,7 +918,7 @@ void CompareImage(const wxImageHandler& handler, const wxImage& expected)
     }
 
     wxMemoryOutputStream memOut;
-    if ( !expected.SaveFile(memOut, type) )
+    if ( !image.SaveFile(memOut, type) )
     {
         // Unfortunately we can't know if the handler just doesn't support
         // saving images, or if it failed to save.
@@ -908,30 +931,37 @@ void CompareImage(const wxImageHandler& handler, const wxImage& expected)
     wxImage actual(memIn);
     CPPUNIT_ASSERT(actual.IsOk());
 
-    CPPUNIT_ASSERT( actual.GetSize() == expected.GetSize() );
+    const wxImage *expected = compareTo ? compareTo : &image;
+    CPPUNIT_ASSERT( actual.GetSize() == expected->GetSize() );
 
+    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
     WX_ASSERT_MESSAGE
     (
-        ("Compare test '%s' for saving failed", handler.GetExtension()),
+        ("Compare test '%s (%d-bit)' for saving failed",
+            handler.GetExtension(), bitsPerPixel),
 
-        memcmp(actual.GetData(), expected.GetData(),
-            expected.GetWidth() * expected.GetHeight() * 3) == 0
+        memcmp(actual.GetData(), expected->GetData(),
+            expected->GetWidth() * expected->GetHeight() * 3) == 0
     );
+
+#if wxUSE_PALETTE
+    CPPUNIT_ASSERT(actual.HasPalette()
+        == (testPalette || type == wxBITMAP_TYPE_XPM));
+#endif
+
+    CPPUNIT_ASSERT( actual.HasAlpha() == testAlpha);
 
     if (!testAlpha)
     {
         return;
     }
 
-
-    CPPUNIT_ASSERT( actual.HasAlpha() );
-
     WX_ASSERT_MESSAGE
     (
         ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
 
-        memcmp(actual.GetAlpha(), expected.GetAlpha(),
-            expected.GetWidth() * expected.GetHeight()) == 0
+        memcmp(actual.GetAlpha(), expected->GetAlpha(),
+            expected->GetWidth() * expected->GetHeight()) == 0
     );
 }
 
@@ -940,6 +970,19 @@ void ImageTestCase::CompareSavedImage()
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
     CPPUNIT_ASSERT( !expected24.HasAlpha() );
+
+    unsigned long numColours = expected24.CountColours();
+    wxImage expected8 = expected24.ConvertToGreyscale();
+    numColours = expected8.CountColours();
+
+    unsigned char greys[256];
+    for (size_t i = 0; i < 256; ++i)
+    {
+        greys[i] = i;
+    }
+    wxPalette palette(256, greys, greys, greys);
+    expected8.SetPalette(palette);
+    expected8.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_8BPP_PALETTE);
 
     // Create an image with alpha based on the loaded image
     wxImage expected32(expected24);
@@ -961,9 +1004,80 @@ void ImageTestCase::CompareSavedImage()
     {
         wxImageHandler *handler = (wxImageHandler *) node->GetData();
 
+#if wxUSE_PALETTE
+        CompareImage(*handler, expected8, wxIMAGE_HAVE_PALETTE);
+#endif
         CompareImage(*handler, expected24);
-        CompareImage(*handler, expected32);
+        CompareImage(*handler, expected32, wxIMAGE_HAVE_ALPHA);
     }
+
+
+    expected8.LoadFile("horse.gif");
+    CPPUNIT_ASSERT( expected8.IsOk() );
+    CPPUNIT_ASSERT( expected8.HasPalette() );
+
+    expected8.SetAlpha();
+
+    width = expected8.GetWidth();
+    height = expected8.GetHeight();
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            expected8.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
+        }
+    }
+
+    /*
+    The image contains 256 indexed colours and needs another palette entry
+    for storing the transparency index. This results in wanting 257 palette
+    entries but that amount is not supported by PNG, as such this image
+    should not contain a palette (but still have alpha) and be stored as a
+    true colour image instead.
+    */
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_ALPHA);
+
+#if wxUSE_PALETTE
+    /*
+    Now do the same test again but remove one (random) palette entry. This
+    should result in saving the PNG with a palette.
+    */
+    unsigned char red[256], green[256], blue[256];
+    const wxPalette& pal = expected8.GetPalette();
+    const int paletteCount = pal.GetColoursCount();
+    for (int i = 0; i < paletteCount; ++i)
+    {
+        expected8.GetPalette().GetRGB(i, &red[i], &green[i], &blue[i]);
+    }
+    wxPalette newPal(paletteCount - 1, red, green, blue);
+    expected8.Replace(
+        red[paletteCount-1], green[paletteCount-1], blue[paletteCount-1],
+        red[paletteCount-2], green[paletteCount-2], blue[paletteCount-2]);
+
+    expected8.SetPalette(newPal);
+    /*
+    Explicitly make known we want a palettised PNG. If we don't then this
+    particular image gets saved as a true colour image because there's an
+    alpha channel present and the PNG saver prefers to keep the alpha over
+    saving as a palettised image that has alpha converted to a mask.
+    */
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+
+    wxImage ref8 = expected8;
+
+    /*
+    Convert the alpha channel to a mask like the PNG saver does. Also convert
+    the colour used for transparency from 1,0,0 to 2,0,0. The latter gets
+    done by the PNG loader in search of an unused colour to use for
+    transparency (this should be fixed).
+    */
+    ref8.ConvertAlphaToMask();
+    ref8.Replace(1, 0, 0,  2, 0, 0);
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_PALETTE, &ref8);
+#endif
 }
 
 #endif //wxUSE_IMAGE

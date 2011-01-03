@@ -642,6 +642,26 @@ error:
 }
 
 // ----------------------------------------------------------------------------
+// SaveFile() helpers
+// ----------------------------------------------------------------------------
+
+static int PaletteFind(const png_color& clr,
+    const png_color *pal, png_uint_16 palCount)
+{
+   for (png_uint_16 i = 0; i < palCount; i++)
+   {
+      if (    (clr.red   == pal[i].red)
+           && (clr.green == pal[i].green)
+           && (clr.blue  == pal[i].blue))
+      {
+         return i;
+      }
+   }
+
+   return wxNOT_FOUND;
+}
+
+// ----------------------------------------------------------------------------
 // writing PNGs
 // ----------------------------------------------------------------------------
 
@@ -693,18 +713,81 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     //     explanation why this line is mandatory
     png_set_write_fn( png_ptr, &wxinfo, wx_PNG_stream_writer, NULL);
 
-    const int iColorType = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT)
+    const bool bHasPngFormatOption
+        = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT);
+
+    int iColorType = bHasPngFormatOption
                             ? image->GetOptionInt(wxIMAGE_OPTION_PNG_FORMAT)
                             : wxPNG_TYPE_COLOUR;
-    const int iBitDepth = image->HasOption(wxIMAGE_OPTION_PNG_BITDEPTH)
-                            ? image->GetOptionInt(wxIMAGE_OPTION_PNG_BITDEPTH)
-                            : 8;
 
     bool bHasAlpha = image->HasAlpha();
     bool bHasMask = image->HasMask();
-    bool bUseAlpha = bHasAlpha || bHasMask;
+
+#if wxUSE_PALETTE
+    /*
+    Only save as an indexed image if the number of palette entries does not
+    exceed libpng's limit (256).
+    We assume here that we will need an extra palette entry if there's an
+    alpha or mask, regardless of whether a possibly needed conversion from
+    alpha to a mask fails (unlikely), or whether the mask colour already
+    can be found in the palette (more likely). In the latter case an extra
+    palette entry would not be required later on and the image could actually
+    be saved as a palettised PNG (instead now it will be saved as true colour).
+    A little bit of precision is lost, but at the benefit of a lot more
+    simplified code.
+    */
+    bool bUsePalette =
+        (!bHasPngFormatOption || iColorType == wxPNG_TYPE_PALETTE)
+        && image->HasPalette()
+        && image->GetPalette().GetColoursCount()
+            + ((bHasAlpha || bHasMask) ? 1 : 0) <= PNG_MAX_PALETTE_LENGTH;
+
+    wxImage temp_image(*image);
+    if (bUsePalette && image->HasAlpha() && !bHasMask)
+    {
+        /*
+        Only convert alpha to mask if saving as a palettised image was
+        explicitly requested. We don't want to lose alpha's precision
+        by converting to a mask just to be able to save palettised.
+        */
+        if (iColorType == wxPNG_TYPE_PALETTE
+            && temp_image.ConvertAlphaToMask())
+        {
+            image = &temp_image;
+            bHasMask = true;
+            bHasAlpha = image->HasAlpha();
+        }
+        else
+        {
+            bUsePalette = false;
+            iColorType = wxPNG_TYPE_COLOUR;
+        }
+    }
+#else
+    bool bUsePalette = false;
+#endif // wxUSE_PALETTE
+
+    bool bUseAlpha = !bUsePalette && (bHasAlpha || bHasMask);
+
+    png_color mask;
+    if (bHasMask)
+    {
+        mask.red   = image->GetMaskRed();
+        mask.green = image->GetMaskGreen();
+        mask.blue  = image->GetMaskBlue();
+    }
+
 
     int iPngColorType;
+
+#if wxUSE_PALETTE
+    if (bUsePalette)
+    {
+        iPngColorType = PNG_COLOR_TYPE_PALETTE;
+        iColorType = wxPNG_TYPE_PALETTE;
+    }
+    else
+#endif // wxUSE_PALETTE
     if ( iColorType==wxPNG_TYPE_COLOUR )
     {
         iPngColorType = bUseAlpha ? PNG_COLOR_TYPE_RGB_ALPHA
@@ -731,10 +814,64 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     if (image->HasOption(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE))
         png_set_compression_buffer_size( png_ptr, image->GetOptionInt(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE) );
 
+    int iBitDepth = !bUsePalette && image->HasOption(wxIMAGE_OPTION_PNG_BITDEPTH)
+                            ? image->GetOptionInt(wxIMAGE_OPTION_PNG_BITDEPTH)
+                            : 8;
+
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(),
                   iBitDepth, iPngColorType,
                   PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,
                   PNG_FILTER_TYPE_BASE);
+
+#if wxUSE_PALETTE
+    if (bUsePalette)
+    {
+        const wxPalette& pal = image->GetPalette();
+        const int palCount = pal.GetColoursCount();
+        png_colorp palette = (png_colorp) malloc(
+            (palCount + 1 /*headroom for trans */) * sizeof(png_color));
+
+        if (!palette)
+        {
+            png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+            if (verbose)
+            {
+               wxLogError(_("Couldn't save PNG image."));
+            }
+            return false;
+        }
+
+        png_uint_16 i;
+        for (i = 0; i < palCount; ++i)
+        {
+            pal.GetRGB(i, &palette[i].red, &palette[i].green, &palette[i].blue);
+        }
+
+        png_uint_16 numPalette = palCount;
+        if (bHasMask)
+        {
+            int index = PaletteFind(mask, palette, numPalette);
+
+            if (index)
+            {
+                if (index == wxNOT_FOUND)
+                {
+                    numPalette++;
+                    index = palCount;
+                    palette[index] = mask;
+                }
+
+                wxSwap(palette[0], palette[index]);
+            }
+
+            png_byte trans = 0;
+            png_set_tRNS(png_ptr, info_ptr, &trans, 1, NULL);
+        }
+
+        png_set_PLTE(png_ptr, info_ptr, palette, numPalette);
+        free (palette);
+    }
+#endif // wxUSE_PALETTE
 
     int iElements;
     png_color_8 sig_bit;
@@ -806,15 +943,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     int iHeight = image->GetHeight();
     int iWidth = image->GetWidth();
 
-    unsigned char uchMaskRed = 0, uchMaskGreen = 0, uchMaskBlue = 0;
-
-    if ( bHasMask )
-    {
-        uchMaskRed = image->GetMaskRed();
-        uchMaskGreen = image->GetMaskGreen();
-        uchMaskBlue = image->GetMaskBlue();
-    }
-
     unsigned char *pColors = image->GetData();
 
     for (int y = 0; y != iHeight; ++y)
@@ -822,9 +950,10 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         unsigned char *pData = data;
         for (int x = 0; x != iWidth; x++)
         {
-            unsigned char uchRed = *pColors++;
-            unsigned char uchGreen = *pColors++;
-            unsigned char uchBlue = *pColors++;
+            png_color clr;
+            clr.red   = *pColors++;
+            clr.green = *pColors++;
+            clr.blue  = *pColors++;
 
             switch ( iColorType )
             {
@@ -833,13 +962,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                     // fall through
 
                 case wxPNG_TYPE_COLOUR:
-                    *pData++ = uchRed;
+                    *pData++ = clr.red;
                     if ( iBitDepth == 16 )
                         *pData++ = 0;
-                    *pData++ = uchGreen;
+                    *pData++ = clr.green;
                     if ( iBitDepth == 16 )
                         *pData++ = 0;
-                    *pData++ = uchBlue;
+                    *pData++ = clr.blue;
                     if ( iBitDepth == 16 )
                         *pData++ = 0;
                     break;
@@ -849,9 +978,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                         // where do these coefficients come from? maybe we
                         // should have image options for them as well?
                         unsigned uiColor =
-                            (unsigned) (76.544*(unsigned)uchRed +
-                                        150.272*(unsigned)uchGreen +
-                                        36.864*(unsigned)uchBlue);
+                            (unsigned) (76.544*(unsigned)clr.red +
+                                        150.272*(unsigned)clr.green +
+                                        36.864*(unsigned)clr.blue);
 
                         *pData++ = (unsigned char)((uiColor >> 8) & 0xFF);
                         if ( iBitDepth == 16 )
@@ -860,9 +989,14 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                     break;
 
                 case wxPNG_TYPE_GREY_RED:
-                    *pData++ = uchRed;
+                    *pData++ = clr.red;
                     if ( iBitDepth == 16 )
                         *pData++ = 0;
+                    break;
+
+                case wxPNG_TYPE_PALETTE:
+                    *pData++ = (unsigned char) PaletteFind(clr,
+                        info_ptr->palette, info_ptr->num_palette);
                     break;
             }
 
@@ -874,9 +1008,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
                 if ( bHasMask )
                 {
-                    if ( (uchRed == uchMaskRed)
-                            && (uchGreen == uchMaskGreen)
-                                && (uchBlue == uchMaskBlue) )
+                    if ( (clr.red == mask.red)
+                            && (clr.green == mask.green)
+                                && (clr.blue == mask.blue) )
                         uchAlpha = 0;
                 }
 

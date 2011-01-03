@@ -33,7 +33,8 @@ enum
 {
     wxPNG_TYPE_COLOUR = 0,
     wxPNG_TYPE_GREY = 2,
-    wxPNG_TYPE_GREY_RED = 3
+    wxPNG_TYPE_GREY_RED = 3,
+    wxPNG_TYPE_PALETTE = 4
 };
 
 class WXDLLIMPEXP_CORE wxPNGHandler: public wxImageHandler
