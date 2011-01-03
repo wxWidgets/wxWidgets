@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxPreviewFrame;
 class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
+class wxPrintPageTextCtrl;
 
 //----------------------------------------------------------------------------
 // error consts
@@ -434,6 +435,8 @@ private:
 #define wxID_PREVIEW_FIRST      6
 #define wxID_PREVIEW_LAST       7
 #define wxID_PREVIEW_GOTO       8
+#define wxID_PREVIEW_ZOOM_IN    9
+#define wxID_PREVIEW_ZOOM_OUT   10
 
 class WXDLLIMPEXP_CORE wxPreviewControlBar: public wxPanel
 {
@@ -455,35 +458,64 @@ public:
     virtual wxPrintPreviewBase *GetPrintPreview() const
         { return m_printPreview; }
 
+
+    // Implementation only from now on.
     void OnWindowClose(wxCommandEvent& event);
     void OnNext();
     void OnPrevious();
     void OnFirst();
     void OnLast();
-    void OnGoto();
+    void OnGotoPage();
     void OnPrint();
+
     void OnPrintButton(wxCommandEvent& WXUNUSED(event)) { OnPrint(); }
     void OnNextButton(wxCommandEvent & WXUNUSED(event)) { OnNext(); }
     void OnPreviousButton(wxCommandEvent & WXUNUSED(event)) { OnPrevious(); }
     void OnFirstButton(wxCommandEvent & WXUNUSED(event)) { OnFirst(); }
     void OnLastButton(wxCommandEvent & WXUNUSED(event)) { OnLast(); }
-    void OnGotoButton(wxCommandEvent & WXUNUSED(event)) { OnGoto(); }
-    void OnZoom(wxCommandEvent& event);
     void OnPaint(wxPaintEvent& event);
+
+    void OnUpdateNextButton(wxUpdateUIEvent& event)
+        { event.Enable(IsNextEnabled()); }
+    void OnUpdatePreviousButton(wxUpdateUIEvent& event)
+        { event.Enable(IsPreviousEnabled()); }
+    void OnUpdateFirstButton(wxUpdateUIEvent& event)
+        { event.Enable(IsFirstEnabled()); }
+    void OnUpdateLastButton(wxUpdateUIEvent& event)
+        { event.Enable(IsLastEnabled()); }
+    void OnUpdateZoomInButton(wxUpdateUIEvent& event)
+        { event.Enable(IsZoomInEnabled()); }
+    void OnUpdateZoomOutButton(wxUpdateUIEvent& event)
+        { event.Enable(IsZoomOutEnabled()); }
+
+    // These methods are not private because they are called by wxPreviewCanvas.
+    void DoZoomIn();
+    void DoZoomOut();
 
 protected:
     wxPrintPreviewBase*   m_printPreview;
     wxButton*             m_closeButton;
-    wxButton*             m_nextPageButton;
-    wxButton*             m_previousPageButton;
-    wxButton*             m_printButton;
     wxChoice*             m_zoomControl;
-    wxButton*             m_firstPageButton;
-    wxButton*             m_lastPageButton;
-    wxButton*             m_gotoPageButton;
+    wxPrintPageTextCtrl* m_currentPageText;
+
     long                  m_buttonFlags;
 
 private:
+    void DoGotoPage(int page);
+
+    void DoZoom();
+
+    bool IsNextEnabled() const;
+    bool IsPreviousEnabled() const;
+    bool IsFirstEnabled() const;
+    bool IsLastEnabled() const;
+    bool IsZoomInEnabled() const;
+    bool IsZoomOutEnabled() const;
+
+    void OnZoomInButton(wxCommandEvent & WXUNUSED(event)) { DoZoomIn(); }
+    void OnZoomOutButton(wxCommandEvent & WXUNUSED(event)) { DoZoomOut(); }
+    void OnZoomChoice(wxCommandEvent& WXUNUSED(event)) { DoZoom(); }
+
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxPreviewControlBar);
 };
