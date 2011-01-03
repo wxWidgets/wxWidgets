@@ -972,7 +972,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = tool_id;
+    item.toolid = tool_id;
     item.state = 0;
     item.proportion = 0;
     item.kind = kind;
@@ -981,8 +981,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
-    if (item.id == wxID_ANY)
-        item.id = wxNewId();
+    if (item.toolid == wxID_ANY)
+        item.toolid = wxNewId();
 
     if (!item.disabled_bitmap.IsOk())
     {
@@ -1010,7 +1010,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = control->GetId();
+    item.toolid = control->GetId();
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_CONTROL;
@@ -1039,7 +1039,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = tool_id;
+    item.toolid = tool_id;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_LABEL;
@@ -1048,8 +1048,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
-    if (item.id == wxID_ANY)
-        item.id = wxNewId();
+    if (item.toolid == wxID_ANY)
+        item.toolid = wxNewId();
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1064,7 +1064,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
     item.disabled_bitmap = wxNullBitmap;
     item.active = true;
     item.dropdown = false;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_SEPARATOR;
@@ -1087,7 +1087,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = pixels;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_SPACER;
@@ -1110,7 +1110,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = proportion;
     item.kind = wxITEM_SPACER;
@@ -1167,7 +1167,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindTool(int tool_id) const
     for (i = 0, count = m_items.GetCount(); i < count; ++i)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
-        if (item.id == tool_id)
+        if (item.toolid == tool_id)
             return &item;
     }
 
@@ -1760,7 +1760,7 @@ int wxAuiToolBar::GetToolIndex(int tool_id) const
     for (i = 0; i < count; ++i)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
-        if (item.id == tool_id)
+        if (item.toolid == tool_id)
             return i;
     }
 
@@ -2169,10 +2169,10 @@ void wxAuiToolBar::DoIdleUpdate()
     {
         wxAuiToolBarItem& item = m_items.Item(i);
 
-        if (item.id == -1)
+        if (item.toolid == -1)
             continue;
 
-        wxUpdateUIEvent evt(item.id);
+        wxUpdateUIEvent evt(item.toolid);
         evt.SetEventObject(this);
 
         if (handler->ProcessEvent(evt))
@@ -2573,9 +2573,9 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         UnsetToolTip();
 
         // fire the tool dropdown event
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_action_item->id);
+        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_action_item->toolid);
         e.SetEventObject(this);
-        e.SetToolId(m_action_item->id);
+        e.SetToolId(m_action_item->toolid);
 
         int mouse_x = evt.GetX();
         wxRect rect = m_action_item->sizer_item->GetRect();
@@ -2636,14 +2636,14 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         {
             UnsetToolTip();
 
-            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
+            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->toolid);
             e.SetEventObject(this);
 
             if (hit_item->kind == wxITEM_CHECK || hit_item->kind == wxITEM_RADIO)
             {
                 const bool toggle = !(m_action_item->state & wxAUI_BUTTON_STATE_CHECKED);
 
-                ToggleTool(m_action_item->id, toggle);
+                ToggleTool(m_action_item->toolid, toggle);
 
                 // repaint immediately
                 Refresh(false);
@@ -2712,9 +2712,9 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
     {
         if (hit_item->kind == wxITEM_NORMAL)
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_action_item->id);
+            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_action_item->toolid);
             e.SetEventObject(this);
-            e.SetToolId(m_action_item->id);
+            e.SetToolId(m_action_item->toolid);
             e.SetClickPoint(m_action_pos);
             GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
@@ -2785,9 +2785,9 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
     {
         if (hit_item->kind == wxITEM_NORMAL)
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, m_action_item->id);
+            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, m_action_item->toolid);
             e.SetEventObject(this);
-            e.SetToolId(m_action_item->id);
+            e.SetToolId(m_action_item->toolid);
             e.SetClickPoint(m_action_pos);
             GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
@@ -2811,7 +2811,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         // event sent sometime in the future (see OnLeftUp())
         wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, GetId());
         e.SetEventObject(this);
-        e.SetToolId(m_action_item->id);
+        e.SetToolId(m_action_item->toolid);
         m_dragging = GetEventHandler()->ProcessEvent(e) && !e.GetSkipped();
 
         DoIdleUpdate();

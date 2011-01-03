@@ -95,7 +95,7 @@ public:
     void SetItemRect(const wxRect& r) { rect = r;    }
 
     int GetToolId() const  { return tool_id; }
-    void SetToolId(int id) { tool_id = id;   }
+    void SetToolId(int toolid) { tool_id = toolid; }
 
 private:
 
@@ -120,7 +120,7 @@ public:
         window = NULL;
         sizer_item = NULL;
         spacer_pixels = 0;
-        id = 0;
+        toolid = 0;
         kind = wxITEM_NORMAL;
         state = 0;  // normal, enabled
         proportion = 0;
@@ -154,7 +154,7 @@ public:
         sizer_item = c.sizer_item;
         min_size = c.min_size;
         spacer_pixels = c.spacer_pixels;
-        id = c.id;
+        toolid = c.toolid;
         kind = c.kind;
         state = c.state;
         proportion = c.proportion;
@@ -169,8 +169,8 @@ public:
     void SetWindow(wxWindow* w) { window = w; }
     wxWindow* GetWindow() { return window; }
 
-    void SetId(int new_id) { id = new_id; }
-    int GetId() const { return id; }
+    void SetId(int new_id) { toolid = new_id; }
+    int GetId() const { return toolid; }
 
     void SetKind(int new_kind) { kind = new_kind; }
     int GetKind() const { return kind; }
@@ -235,7 +235,7 @@ private:
     wxSizerItem* sizer_item;   // sizer item
     wxSize min_size;           // item's minimum size
     int spacer_pixels;         // size of a spacer
-    int id;                    // item's id
+    int toolid;                // item's id
     int kind;                  // item's kind
     int state;                 // state
     int proportion;            // proportion
