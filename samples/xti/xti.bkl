@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- $Id: xti.bkl 48186 2007-08-19 19:59:54Z FM $ -->
+
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="xti" template="wx_sample" template_append="wx_append">
+        <sources>xti.cpp classlist.cpp codereadercallback.cpp</sources>
+        
+        <wx-lib>core</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>
