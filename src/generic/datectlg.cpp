@@ -38,6 +38,7 @@
 #include "wx/combo.h"
 
 #include "wx/datectrl.h"
+#include "wx/generic/datectrl.h"
 
 // ----------------------------------------------------------------------------
 // constants
