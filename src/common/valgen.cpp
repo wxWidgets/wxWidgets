@@ -38,7 +38,7 @@
 #endif
 
 #include "wx/spinctrl.h"
-#include "wx/datectrl.h"
+// #include "wx/datectrl.h" -- can't use it in this (core) file for now
 
 #if wxUSE_SPINBTN
     #include "wx/spinbutt.h"
