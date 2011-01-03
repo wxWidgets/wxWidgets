@@ -1645,7 +1645,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     m_slider = new wxSlider(this, wxID_SLIDER, 0, // init
                             0, // start
-                            0, // end
+                            1, // end, dummy but must be greater than start
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     sizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
