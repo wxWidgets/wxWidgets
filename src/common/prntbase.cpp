@@ -32,6 +32,7 @@
     #include "wx/layout.h"
     #include "wx/choice.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
     #include "wx/dcmemory.h"
     #include "wx/dcclient.h"
