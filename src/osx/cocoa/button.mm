@@ -101,6 +101,10 @@ wxSize wxButton::GetDefaultSize()
 
 @end
 
+@interface NSView(PossibleSizeMethods)
+- (NSControlSize)controlSize;
+@end
+
 namespace
 {
 
@@ -133,7 +137,7 @@ public:
         left = top = right = bottom = 0;
         NSControlSize size = NSRegularControlSize;
         if ( [m_osxView respondsToSelector:@selector(controlSize)] )
-            size = (NSControlSize) [m_osxView controlSize];
+            size = [m_osxView controlSize];
         else if ([m_osxView respondsToSelector:@selector(cell)])
         {
             id cell = [(id)m_osxView cell];
