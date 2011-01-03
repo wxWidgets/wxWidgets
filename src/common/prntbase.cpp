@@ -1400,8 +1400,6 @@ private:
 
 void wxPreviewControlBar::CreateButtons()
 {
-    SetSize(0, 0, 400, 40);
-
     SizerWithButtons sizer(this);
 
     // Print button group (a single button).
@@ -1614,7 +1612,7 @@ void wxPreviewFrame::CreateControlBar()
     if (m_printPreview->GetPrintoutForPrinting())
         buttons |= wxPREVIEW_PRINT;
 
-    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(0,0), wxSize(400, 40));
+    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this);
     m_controlBar->CreateButtons();
 }
 
