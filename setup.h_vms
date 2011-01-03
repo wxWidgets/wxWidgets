@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 14 December 2010                                                   *
+ * Date : 3 January 2011                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -458,6 +458,10 @@ typedef pid_t GPid;
 #define wxUSE_REARRANGECTRL 1
 
 #define wxUSE_ACCEL 1
+
+#define wxUSE_ARTPROVIDER_STD 1
+
+#define wxUSE_ARTPROVIDER_TANGO 1
 
 #define wxUSE_HOTKEY 1
 
