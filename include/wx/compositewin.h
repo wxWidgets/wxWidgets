@@ -90,7 +90,7 @@ private:
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
     template <class T>
-    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
+    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), T arg)
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
