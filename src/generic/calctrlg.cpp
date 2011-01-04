@@ -47,7 +47,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if wxHAS_NATIVE_CALENDARCTRL
+#ifdef wxHAS_NATIVE_CALENDARCTRL
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
 
