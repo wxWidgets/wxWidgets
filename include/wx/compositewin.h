@@ -18,6 +18,16 @@
 //     officially stabilized unless you are ready to change it with the next
 //     wxWidgets release.
 
+// FIXME-VC6: This compiler can't compile DoSetForAllParts() template function,
+// it can't determine whether the deduced type should be "T" or "const T&". And
+// without this function wxCompositeWindow is pretty useless so simply disable
+// this code for it, this does mean that setting colours/fonts/... for
+// composite controls won't work in the library compiled with it but so far
+// this only affects the generic wxDatePickerCtrl which is not used by default
+// under MSW anyhow so it doesn't seem to be worth it to spend time and uglify
+// the code to fix it.
+#ifndef __VISUALC6__
+
 // ----------------------------------------------------------------------------
 // wxCompositeWindow is a helper for implementing composite windows: to define
 // a class using subwindows, simply inherit from it specialized with the real
@@ -90,7 +100,7 @@ private:
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
     template <class T>
-    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), T arg)
+    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
@@ -106,5 +116,14 @@ private:
 
     wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindow, W);
 };
+
+#else // __VISUALC6__
+
+template <class W>
+class WXDLLIMPEXP_CORE wxCompositeWindow : public W
+{
+};
+
+#endif // !__VISUALC6__/__VISUALC6__
 
 #endif // _WX_COMPOSITEWIN_H_
