@@ -667,6 +667,8 @@ public:
            Multiple selection mode.
     @style{wxDV_ROW_LINES}
            Use alternating colours for rows if supported by platform and theme.
+           Currently only supported by the native GTK and OS X implementations
+           but not by the generic one.
     @style{wxDV_HORIZ_RULES}
            Display fine rules between row if supported.
     @style{wxDV_VERT_RULES}
