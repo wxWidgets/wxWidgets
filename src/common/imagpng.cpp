@@ -649,8 +649,9 @@ error:
 // SaveFile() helpers
 // ----------------------------------------------------------------------------
 
-static int PaletteFind(const png_color& clr,
-    const png_color *pal, int palCount)
+#if wxUSE_PALETTE
+
+static int PaletteFind(const png_color& clr, const png_color *pal, int palCount)
 {
    for (int i = 0; i < palCount; ++i)
    {
@@ -664,6 +665,8 @@ static int PaletteFind(const png_color& clr,
 
    return wxNOT_FOUND;
 }
+
+#endif // wxUSE_PALETTE
 
 // ----------------------------------------------------------------------------
 // writing PNGs
@@ -1004,10 +1007,12 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                         *pData++ = 0;
                     break;
 
+#if wxUSE_PALETTE
                 case wxPNG_TYPE_PALETTE:
                     *pData++ = (unsigned char) PaletteFind(clr,
                         palette, numPalette);
                     break;
+#endif // wxUSE_PALETTE
             }
 
             if ( bUseAlpha )
