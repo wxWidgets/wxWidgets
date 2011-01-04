@@ -579,19 +579,23 @@ wxPNGHandler::LoadFile(wxImage *image,
 #if wxUSE_PALETTE
     if (color_type == PNG_COLOR_TYPE_PALETTE)
     {
-        const size_t ncolors = info_ptr->num_palette;
-        unsigned char* r = new unsigned char[ncolors];
-        unsigned char* g = new unsigned char[ncolors];
-        unsigned char* b = new unsigned char[ncolors];
+        png_colorp palette = NULL;
+        int numPalette = 0;
 
-        for (size_t j = 0; j < ncolors; j++)
+        (void) png_get_PLTE(png_ptr, info_ptr, &palette, &numPalette);
+
+        unsigned char* r = new unsigned char[numPalette];
+        unsigned char* g = new unsigned char[numPalette];
+        unsigned char* b = new unsigned char[numPalette];
+
+        for (int j = 0; j < numPalette; j++)
         {
-            r[j] = info_ptr->palette[j].red;
-            g[j] = info_ptr->palette[j].green;
-            b[j] = info_ptr->palette[j].blue;
+            r[j] = palette[j].red;
+            g[j] = palette[j].green;
+            b[j] = palette[j].blue;
         }
 
-        image->SetPalette(wxPalette(ncolors, r, g, b));
+        image->SetPalette(wxPalette(numPalette, r, g, b));
         delete[] r;
         delete[] g;
         delete[] b;
@@ -824,11 +828,14 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                   PNG_FILTER_TYPE_BASE);
 
 #if wxUSE_PALETTE
+    png_colorp palette = NULL;
+    int numPalette = 0;
+
     if (bUsePalette)
     {
         const wxPalette& pal = image->GetPalette();
         const int palCount = pal.GetColoursCount();
-        png_colorp palette = (png_colorp) malloc(
+        palette = (png_colorp) malloc(
             (palCount + 1 /*headroom for trans */) * sizeof(png_color));
 
         if (!palette)
@@ -847,7 +854,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
             pal.GetRGB(i, &palette[i].red, &palette[i].green, &palette[i].blue);
         }
 
-        png_uint_16 numPalette = palCount;
+        numPalette = palCount;
         if (bHasMask)
         {
             int index = PaletteFind(mask, palette, numPalette);
@@ -870,6 +877,10 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
         png_set_PLTE(png_ptr, info_ptr, palette, numPalette);
         free (palette);
+        palette = NULL;
+
+        // Let palette point to libpng's copy of the palette.
+        (void) png_get_PLTE(png_ptr, info_ptr, &palette, &numPalette);
     }
 #endif // wxUSE_PALETTE
 
@@ -996,7 +1007,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
                 case wxPNG_TYPE_PALETTE:
                     *pData++ = (unsigned char) PaletteFind(clr,
-                        info_ptr->palette, info_ptr->num_palette);
+                        palette, numPalette);
                     break;
             }
 
