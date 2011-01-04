@@ -22,8 +22,6 @@
 // wxCheckListBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox,wxListBox)
-
 wxCheckListBox::wxCheckListBox() : wxListBox()
 {
     m_hasCheckBoxes = true;

@@ -20,7 +20,6 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 BEGIN_EVENT_TABLE(wxCheckListBox, wxCheckListBoxBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxCheckListBox,NSButton,NSControl,NSView)

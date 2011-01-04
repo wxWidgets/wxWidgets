@@ -24,7 +24,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
 

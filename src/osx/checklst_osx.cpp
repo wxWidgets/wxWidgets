@@ -24,8 +24,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
-
 BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
 END_EVENT_TABLE()
 
