@@ -105,8 +105,6 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 // wxButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
-
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString &label,
