@@ -516,7 +516,13 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
             wxBitmap* bmp = pen.GetStipple();
             if ( bmp && bmp->Ok() )
             {
-                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),(HPALETTE)bmp->GetPalette()->GetHPALETTE());
+                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+#if wxUSE_PALETTE
+                    (HPALETTE)bmp->GetPalette()->GetHPALETTE()
+#else
+                    NULL
+#endif
+                );
                 m_penBrush = new TextureBrush(m_penImage);
                 m_pen->SetBrush( m_penBrush );
             }
@@ -619,7 +625,13 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
         if ( bmp && bmp->Ok() )
         {
             wxDELETE( m_brushImage );
-            m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),(HPALETTE)bmp->GetPalette()->GetHPALETTE());
+            m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+#if wxUSE_PALETTE
+                (HPALETTE)bmp->GetPalette()->GetHPALETTE()
+#else
+                NULL
+#endif
+            );
             m_brush = new TextureBrush(m_brushImage);
         }
     }
@@ -755,7 +767,13 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
     Bitmap* image = NULL;
     if ( bmp.GetMask() )
     {
-        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
+        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),
+#if wxUSE_PALETTE
+            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
+#else
+            NULL
+#endif
+        );
 
         size_t width = interim.GetWidth();
         size_t height = interim.GetHeight();
@@ -811,7 +829,13 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
     }
     else
     {
-        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
+#if wxUSE_PALETTE
+            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
+#else
+            NULL
+#endif
+        );
         if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
         {
             size_t width = image->GetWidth();

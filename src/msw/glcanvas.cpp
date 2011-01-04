@@ -146,8 +146,10 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
 BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
+#if wxUSE_PALETTE
     EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
     EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
+#endif
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
