@@ -1828,7 +1828,7 @@ void wxWidgetCocoaImpl::SetMaximum( wxInt32 v )
 
 wxInt32 wxWidgetCocoaImpl::GetMinimum() const
 {
-    if (  [m_osxView respondsToSelector:@selector(getMinValue:)] )
+    if (  [m_osxView respondsToSelector:@selector(minValue)] )
     {
         return (int)[m_osxView minValue];
     }
@@ -1837,7 +1837,7 @@ wxInt32 wxWidgetCocoaImpl::GetMinimum() const
 
 wxInt32 wxWidgetCocoaImpl::GetMaximum() const
 {
-    if (  [m_osxView respondsToSelector:@selector(getMaxValue:)] )
+    if (  [m_osxView respondsToSelector:@selector(maxValue)] )
     {
         return (int)[m_osxView maxValue];
     }
