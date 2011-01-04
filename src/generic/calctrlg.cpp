@@ -47,6 +47,12 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
+#if wxHAS_NATIVE_CALENDARCTRL
+
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
+
+#endif
+
 BEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
     EVT_PAINT(wxGenericCalendarCtrl::OnPaint)
 

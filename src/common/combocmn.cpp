@@ -81,7 +81,11 @@ wxFLAGS_MEMBER(wxCB_DROPDOWN)
 
 wxEND_FLAGS( wxComboBoxStyle )
 
+#ifdef __WXUNIVERSAL__
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h")
+#else
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxChoice, "wx/combobox.h")
+#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
 wxEVENT_PROPERTY( Select, wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
