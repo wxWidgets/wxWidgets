@@ -48,8 +48,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)

@@ -32,8 +32,6 @@
 void wxRadioButtonCallback (Widget w, XtPointer clientData,
                             XmToggleButtonCallbackStruct * cbs);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-
 wxRadioButton::wxRadioButton()
 {
 }

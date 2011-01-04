@@ -40,9 +40,6 @@ void wxDialog::OSXEndModalDialog()
     s_openDialogs--;
 }
 
-
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
-
 void wxDialog::Init()
 {
     m_modality = wxDIALOG_MODALITY_NONE;

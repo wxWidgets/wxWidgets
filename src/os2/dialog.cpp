@@ -33,7 +33,6 @@
 #define wxDIALOG_DEFAULT_WIDTH 500
 #define wxDIALOG_DEFAULT_HEIGHT 500
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 // ----------------------------------------------------------------------------
 // wxDialogModalData

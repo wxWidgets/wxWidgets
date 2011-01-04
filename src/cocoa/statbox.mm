@@ -23,7 +23,6 @@
 #import <AppKit/NSBox.h>
 #import <Foundation/NSString.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 BEGIN_EVENT_TABLE(wxStaticBox, wxStaticBoxBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxStaticBox,NSBox,NSView,NSView)

@@ -49,6 +49,161 @@ WX_DEFINE_LIST(wxMenuItemList)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// XTI for wxMenu(Bar)
+// ----------------------------------------------------------------------------
+
+#if wxUSE_EXTENDED_RTTI
+
+WX_DEFINE_LIST( wxMenuInfoList )
+
+wxDEFINE_FLAGS( wxMenuStyle )
+wxBEGIN_FLAGS( wxMenuStyle )
+wxFLAGS_MEMBER(wxMENU_TEAROFF)
+wxEND_FLAGS( wxMenuStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
+wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
+
+template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
+                                           wxVariantBaseArray &value)
+{
+    wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList, value ) ;
+}
+
+wxBEGIN_PROPERTIES_TABLE(wxMenu)
+wxEVENT_PROPERTY( Select, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
+
+wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString(), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+
+wxREADONLY_PROPERTY_FLAGS( MenuStyle, wxMenuStyle, long, GetStyle, \
+                          wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), \
+                          wxT("group")) // style
+
+wxPROPERTY_COLLECTION( MenuItems, wxMenuItemList, wxMenuItem*, Append, \
+                      GetMenuItems, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenu)
+
+wxDIRECT_CONSTRUCTOR_2( wxMenu, wxString, Title, long, MenuStyle  )
+
+wxDEFINE_FLAGS( wxMenuBarStyle )
+
+wxBEGIN_FLAGS( wxMenuBarStyle )
+wxFLAGS_MEMBER(wxMB_DOCKABLE)
+wxEND_FLAGS( wxMenuBarStyle )
+
+// the negative id would lead the window (its superclass !) to
+// vetoe streaming out otherwise
+bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
+                                wxObjectReaderCallback *, wxVariantBaseArray & )
+{
+    return true;
+}
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
+                                       wxMenuBarStreamingCallback)
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
+wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, wxEMPTY_PARAMETER_VALUE, \
+                    0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+wxREADONLY_PROPERTY( Title, wxString, GetTitle, wxString(), \
+                    0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenuInfo)
+
+wxCONSTRUCTOR_2( wxMenuInfo, wxMenu*, Menu, wxString, Title )
+
+wxCOLLECTION_TYPE_INFO( wxMenuInfo *, wxMenuInfoList ) ;
+
+template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, 
+                                           wxVariantBaseArray &value)
+{
+    wxListCollectionToVariantArray<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
+}
+
+wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
+wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, AppendMenuInfo, \
+                      GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenuBar)
+
+wxCONSTRUCTOR_DUMMY( wxMenuBar )
+
+#else
+// IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+// IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
+// IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
+#endif
+
+
+// ----------------------------------------------------------------------------
+// XTI for wxMenuItem
+// ----------------------------------------------------------------------------
+
+#if wxUSE_EXTENDED_RTTI
+
+bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
+                                 wxObjectReaderCallback *, wxVariantBaseArray & )
+{
+    const wxMenuItem * mitem = wx_dynamic_cast(const wxMenuItem*, object);
+    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
+    {
+        // we don't stream out the first two items for menus with a title,
+        // they will be reconstructed
+        if ( mitem->GetMenu()->FindItemByPosition(0) == mitem ||
+            mitem->GetMenu()->FindItemByPosition(1) == mitem )
+            return false;
+    }
+    return true;
+}
+
+wxBEGIN_ENUM( wxItemKind )
+wxENUM_MEMBER( wxITEM_SEPARATOR )
+wxENUM_MEMBER( wxITEM_NORMAL )
+wxENUM_MEMBER( wxITEM_CHECK )
+wxENUM_MEMBER( wxITEM_RADIO )
+wxEND_ENUM( wxItemKind )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
+                                       wxMenuItemStreamingCallback)
+
+wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
+wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Id, int, SetId, GetId, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Text, wxString, SetText, GetText, wxString(), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Help, wxString, SetHelp, GetHelp, wxString(), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxREADONLY_PROPERTY( Kind, wxItemKind, GetKind, wxEMPTY_PARAMETER_VALUE, \
+                    0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxVariantBase((bool)true), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Checked, bool, Check, IsChecked, wxVariantBase((bool)false), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxVariantBase((bool)false), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group") )
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenuItem)
+
+wxDIRECT_CONSTRUCTOR_6( wxMenuItem, wxMenu*, Parent, int, Id, wxString, \
+                       Text, wxString, Help, wxItemKind, Kind, wxMenu*, SubMenu )
+#else
+//IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
+#endif
+
+// ----------------------------------------------------------------------------
 // wxMenuItemBase
 // ----------------------------------------------------------------------------
 

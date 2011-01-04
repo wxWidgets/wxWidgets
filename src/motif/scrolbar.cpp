@@ -28,8 +28,6 @@
 static void wxScrollBarCallback(Widget widget, XtPointer clientData,
                         XmScaleCallbackStruct *cbs);
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,

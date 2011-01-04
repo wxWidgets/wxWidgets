@@ -539,8 +539,6 @@ void wxSpinCtrlGenericBase::SetSelection(long from, long to)
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxSpinCtrlGenericBase)
-
 void wxSpinCtrl::DoSendEvent()
 {
     wxSpinEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());

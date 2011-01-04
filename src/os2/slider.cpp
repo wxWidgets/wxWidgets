@@ -28,8 +28,6 @@
 #include "wx/slider.h"
 #include "wx/os2/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-
 wxSlider::wxSlider()
 {
     m_hStaticValue = 0L;

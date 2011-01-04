@@ -237,8 +237,6 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
 // wxListBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
-
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------

@@ -357,9 +357,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_artstd.obj &
 	$(OBJS)\monodll_arttango.obj &
 	$(OBJS)\monodll_bmpbase.obj &
+	$(OBJS)\monodll_bmpbtncmn.obj &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_btncmn.obj &
 	$(OBJS)\monodll_cairo.obj &
+	$(OBJS)\monodll_calctrlcmn.obj &
+	$(OBJS)\monodll_checkboxcmn.obj &
+	$(OBJS)\monodll_checklstcmn.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -376,6 +380,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcbufcmn.obj &
 	$(OBJS)\monodll_dcgraph.obj &
 	$(OBJS)\monodll_dcsvg.obj &
+	$(OBJS)\monodll_dirctrlcmn.obj &
 	$(OBJS)\monodll_dlgcmn.obj &
 	$(OBJS)\monodll_dndcmn.obj &
 	$(OBJS)\monodll_dobjcmn.obj &
@@ -402,6 +407,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_geometry.obj &
 	$(OBJS)\monodll_gifdecod.obj &
 	$(OBJS)\monodll_graphcmn.obj &
+	$(OBJS)\monodll_gridcmn.obj &
 	$(OBJS)\monodll_headercolcmn.obj &
 	$(OBJS)\monodll_headerctrlcmn.obj &
 	$(OBJS)\monodll_helpbase.obj &
@@ -426,23 +432,32 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_mousemanager.obj &
 	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_odcombocmn.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_ownerdrwcmn.obj &
 	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_panelcmn.obj &
 	$(OBJS)\monodll_persist.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
 	$(OBJS)\monodll_prntbase.obj &
 	$(OBJS)\monodll_quantize.obj &
+	$(OBJS)\monodll_radiobtncmn.obj &
 	$(OBJS)\monodll_radiocmn.obj &
 	$(OBJS)\monodll_rearrangectrl.obj &
 	$(OBJS)\monodll_rendcmn.obj &
 	$(OBJS)\monodll_rgncmn.obj &
+	$(OBJS)\monodll_scrolbarcmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_slidercmn.obj &
+	$(OBJS)\monodll_spinbtncmn.obj &
 	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
+	$(OBJS)\monodll_statbmpcmn.obj &
+	$(OBJS)\monodll_statboxcmn.obj &
+	$(OBJS)\monodll_statlinecmn.obj &
 	$(OBJS)\monodll_stattextcmn.obj &
 	$(OBJS)\monodll_stockitem.obj &
 	$(OBJS)\monodll_tbarbase.obj &
@@ -607,9 +622,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_artstd.obj &
 	$(OBJS)\monodll_arttango.obj &
 	$(OBJS)\monodll_bmpbase.obj &
+	$(OBJS)\monodll_bmpbtncmn.obj &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_btncmn.obj &
 	$(OBJS)\monodll_cairo.obj &
+	$(OBJS)\monodll_calctrlcmn.obj &
+	$(OBJS)\monodll_checkboxcmn.obj &
+	$(OBJS)\monodll_checklstcmn.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -626,6 +645,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcbufcmn.obj &
 	$(OBJS)\monodll_dcgraph.obj &
 	$(OBJS)\monodll_dcsvg.obj &
+	$(OBJS)\monodll_dirctrlcmn.obj &
 	$(OBJS)\monodll_dlgcmn.obj &
 	$(OBJS)\monodll_dndcmn.obj &
 	$(OBJS)\monodll_dobjcmn.obj &
@@ -652,6 +672,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_geometry.obj &
 	$(OBJS)\monodll_gifdecod.obj &
 	$(OBJS)\monodll_graphcmn.obj &
+	$(OBJS)\monodll_gridcmn.obj &
 	$(OBJS)\monodll_headercolcmn.obj &
 	$(OBJS)\monodll_headerctrlcmn.obj &
 	$(OBJS)\monodll_helpbase.obj &
@@ -676,23 +697,32 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_mousemanager.obj &
 	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_odcombocmn.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_ownerdrwcmn.obj &
 	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_panelcmn.obj &
 	$(OBJS)\monodll_persist.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
 	$(OBJS)\monodll_prntbase.obj &
 	$(OBJS)\monodll_quantize.obj &
+	$(OBJS)\monodll_radiobtncmn.obj &
 	$(OBJS)\monodll_radiocmn.obj &
 	$(OBJS)\monodll_rearrangectrl.obj &
 	$(OBJS)\monodll_rendcmn.obj &
 	$(OBJS)\monodll_rgncmn.obj &
+	$(OBJS)\monodll_scrolbarcmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_slidercmn.obj &
+	$(OBJS)\monodll_spinbtncmn.obj &
 	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
+	$(OBJS)\monodll_statbmpcmn.obj &
+	$(OBJS)\monodll_statboxcmn.obj &
+	$(OBJS)\monodll_statlinecmn.obj &
 	$(OBJS)\monodll_stattextcmn.obj &
 	$(OBJS)\monodll_stockitem.obj &
 	$(OBJS)\monodll_tbarbase.obj &
@@ -1092,9 +1122,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_artstd.obj &
 	$(OBJS)\monolib_arttango.obj &
 	$(OBJS)\monolib_bmpbase.obj &
+	$(OBJS)\monolib_bmpbtncmn.obj &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_btncmn.obj &
 	$(OBJS)\monolib_cairo.obj &
+	$(OBJS)\monolib_calctrlcmn.obj &
+	$(OBJS)\monolib_checkboxcmn.obj &
+	$(OBJS)\monolib_checklstcmn.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1111,6 +1145,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcbufcmn.obj &
 	$(OBJS)\monolib_dcgraph.obj &
 	$(OBJS)\monolib_dcsvg.obj &
+	$(OBJS)\monolib_dirctrlcmn.obj &
 	$(OBJS)\monolib_dlgcmn.obj &
 	$(OBJS)\monolib_dndcmn.obj &
 	$(OBJS)\monolib_dobjcmn.obj &
@@ -1137,6 +1172,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_geometry.obj &
 	$(OBJS)\monolib_gifdecod.obj &
 	$(OBJS)\monolib_graphcmn.obj &
+	$(OBJS)\monolib_gridcmn.obj &
 	$(OBJS)\monolib_headercolcmn.obj &
 	$(OBJS)\monolib_headerctrlcmn.obj &
 	$(OBJS)\monolib_helpbase.obj &
@@ -1161,23 +1197,32 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_mousemanager.obj &
 	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_odcombocmn.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_ownerdrwcmn.obj &
 	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_panelcmn.obj &
 	$(OBJS)\monolib_persist.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
 	$(OBJS)\monolib_prntbase.obj &
 	$(OBJS)\monolib_quantize.obj &
+	$(OBJS)\monolib_radiobtncmn.obj &
 	$(OBJS)\monolib_radiocmn.obj &
 	$(OBJS)\monolib_rearrangectrl.obj &
 	$(OBJS)\monolib_rendcmn.obj &
 	$(OBJS)\monolib_rgncmn.obj &
+	$(OBJS)\monolib_scrolbarcmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_slidercmn.obj &
+	$(OBJS)\monolib_spinbtncmn.obj &
 	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
+	$(OBJS)\monolib_statbmpcmn.obj &
+	$(OBJS)\monolib_statboxcmn.obj &
+	$(OBJS)\monolib_statlinecmn.obj &
 	$(OBJS)\monolib_stattextcmn.obj &
 	$(OBJS)\monolib_stockitem.obj &
 	$(OBJS)\monolib_tbarbase.obj &
@@ -1342,9 +1387,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_artstd.obj &
 	$(OBJS)\monolib_arttango.obj &
 	$(OBJS)\monolib_bmpbase.obj &
+	$(OBJS)\monolib_bmpbtncmn.obj &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_btncmn.obj &
 	$(OBJS)\monolib_cairo.obj &
+	$(OBJS)\monolib_calctrlcmn.obj &
+	$(OBJS)\monolib_checkboxcmn.obj &
+	$(OBJS)\monolib_checklstcmn.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1361,6 +1410,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcbufcmn.obj &
 	$(OBJS)\monolib_dcgraph.obj &
 	$(OBJS)\monolib_dcsvg.obj &
+	$(OBJS)\monolib_dirctrlcmn.obj &
 	$(OBJS)\monolib_dlgcmn.obj &
 	$(OBJS)\monolib_dndcmn.obj &
 	$(OBJS)\monolib_dobjcmn.obj &
@@ -1387,6 +1437,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_geometry.obj &
 	$(OBJS)\monolib_gifdecod.obj &
 	$(OBJS)\monolib_graphcmn.obj &
+	$(OBJS)\monolib_gridcmn.obj &
 	$(OBJS)\monolib_headercolcmn.obj &
 	$(OBJS)\monolib_headerctrlcmn.obj &
 	$(OBJS)\monolib_helpbase.obj &
@@ -1411,23 +1462,32 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_mousemanager.obj &
 	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_odcombocmn.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_ownerdrwcmn.obj &
 	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_panelcmn.obj &
 	$(OBJS)\monolib_persist.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
 	$(OBJS)\monolib_prntbase.obj &
 	$(OBJS)\monolib_quantize.obj &
+	$(OBJS)\monolib_radiobtncmn.obj &
 	$(OBJS)\monolib_radiocmn.obj &
 	$(OBJS)\monolib_rearrangectrl.obj &
 	$(OBJS)\monolib_rendcmn.obj &
 	$(OBJS)\monolib_rgncmn.obj &
+	$(OBJS)\monolib_scrolbarcmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_slidercmn.obj &
+	$(OBJS)\monolib_spinbtncmn.obj &
 	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
+	$(OBJS)\monolib_statbmpcmn.obj &
+	$(OBJS)\monolib_statboxcmn.obj &
+	$(OBJS)\monolib_statlinecmn.obj &
 	$(OBJS)\monolib_stattextcmn.obj &
 	$(OBJS)\monolib_stockitem.obj &
 	$(OBJS)\monolib_tbarbase.obj &
@@ -1731,9 +1791,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_artstd.obj &
 	$(OBJS)\coredll_arttango.obj &
 	$(OBJS)\coredll_bmpbase.obj &
+	$(OBJS)\coredll_bmpbtncmn.obj &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_btncmn.obj &
 	$(OBJS)\coredll_cairo.obj &
+	$(OBJS)\coredll_calctrlcmn.obj &
+	$(OBJS)\coredll_checkboxcmn.obj &
+	$(OBJS)\coredll_checklstcmn.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -1750,6 +1814,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcbufcmn.obj &
 	$(OBJS)\coredll_dcgraph.obj &
 	$(OBJS)\coredll_dcsvg.obj &
+	$(OBJS)\coredll_dirctrlcmn.obj &
 	$(OBJS)\coredll_dlgcmn.obj &
 	$(OBJS)\coredll_dndcmn.obj &
 	$(OBJS)\coredll_dobjcmn.obj &
@@ -1776,6 +1841,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_geometry.obj &
 	$(OBJS)\coredll_gifdecod.obj &
 	$(OBJS)\coredll_graphcmn.obj &
+	$(OBJS)\coredll_gridcmn.obj &
 	$(OBJS)\coredll_headercolcmn.obj &
 	$(OBJS)\coredll_headerctrlcmn.obj &
 	$(OBJS)\coredll_helpbase.obj &
@@ -1800,23 +1866,32 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_mousemanager.obj &
 	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_odcombocmn.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_ownerdrwcmn.obj &
 	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_panelcmn.obj &
 	$(OBJS)\coredll_persist.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
 	$(OBJS)\coredll_prntbase.obj &
 	$(OBJS)\coredll_quantize.obj &
+	$(OBJS)\coredll_radiobtncmn.obj &
 	$(OBJS)\coredll_radiocmn.obj &
 	$(OBJS)\coredll_rearrangectrl.obj &
 	$(OBJS)\coredll_rendcmn.obj &
 	$(OBJS)\coredll_rgncmn.obj &
+	$(OBJS)\coredll_scrolbarcmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_slidercmn.obj &
+	$(OBJS)\coredll_spinbtncmn.obj &
 	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
+	$(OBJS)\coredll_statbmpcmn.obj &
+	$(OBJS)\coredll_statboxcmn.obj &
+	$(OBJS)\coredll_statlinecmn.obj &
 	$(OBJS)\coredll_stattextcmn.obj &
 	$(OBJS)\coredll_stockitem.obj &
 	$(OBJS)\coredll_tbarbase.obj &
@@ -1981,9 +2056,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_artstd.obj &
 	$(OBJS)\coredll_arttango.obj &
 	$(OBJS)\coredll_bmpbase.obj &
+	$(OBJS)\coredll_bmpbtncmn.obj &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_btncmn.obj &
 	$(OBJS)\coredll_cairo.obj &
+	$(OBJS)\coredll_calctrlcmn.obj &
+	$(OBJS)\coredll_checkboxcmn.obj &
+	$(OBJS)\coredll_checklstcmn.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -2000,6 +2079,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcbufcmn.obj &
 	$(OBJS)\coredll_dcgraph.obj &
 	$(OBJS)\coredll_dcsvg.obj &
+	$(OBJS)\coredll_dirctrlcmn.obj &
 	$(OBJS)\coredll_dlgcmn.obj &
 	$(OBJS)\coredll_dndcmn.obj &
 	$(OBJS)\coredll_dobjcmn.obj &
@@ -2026,6 +2106,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_geometry.obj &
 	$(OBJS)\coredll_gifdecod.obj &
 	$(OBJS)\coredll_graphcmn.obj &
+	$(OBJS)\coredll_gridcmn.obj &
 	$(OBJS)\coredll_headercolcmn.obj &
 	$(OBJS)\coredll_headerctrlcmn.obj &
 	$(OBJS)\coredll_helpbase.obj &
@@ -2050,23 +2131,32 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_mousemanager.obj &
 	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_odcombocmn.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_ownerdrwcmn.obj &
 	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_panelcmn.obj &
 	$(OBJS)\coredll_persist.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
 	$(OBJS)\coredll_prntbase.obj &
 	$(OBJS)\coredll_quantize.obj &
+	$(OBJS)\coredll_radiobtncmn.obj &
 	$(OBJS)\coredll_radiocmn.obj &
 	$(OBJS)\coredll_rearrangectrl.obj &
 	$(OBJS)\coredll_rendcmn.obj &
 	$(OBJS)\coredll_rgncmn.obj &
+	$(OBJS)\coredll_scrolbarcmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_slidercmn.obj &
+	$(OBJS)\coredll_spinbtncmn.obj &
 	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
+	$(OBJS)\coredll_statbmpcmn.obj &
+	$(OBJS)\coredll_statboxcmn.obj &
+	$(OBJS)\coredll_statlinecmn.obj &
 	$(OBJS)\coredll_stattextcmn.obj &
 	$(OBJS)\coredll_stockitem.obj &
 	$(OBJS)\coredll_tbarbase.obj &
@@ -2246,9 +2336,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_artstd.obj &
 	$(OBJS)\corelib_arttango.obj &
 	$(OBJS)\corelib_bmpbase.obj &
+	$(OBJS)\corelib_bmpbtncmn.obj &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_btncmn.obj &
 	$(OBJS)\corelib_cairo.obj &
+	$(OBJS)\corelib_calctrlcmn.obj &
+	$(OBJS)\corelib_checkboxcmn.obj &
+	$(OBJS)\corelib_checklstcmn.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -2265,6 +2359,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcbufcmn.obj &
 	$(OBJS)\corelib_dcgraph.obj &
 	$(OBJS)\corelib_dcsvg.obj &
+	$(OBJS)\corelib_dirctrlcmn.obj &
 	$(OBJS)\corelib_dlgcmn.obj &
 	$(OBJS)\corelib_dndcmn.obj &
 	$(OBJS)\corelib_dobjcmn.obj &
@@ -2291,6 +2386,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_geometry.obj &
 	$(OBJS)\corelib_gifdecod.obj &
 	$(OBJS)\corelib_graphcmn.obj &
+	$(OBJS)\corelib_gridcmn.obj &
 	$(OBJS)\corelib_headercolcmn.obj &
 	$(OBJS)\corelib_headerctrlcmn.obj &
 	$(OBJS)\corelib_helpbase.obj &
@@ -2315,23 +2411,32 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_mousemanager.obj &
 	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_odcombocmn.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_ownerdrwcmn.obj &
 	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_panelcmn.obj &
 	$(OBJS)\corelib_persist.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
 	$(OBJS)\corelib_prntbase.obj &
 	$(OBJS)\corelib_quantize.obj &
+	$(OBJS)\corelib_radiobtncmn.obj &
 	$(OBJS)\corelib_radiocmn.obj &
 	$(OBJS)\corelib_rearrangectrl.obj &
 	$(OBJS)\corelib_rendcmn.obj &
 	$(OBJS)\corelib_rgncmn.obj &
+	$(OBJS)\corelib_scrolbarcmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_slidercmn.obj &
+	$(OBJS)\corelib_spinbtncmn.obj &
 	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
+	$(OBJS)\corelib_statbmpcmn.obj &
+	$(OBJS)\corelib_statboxcmn.obj &
+	$(OBJS)\corelib_statlinecmn.obj &
 	$(OBJS)\corelib_stattextcmn.obj &
 	$(OBJS)\corelib_stockitem.obj &
 	$(OBJS)\corelib_tbarbase.obj &
@@ -2496,9 +2601,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_artstd.obj &
 	$(OBJS)\corelib_arttango.obj &
 	$(OBJS)\corelib_bmpbase.obj &
+	$(OBJS)\corelib_bmpbtncmn.obj &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_btncmn.obj &
 	$(OBJS)\corelib_cairo.obj &
+	$(OBJS)\corelib_calctrlcmn.obj &
+	$(OBJS)\corelib_checkboxcmn.obj &
+	$(OBJS)\corelib_checklstcmn.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -2515,6 +2624,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcbufcmn.obj &
 	$(OBJS)\corelib_dcgraph.obj &
 	$(OBJS)\corelib_dcsvg.obj &
+	$(OBJS)\corelib_dirctrlcmn.obj &
 	$(OBJS)\corelib_dlgcmn.obj &
 	$(OBJS)\corelib_dndcmn.obj &
 	$(OBJS)\corelib_dobjcmn.obj &
@@ -2541,6 +2651,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_geometry.obj &
 	$(OBJS)\corelib_gifdecod.obj &
 	$(OBJS)\corelib_graphcmn.obj &
+	$(OBJS)\corelib_gridcmn.obj &
 	$(OBJS)\corelib_headercolcmn.obj &
 	$(OBJS)\corelib_headerctrlcmn.obj &
 	$(OBJS)\corelib_helpbase.obj &
@@ -2565,23 +2676,32 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_mousemanager.obj &
 	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_odcombocmn.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_ownerdrwcmn.obj &
 	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_panelcmn.obj &
 	$(OBJS)\corelib_persist.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
 	$(OBJS)\corelib_prntbase.obj &
 	$(OBJS)\corelib_quantize.obj &
+	$(OBJS)\corelib_radiobtncmn.obj &
 	$(OBJS)\corelib_radiocmn.obj &
 	$(OBJS)\corelib_rearrangectrl.obj &
 	$(OBJS)\corelib_rendcmn.obj &
 	$(OBJS)\corelib_rgncmn.obj &
+	$(OBJS)\corelib_scrolbarcmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_slidercmn.obj &
+	$(OBJS)\corelib_spinbtncmn.obj &
 	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
+	$(OBJS)\corelib_statbmpcmn.obj &
+	$(OBJS)\corelib_statboxcmn.obj &
+	$(OBJS)\corelib_statlinecmn.obj &
 	$(OBJS)\corelib_stattextcmn.obj &
 	$(OBJS)\corelib_stockitem.obj &
 	$(OBJS)\corelib_tbarbase.obj &
@@ -7548,6 +7668,11 @@ $(OBJS)\monodll_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_bmpbtncmn.obj :  .AUTODEPEND ..\..\src\common\bmpbtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7559,6 +7684,26 @@ $(OBJS)\monodll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_checkboxcmn.obj :  .AUTODEPEND ..\..\src\common\checkboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_checklstcmn.obj :  .AUTODEPEND ..\..\src\common\checklstcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7639,6 +7784,11 @@ $(OBJS)\monodll_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcsvg.obj :  .AUTODEPEND ..\..\src\common\dcsvg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_dirctrlcmn.obj :  .AUTODEPEND ..\..\src\common\dirctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7773,6 +7923,11 @@ $(OBJS)\monodll_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_gridcmn.obj :  .AUTODEPEND ..\..\src\common\gridcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_headercolcmn.obj :  .AUTODEPEND ..\..\src\common\headercolcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7893,6 +8048,11 @@ $(OBJS)\monodll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7904,6 +8064,11 @@ $(OBJS)\monodll_ownerdrwcmn.obj :  .AUTODEPEND ..\..\src\common\ownerdrwcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_panelcmn.obj :  .AUTODEPEND ..\..\src\common\panelcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7933,6 +8098,11 @@ $(OBJS)\monodll_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_radiobtncmn.obj :  .AUTODEPEND ..\..\src\common\radiobtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7953,12 +8123,27 @@ $(OBJS)\monodll_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_scrolbarcmn.obj :  .AUTODEPEND ..\..\src\common\scrolbarcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_slidercmn.obj :  .AUTODEPEND ..\..\src\common\slidercmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_spinbtncmn.obj :  .AUTODEPEND ..\..\src\common\spinbtncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7974,6 +8159,21 @@ $(OBJS)\monodll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_statbmpcmn.obj :  .AUTODEPEND ..\..\src\common\statbmpcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_statboxcmn.obj :  .AUTODEPEND ..\..\src\common\statboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_statlinecmn.obj :  .AUTODEPEND ..\..\src\common\statlinecmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8229,11 +8429,6 @@ $(OBJS)\monodll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -9795,6 +9990,11 @@ $(OBJS)\monolib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_bmpbtncmn.obj :  .AUTODEPEND ..\..\src\common\bmpbtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -9806,6 +10006,26 @@ $(OBJS)\monolib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_checkboxcmn.obj :  .AUTODEPEND ..\..\src\common\checkboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_checklstcmn.obj :  .AUTODEPEND ..\..\src\common\checklstcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -9886,6 +10106,11 @@ $(OBJS)\monolib_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcsvg.obj :  .AUTODEPEND ..\..\src\common\dcsvg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_dirctrlcmn.obj :  .AUTODEPEND ..\..\src\common\dirctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10020,6 +10245,11 @@ $(OBJS)\monolib_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_gridcmn.obj :  .AUTODEPEND ..\..\src\common\gridcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_headercolcmn.obj :  .AUTODEPEND ..\..\src\common\headercolcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10140,6 +10370,11 @@ $(OBJS)\monolib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10151,6 +10386,11 @@ $(OBJS)\monolib_ownerdrwcmn.obj :  .AUTODEPEND ..\..\src\common\ownerdrwcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_panelcmn.obj :  .AUTODEPEND ..\..\src\common\panelcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10180,6 +10420,11 @@ $(OBJS)\monolib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_radiobtncmn.obj :  .AUTODEPEND ..\..\src\common\radiobtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10200,12 +10445,27 @@ $(OBJS)\monolib_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_scrolbarcmn.obj :  .AUTODEPEND ..\..\src\common\scrolbarcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_slidercmn.obj :  .AUTODEPEND ..\..\src\common\slidercmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_spinbtncmn.obj :  .AUTODEPEND ..\..\src\common\spinbtncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10221,6 +10481,21 @@ $(OBJS)\monolib_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_statbmpcmn.obj :  .AUTODEPEND ..\..\src\common\statbmpcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_statboxcmn.obj :  .AUTODEPEND ..\..\src\common\statboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_statlinecmn.obj :  .AUTODEPEND ..\..\src\common\statlinecmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10476,11 +10751,6 @@ $(OBJS)\monolib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12033,6 +12303,11 @@ $(OBJS)\coredll_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_bmpbtncmn.obj :  .AUTODEPEND ..\..\src\common\bmpbtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12044,6 +12319,21 @@ $(OBJS)\coredll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_checkboxcmn.obj :  .AUTODEPEND ..\..\src\common\checkboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_checklstcmn.obj :  .AUTODEPEND ..\..\src\common\checklstcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12124,6 +12414,11 @@ $(OBJS)\coredll_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcsvg.obj :  .AUTODEPEND ..\..\src\common\dcsvg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_dirctrlcmn.obj :  .AUTODEPEND ..\..\src\common\dirctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12258,6 +12553,11 @@ $(OBJS)\coredll_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_gridcmn.obj :  .AUTODEPEND ..\..\src\common\gridcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_headercolcmn.obj :  .AUTODEPEND ..\..\src\common\headercolcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12378,6 +12678,11 @@ $(OBJS)\coredll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12389,6 +12694,11 @@ $(OBJS)\coredll_ownerdrwcmn.obj :  .AUTODEPEND ..\..\src\common\ownerdrwcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_panelcmn.obj :  .AUTODEPEND ..\..\src\common\panelcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12418,6 +12728,11 @@ $(OBJS)\coredll_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_radiobtncmn.obj :  .AUTODEPEND ..\..\src\common\radiobtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12438,12 +12753,27 @@ $(OBJS)\coredll_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_scrolbarcmn.obj :  .AUTODEPEND ..\..\src\common\scrolbarcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_slidercmn.obj :  .AUTODEPEND ..\..\src\common\slidercmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_spinbtncmn.obj :  .AUTODEPEND ..\..\src\common\spinbtncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12459,6 +12789,21 @@ $(OBJS)\coredll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_statbmpcmn.obj :  .AUTODEPEND ..\..\src\common\statbmpcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_statboxcmn.obj :  .AUTODEPEND ..\..\src\common\statboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_statlinecmn.obj :  .AUTODEPEND ..\..\src\common\statlinecmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -13348,6 +13693,11 @@ $(OBJS)\corelib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_bmpbtncmn.obj :  .AUTODEPEND ..\..\src\common\bmpbtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13359,6 +13709,21 @@ $(OBJS)\corelib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_checkboxcmn.obj :  .AUTODEPEND ..\..\src\common\checkboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_checklstcmn.obj :  .AUTODEPEND ..\..\src\common\checklstcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13439,6 +13804,11 @@ $(OBJS)\corelib_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcsvg.obj :  .AUTODEPEND ..\..\src\common\dcsvg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_dirctrlcmn.obj :  .AUTODEPEND ..\..\src\common\dirctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13573,6 +13943,11 @@ $(OBJS)\corelib_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_gridcmn.obj :  .AUTODEPEND ..\..\src\common\gridcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_headercolcmn.obj :  .AUTODEPEND ..\..\src\common\headercolcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13693,6 +14068,11 @@ $(OBJS)\corelib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13704,6 +14084,11 @@ $(OBJS)\corelib_ownerdrwcmn.obj :  .AUTODEPEND ..\..\src\common\ownerdrwcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_panelcmn.obj :  .AUTODEPEND ..\..\src\common\panelcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13733,6 +14118,11 @@ $(OBJS)\corelib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_radiobtncmn.obj :  .AUTODEPEND ..\..\src\common\radiobtncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13753,12 +14143,27 @@ $(OBJS)\corelib_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_scrolbarcmn.obj :  .AUTODEPEND ..\..\src\common\scrolbarcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_slidercmn.obj :  .AUTODEPEND ..\..\src\common\slidercmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_spinbtncmn.obj :  .AUTODEPEND ..\..\src\common\spinbtncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13774,6 +14179,21 @@ $(OBJS)\corelib_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_statbmpcmn.obj :  .AUTODEPEND ..\..\src\common\statbmpcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_statboxcmn.obj :  .AUTODEPEND ..\..\src\common\statboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_statlinecmn.obj :  .AUTODEPEND ..\..\src\common\statlinecmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

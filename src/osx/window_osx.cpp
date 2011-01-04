@@ -76,8 +76,6 @@
 
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
-#else
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)

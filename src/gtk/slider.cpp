@@ -272,8 +272,6 @@ static gchar* gtk_format_value(GtkScale*, double value, void*)
 // wxSlider
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
-
 wxSlider::wxSlider()
 {
     m_pos = 0;

@@ -23,8 +23,6 @@
 #include "wx/os2/private.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
 bool wxBitmapButton::Create( wxWindow*          pParent,

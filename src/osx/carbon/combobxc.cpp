@@ -25,8 +25,6 @@
 #endif
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-
 #if TARGET_API_MAC_OSX
 #define USE_HICOMBOBOX 1 //use hi combobox define
 #else

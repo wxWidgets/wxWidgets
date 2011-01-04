@@ -23,8 +23,6 @@
 
 #if wxUSE_SCROLLBAR
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
 END_EVENT_TABLE()
 

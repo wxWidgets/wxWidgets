@@ -20,9 +20,6 @@
     #include "wx/dcmemory.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-
-
 #include "wx/osx/private.h"
 
 //---------------------------------------------------------------------------

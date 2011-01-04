@@ -24,8 +24,6 @@
 #include "wx/os2/private.h"
 #include <stdio.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
 bool wxStaticText::Create( wxWindow*        pParent,
                            wxWindowID       vId,
                            const wxString&  rsLabel,

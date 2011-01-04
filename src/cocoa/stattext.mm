@@ -26,7 +26,6 @@
 #import <AppKit/NSTextField.h>
 #include <math.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 BEGIN_EVENT_TABLE(wxStaticText, wxControl)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxStaticText,NSTextField,NSControl,NSView)

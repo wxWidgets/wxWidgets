@@ -24,6 +24,17 @@
 
 // work in progress
 
+@interface wxNSTableDataSource : NSObject wxOSX_10_6_AND_LATER(<NSComboBoxDataSource>)
+{
+    wxNSComboBoxControl* impl;
+}
+
+- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox;
+- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index;
+
+@end
+
+
 @interface wxNSComboBox : NSComboBox
 {
 }

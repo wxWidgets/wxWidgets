@@ -18,8 +18,6 @@
 
 #include "wx/generic/statbmpg.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticBitmap, wxStaticBitmapBase)
-
 bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                                    const wxBitmap& bitmap,
                                    const wxPoint& pos, const wxSize& size,

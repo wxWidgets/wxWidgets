@@ -125,8 +125,6 @@ static gint gtk_slider_button_release_callback( GtkWidget *scale,
 // wxSlider
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
-
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         int value, int minValue, int maxValue,
         const wxPoint& pos, const wxSize& size,

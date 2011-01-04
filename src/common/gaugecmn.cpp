@@ -43,6 +43,69 @@ wxGaugeBase::~wxGaugeBase()
 }
 
 // ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxGaugeStyle )
+wxBEGIN_FLAGS( wxGaugeStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+wxFLAGS_MEMBER(wxGA_HORIZONTAL)
+wxFLAGS_MEMBER(wxGA_VERTICAL)
+#if WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxGA_PROGRESSBAR)
+#endif // WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxGA_SMOOTH)
+wxEND_FLAGS( wxGaugeStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxGauge)
+wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Range, int, SetRange, GetRange, 0, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY( ShadowWidth, int, SetShadowWidth, GetShadowWidth, \
+           0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY( BezelFace, int, SetBezelFace, GetBezelFace, \
+           0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+wxPROPERTY_FLAGS( WindowStyle, wxGaugeStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxGauge)
+
+wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
+                wxPoint, Position, wxSize, Size, long, WindowStyle )
+
+// ----------------------------------------------------------------------------
 // wxGauge creation
 // ----------------------------------------------------------------------------
 

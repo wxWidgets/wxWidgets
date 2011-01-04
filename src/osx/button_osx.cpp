@@ -42,8 +42,6 @@ bool IsHelpButtonWithStandardLabel(wxWindowID id, const wxString& label)
 
 } // anonymous namespace
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
 BEGIN_EVENT_TABLE(wxButton, wxControl)
     EVT_ENTER_WINDOW(wxButton::OnEnterWindow)
     EVT_LEAVE_WINDOW(wxButton::OnLeaveWindow)

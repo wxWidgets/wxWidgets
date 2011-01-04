@@ -38,8 +38,6 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-
 BEGIN_EVENT_TABLE(wxBitmapButton, wxButton)
     EVT_SET_FOCUS(wxBitmapButton::OnSetFocus)
     EVT_KILL_FOCUS(wxBitmapButton::OnKillFocus)

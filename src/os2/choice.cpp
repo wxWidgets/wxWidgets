@@ -24,8 +24,6 @@
 
 #include "wx/os2/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
-
 bool wxChoice::Create(
   wxWindow*                         pParent
 , wxWindowID                        vId

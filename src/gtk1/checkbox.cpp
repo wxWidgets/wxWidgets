@@ -58,8 +58,6 @@ static void gtk_checkbox_toggled_callback(GtkWidget *WXUNUSED(widget),
 // wxCheckBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckBox,wxControl)
-
 wxCheckBox::wxCheckBox()
 {
 }

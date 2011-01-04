@@ -26,7 +26,6 @@
 #import <AppKit/NSButton.h>
 #import <Foundation/NSString.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 BEGIN_EVENT_TABLE(wxCheckBox, wxCheckBoxBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxCheckBox,NSButton,NSControl,NSView)

@@ -928,8 +928,6 @@ void wxWindowCocoaScrollView::Cocoa_FrameChanged(void)
 // normally the base classes aren't included, but wxWindow is special
 #ifdef __WXUNIVERSAL__
 IMPLEMENT_ABSTRACT_CLASS(wxWindowCocoa, wxWindowBase)
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindowCocoa, wxWindowBase)

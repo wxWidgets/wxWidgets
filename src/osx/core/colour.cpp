@@ -19,8 +19,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-
 #if wxOSX_USE_COCOA_OR_CARBON
 wxColour::wxColour(const RGBColor& col)
 {

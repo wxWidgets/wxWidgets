@@ -22,8 +22,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
-
 wxChoice::~wxChoice()
 {
     if ( HasClientObjectData() )

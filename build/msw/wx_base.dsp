@@ -1455,6 +1455,10 @@ SOURCE=..\..\include\wx\regex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\rtti.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\scopedarray.h
 # End Source File
 # Begin Source File
@@ -1655,7 +1659,23 @@ SOURCE=..\..\include\wx\xti.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xtictor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtihandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtiprop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xtistrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtitypes.h
 # End Source File
 # Begin Source File
 

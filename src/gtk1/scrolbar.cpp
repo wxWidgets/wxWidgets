@@ -165,8 +165,6 @@ gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 // wxScrollBar
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
-
 wxScrollBar::~wxScrollBar()
 {
 }

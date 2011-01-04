@@ -68,7 +68,6 @@ static void _SetWidthOfTableColumnToFitItems(NSTableColumn *tableColumn, NSArray
 // class wxListBox
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)

@@ -54,60 +54,6 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxBitmapButtonStyle )
-
-wxBEGIN_FLAGS( wxBitmapButtonStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxBU_AUTODRAW)
-    wxFLAGS_MEMBER(wxBU_LEFT)
-    wxFLAGS_MEMBER(wxBU_RIGHT)
-    wxFLAGS_MEMBER(wxBU_TOP)
-    wxFLAGS_MEMBER(wxBU_BOTTOM)
-wxEND_FLAGS( wxBitmapButtonStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxBitmapButton, wxButton,"wx/bmpbuttn.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxBitmapButton)
-    wxPROPERTY_FLAGS( WindowStyle , wxBitmapButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxBitmapButton)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxBitmapButton , wxWindow* , Parent , wxWindowID , Id , wxBitmap , Bitmap , wxPoint , Position , wxSize , Size )
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
-
 BEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
     EVT_SYS_COLOUR_CHANGED(wxBitmapButton::OnSysColourChanged)
 END_EVENT_TABLE()

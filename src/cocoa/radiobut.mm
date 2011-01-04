@@ -28,7 +28,6 @@
 
 WX_DEFINE_LIST(wxRadioButtonList);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // wxRadioButtonBase == wxControl
 BEGIN_EVENT_TABLE(wxRadioButton, wxControl)
 END_EVENT_TABLE()

@@ -35,8 +35,6 @@ MRESULT EXPENTRY wxComboEditWndProc( HWND   hWnd
 //
 static WXFARPROC gfnWndprocEdit     = (WXFARPROC)NULL;
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-
 bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
 {
     long lSel = GetSelection();

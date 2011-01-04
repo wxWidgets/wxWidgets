@@ -276,6 +276,10 @@ SOURCE=..\..\src\common\bmpbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\bmpbtncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\bookctrl.cpp
 # End Source File
 # Begin Source File
@@ -285,6 +289,18 @@ SOURCE=..\..\src\common\btncmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\cairo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\calctrlcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\checkboxcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\checklstcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -349,6 +365,10 @@ SOURCE=..\..\src\common\dcgraph.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\dcsvg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\dirctrlcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -466,6 +486,10 @@ SOURCE=..\..\src\common\graphcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\gridcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\headercolcmn.cpp
 # End Source File
 # Begin Source File
@@ -566,11 +590,19 @@ SOURCE=..\..\src\common\nbkbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\odcombocmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\overlaycmn.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\common\ownerdrwcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\panelcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -598,6 +630,10 @@ SOURCE=..\..\src\common\quantize.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\radiobtncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\radiocmn.cpp
 # End Source File
 # Begin Source File
@@ -614,11 +650,23 @@ SOURCE=..\..\src\common\rgncmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\scrolbarcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\settcmn.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\common\sizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\slidercmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\spinbtncmn.cpp
 # End Source File
 # Begin Source File
 
@@ -631,6 +679,18 @@ SOURCE=..\..\src\common\srchcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\statbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statbmpcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statboxcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statlinecmn.cpp
 # End Source File
 # Begin Source File
 

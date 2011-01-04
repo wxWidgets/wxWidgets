@@ -64,8 +64,6 @@ gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxChoice)
-
 BEGIN_EVENT_TABLE(wxComboBox, wxChoice)
     EVT_CHAR(wxComboBox::OnChar)
 

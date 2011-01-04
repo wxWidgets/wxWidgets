@@ -137,8 +137,6 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 // GDK's values are in 0..65535 range, our are in 0..255
 #define SHIFT  8
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
-
 wxColour::~wxColour()
 {
 }

@@ -2046,6 +2046,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\rtti.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\scopedarray.h"
 				>
 			</File>
@@ -2246,7 +2250,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xtictor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xtihandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xtiprop.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xtistrm.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xtitypes.h"
 				>
 			</File>
 			<File

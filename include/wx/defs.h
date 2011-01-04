@@ -1440,6 +1440,95 @@ typedef double wxDouble;
 #endif
 
 /*  ---------------------------------------------------------------------------- */
+/*  XTI workarounds for dummy compilers */
+/*  ---------------------------------------------------------------------------- */
+
+#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3, 4 )
+    // GCC <= 3.4 has buggy template support
+#  define wxUSE_MEMBER_TEMPLATES 0
+#endif
+
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+    // MSVC <= 6.0 has buggy template support
+#  define wxUSE_MEMBER_TEMPLATES 0
+#  define wxUSE_FUNC_TEMPLATE_POINTER 0
+#endif
+
+#ifndef wxUSE_MEMBER_TEMPLATES
+#  define wxUSE_MEMBER_TEMPLATES 1
+#endif
+
+#ifndef wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxUSE_FUNC_TEMPLATE_POINTER 1
+#endif
+
+#if wxUSE_MEMBER_TEMPLATES
+#  define wxTEMPLATED_MEMBER_CALL( method, type ) method<type>()
+#  define wxTEMPLATED_MEMBER_FIX( type )
+#else
+#  define wxTEMPLATED_MEMBER_CALL( method, type ) method((type*)NULL)
+#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
+#endif
+
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+#  define wxTEMPLATED_FUNCTION_FIX( type ), wxTEMPLATED_MEMBER_FIX(type)
+#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
+#else
+#  define wxTEMPLATED_FUNCTION_FIX( type )
+#  define wxINFUNC_CLASS_TYPE_FIX( type )
+#endif
+
+#if wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxTO_STRING(type) wxToStringConverter<type>
+#  define wxTO_STRING_IMP(type)
+#  define wxFROM_STRING(type) wxFromStringConverter<type>
+#  define wxFROM_STRING_IMP(type)
+#else
+#  define wxTO_STRING(type) ToString##type
+#  define wxTO_STRING_IMP(type) \
+    inline void ToString##type( const wxVariantBase& data, wxString &result ) \
+        { wxToStringConverter<type>(data, result); }
+
+#  define wxFROM_STRING(type) FromString##type
+#  define wxFROM_STRING_IMP(type) \
+    inline void FromString##type( const wxString& data, wxVariantBase &result ) \
+        { wxFromStringConverter<type>(data, result); }
+#endif
+
+// XTI helper macro. This one is used both by xti.h and rtti.h and
+// thus needs to go in a common header to avoid redundancy.
+#define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
+    class WXDLLIMPEXP_BASE const_iterator                                    \
+    {                                                                        \
+        typedef wxHashTable_Node Node;                                       \
+    public:                                                                  \
+        typedef const wxClassInfo* value_type;                               \
+        typedef const value_type& const_reference;                           \
+        typedef const_iterator itor;                                         \
+        typedef value_type* ptr_type;                                        \
+                                                                             \
+        Node* m_node;                                                        \
+        wxHashTable* m_table;                                                \
+    public:                                                                  \
+        typedef const_reference reference_type;                              \
+        typedef ptr_type pointer_type;                                       \
+                                                                             \
+        const_iterator(Node* node, wxHashTable* table)                       \
+            : m_node(node), m_table(table) { }                               \
+        const_iterator() : m_node(NULL), m_table(NULL) { }                   \
+        value_type operator*() const;                                        \
+        itor& operator++();                                                  \
+        const itor operator++(int);                                          \
+        bool operator!=(const itor& it) const                                \
+            { return it.m_node != m_node; }                                  \
+        bool operator==(const itor& it) const                                \
+            { return it.m_node == m_node; }                                  \
+    };                                                                       \
+                                                                             \
+    static const_iterator begin_classinfo();                                 \
+    static const_iterator end_classinfo();
+
+/*  ---------------------------------------------------------------------------- */
 /*  Geometric flags */
 /*  ---------------------------------------------------------------------------- */
 

@@ -36,8 +36,6 @@
 
 static void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs);
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-
 BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
 

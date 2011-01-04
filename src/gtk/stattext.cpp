@@ -19,8 +19,6 @@
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText,wxControl)
-
 wxStaticText::wxStaticText()
 {
 }

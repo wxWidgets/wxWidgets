@@ -16,8 +16,6 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 bool wxStaticBox::Create( wxWindow *parent,
     wxWindowID id,
     const wxString& label,

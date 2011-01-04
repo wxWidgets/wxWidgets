@@ -392,6 +392,39 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxMenuBase);
 };
 
+#if wxUSE_EXTENDED_RTTI    
+
+// ----------------------------------------------------------------------------
+// XTI accessor
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMenuInfo : public wxObject
+{
+public:
+    wxMenuInfo() { m_menu = NULL; }
+    virtual ~wxMenuInfo() { }
+    
+    bool Create( wxMenu *menu, const wxString &title )
+    { 
+        m_menu = menu; 
+        m_title = title; 
+        return true;
+    }
+    
+    wxMenu* GetMenu() const { return m_menu; }
+    wxString GetTitle() const { return m_title; }
+    
+private:
+    wxMenu *m_menu;
+    wxString m_title;
+    
+    DECLARE_DYNAMIC_CLASS(wxMenuInfo)
+};
+
+WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
+
+#endif
+
 // ----------------------------------------------------------------------------
 // wxMenuBar
 // ----------------------------------------------------------------------------
@@ -508,6 +541,13 @@ public:
 
     virtual bool CanBeOutsideClientArea() const { return true; }
 
+#if wxUSE_EXTENDED_RTTI    
+    // XTI helpers:
+    bool AppendMenuInfo( const wxMenuInfo *info )
+    { return Append( info->GetMenu(), info->GetTitle() ); }
+    const wxMenuInfoList& GetMenuInfos() const;
+#endif
+    
 #if WXWIN_COMPATIBILITY_2_8
     // get or change the label of the menu at given position
     // Deprecated in favour of SetMenuLabel
@@ -520,6 +560,11 @@ protected:
     // the list of all our menus
     wxMenuList m_menus;
 
+#if wxUSE_EXTENDED_RTTI    
+    // used by XTI
+    wxMenuInfoList m_menuInfos;
+#endif
+    
     // the frame we are attached to (may be NULL)
     wxFrame *m_menuBarFrame;
 

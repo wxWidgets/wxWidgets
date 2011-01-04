@@ -553,6 +553,9 @@
 				RelativePath="..\..\src\common\bmpbase.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\bmpbtncmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\bookctrl.cpp">
 			</File>
 			<File
@@ -560,6 +563,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\cairo.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\calctrlcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\checkboxcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\checklstcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\choiccmn.cpp">
@@ -608,6 +620,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\dcsvg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\dirctrlcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\dlgcmn.cpp">
@@ -742,6 +757,9 @@
 				RelativePath="..\..\src\common\graphcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\gridcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\headercolcmn.cpp">
 			</File>
 			<File
@@ -817,10 +835,16 @@
 				RelativePath="..\..\src\common\nbkbase.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\odcombocmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\overlaycmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\ownerdrwcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\panelcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\paper.cpp">
@@ -841,6 +865,9 @@
 				RelativePath="..\..\src\common\quantize.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\radiobtncmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\radiocmn.cpp">
 			</File>
 			<File
@@ -853,10 +880,19 @@
 				RelativePath="..\..\src\common\rgncmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\scrolbarcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\settcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\sizer.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\slidercmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\spinbtncmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\spinctrlcmn.cpp">
@@ -866,6 +902,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\statbar.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\statbmpcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\statboxcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\statlinecmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\stattextcmn.cpp">

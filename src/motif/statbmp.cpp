@@ -26,8 +26,6 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-
 /*
  * wxStaticBitmap
  */

@@ -21,8 +21,6 @@
 
 // work in progress
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-
 wxComboBox::~wxComboBox()
 {
 }

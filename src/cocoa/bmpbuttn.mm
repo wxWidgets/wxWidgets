@@ -24,7 +24,6 @@
 #import <AppKit/NSButton.h>
 #import <Foundation/NSString.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxControl)
 BEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxBitmapButton,NSButton,NSControl,NSView)

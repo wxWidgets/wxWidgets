@@ -170,8 +170,6 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
-
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
     EVT_CHAR(wxComboBox::OnChar)

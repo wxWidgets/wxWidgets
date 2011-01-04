@@ -16,8 +16,6 @@
 #include "wx/slider.h"
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-
 BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
 

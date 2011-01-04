@@ -1839,58 +1839,6 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 /////////////////////////////////////////////////////////////////////
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxGridStyle )
-
-wxBEGIN_FLAGS( wxGridStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-wxEND_FLAGS( wxGridStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow,"wx/grid.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxGrid)
-    wxHIDE_PROPERTY( Children )
-    wxPROPERTY_FLAGS( WindowStyle , wxGridStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxGrid)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxGrid , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-
-/*
- TODO : Expose more information of a list's layout, etc. via appropriate objects (e.g., NotebookPageInfo)
-*/
-#else
-IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
-#endif
-
 BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )

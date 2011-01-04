@@ -26,8 +26,7 @@
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSWindow.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-    BEGIN_EVENT_TABLE(wxSlider, wxSliderBase)
+BEGIN_EVENT_TABLE(wxSlider, wxSliderBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxSlider,NSSlider,NSControl,NSView)
 

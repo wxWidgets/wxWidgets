@@ -19,7 +19,6 @@
 
 #import <AppKit/NSBox.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 BEGIN_EVENT_TABLE(wxStaticLine, wxStaticLineBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxStaticLine,NSTextField,NSControl,NSView)

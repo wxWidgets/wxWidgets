@@ -132,8 +132,6 @@ static int str16len(const char *s)
 // event tables
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-
     BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
         EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     END_EVENT_TABLE()
