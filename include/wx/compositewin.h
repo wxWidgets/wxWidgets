@@ -49,7 +49,7 @@ public:
         if ( !BaseWindowClass::SetForegroundColour(colour) )
             return false;
 
-        DoSetForAllParts(&wxWindow::SetForegroundColour, colour);
+        DoSetForAllParts(&wxWindowBase::SetForegroundColour, colour);
 
         return true;
     }
@@ -59,7 +59,7 @@ public:
         if ( !BaseWindowClass::SetBackgroundColour(colour) )
             return false;
 
-        DoSetForAllParts(&wxWindow::SetBackgroundColour, colour);
+        DoSetForAllParts(&wxWindowBase::SetBackgroundColour, colour);
 
         return true;
     }
@@ -69,7 +69,7 @@ public:
         if ( !BaseWindowClass::SetFont(font) )
             return false;
 
-        DoSetForAllParts(&wxWindow::SetFont, font);
+        DoSetForAllParts(&wxWindowBase::SetFont, font);
 
         return true;
     }
@@ -79,7 +79,7 @@ public:
         if ( !BaseWindowClass::SetCursor(cursor) )
             return false;
 
-        DoSetForAllParts(&wxWindow::SetCursor, cursor);
+        DoSetForAllParts(&wxWindowBase::SetCursor, cursor);
 
         return true;
     }
@@ -90,7 +90,7 @@ private:
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
     template <class T>
-    void DoSetForAllParts(bool (wxWindow::*func)(const T&), const T& arg)
+    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
