@@ -1526,7 +1526,7 @@ typedef double wxDouble;
     };                                                                       \
                                                                              \
     static const_iterator begin_classinfo();                                 \
-    static const_iterator end_classinfo();
+    static const_iterator end_classinfo()
 
 /*  ---------------------------------------------------------------------------- */
 /*  Geometric flags */

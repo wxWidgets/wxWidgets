@@ -26,6 +26,7 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxString;
 class WXDLLIMPEXP_FWD_BASE wxClassInfo;
 class WXDLLIMPEXP_FWD_BASE wxHashTable;
 class WXDLLIMPEXP_FWD_BASE wxObject;
@@ -91,7 +92,7 @@ public:
                  ( m_baseInfo2 && m_baseInfo2->IsKindOf(info) ) );
     }
 
-    wxDECLARE_CLASS_INFO_ITERATORS()
+    wxDECLARE_CLASS_INFO_ITERATORS();
 
 private:
     const wxChar            *m_className;
@@ -116,10 +117,10 @@ protected:
     void Register();
     void Unregister();
 
-    DECLARE_NO_COPY_CLASS(wxClassInfo)
+    wxDECLARE_NO_COPY_CLASS(wxClassInfo);
 };
 
-WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros
