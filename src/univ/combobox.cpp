@@ -105,8 +105,6 @@ BEGIN_EVENT_TABLE(wxComboListBox, wxListBox)
     EVT_LEFT_UP(wxComboListBox::OnLeftUp)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS2(wxComboBox, wxControl, wxComboCtrl)
-
 // ============================================================================
 // implementation
 // ============================================================================
