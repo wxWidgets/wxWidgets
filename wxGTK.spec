@@ -279,6 +279,7 @@ wx/ptr_scpd.h
 wx/ptr_shrd.h
 wx/recguard.h
 wx/regex.h
+wx/rtti.h
 wx/scopedarray.h
 wx/scopedptr.h
 wx/scopeguard.h
@@ -331,6 +332,10 @@ wx/wxprec.h
 wx/xlocale.h
 wx/xti.h
 wx/xtistrm.h
+wx/xtictor.h
+wx/xtihandler.h
+wx/xtiprop.h
+wx/xtitypes.h
 wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h

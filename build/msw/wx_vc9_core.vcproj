@@ -783,10 +783,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\common\calctrlcmn.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\common\checkboxcmn.cpp"
 				>
 			</File>
@@ -1039,10 +1035,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\common\gridcmn.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\common\headercolcmn.cpp"
 				>
 			</File>
@@ -1140,10 +1132,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\nbkbase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\common\odcombocmn.cpp"
 				>
 			</File>
 			<File

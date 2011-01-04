@@ -266,7 +266,15 @@ SOURCE=..\..\src\common\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\gridcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\hyperlnkcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\odcombocmn.cpp
 # End Source File
 # Begin Source File
 

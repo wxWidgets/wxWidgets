@@ -592,7 +592,13 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\src\common\gridcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\hyperlnkcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\odcombocmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\taskbarcmn.cpp">

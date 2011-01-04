@@ -292,10 +292,6 @@ SOURCE=..\..\src\common\cairo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\calctrlcmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\checkboxcmn.cpp
 # End Source File
 # Begin Source File
@@ -486,10 +482,6 @@ SOURCE=..\..\src\common\graphcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\gridcmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\headercolcmn.cpp
 # End Source File
 # Begin Source File
@@ -587,10 +579,6 @@ SOURCE=..\..\src\common\msgout.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\nbkbase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\odcombocmn.cpp
 # End Source File
 # Begin Source File
 

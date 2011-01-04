@@ -657,7 +657,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bookctrl.cpp
     src/common/btncmn.cpp
     src/common/cairo.cpp
-    src/common/calctrlcmn.cpp
     src/common/checkboxcmn.cpp
     src/common/checklstcmn.cpp
     src/common/choiccmn.cpp
@@ -703,7 +702,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/geometry.cpp
     src/common/gifdecod.cpp
     src/common/graphcmn.cpp
-    src/common/gridcmn.cpp
     src/common/headercolcmn.cpp
     src/common/headerctrlcmn.cpp
     src/common/helpbase.cpp
@@ -728,7 +726,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/menucmn.cpp
     src/common/mousemanager.cpp
     src/common/nbkbase.cpp
-    src/common/odcombocmn.cpp
     src/common/overlaycmn.cpp
     src/common/ownerdrwcmn.cpp
     src/common/paper.cpp
@@ -2922,7 +2919,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bmpcboxcmn.cpp
     src/common/calctrlcmn.cpp
     src/common/datavcmn.cpp
+    src/common/gridcmn.cpp
     src/common/hyperlnkcmn.cpp
+    src/common/odcombocmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp

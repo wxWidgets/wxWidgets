@@ -412,6 +412,7 @@ ALL_BASE_HEADERS =  \
 	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
+	wx/rtti.h \
 	wx/scopedarray.h \
 	wx/scopedptr.h \
 	wx/scopeguard.h \
@@ -464,6 +465,10 @@ ALL_BASE_HEADERS =  \
 	wx/xlocale.h \
 	wx/xti.h \
 	wx/xtistrm.h \
+	wx/xtictor.h \
+	wx/xtihandler.h \
+	wx/xtiprop.h \
+	wx/xtitypes.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
 	wx/meta/convertible.h \
@@ -583,6 +588,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
+	wx/rtti.h \
 	wx/scopedarray.h \
 	wx/scopedptr.h \
 	wx/scopeguard.h \
@@ -635,6 +641,10 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/xlocale.h \
 	wx/xti.h \
 	wx/xtistrm.h \
+	wx/xtictor.h \
+	wx/xtihandler.h \
+	wx/xtiprop.h \
+	wx/xtitypes.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
 	wx/meta/convertible.h \
@@ -4460,9 +4470,12 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_artstd.o \
 	monodll_arttango.o \
 	monodll_bmpbase.o \
+	monodll_bmpbtncmn.o \
 	monodll_bookctrl.o \
 	monodll_btncmn.o \
 	monodll_cairo.o \
+	monodll_checkboxcmn.o \
+	monodll_checklstcmn.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
@@ -4479,6 +4492,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dcbufcmn.o \
 	monodll_dcgraph.o \
 	monodll_dcsvg.o \
+	monodll_dirctrlcmn.o \
 	monodll_dlgcmn.o \
 	monodll_dndcmn.o \
 	monodll_dobjcmn.o \
@@ -4532,20 +4546,28 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_overlaycmn.o \
 	monodll_ownerdrwcmn.o \
 	monodll_paper.o \
+	monodll_panelcmn.o \
 	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
+	monodll_radiobtncmn.o \
 	monodll_radiocmn.o \
 	monodll_rearrangectrl.o \
 	monodll_rendcmn.o \
 	monodll_rgncmn.o \
+	monodll_scrolbarcmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
+	monodll_slidercmn.o \
+	monodll_spinbtncmn.o \
 	monodll_spinctrlcmn.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
+	monodll_statbmpcmn.o \
+	monodll_statboxcmn.o \
+	monodll_statlinecmn.o \
 	monodll_stattextcmn.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
@@ -4660,9 +4682,12 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_artstd.o \
 	monodll_arttango.o \
 	monodll_bmpbase.o \
+	monodll_bmpbtncmn.o \
 	monodll_bookctrl.o \
 	monodll_btncmn.o \
 	monodll_cairo.o \
+	monodll_checkboxcmn.o \
+	monodll_checklstcmn.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
@@ -4679,6 +4704,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dcbufcmn.o \
 	monodll_dcgraph.o \
 	monodll_dcsvg.o \
+	monodll_dirctrlcmn.o \
 	monodll_dlgcmn.o \
 	monodll_dndcmn.o \
 	monodll_dobjcmn.o \
@@ -4732,20 +4758,28 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_overlaycmn.o \
 	monodll_ownerdrwcmn.o \
 	monodll_paper.o \
+	monodll_panelcmn.o \
 	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
+	monodll_radiobtncmn.o \
 	monodll_radiocmn.o \
 	monodll_rearrangectrl.o \
 	monodll_rendcmn.o \
 	monodll_rgncmn.o \
+	monodll_scrolbarcmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
+	monodll_slidercmn.o \
+	monodll_spinbtncmn.o \
 	monodll_spinctrlcmn.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
+	monodll_statbmpcmn.o \
+	monodll_statboxcmn.o \
+	monodll_statlinecmn.o \
 	monodll_stattextcmn.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
@@ -5979,7 +6013,9 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_bmpcboxcmn.o \
 	monodll_calctrlcmn.o \
 	monodll_datavcmn.o \
+	monodll_gridcmn.o \
 	monodll_hyperlnkcmn.o \
+	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
@@ -6009,7 +6045,9 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_bmpcboxcmn.o \
 	monodll_calctrlcmn.o \
 	monodll_datavcmn.o \
+	monodll_gridcmn.o \
 	monodll_hyperlnkcmn.o \
+	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
@@ -6340,9 +6378,12 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_artstd.o \
 	monolib_arttango.o \
 	monolib_bmpbase.o \
+	monolib_bmpbtncmn.o \
 	monolib_bookctrl.o \
 	monolib_btncmn.o \
 	monolib_cairo.o \
+	monolib_checkboxcmn.o \
+	monolib_checklstcmn.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
@@ -6359,6 +6400,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcbufcmn.o \
 	monolib_dcgraph.o \
 	monolib_dcsvg.o \
+	monolib_dirctrlcmn.o \
 	monolib_dlgcmn.o \
 	monolib_dndcmn.o \
 	monolib_dobjcmn.o \
@@ -6412,20 +6454,28 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_overlaycmn.o \
 	monolib_ownerdrwcmn.o \
 	monolib_paper.o \
+	monolib_panelcmn.o \
 	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
+	monolib_radiobtncmn.o \
 	monolib_radiocmn.o \
 	monolib_rearrangectrl.o \
 	monolib_rendcmn.o \
 	monolib_rgncmn.o \
+	monolib_scrolbarcmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
+	monolib_slidercmn.o \
+	monolib_spinbtncmn.o \
 	monolib_spinctrlcmn.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
+	monolib_statbmpcmn.o \
+	monolib_statboxcmn.o \
+	monolib_statlinecmn.o \
 	monolib_stattextcmn.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
@@ -6540,9 +6590,12 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_artstd.o \
 	monolib_arttango.o \
 	monolib_bmpbase.o \
+	monolib_bmpbtncmn.o \
 	monolib_bookctrl.o \
 	monolib_btncmn.o \
 	monolib_cairo.o \
+	monolib_checkboxcmn.o \
+	monolib_checklstcmn.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
@@ -6559,6 +6612,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcbufcmn.o \
 	monolib_dcgraph.o \
 	monolib_dcsvg.o \
+	monolib_dirctrlcmn.o \
 	monolib_dlgcmn.o \
 	monolib_dndcmn.o \
 	monolib_dobjcmn.o \
@@ -6612,20 +6666,28 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_overlaycmn.o \
 	monolib_ownerdrwcmn.o \
 	monolib_paper.o \
+	monolib_panelcmn.o \
 	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
+	monolib_radiobtncmn.o \
 	monolib_radiocmn.o \
 	monolib_rearrangectrl.o \
 	monolib_rendcmn.o \
 	monolib_rgncmn.o \
+	monolib_scrolbarcmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
+	monolib_slidercmn.o \
+	monolib_spinbtncmn.o \
 	monolib_spinctrlcmn.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
+	monolib_statbmpcmn.o \
+	monolib_statboxcmn.o \
+	monolib_statlinecmn.o \
 	monolib_stattextcmn.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
@@ -7859,7 +7921,9 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_bmpcboxcmn.o \
 	monolib_calctrlcmn.o \
 	monolib_datavcmn.o \
+	monolib_gridcmn.o \
 	monolib_hyperlnkcmn.o \
+	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
@@ -7889,7 +7953,9 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_bmpcboxcmn.o \
 	monolib_calctrlcmn.o \
 	monolib_datavcmn.o \
+	monolib_gridcmn.o \
 	monolib_hyperlnkcmn.o \
+	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
@@ -8404,9 +8470,12 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_artstd.o \
 	coredll_arttango.o \
 	coredll_bmpbase.o \
+	coredll_bmpbtncmn.o \
 	coredll_bookctrl.o \
 	coredll_btncmn.o \
 	coredll_cairo.o \
+	coredll_checkboxcmn.o \
+	coredll_checklstcmn.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
@@ -8423,6 +8492,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcbufcmn.o \
 	coredll_dcgraph.o \
 	coredll_dcsvg.o \
+	coredll_dirctrlcmn.o \
 	coredll_dlgcmn.o \
 	coredll_dndcmn.o \
 	coredll_dobjcmn.o \
@@ -8476,20 +8546,28 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_overlaycmn.o \
 	coredll_ownerdrwcmn.o \
 	coredll_paper.o \
+	coredll_panelcmn.o \
 	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
+	coredll_radiobtncmn.o \
 	coredll_radiocmn.o \
 	coredll_rearrangectrl.o \
 	coredll_rendcmn.o \
 	coredll_rgncmn.o \
+	coredll_scrolbarcmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
+	coredll_slidercmn.o \
+	coredll_spinbtncmn.o \
 	coredll_spinctrlcmn.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
+	coredll_statbmpcmn.o \
+	coredll_statboxcmn.o \
+	coredll_statlinecmn.o \
 	coredll_stattextcmn.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
@@ -8604,9 +8682,12 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_artstd.o \
 	coredll_arttango.o \
 	coredll_bmpbase.o \
+	coredll_bmpbtncmn.o \
 	coredll_bookctrl.o \
 	coredll_btncmn.o \
 	coredll_cairo.o \
+	coredll_checkboxcmn.o \
+	coredll_checklstcmn.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
@@ -8623,6 +8704,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcbufcmn.o \
 	coredll_dcgraph.o \
 	coredll_dcsvg.o \
+	coredll_dirctrlcmn.o \
 	coredll_dlgcmn.o \
 	coredll_dndcmn.o \
 	coredll_dobjcmn.o \
@@ -8676,20 +8758,28 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_overlaycmn.o \
 	coredll_ownerdrwcmn.o \
 	coredll_paper.o \
+	coredll_panelcmn.o \
 	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
+	coredll_radiobtncmn.o \
 	coredll_radiocmn.o \
 	coredll_rearrangectrl.o \
 	coredll_rendcmn.o \
 	coredll_rgncmn.o \
+	coredll_scrolbarcmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
+	coredll_slidercmn.o \
+	coredll_spinbtncmn.o \
 	coredll_spinctrlcmn.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
+	coredll_statbmpcmn.o \
+	coredll_statboxcmn.o \
+	coredll_statlinecmn.o \
 	coredll_stattextcmn.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
@@ -9950,9 +10040,12 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_artstd.o \
 	corelib_arttango.o \
 	corelib_bmpbase.o \
+	corelib_bmpbtncmn.o \
 	corelib_bookctrl.o \
 	corelib_btncmn.o \
 	corelib_cairo.o \
+	corelib_checkboxcmn.o \
+	corelib_checklstcmn.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
@@ -9969,6 +10062,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcbufcmn.o \
 	corelib_dcgraph.o \
 	corelib_dcsvg.o \
+	corelib_dirctrlcmn.o \
 	corelib_dlgcmn.o \
 	corelib_dndcmn.o \
 	corelib_dobjcmn.o \
@@ -10022,20 +10116,28 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_overlaycmn.o \
 	corelib_ownerdrwcmn.o \
 	corelib_paper.o \
+	corelib_panelcmn.o \
 	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
+	corelib_radiobtncmn.o \
 	corelib_radiocmn.o \
 	corelib_rearrangectrl.o \
 	corelib_rendcmn.o \
 	corelib_rgncmn.o \
+	corelib_scrolbarcmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
+	corelib_slidercmn.o \
+	corelib_spinbtncmn.o \
 	corelib_spinctrlcmn.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
+	corelib_statbmpcmn.o \
+	corelib_statboxcmn.o \
+	corelib_statlinecmn.o \
 	corelib_stattextcmn.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
@@ -10150,9 +10252,12 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_artstd.o \
 	corelib_arttango.o \
 	corelib_bmpbase.o \
+	corelib_bmpbtncmn.o \
 	corelib_bookctrl.o \
 	corelib_btncmn.o \
 	corelib_cairo.o \
+	corelib_checkboxcmn.o \
+	corelib_checklstcmn.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
@@ -10169,6 +10274,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcbufcmn.o \
 	corelib_dcgraph.o \
 	corelib_dcsvg.o \
+	corelib_dirctrlcmn.o \
 	corelib_dlgcmn.o \
 	corelib_dndcmn.o \
 	corelib_dobjcmn.o \
@@ -10222,20 +10328,28 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_overlaycmn.o \
 	corelib_ownerdrwcmn.o \
 	corelib_paper.o \
+	corelib_panelcmn.o \
 	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
+	corelib_radiobtncmn.o \
 	corelib_radiocmn.o \
 	corelib_rearrangectrl.o \
 	corelib_rendcmn.o \
 	corelib_rgncmn.o \
+	corelib_scrolbarcmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
+	corelib_slidercmn.o \
+	corelib_spinbtncmn.o \
 	corelib_spinctrlcmn.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
+	corelib_statbmpcmn.o \
+	corelib_statboxcmn.o \
+	corelib_statlinecmn.o \
 	corelib_stattextcmn.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
@@ -11538,7 +11652,9 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_bmpcboxcmn.o \
 	advdll_calctrlcmn.o \
 	advdll_datavcmn.o \
+	advdll_gridcmn.o \
 	advdll_hyperlnkcmn.o \
+	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
@@ -11568,7 +11684,9 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_bmpcboxcmn.o \
 	advdll_calctrlcmn.o \
 	advdll_datavcmn.o \
+	advdll_gridcmn.o \
 	advdll_hyperlnkcmn.o \
+	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
@@ -11636,7 +11754,9 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_bmpcboxcmn.o \
 	advlib_calctrlcmn.o \
 	advlib_datavcmn.o \
+	advlib_gridcmn.o \
 	advlib_hyperlnkcmn.o \
+	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
@@ -11666,7 +11786,9 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_bmpcboxcmn.o \
 	advlib_calctrlcmn.o \
 	advlib_datavcmn.o \
+	advlib_gridcmn.o \
 	advlib_hyperlnkcmn.o \
+	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
@@ -19584,6 +19706,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_bmpbase.o: $(srcdir)/src/common/bmpbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/bmpbase.cpp
 
+@COND_USE_GUI_1@monodll_bmpbtncmn.o: $(srcdir)/src/common/bmpbtncmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/bmpbtncmn.cpp
+
 @COND_USE_GUI_1@monodll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
@@ -19592,6 +19717,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_cairo.o: $(srcdir)/src/common/cairo.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/cairo.cpp
+
+@COND_USE_GUI_1@monodll_checkboxcmn.o: $(srcdir)/src/common/checkboxcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/checkboxcmn.cpp
+
+@COND_USE_GUI_1@monodll_checklstcmn.o: $(srcdir)/src/common/checklstcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/checklstcmn.cpp
 
 @COND_USE_GUI_1@monodll_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
@@ -19640,6 +19771,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_dcsvg.o: $(srcdir)/src/common/dcsvg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dcsvg.cpp
+
+@COND_USE_GUI_1@monodll_dirctrlcmn.o: $(srcdir)/src/common/dirctrlcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dirctrlcmn.cpp
 
 @COND_USE_GUI_1@monodll_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
@@ -19800,6 +19934,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_paper.o: $(srcdir)/src/common/paper.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@monodll_panelcmn.o: $(srcdir)/src/common/panelcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/panelcmn.cpp
+
 @COND_USE_GUI_1@monodll_persist.o: $(srcdir)/src/common/persist.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/persist.cpp
 
@@ -19815,6 +19952,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_quantize.o: $(srcdir)/src/common/quantize.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/quantize.cpp
 
+@COND_USE_GUI_1@monodll_radiobtncmn.o: $(srcdir)/src/common/radiobtncmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/radiobtncmn.cpp
+
 @COND_USE_GUI_1@monodll_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
@@ -19827,11 +19967,20 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_rgncmn.o: $(srcdir)/src/common/rgncmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/rgncmn.cpp
 
+@COND_USE_GUI_1@monodll_scrolbarcmn.o: $(srcdir)/src/common/scrolbarcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/scrolbarcmn.cpp
+
 @COND_USE_GUI_1@monodll_settcmn.o: $(srcdir)/src/common/settcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/settcmn.cpp
 
 @COND_USE_GUI_1@monodll_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
+
+@COND_USE_GUI_1@monodll_slidercmn.o: $(srcdir)/src/common/slidercmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/slidercmn.cpp
+
+@COND_USE_GUI_1@monodll_spinbtncmn.o: $(srcdir)/src/common/spinbtncmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/spinbtncmn.cpp
 
 @COND_USE_GUI_1@monodll_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -19841,6 +19990,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@monodll_statbmpcmn.o: $(srcdir)/src/common/statbmpcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statbmpcmn.cpp
+
+@COND_USE_GUI_1@monodll_statboxcmn.o: $(srcdir)/src/common/statboxcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statboxcmn.cpp
+
+@COND_USE_GUI_1@monodll_statlinecmn.o: $(srcdir)/src/common/statlinecmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statlinecmn.cpp
 
 @COND_USE_GUI_1@monodll_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
@@ -20001,8 +20159,14 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+@COND_USE_GUI_1@monodll_gridcmn.o: $(srcdir)/src/common/gridcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gridcmn.cpp
+
 @COND_USE_GUI_1@monodll_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
+@COND_USE_GUI_1@monodll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
 @COND_USE_GUI_1@monodll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
@@ -24816,6 +24980,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_bmpbase.o: $(srcdir)/src/common/bmpbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/bmpbase.cpp
 
+@COND_USE_GUI_1@monolib_bmpbtncmn.o: $(srcdir)/src/common/bmpbtncmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/bmpbtncmn.cpp
+
 @COND_USE_GUI_1@monolib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
@@ -24824,6 +24991,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_cairo.o: $(srcdir)/src/common/cairo.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/cairo.cpp
+
+@COND_USE_GUI_1@monolib_checkboxcmn.o: $(srcdir)/src/common/checkboxcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/checkboxcmn.cpp
+
+@COND_USE_GUI_1@monolib_checklstcmn.o: $(srcdir)/src/common/checklstcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/checklstcmn.cpp
 
 @COND_USE_GUI_1@monolib_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
@@ -24872,6 +25045,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_dcsvg.o: $(srcdir)/src/common/dcsvg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dcsvg.cpp
+
+@COND_USE_GUI_1@monolib_dirctrlcmn.o: $(srcdir)/src/common/dirctrlcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dirctrlcmn.cpp
 
 @COND_USE_GUI_1@monolib_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
@@ -25032,6 +25208,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_paper.o: $(srcdir)/src/common/paper.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@monolib_panelcmn.o: $(srcdir)/src/common/panelcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/panelcmn.cpp
+
 @COND_USE_GUI_1@monolib_persist.o: $(srcdir)/src/common/persist.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/persist.cpp
 
@@ -25047,6 +25226,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_quantize.o: $(srcdir)/src/common/quantize.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/quantize.cpp
 
+@COND_USE_GUI_1@monolib_radiobtncmn.o: $(srcdir)/src/common/radiobtncmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/radiobtncmn.cpp
+
 @COND_USE_GUI_1@monolib_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
@@ -25059,11 +25241,20 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_rgncmn.o: $(srcdir)/src/common/rgncmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/rgncmn.cpp
 
+@COND_USE_GUI_1@monolib_scrolbarcmn.o: $(srcdir)/src/common/scrolbarcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/scrolbarcmn.cpp
+
 @COND_USE_GUI_1@monolib_settcmn.o: $(srcdir)/src/common/settcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/settcmn.cpp
 
 @COND_USE_GUI_1@monolib_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
+
+@COND_USE_GUI_1@monolib_slidercmn.o: $(srcdir)/src/common/slidercmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/slidercmn.cpp
+
+@COND_USE_GUI_1@monolib_spinbtncmn.o: $(srcdir)/src/common/spinbtncmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/spinbtncmn.cpp
 
 @COND_USE_GUI_1@monolib_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -25073,6 +25264,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@monolib_statbmpcmn.o: $(srcdir)/src/common/statbmpcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statbmpcmn.cpp
+
+@COND_USE_GUI_1@monolib_statboxcmn.o: $(srcdir)/src/common/statboxcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statboxcmn.cpp
+
+@COND_USE_GUI_1@monolib_statlinecmn.o: $(srcdir)/src/common/statlinecmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statlinecmn.cpp
 
 @COND_USE_GUI_1@monolib_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
@@ -25233,8 +25433,14 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+@COND_USE_GUI_1@monolib_gridcmn.o: $(srcdir)/src/common/gridcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gridcmn.cpp
+
 @COND_USE_GUI_1@monolib_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
+@COND_USE_GUI_1@monolib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
 @COND_USE_GUI_1@monolib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
@@ -30225,6 +30431,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_bmpbase.o: $(srcdir)/src/common/bmpbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/bmpbase.cpp
 
+@COND_USE_GUI_1@coredll_bmpbtncmn.o: $(srcdir)/src/common/bmpbtncmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/bmpbtncmn.cpp
+
 @COND_USE_GUI_1@coredll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
@@ -30233,6 +30442,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_cairo.o: $(srcdir)/src/common/cairo.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/cairo.cpp
+
+@COND_USE_GUI_1@coredll_checkboxcmn.o: $(srcdir)/src/common/checkboxcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/checkboxcmn.cpp
+
+@COND_USE_GUI_1@coredll_checklstcmn.o: $(srcdir)/src/common/checklstcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/checklstcmn.cpp
 
 @COND_USE_GUI_1@coredll_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
@@ -30281,6 +30496,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_dcsvg.o: $(srcdir)/src/common/dcsvg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dcsvg.cpp
+
+@COND_USE_GUI_1@coredll_dirctrlcmn.o: $(srcdir)/src/common/dirctrlcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dirctrlcmn.cpp
 
 @COND_USE_GUI_1@coredll_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
@@ -30441,6 +30659,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_paper.o: $(srcdir)/src/common/paper.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@coredll_panelcmn.o: $(srcdir)/src/common/panelcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/panelcmn.cpp
+
 @COND_USE_GUI_1@coredll_persist.o: $(srcdir)/src/common/persist.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/persist.cpp
 
@@ -30456,6 +30677,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_quantize.o: $(srcdir)/src/common/quantize.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/quantize.cpp
 
+@COND_USE_GUI_1@coredll_radiobtncmn.o: $(srcdir)/src/common/radiobtncmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/radiobtncmn.cpp
+
 @COND_USE_GUI_1@coredll_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
@@ -30468,11 +30692,20 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_rgncmn.o: $(srcdir)/src/common/rgncmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/rgncmn.cpp
 
+@COND_USE_GUI_1@coredll_scrolbarcmn.o: $(srcdir)/src/common/scrolbarcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/scrolbarcmn.cpp
+
 @COND_USE_GUI_1@coredll_settcmn.o: $(srcdir)/src/common/settcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/settcmn.cpp
 
 @COND_USE_GUI_1@coredll_sizer.o: $(srcdir)/src/common/sizer.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
+
+@COND_USE_GUI_1@coredll_slidercmn.o: $(srcdir)/src/common/slidercmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/slidercmn.cpp
+
+@COND_USE_GUI_1@coredll_spinbtncmn.o: $(srcdir)/src/common/spinbtncmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/spinbtncmn.cpp
 
 @COND_USE_GUI_1@coredll_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -30482,6 +30715,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_statbar.o: $(srcdir)/src/common/statbar.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@coredll_statbmpcmn.o: $(srcdir)/src/common/statbmpcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statbmpcmn.cpp
+
+@COND_USE_GUI_1@coredll_statboxcmn.o: $(srcdir)/src/common/statboxcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statboxcmn.cpp
+
+@COND_USE_GUI_1@coredll_statlinecmn.o: $(srcdir)/src/common/statlinecmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statlinecmn.cpp
 
 @COND_USE_GUI_1@coredll_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
@@ -34149,6 +34391,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_bmpbase.o: $(srcdir)/src/common/bmpbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/bmpbase.cpp
 
+@COND_USE_GUI_1@corelib_bmpbtncmn.o: $(srcdir)/src/common/bmpbtncmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/bmpbtncmn.cpp
+
 @COND_USE_GUI_1@corelib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
@@ -34157,6 +34402,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_cairo.o: $(srcdir)/src/common/cairo.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/cairo.cpp
+
+@COND_USE_GUI_1@corelib_checkboxcmn.o: $(srcdir)/src/common/checkboxcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/checkboxcmn.cpp
+
+@COND_USE_GUI_1@corelib_checklstcmn.o: $(srcdir)/src/common/checklstcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/checklstcmn.cpp
 
 @COND_USE_GUI_1@corelib_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
@@ -34205,6 +34456,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_dcsvg.o: $(srcdir)/src/common/dcsvg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dcsvg.cpp
+
+@COND_USE_GUI_1@corelib_dirctrlcmn.o: $(srcdir)/src/common/dirctrlcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dirctrlcmn.cpp
 
 @COND_USE_GUI_1@corelib_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
@@ -34365,6 +34619,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_paper.o: $(srcdir)/src/common/paper.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@corelib_panelcmn.o: $(srcdir)/src/common/panelcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/panelcmn.cpp
+
 @COND_USE_GUI_1@corelib_persist.o: $(srcdir)/src/common/persist.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/persist.cpp
 
@@ -34380,6 +34637,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_quantize.o: $(srcdir)/src/common/quantize.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/quantize.cpp
 
+@COND_USE_GUI_1@corelib_radiobtncmn.o: $(srcdir)/src/common/radiobtncmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/radiobtncmn.cpp
+
 @COND_USE_GUI_1@corelib_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
@@ -34392,11 +34652,20 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_rgncmn.o: $(srcdir)/src/common/rgncmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/rgncmn.cpp
 
+@COND_USE_GUI_1@corelib_scrolbarcmn.o: $(srcdir)/src/common/scrolbarcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/scrolbarcmn.cpp
+
 @COND_USE_GUI_1@corelib_settcmn.o: $(srcdir)/src/common/settcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/settcmn.cpp
 
 @COND_USE_GUI_1@corelib_sizer.o: $(srcdir)/src/common/sizer.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
+
+@COND_USE_GUI_1@corelib_slidercmn.o: $(srcdir)/src/common/slidercmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/slidercmn.cpp
+
+@COND_USE_GUI_1@corelib_spinbtncmn.o: $(srcdir)/src/common/spinbtncmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/spinbtncmn.cpp
 
 @COND_USE_GUI_1@corelib_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -34406,6 +34675,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_statbar.o: $(srcdir)/src/common/statbar.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@corelib_statbmpcmn.o: $(srcdir)/src/common/statbmpcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statbmpcmn.cpp
+
+@COND_USE_GUI_1@corelib_statboxcmn.o: $(srcdir)/src/common/statboxcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statboxcmn.cpp
+
+@COND_USE_GUI_1@corelib_statlinecmn.o: $(srcdir)/src/common/statlinecmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statlinecmn.cpp
 
 @COND_USE_GUI_1@corelib_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
@@ -34590,8 +34868,14 @@ advdll_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(ADVDLL_ODEP)
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+advdll_gridcmn.o: $(srcdir)/src/common/gridcmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/gridcmn.cpp
+
 advdll_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
+advdll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
 advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
@@ -34938,8 +35222,14 @@ advlib_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(ADVLIB_ODEP)
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+advlib_gridcmn.o: $(srcdir)/src/common/gridcmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/gridcmn.cpp
+
 advlib_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
+advlib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
 advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
