@@ -83,10 +83,10 @@ wxPROPERTY( ValueString, wxString, SetValue, GetValue, \
            wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) ;
 wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
-/*
- wxPROPERTY( Min, int, SetMin, GetMin, 0, 0 /*flags, wxT("Helpstring"), wxT("group") )
- wxPROPERTY( Max, int, SetMax, GetMax, 0, 0 /*flags, wxT("Helpstring"), wxT("group"))
- */
+#if 0
+ wxPROPERTY( Min, int, SetMin, GetMin, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
+ wxPROPERTY( Max, int, SetMax, GetMax, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+#endif
 wxPROPERTY_FLAGS( WindowStyle, wxSpinCtrlStyle, long, SetWindowStyleFlag, \
                  GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                  wxT("Helpstring"), wxT("group")) // style
