@@ -29,7 +29,6 @@
 #include "wx/checklst.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcctl.h"
     #include "wx/object.h"
     #include "wx/colour.h"
     #include "wx/font.h"
