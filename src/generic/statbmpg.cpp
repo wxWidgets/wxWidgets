@@ -38,5 +38,12 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DrawBitmap(m_bitmap, 0, 0, true);
 }
 
+// under OSX_cocoa is a define, avoid duplicate info
+#ifndef wxGenericStaticBitmap
+
+IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticBitmap, wxStaticBitmapBase)
+
+#endif
+
 #endif // wxUSE_STATBMP
 
