@@ -967,6 +967,11 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
 
 void ImageTestCase::CompareSavedImage()
 {
+    // FIXME-VC6: Pre-declare the loop variables for compatibility with
+    // pre-standard compilers such as MSVC6 that don't implement proper scope
+    // for the variables declared in the for loops.
+    int i, x, y;
+
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
     CPPUNIT_ASSERT( !expected24.HasAlpha() );
@@ -976,7 +981,7 @@ void ImageTestCase::CompareSavedImage()
     numColours = expected8.CountColours();
 
     unsigned char greys[256];
-    for (size_t i = 0; i < 256; ++i)
+    for (i = 0; i < 256; ++i)
     {
         greys[i] = i;
     }
@@ -990,9 +995,9 @@ void ImageTestCase::CompareSavedImage()
 
     int width = expected32.GetWidth();
     int height = expected32.GetHeight();
-    for (int y = 0; y < height; ++y)
+    for (y = 0; y < height; ++y)
     {
-        for (int x = 0; x < width; ++x)
+        for (x = 0; x < width; ++x)
         {
             expected32.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
         }
@@ -1020,9 +1025,9 @@ void ImageTestCase::CompareSavedImage()
 
     width = expected8.GetWidth();
     height = expected8.GetHeight();
-    for (int y = 0; y < height; ++y)
+    for (y = 0; y < height; ++y)
     {
-        for (int x = 0; x < width; ++x)
+        for (x = 0; x < width; ++x)
         {
             expected8.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
         }
@@ -1046,7 +1051,7 @@ void ImageTestCase::CompareSavedImage()
     unsigned char red[256], green[256], blue[256];
     const wxPalette& pal = expected8.GetPalette();
     const int paletteCount = pal.GetColoursCount();
-    for (int i = 0; i < paletteCount; ++i)
+    for (i = 0; i < paletteCount; ++i)
     {
         expected8.GetPalette().GetRGB(i, &red[i], &green[i], &blue[i]);
     }
