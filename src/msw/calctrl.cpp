@@ -34,8 +34,6 @@
 
 #include "wx/msw/private/datecontrols.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
