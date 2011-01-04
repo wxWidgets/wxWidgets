@@ -650,9 +650,9 @@ error:
 // ----------------------------------------------------------------------------
 
 static int PaletteFind(const png_color& clr,
-    const png_color *pal, png_uint_16 palCount)
+    const png_color *pal, int palCount)
 {
-   for (png_uint_16 i = 0; i < palCount; i++)
+   for (int i = 0; i < palCount; ++i)
    {
       if (    (clr.red   == pal[i].red)
            && (clr.green == pal[i].green)
@@ -848,8 +848,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
             return false;
         }
 
-        png_uint_16 i;
-        for (i = 0; i < palCount; ++i)
+        for (int i = 0; i < palCount; ++i)
         {
             pal.GetRGB(i, &palette[i].red, &palette[i].green, &palette[i].blue);
         }
