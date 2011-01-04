@@ -171,7 +171,4 @@ void wxGtkCalendarCtrl::Mark(size_t day, bool mark)
         gtk_calendar_unmark_day(GTK_CALENDAR(m_widget), day);
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxGtkCalendarCtrl, wxControl)
-
-
 #endif // wxUSE_CALENDARCTRL
