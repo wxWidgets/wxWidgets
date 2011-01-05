@@ -887,7 +887,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         // get size of bitmap always return valid value (0 for invalid bitmap),
         // so we don't needed check if bitmap is valid ;)
         size_t heightBmp = wxMax(m_bmpChecked.GetHeight(), m_bmpUnchecked.GetHeight());
-        size_t widthtBmp = wxMax(m_bmpChecked.GetWidth(),  m_bmpUnchecked.GetWidth());
+        size_t widthBmp = wxMax(m_bmpChecked.GetWidth(),  m_bmpUnchecked.GetWidth());
 
         if ( IsOwnerDrawn() )
         {
@@ -896,7 +896,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         else
         {
             // we must allocate enough space for the bitmap
-            *width += widthtBmp;
+            *width += widthBmp;
         }
 
         // Is BMP height larger than text height?
