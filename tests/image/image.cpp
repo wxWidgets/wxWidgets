@@ -980,6 +980,7 @@ void ImageTestCase::CompareSavedImage()
     wxImage expected8 = expected24.ConvertToGreyscale();
     numColours = expected8.CountColours();
 
+#if wxUSE_PALETTE
     unsigned char greys[256];
     for (i = 0; i < 256; ++i)
     {
@@ -987,6 +988,8 @@ void ImageTestCase::CompareSavedImage()
     }
     wxPalette palette(256, greys, greys, greys);
     expected8.SetPalette(palette);
+#endif // #if wxUSE_PALETTE
+
     expected8.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_8BPP_PALETTE);
 
     // Create an image with alpha based on the loaded image
@@ -1019,7 +1022,9 @@ void ImageTestCase::CompareSavedImage()
 
     expected8.LoadFile("horse.gif");
     CPPUNIT_ASSERT( expected8.IsOk() );
+#if wxUSE_PALETTE
     CPPUNIT_ASSERT( expected8.HasPalette() );
+#endif // #if wxUSE_PALETTE
 
     expected8.SetAlpha();
 
