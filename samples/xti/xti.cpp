@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor, Francesco Montorsi
 // Modified by:
 // Created:     13/5/2007
-// RCS-ID:      $Id: xti.cpp 48407 2007-08-26 23:17:23Z FM $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor, Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

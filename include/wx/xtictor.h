@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
 // Created:     27/07/03
-// RCS-ID:      $Id: xti.h 47299 2007-07-10 15:58:27Z FM $
+// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence

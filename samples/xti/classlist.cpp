@@ -4,7 +4,7 @@
 // Author:      Francesco Montorsi
 // Modified by: 
 // Created:     03/06/2007 14:49:55
-// RCS-ID:      $Id: classlist.cpp 48186 2007-08-19 19:59:54Z FM $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWidgets license
 /////////////////////////////////////////////////////////////////////////////
