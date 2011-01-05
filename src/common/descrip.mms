@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 15 December 2010                                                    *
+# Date : 4 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -218,7 +218,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
 		arcfind.obj,tarstrm.obj,datavcmn.obj,debugrpt.obj,\
 		translation.obj,languageinfo.obj,filehistorycmn.obj,\
-		stdstream.obj,uiactioncmn.obj
+		stdstream.obj,uiactioncmn.obj,arttango.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -417,7 +417,8 @@ SOURCES = \
 		xtistrm.cpp,\
 		xtixml.cpp,\
 		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.cpp,arcfind.cpp,\
-		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp,uiactioncmn.cpp
+		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp,uiactioncmn.cpp,\
+		arttango.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -672,3 +673,4 @@ languageinfo.obj : languageinfo.cpp
 filehistorycmn.obj : filehistorycmn.cpp
 stdstream.obj : stdstream.cpp
 uiactioncmn.obj : uiactioncmn.cpp
+arttango.obj : arttango.cpp
