@@ -772,6 +772,11 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     }
 #else
     bool bUsePalette = false;
+
+    if (iColorType == wxPNG_TYPE_PALETTE)
+    {
+        iColorType = wxPNG_TYPE_COLOUR;
+    }
 #endif // wxUSE_PALETTE
 
     bool bUseAlpha = !bUsePalette && (bHasAlpha || bHasMask);
