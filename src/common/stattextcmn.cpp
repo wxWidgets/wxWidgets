@@ -26,7 +26,7 @@
 
 #include "wx/private/stattext.h"
 
-const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
+const wxChar *const wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 {
     // the entities handled by SetLabel() when wxST_MARKUP is used and their referenced string
 

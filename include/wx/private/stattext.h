@@ -37,6 +37,6 @@ enum
 //    wxMarkupEntities[wxMARKUP_ELEMENT_NAME][wxMARKUP_ENTITY_GT]  == "&gt;"
 //    wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][wxMARKUP_ENTITY_GT] == ">"
 //
-extern const wxChar *wxMarkupEntities[wxMARKUP_ELEMENT_MAX][wxMARKUP_ENTITY_MAX];
+extern const wxChar *const wxMarkupEntities[wxMARKUP_ELEMENT_MAX][wxMARKUP_ENTITY_MAX];
 
 #endif // _WX_PRIVATE_STATTEXT_H_
