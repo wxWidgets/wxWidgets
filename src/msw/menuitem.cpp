@@ -882,7 +882,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         *width += imgWidth + data->CheckBgMargin.GetTotalX();
     }
 
-    if ( m_bmpChecked.IsOk() || m_bmpChecked.IsOk() )
+    if ( m_bmpChecked.IsOk() || m_bmpUnchecked.IsOk() )
     {
         // get size of bitmap always return valid value (0 for invalid bitmap),
         // so we don't needed check if bitmap is valid ;)
