@@ -131,9 +131,11 @@ public:
     virtual bool RemoveAll();
 
     /**
-        Returns the number of watched paths
+        Returns the number of currently watched paths.
+
+        @see GetWatchedPaths()
      */
-    int GetWatchedPathCount() const;
+    int GetWatchedPathsCount() const;
 
     /**
         Retrieves all watched paths and places them in @a paths. Returns
