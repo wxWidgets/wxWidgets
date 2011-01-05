@@ -195,6 +195,8 @@ void wxMessageOutputLog::Output(const wxString& str)
 
 #if wxUSE_GUI && wxUSE_MSGDLG
 
+extern WXDLLEXPORT_DATA(const char) wxMessageBoxCaptionStr[] = "Message";
+
 void wxMessageOutputMessageBox::Output(const wxString& str)
 {
     wxString out(str);

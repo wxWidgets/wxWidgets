@@ -31,9 +31,10 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/arrstr.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
+extern WXDLLEXPORT_DATA(const char) wxListBoxNameStr[] = "listBox";
 
 // ============================================================================
 // implementation

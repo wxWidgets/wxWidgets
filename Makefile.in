@@ -4487,7 +4487,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_cshelp.o \
 	monodll_ctrlcmn.o \
 	monodll_ctrlsub.o \
-	monodll_datacmn.o \
 	monodll_dcbase.o \
 	monodll_dcbufcmn.o \
 	monodll_dcgraph.o \
@@ -4699,7 +4698,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_cshelp.o \
 	monodll_ctrlcmn.o \
 	monodll_ctrlsub.o \
-	monodll_datacmn.o \
 	monodll_dcbase.o \
 	monodll_dcbufcmn.o \
 	monodll_dcgraph.o \
@@ -6395,7 +6393,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_cshelp.o \
 	monolib_ctrlcmn.o \
 	monolib_ctrlsub.o \
-	monolib_datacmn.o \
 	monolib_dcbase.o \
 	monolib_dcbufcmn.o \
 	monolib_dcgraph.o \
@@ -6607,7 +6604,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_cshelp.o \
 	monolib_ctrlcmn.o \
 	monolib_ctrlsub.o \
-	monolib_datacmn.o \
 	monolib_dcbase.o \
 	monolib_dcbufcmn.o \
 	monolib_dcgraph.o \
@@ -8487,7 +8483,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_cshelp.o \
 	coredll_ctrlcmn.o \
 	coredll_ctrlsub.o \
-	coredll_datacmn.o \
 	coredll_dcbase.o \
 	coredll_dcbufcmn.o \
 	coredll_dcgraph.o \
@@ -8699,7 +8694,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_cshelp.o \
 	coredll_ctrlcmn.o \
 	coredll_ctrlsub.o \
-	coredll_datacmn.o \
 	coredll_dcbase.o \
 	coredll_dcbufcmn.o \
 	coredll_dcgraph.o \
@@ -10057,7 +10051,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_cshelp.o \
 	corelib_ctrlcmn.o \
 	corelib_ctrlsub.o \
-	corelib_datacmn.o \
 	corelib_dcbase.o \
 	corelib_dcbufcmn.o \
 	corelib_dcgraph.o \
@@ -10269,7 +10262,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_cshelp.o \
 	corelib_ctrlcmn.o \
 	corelib_ctrlsub.o \
-	corelib_datacmn.o \
 	corelib_dcbase.o \
 	corelib_dcbufcmn.o \
 	corelib_dcgraph.o \
@@ -19757,9 +19749,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_ctrlsub.o: $(srcdir)/src/common/ctrlsub.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/ctrlsub.cpp
 
-@COND_USE_GUI_1@monodll_datacmn.o: $(srcdir)/src/common/datacmn.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datacmn.cpp
-
 @COND_USE_GUI_1@monodll_dcbase.o: $(srcdir)/src/common/dcbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dcbase.cpp
 
@@ -25030,9 +25019,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_ctrlsub.o: $(srcdir)/src/common/ctrlsub.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/ctrlsub.cpp
-
-@COND_USE_GUI_1@monolib_datacmn.o: $(srcdir)/src/common/datacmn.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datacmn.cpp
 
 @COND_USE_GUI_1@monolib_dcbase.o: $(srcdir)/src/common/dcbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dcbase.cpp
@@ -30482,9 +30468,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_ctrlsub.o: $(srcdir)/src/common/ctrlsub.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/ctrlsub.cpp
 
-@COND_USE_GUI_1@coredll_datacmn.o: $(srcdir)/src/common/datacmn.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/datacmn.cpp
-
 @COND_USE_GUI_1@coredll_dcbase.o: $(srcdir)/src/common/dcbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dcbase.cpp
 
@@ -34441,9 +34424,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_ctrlsub.o: $(srcdir)/src/common/ctrlsub.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/ctrlsub.cpp
-
-@COND_USE_GUI_1@corelib_datacmn.o: $(srcdir)/src/common/datacmn.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/datacmn.cpp
 
 @COND_USE_GUI_1@corelib_dcbase.o: $(srcdir)/src/common/dcbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dcbase.cpp

@@ -87,6 +87,8 @@ WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS
 
+extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[] = "panel";
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------

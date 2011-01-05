@@ -24,19 +24,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/textwrapper.h"
 #include "wx/private/stattext.h"
-
-#ifndef WX_PRECOMP
-    #include "wx/button.h"
-    #include "wx/dcclient.h"
-    #include "wx/intl.h"
-    #include "wx/log.h"
-    #include "wx/settings.h"
-    #include "wx/stattext.h"
-    #include "wx/sizer.h"
-    #include "wx/containr.h"
-#endif
 
 const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 {
@@ -47,6 +35,21 @@ const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 };
 
 #if wxUSE_STATTEXT
+
+#ifndef WX_PRECOMP
+    #include "wx/stattext.h"
+    #include "wx/button.h"
+    #include "wx/dcclient.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/settings.h"
+    #include "wx/sizer.h"
+    #include "wx/containr.h"
+#endif
+
+#include "wx/textwrapper.h"
+
+extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[] = "staticText";
 
 // ----------------------------------------------------------------------------
 // XTI

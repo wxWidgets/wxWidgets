@@ -30,6 +30,7 @@
     #include "wx/toplevel.h"
 #endif //WX_PRECOMP
 
+extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[] = "button";
 
 // ----------------------------------------------------------------------------
 // XTI

@@ -38,6 +38,8 @@
     #include "wx/cshelp.h"
 #endif
 
+extern WXDLLEXPORT_DATA(const char) wxRadioBoxNameStr[] = "radioBox";
+
 // ============================================================================
 // implementation
 // ============================================================================

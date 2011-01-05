@@ -344,10 +344,6 @@ SOURCE=..\..\src\common\ctrlsub.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\datacmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\dcbase.cpp
 # End Source File
 # Begin Source File

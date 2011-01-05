@@ -1808,7 +1808,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_cshelp.obj \
 	$(OBJS)\monodll_ctrlcmn.obj \
 	$(OBJS)\monodll_ctrlsub.obj \
-	$(OBJS)\monodll_datacmn.obj \
 	$(OBJS)\monodll_dcbase.obj \
 	$(OBJS)\monodll_dcbufcmn.obj \
 	$(OBJS)\monodll_dcgraph.obj \
@@ -2068,7 +2067,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_cshelp.obj \
 	$(OBJS)\monodll_ctrlcmn.obj \
 	$(OBJS)\monodll_ctrlsub.obj \
-	$(OBJS)\monodll_datacmn.obj \
 	$(OBJS)\monodll_dcbase.obj \
 	$(OBJS)\monodll_dcbufcmn.obj \
 	$(OBJS)\monodll_dcgraph.obj \
@@ -2560,7 +2558,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_cshelp.obj \
 	$(OBJS)\monolib_ctrlcmn.obj \
 	$(OBJS)\monolib_ctrlsub.obj \
-	$(OBJS)\monolib_datacmn.obj \
 	$(OBJS)\monolib_dcbase.obj \
 	$(OBJS)\monolib_dcbufcmn.obj \
 	$(OBJS)\monolib_dcgraph.obj \
@@ -2820,7 +2817,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_cshelp.obj \
 	$(OBJS)\monolib_ctrlcmn.obj \
 	$(OBJS)\monolib_ctrlsub.obj \
-	$(OBJS)\monolib_datacmn.obj \
 	$(OBJS)\monolib_dcbase.obj \
 	$(OBJS)\monolib_dcbufcmn.obj \
 	$(OBJS)\monolib_dcgraph.obj \
@@ -3200,7 +3196,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_cshelp.obj \
 	$(OBJS)\coredll_ctrlcmn.obj \
 	$(OBJS)\coredll_ctrlsub.obj \
-	$(OBJS)\coredll_datacmn.obj \
 	$(OBJS)\coredll_dcbase.obj \
 	$(OBJS)\coredll_dcbufcmn.obj \
 	$(OBJS)\coredll_dcgraph.obj \
@@ -3460,7 +3455,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_cshelp.obj \
 	$(OBJS)\coredll_ctrlcmn.obj \
 	$(OBJS)\coredll_ctrlsub.obj \
-	$(OBJS)\coredll_datacmn.obj \
 	$(OBJS)\coredll_dcbase.obj \
 	$(OBJS)\coredll_dcbufcmn.obj \
 	$(OBJS)\coredll_dcgraph.obj \
@@ -3729,7 +3723,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_cshelp.obj \
 	$(OBJS)\corelib_ctrlcmn.obj \
 	$(OBJS)\corelib_ctrlsub.obj \
-	$(OBJS)\corelib_datacmn.obj \
 	$(OBJS)\corelib_dcbase.obj \
 	$(OBJS)\corelib_dcbufcmn.obj \
 	$(OBJS)\corelib_dcgraph.obj \
@@ -3989,7 +3982,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_cshelp.obj \
 	$(OBJS)\corelib_ctrlcmn.obj \
 	$(OBJS)\corelib_ctrlsub.obj \
-	$(OBJS)\corelib_datacmn.obj \
 	$(OBJS)\corelib_dcbase.obj \
 	$(OBJS)\corelib_dcbufcmn.obj \
 	$(OBJS)\corelib_dcgraph.obj \
@@ -7336,11 +7328,6 @@ $(OBJS)\monodll_ctrlsub.obj: ..\..\src\common\ctrlsub.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_datacmn.obj: ..\..\src\common\datacmn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\datacmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_dcbase.obj: ..\..\src\common\dcbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\dcbase.cpp
 !endif
@@ -9653,11 +9640,6 @@ $(OBJS)\monolib_ctrlsub.obj: ..\..\src\common\ctrlsub.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_datacmn.obj: ..\..\src\common\datacmn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\datacmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_dcbase.obj: ..\..\src\common\dcbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\dcbase.cpp
 !endif
@@ -11961,11 +11943,6 @@ $(OBJS)\coredll_ctrlsub.obj: ..\..\src\common\ctrlsub.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_datacmn.obj: ..\..\src\common\datacmn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\datacmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_dcbase.obj: ..\..\src\common\dcbase.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\dcbase.cpp
 !endif
@@ -13333,11 +13310,6 @@ $(OBJS)\corelib_ctrlcmn.obj: ..\..\src\common\ctrlcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_ctrlsub.obj: ..\..\src\common\ctrlsub.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\ctrlsub.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_datacmn.obj: ..\..\src\common\datacmn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\datacmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

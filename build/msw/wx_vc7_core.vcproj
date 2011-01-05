@@ -604,9 +604,6 @@
 				RelativePath="..\..\src\common\ctrlsub.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\common\datacmn.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\common\dcbase.cpp">
 			</File>
 			<File

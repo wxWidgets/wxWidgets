@@ -23,9 +23,12 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COMBOCTRL
-
+#if wxUSE_COMBOBOX
 #include "wx/combobox.h"
+extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
+#endif
+
+#if wxUSE_COMBOCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

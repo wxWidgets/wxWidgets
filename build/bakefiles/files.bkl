@@ -670,7 +670,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/cshelp.cpp
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
-    src/common/datacmn.cpp
     src/common/dcbase.cpp
     src/common/dcbufcmn.cpp
     src/common/dcgraph.cpp
