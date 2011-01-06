@@ -524,4 +524,7 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxAnyNullValue>)
 wxAnyValueType* wxAnyNullValueType =
     wxAnyValueTypeImpl<wxAnyNullValue>::GetInstance();
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxAnyList)
+
 #endif // wxUSE_ANY

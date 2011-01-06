@@ -20,7 +20,7 @@
 #include "wx/string.h"
 #include "wx/meta/if.h"
 #include "wx/typeinfo.h"
-
+#include "wx/list.h"
 
 // Size of the wxAny value buffer.
 enum
@@ -104,7 +104,7 @@ public:
         a specific C++ data type.
 
         @remarks This template function does not work on some older compilers
-                (such as Visual C++ 6.0). For full compiler ccompatibility
+                (such as Visual C++ 6.0). For full compiler compatibility
                 please use wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T) macro
                 instead.
 
@@ -215,7 +215,7 @@ public:
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
     {
-        // Breaking this code into two lines should supress
+        // Breaking this code into two lines should suppress
         // GCC's 'type-punned pointer will break strict-aliasing rules'
         // warning.
         const T* value = reinterpret_cast<const T*>(&buf.m_buffer[0]);
@@ -558,7 +558,7 @@ public: \
 // (this is needed only for types that are referred to from wxBase.
 // currently we may not use any of these types from there, but let's
 // use the macro on at least one to make sure it compiles since we can't
-// really test it properly in unittests since a separate DLL would
+// really test it properly in unit tests since a separate DLL would
 // be needed).
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -934,7 +934,7 @@ public:
         no type conversion is performed, so if the type is incorrect an
         assertion failure will occur.
 
-        @remarks For conveniency, conversion is done when T is wxString. This
+        @remarks For convenience, conversion is done when T is wxString. This
                  is useful when a string literal (which are treated as
                  const char* and const wchar_t*) has been assigned to wxAny.
 
@@ -968,10 +968,10 @@ public:
     }
 
     /**
-        Template function that etrieves and converts the value of this
+        Template function that retrieves and converts the value of this
         variant to the type that T* value is.
 
-        @return Returns @true if conversion was succesfull.
+        @return Returns @true if conversion was successful.
     */
     template<typename T>
     bool GetAs(T* value) const
@@ -1007,12 +1007,15 @@ private:
     // Assignment functions
     void AssignAny(const wxAny& any)
     {
-        // Must delete value - CopyBuffer() never does that
-        m_type->DeleteValue(m_buffer);
+        if ( m_type != wxAnyNullValueType )
+        {
+            // Must delete value - CopyBuffer() never does that
+            m_type->DeleteValue(m_buffer);
+        }
 
         wxAnyValueType* newType = any.m_type;
 
-        if ( !newType->IsSameType(m_type) )
+        if ( m_type == wxAnyNullValueType || !newType->IsSameType(m_type) )
             m_type = newType;
 
         newType->CopyBuffer(any.m_buffer, m_buffer);
@@ -1075,7 +1078,7 @@ inline bool wxAnyValueType::CheckType(T* reserved) const
     return wxAnyValueTypeImpl<T>::IsSameClass(this);
 }
 
-
+WX_DECLARE_LIST_WITH_DECL(wxAny, wxAnyList, class WXDLLIMPEXP_BASE);
 
 #endif // wxUSE_ANY
 
