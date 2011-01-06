@@ -1007,15 +1007,12 @@ private:
     // Assignment functions
     void AssignAny(const wxAny& any)
     {
-        if ( m_type != wxAnyNullValueType )
-        {
-            // Must delete value - CopyBuffer() never does that
-            m_type->DeleteValue(m_buffer);
-        }
+        // Must delete value - CopyBuffer() never does that
+        m_type->DeleteValue(m_buffer);
 
         wxAnyValueType* newType = any.m_type;
 
-        if ( m_type == wxAnyNullValueType || !newType->IsSameType(m_type) )
+        if ( !newType->IsSameType(m_type) )
             m_type = newType;
 
         newType->CopyBuffer(any.m_buffer, m_buffer);
