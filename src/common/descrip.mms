@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 January 2011                                                      *
+# Date : 6 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -218,7 +218,9 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
 		arcfind.obj,tarstrm.obj,datavcmn.obj,debugrpt.obj,\
 		translation.obj,languageinfo.obj,filehistorycmn.obj,\
-		stdstream.obj,uiactioncmn.obj,arttango.obj
+		stdstream.obj,uiactioncmn.obj,arttango.obj,mediactrlcmn.obj,\
+		panelcmn.obj,checkboxcmn.obj,statboxcmn.obj,slidercmn.obj,\
+		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -418,7 +420,9 @@ SOURCES = \
 		xtixml.cpp,\
 		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.cpp,arcfind.cpp,\
 		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp,uiactioncmn.cpp,\
-		arttango.cpp
+		arttango.cpp,mediactrlcmn.cpp,panelcmn.cpp,checkboxcmn.cpp,\
+		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
+		bmpbtncmn.cpp,checklstcmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -674,3 +678,12 @@ filehistorycmn.obj : filehistorycmn.cpp
 stdstream.obj : stdstream.cpp
 uiactioncmn.obj : uiactioncmn.cpp
 arttango.obj : arttango.cpp
+mediactrlcmn.obj : mediactrlcmn.cpp
+panelcmn.obj : panelcmn.cpp
+checkboxcmn.obj : checkboxcmn.cpp
+statboxcmn.obj : statboxcmn.cpp
+slidercmn.obj : slidercmn.cpp
+statlinecmn.obj : statlinecmn.cpp
+radiobtncmn.obj : radiobtncmn.cpp
+bmpbtncmn.obj : bmpbtncmn.cpp
+checklstcmn.obj : checklstcmn.cpp
