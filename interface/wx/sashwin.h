@@ -52,10 +52,10 @@ enum wxSashDragStatus
 
     @beginEventEmissionTable{wxSashEvent}
     @event{EVT_SASH_DRAGGED(id, func)}
-           Process a wxEVT_SASH_DRAGGED event, when the user has finished
+           Process a @c wxEVT_SASH_DRAGGED event, when the user has finished
            dragging a sash.
     @event{EVT_SASH_DRAGGED_RANGE(id1, id2, func)}
-           Process a wxEVT_SASH_DRAGGED_RANGE event, when the user has
+           Process a @c wxEVT_SASH_DRAGGED_RANGE event, when the user has
            finished dragging a sash. The event handler is called when windows
            with ids in the given range have their sashes dragged.
     @endEventTable
@@ -212,9 +212,9 @@ public:
 
     @beginEventTable{wxSashEvent}
     @event{EVT_SASH_DRAGGED(id, func)}
-        Process a wxEVT_SASH_DRAGGED event, when the user has finished dragging a sash.
+        Process a @c wxEVT_SASH_DRAGGED event, when the user has finished dragging a sash.
     @event{EVT_SASH_DRAGGED_RANGE(id1, id2, func)}
-        Process a wxEVT_SASH_DRAGGED_RANGE event, when the user has finished
+        Process a @c wxEVT_SASH_DRAGGED_RANGE event, when the user has finished
         dragging a sash. The event handler is called when windows with ids in
         the given range have their sashes dragged.
     @endEventTable

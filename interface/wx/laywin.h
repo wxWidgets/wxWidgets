@@ -92,10 +92,10 @@ enum wxLayoutAlignment
 
     @beginEventEmissionTable{wxQueryLayoutInfoEvent,wxCalculateLayoutEvent}
     @event{EVT_QUERY_LAYOUT_INFO(func)}
-        Process a wxEVT_QUERY_LAYOUT_INFO event, to get size, orientation and
+        Process a @c wxEVT_QUERY_LAYOUT_INFO event, to get size, orientation and
         alignment from a window. See wxQueryLayoutInfoEvent.
     @event{EVT_CALCULATE_LAYOUT(func)}
-        Process a wxEVT_CALCULATE_LAYOUT event, which asks the window to take a
+        Process a @c wxEVT_CALCULATE_LAYOUT event, which asks the window to take a
         'bite' out of a rectangle provided by the algorithm. See wxCalculateLayoutEvent.
     @endEventTable
 
@@ -294,7 +294,7 @@ public:
 
     @beginEventTable{wxQueryLayoutInfoEvent}
     @event{EVT_QUERY_LAYOUT_INFO(func)}
-        Process a wxEVT_QUERY_LAYOUT_INFO event, to get size, orientation and alignment
+        Process a @c wxEVT_QUERY_LAYOUT_INFO event, to get size, orientation and alignment
         from a window.
     @endEventTable
 
@@ -381,7 +381,7 @@ public:
 
     @beginEventTable{wxCalculateLayoutEvent}
     @event{EVT_CALCULATE_LAYOUT(func)}
-        Process a wxEVT_CALCULATE_LAYOUT event, which asks the window to take a
+        Process a @c wxEVT_CALCULATE_LAYOUT event, which asks the window to take a
         'bite' out of a rectangle provided by the algorithm.
     @endEventTable
 

@@ -17,7 +17,7 @@
     @style{wxSP_WRAP}
         The value wraps at the minimum and maximum.
     @style{wxTE_PROCESS_ENTER}
-        Indicates that the control should generate wxEVT_COMMAND_TEXT_ENTER
+        Indicates that the control should generate @c wxEVT_COMMAND_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.

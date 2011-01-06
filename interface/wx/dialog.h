@@ -112,7 +112,7 @@ enum wxDialogLayoutAdaptationMode
     @style{wxDIALOG_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
-           will send a wxEVT_HELP event if the user clicked on an application
+           will send a @c wxEVT_HELP event if the user clicked on an application
            window. Note that this is an extended style and must be set by
            calling SetExtraStyle() before Create is called (two-step
            construction).
@@ -452,7 +452,7 @@ public:
     virtual bool IsModal() const;
 
     /**
-        The default handler for wxEVT_SYS_COLOUR_CHANGED.
+        The default handler for @c wxEVT_SYS_COLOUR_CHANGED.
 
         @param event
             The colour change event.

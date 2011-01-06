@@ -53,19 +53,19 @@ public:
     to override wxTaskBarIcon::CreatePopupMenu() if all that the application does
     is that it shows a popup menu in reaction to mouse click.
     @event{EVT_TASKBAR_MOVE(func)}
-        Process a wxEVT_TASKBAR_MOVE event.
+        Process a @c wxEVT_TASKBAR_MOVE event.
     @event{EVT_TASKBAR_LEFT_DOWN(func)}
-        Process a wxEVT_TASKBAR_LEFT_DOWN event.
+        Process a @c wxEVT_TASKBAR_LEFT_DOWN event.
     @event{EVT_TASKBAR_LEFT_UP(func)}
-        Process a wxEVT_TASKBAR_LEFT_UP event.
+        Process a @c wxEVT_TASKBAR_LEFT_UP event.
     @event{EVT_TASKBAR_RIGHT_DOWN(func)}
-        Process a wxEVT_TASKBAR_RIGHT_DOWN event.
+        Process a @c wxEVT_TASKBAR_RIGHT_DOWN event.
     @event{EVT_TASKBAR_RIGHT_UP(func)}
-        Process a wxEVT_TASKBAR_RIGHT_UP event.
+        Process a @c wxEVT_TASKBAR_RIGHT_UP event.
     @event{EVT_TASKBAR_LEFT_DCLICK(func)}
-        Process a wxEVT_TASKBAR_LEFT_DCLICK event.
+        Process a @c wxEVT_TASKBAR_LEFT_DCLICK event.
     @event{EVT_TASKBAR_RIGHT_DCLICK(func)}
-        Process a wxEVT_TASKBAR_RIGHT_DCLICK event.
+        Process a @c wxEVT_TASKBAR_RIGHT_DCLICK event.
     @event{EVT_TASKBAR_CLICK(func)}
         This is a synonym for either EVT_TASKBAR_RIGHT_DOWN or UP depending on
         the platform, use this event macro to catch the event which should result

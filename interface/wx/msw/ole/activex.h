@@ -85,7 +85,7 @@ public:
     is a platform-specific class).
 
     Note that the HWND that the class contains is the actual HWND of the ActiveX
-    control so using dynamic events and connecting to wxEVT_SIZE, for example,
+    control so using dynamic events and connecting to @c wxEVT_SIZE, for example,
     will receive the actual size message sent to the control.
 
     It is somewhat similar to the ATL class CAxWindow in operation.

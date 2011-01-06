@@ -533,7 +533,7 @@ public:
             Pull-right submenu.
         @param helpString
             An optional help string associated with the item.
-            By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
+            By default, the handler for the @c wxEVT_MENU_HIGHLIGHT event displays
             this string in the status line.
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),

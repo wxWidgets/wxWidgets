@@ -51,10 +51,10 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_LISTBOX(id, func)}
-        Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
+        Process a @c wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
         list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
-        Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox
+        Process a @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox
         is double-clicked.
     @endEventTable
 

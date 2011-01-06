@@ -110,8 +110,8 @@ public:
             The identifier of the object (window, timer, ...) which generated
             this event.
         @param eventType
-            The unique type of event, e.g. wxEVT_PAINT, wxEVT_SIZE or
-            wxEVT_COMMAND_BUTTON_CLICKED.
+            The unique type of event, e.g. @c wxEVT_PAINT, @c wxEVT_SIZE or
+            @c wxEVT_COMMAND_BUTTON_CLICKED.
     */
     wxEvent(int id = 0, wxEventType eventType = wxEVT_NULL);
 
@@ -1573,22 +1573,22 @@ public:
     @event{EVT_SCROLLWIN(func)}
         Process all scroll events.
     @event{EVT_SCROLLWIN_TOP(func)}
-        Process wxEVT_SCROLLWIN_TOP scroll-to-top events.
+        Process @c wxEVT_SCROLLWIN_TOP scroll-to-top events.
     @event{EVT_SCROLLWIN_BOTTOM(func)}
-        Process wxEVT_SCROLLWIN_BOTTOM scroll-to-bottom events.
+        Process @c wxEVT_SCROLLWIN_BOTTOM scroll-to-bottom events.
     @event{EVT_SCROLLWIN_LINEUP(func)}
-        Process wxEVT_SCROLLWIN_LINEUP line up events.
+        Process @c wxEVT_SCROLLWIN_LINEUP line up events.
     @event{EVT_SCROLLWIN_LINEDOWN(func)}
-        Process wxEVT_SCROLLWIN_LINEDOWN line down events.
+        Process @c wxEVT_SCROLLWIN_LINEDOWN line down events.
     @event{EVT_SCROLLWIN_PAGEUP(func)}
-        Process wxEVT_SCROLLWIN_PAGEUP page up events.
+        Process @c wxEVT_SCROLLWIN_PAGEUP page up events.
     @event{EVT_SCROLLWIN_PAGEDOWN(func)}
-        Process wxEVT_SCROLLWIN_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLLWIN_PAGEDOWN page down events.
     @event{EVT_SCROLLWIN_THUMBTRACK(func)}
-        Process wxEVT_SCROLLWIN_THUMBTRACK thumbtrack events
+        Process @c wxEVT_SCROLLWIN_THUMBTRACK thumbtrack events
         (frequent events sent as the user drags the thumbtrack).
     @event{EVT_SCROLLWIN_THUMBRELEASE(func)}
-        Process wxEVT_SCROLLWIN_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLLWIN_THUMBRELEASE thumb release events.
     @endEventTable
 
 
@@ -2027,8 +2027,8 @@ public:
     wxTextCtrl but other windows can generate these events as well) when its
     content gets copied or cut to, or pasted from the clipboard.
 
-    There are three types of corresponding events wxEVT_COMMAND_TEXT_COPY,
-    wxEVT_COMMAND_TEXT_CUT and wxEVT_COMMAND_TEXT_PASTE.
+    There are three types of corresponding events @c wxEVT_COMMAND_TEXT_COPY,
+    @c wxEVT_COMMAND_TEXT_CUT and @c wxEVT_COMMAND_TEXT_PASTE.
 
     If any of these events is processed (without being skipped) by an event
     handler, the corresponding operation doesn't take place which allows to
@@ -2174,25 +2174,25 @@ public:
     /**
         Constructor. Valid event types are:
 
-         @li wxEVT_ENTER_WINDOW
-         @li wxEVT_LEAVE_WINDOW
-         @li wxEVT_LEFT_DOWN
-         @li wxEVT_LEFT_UP
-         @li wxEVT_LEFT_DCLICK
-         @li wxEVT_MIDDLE_DOWN
-         @li wxEVT_MIDDLE_UP
-         @li wxEVT_MIDDLE_DCLICK
-         @li wxEVT_RIGHT_DOWN
-         @li wxEVT_RIGHT_UP
-         @li wxEVT_RIGHT_DCLICK
-         @li wxEVT_MOUSE_AUX1_DOWN
-         @li wxEVT_MOUSE_AUX1_UP
-         @li wxEVT_MOUSE_AUX1_DCLICK
-         @li wxEVT_MOUSE_AUX2_DOWN
-         @li wxEVT_MOUSE_AUX2_UP
-         @li wxEVT_MOUSE_AUX2_DCLICK
-         @li wxEVT_MOTION
-         @li wxEVT_MOUSEWHEEL
+         @li @c wxEVT_ENTER_WINDOW
+         @li @c wxEVT_LEAVE_WINDOW
+         @li @c wxEVT_LEFT_DOWN
+         @li @c wxEVT_LEFT_UP
+         @li @c wxEVT_LEFT_DCLICK
+         @li @c wxEVT_MIDDLE_DOWN
+         @li @c wxEVT_MIDDLE_UP
+         @li @c wxEVT_MIDDLE_DCLICK
+         @li @c wxEVT_RIGHT_DOWN
+         @li @c wxEVT_RIGHT_UP
+         @li @c wxEVT_RIGHT_DCLICK
+         @li @c wxEVT_MOUSE_AUX1_DOWN
+         @li @c wxEVT_MOUSE_AUX1_UP
+         @li @c wxEVT_MOUSE_AUX1_DCLICK
+         @li @c wxEVT_MOUSE_AUX2_DOWN
+         @li @c wxEVT_MOUSE_AUX2_UP
+         @li @c wxEVT_MOUSE_AUX2_DCLICK
+         @li @c wxEVT_MOTION
+         @li @c wxEVT_MOUSEWHEEL
     */
     wxMouseEvent(wxEventType mouseEventType = wxEVT_NULL);
 
@@ -2673,7 +2673,7 @@ public:
         to wxApp only, and only on Windows SmartPhone and PocketPC.
         It is generated when the system is low on memory; the application should free
         up as much memory as possible, and restore full working state when it receives
-        a wxEVT_ACTIVATE or wxEVT_ACTIVATE_APP event.
+        a @c wxEVT_ACTIVATE or @c wxEVT_ACTIVATE_APP event.
     @endEventTable
 
     @library{wxcore}
@@ -3202,45 +3202,45 @@ public:
     @event{EVT_SCROLL(func)}
         Process all scroll events.
     @event{EVT_SCROLL_TOP(func)}
-        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
     @event{EVT_SCROLL_BOTTOM(func)}
-        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
     @event{EVT_SCROLL_LINEUP(func)}
-        Process wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up events.
     @event{EVT_SCROLL_LINEDOWN(func)}
-        Process wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down events.
     @event{EVT_SCROLL_PAGEUP(func)}
-        Process wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up events.
     @event{EVT_SCROLL_PAGEDOWN(func)}
-        Process wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
     @event{EVT_SCROLL_THUMBTRACK(func)}
-        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the
+        Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the
         user drags the thumbtrack).
     @event{EVT_SCROLL_THUMBRELEASE(func)}
-        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLL_THUMBRELEASE thumb release events.
     @event{EVT_SCROLL_CHANGED(func)}
-        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+        Process @c wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
     @event{EVT_COMMAND_SCROLL(id, func)}
         Process all scroll events.
     @event{EVT_COMMAND_SCROLL_TOP(id, func)}
-        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
     @event{EVT_COMMAND_SCROLL_BOTTOM(id, func)}
-        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
     @event{EVT_COMMAND_SCROLL_LINEUP(id, func)}
-        Process wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up events.
     @event{EVT_COMMAND_SCROLL_LINEDOWN(id, func)}
-        Process wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down events.
     @event{EVT_COMMAND_SCROLL_PAGEUP(id, func)}
-        Process wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up events.
     @event{EVT_COMMAND_SCROLL_PAGEDOWN(id, func)}
-        Process wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
     @event{EVT_COMMAND_SCROLL_THUMBTRACK(id, func)}
-        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent
+        Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent
         as the user drags the thumbtrack).
     @event{EVT_COMMAND_SCROLL_THUMBRELEASE(func)}
-        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLL_THUMBRELEASE thumb release events.
     @event{EVT_COMMAND_SCROLL_CHANGED(func)}
-        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+        Process @c wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
     @endEventTable
 
     @library{wxcore}

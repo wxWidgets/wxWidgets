@@ -276,7 +276,7 @@ public:
     /**
         Call this to inform the model that an item has changed.
 
-        This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
     */
     bool ItemChanged(const wxDataViewItem& item);
@@ -296,7 +296,7 @@ public:
     /**
         Call this to inform the model that several items have changed.
 
-        This will eventually emit wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
     */
     bool ItemsChanged(const wxDataViewItemArray& items);
@@ -337,7 +337,7 @@ public:
         This is also called from wxDataViewCtrl's internal editing code, e.g. when
         editing a text field in the control.
 
-        This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
     */
     virtual bool ValueChanged(const wxDataViewItem& item,
@@ -2692,7 +2692,7 @@ public:
     void SetColumn(int col);
 
     /**
-        For wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
+        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
     */
     void SetDataViewColumn(wxDataViewColumn* col);
 
