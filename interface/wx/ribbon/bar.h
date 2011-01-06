@@ -213,6 +213,35 @@ public:
         for the currently active page, or @false if there is no active page.
     */
     bool DismissExpandedPanel();
+
+    /**
+        Shows or hides the panel area of the ribbon bar.
+
+        If the panel area is hidden, then only the tab of the ribbon bar will
+        be shown. This is useful for giving the user more screen space to work
+        with when he/she doesn't need to see the ribbon's options.
+
+        @since 2.9.2
+    */
+    void ShowPanels(bool show = true);
+
+    /**
+        Hides the panel area of the ribbon bar.
+
+        This method simply calls ShowPanels() with @false argument.
+
+        @since 2.9.2
+    */
+    void HidePanels();
+
+    /**
+        Indicates whether the panel area of the ribbon bar is shown.
+
+        @see ShowPanels()
+
+        @since 2.9.2
+    */
+    bool ArePanelsShown() const;
     
     /**
         Perform initial layout and size calculations of the bar and its

@@ -115,6 +115,10 @@ public:
     wxRibbonPage* GetPage(int n);
     bool DismissExpandedPanel();
 
+    void ShowPanels(bool show = true);
+    void HidePanels() { ShowPanels(false); }
+    bool ArePanelsShown() const { return m_arePanelsShown; }
+
     virtual bool HasMultiplePages() const { return true; }
 
     void SetWindowStyleFlag(long style);
@@ -166,6 +170,7 @@ protected:
     int m_tab_scroll_left_button_state;
     int m_tab_scroll_right_button_state;
     bool m_tab_scroll_buttons_shown;
+    bool m_arePanelsShown;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonBar)
