@@ -4238,7 +4238,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
         calculator.UpdateWithRow(row);
     }
 
-    // row is the first unmeasured item now; that's out value of N/2
+    // row is the first unmeasured item now; that's our value of N/2
 
     if ( row < count )
     {
@@ -4278,8 +4278,6 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
 
     const_cast<wxDataViewCtrl*>(this)->m_colsBestWidths[idx] = max_width;
     return max_width;
-
-    #undef MEASURE_ITEM
 }
 
 void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
