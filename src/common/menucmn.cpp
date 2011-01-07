@@ -60,11 +60,13 @@ wxEND_FLAGS( wxMenuStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
+#if wxUSE_EXTENDED_RTTI    
 template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
                                            wxAnyList &value)
 {
     wxListCollectionToAnyList<wxMenuItemList::compatibility_iterator>( theList, value ) ;
 }
+#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxMenu)
 wxEVENT_PROPERTY( Select, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
@@ -90,6 +92,7 @@ wxBEGIN_FLAGS( wxMenuBarStyle )
 wxFLAGS_MEMBER(wxMB_DOCKABLE)
 wxEND_FLAGS( wxMenuBarStyle )
 
+#if wxUSE_EXTENDED_RTTI    
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
@@ -97,6 +100,7 @@ bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWrite
 {
     return true;
 }
+#endif
 
 wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
                                        wxMenuBarStreamingCallback)
