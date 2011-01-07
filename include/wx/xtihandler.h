@@ -17,18 +17,21 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-#include "wx/string.h"
+#include "wx/xti.h"
 
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxDynamicClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxHashTable_Node;
-class WXDLLIMPEXP_BASE wxObjectRefData;
-class WXDLLIMPEXP_BASE wxEvent;
-class WXDLLIMPEXP_BASE wxEvtHandler;
+// copied from event.h which cannot be included at this place, TODO MOVE to common file
 
-typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+class WXDLLIMPEXP_FWD_BASE wxEvent;
+
+#ifdef __VISUALC__
+#define wxMSVC_FWD_MULTIPLE_BASES __multiple_inheritance
+#else
+#define wxMSVC_FWD_MULTIPLE_BASES
+#endif
+
+class WXDLLIMPEXP_FWD_BASE wxMSVC_FWD_MULTIPLE_BASES wxEvtHandler;
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
+typedef wxEventFunction wxObjectEventFunction;
 
 // ----------------------------------------------------------------------------
 // Handler Info

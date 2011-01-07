@@ -17,17 +17,7 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-#include "wx/string.h"
-#include "wx/variant.h"
-
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxDynamicClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxHashTable_Node;
-class WXDLLIMPEXP_BASE wxObjectRefData;
-class WXDLLIMPEXP_BASE wxEvent;
-class WXDLLIMPEXP_BASE wxEvtHandler;
+#include "wx/xti.h"
 
 // ----------------------------------------------------------------------------
 // Constructor Bridges
@@ -39,7 +29,7 @@ class WXDLLIMPEXP_BASE wxObjectAllocatorAndCreator
 {
 public:
     virtual ~wxObjectAllocatorAndCreator() { }
-    virtual bool Create(wxObject * &o, wxVariantBase *args) = 0;
+    virtual bool Create(wxObject * &o, wxAny *args) = 0;
 };
 
 // a direct constructor bridge calls the operator new for this class and
@@ -48,7 +38,7 @@ public:
 class WXDLLIMPEXP_BASE wxObjectAllocator : public wxObjectAllocatorAndCreator
 {
 public:
-    virtual bool Create(wxObject * &o, wxVariantBase *args) = 0;
+    virtual bool Create(wxObject * &o, wxAny *args) = 0;
 };
 
 
@@ -61,7 +51,7 @@ public:
 template<typename Class>
 struct wxObjectAllocatorAndCreator_0 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *)
+    bool Create(wxObject * &o, wxAny *)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create();
@@ -70,7 +60,7 @@ struct wxObjectAllocatorAndCreator_0 : public wxObjectAllocatorAndCreator
 
 struct wxObjectAllocatorAndCreator_Dummy : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject *&, wxVariantBase *)
+    bool Create(wxObject *&, wxAny *)
     {
         return true;
     }
@@ -93,7 +83,7 @@ struct wxObjectAllocatorAndCreator_Dummy : public wxObjectAllocatorAndCreator
 template<typename Class>
 struct wxDirectConstructorBridge_0 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class( );
         return o != NULL;
@@ -112,11 +102,11 @@ struct wxDirectConstructorBridge_0 : public wxObjectAllocator
 template<typename Class, typename T0>
 struct wxObjectAllocatorAndCreator_1 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0)
+            (args[0]).As(static_cast<T0*>(NULL))
             );
     }
 };
@@ -132,10 +122,10 @@ struct wxObjectAllocatorAndCreator_1 : public wxObjectAllocatorAndCreator
 template<typename Class, typename T0>
 struct wxDirectConstructorBridge_1 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0)
+            (args[0]).As(static_cast<T0*>(NULL))
             );
         return o != NULL;
     }
@@ -154,12 +144,12 @@ template<typename Class,
 typename T0, typename T1>
 struct wxObjectAllocatorAndCreator_2 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL))
             );
     }
 };
@@ -176,11 +166,11 @@ template<typename Class,
 typename T0, typename T1>
 struct wxDirectConstructorBridge_2 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL))
             );
         return o != NULL;
     }
@@ -199,13 +189,13 @@ template<typename Class,
 typename T0, typename T1, typename T2>
 struct wxObjectAllocatorAndCreator_3 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL))
             );
     }
 };
@@ -222,12 +212,12 @@ template<typename Class,
 typename T0, typename T1, typename T2>
 struct wxDirectConstructorBridge_3 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL))
             );
         return o != NULL;
     }
@@ -246,14 +236,14 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3>
 struct wxObjectAllocatorAndCreator_4 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL))
             );
     }
 };
@@ -271,13 +261,13 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3>
 struct wxDirectConstructorBridge_4 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL))
             );
         return o != NULL;
     }
@@ -297,15 +287,15 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4>
 struct wxObjectAllocatorAndCreator_5 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL))
             );
     }
 };
@@ -323,14 +313,14 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4>
 struct wxDirectConstructorBridge_5 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL))
             );
         return o != NULL;
     }
@@ -350,16 +340,16 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
 struct wxObjectAllocatorAndCreator_6 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[5].wxTEMPLATED_MEMBER_CALL(Get, T5)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL))
             );
     }
 };
@@ -377,15 +367,15 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
 struct wxDirectConstructorBridge_6 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[5].wxTEMPLATED_MEMBER_CALL(Get, T5)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL))
             );
         return o != NULL;
     }
@@ -405,17 +395,17 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
 struct wxObjectAllocatorAndCreator_7 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[5].wxTEMPLATED_MEMBER_CALL(Get, T5),
-            args[6].wxTEMPLATED_MEMBER_CALL(Get, T6)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL)),
+            (args[6]).As(static_cast<T6*>(NULL))
             );
     }
 };
@@ -433,16 +423,16 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
 struct wxDirectConstructorBridge_7 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T5),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T6)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL)),
+            (args[6]).As(static_cast<T6*>(NULL))
             );
         return o != NULL;
     }
@@ -463,18 +453,18 @@ typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, \
 typename T6, typename T7>
 struct wxObjectAllocatorAndCreator_8 : public wxObjectAllocatorAndCreator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[5].wxTEMPLATED_MEMBER_CALL(Get, T5),
-            args[6].wxTEMPLATED_MEMBER_CALL(Get, T6),
-            args[7].wxTEMPLATED_MEMBER_CALL(Get, T7)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL)),
+            (args[6]).As(static_cast<T6*>(NULL)),
+            (args[7]).As(static_cast<T7*>(NULL))
             );
     }
 };
@@ -493,17 +483,17 @@ typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, \
 typename T6, typename T7>
 struct wxDirectConstructorBridge_8 : public wxObjectAllocator
 {
-    bool Create(wxObject * &o, wxVariantBase *args)
+    bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            args[0].wxTEMPLATED_MEMBER_CALL(Get, T0),
-            args[1].wxTEMPLATED_MEMBER_CALL(Get, T1),
-            args[2].wxTEMPLATED_MEMBER_CALL(Get, T2),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T3),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T4),
-            args[3].wxTEMPLATED_MEMBER_CALL(Get, T5),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T6),
-            args[4].wxTEMPLATED_MEMBER_CALL(Get, T7)
+            (args[0]).As(static_cast<T0*>(NULL)),
+            (args[1]).As(static_cast<T1*>(NULL)),
+            (args[2]).As(static_cast<T2*>(NULL)),
+            (args[3]).As(static_cast<T3*>(NULL)),
+            (args[4]).As(static_cast<T4*>(NULL)),
+            (args[5]).As(static_cast<T5*>(NULL)),
+            (args[6]).As(static_cast<T6*>(NULL)),
+            (args[7]).As(static_cast<T7*>(NULL))
             );
         return o != NULL;
     }
