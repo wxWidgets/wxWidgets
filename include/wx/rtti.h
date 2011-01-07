@@ -193,12 +193,6 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 #define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)               \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, NULL)
 
-#define wxIMPLEMENT_CLASS(name, basename)                                     \
-    wxIMPLEMENT_ABSTRACT_CLASS(name, basename)
-
-#define wxIMPLEMENT_CLASS2(name, basename1, basename2)                        \
-    IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)
-
 // -----------------------------------
 // XTI-compatible macros
 // -----------------------------------
