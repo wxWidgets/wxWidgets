@@ -131,7 +131,6 @@ END_EVENT_TABLE()
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
 
 // ============================================================================
