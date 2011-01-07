@@ -183,7 +183,7 @@ protected:
 
 class WXDLLIMPEXP_CORE wxWebKitNewWindowEvent : public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS( wxWebViewNewWindowEvent )
+    DECLARE_DYNAMIC_CLASS( wxWebKitNewWindowEvent )
 public:
     wxString GetURL() const { return m_url; }
     void SetURL(const wxString& url) { m_url = url; }
