@@ -155,15 +155,6 @@ const wxMenuInfoHelperList& wxMenuBarBase::GetMenuInfos() const
 
 #endif
 
-wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
-wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, AppendMenuInfo, \
-                      GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxEMPTY_HANDLERS_TABLE(wxMenuBar)
-
-wxCONSTRUCTOR_DUMMY( wxMenuBar )
-
 // ----------------------------------------------------------------------------
 // XTI for wxMenuItem
 // ----------------------------------------------------------------------------
