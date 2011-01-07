@@ -227,11 +227,13 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 #define wxBEGIN_HANDLERS_TABLE(theClass) wxEMPTY_PARAMETER_VALUE
 #define wxEND_HANDLERS_TABLE() wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) wxIMPLEMENT_DYNAMIC_CLASS( name, basename )
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) \
+    wxIMPLEMENT_DYNAMIC_CLASS( name, basename )
 #define wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback ) \
-        wxEMPTY_PARAMETER_VALUE
+    wxIMPLEMENT_DYNAMIC_CLASS( name, basename )
 
-#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit ) wxEMPTY_PARAMETER_VALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit ) \
+    wxIMPLEMENT_DYNAMIC_CLASS( name, basename)
 
 #define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name, basename,  \
                                                              unit, toString,    \
