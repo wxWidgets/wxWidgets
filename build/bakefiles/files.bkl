@@ -663,6 +663,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/clipcmn.cpp
     src/common/clrpickercmn.cpp
     src/common/colourcmn.cpp
+    src/common/colourdata.cpp
     src/common/combocmn.cpp
     src/common/cmdproc.cpp
     src/common/cmndata.cpp
@@ -690,6 +691,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontpickercmn.cpp
     src/common/fldlgcmn.cpp
     src/common/fontcmn.cpp
+    src/common/fontdata.cpp
     src/generic/graphicc.cpp
     src/common/fontenumcmn.cpp
     src/common/fontmap.cpp
@@ -924,6 +926,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cmdproc.h
     wx/colordlg.h
     wx/colour.h
+    wx/colourdata.h
     wx/cshelp.h
     wx/dataobj.h
     wx/dcmirror.h
@@ -944,6 +947,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/fontpicker.h
     wx/fmappriv.h
     wx/font.h
+    wx/fontdata.h
     wx/fontdlg.h
     wx/fontenum.h
     wx/fontutil.h

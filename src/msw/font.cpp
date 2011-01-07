@@ -31,11 +31,10 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
-    #include "wx/encinfo.h"
+    #include "wx/msw/private.h"
 #endif // WX_PRECOMP
 
-#include "wx/msw/private.h"
-
+#include "wx/encinfo.h"
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 

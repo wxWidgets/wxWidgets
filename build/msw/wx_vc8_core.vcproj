@@ -819,6 +819,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\colourdata.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\combocmn.cpp"
 				>
 			</File>
@@ -984,6 +988,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\fontcmn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\common\fontdata.cpp"
 				>
 			</File>
 			<File
@@ -6808,6 +6816,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\colourdata.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\combo.h"
 				>
 			</File>
@@ -7001,6 +7013,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\font.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\fontdata.h"
 				>
 			</File>
 			<File

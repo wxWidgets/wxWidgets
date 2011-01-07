@@ -18,7 +18,6 @@
     #include <stdio.h>
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/cmndata.h"
 #endif
 
 #include "wx/os2/private.h"

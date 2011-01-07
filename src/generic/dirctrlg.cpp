@@ -29,7 +29,6 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
-    #include "wx/cmndata.h"
     #include "wx/choice.h"
     #include "wx/textctrl.h"
     #include "wx/layout.h"

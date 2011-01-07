@@ -32,7 +32,6 @@
     #include "wx/checkbox.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
-    #include "wx/cmndata.h"
     #include "wx/sizer.h"
 #endif
 

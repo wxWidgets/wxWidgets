@@ -17,7 +17,7 @@
 #if wxUSE_FONTDLG
 
 #include "wx/dialog.h"          // the base class
-#include "wx/cmndata.h"         // wxFontData
+#include "wx/fontdata.h"
 
 // ----------------------------------------------------------------------------
 // wxFontDialog interface

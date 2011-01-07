@@ -324,6 +324,10 @@ SOURCE=..\..\src\common\colourcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\colourdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\combocmn.cpp
 # End Source File
 # Begin Source File
@@ -427,6 +431,10 @@ SOURCE=..\..\src\common\fldlgcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\fontcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\fontdata.cpp
 # End Source File
 # Begin Source File
 
@@ -5997,6 +6005,10 @@ SOURCE=..\..\include\wx\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\colourdata.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\combo.h
 # End Source File
 # Begin Source File
@@ -6190,6 +6202,10 @@ SOURCE=..\..\include\wx\fmappriv.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fontdata.h
 # End Source File
 # Begin Source File
 

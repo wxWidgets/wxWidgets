@@ -13,7 +13,6 @@
 #define _WX_FONTDLG_H_
 
 #include "wx/dialog.h"
-#include "wx/cmndata.h"
 
 /*
  * Font dialog

@@ -23,7 +23,6 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/settings.h"
-    #include "wx/cmndata.h"
     #include "wx/gdicmn.h"
 #endif
 

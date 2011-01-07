@@ -29,7 +29,7 @@
 #include "wx/dynarray.h"
 #include "wx/math.h"
 #include "wx/image.h"
-#include "wx/cmndata.h"
+#include "wx/region.h"
 
 #define wxUSE_NEW_DC 1
 

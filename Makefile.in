@@ -3943,6 +3943,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/cmdproc.h \
 	wx/colordlg.h \
 	wx/colour.h \
+	wx/colourdata.h \
 	wx/cshelp.h \
 	wx/dataobj.h \
 	wx/dcmirror.h \
@@ -3963,6 +3964,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/fontpicker.h \
 	wx/fmappriv.h \
 	wx/font.h \
+	wx/fontdata.h \
 	wx/fontdlg.h \
 	wx/fontenum.h \
 	wx/fontutil.h \
@@ -4480,6 +4482,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
+	monodll_colourdata.o \
 	monodll_combocmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
@@ -4507,6 +4510,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
+	monodll_fontdata.o \
 	monodll_graphicc.o \
 	monodll_fontenumcmn.o \
 	monodll_fontmap.o \
@@ -4691,6 +4695,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
+	monodll_colourdata.o \
 	monodll_combocmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
@@ -4718,6 +4723,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
+	monodll_fontdata.o \
 	monodll_graphicc.o \
 	monodll_fontenumcmn.o \
 	monodll_fontmap.o \
@@ -6386,6 +6392,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
+	monolib_colourdata.o \
 	monolib_combocmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
@@ -6413,6 +6420,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
+	monolib_fontdata.o \
 	monolib_graphicc.o \
 	monolib_fontenumcmn.o \
 	monolib_fontmap.o \
@@ -6597,6 +6605,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
+	monolib_colourdata.o \
 	monolib_combocmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
@@ -6624,6 +6633,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
+	monolib_fontdata.o \
 	monolib_graphicc.o \
 	monolib_fontenumcmn.o \
 	monolib_fontmap.o \
@@ -8476,6 +8486,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
+	coredll_colourdata.o \
 	coredll_combocmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
@@ -8503,6 +8514,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
+	coredll_fontdata.o \
 	coredll_graphicc.o \
 	coredll_fontenumcmn.o \
 	coredll_fontmap.o \
@@ -8687,6 +8699,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
+	coredll_colourdata.o \
 	coredll_combocmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
@@ -8714,6 +8727,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
+	coredll_fontdata.o \
 	coredll_graphicc.o \
 	coredll_fontenumcmn.o \
 	coredll_fontmap.o \
@@ -10044,6 +10058,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
+	corelib_colourdata.o \
 	corelib_combocmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
@@ -10071,6 +10086,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
+	corelib_fontdata.o \
 	corelib_graphicc.o \
 	corelib_fontenumcmn.o \
 	corelib_fontmap.o \
@@ -10255,6 +10271,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
+	corelib_colourdata.o \
 	corelib_combocmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
@@ -10282,6 +10299,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
+	corelib_fontdata.o \
 	corelib_graphicc.o \
 	corelib_fontenumcmn.o \
 	corelib_fontmap.o \
@@ -19728,6 +19746,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
+@COND_USE_GUI_1@monodll_colourdata.o: $(srcdir)/src/common/colourdata.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/colourdata.cpp
+
 @COND_USE_GUI_1@monodll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
@@ -19808,6 +19829,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_fontcmn.o: $(srcdir)/src/common/fontcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontcmn.cpp
+
+@COND_USE_GUI_1@monodll_fontdata.o: $(srcdir)/src/common/fontdata.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontdata.cpp
 
 @COND_USE_GUI_1@monodll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -24999,6 +25023,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
+@COND_USE_GUI_1@monolib_colourdata.o: $(srcdir)/src/common/colourdata.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/colourdata.cpp
+
 @COND_USE_GUI_1@monolib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
@@ -25079,6 +25106,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_fontcmn.o: $(srcdir)/src/common/fontcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontcmn.cpp
+
+@COND_USE_GUI_1@monolib_fontdata.o: $(srcdir)/src/common/fontdata.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontdata.cpp
 
 @COND_USE_GUI_1@monolib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -30447,6 +30477,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
+@COND_USE_GUI_1@coredll_colourdata.o: $(srcdir)/src/common/colourdata.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/colourdata.cpp
+
 @COND_USE_GUI_1@coredll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
@@ -30527,6 +30560,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_fontcmn.o: $(srcdir)/src/common/fontcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontcmn.cpp
+
+@COND_USE_GUI_1@coredll_fontdata.o: $(srcdir)/src/common/fontdata.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontdata.cpp
 
 @COND_USE_GUI_1@coredll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -34404,6 +34440,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
+@COND_USE_GUI_1@corelib_colourdata.o: $(srcdir)/src/common/colourdata.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/colourdata.cpp
+
 @COND_USE_GUI_1@corelib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
@@ -34484,6 +34523,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_fontcmn.o: $(srcdir)/src/common/fontcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontcmn.cpp
+
+@COND_USE_GUI_1@corelib_fontdata.o: $(srcdir)/src/common/fontdata.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontdata.cpp
 
 @COND_USE_GUI_1@corelib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp

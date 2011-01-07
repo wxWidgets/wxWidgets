@@ -15,7 +15,6 @@
 #include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"
-#include "wx/cmndata.h"
 
 
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog

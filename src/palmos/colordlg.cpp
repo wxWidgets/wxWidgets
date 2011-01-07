@@ -30,7 +30,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
-    #include "wx/cmndata.h"
 #endif
 
 #include <UIColor.h>

@@ -33,7 +33,6 @@
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/log.h"
-    #include "wx/cmndata.h"
     #include "wx/math.h"
 #endif
 

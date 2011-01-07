@@ -26,17 +26,17 @@
 
 #if wxUSE_FONTENUM
 
+#include "wx/fontenum.h"
+
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
     #include "wx/font.h"
-    #include "wx/encinfo.h"
     #include "wx/dynarray.h"
+    #include "wx/msw/private.h"
 #endif
 
-#include "wx/msw/private.h"
-
+#include "wx/encinfo.h"
 #include "wx/fontutil.h"
-#include "wx/fontenum.h"
 #include "wx/fontmap.h"
 
 // ----------------------------------------------------------------------------

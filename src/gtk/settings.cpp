@@ -14,7 +14,6 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/cmndata.h"
     #include "wx/toplevel.h"
 #endif
 

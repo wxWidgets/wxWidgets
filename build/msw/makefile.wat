@@ -367,6 +367,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
 	$(OBJS)\monodll_colourcmn.obj &
+	$(OBJS)\monodll_colourdata.obj &
 	$(OBJS)\monodll_combocmn.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
@@ -394,6 +395,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fontpickercmn.obj &
 	$(OBJS)\monodll_fldlgcmn.obj &
 	$(OBJS)\monodll_fontcmn.obj &
+	$(OBJS)\monodll_fontdata.obj &
 	$(OBJS)\monodll_graphicc.obj &
 	$(OBJS)\monodll_fontenumcmn.obj &
 	$(OBJS)\monodll_fontmap.obj &
@@ -628,6 +630,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
 	$(OBJS)\monodll_colourcmn.obj &
+	$(OBJS)\monodll_colourdata.obj &
 	$(OBJS)\monodll_combocmn.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
@@ -655,6 +658,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fontpickercmn.obj &
 	$(OBJS)\monodll_fldlgcmn.obj &
 	$(OBJS)\monodll_fontcmn.obj &
+	$(OBJS)\monodll_fontdata.obj &
 	$(OBJS)\monodll_graphicc.obj &
 	$(OBJS)\monodll_fontenumcmn.obj &
 	$(OBJS)\monodll_fontmap.obj &
@@ -1128,6 +1132,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
 	$(OBJS)\monolib_colourcmn.obj &
+	$(OBJS)\monolib_colourdata.obj &
 	$(OBJS)\monolib_combocmn.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
@@ -1155,6 +1160,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fontpickercmn.obj &
 	$(OBJS)\monolib_fldlgcmn.obj &
 	$(OBJS)\monolib_fontcmn.obj &
+	$(OBJS)\monolib_fontdata.obj &
 	$(OBJS)\monolib_graphicc.obj &
 	$(OBJS)\monolib_fontenumcmn.obj &
 	$(OBJS)\monolib_fontmap.obj &
@@ -1389,6 +1395,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
 	$(OBJS)\monolib_colourcmn.obj &
+	$(OBJS)\monolib_colourdata.obj &
 	$(OBJS)\monolib_combocmn.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
@@ -1416,6 +1423,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fontpickercmn.obj &
 	$(OBJS)\monolib_fldlgcmn.obj &
 	$(OBJS)\monolib_fontcmn.obj &
+	$(OBJS)\monolib_fontdata.obj &
 	$(OBJS)\monolib_graphicc.obj &
 	$(OBJS)\monolib_fontenumcmn.obj &
 	$(OBJS)\monolib_fontmap.obj &
@@ -1793,6 +1801,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
 	$(OBJS)\coredll_colourcmn.obj &
+	$(OBJS)\coredll_colourdata.obj &
 	$(OBJS)\coredll_combocmn.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
@@ -1820,6 +1829,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fontpickercmn.obj &
 	$(OBJS)\coredll_fldlgcmn.obj &
 	$(OBJS)\coredll_fontcmn.obj &
+	$(OBJS)\coredll_fontdata.obj &
 	$(OBJS)\coredll_graphicc.obj &
 	$(OBJS)\coredll_fontenumcmn.obj &
 	$(OBJS)\coredll_fontmap.obj &
@@ -2054,6 +2064,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
 	$(OBJS)\coredll_colourcmn.obj &
+	$(OBJS)\coredll_colourdata.obj &
 	$(OBJS)\coredll_combocmn.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
@@ -2081,6 +2092,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fontpickercmn.obj &
 	$(OBJS)\coredll_fldlgcmn.obj &
 	$(OBJS)\coredll_fontcmn.obj &
+	$(OBJS)\coredll_fontdata.obj &
 	$(OBJS)\coredll_graphicc.obj &
 	$(OBJS)\coredll_fontenumcmn.obj &
 	$(OBJS)\coredll_fontmap.obj &
@@ -2330,6 +2342,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
 	$(OBJS)\corelib_colourcmn.obj &
+	$(OBJS)\corelib_colourdata.obj &
 	$(OBJS)\corelib_combocmn.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
@@ -2357,6 +2370,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fontpickercmn.obj &
 	$(OBJS)\corelib_fldlgcmn.obj &
 	$(OBJS)\corelib_fontcmn.obj &
+	$(OBJS)\corelib_fontdata.obj &
 	$(OBJS)\corelib_graphicc.obj &
 	$(OBJS)\corelib_fontenumcmn.obj &
 	$(OBJS)\corelib_fontmap.obj &
@@ -2591,6 +2605,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
 	$(OBJS)\corelib_colourcmn.obj &
+	$(OBJS)\corelib_colourdata.obj &
 	$(OBJS)\corelib_combocmn.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
@@ -2618,6 +2633,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fontpickercmn.obj &
 	$(OBJS)\corelib_fldlgcmn.obj &
 	$(OBJS)\corelib_fontcmn.obj &
+	$(OBJS)\corelib_fontdata.obj &
 	$(OBJS)\corelib_graphicc.obj &
 	$(OBJS)\corelib_fontenumcmn.obj &
 	$(OBJS)\corelib_fontmap.obj &
@@ -7702,6 +7718,11 @@ $(OBJS)\monodll_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_colourdata.obj :  .AUTODEPEND ..\..\src\common\colourdata.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7833,6 +7854,11 @@ $(OBJS)\monodll_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_fontdata.obj :  .AUTODEPEND ..\..\src\common\fontdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10014,6 +10040,11 @@ $(OBJS)\monolib_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_colourdata.obj :  .AUTODEPEND ..\..\src\common\colourdata.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10145,6 +10176,11 @@ $(OBJS)\monolib_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_fontdata.obj :  .AUTODEPEND ..\..\src\common\fontdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12317,6 +12353,11 @@ $(OBJS)\coredll_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_colourdata.obj :  .AUTODEPEND ..\..\src\common\colourdata.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12448,6 +12489,11 @@ $(OBJS)\coredll_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_fontdata.obj :  .AUTODEPEND ..\..\src\common\fontdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -13687,6 +13733,11 @@ $(OBJS)\corelib_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_colourdata.obj :  .AUTODEPEND ..\..\src\common\colourdata.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13818,6 +13869,11 @@ $(OBJS)\corelib_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_fontdata.obj :  .AUTODEPEND ..\..\src\common\fontdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

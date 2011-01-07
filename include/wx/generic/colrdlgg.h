@@ -9,13 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLORDLGH_G__
-#define __COLORDLGH_G__
+#ifndef _WX_COLORDLGG_H_
+#define _WX_COLORDLGG_H_
 
-#include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"
-#include "wx/cmndata.h"
 
 #define wxID_ADD_CUSTOM     3000
 
@@ -116,4 +114,4 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxGenericColourDialog)
 };
 
-#endif
+#endif // _WX_COLORDLGG_H_

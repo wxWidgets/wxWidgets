@@ -35,6 +35,7 @@
     #include "wx/statline.h"
 #endif
 
+#include "wx/colourdata.h"
 #include "wx/generic/colrdlgg.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)

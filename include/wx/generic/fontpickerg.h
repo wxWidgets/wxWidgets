@@ -13,7 +13,7 @@
 #define _WX_FONTPICKER_H_
 
 #include "wx/button.h"
-#include "wx/cmndata.h"
+#include "wx/fontdata.h"
 
 //-----------------------------------------------------------------------------
 // wxGenericFontButton: a button which brings up a wxFontDialog

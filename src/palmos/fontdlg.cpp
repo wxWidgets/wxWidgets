@@ -33,7 +33,6 @@
     #include "wx/dialog.h"
     #include "wx/math.h"
     #include "wx/log.h"
-    #include "wx/cmndata.h"
 #endif
 
 #include "wx/palmos/private.h"

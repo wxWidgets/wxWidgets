@@ -29,6 +29,9 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
+    #ifdef __WXGTK__
+        #include "wx/window.h"
+    #endif
 #endif
 
 #include "wx/private/graphics.h"

@@ -34,8 +34,6 @@
     #include "wx/colour.h"
     #include "wx/gdicmn.h"
     #include "wx/utils.h"
-    #include "wx/dialog.h"
-    #include "wx/cmndata.h"
     #include "wx/math.h"
 #endif
 
