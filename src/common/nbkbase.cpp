@@ -40,15 +40,11 @@ extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
 wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 
-#if wxUSE_EXTENDED_RTTI    
-
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST( wxNotebookPageInfoList )
-
 wxDEFINE_FLAGS( wxNotebookStyle )
 wxBEGIN_FLAGS( wxNotebookStyle )
 // new style border flags, we put them first to
@@ -88,7 +84,10 @@ wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
 wxFLAGS_MEMBER(wxNB_FLAT)
 wxEND_FLAGS( wxNotebookStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl, "wx/notebook.h")
+#if wxUSE_EXTENDED_RTTI  
+
+WX_DEFINE_LIST( wxNotebookPageInfoList )
+
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
 
 wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
@@ -98,23 +97,6 @@ template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theLis
 {
     wxListCollectionToAnyList<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
 }
-
-wxBEGIN_PROPERTIES_TABLE(wxNotebook)
-wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
-wxEVENT_PROPERTY( PageChanged, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEvent )
-
-wxPROPERTY_COLLECTION( PageInfos, wxNotebookPageInfoList, wxNotebookPageInfo*, \
-                      AddPageInfo, GetPageInfos, 0 /*flags*/, wxT("Helpstring"), \
-                      wxT("group"))
-wxPROPERTY_FLAGS( WindowStyle, wxNotebookStyle, long, SetWindowStyleFlag, \
-                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
-                 wxT("Helpstring"), wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxEMPTY_HANDLERS_TABLE(wxNotebook)
-
-wxCONSTRUCTOR_5( wxNotebook, wxWindow*, Parent, wxWindowID, Id, \
-                wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
 wxREADONLY_PROPERTY( Page, wxNotebookPage*, GetPage, wxEMPTY_PARAMETER_VALUE, \
@@ -132,7 +114,7 @@ wxEMPTY_HANDLERS_TABLE(wxNotebookPageInfo)
 wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, \
                 wxString, Text, bool, Selected, int, ImageId )
 
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxNotebookPageInfo**>)
+// WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxNotebookPageInfo**>)
 // XTI accessors:
 
 void wxNotebookBase::AddPageInfo( wxNotebookPageInfo* info )
@@ -155,6 +137,24 @@ const wxNotebookPageInfoList& wxNotebookBase::GetPageInfos() const
 }
 
 #endif
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl, "wx/notebook.h")
+wxBEGIN_PROPERTIES_TABLE(wxNotebook)
+wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
+wxEVENT_PROPERTY( PageChanged, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEvent )
+
+wxPROPERTY_COLLECTION( PageInfos, wxNotebookPageInfoList, wxNotebookPageInfo*, \
+                      AddPageInfo, GetPageInfos, 0 /*flags*/, wxT("Helpstring"), \
+                      wxT("group"))
+wxPROPERTY_FLAGS( WindowStyle, wxNotebookStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxNotebook)
+
+wxCONSTRUCTOR_5( wxNotebook, wxWindow*, Parent, wxWindowID, Id, \
+                wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 // ----------------------------------------------------------------------------
 // geometry

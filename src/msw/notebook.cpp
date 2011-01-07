@@ -127,12 +127,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
 #endif // USE_NOTEBOOK_ANTIFLICKER
 END_EVENT_TABLE()
 
-#if wxUSE_EXTENDED_RTTI
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================

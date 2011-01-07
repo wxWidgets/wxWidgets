@@ -38,8 +38,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-
 bool wxNotebook::Create( wxWindow *parent,
     wxWindowID id,
     const wxPoint& pos,
