@@ -76,6 +76,8 @@ protected:
   void AdjustRowHeight(wxDataViewItem const& item);
  // ... and the same method for a couple of items:
   void AdjustRowHeights(wxDataViewItemArray const& items);
+ // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
+  void AdjustAutosizedColumns();
 
 private:
   wxDataViewCtrl* m_DataViewCtrlPtr;
@@ -130,6 +132,7 @@ bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
     m_DataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
    // row height may have to be adjusted:
     AdjustRowHeight(item);
+    AdjustAutosizedColumns();
    // done
     return true;
   }
@@ -156,6 +159,7 @@ bool wxOSXDataViewModelNotifier::ItemsChanged(wxDataViewItemArray const& items)
       return false;
  // if this location is reached all items have been updated:
   AdjustRowHeights(items);
+  AdjustAutosizedColumns();
  // done:
   return true;
 }
@@ -174,6 +178,8 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,item);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
+
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
@@ -192,6 +198,8 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,items);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
+
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
@@ -209,6 +217,8 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
     dataViewEvent.SetItem(item);
    // send the equivalent wxWidget event:
     m_DataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
+
+    AdjustAutosizedColumns();
    // done
     return true;
   }
@@ -289,6 +299,18 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
         if (height > 20)
           m_DataViewCtrlPtr->GetDataViewPeer()->SetRowHeight(items[itemIndex],height);
       }
+  }
+}
+
+void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
+{
+  unsigned count = m_DataViewCtrlPtr->GetColumnCount();
+  for ( unsigned col = 0; col < count; col++ )
+  {
+      wxDataViewColumn *column = m_DataViewCtrlPtr->GetColumnPtr(col);
+
+      if ( column->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
+        m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
   }
 }
 

@@ -58,6 +58,7 @@ public:
   virtual int               GetColumnPosition  (wxDataViewColumn const* columnPtr) const       = 0; // returns the position of the passed column in the native control
   virtual bool              InsertColumn       (unsigned int pos, wxDataViewColumn* columnPtr) = 0; // inserts a column at pos in the native control;
                                                                                                     // the method can assume that the column's owner is already set
+  virtual void              FitColumnWidthToContent(unsigned int pos)                          = 0; // resizes column to fit its content
 
  //
  // item related methods

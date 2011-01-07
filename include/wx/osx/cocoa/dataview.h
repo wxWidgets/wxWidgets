@@ -441,6 +441,7 @@ public:
     virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
     virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
     virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr);
+    virtual void FitColumnWidthToContent(unsigned int pos);
 
     // item related methods (inherited from wxDataViewWidgetImpl)
     virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item);

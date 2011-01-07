@@ -2746,6 +2746,16 @@ void wxDataViewColumn::SetWidth(int width)
 {
   wxDataViewCtrl* dataViewCtrlPtr(GetOwner());
 
+  switch ( width )
+  {
+    case wxCOL_WIDTH_AUTOSIZE:
+       // not implemented, fall through
+    case wxCOL_WIDTH_DEFAULT:
+      width = wxDVC_DEFAULT_WIDTH;
+      break;
+    default:
+      break;
+  }
 
   if ((width >= m_minWidth) && (width <= m_maxWidth))
   {
