@@ -161,63 +161,6 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 // implementation
 // ============================================================================
 
-#include "wx/listimpl.cpp"
-
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxMenuStyle )
-
-wxBEGIN_FLAGS( wxMenuStyle )
-    wxFLAGS_MEMBER(wxMENU_TEAROFF)
-wxEND_FLAGS( wxMenuStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler,"wx/menu.h")
-
-wxCOLLECTION_TYPE_INFO( wxMenuItem * , wxMenuItemList ) ;
-
-template<> void wxCollectionToVariantArray( wxMenuItemList const &theList, wxxVariantArray &value)
-{
-    wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList , value ) ;
-}
-
-wxBEGIN_PROPERTIES_TABLE(wxMenu)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
-    wxPROPERTY( Title, wxString , SetTitle, GetTitle, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxREADONLY_PROPERTY_FLAGS( MenuStyle , wxMenuStyle , long , GetStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-    wxPROPERTY_COLLECTION( MenuItems , wxMenuItemList , wxMenuItem* , Append , GetMenuItems , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxMenu)
-wxEND_HANDLERS_TABLE()
-
-wxDIRECT_CONSTRUCTOR_2( wxMenu , wxString , Title , long , MenuStyle  )
-
-WX_DEFINE_FLAGS( wxMenuBarStyle )
-
-wxBEGIN_FLAGS( wxMenuBarStyle )
-    wxFLAGS_MEMBER(wxMB_DOCKABLE)
-wxEND_FLAGS( wxMenuBarStyle )
-
-// the negative id would lead the window (its superclass !) to vetoe streaming out otherwise
-bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxWriter * , wxPersister * , wxxVariantArray & )
-{
-    return true ;
-}
-
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow ,"wx/menu.h",wxMenuBarStreamingCallback)
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject , "wx/menu.h" )
-
-wxBEGIN_HANDLERS_TABLE(wxMenuBar)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_DUMMY( wxMenuBar )
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
-#endif
-
 // ---------------------------------------------------------------------------
 // wxMenu construction, adding and removing menu items
 // ---------------------------------------------------------------------------
