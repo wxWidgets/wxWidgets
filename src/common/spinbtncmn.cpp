@@ -71,7 +71,7 @@ wxBEGIN_FLAGS( wxSpinButtonStyle )
     wxFLAGS_MEMBER(wxSP_WRAP)
 wxEND_FLAGS( wxSpinButtonStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl, "wx/spinbut.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl, "wx/spinbutt.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinButton)
     wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )
