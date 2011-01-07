@@ -12,6 +12,7 @@
 #ifndef _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
 #define _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
 
+#include "wx/fontdata.h"
 
 DECLARE_VARIANT_OBJECT(wxFontData)
 
