@@ -281,8 +281,6 @@ static wxNativeFontInfo MakeNativeFontInfoForNSFont(NSFont *cocoaNSFont, bool un
 
 //#include "_font_test_2_8_abi_compat.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 static wxNativeFontInfo MakeNativeFontInfo(int size, wxFontFamily family, wxFontStyle style, wxFontWeight weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     wxNativeFontInfo m_info; // NOTE: not an i-var despite name

@@ -40,8 +40,6 @@
 
 #include <malloc.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 // ----------------------------------------------------------------------------
 // wxFontRefData - the internal description of the font
 // ----------------------------------------------------------------------------

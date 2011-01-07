@@ -31,8 +31,6 @@
 #include <map>
 #include <string>
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {
 public:

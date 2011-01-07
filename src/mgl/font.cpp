@@ -36,8 +36,6 @@ typedef wxFontMgrFontRefData wxFontRefData;
 // wxFont
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 bool wxFont::Create(const wxNativeFontInfo& info)
 {
     return Create(info.pointSize, info.family, info.style, info.weight,

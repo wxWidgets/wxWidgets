@@ -42,8 +42,6 @@
 #include "wx/tokenzr.h"
 #include "wx/motif/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
