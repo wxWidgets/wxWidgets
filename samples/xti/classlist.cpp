@@ -429,7 +429,7 @@ wxString DumpPropertyInfo(const wxPropertyInfo *prop, int indent)
     infostr << ind << _T("collection element type: ") << DumpTypeInfo(prop->GetCollectionElementTypeInfo());
     infostr << ind << _T("type: ") << DumpTypeInfo(prop->GetTypeInfo());
 
-    infostr << ind << _T("default value: ") << DumpStr(prop->GetDefaultValue().GetAsString());
+    infostr << ind << _T("default value: ") << DumpStr(wxAnyGetAsString(prop->GetDefaultValue()));
     infostr << DumpPropertyAccessor(prop->GetAccessor(), indent+1);
 
     return infostr;

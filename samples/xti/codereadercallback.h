@@ -13,6 +13,7 @@
 #define _CODEDEPERSISTER_
 
 #include "wx/defs.h"
+#include "wx/sstream.h"
 
 /*
 wxObjectCodeReaderCallback implements the callbacks that will depersist
@@ -21,21 +22,21 @@ an object into a C++ initialization function.
 
 class WXDLLIMPEXP_BASE wxTextOutputStream;
 
-class WXDLLIMPEXP_BASE wxObjectCodeReaderCallback: public wxObjectWriterCallback
+class WXDLLIMPEXP_BASE wxObjectCodeReaderCallback: public wxObjectReaderCallback
 {
 private:
     struct wxObjectCodeReaderCallbackInternal;
     wxObjectCodeReaderCallbackInternal * m_data;
-    wxTextOutputStream *m_fp;
-    wxString ValueAsCode( const wxVariantBase &param );
+    wxString& m_headerincludes;
+    wxString& m_source;
 
 public:
-    wxObjectCodeReaderCallback(wxTextOutputStream *out);
+    wxObjectCodeReaderCallback(wxString& headerincludes, wxString &source);
     virtual ~wxObjectCodeReaderCallback();
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
-        wxVariantBaseArray &metadata);
+        wxStringToAnyHashMap &metadata);
 
     // initialize the already allocated object having the ID objectID 
     // with the Create method creation parameters which are objects are 
@@ -44,10 +45,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *variantValues,
+        wxAny *variantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata
+        wxStringToAnyHashMap &metadata
         );
 
     // construct the new object on the heap, that object will have the 
@@ -58,10 +59,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *VariantValues,
+        wxAny *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata);
+        wxStringToAnyHashMap &metadata);
 
     // destroy the heap-allocated object having the ID objectID, this may 
     // be used if an object is embedded in another object and set via value 
@@ -72,7 +73,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &variantValue);
+        const wxAny &variantValue);
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectId,
@@ -84,7 +85,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &VariantValue);
+        const wxAny &VariantValue);
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,
@@ -99,6 +100,9 @@ public:
         const wxClassInfo *eventSinkClassInfo,
         const wxHandlerInfo* handlerInfo,
         int eventSinkObjectID );
+
+    // utility function exposed for callbacks
+    wxString ValueAsCode( const wxAny &param );
 };
 
 #endif

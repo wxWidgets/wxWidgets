@@ -89,7 +89,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    wxDECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
-wxIMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // ============================================================================
 // implementation
@@ -263,7 +263,7 @@ MyFrame::MyFrame(const wxString& title)
 
 // the following class "persists" (i.e. saves) a wxFrame into a wxObjectWriter
 
-class MyDesignerPersister : public wxObjectReaderCallback
+class MyDesignerPersister : public wxObjectWriterCallback
 {
 public:
     MyDesignerPersister( wxDynamicObject * frame)
@@ -278,15 +278,16 @@ public:
                                     const wxObject *&eventSink, 
                                     const wxHandlerInfo* &handlerInfo )  
     {
-        // this approach would be used it the handler would not 
+        // this approach would be used if the handler would not 
         // be connected really in the designer, so we have to supply 
         // the information
-        if ( object == m_frame->GetProperty(wxT("Button")).GetAsObject() && 
-             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
+        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty(wxT("Button")) );
+        if ( object == but && 
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo(wxT("OnClick")) )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
-                FindHandlerInfo("ButtonClickHandler");
+                FindHandlerInfo(wxT("ButtonClickHandler"));
             return true;
         }
         return false;
@@ -323,8 +324,8 @@ void RegisterFrameRTTI()
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
-        dyninfo->AddHandler("ButtonClickHandler", 
+        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) NULL));
+        dyninfo->AddHandler(wxT("ButtonClickHandler"), 
             NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
@@ -332,7 +333,7 @@ void RegisterFrameRTTI()
 wxDynamicObject* CreateFrameRTTI()
 {
     int baseID = 100;
-    wxVariantBase Params[10];
+    wxAny Params[10];
 
     // the class is now part of XTI internal table so that we can
     // get a pointer to it just searching it like any other class:
@@ -341,25 +342,26 @@ wxDynamicObject* CreateFrameRTTI()
     wxASSERT( info );
     wxDynamicObject* frameWrapper = 
         wx_dynamic_cast(wxDynamicObject*, info->CreateObject() );
-    Params[0] = wxVariantBase((wxWindow*)(NULL));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("This is a frame created from XTI")));
-    Params[3] = wxVariantBase(wxPoint(-1,-1));
-    Params[4] = wxVariantBase(wxSize(400,300));
-    Params[5] = wxVariantBase((long)wxDEFAULT_FRAME_STYLE);
+    Params[0] = wxAny((wxWindow*)(NULL));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("This is a frame created from XTI")));
+    Params[3] = wxAny(wxPoint(-1,-1));
+    Params[4] = wxAny(wxSize(400,300));
+    Params[5] = wxAny((long)wxDEFAULT_FRAME_STYLE);
     wxASSERT( info->Create(frameWrapper, 6, Params ));
     frame = wx_dynamic_cast(wxFrame*, frameWrapper->GetSuperClassInstance());
 
+#if 1
     // now build a notebook inside it:
     wxNotebook* notebook;
     info = wxClassInfo::FindClass("wxNotebook");
     wxASSERT( info );
     notebook = wxDynamicCast( info->CreateObject(), wxNotebook );
-    Params[0] = wxVariantBase((wxWindow*)frame);
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxPoint( 10, 10 ));
-    Params[3] = wxVariantBase(wxDefaultSize);
-    Params[4] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)frame);
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxPoint( 10, 10 ));
+    Params[3] = wxAny(wxDefaultSize);
+    Params[4] = wxAny((long)0);
     wxASSERT( info->Create(notebook, 5, Params ));
 
     // button page
@@ -368,12 +370,12 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxPanel");
     wxASSERT( info );
     panel = wxDynamicCast( info->CreateObject(), wxPanel );
-    Params[0] = wxVariantBase((wxWindow*)(notebook));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxPoint(-1,-1));
-    Params[3] = wxVariantBase(wxSize(-1,-1));
-    Params[4] = wxVariantBase((long)0);
-    Params[5] = wxVariantBase(wxString(wxT("Hello")));
+    Params[0] = wxAny((wxWindow*)(notebook));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxPoint(-1,-1));
+    Params[3] = wxAny(wxSize(-1,-1));
+    Params[4] = wxAny((long)0);
+    Params[5] = wxAny(wxString(wxT("Hello")));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Buttons" );
 
@@ -381,26 +383,26 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxButton");
     wxASSERT( info );
     button = wxDynamicCast( info->CreateObject(), wxButton );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("Click Me!")));
-    Params[3] = wxVariantBase(wxPoint( 10, 10 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("Click Me!")));
+    Params[3] = wxAny(wxPoint( 10, 10 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(button, 6, Params ));
-    frameWrapper->SetProperty( "Button", wxVariantBase( button ) );
+    frameWrapper->SetProperty( wxT("Button"), wxAny( button ) );
 
     // other controls page
 
     info = wxClassInfo::FindClass("wxPanel");
     wxASSERT( info );
     panel = wxDynamicCast( info->CreateObject(), wxPanel );
-    Params[0] = wxVariantBase((wxWindow*)(notebook));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxPoint(-1,-1));
-    Params[3] = wxVariantBase(wxSize(-1,-1));
-    Params[4] = wxVariantBase((long)0);
-    Params[5] = wxVariantBase(wxString(wxT("Hello")));
+    Params[0] = wxAny((wxWindow*)(notebook));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxPoint(-1,-1));
+    Params[3] = wxAny(wxSize(-1,-1));
+    Params[4] = wxAny((long)0);
+    Params[5] = wxAny(wxString(wxT("Hello")));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Other Standard controls" );
 
@@ -408,62 +410,62 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxCheckBox");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("A Checkbox")));
-    Params[3] = wxVariantBase(wxPoint( 10, 10 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("A Checkbox")));
+    Params[3] = wxAny(wxPoint( 10, 10 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(control, 6, Params ));
 
     info = wxClassInfo::FindClass("wxRadioButton");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("A Radiobutton")));
-    Params[3] = wxVariantBase(wxPoint( 10, 30 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("A Radiobutton")));
+    Params[3] = wxAny(wxPoint( 10, 30 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(control, 6, Params ));
 
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("Another One")));
-    Params[3] = wxVariantBase(wxPoint( 10, 50 ));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("Another One")));
+    Params[3] = wxAny(wxPoint( 10, 50 ));
     wxASSERT( info->Create(control, 6, Params ));
 
     info = wxClassInfo::FindClass("wxStaticText");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("A Static Text!")));
-    Params[3] = wxVariantBase(wxPoint( 10, 70 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("A Static Text!")));
+    Params[3] = wxAny(wxPoint( 10, 70 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(control, 6, Params ));
 
     info = wxClassInfo::FindClass("wxStaticBox");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("A Static Box")));
-    Params[3] = wxVariantBase(wxPoint( 10, 90 ));
-    Params[4] = wxVariantBase(wxSize(100,80));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("A Static Box")));
+    Params[3] = wxAny(wxPoint( 10, 90 ));
+    Params[4] = wxAny(wxSize(100,80));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(control, 6, Params ));
 
     info = wxClassInfo::FindClass("wxTextCtrl");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString(wxT("A Text Control")));
-    Params[3] = wxVariantBase(wxPoint( 10, 200 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long)0);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString(wxT("A Text Control")));
+    Params[3] = wxAny(wxPoint( 10, 200 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long)0);
     wxASSERT( info->Create(control, 6, Params ));
 
     // spins and gauges page
@@ -471,12 +473,12 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxPanel");
     wxASSERT( info );
     panel = wxDynamicCast( info->CreateObject(), wxPanel );
-    Params[0] = wxVariantBase((wxWindow*)(notebook));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxPoint(-1,-1));
-    Params[3] = wxVariantBase(wxSize(-1,-1));
-    Params[4] = wxVariantBase((long)0);
-    Params[5] = wxVariantBase(wxString(wxT("Hello")));
+    Params[0] = wxAny((wxWindow*)(notebook));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxPoint(-1,-1));
+    Params[3] = wxAny(wxSize(-1,-1));
+    Params[4] = wxAny((long)0);
+    Params[5] = wxAny(wxString(wxT("Hello")));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Spins and Sliders" );
 
@@ -485,11 +487,11 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxSpinButton");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxPoint( 10, 10 ));
-    Params[3] = wxVariantBase(wxSize(-1,-1));
-    Params[4] = wxVariantBase((long)wxSP_VERTICAL | wxSP_ARROW_KEYS);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxPoint( 10, 10 ));
+    Params[3] = wxAny(wxSize(-1,-1));
+    Params[4] = wxAny((long)wxSP_VERTICAL | wxSP_ARROW_KEYS);
     wxASSERT( info->Create(control, 5, Params ));
 
     wxENSURE_CLASS_IS_LINKED(wxSpinCtrl);
@@ -497,12 +499,12 @@ wxDynamicObject* CreateFrameRTTI()
     info = wxClassInfo::FindClass("wxSpinCtrl");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase(wxString("20"));
-    Params[3] = wxVariantBase(wxPoint( 40, 10 ));
-    Params[4] = wxVariantBase(wxSize(40,-1));
-    Params[5] = wxVariantBase((long) wxSP_ARROW_KEYS);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny(wxString("20"));
+    Params[3] = wxAny(wxPoint( 40, 10 ));
+    Params[4] = wxAny(wxSize(40,-1));
+    Params[5] = wxAny((long) wxSP_ARROW_KEYS);
     wxASSERT( info->Create(control, 6, Params ));
 
     // MSVC likes to exclude from link wxGauge...
@@ -510,23 +512,20 @@ wxDynamicObject* CreateFrameRTTI()
     wxENSURE_CLASS_IS_LINKED(wxCheckBox)
     wxENSURE_CLASS_IS_LINKED(wxSpinCtrl)
 
-#ifdef __WXMSW__
-    // under wxMSW wxGauge is simply #defined to wxGauge95
-    info = wxClassInfo::FindClass("wxGauge95");
-#else
     info = wxClassInfo::FindClass("wxGauge");
-#endif
+
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
-    Params[0] = wxVariantBase((wxWindow*)(panel));
-    Params[1] = wxVariantBase(wxWindowID(baseID++));
-    Params[2] = wxVariantBase((int) 100);
-    Params[3] = wxVariantBase(wxPoint( 10, 50 ));
-    Params[4] = wxVariantBase(wxSize(-1,-1));
-    Params[5] = wxVariantBase((long) wxGA_HORIZONTAL);
+    Params[0] = wxAny((wxWindow*)(panel));
+    Params[1] = wxAny(wxWindowID(baseID++));
+    Params[2] = wxAny((int) 100);
+    Params[3] = wxAny(wxPoint( 10, 50 ));
+    Params[4] = wxAny(wxSize(-1,-1));
+    Params[5] = wxAny((long) wxGA_HORIZONTAL);
     wxASSERT( info->Create(control, 6, Params ));
     wx_dynamic_cast(wxGauge*, control)->SetValue(20);
 
+#endif
     return frameWrapper;
 }
 
@@ -543,7 +542,7 @@ bool SaveFrameRTTI(const wxString &testFileName, wxDynamicObject *frame)
     MyDesignerPersister persister(frame);
 
     // write the given wxObject into the XML document
-    wxVariantBaseArray empty;
+    wxStringToAnyHashMap empty;
     writer.WriteObject( frame, frame->GetClassInfo(), &persister, 
                         wxString("myTestFrame"), empty );
 
@@ -587,12 +586,24 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
         return false;
 
     // read the XML file using the wxObjectCodeReaderCallback
-    wxObjectCodeReaderCallback Callbacks(&tos);
+    
+    wxString headerincludes;
+    wxString sourcecode;
+    wxObjectCodeReaderCallback Callbacks(headerincludes,sourcecode);
     wxObjectXmlReader Reader(root);
 
     // ReadObject will return the ID of the object read??
     Reader.ReadObject( wxString("myTestFrame"), &Callbacks );
 
+    // header preamble
+    tos << 
+        "#include \"wx/wxprec.h\" \n#ifdef __BORLANDC__\n#pragma hdrstop\n#endif\n#ifndef WX_PRECOMP\n#include \"wx/wx.h\" \n#endif\n\n";
+    // add object includes
+    tos.WriteString( headerincludes );
+
+    tos << "\n\nvoid test()\n{";
+    tos.WriteString( sourcecode );
+    tos << "}";
     return true;
 }
 
