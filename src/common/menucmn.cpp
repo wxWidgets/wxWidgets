@@ -101,12 +101,13 @@ bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWrite
 wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
                                        wxMenuBarStreamingCallback)
 
+
 #if wxUSE_EXTENDED_RTTI    
+WX_DEFINE_LIST( wxMenuInfoHelperList )
 
-WX_DEFINE_LIST( wxMenuInfoList )
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfoHelper, wxObject, "wx/menu.h")
 
-wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
+wxBEGIN_PROPERTIES_TABLE(wxMenuInfoHelper)
 wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, wxEMPTY_PARAMETER_VALUE, \
                     0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
@@ -114,25 +115,38 @@ wxREADONLY_PROPERTY( Title, wxString, GetTitle, wxString(), \
                     0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxEMPTY_HANDLERS_TABLE(wxMenuInfo)
+wxEMPTY_HANDLERS_TABLE(wxMenuInfoHelper)
 
-wxCONSTRUCTOR_2( wxMenuInfo, wxMenu*, Menu, wxString, Title )
+wxCONSTRUCTOR_2( wxMenuInfoHelper, wxMenu*, Menu, wxString, Title )
 
-wxCOLLECTION_TYPE_INFO( wxMenuInfo *, wxMenuInfoList ) ;
+wxCOLLECTION_TYPE_INFO( wxMenuInfoHelper *, wxMenuInfoHelperList ) ;
 
-template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, 
+template<> void wxCollectionToVariantArray( wxMenuInfoHelperList const &theList, 
                                            wxAnyList &value)
 {
-    wxListCollectionToAnyList<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
+    wxListCollectionToAnyList<wxMenuInfoHelperList::compatibility_iterator>( theList, value ) ;
 }
 
-const wxMenuInfoList& wxMenuBarBase::GetMenuInfos() const
+#endif
+
+wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
+wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoHelperList, wxMenuInfoHelper*, AppendMenuInfo, \
+                      GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenuBar)
+
+wxCONSTRUCTOR_DUMMY( wxMenuBar )
+
+#if wxUSE_EXTENDED_RTTI    
+
+const wxMenuInfoHelperList& wxMenuBarBase::GetMenuInfos() const
 {
-    wxMenuInfoList* list = const_cast< wxMenuInfoList* > (& m_menuInfos);
-    WX_CLEAR_LIST( wxMenuInfoList, *list);
+    wxMenuInfoHelperList* list = const_cast< wxMenuInfoHelperList* > (& m_menuInfos);
+    WX_CLEAR_LIST( wxMenuInfoHelperList, *list);
     for (size_t i = 0 ; i < GetMenuCount(); ++i)
     {
-        wxMenuInfo* info = new wxMenuInfo();
+        wxMenuInfoHelper* info = new wxMenuInfoHelper();
         info->Create( GetMenu(i), GetMenuLabel(i));
         list->Append(info);
     }
