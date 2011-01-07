@@ -516,6 +516,14 @@ public:
         return false;
     }
 
+#if wxUSE_EXTENDED_RTTI
+    virtual const wxTypeInfo* GetTypeInfo() const
+    {
+        wxFAIL_MSG("Null Type Info not available");
+        return NULL;
+    }
+#endif
+
 private:
 };
 

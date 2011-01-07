@@ -65,9 +65,9 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
 template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
-                                           wxVariantBaseArray &value)
+                                           wxAnyList &value)
 {
-    wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList, value ) ;
+    wxListCollectionToAnyList<wxMenuItemList::compatibility_iterator>( theList, value ) ;
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxMenu)
@@ -97,7 +97,7 @@ wxEND_FLAGS( wxMenuBarStyle )
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
-                                wxObjectReaderCallback *, wxVariantBaseArray & )
+                                wxObjectWriterCallback *, const wxStringToAnyHashMap & )
 {
     return true;
 }
@@ -122,9 +122,9 @@ wxCONSTRUCTOR_2( wxMenuInfo, wxMenu*, Menu, wxString, Title )
 wxCOLLECTION_TYPE_INFO( wxMenuInfo *, wxMenuInfoList ) ;
 
 template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, 
-                                           wxVariantBaseArray &value)
+                                           wxAnyList &value)
 {
-    wxListCollectionToVariantArray<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
+    wxListCollectionToAnyList<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
@@ -136,6 +136,25 @@ wxEMPTY_HANDLERS_TABLE(wxMenuBar)
 
 wxCONSTRUCTOR_DUMMY( wxMenuBar )
 
+const wxMenuInfoList& wxMenuBarBase::GetMenuInfos() const
+{
+    wxMenuInfoList* list = const_cast< wxMenuInfoList* > (& m_menuInfos);
+    WX_CLEAR_LIST( wxMenuInfoList, *list);
+    for (size_t i = 0 ; i < GetMenuCount(); ++i)
+    {
+        wxMenuInfo* info = new wxMenuInfo();
+        info->Create( GetMenu(i), GetMenuLabel(i));
+        list->Append(info);
+    }
+    return m_menuInfos;
+}
+
+/*
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenu**>)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuItem**>)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuBar**>)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuInfo**>)
+*/
 #else
 // IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 // IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
@@ -150,7 +169,7 @@ wxCONSTRUCTOR_DUMMY( wxMenuBar )
 #if wxUSE_EXTENDED_RTTI
 
 bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
-                                 wxObjectReaderCallback *, wxVariantBaseArray & )
+                                 wxObjectWriterCallback *, const wxStringToAnyHashMap & )
 {
     const wxMenuItem * mitem = wx_dynamic_cast(const wxMenuItem*, object);
     if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
@@ -163,6 +182,8 @@ bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
     }
     return true;
 }
+
+#endif
 
 wxBEGIN_ENUM( wxItemKind )
 wxENUM_MEMBER( wxITEM_SEPARATOR )
@@ -179,7 +200,7 @@ wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxPROPERTY( Id, int, SetId, GetId, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
-wxPROPERTY( Text, wxString, SetText, GetText, wxString(), \
+wxPROPERTY( ItemLabel, wxString, SetItemLabel, GetItemLabel, wxString(), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxPROPERTY( Help, wxString, SetHelp, GetHelp, wxString(), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -187,11 +208,11 @@ wxREADONLY_PROPERTY( Kind, wxItemKind, GetKind, wxEMPTY_PARAMETER_VALUE, \
                     0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
-wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxVariantBase((bool)true), \
+wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxAny((bool)true), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
-wxPROPERTY( Checked, bool, Check, IsChecked, wxVariantBase((bool)false), \
+wxPROPERTY( Checked, bool, Check, IsChecked, wxAny((bool)false), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
-wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxVariantBase((bool)false), \
+wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxAny((bool)false), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
@@ -199,9 +220,6 @@ wxEMPTY_HANDLERS_TABLE(wxMenuItem)
 
 wxDIRECT_CONSTRUCTOR_6( wxMenuItem, wxMenu*, Parent, int, Id, wxString, \
                        Text, wxString, Help, wxItemKind, Kind, wxMenu*, SubMenu )
-#else
-//IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase

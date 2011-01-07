@@ -73,22 +73,22 @@ void wxObjectWriter::ClearObjectContext()
 }
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                           wxObjectReaderCallback *persister, const wxString &name, 
-                           wxVariantBaseArray &metadata )
+                           wxObjectWriterCallback *writercallback, const wxString &name, 
+                           const wxStringToAnyHashMap &metadata )
 {
     DoBeginWriteTopLevelEntry( name );
-    WriteObject( object, classInfo, persister, false, metadata);
+    WriteObject( object, classInfo, writercallback, false, metadata);
     DoEndWriteTopLevelEntry( name );
 }
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                           wxObjectReaderCallback *persister, bool isEmbedded, 
-                           wxVariantBaseArray &metadata )
+                           wxObjectWriterCallback *writercallback, bool isEmbedded, 
+                           const wxStringToAnyHashMap &metadata )
 {
-    if ( !classInfo->BeforeWriteObject( object, this, persister, metadata) )
+    if ( !classInfo->BeforeWriteObject( object, this, writercallback, metadata) )
         return;
 
-    if ( persister->BeforeWriteObject( this, object, classInfo, metadata) )
+    if ( writercallback->BeforeWriteObject( this, object, classInfo, metadata) )
     {
         if ( object == NULL )
             DoWriteNullObject();
@@ -108,10 +108,10 @@ void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *clas
 
             DoBeginWriteObject( object, classInfo, oid, metadata );
             wxObjectWriterInternalPropertiesData data;
-            WriteAllProperties( object, classInfo, persister, &data );
+            WriteAllProperties( object, classInfo, writercallback, &data );
             DoEndWriteObject( object, classInfo, oid  );
         }
-        persister->AfterWriteObject( this,object, classInfo );
+        writercallback->AfterWriteObject( this,object, classInfo );
     }
 }
 
@@ -124,23 +124,22 @@ void wxObjectWriter::FindConnectEntry(const wxEvtHandler * evSource,
 
     if ( dynamicEvents )
     {
-        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
-        while (node)
+        for ( wxList::const_iterator node = dynamicEvents->begin(); node != dynamicEvents->end(); ++node )
         {
-            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)(*node);
 
             // find the match
             if ( entry->m_fn &&
                 (dti->GetEventType() == entry->m_eventType) &&
                 (entry->m_id == -1 ) &&
-                (entry->m_eventSink != NULL ) )
+                (entry->m_fn->GetEvtHandler() != NULL ) )
             {
-                sink = entry->m_eventSink;
+                sink = entry->m_fn->GetEvtHandler();
                 const wxClassInfo* sinkClassInfo = sink->GetClassInfo();
                 const wxHandlerInfo* sinkHandler = sinkClassInfo->GetFirstHandler();
                 while ( sinkHandler )
                 {
-                    if ( sinkHandler->GetEventFunction() == entry->m_fn )
+                    if ( sinkHandler->GetEventFunction() == entry->m_fn->GetEvtMethod() )
                     {
                         handler = sinkHandler;
                         break;
@@ -149,12 +148,11 @@ void wxObjectWriter::FindConnectEntry(const wxEvtHandler * evSource,
                 }
                 break;
             }
-            node = node->GetNext();
         }
     }
 }
 void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
-                                   wxObjectReaderCallback *persister, 
+                                   wxObjectWriterCallback *writercallback, 
                                    wxObjectWriterInternalPropertiesData * data )
 {
     wxPropertyInfoMap map;
@@ -166,7 +164,7 @@ void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo
         const wxPropertyInfo* prop = iter == map.end() ? NULL : iter->second;
         if ( prop )
         {
-            WriteOneProperty( obj, prop->GetDeclaringClass(), prop, persister, data );
+            WriteOneProperty( obj, prop->GetDeclaringClass(), prop, writercallback, data );
         }
         else
         {
@@ -180,7 +178,7 @@ void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo
             const wxPropertyInfo* prop = iter->second;
             if ( prop->GetFlags() & wxPROP_OBJECT_GRAPH )
             {
-                WriteOneProperty( obj, prop->GetDeclaringClass(), prop, persister, data );
+                WriteOneProperty( obj, prop->GetDeclaringClass(), prop, writercallback, data );
             }
         }
     }
@@ -190,14 +188,36 @@ void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo
             const wxPropertyInfo* prop = iter->second;
             if ( !(prop->GetFlags() & wxPROP_OBJECT_GRAPH) )
             {
-                WriteOneProperty( obj, prop->GetDeclaringClass(), prop, persister, data );
+                WriteOneProperty( obj, prop->GetDeclaringClass(), prop, writercallback, data );
             }
         }
     }
 }
 
+class WXDLLIMPEXP_BASE wxObjectPropertyWriter: public wxObjectWriterFunctor
+{
+public:
+    wxObjectPropertyWriter(const wxClassTypeInfo* cti,
+        wxObjectWriterCallback *writercallback,
+        wxObjectWriter* writer,
+        wxStringToAnyHashMap &props) : 
+    m_cti(cti),m_persister(writercallback),m_writer(writer),m_props(props)
+    {}
+
+    virtual void operator()(const wxObject *vobj)
+    {
+        m_writer->WriteObject( vobj, (vobj ? vobj->GetClassInfo() : m_cti->GetClassInfo() ), 
+            m_persister, m_cti->GetKind()== wxT_OBJECT, m_props );
+    }
+private:
+    const wxClassTypeInfo* m_cti;
+    wxObjectWriterCallback *m_persister;
+    wxObjectWriter* m_writer;
+    wxStringToAnyHashMap& m_props;
+};
+
 void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
-                                 const wxPropertyInfo* pi, wxObjectReaderCallback *persister, 
+                                 const wxPropertyInfo* pi, wxObjectWriterCallback *writercallback, 
                                  wxObjectWriterInternalPropertiesData *WXUNUSED(data) )
 {
     if ( pi->GetFlags() & wxPROP_DONT_STREAM )
@@ -210,39 +230,39 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
 
     if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
     {
-        wxVariantBaseArray data;
+        wxAnyList data;
         pi->GetAccessor()->GetPropertyCollection(obj, data);
         const wxTypeInfo * elementType = 
             wx_dynamic_cast( const wxCollectionTypeInfo*, pi->GetTypeInfo() )->GetElementType();
-        for ( size_t i = 0; i < data.GetCount(); ++i )
+        if ( !data.empty() )
         {
-            if ( i == 0 )
-                DoBeginWriteProperty( pi );
-
-            DoBeginWriteElement();
-            wxVariantBase value = data[i];
-            if ( persister->BeforeWriteProperty( this, obj, pi, value ) )
+            DoBeginWriteProperty( pi );
+            for ( wxAnyList::const_iterator iter = data.begin(); iter != data.end(); ++iter )
             {
-                const wxClassTypeInfo* cti = 
-                    wx_dynamic_cast( const wxClassTypeInfo*, elementType );
-                if ( cti )
+                DoBeginWriteElement();
+                const wxAny* valptr = *iter;
+                if ( writercallback->BeforeWriteProperty( this, obj, pi, *valptr ) )
                 {
-                    const wxClassInfo* pci = cti->GetClassInfo();
-                    wxObject *vobj = pci->VariantToInstance( value );
-                    wxVariantBaseArray md;
-                    WriteObject( vobj, (vobj ? vobj->GetClassInfo() : pci ), 
-                                 persister, cti->GetKind()== wxT_OBJECT, md );
+                    const wxClassTypeInfo* cti = 
+                        wx_dynamic_cast( const wxClassTypeInfo*, elementType );
+                    if ( cti )
+                    {
+                        wxStringToAnyHashMap md;
+                        wxObjectPropertyWriter pw(cti,writercallback,this, md);
+
+                        const wxClassInfo* pci = cti->GetClassInfo();
+                        pci->CallOnAny( *valptr, &pw);
+                    }
+                    else
+                    {
+                        DoWriteSimpleType( *valptr );
+                    }
                 }
-                else
-                {
-                    DoWriteSimpleType( value );
-                }
+                DoEndWriteElement();
             }
-            DoEndWriteElement();
-            if ( i == data.GetCount() - 1 )
-                 DoEndWriteProperty( pi );
-       }
-   }
+            DoEndWriteProperty( pi );
+        }
+    }
     else
     {
         const wxEventSourceTypeInfo* dti = 
@@ -256,7 +276,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
             if ( evSource )
             {
                 FindConnectEntry( evSource, dti, sink, handler );
-                if ( persister->BeforeWriteDelegate( this, obj, ci, pi, sink, handler ) )
+                if ( writercallback->BeforeWriteDelegate( this, obj, ci, pi, sink, handler ) )
                 {
                     if ( sink != NULL && handler != NULL )
                     {
@@ -282,11 +302,12 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
         }
         else
         {
-            wxVariantBase value;
+            wxAny value;
             pi->GetAccessor()->GetProperty(obj, value);
 
             // avoid streaming out void objects
-            if( value.IsEmpty() )
+            // TODO Verify
+            if( value.IsNull() )
                 return;
 
             if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
@@ -295,7 +316,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
                     wx_dynamic_cast(const wxEnumTypeInfo*,  pi->GetTypeInfo() );
                 if ( eti )
                 {
-                    eti->ConvertFromLong( value.wxTEMPLATED_MEMBER_CALL(Get, long), value );
+                    eti->ConvertFromLong( wxANY_AS(value, long ), value );
                 }
                 else
                 {
@@ -305,9 +326,9 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
 
             // avoid streaming out default values
             if ( pi->GetTypeInfo()->HasStringConverters() && 
-                 !pi->GetDefaultValue().IsEmpty() )
+                 !pi->GetDefaultValue().IsNull() ) // TODO Verify
             {
-                if ( value.GetAsString() == pi->GetDefaultValue().GetAsString() )
+                if ( wxAnyGetAsString(value) == wxAnyGetAsString(pi->GetDefaultValue()) )
                     return;
             }
 
@@ -315,28 +336,28 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
             const wxClassTypeInfo* cti = 
                 wx_dynamic_cast( const wxClassTypeInfo* , pi->GetTypeInfo() );
 
-            if ( cti && value.GetAsObject() == NULL )
+            if ( cti && cti->GetKind() == wxT_OBJECT_PTR && wxAnyGetAsObjectPtr(value) == NULL )
                 return;
 
-            if ( persister->BeforeWriteProperty( this, obj, pi, value ) )
+            if ( writercallback->BeforeWriteProperty( this, obj, pi, value ) )
             {
                 DoBeginWriteProperty( pi );
                 if ( cti )
                 {
-                    const wxClassInfo* pci = cti->GetClassInfo();
-                    wxObject *vobj = pci->VariantToInstance( value );
-                    if ( vobj && pi->GetTypeInfo()->HasStringConverters() )
+                    if ( cti->HasStringConverters() )
                     {
                         wxString stringValue;
                         cti->ConvertToString( value, stringValue );
-                        wxVariantBase convertedValue(stringValue);
+                        wxAny convertedValue(stringValue);
                         DoWriteSimpleType( convertedValue );
                     }
                     else
                     {
-                        wxVariantBaseArray md;
-                        WriteObject( vobj, (vobj ? vobj->GetClassInfo() : pci ), 
-                                     persister, cti->GetKind()== wxT_OBJECT, md);
+                        wxStringToAnyHashMap md;
+                        wxObjectPropertyWriter pw(cti,writercallback,this, md);
+
+                        const wxClassInfo* pci = cti->GetClassInfo();
+                        pci->CallOnAny(value, &pw);
                     }
                 }
                 else
@@ -476,7 +497,7 @@ wxObjectRuntimeReaderCallback::~wxObjectRuntimeReaderCallback()
 }
 
 void wxObjectRuntimeReaderCallback::AllocateObject(int objectID, wxClassInfo *classInfo,
-                                          wxVariantBaseArray &WXUNUSED(metadata))
+                                          wxStringToAnyHashMap &WXUNUSED(metadata))
 {
     wxObject *O;
     O = classInfo->CreateObject();
@@ -486,10 +507,10 @@ void wxObjectRuntimeReaderCallback::AllocateObject(int objectID, wxClassInfo *cl
 void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
-                                        wxVariantBase *params,
+                                        wxAny *params,
                                         int *objectIdValues,
                                         const wxClassInfo **objectClassInfos,
-                                        wxVariantBaseArray &WXUNUSED(metadata))
+                                        wxStringToAnyHashMap &WXUNUSED(metadata))
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -506,7 +527,7 @@ void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
             {
                 o = dyno->GetSuperClassInstance();
             }
-            params[i] = objectClassInfos[i]->InstanceToVariant(o);
+            params[i] = objectClassInfos[i]->ObjectPtrToAny(o);
         }
     }
     classInfo->Create(o, paramCount, params);
@@ -515,10 +536,10 @@ void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
 void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
-                                        wxVariantBase *params,
+                                        wxAny *params,
                                         int *objectIdValues,
                                         const wxClassInfo **objectClassInfos,
-                                        wxVariantBaseArray &WXUNUSED(metadata))
+                                        wxStringToAnyHashMap &WXUNUSED(metadata))
 {
     wxObject *o;
     for ( int i = 0; i < paramCount; ++i )
@@ -534,7 +555,7 @@ void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
             {
                 o = dyno->GetSuperClassInstance();
             }
-            params[i] = objectClassInfos[i]->InstanceToVariant(o);
+            params[i] = objectClassInfos[i]->ObjectPtrToAny(o);
         }
     }
     o = classInfo->ConstructObject(paramCount, params);
@@ -552,7 +573,7 @@ void wxObjectRuntimeReaderCallback::DestroyObject(int objectID, wxClassInfo *WXU
 void wxObjectRuntimeReaderCallback::SetProperty(int objectID,
                                        const wxClassInfo *classInfo,
                                        const wxPropertyInfo* propertyInfo,
-                                       const wxVariantBase &value)
+                                       const wxAny &value)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -579,7 +600,7 @@ void wxObjectRuntimeReaderCallback::SetPropertyAsObject(int objectID,
     }
 
     classInfo->SetProperty( o, propertyInfo->GetName(), 
-                            valClassInfo->InstanceToVariant(valo) );
+                            valClassInfo->ObjectPtrToAny(valo) );
 }
 
 void wxObjectRuntimeReaderCallback::SetConnect(int eventSourceObjectID,
@@ -625,7 +646,7 @@ wxObject *wxObjectRuntimeReaderCallback::GetObject(int objectID)
 void wxObjectRuntimeReaderCallback::AddToPropertyCollection( int objectID,
                                                    const wxClassInfo *classInfo,
                                                    const wxPropertyInfo* propertyInfo,
-                                                   const wxVariantBase &value)
+                                                   const wxAny &value)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -654,12 +675,7 @@ void wxObjectRuntimeReaderCallback::AddToPropertyCollectionAsObject(int objectID
     }
 
     classInfo->AddToPropertyCollection( o, propertyInfo->GetName(), 
-                                        valClassInfo->InstanceToVariant(valo) );
+                                        valClassInfo->ObjectPtrToAny(valo) );
 }
-
-#if TEST_XVARIANT
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxVariantBaseArray);
-#endif
 
 #endif // wxUSE_EXTENDED_RTTI

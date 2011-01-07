@@ -93,13 +93,11 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
 
 wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
 
-#if wxUSE_EXTENDED_RTTI
 template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList,
-                                           wxVariantBaseArray &value)
+                                           wxAnyList &value)
 {
-    wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
+    wxListCollectionToAnyList<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
 }
-#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebook)
 wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
@@ -134,6 +132,7 @@ wxEMPTY_HANDLERS_TABLE(wxNotebookPageInfo)
 wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, \
                 wxString, Text, bool, Selected, int, ImageId )
 
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxNotebookPageInfo**>)
 // XTI accessors:
 
 void wxNotebookBase::AddPageInfo( wxNotebookPageInfo* info )

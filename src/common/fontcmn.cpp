@@ -76,37 +76,39 @@ extern const char *wxDumpFont(const wxFont *font)
 // ----------------------------------------------------------------------------
 
 wxBEGIN_ENUM( wxFontFamily )
-wxENUM_MEMBER( wxDEFAULT )
-wxENUM_MEMBER( wxDECORATIVE )
-wxENUM_MEMBER( wxROMAN )
-wxENUM_MEMBER( wxSCRIPT )
-wxENUM_MEMBER( wxSWISS )
-wxENUM_MEMBER( wxMODERN )
-wxENUM_MEMBER( wxTELETYPE )
+wxENUM_MEMBER( wxFONTFAMILY_DEFAULT )
+wxENUM_MEMBER( wxFONTFAMILY_DECORATIVE )
+wxENUM_MEMBER( wxFONTFAMILY_ROMAN )
+wxENUM_MEMBER( wxFONTFAMILY_SCRIPT )
+wxENUM_MEMBER( wxFONTFAMILY_SWISS )
+wxENUM_MEMBER( wxFONTFAMILY_MODERN )
+wxENUM_MEMBER( wxFONTFAMILY_TELETYPE )
 wxEND_ENUM( wxFontFamily )
 
 wxBEGIN_ENUM( wxFontStyle )
-wxENUM_MEMBER( wxNORMAL )
-wxENUM_MEMBER( wxITALIC )
-wxENUM_MEMBER( wxSLANT )
+wxENUM_MEMBER( wxFONTSTYLE_NORMAL )
+wxENUM_MEMBER( wxFONTSTYLE_ITALIC )
+wxENUM_MEMBER( wxFONTSTYLE_SLANT )
 wxEND_ENUM( wxFontStyle )
 
 wxBEGIN_ENUM( wxFontWeight )
-wxENUM_MEMBER( wxNORMAL )
-wxENUM_MEMBER( wxLIGHT )
-wxENUM_MEMBER( wxBOLD )
+wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_LIGHT )
+wxENUM_MEMBER( wxFONTWEIGHT_BOLD )
 wxEND_ENUM( wxFontWeight )
 
 wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h")
 
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxFont>)
+
 wxBEGIN_PROPERTIES_TABLE(wxFont)
 wxPROPERTY( Size,int, SetPointSize, GetPointSize, 12, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
-wxPROPERTY( Family, int , SetFamily, GetFamily, (int)wxDEFAULT, \
+wxPROPERTY( Family, wxFontFamily , SetFamily, GetFamily, (wxFontFamily)wxDEFAULT, \
            0 /*flags*/, wxT("Helpstring"), wxT("group")) // wxFontFamily
-wxPROPERTY( Style, int, SetStyle, GetStyle, (int)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, (wxFontStyle)wxNORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontStyle
-wxPROPERTY( Weight, int, SetWeight, GetWeight, (int)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
@@ -116,7 +118,7 @@ wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
            wxFONTENCODING_DEFAULT, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxCONSTRUCTOR_6( wxFont, int, Size, int, Family, int, Style, int, Weight, \
+wxCONSTRUCTOR_6( wxFont, int, Size, wxFontFamily, Family, wxFontStyle, Style, wxFontWeight, Weight, \
                 bool, Underlined, wxString, Face )
 
 wxEMPTY_HANDLERS_TABLE(wxFont)

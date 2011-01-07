@@ -32,6 +32,11 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxBitmap,WXDLLEXPORT)
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxBitmap>)
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxIcon>)
+#endif
+
 // ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------

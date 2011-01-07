@@ -70,7 +70,7 @@ wxFLAGS_MEMBER(wxSP_ARROW_KEYS)
 wxFLAGS_MEMBER(wxSP_WRAP)
 wxEND_FLAGS( wxSpinCtrlStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinbut.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
 wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )

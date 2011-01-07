@@ -59,7 +59,7 @@ wxFROM_STRING_IMP( wxColour )
 
 wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour, wxObject,  \
                                                       "wx/colour.h",  &wxTO_STRING( wxColour ), &wxFROM_STRING( wxColour ))
-
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxColour>)
 wxBEGIN_PROPERTIES_TABLE(wxColour)
 wxREADONLY_PROPERTY( Red, unsigned char, Red, wxEMPTY_PARAMETER_VALUE, \
                     0 /*flags*/, wxT("Helpstring"), wxT("group"))
