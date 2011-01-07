@@ -139,7 +139,7 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxDDEServer, wxServerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxDDEClient, wxClientBase)
-IMPLEMENT_CLASS(wxDDEConnection, wxConnectionBase)
+IMPLEMENT_DYNAMIC_CLASS(wxDDEConnection, wxConnectionBase)
 IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
 
 // ============================================================================
