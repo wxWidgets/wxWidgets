@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 January 2011                                                      *
+# Date : 7 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -79,7 +79,6 @@ OBJECTS = \
 		cshelp.obj,\
 		ctrlcmn.obj,\
 		ctrlsub.obj,\
-		datacmn.obj,\
 		datetime.obj,\
 		datstrm.obj,\
 		dcbase.obj,\
@@ -220,7 +219,9 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		translation.obj,languageinfo.obj,filehistorycmn.obj,\
 		stdstream.obj,uiactioncmn.obj,arttango.obj,mediactrlcmn.obj,\
 		panelcmn.obj,checkboxcmn.obj,statboxcmn.obj,slidercmn.obj,\
-		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj
+		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj,\
+		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
+		spinbtncmn.obj,scrolbarcmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -263,7 +264,6 @@ SOURCES = \
 		cshelp.cpp,\
 		ctrlcmn.cpp,\
 		ctrlsub.cpp,\
-		datacmn.cpp,\
 		datetime.cpp,\
 		datstrm.cpp,\
 		dcbase.cpp,\
@@ -422,7 +422,8 @@ SOURCES = \
 		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp,uiactioncmn.cpp,\
 		arttango.cpp,mediactrlcmn.cpp,panelcmn.cpp,checkboxcmn.cpp,\
 		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
-		bmpbtncmn.cpp,checklstcmn.cpp
+		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
+		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -496,7 +497,6 @@ colourcmn.obj : colourcmn.cpp
 cshelp.obj : cshelp.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp
-datacmn.obj : datacmn.cpp
 datetime.obj : datetime.cpp
 datstrm.obj : datstrm.cpp
 dcbase.obj : dcbase.cpp
@@ -687,3 +687,9 @@ statlinecmn.obj : statlinecmn.cpp
 radiobtncmn.obj : radiobtncmn.cpp
 bmpbtncmn.obj : bmpbtncmn.cpp
 checklstcmn.obj : checklstcmn.cpp
+statbmpcmn.obj : statbmpcmn.cpp
+dirctrlcmn.obj : dirctrlcmn.cpp
+gridcmn.obj : gridcmn.cpp
+odcombocmn.obj : odcombocmn.cpp
+spinbtncmn.obj : spinbtncmn.cpp
+scrolbarcmn.obj : scrolbarcmn.cpp

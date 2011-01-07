@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 15 December 2010                                                    *
+# Date : 7 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -125,6 +125,8 @@ gtk : [.include.wx]setup.h
 	set default [-.keyboard]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.mdi]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.mediaplayer]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
