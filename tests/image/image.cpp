@@ -1039,6 +1039,14 @@ void ImageTestCase::CompareSavedImage()
     }
 
     /*
+    Explicitly make known we want a palettised PNG. If we don't then this
+    particular image gets saved as a true colour image because there's an
+    alpha channel present and the PNG saver prefers to keep the alpha over
+    saving as a palettised image that has alpha converted to a mask.
+    */
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+
+    /*
     The image contains 256 indexed colours and needs another palette entry
     for storing the transparency index. This results in wanting 257 palette
     entries but that amount is not supported by PNG, as such this image
@@ -1066,13 +1074,6 @@ void ImageTestCase::CompareSavedImage()
         red[paletteCount-2], green[paletteCount-2], blue[paletteCount-2]);
 
     expected8.SetPalette(newPal);
-    /*
-    Explicitly make known we want a palettised PNG. If we don't then this
-    particular image gets saved as a true colour image because there's an
-    alpha channel present and the PNG saver prefers to keep the alpha over
-    saving as a palettised image that has alpha converted to a mask.
-    */
-    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
 
     wxImage ref8 = expected8;
 

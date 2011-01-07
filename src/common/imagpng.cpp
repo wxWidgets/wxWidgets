@@ -772,12 +772,16 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     }
 #else
     bool bUsePalette = false;
+#endif // wxUSE_PALETTE
 
-    if (iColorType == wxPNG_TYPE_PALETTE)
+    /*
+    If saving palettised was requested but it was decided we can't use a
+    palette then reset the colour type to RGB.
+    */
+    if (!bUsePalette && iColorType == wxPNG_TYPE_PALETTE)
     {
         iColorType = wxPNG_TYPE_COLOUR;
     }
-#endif // wxUSE_PALETTE
 
     bool bUseAlpha = !bUsePalette && (bHasAlpha || bHasMask);
 
