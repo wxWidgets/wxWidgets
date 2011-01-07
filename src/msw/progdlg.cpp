@@ -25,8 +25,16 @@
 
 #if wxUSE_PROGRESSDLG && wxUSE_THREADS
 
-#include "wx/msw/private/msgdlg.h"
 #include "wx/progdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/msgdlg.h"
+    #include "wx/stopwatch.h"
+    #include "wx/msw/private.h"
+#endif
+
+#include "wx/msw/private/msgdlg.h"
 #include "wx/evtloop.h"
 
 using namespace wxMSWMessageDialog;

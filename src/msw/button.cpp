@@ -37,15 +37,16 @@
     #include "wx/dcscreen.h"
     #include "wx/dcclient.h"
     #include "wx/toplevel.h"
+    #include "wx/msw/wrapcctl.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 #include "wx/imaglist.h"
 #include "wx/stockitem.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
 #include "wx/private/window.h"
-#include "wx/msw/missing.h"
 
 using namespace wxMSWImpl;
 

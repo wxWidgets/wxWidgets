@@ -18,8 +18,6 @@
 
 #if wxUSE_MSGDLG
 
-#include "wx/ptr_scpd.h"
-
 // there is no hook support under CE so we can't use the code for message box
 // positioning there
 #ifndef __WXWINCE__
@@ -29,21 +27,21 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msgdlg.h"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
-    #include "wx/dialog.h"
+    #include "wx/msw/private.h"
     #if wxUSE_MSGBOX_HOOK
         #include "wx/hashmap.h"
     #endif
 #endif
 
+#include "wx/ptr_scpd.h"
 #include "wx/dynlib.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
-#include "wx/msgdlg.h"
 
 #if wxUSE_MSGBOX_HOOK
     #include "wx/fontutil.h"
