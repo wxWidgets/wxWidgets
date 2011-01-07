@@ -732,6 +732,11 @@ wxAny wxClassInfo::ObjectPtrToAny( wxObject* obj) const
     return m_objectToVariantConverter(obj);
 }
 
+bool wxClassInfo::NeedsDirectConstruction() const 
+{ 
+    return wx_dynamic_cast(wxObjectAllocator*, m_constructor) != NULL; 
+}
+
 // ----------------------------------------------------------------------------
 // wxDynamicObject support
 // ----------------------------------------------------------------------------

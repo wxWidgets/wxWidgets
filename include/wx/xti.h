@@ -50,11 +50,13 @@ class WXDLLIMPEXP_FWD_BASE wxHashTable_Node;
 class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap;
 class WXDLLIMPEXP_FWD_BASE wxPropertyInfoMap;
 class WXDLLIMPEXP_FWD_BASE wxPropertyAccessor;
+class WXDLLIMPEXP_FWD_BASE wxObjectAllocatorAndCreator;
+class WXDLLIMPEXP_FWD_BASE wxObjectAllocator;
+
 
 #define wx_dynamic_cast(t, x) dynamic_cast<t>(x)
 
 #include "wx/xtitypes.h"
-#include "wx/xtictor.h"
 #include "wx/xtihandler.h"
 
 // ----------------------------------------------------------------------------
@@ -205,9 +207,8 @@ public:
     // direct construction call for classes that cannot construct instances via alloc/create
     wxObject *ConstructObject(int ParamCount, wxAny *Params) const;
 
-    bool NeedsDirectConstruction() const 
-        { return wx_dynamic_cast(wxObjectAllocator*, m_constructor) != NULL; }
-
+    bool NeedsDirectConstruction() const;
+    
     const wxChar       *GetClassName() const 
         { return m_className; }
     const wxChar       *GetBaseClassName1() const
@@ -463,29 +464,6 @@ private:
 
 #define wxDECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
 #define wxCLASSINFO(name)                 (&name::ms_classInfo)
-
-// --------------------------------------------------------------------------
-// Collection Support
-// --------------------------------------------------------------------------
-
-template<typename iter, typename collection_t > void wxListCollectionToAnyList( 
-    const collection_t& coll, wxAnyList &value )
-{
-    for ( collection_t::compatibility_iterator current = coll.GetFirst(); current; 
-        current = current->GetNext() )
-    {
-        value.Append( new wxAny(current->GetData()) );
-    }
-}
-
-template<typename collection_t> void wxArrayCollectionToVariantArray( 
-    const collection_t& coll, wxAnyList &value )
-{
-    for( size_t i = 0; i < coll.GetCount(); i++ )
-    {
-        value.Append( new wxAny(coll[i]) );
-    }
-}
 
 #endif  // wxUSE_EXTENDED_RTTI
 #endif // _WX_XTIH__

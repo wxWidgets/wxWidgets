@@ -58,6 +58,7 @@ private :
 };
 
 #include "wx/xtiprop.h"
+#include "wx/xtictor.h"
 
 // ----------------------------------------------------------------------------
 // wxIMPLEMENT class macros for concrete classes
@@ -238,6 +239,29 @@ void wxToStringConverter( const wxAny &v, wxString &s )
 template<typename T>
 void wxFromStringConverter( const wxString &s, wxAny &v) 
 { T d; wxStringReadValue(s, d); v = wxAny(d); }
+
+// --------------------------------------------------------------------------
+// Collection Support
+// --------------------------------------------------------------------------
+
+template<typename iter, typename collection_t > void wxListCollectionToAnyList( 
+                                                                               const collection_t& coll, wxAnyList &value )
+{
+    for ( iter current = coll.GetFirst(); current; 
+         current = current->GetNext() )
+    {
+        value.Append( new wxAny(current->GetData()) );
+    }
+}
+
+template<typename collection_t> void wxArrayCollectionToVariantArray( 
+                                                                     const collection_t& coll, wxAnyList &value )
+{
+    for( size_t i = 0; i < coll.GetCount(); i++ )
+    {
+        value.Append( new wxAny(coll[i]) );
+    }
+}
 
 #endif
 
