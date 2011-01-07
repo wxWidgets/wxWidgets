@@ -398,11 +398,11 @@ protected:
 // XTI accessor
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuInfo : public wxObject
+class WXDLLEXPORT wxMenuInfoHelper : public wxObject
 {
 public:
-    wxMenuInfo() { m_menu = NULL; }
-    virtual ~wxMenuInfo() { }
+    wxMenuInfoHelper() { m_menu = NULL; }
+    virtual ~wxMenuInfoHelper() { }
     
     bool Create( wxMenu *menu, const wxString &title )
     { 
@@ -418,10 +418,10 @@ private:
     wxMenu *m_menu;
     wxString m_title;
     
-    DECLARE_DYNAMIC_CLASS(wxMenuInfo)
+    DECLARE_DYNAMIC_CLASS(wxMenuInfoHelper)
 };
 
-WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
+WX_DECLARE_EXPORTED_LIST(wxMenuInfoHelper, wxMenuInfoHelperList );
 
 #endif
 
@@ -543,9 +543,9 @@ public:
 
 #if wxUSE_EXTENDED_RTTI    
     // XTI helpers:
-    bool AppendMenuInfo( const wxMenuInfo *info )
+    bool AppendMenuInfo( const wxMenuInfoHelper *info )
     { return Append( info->GetMenu(), info->GetTitle() ); }
-    const wxMenuInfoList& GetMenuInfos() const;
+    const wxMenuInfoHelperList& GetMenuInfos() const;
 #endif
     
 #if WXWIN_COMPATIBILITY_2_8
@@ -562,7 +562,7 @@ protected:
 
 #if wxUSE_EXTENDED_RTTI    
     // used by XTI
-    wxMenuInfoList m_menuInfos;
+    wxMenuInfoHelperList m_menuInfos;
 #endif
     
     // the frame we are attached to (may be NULL)
