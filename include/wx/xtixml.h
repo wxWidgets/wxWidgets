@@ -23,7 +23,7 @@ class WXDLLIMPEXP_XML wxXmlNode;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxVariantBaseArray;
+class WXDLLIMPEXP_BASE wxAnyList;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 class WXDLLIMPEXP_BASE wxObjectWriterCallback;
 
@@ -53,7 +53,7 @@ public:
 
     // start of writing an object having the passed in ID
     virtual void DoBeginWriteObject(const wxObject *object, 
-        const wxClassInfo *classInfo, int objectID, wxVariantBaseArray &metadata );
+        const wxClassInfo *classInfo, int objectID, const wxStringToAnyHashMap &metadata );
 
     // end of writing an toplevel object name param is used for unique 
     // identification within the container
@@ -61,7 +61,7 @@ public:
         const wxClassInfo *classInfo, int objectID );
 
     // writes a simple property in the stream format
-    virtual void DoWriteSimpleType( wxVariantBase &value );
+    virtual void DoWriteSimpleType( const wxAny &value );
 
     // start of writing a complex property into the stream (
     virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo );
@@ -100,15 +100,15 @@ public:
     virtual ~wxObjectXmlReader() {}
 
     // Reads a component from XML.  The return value is the root object ID, which can
-    // then be used to ask the depersister about that object
+    // then be used to ask the readercallback about that object
 
-    virtual int ReadObject( const wxString &name, wxObjectWriterCallback *depersist );
+    virtual int ReadObject( const wxString &name, wxObjectReaderCallback *readercallback );
 
 private:
-    int ReadComponent(wxXmlNode *parent, wxObjectWriterCallback *callbacks);
+    int ReadComponent(wxXmlNode *parent, wxObjectReaderCallback *callbacks);
 
     // read the content of this node (simple type) and return the corresponding value
-    wxVariantBase ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
+    wxAny ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
 
     wxXmlNode * m_parent;
 };

@@ -26,6 +26,12 @@
 #include "wx/xti.h"
 #include "wx/rtti.h"
 
+#define wxIMPLEMENT_CLASS(name, basename)                                     \
+    wxIMPLEMENT_ABSTRACT_CLASS(name, basename)
+
+#define wxIMPLEMENT_CLASS2(name, basename1, basename2)                        \
+    wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)
+
 // -----------------------------------
 // for pluggable classes
 // -----------------------------------
@@ -187,6 +193,25 @@ inline T *wxCheckCast(const void *ptr, T * = NULL)
 #endif // wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
+// Compatibility macro aliases DECLARE group
+// ----------------------------------------------------------------------------
+// deprecated variants _not_ requiring a semicolon after them and without wx prefix.
+// (note that also some wx-prefixed macro do _not_ require a semicolon because
+//  it's not always possible to force the compire to require it)
+
+#define DECLARE_CLASS_INFO_ITERATORS()                              wxDECLARE_CLASS_INFO_ITERATORS();
+#define DECLARE_ABSTRACT_CLASS(n)                                   wxDECLARE_ABSTRACT_CLASS(n);
+#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(n)                          wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(n);
+#define DECLARE_DYNAMIC_CLASS_NO_COPY(n)                            wxDECLARE_DYNAMIC_CLASS_NO_COPY(n);
+#define DECLARE_DYNAMIC_CLASS(n)                                    wxDECLARE_DYNAMIC_CLASS(n);
+#define DECLARE_CLASS(n)                                            wxDECLARE_CLASS(n);
+
+#define DECLARE_PLUGGABLE_CLASS(n)                                  wxDECLARE_PLUGGABLE_CLASS(n);
+#define DECLARE_ABSTRACT_PLUGGABLE_CLASS(n)                         wxDECLARE_ABSTRACT_PLUGGABLE_CLASS(n);
+#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(n,u)                  wxDECLARE_USER_EXPORTED_PLUGGABLE_CLASS(n,u);
+#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(n,u)         wxDECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(n,u);
+
+// ----------------------------------------------------------------------------
 // wxRefCounter: ref counted data "manager"
 // ----------------------------------------------------------------------------
 
@@ -221,7 +246,6 @@ private:
 // ----------------------------------------------------------------------------
 
 typedef wxRefCounter wxObjectRefData;
-
 
 // ----------------------------------------------------------------------------
 // wxObjectDataPtr: helper class to avoid memleaks because of missing calls
@@ -403,46 +427,7 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
     return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : NULL;
 }
 
-#if wxUSE_EXTENDED_RTTI
-class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
-{
-    friend class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo ;
-public:
-    // instantiates this object with an instance of its superclass
-    wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) ;
-    virtual ~wxDynamicObject();
-
-    void SetProperty (const wxChar *propertyName, const wxxVariant &value);
-    wxxVariant GetProperty (const wxChar *propertyName) const ;
-
-    // get the runtime identity of this object
-    wxClassInfo *GetClassInfo() const
-    {
-#ifdef _MSC_VER
-        return (wxClassInfo*) m_classInfo;
-#else
-        wxDynamicClassInfo *nonconst = const_cast<wxDynamicClassInfo *>(m_classInfo);
-        return static_cast<wxClassInfo *>(nonconst);
-#endif
-    }
-
-    wxObject* GetSuperClassInstance() const
-    {
-        return m_superClassInstance ;
-    }
-private :
-    // removes an existing runtime-property
-    void RemoveProperty( const wxChar *propertyName ) ;
-
-    // renames an existing runtime-property
-    void RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) ;
-
-    wxObject *m_superClassInstance ;
-    const wxDynamicClassInfo *m_classInfo;
-    struct wxDynamicObjectInternal;
-    wxDynamicObjectInternal *m_data;
-};
-#endif
+#include "wx/xti2.h"
 
 // ----------------------------------------------------------------------------
 // more debugging macros
@@ -461,19 +446,12 @@ private :
 #endif // wxUSE_DEBUG_NEW_ALWAYS
 
 // ----------------------------------------------------------------------------
-// Compatibility macro aliases
+// Compatibility macro aliases IMPLEMENT group
 // ----------------------------------------------------------------------------
 
 // deprecated variants _not_ requiring a semicolon after them and without wx prefix.
 // (note that also some wx-prefixed macro do _not_ require a semicolon because
 //  it's not always possible to force the compire to require it)
-
-#define DECLARE_CLASS_INFO_ITERATORS()                              wxDECLARE_CLASS_INFO_ITERATORS();
-#define DECLARE_ABSTRACT_CLASS(n)                                   wxDECLARE_ABSTRACT_CLASS(n);
-#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(n)                          wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(n);
-#define DECLARE_DYNAMIC_CLASS_NO_COPY(n)                            wxDECLARE_DYNAMIC_CLASS_NO_COPY(n);
-#define DECLARE_DYNAMIC_CLASS(n)                                    wxDECLARE_DYNAMIC_CLASS(n);
-#define DECLARE_CLASS(n)                                            wxDECLARE_CLASS(n);
 
 #define IMPLEMENT_DYNAMIC_CLASS(n,b)                                wxIMPLEMENT_DYNAMIC_CLASS(n,b)
 #define IMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)                           wxIMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)
@@ -481,11 +459,6 @@ private :
 #define IMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)                          wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
 #define IMPLEMENT_CLASS(n,b)                                        wxIMPLEMENT_CLASS(n,b)
 #define IMPLEMENT_CLASS2(n,b1,b2)                                   wxIMPLEMENT_CLASS2(n,b1,b2)
-
-#define DECLARE_PLUGGABLE_CLASS(n)                                  wxDECLARE_PLUGGABLE_CLASS(n);
-#define DECLARE_ABSTRACT_PLUGGABLE_CLASS(n)                         wxDECLARE_ABSTRACT_PLUGGABLE_CLASS(n);
-#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(n,u)                  wxDECLARE_USER_EXPORTED_PLUGGABLE_CLASS(n,u);
-#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(n,u)         wxDECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(n,u);
 
 #define IMPLEMENT_PLUGGABLE_CLASS(n,b)                              wxIMPLEMENT_PLUGGABLE_CLASS(n,b)
 #define IMPLEMENT_PLUGGABLE_CLASS2(n,b,b2)                          wxIMPLEMENT_PLUGGABLE_CLASS2(n,b,b2)

@@ -1486,12 +1486,12 @@ typedef double wxDouble;
 #else
 #  define wxTO_STRING(type) ToString##type
 #  define wxTO_STRING_IMP(type) \
-    inline void ToString##type( const wxVariantBase& data, wxString &result ) \
+    inline void ToString##type( const wxAny& data, wxString &result ) \
         { wxToStringConverter<type>(data, result); }
 
 #  define wxFROM_STRING(type) FromString##type
 #  define wxFROM_STRING_IMP(type) \
-    inline void FromString##type( const wxString& data, wxVariantBase &result ) \
+    inline void FromString##type( const wxString& data, wxAny &result ) \
         { wxFromStringConverter<type>(data, result); }
 #endif
 

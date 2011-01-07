@@ -16,7 +16,6 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-#include "wx/string.h"
 #include "wx/object.h"
 
 const int wxInvalidObjectID = -2;
@@ -26,13 +25,13 @@ const int wxNullObjectID = -3;
 // rendering them either to objects in memory, or to code.  Note:  We
 // consider the process of generating code to be one of *depersisting* the
 // object from xml, *not* of persisting the object to code from an object
-// in memory.  This distincation can be confusing, and should be kept
+// in memory.  This distinction can be confusing, and should be kept
 // in mind when looking at the property streamers and callback interfaces
 // listed below.
 
 
 // ----------------------------------------------------------------------------
-// wxObjectReaderCallback
+// wxObjectWriterCallback
 //
 // This class will be asked during the streaming-out process about every single
 // property or object instance. It can veto streaming out by returning false
@@ -42,22 +41,22 @@ const int wxNullObjectID = -3;
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxObjectReader;
 class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxVariantBaseArray;
+class WXDLLIMPEXP_BASE wxAnyList;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
-class WXDLLIMPEXP_BASE wxVariantBase;
+class WXDLLIMPEXP_BASE wxAny;
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 
-class WXDLLIMPEXP_BASE wxObjectReaderCallback
+class WXDLLIMPEXP_BASE wxObjectWriterCallback
 {
 public:
-    virtual ~wxObjectReaderCallback() {}
+    virtual ~wxObjectWriterCallback() {}
 
     // will be called before an object is written, may veto by returning false
     virtual bool BeforeWriteObject( wxObjectWriter *WXUNUSED(writer), 
                                     const wxObject *WXUNUSED(object), 
                                     const wxClassInfo *WXUNUSED(classInfo), 
-                                    wxVariantBaseArray &WXUNUSED(metadata)) 
+                                    const wxStringToAnyHashMap &WXUNUSED(metadata)) 
         { return true; }
 
     // will be called after this object has been written, may be 
@@ -73,7 +72,7 @@ public:
     virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
-                                      wxVariantBase &WXUNUSED(value) )  
+                                      const wxAny &WXUNUSED(value) )  
         { return true; }
 
     // will be called before a property gets written, may change the value, 
@@ -82,7 +81,7 @@ public:
     virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
-                                      wxVariantBaseArray &WXUNUSED(value) )  
+                                      const wxAnyList &WXUNUSED(value) )  
         { return true; }
 
     // will be called after a property has been written out, may be needed 
@@ -109,16 +108,21 @@ public:
         { }
 };
 
+class WXDLLIMPEXP_BASE wxObjectWriterFunctor: public wxObjectFunctor
+{
+};
+
 class WXDLLIMPEXP_BASE wxObjectWriter: public wxObject
 {
+    friend class wxObjectWriterFunctor;
 public:
     wxObjectWriter();
     virtual ~wxObjectWriter();
 
     // with this call you start writing out a new top-level object
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                     wxObjectReaderCallback *persister, const wxString &name, 
-                     wxVariantBaseArray &WXUNUSED(metadata));
+                     wxObjectWriterCallback *writercallback, const wxString &name, 
+                     const wxStringToAnyHashMap &metadata);
 
     // Managing the object identity table a.k.a context
     //
@@ -147,7 +151,7 @@ public:
 
     // start of writing an object having the passed in ID
     virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                                    int objectID, wxVariantBaseArray &metadata ) = 0;
+                                    int objectID, const wxStringToAnyHashMap &metadata ) = 0;
 
     // end of writing an toplevel object name param is used for unique 
     // identification within the container
@@ -155,7 +159,7 @@ public:
                 const wxClassInfo *classInfo, int objectID ) = 0;
 
     // writes a simple property in the stream format
-    virtual void DoWriteSimpleType( wxVariantBase &value ) = 0;
+    virtual void DoWriteSimpleType( const wxAny &value ) = 0;
 
     // start of writing a complex property into the stream (
     virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo ) = 0;
@@ -177,22 +181,23 @@ public:
                                   int sinkObjectID, const wxClassInfo* eventSinkClassInfo,
                                   const wxHandlerInfo* handlerIndo ) = 0;
 
-private:
+    void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
+        wxObjectWriterCallback *writercallback, bool isEmbedded, const wxStringToAnyHashMap &metadata );
+
+protected:
     struct wxObjectWriterInternal;
     wxObjectWriterInternal* m_data;
 
     struct wxObjectWriterInternalPropertiesData;
 
     void WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
-                             wxObjectReaderCallback *persister, 
+                             wxObjectWriterCallback *writercallback, 
                              wxObjectWriterInternalPropertiesData * data );
 
     void WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
-                           const wxPropertyInfo* pi, wxObjectReaderCallback *persister,
+                           const wxPropertyInfo* pi, wxObjectWriterCallback *writercallback,
                            wxObjectWriterInternalPropertiesData *data );
 
-    void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                     wxObjectReaderCallback *persister, bool isEmbedded, wxVariantBaseArray &metadata );
 
     void FindConnectEntry(const wxEvtHandler * evSource,
                           const wxEventSourceTypeInfo* dti, const wxObject* &sink, 
@@ -204,11 +209,11 @@ private:
 Streaming callbacks for depersisting XML to code, or running objects
 */
 
-class WXDLLIMPEXP_BASE wxObjectWriterCallback;
+class WXDLLIMPEXP_BASE wxObjectReaderCallback;
 
 /*
 wxObjectReader handles streaming in a class from a arbitrary format. 
-While walking through it issues calls out to interfaces to depersist 
+While walking through it issues calls out to interfaces to readercallback 
 the guts from the underlying storage format.
 */
 
@@ -228,7 +233,7 @@ public:
     // then be used to ask the depersister about that object
     // if there was a problem you will get back wxInvalidObjectID and the current
     // error log will carry the problems encoutered
-    virtual int ReadObject( const wxString &name, wxObjectWriterCallback *depersist ) = 0;
+    virtual int ReadObject( const wxString &name, wxObjectReaderCallback *readercallback ) = 0;
 
 private:
     struct wxObjectReaderInternal;
@@ -240,14 +245,14 @@ private:
 // When generating code, these will just create statements of C++
 // code to create the objects.
 
-class WXDLLIMPEXP_BASE wxObjectWriterCallback
+class WXDLLIMPEXP_BASE wxObjectReaderCallback
 {
 public:
-    virtual ~wxObjectWriterCallback() {}
+    virtual ~wxObjectReaderCallback() {}
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo, 
-                                wxVariantBaseArray &metadata) = 0;
+                                wxStringToAnyHashMap &metadata) = 0;
 
     // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
@@ -256,10 +261,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *VariantValues,
+        wxAny *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata) = 0;
+        wxStringToAnyHashMap &metadata) = 0;
 
     // construct the new object on the heap, that object will have the passed in ID 
     // (for objects that don't support allocate-create type of creation)
@@ -269,10 +274,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *VariantValues,
+        wxAny *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata) = 0;
+        wxStringToAnyHashMap &metadata) = 0;
 
     // destroy the heap-allocated object having the ID objectID, this may be used 
     // if an object is embedded in another object and set via value semantics, 
@@ -283,7 +288,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &VariantValue) = 0;
+        const wxAny &VariantValue) = 0;
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectID,
@@ -295,7 +300,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &VariantValue) = 0;
+        const wxAny &VariantValue) = 0;
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,
@@ -313,12 +318,11 @@ public:
 };
 
 /*
-wxObjectRuntimeReaderCallback implements the callbacks that will depersist
-an object into a running memory image, as opposed to writing
-C++ initialization code to bring the object to life.
+wxObjectRuntimeReaderCallback implements the callbacks that will bring back
+an object into a life memory instance
 */
 
-class WXDLLIMPEXP_BASE wxObjectRuntimeReaderCallback: public wxObjectWriterCallback
+class WXDLLIMPEXP_BASE wxObjectRuntimeReaderCallback: public wxObjectReaderCallback
 {
     struct wxObjectRuntimeReaderCallbackInternal;
     wxObjectRuntimeReaderCallbackInternal * m_data;
@@ -332,7 +336,7 @@ public:
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
-        wxVariantBaseArray &metadata);
+        wxStringToAnyHashMap &metadata);
 
     // initialize the already allocated object having the ID objectID with 
     // the Create method creation parameters which are objects are having 
@@ -341,10 +345,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *VariantValues,
+        wxAny *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata
+        wxStringToAnyHashMap &metadata
         );
 
     // construct the new object on the heap, that object will have the 
@@ -355,10 +359,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxVariantBase *VariantValues,
+        wxAny *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxVariantBaseArray &metadata);
+        wxStringToAnyHashMap &metadata);
 
     // destroy the heap-allocated object having the ID objectID, this may be 
     // used if an object is embedded in another object and set via value semantics, 
@@ -369,7 +373,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &variantValue);
+        const wxAny &variantValue);
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectId,
@@ -381,7 +385,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxVariantBase &VariantValue);
+        const wxAny &VariantValue);
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,
