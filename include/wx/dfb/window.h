@@ -100,8 +100,6 @@ public:
     // returns toplevel window the window belongs to
     wxNonOwnedWindow *GetTLW() const { return m_tlw; }
 
-    void OnInternalIdle();
-
     virtual bool IsDoubleBuffered() const { return true; }
 
 protected:

@@ -2960,8 +2960,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 }
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const

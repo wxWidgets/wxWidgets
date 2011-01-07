@@ -1507,8 +1507,7 @@ void wxWindowMSW::OnInternalIdle()
     }
 #endif // !HAVE_TRACKMOUSEEVENT
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 }
 
 // Set this window to be the child of 'parent'.

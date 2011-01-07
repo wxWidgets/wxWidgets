@@ -1318,10 +1318,7 @@ void wxWindowX11::OnInternalIdle()
     // Update invalidated regions.
     Update();
 
-    // This calls the UI-update mechanism (querying windows for
-    // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate((wxWindow*) this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 
     // Set the input focus if couldn't do it before
     if (m_needsInputFocus)

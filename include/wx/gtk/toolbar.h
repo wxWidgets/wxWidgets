@@ -59,8 +59,6 @@ public:
     // implementation from now on
     // --------------------------
 
-    void OnInternalIdle();
-
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;

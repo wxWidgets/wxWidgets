@@ -1370,7 +1370,7 @@ public:
 
         // virtual function for implementing internal idle
         // behaviour
-        virtual void OnInternalIdle() {}
+        virtual void OnInternalIdle();
 
         // call internal idle recursively
 //        void ProcessInternalIdle() ;

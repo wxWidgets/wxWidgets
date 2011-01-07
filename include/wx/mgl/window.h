@@ -89,8 +89,6 @@ public:
     // implementation from now on
     // --------------------------
 
-    void OnInternalIdle();
-
 protected:
     virtual void DoFreeze();
     virtual void DoThaw();

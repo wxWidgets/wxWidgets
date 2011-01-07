@@ -748,20 +748,6 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 }
 
 // ----------------------------------------------------------------------------
-// wxToolBar idle handling
-// ----------------------------------------------------------------------------
-
-void wxToolBar::OnInternalIdle()
-{
-    // Check if we have to show window now
-    if (GTKShowFromOnIdle()) return;
-
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
-
-// ----------------------------------------------------------------------------
 
 // static
 wxVisualAttributes

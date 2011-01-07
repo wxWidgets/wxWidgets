@@ -1206,14 +1206,3 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     window_t *wnd = MGL_wmGetWindowAtPosition(g_winMng, pt.x, pt.y);
     return (wxWindow*)wnd->userData;
 }
-
-
-// ---------------------------------------------------------------------------
-// idle events processing
-// ---------------------------------------------------------------------------
-
-void wxWindowMGL::OnInternalIdle()
-{
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}

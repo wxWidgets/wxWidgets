@@ -2601,6 +2601,16 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// Idle processing
+// ----------------------------------------------------------------------------
+
+void wxWindowBase::OnInternalIdle()
+{
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+}
+
+// ----------------------------------------------------------------------------
 // dialog units translations
 // ----------------------------------------------------------------------------
 

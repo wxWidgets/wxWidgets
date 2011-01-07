@@ -1652,14 +1652,6 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
-void wxWindow::OnInternalIdle()
-{
-    // This calls the UI-update mechanism (querying windows for
-    // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 // ----------------------------------------------------------------------------
 // accelerators
 // ----------------------------------------------------------------------------

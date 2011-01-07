@@ -314,17 +314,4 @@ wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
     return attr;
 }
 
-// ----------------------------------------------------------------------------
-// idle handling
-// ----------------------------------------------------------------------------
-
-void wxControl::OnInternalIdle()
-{
-    if ( GTKShowFromOnIdle() )
-        return;
-
-    if ( wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen() )
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 #endif // wxUSE_CONTROLS

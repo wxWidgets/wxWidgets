@@ -1683,14 +1683,6 @@ wxWindow *wxWindowBase::DoFindFocus()
     return wxFindWindowFromWXWidget(wxWidgetImpl::FindFocus());
 }
 
-void wxWindowMac::OnInternalIdle()
-{
-    // This calls the UI-update mechanism (querying windows for
-    // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 // Raise the window to the top of the Z order
 void wxWindowMac::Raise()
 {
