@@ -52,10 +52,6 @@ WX_DEFINE_LIST(wxMenuItemList)
 // XTI for wxMenu(Bar)
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_LIST( wxMenuInfoList )
-
 wxDEFINE_FLAGS( wxMenuStyle )
 wxBEGIN_FLAGS( wxMenuStyle )
 wxFLAGS_MEMBER(wxMENU_TEAROFF)
@@ -105,6 +101,9 @@ bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWrite
 wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
                                        wxMenuBarStreamingCallback)
 
+#if wxUSE_EXTENDED_RTTI    
+
+WX_DEFINE_LIST( wxMenuInfoList )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
@@ -127,15 +126,6 @@ template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList,
     wxListCollectionToAnyList<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
 }
 
-wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
-wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, AppendMenuInfo, \
-                      GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxEMPTY_HANDLERS_TABLE(wxMenuBar)
-
-wxCONSTRUCTOR_DUMMY( wxMenuBar )
-
 const wxMenuInfoList& wxMenuBarBase::GetMenuInfos() const
 {
     wxMenuInfoList* list = const_cast< wxMenuInfoList* > (& m_menuInfos);
@@ -149,18 +139,16 @@ const wxMenuInfoList& wxMenuBarBase::GetMenuInfos() const
     return m_menuInfos;
 }
 
-/*
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenu**>)
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuItem**>)
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuBar**>)
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxMenuInfo**>)
-*/
-#else
-// IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-// IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
-// IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
 #endif
 
+wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
+wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, AppendMenuInfo, \
+                      GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxMenuBar)
+
+wxCONSTRUCTOR_DUMMY( wxMenuBar )
 
 // ----------------------------------------------------------------------------
 // XTI for wxMenuItem

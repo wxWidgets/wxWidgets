@@ -58,8 +58,6 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
-
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
@@ -519,8 +517,6 @@ static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
@@ -677,8 +673,6 @@ static gboolean can_activate_accel(GtkWidget*, guint, wxMenu* menu)
     return true;
 }
 }
-
-IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
 {
