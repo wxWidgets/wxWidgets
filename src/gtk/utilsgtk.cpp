@@ -40,14 +40,11 @@
 #include <sys/wait.h>   // for WNOHANG
 #include <unistd.h>
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "gdk/gdkx.h"
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #if wxUSE_DETECT_SM
-    #include "X11/Xlib.h"
-    #include "X11/SM/SMlib.h"
+    #include <X11/SM/SMlib.h>
 
     #include "wx/unix/utilsx11.h"
 #endif

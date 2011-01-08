@@ -14,12 +14,6 @@
 
 #include "wx/radiobox.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/log.h"
-    #include "wx/frame.h"
-    #include "wx/dialog.h"
-#endif
-
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
