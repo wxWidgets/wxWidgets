@@ -328,30 +328,6 @@ public:
            Insert(iter);
        }
 
-#if wxUSE_UNICODE
-    wxPropertyInfo(wxPropertyInfo* &iter,
-                   wxClassInfo* itsClass,
-                   const wxString& name,
-                   const char* typeName,
-                   wxPropertyAccessor *accessor,
-                   wxAny dv,
-                   wxPropertyInfoFlags flags = 0,
-                   const wxString& helpString = wxEmptyString,
-                   const wxString& groupString = wxEmptyString) :
-                   m_itsClass(itsClass),
-           m_name(name),
-           m_typeInfo(NULL),
-           m_typeName(wxString::FromAscii(typeName)),
-           m_collectionElementTypeInfo(NULL),
-           m_accessor(accessor),
-           m_defaultValue(dv),
-           m_flags(flags),
-           m_helpString(helpString),
-           m_groupString(groupString)
-       {
-           Insert(iter);
-       }
-#endif
     wxPropertyInfo(wxPropertyInfo* &iter,
                    wxClassInfo* itsClass,
                    const wxString& name,
@@ -396,29 +372,6 @@ public:
         Insert(iter);
     }
 
-#if wxUSE_UNICODE
-    wxPropertyInfo(wxPropertyInfo* &iter,
-            wxClassInfo* itsClass, const wxString& name,
-            const char* collectionTypeName,
-            const char* elementTypeName,
-            wxPropertyAccessor *accessor,
-            wxPropertyInfoFlags flags = 0,
-            const wxString& helpString = wxEmptyString,
-            const wxString& groupString = wxEmptyString) :
-        m_itsClass(itsClass),
-        m_name(name),
-        m_typeInfo(NULL),
-        m_typeName(wxString::FromAscii(collectionTypeName)),
-        m_collectionElementTypeInfo(NULL),
-        m_collectionElementTypeName(wxString::FromAscii(elementTypeName)),
-        m_accessor(accessor),
-        m_flags(flags),
-        m_helpString(helpString),
-        m_groupString(groupString)
-    {
-        Insert(iter);
-    }
-#endif
     ~wxPropertyInfo()
         { Remove(); }
 

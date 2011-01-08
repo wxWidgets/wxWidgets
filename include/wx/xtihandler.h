@@ -19,7 +19,7 @@
 
 #include "wx/xti.h"
 
-// copied from event.h which cannot be included at this place, TODO MOVE to common file
+// copied from event.h which cannot be included at this place
 
 class WXDLLIMPEXP_FWD_BASE wxEvent;
 

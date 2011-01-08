@@ -249,7 +249,8 @@ wxObject* wxVariantOfPtrToObjectConverter##name ( const wxAny &data )        \
     wxT(#basename2), (int) sizeof(name),         \
     (wxObjectConstructorFn) 0);
 
-// templated streaming, every type must have their specialization for these methods
+// templated streaming, every type that can be converted to wxString
+// must have their specialization for these methods
 
 template<typename T>
 void wxStringReadValue( const wxString &s, T &data );

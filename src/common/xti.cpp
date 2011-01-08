@@ -341,29 +341,11 @@ wxTypeInfo *wxTypeInfo::FindType(const wxString& typeName)
 {
     wxTypeInfoMap::iterator iter = ms_typeTable->find(typeName);
 
-    //wxASSERT_MSG( iter != ms_typeTable->end(), 
-    // wxT("lookup for a non-existent type-info") );
-    // FM 3/6/2007 - disabled because otherwise 
-    //               wxPropertyInfo::GetCollectionElementTypeInfo
-    //               may easily crash
     if (iter == ms_typeTable->end())
         return NULL;
 
     return (wxTypeInfo *)iter->second;
 }
-
-#if wxUSE_UNICODE
-wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
-                                  wxVariant2StringFnc to, 
-                                  wxString2VariantFnc from, 
-                                  const char *name) :
-    wxTypeInfo( kind, to, from, name)
-{ 
-    wxASSERT_MSG( kind == wxT_OBJECT_PTR || 
-                  kind == wxT_OBJECT, 
-                  wxT("Illegal Kind for Enum Type")); m_classInfo = classInfo;
-}
-#endif
 
 wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
                                   wxVariant2StringFnc to, 

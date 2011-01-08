@@ -369,6 +369,7 @@ public:
 
     // statics:
 
+    // looks for the corresponding type, will return NULL if not found
     static wxTypeInfo *FindType( const wxString& typeName );
 private:
     void Register();
@@ -392,13 +393,6 @@ public:
                        const wxString &name = wxEmptyString ) :
             wxTypeInfo( kind, to, from, name )
        { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
-
-#if 0 // wxUSE_UNICODE
-    wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to, 
-                       wxString2VariantFnc from , const char *name  ) :
-            wxTypeInfo( kind, to, from, name )
-       { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
-#endif
 };
 
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
@@ -408,13 +402,6 @@ public:
                       wxString2VariantFnc from ) :
             wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
-
-#if 0 // wxUSE_UNICODE
-    wxCustomTypeInfo( const char *name , wxVariant2StringFnc to, 
-                      wxString2VariantFnc from ) :
-            wxTypeInfo( wxT_CUSTOM, to, from, name )
-       {}
-#endif
 };
 
 class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
@@ -433,17 +420,6 @@ public:
         m_enumInfo = enumInfo; 
     }
 
-#if 0 //wxUSE_UNICODE
-    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, wxVariant2StringFnc to,
-                    wxString2VariantFnc from, converterToLong_t toLong,
-                    converterFromLong_t fromLong, const char * name ) :
-        wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
-    {
-        wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET, 
-                      wxT("Illegal Kind for Enum Type")); 
-        m_enumInfo = enumInfo; 
-    }
-#endif
     const wxEnumData* GetEnumData() const { return m_enumInfo; }
 
     // convert a wxAny holding data of this type into a long
@@ -478,11 +454,6 @@ public:
                      wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL, 
                      const wxString &name = wxEmptyString);
 
-#if 0 // wxUSE_UNICODE
-    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, wxVariant2StringFnc to,
-                     wxString2VariantFnc from , const char *name );
-#endif
-
     const wxClassInfo *GetClassInfo() const { return m_classInfo; }
 
 private:
@@ -496,13 +467,6 @@ public:
                           wxString2VariantFnc from , const wxString &name) :
             wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = elementName; m_elementType = NULL; }
-
-#if 0 // wxUSE_UNICODE
-    wxCollectionTypeInfo( const char *elementName, wxVariant2StringFnc to, 
-                          wxString2VariantFnc from , const char *name ) :
-            wxTypeInfo( wxT_COLLECTION, to, from, name )
-       { m_elementTypeName = wxString::FromAscii( elementName ); m_elementType = NULL; }
-#endif
 
     const wxTypeInfo* GetElementType() const
     {
