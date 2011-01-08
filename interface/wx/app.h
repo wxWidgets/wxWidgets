@@ -723,19 +723,6 @@ public:
     bool ProcessMessage(WXMSG* msg);
 
     /**
-        Sends idle events to a window and its children.
-        Please note that this function is internal to wxWidgets and shouldn't be used
-        by user code.
-
-        @remarks These functions poll the top-level windows, and their children,
-                 for idle event processing. If @true is returned, more OnIdle
-                 processing is requested by one or more window.
-
-        @see wxIdleEvent
-    */
-    virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-
-    /**
         Set display mode to use. This is only used in framebuffer wxWidgets
         ports (such as wxMGL or wxDFB).
     */

@@ -349,42 +349,12 @@ bool wxAppBase::ProcessIdle()
     while (node)
     {
         wxWindow* win = node->GetData();
-        if (SendIdleEvents(win, event))
+        if (win->SendIdleEvents(event))
             needMore = true;
         node = node->GetNext();
     }
 
     wxUpdateUIEvent::ResetUpdateTime();
-
-    return needMore;
-}
-
-// Send idle event to window and all subwindows
-bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
-{
-    bool needMore = false;
-
-    win->OnInternalIdle();
-
-    // should we send idle event to this window?
-    if ( wxIdleEvent::GetMode() == wxIDLE_PROCESS_ALL ||
-            win->HasExtraStyle(wxWS_EX_PROCESS_IDLE) )
-    {
-        event.SetEventObject(win);
-        win->HandleWindowEvent(event);
-
-        if (event.MoreRequested())
-            needMore = true;
-    }
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while ( node )
-    {
-        wxWindow *child = node->GetData();
-        if (SendIdleEvents(child, event))
-            needMore = true;
-
-        node = node->GetNext();
-    }
 
     return needMore;
 }

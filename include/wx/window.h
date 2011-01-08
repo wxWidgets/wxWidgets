@@ -1372,8 +1372,9 @@ public:
         // behaviour
         virtual void OnInternalIdle();
 
-        // call internal idle recursively
-//        void ProcessInternalIdle() ;
+    // Send idle event to window and all subwindows
+    // Returns true if more idle time is requested.
+    virtual bool SendIdleEvents(wxIdleEvent& event);
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call

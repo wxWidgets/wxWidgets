@@ -61,8 +61,7 @@ public:
     // implementation from now on
     // --------------------------
 
-    // GTK callbacks
-    virtual void OnInternalIdle();
+    virtual bool SendIdleEvents(wxIdleEvent& event);
 
 protected:
     // common part of all ctors

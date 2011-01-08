@@ -2604,6 +2604,34 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // Idle processing
 // ----------------------------------------------------------------------------
 
+// Send idle event to window and all subwindows
+bool wxWindowBase::SendIdleEvents(wxIdleEvent& event)
+{
+    bool needMore = false;
+
+    OnInternalIdle();
+
+    // should we send idle event to this window?
+    if (wxIdleEvent::GetMode() == wxIDLE_PROCESS_ALL ||
+        HasExtraStyle(wxWS_EX_PROCESS_IDLE))
+    {
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+
+        if (event.MoreRequested())
+            needMore = true;
+    }
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    for (; node; node = node->GetNext())
+    {
+        wxWindow* child = node->GetData();
+        if (child->SendIdleEvents(event))
+            needMore = true;
+    }
+
+    return needMore;
+}
+
 void wxWindowBase::OnInternalIdle()
 {
     if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
