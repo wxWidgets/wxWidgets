@@ -747,7 +747,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextAttr: public wxTextAttr
 {
 public:
     wxRichTextAttr(const wxTextAttr& attr) { wxTextAttr::Copy(attr); }
-    wxRichTextAttr(const wxRichTextAttr& attr) { Copy(attr); }
+    wxRichTextAttr(const wxRichTextAttr& attr) : wxTextAttr() { Copy(attr); }
     wxRichTextAttr() {}
     
     // Copy
@@ -793,7 +793,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextProperties: public wxObject
 DECLARE_DYNAMIC_CLASS(wxRichTextProperties)
 public:
     wxRichTextProperties() {}
-    wxRichTextProperties(const wxRichTextProperties& props) { Copy(props); }
+    wxRichTextProperties(const wxRichTextProperties& props) : wxObject() { Copy(props); }
 
     void operator=(const wxRichTextProperties& props) { Copy(props); }
     bool operator==(const wxRichTextProperties& props) const;
