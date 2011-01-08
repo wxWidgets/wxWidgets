@@ -18,6 +18,10 @@
 
 #if wxUSE_EXTENDED_RTTI
 
+// ----------------------------------------------------------------------------
+// wxDynamicObject class, its instances connect to a 'super class instance'
+// ----------------------------------------------------------------------------
+
 class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
 {
     friend class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo ;
@@ -56,6 +60,27 @@ private :
     struct wxDynamicObjectInternal;
     wxDynamicObjectInternal *m_data;
 };
+
+// ----------------------------------------------------------------------------
+// String conversion templates supporting older compilers
+// ----------------------------------------------------------------------------
+
+#if wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxTO_STRING(type) wxToStringConverter<type>
+#  define wxTO_STRING_IMP(type)
+#  define wxFROM_STRING(type) wxFromStringConverter<type>
+#  define wxFROM_STRING_IMP(type)
+#else
+#  define wxTO_STRING(type) ToString##type
+#  define wxTO_STRING_IMP(type) \
+    inline void ToString##type( const wxAny& data, wxString &result ) \
+{ wxToStringConverter<type>(data, result); }
+
+#  define wxFROM_STRING(type) FromString##type
+#  define wxFROM_STRING_IMP(type) \
+    inline void FromString##type( const wxString& data, wxAny &result ) \
+{ wxFromStringConverter<type>(data, result); }
+#endif
 
 #include "wx/xtiprop.h"
 #include "wx/xtictor.h"

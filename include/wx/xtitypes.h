@@ -83,11 +83,6 @@ private:
 
 #define wxENUM_MEMBER( v ) { wxT(#v), v },
 
-/*
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<e>)                 \
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<e*>)                 \
-*/
-
 #define wxEND_ENUM( e )                                                 \
         { NULL, 0 } };                                                 \
     wxEnumData s_enumData##e( s_enumDataMembers##e );                   \
@@ -137,7 +132,6 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<e*>)                 \
 //
 // ----------------------------------------------------------------------------
 
-// in order to remove dependancy on string tokenizer
 void WXDLLIMPEXP_BASE wxSetStringToArray( const wxString &s, wxArrayString &array );
 
 template<typename e>
@@ -244,11 +238,6 @@ void wxFlagsToString( wxString &s, const e& data )
 
 #define wxFLAGS_MEMBER( v ) { wxT(#v), v },
 
-/*
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<e>)                 \
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<e*>)                 \
-*/
-
 #define wxEND_FLAGS( e )                                                \
         { NULL, 0 } };                                                 \
     wxEnumData s_enumData##e( s_enumDataMembers##e );                   \
@@ -326,7 +315,7 @@ public:
     {
         Register();
     }
-#if wxUSE_UNICODE
+#if 0 // wxUSE_UNICODE
     wxTypeInfo(wxTypeKind kind,
                wxVariant2StringFnc to, wxString2VariantFnc from,
                const char *name):
@@ -381,21 +370,6 @@ public:
     // statics:
 
     static wxTypeInfo *FindType( const wxString& typeName );
-#if 0 // TODO
-#if wxUSE_UNICODE
-    static wxTypeInfo *FindType(const char *typeName) 
-        { return FindType( wxString::FromAscii(typeName) ); }
-#endif
-    static wxTypeInfo *FindType(const wxChar *typeName);
-    static wxTypeInfo *FindType(const wxString& typeName)
-        {
-#if wxUSE_UNICODE
-            return FindType( typeName.wchar_str() );
-#else
-            return FindType( typeName.char_str() );
-#endif
-        }
-#endif
 private:
     void Register();
     void Unregister();
@@ -419,7 +393,7 @@ public:
             wxTypeInfo( kind, to, from, name )
        { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
 
-#if wxUSE_UNICODE
+#if 0 // wxUSE_UNICODE
     wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to, 
                        wxString2VariantFnc from , const char *name  ) :
             wxTypeInfo( kind, to, from, name )
@@ -435,7 +409,7 @@ public:
             wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
 
-#if wxUSE_UNICODE
+#if 0 // wxUSE_UNICODE
     wxCustomTypeInfo( const char *name , wxVariant2StringFnc to, 
                       wxString2VariantFnc from ) :
             wxTypeInfo( wxT_CUSTOM, to, from, name )
@@ -459,7 +433,7 @@ public:
         m_enumInfo = enumInfo; 
     }
 
-#if wxUSE_UNICODE
+#if 0 //wxUSE_UNICODE
     wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, wxVariant2StringFnc to,
                     wxString2VariantFnc from, converterToLong_t toLong,
                     converterFromLong_t fromLong, const char * name ) :
@@ -504,7 +478,7 @@ public:
                      wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL, 
                      const wxString &name = wxEmptyString);
 
-#if wxUSE_UNICODE
+#if 0 // wxUSE_UNICODE
     wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, wxVariant2StringFnc to,
                      wxString2VariantFnc from , const char *name );
 #endif
@@ -523,7 +497,7 @@ public:
             wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = elementName; m_elementType = NULL; }
 
-#if wxUSE_UNICODE
+#if 0 // wxUSE_UNICODE
     wxCollectionTypeInfo( const char *elementName, wxVariant2StringFnc to, 
                           wxString2VariantFnc from , const char *name ) :
             wxTypeInfo( wxT_COLLECTION, to, from, name )

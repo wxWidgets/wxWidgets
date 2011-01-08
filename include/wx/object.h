@@ -19,6 +19,37 @@
 
 #include "wx/memory.h"
 
+#define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
+class WXDLLIMPEXP_BASE const_iterator                                    \
+    {                                                                        \
+    typedef wxHashTable_Node Node;                                       \
+    public:                                                                  \
+    typedef const wxClassInfo* value_type;                               \
+    typedef const value_type& const_reference;                           \
+    typedef const_iterator itor;                                         \
+    typedef value_type* ptr_type;                                        \
+    \
+    Node* m_node;                                                        \
+    wxHashTable* m_table;                                                \
+    public:                                                                  \
+    typedef const_reference reference_type;                              \
+    typedef ptr_type pointer_type;                                       \
+    \
+    const_iterator(Node* node, wxHashTable* table)                       \
+    : m_node(node), m_table(table) { }                               \
+    const_iterator() : m_node(NULL), m_table(NULL) { }                   \
+    value_type operator*() const;                                        \
+    itor& operator++();                                                  \
+    const itor operator++(int);                                          \
+    bool operator!=(const itor& it) const                                \
+            { return it.m_node != m_node; }                                  \
+            bool operator==(const itor& it) const                                \
+            { return it.m_node == m_node; }                                  \
+    };                                                                       \
+    \
+    static const_iterator begin_classinfo();                                 \
+    static const_iterator end_classinfo()
+
 // based on the value of wxUSE_EXTENDED_RTTI symbol,
 // only one of the RTTI system will be compiled:
 // - the "old" one (defined by rtti.h) or
