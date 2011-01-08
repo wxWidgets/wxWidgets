@@ -291,13 +291,13 @@ wxRect wxRichTextFloatCollector::GetAvailableRect(int startY, int endY)
     if (m_left.GetCount() != 0)
     {
         unsigned int i = SearchAdjacentRect(m_left, startY);
-        if (i >= 0 && i < m_left.GetCount())
+        if (i < m_left.GetCount())
             widthLeft = GetWidthFromFloatRect(m_left, i, startY, endY);
     }
     if (m_right.GetCount() != 0)
     {
         unsigned int j = SearchAdjacentRect(m_right, startY);
-        if (j >= 0 && j < m_right.GetCount())
+        if (j < m_right.GetCount())
             widthRight = GetWidthFromFloatRect(m_right, j, startY, endY);
     }
 
@@ -325,10 +325,10 @@ void wxRichTextFloatCollector::DrawFloat(const wxRichTextFloatRectMapArray& arra
     int end = rect.y + rect.height;
     unsigned int i, j;
     i = SearchAdjacentRect(array, start);
-    if (i < 0 || i >= array.GetCount())
+    if (i >= array.GetCount())
         return;
     j = SearchAdjacentRect(array, end);
-    if (j < 0 || j >= array.GetCount())
+    if (j >= array.GetCount())
         j = array.GetCount() - 1;
     while (i <= j)
     {
@@ -353,7 +353,7 @@ int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& ar
     if (array.GetCount() == 0)
         return wxRICHTEXT_HITTEST_NONE;
     i = SearchAdjacentRect(array, pt.y);
-    if (i < 0 || i >= array.GetCount())
+    if (i >= array.GetCount())
         return wxRICHTEXT_HITTEST_NONE;
     wxPoint point = array[i]->anchor->GetPosition();
     wxSize size = array[i]->anchor->GetCachedSize();
