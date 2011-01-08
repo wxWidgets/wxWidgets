@@ -372,15 +372,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
             return curLine;
     }
 
-#ifdef __VMS
-#pragma message disable unscomzer
-   // suppress warnings on comparison of unsigned numbers
-#endif
-   wxASSERT(initialCharToRemove >= 0 && initialCharToRemove <= len-1);  // see valid range for initialCharToRemove above
-#ifdef __VMS
-#pragma message enable unscomzer
-   // suppress warnings on comparison of unsigned numbers
-#endif
+    wxASSERT(initialCharToRemove <= len-1);  // see valid range for initialCharToRemove above
     wxASSERT(nCharsToRemove >= 1 && nCharsToRemove <= len-initialCharToRemove);  // see valid range for nCharsToRemove above
 
     // erase nCharsToRemove characters after initialCharToRemove (included);
