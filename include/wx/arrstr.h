@@ -173,23 +173,26 @@ public:
 
   // items access (range checking is done in debug version)
     // get item at position uiIndex
-  wxString& Item(size_t nIndex) const
+  wxString& Item(size_t nIndex)
     {
         wxASSERT_MSG( nIndex < m_nCount,
                       wxT("wxArrayString: index out of bounds") );
 
         return m_pItems[nIndex];
     }
+  const wxString& Item(size_t nIndex) const { return const_cast<wxArrayString*>(this)->Item(nIndex); }
 
     // same as Item()
-  wxString& operator[](size_t nIndex) const { return Item(nIndex); }
+  wxString& operator[](size_t nIndex) { return Item(nIndex); }
+  const wxString& operator[](size_t nIndex) const { return Item(nIndex); }
     // get last item
-  wxString& Last() const
+  wxString& Last()
   {
       wxASSERT_MSG( !IsEmpty(),
                     wxT("wxArrayString: index out of bounds") );
       return Item(GetCount() - 1);
   }
+  const wxString& Last() const { return const_cast<wxArrayString*>(this)->Last(); }
 
 
   // item management
