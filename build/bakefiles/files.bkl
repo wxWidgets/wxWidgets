@@ -551,6 +551,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxprec.h
     wx/xlocale.h
     wx/xti.h
+    wx/xti2.h
     wx/xtistrm.h
     wx/xtictor.h
     wx/xtihandler.h
@@ -884,6 +885,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/position.h
     wx/radiobox.h
     wx/radiobut.h
+    wx/range.h
     wx/rearrangectrl.h
     wx/renderer.h
     wx/richmsgdlg.h
