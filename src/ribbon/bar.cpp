@@ -109,7 +109,7 @@ bool wxRibbonBar::DismissExpandedPanel()
     return m_pages.Item(m_current_page).page->DismissExpandedPanel();
 }
 
-void wxRibbonBar::ShowPanels(const bool show)
+void wxRibbonBar::ShowPanels(bool show)
 {
     m_arePanelsShown = show;
     SetMinSize(wxSize(GetSize().GetWidth(), DoGetBestSize().GetHeight()));
