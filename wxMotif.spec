@@ -233,6 +233,7 @@ wx/wxcrtvararg.h
 wx/wxprec.h
 wx/xlocale.h
 wx/xti.h
+wx/xti2.h
 wx/xtistrm.h
 wx/xtictor.h
 wx/xtihandler.h
