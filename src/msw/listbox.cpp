@@ -306,17 +306,11 @@ bool wxListBox::IsSelected(int N) const
 
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL,
-                 wxT("invalid index in wxListBox::GetClientData") );
-
     return (void *)SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
-    wxCHECK_RET( IsValid(n),
-                 wxT("invalid index in wxListBox::SetClientData") );
-
     if ( ListBox_SetItemData(GetHwnd(), n, clientData) == LB_ERR )
     {
         wxLogDebug(wxT("LB_SETITEMDATA failed"));

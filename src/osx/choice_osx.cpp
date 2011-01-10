@@ -219,15 +219,11 @@ wxString wxChoice::GetString(unsigned int n) const
 // ----------------------------------------------------------------------------
 void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n), wxT("wxChoice::DoSetItemClientData: invalid index") );
-
     m_datas[n] = (char*)clientData ;
 }
 
 void * wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL, wxT("wxChoice::DoGetClientData: invalid index") );
-
     return (void *)m_datas[n];
 }
 

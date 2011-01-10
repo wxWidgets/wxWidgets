@@ -578,9 +578,6 @@ void wxListBox::GTKSetItem(GtkTreeIter& iter, const GtkTreeEntry *entry)
 
 void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL,
-                 wxT("Invalid index passed to GetItemClientData") );
-
     wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
@@ -589,9 +586,6 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
 
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n),
-                 wxT("Invalid index passed to SetItemClientData") );
-
     wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_RET(entry, wxT("could not get entry"));
 

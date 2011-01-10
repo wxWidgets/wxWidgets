@@ -120,15 +120,11 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
 // ----------------------------------------------------------------------------
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n), "invalid index" );
-
     m_datas[n] = (char*)clientData ;
 }
 
 void * wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL, "invalid index" );
-
     return (void *)m_datas[n];
 }
 
