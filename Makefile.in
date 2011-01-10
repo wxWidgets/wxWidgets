@@ -464,6 +464,7 @@ ALL_BASE_HEADERS =  \
 	wx/wxprec.h \
 	wx/xlocale.h \
 	wx/xti.h \
+	wx/xti2.h \
 	wx/xtistrm.h \
 	wx/xtictor.h \
 	wx/xtihandler.h \
@@ -640,6 +641,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/wxprec.h \
 	wx/xlocale.h \
 	wx/xti.h \
+	wx/xti2.h \
 	wx/xtistrm.h \
 	wx/xtictor.h \
 	wx/xtihandler.h \
@@ -3902,6 +3904,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/position.h \
 	wx/radiobox.h \
 	wx/radiobut.h \
+	wx/range.h \
 	wx/rearrangectrl.h \
 	wx/renderer.h \
 	wx/richmsgdlg.h \
