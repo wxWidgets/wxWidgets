@@ -24,6 +24,7 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
+    #include "wx/encinfo.h"
 #endif
 
 #include "wx/fontutil.h"
