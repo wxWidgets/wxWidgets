@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 7 January 2011                                                      *
+# Date : 11 January 2011                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -221,7 +221,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		panelcmn.obj,checkboxcmn.obj,statboxcmn.obj,slidercmn.obj,\
 		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
-		spinbtncmn.obj,scrolbarcmn.obj
+		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -423,7 +423,8 @@ SOURCES = \
 		arttango.cpp,mediactrlcmn.cpp,panelcmn.cpp,checkboxcmn.cpp,\
 		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
-		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp
+		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
+		colourdata.cpp,fontdata.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -693,3 +694,5 @@ gridcmn.obj : gridcmn.cpp
 odcombocmn.obj : odcombocmn.cpp
 spinbtncmn.obj : spinbtncmn.cpp
 scrolbarcmn.obj : scrolbarcmn.cpp
+colourdata.obj : colourdata.cpp
+fontdata.obj : fontdata.cpp
