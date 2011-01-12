@@ -50,6 +50,18 @@
 //     -  [version] -> 42 or 70 or 80 etc
 //     -  u if using Unicode
 
+// Disable deprecation warnings from headers included from stdafx.h for VC8+
+#ifndef _CRT_SECURE_NO_WARNINGS
+    #define _CRT_SECURE_NO_WARNINGS
+#endif
+
+// Also define WINVER to avoid warnings about it being undefined from the
+// platform SDK headers (usually this is not necessary because it is done by wx
+// headers but here we include the system ones before them)
+#ifndef WINVER
+    #define WINVER 0x0600
+#endif
+
 #include "stdafx.h"
 
 // For compilers that support precompilation, includes "wx/wx.h".
