@@ -547,6 +547,14 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     DrawCaptionBackground(dc, rect,
                           (pane.state & wxAuiPaneInfo::optionActive)?true:false);
 
+    int caption_offset = 0;
+    if ( pane.icon.IsOk() )
+    {
+        DrawIcon(dc, rect, pane);
+
+        caption_offset += pane.icon.GetWidth() + 3;
+    }
+
     if (pane.state & wxAuiPaneInfo::optionActive)
         dc.SetTextForeground(m_active_caption_text_colour);
     else
@@ -569,8 +577,17 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 
     dc.SetClippingRegion(clip_rect);
-    dc.DrawText(draw_text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
+    dc.DrawText(draw_text, rect.x+3 + caption_offset, rect.y+(rect.height/2)-(h/2)-1);
     dc.DestroyClippingRegion();
+}
+
+void
+wxAuiDefaultDockArt::DrawIcon(wxDC& dc, const wxRect& rect, wxAuiPaneInfo& pane)
+{
+   // Draw the icon centered vertically
+   dc.DrawBitmap(pane.icon,
+                 rect.x+2, rect.y+(rect.height-pane.icon.GetHeight())/2,
+                 true);
 }
 
 void wxAuiDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),

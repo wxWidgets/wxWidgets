@@ -916,9 +916,19 @@ MyFrame::MyFrame(wxWindow* parent,
                   CloseButton(true).MaximizeButton(true));
 
     wxWindow* wnd10 = CreateTextCtrl(wxT("This pane will prompt the user before hiding."));
+
+    // Give this pane an icon, too, just for testing.
+    int iconSize = m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE);
+
+    // Make it even to use 16 pixel icons with default 17 caption height.
+    iconSize &= ~1;
+
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name(wxT("test10")).Caption(wxT("Text Pane with Hide Prompt")).
-                  Bottom().Layer(1).Position(1));
+                  Bottom().Layer(1).Position(1).
+                  Icon(wxArtProvider::GetBitmap(wxART_WARNING,
+                                                wxART_OTHER,
+                                                wxSize(iconSize, iconSize))));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test11")).Caption(wxT("Fixed Pane")).

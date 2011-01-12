@@ -571,6 +571,17 @@ public:
     wxAuiPaneInfo& Hide();
 
     /**
+        Icon() sets the icon of the pane.
+
+        Notice that the height of the icon should be smaller than the value
+        returned by wxAuiDockArt::GetMetric(wxAUI_DOCKART_CAPTION_SIZE) to
+        ensure that it appears correctly.
+
+        @since 2.9.2
+    */
+    wxAuiPaneInfo& Icon(const wxBitmap& b);
+
+    /**
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
         managed frame.
 

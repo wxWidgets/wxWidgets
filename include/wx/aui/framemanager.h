@@ -173,6 +173,7 @@ public:
     {
         name = c.name;
         caption = c.caption;
+        icon = c.icon;
         window = c.window;
         frame = c.frame;
         state = c.state;
@@ -271,6 +272,7 @@ public:
     }
     wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxAuiPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
+    wxAuiPaneInfo& Icon(const wxBitmap& b) { icon = b; return *this; }
     wxAuiPaneInfo& Left() { dock_direction = wxAUI_DOCK_LEFT; return *this; }
     wxAuiPaneInfo& Right() { dock_direction = wxAUI_DOCK_RIGHT; return *this; }
     wxAuiPaneInfo& Top() { dock_direction = wxAUI_DOCK_TOP; return *this; }
@@ -418,6 +420,7 @@ public:
 public:
     wxString name;        // name of the pane
     wxString caption;     // caption displayed on the window
+    wxBitmap icon;        // icon of the pane, may be invalid
 
     wxWindow* window;     // window that is in this pane
     wxFrame* frame;       // floating frame window that holds the pane
@@ -437,6 +440,7 @@ public:
     int dock_proportion;  // proportion while docked
 
     wxAuiPaneButtonArray buttons; // buttons on the pane
+
 
     wxRect rect;              // current rectangle (populated by wxAUI)
 
