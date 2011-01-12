@@ -181,7 +181,8 @@ void wxBitmapComboBox::RecreateControl()
     ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, 0, MeasureItem(0));
 
     // Revert the old string value
-    ChangeValue(value);
+    if ( !HasFlag(wxCB_READONLY) )
+        ChangeValue(value);
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
