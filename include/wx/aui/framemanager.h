@@ -25,6 +25,7 @@
 #include "wx/window.h"
 #include "wx/timer.h"
 #include "wx/sizer.h"
+#include "wx/bitmap.h"
 
 enum wxAuiManagerDock
 {
