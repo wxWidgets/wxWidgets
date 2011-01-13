@@ -171,7 +171,7 @@ void ItemContainerTestCase::ClientData()
     CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data),
                          container->GetClientObject(2));
 
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject(-1, item0data) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject((unsigned)-1, item0data) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject(12345, item0data) );
 }
 
@@ -199,7 +199,7 @@ void ItemContainerTestCase::VoidData()
 
     CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
 
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(-1, NULL) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
 }
 
