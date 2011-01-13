@@ -85,117 +85,119 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     const wxString::const_iterator end = source.end();
     for ( wxString::const_iterator pos = source.begin(); pos < end; ++pos )
     {
-        if (*pos == wxT('<'))   // tag found:
+        if (*pos != wxT('<'))
+            continue;
+
+        // possible tag start found:
+
+        // don't cache comment tags
+        if ( wxHtmlParser::SkipCommentTag(pos, end) )
+            continue;
+
+        size_t tg = Cache().size();
+        Cache().push_back(wxHtmlCacheItem());
+
+        wxString::const_iterator stpos = pos++;
+        Cache()[tg].Key = stpos;
+
+        int i;
+        for ( i = 0;
+              pos < end && i < (int)WXSIZEOF(tagBuffer) - 1 &&
+              *pos != wxT('>') && !wxIsspace(*pos);
+              ++i, ++pos )
         {
-            // don't cache comment tags
-            if ( wxHtmlParser::SkipCommentTag(pos, source.end()) )
-                continue;
+            tagBuffer[i] = (wxChar)wxToupper(*pos);
+        }
+        tagBuffer[i] = wxT('\0');
 
-            size_t tg = Cache().size();
-            Cache().push_back(wxHtmlCacheItem());
+        Cache()[tg].Name = new wxChar[i+1];
+        memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
 
-            wxString::const_iterator stpos = pos++;
-            Cache()[tg].Key = stpos;
+        while (pos < end && *pos != wxT('>'))
+            ++pos;
 
-            int i;
-            for ( i = 0;
-                  pos < end && i < (int)WXSIZEOF(tagBuffer) - 1 &&
-                  *pos != wxT('>') && !wxIsspace(*pos);
-                  ++i, ++pos )
+        if ((stpos+1) < end && *(stpos+1) == wxT('/')) // ending tag:
+        {
+            Cache()[tg].type = wxHtmlCacheItem::Type_EndingTag;
+            // find matching begin tag:
+            for (i = tg; i >= 0; i--)
             {
-                tagBuffer[i] = (wxChar)wxToupper(*pos);
-            }
-            tagBuffer[i] = wxT('\0');
-
-            Cache()[tg].Name = new wxChar[i+1];
-            memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
-
-            while (pos < end && *pos != wxT('>'))
-                ++pos;
-
-            if ((stpos+1) < end && *(stpos+1) == wxT('/')) // ending tag:
-            {
-                Cache()[tg].type = wxHtmlCacheItem::Type_EndingTag;
-                // find matching begin tag:
-                for (i = tg; i >= 0; i--)
+                if ((Cache()[i].type == wxHtmlCacheItem::Type_NoMatchingEndingTag) && (wxStrcmp(Cache()[i].Name, tagBuffer+1) == 0))
                 {
-                    if ((Cache()[i].type == wxHtmlCacheItem::Type_NoMatchingEndingTag) && (wxStrcmp(Cache()[i].Name, tagBuffer+1) == 0))
-                    {
-                        Cache()[i].type = wxHtmlCacheItem::Type_Normal;
-                        Cache()[i].End1 = stpos;
-                        Cache()[i].End2 = pos + 1;
-                        break;
-                    }
+                    Cache()[i].type = wxHtmlCacheItem::Type_Normal;
+                    Cache()[i].End1 = stpos;
+                    Cache()[i].End2 = pos + 1;
+                    break;
                 }
             }
-            else
+        }
+        else
+        {
+            Cache()[tg].type = wxHtmlCacheItem::Type_NoMatchingEndingTag;
+
+            if (wxIsCDATAElement(tagBuffer))
             {
-                Cache()[tg].type = wxHtmlCacheItem::Type_NoMatchingEndingTag;
+                // store the orig pos in case we are missing the closing
+                // tag (see below)
+                const wxString::const_iterator old_pos = pos;
+                bool foundCloseTag = false;
 
-                if (wxIsCDATAElement(tagBuffer))
+                // find next matching tag
+                int tag_len = wxStrlen(tagBuffer);
+                while (pos < end)
                 {
-                    // store the orig pos in case we are missing the closing
-                    // tag (see below)
-                    const wxString::const_iterator old_pos = pos;
-                    bool foundCloseTag = false;
+                    // find the ending tag
+                    while (pos + 1 < end &&
+                           (*pos != '<' || *(pos+1) != '/'))
+                        ++pos;
+                    if (*pos == '<')
+                        ++pos;
 
-                    // find next matching tag
-                    int tag_len = wxStrlen(tagBuffer);
-                    while (pos < end)
+                    // see if it matches
+                    int match_pos = 0;
+                    while (pos < end && match_pos < tag_len )
                     {
-                        // find the ending tag
-                        while (pos + 1 < end &&
-                               (*pos != '<' || *(pos+1) != '/'))
-                            ++pos;
-                        if (*pos == '<')
-                            ++pos;
-
-                        // see if it matches
-                        int match_pos = 0;
-                        while (pos < end && match_pos < tag_len )
-                        {
-                            wxChar c = *pos;
-                            if ( c == '>' || c == '<' )
-                                break;
-
-                            // cast to wxChar needed to suppress warning in
-                            // Unicode build
-                            if ((wxChar)wxToupper(c) == tagBuffer[match_pos])
-                            {
-                                ++match_pos;
-                            }
-                            else if (c == wxT(' ') || c == wxT('\n') ||
-                                c == wxT('\r') || c == wxT('\t'))
-                            {
-                                // need to skip over these
-                            }
-                            else
-                            {
-                                match_pos = 0;
-                            }
-                            ++pos;
-                        }
-
-                        // found a match
-                        if (match_pos == tag_len)
-                        {
-                            pos = pos - tag_len - 3;
-                            foundCloseTag = true;
+                        wxChar c = *pos;
+                        if ( c == '>' || c == '<' )
                             break;
-                        }
-                        else // keep looking for the closing tag
+
+                        // cast to wxChar needed to suppress warning in
+                        // Unicode build
+                        if ((wxChar)wxToupper(c) == tagBuffer[match_pos])
                         {
-                            ++pos;
+                            ++match_pos;
                         }
+                        else if (c == wxT(' ') || c == wxT('\n') ||
+                            c == wxT('\r') || c == wxT('\t'))
+                        {
+                            // need to skip over these
+                        }
+                        else
+                        {
+                            match_pos = 0;
+                        }
+                        ++pos;
                     }
-                    if (!foundCloseTag)
+
+                    // found a match
+                    if (match_pos == tag_len)
                     {
-                        // we didn't find closing tag; this means the markup
-                        // is incorrect and the best thing we can do is to
-                        // ignore the unclosed tag and continue parsing as if
-                        // it didn't exist:
-                        pos = old_pos;
+                        pos = pos - tag_len - 3;
+                        foundCloseTag = true;
+                        break;
                     }
+                    else // keep looking for the closing tag
+                    {
+                        ++pos;
+                    }
+                }
+                if (!foundCloseTag)
+                {
+                    // we didn't find closing tag; this means the markup
+                    // is incorrect and the best thing we can do is to
+                    // ignore the unclosed tag and continue parsing as if
+                    // it didn't exist:
+                    pos = old_pos;
                 }
             }
         }
