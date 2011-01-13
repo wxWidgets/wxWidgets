@@ -94,12 +94,10 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
         if ( wxHtmlParser::SkipCommentTag(pos, end) )
             continue;
 
-        size_t tg = Cache().size();
-        Cache().push_back(wxHtmlCacheItem());
-
+        // Remember the starting tag position.
         wxString::const_iterator stpos = pos++;
-        Cache()[tg].Key = stpos;
 
+        // And look for the ending one.
         int i;
         for ( i = 0;
               pos < end && i < (int)WXSIZEOF(tagBuffer) - 1 &&
@@ -110,11 +108,25 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
         }
         tagBuffer[i] = wxT('\0');
 
-        Cache()[tg].Name = new wxChar[i+1];
-        memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
-
         while (pos < end && *pos != wxT('>'))
             ++pos;
+
+        if ( pos == end )
+        {
+            // We didn't find a closing bracket, this is not a valid tag after
+            // all. Notice that we need to roll back pos to avoid creating an
+            // invalid iterator when "++pos" is done in the loop statement.
+            --pos;
+
+            continue;
+        }
+
+        // We have a valid tag, add it to the cache.
+        size_t tg = Cache().size();
+        Cache().push_back(wxHtmlCacheItem());
+        Cache()[tg].Key = stpos;
+        Cache()[tg].Name = new wxChar[i+1];
+        memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
 
         if ((stpos+1) < end && *(stpos+1) == wxT('/')) // ending tag:
         {
@@ -223,7 +235,12 @@ void wxHtmlTagsCache::QueryTag(const wxString::const_iterator& at,
                                bool *hasEnding)
 {
     if (Cache().empty())
+    {
+        *end1 =
+        *end2 = inputEnd;
+        *hasEnding = true;
         return;
+    }
 
     if (Cache()[m_CachePos].Key != at)
     {

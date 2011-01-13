@@ -227,7 +227,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
             else
             {
                 while (i < end_pos && *i != wxT('>')) ++i;
-                textBeginning = i+1;
+                textBeginning = i < end_pos ? i+1 : i;
             }
         }
         else ++i;
@@ -958,7 +958,7 @@ wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
     wxString::const_iterator p = start;
 
     // comments begin with "<!--" in HTML 4.0
-    if ( p > end - 3 || *++p != '!' || *++p != '-' || *++p != '-' )
+    if ( end - start < 4 || *++p != '!' || *++p != '-' || *++p != '-' )
     {
         // not a comment at all
         return false;

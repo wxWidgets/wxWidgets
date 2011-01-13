@@ -183,6 +183,7 @@
             font/fonttest.cpp
             image/image.cpp
             image/rawbmp.cpp
+            html/htmlparser.cpp
             html/htmlwindow.cpp
             menu/accelentry.cpp
             menu/menu.cpp

@@ -187,6 +187,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_fonttest.obj \
 	$(OBJS)\test_gui_image.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
+	$(OBJS)\test_gui_htmlparser.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
 	$(OBJS)\test_gui_accelentry.obj \
 	$(OBJS)\test_gui_menu.obj \
@@ -876,6 +877,9 @@ $(OBJS)\test_gui_image.obj: .\image\image.cpp
 
 $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp
+
+$(OBJS)\test_gui_htmlparser.obj: .\html\htmlparser.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\html\htmlparser.cpp
 
 $(OBJS)\test_gui_htmlwindow.obj: .\html\htmlwindow.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\html\htmlwindow.cpp

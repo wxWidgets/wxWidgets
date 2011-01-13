@@ -972,6 +972,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\html\htmlparser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\html\htmlwindow.cpp"
 				>
 			</File>

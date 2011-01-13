@@ -422,6 +422,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_fonttest.obj &
 	$(OBJS)\test_gui_image.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
+	$(OBJS)\test_gui_htmlparser.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
 	$(OBJS)\test_gui_accelentry.obj &
 	$(OBJS)\test_gui_menu.obj &
@@ -914,6 +915,9 @@ $(OBJS)\test_gui_image.obj :  .AUTODEPEND .\image\image.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_htmlparser.obj :  .AUTODEPEND .\html\htmlparser.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_htmlwindow.obj :  .AUTODEPEND .\html\htmlwindow.cpp
