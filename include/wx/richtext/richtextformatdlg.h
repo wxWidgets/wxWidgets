@@ -33,6 +33,8 @@
 
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFormattingDialog;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 /*!
  * Flags determining the pages and buttons to be created in the dialog

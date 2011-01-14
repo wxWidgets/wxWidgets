@@ -14,6 +14,8 @@
 
 #if wxUSE_RICHTEXT
 
+#include "wx/window.h"
+
 /**
     @class wxRichTextUICustomization
     The base class for functionality to plug in to various rich text control dialogs,

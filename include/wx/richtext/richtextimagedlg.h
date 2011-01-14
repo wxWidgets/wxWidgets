@@ -15,19 +15,20 @@
 #define _RICHTEXTIMAGEDLG_H_
 
 /*!
- * Includes
- */
-
-#include "wx/richtext/richtextbuffer.h"
-#include "wx/richtext/richtextformatdlg.h"
-
-/*!
  * Forward declarations
  */
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+
+/*!
+ * Includes
+ */
+
+#include "wx/richtext/richtextbuffer.h"
+#include "wx/richtext/richtextformatdlg.h"
 
 /*!
  * Control identifiers

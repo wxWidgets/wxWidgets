@@ -1199,9 +1199,9 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
         wxString value;
         if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_LEFT)
             value = wxT("left");
-        else if (attr.GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_CLEAR_RIGHT)
+        else if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_RIGHT)
             value = wxT("right");
-        else if (attr.GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_CLEAR_BOTH)
+        else if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_BOTH)
             value = wxT("both");
         else
             value = wxT("none");
@@ -1473,9 +1473,9 @@ bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, 
         wxString value;
         if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_LEFT)
             value = wxT("left");
-        else if (attr.GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_CLEAR_RIGHT)
+        else if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_RIGHT)
             value = wxT("right");
-        else if (attr.GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_CLEAR_BOTH)
+        else if (attr.GetTextBoxAttr().GetClearMode() == wxTEXT_BOX_ATTR_CLEAR_BOTH)
             value = wxT("both");
         else
             value = wxT("none");
