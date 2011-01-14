@@ -250,7 +250,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBoxStyleDefinition: public wxRichTextStyleD
 public:
 
     /// Copy constructor
-    wxRichTextBoxStyleDefinition(const wxRichTextBoxStyleDefinition& def) { Copy(def); }
+    wxRichTextBoxStyleDefinition(const wxRichTextBoxStyleDefinition& def): wxRichTextStyleDefinition(def) { Copy(def); }
 
     /// Default constructor
     wxRichTextBoxStyleDefinition(const wxString& name = wxEmptyString):
