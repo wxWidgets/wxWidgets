@@ -294,83 +294,209 @@ enum wxTextBoxAttrPosition
     wxTEXT_BOX_ATTR_POSITION_MASK           = 0x00F0
 };
 
-// Dimension, including units and position
+/**
+    @class wxTextAttrDimension
+
+    A class representing a rich text dimension, including units and position.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl,  wxTextAttrDimensions
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrDimension
 {
 public:
+    /**
+        Default constructor.
+    */
     wxTextAttrDimension() { Reset(); }
+    /**
+        Constructor taking value and units flag.
+    */
     wxTextAttrDimension(int value, wxTextAttrUnits units = wxTEXT_ATTR_UNITS_TENTHS_MM) { m_value = value; m_flags = units|wxTEXT_ATTR_VALUE_VALID; }
 
+    /**
+        Resets the dimension value and flags.
+    */
     void Reset() { m_value = 0; m_flags = 0; }
 
-    // Partial equality test
+    /**
+        Partial equality test.
+    */
     bool EqPartial(const wxTextAttrDimension& dim) const;
 
-    // Apply
+    /** Apply the dimension, but not those identical to @a compareWith if present.
+    */
     bool Apply(const wxTextAttrDimension& dim, const wxTextAttrDimension* compareWith = NULL);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /** Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxTextAttrDimension& attr, wxTextAttrDimension& clashingAttr, wxTextAttrDimension& absentAttr);
 
+    /**
+        Equality operator.
+    */
     bool operator==(const wxTextAttrDimension& dim) const { return m_value == dim.m_value && m_flags == dim.m_flags; }
 
+    /**
+        Returns the integer value of the dimension.
+    */
     int GetValue() const { return m_value; }
+
+    /**
+        Returns the floating-pointing value of the dimension in mm.
+
+    */
     float GetValueMM() const { return float(m_value) / 10.0; }
+
+    /**
+        Sets the value of the dimension in mm.
+    */
     void SetValueMM(float value) { m_value = (int) ((value * 10.0) + 0.5); m_flags |= wxTEXT_ATTR_VALUE_VALID; }
+
+    /**
+        Sets the integer value of the dimension.
+    */
     void SetValue(int value) { m_value = value; m_flags |= wxTEXT_ATTR_VALUE_VALID; }
+
+    /**
+        Sets the integer value of the dimension, passing dimension flags.
+    */
     void SetValue(int value, wxTextAttrDimensionFlags flags) { SetValue(value); m_flags = flags; }
+
+    /**
+        Sets the integer value and units.
+    */
     void SetValue(int value, wxTextAttrUnits units) { m_value = value; m_flags = units | wxTEXT_ATTR_VALUE_VALID; }
+
+    /**
+        Sets the dimension.
+    */
     void SetValue(const wxTextAttrDimension& dim) { (*this) = dim; }
 
+    /**
+        Gets the units of the dimension.
+    */
     wxTextAttrUnits GetUnits() const { return (wxTextAttrUnits) (m_flags & wxTEXT_ATTR_UNITS_MASK); }
+
+    /**
+        Sets the units of the dimension.
+    */
     void SetUnits(wxTextAttrUnits units) { m_flags &= ~wxTEXT_ATTR_UNITS_MASK; m_flags |= units; }
 
+    /**
+        Gets the position flags.
+    */
     wxTextBoxAttrPosition GetPosition() const { return (wxTextBoxAttrPosition) (m_flags & wxTEXT_BOX_ATTR_POSITION_MASK); }
+
+    /**
+        Sets the position flags.
+    */
     void SetPosition(wxTextBoxAttrPosition pos) { m_flags &= ~wxTEXT_BOX_ATTR_POSITION_MASK; m_flags |= pos; }
 
+    /**
+        Returns @true if the dimension is valid.
+    */
     bool IsValid() const { return (m_flags & wxTEXT_ATTR_VALUE_VALID) != 0; }
+
+    /**
+        Sets the valid flag.
+    */
     void SetValid(bool b) { m_flags &= ~wxTEXT_ATTR_VALUE_VALID_MASK; m_flags |= (b ? wxTEXT_ATTR_VALUE_VALID : 0); }
 
+    /**
+        Gets the dimension flags.
+    */
     wxTextAttrDimensionFlags GetFlags() const { return m_flags; }
+
+    /**
+        Sets the dimension flags.
+    */
     void SetFlags(wxTextAttrDimensionFlags flags) { m_flags = flags; }
 
     int                         m_value;
     wxTextAttrDimensionFlags    m_flags;
 };
 
-// A class for left, right, top and bottom dimensions
+/**
+    @class wxTextAttrDimensions
+    A class for left, right, top and bottom dimensions.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl, wxTextAttrDimension
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrDimensions
 {
 public:
+    /**
+        Default constructor.
+    */
     wxTextAttrDimensions() {}
 
+    /**
+        Resets the value and flags for all dimensions.
+    */
     void Reset() { m_left.Reset(); m_top.Reset(); m_right.Reset(); m_bottom.Reset(); }
 
+    /**
+        Equality operator.
+    */
     bool operator==(const wxTextAttrDimensions& dims) const { return m_left == dims.m_left && m_top == dims.m_top && m_right == dims.m_right && m_bottom == dims.m_bottom; }
 
-    // Partial equality test
+    /**
+        Partial equality test.
+
+    */
     bool EqPartial(const wxTextAttrDimensions& dims) const;
 
-    // Apply border to 'this', but not if the same as compareWith
+    /**
+        Apply border to 'this', but not if the same as @a compareWith.
+
+    */
     bool Apply(const wxTextAttrDimensions& dims, const wxTextAttrDimensions* compareWith = NULL);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+
+    */
     void CollectCommonAttributes(const wxTextAttrDimensions& attr, wxTextAttrDimensions& clashingAttr, wxTextAttrDimensions& absentAttr);
 
-    // Remove specified attributes from this object
+    /**
+        Remove specified attributes from this object.
+    */
     bool RemoveStyle(const wxTextAttrDimensions& attr);
 
+    /**
+        Gets the left dimension.
+    */
     const wxTextAttrDimension& GetLeft() const { return m_left; }
     wxTextAttrDimension& GetLeft() { return m_left; }
 
+    /**
+        Gets the right dimension.
+
+    */
     const wxTextAttrDimension& GetRight() const { return m_right; }
     wxTextAttrDimension& GetRight() { return m_right; }
 
+    /**
+        Gets the top dimension.
+
+    */
     const wxTextAttrDimension& GetTop() const { return m_top; }
     wxTextAttrDimension& GetTop() { return m_top; }
 
+    /**
+        Gets the bottom dimension.
+
+    */
     const wxTextAttrDimension& GetBottom() const { return m_bottom; }
     wxTextAttrDimension& GetBottom() { return m_bottom; }
 
@@ -380,60 +506,135 @@ public:
     wxTextAttrDimension         m_bottom;
 };
 
-// A class for width and height
+/**
+    @class wxTextAttrSize
+    A class for representing width and height.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl, wxTextAttrDimension
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrSize
 {
 public:
+    /**
+        Default constructor.
+    */
     wxTextAttrSize() {}
 
+    /**
+        Resets the width and height dimensions.
+    */
     void Reset() { m_width.Reset(); m_height.Reset(); }
 
+    /**
+        Equality operator.
+    */
     bool operator==(const wxTextAttrSize& size) const { return m_width == size.m_width && m_height == size.m_height ; }
 
-    // Partial equality test
+    /**
+        Partial equality test.
+    */
     bool EqPartial(const wxTextAttrSize& dims) const;
 
-    // Apply border to 'this', but not if the same as compareWith
+    /**
+        Apply border to this object, but not if the same as @a compareWith.
+    */
     bool Apply(const wxTextAttrSize& dims, const wxTextAttrSize* compareWith = NULL);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxTextAttrSize& attr, wxTextAttrSize& clashingAttr, wxTextAttrSize& absentAttr);
 
-    // Remove specified attributes from this object
+    /**
+        Removes the specified attributes from this object.
+    */
     bool RemoveStyle(const wxTextAttrSize& attr);
 
-    // Width and height
-
+    /**
+        Returns the width.
+    */
     wxTextAttrDimension& GetWidth() { return m_width; }
     const wxTextAttrDimension& GetWidth() const { return m_width; }
 
+    /**
+        Sets the width.
+    */
     void SetWidth(int value, wxTextAttrDimensionFlags flags) { m_width.SetValue(value, flags); }
+    /**
+        Sets the width.
+    */
     void SetWidth(int value, wxTextAttrUnits units) { m_width.SetValue(value, units); }
+    /**
+        Sets the width.
+    */
     void SetWidth(const wxTextAttrDimension& dim) { m_width.SetValue(dim); }
 
+    /**
+        Gets the height.
+    */
     wxTextAttrDimension& GetHeight() { return m_height; }
     const wxTextAttrDimension& GetHeight() const { return m_height; }
 
+    /**
+        Sets the height.
+    */
     void SetHeight(int value, wxTextAttrDimensionFlags flags) { m_height.SetValue(value, flags); }
+    /**
+        Sets the height.
+    */
     void SetHeight(int value, wxTextAttrUnits units) { m_height.SetValue(value, units); }
+    /**
+        Sets the height.
+    */
     void SetHeight(const wxTextAttrDimension& dim) { m_height.SetValue(dim); }
 
     wxTextAttrDimension         m_width;
     wxTextAttrDimension         m_height;
 };
 
-// A class to make it easier to convert dimensions
+/**
+    @class wxTextAttrDimensionConverter
+    A class to make it easier to convert dimensions.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl, wxTextAttrDimension
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrDimensionConverter
 {
 public:
+    /**
+        Constructor.
+    */
     wxTextAttrDimensionConverter(wxDC& dc, double scale = 1.0, const wxSize& parentSize = wxDefaultSize);
+    /**
+        Constructor.
+    */
     wxTextAttrDimensionConverter(int ppi, double scale = 1.0, const wxSize& parentSize = wxDefaultSize);
 
+    /**
+        Gets the pixel size for the given dimension.
+    */
     int GetPixels(const wxTextAttrDimension& dim, int direction = wxHORIZONTAL) const;
+    /**
+        Gets the mm size for the given dimension.
+    */
     int GetTenthsMM(const wxTextAttrDimension& dim) const;
 
+    /**
+        Converts tenths of a mm to pixels.
+    */
     int ConvertTenthsMMToPixels(int units) const;
+    /**
+        Converts pixels to tenths of a mm.
+    */
     int ConvertPixelsToTenthsMM(int pixels) const;
 
     int     m_ppi;
@@ -503,56 +704,149 @@ enum wxTextBoxAttrVerticalAlignment
     wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM  =    3
 };
 
-// Border
+/**
+    @class wxTextAttrBorder
+    A class representing a rich text object border.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl, wxRichTextAttrBorders
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrBorder
 {
 public:
+    /**
+        Default constructor.
+    */
     wxTextAttrBorder() { Reset(); }
 
+    /**
+        Equality operator.
+    */
     bool operator==(const wxTextAttrBorder& border) const
     {
         return m_flags == border.m_flags && m_borderStyle == border.m_borderStyle &&
                m_borderColour == border.m_borderColour && m_borderWidth == border.m_borderWidth;
     }
 
+    /**
+        Resets the border style, colour, width and flags.
+    */
     void Reset() { m_borderStyle = 0; m_borderColour = 0; m_flags = 0; m_borderWidth.Reset(); }
 
-    // Partial equality test
+    /**
+        Partial equality test.
+    */
     bool EqPartial(const wxTextAttrBorder& border) const;
 
-    // Apply border to 'this', but not if the same as compareWith
+    /**
+        Applies the border to this object, but not if the same as @a compareWith.
+
+    */
     bool Apply(const wxTextAttrBorder& border, const wxTextAttrBorder* compareWith = NULL);
 
-    // Remove specified attributes from this object
+    /**
+        Removes the specified attributes from this object.
+    */
     bool RemoveStyle(const wxTextAttrBorder& attr);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxTextAttrBorder& attr, wxTextAttrBorder& clashingAttr, wxTextAttrBorder& absentAttr);
 
+    /**
+        Sets the border style.
+    */
     void SetStyle(int style) { m_borderStyle = style; m_flags |= wxTEXT_BOX_ATTR_BORDER_STYLE; }
+
+    /**
+        Gets the border style.
+
+    */
     int GetStyle() const { return m_borderStyle; }
 
+    /**
+        Sets the border colour.
+    */
     void SetColour(unsigned long colour) { m_borderColour = colour; m_flags |= wxTEXT_BOX_ATTR_BORDER_COLOUR; }
+
+    /**
+        Sets the border colour.
+    */
     void SetColour(const wxColour& colour) { m_borderColour = colour.GetRGB(); m_flags |= wxTEXT_BOX_ATTR_BORDER_COLOUR; }
+
+    /**
+        Gets the colour as a long.
+    */
     unsigned long GetColourLong() const { return m_borderColour; }
+
+    /**
+        Gets the colour.
+    */
     wxColour GetColour() const { return wxColour(m_borderColour); }
 
+    /**
+        Gets the border width.
+    */
     wxTextAttrDimension& GetWidth() { return m_borderWidth; }
     const wxTextAttrDimension& GetWidth() const { return m_borderWidth; }
+
+    /**
+        Sets the border width.
+    */
     void SetWidth(const wxTextAttrDimension& width) { m_borderWidth = width; }
+    /**
+        Sets the border width.
+    */
     void SetWidth(int value, wxTextAttrUnits units = wxTEXT_ATTR_UNITS_TENTHS_MM) { SetWidth(wxTextAttrDimension(value, units)); }
 
+    /**
+        True if the border has a valid style.
+    */
     bool HasStyle() const { return (m_flags & wxTEXT_BOX_ATTR_BORDER_STYLE) != 0; }
+
+    /**
+        True if the border has a valid colour.
+    */
     bool HasColour() const { return (m_flags & wxTEXT_BOX_ATTR_BORDER_COLOUR) != 0; }
+
+    /**
+        True if the border has a valid width.
+    */
     bool HasWidth() const { return m_borderWidth.IsValid(); }
 
+    /**
+        True if the border is valid.
+    */
     bool IsValid() const { return HasWidth(); }
+
+    /**
+        Set the valid flag for this border.
+    */
     void MakeValid() { m_borderWidth.SetValid(true); }
 
+    /**
+        Returns the border flags.
+    */
     int GetFlags() const { return m_flags; }
+
+    /**
+        Sets the border flags.
+    */
     void SetFlags(int flags) { m_flags = flags; }
+
+    /**
+        Adds a border flag.
+    */
     void AddFlag(int flag) { m_flags |= flag; }
+
+    /**
+        Removes a border flag.
+    */
     void RemoveFlag(int flag) { m_flags &= ~flag; }
 
     int                         m_borderStyle;
@@ -561,56 +855,110 @@ public:
     int                         m_flags;
 };
 
-// Borders
+/**
+    @class wxTextAttrBorders
+    A class representing a rich text object's borders.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl, wxRichTextAttrBorder
+*/
+
 class WXDLLIMPEXP_RICHTEXT wxTextAttrBorders
 {
 public:
+    /**
+        Default constructor.
+    */
     wxTextAttrBorders() { }
 
+    /**
+        Equality operator.
+    */
     bool operator==(const wxTextAttrBorders& borders) const
     {
         return m_left == borders.m_left && m_right == borders.m_right &&
                m_top == borders.m_top && m_bottom == borders.m_bottom;
     }
 
-    // Set style of all borders
+    /**
+        Sets the style of all borders.
+    */
     void SetStyle(int style);
 
-    // Set colour of all borders
+    /**
+        Sets colour of all borders.
+    */
     void SetColour(unsigned long colour);
+
+    /**
+        Sets the colour for all borders.
+    */
     void SetColour(const wxColour& colour);
 
-    // Set width of all borders
+    /**
+        Sets the width of all borders.
+    */
     void SetWidth(const wxTextAttrDimension& width);
+
+    /**
+        Sets the width of all borders.
+    */
     void SetWidth(int value, wxTextAttrUnits units = wxTEXT_ATTR_UNITS_TENTHS_MM) { SetWidth(wxTextAttrDimension(value, units)); }
 
-    // Reset
+    /**
+        Resets all borders.
+    */
     void Reset() { m_left.Reset(); m_right.Reset(); m_top.Reset(); m_bottom.Reset(); }
 
-    // Partial equality test
+    /**
+        Partial equality test.
+    */
     bool EqPartial(const wxTextAttrBorders& borders) const;
 
-    // Apply border to 'this', but not if the same as compareWith
+    /**
+        Applies border to this object, but not if the same as @a compareWith.
+    */
     bool Apply(const wxTextAttrBorders& borders, const wxTextAttrBorders* compareWith = NULL);
 
-    // Remove specified attributes from this object
+    /**
+        Removes the specified attributes from this object.
+    */
     bool RemoveStyle(const wxTextAttrBorders& attr);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxTextAttrBorders& attr, wxTextAttrBorders& clashingAttr, wxTextAttrBorders& absentAttr);
 
+    /**
+        Returns @true if all borders are valid.
+    */
     bool IsValid() const { return m_left.IsValid() || m_right.IsValid() || m_top.IsValid() || m_bottom.IsValid(); }
 
+    /**
+        Returns the left border.
+    */
     const wxTextAttrBorder& GetLeft() const { return m_left; }
     wxTextAttrBorder& GetLeft() { return m_left; }
 
+    /**
+        Returns the right border.
+    */
     const wxTextAttrBorder& GetRight() const { return m_right; }
     wxTextAttrBorder& GetRight() { return m_right; }
 
+    /**
+        Returns the top border.
+    */
     const wxTextAttrBorder& GetTop() const { return m_top; }
     wxTextAttrBorder& GetTop() { return m_top; }
 
+    /**
+        Returns the bottom border.
+    */
     const wxTextAttrBorder& GetBottom() const { return m_bottom; }
     wxTextAttrBorder& GetBottom() { return m_bottom; }
 
@@ -618,21 +966,37 @@ public:
 
 };
 
-// ----------------------------------------------------------------------------
-// wxTextBoxAttr: a structure containing box attributes
-// ----------------------------------------------------------------------------
+/**
+    @class wxTextBoxAttr
+    A class representing the box attributes of a rich text object.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxTextBoxAttr
 {
 public:
-    // ctors
+    /**
+        Default constructor.
+    */
     wxTextBoxAttr() { Init(); }
+
+    /**
+        Copy constructor.
+    */
     wxTextBoxAttr(const wxTextBoxAttr& attr) { Init(); (*this) = attr; }
 
-    /// Initialise this object.
+    /**
+        Initialises this object.
+    */
     void Init() { Reset(); }
 
-    /// Reset this object.
+    /**
+        Resets this object.
+    */
     void Reset();
 
     // Copy. Unnecessary since we let it do a binary copy
@@ -641,193 +1005,300 @@ public:
     // Assignment
     //void operator= (const wxTextBoxAttr& attr);
 
-    /// Equality test
+    /**
+        Equality test.
+    */
     bool operator== (const wxTextBoxAttr& attr) const;
 
-    /// Partial equality test, ignoring unset attributes.
+    /**
+        Partial equality test, ignoring unset attributes.
+
+    */
     bool EqPartial(const wxTextBoxAttr& attr) const;
 
-    /// Merges the given attributes. If compareWith
-    /// is non-NULL, then it will be used to mask out those attributes that are the same in style
-    /// and compareWith, for situations where we don't want to explicitly set inherited attributes.
+    /**
+        Merges the given attributes. If @a compareWith is non-NULL, then it will be used
+        to mask out those attributes that are the same in style and @a compareWith, for
+        situations where we don't want to explicitly set inherited attributes.
+    */
     bool Apply(const wxTextBoxAttr& style, const wxTextBoxAttr* compareWith = NULL);
 
-    /// Collects the attributes that are common to a range of content, building up a note of
-    /// which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBoxAttr& clashingAttr, wxTextBoxAttr& absentAttr);
 
-    /// Removes the specified attributes from this object
+    /**
+        Removes the specified attributes from this object.
+    */
     bool RemoveStyle(const wxTextBoxAttr& attr);
 
-    /// Sets the flags.
+    /**
+        Sets the flags.
+    */
     void SetFlags(int flags) { m_flags = flags; }
 
-    /// Returns the flags.
+    /**
+        Returns the flags.
+    */
     int GetFlags() const { return m_flags; }
 
-    /// Is this flag present?
+    /**
+        Is this flag present?
+    */
     bool HasFlag(wxTextBoxAttrFlags flag) const { return (m_flags & flag) != 0; }
 
-    /// Remove this flag
+    /**
+        Removes this flag.
+    */
     void RemoveFlag(wxTextBoxAttrFlags flag) { m_flags &= ~flag; }
 
-    /// Add this flag
+    /**
+        Adds this flag.
+    */
     void AddFlag(wxTextBoxAttrFlags flag) { m_flags |= flag; }
 
-    /// Is this default? I.e. no attributes set.
+    /**
+        Returns @true if no attributes are set.
+    */
     bool IsDefault() const;
 
-    /// Get the float mode.
+    /**
+        Returns the float mode.
+    */
     wxTextBoxAttrFloatStyle GetFloatMode() const { return m_floatMode; }
 
-    /// Set the float mode.
+    /**
+        Sets the float mode.
+    */
     void SetFloatMode(wxTextBoxAttrFloatStyle mode) { m_floatMode = mode; m_flags |= wxTEXT_BOX_ATTR_FLOAT; }
 
-    /// Do we have a float mode?
+    /**
+        Returns @true if float mode is active.
+    */
     bool HasFloatMode() const { return HasFlag(wxTEXT_BOX_ATTR_FLOAT); }
 
-    /// Is this object floating?
+    /**
+        Returns @true if this object is floating?
+    */
     bool IsFloating() const { return HasFloatMode() && GetFloatMode() != wxTEXT_BOX_ATTR_FLOAT_NONE; }
 
-    /// Returns the clear mode - whether to wrap text after object. Currently unimplemented.
+    /**
+        Returns the clear mode - whether to wrap text after object. Currently unimplemented.
+    */
     wxTextBoxAttrClearStyle GetClearMode() const { return m_clearMode; }
 
-    /// Set the clear mode. Currently unimplemented.
+    /**
+        Set the clear mode. Currently unimplemented.
+    */
     void SetClearMode(wxTextBoxAttrClearStyle mode) { m_clearMode = mode; m_flags |= wxTEXT_BOX_ATTR_CLEAR; }
 
-    /// Do we have a clear mode?
+    /**
+        Returns @true if we have a clear flag.
+    */
     bool HasClearMode() const { return HasFlag(wxTEXT_BOX_ATTR_CLEAR); }
 
-    /// Returns the collapse mode - whether to collapse borders. Currently unimplemented.
+    /**
+        Returns the collapse mode - whether to collapse borders. Currently unimplemented.
+    */
     wxTextBoxAttrCollapseMode GetCollapseBorders() const { return m_collapseMode; }
 
-    /// Sets the collapse mode - whether to collapse borders. Currently unimplemented.
+    /**
+        Sets the collapse mode - whether to collapse borders. Currently unimplemented.
+    */
     void SetCollapseBorders(wxTextBoxAttrCollapseMode collapse) { m_collapseMode = collapse; m_flags |= wxTEXT_BOX_ATTR_COLLAPSE_BORDERS; }
 
-    /// Do we have a collapse borders flag?
+    /**
+        Returns @true if the collapse borders flag is present.
+    */
     bool HasCollapseBorders() const { return HasFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS); }
 
-    /// Returns the vertical alignment.
+    /**
+        Returns the vertical alignment.
+    */
     wxTextBoxAttrVerticalAlignment GetVerticalAlignment() const { return m_verticalAlignment; }
 
-    /// Set the vertical alignment.
+    /**
+        Sets the vertical alignment.
+    */
     void SetVerticalAlignment(wxTextBoxAttrVerticalAlignment verticalAlignment) { m_verticalAlignment = verticalAlignment; m_flags |= wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT; }
 
-    /// Do we have a vertical alignment flag?
+    /**
+        Returns @true if a vertical alignment flag is present.
+    */
     bool HasVerticalAlignment() const { return HasFlag(wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT); }
 
-    /// Gets the margin values.
+    /**
+        Returns the margin values.
+    */
     wxTextAttrDimensions& GetMargins() { return m_margins; }
     const wxTextAttrDimensions& GetMargins() const { return m_margins; }
 
-    /// Gets the left margin.
+    /**
+        Returns the left margin.
+    */
     wxTextAttrDimension& GetLeftMargin() { return m_margins.m_left; }
     const wxTextAttrDimension& GetLeftMargin() const { return m_margins.m_left; }
 
-    /// Gets the right margin.
+    /**
+        Returns the right margin.
+    */
     wxTextAttrDimension& GetRightMargin() { return m_margins.m_right; }
     const wxTextAttrDimension& GetRightMargin() const { return m_margins.m_right; }
 
-    /// Gets the top margin.
+    /**
+        Returns the top margin.
+    */
     wxTextAttrDimension& GetTopMargin() { return m_margins.m_top; }
     const wxTextAttrDimension& GetTopMargin() const { return m_margins.m_top; }
 
-    /// Gets the bottom margin.
+    /**
+        Returns the bottom margin.
+    */
     wxTextAttrDimension& GetBottomMargin() { return m_margins.m_bottom; }
     const wxTextAttrDimension& GetBottomMargin() const { return m_margins.m_bottom; }
 
-    /// Returns the position.
+    /**
+        Returns the position.
+    */
     wxTextAttrDimensions& GetPosition() { return m_position; }
     const wxTextAttrDimensions& GetPosition() const { return m_position; }
 
-    /// Returns the left position.
+    /**
+        Returns the left position.
+    */
     wxTextAttrDimension& GetLeft() { return m_position.m_left; }
     const wxTextAttrDimension& GetLeft() const { return m_position.m_left; }
 
-    /// Returns the right position.
+    /**
+        Returns the right position.
+    */
     wxTextAttrDimension& GetRight() { return m_position.m_right; }
     const wxTextAttrDimension& GetRight() const { return m_position.m_right; }
 
-    /// Returns the top position.
+    /**
+        Returns the top position.
+    */
     wxTextAttrDimension& GetTop() { return m_position.m_top; }
     const wxTextAttrDimension& GetTop() const { return m_position.m_top; }
 
-    /// Returns the bottom position.
+    /**
+        Returns the bottom position.
+    */
     wxTextAttrDimension& GetBottom() { return m_position.m_bottom; }
     const wxTextAttrDimension& GetBottom() const { return m_position.m_bottom; }
 
-    /// Returns the padding values.
+    /**
+        Returns the padding values.
+    */
     wxTextAttrDimensions& GetPadding() { return m_padding; }
     const wxTextAttrDimensions& GetPadding() const { return m_padding; }
 
-    /// Returns the left padding value.
+    /**
+        Returns the left padding value.
+    */
     wxTextAttrDimension& GetLeftPadding() { return m_padding.m_left; }
     const wxTextAttrDimension& GetLeftPadding() const { return m_padding.m_left; }
 
-    /// Returns the right padding value.
+    /**
+        Returns the right padding value.
+    */
     wxTextAttrDimension& GetRightPadding() { return m_padding.m_right; }
     const wxTextAttrDimension& GetRightPadding() const { return m_padding.m_right; }
 
-    /// Returns the top padding value.
+    /**
+        Returns the top padding value.
+    */
     wxTextAttrDimension& GetTopPadding() { return m_padding.m_top; }
     const wxTextAttrDimension& GetTopPadding() const { return m_padding.m_top; }
 
-    /// Returns the bottom padding value.
+    /**
+        Returns the bottom padding value.
+    */
     wxTextAttrDimension& GetBottomPadding() { return m_padding.m_bottom; }
     const wxTextAttrDimension& GetBottomPadding() const { return m_padding.m_bottom; }
 
-    /// Returns the borders.
+    /**
+        Returns the borders.
+    */
     wxTextAttrBorders& GetBorder() { return m_border; }
     const wxTextAttrBorders& GetBorder() const { return m_border; }
 
-    /// Returns the left border.
+    /**
+        Returns the left border.
+    */
     wxTextAttrBorder& GetLeftBorder() { return m_border.m_left; }
     const wxTextAttrBorder& GetLeftBorder() const { return m_border.m_left; }
 
-    /// Returns the top border.
+    /**
+        Returns the top border.
+    */
     wxTextAttrBorder& GetTopBorder() { return m_border.m_top; }
     const wxTextAttrBorder& GetTopBorder() const { return m_border.m_top; }
 
-    /// Returns the right border.
+    /**
+        Returns the right border.
+    */
     wxTextAttrBorder& GetRightBorder() { return m_border.m_right; }
     const wxTextAttrBorder& GetRightBorder() const { return m_border.m_right; }
 
-    /// Returns the bottom border.
+    /**
+        Returns the bottom border.
+    */
     wxTextAttrBorder& GetBottomBorder() { return m_border.m_bottom; }
     const wxTextAttrBorder& GetBottomBorder() const { return m_border.m_bottom; }
 
-    /// Returns the outline.
+    /**
+        Returns the outline.
+    */
     wxTextAttrBorders& GetOutline() { return m_outline; }
     const wxTextAttrBorders& GetOutline() const { return m_outline; }
 
-    /// Returns the left outline.
+    /**
+        Returns the left outline.
+    */
     wxTextAttrBorder& GetLeftOutline() { return m_outline.m_left; }
     const wxTextAttrBorder& GetLeftOutline() const { return m_outline.m_left; }
 
-    /// Returns the top outline.
+    /**
+        Returns the top outline.
+    */
     wxTextAttrBorder& GetTopOutline() { return m_outline.m_top; }
     const wxTextAttrBorder& GetTopOutline() const { return m_outline.m_top; }
 
-    /// Returns the right outline.
+    /**
+        Returns the right outline.
+    */
     wxTextAttrBorder& GetRightOutline() { return m_outline.m_right; }
     const wxTextAttrBorder& GetRightOutline() const { return m_outline.m_right; }
 
-    /// Returns the bottom outline.
+    /**
+        Returns the bottom outline.
+    */
     wxTextAttrBorder& GetBottomOutline() { return m_outline.m_bottom; }
     const wxTextAttrBorder& GetBottomOutline() const { return m_outline.m_bottom; }
 
-    /// Returns the object size.
+    /**
+        Returns the object size.
+    */
     wxTextAttrSize& GetSize() { return m_size; }
     const wxTextAttrSize& GetSize() const { return m_size; }
 
-    /// Sets the object size.
+    /**
+        Sets the object size.
+    */
     void SetSize(const wxTextAttrSize& sz) { m_size = sz; }
 
-    /// Returns the object width.
+    /**
+        Returns the object width.
+    */
     wxTextAttrDimension& GetWidth() { return m_size.m_width; }
     const wxTextAttrDimension& GetWidth() const { return m_size.m_width; }
 
-    /// Returns the object height.
+    /**
+        Returns the object height.
+    */
     wxTextAttrDimension& GetHeight() { return m_size.m_height; }
     const wxTextAttrDimension& GetHeight() const { return m_size.m_height; }
 
@@ -850,44 +1321,87 @@ public:
     wxTextBoxAttrVerticalAlignment  m_verticalAlignment;
 };
 
-// ----------------------------------------------------------------------------
-// wxRichTextAttr: an enhanced attribute
-// ----------------------------------------------------------------------------
+/**
+    @class wxRichTextAttr
+    A class representing enhanced attributes for rich text objects.
+    This adds a wxTextBoxAttr member to the basic wxTextAttr class.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxTextBoxAttr, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextAttr: public wxTextAttr
 {
 public:
+    /**
+        Constructor taking a wxTextAttr.
+    */
     wxRichTextAttr(const wxTextAttr& attr) { wxTextAttr::Copy(attr); }
+
+    /**
+        Copy constructor.
+    */
     wxRichTextAttr(const wxRichTextAttr& attr): wxTextAttr() { Copy(attr); }
+
+    /**
+        Default constructor.
+    */
     wxRichTextAttr() {}
 
-    // Copy
+    /**
+        Copy function.
+    */
     void Copy(const wxRichTextAttr& attr);
 
-    // Assignment
+    /**
+        Assignment operator.
+    */
     void operator=(const wxRichTextAttr& attr) { Copy(attr); }
+
+    /**
+        Assignment operator.
+    */
     void operator=(const wxTextAttr& attr) { wxTextAttr::Copy(attr); }
 
-    // Equality test
+    /**
+        Equality test.
+    */
     bool operator==(const wxRichTextAttr& attr) const;
 
-    // Partial equality test taking comparison object into account
+    /**
+        Partial equality test taking comparison object into account.
+    */
     bool EqPartial(const wxRichTextAttr& attr) const;
 
-    // Merges the given attributes. If compareWith
-    // is non-NULL, then it will be used to mask out those attributes that are the same in style
-    // and compareWith, for situations where we don't want to explicitly set inherited attributes.
+    /**
+        Merges the given attributes. If @a compareWith
+        is non-NULL, then it will be used to mask out those attributes that are the same in style
+        and @a compareWith, for situations where we don't want to explicitly set inherited attributes.
+    */
     bool Apply(const wxRichTextAttr& style, const wxRichTextAttr* compareWith = NULL);
 
-    // Collects the attributes that are common to a range of content, building up a note of
-    // which attributes are absent in some objects and which clash in some objects.
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
     void CollectCommonAttributes(const wxRichTextAttr& attr, wxRichTextAttr& clashingAttr, wxRichTextAttr& absentAttr);
 
-    // Remove specified attributes from this object
+    /**
+        Removes the specified attributes from this object.
+    */
     bool RemoveStyle(const wxRichTextAttr& attr);
 
+    /**
+        Returns the text box attributes.
+    */
     wxTextBoxAttr& GetTextBoxAttr() { return m_textBoxAttr; }
     const wxTextBoxAttr& GetTextBoxAttr() const { return m_textBoxAttr; }
+
+    /**
+        Set the text box attributes.
+    */
     void SetTextBoxAttr(const wxTextBoxAttr& attr) { m_textBoxAttr = attr; }
 
     wxTextBoxAttr    m_textBoxAttr;
