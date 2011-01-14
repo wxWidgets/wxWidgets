@@ -54,6 +54,7 @@ void wxRichTextPrintout::OnPreparePrinting()
 
     m_pageBreaksStart.Clear();
     m_pageBreaksEnd.Clear();
+    m_pageYOffsets.Clear();
 
     int lastStartPos = 0;
 
@@ -80,57 +81,69 @@ void wxRichTextPrintout::OnPreparePrinting()
             // child is a paragraph
             wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
             wxASSERT (child != NULL);
-
-            wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
-            while (node2)
+            if (child)
             {
-                wxRichTextLine* line = node2->GetData();
-
-                // Set the line to the page-adjusted position
-                line->SetPosition(wxPoint(line->GetPosition().x, line->GetPosition().y - yOffset));
-
-                int lineY = child->GetPosition().y + line->GetPosition().y;
-
-                // Break the page if either we're going off the bottom, or this paragraph specifies
-                // an explicit page break
-
-                if (((lineY + line->GetSize().y) > rect.GetBottom()) ||
-                    ((node2 == child->GetLines().GetFirst()) && child->GetAttributes().HasPageBreak()))
+                wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
+                while (node2)
                 {
-                    // New page starting at this line
-                    int newY = rect.y;
+                    wxRichTextLine* line = node2->GetData();
 
-                    // We increase the offset by the difference between new and old positions
+                    int lineY = child->GetPosition().y + line->GetPosition().y - yOffset;
+                    bool hasHardPageBreak = ((node2 == child->GetLines().GetFirst()) && child->GetAttributes().HasPageBreak());
 
-                    int increaseOffsetBy = lineY - newY;
-                    yOffset += increaseOffsetBy;
+                    // Break the page if either we're going off the bottom, or this paragraph specifies
+                    // an explicit page break
 
-                    line->SetPosition(wxPoint(line->GetPosition().x, newY - child->GetPosition().y));
+                    if (((lineY + line->GetSize().y) > rect.GetBottom()) || hasHardPageBreak)
+                    {
+                        // New page starting at this line
+                        int newY = rect.y;
 
-                    if (!lastLine)
+                        // We increase the offset by the difference between new and old positions
+
+                        int increaseOffsetBy = lineY - newY;
+                        yOffset += increaseOffsetBy;
+
+                        if (!lastLine)
+                            lastLine = line;
+
+                        m_pageBreaksStart.Add(lastStartPos);
+                        m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
+                        m_pageYOffsets.Add(yOffset);
+
+                        lastStartPos = line->GetAbsoluteRange().GetStart();
                         lastLine = line;
 
-                    m_pageBreaksStart.Add(lastStartPos);
-                    m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
+                        m_numPages ++;
+                        
+                        // Now create page breaks for the rest of the line, if it's larger than the page height
+                        int contentLeft = line->GetSize().y - rect.GetHeight();
+                        while (contentLeft >= 0)
+                        {
+                            yOffset += rect.GetHeight();
+                            contentLeft -= rect.GetHeight();
+                            
+                            m_pageBreaksStart.Add(lastStartPos);
+                            m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
+                            m_pageYOffsets.Add(yOffset);
+                        }                        
+                    }
 
-                    lastStartPos = line->GetAbsoluteRange().GetStart();
+                    lastLine = line;
 
-                    m_numPages ++;
+                    node2 = node2->GetNext();
                 }
-
-                lastLine = line;
-
-                node2 = node2->GetNext();
             }
 
             node = node->GetNext();
         }
 
         // Closing page break
-        if (m_pageBreaksStart.GetCount() == 0 || (m_pageBreaksEnd[m_pageBreaksEnd.GetCount()-1] < (GetRichTextBuffer()->GetRange().GetEnd()-1)))
+        if (m_pageBreaksStart.GetCount() == 0 || (m_pageBreaksEnd[m_pageBreaksEnd.GetCount()-1] < (GetRichTextBuffer()->GetOwnRange().GetEnd()-1)))
         {
             m_pageBreaksStart.Add(lastStartPos);
-            m_pageBreaksEnd.Add(GetRichTextBuffer()->GetRange().GetEnd());
+            m_pageBreaksEnd.Add(GetRichTextBuffer()->GetOwnRange().GetEnd());
+            m_pageYOffsets.Add(yOffset);
         }
     }
 }
@@ -273,8 +286,26 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
     }
 
     wxRichTextRange rangeToDraw(m_pageBreaksStart[page-1], m_pageBreaksEnd[page-1]);
+    
+    wxPoint oldOrigin = dc->GetLogicalOrigin();
+    double scaleX, scaleY;
+    dc->GetUserScale(& scaleX, & scaleY);
 
-    GetRichTextBuffer()->Draw(*dc, rangeToDraw, wxRichTextRange(-1,-1), textRect, 0 /* descent */, wxRICHTEXT_DRAW_IGNORE_CACHE /* flags */);
+    int yOffset = 0;
+    if (page > 1)
+        yOffset = m_pageYOffsets[page-2];
+        
+    if (yOffset != oldOrigin.y)
+        dc->SetLogicalOrigin(oldOrigin.x, oldOrigin.y + yOffset);
+
+    dc->SetClippingRegion(wxRect(textRect.x, textRect.y + yOffset, textRect.width, textRect.height));
+
+    GetRichTextBuffer()->Draw(*dc, rangeToDraw, wxRichTextSelection(), textRect, 0 /* descent */, wxRICHTEXT_DRAW_IGNORE_CACHE|wxRICHTEXT_DRAW_PRINT /* flags */);
+
+    dc->DestroyClippingRegion();
+
+    if (yOffset != oldOrigin.y)
+        dc->SetLogicalOrigin(oldOrigin.x, oldOrigin.y);
 }
 
 void wxRichTextPrintout::SetMargins(int top, int bottom, int left, int right)
@@ -312,7 +343,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
 
     // The dimensions used for indentation etc. have to be unscaled
     // during printing to be correct when scaling is applied.
-    if (!IsPreview())
+    // if (!IsPreview())
         m_richTextBuffer->SetScale(scale);
 
     // Calculate margins

@@ -719,6 +719,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     m_richTextCtrl->SetFont(font);
 
+    m_richTextCtrl->SetMargins(10, 10);
+
     m_richTextCtrl->SetStyleSheet(wxGetApp().GetStyleSheet());
 
     combo->SetStyleSheet(wxGetApp().GetStyleSheet());
@@ -757,6 +759,7 @@ void MyFrame::WriteInitialText()
 
     r.Freeze();
 
+#if 1
     r.BeginParagraphSpacing(0, 20);
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -950,7 +953,69 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
+#endif
+#if 1
 
+    {
+        // Add a text box
+
+        r.Newline();
+        
+        wxRichTextAttr attr;
+        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+
+        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+
+        wxRichTextBox* textBox = r.WriteTextBox(attr);
+        r.SetFocusObject(textBox);
+
+        r.WriteText(wxT("This is a text box. Just testing! Once more unto the breach, dear friends, once more..."));
+
+        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetInsertionPointEnd();
+    }
+#endif
+#if 1
+    {
+        // Add a table
+
+        r.Newline();
+        
+        wxRichTextAttr attr;
+        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
+
+        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+
+        wxRichTextAttr cellAttr = attr;
+        cellAttr.GetTextBoxAttr().GetWidth().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
+        cellAttr.GetTextBoxAttr().GetHeight().SetValue(150, wxTEXT_ATTR_UNITS_PIXELS);
+
+        wxRichTextTable* table = r.WriteTable(3, 2, attr, cellAttr);
+        int i, j;
+        for (j = 0; j < table->GetRowCount(); j++)
+        {
+            for (i = 0; i < table->GetColumnCount(); i++)
+            {
+                wxString msg = wxString::Format(wxT("This is cell %d, %d"), (j+1), (i+1));
+                r.SetFocusObject(table->GetCell(j, i));
+                r.WriteText(msg);
+            }
+        }
+        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetInsertionPointEnd();
+    }
+#endif
     r.Thaw();
 
     r.EndSuppressUndo();
@@ -1199,15 +1264,14 @@ void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
     range = m_richTextCtrl->GetSelectionRange();
     wxASSERT(range.ToInternal().GetLength() == 1);
 
-    wxRichTextImage* image = wxDynamicCast(m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart()), wxRichTextImage);
+    wxRichTextImage* image = wxDynamicCast(m_richTextCtrl->GetFocusObject()->GetLeafObjectAtPosition(range.GetStart()), wxRichTextImage);
     if (image)
     {
-        wxRichTextImageDialog imageDlg(this);
-        imageDlg.SetImageObject(image, &m_richTextCtrl->GetBuffer());
+        wxRichTextObjectPropertiesDialog imageDlg(image, this);
 
         if (imageDlg.ShowModal() == wxID_OK)
         {
-            image = imageDlg.ApplyImageAttr();
+            imageDlg.ApplyStyle(m_richTextCtrl);
         }
     }
 }
@@ -1263,7 +1327,7 @@ void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
     range = m_richTextCtrl->GetSelectionRange();
     if (range.ToInternal().GetLength() == 1)
     {
-        obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
+        obj = m_richTextCtrl->GetFocusObject()->GetLeafObjectAtPosition(range.GetStart());
         if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
         {
             event.Enable(true);

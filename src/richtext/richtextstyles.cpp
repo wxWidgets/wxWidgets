@@ -35,6 +35,7 @@ IMPLEMENT_CLASS(wxRichTextStyleDefinition, wxObject)
 IMPLEMENT_CLASS(wxRichTextCharacterStyleDefinition, wxRichTextStyleDefinition)
 IMPLEMENT_CLASS(wxRichTextParagraphStyleDefinition, wxRichTextStyleDefinition)
 IMPLEMENT_CLASS(wxRichTextListStyleDefinition, wxRichTextParagraphStyleDefinition)
+IMPLEMENT_CLASS(wxRichTextBoxStyleDefinition, wxRichTextStyleDefinition)
 
 /*!
  * A definition
@@ -101,6 +102,20 @@ void wxRichTextParagraphStyleDefinition::Copy(const wxRichTextParagraphStyleDefi
 bool wxRichTextParagraphStyleDefinition::operator ==(const wxRichTextParagraphStyleDefinition& def) const
 {
     return (Eq(def) && m_nextStyle == def.m_nextStyle);
+}
+
+/*!
+ * Box style definition
+ */
+
+void wxRichTextBoxStyleDefinition::Copy(const wxRichTextBoxStyleDefinition& def)
+{
+    wxRichTextStyleDefinition::Copy(def);
+}
+
+bool wxRichTextBoxStyleDefinition::operator ==(const wxRichTextBoxStyleDefinition& def) const
+{
+    return (Eq(def));
 }
 
 /*!
@@ -315,6 +330,8 @@ bool wxRichTextStyleSheet::RemoveStyle(wxRichTextStyleDefinition* def, bool dele
         return true;
     if (RemoveListStyle(def, deleteStyle))
         return true;
+    if (RemoveBoxStyle(def, deleteStyle))
+        return true;
     return false;
 }
 
@@ -340,6 +357,7 @@ void wxRichTextStyleSheet::DeleteStyles()
     WX_CLEAR_LIST(wxList, m_characterStyleDefinitions);
     WX_CLEAR_LIST(wxList, m_paragraphStyleDefinitions);
     WX_CLEAR_LIST(wxList, m_listStyleDefinitions);
+    WX_CLEAR_LIST(wxList, m_boxStyleDefinitions);
 }
 
 /// Insert into list of style sheets
@@ -405,6 +423,13 @@ bool wxRichTextStyleSheet::AddListStyle(wxRichTextListStyleDefinition* def)
     return AddStyle(m_listStyleDefinitions, def);
 }
 
+/// Add a definition to the box style list
+bool wxRichTextStyleSheet::AddBoxStyle(wxRichTextBoxStyleDefinition* def)
+{
+    def->GetStyle().SetParagraphStyleName(def->GetName());
+    return AddStyle(m_boxStyleDefinitions, def);
+}
+
 /// Add a definition to the appropriate style list
 bool wxRichTextStyleSheet::AddStyle(wxRichTextStyleDefinition* def)
 {
@@ -419,6 +444,10 @@ bool wxRichTextStyleSheet::AddStyle(wxRichTextStyleDefinition* def)
     wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
     if (charDef)
         return AddCharacterStyle(charDef);
+
+    wxRichTextBoxStyleDefinition* boxDef = wxDynamicCast(def, wxRichTextBoxStyleDefinition);
+    if (boxDef)
+        return AddBoxStyle(boxDef);
 
     return false;
 }
@@ -437,6 +466,10 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxString& name,
     wxRichTextCharacterStyleDefinition* charDef = FindCharacterStyle(name, recurse);
     if (charDef)
         return charDef;
+
+    wxRichTextBoxStyleDefinition* boxDef = FindBoxStyle(name, recurse);
+    if (boxDef)
+        return boxDef;
 
     return NULL;
 }
@@ -464,6 +497,12 @@ void wxRichTextStyleSheet::Copy(const wxRichTextStyleSheet& sheet)
     {
         wxRichTextListStyleDefinition* def = (wxRichTextListStyleDefinition*) node->GetData();
         AddListStyle(new wxRichTextListStyleDefinition(*def));
+    }
+
+    for (node = sheet.m_boxStyleDefinitions.GetFirst(); node; node = node->GetNext())
+    {
+        wxRichTextBoxStyleDefinition* def = (wxRichTextBoxStyleDefinition*) node->GetData();
+        AddBoxStyle(new wxRichTextBoxStyleDefinition(*def));
     }
 
     SetName(sheet.GetName());
@@ -559,6 +598,11 @@ void wxRichTextStyleListBox::UpdateStyles()
         {
             for (i = 0; i < GetStyleSheet()->GetListStyleCount(); i++)
                 m_styleNames.Add(GetStyleSheet()->GetListStyle(i)->GetName());
+        }
+        if (GetStyleType() == wxRICHTEXT_STYLE_ALL || GetStyleType() == wxRICHTEXT_STYLE_BOX)
+        {
+            for (i = 0; i < GetStyleSheet()->GetBoxStyleCount(); i++)
+                m_styleNames.Add(GetStyleSheet()->GetBoxStyle(i)->GetName());
         }
 
         m_styleNames.Sort();
@@ -817,6 +861,13 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
         else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_LIST) &&
                           !attr.GetListStyleName().IsEmpty())
             styleName = attr.GetListStyleName();
+        // TODO: when we have a concept of focused object (text box), we'll
+        // use the paragraph style name of the focused object as the frame style name.
+#if 0
+        else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_BOX) &&
+                          !attr.GetBoxStyleName().IsEmpty())
+            styleName = attr.GetBoxStyleName();
+#endif
     }
     else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
              !attr.GetCharacterStyleName().IsEmpty())
@@ -923,6 +974,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
         choices.Add(_("Paragraph styles"));
         choices.Add(_("Character styles"));
         choices.Add(_("List styles"));
+        choices.Add(_("Box styles"));
 
         m_styleChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices);
 
@@ -997,6 +1049,10 @@ int wxRichTextStyleListCtrl::StyleTypeToIndex(wxRichTextStyleListBox::wxRichText
     {
         return 3;
     }
+    else if (styleType == wxRichTextStyleListBox::wxRICHTEXT_STYLE_BOX)
+    {
+        return 4;
+    }
     return 0;
 }
 
@@ -1009,6 +1065,8 @@ wxRichTextStyleListBox::wxRichTextStyleType wxRichTextStyleListCtrl::StyleIndexT
         return wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER;
     else if (i == 3)
         return wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST;
+    else if (i == 4)
+        return wxRichTextStyleListBox::wxRICHTEXT_STYLE_BOX;
 
     return wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL;
 }

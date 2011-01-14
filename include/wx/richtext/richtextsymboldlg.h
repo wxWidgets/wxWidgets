@@ -16,6 +16,7 @@
  * Includes
  */
 
+#include "wx/richtext/richtextuicustomization.h"
 #include "wx/dialog.h"
 #include "wx/vscroll.h"
 
@@ -29,6 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 ////@begin forward declarations
 class wxSymbolListCtrl;
+class wxStdDialogButtonSizer;
 ////@end forward declarations
 
 // __UNICODE__ is a symbol used by DialogBlocks-generated code.
@@ -56,6 +58,7 @@ class WXDLLIMPEXP_RICHTEXT wxSymbolPickerDialog: public wxDialog
 {
     DECLARE_DYNAMIC_CLASS( wxSymbolPickerDialog )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors
@@ -158,6 +161,7 @@ public:
 #if defined(__UNICODE__)
     wxComboBox* m_fromUnicodeCtrl;
 #endif
+    wxStdDialogButtonSizer* m_stdButtonSizer;
     wxString m_fontName;
     wxString m_symbol;
     bool m_fromUnicode;

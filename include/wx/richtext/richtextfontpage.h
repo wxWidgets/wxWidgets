@@ -16,6 +16,8 @@
  * Includes
  */
 
+#include "wx/richtext/richtextdialogpage.h"
+
 ////@begin includes
 ////@end includes
 
@@ -35,7 +37,7 @@ class wxRichTextFontPreviewCtrl;
 
 ////@begin control identifiers
 #define SYMBOL_WXRICHTEXTFONTPAGE_STYLE wxTAB_TRAVERSAL
-#define SYMBOL_WXRICHTEXTFONTPAGE_TITLE wxT("")
+#define SYMBOL_WXRICHTEXTFONTPAGE_TITLE wxEmptyString
 #define SYMBOL_WXRICHTEXTFONTPAGE_IDNAME ID_RICHTEXTFONTPAGE
 #define SYMBOL_WXRICHTEXTFONTPAGE_SIZE wxSize(200, 100)
 #define SYMBOL_WXRICHTEXTFONTPAGE_POSITION wxDefaultPosition
@@ -45,10 +47,11 @@ class wxRichTextFontPreviewCtrl;
  * wxRichTextFontPage class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextFontPage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextFontPage: public wxRichTextDialogPage
 {
     DECLARE_DYNAMIC_CLASS( wxRichTextFontPage )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors

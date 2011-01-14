@@ -145,6 +145,7 @@ private:
     int                         m_numPages;
     wxArrayInt                  m_pageBreaksStart;
     wxArrayInt                  m_pageBreaksEnd;
+    wxArrayInt                  m_pageYOffsets;
     int                         m_marginLeft, m_marginTop, m_marginRight, m_marginBottom;
 
     wxRichTextHeaderFooterData  m_headerFooterData;

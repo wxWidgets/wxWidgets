@@ -16,6 +16,8 @@
  * Includes
  */
 
+#include "wx/richtext/richtextdialogpage.h"
+
 ////@begin includes
 #include "wx/spinctrl.h"
 #include "wx/notebook.h"
@@ -28,7 +30,7 @@
 
 ////@begin control identifiers
 #define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_STYLE wxRESIZE_BORDER|wxTAB_TRAVERSAL
-#define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_TITLE wxT("")
+#define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_TITLE wxEmptyString
 #define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_IDNAME ID_RICHTEXTLISTSTYLEPAGE
 #define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTLISTSTYLEPAGE_POSITION wxDefaultPosition
@@ -38,10 +40,11 @@
  * wxRichTextListStylePage class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxRichTextDialogPage
 {
     DECLARE_DYNAMIC_CLASS( wxRichTextListStylePage )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors

@@ -16,6 +16,8 @@
  * Includes
  */
 
+#include "wx/richtext/richtextdialogpage.h"
+
 ////@begin includes
 #include "wx/statline.h"
 ////@end includes
@@ -44,10 +46,11 @@ class wxRichTextCtrl;
  * wxRichTextIndentsSpacingPage class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextIndentsSpacingPage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextIndentsSpacingPage: public wxRichTextDialogPage
 {
     DECLARE_DYNAMIC_CLASS( wxRichTextIndentsSpacingPage )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors
