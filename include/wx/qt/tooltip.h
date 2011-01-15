@@ -30,9 +30,8 @@ public:
     void SetTip(const wxString& tip);
     const wxString& GetTip() const;
 
-protected:
-
 private:
+    wxString m_text;
 };
 
 #endif // _WX_QT_TOOLTIP_H_

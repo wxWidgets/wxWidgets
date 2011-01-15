@@ -14,17 +14,11 @@
 
 #include <QtGui/qmessagebox.h>
 
-wxMessageDialog::wxMessageDialog()
-    : wxMessageDialogBase()
-{
-}
-
 wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
     : wxMessageDialogBase( parent, message, caption, style )
 {
-    if ( GetHandle() == NULL )
-        m_qtMessageBox = wxQtCreateWidget< wxQtMessageDialog >( this, parent );
+    m_qtMessageBox = new wxQtMessageDialog( parent, this );
 
     // Set properties
     Move( pos );
@@ -134,7 +128,7 @@ QMessageBox *wxMessageDialog::GetHandle() const
 
 //=============================================================================
 
-wxQtMessageDialog::wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent )
-    : wxQtEventForwarder< wxMessageDialog, QMessageBox >( dialog, parent )
+wxQtMessageDialog::wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler )
+    : wxQtEventSignalHandler< QMessageBox, wxMessageDialog >( parent, handler )
 {
 }

@@ -32,41 +32,32 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name )
 {
+    m_qtPushButton = new wxQtPushButton( parent, this );
+
     if ( !CreateControl( parent, id, pos, size, style, validator, name ))
         return false;
 
-    m_qtPushButton = new wxQtButton( this, wxQtConvertString( label ), parent->GetHandle() );
+    SetLabel( label );
 
-    return true;
+    return wxButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    m_qtPushButton->setDefault( true );
+    m_qtPushButton->SetDefault();
 
     return oldDefault;
 
 }
+
+void wxButton::SetLabel( const wxString &label )
+{
+    m_qtPushButton->SetLabel( label );
+}
+
 QPushButton *wxButton::GetHandle() const
 {
     return m_qtPushButton;
-}
-
-//=============================================================================
-
-wxQtButton::wxQtButton( wxButton *button, const QString &text, QWidget *parent )
-    : QPushButton( text, parent ),
-      wxQtSignalForwarder< wxButton >( button )
-{
-    connect( this, SIGNAL( clicked( bool )), this, SLOT( OnButtonClicked( bool )));
-}
-
-void wxQtButton::OnButtonClicked( bool WXUNUSED( checked ))
-{
-    wxButton *button = GetSignalHandler();
-    wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, button->GetId() );
-    event.SetEventObject( button );
-    button->HandleWindowEvent( event );
 }

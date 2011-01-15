@@ -23,8 +23,6 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  * Remember to implement the Qt object getters on all subclasses:
  *  - GetHandle() returns the Qt object
  *  - QtGetScrollBarsContainer() returns the widget where scrollbars are placed
- *  - QtGetContainer() returns the widget where the children are placed. Usually
- *    there is no need to reimplement this one.
  * For example, for wxFrame, GetHandle() is the QMainWindow,
  * QtGetScrollBarsContainer() is the central widget and QtGetContainer() is a widget
  * in a layout inside the central widget that also contains the scrollbars.
@@ -65,6 +63,10 @@ public:
     virtual wxString GetLabel() const;
 
     virtual void SetFocus();
+
+    // Parent/Child:
+    static void QtReparent( QWidget *child, QWidget *parent );
+    virtual bool Reparent( wxWindowBase *newParent );
     
     // Z-order
     virtual void Raise();
@@ -113,7 +115,6 @@ public:
     
     // wxQt implementation internals:
 
-    virtual QWidget *QtGetContainer() const;
     virtual QPicture *QtGetPicture() const;
 
     QImage *QtGetPaintBuffer();
@@ -132,6 +133,9 @@ public:
     virtual bool QtHandleCloseEvent  ( QWidget *handler, QCloseEvent *event );
     virtual bool QtHandleContextMenuEvent  ( QWidget *handler, QContextMenuEvent *event );
     virtual bool QtHandleFocusEvent  ( QWidget *handler, QFocusEvent *event );
+
+    static void QtStoreWindowPointer( QWidget *widget, const wxWindow *window );
+    static wxWindow *QtRetrieveWindowPointer( const QWidget *widget );
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
@@ -173,6 +177,7 @@ protected:
 #if wxUSE_MENUS
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
+
 
     virtual WXWidget QtGetScrollBarsContainer() const;
 

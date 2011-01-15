@@ -45,21 +45,23 @@ public:
     
     virtual void SetWindowStyleFlag( long style );
 
+    virtual void AddChild( wxWindowBase *child );
+    virtual void RemoveChild( wxWindowBase *child );
+
     virtual QMainWindow *GetHandle() const;
-    virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
-    wxQtPointer< QMainWindow > m_qtFrame;
+    wxQtPointer< QMainWindow > m_qtMainWindow;
 };
 
 
 
-class WXDLLIMPEXP_CORE wxQtFrame : public wxQtEventForwarder< wxFrame, QMainWindow >
+class WXDLLIMPEXP_CORE wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
 {
     Q_OBJECT
 
 public:
-    wxQtFrame( wxFrame *frame, QWidget *parent );
+    wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
 private Q_SLOTS:
 };

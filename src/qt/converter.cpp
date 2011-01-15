@@ -50,7 +50,7 @@ wxRect wxQtConvertRect( const QRect &rect )
     return wxRect( rect.x(), rect.y(), rect.width(), rect.height() );
 }
 
-
+// TODO: Check whether QString::toStdString/QString::toStdWString might be faster
 
 wxString wxQtConvertString( const QString &str )
 {

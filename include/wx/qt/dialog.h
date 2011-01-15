@@ -36,7 +36,6 @@ public:
     virtual bool IsModal() const;
 
     virtual QDialog *GetHandle() const;
-    virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
     wxQtPointer< QDialog > m_qtDialog;

@@ -12,6 +12,8 @@
 #ifndef _WX_TEXTDLG_H_BASE_
 #define _WX_TEXTDLG_H_BASE_
 
+#include "wx/defs.h"
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGetTextFromUserPromptStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGetPasswordFromUserPromptStr[];
 

@@ -11,25 +11,26 @@
 
 #include "wx/window.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtGui/QFrame>
+#include <QtGui/QWidget>
 
-class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< wxWindow, QFrame >
+class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindow >
 {
     Q_OBJECT
 
     public:
-        wxQtWidget( wxWindow *window, QWidget *parent );
+        wxQtWidget( wxWindow *parent, wxWindow *handler );
 };
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
-class WXDLLIMPEXP_CORE wxQtShortcutHandler : public QObject, public wxQtSignalForwarder< wxWindow >
+class WXDLLIMPEXP_CORE wxQtShortcutHandler : public QObject, public wxQtSignalHandler< wxWindow >
 {
     Q_OBJECT
-    public:
-        wxQtShortcutHandler( wxWindow *window );
-    
-    public Q_SLOTS:
-        void activated();
+
+public:
+    wxQtShortcutHandler( wxWindow *window );
+
+public Q_SLOTS:
+    void activated();
 };
 #endif // wxUSE_ACCEL
 

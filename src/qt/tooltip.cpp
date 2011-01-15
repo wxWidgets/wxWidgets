@@ -10,35 +10,42 @@
 #include "wx/wxprec.h"
 
 #include "wx/tooltip.h"
+#include "wx/qt/utils.h"
 
-void wxToolTip::Enable(bool flag)
+/* static */ void wxToolTip::Enable(bool flag)
 {
+    wxMISSING_FUNCTION();
 }
 
-void wxToolTip::SetDelay(long milliseconds)
+/* static */ void wxToolTip::SetDelay(long milliseconds)
 {
+    wxMISSING_FUNCTION();
 }
 
-void wxToolTip::SetAutoPop(long milliseconds)
+/* static */ void wxToolTip::SetAutoPop(long milliseconds)
 {
+    wxMISSING_FUNCTION();
 }
 
-void wxToolTip::SetReshow(long milliseconds)
+/* static */ void wxToolTip::SetReshow(long milliseconds)
 {
+    wxMISSING_FUNCTION();
 }
+
+
 
 wxToolTip::wxToolTip(const wxString &tip)
 {
+    SetTip( tip );
 }
 
 void wxToolTip::SetTip(const wxString& tip)
 {
+    m_text = tip;
 }
 
 const wxString &wxToolTip::GetTip() const
 {
-    static wxString s_string;
-
-    return s_string;
+    return m_text;
 }
 

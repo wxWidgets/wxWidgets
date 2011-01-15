@@ -8,21 +8,21 @@
 
 #include "wx/qt/window_qt.h"
 
-wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
-    : wxQtEventForwarder< wxWindow, QFrame >( window, parent )
+wxQtWidget::wxQtWidget( wxWindow *parent, wxWindow *handler )
+    : wxQtEventSignalHandler< QWidget, wxWindow >( parent, handler )
 {
 }
 
 #if wxUSE_ACCEL
 wxQtShortcutHandler::wxQtShortcutHandler( wxWindow *window )
-    : wxQtSignalForwarder< wxWindow >( window )
+    : wxQtSignalHandler< wxWindow >( window )
 {
 }
 
 void wxQtShortcutHandler::activated()
 {
     int command = sender()->property("wxQt_Command").toInt();
-    
-    GetSignalHandler()->QtHandleShortcut( command );
+
+    GetHandler()->QtHandleShortcut( command );
 }
 #endif // wxUSE_ACCEL

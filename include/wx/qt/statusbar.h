@@ -9,10 +9,13 @@
 #ifndef _WX_QT_STATUSBAR_H_
 #define _WX_QT_STATUSBAR_H_
 
+#include "wx/statusbr.h"
 #include "wx/qt/winevent_qt.h"
 
 #include <QtGui/QLabel>
 #include <QtGui/QStatusBar>
+
+class WXDLLIMPEXP_FWD_CORE wxQtStatusBar;
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
@@ -34,7 +37,7 @@ public:
                           const wxRect *rect = (const wxRect *) NULL );
 
     virtual QStatusBar *GetHandle() const;
-    virtual WXWidget QtGetScrollBarsContainer() const;
+
 protected:
     virtual void DoUpdateStatusText(int number);
 
@@ -42,19 +45,20 @@ private:
     void Init();
     void UpdateFields();
 
-    wxQtPointer< QStatusBar > m_qtStatusBar;
+    wxQtPointer< wxQtStatusBar > m_qtStatusBar;
     QList< QLabel* > m_qtPanes;
 
     DECLARE_DYNAMIC_CLASS( wxStatusBar )
 };
 
-class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventForwarder< wxStatusBar, QStatusBar >
+class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
 {
-    public:
-        wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent );
-        
-    protected:
-        virtual void resizeEvent ( QResizeEvent * event );
+    Q_OBJECT
+
+public:
+    wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
+
+private Q_SLOTS:
 };
 
 #endif // _WX_QT_STATUSBAR_H_

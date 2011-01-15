@@ -12,6 +12,8 @@
 #include "wx/radiobox.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include <QtGui/QCheckBox>
+#include <QtGui/QRadioButton>
 
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
 
@@ -100,7 +102,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     else
         AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
 
-    return true;
+    return wxControl::Create( parent, id, pos, size, style, val, name );
 }
 
 static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )

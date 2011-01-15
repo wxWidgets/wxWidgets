@@ -9,7 +9,10 @@
 #ifndef _WX_QT_TGLBTN_H_
 #define _WX_QT_TGLBTN_H_
 
-#include <QtGui/QPushButton>
+#include "wx/tglbtn.h"
+#include "wx/qt/button_qt.h"
+
+extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
 class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
 {
@@ -40,8 +43,7 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 
-    // TODO: Check how to reuse wxQtButton.
-    wxQtPointer< QPushButton > m_qtPushButton;
+    wxQtPointer< wxQtPushButton > m_qtPushButton;
 };
 
 
@@ -73,8 +75,7 @@ public:
     virtual QPushButton *GetHandle() const;
 
 private:
-    // TODO: Check how to reuse wxQtButton.
-    wxQtPointer< QPushButton > m_qtPushButton;
+    wxQtPointer< wxQtPushButton > m_qtPushButton;
 };
 
 #endif // _WX_QT_TGLBTN_H_

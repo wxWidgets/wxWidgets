@@ -32,9 +32,15 @@ bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
     const wxString &title, const wxPoint &pos, const wxSize &size,
     long style, const wxString &name )
 {
+    wxSize defaultSize = size;
+    if ( !defaultSize.IsFullySpecified() )
+        defaultSize.SetDefaults( GetDefaultSize() );
+
+    wxTopLevelWindows.Append( this );
+
     SetTitle( title );
 
-    return wxTopLevelWindowBase::Create( parent, winId, pos, size, style, name );
+    return CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxTopLevelWindowNative::Maximize(bool maximize) 

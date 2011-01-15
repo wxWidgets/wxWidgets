@@ -6,6 +6,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/textdlg.h"
 #include "../generic/textdlgg.cpp"
 
 // For compilers that support precompilation, includes "wx.h".

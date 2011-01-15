@@ -17,7 +17,6 @@
 class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:
-    wxMessageDialog();
     wxMessageDialog(wxWindow *parent, const wxString& message,
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
@@ -32,12 +31,12 @@ private:
     wxQtPointer< QMessageBox > m_qtMessageBox;
 };
 
-class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventForwarder< wxMessageDialog, QMessageBox >
+class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
 {
     Q_OBJECT
     
     public:
-        wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent );
+        wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
 };
 
 #endif // _WX_QT_MSGDLG_H_

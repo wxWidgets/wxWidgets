@@ -40,29 +40,28 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    if ( GetHandle() == NULL )
-        m_qtDialog = wxQtCreateWidget< wxQtDialog >( this, parent );
+    m_qtDialog = new wxQtDialog( parent, this );
     
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
 int wxDialog::ShowModal()
 {
-    wxCHECK_MSG( GetHandle(), -1, "Invalid dialog" );
+    wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
     
     return GetHandle()->exec();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxCHECK_RET( GetHandle(), "Invalid dialog" );
+    wxCHECK_RET( GetHandle() != NULL, "Invalid dialog" );
     
     GetHandle()->done( retCode );
 }
 
 bool wxDialog::IsModal() const
 {
-    wxCHECK_MSG( GetHandle(), false, "Invalid dialog" );
+    wxCHECK_MSG( GetHandle() != NULL, false, "Invalid dialog" );
 
     return GetHandle()->isModal();
 }
@@ -72,7 +71,3 @@ QDialog *wxDialog::GetHandle() const
     return m_qtDialog;
 }
 
-WXWidget wxDialog::QtGetScrollBarsContainer() const
-{
-    return m_qtDialog;
-}

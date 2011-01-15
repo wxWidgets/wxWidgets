@@ -54,7 +54,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
-    m_qtCalendar = new wxQtCalendarCtrl(this, parent->GetHandle());
+    m_qtCalendar = new wxQtCalendarWidget( parent, this );
     m_qtCalendar->resize(m_qtCalendar->sizeHint());
 
     {
@@ -313,24 +313,23 @@ QCalendarWidget *wxCalendarCtrl::GetHandle() const
 
 //=============================================================================
 
-wxQtCalendarCtrl::wxQtCalendarCtrl(wxCalendarCtrl *calendar, QWidget *parent)
-    : QCalendarWidget(parent),
-      wxQtSignalForwarder< wxCalendarCtrl >( calendar )
+wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler )
+    : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
 {
     m_date = selectedDate();
     connect(this, SIGNAL(selectionChanged()), this, SLOT(OnSelectionChanged()));
     connect(this, SIGNAL(activated(QDate)),   this, SLOT(OnActivated(QDate)));
 }
 
-void wxQtCalendarCtrl::OnSelectionChanged()
+void wxQtCalendarWidget::OnSelectionChanged()
 {
-    GetSignalHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
+    GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
     m_date = selectedDate();
 }
 
-void wxQtCalendarCtrl::OnActivated(const QDate &WXUNUSED(date))
+void wxQtCalendarWidget::OnActivated(const QDate &WXUNUSED(date))
 {
-    GetSignalHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    GetHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
 }
 
 #endif // wxUSE_CALENDARCTRL

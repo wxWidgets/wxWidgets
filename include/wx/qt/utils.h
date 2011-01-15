@@ -25,16 +25,4 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 #define wxMISSING_FUNCTION() \
     wxMISSING_IMPLEMENTATION( __WXFUNCTION__ )
 
-template< typename QtWidget, typename WxWindow >
-    QtWidget *wxQtCreateWidget( WxWindow *window, wxWindow *parent )
-    {
-        QWidget *qtParent = NULL;
-        if ( parent != NULL )
-        {
-            qtParent = parent->QtGetContainer();
-            parent->AddChild( window );
-        }
-        return new QtWidget( window, qtParent );
-    }
-
 #endif // _WX_QT_UTILS_H_

@@ -14,6 +14,8 @@
 
 #include <QtGui/QScrollBar>
 
+class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
+
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase
 {
 public:
@@ -43,22 +45,20 @@ public:
                               bool refresh = true);
 
     virtual QScrollBar* GetHandle() const;
-    virtual WXWidget QtGetScrollBarsContainer() const;
-protected:
 
 private:
-    wxQtPointer< QScrollBar > m_qtScrollBar;
+    wxQtPointer< wxQtScrollBar > m_qtScrollBar;
+
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 
 
-class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar,
-    public wxQtSignalForwarder< wxScrollBar >
+class WXDLLIMPEXP_CORE wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 {
     Q_OBJECT
     
     public:
-        wxQtScrollBar( wxScrollBar *scrollBar, QWidget *parent = 0 );
+        wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
                        
     private Q_SLOTS:
         void OnActionTriggered( int action );

@@ -9,10 +9,9 @@
 #ifndef _WX_QT_BUTTON_H_
 #define _WX_QT_BUTTON_H_
 
-#include "wx/qt/winevent_qt.h"
 #include "wx/button.h"
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QPushButton>
+#include "wx/qt/button_qt.h"
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
@@ -33,23 +32,12 @@ public:
            const wxString& name = wxButtonNameStr);
 
     virtual wxWindow *SetDefault();
+    virtual void SetLabel( const wxString &label );
 
     virtual QPushButton *GetHandle() const;
 
 private:
-    wxQtPointer< QPushButton > m_qtPushButton;
-};
-
-
-class WXDLLIMPEXP_CORE wxQtButton : public QPushButton, public wxQtSignalForwarder< wxButton >
-{
-    Q_OBJECT
-
-public:
-    wxQtButton( wxButton *button, const QString &text, QWidget *parent );
-
-private Q_SLOTS:
-    void OnButtonClicked( bool checked );
+    wxQtPointer< wxQtPushButton > m_qtPushButton;
 };
 
 #endif // _WX_QT_BUTTON_H_

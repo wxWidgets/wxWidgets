@@ -41,8 +41,8 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtPushButton = new QPushButton( parent->GetHandle() );
-    m_qtPushButton->setIcon( QIcon( *label.GetHandle() ));
+    m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton->SetBitmap( label );
 
     return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
@@ -87,7 +87,8 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtPushButton = new QPushButton( wxQtConvertString( label ), parent->GetHandle() );
+    m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton->SetLabel( label );
 
     return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }

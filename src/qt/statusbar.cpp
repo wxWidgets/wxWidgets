@@ -13,22 +13,6 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
-// We need an explicit version so that 'GetHandle' instead of 'QtGetContainer'
-// is called/used:
-
-template <>
-    wxQtStatusBar *wxQtCreateWidget( wxStatusBar *statusBar, wxWindow *parent )
-    {
-        QWidget *qtParent = NULL;
-        if ( parent != NULL ) {
-            // The parent here is the widget itself, not the "container"
-            qtParent = parent->GetHandle();
-            parent->AddChild( statusBar );
-        }
-        return new wxQtStatusBar( statusBar, qtParent );
-    }
-
-
 wxStatusBar::wxStatusBar()
 {
 }
@@ -50,10 +34,9 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
-    if ( GetHandle() == NULL )
-        m_qtStatusBar = wxQtCreateWidget< wxQtStatusBar >( this, parent );
+    m_qtStatusBar = new wxQtStatusBar( parent, this );
 
-    return wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style, name);
+    return true;
 }
 
 bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
@@ -122,19 +105,10 @@ QStatusBar *wxStatusBar::GetHandle() const
     return m_qtStatusBar;
 }
 
-WXWidget wxStatusBar::QtGetScrollBarsContainer() const
-{
-    return 0;
-}
-
 //==============================================================================
 
-wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )
-    : wxQtEventForwarder< wxStatusBar, QStatusBar >( statusBar, parent)
+wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
+    : wxQtEventSignalHandler< QStatusBar, wxStatusBar >( parent, handler )
 {
 }
 
-void wxQtStatusBar::resizeEvent ( QResizeEvent * event )
-{
-    QStatusBar::resizeEvent( event );
-}

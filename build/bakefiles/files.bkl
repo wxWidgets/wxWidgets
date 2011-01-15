@@ -325,6 +325,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
     wx/qt/button.h
+    wx/qt/button_qt.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
@@ -410,7 +411,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
     src/qt/button.cpp
-    src/qt/button.moc.cpp
+    src/qt/button_qt.cpp
+    src/qt/button_qt.moc.cpp
     src/generic/caret.cpp
     src/qt/checkbox.cpp
     src/qt/checklst.cpp
@@ -490,6 +492,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/statline.cpp
     src/qt/stattext.cpp
     src/qt/statusbar.cpp
+    src/qt/statusbar.moc.cpp
     src/qt/textctrl.cpp
     src/qt/textdlg.cpp
     src/qt/textentry.cpp

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        include/wx/qt/winevent_qt.h
-// Purpose:     QWidget to wxWindow event forwarding class template
-// Author:      Javier Torres
+// Purpose:     QWidget to wxWindow event handler
+// Author:      Javier Torres, Peter Most
 // Modified by:
 // Created:     21.06.10
 // RCS-ID:      $Id$
@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_EVENTFORWARDER_H_
-#define _WX_QT_EVENTFORWARDER_H_
+#ifndef _WX_QT_EVENTSIGNALFORWARDER_H_
+#define _WX_QT_EVENTSIGNALFORWARDER_H_
 
 #include "wx/window.h"
 #include "wx/qt/converter.h"
@@ -18,26 +18,42 @@
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
 
-// TODO: Check whether wxQtEventForwarder and wxQtSignalForwarder can be merged
-// into one class (wxQtNotificationForwarder or wxQtEventSignalForwarder), because
-// we probably need a way to forward both events and signals.
-
-template <typename Handler, typename Widget>
-class wxQtEventForwarder : public Widget
+template< typename Handler >
+class wxQtSignalHandler
 {
-public:
-    wxQtEventForwarder(Handler *handler, QWidget *parent)
-        : Widget(parent)
+protected:
+    wxQtSignalHandler( Handler *handler )
     {
         m_handler = handler;
     }
 
-protected:
-    Handler *GetEventHandler() const
+    void EmitEvent( wxEvent &event ) const
+    {
+        wxWindow *handler = GetHandler();
+        event.SetEventObject( handler );
+        handler->HandleWindowEvent( event );
+    }
+
+    Handler *GetHandler() const
     {
         return m_handler;
     }
 
+private:
+    Handler *m_handler;
+};
+
+template < typename Widget, typename Handler >
+class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler< Handler >
+{
+public:
+    wxQtEventSignalHandler( wxWindow *parent, Handler *handler )
+        : Widget( parent != NULL ? parent->GetHandle() : NULL )
+        , wxQtSignalHandler< Handler >( handler )
+    {
+    }
+
+protected:
     /* Not implemented here: wxHelpEvent, wxIdleEvent wxJoystickEvent,
      * wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
      * wxPowerEvent, wxScrollWinEvent, wxSysColourChangedEvent */
@@ -45,7 +61,7 @@ protected:
     //wxActivateEvent
     virtual void changeEvent ( QEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleChangeEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleChangeEvent(this, event) )
             Widget::changeEvent(event);
         else
             event->accept();
@@ -54,7 +70,7 @@ protected:
     //wxCloseEvent
     virtual void closeEvent ( QCloseEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleCloseEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleCloseEvent(this, event) )
             Widget::closeEvent(event);
         else
             event->accept();
@@ -63,7 +79,7 @@ protected:
     //wxContextMenuEvent
     virtual void contextMenuEvent ( QContextMenuEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleContextMenuEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleContextMenuEvent(this, event) )
             Widget::contextMenuEvent(event);
         else
             event->accept();
@@ -75,7 +91,7 @@ protected:
     //wxMouseEvent
     virtual void enterEvent ( QEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleEnterEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
             Widget::enterEvent(event);
         else
             event->accept();
@@ -84,7 +100,7 @@ protected:
     //wxFocusEvent.
     virtual void focusInEvent ( QFocusEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleFocusEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusInEvent(event);
         else
             event->accept();
@@ -93,7 +109,7 @@ protected:
     //wxFocusEvent.
     virtual void focusOutEvent ( QFocusEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleFocusEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusOutEvent(event);
         else
             event->accept();
@@ -102,7 +118,7 @@ protected:
     //wxShowEvent
     virtual void hideEvent ( QHideEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleShowEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
             Widget::hideEvent(event);
         else
             event->accept();
@@ -111,7 +127,7 @@ protected:
     //wxKeyEvent
     virtual void keyPressEvent ( QKeyEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleKeyEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyPressEvent(event);
         else
             event->accept();
@@ -120,7 +136,7 @@ protected:
     //wxKeyEvent
     virtual void keyReleaseEvent ( QKeyEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleKeyEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyReleaseEvent(event);
         else
             event->accept();
@@ -129,7 +145,7 @@ protected:
     //wxMouseEvent
     virtual void leaveEvent ( QEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleEnterEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
             Widget::leaveEvent(event);
         else
             event->accept();
@@ -138,7 +154,7 @@ protected:
     //wxMouseEvent
     virtual void mouseDoubleClickEvent ( QMouseEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleMouseEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseDoubleClickEvent(event);
         else
             event->accept();
@@ -147,7 +163,7 @@ protected:
     //wxMouseEvent
     virtual void mouseMoveEvent ( QMouseEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleMouseEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseMoveEvent(event);
         else
             event->accept();
@@ -156,7 +172,7 @@ protected:
     //wxMouseEvent
     virtual void mousePressEvent ( QMouseEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleMouseEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mousePressEvent(event);
         else
             event->accept();
@@ -165,7 +181,7 @@ protected:
     //wxMouseEvent
     virtual void mouseReleaseEvent ( QMouseEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleMouseEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseReleaseEvent(event);
         else
             event->accept();
@@ -174,7 +190,7 @@ protected:
     //wxMoveEvent
     virtual void moveEvent ( QMoveEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleMoveEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleMoveEvent(this, event) )
             Widget::moveEvent(event);
         else
             event->accept();
@@ -183,7 +199,7 @@ protected:
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
     {
-        if ( !GetEventHandler()->QtHandlePaintEvent(this, event) )
+        if ( !this->GetHandler()->QtHandlePaintEvent(this, event) )
             Widget::paintEvent(event);
         else
             event->accept();
@@ -191,13 +207,13 @@ protected:
         // Extra: Paint the wxClientDC part for both Qt and wx handling
         // This has to be here to be able to call after Qt paints if wx
         // doesn't handle the event.
-        GetEventHandler()->QtPaintClientDCPicture( this );
+        this->GetHandler()->QtPaintClientDCPicture( this );
     }
 
     //wxSizeEvent
     virtual void resizeEvent ( QResizeEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleResizeEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleResizeEvent(this, event) )
             Widget::resizeEvent(event);
         else
             event->accept();
@@ -206,7 +222,7 @@ protected:
     //wxShowEvent
     virtual void showEvent ( QShowEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleShowEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
             Widget::showEvent(event);
         else
             event->accept();
@@ -215,7 +231,7 @@ protected:
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
     {
-        if ( !GetEventHandler()->QtHandleWheelEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleWheelEvent(this, event) )
             Widget::wheelEvent(event);
         else
             event->accept();
@@ -232,30 +248,6 @@ protected:
     virtual void tabletEvent ( QTabletEvent * event ) { }
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
-
-private:
-    Handler *m_handler;
 };
-
-
-
-template < typename Handler >
-class wxQtSignalForwarder
-{
-public:
-    wxQtSignalForwarder( Handler *handler )
-    {
-        m_handler = handler;
-    }
-
-    Handler *GetSignalHandler() const
-    {
-        return m_handler;
-    }
-
-private:
-    Handler *m_handler;
-};
-
 
 #endif

@@ -35,12 +35,13 @@ bool wxScrollBar::Create( wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name)
 {
-    if ( GetHandle() == NULL )
-    {
-        m_qtScrollBar = wxQtCreateWidget< wxQtScrollBar >( this, parent );
-        m_qtScrollBar->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
-    }
-    return wxControl::Create( parent, id, pos, size, style, validator, name );
+    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
+        return false;
+
+    m_qtScrollBar = new wxQtScrollBar( parent, this );
+    m_qtScrollBar->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
+
+    return true;
 }
 
 int wxScrollBar::GetThumbPosition() const
@@ -104,18 +105,12 @@ QScrollBar *wxScrollBar::GetHandle() const
     return m_qtScrollBar;
 }
 
-WXWidget wxScrollBar::QtGetScrollBarsContainer() const
-{
-    return 0;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 // wxQtScrollBar
 /////////////////////////////////////////////////////////////////////////////
 
-wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, QWidget *parent )
-    : QScrollBar( parent ),
-      wxQtSignalForwarder< wxScrollBar >( scrollBar )
+wxQtScrollBar::wxQtScrollBar( wxWindow *parent, wxScrollBar *handler )
+    : wxQtEventSignalHandler< QScrollBar, wxScrollBar >( parent, handler )
 {
     connect( this, SIGNAL( actionTriggered(int) ), this, SLOT( OnActionTriggered(int) ) );
     connect( this, SIGNAL( sliderReleased() ), this, SLOT( OnSliderReleased() ) );
@@ -152,27 +147,27 @@ void wxQtScrollBar::OnActionTriggered( int action )
             return;
     }
     
-    wxScrollBar *scrollBar = GetSignalHandler();
-    wxScrollEvent e( eventType, scrollBar->GetId(), sliderPosition(),
+    wxScrollBar *handler = GetHandler();
+    wxScrollEvent e( eventType, handler->GetId(), sliderPosition(),
             wxQtConvertOrientation( orientation() ));
                         
-    scrollBar->ProcessWindowEvent(e);
+    EmitEvent( e );
 }
 
 void wxQtScrollBar::OnSliderReleased()
 {
-    wxScrollBar *scrollBar = GetSignalHandler();
-    wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, scrollBar->GetId(), sliderPosition(),
+    wxScrollBar *handler = GetHandler();
+    wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, handler->GetId(), sliderPosition(),
             wxQtConvertOrientation( orientation() ));
                         
-    scrollBar->ProcessWindowEvent(e);
+    EmitEvent( e );
 }
 
 void wxQtScrollBar::OnValueChanged( int position )
 {
-    wxScrollBar *scrollBar = GetSignalHandler();
-    wxScrollEvent e( wxEVT_SCROLL_CHANGED, scrollBar->GetId(), position,
+    wxScrollBar *handler = GetHandler();
+    wxScrollEvent e( wxEVT_SCROLL_CHANGED, handler->GetId(), position,
             wxQtConvertOrientation( orientation() ));
                      
-    scrollBar->ProcessWindowEvent(e);
+    EmitEvent( e );
 }

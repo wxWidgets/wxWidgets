@@ -32,29 +32,33 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS( wxWindow, wxWindowBase )
 
+
 // We use the QObject property capabilities to store the wxWindow pointer, so we
 // don't need to use a separate lookup table. We also want to use it in the proper
-// way and so we don't store void pointers e.g.:
+// way and not use/store store void pointers e.g.:
 // qVariantSetValue( variant, static_cast< void * >( window ));
 // static_cast< wxWindow * >( qVariantValue< void * >( variant ));
-// but declare the corresponding Qt meta type:
+// so we declare the corresponding Qt meta type:
 
-Q_DECLARE_METATYPE( wxWindow * )
+Q_DECLARE_METATYPE( const wxWindow * )
 
 static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 
-static void StoreWindowPointer( QObject *qtObject, wxWindow *window )
+// We accept a 'const wxWindow *' to indicate that the pointer is only stored:
+
+/* static */ void wxWindow::QtStoreWindowPointer( QWidget *widget, const wxWindow *window )
 {
     QVariant variant;
     qVariantSetValue( variant, window );
-    qtObject->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
+    widget->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
 }
 
-static wxWindow *RetrieveWindowPointer( const QObject *qtObject )
+/* static */ wxWindow *wxWindow::QtRetrieveWindowPointer( const QWidget *widget )
 {
-    QVariant variant = qtObject->property( WINDOW_POINTER_PROPERTY_NAME );
-    return qVariantValue< wxWindow * >( variant );
+    QVariant variant = widget->property( WINDOW_POINTER_PROPERTY_NAME );
+    return const_cast< wxWindow * >( qVariantValue< const wxWindow * >( variant ));
 }
+
 
 
 
@@ -65,7 +69,7 @@ static wxWindow *s_capturedWindow = NULL;
     wxWindow *window = NULL;
     QWidget *qtWidget = QApplication::focusWidget();
     if ( qtWidget != NULL )
-        window = RetrieveWindowPointer( qtWidget );
+        window = wxWindow::QtRetrieveWindowPointer( qtWidget );
 
     return window;
 }
@@ -113,47 +117,51 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
 
-    // Should have already been created in the derived class in most cases
-    
     if ( GetHandle() == NULL )
-        m_qtWindow = wxQtCreateWidget< wxQtWidget >( this, parent );
+        m_qtWindow = new wxQtWidget( parent, this );
 
-    StoreWindowPointer( GetHandle(), this );
+    QtStoreWindowPointer( GetHandle(), this );
 
-    // Create layout for built-in scrolling bars
-    if ( QtGetScrollBarsContainer() )
-    {
-        QGridLayout *scrollLayout = new QGridLayout();
-        scrollLayout->setContentsMargins( 0 , 0, 0, 0 );
-        scrollLayout->setSpacing( 0 );
-        QtGetScrollBarsContainer()->setLayout( scrollLayout );
+    if ( parent != NULL && FindWindow( GetId() ) == NULL )
+        parent->AddChild( this );
 
-        // Container at top-left
-        // Scrollbars are lazily initialized
-        m_qtContainer = new wxQtWidget( this, GetHandle() );
-        scrollLayout->addWidget( m_qtContainer, 0, 0 );
-        m_qtContainer->setFocus();
-    }
+//    if ( parent != NULL )
+//        parent->AddChild( this );
 
-    Move(pos);
-    SetSize(size);
+    DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
+
+//    // Create layout for built-in scrolling bars
+//    if ( QtGetScrollBarsContainer() )
+//    {
+//        QGridLayout *scrollLayout = new QGridLayout();
+//        scrollLayout->setContentsMargins( 0 , 0, 0, 0 );
+//        scrollLayout->setSpacing( 0 );
+//        QtGetScrollBarsContainer()->setLayout( scrollLayout );
+//
+//        // Container at top-left
+//        // Scrollbars are lazily initialized
+//        m_qtContainer = new wxQtWidget( this, GetHandle() );
+//        scrollLayout->addWidget( m_qtContainer, 0, 0 );
+//        m_qtContainer->setFocus();
+//    }
+
     
-    // Use custom Qt window flags (allow to turn on or off
-    // the minimize/maximize/close buttons and title bar)
-    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-    
-    qtFlags |= Qt::CustomizeWindowHint;
-    qtFlags |= Qt::WindowTitleHint;
-    qtFlags |= Qt::WindowSystemMenuHint;
-    qtFlags |= Qt::WindowMinMaxButtonsHint;
-    qtFlags |= Qt::WindowCloseButtonHint;
-    
-    GetHandle()->setWindowFlags( qtFlags );
-    
-    SetWindowStyleFlag( style );
-
-    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
-    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
+//    // Use custom Qt window flags (allow to turn on or off
+//    // the minimize/maximize/close buttons and title bar)
+//    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+//
+//    qtFlags |= Qt::CustomizeWindowHint;
+//    qtFlags |= Qt::WindowTitleHint;
+//    qtFlags |= Qt::WindowSystemMenuHint;
+//    qtFlags |= Qt::WindowMinMaxButtonsHint;
+//    qtFlags |= Qt::WindowCloseButtonHint;
+//
+//    GetHandle()->setWindowFlags( qtFlags );
+//
+//    SetWindowStyleFlag( style );
+//
+//    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
+//    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
 
     return ( true );
 }
@@ -174,6 +182,9 @@ bool wxWindow::Show( bool show )
     else
         return false;
 
+    wxSizeEvent event(GetSize(), GetId());
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
 }
 
 
@@ -193,6 +204,33 @@ void wxWindow::SetFocus()
     GetHandle()->setFocus();
 }
 
+/* static */ void wxWindow::QtReparent( QWidget *child, QWidget *parent )
+{
+    // Backup the attributes which will be changed during the reparenting:
+
+//    QPoint position = child->pos();
+//    bool isVisible = child->isVisible();
+    Qt::WindowFlags windowFlags = child->windowFlags();
+
+    child->setParent( parent );
+
+    // Restore the attributes:
+
+    child->setWindowFlags( windowFlags );
+//    child->move( position );
+//    child->setVisible( isVisible );
+}
+
+bool wxWindow::Reparent( wxWindowBase *parent )
+{
+    if ( !wxWindowBase::Reparent( parent ))
+        return false;
+
+    QtReparent( GetHandle(), parent->GetHandle() );
+
+    return true;
+}
+
 
 void wxWindow::Raise()
 {
@@ -207,7 +245,10 @@ void wxWindow::Lower()
 
 void wxWindow::WarpPointer(int x, int y)
 {
-    GetHandle()->move( x, y );
+    // QCursor::setPos takes global screen coordinates, so translate it:
+
+    ClientToScreen( &x, &y );
+    QCursor::setPos( x, y );
 }
 
 void wxWindow::Update()
@@ -511,14 +552,14 @@ void wxWindow::DoScreenToClient( int *x, int *y ) const
 
 void wxWindow::DoCaptureMouse()
 {
-    QtGetContainer()->grabMouse();
+    GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
 
 
 void wxWindow::DoReleaseMouse()
 {
-    QtGetContainer()->releaseMouse();
+    GetHandle()->releaseMouse();
     s_capturedWindow = NULL;
 }
 
@@ -544,25 +585,46 @@ void wxWindow::DoGetSize(int *width, int *height) const
 }
 
     
-void wxWindow::DoGetClientSize(int *width, int *height) const
-{
-    QSize size = QtGetContainer()->size();
-    *width = size.width();
-    *height = size.height();
-}
-
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 {
-    wxMISSING_IMPLEMENTATION( "sizeFlags" );
+    int currentX, currentY;
+    GetPosition( &currentX, &currentY );
+    if ( x == wxDefaultCoord && !( sizeFlags & wxSIZE_ALLOW_MINUS_ONE ))
+        x = currentX;
+    if ( y == wxDefaultCoord && !( sizeFlags & wxSIZE_ALLOW_MINUS_ONE ))
+        y = currentY;
 
+    // Should we use the best size:
+
+    if (( width == wxDefaultCoord && ( sizeFlags & wxSIZE_AUTO_WIDTH )) ||
+        ( height == wxDefaultCoord && ( sizeFlags & wxSIZE_AUTO_HEIGHT )))
+    {
+        const wxSize BEST_SIZE = GetBestSize();
+        if ( width == wxDefaultCoord && ( sizeFlags & wxSIZE_AUTO_WIDTH ))
+            width = BEST_SIZE.x;
+        if ( height == wxDefaultCoord && ( sizeFlags & wxSIZE_AUTO_HEIGHT ))
+            height = BEST_SIZE.y;
+    }
     DoMoveWindow( x, y, width, height );
+}
+
+
+void wxWindow::DoGetClientSize(int *width, int *height) const
+{
+    QRect geometry = GetHandle()->geometry();
+    *width = geometry.width();
+    *height = geometry.height();
 }
 
     
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    GetHandle()->resize( width, height );
+    QWidget *qtWidget = GetHandle();
+    QRect geometry = qtWidget->geometry();
+    geometry.setWidth( width );
+    geometry.setHeight( height );
+    qtWidget->setGeometry( geometry );
 }
 
 
@@ -570,16 +632,6 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
 
-    if (x == wxDefaultCoord)
-        x = GetHandle()->x();
-    if (y == wxDefaultCoord)
-        y = GetHandle()->y();
-
-    if (width == wxDefaultCoord)
-        width = GetHandle()->width();
-    if (height == wxDefaultCoord)
-        height = GetHandle()->height();
-    
     qtWidget->move( x, y );
     qtWidget->resize( width, height );
 }
@@ -590,7 +642,10 @@ void wxWindow::DoSetToolTip( wxToolTip *tip )
 {
     wxWindowBase::DoSetToolTip( tip );
     
-    GetHandle()->setToolTip( wxQtConvertString( tip->GetTip() ));
+    if ( tip != NULL )
+        GetHandle()->setToolTip( wxQtConvertString( tip->GetTip() ));
+    else
+        GetHandle()->setToolTip( QString() );
 }
 #endif // wxUSE_TOOLTIPS
 
@@ -641,7 +696,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
         if ( !m_qtPicture->isNull() )
         {
             // Data from wxClientDC, paint it
-            QPainter p( QtGetContainer() );
+            QPainter p( GetHandle() );
             p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
             p.end();
             QtPaintClientDCPicture( handler );
@@ -663,7 +718,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
 
             if ( m_qtPaintBuffer )
             {
-                QPainter p( QtGetContainer() );
+                QPainter p( GetHandle() );
                 p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
                 p.end();
             }
@@ -1147,14 +1202,6 @@ void wxWindow::QtHandleShortcut ( int command )
 QWidget *wxWindow::GetHandle() const
 {
     return m_qtWindow;
-}
-
-QWidget *wxWindow::QtGetContainer() const
-{
-    if ( m_qtContainer != NULL )
-        return m_qtContainer;
-    else
-        return GetHandle();
 }
 
 QWidget *wxWindow::QtGetScrollBarsContainer() const

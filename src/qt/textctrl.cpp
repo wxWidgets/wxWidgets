@@ -40,7 +40,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !CreateControl( parent, id, pos, size, style, validator, name ))
         return false;
 
-    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->QtGetContainer() );
+    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
 
     return true;
 }

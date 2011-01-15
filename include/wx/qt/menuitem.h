@@ -17,6 +17,8 @@
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
+class WXDLLIMPEXP_FWD_CORE wxQtAction;
+
 class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
@@ -43,19 +45,32 @@ public:
 
 private:
     // Qt is using an action instead of a menu item.
-    wxQtPointer< QAction > m_qtAction;
+    wxQtPointer< wxQtAction > m_qtAction;
 
     wxDECLARE_NO_COPY_CLASS( wxMenuItem );
 };
 
 
 
-class WXDLLIMPEXP_CORE wxQtAction : public QAction, public wxQtSignalForwarder< wxMenuItem >
+class WXDLLIMPEXP_CORE wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
 {
     Q_OBJECT
 
 public:
-    wxQtAction( wxMenuItem *signalHandler, wxMenu *parent, const wxString &text );
+    wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
+        wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler );
+
+    void SetItemLabel( const wxString &label );
+
+    void Enable( bool enable );
+    bool IsEnabled() const;
+
+    void SetCheckable( bool checkable );
+    void Check( bool checked );
+    bool IsChecked() const;
+
+    void SetBitmap( const wxBitmap &bitmap );
+    const wxBitmap &GetBitmap() const;
 
 private Q_SLOTS:
     void OnActionTriggered( bool checked );

@@ -13,6 +13,7 @@
 
 #include "wx/spinctrl.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/converter.h"
 
 template< typename T, typename Widget >
 wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase()
