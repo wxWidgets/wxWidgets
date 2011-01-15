@@ -2862,7 +2862,7 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
 /// Get all the text
 wxString wxRichTextParagraphLayoutBox::GetText() const
 {
-    return GetTextForRange(GetRange());
+    return GetTextForRange(GetOwnRange());
 }
 
 /// Get the paragraph by number
