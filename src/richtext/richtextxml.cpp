@@ -169,9 +169,9 @@ wxRichTextObject* wxRichTextXMLHandler::CreateObjectForXMLName(wxRichTextObject*
     else if (name == wxT("textbox"))
         return new wxRichTextBox;
     else if (name == wxT("cell"))
-        return new wxRichTextBox;
+        return new wxRichTextCell;
     else if (name == wxT("table"))
-        return new wxRichTextBox;
+        return new wxRichTextTable;
     else
         return NULL;
 }
@@ -411,6 +411,7 @@ wxXmlNode* wxRichTextXMLHandler::FindNode(wxXmlNode* node, const wxString& name)
     {
         if (child->GetName() == name)
             return child;
+        child = child->GetNext();
     }
     return NULL;
 }
@@ -1945,7 +1946,7 @@ bool wxRichTextObject::ImportFromXML(wxRichTextBuffer* WXUNUSED(buffer), wxXmlNo
     handler->ImportProperties(this, node);
     handler->ImportStyle(GetAttributes(), node, UsesParagraphAttributes());
     
-    *recurse = false;
+    *recurse = true;
 
     return true;
 }
