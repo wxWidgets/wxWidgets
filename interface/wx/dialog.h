@@ -594,7 +594,7 @@ public:
     virtual bool Show(bool show = 1);
 
     /**
-        Shows a modal dialog.
+        Shows an application-modal dialog.
 
         Program flow does not return until the dialog has been dismissed with
         EndModal().
@@ -611,9 +611,26 @@ public:
 
         @return The value set with SetReturnCode().
 
-        @see EndModal(), GetReturnCode(), SetReturnCode()
+        @see ShowWindowModal(), EndModal(), GetReturnCode(), SetReturnCode()
     */
     virtual int ShowModal();
+
+    /**
+        Shows a dialog modal to the parent top level window only.
+
+        Unlike ShowModal(), dialogs shown with this function only prevent the
+        user from interacting with their parent frame only but not with the
+        rest of the application. They also don't block the program execution
+        but instead return immediately, as Show(), and generate a
+        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event later when the dialog is closed.
+
+        Currently this function is only fully implemented in wxOSX ports, under
+        the other platforms it behaves like ShowModal() (but also sends the
+        above mentioned event).
+
+        @since 2.9.0
+     */
+    void ShowWindowModal();
 };
 
 
