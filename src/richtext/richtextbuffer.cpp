@@ -9765,7 +9765,11 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                 m_ctrl->Refresh(false);
 
             m_ctrl->PositionCaret();
-            m_ctrl->SetDefaultStyleToCursorStyle();
+
+            // This causes styles to persist when doing programmatic
+            // content creation except when Freeze/Thaw is used, so
+            // disable this and check for the consequences.
+            // m_ctrl->SetDefaultStyleToCursorStyle();
 
             if (sendUpdateEvent)
                 wxTextCtrl::SendTextUpdatedEvent(m_ctrl);

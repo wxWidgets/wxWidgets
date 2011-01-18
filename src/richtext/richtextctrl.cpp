@@ -249,7 +249,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
     attributes.SetParagraphSpacingBefore(0);
-    
+
     SetBasicStyle(attributes);
 
     int margin = 5;
@@ -436,7 +436,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         int flags = 0;
         if ((GetExtraStyle() & wxRICHTEXT_EX_NO_GUIDELINES) == 0)
             flags |= wxRICHTEXT_DRAW_GUIDELINES;
-        
+
         GetBuffer().Draw(dc, GetBuffer().GetOwnRange(), GetSelection(), drawingArea, 0 /* descent */, flags);
 
         dc.DestroyClippingRegion();
@@ -525,7 +525,7 @@ bool wxRichTextCtrl::SetCaretPositionAfterClick(wxRichTextParagraphLayoutBox* co
 
     MoveCaret(position, caretAtLineStart);
     SetDefaultStyleToCursorStyle();
-    
+
     return true;
 }
 
@@ -552,7 +552,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
         {
             SetFocusObject(container, false /* don't set caret position yet */);
         }
-        
+
         m_dragStart = event.GetLogicalPosition(dc);
         m_dragging = true;
         CaptureMouse();
@@ -652,9 +652,9 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     wxPoint logicalPt = event.GetLogicalPosition(dc);
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
-    
+
     int flags = 0;
-    
+
     // If we're dragging, let's only consider positions at this level; otherwise
     // selecting a range is not going to work.
     wxRichTextParagraphLayoutBox* container = & GetBuffer();
@@ -664,7 +664,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         container = GetFocusObject();
     }
     int hit = container->HitTest(dc, logicalPt, position, & hitObj, & contextObj, flags);
-    
+
     // See if we need to change the cursor
 
     {
@@ -693,7 +693,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         event.Skip();
         return;
     }
-    
+
     if (m_dragging)
     {
         wxRichTextParagraphLayoutBox* commonAncestor = NULL;
@@ -719,7 +719,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
                                                    // is the common ancestor.
                 commonAncestor = wxDynamicCast(firstContainer->GetParent(), wxRichTextParagraphLayoutBox);
             }
-            
+
             if (commonAncestor && commonAncestor->HandlesChildSelections())
             {
                 wxRichTextObject* p = hitObj2;
@@ -761,7 +761,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
                 if (otherContainer->AcceptsFocus())
                     SetFocusObject(otherContainer, false /* don't set caret and clear selection */);
-                MoveCaret(-1, false);                
+                MoveCaret(-1, false);
                 SetDefaultStyleToCursorStyle();
             }
         }
@@ -778,7 +778,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 {
     SetFocus();
-    
+
     wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
@@ -1359,9 +1359,9 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
             return false;
 
         wxRichTextSelection oldSelection = m_selection;
-        
+
         m_selection.SetContainer(GetFocusObject());
-        
+
         wxRichTextRange oldRange;
         if (m_selection.IsValid())
             oldRange = m_selection.GetRange();
@@ -1390,7 +1390,7 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
             else
                 newRange.SetRange(newPos+1, m_selectionAnchor);
         }
-        
+
         m_selection.SetRange(newRange);
 
         RefreshForSelectionChange(oldSelection, m_selection);
@@ -1434,7 +1434,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     bool scrolled = false;
 
     wxSize clientSize = GetClientSize();
-    
+
     int leftMargin, rightMargin, topMargin, bottomMargin;
 
     {
@@ -1780,7 +1780,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
 
     long lineNumber = GetFocusObject()->GetVisibleLineNumber(m_caretPosition, true, m_caretAtLineStart);
     wxPoint pt = GetCaret()->GetPosition();
-    long newLine = lineNumber + noLines;    
+    long newLine = lineNumber + noLines;
     bool notInThisObject = false;
 
     if (lineNumber != -1)
@@ -1797,7 +1797,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
                 notInThisObject = true;
         }
     }
-    
+
     wxRichTextParagraphLayoutBox* container = GetFocusObject();
     int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS;
 
@@ -1807,7 +1807,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         // try to find an object anywhere in the buffer at the new position (up or down a bit)
         container = & GetBuffer();
         hitTestFlags = 0;
-        
+
         if (noLines > 0) // going down
         {
             pt.y = GetFocusObject()->GetPosition().y + GetFocusObject()->GetCachedSize().y + 2;
@@ -1843,11 +1843,11 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
             if (actualContainer && actualContainer != GetFocusObject() && actualContainer->AcceptsFocus())
             {
                 SetFocusObject(actualContainer, false /* don't set caret position yet */);
-                
+
                 container = actualContainer;
             }
         }
-        
+
         bool caretLineStart = true;
         long caretPosition = FindCaretPositionForCharacterPosition(newPos, hitTest, container, caretLineStart);
         long newSelEnd = caretPosition;
@@ -2391,6 +2391,7 @@ bool wxRichTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 wxRichTextRange wxRichTextCtrl::AddParagraph(const wxString& text)
 {
     wxRichTextRange range = GetFocusObject()->AddParagraph(text);
+    GetBuffer().Invalidate();
     LayoutContent();
     return range;
 }
@@ -2399,6 +2400,7 @@ wxRichTextRange wxRichTextCtrl::AddParagraph(const wxString& text)
 wxRichTextRange wxRichTextCtrl::AddImage(const wxImage& image)
 {
     wxRichTextRange range = GetFocusObject()->AddImage(image);
+    GetBuffer().Invalidate();
     LayoutContent();
     return range;
 }
@@ -2684,7 +2686,7 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
     wxRichTextTable* table = new wxRichTextTable;
     table->SetAttributes(tableAttr);
     table->SetParent(& GetBuffer()); // set parent temporarily for AddParagraph to use correct style
-    
+
     table->CreateTable(rows, cols);
 
     table->SetParent(NULL);
@@ -3153,9 +3155,9 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
     int hit = GetFocusObject()->HitTest(dc, logicalPt, position, & hitObj, & contextObj);
-    
+
     m_contextMenuPropertiesInfo.Clear();
-    
+
     if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
     {
         wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
@@ -3166,7 +3168,7 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
                 SetFocusObject(actualContainer, false /* don't set caret position yet */);
                 SetCaretPositionAfterClick(actualContainer, position, hit);
             }
-            
+
             m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
         }
         else
@@ -3376,7 +3378,7 @@ bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect, wxRic
 
     wxPoint pt;
     int height = 0;
-    
+
     if (!container)
         container = GetFocusObject();
 
@@ -3890,7 +3892,7 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextSelection& oldSel
         Refresh(false);
         return true;
     }
-    
+
     wxRichTextRange oldRange, newRange;
     if (oldSelection.IsValid())
         oldRange = oldSelection.GetRange();
@@ -3900,7 +3902,7 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextSelection& oldSel
         newRange = newSelection.GetRange();
     else
         newRange = wxRICHTEXT_NO_SELECTION;
-    
+
     // Calculate the refresh rectangle - just the affected lines
     long firstPos, lastPos;
     if (oldRange.GetStart() == -2 && newRange.GetStart() != -2)
@@ -3953,7 +3955,7 @@ bool wxRichTextCtrl::DoSetMargins(const wxPoint& pt)
     GetBuffer().GetAttributes().GetTextBoxAttr().GetMargins().GetRight().SetValue(pt.x, wxTEXT_ATTR_UNITS_PIXELS);
     GetBuffer().GetAttributes().GetTextBoxAttr().GetMargins().GetTop().SetValue(pt.y, wxTEXT_ATTR_UNITS_PIXELS);
     GetBuffer().GetAttributes().GetTextBoxAttr().GetMargins().GetBottom().SetValue(pt.y, wxTEXT_ATTR_UNITS_PIXELS);
-    
+
     return true;
 }
 
@@ -3972,7 +3974,7 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
     bool changingContainer = (m_focusObject != obj);
 
     m_focusObject = obj;
-    
+
     if (!obj)
         m_focusObject = & m_buffer;
 
@@ -3984,7 +3986,7 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
         m_selectionState = wxRichTextCtrlSelectionState_Normal;
 
         long pos = -1;
-        
+
         m_caretAtLineStart = false;
         MoveCaret(pos, m_caretAtLineStart);
         SetDefaultStyleToCursorStyle();
@@ -4168,7 +4170,7 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
         if (GetCount() == 0)
         {
             menu->SetLabel(startCmd, _("&Properties"));
-            
+
             // Delete the others if necessary
             int i;
             for (i = startCmd+1; i < startCmd+3; i++)
@@ -4193,7 +4195,7 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
                     break;
                 }
             }
-            
+
             if (pos != -1)
             {
                 int insertBefore = pos+1;
@@ -4212,7 +4214,7 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
                     }
                     insertBefore ++;
                 }
-                
+
                 // Delete any old items still left on the menu
                 for (i = startCmd + GetCount(); i < startCmd+3; i++)
                 {
