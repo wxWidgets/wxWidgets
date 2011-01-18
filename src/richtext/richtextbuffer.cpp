@@ -116,6 +116,14 @@ public:
     // Get floating objects
     bool GetFloatingObjects(wxRichTextObjectList& objects) const;
 
+    // Delete a float
+    bool DeleteFloat(wxRichTextObject* obj);
+
+    // Do we have this float already?
+    bool HasFloat(wxRichTextObject* obj);
+
+    bool HasFloats() const { return m_left.GetCount() >0 || m_right.GetCount() > 0; }
+
     static int SearchAdjacentRect(const wxRichTextFloatRectMapArray& array, int point);
 
     static int GetWidthFromFloatRect(const wxRichTextFloatRectMapArray& array, int index, int startY, int endY);
@@ -133,6 +141,50 @@ private:
     wxRect               m_availableRect;
     wxRichTextParagraph* m_para;
 };
+
+// Delete a float
+bool wxRichTextFloatCollector::DeleteFloat(wxRichTextObject* obj)
+{
+    size_t i;
+    for (i = 0; i < m_left.GetCount(); i++)
+    {
+        if (m_left[i]->anchor == obj)
+        {
+            m_left.RemoveAt(i);
+            return true;
+        }
+    }
+    for (i = 0; i < m_right.GetCount(); i++)
+    {
+        if (m_right[i]->anchor == obj)
+        {
+            m_right.RemoveAt(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+// Do we have this float already?
+bool wxRichTextFloatCollector::HasFloat(wxRichTextObject* obj)
+{
+    size_t i;
+    for (i = 0; i < m_left.GetCount(); i++)
+    {
+        if (m_left[i]->anchor == obj)
+        {
+            return true;
+        }
+    }
+    for (i = 0; i < m_right.GetCount(); i++)
+    {
+        if (m_right[i]->anchor == obj)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 // Get floating objects
 bool wxRichTextFloatCollector::GetFloatingObjects(wxRichTextObjectList& objects) const
@@ -1026,7 +1078,7 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
         // If a paragraph, align the whole paragraph.
         // Problem with this: if we're limited by a floating object, a line may be centered
         // w.r.t. the smaller resulting box rather than the actual available width.
-        if (attr.HasAlignment())
+        if (attr.HasAlignment() && !GetContainer()->GetFloatCollector()->HasFloats()) // FIXME: aligning whole paragraph not compatible with floating objects
         {
             // centering, right-justification
             if (GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
@@ -1619,14 +1671,17 @@ void wxRichTextParagraphLayoutBox::Copy(const wxRichTextParagraphLayoutBox& obj)
     m_defaultAttributes = obj.m_defaultAttributes;
 }
 
-// Gather information about floating objects
+// Gather information about floating objects; only gather floats for those paragraphs that
+// will not be formatted again due to optimization, after which floats will be gathered per-paragraph
+// during layout.
 bool wxRichTextParagraphLayoutBox::UpdateFloatingObjects(const wxRect& availableRect, wxRichTextObject* untilObj)
 {
     if (m_floatCollector != NULL)
         delete m_floatCollector;
     m_floatCollector = new wxRichTextFloatCollector(availableRect);
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
-    while (node && node->GetData() != untilObj)
+    // Only gather floats up to the point we'll start formatting paragraphs.
+    while (untilObj && node && node->GetData() != untilObj)
     {
         wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
         wxASSERT (child != NULL);
@@ -1852,6 +1907,8 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         }
     }
 
+    // Gather information about only those floating objects that will not be formatted,
+    // after which floats will be gathered per-paragraph during layout.
     UpdateFloatingObjects(availableSpace, node ? node->GetData() : (wxRichTextObject*) NULL);
 
     // A way to force speedy rest-of-buffer layout (the 'else' below)
@@ -4250,7 +4307,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     // Deal with floating objects firstly before the normal layout
     wxRichTextBuffer* buffer = GetBuffer();
     wxASSERT(buffer);
-    wxRichTextFloatCollector* collector = buffer->GetFloatCollector();
+    wxRichTextFloatCollector* collector = GetContainer()->GetFloatCollector();
     wxASSERT(collector);
     LayoutFloat(dc, rect, style, collector);
 
@@ -4302,25 +4359,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     wxRichTextObjectList::compatibility_iterator node;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
-#if 0
-    node = m_children.GetFirst();
-    while (node)
-    {
-        wxRichTextObject* child = node->GetData();
-        if (child->IsTopLevel())
-        {
-            //child->SetCachedSize(wxDefaultSize);
-            wxRect availableChildRect = AdjustAvailableSpace(dc, GetBuffer(), GetAttributes(), child->GetAttributes(), rect);
-
-            // Hm, can't do this here, we surely need to take into account indents, margins, floating images etc.
-            // So need to call layout lower down.
-            child->Layout(dc, availableChildRect, style);
-        }
-
-        node = node->GetNext();
-    }
-#endif
-
     wxUnusedVar(style);
     wxArrayInt partialExtents;
 
@@ -4403,7 +4441,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             // lays out the object again using the minimum size
             // The position will be determined by its location in its line,
             // and not by the child's actual position.
-            child->LayoutToBestSize(dc, GetBuffer(),
+            child->LayoutToBestSize(dc, buffer,
                     GetAttributes(), child->GetAttributes(), availableRect, style);
 
             if (oldSize != child->GetCachedSize())
@@ -4487,7 +4525,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
                     // Lays out the object first with a given amount of space, and then if no width was specified in attr,
                     // lays out the object again using the minimum size
                     child->Invalidate(wxRICHTEXT_ALL);
-                    child->LayoutToBestSize(dc, GetBuffer(),
+                    child->LayoutToBestSize(dc, buffer,
                                 GetAttributes(), child->GetAttributes(), availableRect, style);
                     childSize = child->GetCachedSize();
                     childDescent = child->GetDescent();
@@ -4581,9 +4619,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             maxAscent = wxMax(actualSize.y-childDescent, maxAscent);
             lineHeight = maxDescent + maxAscent;
 
-            if (lineHeight == 0 && GetBuffer())
+            if (lineHeight == 0 && buffer)
             {
-                wxFont font(GetBuffer()->GetFontTable().FindFont(attr));
+                wxFont font(buffer->GetFontTable().FindFont(attr));
                 wxCheckSetFont(dc, font);
                 lineHeight = dc.GetCharHeight();
             }
@@ -4653,44 +4691,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         }
     }
 
-    wxASSERT(!(lastCompletedEndPos != -1 && lastCompletedEndPos < GetRange().GetEnd()-1));
-
-#if 0
-    // Add the last line - it's the current pos -> last para pos
-    // Substract -1 because the last position is always the end-paragraph position.
-    if (lastCompletedEndPos <= GetRange().GetEnd()-1)
-    {
-        currentPosition.x = availableRect.x - rect.x;
-
-        wxRichTextLine* line = AllocateLine(lineCount);
-
-        wxRichTextRange actualRange(lastCompletedEndPos+1, GetRange().GetEnd()-1);
-
-        // Set relative range so we won't have to change line ranges when paragraphs are moved
-        line->SetRange(wxRichTextRange(actualRange.GetStart() - GetRange().GetStart(), actualRange.GetEnd() - GetRange().GetStart()));
-
-        line->SetPosition(currentPosition);
-
-        if (lineHeight == 0 && GetBuffer())
-        {
-            wxFont font(GetBuffer()->GetFontTable().FindFont(attr));
-            wxCheckSetFont(dc, font);
-            lineHeight = dc.GetCharHeight();
-        }
-        if (maxDescent == 0)
-        {
-            int w, h;
-            dc.GetTextExtent(wxT("X"), & w, &h, & maxDescent);
-        }
-
-        line->SetSize(wxSize(currentWidth, lineHeight));
-        line->SetDescent(maxDescent);
-        maxWidth = wxMax(maxWidth, currentWidth+startOffset);
-        currentPosition.y += lineHeight;
-        currentPosition.y += lineSpacing;
-        lineCount ++;
-    }
-#endif
+    //wxASSERT(!(lastCompletedEndPos != -1 && lastCompletedEndPos < GetRange().GetEnd()-1));
 
     // Remove remaining unused line objects, if any
     ClearUnusedLines(lineCount);
@@ -4699,7 +4700,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     {
         wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
         contentRect = wxRect(wxPoint(0, 0), wxSize(maxWidth, currentPosition.y + spaceAfterPara));
-        GetBoxRects(dc, GetBuffer(), GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+        GetBoxRects(dc, buffer, GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
         SetCachedSize(marginRect.GetSize());
     }
 
@@ -4709,7 +4710,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     {
         wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
         contentRect = wxRect(wxPoint(0, 0), wxSize(paraSize.x, currentPosition.y + spaceAfterPara));
-        GetBoxRects(dc, GetBuffer(), GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+        GetBoxRects(dc, buffer, GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
         SetMaxSize(marginRect.GetSize());
     }
 
@@ -4736,7 +4737,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 
         wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
         contentRect = wxRect(wxPoint(0, 0), wxSize(minWidth, currentPosition.y + spaceAfterPara));
-        GetBoxRects(dc, GetBuffer(), GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+        GetBoxRects(dc, buffer, GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
         SetMinSize(marginRect.GetSize());
     }
 
@@ -4785,45 +4786,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 
     return true;
 }
-
-#if 0
-/// Apply paragraph styles, such as centering, to wrapped lines
-/// TODO: take into account box attributes
-void wxRichTextParagraph::ApplyParagraphStyle(const wxRichTextAttr& attr, const wxRect& rect, wxDC& dc)
-{
-    if (!attr.HasAlignment())
-        return;
-
-    wxRichTextLineList::compatibility_iterator node = m_cachedLines.GetFirst();
-    while (node)
-    {
-        wxRichTextLine* line = node->GetData();
-
-        wxPoint pos = line->GetPosition();
-        wxSize size = line->GetSize();
-
-        // centering, right-justification
-        if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
-        {
-            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-            // Subtract paragraph position because lines are relative to
-            // the paragraph.
-            pos.x = rect.x - GetPosition().x + (rect.GetWidth() - rightIndent - size.x)/2;
-            line->SetPosition(pos);
-        }
-        else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
-        {
-            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-            // Subtract paragraph position because lines are relative to
-            // the paragraph.
-            pos.x = (rect.x - GetPosition().x) + rect.GetWidth() - size.x - rightIndent;
-            line->SetPosition(pos);
-        }
-
-        node = node->GetNext();
-    }
-}
-#endif
 
 /// Apply paragraph styles, such as centering, to wrapped lines
 /// TODO: take into account box attributes, possibly
@@ -5799,7 +5761,7 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, w
     while (node)
     {
         wxRichTextObject* anchored = node->GetData();
-        if (anchored && anchored->IsFloating())
+        if (anchored && anchored->IsFloating() && !floatCollector->HasFloat(anchored))
         {
             wxSize size;
             int descent, x = 0;
