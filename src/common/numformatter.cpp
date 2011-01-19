@@ -36,7 +36,11 @@ wxChar wxNumberFormatter::GetDecimalSeparator()
     // concurrently from more than one thread so it's not a real problem.
     static wxChar s_decimalSeparator = 0;
 
-    if ( !s_decimalSeparator )
+    // Remember the locale which was current when we initialized, we must redo
+    // the initialization if the locale changed.
+    static wxLocale *s_localeUsedForInit = NULL;
+
+    if ( !s_decimalSeparator || (s_localeUsedForInit != wxGetLocale()) )
     {
         const wxString
             s = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
@@ -54,6 +58,8 @@ wxChar wxNumberFormatter::GetDecimalSeparator()
 
             s_decimalSeparator = s[0];
         }
+
+        s_localeUsedForInit = wxGetLocale();
     }
 
     return s_decimalSeparator;
@@ -63,8 +69,9 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
 {
     static wxChar s_thousandsSeparator = 0;
     static bool s_initialized = false;
+    static wxLocale *s_localeUsedForInit = NULL;
 
-    if ( !s_initialized )
+    if ( !s_initialized || (s_localeUsedForInit != wxGetLocale()) )
     {
         const wxString
             s = wxLocale::GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
@@ -79,6 +86,7 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
         //      be empty if grouping is not used, so just leave it as 0.
 
         s_initialized = true;
+        s_localeUsedForInit = wxGetLocale();
     }
 
     if ( !s_thousandsSeparator )
