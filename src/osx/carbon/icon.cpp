@@ -321,6 +321,25 @@ bool wxIcon::LoadIconFromBundleResource(const wxString& resourceName, int desire
             ReleaseResource( resHandle ) ;
         }
     }
+    if ( iconRef == NULL )
+    {
+        wxCFStringRef name(resourceName);
+        FSRef iconFSRef;
+        
+        wxCFRef<CFURLRef> iconURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), name, CFSTR("icns"), NULL));
+
+        if (CFURLGetFSRef(iconURL, &iconFSRef))
+        {
+            // Get a handle on the icon family
+            IconFamilyHandle iconFamily;
+            OSStatus err = ReadIconFromFSRef( &iconFSRef, &iconFamily );
+            
+            if ( err == noErr )
+            {
+                err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
+            }
+        }
+    }
 
     if ( iconRef )
     {
