@@ -27,22 +27,22 @@
 class NumFormatterTestCase : public CppUnit::TestCase
 {
 public:
-    NumFormatterTestCase()
+    NumFormatterTestCase() { m_locale = NULL; }
+
+    virtual void setUp()
     {
         // We need to use a locale with known decimal point and which uses the
         // thousands separator for the tests to make sense.
         m_locale = new wxLocale(wxLANGUAGE_ENGLISH_UK,
                                 wxLOCALE_DONT_LOAD_DEFAULT);
         if ( !m_locale->IsOk() )
-        {
-            delete m_locale;
-            m_locale = NULL;
-        }
+            tearDown();
     }
 
-    virtual ~NumFormatterTestCase()
+    virtual void tearDown()
     {
         delete m_locale;
+        m_locale = NULL;
     }
 
 private:
