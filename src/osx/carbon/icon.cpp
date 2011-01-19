@@ -338,6 +338,7 @@ bool wxIcon::LoadIconFromBundleResource(const wxString& resourceName, int desire
             {
                 err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
             }
+            ReleaseResource( (Handle) iconFamily );
         }
     }
 
