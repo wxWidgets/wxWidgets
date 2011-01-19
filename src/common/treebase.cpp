@@ -323,8 +323,10 @@ void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
         CollapseAllChildren(idCurr);
     }
 
-    // then collapse this element too
-    Collapse(item);
+    // then collapse this element too unless it's the hidden root which can't
+    // be collapsed
+    if ( item != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT) )
+        Collapse(item);
     Thaw();
 }
 
