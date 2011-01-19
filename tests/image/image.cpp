@@ -976,9 +976,7 @@ void ImageTestCase::CompareSavedImage()
     CPPUNIT_ASSERT( expected24.IsOk() );
     CPPUNIT_ASSERT( !expected24.HasAlpha() );
 
-    unsigned long numColours = expected24.CountColours();
     wxImage expected8 = expected24.ConvertToGreyscale();
-    numColours = expected8.CountColours();
 
 #if wxUSE_PALETTE
     unsigned char greys[256];
