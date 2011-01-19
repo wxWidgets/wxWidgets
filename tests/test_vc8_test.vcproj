@@ -1084,6 +1084,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\strings\numformatter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\interactive\output.cpp"
 				>
 			</File>

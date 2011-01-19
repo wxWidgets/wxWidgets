@@ -1071,6 +1071,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\numformatter.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\object.cpp"
 				>
 			</File>
@@ -2010,6 +2014,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\numformatter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\object.h"
 				>
 			</File>
@@ -2251,6 +2259,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xti.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xti2.h"
 				>
 			</File>
 			<File

@@ -7372,6 +7372,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\range.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\rawbmp.h"
 				>
 			</File>

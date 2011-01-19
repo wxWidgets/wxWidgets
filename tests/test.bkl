@@ -75,6 +75,7 @@
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp
             strings/iostream.cpp
+            strings/numformatter.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/tokenizer.cpp

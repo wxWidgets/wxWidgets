@@ -319,6 +319,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_wxregextest.obj &
 	$(OBJS)\test_scopeguardtest.obj &
 	$(OBJS)\test_iostream.obj &
+	$(OBJS)\test_numformatter.obj &
 	$(OBJS)\test_strings.obj &
 	$(OBJS)\test_stdstrings.obj &
 	$(OBJS)\test_tokenizer.obj &
@@ -630,6 +631,9 @@ $(OBJS)\test_scopeguardtest.obj :  .AUTODEPEND .\scopeguard\scopeguardtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_iostream.obj :  .AUTODEPEND .\strings\iostream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_numformatter.obj :  .AUTODEPEND .\strings\numformatter.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp

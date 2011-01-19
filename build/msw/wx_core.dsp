@@ -6561,6 +6561,10 @@ SOURCE=..\..\include\wx\radiobut.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\range.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\rawbmp.h
 # End Source File
 # Begin Source File

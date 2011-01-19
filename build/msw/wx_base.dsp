@@ -451,6 +451,10 @@ SOURCE=..\..\src\common\mstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\numformatter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\object.cpp
 # End Source File
 # Begin Source File
@@ -1415,6 +1419,10 @@ SOURCE=..\..\include\wx\mstream.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\numformatter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\object.h
 # End Source File
 # Begin Source File
@@ -1656,6 +1664,10 @@ SOURCE=..\..\include\wx\xlocale.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xti.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xti2.h
 # End Source File
 # Begin Source File
 

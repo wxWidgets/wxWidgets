@@ -403,6 +403,7 @@ ALL_BASE_HEADERS =  \
 	wx/msgout.h \
 	wx/msgqueue.h \
 	wx/mstream.h \
+	wx/numformatter.h \
 	wx/object.h \
 	wx/platform.h \
 	wx/platinfo.h \
@@ -580,6 +581,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msgout.h \
 	wx/msgqueue.h \
 	wx/mstream.h \
+	wx/numformatter.h \
 	wx/object.h \
 	wx/platform.h \
 	wx/platinfo.h \
@@ -761,6 +763,7 @@ ALL_BASE_SOURCES =  \
 	src/common/mimecmn.cpp \
 	src/common/module.cpp \
 	src/common/mstream.cpp \
+	src/common/numformatter.cpp \
 	src/common/object.cpp \
 	src/common/platinfo.cpp \
 	src/common/powercmn.cpp \
@@ -959,6 +962,7 @@ MONODLL_OBJECTS =  \
 	monodll_mimecmn.o \
 	monodll_module.o \
 	monodll_mstream.o \
+	monodll_numformatter.o \
 	monodll_object.o \
 	monodll_platinfo.o \
 	monodll_powercmn.o \
@@ -1091,6 +1095,7 @@ MONOLIB_OBJECTS =  \
 	monolib_mimecmn.o \
 	monolib_module.o \
 	monolib_mstream.o \
+	monolib_numformatter.o \
 	monolib_object.o \
 	monolib_platinfo.o \
 	monolib_powercmn.o \
@@ -1218,6 +1223,7 @@ BASEDLL_OBJECTS =  \
 	basedll_mimecmn.o \
 	basedll_module.o \
 	basedll_mstream.o \
+	basedll_numformatter.o \
 	basedll_object.o \
 	basedll_platinfo.o \
 	basedll_powercmn.o \
@@ -1328,6 +1334,7 @@ BASELIB_OBJECTS =  \
 	baselib_mimecmn.o \
 	baselib_module.o \
 	baselib_mstream.o \
+	baselib_numformatter.o \
 	baselib_object.o \
 	baselib_platinfo.o \
 	baselib_powercmn.o \
@@ -15393,6 +15400,9 @@ monodll_module.o: $(srcdir)/src/common/module.cpp $(MONODLL_ODEP)
 monodll_mstream.o: $(srcdir)/src/common/mstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mstream.cpp
 
+monodll_numformatter.o: $(srcdir)/src/common/numformatter.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/numformatter.cpp
+
 monodll_object.o: $(srcdir)/src/common/object.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/object.cpp
 
@@ -20669,6 +20679,9 @@ monolib_module.o: $(srcdir)/src/common/module.cpp $(MONOLIB_ODEP)
 
 monolib_mstream.o: $(srcdir)/src/common/mstream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mstream.cpp
+
+monolib_numformatter.o: $(srcdir)/src/common/numformatter.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/numformatter.cpp
 
 monolib_object.o: $(srcdir)/src/common/object.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/object.cpp
@@ -25947,6 +25960,9 @@ basedll_module.o: $(srcdir)/src/common/module.cpp $(BASEDLL_ODEP)
 basedll_mstream.o: $(srcdir)/src/common/mstream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/mstream.cpp
 
+basedll_numformatter.o: $(srcdir)/src/common/numformatter.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/numformatter.cpp
+
 basedll_object.o: $(srcdir)/src/common/object.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/object.cpp
 
@@ -26447,6 +26463,9 @@ baselib_module.o: $(srcdir)/src/common/module.cpp $(BASELIB_ODEP)
 
 baselib_mstream.o: $(srcdir)/src/common/mstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/mstream.cpp
+
+baselib_numformatter.o: $(srcdir)/src/common/numformatter.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/numformatter.cpp
 
 baselib_object.o: $(srcdir)/src/common/object.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/object.cpp

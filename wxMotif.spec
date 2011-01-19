@@ -172,6 +172,7 @@ wx/mousestate.h
 wx/msgout.h
 wx/msgqueue.h
 wx/mstream.h
+wx/numformatter.h
 wx/object.h
 wx/platform.h
 wx/platinfo.h

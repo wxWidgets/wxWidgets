@@ -3755,6 +3755,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_mimecmn.obj &
 	$(OBJS)\monodll_module.obj &
 	$(OBJS)\monodll_mstream.obj &
+	$(OBJS)\monodll_numformatter.obj &
 	$(OBJS)\monodll_object.obj &
 	$(OBJS)\monodll_platinfo.obj &
 	$(OBJS)\monodll_powercmn.obj &
@@ -3901,6 +3902,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_mimecmn.obj &
 	$(OBJS)\monolib_module.obj &
 	$(OBJS)\monolib_mstream.obj &
+	$(OBJS)\monolib_numformatter.obj &
 	$(OBJS)\monolib_object.obj &
 	$(OBJS)\monolib_platinfo.obj &
 	$(OBJS)\monolib_powercmn.obj &
@@ -4045,6 +4047,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_mimecmn.obj &
 	$(OBJS)\basedll_module.obj &
 	$(OBJS)\basedll_mstream.obj &
+	$(OBJS)\basedll_numformatter.obj &
 	$(OBJS)\basedll_object.obj &
 	$(OBJS)\basedll_platinfo.obj &
 	$(OBJS)\basedll_powercmn.obj &
@@ -4174,6 +4177,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_mimecmn.obj &
 	$(OBJS)\baselib_module.obj &
 	$(OBJS)\baselib_mstream.obj &
+	$(OBJS)\baselib_numformatter.obj &
 	$(OBJS)\baselib_object.obj &
 	$(OBJS)\baselib_platinfo.obj &
 	$(OBJS)\baselib_powercmn.obj &
@@ -6407,6 +6411,9 @@ $(OBJS)\monodll_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_numformatter.obj :  .AUTODEPEND ..\..\src\common\numformatter.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
@@ -8731,6 +8738,9 @@ $(OBJS)\monolib_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
 $(OBJS)\monolib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_numformatter.obj :  .AUTODEPEND ..\..\src\common\numformatter.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -11053,6 +11063,9 @@ $(OBJS)\basedll_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
 $(OBJS)\basedll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_numformatter.obj :  .AUTODEPEND ..\..\src\common\numformatter.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -11384,6 +11397,9 @@ $(OBJS)\baselib_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_numformatter.obj :  .AUTODEPEND ..\..\src\common\numformatter.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp

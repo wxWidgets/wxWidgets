@@ -100,6 +100,7 @@ TEST_OBJECTS =  \
 	test_wxregextest.o \
 	test_scopeguardtest.o \
 	test_iostream.o \
+	test_numformatter.o \
 	test_strings.o \
 	test_stdstrings.o \
 	test_tokenizer.o \
@@ -549,6 +550,9 @@ test_scopeguardtest.o: $(srcdir)/scopeguard/scopeguardtest.cpp $(TEST_ODEP)
 
 test_iostream.o: $(srcdir)/strings/iostream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/iostream.cpp
+
+test_numformatter.o: $(srcdir)/strings/numformatter.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/numformatter.cpp
 
 test_strings.o: $(srcdir)/strings/strings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/strings.cpp
