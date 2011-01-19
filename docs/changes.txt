@@ -457,6 +457,7 @@ All (GUI):
 - Added wxArtProvider returning higher quality icons from Tango project.
 - wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
 - Added support for saving PNG files with palette (troelsk).
+- Added support for saving as GIF and animated GIF (troelsk).
 
 GTK:
 

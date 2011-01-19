@@ -334,7 +334,7 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     - wxBMPHandler: For loading (including alpha support) and saving, always installed.
     - wxPNGHandler: For loading and saving. Includes alpha support.
     - wxJPEGHandler: For loading and saving.
-    - wxGIFHandler: Only for loading, due to legal issues.
+    - wxGIFHandler: For loading and saving (see below).
     - wxPCXHandler: For loading and saving (see below).
     - wxPNMHandler: For loading and saving (see below).
     - wxTIFFHandler: For loading (including alpha support) and saving.
@@ -352,6 +352,8 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     Loading PNMs only works for ASCII or raw RGB images.
     When saving in PNM format, wxPNMHandler will always save as raw RGB.
 
+    Saving GIFs requires images of maximum 8 bpp (see wxQuantize), and the alpha channel converted to a mask (see wxImage::ConvertAlphaToMask).
+    Saving an animated GIF requires images of the same size (see wxGIFHandler::SaveAnimation)
 
     @library{wxcore}
     @category{gdi}

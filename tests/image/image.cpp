@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
+#include "wx/anidecod.h" // wxImageArray
 #include "wx/image.h"
 #include "wx/palette.h"
 #include "wx/url.h"
@@ -70,6 +71,7 @@ private:
         CPPUNIT_TEST( SizeImage );
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
+        CPPUNIT_TEST( SaveAnimatedGIF );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -78,6 +80,7 @@ private:
     void SizeImage();
     void CompareLoadedImage();
     void CompareSavedImage();
+    void SaveAnimatedGIF();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -1087,6 +1090,47 @@ void ImageTestCase::CompareSavedImage()
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
         expected8, wxIMAGE_HAVE_PALETTE, &ref8);
 #endif
+}
+
+void ImageTestCase::SaveAnimatedGIF()
+{
+#if wxUSE_PALETTE
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    wxImageArray images;
+    images.Add(image);
+    int i;
+    for (i = 0; i < 4-1; ++i)
+    {
+        images.Add( images[i].Rotate90() );
+
+        images[i+1].SetPalette(images[0].GetPalette());
+    }
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    CPPUNIT_ASSERT_EQUAL(4, imageCount);
+
+    for (i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
+        memIn.SeekI(pos);
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Compare test for GIF frame number %d failed", i),
+            memcmp(image.GetData(), images[i].GetData(),
+                images[i].GetWidth() * images[i].GetHeight() * 3) == 0
+        );
+    }
+#endif // #if wxUSE_PALETTE
 }
 
 #endif //wxUSE_IMAGE
