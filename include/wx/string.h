@@ -2121,7 +2121,7 @@ public:
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
     { return (*this) << Format(wxT("%lu"), ul); }
-#if defined wxLongLong_t && !defined wxLongLongIsLong
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
     {
@@ -2132,7 +2132,7 @@ public:
     {
       return (*this) << Format("%" wxLongLongFmtSpec "u" , ull);
     }
-#endif // wxLongLong_t && !wxLongLongIsLong
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
     { return (*this) << Format(wxT("%f"), f); }

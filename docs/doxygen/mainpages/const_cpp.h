@@ -209,6 +209,13 @@ Currently the following symbols exist:
 @itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in
     size (notice that you must include @c wx/filefn.h before testing for this
     symbol).}
+@itemdef{wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG, Defined if compiler supports a
+    64 bit integer type (available as @c wxLongLong_t) and this type is
+    different from long. Notice that, provided wxUSE_LONGLONG is not turned
+    off, some 64 bit type is always available to wxWidgets programs and this
+    symbol only indicates a presence of such primitive type. It is useful to
+    decide whether some function should be overloaded for both
+    <code>long</code> and <code>long long</code> types.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,

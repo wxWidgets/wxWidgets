@@ -1075,6 +1075,9 @@ typedef wxUint32 wxDword;
 
     #define wxHAS_INT64 1
 
+    #ifndef wxLongLongIsLong
+        #define wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    #endif
 #elif wxUSE_LONGLONG
     /*  these macros allow to define 64 bit constants in a portable way */
     #define wxLL(x) wxLongLong(x)
