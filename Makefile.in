@@ -3933,6 +3933,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/toolbar.h \
 	wx/validate.h \
 	wx/valtext.h \
+	wx/valnum.h \
 	wx/window.h \
 	wx/windowid.h \
 	wx/wrapsizer.h \
@@ -4592,6 +4593,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_valgen.o \
 	monodll_validate.o \
 	monodll_valtext.o \
+	monodll_valnum.o \
 	monodll_wincmn.o \
 	monodll_windowid.o \
 	monodll_wrapsizer.o \
@@ -4805,6 +4807,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_valgen.o \
 	monodll_validate.o \
 	monodll_valtext.o \
+	monodll_valnum.o \
 	monodll_wincmn.o \
 	monodll_windowid.o \
 	monodll_wrapsizer.o \
@@ -6502,6 +6505,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_valgen.o \
 	monolib_validate.o \
 	monolib_valtext.o \
+	monolib_valnum.o \
 	monolib_wincmn.o \
 	monolib_windowid.o \
 	monolib_wrapsizer.o \
@@ -6715,6 +6719,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_valgen.o \
 	monolib_validate.o \
 	monolib_valtext.o \
+	monolib_valnum.o \
 	monolib_wincmn.o \
 	monolib_windowid.o \
 	monolib_wrapsizer.o \
@@ -8596,6 +8601,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_valgen.o \
 	coredll_validate.o \
 	coredll_valtext.o \
+	coredll_valnum.o \
 	coredll_wincmn.o \
 	coredll_windowid.o \
 	coredll_wrapsizer.o \
@@ -8809,6 +8815,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_valgen.o \
 	coredll_validate.o \
 	coredll_valtext.o \
+	coredll_valnum.o \
 	coredll_wincmn.o \
 	coredll_windowid.o \
 	coredll_wrapsizer.o \
@@ -10168,6 +10175,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_valgen.o \
 	corelib_validate.o \
 	corelib_valtext.o \
+	corelib_valnum.o \
 	corelib_wincmn.o \
 	corelib_windowid.o \
 	corelib_wrapsizer.o \
@@ -10381,6 +10389,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_valgen.o \
 	corelib_validate.o \
 	corelib_valtext.o \
+	corelib_valnum.o \
 	corelib_wincmn.o \
 	corelib_windowid.o \
 	corelib_wrapsizer.o \
@@ -20059,6 +20068,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_valtext.o: $(srcdir)/src/common/valtext.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/valtext.cpp
 
+@COND_USE_GUI_1@monodll_valnum.o: $(srcdir)/src/common/valnum.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/valnum.cpp
+
 @COND_USE_GUI_1@monodll_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
 
@@ -25338,6 +25350,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_valtext.o: $(srcdir)/src/common/valtext.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/valtext.cpp
+
+@COND_USE_GUI_1@monolib_valnum.o: $(srcdir)/src/common/valnum.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/valnum.cpp
 
 @COND_USE_GUI_1@monolib_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
@@ -30799,6 +30814,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_valtext.o: $(srcdir)/src/common/valtext.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/valtext.cpp
 
+@COND_USE_GUI_1@coredll_valnum.o: $(srcdir)/src/common/valnum.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/valnum.cpp
+
 @COND_USE_GUI_1@coredll_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
 
@@ -34761,6 +34779,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_valtext.o: $(srcdir)/src/common/valtext.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/valtext.cpp
+
+@COND_USE_GUI_1@corelib_valnum.o: $(srcdir)/src/common/valnum.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/valnum.cpp
 
 @COND_USE_GUI_1@corelib_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp

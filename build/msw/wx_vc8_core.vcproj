@@ -1287,6 +1287,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\valnum.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\valtext.cpp"
 				>
 			</File>
@@ -7605,6 +7609,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\validate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\valnum.h"
 				>
 			</File>
 			<File

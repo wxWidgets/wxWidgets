@@ -467,6 +467,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_valgen.obj &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
+	$(OBJS)\monodll_valnum.obj &
 	$(OBJS)\monodll_wincmn.obj &
 	$(OBJS)\monodll_windowid.obj &
 	$(OBJS)\monodll_wrapsizer.obj &
@@ -730,6 +731,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_valgen.obj &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
+	$(OBJS)\monodll_valnum.obj &
 	$(OBJS)\monodll_wincmn.obj &
 	$(OBJS)\monodll_windowid.obj &
 	$(OBJS)\monodll_wrapsizer.obj &
@@ -1232,6 +1234,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_valgen.obj &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
+	$(OBJS)\monolib_valnum.obj &
 	$(OBJS)\monolib_wincmn.obj &
 	$(OBJS)\monolib_windowid.obj &
 	$(OBJS)\monolib_wrapsizer.obj &
@@ -1495,6 +1498,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_valgen.obj &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
+	$(OBJS)\monolib_valnum.obj &
 	$(OBJS)\monolib_wincmn.obj &
 	$(OBJS)\monolib_windowid.obj &
 	$(OBJS)\monolib_wrapsizer.obj &
@@ -1901,6 +1905,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_valgen.obj &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
+	$(OBJS)\coredll_valnum.obj &
 	$(OBJS)\coredll_wincmn.obj &
 	$(OBJS)\coredll_windowid.obj &
 	$(OBJS)\coredll_wrapsizer.obj &
@@ -2164,6 +2169,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_valgen.obj &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
+	$(OBJS)\coredll_valnum.obj &
 	$(OBJS)\coredll_wincmn.obj &
 	$(OBJS)\coredll_windowid.obj &
 	$(OBJS)\coredll_wrapsizer.obj &
@@ -2442,6 +2448,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_valgen.obj &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
+	$(OBJS)\corelib_valnum.obj &
 	$(OBJS)\corelib_wincmn.obj &
 	$(OBJS)\corelib_windowid.obj &
 	$(OBJS)\corelib_wrapsizer.obj &
@@ -2705,6 +2712,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_valgen.obj &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
+	$(OBJS)\corelib_valnum.obj &
 	$(OBJS)\corelib_wincmn.obj &
 	$(OBJS)\corelib_windowid.obj &
 	$(OBJS)\corelib_wrapsizer.obj &
@@ -8225,6 +8233,11 @@ $(OBJS)\monodll_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_valnum.obj :  .AUTODEPEND ..\..\src\common\valnum.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10550,6 +10563,11 @@ $(OBJS)\monolib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_valnum.obj :  .AUTODEPEND ..\..\src\common\valnum.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -12869,6 +12887,11 @@ $(OBJS)\coredll_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_valnum.obj :  .AUTODEPEND ..\..\src\common\valnum.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -14245,6 +14268,11 @@ $(OBJS)\corelib_validate.obj :  .AUTODEPEND ..\..\src\common\validate.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_valnum.obj :  .AUTODEPEND ..\..\src\common\valnum.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

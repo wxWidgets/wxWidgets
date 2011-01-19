@@ -1916,6 +1916,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_valgen.o \
 	$(OBJS)\monodll_validate.o \
 	$(OBJS)\monodll_valtext.o \
+	$(OBJS)\monodll_valnum.o \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_windowid.o \
 	$(OBJS)\monodll_wrapsizer.o \
@@ -2179,6 +2180,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_valgen.o \
 	$(OBJS)\monodll_validate.o \
 	$(OBJS)\monodll_valtext.o \
+	$(OBJS)\monodll_valnum.o \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_windowid.o \
 	$(OBJS)\monodll_wrapsizer.o \
@@ -2676,6 +2678,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_valgen.o \
 	$(OBJS)\monolib_validate.o \
 	$(OBJS)\monolib_valtext.o \
+	$(OBJS)\monolib_valnum.o \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_windowid.o \
 	$(OBJS)\monolib_wrapsizer.o \
@@ -2939,6 +2942,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_valgen.o \
 	$(OBJS)\monolib_validate.o \
 	$(OBJS)\monolib_valtext.o \
+	$(OBJS)\monolib_valnum.o \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_windowid.o \
 	$(OBJS)\monolib_wrapsizer.o \
@@ -3334,6 +3338,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_valgen.o \
 	$(OBJS)\coredll_validate.o \
 	$(OBJS)\coredll_valtext.o \
+	$(OBJS)\coredll_valnum.o \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_windowid.o \
 	$(OBJS)\coredll_wrapsizer.o \
@@ -3597,6 +3602,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_valgen.o \
 	$(OBJS)\coredll_validate.o \
 	$(OBJS)\coredll_valtext.o \
+	$(OBJS)\coredll_valnum.o \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_windowid.o \
 	$(OBJS)\coredll_wrapsizer.o \
@@ -3873,6 +3879,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_valgen.o \
 	$(OBJS)\corelib_validate.o \
 	$(OBJS)\corelib_valtext.o \
+	$(OBJS)\corelib_valnum.o \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_windowid.o \
 	$(OBJS)\corelib_wrapsizer.o \
@@ -4136,6 +4143,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_valgen.o \
 	$(OBJS)\corelib_validate.o \
 	$(OBJS)\corelib_valtext.o \
+	$(OBJS)\corelib_valnum.o \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_windowid.o \
 	$(OBJS)\corelib_wrapsizer.o \
@@ -7966,6 +7974,11 @@ $(OBJS)\monodll_valtext.o: ../../src/common/valtext.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_valnum.o: ../../src/common/valnum.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_wincmn.o: ../../src/common/wincmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10291,6 +10304,11 @@ $(OBJS)\monolib_valtext.o: ../../src/common/valtext.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_valnum.o: ../../src/common/valnum.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_wincmn.o: ../../src/common/wincmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12610,6 +12628,11 @@ $(OBJS)\coredll_valtext.o: ../../src/common/valtext.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_valnum.o: ../../src/common/valnum.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_wincmn.o: ../../src/common/wincmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13986,6 +14009,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_valtext.o: ../../src/common/valtext.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_valnum.o: ../../src/common/valnum.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

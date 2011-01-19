@@ -213,6 +213,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_settings.o \
 	test_gui_socket.o \
 	test_gui_boxsizer.o \
+	test_gui_valnum.o \
 	test_gui_clientsize.o \
 	test_gui_setsize.o \
 	test_gui_xrctest.o
@@ -865,6 +866,9 @@ test_gui_socket.o: $(srcdir)/net/socket.cpp $(TEST_GUI_ODEP)
 
 test_gui_boxsizer.o: $(srcdir)/sizers/boxsizer.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/boxsizer.cpp
+
+test_gui_valnum.o: $(srcdir)/validators/valnum.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/validators/valnum.cpp
 
 test_gui_clientsize.o: $(srcdir)/window/clientsize.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/window/clientsize.cpp

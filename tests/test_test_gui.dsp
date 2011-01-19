@@ -517,6 +517,10 @@ SOURCE=.\controls\treectrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\validators\valnum.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\virtlistctrltest.cpp
 # End Source File
 # Begin Source File

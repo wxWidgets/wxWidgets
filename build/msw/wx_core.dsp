@@ -730,6 +730,10 @@ SOURCE=..\..\src\common\validate.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\valnum.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\valtext.cpp
 # End Source File
 # Begin Source File
@@ -6794,6 +6798,10 @@ SOURCE=..\..\include\wx\valgen.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\validate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\valnum.h
 # End Source File
 # Begin Source File
 

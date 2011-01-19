@@ -77,7 +77,8 @@ enum wxTextValidatorStyle
     @library{wxcore}
     @category{validator}
 
-    @see @ref overview_validator, wxValidator, wxGenericValidator
+    @see @ref overview_validator, wxValidator, wxGenericValidator,
+        wxIntegerValidator, wxFloatingPointValidator
 */
 class wxTextValidator : public wxValidator
 {

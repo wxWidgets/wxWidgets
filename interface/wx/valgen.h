@@ -27,7 +27,8 @@
     @library{wxcore}
     @category{validator}
 
-    @see @ref overview_validator, wxValidator, wxTextValidator
+    @see @ref overview_validator, wxValidator, wxTextValidator,
+        wxIntegerValidator, wxFloatingPointValidator
 */
 class wxGenericValidator : public wxValidator
 {

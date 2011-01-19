@@ -766,6 +766,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/valgen.cpp
     src/common/validate.cpp
     src/common/valtext.cpp
+    src/common/valnum.cpp
     src/common/wincmn.cpp
     src/common/windowid.cpp
     src/common/wrapsizer.cpp
@@ -909,6 +910,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
+    wx/valnum.h
     wx/window.h
     wx/windowid.h
     wx/wrapsizer.h

@@ -423,6 +423,7 @@ All:
 - Added negatable command line switches (Armel Asselin).
 - Added wxVersionInfo and various GetLibraryVersionInfo() functions (troelsk).
 - Added wxNumberFormatter for dealing with thousands separators.
+- Added wxIntegerValidator<> and wxFloatingPointValidator<> validators.
 
 Unix:
 

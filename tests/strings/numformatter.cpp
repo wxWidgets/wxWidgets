@@ -31,18 +31,13 @@ public:
     {
         // We need to use a locale with known decimal point and which uses the
         // thousands separator for the tests to make sense.
-        wxLanguage lang;
-        if ( wxLocale::IsAvailable(wxLANGUAGE_ENGLISH_US) )
-            lang = wxLANGUAGE_ENGLISH_US;
-        else if ( wxLocale::IsAvailable(wxLANGUAGE_ENGLISH_UK) )
-            lang = wxLANGUAGE_ENGLISH_UK;
-        else
+        m_locale = new wxLocale(wxLANGUAGE_ENGLISH_UK,
+                                wxLOCALE_DONT_LOAD_DEFAULT);
+        if ( !m_locale->IsOk() )
         {
+            delete m_locale;
             m_locale = NULL;
-            return;
         }
-
-        m_locale = new wxLocale(lang, wxLOCALE_DONT_LOAD_DEFAULT);
     }
 
     virtual ~NumFormatterTestCase()

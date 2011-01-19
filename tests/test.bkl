@@ -199,6 +199,7 @@
              -->
             net/socket.cpp
             sizers/boxsizer.cpp
+            validators/valnum.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp

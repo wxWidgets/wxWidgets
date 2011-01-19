@@ -10,7 +10,8 @@
 
 @page overview_validator wxValidator Overview
 
-Classes: wxValidator, wxTextValidator, wxGenericValidator
+Classes: wxValidator, wxTextValidator, wxGenericValidator, wxIntegerValidator,
+wxFloatingPointValidator
 
 @li @ref overview_validator_intro
 @li @ref overview_validator_anatomy
