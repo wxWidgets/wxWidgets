@@ -589,7 +589,7 @@ WXWindow wxNonOwnedWindowCocoaImpl::GetWXWindow() const
 
 void wxNonOwnedWindowCocoaImpl::Raise()
 {
-    [m_macWindow orderWindow:NSWindowAbove relativeTo:0];
+    [m_macWindow makeKeyAndOrderFront:nil];
 }
 
 void wxNonOwnedWindowCocoaImpl::Lower()
