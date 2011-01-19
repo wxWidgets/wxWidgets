@@ -296,13 +296,23 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
 
+    uint16 photometric;
+    uint16 samplesPerPixel;
     uint16 extraSamples;
     uint16* samplesInfo;
+    TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
                           &extraSamples, &samplesInfo);
-    const bool hasAlpha = (extraSamples == 1 &&
-                           (samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA ||
-                            samplesInfo[0] == EXTRASAMPLE_UNASSALPHA));
+    if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric))
+    {
+        photometric = PHOTOMETRIC_MINISWHITE;
+    }
+    const bool hasAlpha = (extraSamples >= 1
+        && ((samplesInfo[0] == EXTRASAMPLE_UNSPECIFIED && samplesPerPixel > 3)
+            || samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA
+            || samplesInfo[0] == EXTRASAMPLE_UNASSALPHA))
+        || (extraSamples == 0 && samplesPerPixel == 4
+            && photometric == PHOTOMETRIC_RGB);
 
     // guard against integer overflow during multiplication which could result
     // in allocating a too small buffer and then overflowing it
