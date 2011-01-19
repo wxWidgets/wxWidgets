@@ -2468,16 +2468,18 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title, wxDataViewRenderer* re
                  :wxDataViewColumnBase(renderer, model_column), m_NativeDataPtr(new wxDataViewColumnNativeData()), m_title(title)
 {
   InitCommon(width, align, flags);
-  if ((renderer != NULL) && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-    renderer->SetAlignment(align);
+  if ((renderer != NULL) && !renderer->IsCustomRenderer() &&
+      (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+      renderer->SetAlignment(align);
 }
 
 wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap, wxDataViewRenderer* renderer, unsigned int model_column, int width, wxAlignment align, int flags)
                  :wxDataViewColumnBase(bitmap, renderer, model_column), m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
   InitCommon(width, align, flags);
-  if ((renderer != NULL) && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-    renderer->SetAlignment(align);
+  if ((renderer != NULL) && !renderer->IsCustomRenderer() &&
+      (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+      renderer->SetAlignment(align);
 }
 
 wxDataViewColumn::~wxDataViewColumn()

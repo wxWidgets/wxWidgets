@@ -159,6 +159,9 @@ public:
 
     wxControl *GetEditorCtrl() { return m_editorCtrl; }
 
+    virtual bool IsCustomRenderer() const { return false; }
+
+
 protected:
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
     void DestroyEditControl();
@@ -277,6 +280,8 @@ public:
 
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
+
+    virtual bool IsCustomRenderer() const { return true; }
 
 protected:
     // helper for GetSize() implementations, respects attributes

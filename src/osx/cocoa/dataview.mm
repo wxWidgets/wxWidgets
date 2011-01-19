@@ -3015,7 +3015,8 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
        m_title(title)
 {
     InitCommon(width, align, flags);
-    if (renderer && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (renderer && !renderer->IsCustomRenderer() &&
+        (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         renderer->SetAlignment(align);
 }
 
@@ -3029,7 +3030,8 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
       m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
     InitCommon(width, align, flags);
-    if (renderer && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (renderer && !renderer->IsCustomRenderer() &&
+        (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         renderer->SetAlignment(align);
 }
 
@@ -3053,7 +3055,8 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
 {
     m_alignment = align;
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-    if (m_renderer && (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (m_renderer && !m_renderer->IsCustomRenderer() &&
+        (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         m_renderer->SetAlignment(align);
 }
 
