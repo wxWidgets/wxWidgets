@@ -30,7 +30,10 @@ public:
     // precision can also be specified.
     static wxString ToString(long val,
                              int style = Style_WithThousandsSep);
-
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static wxString ToString(wxLongLong_t val,
+                             int style = Style_WithThousandsSep);
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     static wxString ToString(double val,
                              int precision,
                              int style = Style_WithThousandsSep);
@@ -40,6 +43,9 @@ public:
     // Return true on success and stores the result in the provided location
     // which must be a valid non-NULL pointer.
     static bool FromString(wxString s, long *val);
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static bool FromString(wxString s, wxLongLong_t *val);
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     static bool FromString(wxString s, double *val);
 
 
@@ -53,6 +59,9 @@ public:
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
 private:
+    // Post-process the string representing an integer.
+    static wxString PostProcessIntString(wxString s, int style);
+
     // Add the thousands separators to a string representing a number without
     // the separators. This is used by ToString(Style_WithThousandsSep).
     static void AddThousandsSeparators(wxString& s);

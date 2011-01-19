@@ -94,10 +94,8 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
 // Conversion to string and helpers
 // ----------------------------------------------------------------------------
 
-wxString wxNumberFormatter::ToString(long val, int style)
+wxString wxNumberFormatter::PostProcessIntString(wxString s, int style)
 {
-    wxString s = wxString::Format("%ld", val);
-
     if ( style & Style_WithThousandsSep )
         AddThousandsSeparators(s);
 
@@ -106,6 +104,21 @@ wxString wxNumberFormatter::ToString(long val, int style)
 
     return s;
 }
+
+wxString wxNumberFormatter::ToString(long val, int style)
+{
+    return PostProcessIntString(wxString::Format("%ld", val), style);
+}
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+wxString wxNumberFormatter::ToString(wxLongLong_t val, int style)
+{
+    return PostProcessIntString(wxString::Format("%" wxLongLongFmtSpec "d", val),
+                                style);
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 wxString wxNumberFormatter::ToString(double val, int precision, int style)
 {
@@ -182,6 +195,16 @@ bool wxNumberFormatter::FromString(wxString s, long *val)
     RemoveThousandsSeparators(s);
     return s.ToLong(val);
 }
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
+{
+    RemoveThousandsSeparators(s);
+    return s.ToLongLong(val);
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 bool wxNumberFormatter::FromString(wxString s, double *val)
 {
