@@ -135,6 +135,9 @@ void NumValidatorTestCase::TransferUnsigned()
 
 void NumValidatorTestCase::TransferFloat()
 {
+    // We need a locale with point as decimal separator.
+    CLocaleSetter cloc;
+
     float value = 0;
     wxFloatingPointValidator<float> valFloat(3, &value);
     valFloat.SetWindow(m_text);
@@ -180,6 +183,9 @@ void NumValidatorTestCase::ZeroAsBlank()
 
 void NumValidatorTestCase::NoTrailingZeroes()
 {
+    // We need a locale with point as decimal separator.
+    CLocaleSetter cloc;
+
     double value = 1.2;
     m_text->SetValidator(
         wxMakeFloatingPointValidator(3, &value, wxNUM_VAL_NO_TRAILING_ZEROES));
