@@ -1799,14 +1799,14 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     }
 
     wxRichTextParagraphLayoutBox* container = GetFocusObject();
-    int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS;
+    int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS;
 
     if (notInThisObject)
     {
         // If we know we're navigating out of the current object,
         // try to find an object anywhere in the buffer at the new position (up or down a bit)
         container = & GetBuffer();
-        hitTestFlags = 0;
+        hitTestFlags &= ~wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS;
 
         if (noLines > 0) // going down
         {
@@ -1835,7 +1835,10 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     wxRichTextObject* contextObj = NULL;
     int hitTest = container->HitTest(dc, pt, newPos, & hitObj, & contextObj, hitTestFlags);
 
-    if (hitTest != wxRICHTEXT_HITTEST_NONE && hitObj)
+    if (hitObj &&
+        ((hitTest & wxRICHTEXT_HITTEST_NONE) == 0) &&
+        (! (hitObj == (& m_buffer) && ((hitTest & wxRICHTEXT_HITTEST_OUTSIDE) != 0))) // outside the buffer counts as 'do nothing'
+        )
     {
         if (notInThisObject)
         {

@@ -187,7 +187,10 @@ enum wxRichTextHitTestFlags
     wxRICHTEXT_HITTEST_OUTSIDE = 0x10,
 
     // Only do hit-testing at the current level (don't traverse into top-level objects)
-    wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS = 0x20
+    wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS = 0x20,
+
+    // Ignore floating objects
+    wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS = 0x40
 };
 
 /*!
@@ -1409,48 +1412,155 @@ public:
 
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxVariant, wxRichTextVariantArray, WXDLLIMPEXP_RICHTEXT);
 
-// ----------------------------------------------------------------------------
-// wxRichTextProperties - A simple property class using wxVariants
-// ----------------------------------------------------------------------------
+/**
+    @class wxRichTextProperties
+    A simple property class using wxVariants. This is used to give each rich text object the
+    ability to store custom properties that can be used by the application.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextObject, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextProperties: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxRichTextProperties)
 public:
+
+    /**
+        Default constructor.
+    */
     wxRichTextProperties() {}
+
+    /**
+        Copy constructor.
+    */
     wxRichTextProperties(const wxRichTextProperties& props): wxObject() { Copy(props); }
 
+    /**
+        Assignment operator.
+    */
     void operator=(const wxRichTextProperties& props) { Copy(props); }
+
+    /**
+        Equality operator.
+    */
     bool operator==(const wxRichTextProperties& props) const;
+
+    /**
+        Copies from @a props.
+    */
     void Copy(const wxRichTextProperties& props) { m_properties = props.m_properties; }
+
+    /**
+        Returns the variant at the given index.
+    */
     const wxVariant& operator[](size_t idx) const { return m_properties[idx]; }
+
+    /**
+        Returns the variant at the given index.
+    */
     wxVariant& operator[](size_t idx) { return m_properties[idx]; }
+
+    /**
+        Clears the properties.
+    */
     void Clear() { m_properties.Clear(); }
 
+    /**
+        Returns the array of variants implementing the properties.
+    */
     const wxRichTextVariantArray& GetProperties() const { return m_properties; }
+
+    /**
+        Returns the array of variants implementing the properties.
+    */
     wxRichTextVariantArray& GetProperties() { return m_properties; }
+
+    /**
+        Sets the array of variants.
+    */
     void SetProperties(const wxRichTextVariantArray& props) { m_properties = props; }
 
+    /**
+        Returns all the property names.
+    */
     wxArrayString GetPropertyNames() const;
 
+    /**
+        Returns a count of the properties.
+    */
     size_t GetCount() const { return m_properties.GetCount(); }
 
-    int HasProperty(const wxString& name) const { return Find(name) != -1; }
+    /**
+        Returns @true if the given property is found.
+    */
+    bool HasProperty(const wxString& name) const { return Find(name) != -1; }
 
+    /**
+        Finds the given property.
+    */
     int Find(const wxString& name) const;
+
+    /**
+        Gets the property variant by name.
+    */
     const wxVariant& GetProperty(const wxString& name) const;
+
+    /**
+        Finds or creates a property with the given name, returning a pointer to the variant.
+    */
     wxVariant* FindOrCreateProperty(const wxString& name);
 
+    /**
+        Gets the value of the named property as a string.
+    */
     wxString GetPropertyString(const wxString& name) const;
+
+    /**
+        Gets the value of the named property as a long integer.
+    */
     long GetPropertyLong(const wxString& name) const;
+
+    /**
+        Gets the value of the named property as a boolean.
+    */
     bool GetPropertyBool(const wxString& name) const;
+
+    /**
+        Gets the value of the named property as a double.
+    */
     double GetPropertyDouble(const wxString& name) const;
 
+    /**
+        Sets the property by passing a variant which contains a name and value.
+    */
     void SetProperty(const wxVariant& variant);
+
+    /**
+        Sets a property by name and variant.
+    */
     void SetProperty(const wxString& name, const wxVariant& variant);
+
+    /**
+        Sets a property by name and string value.
+    */
     void SetProperty(const wxString& name, const wxString& value);
+
+    /**
+        Sets  property by name and long integer value.
+    */
     void SetProperty(const wxString& name, long value);
+
+    /**
+        Sets  property by name and double value.
+    */
     void SetProperty(const wxString& name, double value);
+
+    /**
+        Sets  property by name and boolean value.
+    */
     void SetProperty(const wxString& name, bool value);
 
 protected:
@@ -1458,26 +1568,58 @@ protected:
 };
 
 
-/*!
- * wxRichTextFontTable
- * Manages quick access to a pool of fonts for rendering rich text
- */
+/**
+    @class wxRichTextFontTable
+    Manages quick access to a pool of fonts for rendering rich text.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontTable: public wxObject
 {
 public:
+    /**
+        Default constructor.
+    */
     wxRichTextFontTable();
 
+    /**
+        Copy constructor.
+    */
     wxRichTextFontTable(const wxRichTextFontTable& table);
     virtual ~wxRichTextFontTable();
 
+    /**
+        Returns @true if the font table is valid.
+    */
     bool IsOk() const { return m_refData != NULL; }
 
+    /**
+        Finds a font for the given attribute object.
+    */
     wxFont FindFont(const wxRichTextAttr& fontSpec);
+
+    /**
+        Clears the font table.
+    */
     void Clear();
 
+    /**
+        Assignment operator.
+    */
     void operator= (const wxRichTextFontTable& table);
+
+    /**
+        Equality operator.
+    */
     bool operator == (const wxRichTextFontTable& table) const;
+
+    /**
+        Inequality operator.
+    */
     bool operator != (const wxRichTextFontTable& table) const { return !(*this == table); }
 
 protected:
@@ -1485,61 +1627,126 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxRichTextFontTable)
 };
 
-/*!
- * wxRichTextRange class declaration
- * This stores beginning and end positions for a range of data.
- * TODO: consider renaming wxTextRange and using for all text controls.
- */
+/**
+    @class wxRichTextRange
+
+    This stores beginning and end positions for a range of data.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextRange
 {
 public:
 // Constructors
 
+    /**
+        Default constructor.
+    */
     wxRichTextRange() { m_start = 0; m_end = 0; }
+
+    /**
+        Constructor taking start and end positions.
+    */
     wxRichTextRange(long start, long end) { m_start = start; m_end = end; }
+
+    /**
+        Copy constructor.
+    */
     wxRichTextRange(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
     ~wxRichTextRange() {}
 
+    /**
+        Assignment operator.
+    */
     void operator =(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
+
+    /**
+        Equality operator.
+    */
     bool operator ==(const wxRichTextRange& range) const { return (m_start == range.m_start && m_end == range.m_end); }
+
+    /**
+        Inequality operator.
+    */
     bool operator !=(const wxRichTextRange& range) const { return (m_start != range.m_start || m_end != range.m_end); }
+
+    /**
+        Subtracts a range from this range.
+    */
     wxRichTextRange operator -(const wxRichTextRange& range) const { return wxRichTextRange(m_start - range.m_start, m_end - range.m_end); }
+
+    /**
+        Adds a range to this range.
+    */
     wxRichTextRange operator +(const wxRichTextRange& range) const { return wxRichTextRange(m_start + range.m_start, m_end + range.m_end); }
 
+    /**
+        Sets the range start and end positions.
+    */
     void SetRange(long start, long end) { m_start = start; m_end = end; }
 
+    /**
+        Sets the start position.
+    */
     void SetStart(long start) { m_start = start; }
+
+    /**
+        Returns the start position.
+    */
     long GetStart() const { return m_start; }
 
+    /**
+        Sets the end position.
+    */
     void SetEnd(long end) { m_end = end; }
+
+    /**
+        Gets the end position.
+    */
     long GetEnd() const { return m_end; }
 
-    /// Returns true if this range is completely outside 'range'
+    /**
+        Returns true if this range is completely outside @a range.
+    */
     bool IsOutside(const wxRichTextRange& range) const { return range.m_start > m_end || range.m_end < m_start; }
 
-    /// Returns true if this range is completely within 'range'
+    /**
+        Returns true if this range is completely within @a range.
+    */
     bool IsWithin(const wxRichTextRange& range) const { return m_start >= range.m_start && m_end <= range.m_end; }
 
-    /// Returns true if the given position is within this range. Allow
-    /// for the possibility of an empty range - assume the position
-    /// is within this empty range. NO, I think we should not match with an empty range.
-    // bool Contains(long pos) const { return pos >= m_start && (pos <= m_end || GetLength() == 0); }
+    /**
+        Returns true if @a pos was within the range.
+    */
     bool Contains(long pos) const { return pos >= m_start && pos <= m_end ; }
 
-    /// Limit this range to be within 'range'
+    /**
+        Limit this range to be within @a range.
+    */
     bool LimitTo(const wxRichTextRange& range) ;
 
-    /// Gets the length of the range
+    /**
+        Gets the length of the range.
+    */
     long GetLength() const { return m_end - m_start + 1; }
 
-    /// Swaps the start and end
+    /**
+        Swaps the start and end.
+    */
     void Swap() { long tmp = m_start; m_start = m_end; m_end = tmp; }
 
-    /// Convert to internal form: (n, n) is the range of a single character.
+    /**
+        Convert to internal form: (n, n) is the range of a single character.
+    */
     wxRichTextRange ToInternal() const { return wxRichTextRange(m_start, m_end-1); }
 
-    /// Convert from internal to public API form: (n, n+1) is the range of a single character.
+    /**
+        Convert from internal to public API form: (n, n+1) is the range of a single character.
+    */
     wxRichTextRange FromInternal() const { return wxRichTextRange(m_start, m_end+1); }
 
 protected:
@@ -1552,89 +1759,163 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRichTextRange, wxRichTextRangeArray, WXDLLIM
 #define wxRICHTEXT_ALL  wxRichTextRange(-2, -2)
 #define wxRICHTEXT_NONE  wxRichTextRange(-1, -1)
 
-// ----------------------------------------------------------------------------
-// wxRichTextSelection: stores selection information
-// ----------------------------------------------------------------------------
-
 #define wxRICHTEXT_NO_SELECTION wxRichTextRange(-2, -2)
+
+/**
+    @class wxRichTextSelection
+
+    Stores selection information. The selection does not have to be contiguous, though currently non-contiguous
+    selections are only supported for a range of table cells (a geometric block of cells can consist
+    of a set of non-contiguous positions).
+
+    The selection consists of an array of ranges, and the container that is the context for the selection. It
+    follows that a single selection object can only represent ranges with the same parent container.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextSelection
 {
 public:
+    /**
+        Copy constructor.
+    */
     wxRichTextSelection(const wxRichTextSelection& sel) { Copy(sel); }
+
+    /**
+        Creates a selection from a range and a container.
+    */
     wxRichTextSelection(const wxRichTextRange& range, wxRichTextParagraphLayoutBox* container) { m_ranges.Add(range); m_container = container; }
+
+    /**
+        Default constructor.
+    */
     wxRichTextSelection() { Reset(); }
 
-    /// Reset the selection
+    /**
+        Resets the selection.
+    */
     void Reset() { m_ranges.Clear(); m_container = NULL; }
 
-    /// Set the selection
+    /**
+        Sets the selection.
+    */
+
     void Set(const wxRichTextRange& range, wxRichTextParagraphLayoutBox* container)
     { m_ranges.Clear(); m_ranges.Add(range); m_container = container; }
 
-    /// Add a selection
+    /**
+        Adds a range.
+    */
     void Add(const wxRichTextRange& range)
     { m_ranges.Add(range); }
 
-    /// Set the selections
+    /**
+        Sets the selections from an array of ranges and a container object.
+    */
     void Set(const wxRichTextRangeArray& ranges, wxRichTextParagraphLayoutBox* container)
     { m_ranges = ranges; m_container = container; }
 
-    /// Copy
+    /**
+        Copies from @a sel.
+    */
     void Copy(const wxRichTextSelection& sel)
     { m_ranges = sel.m_ranges; m_container = sel.m_container; }
 
-    /// Assignment
+    /**
+        Assignment operator.
+    */
     void operator=(const wxRichTextSelection& sel) { Copy(sel); }
 
-    /// Equality test
+    /**
+        Equality operator.
+    */
     bool operator==(const wxRichTextSelection& sel) const;
 
-    /// Index operator
+    /**
+        Index operator.
+    */
     wxRichTextRange operator[](size_t i) const { return GetRange(i); }
 
-    /// Get the selection ranges
+    /**
+        Returns the selection ranges.
+    */
     wxRichTextRangeArray& GetRanges() { return m_ranges; }
+
+    /**
+        Returns the selection ranges.
+    */
     const wxRichTextRangeArray& GetRanges() const { return m_ranges; }
 
-    /// Set the selection ranges
+    /**
+        Sets the selection ranges.
+    */
     void SetRanges(const wxRichTextRangeArray& ranges) { m_ranges = ranges; }
 
-    /// Get the number of ranges in the selection
+    /**
+        Returns the number of ranges in the selection.
+    */
     size_t GetCount() const { return m_ranges.GetCount(); }
 
-    /// Get the given range
+    /**
+        Returns the range at the given index.
+
+    */
     wxRichTextRange GetRange(size_t i) const { return m_ranges[i]; }
 
-    /// Get the first range if there is one, otherwise wxRICHTEXT_NO_SELECTION.
+    /**
+        Returns the first range if there is one, otherwise wxRICHTEXT_NO_SELECTION.
+    */
     wxRichTextRange GetRange() const { return (m_ranges.GetCount() > 0) ? (m_ranges[0]) : wxRICHTEXT_NO_SELECTION; }
 
-    /// Set a single range.
+    /**
+        Sets a single range.
+    */
     void SetRange(const wxRichTextRange& range) { m_ranges.Clear(); m_ranges.Add(range); }
 
-    /// Get the container for which the selection is valid
+    /**
+        Returns the container for which the selection is valid.
+    */
     wxRichTextParagraphLayoutBox* GetContainer() const { return m_container; }
 
-    /// Set the container for which the selection is valid
+    /**
+        Sets the container for which the selection is valid.
+    */
     void SetContainer(wxRichTextParagraphLayoutBox* container) { m_container = container; }
 
-    /// Is the selection valid?
+    /**
+        Returns @true if the selection is valid.
+    */
     bool IsValid() const { return m_ranges.GetCount() > 0 && GetContainer(); }
 
-    /// Get the selection appropriate to the specified object, if any; returns an empty array if none
-    /// at the level of the object's container.
+    /**
+        Returns the selection appropriate to the specified object, if any; returns an empty array if none
+        at the level of the object's container.
+    */
     wxRichTextRangeArray GetSelectionForObject(wxRichTextObject* obj) const;
 
-    /// Is the given position within the selection?
+    /**
+        Returns @true if the given position is within the selection.
+    */
     bool WithinSelection(long pos, wxRichTextObject* obj) const;
 
-    /// Is the given position within the selection?
+    /**
+        Returns @true if the given position is within the selection.
+
+    */
     bool WithinSelection(long pos) const { return WithinSelection(pos, m_ranges); }
 
-    /// Is the given position within the selection range?
+    /**
+        Returns @true if the given position is within the selection range.
+    */
     static bool WithinSelection(long pos, const wxRichTextRangeArray& ranges);
 
-    /// Is the given range within the selection range?
+    /**
+        Returns @true if the given range is within the selection range.
+    */
     static bool WithinSelection(const wxRichTextRange& range, const wxRichTextRangeArray& ranges);
 
     wxRichTextRangeArray            m_ranges;

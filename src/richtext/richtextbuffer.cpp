@@ -1736,7 +1736,7 @@ int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, const wxPoint& pt, long& tex
         return wxRICHTEXT_HITTEST_NONE;
 
     int ret = wxRICHTEXT_HITTEST_NONE;
-    if (m_floatCollector)
+    if (m_floatCollector && (flags & wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS) == 0)
         ret = m_floatCollector->HitTest(dc, pt, textPosition, obj, flags);
 
     if (ret == wxRICHTEXT_HITTEST_NONE)
