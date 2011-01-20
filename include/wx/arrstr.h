@@ -252,7 +252,7 @@ public:
   public:
     pointer m_ptr;
     reverse_iterator() : m_ptr(NULL) { }
-    reverse_iterator(pointer ptr) : m_ptr(ptr) { }
+    wxEXPLICIT reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
     pointer operator->() const { return m_ptr; }
@@ -278,7 +278,7 @@ public:
   public:
     pointer m_ptr;
     const_reverse_iterator() : m_ptr(NULL) { }
-    const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }
+    wxEXPLICIT const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
