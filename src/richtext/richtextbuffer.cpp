@@ -6668,13 +6668,13 @@ bool wxRichTextParagraphLayoutBox::InsertTextWithUndo(long pos, const wxString& 
 
     int length = action->GetNewParagraphs().GetOwnRange().GetLength();
 
-    if (text.length() > 0 && text.Last() != wxT('\n'))
+    if (!text.empty() && text.Last() != wxT('\n'))
     {
         // Don't count the newline when undoing
         length --;
         action->GetNewParagraphs().SetPartialParagraph(true);
     }
-    else if (text.length() > 0 && text.Last() == wxT('\n'))
+    else if (!text.empty() && text.Last() == wxT('\n'))
         length --;
 
     action->SetPosition(pos);

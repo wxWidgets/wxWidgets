@@ -545,7 +545,7 @@ bool wxToolBar::Realize()
                     m_vLastY                = m_yMargin;
                 }
                 pTool->m_vX = m_vLastX + pTool->GetWidth();
-                if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsNull())
+                if ( HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty() )
                     pTool->m_vY = m_vLastY + (nMaxToolHeight - m_vTextY) + m_toolPacking;
                 else
                     pTool->m_vY = m_vLastY + (nMaxToolHeight - (int)(pTool->GetHeight()/2));
@@ -858,7 +858,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
         {
             RaiseTool(pTool);
         }
-        if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsNull())
+        if ( HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty() )
         {
             wxCoord                 vX;
             wxCoord                 vY;
@@ -903,7 +903,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
                        ,pTool->m_vY
                        ,bUseMask
                       );
-        if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsNull())
+        if ( HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty() )
         {
             wxCoord                 vX;
             wxCoord                 vY;
@@ -953,7 +953,7 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
     {
         wxToolBarTool*              pTool = (wxToolBarTool *)node->GetData();
 
-        if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsNull())
+        if ( HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty() )
         {
             if ((vX >= (pTool->m_vX - ((wxCoord)(pTool->GetWidth()/2) - 2))) &&
                 (vY >= (pTool->m_vY - 2)) &&

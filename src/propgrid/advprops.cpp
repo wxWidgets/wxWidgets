@@ -634,7 +634,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     wxString faceName = font.GetFaceName();
     // If font was not in there, add it now
-    if ( faceName.length() &&
+    if ( !faceName.empty() &&
          wxPGGlobalVars->m_fontFamilyChoices->Index(faceName) == wxNOT_FOUND )
         wxPGGlobalVars->m_fontFamilyChoices->AddAsSorted(faceName);
 
@@ -797,7 +797,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
     else
         drawFace = m_value_wxFont.GetFaceName();
 
-    if ( drawFace.length() )
+    if ( !drawFace.empty() )
     {
         // Draw the background
         dc.SetBrush( wxColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)) );
@@ -1782,7 +1782,7 @@ void wxCursorProperty::OnCustomPaint( wxDC&, const wxRect&, wxPGPaintData& ) { }
 const wxString& wxPGGetDefaultImageWildcard()
 {
     // Form the wildcard, if not done yet
-    if ( !wxPGGlobalVars->m_pDefaultImageWildcard.length() )
+    if ( wxPGGlobalVars->m_pDefaultImageWildcard.empty() )
     {
 
         wxString str;
@@ -2179,7 +2179,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
     if ( !dateTime.IsValid() )
         return wxT("Invalid");
 
-    if ( !ms_defaultDateFormat.length() )
+    if ( ms_defaultDateFormat.empty() )
     {
 #if wxUSE_DATEPICKCTRL
         bool showCentury = m_dpStyle & wxDP_SHOWCENTURY ? true : false;
@@ -2189,7 +2189,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
         ms_defaultDateFormat = DetermineDefaultDateFormat( showCentury );
     }
 
-    if ( m_format.length() &&
+    if ( !m_format.empty() &&
          !(argFlags & wxPG_FULL_VALUE) )
             format = m_format.c_str();
 

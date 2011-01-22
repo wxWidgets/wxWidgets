@@ -339,7 +339,7 @@ bool wxExtHelpController::DisplayContents()
     file << m_helpDir << wxFILE_SEP_PATH << contents;
     if (file.Contains(wxT('#')))
         file = file.BeforeLast(wxT('#'));
-    if (contents.length() && wxFileExists(file))
+    if ( wxFileExists(file) )
         rc = DisplaySection(WXEXTHELP_CONTENTS_ID);
 
     // if not found, open homemade toc:

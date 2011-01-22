@@ -618,7 +618,7 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
 
     WX_PG_TOKENIZER1_BEGIN(text,delimiter)
 
-        if ( token.length() )
+        if ( !token.empty() )
         {
 
             // If token was invalid, exit the loop now

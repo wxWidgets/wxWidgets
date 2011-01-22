@@ -114,7 +114,7 @@ bool wxDialog::Create( wxWindow*       pParent,
     //
     // Must defer setting the title until after dialog is created and sized
     //
-    if (!rsTitle.IsNull())
+    if ( !rsTitle.empty() )
         SetTitle(rsTitle);
     return true;
 } // end of wxDialog::Create

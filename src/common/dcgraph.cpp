@@ -945,7 +945,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawRotatedText - invalid DC") );
 
-    if ( str.length() == 0 )
+    if ( str.empty() )
         return;
     if ( !m_logicalFunctionSupported )
         return;
@@ -960,7 +960,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
 
-    if ( str.length() == 0 )
+    if ( str.empty() )
         return;
 
     if ( !m_logicalFunctionSupported )

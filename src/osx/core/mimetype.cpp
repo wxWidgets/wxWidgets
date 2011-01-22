@@ -577,7 +577,7 @@ bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
 {
     const UtiMap::const_iterator itr = m_utiMap.find( uti );
 
-    if( itr == m_utiMap.end() || itr->second.description.IsNull() )
+    if( itr == m_utiMap.end() || itr->second.description.empty() )
     {
         *desc = wxEmptyString;
         return false;

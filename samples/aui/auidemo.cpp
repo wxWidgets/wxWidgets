@@ -1548,7 +1548,7 @@ wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
     static int n = 0;
 
     wxString text;
-    if (ctrl_text.Length() > 0)
+    if ( !ctrl_text.empty() )
         text = ctrl_text;
     else
         text.Printf(wxT("This is text box %d"), ++n);

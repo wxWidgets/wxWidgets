@@ -2130,7 +2130,7 @@ void wxComboCtrlBase::DoSetPopupControl(wxComboPopup* iface)
     }
 
     // This must be done after creation
-    if ( m_valueString.length() )
+    if ( !m_valueString.empty() )
     {
         iface->SetStringValue(m_valueString);
         //Refresh();

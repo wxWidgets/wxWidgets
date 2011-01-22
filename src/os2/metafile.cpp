@@ -142,7 +142,7 @@ wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file)
   m_maxY = -10000;
 //  m_title = NULL;
 
-  if (!file.IsNull() && wxFileExists(file))
+  if ( wxFileExists(file) )
     wxRemoveFile(file);
 
   // TODO

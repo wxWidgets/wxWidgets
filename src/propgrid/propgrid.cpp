@@ -1688,7 +1688,7 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
 wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() == 0 )
+    if ( src_str.empty() )
     {
         dst_str = src_str;
         return src_str;
@@ -1747,7 +1747,7 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
 
 wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() == 0 )
+    if ( src_str.empty() )
     {
         dst_str = src_str;
         return src_str;
@@ -3162,7 +3162,7 @@ wxStatusBar* wxPropertyGrid::GetStatusBar()
 
 void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), const wxString& msg )
 {
-    if ( !msg.length() )
+    if ( msg.empty() )
         return;
 
 #if wxUSE_STATUSBAR
@@ -3290,7 +3290,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
     {
         wxString msg = m_validationInfo.m_failureMessage;
 
-        if ( !msg.length() )
+        if ( msg.empty() )
             msg = _("You have entered invalid value. Press ESC to cancel editing.");
 
     #if wxUSE_STATUSBAR
@@ -4339,7 +4339,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         wxStatusBar* statusbar = GetStatusBar();
         if ( statusbar )
         {
-            if ( pHelpString && pHelpString->length() )
+            if ( pHelpString && !pHelpString->empty() )
             {
                 // Set help box text.
                 statusbar->SetStatusText( *pHelpString );
@@ -4361,7 +4361,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         //
         // Show help as a tool tip on the editor control.
         //
-        if ( pHelpString && pHelpString->length() &&
+        if ( pHelpString && !pHelpString->empty() &&
              primaryCtrl )
         {
             primaryCtrl->SetToolTip(*pHelpString);
@@ -6020,7 +6020,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
         RegisterDefaultEditors();
 
     wxString name = editorName;
-    if ( name.length() == 0 )
+    if ( name.empty() )
         name = editorClass->GetName();
 
     // Existing editor under this name?
@@ -6421,7 +6421,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
     else
     {
         bool found = false;
-        if ( idString.length() )
+        if ( !idString.empty() )
         {
             wxPGHashMapS2P::iterator it = m_dictIdChoices.find(idString);
             if ( it != m_dictIdChoices.end() )
@@ -6497,7 +6497,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
             }
 
             // Assign to id
-            if ( idString.length() )
+            if ( !idString.empty() )
                 m_dictIdChoices[idString] = choices.GetData();
         }
     }
@@ -6538,7 +6538,7 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
     wxString valuel = value.Lower();
     wxVariant variant;
 
-    if ( type.length() == 0 )
+    if ( type.empty() )
     {
         long v;
 

@@ -255,15 +255,15 @@ wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 {
    /// does hostname contain a port number?
    wxString port = hostname.After(':');
-   if(port.Length())
-   {
-      m_BeaconHost = hostname.Before(':');
-      m_BeaconPort = atoi(port);
-   }
-   else
+   if(port.empty())
    {
       m_BeaconHost = hostname;
       m_BeaconPort = portno;
+   }
+   else
+   {
+      m_BeaconHost = hostname.Before(':');
+      m_BeaconPort = atoi(port);
    }
 }
 
@@ -319,7 +319,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    // Let's try the ifconfig method first, should be fastest:
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
-      wxASSERT(m_IfconfigPath.length());
+      wxASSERT( !m_IfconfigPath.empty() );
 
       wxString tmpfile = wxFileName::CreateTempFileName("_wxdialuptest");
       wxString cmd = "/bin/sh -c \'";

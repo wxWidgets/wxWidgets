@@ -672,7 +672,7 @@ bool wxGIFHandler_WriteHeader(wxOutputStream *stream, int width, int height,
        ok = ok && wxGIFHandler_WriteLoop(stream);
     }
 
-    if (comment.length())
+    if ( !comment.empty() )
     {
        ok = ok && wxGIFHandler_WriteComment(stream, comment);
     }

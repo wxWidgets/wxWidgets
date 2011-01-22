@@ -997,7 +997,7 @@ public:
     void SetCustomButton( const wxString& custBtText,
                           wxArrayStringProperty* pcc )
     {
-        if ( custBtText.length() )
+        if ( !custBtText.empty() )
         {
             EnableCustomNewAction();
             m_pCallingClass = pcc;

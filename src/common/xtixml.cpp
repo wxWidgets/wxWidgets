@@ -399,7 +399,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
     // properties were written in the xml
     for ( size_t j = 0; j < propertyNames.size(); ++j )
     {
-        if ( propertyNames[j].length() )
+        if ( !propertyNames[j].empty() )
         {
             PropertyNodes::iterator propiter = propertyNodes.find( propertyNames[j] );
             if ( propiter != propertyNodes.end() )

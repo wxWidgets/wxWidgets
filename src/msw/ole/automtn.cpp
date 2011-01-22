@@ -109,7 +109,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     int namedArgCount = 0;
     int i;
     for (i = 0; i < noArgs; i++)
-        if (!INVOKEARG(i).GetName().IsNull())
+        if ( !INVOKEARG(i).GetName().empty() )
         {
             namedArgCount ++;
         }
@@ -124,7 +124,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     int j = 0;
     for (i = 0; i < namedArgCount; i++)
     {
-        if (!INVOKEARG(i).GetName().IsNull())
+        if ( !INVOKEARG(i).GetName().empty() )
         {
             argNames[(namedArgCount-j)] = wxConvertStringToOle(INVOKEARG(i).GetName());
             j ++;

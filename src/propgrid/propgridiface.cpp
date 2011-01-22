@@ -699,7 +699,7 @@ void wxPropertyGridInterface::SetPropertyCell( wxPGPropArg id,
     wxPG_PROP_ARG_CALL_PROLOG()
 
     wxPGCell& cell = p->GetCell(column);
-    if ( text.length() && text != wxPG_LABEL )
+    if ( !text.empty() && text != wxPG_LABEL )
         cell.SetText(text);
     if ( bitmap.IsOk() )
         cell.SetBitmap(bitmap);
@@ -932,7 +932,7 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
     }
 
     // Remove last '|'
-    if ( result.length() )
+    if ( !result.empty() )
         result.RemoveLast();
 
     return result;
@@ -1034,13 +1034,13 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                         {
                             if ( pageState->IsDisplayed() )
                             {
-                                if ( values[0].length() )
+                                if ( !values[0].empty() )
                                     newSelection = GetPropertyByName(value);
                                 pgSelectionSet = true;
                             }
                             else
                             {
-                                if ( values[0].length() )
+                                if ( !values[0].empty() )
                                     pageState->DoSetSelection(GetPropertyByName(value));
                                 else
                                     pageState->DoClearSelection();

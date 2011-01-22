@@ -161,7 +161,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 #if 0
         // TODO: Is this relevant? What does it do?
         int noCols = 2;
-        if (!value.IsNull() && (value.length() > (unsigned int) noCols))
+        if (!value.empty() && (value.length() > (unsigned int) noCols))
             noCols = value.length();
         XtVaSetValues((Widget) m_mainWidget,
                       XmNcolumns, noCols,

@@ -472,7 +472,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                 }
                 CFRelease( flavorTypeArray );
             }
-            if (filenamesPassed.length() > 0)
+            if ( !filenamesPassed.empty() )
             {
                 wxCharBuffer buf = filenamesPassed.fn_str();
                 SetData( wxDF_FILENAME, strlen( buf ), (const char*)buf );

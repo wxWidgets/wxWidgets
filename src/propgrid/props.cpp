@@ -210,7 +210,7 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
     wxTextCtrl* tc = static_cast<wxTextCtrl*>(wnd);
     wxString text = tc->GetValue();
 
-    if ( !text.length() )
+    if ( text.empty() )
         return false;
 
     return true;
@@ -260,7 +260,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
     wxString s;
     long value32;
 
-    if ( text.length() == 0 )
+    if ( text.empty() )
     {
         variant.MakeNull();
         return true;
@@ -539,7 +539,7 @@ bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, in
     wxString variantType = variant.GetType();
     bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
 
-    if ( text.length() == 0 )
+    if ( text.empty() )
     {
         variant.MakeNull();
         return true;
@@ -682,7 +682,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
         if (!precTemplate)
             precTemplate = &text1;
 
-        if ( !precTemplate->length() )
+        if ( precTemplate->empty() )
         {
             *precTemplate = wxS("%.");
             *precTemplate << wxString::Format( wxS("%i"), precision );
@@ -696,7 +696,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
         target.Printf( wxS("%f"), value );
     }
 
-    if ( removeZeroes && precision != 0 && target.length() )
+    if ( removeZeroes && precision != 0 && !target.empty() )
     {
         // Remove excess zeroes (do not remove this code just yet,
         // since sprintf can't do the same consistently across platforms).
@@ -760,7 +760,7 @@ bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, i
     wxString s;
     double value;
 
-    if ( text.length() == 0 )
+    if ( text.empty() )
     {
         variant.MakeNull();
         return true;
@@ -914,7 +914,7 @@ bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, in
          text.CmpNoCase(m_label) == 0 )
         boolValue = true;
 
-    if ( text.length() == 0 )
+    if ( text.empty() )
     {
         variant.MakeNull();
         return true;
@@ -1518,7 +1518,7 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
     // semicolons are no longer valid delimeters
     WX_PG_TOKENIZER1_BEGIN(text,wxS(','))
 
-        if ( token.length() )
+        if ( !token.empty() )
         {
             // Determine which one it is
             long bit = IdToBit( token );
@@ -1690,7 +1690,7 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
         path = filename.GetPath();
         indFilter = fileProp->m_indFilter;
 
-        if ( !path.length() && fileProp->m_basePath.length() )
+        if ( path.empty() && !fileProp->m_basePath.empty() )
             path = fileProp->m_basePath;
     }
     else
@@ -1781,7 +1781,7 @@ void wxFileProperty::OnSetValue()
     }
 
     // Find index for extension.
-    if ( m_indFilter < 0 && fnstr.length() )
+    if ( m_indFilter < 0 && !fnstr.empty() )
     {
         wxString ext = filename.GetExt();
         int curind = 0;
@@ -1798,7 +1798,7 @@ void wxFileProperty::OnSetValue()
                 pos = len;
             wxString found_ext = m_wildcard.substr(ext_begin, pos-ext_begin);
 
-            if ( found_ext.length() > 0 )
+            if ( !found_ext.empty() )
             {
                 if ( found_ext[0] == wxS('*') )
                 {
@@ -1839,7 +1839,7 @@ wxString wxFileProperty::ValueToString( wxVariant& value,
         return wxEmptyString;
 
     wxString fullName = filename.GetFullName();
-    if ( !fullName.length() )
+    if ( fullName.empty() )
         return wxEmptyString;
 
     if ( argFlags & wxPG_FULL_VALUE )
@@ -1848,7 +1848,7 @@ wxString wxFileProperty::ValueToString( wxVariant& value,
     }
     else if ( m_flags & wxPG_PROP_SHOW_FULL_FILENAME )
     {
-        if ( m_basePath.Length() )
+        if ( !m_basePath.empty() )
         {
             wxFileName fn2(filename);
             fn2.MakeRelativeTo(m_basePath);
@@ -2186,7 +2186,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
 
     // Message
-    if ( message.length() )
+    if ( !message.empty() )
         topsizer->Add( new wxStaticText(this,-1,message),
             0, wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxALL, spacing );
 
@@ -2555,7 +2555,7 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
         if ( flags & Escape )
         {
             str.Replace( wxS("\\"), wxS("\\\\"), true );
-            if ( pdr.length() )
+            if ( !pdr.empty() )
                 str.Replace( preas, pdr, true );
         }
 

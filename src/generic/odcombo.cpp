@@ -865,7 +865,7 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 
     // Find initial selection
     wxString strValue = m_combo->GetValue();
-    if ( strValue.length() )
+    if ( !strValue.empty() )
         m_value = m_strings.Index(strValue);
 }
 

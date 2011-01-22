@@ -140,7 +140,7 @@ public:
         {
             const XRCWidgetData& w = m_wdata.Item(i);
             if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
-            if( w.GetName().Length() == 0 ) continue;
+            if( w.GetName().empty() ) continue;
             file.Write(
                 wxT(" ") + w.GetClass() + wxT("* ") + w.GetName()
                 + wxT(";\n"));
@@ -155,7 +155,7 @@ public:
         {
             const XRCWidgetData& w = m_wdata.Item(i);
             if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
-            if( w.GetName().Length() == 0 ) continue;
+            if( w.GetName().empty() ) continue;
             file.Write( wxT("  ")
                         + w.GetName()
                         + wxT(" = XRCCTRL(*this,\"")

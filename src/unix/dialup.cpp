@@ -395,7 +395,7 @@ void wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 
 void wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 {
-   if(hostname.length() == 0)
+   if( hostname.empty() )
    {
       m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
       m_BeaconPort = 80;
@@ -404,7 +404,7 @@ void wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 
    // does hostname contain a port number?
    wxString port = hostname.After(wxT(':'));
-   if(port.length())
+   if( !port.empty() )
    {
       m_BeaconHost = hostname.Before(wxT(':'));
       m_BeaconPort = wxAtoi(port);
@@ -667,7 +667,7 @@ wxDialUpManagerImpl::CheckIfconfig()
     {
         wxLogNull ln; // suppress all error messages
 
-        wxASSERT_MSG( m_IfconfigPath.length(),
+        wxASSERT_MSG( !m_IfconfigPath.empty(),
                       wxT("can't use ifconfig if it wasn't found") );
 
         wxString tmpfile = wxFileName::CreateTempFileName( wxT("_wxdialuptest") );

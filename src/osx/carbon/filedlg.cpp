@@ -324,11 +324,11 @@ void OpenUserDataRec::MakeUserDataRec( const wxString& filter )
             wxString extension = m_extensions[i];
 
             // Remove leading '*'
-            if (extension.length() && (extension.GetChar(0) == '*'))
+            if ( !extension.empty() && (extension.GetChar(0) == '*') )
                 extension = extension.Mid( 1 );
 
             // Remove leading '.'
-            if (extension.length() && (extension.GetChar(0) == '.'))
+            if ( !extension.empty() && (extension.GetChar(0) == '.') )
                 extension = extension.Mid( 1 );
 
             if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))

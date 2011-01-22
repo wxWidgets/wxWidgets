@@ -322,7 +322,7 @@ public:
         wxString s = ::wxGetSingleChoice(wxT("Message"),
                                          wxT("Caption"),
                                          m_choices.GetLabels());
-        if ( s.length() )
+        if ( !s.empty() )
         {
             SetValue(s);
             return true;
