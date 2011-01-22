@@ -1931,7 +1931,7 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
     // common) case when the number of rows was not specified in the ctor -- in
     // this case it will be computed only later, when all items are added to
     // the sizer, and the check will be done in AdjustForGrowables()
-    wxCHECK_RET( !m_rows || idx < (size_t)m_rows, "invalid row index" );
+    // wxCHECK_RET( !m_rows || idx < (size_t)m_rows, "invalid row index" );
 
     m_growableRows.Add( idx );
     m_growableRowsProportions.Add( proportion );
@@ -1944,7 +1944,7 @@ void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 
     // see comment in AddGrowableRow(): although it's less common to omit the
     // specification of the number of columns, it still can also happen
-    wxCHECK_RET( !m_cols || idx < (size_t)m_cols, "invalid column index" );
+    // wxCHECK_RET( !m_cols || idx < (size_t)m_cols, "invalid column index" );
 
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );
