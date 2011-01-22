@@ -4325,8 +4325,9 @@ void wxDataViewCtrl::InvalidateColBestWidths()
 
     if ( m_headerArea )
     {
-        // this updates visual appearance of columns 0 and up, not just 0
-        m_headerArea->UpdateColumn(0);
+        const unsigned cols = m_headerArea->GetColumnCount();
+        for ( unsigned i = 0; i < cols; i++ )
+            m_headerArea->UpdateColumn(i);
     }
 }
 
