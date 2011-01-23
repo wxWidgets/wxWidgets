@@ -27,6 +27,17 @@
 
 #ifndef wxNO_RTTI
 
+//
+// Let's trust that Visual C++ versions 9.0 and later implement C++
+// RTTI well enough, so we can use it and work around harmless memory
+// leaks reported by the static run-time libraries.
+//
+#if wxCHECK_VISUALC_VERSION(9)
+    #define wxTRUST_CPP_RTTI    1
+#else
+    #define wxTRUST_CPP_RTTI    0
+#endif
+
 #include <typeinfo>
 #include <string.h>
 
@@ -35,6 +46,12 @@
 #define WX_DECLARE_TYPEINFO(CLS)
 #define WX_DEFINE_TYPEINFO(CLS)
 #define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
+
+#if wxTRUST_CPP_RTTI
+
+#define wxTypeId    typeid
+
+#else /*  !wxTRUST_CPP_RTTI */
 
 //
 // For improved type-safety, let's make the check using class name
@@ -67,7 +84,11 @@ private:
 
 #define wxTypeId(OBJ) wxTypeIdentifier(typeid(OBJ).name())
 
+#endif /*  wxTRUST_CPP_RTTI/!wxTRUST_CPP_RTTI */
+
 #else // if !wxNO_RTTI
+
+#define wxTRUST_CPP_RTTI    0
 
 //
 // When C++ RTTI is not available, we will have to make the type comparison
