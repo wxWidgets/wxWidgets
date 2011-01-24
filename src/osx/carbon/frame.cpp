@@ -80,7 +80,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         {
             pt.x += w;
         }
-        else if ( HasFlag(wxTB_TOP) )
+        else if ( toolbar->HasFlag(wxTB_TOP) )
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
