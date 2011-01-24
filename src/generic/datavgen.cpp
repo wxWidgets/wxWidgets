@@ -145,7 +145,6 @@ protected:
         return *(GetOwner()->GetColumn(idx));
     }
 
-    // FIXME: currently unused
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
     {
         wxDataViewCtrl * const owner = GetOwner();
