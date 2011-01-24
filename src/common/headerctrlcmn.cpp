@@ -114,8 +114,15 @@ void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
 void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
 {
     const unsigned col = event.GetColumn();
+    const wxHeaderColumn& column = GetColumn(col);
 
-    int w = wxWindowBase::GetTextExtent(GetColumn(col).GetTitle()).x;
+    if ( !column.IsResizeable() )
+    {
+        event.Skip();
+        return;
+    }
+
+    int w = wxWindowBase::GetTextExtent(column.GetTitle()).x;
     w += 4*GetCharWidth(); // add some arbitrary margins around text
 
     if ( !UpdateColumnWidthToFit(col, w) )
