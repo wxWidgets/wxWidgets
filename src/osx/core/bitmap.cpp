@@ -291,35 +291,38 @@ wxBitmapRefData::wxBitmapRefData(CGImageRef image)
 
 bool wxBitmapRefData::Create(CGImageRef image)
 {
-    m_width = CGImageGetWidth(image);
-    m_height = CGImageGetHeight(image);
-    m_depth = 32;
-    m_hBitmap = NULL;
-    
-    m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
-    size_t size = m_bytesPerRow * m_height ;
-    void* data = m_memBuf.GetWriteBuf( size ) ;
-    if ( data != NULL )
+    if ( image != NULL )
     {
-        memset( data , 0 , size ) ;
-        m_memBuf.UngetWriteBuf( size ) ;
-        CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
-        if ( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipLast || alpha == kCGImageAlphaNoneSkipLast )
-        {
-            m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
-        }
-        else 
-        {
-            m_hasAlpha = true;
-            m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst );
-        }
-        CGRect rect = {{0,0},{m_width,m_height}}; 
-        CGContextDrawImage(m_hBitmap, rect, image);
+        m_width = CGImageGetWidth(image);
+        m_height = CGImageGetHeight(image);
+        m_depth = 32;
+        m_hBitmap = NULL;
         
-        wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
-        CGContextTranslateCTM( m_hBitmap, 0,  m_height );
-        CGContextScaleCTM( m_hBitmap, 1, -1 );
-    } /* data != NULL */
+        m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
+        size_t size = m_bytesPerRow * m_height ;
+        void* data = m_memBuf.GetWriteBuf( size ) ;
+        if ( data != NULL )
+        {
+            memset( data , 0 , size ) ;
+            m_memBuf.UngetWriteBuf( size ) ;
+            CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
+            if ( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipLast || alpha == kCGImageAlphaNoneSkipLast )
+            {
+                m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
+            }
+            else 
+            {
+                m_hasAlpha = true;
+                m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst );
+            }
+            CGRect rect = {{0,0},{m_width,m_height}}; 
+            CGContextDrawImage(m_hBitmap, rect, image);
+            
+            wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+            CGContextTranslateCTM( m_hBitmap, 0,  m_height );
+            CGContextScaleCTM( m_hBitmap, 1, -1 );
+        } /* data != NULL */
+    }
     m_ok = ( m_hBitmap != NULL ) ;
     
     return m_ok ;
