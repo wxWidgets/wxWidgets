@@ -199,6 +199,7 @@ private:
 class WXDLLIMPEXP_HTML wxSimpleHtmlListBox : public wxHtmlListBox,
                                              public wxItemContainer
 {
+    DECLARE_ABSTRACT_CLASS(wxSimpleHtmlListBox)
 public:
     // wxListbox-compatible constructors
     // ---------------------------------

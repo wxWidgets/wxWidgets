@@ -599,6 +599,9 @@ void wxHtmlListBox::OnLeftDown(wxMouseEvent& event)
 // wxSimpleHtmlListBox
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxSimpleHtmlListBox, wxHtmlListBox)
+
+
 bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
                                  const wxPoint& pos,
                                  const wxSize& size,
