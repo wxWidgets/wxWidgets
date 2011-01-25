@@ -121,7 +121,12 @@ wxToolBarToolBase(
     UIBarButtonItemStyle style = UIBarButtonItemStylePlain;
     wxUIToolbar* toolbar = (wxUIToolbar*) tbar->GetHandle();
     
-    if ( bmpNormal.Ok() )
+    if ( id == wxID_SEPARATOR )
+    {
+        [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        bui.width = 25.0f;
+    }
+    else if ( bmpNormal.Ok() )
     {
         [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
                       action:@selector(clickedAction:)];
