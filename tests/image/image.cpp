@@ -72,6 +72,7 @@ private:
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SaveAnimatedGIF );
+        CPPUNIT_TEST( ReadCorruptedTGA );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -81,6 +82,7 @@ private:
     void CompareLoadedImage();
     void CompareSavedImage();
     void SaveAnimatedGIF();
+    void ReadCorruptedTGA();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -1131,6 +1133,42 @@ void ImageTestCase::SaveAnimatedGIF()
         );
     }
 #endif // #if wxUSE_PALETTE
+}
+
+void ImageTestCase::ReadCorruptedTGA()
+{
+    static unsigned char corruptTGA[18+1+3] =
+    {
+        0,
+        0,
+        10, // RLE compressed image.
+        0, 0,
+        0, 0,
+        0,
+        0, 0,
+        0, 0,
+        1, 0, // Width is 1.
+        1, 0, // Height is 1.
+        24, // Bits per pixel.
+        0,
+
+        0xff, // Run length (repeat next pixel 127+1 times).
+        0xff, 0xff, 0xff // One 24-bit pixel.
+    };
+
+    wxMemoryInputStream memIn(corruptTGA, WXSIZEOF(corruptTGA));
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage tgaImage;
+    CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+
+
+    /*
+    Instead of repeating a pixel 127+1 times, now tell it there will
+    follow 127+1 uncompressed pixels (while we only should have 1 in total).
+    */
+    corruptTGA[18] = 0x7f;
+    CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
 }
 
 #endif //wxUSE_IMAGE

@@ -131,6 +131,11 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
 
             index += current * pixelSize;
 
+            if (index >= imageSize)
+            {
+                return wxTGA_IOERR;
+            }
+
             // Repeat the pixel length times.
             if ( !stream.Read(buf, pixelSize) )
                 return wxTGA_IOERR;
@@ -150,6 +155,11 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
             length = current * pixelSize;
 
             index += length;
+
+            if (index >= imageSize)
+            {
+                return wxTGA_IOERR;
+            }
 
             // Write the next length pixels directly to the image data.
             if ( !stream.Read(imageData, length) )
