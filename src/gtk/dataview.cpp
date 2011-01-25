@@ -1777,6 +1777,8 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
             return;
     }
 
+    m_mode = mode;
+    
     // This value is most often ignored in GtkTreeView
     GValue gvalue = { 0, };
     g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
