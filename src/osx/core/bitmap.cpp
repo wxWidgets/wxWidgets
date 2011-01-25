@@ -1011,6 +1011,11 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
+wxBitmap::wxBitmap(CGImageRef image)
+{
+    (void) Create(image);
+}
+
 wxGDIRefData* wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
