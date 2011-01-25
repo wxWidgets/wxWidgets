@@ -557,7 +557,7 @@ public:
         units for multiples of 1024 is used, i.e. returned string will use
         suffixes of B, KB, MB, GB, TB for bytes, kilobytes, megabytes,
         gigabytes and terabytes respectively. With the IEC convention the names
-        of the units are changed to B, KiB, MiB, GiB and TiB fofr bytes,
+        of the units are changed to B, KiB, MiB, GiB and TiB for bytes,
         kibibytes, mebibyes, gibibytes and tebibytes. Finally, with SI
         convention the same B, KB, MB, GB and TB suffixes are used but in their
         correct SI meaning, i.e. as multiples of 1000 and not 1024.
