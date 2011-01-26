@@ -381,8 +381,10 @@ wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 wxWindowList wxDatePickerCtrlGeneric::GetCompositeWindowParts() const
 {
     wxWindowList parts;
-    parts.push_back(m_combo);
-    parts.push_back(m_popup);
+    if (m_combo)
+        parts.push_back(m_combo);
+    if (m_popup)
+        parts.push_back(m_popup);
     return parts;
 }
 
