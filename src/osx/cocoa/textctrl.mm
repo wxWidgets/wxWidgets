@@ -684,6 +684,13 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
+bool wxNSTextFieldControl::SetHint(const wxString& hint)
+{
+    wxCFStringRef hintstring(hint);
+    [[m_textField cell] setPlaceholderString:hintstring.AsNSString()];
+    return true;
+}
+
 //
 //
 //

@@ -39,6 +39,7 @@ public :
     virtual void SetSelection( long from , long to );
     virtual void WriteText(const wxString& str) ;
     virtual bool HasOwnContextMenu() const { return true; }
+    virtual bool SetHint(const wxString& hint);
 
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
 
