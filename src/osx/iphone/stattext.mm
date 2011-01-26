@@ -79,7 +79,8 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxUILabel* v = [[wxUILabel alloc] initWithFrame:r];
-    
+    v.backgroundColor = [UIColor clearColor];
+
     UILineBreakMode linebreak = UILineBreakModeWordWrap;
     if ( ((wxStaticText*)wxpeer)->IsEllipsized() )
     {
