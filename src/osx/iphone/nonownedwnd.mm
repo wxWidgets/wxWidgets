@@ -275,7 +275,7 @@ void wxNonOwnedWindowIPhoneImpl::Maximize(bool maximize)
 {
     if ( maximize )
     {
-        CGRect r = [[UIScreen mainScreen] applicationFrame];
+        CGRect r = [[UIScreen mainScreen] bounds];
         [m_macWindow setFrame:r];
     }
 }
