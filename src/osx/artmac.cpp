@@ -25,7 +25,7 @@
     #include "wx/image.h"
 #endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#include "wx/osx/private.h"
 
 // ----------------------------------------------------------------------------
 // wxMacArtProvider
@@ -34,14 +34,26 @@
 class wxMacArtProvider : public wxArtProvider
 {
 protected:
+#if wxOSX_USE_COCOA_OR_CARBON
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
                                           const wxArtClient& client);
+#endif
+#if wxOSX_USE_COCOA_OR_IPHONE
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size)
+    {
+        return wxOSXCreateSystemBitmap(id, client, size);
+    }
+#endif
 };
 
 /* static */ void wxArtProvider::InitNativeProvider()
 {
     wxArtProvider::Push(new wxMacArtProvider);
 }
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 // ----------------------------------------------------------------------------
 // helper macros
@@ -103,6 +115,7 @@ wxIconBundle wxMacArtProvider::CreateIconBundle(const wxArtID& id, const wxArtCl
     return wxMacArtProvider_CreateIconBundle(id);
 }
 
+#endif
 
 // ----------------------------------------------------------------------------
 // wxArtProvider::GetNativeSizeHint()
@@ -129,4 +142,3 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
     return wxDefaultSize;
 }
 
-#endif // wxOSX_USE_COCOA_CARBON

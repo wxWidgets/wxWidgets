@@ -41,6 +41,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image );
 CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage );
+wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 

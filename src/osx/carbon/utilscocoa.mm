@@ -353,9 +353,27 @@ WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
     return( newImage );
 }
 
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+{
+#if 0
+    // unfortunately this only accesses images in the app bundle, not the system wide globals
+    wxCFStringRef cfname(name);
+    return wxBitmap( [[UIImage imageNamed:cfname.AsNSString()] CGImage] );
+#else
+    return wxBitmap();
+#endif
+}
+
 #endif
 
 #if wxOSX_USE_COCOA
+
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+{
+    wxCFStringRef cfname(name);
+    wxCFRef<CGImageRef> image( wxOSXCreateCGImageFromNSImage([NSImage imageNamed:cfname.AsNSString()]) );
+    return wxBitmap( image );
+}
 
 //  From "Cocoa Drawing Guide:Working with Images"
 WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
