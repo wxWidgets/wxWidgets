@@ -273,6 +273,11 @@ void wxNonOwnedWindowIPhoneImpl::Iconize( bool iconize )
 
 void wxNonOwnedWindowIPhoneImpl::Maximize(bool maximize)
 {
+    if ( maximize )
+    {
+        CGRect r = [[UIScreen mainScreen] applicationFrame];
+        [m_macWindow setFrame:r];
+    }
 }
 
 bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
