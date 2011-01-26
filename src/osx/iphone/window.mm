@@ -477,7 +477,14 @@ void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
 {
-    [m_osxView setOpaque: (style == wxBG_STYLE_PAINT) ];
+    if ( style == wxBG_STYLE_PAINT )
+        [m_osxView setOpaque: YES ];
+    else
+    {
+        [m_osxView setOpaque: NO ];
+        m_osxView.backgroundColor = [UIColor clearColor];
+    }
+    return true;
 }
 
 void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
@@ -681,10 +688,10 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
     CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
     CGContextSaveGState( context );
     // draw background
-
+/*
     CGContextSetFillColorWithColor( context, GetWXPeer()->GetBackgroundColour().GetCGColor());
     CGContextFillRect(context, *rect );
-
+*/
     GetWXPeer()->MacSetCGContextRef( context );
 
     GetWXPeer()->GetUpdateRegion() =
