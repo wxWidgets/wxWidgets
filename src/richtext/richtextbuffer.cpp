@@ -8914,7 +8914,7 @@ wxRichTextCell* wxRichTextTable::GetCell(int row, int col) const
         return wxDynamicCast(obj, wxRichTextCell);
     }
     else
-        return false;
+        return NULL;
 }
 
 // Returns a selection object specifying the selections between start and end character positions.
