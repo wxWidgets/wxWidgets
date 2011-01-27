@@ -32,7 +32,7 @@
 #define SIZEOF_LONG 4
 #endif
 
-#if __BIG_ENDIAN__
+#ifdef __BIG_ENDIAN__
     /* Set the native cpu bit order */
     #define HOST_FILLORDER FILLORDER_MSB2LSB
     
