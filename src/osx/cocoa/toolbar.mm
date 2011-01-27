@@ -987,7 +987,7 @@ bool wxToolBar::Realize()
                     }
 
                     wxCFStringRef cfidentifier;
-                    const NSString *nsItemId;
+                    NSString *nsItemId;
                     if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
                     {
                         nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
@@ -1249,8 +1249,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
                 if (m_macToolbar != NULL)
                 {
-                    const NSString * const
-                        nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
+                    NSString * nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
                                                          : NSToolbarSeparatorItemIdentifier;
                     NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:nsItemId];
                     tool->SetToolbarItemRef( item );

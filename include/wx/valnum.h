@@ -192,7 +192,7 @@ public:
             else if ( !BaseValidator::FromString(s, &value) )
                 return false;
 
-            if ( !IsInRange(value) )
+            if ( !this->IsInRange(value) )
                 return false;
 
             *m_value = static_cast<ValueType>(value);
@@ -225,7 +225,7 @@ private:
     {
         wxString s;
         if ( value != 0 || !BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
-            s = ToString(value);
+            s = this->ToString(value);
 
         return s;
     }
@@ -314,8 +314,8 @@ public:
     wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT)
         : Base(value, style)
     {
-        DoSetMin(std::numeric_limits<ValueType>::min());
-        DoSetMax(std::numeric_limits<ValueType>::max());
+        this->DoSetMin(std::numeric_limits<ValueType>::min());
+        this->DoSetMax(std::numeric_limits<ValueType>::max());
     }
 
     virtual wxObject *Clone() const { return new wxIntegerValidator(*this); }
@@ -434,8 +434,8 @@ private:
         // NB: Do not use min(), it's not the smallest representable value for
         //     the floating point types but rather the smallest representable
         //     positive value.
-        DoSetMin(-std::numeric_limits<ValueType>::max());
-        DoSetMax( std::numeric_limits<ValueType>::max());
+        this->DoSetMin(-std::numeric_limits<ValueType>::max());
+        this->DoSetMax( std::numeric_limits<ValueType>::max());
     }
 };
 

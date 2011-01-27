@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/control.h"
+DECLARE_WXCOCOA_OBJC_CLASS(WebView); 
 
 // ----------------------------------------------------------------------------
 // Web Kit Control
@@ -107,13 +108,11 @@ private:
     wxString m_currentURL;
     wxString m_pageTitle;
 
-    struct objc_object *m_webView;
+    WX_WebView m_webView;
 
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
     void* m_webKitCtrlEventHandler;
-    //It should be WebView*, but WebView is an Objective-C class
-    //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
 // ----------------------------------------------------------------------------

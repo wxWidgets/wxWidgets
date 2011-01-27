@@ -260,7 +260,7 @@ public:
         {
             if ( len == wxNO_LEN )
                 len = wxStrlen(str);
-            this->m_data = new Data(StrCopy(str, len), len);
+            this->m_data = new Data(this->StrCopy(str, len), len);
         }
         else
         {
@@ -295,7 +295,7 @@ public:
 
     wxCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src)
     {
-        MakeOwnedCopyOf(src);
+        this->MakeOwnedCopyOf(src);
     }
 
     wxCharTypeBuffer& operator=(const wxScopedCharTypeBuffer<T>& src)

@@ -1240,7 +1240,7 @@ public :
     virtual void Transform( const wxGraphicsMatrixData* matrix );
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y) const;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
     virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 private :
