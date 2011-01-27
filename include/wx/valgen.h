@@ -34,8 +34,6 @@ public:
     wxGenericValidator(bool* val);
         // wxChoice, wxGauge, wxRadioBox, wxScrollBar, wxSlider, wxSpinButton
     wxGenericValidator(int* val);
-    wxGenericValidator(float* val);
-    wxGenericValidator(double* val);
         // wxComboBox, wxTextCtrl, wxButton, wxStaticText (read-only)
     wxGenericValidator(wxString* val);
         // wxListBox, wxCheckListBox
@@ -70,8 +68,6 @@ protected:
 
     bool*       m_pBool;
     int*        m_pInt;
-    float*      m_pFloat;
-    double*     m_pDouble;
     wxString*   m_pString;
     wxArrayInt* m_pArrayInt;
 #if wxUSE_DATETIME
