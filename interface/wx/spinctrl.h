@@ -33,7 +33,8 @@
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
-        Generated whenever the numeric value of the spinctrl is updated
+        Process a wxEVT_COMMAND_SPINCTRL_UPDATED event, which is generated
+        whenever the numeric value of the spin control is updated.
     @endEventTable
 
     You may also use the wxSpinButton event macros, however the corresponding events
