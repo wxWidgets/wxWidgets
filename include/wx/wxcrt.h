@@ -880,7 +880,7 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
         { return implW(nptr, endptr, base); }                                 \
     template<typename T>                                                      \
     inline rettype name(const wxScopedCharTypeBuffer<T>& nptr, T **endptr, int base)\
-        { return name(nptr.data(), endptr); }                                 \
+        { wxUnusedVar(base); return name(nptr.data(), endptr); }              \
     template<typename T>                                                      \
     inline rettype name(const wxString& nptr, T endptr, int base)             \
     {                                                                         \

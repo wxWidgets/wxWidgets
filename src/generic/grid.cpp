@@ -156,6 +156,23 @@ wxDEFINE_EVENT( wxEVT_GRID_EDITOR_SHOWN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent );
 
+// ----------------------------------------------------------------------------
+// private helpers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+    
+    // ensure that first is less or equal to second, swapping the values if
+    // necessary
+    void EnsureFirstLessThanSecond(int& first, int& second)
+    {
+        if ( first > second )
+            wxSwap(first, second);
+    }
+    
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================

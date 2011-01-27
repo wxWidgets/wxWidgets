@@ -794,23 +794,6 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// private helpers
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// ensure that first is less or equal to second, swapping the values if
-// necessary
-void EnsureFirstLessThanSecond(int& first, int& second)
-{
-    if ( first > second )
-        wxSwap(first, second);
-}
-
-} // anonymous namespace
-
-// ----------------------------------------------------------------------------
 // data structures used for the data type registry
 // ----------------------------------------------------------------------------
 
