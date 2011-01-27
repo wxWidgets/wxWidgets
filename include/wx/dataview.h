@@ -772,7 +772,7 @@ public:
         m_model(event.m_model),
         m_value(event.m_value),
         m_column(event.m_column),
-        m_pos(m_pos),
+        m_pos(event.m_pos),
         m_cacheFrom(event.m_cacheFrom),
         m_cacheTo(event.m_cacheTo)
 #if wxUSE_DRAG_AND_DROP
