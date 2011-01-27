@@ -409,7 +409,7 @@ public:
     {
         DoSetMinMax();
 
-        SetPrecision(std::numeric_limits<ValueType>::digits10);
+        this->SetPrecision(std::numeric_limits<ValueType>::digits10);
     }
 
     // Ctor specifying an explicit precision.
