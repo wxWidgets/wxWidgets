@@ -92,8 +92,7 @@ static bool wxGIFHandler_Write(wxOutputStream *, const void *buf, size_t len);
 static bool wxGIFHandler_WriteByte(wxOutputStream *, wxUint8);
 static bool wxGIFHandler_WriteWord(wxOutputStream *, wxUint16);
 static bool wxGIFHandler_WriteHeader(wxOutputStream *, int width, int height,
-    bool loop, const wxRGB *pal, int palCount,
-    const wxString& comment = wxEmptyString);
+    bool loop, const wxRGB *pal, int palCount);
 static bool wxGIFHandler_WriteRect(wxOutputStream *, int width, int height);
 #if wxUSE_PALETTE
 static bool wxGIFHandler_WriteTerm(wxOutputStream *);
@@ -225,10 +224,13 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
     if (first)
     {
         ok = wxGIFHandler_WriteHeader(stream, width, height, loop,
-            pal, palCount, image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+            pal, palCount);
     }
 
-    ok = ok && wxGIFHandler_WriteControl(stream, maskIndex, delayMilliSecs)
+    ok = ok
+        && wxGIFHandler_WriteComment(stream,
+            image.GetOption(wxIMAGE_OPTION_GIF_COMMENT))
+        && wxGIFHandler_WriteControl(stream, maskIndex, delayMilliSecs)
         && wxGIFHandler_WriteByte(stream, GIF_MARKER_SEP)
         && wxGIFHandler_WriteRect(stream, width, height);
 
@@ -645,7 +647,7 @@ bool wxGIFHandler_WriteWord(wxOutputStream *stream, wxUint16 word)
 }
 
 bool wxGIFHandler_WriteHeader(wxOutputStream *stream, int width, int height,
-    bool loop, const wxRGB *pal, int palCount, const wxString& comment)
+    bool loop, const wxRGB *pal, int palCount)
 {
     const int bpp = wxGIFHandler_BitSize(palCount);
     wxUint8 buf[3];
@@ -667,7 +669,7 @@ bool wxGIFHandler_WriteHeader(wxOutputStream *stream, int width, int height,
        ok = ok && wxGIFHandler_WriteLoop(stream);
     }
 
-    return ok && wxGIFHandler_WriteComment(stream, comment);
+    return ok;
 }
 
 bool wxGIFHandler_WriteRect(wxOutputStream *stream, int width, int height)
