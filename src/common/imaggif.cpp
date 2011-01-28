@@ -667,12 +667,7 @@ bool wxGIFHandler_WriteHeader(wxOutputStream *stream, int width, int height,
        ok = ok && wxGIFHandler_WriteLoop(stream);
     }
 
-    if ( !comment.empty() )
-    {
-       ok = ok && wxGIFHandler_WriteComment(stream, comment);
-    }
-
-    return ok;
+    return ok && wxGIFHandler_WriteComment(stream, comment);
 }
 
 bool wxGIFHandler_WriteRect(wxOutputStream *stream, int width, int height)
@@ -739,18 +734,44 @@ bool wxGIFHandler_WriteControl(wxOutputStream *stream,
 
 bool wxGIFHandler_WriteComment(wxOutputStream *stream, const wxString& comment)
 {
-    wxUint8 buf[3];
-    wxCharBuffer text(comment.mb_str());
-    size_t len = strlen(text.data());
-    len = wxMin(len, 255);
+    if ( comment.empty() )
+    {
+        return true;
+    }
 
+    // Write comment header.
+    wxUint8 buf[2];
     buf[0] = GIF_MARKER_EXT;
     buf[1] = GIF_MARKER_EXT_COMMENT;
-    buf[2] = (wxUint8)len;
+    if ( !wxGIFHandler_Write(stream, buf, sizeof(buf)) )
+    {
+        return false;
+    }
 
-    return wxGIFHandler_Write(stream, buf, sizeof(buf))
-        && wxGIFHandler_Write(stream, text.data(), len)
-        && wxGIFHandler_WriteZero(stream);
+    /*
+    If comment is longer than 255 bytes write it in blocks of maximum 255
+    bytes each.
+    */
+    wxCharBuffer text( comment.mb_str() );
+
+    size_t pos = 0, fullLength = text.length();
+
+    do
+    {
+        size_t blockLength = wxMin(fullLength - pos, 255);
+
+        if ( !wxGIFHandler_WriteByte(stream, (wxUint8) blockLength)
+            || !wxGIFHandler_Write(stream, &text.data()[pos], blockLength) )
+        {
+            return false;
+        }
+
+        pos += blockLength;
+    }while (pos < fullLength);
+
+
+    // Write comment footer.
+    return wxGIFHandler_WriteZero(stream);
 }
 
 bool wxGIFHandler_WriteLoop(wxOutputStream *stream)
