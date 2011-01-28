@@ -288,7 +288,7 @@ bool wxRegion::IsEmpty() const
         return true ;
 }
 
-const WXHRGN wxRegion::GetWXHRGN() const
+WXHRGN wxRegion::GetWXHRGN() const
 {
     return M_REGION ;
 }
