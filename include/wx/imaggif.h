@@ -19,6 +19,8 @@
 
 #if wxUSE_GIF
 
+#define wxIMAGE_OPTION_GIF_COMMENT wxT("GifComment")
+
 struct wxRGB;
 struct GifHashTableType;
 class WXDLLIMPEXP_FWD_CORE wxImageArray; // anidecod.h
@@ -43,8 +45,7 @@ public:
 
     // Save animated gif
     bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
-        bool verbose = true, int delayMilliSecs = 1000,
-        const wxString& comment = wxEmptyString);
+        bool verbose = true, int delayMilliSecs = 1000);
 
 protected:
     virtual int DoGetImageCount(wxInputStream& stream);
@@ -53,7 +54,7 @@ protected:
     bool DoSaveFile(const wxImage&, wxOutputStream *, bool verbose,
         bool first, int delayMilliSecs, bool loop,
         const wxRGB *pal, int palCount,
-        int mask_index, const wxString& comment = wxEmptyString);
+        int mask_index);
 #endif // wxUSE_STREAMS
 protected:
 
@@ -82,8 +83,7 @@ protected:
     bool SetupCompress(wxOutputStream *, int bpp);
     bool CompressLine(wxOutputStream *, const wxUint8 *line, int lineLen);
 #endif
-public:
-    static wxString ms_comment;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGIFHandler)
 };

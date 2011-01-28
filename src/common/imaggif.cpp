@@ -69,8 +69,6 @@ struct GifHashTableType
     wxUint32 HTable[HT_SIZE];
 };
 
-/*static*/ wxString wxGIFHandler::ms_comment;
-
 IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 
 //----------------------------------------------------------------------------
@@ -179,7 +177,7 @@ bool wxGIFHandler::SaveFile(wxImage *image,
 
     return wxGIFHandler_GetPalette(*image, pal, &palCount, &maskIndex)
         && DoSaveFile(*image, &stream, verbose, true /*first?*/, 0,
-            false /*loop?*/, pal, palCount, maskIndex, ms_comment)
+            false /*loop?*/, pal, palCount, maskIndex)
         && wxGIFHandler_WriteTerm(&stream);
 #else
     wxUnusedVar(image);
@@ -211,7 +209,7 @@ int wxGIFHandler::DoGetImageCount( wxInputStream& stream )
 
 bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
     bool WXUNUSED(verbose), bool first, int delayMilliSecs, bool loop,
-    const wxRGB *pal, int palCount, int maskIndex, const wxString& comment)
+    const wxRGB *pal, int palCount, int maskIndex)
 {
     const unsigned long colorcount = image.CountColours(256+1);
     bool ok = colorcount && (colorcount <= 256);
@@ -227,7 +225,7 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
     if (first)
     {
         ok = wxGIFHandler_WriteHeader(stream, width, height, loop,
-            pal, palCount, comment);
+            pal, palCount, image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
     }
 
     ok = ok && wxGIFHandler_WriteControl(stream, maskIndex, delayMilliSecs)
@@ -301,8 +299,7 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
 }
 
 bool wxGIFHandler::SaveAnimation(const wxImageArray& images,
-    wxOutputStream *stream, bool verbose, int delayMilliSecs,
-    const wxString& comment)
+    wxOutputStream *stream, bool verbose, int delayMilliSecs)
 {
 #if wxUSE_PALETTE
     bool ok = true;
@@ -334,8 +331,7 @@ bool wxGIFHandler::SaveAnimation(const wxImageArray& images,
 
         ok = wxGIFHandler_GetPalette(image, pal, &palCount, &maskIndex)
           && DoSaveFile(image, stream, verbose, i == 0 /*first?*/, delayMilliSecs,
-            true /*loop?*/, pal, palCount, maskIndex,
-            comment.length() ? comment : ms_comment);
+            true /*loop?*/, pal, palCount, maskIndex);
     }
 
     return ok && wxGIFHandler_WriteTerm(stream);
@@ -344,7 +340,6 @@ bool wxGIFHandler::SaveAnimation(const wxImageArray& images,
     wxUnusedVar(stream);
     wxUnusedVar(verbose);
     wxUnusedVar(delayMilliSecs);
-    wxUnusedVar(comment);
 
     return false;
 #endif
