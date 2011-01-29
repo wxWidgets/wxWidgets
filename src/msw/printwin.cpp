@@ -91,16 +91,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
-    // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-
-    m_printDialogData.SetFromPage(fromPage);
-    m_printDialogData.SetToPage(toPage);
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
-    m_printDialogData.SetAllPages((fromPage == minPage) && (toPage == maxPage));
+    if (m_printDialogData.GetMinPage() < 1)
+        m_printDialogData.SetMinPage(1);
+    if (m_printDialogData.GetMaxPage() < 1)
+        m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
     wxPrinterDC *dc wxDUMMY_INITIALIZE(NULL);
@@ -156,6 +150,11 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     wxBusyCursor busyCursor;
 
     printout->OnPreparePrinting();
+
+    // Get some parameters from the printout, if defined
+    int fromPage, toPage;
+    int minPage, maxPage;
+    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
     if (maxPage == 0)
     {
