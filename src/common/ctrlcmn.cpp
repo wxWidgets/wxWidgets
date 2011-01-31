@@ -303,8 +303,8 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 // - the second one to remove, valid range [initialCharToRemove;endCharToRemove]
                 // - the third one to preserve, valid range [endCharToRemove+1;len-1] or the empty range if endCharToRemove==len-1
                 // NOTE: empty range != range [0;0] since the range [0;0] contains 1 character (the zero-th one)!
-                initialCharToRemove = len/2;
-                size_t endCharToRemove = len/2;     // index of the last character to remove; valid range is [0;len-1]
+                initialCharToRemove = len/2; // index of the last character to remove; valid range is [0;len-1]
+                size_t endCharToRemove = initialCharToRemove - 1; // initial removal range is empty
 
                 int removedPx = 0;
                 bool removeFromStart = true;
