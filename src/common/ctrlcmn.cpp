@@ -307,11 +307,30 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 size_t endCharToRemove = len/2;     // index of the last character to remove; valid range is [0;len-1]
 
                 int removedPx = 0;
+                bool removeFromStart = true;
                 for ( ; removedPx < excessPx; )
                 {
-                    // try to remove the last character of the first part of the string
-                    if (initialCharToRemove > 0)
+                    const bool canRemoveFromStart = initialCharToRemove > 0;
+                    const bool canRemoveFromEnd = endCharToRemove < len - 1;
+
+                    if ( !canRemoveFromStart && !canRemoveFromEnd )
                     {
+                        // we need to remove all the characters of the string!
+                        break;
+                    }
+
+                    // Remove from the beginning in even steps and from the end
+                    // in odd steps, unless we exhausted one side already:
+                    removeFromStart = !removeFromStart;
+                    if ( removeFromStart && !canRemoveFromStart )
+                        removeFromStart = false;
+                    else if ( !removeFromStart && !canRemoveFromEnd )
+                        removeFromStart = true;
+
+                    if ( removeFromStart )
+                    {
+                        // try to remove the last character of the first part of the string
+
                         // width of the (initialCharToRemove-1)-th character
                         int widthPx;
                         if (initialCharToRemove >= 2)
@@ -325,12 +344,13 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                         // mark the (initialCharToRemove-1)-th character as removable
                         initialCharToRemove--;
                         removedPx += widthPx;
-                    }
 
-                    // try to remove the first character of the last part of the string
-                    if (endCharToRemove < len - 1 &&
-                        removedPx < excessPx)
+                        continue; // don't remove anything else
+                    }
+                    else // !removeFromStart
                     {
+                        // try to remove the first character of the last part of the string
+
                         // width of the (endCharToRemove+1)-th character
                         int widthPx = charOffsetsPx[endCharToRemove+1] -
                                       charOffsetsPx[endCharToRemove];
@@ -340,12 +360,8 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                         // mark the (endCharToRemove+1)-th character as removable
                         endCharToRemove++;
                         removedPx += widthPx;
-                    }
 
-                    if (initialCharToRemove == 0 && endCharToRemove == len-1)
-                    {
-                        // we need to remove all the characters of the string!
-                        break;
+                        continue; // don't remove anything else
                     }
                 }
 
