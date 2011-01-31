@@ -1664,22 +1664,23 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen(m_penRule);
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        int x = x_start;
+        // NB: Vertical rules are drawn in the last pixel of a column so that
+        //     they align perfectly with native MSW wxHeaderCtrl as well as for
+        //     consistency with MSW native list control. There's no vertical
+        //     rule at the most-left side of the control.
+
+        int x = x_start - 1;
         for (unsigned int i = col_start; i < col_last; i++)
         {
             wxDataViewColumn *col = GetOwner()->GetColumnAt(i);
             if (col->IsHidden())
                 continue;       // skip it
 
+            x += col->GetWidth();
+
             dc.DrawLine(x, GetLineStart( item_start ),
                         x, GetLineStart( item_last ) );
-
-            x += col->GetWidth();
         }
-
-        // Draw last vertical rule
-        dc.DrawLine(x, GetLineStart( item_start ),
-                    x, GetLineStart( item_last ) );
     }
 
     // redraw the background for the items which are selected/current
