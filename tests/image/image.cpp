@@ -73,6 +73,7 @@ private:
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
+        CPPUNIT_TEST( GIFComment );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -83,6 +84,7 @@ private:
     void CompareSavedImage();
     void SaveAnimatedGIF();
     void ReadCorruptedTGA();
+    void GIFComment();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -1169,6 +1171,81 @@ void ImageTestCase::ReadCorruptedTGA()
     */
     corruptTGA[18] = 0x7f;
     CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+}
+
+static void TestGIFComment(const wxString& comment)
+{
+    wxImage image("horse.gif");
+
+    image.SetOption(wxIMAGE_OPTION_GIF_COMMENT, comment);
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_GIF));
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT( image.LoadFile(memIn) );
+
+    CPPUNIT_ASSERT_EQUAL(comment,
+        image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+}
+
+void ImageTestCase::GIFComment()
+{
+    // Test reading a comment.
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT_EQUAL("  Imported from GRADATION image: gray",
+        image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+
+
+    // Test writing a comment and reading it back.
+    TestGIFComment("Giving the GIF a gifted giraffe as a gift");
+
+
+    // Test writing and reading a comment again but with a long comment.
+    TestGIFComment(wxString(wxT('a'), 256)
+        + wxString(wxT('b'), 256)
+        + wxString(wxT('c'), 256));
+
+
+    // Test writing comments in an animated GIF and reading them back.
+    CPPUNIT_ASSERT( image.LoadFile("horse.gif") );
+
+    wxImageArray images;
+    int i;
+    for (i = 0; i < 4; ++i)
+    {
+        if (i)
+        {
+            images.Add( images[i-1].Rotate90() );
+            images[i].SetPalette(images[0].GetPalette());
+        }
+        else
+        {
+            images.Add(image);
+        }
+
+        images[i].SetOption(wxIMAGE_OPTION_GIF_COMMENT,
+            wxString::Format("GIF comment for frame #%d", i+1));
+
+    }
+
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    for (i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true /*verbose?*/, i) );
+
+        CPPUNIT_ASSERT_EQUAL(
+            wxString::Format("GIF comment for frame #%d", i+1),
+            image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+        memIn.SeekI(pos);
+    }
 }
 
 #endif //wxUSE_IMAGE

@@ -40,6 +40,8 @@ enum
     GIF_MARKER_EXT_APP              = 0xFF
 };
 
+#define GetFrame(n)     ((GIFImage*)m_frames[n])
+
 //---------------------------------------------------------------------------
 // GIFImage
 //---------------------------------------------------------------------------
@@ -61,6 +63,7 @@ public:
     unsigned char *p;               // bitmap
     unsigned char *pal;             // palette
     unsigned int ncolours;          // number of colours
+    wxString comment;
 
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
@@ -189,6 +192,12 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
         *(dst++) = pal[3 * (*src) + 2];
     }
 
+    wxString comment = GetFrame(frame)->comment;
+    if ( !comment.empty() )
+    {
+        image->SetOption(wxIMAGE_OPTION_GIF_COMMENT, comment);
+    }
+
     return true;
 }
 
@@ -196,9 +205,6 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 //---------------------------------------------------------------------------
 // Data accessors
 //---------------------------------------------------------------------------
-
-#define GetFrame(n)     ((GIFImage*)m_frames[n])
-
 
 // Get data for current frame
 
@@ -672,6 +678,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     int transparent = -1;
     disposal = wxANIM_UNSPECIFIED;
     delay = -1;
+    wxString comment;
 
     bool done = false;
     while (!done)
@@ -701,38 +708,68 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 done = true;
                 break;
             case GIF_MARKER_EXT:
-                if (stream.GetC() == GIF_MARKER_EXT_GRAPHICS_CONTROL)
-                // graphics control extension, parse it
+                switch (stream.GetC())
                 {
-                    static const unsigned int gceSize = 6;
-                    stream.Read(buf, gceSize);
-                    if (stream.LastRead() != gceSize)
+                    case GIF_MARKER_EXT_GRAPHICS_CONTROL:
                     {
-                        Destroy();
-                        return wxGIF_INVFORMAT;
-                    }
+                        // graphics control extension, parse it
 
-                    // read delay and convert from 1/100 of a second to ms
-                    delay = 10 * (buf[2] + 256 * buf[3]);
-
-                    // read transparent colour index, if used
-                    transparent = buf[1] & 0x01 ? buf[4] : -1;
-
-                    // read disposal method
-                    disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
-                }
-                else
-                // other extension, skip
-                {
-                    while ((i = stream.GetC()) != 0)
-                    {
-                        if (stream.Eof() || (stream.LastRead() == 0) ||
-                            stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                        static const unsigned int gceSize = 6;
+                        stream.Read(buf, gceSize);
+                        if (stream.LastRead() != gceSize)
                         {
-                            done = true;
-                            break;
+                            Destroy();
+                            return wxGIF_INVFORMAT;
                         }
+
+                        // read delay and convert from 1/100 of a second to ms
+                        delay = 10 * (buf[2] + 256 * buf[3]);
+
+                        // read transparent colour index, if used
+                        transparent = buf[1] & 0x01 ? buf[4] : -1;
+
+                        // read disposal method
+                        disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
+                        break;
                     }
+                    case GIF_MARKER_EXT_COMMENT:
+                    {
+                        int len = stream.GetC();
+                        while (len)
+                        {
+                            if ( stream.Eof() )
+                            {
+                                done = true;
+                                break;
+                            }
+
+                            wxCharBuffer charbuf(len);
+                            stream.Read(charbuf.data(), len);
+                            if ( (int) stream.LastRead() != len )
+                            {
+                                done = true;
+                                break;
+                            }
+
+                            comment += wxConvertMB2WX(charbuf.data());
+
+                            len = stream.GetC();
+                        }
+
+                        break;
+                    }
+                    default:
+                        // other extension, skip
+                        while ((i = stream.GetC()) != 0)
+                        {
+                            if (stream.Eof() || (stream.LastRead() == 0) ||
+                                stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                            {
+                                done = true;
+                                break;
+                            }
+                        }
+                        break;
                 }
                 break;
             case GIF_MARKER_SEP:
@@ -751,6 +788,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 if (stream.LastRead() != idbSize)
                     return wxGIF_INVFORMAT;
 
+                pimg->comment = comment;
+                comment.clear();
                 pimg->left = buf[0] + 256 * buf[1];
                 pimg->top = buf[2] + 256 * buf[3];
     /*

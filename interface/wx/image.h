@@ -1136,6 +1136,12 @@ public:
             the resulting PNG file. Use this option if your application produces
             images with small size variation.
 
+        Options specific to wxGIFHandler:
+        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
+            or written to the GIF file. In an animated GIF each frame can have
+            its own comment. If there is only a comment in the first frame of
+            a GIF it will not be repeated in other frames.
+
         @param name
             The name of the option, case-insensitive.
         @return
