@@ -13,7 +13,7 @@
 
 #define HAVE_SSIZE_T 1
 #define STDC_HEADERS 1
-#if __BIG_ENDIAN__
+#ifdef __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
 #endif
 #define wxUSE_UNIX 1
