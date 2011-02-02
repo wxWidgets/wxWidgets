@@ -821,15 +821,15 @@ private:
             ptrop                                                           \
             itor& operator++()                                              \
             {                                                               \
-                if (m_node)                                                 \
-                    m_node = m_node->GetNext();                             \
+                wxASSERT_MSG( m_node, wxT("uninitialized iterator") );      \
+                m_node = m_node->GetNext();                                 \
                 return *this;                                               \
             }                                                               \
             const itor operator++(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
-                if (m_node)                                                 \
-                    m_node = m_node->GetNext();                             \
+                wxASSERT_MSG( m_node, wxT("uninitialized iterator") );      \
+                m_node = m_node->GetNext();                                 \
                 return tmp;                                                 \
             }                                                               \
             itor& operator--()                                              \
@@ -874,15 +874,15 @@ private:
             ptrop                                                           \
             itor& operator++()                                              \
             {                                                               \
-                if (m_node)                                                 \
-                    m_node = m_node->GetNext();                             \
+                wxASSERT_MSG( m_node, wxT("uninitialized iterator") );      \
+                m_node = m_node->GetNext();                                 \
                 return *this;                                               \
             }                                                               \
             const itor operator++(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
-                if (m_node)                                                 \
-                    m_node = m_node->GetNext();                             \
+                wxASSERT_MSG( m_node, wxT("uninitialized iterator") );      \
+                m_node = m_node->GetNext();                                 \
                 return tmp;                                                 \
             }                                                               \
             itor& operator--()                                              \
