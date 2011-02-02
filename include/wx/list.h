@@ -819,9 +819,19 @@ private:
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
-            itor& operator++() { m_node = m_node->GetNext(); return *this; }\
+            itor& operator++()                                              \
+            {                                                               \
+                if (m_node)                                                 \
+                    m_node = m_node->GetNext();                             \
+                return *this;                                               \
+            }                                                               \
             const itor operator++(int)                                      \
-                { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
+            {                                                               \
+                itor tmp = *this;                                           \
+                if (m_node)                                                 \
+                    m_node = m_node->GetNext();                             \
+                return tmp;                                                 \
+            }                                                               \
             itor& operator--()                                              \
             {                                                               \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
@@ -862,9 +872,19 @@ private:
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
-            itor& operator++() { m_node = m_node->GetNext(); return *this; }\
+            itor& operator++()                                              \
+            {                                                               \
+                if (m_node)                                                 \
+                    m_node = m_node->GetNext();                             \
+                return *this;                                               \
+            }                                                               \
             const itor operator++(int)                                      \
-                { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
+            {                                                               \
+                itor tmp = *this;                                           \
+                if (m_node)                                                 \
+                    m_node = m_node->GetNext();                             \
+                return tmp;                                                 \
+            }                                                               \
             itor& operator--()                                              \
             {                                                               \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
