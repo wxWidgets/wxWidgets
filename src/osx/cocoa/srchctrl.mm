@@ -50,33 +50,9 @@
 - (id)initWithFrame:(NSRect)frame
 {
     [super initWithFrame:frame];
-    [self setTarget: self];
-    [self setAction: @selector(searchAction:)];
     return self;
 }
-
-- (void) searchAction: (id) sender
-{
-    (void) sender;
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
-    {
-        wxSearchCtrl* wxpeer = dynamic_cast<wxSearchCtrl*>( impl->GetWXPeer() );
-        if ( wxpeer )
-        {
-            NSString *searchString = [self stringValue];
-            if ( searchString == nil )
-            {
-                wxpeer->HandleSearchFieldCancelHit();
-            }
-            else
-            {
-                wxpeer->HandleSearchFieldSearchHit();
-            }
-        }
-    }
-}
-
+ 
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -150,6 +126,23 @@ public :
        return  wxNSTextFieldControl::SetFocus();
     }
 
+    void controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
+    {
+        wxSearchCtrl* wxpeer = (wxSearchCtrl*) GetWXPeer();
+        if ( wxpeer )
+        {
+            NSString *searchString = [m_searchField stringValue];
+            if ( searchString == nil )
+            {
+                wxpeer->HandleSearchFieldCancelHit();
+            }
+            else
+            {
+                wxpeer->HandleSearchFieldSearchHit();
+            }
+        }
+    }
+    
 private:
     wxNSSearchField* m_searchField;
     NSSearchFieldCell* m_searchFieldCell;
@@ -159,7 +152,7 @@ wxNSSearchFieldControl::~wxNSSearchFieldControl()
 {
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
+wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
                                     const wxString& str,

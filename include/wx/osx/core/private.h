@@ -114,6 +114,7 @@ class wxWidgetImpl;
 class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
+class wxSearchCtrl;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
@@ -377,7 +378,7 @@ public :
                                     long style,
                                     long extraStyle) ;
 
-    static wxWidgetImplType*    CreateSearchControl( wxTextCtrl* wxpeer,
+    static wxWidgetImplType*    CreateSearchControl( wxSearchCtrl* wxpeer,
                                     wxWindowMac* parent,
                                     wxWindowID id,
                                     const wxString& content,
