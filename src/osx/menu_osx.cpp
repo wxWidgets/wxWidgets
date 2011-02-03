@@ -595,7 +595,23 @@ void wxMenuBar::MacInstallMenuBar()
         return ;
 
     m_rootMenu->GetPeer()->MakeRoot();
+    
+    // hide items in the apple menu that don't exist in the wx menubar
+    
+    int id = 0;
+    wxMenuItem* appleItem = NULL;
 
+    id = wxApp::s_macAboutMenuItemId;
+    appleItem = m_appleMenu->FindItem(id);
+    if ( appleItem != NULL )
+        appleItem->GetPeer()->Hide(FindItem(id) == NULL );
+    
+    id = wxApp::s_macPreferencesMenuItemId;
+    appleItem = m_appleMenu->FindItem(id);
+    if ( appleItem != NULL )
+        appleItem->GetPeer()->Hide(FindItem(id) == NULL );
+    
+        
 #if 0
 
     MenuBarHandle menubar = NULL ;
