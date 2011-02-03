@@ -26682,7 +26682,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
                                 if test -z "$x_includes" -o "$x_includes" = NONE; then
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /usr/include;
+for ac_dir in $SEARCH_INCLUDE /usr/include
   do
     if test -f "$ac_dir/X11/Intrinsic.h"; then
       ac_find_includes=$ac_dir
@@ -26695,7 +26695,7 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXt.$ac_extension"; then
@@ -30916,7 +30916,7 @@ done
 echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgpewidget.$ac_extension"; then
@@ -33111,7 +33111,7 @@ done
 echo $ECHO_N "checking for Motif/Lesstif headers... $ECHO_C" >&6; }
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /usr/include;
+for ac_dir in $SEARCH_INCLUDE /usr/include
   do
     if test -f "$ac_dir/Xm/Xm.h"; then
       ac_find_includes=$ac_dir
@@ -33206,7 +33206,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXm.$ac_extension"; then
@@ -33610,7 +33610,7 @@ _ACEOF
 echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXpm.$ac_extension"; then
@@ -34142,7 +34142,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
@@ -34236,7 +34236,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
 echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
@@ -34326,7 +34326,7 @@ if test "$wxUSE_DETECT_SM" = "yes"; then
 echo $ECHO_N "checking for -lSM - X11 session management... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libSM.$ac_extension"; then
@@ -34384,7 +34384,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 echo $ECHO_N "checking for OpenGL headers... $ECHO_C" >&6; }
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /opt/graphics/OpenGL/include /usr/include;
+for ac_dir in $SEARCH_INCLUDE /opt/graphics/OpenGL/include /usr/include
   do
     if test -f "$ac_dir/GL/gl.h"; then
       ac_find_includes=$ac_dir
@@ -34512,7 +34512,7 @@ if test $ac_cv_header_GL_glu_h = yes; then
 echo $ECHO_N "checking for -lGL... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib;
+  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
@@ -34547,7 +34547,7 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6; }
 echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
@@ -34594,7 +34594,7 @@ echo "${ECHO_T}no" >&6; }
 echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
@@ -51075,10 +51075,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.8"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.8"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.9"
 
 
 

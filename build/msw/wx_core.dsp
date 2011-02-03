@@ -5925,11 +5925,11 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\bookctrl.h
+SOURCE=..\..\include\wx\bookctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\bookctrl.h
+SOURCE=..\..\include\wx\persist\bookctrl.h
 # End Source File
 # Begin Source File
 
@@ -6765,11 +6765,11 @@ SOURCE=..\..\include\wx\tooltip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\toplevel.h
+SOURCE=..\..\include\wx\persist\toplevel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\toplevel.h
+SOURCE=..\..\include\wx\toplevel.h
 # End Source File
 # Begin Source File
 
@@ -6777,11 +6777,11 @@ SOURCE=..\..\include\wx\treebase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\treebook.h
+SOURCE=..\..\include\wx\persist\treebook.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\treebook.h
+SOURCE=..\..\include\wx\treebook.h
 # End Source File
 # Begin Source File
 
@@ -6825,11 +6825,11 @@ SOURCE=..\..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\window.h
+SOURCE=..\..\include\wx\persist\window.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\window.h
+SOURCE=..\..\include\wx\window.h
 # End Source File
 # Begin Source File
 
