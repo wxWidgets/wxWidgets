@@ -2727,7 +2727,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
-#if 0
+
         case WM_ENTERSIZEMOVE:
             {
                 processed = HandleEnterSizeMove();
@@ -2739,7 +2739,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 processed = HandleExitSizeMove();
             }
             break;
-#endif
+
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
