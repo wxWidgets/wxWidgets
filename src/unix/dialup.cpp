@@ -608,7 +608,10 @@ wxDialUpManagerImpl::CheckProcNet()
 
             while (fgets(output, 256, f) != NULL)
             {
-                if ( strstr(output, "eth") ) // network card
+                // Test for the known network interface names
+                if ( strstr(output, "eth")
+                        || strstr(output, "wlan")
+                        || strstr(output, "ath") )
                 {
                     netDevice |= NetDevice_LAN;
                 }
