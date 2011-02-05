@@ -44,11 +44,6 @@ public:
         there are differences on other platforms. On Unix variations using X11
         extensions it should behave as defined, but some irregularities may
         occur.
-
-        On wxMac passing in wxDefaultVideoMode as the mode parameter does
-        nothing. This happens because carbon no longer has access to
-        @c DMUseScreenPrefs(), an undocumented function that changed the video
-        mode to the system default by using the system's "scrn" resource.
     */
     bool ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode);
 
