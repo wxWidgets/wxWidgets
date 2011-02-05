@@ -594,10 +594,16 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
 
+    <set var="LIB_PNG_IF_MONO">
+        <if cond="MONOLITHIC=='1'">$(LIB_PNG)</if>
+    </set>
 
     <template id="wx_append_base" template_append="wx_append_base_nomono">
-        <!-- Always link against the wxWin library in monolithic build: -->
+        <!-- Always link against the full wx library in monolithic build and
+             also against the PNG one as core code references it for Tango
+             icons and so it is pulled in even by the console programs. -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <sys-lib>$(LIB_PNG_IF_MONO)</sys-lib>
     </template>
     <template id="wx_append" template_append="wx_append_nomono">
         <!-- Always link against the wxWin library in monolithic build: -->

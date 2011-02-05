@@ -68,6 +68,10 @@ EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 1
 EXTRALIBS_FOR_BASE =  
 !endif
+__LIB_PNG_IF_MONO_p =
+!ifeq MONOLITHIC 1
+__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
+!endif
 __test_gui___depname =
 !ifeq USE_GUI 1
 __test_gui___depname = $(OBJS)\test_gui.exe
@@ -111,10 +115,6 @@ __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
-!endif
-__LIB_PNG_p =
-!ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 __DEBUGINFO =
 !ifeq BUILD debug
@@ -204,6 +204,10 @@ __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__LIB_PNG_p =
+!ifeq USE_GUI 1
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 __CAIRO_LIB_p =
 !ifeq USE_CAIRO 1
@@ -463,7 +467,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@%append $(OBJS)\test.lbc option caseexact
 	@%append $(OBJS)\test.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
-	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test.lbc library %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
 	@for %i in () do @%append $(OBJS)\test.lbc option stack=%i
 	wlink @$(OBJS)\test.lbc
