@@ -87,8 +87,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID winid,
     // minValue > maxValue not handled, tickMarks set to 0
     if ( style & wxSL_AUTOTICKS )
         tickMarks = ((maxValue - minValue >= 0) ? (maxValue - minValue) : 0);
-    // arg2 needed a value, doesnt do anything
-    SetTickFreq(tickMarks,1);
+    SetTickFreq(tickMarks);
 
     return true;
 }
@@ -206,7 +205,7 @@ int wxSlider::GetMax() const
     return [GetNSSlider() maxValue];
 }
 
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::DoSetTickFreq(int n)
 {
     const int numTicks = (n > 0) ? ((GetMax() - GetMin()) / n) + 1 : 0;
     [GetNSSlider() setNumberOfTickMarks:numTicks];

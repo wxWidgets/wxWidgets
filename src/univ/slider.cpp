@@ -352,7 +352,7 @@ int wxSlider::GetThumbLength() const
 // wxSlider ticks
 // ----------------------------------------------------------------------------
 
-void wxSlider::SetTickFreq(int n, int WXUNUSED(dummy))
+void wxSlider::DoSetTickFreq(int n)
 {
     wxCHECK_RET (n > 0, wxT("invalid slider tick frequency"));
 

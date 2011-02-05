@@ -59,7 +59,6 @@ public:
     int GetMax() const { return m_rangeMax; }
 
     // Win32-specific slider methods
-    void SetTickFreq(int n, int pos);
     int GetTickFreq() const { return m_tickFreq; }
     void SetPageSize(int pageSize);
     int GetPageSize() const;
@@ -130,6 +129,9 @@ protected:
     // flag needed to detect whether we're getting THUMBRELEASE event because
     // of dragging the thumb or scrolling the mouse wheel
     bool m_isDragging;
+
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int freq);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };

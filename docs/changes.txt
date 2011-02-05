@@ -377,7 +377,9 @@ Deprecated methods and their replacements
   with more expected semantics.
 - wxPORTRAIT and wxLANDSCAPE are now elements of wxPrintOrientation enum and
   wxPrintData::SetOrientation(int) takes wxPrintOrientation and not int.
-
+- Second parameter of wxSlider::SetTickFreq(int n, int pos) is deprecated,
+  simply remove it from your code and use wxSlider::SetTickFreq(int n) as it
+  was never used anyhow.
 
 Major new features in this release
 ----------------------------------

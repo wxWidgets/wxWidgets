@@ -168,7 +168,7 @@ void wxSlider::SetRange(int WXUNUSED(minValue), int WXUNUSED(maxValue))
     // unsupported feature
 }
 
-void wxSlider::SetTickFreq(int WXUNUSED(n), int WXUNUSED(pos))
+void wxSlider::DoSetTickFreq(int WXUNUSED(n))
 {
     // unsupported feature
 }

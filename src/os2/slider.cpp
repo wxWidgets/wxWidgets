@@ -1074,7 +1074,7 @@ void wxSlider::SetTick(
 } // end of wxSlider::SetTick
 
 // For trackbars only
-void wxSlider::SetTickFreq( int n, int WXUNUSED(nPos) )
+void wxSlider::DoSetTickFreq( int n )
 {
     SLDCDATA  vSlData;
     WNDPARAMS vWndParams;

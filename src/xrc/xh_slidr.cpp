@@ -63,7 +63,7 @@ wxObject *wxSliderXmlHandler::DoCreateResource()
 
     if( HasParam(wxT("tickfreq")))
     {
-        control->SetTickFreq(GetLong(wxT("tickfreq")), 0);
+        control->SetTickFreq(GetLong(wxT("tickfreq")));
     }
     if( HasParam(wxT("pagesize")))
     {

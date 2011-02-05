@@ -666,10 +666,10 @@ void wxSlider::SetRange(int minValue, int maxValue)
     }
 }
 
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::DoSetTickFreq(int n)
 {
     m_tickFreq = n;
-    ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
+    ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) 0 );
 }
 
 void wxSlider::SetPageSize(int pageSize)

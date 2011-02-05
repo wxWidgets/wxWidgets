@@ -95,7 +95,7 @@ public:
     // warning: most of subsequent methods are currently only implemented in
     //          wxMSW under Win95 and are silently ignored on other platforms
 
-    virtual void SetTickFreq(int WXUNUSED(n), int WXUNUSED(pos)) { }
+    void SetTickFreq(int freq) { DoSetTickFreq(freq); }
     virtual int GetTickFreq() const { return 0; }
     virtual void ClearTicks() { }
     virtual void SetTick(int WXUNUSED(tickPos)) { }
@@ -105,7 +105,13 @@ public:
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_INLINE( void SetTickFreq(int freq, int), DoSetTickFreq(freq); )
+#endif
+
 protected:
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int WXUNUSED(freq)) { /* unsupported by default */ }
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }

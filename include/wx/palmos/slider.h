@@ -52,7 +52,6 @@ public:
     int GetMax() const;
 
     // For trackbars only
-    void SetTickFreq(int n, int pos);
     int GetTickFreq() const;
     void SetPageSize(int pageSize);
     int GetPageSize() const;
@@ -75,6 +74,8 @@ public:
     bool SendScrollEvent(WXEVENTPTR event);
 
 protected:
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int freq);
 
     virtual wxSize DoGetBestSize() const;
 

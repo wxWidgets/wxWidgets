@@ -206,7 +206,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
 }
 
 // For trackbars only
-void wxSlider::SetTickFreq(int n, int WXUNUSED(pos))
+void wxSlider::DoSetTickFreq(int n)
 {
     // TODO
     m_tickFreq = n;

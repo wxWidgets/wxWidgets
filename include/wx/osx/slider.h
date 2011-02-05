@@ -59,7 +59,6 @@ public:
     void SetMax(int maxValue) { SetRange(m_rangeMin, maxValue); }
 
     // For trackbars only
-    void SetTickFreq(int n, int pos);
     inline int GetTickFreq() const { return m_tickFreq; }
     void SetPageSize(int pageSize);
     int GetPageSize() const ;
@@ -81,6 +80,9 @@ public:
     virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
 
 protected:
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int freq);
+
     virtual wxSize DoGetBestSize() const;
     virtual void   DoSetSize(int x, int y, int w, int h, int sizeFlags);
     virtual void   DoMoveWindow(int x, int y, int w, int h);

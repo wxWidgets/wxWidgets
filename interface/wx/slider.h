@@ -337,14 +337,12 @@ public:
         @param n
             Frequency. For example, if the frequency is set to two, a tick mark is
             displayed for every other increment in the slider's range.
-        @param pos
-            Position. Must be greater than zero. @todo: what is this for?
 
         @onlyfor{wxmsw}
 
         @see GetTickFreq()
     */
-    virtual void SetTickFreq(int n, int pos);
+    virtual void SetTickFreq(int n);
 
     /**
         Sets the slider position.
