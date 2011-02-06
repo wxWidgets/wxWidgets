@@ -651,6 +651,7 @@ MSW:
 - In some rare cases wxOwnerDrawnComboBox drop-down animation could display
   as garbage. This has now been greatly reduced (mcben).
 - Fixed wxComboCtrl::SetButtonPosition() on Vista/Win7.
+- Allow accessing 64/32 bit registry from 32/64 bit code (Rickard Westerlund).
 
 i18n:
 

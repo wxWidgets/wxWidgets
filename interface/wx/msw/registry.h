@@ -71,20 +71,27 @@ class wxRegKey
 public:
     /**
         Default constructor, initializes to @c HKEY_CLASSES_ROOT.
+
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey();
+    wxRegKey(WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
         The constructor to set the full name of the key.
+
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey(const wxString& strKey);
+    wxRegKey(const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
         The constructor to set the full name of the key using one of the
         standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD, HKCC or HKDD.
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey(StdKey keyParent, const wxString& strKey);
+    wxRegKey(StdKey keyParent, const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
-        The constructor to set the full name of the key under a previously created
-        parent.
+        The constructor to set the full name of the key under a previously
+        created parent. The registry view is inherited from the parent.
     */
     wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
 
@@ -130,6 +137,33 @@ public:
     Type_Resource_list,       ///< Resource list in the resource map
     Type_Full_resource_descriptor,  ///< Resource list in the hardware description
     Type_Resource_requirements_list ///<
+    };
+
+    /**
+        Used to determine how the registry will be viewed, either as
+        32-bit or 64-bit.
+
+        @since 2.9.2
+    */
+    enum WOW64ViewMode
+    {
+        /**
+            Uses 32-bit registry for 32-bit applications and
+            64-bit registry for 64-bit ones.
+        */
+        WOW64ViewMode_Default,
+
+        /**
+            Can be used in 64-bit apps to access the 32-bit registry,
+            has no effect (i.e. treated as default) in 32-bit apps.
+        */
+        WOW64ViewMode_32,
+
+        /**
+            Can be used in 32-bit apps to access the 64-bit registry,
+            has no effect (i.e. treated as default) in 64-bit apps.
+        */
+        WOW64ViewMode_64
     };
 
     /**
@@ -223,6 +257,15 @@ public:
         Gets the name of the registry key.
     */
     wxString GetName(bool bShortPrefix = true) const;
+
+    /**
+        Retrieves the registry view used by this key.
+
+        @since 2.9.2
+
+        @return The registry view given at the object's construction.
+    */
+    WOW64ViewMode GetView() const { return m_viewMode; }
 
     /**
         Gets the next key. Returns @true if successful.
