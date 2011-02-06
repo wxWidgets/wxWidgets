@@ -40,10 +40,6 @@
 #include "wx/dynlib.h"
 #include "wx/msw/private.h"
 
-// Set this to 1 to be _absolutely_ sure that repainting will work for all
-// comctl32.dll versions
-#define wxUSE_COMCTL32_SAFELY 0
-
 #include "wx/imaglist.h"
 #include "wx/msw/dragimag.h"
 
@@ -740,22 +736,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle, pos, size) )
         return false;
 
-#if wxUSE_COMCTL32_SAFELY
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#elif 1
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#else
-    // This works around a bug in the Windows tree control whereby for some versions
-    // of comctrl32, setting any colour actually draws the background in black.
-    // This will initialise the background to the system colour.
-    // THIS FIX NOW REVERTED since it caused problems on _other_ systems.
-    // Assume the user has an updated comctl32.dll.
-    ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#endif
 
     wxSetCCUnicodeFormat(GetHwnd());
 
@@ -877,24 +859,20 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
 bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
 {
-#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
     ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
-#endif
 
     return true;
 }
 
 bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 {
-#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetForegroundColour(colour) )
         return false;
 
     ::SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
-#endif
 
     return true;
 }
@@ -3454,7 +3432,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         // instead of explicitly checking for _WIN32_IE, check if the
         // required symbols are available in the headers
-#if defined(CDDS_PREPAINT) && !wxUSE_COMCTL32_SAFELY
+#if defined(CDDS_PREPAINT)
         case NM_CUSTOMDRAW:
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
