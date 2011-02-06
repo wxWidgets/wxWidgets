@@ -2185,12 +2185,12 @@ public:
          @li @c wxEVT_RIGHT_DOWN
          @li @c wxEVT_RIGHT_UP
          @li @c wxEVT_RIGHT_DCLICK
-         @li @c wxEVT_MOUSE_AUX1_DOWN
-         @li @c wxEVT_MOUSE_AUX1_UP
-         @li @c wxEVT_MOUSE_AUX1_DCLICK
-         @li @c wxEVT_MOUSE_AUX2_DOWN
-         @li @c wxEVT_MOUSE_AUX2_UP
-         @li @c wxEVT_MOUSE_AUX2_DCLICK
+         @li @c wxEVT_AUX1_DOWN
+         @li @c wxEVT_AUX1_UP
+         @li @c wxEVT_AUX1_DCLICK
+         @li @c wxEVT_AUX2_DOWN
+         @li @c wxEVT_AUX2_UP
+         @li @c wxEVT_AUX2_DCLICK
          @li @c wxEVT_MOTION
          @li @c wxEVT_MOUSEWHEEL
     */
