@@ -1976,8 +1976,27 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
+namespace
+{
+
+wxString GetAppropriateTitle(const wxView *view, const wxString& titleGiven)
+{
+    wxString title(titleGiven);
+    if ( title.empty() )
+    {
+        if ( view && view->GetDocument() )
+            title = view->GetDocument()->GetUserReadableName();
+        else
+            title = _("Printout");
+    }
+
+    return title;
+}
+
+} // anonymous namespace
+
 wxDocPrintout::wxDocPrintout(wxView *view, const wxString& title)
-             : wxPrintout(title)
+             : wxPrintout(GetAppropriateTitle(view, title))
 {
     m_printoutView = view;
 }
