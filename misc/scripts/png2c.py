@@ -56,9 +56,14 @@ for path in sys.argv[1:]:
 
         # Try to naively get its size if necessary
         if with_size:
-                width = bytes[19] + 16*bytes[18] + 256*bytes[17] + 65536*bytes[16]
-                height = bytes[23] + 16*bytes[22] + 256*bytes[21] + 65536*bytes[20]
-                size_suffix = "_%dx%d" % (width, height)
+                def getInt(start):
+                        """ Convert 4 bytes in network byte order to an integer. """
+                        return 16777216*bytes[start]   + \
+                                  65536*bytes[start+1] + \
+                                    256*bytes[start+2] + \
+                                        bytes[start+3];
+
+                size_suffix = "_%dx%d" % (getInt(16), getInt(20))
 
         # Create the C header
         text = "/* %s - %d bytes */\n" \
