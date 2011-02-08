@@ -136,7 +136,7 @@ void NumValidatorTestCase::TransferUnsigned()
 void NumValidatorTestCase::TransferFloat()
 {
     // We need a locale with point as decimal separator.
-    CLocaleSetter cloc;
+    wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
 
     float value = 0;
     wxFloatingPointValidator<float> valFloat(3, &value);
@@ -184,7 +184,7 @@ void NumValidatorTestCase::ZeroAsBlank()
 void NumValidatorTestCase::NoTrailingZeroes()
 {
     // We need a locale with point as decimal separator.
-    CLocaleSetter cloc;
+    wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
 
     double value = 1.2;
     m_text->SetValidator(
