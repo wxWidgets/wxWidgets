@@ -1920,15 +1920,23 @@ void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
 
 bool wxWidgetCocoaImpl::IsEnabled() const
 {
-    if ( [m_osxView respondsToSelector:@selector(isEnabled) ] )
-        return [m_osxView isEnabled];
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+
+    if ( [targetView respondsToSelector:@selector(isEnabled) ] )
+        return [targetView isEnabled];
     return true;
 }
 
 void wxWidgetCocoaImpl::Enable( bool enable )
 {
-    if ( [m_osxView respondsToSelector:@selector(setEnabled:) ] )
-        [m_osxView setEnabled:enable];
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+
+    if ( [targetView respondsToSelector:@selector(setEnabled:) ] )
+        [targetView setEnabled:enable];
 }
 
 void wxWidgetCocoaImpl::PulseGauge()
