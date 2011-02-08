@@ -600,16 +600,29 @@ void wxMenuBar::MacInstallMenuBar()
     
     int id = 0;
     wxMenuItem* appleItem = NULL;
+    wxMenuItem* wxItem = NULL;
 
     id = wxApp::s_macAboutMenuItemId;
     appleItem = m_appleMenu->FindItem(id);
+    wxItem = FindItem(id);
     if ( appleItem != NULL )
-        appleItem->GetPeer()->Hide(FindItem(id) == NULL );
+    {
+        if ( wxItem == NULL )
+            appleItem->GetPeer()->Hide();
+        else 
+            appleItem->SetItemLabel(wxItem->GetItemLabel());
+    }
     
     id = wxApp::s_macPreferencesMenuItemId;
     appleItem = m_appleMenu->FindItem(id);
+    wxItem = FindItem(id);
     if ( appleItem != NULL )
-        appleItem->GetPeer()->Hide(FindItem(id) == NULL );
+    {
+        if ( wxItem == NULL )
+            appleItem->GetPeer()->Hide();
+        else 
+            appleItem->SetItemLabel(wxItem->GetItemLabel());
+    }
     
         
 #if 0
