@@ -525,12 +525,7 @@ public:
     // tells the item how much more space there is available in the opposite
     // direction (-1 if unknown).
     virtual bool
-    InformFirstDirection(int WXUNUSED(direction),
-                         int WXUNUSED(size),
-                         int WXUNUSED(availableOtherDir))
-    {
-        return false;
-    }
+    InformFirstDirection(int direction, int size, int availableOtherDir);
 
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout

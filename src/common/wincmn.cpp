@@ -853,6 +853,16 @@ wxSize wxWindowBase::GetWindowBorderSize() const
     return size*2;
 }
 
+bool
+wxWindowBase::InformFirstDirection(int direction,
+                                   int size,
+                                   int availableOtherDir)
+{
+    return GetSizer() && GetSizer()->InformFirstDirection(direction,
+                                                          size,
+                                                          availableOtherDir);
+}
+
 wxSize wxWindowBase::GetEffectiveMinSize() const
 {
     // merge the best size with the min size, giving priority to the min size

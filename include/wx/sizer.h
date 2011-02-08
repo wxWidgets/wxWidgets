@@ -665,6 +665,10 @@ public:
         m_position = pos;
         m_size = size;
         Layout();
+
+        // This call is required for wxWrapSizer to be able to calculate its
+        // minimal size correctly.
+        InformFirstDirection(wxHORIZONTAL, size.x, size.y);
     }
     void SetDimension(int x, int y, int width, int height)
         { SetDimension(wxPoint(x, y), wxSize(width, height)); }

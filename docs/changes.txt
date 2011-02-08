@@ -461,6 +461,7 @@ All (GUI):
 - wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
 - Added support for saving PNG files with palette (troelsk).
 - Added support for saving as GIF and animated GIF (troelsk).
+- Fix wxWrapSizer minimal size calculation (Catalin Raceanu).
 
 GTK:
 

@@ -529,6 +529,10 @@ SOURCE=.\controls\windowtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\sizers\wrapsizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xml\xrctest.cpp
 # End Source File
 # End Group
