@@ -52,6 +52,8 @@
 @interface NSView(EditableView)
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
+- (BOOL)isSelectable;
+- (void)setSelectable:(BOOL)flag;
 @end
 
 class wxMacEditHelper
@@ -60,10 +62,11 @@ public :
     wxMacEditHelper( NSView* textView )
     {
         m_textView = textView;
-        m_formerState = YES;
+        m_formerEditable = YES;
         if ( textView )
         {
-            m_formerState = [textView isEditable];
+            m_formerEditable = [textView isEditable];
+            m_formerSelectable = [textView isSelectable];
             [textView setEditable:YES];
         }
     }
@@ -71,11 +74,15 @@ public :
     ~wxMacEditHelper()
     {
         if ( m_textView )
-            [m_textView setEditable:m_formerState];
+        {
+            [m_textView setEditable:m_formerEditable];
+            [m_textView setSelectable:m_formerSelectable];
+        }
     }
 
 protected :
-    BOOL m_formerState ;
+    BOOL m_formerEditable ;
+    BOOL m_formerSelectable;
     NSView* m_textView;
 } ;
 
@@ -190,6 +197,25 @@ protected :
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+}
+
+- (void) setEnabled:(BOOL) flag
+{
+    // from Technical Q&A QA1461
+    if (flag) {
+        [self setTextColor: [NSColor controlTextColor]];
+
+    } else {
+        [self setTextColor: [NSColor disabledControlTextColor]];
+    }
+
+    [self setSelectable: flag];
+    [self setEditable: flag];
+}
+
+- (BOOL) isEnabled
+{
+    return [self isEditable];
 }
 
 @end
