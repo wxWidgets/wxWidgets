@@ -168,7 +168,7 @@ protected:
     // Ellipsize() helper:
     static wxString DoEllipsizeSingleLine(const wxString& label, const wxDC& dc,
                                           wxEllipsizeMode mode, int maxWidth,
-                                          int replacementWidth, int marginWidth);
+                                          int replacementWidth);
 
     // this field contains the label in wx format, i.e. with '&' mnemonics,
     // as it was passed to the last SetLabel() call

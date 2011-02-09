@@ -239,10 +239,9 @@ wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(va
 /* static and protected */
 wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
                                               wxEllipsizeMode mode, int maxFinalWidthPx,
-                                              int replacementWidthPx, int marginWidthPx)
+                                              int replacementWidthPx)
 {
-    wxASSERT_MSG(replacementWidthPx > 0 && marginWidthPx > 0,
-                 "Invalid parameters");
+    wxASSERT_MSG(replacementWidthPx > 0, "Invalid parameters");
     wxASSERT_LEVEL_2_MSG(!curLine.Contains('\n'),
                          "Use Ellipsize() instead!");
 
@@ -269,8 +268,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
         return curLine;     // we don't need to do any ellipsization!
 
     int excessPx = wxMin(totalWidthPx - maxFinalWidthPx +
-                         replacementWidthPx +
-                         marginWidthPx,     // security margin
+                         replacementWidthPx,
                          totalWidthPx);
     wxASSERT(excessPx>0);       // excessPx should be in the [1;totalWidthPx] range
 
@@ -407,12 +405,12 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     wxASSERT(removedPx >= excessPx);
 
     // if there is space for the replacement dots, add them
-    if ((int)totalWidthPx-removedPx+replacementWidthPx < maxFinalWidthPx)
+    if ((int)totalWidthPx-removedPx+replacementWidthPx <= maxFinalWidthPx)
         ret.insert(initialCharToRemove, wxELLIPSE_REPLACEMENT);
 
     // if everything was ok, we should have shortened this line
     // enough to make it fit in maxFinalWidthPx:
-    wxASSERT_LEVEL_2(dc.GetTextExtent(ret).GetWidth() <= maxFinalWidthPx);
+    wxASSERT(dc.GetTextExtent(ret).GetWidth() <= maxFinalWidthPx);
 
     return ret;
 }
@@ -428,7 +426,6 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
     // change because of e.g. a font change; however we calculate them only once
     // when ellipsizing multiline labels:
     int replacementWidth = dc.GetTextExtent(wxELLIPSE_REPLACEMENT).GetWidth();
-    int marginWidth = dc.GetCharWidth();
 
     // NB: we must handle correctly labels with newlines:
     wxString curLine;
@@ -437,7 +434,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
         if ( pc == label.end() || *pc == wxS('\n') )
         {
             curLine = DoEllipsizeSingleLine(curLine, dc, mode, maxFinalWidth,
-                                            replacementWidth, marginWidth);
+                                            replacementWidth);
 
             // add this (ellipsized) row to the rest of the label
             ret << curLine;
