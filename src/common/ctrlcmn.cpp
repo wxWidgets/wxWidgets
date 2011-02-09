@@ -255,7 +255,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
 
     wxArrayInt charOffsetsPx;
     size_t len = curLine.length();
-    if (len == 0 ||
+    if (len <= 1 ||
         !dc.GetPartialTextExtents(curLine, charOffsetsPx))
         return curLine;
 
