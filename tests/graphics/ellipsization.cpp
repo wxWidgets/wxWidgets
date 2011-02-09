@@ -31,10 +31,16 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( EllipsizationTestCase );
-        CPPUNIT_TEST( Ellipsize );
+        CPPUNIT_TEST( NormalCase );
+        CPPUNIT_TEST( EnoughSpace );
+        CPPUNIT_TEST( VeryLittleSpace );
+        CPPUNIT_TEST( HasThreeDots );
     CPPUNIT_TEST_SUITE_END();
 
-    void Ellipsize();
+    void NormalCase();
+    void EnoughSpace();
+    void VeryLittleSpace();
+    void HasThreeDots();
 
     DECLARE_NO_COPY_CLASS(EllipsizationTestCase)
 };
@@ -45,7 +51,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EllipsizationTestCase );
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EllipsizationTestCase, "EllipsizationTestCase" );
 
-void EllipsizationTestCase::Ellipsize()
+void EllipsizationTestCase::NormalCase()
 {
     wxMemoryDC dc;
 
@@ -81,7 +87,7 @@ void EllipsizationTestCase::Ellipsize()
         wxELLIPSIZE_END
     };
 
-    int widthsToTest[] = { 0, 1, 2, 3, 10, 20, 100 };
+    int widthsToTest[] = { 50, 100, 150 };
 
     for ( unsigned int s = 0; s < WXSIZEOF(stringsToTest); s++ )
     {
@@ -93,7 +99,7 @@ void EllipsizationTestCase::Ellipsize()
             {
                 for ( unsigned int w = 0; w < WXSIZEOF(widthsToTest); w++ )
                 {
-                    wxString ret = wxControlBase::Ellipsize
+                    wxString ret = wxControl::Ellipsize
                                    (
                                     str,
                                     dc,
@@ -104,11 +110,63 @@ void EllipsizationTestCase::Ellipsize()
 
                     WX_ASSERT_MESSAGE
                     (
-                     ("invalid ellipsization for \"%s\"", str),
+                     (
+                        "invalid ellipsization for \"%s\" (%dpx, should be <=%dpx)",
+                        str,
+                        dc.GetMultiLineTextExtent(ret).GetWidth(),
+                        widthsToTest[w]
+                     ),
                      dc.GetMultiLineTextExtent(ret).GetWidth() <= widthsToTest[w]
                     );
                 }
             }
         }
     }
+}
+
+
+void EllipsizationTestCase::EnoughSpace()
+{
+    // No ellipsization should occur if there's plenty of space.
+
+    wxMemoryDC dc;
+
+    CPPUNIT_ASSERT_EQUAL("some label",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_START, 200));
+    CPPUNIT_ASSERT_EQUAL("some label",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_MIDDLE, 200));
+    CPPUNIT_ASSERT_EQUAL("some label",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_END, 200));
+}
+
+
+void EllipsizationTestCase::VeryLittleSpace()
+{
+    // If there's not enough space, the shortened label should still contain "..." and one character
+
+    wxMemoryDC dc;
+
+    CPPUNIT_ASSERT_EQUAL("...l",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_START, 5));
+    CPPUNIT_ASSERT_EQUAL("s...",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_MIDDLE, 5));
+    CPPUNIT_ASSERT_EQUAL("s...",
+                         wxControl::Ellipsize("some label1", dc, wxELLIPSIZE_MIDDLE, 5));
+    CPPUNIT_ASSERT_EQUAL("s...",
+                         wxControl::Ellipsize("some label", dc, wxELLIPSIZE_END, 5));
+}
+
+
+void EllipsizationTestCase::HasThreeDots()
+{
+    wxMemoryDC dc;
+
+    CPPUNIT_ASSERT( wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_START, 80).StartsWith("...") );
+    CPPUNIT_ASSERT( !wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_START, 80).EndsWith("...") );
+
+    CPPUNIT_ASSERT( wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_END, 80).EndsWith("...") );
+
+    CPPUNIT_ASSERT( wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_MIDDLE, 80).Contains("...") );
+    CPPUNIT_ASSERT( !wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_MIDDLE, 80).StartsWith("...") );
+    CPPUNIT_ASSERT( !wxControl::Ellipsize("some longer text", dc, wxELLIPSIZE_MIDDLE, 80).EndsWith("...") );
 }
