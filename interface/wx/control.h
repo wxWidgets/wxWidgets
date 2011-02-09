@@ -179,11 +179,11 @@ public:     // static functions
 
     /**
         Replaces parts of the @a label string with ellipsis, if needed, so
-        that it doesn't exceed @a maxWidth.
-        
-        Note that this functions is guaranteed to always returns a string
-        whose rendering on the given DC takes less than @a maxWidth pixels
-        in horizontal.
+        that it fits into @a maxWidth pixels if possible.
+
+        Note that this function does @em not guarantee that the returned string
+        will always be shorter than @a maxWidth; if @a maxWidth is extremely
+        small, ellipsized text may be larger.
 
         @param label
             The string to ellipsize

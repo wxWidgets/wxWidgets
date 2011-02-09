@@ -397,20 +397,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     wxString ret(curLine);
     ret.erase(initialCharToRemove, nCharsToRemove);
 
-    int removedPx;
-    if (initialCharToRemove >= 1)
-        removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1] - charOffsetsPx[initialCharToRemove-1];
-    else
-        removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1];
-    wxASSERT(removedPx >= excessPx);
-
-    // if there is space for the replacement dots, add them
-    if ((int)totalWidthPx-removedPx+replacementWidthPx <= maxFinalWidthPx)
-        ret.insert(initialCharToRemove, wxELLIPSE_REPLACEMENT);
-
-    // if everything was ok, we should have shortened this line
-    // enough to make it fit in maxFinalWidthPx:
-    wxASSERT(dc.GetTextExtent(ret).GetWidth() <= maxFinalWidthPx);
+    ret.insert(initialCharToRemove, wxELLIPSE_REPLACEMENT);
 
     return ret;
 }
