@@ -402,6 +402,11 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 calc.Init(0, 1);
                 while ( !calc.IsShortEnough() )
                     calc.RemoveFromEnd();
+
+                // always show at least one character of the string:
+                if ( calc.m_nCharsToRemove == len )
+                    return wxString(wxELLIPSE_REPLACEMENT) + curLine[len-1];
+
                 break;
             }
 
@@ -444,6 +449,15 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                     else
                         calc.RemoveFromEnd();
                 }
+
+                // Always show at least one character of the string.
+                // Additionally, if there's only one character left, prefer
+                // "a..." to "...a":
+                if ( calc.m_nCharsToRemove == len ||
+                     calc.m_nCharsToRemove == len - 1 )
+                {
+                    return curLine[0] + wxString(wxELLIPSE_REPLACEMENT);
+                }
             }
             break;
 
@@ -452,6 +466,11 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 calc.Init(len - 1, 1);
                 while ( !calc.IsShortEnough() )
                     calc.RemoveFromStart();
+
+                // always show at least one character of the string:
+                if ( calc.m_nCharsToRemove == len )
+                    return curLine[0] + wxString(wxELLIPSE_REPLACEMENT);
+
                 break;
             }
 
