@@ -797,8 +797,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_lib\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswud\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -806,8 +805,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_lib\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswu\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Debug|Win32"/>
@@ -819,8 +817,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_dll\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswud\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Release|Win32">
@@ -828,8 +825,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_dll\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswu\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Universal Debug|Win32"/>
@@ -848,8 +844,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_lib\mswunivud\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Release|Win32">
@@ -857,8 +852,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_lib\mswunivu\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Debug|Win32"/>
@@ -870,8 +864,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_dll\mswunivud\wx\setup.h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32">
@@ -879,8 +872,7 @@
 						Name="VCCustomBuildTool"
 						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						Outputs="..\..\lib\vc_dll\mswunivu\wx\setup.h"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

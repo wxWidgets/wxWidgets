@@ -376,7 +376,14 @@
     </define-tag>
 
     <set var="msvc_copy_setup_h_script">
-        <if cond="IS_MSVC_PRJ">
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT not in ['msvc6prj','msevc4prj']">
+Creating $(SETUPHDIR)\wx\setup.h
+InputPath=..\..\include\wx\%s
+
+"$(SETUPHDIR)\wx\setup.h" : 
+$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+        </if>
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT in ['msvc6prj','msevc4prj']">
 Creating $(SETUPHDIR)\wx\setup.h
 InputPath=..\..\include\wx\%s
 

@@ -863,7 +863,6 @@
 						Description="Creating ..\..\lib\vc_lib\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswud\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -874,7 +873,6 @@
 						Description="Creating ..\..\lib\vc_lib\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswu\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -891,7 +889,6 @@
 						Description="Creating ..\..\lib\vc_dll\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswud\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -902,7 +899,6 @@
 						Description="Creating ..\..\lib\vc_dll\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswu\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -929,7 +925,6 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivud\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -940,7 +935,6 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivu\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -957,7 +951,6 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivud\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -968,7 +961,6 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivu\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
 					/>
 				</FileConfiguration>
 			</File>
