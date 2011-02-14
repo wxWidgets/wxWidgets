@@ -388,7 +388,6 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     wxSize sizeBtn = sizeLabel;
 
     sizeBtn.x += 3*win->GetCharWidth();
-    sizeBtn.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(sizeLabel.y)/10;
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
@@ -416,7 +415,9 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     // creating the button
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The size of a standard button in the dialog units is 50x14, use it.
+        // The 50x14 button size is documented in the "Recommended sizing and
+        // spacing" section of MSDN layout article.
+        //
         // Note that we intentionally don't use GetDefaultSize() here, because
         // it's inexact -- dialog units depend on this dialog's font.
         wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
@@ -604,10 +605,8 @@ wxSize wxButton::DoGetBestSize() const
 
     wxSize size;
 
-    // account for the text part if we have it or if we don't have any image at
-    // all (buttons initially created with empty label should still have a non
-    // zero size)
-    if ( ShowsLabel() || !m_imageData )
+    // Account for the text part if we have it.
+    if ( ShowsLabel() )
     {
         int flags = 0;
         if ( GetAuthNeeded() )
