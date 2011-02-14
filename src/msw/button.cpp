@@ -225,13 +225,13 @@ public:
 
         m_data.himl = GetHimagelistOf(&m_iml);
 
-        // use default margins
+        // no margins by default
         m_data.margin.left =
-        m_data.margin.right = btn->GetCharWidth();
+        m_data.margin.right =
         m_data.margin.top =
-        m_data.margin.bottom = btn->GetCharHeight() / 2;
+        m_data.margin.bottom = 0;
 
-        // and default alignment
+        // use default alignment
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
 
         UpdateImageInfo();
