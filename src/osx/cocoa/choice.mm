@@ -52,6 +52,53 @@
 
 @end
 
+@interface NSView(PossibleSizeMethods)
+- (NSControlSize)controlSize;
+@end
+
+class wxChoiceCocoaImpl : public wxWidgetCocoaImpl
+{
+public:
+    wxChoiceCocoaImpl(wxWindowMac *wxpeer, wxNSPopUpButton *v)
+    : wxWidgetCocoaImpl(wxpeer, v)
+    {
+    }
+    
+    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+    {
+        left = top = right = bottom = 0;
+        NSControlSize size = NSRegularControlSize;
+        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
+            size = [m_osxView controlSize];
+        else if ([m_osxView respondsToSelector:@selector(cell)])
+        {
+            id cell = [(id)m_osxView cell];
+            if ([cell respondsToSelector:@selector(controlSize)])
+                size = [cell controlSize];
+        }
+        
+        switch( size )
+        {
+            case NSRegularControlSize:
+                left = right = 3;
+                top = 2;
+                bottom = 4;
+                break;
+            case NSSmallControlSize:
+                left = right = 3;
+                top = 1;
+                bottom = 4;
+                break;
+            case NSMiniControlSize:
+                left = 1;
+                right = 2;
+                top = 0;
+                bottom = 0;
+                break;
+        }
+    }
+};
+
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
@@ -65,7 +112,7 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
     [v setMenu: menu->GetHMenu()];
     [v setAutoenablesItems:NO];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxChoiceCocoaImpl( wxpeer, v );
     return c;
 }
 
