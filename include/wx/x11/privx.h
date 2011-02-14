@@ -66,9 +66,6 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 // For debugging
 wxString wxGetXEventName(XEvent& event);
 
-// Is the window visible?
-bool wxWindowIsVisible(Window win);
-
 #if wxUSE_NANOX
 #define XEventGetWindow(event) event->general.wid
 #define XEventGetType(event) event->general.type

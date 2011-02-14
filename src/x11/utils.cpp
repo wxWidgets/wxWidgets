@@ -395,10 +395,3 @@ wxString wxGetXEventName(XEvent& event)
 #endif
 }
 
-bool wxWindowIsVisible(Window win)
-{
-    XWindowAttributes wa;
-    XGetWindowAttributes(wxGlobalDisplay(), win, &wa);
-
-    return (wa.map_state == IsViewable);
-}

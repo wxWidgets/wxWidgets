@@ -397,7 +397,10 @@ void wxWindowX11::SetFocus()
     }
 #endif
 
-    if (wxWindowIsVisible(xwindow))
+    XWindowAttributes wa;
+    XGetWindowAttributes(wxGlobalDisplay(), xwindow, &wa);
+
+    if (wa.map_state == IsViewable)
     {
         wxLogTrace( wxT("focus"), wxT("wxWindowX11::SetFocus: %s"), GetClassInfo()->GetClassName());
         //        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
