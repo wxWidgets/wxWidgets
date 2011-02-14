@@ -88,8 +88,10 @@ protected:
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
     virtual void DoSetBitmapPosition(wxDirection dir);
 
-    // Increases the passed in size if necessary to account for the
-    // button image, if any
+    // Increases the passed in size to account for the button image.
+    //
+    // Should only be called if we do have a button, i.e. if m_imageData is
+    // non-NULL.
     void AdjustForBitmapSize(wxSize& size) const;
 
     class wxButtonImageData *m_imageData;

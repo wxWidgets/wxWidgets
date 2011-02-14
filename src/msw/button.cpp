@@ -531,8 +531,7 @@ void wxButton::SetLabel(const wxString& label)
 
 void wxButton::AdjustForBitmapSize(wxSize &size) const
 {
-    if ( !m_imageData )
-        return;
+    wxCHECK_RET( m_imageData, wxT("shouldn't be called if no image") );
 
     // account for the bitmap size
     const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
@@ -614,6 +613,8 @@ wxSize wxButton::DoGetBestSize() const
     {
         AdjustForBitmapSize(size);
 
+        // The best size has changed so even if it had been already cached by
+        // ComputeBestSize() call above we still need to update it.
         CacheBestSize(size);
     }
 
