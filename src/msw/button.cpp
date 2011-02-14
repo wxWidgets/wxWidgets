@@ -397,14 +397,19 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     return sizeBtn;
 }
 
-wxSize wxMSWButton::ComputeBestSize(wxControl *btn, int flags)
+wxSize wxMSWButton::ComputeBestFittingSize(wxControl *btn, int flags)
 {
     wxClientDC dc(btn);
 
     wxSize sizeBtn;
     dc.GetMultiLineTextExtent(btn->GetLabelText(), &sizeBtn.x, &sizeBtn.y);
 
-    sizeBtn = GetFittingSize(btn, sizeBtn, flags);
+    return GetFittingSize(btn, sizeBtn, flags);
+}
+
+wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size)
+{
+    wxSize sizeBtn(size);
 
     // all buttons have at least the standard size unless the user explicitly
     // wants them to be of smaller size and used wxBU_EXACTFIT style when
@@ -595,6 +600,8 @@ void wxButton::AdjustForBitmapSize(wxSize &size) const
 
 wxSize wxButton::DoGetBestSize() const
 {
+    wxButton * const self = const_cast<wxButton *>(this);
+
     wxSize size;
 
     // account for the text part if we have it or if we don't have any image at
@@ -606,19 +613,13 @@ wxSize wxButton::DoGetBestSize() const
         if ( GetAuthNeeded() )
             flags |= wxMSWButton::Size_AuthNeeded;
 
-        size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this), flags);
+        size = wxMSWButton::ComputeBestFittingSize(self, flags);
     }
 
     if ( m_imageData )
-    {
         AdjustForBitmapSize(size);
 
-        // The best size has changed so even if it had been already cached by
-        // ComputeBestSize() call above we still need to update it.
-        CacheBestSize(size);
-    }
-
-    return size;
+    return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
 
 /* static */

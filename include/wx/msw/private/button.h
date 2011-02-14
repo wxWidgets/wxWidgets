@@ -47,14 +47,28 @@ enum
     Size_AuthNeeded = 1
 };
 
-// common implementation of wxButton and wxToggleButton::DoGetBestSize()
-// (implemented in src/msw/button.cpp)
-wxSize ComputeBestSize(wxControl *btn, int flags = 0);
+// NB: All the functions below are implemented in src/msw/button.cpp
 
-// compute the button size (as if wxBU_EXACTFIT were specified, i.e. without
+// Compute the button size (as if wxBU_EXACTFIT were specified, i.e. without
 // adjusting it to be of default size if it's smaller) for the given label size
 WXDLLIMPEXP_CORE wxSize
 GetFittingSize(wxWindow *win, const wxSize& sizeLabel, int flags = 0);
+
+// Compute the button size (as if wxBU_EXACTFIT were specified) by computing
+// its label size and then calling GetFittingSize().
+wxSize ComputeBestFittingSize(wxControl *btn, int flags = 0);
+
+// Increase the size passed as parameter to be at least the standard button
+// size if the control doesn't have wxBU_EXACTFIT style and also cache it as
+// the best size and return its value -- this is used in DoGetBestSize()
+// implementation.
+wxSize IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size);
+
+// helper of wxToggleButton::DoGetBestSize()
+inline wxSize ComputeBestSize(wxControl *btn, int flags = 0)
+{
+    return IncreaseToStdSizeAndCache(btn, ComputeBestFittingSize(btn, flags));
+}
 
 } // namespace wxMSWButton
 
