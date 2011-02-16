@@ -199,10 +199,13 @@ int wxFrameManager::GetViewNo( wxFrameView* pView )
 void wxFrameManager::EnableMenusForView( wxFrameView* pView, bool enable )
 {
     wxMenuBar* pMenuBar = GetParentFrame()->GetMenuBar();
-    int count = pMenuBar->GetMenuCount();
 
     if ( !pMenuBar )
         return;
+
+    int count = pMenuBar->GetMenuCount();
+
+
 
     wxStringList::compatibility_iterator pNode = pView->mTopMenus.GetFirst();
 
