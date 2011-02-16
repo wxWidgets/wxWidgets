@@ -2010,12 +2010,15 @@ bool wxDocParentFrame::ProcessEvent(wxEvent& event)
 // - must delete all frames except for the main one.
 void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
-    if (m_docManager->Clear(!event.CanVeto()))
+    if ( m_docManager && !m_docManager->Clear(!event.CanVeto()) )
+    {
+        // The user decided not to close finally, abort.
+        event.Veto();
+    }
+    else
     {
         this->Destroy();
     }
-    else
-        event.Veto();
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE

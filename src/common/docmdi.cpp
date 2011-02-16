@@ -80,14 +80,16 @@ bool wxDocMDIParentFrame::ProcessEvent(wxEvent& event)
 
 void wxDocMDIParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  if (m_docManager->Clear(!event.CanVeto()))
-  {
-    this->Destroy();
-  }
-  else
-    event.Veto();
+    if ( m_docManager && !m_docManager->Clear(!event.CanVeto()) )
+    {
+        // The user decided not to close finally, abort.
+        event.Veto();
+    }
+    else
+    {
+        this->Destroy();
+    }
 }
-
 
 /*
  * Default document child frame for MDI children
