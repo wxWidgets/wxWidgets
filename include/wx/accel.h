@@ -106,8 +106,7 @@ public:
 
     bool IsOk() const
     {
-        return m_flags != 0 &&
-               m_keyCode != 0;
+        return m_keyCode != 0;
     }
 
 
