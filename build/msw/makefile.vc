@@ -1930,6 +1930,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_settings.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
+	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_utilsgui.obj \
 	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_window.obj \
@@ -1991,7 +1992,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentry.obj \
 	$(OBJS)\monodll_msw_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
-	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2197,6 +2197,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_settings.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
+	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_utilsgui.obj \
 	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_window.obj \
@@ -2692,6 +2693,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_settings.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
+	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_utilsgui.obj \
 	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_window.obj \
@@ -2753,7 +2755,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentry.obj \
 	$(OBJS)\monolib_msw_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
-	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -2959,6 +2960,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_settings.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
+	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_utilsgui.obj \
 	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_window.obj \
@@ -3402,6 +3404,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_settings.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
+	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_utilsgui.obj \
 	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_window.obj \
@@ -3463,7 +3466,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentry.obj \
 	$(OBJS)\coredll_msw_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
-	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3669,6 +3671,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_settings.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
+	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_utilsgui.obj \
 	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_window.obj \
@@ -3941,6 +3944,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_settings.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
+	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_utilsgui.obj \
 	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_window.obj \
@@ -4002,7 +4006,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentry.obj \
 	$(OBJS)\corelib_msw_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
-	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4208,6 +4211,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_settings.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
+	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_utilsgui.obj \
 	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_window.obj \
@@ -6970,9 +6974,6 @@ $(OBJS)\monodll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monodll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
-$(OBJS)\monodll_uiaction.obj: ..\..\src\msw\uiaction.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
-
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -7751,6 +7752,11 @@ $(OBJS)\monodll_tooltip.obj: ..\..\src\msw\tooltip.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_toplevel.obj: ..\..\src\msw\toplevel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\toplevel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9300,9 +9306,6 @@ $(OBJS)\monolib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monolib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
-$(OBJS)\monolib_uiaction.obj: ..\..\src\msw\uiaction.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
-
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -10081,6 +10084,11 @@ $(OBJS)\monolib_tooltip.obj: ..\..\src\msw\tooltip.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_toplevel.obj: ..\..\src\msw\toplevel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\toplevel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12041,9 +12049,6 @@ $(OBJS)\coredll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\coredll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
-$(OBJS)\coredll_uiaction.obj: ..\..\src\msw\uiaction.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
-
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -12405,6 +12410,11 @@ $(OBJS)\coredll_tooltip.obj: ..\..\src\msw\tooltip.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_toplevel.obj: ..\..\src\msw\toplevel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\toplevel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13426,9 +13436,6 @@ $(OBJS)\corelib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\corelib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
-$(OBJS)\corelib_uiaction.obj: ..\..\src\msw\uiaction.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
-
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -13790,6 +13797,11 @@ $(OBJS)\corelib_tooltip.obj: ..\..\src\msw\tooltip.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_toplevel.obj: ..\..\src\msw\toplevel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\toplevel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

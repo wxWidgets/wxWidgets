@@ -5053,6 +5053,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_settings.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
+	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
@@ -5111,6 +5112,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_settings.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
+	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o
@@ -5469,7 +5471,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
-	monodll_uiaction.o \
 	monodll_msw_checklst.o \
 	monodll_msw_fdrepdlg.o \
 	monodll_msw_fontdlg.o
@@ -5704,7 +5705,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
-	monodll_uiaction.o \
 	monodll_dirdlgg.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_filedlgg.o \
@@ -5925,6 +5925,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_settings.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
+	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
@@ -5983,6 +5984,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_settings.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
+	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o
@@ -6965,6 +6967,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_settings.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
+	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
@@ -7023,6 +7026,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_settings.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
+	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o
@@ -7381,7 +7385,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
-	monolib_uiaction.o \
 	monolib_msw_checklst.o \
 	monolib_msw_fdrepdlg.o \
 	monolib_msw_fontdlg.o
@@ -7616,7 +7619,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
-	monolib_uiaction.o \
 	monolib_dirdlgg.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_filedlgg.o \
@@ -7837,6 +7839,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_settings.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
+	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
@@ -7895,6 +7898,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_settings.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
+	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o
@@ -9061,6 +9065,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_settings.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
+	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
@@ -9119,6 +9124,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_settings.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
+	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o
@@ -9477,7 +9483,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
-	coredll_uiaction.o \
 	coredll_msw_checklst.o \
 	coredll_msw_fdrepdlg.o \
 	coredll_msw_fontdlg.o
@@ -9712,7 +9717,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
-	coredll_uiaction.o \
 	coredll_dirdlgg.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_filedlgg.o \
@@ -9933,6 +9937,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_settings.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
+	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
@@ -9991,6 +9996,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_settings.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
+	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o
@@ -10635,6 +10641,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_settings.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
+	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
@@ -10693,6 +10700,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_settings.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
+	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o
@@ -11051,7 +11059,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
-	corelib_uiaction.o \
 	corelib_msw_checklst.o \
 	corelib_msw_fdrepdlg.o \
 	corelib_msw_fontdlg.o
@@ -11286,7 +11293,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
-	corelib_uiaction.o \
 	corelib_dirdlgg.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_filedlgg.o \
@@ -11507,6 +11513,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_settings.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
+	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
@@ -11565,6 +11572,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_settings.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
+	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o
@@ -12909,7 +12917,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_textctrl_osx.o \
 	monodll_tglbtn_osx.o \
 	monodll_toolbar_osx.o \
-	monodll_uiaction_osx.o \
 	monodll_webkit.o \
 	monodll_colordlgosx.o \
 	monodll_fontdlgosx.o \
@@ -12964,6 +12971,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_osx_palette.o \
 	monodll_osx_pen.o \
 	monodll_toplevel_osx.o \
+	monodll_uiaction_osx.o \
 	monodll_utils_osx.o \
 	monodll_window_osx.o \
 	monodll_core_bitmap.o \
@@ -13096,7 +13104,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_textctrl_osx.o \
 	monolib_tglbtn_osx.o \
 	monolib_toolbar_osx.o \
-	monolib_uiaction_osx.o \
 	monolib_webkit.o \
 	monolib_colordlgosx.o \
 	monolib_fontdlgosx.o \
@@ -13151,6 +13158,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_27 =  \
 	monolib_osx_palette.o \
 	monolib_osx_pen.o \
 	monolib_toplevel_osx.o \
+	monolib_uiaction_osx.o \
 	monolib_utils_osx.o \
 	monolib_window_osx.o \
 	monolib_core_bitmap.o \
@@ -13283,7 +13291,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_textctrl_osx.o \
 	coredll_tglbtn_osx.o \
 	coredll_toolbar_osx.o \
-	coredll_uiaction_osx.o \
 	coredll_webkit.o \
 	coredll_colordlgosx.o \
 	coredll_fontdlgosx.o \
@@ -13338,6 +13345,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	coredll_osx_palette.o \
 	coredll_osx_pen.o \
 	coredll_toplevel_osx.o \
+	coredll_uiaction_osx.o \
 	coredll_utils_osx.o \
 	coredll_window_osx.o \
 	coredll_core_bitmap.o \
@@ -13380,7 +13388,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_textctrl_osx.o \
 	corelib_tglbtn_osx.o \
 	corelib_toolbar_osx.o \
-	corelib_uiaction_osx.o \
 	corelib_webkit.o \
 	corelib_colordlgosx.o \
 	corelib_fontdlgosx.o \
@@ -13435,6 +13442,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_2_2 =  \
 	corelib_osx_palette.o \
 	corelib_osx_pen.o \
 	corelib_toplevel_osx.o \
+	corelib_uiaction_osx.o \
 	corelib_utils_osx.o \
 	corelib_window_osx.o \
 	corelib_core_bitmap.o \
@@ -18100,6 +18108,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_toplevel.o: $(srcdir)/src/msw/toplevel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/toplevel.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
@@ -18219,6 +18233,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_toplevel_osx.o: $(srcdir)/src/osx/toplevel_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/toplevel_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_utils_osx.o: $(srcdir)/src/osx/utils_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/utils_osx.cpp
@@ -19189,12 +19212,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -19437,15 +19454,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
@@ -23383,6 +23391,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_toplevel.o: $(srcdir)/src/msw/toplevel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/toplevel.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
@@ -23502,6 +23516,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_toplevel_osx.o: $(srcdir)/src/osx/toplevel_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/toplevel_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_utils_osx.o: $(srcdir)/src/osx/utils_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/utils_osx.cpp
@@ -24472,12 +24495,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -24720,15 +24737,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
@@ -28846,6 +28854,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_toplevel.o: $(srcdir)/src/msw/toplevel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/toplevel.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
@@ -28965,6 +28979,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_toplevel_osx.o: $(srcdir)/src/osx/toplevel_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/toplevel_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_utils_osx.o: $(srcdir)/src/osx/utils_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/utils_osx.cpp
@@ -29935,12 +29958,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -30183,15 +30200,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
@@ -32812,6 +32820,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_toplevel.o: $(srcdir)/src/msw/toplevel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/toplevel.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
@@ -32931,6 +32945,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_toplevel_osx.o: $(srcdir)/src/osx/toplevel_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/toplevel_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_utils_osx.o: $(srcdir)/src/osx/utils_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/utils_osx.cpp
@@ -33901,12 +33924,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_uiaction.o: $(srcdir)/src/msw/uiaction.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/uiaction.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -34149,15 +34166,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_uiaction_osx.o: $(srcdir)/src/osx/uiaction_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/uiaction_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm

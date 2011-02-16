@@ -284,6 +284,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_settings.obj &
 	$(OBJS)\monodll_tooltip.obj &
 	$(OBJS)\monodll_toplevel.obj &
+	$(OBJS)\monodll_uiaction.obj &
 	$(OBJS)\monodll_utilsgui.obj &
 	$(OBJS)\monodll_uxtheme.obj &
 	$(OBJS)\monodll_window.obj &
@@ -345,7 +346,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textentry.obj &
 	$(OBJS)\monodll_msw_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
-	$(OBJS)\monodll_uiaction.obj &
 	$(OBJS)\monodll_msw_checklst.obj &
 	$(OBJS)\monodll_msw_fdrepdlg.obj &
 	$(OBJS)\monodll_fontdlg.obj &
@@ -553,6 +553,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_settings.obj &
 	$(OBJS)\monodll_tooltip.obj &
 	$(OBJS)\monodll_toplevel.obj &
+	$(OBJS)\monodll_uiaction.obj &
 	$(OBJS)\monodll_utilsgui.obj &
 	$(OBJS)\monodll_uxtheme.obj &
 	$(OBJS)\monodll_window.obj &
@@ -1051,6 +1052,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_settings.obj &
 	$(OBJS)\monolib_tooltip.obj &
 	$(OBJS)\monolib_toplevel.obj &
+	$(OBJS)\monolib_uiaction.obj &
 	$(OBJS)\monolib_utilsgui.obj &
 	$(OBJS)\monolib_uxtheme.obj &
 	$(OBJS)\monolib_window.obj &
@@ -1112,7 +1114,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textentry.obj &
 	$(OBJS)\monolib_msw_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
-	$(OBJS)\monolib_uiaction.obj &
 	$(OBJS)\monolib_msw_checklst.obj &
 	$(OBJS)\monolib_msw_fdrepdlg.obj &
 	$(OBJS)\monolib_fontdlg.obj &
@@ -1320,6 +1321,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_settings.obj &
 	$(OBJS)\monolib_tooltip.obj &
 	$(OBJS)\monolib_toplevel.obj &
+	$(OBJS)\monolib_uiaction.obj &
 	$(OBJS)\monolib_utilsgui.obj &
 	$(OBJS)\monolib_uxtheme.obj &
 	$(OBJS)\monolib_window.obj &
@@ -1722,6 +1724,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_settings.obj &
 	$(OBJS)\coredll_tooltip.obj &
 	$(OBJS)\coredll_toplevel.obj &
+	$(OBJS)\coredll_uiaction.obj &
 	$(OBJS)\coredll_utilsgui.obj &
 	$(OBJS)\coredll_uxtheme.obj &
 	$(OBJS)\coredll_window.obj &
@@ -1783,7 +1786,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textentry.obj &
 	$(OBJS)\coredll_msw_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
-	$(OBJS)\coredll_uiaction.obj &
 	$(OBJS)\coredll_msw_checklst.obj &
 	$(OBJS)\coredll_msw_fdrepdlg.obj &
 	$(OBJS)\coredll_fontdlg.obj &
@@ -1991,6 +1993,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_settings.obj &
 	$(OBJS)\coredll_tooltip.obj &
 	$(OBJS)\coredll_toplevel.obj &
+	$(OBJS)\coredll_uiaction.obj &
 	$(OBJS)\coredll_utilsgui.obj &
 	$(OBJS)\coredll_uxtheme.obj &
 	$(OBJS)\coredll_window.obj &
@@ -2265,6 +2268,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_settings.obj &
 	$(OBJS)\corelib_tooltip.obj &
 	$(OBJS)\corelib_toplevel.obj &
+	$(OBJS)\corelib_uiaction.obj &
 	$(OBJS)\corelib_utilsgui.obj &
 	$(OBJS)\corelib_uxtheme.obj &
 	$(OBJS)\corelib_window.obj &
@@ -2326,7 +2330,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textentry.obj &
 	$(OBJS)\corelib_msw_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
-	$(OBJS)\corelib_uiaction.obj &
 	$(OBJS)\corelib_msw_checklst.obj &
 	$(OBJS)\corelib_msw_fdrepdlg.obj &
 	$(OBJS)\corelib_fontdlg.obj &
@@ -2534,6 +2537,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_settings.obj &
 	$(OBJS)\corelib_tooltip.obj &
 	$(OBJS)\corelib_toplevel.obj &
+	$(OBJS)\corelib_uiaction.obj &
 	$(OBJS)\corelib_utilsgui.obj &
 	$(OBJS)\corelib_uxtheme.obj &
 	$(OBJS)\corelib_window.obj &
@@ -6799,9 +6803,6 @@ $(OBJS)\monodll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monodll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7579,6 +7580,11 @@ $(OBJS)\monodll_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -9129,9 +9135,6 @@ $(OBJS)\monolib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monolib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9909,6 +9912,11 @@ $(OBJS)\monolib_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11870,9 +11878,6 @@ $(OBJS)\coredll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\coredll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12233,6 +12238,11 @@ $(OBJS)\coredll_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -13255,9 +13265,6 @@ $(OBJS)\corelib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\corelib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -13618,6 +13625,11 @@ $(OBJS)\corelib_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

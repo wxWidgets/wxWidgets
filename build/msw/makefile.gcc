@@ -1733,6 +1733,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_settings.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
+	$(OBJS)\monodll_uiaction.o \
 	$(OBJS)\monodll_utilsgui.o \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
@@ -1794,7 +1795,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentry.o \
 	$(OBJS)\monodll_msw_tglbtn.o \
 	$(OBJS)\monodll_treectrl.o \
-	$(OBJS)\monodll_uiaction.o \
 	$(OBJS)\monodll_msw_checklst.o \
 	$(OBJS)\monodll_msw_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
@@ -2002,6 +2002,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_settings.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
+	$(OBJS)\monodll_uiaction.o \
 	$(OBJS)\monodll_utilsgui.o \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
@@ -2495,6 +2496,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_settings.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
+	$(OBJS)\monolib_uiaction.o \
 	$(OBJS)\monolib_utilsgui.o \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
@@ -2556,7 +2558,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentry.o \
 	$(OBJS)\monolib_msw_tglbtn.o \
 	$(OBJS)\monolib_treectrl.o \
-	$(OBJS)\monolib_uiaction.o \
 	$(OBJS)\monolib_msw_checklst.o \
 	$(OBJS)\monolib_msw_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
@@ -2764,6 +2765,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_settings.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
+	$(OBJS)\monolib_uiaction.o \
 	$(OBJS)\monolib_utilsgui.o \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
@@ -3155,6 +3157,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_settings.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
+	$(OBJS)\coredll_uiaction.o \
 	$(OBJS)\coredll_utilsgui.o \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
@@ -3216,7 +3219,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentry.o \
 	$(OBJS)\coredll_msw_tglbtn.o \
 	$(OBJS)\coredll_treectrl.o \
-	$(OBJS)\coredll_uiaction.o \
 	$(OBJS)\coredll_msw_checklst.o \
 	$(OBJS)\coredll_msw_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
@@ -3424,6 +3426,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_settings.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
+	$(OBJS)\coredll_uiaction.o \
 	$(OBJS)\coredll_utilsgui.o \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
@@ -3696,6 +3699,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_settings.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
+	$(OBJS)\corelib_uiaction.o \
 	$(OBJS)\corelib_utilsgui.o \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
@@ -3757,7 +3761,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentry.o \
 	$(OBJS)\corelib_msw_tglbtn.o \
 	$(OBJS)\corelib_treectrl.o \
-	$(OBJS)\corelib_uiaction.o \
 	$(OBJS)\corelib_msw_checklst.o \
 	$(OBJS)\corelib_msw_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
@@ -3965,6 +3968,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_settings.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
+	$(OBJS)\corelib_uiaction.o \
 	$(OBJS)\corelib_utilsgui.o \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
@@ -6540,9 +6544,6 @@ $(OBJS)\monodll_msw_tglbtn.o: ../../src/msw/tglbtn.cpp
 $(OBJS)\monodll_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_uiaction.o: ../../src/msw/uiaction.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7320,6 +7321,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_toplevel.o: ../../src/msw/toplevel.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_uiaction.o: ../../src/msw/uiaction.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8870,9 +8876,6 @@ $(OBJS)\monolib_msw_tglbtn.o: ../../src/msw/tglbtn.cpp
 $(OBJS)\monolib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_uiaction.o: ../../src/msw/uiaction.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9650,6 +9653,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_toplevel.o: ../../src/msw/toplevel.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_uiaction.o: ../../src/msw/uiaction.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11611,9 +11619,6 @@ $(OBJS)\coredll_msw_tglbtn.o: ../../src/msw/tglbtn.cpp
 $(OBJS)\coredll_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_uiaction.o: ../../src/msw/uiaction.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11974,6 +11979,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_toplevel.o: ../../src/msw/toplevel.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_uiaction.o: ../../src/msw/uiaction.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12996,9 +13006,6 @@ $(OBJS)\corelib_msw_tglbtn.o: ../../src/msw/tglbtn.cpp
 $(OBJS)\corelib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_uiaction.o: ../../src/msw/uiaction.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13359,6 +13366,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_toplevel.o: ../../src/msw/toplevel.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_uiaction.o: ../../src/msw/uiaction.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
