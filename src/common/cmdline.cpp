@@ -951,14 +951,13 @@ void wxCmdLineParser::Usage()
 wxString wxCmdLineParser::GetUsageString()
 {
     wxString appname;
-    if ( m_data->m_arguments.empty() )
+    if ( wxTheApp )
     {
-        if ( wxTheApp )
-            appname = wxTheApp->GetAppName();
+        appname = wxFileName(wxTheApp->argv[0]).GetFullName();
     }
-    else // use argv[0]
+    else if (!m_data->m_arguments.empty() )
     {
-        appname = wxFileName(m_data->m_arguments[0]).GetName();
+        appname = wxFileName(m_data->m_arguments[0]).GetFullName();
     }
 
     // we construct the brief cmd line desc on the fly, but not the detailed
