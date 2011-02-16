@@ -164,6 +164,7 @@ void wxFileDialog::ShowWindowModal()
 
     wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
     
+    NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
     if (HasFlag(wxFD_SAVE))
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
@@ -177,6 +178,8 @@ void wxFileDialog::ShowWindowModal()
         // be able to pass this in
         [sPanel setTreatsFilePackagesAsDirectories:NO];
         [sPanel setCanSelectHiddenExtension:YES];
+        [sPanel setAllowedFileTypes:types];
+        [sPanel setAllowsOtherFileTypes:NO];
         
         NSWindow* nativeParent = parentWindow->GetWXWindow();
         ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
@@ -188,7 +191,6 @@ void wxFileDialog::ShowWindowModal()
     }
     else 
     {
-        NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
         
         SetupExtraControls(oPanel);
@@ -209,9 +211,9 @@ void wxFileDialog::ShowWindowModal()
             modalDelegate: sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
-        [types release];
-        types = nil;
     }
+    [types release];
+    types = nil;
 }
 
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
@@ -258,6 +260,7 @@ int wxFileDialog::ShowModal()
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
     }
 
+    NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
     if (HasFlag(wxFD_SAVE))
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
@@ -271,6 +274,8 @@ int wxFileDialog::ShowModal()
         // be able to pass this in
         [sPanel setTreatsFilePackagesAsDirectories:NO];
         [sPanel setCanSelectHiddenExtension:YES];
+        [sPanel setAllowedFileTypes:types];
+        [sPanel setAllowsOtherFileTypes:NO];
 
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
@@ -284,7 +289,6 @@ int wxFileDialog::ShowModal()
     }
     else
     {
-        NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
         
         SetupExtraControls(oPanel);
@@ -305,9 +309,9 @@ int wxFileDialog::ShowModal()
         UnsubclassWin();
         [oPanel setAccessoryView:nil];
         
-        [types release];
-        types = nil;
     }
+    [types release];
+    types = nil;
 
     return GetReturnCode();
 }
