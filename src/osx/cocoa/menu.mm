@@ -36,9 +36,9 @@
 
 @implementation wxNSMenu
 
-- (id) init
+- (id) initWithTitle:(NSString*) title
 {
-    [super init];
+    [super initWithTitle:title];
     impl = NULL;
     return self;
 }

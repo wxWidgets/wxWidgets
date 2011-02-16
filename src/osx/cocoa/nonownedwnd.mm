@@ -263,12 +263,80 @@ bool shouldHandleSelector(SEL selector)
 
 @end
 
+extern int wxOSXGetIdFromSelector(SEL action );
+
 @implementation wxNonOwnedWindowController
 
 - (id) init
 {
     [super init];
     return self;
+}
+
+- (BOOL) triggerMenu:(SEL) action
+{
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
+    if ( mbar )
+    {
+        wxMenu* menu = NULL;
+        wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
+        if ( menu != NULL && menuitem != NULL)
+            return menu->HandleCommandProcess(menuitem);
+    }
+    return NO;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem 
+{    
+    SEL action = [menuItem action];
+
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
+    if ( mbar )
+    {
+        wxMenu* menu = NULL;
+        wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
+        if ( menu != NULL && menuitem != NULL)
+        {
+            if ( menu->HandleCommandUpdateStatus(menuitem) )
+                return menuitem->IsEnabled();
+        }
+    }
+    return YES;
+}
+
+- (void)undo:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)redo:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)cut:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)copy:(id)sender
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)paste:(id)sender
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)delete:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)selectAll:(id)sender 
+{
+    [self triggerMenu:_cmd];
 }
 
 - (BOOL)windowShouldClose:(id)nwindow
