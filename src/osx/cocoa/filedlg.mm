@@ -200,9 +200,8 @@ void wxFileDialog::ShowWindowModal()
         [oPanel setResolvesAliases:YES];
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
-        if ( HasFlag(wxFD_MULTIPLE) )
-            [oPanel setAllowsMultipleSelection:YES];
-    
+        [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
+        
         NSWindow* nativeParent = parentWindow->GetWXWindow();
         ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
         [sheetDelegate setImplementation: this];
@@ -298,11 +297,20 @@ int wxFileDialog::ShowModal()
         [oPanel setResolvesAliases:YES];
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
-        if ( HasFlag(wxFD_MULTIPLE) )
-            [oPanel setAllowsMultipleSelection:YES];
+        [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
 
-        returnCode = [oPanel runModalForDirectory:dir.AsNSString()
+        if ( UMAGetSystemVersion() < 0x1060 )
+        {
+            returnCode = [oPanel runModalForDirectory:dir.AsNSString()
                         file:file.AsNSString() types:types];
+        }
+        else 
+        {
+            [oPanel setAllowedFileTypes:types];
+            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
+                                               isDirectory:YES]];
+            returnCode = [oPanel runModal];
+        }
 
         ModalFinishedCallback(oPanel, returnCode);
         
