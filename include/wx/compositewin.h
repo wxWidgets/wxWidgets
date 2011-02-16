@@ -120,7 +120,7 @@ private:
 #else // __VISUALC6__
 
 template <class W>
-class WXDLLIMPEXP_CORE wxCompositeWindow : public W
+class wxCompositeWindow : public W
 {
 };
 
