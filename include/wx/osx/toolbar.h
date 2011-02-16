@@ -82,6 +82,10 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 protected:
     // common part of all ctors
     void Init();
+    
+    void DoLayout();
+    
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
 #ifndef __WXOSX_IPHONE__
    virtual void DoGetSize(int *width, int *height) const;
