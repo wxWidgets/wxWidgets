@@ -713,13 +713,13 @@ WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& 
             VariantTimeToSystemTime(oleVariant.date, &st);
 
             wxDateTime date;
-            variant = date;
             date.Set(st.wDay,
                      (wxDateTime::Month)(wxDateTime::Jan + st.wMonth - 1),
                      st.wYear,
                      st.wHour,
                      st.wMinute,
                      st.wSecond);
+            variant = date;
 #endif
             break;
         }
