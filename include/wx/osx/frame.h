@@ -64,6 +64,7 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -88,8 +89,6 @@ public:
 
     void PositionBars();
 
-    // osx specific event handling common for all osx-ports
-    virtual void HandleResized( double timestampsec );
 
 protected:
     // common part of all ctors
