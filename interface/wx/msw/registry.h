@@ -35,30 +35,28 @@
     @b Example:
 
     @code
-    wxRegKey *key = new wxRegKey("HKEY_LOCAL_MACHINE\\Software\\MyKey");
-
-    // Create the key if it does not exist.
-    if( !key->Exists() )
-        key->Create();
+    // This assume that the key already exists, use HasSubKey() to check
+    // for the key existence if necessary.
+    wxRegKey key(wxRegKey::HKLM, "Software\\MyKey");
 
     // Create a new value "MYVALUE" and set it to 12.
-    key->SetValue("MYVALUE", 12);
+    key.SetValue("MyValue", 12);
 
     // Read the value back.
     long value;
-    key->QueryValue("MYVALUE", &value);
+    key.QueryValue("MyValue", &value);
     wxMessageBox(wxString::Format("%d", value), "Registry Value", wxOK);
 
     // Get the number of subkeys and enumerate them.
     size_t subkeys;
-    key->GetKeyInfo(&subkeys, NULL, NULL, NULL);
+    key.GetKeyInfo(&subkeys, NULL, NULL, NULL);
 
     wxString key_name;
-    key->GetFirstKey(key_name, 1);
+    key.GetFirstKey(key_name, 1);
     for(int i = 0; i < subkeys; i++)
     {
         wxMessageBox(key_name, "Subkey Name", wxOK);
-        key->GetNextKey(key_name, 1);
+        key.GetNextKey(key_name, 1);
     }
     @endcode
 
