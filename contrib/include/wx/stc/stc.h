@@ -3268,7 +3268,7 @@ public:
 
 
     // Send a message to Scintilla
-    long SendMsg(int msg, long wp=0, long lp=0);
+    wxIntPtr SendMsg(int msg, wxUIntPtr wp=0, wxIntPtr lp=0);
 
 
     // Set the vertical scrollbar to use instead of the ont that's built-in.

@@ -829,9 +829,11 @@ typedef wxUint32 wxDword;
 #if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
     /* normal case */
     typedef unsigned long wxUIntPtr;
+    typedef long wxIntPtr;
 #elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
     /* Win64 case */
     typedef size_t wxUIntPtr;
+    #define wxIntPtr ssize_t
 #else
     /*
        This should never happen for the current architectures but if you're
