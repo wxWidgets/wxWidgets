@@ -74,7 +74,6 @@ private:
     bool m_isRadioGroupStart;
 
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
-    void* m_menu ; // the appropriate menu , may also be a system menu
 
     wxMenuItemImpl* m_peer;
 
