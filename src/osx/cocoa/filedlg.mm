@@ -198,6 +198,8 @@ void wxFileDialog::ShowWindowModal()
         [oPanel setResolvesAliases:YES];
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
+        if ( HasFlag(wxFD_MULTIPLE) )
+            [oPanel setAllowsMultipleSelection:YES];
     
         NSWindow* nativeParent = parentWindow->GetWXWindow();
         ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
@@ -292,6 +294,8 @@ int wxFileDialog::ShowModal()
         [oPanel setResolvesAliases:YES];
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
+        if ( HasFlag(wxFD_MULTIPLE) )
+            [oPanel setAllowsMultipleSelection:YES];
 
         returnCode = [oPanel runModalForDirectory:dir.AsNSString()
                         file:file.AsNSString() types:types];
