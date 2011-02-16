@@ -1626,8 +1626,8 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
         // into children
         m_anchor->SetHasPlus();
         m_anchor->Expand();
-        CalculatePositions();
     }
+    CalculatePositions();
 
     if (!HasFlag(wxTR_MULTIPLE))
     {
@@ -3618,8 +3618,8 @@ void wxGenericTreeCtrl::CalculatePositions()
     dc.SetFont( m_normalFont );
 
     dc.SetPen( m_dottedPen );
-    //if(GetImageList() == NULL)
-    // m_lineHeight = (int)(dc.GetCharHeight() + 4);
+
+    m_anchor->CalculateSize(this, dc);
 
     int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
