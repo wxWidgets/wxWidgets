@@ -1290,15 +1290,14 @@ void wxCairoContext::DrawGraphicsBitmapInternal(const wxGraphicsBitmap &bmp, wxD
     wxSize size = data->GetSize();
     PushState();
     
+    // prepare to draw the image
+    cairo_translate(m_context, x, y);
     // In case we're scaling the image by using a width and height different
     // than the bitmap's size create a pattern transformation on the surface and
     // draw the transformed pattern.
     wxDouble scaleX = w / size.GetWidth();
     wxDouble scaleY = h / size.GetHeight();
     cairo_scale(m_context, scaleX, scaleY);
-
-    // prepare to draw the image
-    cairo_translate(m_context, x, y);
     cairo_set_source(m_context, pattern);
     // use the original size here since the context is scaled already...
     cairo_rectangle(m_context, 0, 0, size.GetWidth(), size.GetHeight());
