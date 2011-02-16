@@ -593,7 +593,11 @@ bool DocGeneratorBase::SaveDocument( const char*    fname,
     ScriptStream stm;
 
     // check if derived class agrees about saving it
-    if ( !OnSaveDocument( stm ) ) return 0;
+    if ( !OnSaveDocument( stm ) )
+    {
+        fclose( fp );
+        return 0;
+    }
 
     if ( pFromSection )
 
