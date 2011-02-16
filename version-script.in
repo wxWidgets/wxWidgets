@@ -23,6 +23,12 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
+# public symbols added in 2.8.12 (please keep in alphabetical order):
+@WX_VERSION_TAG@.12 {
+        *wxDataViewListModel*GetValueByRow*;
+        *wxDataViewListModel*SetValueByRow*;
+};
+
 # public symbols added in 2.8.11 (please keep in alphabetical order):
 #
 # NB: Convert{From,To}IeeeExtended() were not really added but they were not
