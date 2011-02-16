@@ -1285,7 +1285,7 @@ wxString wxGetPasswordFromUser(const wxString& message,
 
 wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit, const wxString& caption)
 {
-    wxColourData data;
+    static wxColourData data;
     data.SetChooseFull(true);
     if ( colInit.Ok() )
     {
