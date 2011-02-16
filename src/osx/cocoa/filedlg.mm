@@ -57,7 +57,7 @@ bool wxFileDialog::SupportsExtraControl() const
     return true;
 }
 
-NSArray* GetTypesFromFilter( const wxString filter )
+NSArray* CopyTypesFromFilter( const wxString filter )
 {
     NSMutableArray* types = nil;
     if ( !filter.empty() )
@@ -127,8 +127,8 @@ NSArray* GetTypesFromFilter( const wxString filter )
 
                 if ( extension.IsEmpty() )
                 {
-                    if ( types != nil )
-                        [types release];
+                    [types release];
+                    types = nil;
                     return nil;
                 }
 
@@ -188,7 +188,7 @@ void wxFileDialog::ShowWindowModal()
     }
     else 
     {
-        NSArray* types = GetTypesFromFilter( m_wildCard ) ;
+        NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
         
         SetupExtraControls(oPanel);
@@ -207,6 +207,8 @@ void wxFileDialog::ShowWindowModal()
             modalDelegate: sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
+        [types release];
+        types = nil;
     }
 }
 
@@ -280,7 +282,7 @@ int wxFileDialog::ShowModal()
     }
     else
     {
-        NSArray* types = GetTypesFromFilter( m_wildCard ) ;
+        NSArray* types = CopyTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
         
         SetupExtraControls(oPanel);
@@ -299,8 +301,8 @@ int wxFileDialog::ShowModal()
         UnsubclassWin();
         [oPanel setAccessoryView:nil];
         
-        if ( types != nil )
-            [types release];
+        [types release];
+        types = nil;
     }
 
     return GetReturnCode();
