@@ -1,4 +1,4 @@
-wxWidgets 2.8.11
+wxWidgets 2.8.12
 ---------------------------------------------------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
@@ -30,14 +30,13 @@ Platforms supported
 
 wxWidgets currently supports the following platforms:
 
-- Windows 95/98/ME, NT, 2000, XP, Vista, Pocket PC/Mobile, Smartphone
+- Windows 95/98/ME, NT, 2000, XP, Vista, 7, Pocket PC/Mobile, Smartphone
 - Most Unix variants with GTK+ 1 and GTK+ 2
 - Most Unix variants with X11 (beta)
 - Most Unix variants with Motif/Lesstif
 - MacOS 9.x and 10.x using Carbon (10.3 and above preferred)
 - MacOS 10.x using Cocoa (beta)
 - OS/2 (beta)
-- PalmOS (alpha)
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
@@ -88,7 +87,7 @@ to those writing GPL'ed applications. In summary, the licence is
 LGPL plus a clause allowing unrestricted distribution of
 application binaries. To answer a FAQ, you don't have to
 distribute any source if you wish to write commercial
-applications using wxWidgets. 
+applications using wxWidgets.
 
 However, if you distribute wxGTK or wxMotif (with Lesstif)
 version of your application, don't forget that it is linked
@@ -155,12 +154,7 @@ The main wxWidgets ftp site is at:
 
   ftp://biolpc22.york.ac.uk/pub
 
-A wxWidgets CD-ROM with the latest distribution plus an HTML
-front-end and hundreds of MB of compilers, utilities and other
-material may be ordered from the CD-ROM page: see the wxWidgets
-web site.
-
 Have fun!
 
-The wxWidgets Team, June 2008
+The wxWidgets Team, March 2011
 

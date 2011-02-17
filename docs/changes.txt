@@ -91,15 +91,35 @@ Major new features in 2.8 release
 2.8.12:
 -------
 
+All:
+
+- Fixed a bug in UNC path testing.
+- Improved command line parser usage help.
+- Fixed race condition bugs in wxCondition.
+
 All (GUI):
 
 - wxRTC: fixed style selection resetting after editing a style.
 - wxRTC: can now edit line spacing in .1 increments from 1 to 2.
 - wxRTC: fixed wrong line spacing and space after paragraph calculations.
 - wxRTC: GetStyleMergedWithBase now detects loops.
-- wxRTC: wxRichTextCtrl::ApplyStyle now applies a paragraph style at the cursor
-  without needing a selection, and setting the default style now avoids duplicating
-  character attributes in subsequently typed text when they exist in the paragraph style.
+- wxRTC: wxRichTextCtrl::ApplyStyle now applies a paragraph style at the
+  cursor without needing a selection, and setting the default style now
+  avoids duplicating character attributes in subsequently typed text when
+  they exist in the paragraph style.
+- Fixed error in generic tree control CalculatePositions.
+- Added wxFD_FILE_MUST_EXIST to wxFileSelector function.
+- Added wxDataViewCtrl Get/SetValueByRow functions for forward compatibility
+  with 2.9.
+- Right-clicking is now supported in any kind of wxAuiToolBar button.
+- Fixed a bug in wxAcceleratorEntry::IsOk.
+- wxGraphicsContext::DrawBitmap: x and y coordinates no longer affected by
+  stretch factor.
+- Fixed an assert in wxGrid on wxEVT_MOUSE_CAPTURE_LOST.
+- Fixed bug in generic wxTreeCtrl where SelectItem toggles the selection if
+  the item is already in the desired state.
+- Fixed bug in wxSizer::Replace(size_t, wxSizerItem *) whereby SetContainingSizer
+  is not called.
 
 wxMSW:
 
@@ -109,6 +129,21 @@ wxMSW:
   displayed when arrow key is pressed (without Alt).
 - In some rare cases wxOwnerDrawnComboBox drop-down animation could display
   as garbage. This has now been greatly reduced (mcben).
+- Fixed OLE date conversion bug.
+- Added check for double window handle creation.
+- Fixed WIN64 crash in wxStyledTextCtrl.
+- Fixed Watcom compilation when omitting threads.
+- Fixed wxFileName::IsFileReadable on Windows 98.
+- Fixed bug whereby clicking anywhere inside wxListBox generates
+  wxEVT_COMMAND_LISTBOX_SELECTED event. You need to set wxUSE_LISTBOX_SELECTION_FIX
+  to 1 in include/wx/msw/listbox.h to enable this binary-incompatible fix.
+
+wxGTK:
+
+- Fix for --disable-radiobtn compilation.
+- Fixed a bug on GTK+ only whereby wxGrid scrolls back to the previous edit position
+  when another cell is edited.
+
 
 2.8.11:
 -------
