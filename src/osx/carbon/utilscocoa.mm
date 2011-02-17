@@ -355,7 +355,7 @@ WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
 
 wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
 {
-#if 0
+#if 1
     // unfortunately this only accesses images in the app bundle, not the system wide globals
     wxCFStringRef cfname(name);
     return wxBitmap( [[UIImage imageNamed:cfname.AsNSString()] CGImage] );
