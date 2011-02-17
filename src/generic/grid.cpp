@@ -147,18 +147,45 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_CREATED)
 // private classes
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridRowLabelWindow : public wxWindow
+// common base class for various grid subwindows
+class WXDLLIMPEXP_ADV wxGridSubwindow : public wxWindow
 {
 public:
-    wxGridRowLabelWindow() { m_owner = (wxGrid *)NULL; }
+    wxGridSubwindow() { m_owner = NULL; }
+    wxGridSubwindow(wxGrid *owner,
+                    wxWindowID id,
+                    const wxPoint& pos,
+                    const wxSize& size,
+                    int additionalStyle = 0,
+                    const wxString& name = wxPanelNameStr)
+        : wxWindow(owner, id, pos, size,
+                   wxWANTS_CHARS | wxBORDER_NONE | additionalStyle,
+                   name)
+    {
+        m_owner = owner;
+    }
+
+    wxGrid *GetOwner() { return m_owner; }
+
+protected:
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
+
+    wxGrid *m_owner;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridSubwindow)
+};
+
+class WXDLLIMPEXP_ADV wxGridRowLabelWindow : public wxGridSubwindow
+{
+public:
+    wxGridRowLabelWindow() { }
     wxGridRowLabelWindow( wxGrid *parent, wxWindowID id,
                           const wxPoint &pos, const wxSize &size );
 
     virtual bool AcceptsFocus() const { return false; }
 
 private:
-    wxGrid   *m_owner;
-
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
@@ -172,18 +199,16 @@ private:
 };
 
 
-class WXDLLIMPEXP_ADV wxGridColLabelWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridColLabelWindow : public wxGridSubwindow
 {
 public:
-    wxGridColLabelWindow() { m_owner = (wxGrid *)NULL; }
+    wxGridColLabelWindow() { }
     wxGridColLabelWindow( wxGrid *parent, wxWindowID id,
                           const wxPoint &pos, const wxSize &size );
 
     virtual bool AcceptsFocus() const { return false; }
 
 private:
-    wxGrid   *m_owner;
-
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
@@ -197,18 +222,16 @@ private:
 };
 
 
-class WXDLLIMPEXP_ADV wxGridCornerLabelWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridCornerLabelWindow : public wxGridSubwindow
 {
 public:
-    wxGridCornerLabelWindow() { m_owner = (wxGrid *)NULL; }
+    wxGridCornerLabelWindow() { }
     wxGridCornerLabelWindow( wxGrid *parent, wxWindowID id,
                              const wxPoint &pos, const wxSize &size );
 
     virtual bool AcceptsFocus() const { return false; }
 
 private:
-    wxGrid *m_owner;
-
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
@@ -221,12 +244,11 @@ private:
     DECLARE_NO_COPY_CLASS(wxGridCornerLabelWindow)
 };
 
-class WXDLLIMPEXP_ADV wxGridWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridWindow : public wxGridSubwindow
 {
 public:
     wxGridWindow()
     {
-        m_owner = NULL;
         m_rowLabelWin = NULL;
         m_colLabelWin = NULL;
     }
@@ -235,14 +257,10 @@ public:
                   wxGridRowLabelWindow *rowLblWin,
                   wxGridColLabelWindow *colLblWin,
                   wxWindowID id, const wxPoint &pos, const wxSize &size );
-    virtual ~wxGridWindow() {}
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
-    wxGrid* GetOwner() { return m_owner; }
-
 private:
-    wxGrid                   *m_owner;
     wxGridRowLabelWindow     *m_rowLabelWin;
     wxGridColLabelWindow     *m_colLabelWin;
 
@@ -3837,9 +3855,18 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
+BEGIN_EVENT_TABLE(wxGridSubwindow, wxWindow)
+    EVT_MOUSE_CAPTURE_LOST(wxGridSubwindow::OnMouseCaptureLost)
+END_EVENT_TABLE()
+
+void wxGridSubwindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    m_owner->CancelMouseCapture();
+}
+
 IMPLEMENT_DYNAMIC_CLASS( wxGridRowLabelWindow, wxWindow )
 
-BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxWindow )
+BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridRowLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridRowLabelWindow::OnMouseEvent )
@@ -3851,7 +3878,7 @@ END_EVENT_TABLE()
 wxGridRowLabelWindow::wxGridRowLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxFULL_REPAINT_ON_RESIZE )
+  : wxGridSubwindow(parent, id, pos, size)
 {
     m_owner = parent;
 }
@@ -3910,7 +3937,7 @@ void wxGridRowLabelWindow::OnChar( wxKeyEvent& event )
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridColLabelWindow, wxWindow )
 
-BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxWindow )
+BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridColLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridColLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridColLabelWindow::OnMouseEvent )
@@ -3922,7 +3949,7 @@ END_EVENT_TABLE()
 wxGridColLabelWindow::wxGridColLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxFULL_REPAINT_ON_RESIZE )
+  : wxGridSubwindow(parent, id, pos, size)
 {
     m_owner = parent;
 }
@@ -3984,7 +4011,7 @@ void wxGridColLabelWindow::OnChar( wxKeyEvent& event )
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridCornerLabelWindow, wxWindow )
 
-BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxWindow )
+BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxGridSubwindow )
     EVT_MOUSEWHEEL( wxGridCornerLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
     EVT_PAINT( wxGridCornerLabelWindow::OnPaint )
@@ -3996,7 +4023,7 @@ END_EVENT_TABLE()
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
                                                   const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxFULL_REPAINT_ON_RESIZE )
+  : wxGridSubwindow(parent, id, pos, size)
 {
     m_owner = parent;
 }
@@ -4067,7 +4094,7 @@ void wxGridCornerLabelWindow::OnChar( wxKeyEvent& event )
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxWindow )
 
-BEGIN_EVENT_TABLE( wxGridWindow, wxWindow )
+BEGIN_EVENT_TABLE( wxGridWindow, wxGridSubwindow )
     EVT_PAINT( wxGridWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
@@ -4085,10 +4112,8 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxWindowID id,
                             const wxPoint &pos,
                             const wxSize &size )
-            : wxWindow(
-                parent, id, pos, size,
-                wxWANTS_CHARS | wxBORDER_NONE | wxCLIP_CHILDREN | wxFULL_REPAINT_ON_RESIZE,
-                wxT("grid window") )
+            : wxGridSubwindow(parent, id, pos, size,
+                              wxCLIP_CHILDREN, wxT("grid window") )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
@@ -5943,6 +5968,21 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         {
             // no default action at the moment
         }
+    }
+}
+
+void wxGrid::CancelMouseCapture()
+{
+    // cancel operation currently in progress, whatever it is
+    if ( m_winCapture )
+    {
+        m_isDragging = false;
+        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+        m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
+        m_winCapture = NULL;
+
+        // remove traces of whatever we drew on screen
+        Refresh();
     }
 }
 
