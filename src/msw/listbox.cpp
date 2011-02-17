@@ -145,6 +145,9 @@ wxListBox::wxListBox()
 {
     m_noItems = 0;
     m_selected = 0;
+#if wxUSE_LISTBOX_SELECTION_FIX
+    m_selectedByKeyboard = false;
+#endif
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -702,7 +705,46 @@ wxSize wxListBox::DoGetBestSize() const
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     wxEventType evtType;
-    int n;
+    int n = wxNOT_FOUND;
+
+#if wxUSE_LISTBOX_SELECTION_FIX
+    if ( param == LBN_SELCHANGE )
+    {
+        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+        if ( m_selectedByKeyboard )
+        {
+            // We shouldn't use the mouse position to find the item as mouse
+            // can be anywhere, ask the listbox itself. Notice that this can't
+            // be used when the item is selected using the mouse however as
+            // LB_GETCARETINDEX will always return a valid item, even if the
+            // mouse is clicked below all the items, which is why we find the
+            // item ourselves below in this case.
+            n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+        }
+        //else: n will be determined below from the mouse position
+
+        // NB: conveniently enough, LB_ERR is the same as wxNOT_FOUND
+    }
+    else if ( param == LBN_DBLCLK )
+    {
+        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+        n = HitTest(ScreenToClient(wxGetMousePosition()));
+    }
+    else
+    {
+        // some event we're not interested in
+        return false;
+    }
+
+    // Find the item position if it was a mouse-generated selection event or a
+    // double click event (which is always generated using the mouse)
+    if ( n == wxNOT_FOUND )
+    {
+        const DWORD pos = ::GetMessagePos();
+        const wxPoint pt(GET_X_LPARAM(pos), GET_Y_LPARAM(pos));
+        n = HitTest(ScreenToClient(wxPoint(pt)));
+    }
+#else
     if ( param == LBN_SELCHANGE )
     {
         evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
@@ -720,6 +762,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         // some event we're not interested in
         return false;
     }
+#endif
 
     // retrieve the affected item
     if ( n == wxNOT_FOUND )
@@ -739,6 +782,22 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     return GetEventHandler()->ProcessEvent(event);
 }
+
+#if wxUSE_LISTBOX_SELECTION_FIX
+WXLRESULT
+wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // Remember whether there was a keyboard or mouse event before
+    // LBN_SELCHANGE: this allows us to correctly determine the item affected
+    // by it in MSWCommand() above in any case.
+    if ( WM_KEYFIRST <= nMsg && nMsg <= WM_KEYLAST )
+        m_selectedByKeyboard = true;
+    else if ( WM_MOUSEFIRST <= nMsg && nMsg <= WM_MOUSELAST )
+        m_selectedByKeyboard = false;
+
+    return wxListBoxBase::MSWWindowProc(nMsg, wParam, lParam);
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxCheckListBox support

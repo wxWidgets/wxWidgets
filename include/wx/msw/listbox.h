@@ -14,6 +14,10 @@
 
 #if wxUSE_LISTBOX
 
+// Fixing spurious selection events breaks binary compatibility, so this is normally 0.
+// See ticket #12143
+#define wxUSE_LISTBOX_SELECTION_FIX 0
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------
@@ -133,6 +137,10 @@ public:
         return GetCompositeControlsDefaultAttributes(variant);
     }
 
+#if wxUSE_LISTBOX_SELECTION_FIX
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif
+
 protected:
     virtual void DoSetSelection(int n, bool select);
     virtual int DoAppend(const wxString& item);
@@ -156,6 +164,13 @@ protected:
 #if wxUSE_OWNER_DRAWN
     // control items
     wxListBoxItemsArray m_aItems;
+#endif
+
+#if wxUSE_LISTBOX_SELECTION_FIX
+    // flag set to true when we get a keyboard event and reset to false when we
+    // get a mouse one: this is used to find the correct item for the selection
+    // event
+    bool m_selectedByKeyboard;
 #endif
 
 private:
