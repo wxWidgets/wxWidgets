@@ -8636,6 +8636,11 @@ void wxGrid::ShowCellEditControl()
                     editor->GetControl()->GetPosition().y );
             editor->Show( true, attr );
 
+#ifdef __WXGTK20__
+            int px, py;
+            GetViewStart(& px, & py);
+#endif
+
             // recalc dimensions in case we need to
             // expand the scrolled window to account for editor
             CalcDimensions();
@@ -8645,6 +8650,14 @@ void wxGrid::ShowCellEditControl()
 
             editor->DecRef();
             attr->DecRef();
+
+#ifdef __WXGTK20__
+            // On GTK+, erroneous scrolling to the old control
+            // position can happen when the grid window gets a
+            // focus event and this is processed by wxScrollHelper.
+            // This line resets the scroll position.
+            Scroll(px, py);
+#endif
         }
     }
 }
