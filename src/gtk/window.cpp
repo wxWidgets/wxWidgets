@@ -25,7 +25,9 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
+#if wxUSE_RADIOBTN
     #include "wx/radiobut.h"
+#endif
     #include "wx/toolbar.h"
     #include "wx/combobox.h"
     #include "wx/layout.h"
@@ -3316,12 +3318,13 @@ void wxWindowGTK::SetFocus()
     {
         if (GTK_IS_CONTAINER(m_widget))
         {
+#if wxUSE_RADIOBTN
             if (IsKindOf(CLASSINFO(wxRadioButton)))
             {
                 gtk_widget_grab_focus (m_widget);
                 return;
             }
-
+#endif
             gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
         }
         else
