@@ -1,5 +1,5 @@
 %define _prefix /usr
-%define ver  2.8.11
+%define ver  2.8.12
 %define ver2 2.8
 %define rel  0
 
@@ -116,7 +116,7 @@ wxBase is a collection of C++ classes providing basic data structures (strings,
 lists, arrays), portable wrappers around many OS-specific funstions (file
 operations, time/date manipulations, threads, processes, sockets, shared
 library loading) as well as other utility classes (streams, archive and
-compression). wxBase currently supports Win32, most Unix variants (Linux, 
+compression). wxBase currently supports Win32, most Unix variants (Linux,
 FreeBSD, Solaris, HP-UX) and MacOS X (Carbon and Mach-0).
 
 %package -n %{wxbasename}-devel

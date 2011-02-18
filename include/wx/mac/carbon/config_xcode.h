@@ -2,7 +2,7 @@
 // Name:        config_xcode.pch
 // Purpose:     configurations for xcode builds
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     29.04.04
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
@@ -25,9 +25,9 @@
 
 #define HAVE_BOOL 1
 #define HAVE_EXPLICIT 1
-#define HAVE_CONST_CAST 
-#define HAVE_REINTERPRET_CAST 
-#define HAVE_STATIC_CAST 
+#define HAVE_CONST_CAST
+#define HAVE_REINTERPRET_CAST
+#define HAVE_STATIC_CAST
 #define HAVE_VA_COPY 1
 #define HAVE_VARIADIC_MACROS 1
 #define CONST_COMPATIBILITY 0
@@ -117,9 +117,9 @@
 // #define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
 // #define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
 // #define PACKAGE_NAME "wxWidgets"
-// #define PACKAGE_STRING "wxWidgets 2.8.10"
+// #define PACKAGE_STRING "wxWidgets 2.8.12"
 // #define PACKAGE_TARNAME "wxwidgets"
-// #define PACKAGE_VERSION "2.8.10"
+// #define PACKAGE_VERSION "2.8.12"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1
@@ -129,7 +129,7 @@
 #define HAVE_STDLIB_H 1
 
 // OBSOLETE ?
- 
+
 #define HAVE_COS 1
 #define HAVE_FLOOR 1
 #define HAVE_INTTYPES_H 1

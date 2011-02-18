@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver  2.8.11
+%define ver  2.8.12
 %define ver2 2.8
 %define rel  0
 
@@ -97,7 +97,7 @@ cd ../../..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{pref} --with-motif --disable-shared --with-odbc --with-opengl 
+../configure --prefix=%{pref} --with-motif --disable-shared --with-odbc --with-opengl
 $MAKE
 cd ..
 

@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver  2.8.11
+%define ver  2.8.12
 %define ver2 2.8
 %define rel  0
 
@@ -123,7 +123,7 @@ ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/%{wxconfiglink}
 %preun devel
 if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
     SUM1=`md5sum %{_libdir}/wx/config/%{wxconfig} | cut -c 0-32`
-    SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`  
+    SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
     if test "x$SUM1" = "x$SUM2" ; then
         rm -f %{_bindir}/wx-config
     fi
