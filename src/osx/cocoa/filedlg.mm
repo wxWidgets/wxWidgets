@@ -27,6 +27,9 @@
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
     #include "wx/app.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
+    #include "wx/choice.h"
 #endif
 
 #include "wx/filename.h"
