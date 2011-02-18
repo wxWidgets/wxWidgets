@@ -71,7 +71,9 @@
         #undef wxOSX_USE_COCOA
         #define wxOSX_USE_COCOA 1
     #endif
-    #define wxOSX_USE_CARBON 0
+    #if wxOSX_USE_CARBON
+        #error "Carbon does not support 64bit"
+    #endif
     #define wxOSX_USE_IPHONE 0
 #else
     #ifdef __WXOSX_IPHONE__
