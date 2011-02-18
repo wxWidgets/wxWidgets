@@ -15,6 +15,8 @@
     #include "wx/frame.h"
     #include "wx/app.h"
     #include "wx/dialog.h"
+    #include "wx/menuitem.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/osx/private.h"
