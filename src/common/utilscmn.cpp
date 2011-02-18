@@ -580,6 +580,10 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 #else // non-MSVC non-Mac
     // Not sure if other compilers have _tenviron so use the (more standard)
     // ANSI version only for them.
+#ifdef __BSD__
+    // POSIX, but not in an include file
+    extern char **environ;
+#endif
     char **env = environ;
 #endif
 
