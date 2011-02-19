@@ -1533,6 +1533,15 @@ void GSocket::Disable(GSocketEvent event)
  */
 GSocketError GSocket::Input_Timeout()
 {
+#ifdef __WXMAC__
+  // This seems to happen under OS X sometimes, see #8904.
+  if ( m_fd == INVALID_SOCKET )
+  {
+    m_error = GSOCK_TIMEDOUT;
+    return GSOCK_TIMEDOUT;
+  }
+#endif // __WXMAC__
+
   struct timeval tv;
   fd_set readfds;
   int ret;
