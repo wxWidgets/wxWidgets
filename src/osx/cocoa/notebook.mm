@@ -66,8 +66,7 @@
     return YES;
 }
 
-- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
-
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     wxUnusedVar(tabViewItem);
     wxNSTabView* view = (wxNSTabView*) tabView;

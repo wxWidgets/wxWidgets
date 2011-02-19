@@ -72,7 +72,7 @@ void wxBell()
     wxUnusedVar(application);
 }
 
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename
 {
     wxUnusedVar(sender);
     wxCFStringRef cf(wxCFRetain(filename));
@@ -80,7 +80,7 @@ void wxBell()
     return YES;
 }
 
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
 {
     wxUnusedVar(sender);
     wxTheApp->MacNewFile() ;
