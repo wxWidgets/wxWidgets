@@ -238,6 +238,14 @@
 #endif /* Unicode/!Unicode */
 
 /*
+    This macro is defined for forward compatibility with wxWidgets 3. It should
+    be used in the places where wxWidgets 2 API requires wxT() (in Unicode
+    build) but wxWidgets 3 doesn't accept it, e.g. wxCmdLineEntryDesc struct
+    elements initializers.
+ */
+#define wxT_2(x) wxT(x)
+
+/*
     We define _T() as a synonym of wxT() for backwards compatibility and also
     for the benefit of Windows programmers used to it. But this identifier is a
     reserved one and this does create problems in practice, notably with Sun CC
