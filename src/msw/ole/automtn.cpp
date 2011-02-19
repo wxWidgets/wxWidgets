@@ -545,8 +545,15 @@ bool wxAutomationObject::GetInstance(const wxString& progId, int flags) const
         }
         else
         {
-            wxLogSysError(hr,
-                          _("Cannot get an active instance of \"%s\""), progId);
+            // Log an error except if we're supposed to fail silently when the
+            // error is that no current instance exists.
+            if ( hr != MK_E_UNAVAILABLE ||
+                    !(flags & wxAutomationInstance_SilentIfNone) )
+            {
+                wxLogSysError(hr,
+                              _("Cannot get an active instance of \"%s\""),
+                              progId);
+            }
         }
 
         return false;

@@ -33,7 +33,11 @@ enum wxAutomationInstanceFlags
     wxAutomationInstance_UseExistingOnly = 0,
 
     // Create a new instance if there are no existing ones.
-    wxAutomationInstance_CreateIfNeeded = 1
+    wxAutomationInstance_CreateIfNeeded = 1,
+
+    // Do not log errors if we failed to get the existing instance because none
+    // is available.
+    wxAutomationInstance_SilentIfNone = 2
 };
 
 /*

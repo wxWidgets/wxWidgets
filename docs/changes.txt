@@ -178,7 +178,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxMSW-specific wxAutomationObject::GetInstance() method now creates a new
   instance if needed instead of failing if the application providing the
   requested ProgID is not running. Pass wxAutomationInstance_UseExistingOnly
-  flag to it to revert to the old behaviour.
+  flag to it to revert to the old behaviour. It is also possible to use the
+  wxAutomationInstance_SilentIfNone flag to prevent the error message if no
+  currently running instances of this object are available.
 
 
 Changes in behaviour which may result in compilation errors

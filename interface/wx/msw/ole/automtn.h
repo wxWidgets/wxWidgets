@@ -31,7 +31,15 @@ enum wxAutomationInstanceFlags
         instance failed, we should call wxAutomationObject::CreateInstance() to
         create a new one.
      */
-    wxAutomationInstance_CreateIfNeeded = 1
+    wxAutomationInstance_CreateIfNeeded = 1,
+
+    /**
+        Do not show an error message if no existing instance is currently
+        running.
+
+        All other errors will still be reported as usual.
+     */
+    wxAutomationInstance_SilentIfNone = 2
 };
 
 
@@ -134,6 +142,10 @@ public:
 
         If attaching to an existing object failed and @a flags includes
         wxAutomationInstance_CreateIfNeeded flag, a new object will be created.
+        Otherwise this function will normally log an error message which may be
+        undesirable if the object may or may not exist. The
+        wxAutomationInstance_SilentIfNone flag can be used to prevent the error
+        from being logged in this case.
 
         Returns @true if a pointer was successfully retrieved, @false
         otherwise.
