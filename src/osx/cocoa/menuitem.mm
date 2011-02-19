@@ -33,14 +33,14 @@ struct Mapping
 
 Mapping sActionToWXMapping[] =
 {
-    wxID_UNDO, @selector(undo:) ,
-    wxID_REDO, @selector(redo:) ,
-    wxID_CUT, @selector(cut:) ,
-    wxID_COPY, @selector(copy:) ,
-    wxID_PASTE, @selector(paste:) ,
-    wxID_CLEAR, @selector(delete:) ,
-    wxID_SELECTALL, @selector(selectAll:) ,
-    0, NULL
+    { wxID_UNDO, @selector(undo:) },
+    { wxID_REDO, @selector(redo:) },
+    { wxID_CUT, @selector(cut:) },
+    { wxID_COPY, @selector(copy:) },
+    { wxID_PASTE, @selector(paste:) },
+    { wxID_CLEAR, @selector(delete:) },
+    { wxID_SELECTALL, @selector(selectAll:) },
+    { 0, NULL }
 };
 
 int wxOSXGetIdFromSelector(SEL action )
