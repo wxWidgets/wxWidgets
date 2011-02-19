@@ -46,7 +46,9 @@ changes:
 - Some structure fields which used to be of type "const wxChar *" (such as
   wxCmdLineEntryDesc::shortName, longName and description fields) are now of
   type "const char *", you need to remove wxT() or _T() around the values used
-  to initialize them (which should normally always be ASCII).
+  to initialize them (which should normally always be ASCII). If you want your
+  code to remain compatible with Unicode build of previous wx version, please
+  use the special wxT_2, which is the same as wxT in 2.x only, instead.
 
 - wxIPC classes didn't work correctly in Unicode build before, this was fixed
   but at a price of breaking backwards compatibility: many methods which used

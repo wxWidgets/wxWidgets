@@ -33,6 +33,32 @@
 #define wxT(string)
 
 /**
+    Compatibility macro which expands to wxT() in wxWidgets 2 only.
+
+    This macro can be used in the code which needs to compile with both
+    wxWidgets 2 and 3 versions in places where v2 API requires a Unicode string
+    (in Unicode build) and v3 API only accepts a standard standard narrow
+    string as in e.g. wxCmdLineEntryDesc structure objects initializers.
+
+    Example of use:
+    @code
+    const wxCmdLineEntryDesc cmdLineDesc[] =
+    {
+        { wxCMD_LINE_SWITCH, wxT_2("q"), wxT_2("quiet"),
+          wxT_2("Don't output verbose messages") },
+        wxCMD_LINE_DESC_END
+    };
+    @endcode
+
+    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, with @c
+    wxT instead of it, it wouldn't compile with wxWidgets 3.
+
+    @see wxT()
+
+    @header{wx/chartype.h}
+ */
+
+/**
     wxS is macro which can be used with character and string literals (in other words,
     @c 'x' or @c "foo") to either convert them to wide characters or wide strings
     in @c wchar_t-based (UTF-16) builds or keep them unchanged in @c char-based

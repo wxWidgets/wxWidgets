@@ -251,6 +251,12 @@
 #endif /* !defined(wxT) */
 
 /*
+    wxT_2 exists only for compatibility with wx 2.x and is the same as wxT() in
+    that version but nothing in the newer ones.
+ */
+#define wxT_2(x) x
+
+/*
    wxS ("wx string") macro can be used to create literals using the same
    representation as wxString does internally, i.e. wchar_t in Unicode build
    under Windows or char in UTF-8-based Unicode builds and (deprecated) ANSI
