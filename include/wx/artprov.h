@@ -136,7 +136,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // use PushBack(), it's the same thing
-    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
+    static wxDEPRECATED( void Insert(wxArtProvider *provider) );
 #endif
 
     // Remove latest added provider and delete it.
@@ -189,14 +189,14 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_6
     // use the corresponding methods without redundant "Provider" suffix
-    wxDEPRECATED( static void PushProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static void InsertProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static bool PopProvider() );
+    static wxDEPRECATED( void PushProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( void InsertProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( bool PopProvider() );
 
     // use Delete() if this is what you really need, or just delete the
     // provider pointer, do not use Remove() as it does not delete the pointer
     // unlike RemoveProvider() which does
-    wxDEPRECATED( static bool RemoveProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( bool RemoveProvider(wxArtProvider *provider) );
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:

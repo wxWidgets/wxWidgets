@@ -127,7 +127,7 @@ public:
     wxDEPRECATED( const wxString& GetText() const );
 
     // Now use GetLabelText to strip the accelerators
-    wxDEPRECATED( static wxString GetLabelFromText(const wxString& text) );
+    static wxDEPRECATED( wxString GetLabelFromText(const wxString& text) );
 
     // Now use SetItemLabel
     wxDEPRECATED( virtual void SetText(const wxString& str) );

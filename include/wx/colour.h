@@ -172,7 +172,7 @@ public:
     // ---------------
 
 #if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( static wxColour CreateByName(const wxString& name) );
+    static wxDEPRECATED( wxColour CreateByName(const wxString& name) );
     wxDEPRECATED( void InitFromName(const wxString& col) );
 #endif
 
