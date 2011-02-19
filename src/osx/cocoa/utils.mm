@@ -328,12 +328,9 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     wxSize sz = m_window->GetSize();
 
-    int left = subrect != NULL ? subrect->x : 0 ;
-    int top = subrect != NULL ? subrect->y : 0 ;
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
 
-    NSRect rect = NSMakeRect(left, top, width, height );
     NSView* view = (NSView*) m_window->GetHandle();
     [view lockFocus];
     // we use this method as other methods force a repaint, and this method can be
