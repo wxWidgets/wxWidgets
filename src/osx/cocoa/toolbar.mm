@@ -1560,9 +1560,15 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
             
             dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
             dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
-            dc.DrawRectangle(rect);            
+            if ( HasFlag(wxTB_LEFT) )
+                dc.DrawLine(w-1, 0, w-1, h);
+            else if ( HasFlag(wxTB_RIGHT) )
+                dc.DrawLine(0, 0, 0, h);
+            else if ( HasFlag(wxTB_BOTTOM) )
+                dc.DrawLine(0, 0, w, 0);
+            else if ( HasFlag(wxTB_TOP) )
+                dc.DrawLine(0, h-1, w, h-1);
         }
-                
     }
     event.Skip();
 }
