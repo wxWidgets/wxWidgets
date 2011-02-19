@@ -53,20 +53,46 @@ private:
 class WXDLLIMPEXP_CORE wxGBSpan
 {
 public:
-    wxGBSpan() : m_rowspan(1), m_colspan(1) {}
-    wxGBSpan(int rowspan, int colspan) : m_rowspan(rowspan), m_colspan(colspan) {}
+    wxGBSpan() { Init(); }
+    wxGBSpan(int rowspan, int colspan)
+    {
+        // Initialize the members to valid values as not doing it may result in
+        // infinite loop in wxGBSizer code if the user passed 0 for any of
+        // them, see #12934.
+        Init();
+
+        SetRowspan(rowspan);
+        SetColspan(colspan);
+    }
 
     // default copy ctor and assignment operator are okay.
 
     int GetRowspan() const { return m_rowspan; }
     int GetColspan() const { return m_colspan; }
-    void SetRowspan(int rowspan) { m_rowspan = rowspan; }
-    void SetColspan(int colspan) { m_colspan = colspan; }
+    void SetRowspan(int rowspan)
+    {
+        wxCHECK_RET( rowspan > 0, "Row span should be strictly positive" );
+
+        m_rowspan = rowspan;
+    }
+
+    void SetColspan(int colspan)
+    {
+        wxCHECK_RET( colspan > 0, "Column span should be strictly positive" );
+
+        m_colspan = colspan;
+    }
 
     bool operator==(const wxGBSpan& o) const { return m_rowspan == o.m_rowspan && m_colspan == o.m_colspan; }
     bool operator!=(const wxGBSpan& o) const { return !(*this == o); }
 
 private:
+    void Init()
+    {
+        m_rowspan =
+        m_colspan = 1;
+    }
+
     int m_rowspan;
     int m_colspan;
 };
