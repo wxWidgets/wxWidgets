@@ -2201,7 +2201,7 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
         return false;
 
     wxAuiTabContainerButton* btn = NULL;
-    if (ButtonHitTest(x, y, &btn))
+    if (ButtonHitTest(x, y, &btn) && !(btn->cur_state & wxAUI_BUTTON_STATE_DISABLED))
     {
         if (m_buttons.Index(*btn) != wxNOT_FOUND)
             return false;
@@ -2239,8 +2239,7 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
         if (button.rect.Contains(x,y) &&
-            !(button.cur_state & (wxAUI_BUTTON_STATE_HIDDEN |
-                                   wxAUI_BUTTON_STATE_DISABLED)))
+            !(button.cur_state & wxAUI_BUTTON_STATE_HIDDEN ))
         {
             if (hit)
                 *hit = &button;
@@ -2447,7 +2446,8 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     {
         // make sure we're still clicking the button
         wxAuiTabContainerButton* button = NULL;
-        if (!ButtonHitTest(evt.m_x, evt.m_y, &button))
+        if (!ButtonHitTest(evt.m_x, evt.m_y, &button) ||
+            button->cur_state & wxAUI_BUTTON_STATE_DISABLED)
             return;
 
         if (button != m_pressed_button)
@@ -2542,7 +2542,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
     // check if the mouse is hovering above a button
     wxAuiTabContainerButton* button;
-    if (ButtonHitTest(pos.x, pos.y, &button))
+    if (ButtonHitTest(pos.x, pos.y, &button) && !(button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
     {
         if (m_hover_button && button != m_hover_button)
         {
