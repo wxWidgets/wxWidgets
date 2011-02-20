@@ -249,7 +249,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString &name = wxT("frame"))
     {
-         if (!CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+        if (!Create( parent, id, title, pos, size, style, name ))
             return;
 
         m_title = title;
