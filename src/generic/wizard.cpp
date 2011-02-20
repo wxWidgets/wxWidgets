@@ -373,13 +373,6 @@ void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
                   wxT("You must create the buttons before calling ")
                   wxT("wxWizard::AddBackNextPair") );
 
-    // margin between Back and Next buttons
-#ifdef __WXMAC__
-    static const int BACKNEXT_MARGIN = 10;
-#else
-    static const int BACKNEXT_MARGIN = 0;
-#endif
-
     wxBoxSizer *backNextPair = new wxBoxSizer(wxHORIZONTAL);
     buttonRow->Add(
         backNextPair,
@@ -389,7 +382,7 @@ void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
     );
 
     backNextPair->Add(m_btnPrev);
-    backNextPair->Add(BACKNEXT_MARGIN,0,
+    backNextPair->Add(10, 0,
         0, // No horizontal stretching
         wxEXPAND // No border, (mostly useless) vertical stretching
     );
