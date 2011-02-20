@@ -995,7 +995,12 @@ GSocketError GSocket::Connect(GSocketStream stream)
   // If a local address has been set, then we need to bind to it before calling connect
   if (m_local && m_local->m_addr)
   {
-     bind(m_fd, m_local->m_addr, m_local->m_len);
+    if (bind(m_fd, m_local->m_addr, m_local->m_len) < 0)
+    {
+      Close();
+      m_error = GSOCK_IOERR;
+      return GSOCK_IOERR;
+    }
   }
 
   /* Connect it to the peer address, with a timeout (see below) */
