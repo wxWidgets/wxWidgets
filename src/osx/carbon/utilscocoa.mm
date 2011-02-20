@@ -408,19 +408,23 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-    
-    NSSize imageSize = [nsimage size];
-    CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
-    CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
-    NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
-    [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-    [[NSColor whiteColor] setFill];
-    NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
-    [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-    [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-    CGImageRef image = CGBitmapContextCreateImage(context);
-    CFRelease(context);
+
+    CGImageRef image = NULL;
+    if (nsimage != nil)
+    {
+        NSSize imageSize = [nsimage size];
+        CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
+        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+        [[NSColor whiteColor] setFill];
+        NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
+        [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+        image = CGBitmapContextCreateImage(context);
+        CFRelease(context);
+    }
     return image;
  }
 
