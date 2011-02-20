@@ -5244,7 +5244,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
                 int paraDescent;
 
                 // This calculates the partial text extents
-                GetRangeSize(lineRange, paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0), & partialExtents);
+                GetRangeSize(lineRange, paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, linePos, & partialExtents);
 
                 int lastX = linePos.x;
                 size_t i;
