@@ -4533,7 +4533,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
                 int paraDescent;
 
                 // This calculates the partial text extents
-                GetRangeSize(lineRange, paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0));
+                GetRangeSize(lineRange, paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, linePos);
                 g_UseGlobalPartialTextExtents = false;
 
                 int lastX = linePos.x;
@@ -5406,7 +5406,7 @@ bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXU
 {
     // Only lay out if we haven't already cached the size
     if (m_size.x == -1)
-        GetRangeSize(GetRange(), m_size, m_descent, dc, 0, wxPoint(0, 0));
+        GetRangeSize(GetRange(), m_size, m_descent, dc, 0, GetParent() ? GetParent()->GetPosition() : wxPoint(0, 0));
 
     return true;
 }
