@@ -265,6 +265,18 @@ bool wxToolBar::Realize()
     return true;
 }
 
+void wxToolBar::DoLayout()
+{
+    // TODO port back osx_cocoa layout solution
+}
+
+void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
+    
+    DoLayout();
+} 
+
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
     m_defaultWidth = size.x;
