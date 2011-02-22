@@ -7510,13 +7510,25 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
             [AC_MSG_WARN([Cairo library not found])]
         )
         if test "$wx_has_graphics" = 1; then
-            AC_DEFINE(wxUSE_CAIRO)
+            dnl Check that Cairo library is new enough: wxGraphicsContext
+            dnl won't compile without cairo_push_group() and
+            dnl cairo_pop_group_to_source() which are new in 1.2.
+            save_LIBS="$LIBS"
+            LIBS="$LIBS $CAIRO_LIBS"
+            AC_CHECK_FUNCS([cairo_push_group])
+            LIBS="$save_LIBS"
+            if test "$ac_cv_func_cairo_push_group" = "no"; then
+                wx_has_graphics=0
+                AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
+            else
+                AC_DEFINE(wxUSE_CAIRO)
 
-            dnl We don't need to do this for wxGTK as we already get Cairo
-            dnl flags as part of GTK+ ones.
-            if test "$wxUSE_GTK" != 1; then
-                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+                dnl We don't need to do this for wxGTK as we already get Cairo
+                dnl flags as part of GTK+ ones.
+                if test "$wxUSE_GTK" != 1; then
+                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+                fi
             fi
         fi
     else
