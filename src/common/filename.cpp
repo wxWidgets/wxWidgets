@@ -153,13 +153,6 @@
 extern const wxULongLong wxInvalidSize = (unsigned)-1;
 #endif // wxUSE_LONGLONG
 
-#ifdef __WIN32__
-    // this define is missing from VC6 headers
-    #ifndef INVALID_FILE_ATTRIBUTES
-        #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
-    #endif
-#endif // __WIN32__
-
 namespace
 {
 

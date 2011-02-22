@@ -98,10 +98,6 @@
     #define _MAXPATHLEN 1024
 #endif
 
-#ifndef INVALID_FILE_ATTRIBUTES
-    #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
-#endif
-
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
