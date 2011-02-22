@@ -15,8 +15,6 @@
 
 #include "wx/bitmap.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
-
 //-----------------------------------------------------------------------------
 // wxBitmapToggleButton
 //-----------------------------------------------------------------------------

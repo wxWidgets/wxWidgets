@@ -13,9 +13,6 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxCheckBoxNameStr[];
-
-
 class WXDLLIMPEXP_CORE wxBitmapToggleButton : public wxToggleButtonBase
 {
 public:

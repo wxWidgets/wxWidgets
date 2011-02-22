@@ -23,12 +23,6 @@ class WXDLLIMPEXP_FWD_CORE wxToggleButton;
 class WXDLLIMPEXP_FWD_CORE wxToggleBitmapButton;
 
 //-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
-
-//-----------------------------------------------------------------------------
 // wxBitmapToggleButton
 //-----------------------------------------------------------------------------
 
