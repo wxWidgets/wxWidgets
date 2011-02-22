@@ -146,7 +146,9 @@ wxGTK:
 - Fix for --disable-radiobtn compilation.
 - Fixed a bug on GTK+ only whereby wxGrid scrolls back to the previous edit position
   when another cell is edited.
-
+- Fix for missing menubar problem under some window managers where menu bar height is
+  reported as 0 when the menu hasn't fully realized yet. Now updates the height during
+  idle time if it is 0, otherwise no menu is shown.
 
 2.8.11:
 -------
