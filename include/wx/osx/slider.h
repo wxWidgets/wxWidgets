@@ -16,8 +16,6 @@
 #include "wx/slider.h"
 #include "wx/stattext.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxSliderNameStr[];
-
 // Slider
 class WXDLLIMPEXP_CORE wxSlider: public wxSliderBase
 {

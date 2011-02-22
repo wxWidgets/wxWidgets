@@ -12,15 +12,10 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-#include "wx/window.h"
 #include "wx/toolbar.h"
 #include "wx/accel.h"
 #include "wx/icon.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxToolBarNameStr[];
-
-class WXDLLIMPEXP_FWD_CORE wxMenuBar;
-class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
 
 class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase

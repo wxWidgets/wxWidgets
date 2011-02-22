@@ -16,8 +16,6 @@
 #include "wx/choice.h"
 #include "wx/textctrl.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxComboBoxNameStr[];
-
 WX_DEFINE_ARRAY( char * , wxComboBoxDataArray ) ;
 
 // forward declaration of private implementation classes

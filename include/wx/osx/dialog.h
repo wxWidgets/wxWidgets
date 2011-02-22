@@ -14,8 +14,6 @@
 
 #include "wx/panel.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxDialogNameStr[];
-
 class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
 class WXDLLIMPEXP_FWD_CORE wxModalEventLoop ;
 

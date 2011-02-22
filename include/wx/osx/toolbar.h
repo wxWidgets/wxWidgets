@@ -17,8 +17,6 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxToolBarNameStr[];
-
 class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 {
   DECLARE_DYNAMIC_CLASS(wxToolBar)

@@ -14,8 +14,6 @@
 
 #include "wx/control.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxGaugeNameStr[];
-
 // Group box
 class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
