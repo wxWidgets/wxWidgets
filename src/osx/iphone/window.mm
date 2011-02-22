@@ -392,6 +392,8 @@ void wxWidgetIPhoneImpl::Move(int x, int y, int width, int height)
     [m_osxView setFrame:r];
 }
 
+
+
 void wxWidgetIPhoneImpl::GetPosition( int &x, int &y ) const
 {
     CGRect r = [m_osxView frame];
@@ -589,6 +591,11 @@ void wxWidgetIPhoneImpl::SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
 
 void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 {
+}
+
+float wxWidgetIPhoneImpl::GetContentScaleFactor() const 
+{
+    return [m_osxView contentScaleFactor];
 }
 
 void wxWidgetIPhoneImpl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )

@@ -1115,6 +1115,11 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
     }
 }
 
+float wxWindowMac::GetContentScaleFactor() const 
+{
+    return m_peer->GetContentScaleFactor();
+}
+
 void wxWindowMac::SetLabel(const wxString& title)
 {
     if ( title == m_label )

@@ -235,6 +235,10 @@ public :
     virtual void        GetPosition( int &x, int &y ) const = 0;
     virtual void        GetSize( int &width, int &height ) const = 0;
     virtual void        SetControlSize( wxWindowVariant variant ) = 0;
+    virtual float       GetContentScaleFactor() const 
+    {
+        return 1.0;
+    }
     
     // the native coordinates may have an 'aura' for shadows etc, if this is the case the layout
     // inset indicates on which insets the real control is drawn

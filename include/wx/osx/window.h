@@ -266,6 +266,9 @@ public:
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
+    
+    float               GetContentScaleFactor() const ;
+    
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
