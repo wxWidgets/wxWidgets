@@ -91,10 +91,6 @@ compiler you use.
 3. Installing under Unix/BeOS
 -----------------------------
 
-NB: If you're building wxBase from the wxWidgets distribution and not from a
-    separate wxBase one you will need to add "--disable-gui" to configure
-    arguments below!
-
 Please note that GNU make may be required to build wxBase, please use it if
 you get any errors from the native Unix make.
 
@@ -103,7 +99,7 @@ The recommended way to build wxBase is:
         % cd ..../wxWidgets
         % mkdir base-release # or any other directory of your liking
         % cd base-release
-        % ../configure
+        % ../configure --disable-gui
         # ignore the error messages about missing samples
         % make
         % make install
@@ -112,7 +108,7 @@ You can also do:
 
         % mkdir base-debug
         % cd base-debug
-        % ../configure --enable-debug
+        % ../configure --disable-gui --enable-debug
         % make
 
 To build the sample then cd to samples/console and make there.
