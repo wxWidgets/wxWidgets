@@ -79,6 +79,12 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::MAX /* wxSYS_COLOUR_INFOTEXT */,
         wxColourScheme::MAX /* wxSYS_COLOUR_INFOBK */,
         wxColourScheme::WINDOW /* wxSYS_COLOUR_LISTBOX */,
+        wxColourScheme::SHADOW_HIGHLIGHT /* wxSYS_COLOUR_HOTLIGHT */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_GRADIENTACTIVECAPTION */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_GRADIENTINACTIVECAPTION */,
+        wxColourScheme::SHADOW_DARK /* wxSYS_COLOUR_MENUHILIGHT */,
+        wxColourScheme::CONTROL /* wxSYS_COLOUR_MENUBAR */,
+        wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_LISTBOXTEXT */
     };
 
     wxCHECK_MSG( index < (int)WXSIZEOF(s_mapSysToThemeCol), wxNullColour,
