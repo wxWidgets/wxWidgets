@@ -1427,7 +1427,16 @@ bool wxListLineData::SetAttributes(wxDC *dc,
             colText = *wxBLACK;
     }
 #else
+    {
+#ifdef __WXGTK__
+        if (m_owner->HasFocus())
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        else
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#else
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+#endif
+    }
 #endif
     else if ( attr && attr->HasTextColour() )
         colText = attr->GetTextColour();
