@@ -2756,8 +2756,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
         if (win_impl->GetWindow())
             cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
 
-        if (cgctx != 0)
-            return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        // having a cgctx being NULL is fine (will be created on demand)
+        // this is the case for all wxWindowDCs except wxPaintDC
+        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
     }
     return NULL;
 }
