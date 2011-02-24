@@ -123,6 +123,7 @@ All (GUI):
   the item is already in the desired state.
 - Fixed bug in wxSizer::Replace(size_t, wxSizerItem *) whereby SetContainingSizer
   is not called.
+- Fixed compilation with libpng 1.5 and above.
 
 wxMSW:
 
@@ -149,6 +150,10 @@ wxGTK:
 - Fix for missing menubar problem under some window managers where menu bar height is
   reported as 0 when the menu hasn't fully realized yet. Now updates the height during
   idle time if it is 0, otherwise no menu is shown.
+
+wxUniv:
+
+- Fixed assertion in tree control sample due to colour index not being supported.
 
 2.8.11:
 -------
