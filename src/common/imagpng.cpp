@@ -529,7 +529,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     png_structp png_ptr = png_create_read_struct
                           (
                             PNG_LIBPNG_VER_STRING,
-                            (voidp) NULL,
+                            NULL,
                             wx_png_error,
                             wx_png_warning
                           );
@@ -586,16 +586,19 @@ wxPNGHandler::LoadFile(wxImage *image,
 #if wxUSE_PALETTE
     if (color_type == PNG_COLOR_TYPE_PALETTE)
     {
-        const size_t ncolors = info_ptr->num_palette;
+        int ncolors = 0;
+        png_colorp palette;
+        png_get_PLTE( png_ptr, info_ptr, &palette, &ncolors);
         unsigned char* r = new unsigned char[ncolors];
         unsigned char* g = new unsigned char[ncolors];
         unsigned char* b = new unsigned char[ncolors];
+        int j;
 
-        for (size_t j = 0; j < ncolors; j++)
+        for (j = 0; j < ncolors; j++)
         {
-            r[j] = info_ptr->palette[j].red;
-            g[j] = info_ptr->palette[j].green;
-            b[j] = info_ptr->palette[j].blue;
+            r[j] = palette[j].red;
+            g[j] = palette[j].green;
+            b[j] = palette[j].blue;
         }
 
         image->SetPalette(wxPalette(ncolors, r, g, b));
