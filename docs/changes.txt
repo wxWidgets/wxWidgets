@@ -70,7 +70,7 @@ Also the "applet", "deprecated", "fl", "mmedia" and "plot" contrib libraries
 were removed as they were unmaintained and broken since several years.
 The "gizmos", "ogl", "net" and "foldbar" contribs have been moved to
 wxCode (see http://wxcode.sourceforge.net/complist.php); they are now
-open for futher development by volunteers.
+open for further development by volunteers.
 
 The "stc" and "svg" contribs instead have been moved respectively into a new
 "official" library stc and in the core lib.
