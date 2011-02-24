@@ -48,7 +48,8 @@ struct wxSystemObjects
              m_colTooltip,
              m_colTooltipText,
              m_colMenubarBg,
-             m_colListBoxText;
+             m_colListBoxText,
+             m_colListBoxUnfocusedText;
 
     wxFont m_fontSystem;
 };
@@ -307,10 +308,21 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             color = gs_objects.m_colListBoxText;
             break;
 
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        {
+            if (!gs_objects.m_colListBoxUnfocusedText.Ok())
+            {
+                if (GetColourFromGTKWidget(gdkColor, wxGTK_LIST, GTK_STATE_ACTIVE, wxGTK_TEXT))
+                    gs_objects.m_colListBoxUnfocusedText = wxColour(gdkColor);
+                else
+                    gs_objects.m_colListBoxUnfocusedText = GetColour(wxSYS_COLOUR_WINDOWTEXT);
+            }
+            color = gs_objects.m_colListBoxUnfocusedText;
+            break;
+        }
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
         case wxSYS_COLOUR_CAPTIONTEXT:
-        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
             if (!gs_objects.m_colBtnText.Ok())
             {
