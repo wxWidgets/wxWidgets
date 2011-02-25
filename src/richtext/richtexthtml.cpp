@@ -196,10 +196,27 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxRichTextAttr& curre
     }
     if (thisStyle.GetFontSize() != currentStyle.GetFontSize())
         style += wxString::Format(wxT(" size=\"%ld\""), PtToSize(thisStyle.GetFontSize()));
-    if (thisStyle.GetTextColour() != currentStyle.GetTextColour() )
+
+    bool bTextColourChanged = (thisStyle.GetTextColour() != currentStyle.GetTextColour());
+    bool bBackgroundColourChanged = (thisStyle.GetBackgroundColour() != currentStyle.GetBackgroundColour());
+    if (bTextColourChanged || bBackgroundColourChanged)
     {
-        wxString color(thisStyle.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX));
-        style += wxString::Format(wxT(" color=\"%s\""), color.c_str());
+        style += wxT(" style=\"");
+
+        if (bTextColourChanged)
+        {
+            wxString color(thisStyle.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX));
+            style += wxString::Format(wxT("color: %s"), color.c_str());
+        }
+        if (bTextColourChanged && bBackgroundColourChanged)
+            style += wxT(";");
+        if (bBackgroundColourChanged)
+        {
+            wxString color(thisStyle.GetBackgroundColour().GetAsString(wxC2S_HTML_SYNTAX));
+            style += wxString::Format(wxT("background-color: %s"), color.c_str());
+        }
+
+        style += wxT("\"");
     }
 
     if (style.size())
