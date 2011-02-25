@@ -109,6 +109,13 @@ enum wxSystemColour
      */
     wxSYS_COLOUR_LISTBOXTEXT,
 
+    /**
+        Text colour for the unfocused selection of list-like controls.
+
+        @since 2.9.1
+     */
+    wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
+
     wxSYS_COLOUR_MAX
 
 

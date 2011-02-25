@@ -687,7 +687,10 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
         else
             colText = *wxBLACK;
 #else
-        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        if ( hasFocus )
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        else
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
 #endif
     }
     else if ( attr && attr->HasTextColour() )
