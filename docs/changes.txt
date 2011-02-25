@@ -150,6 +150,8 @@ wxGTK:
 - Fix for missing menubar problem under some window managers where menu bar height is
   reported as 0 when the menu hasn't fully realized yet. Now updates the height during
   idle time if it is 0, otherwise no menu is shown.
+- Improved list control and tree control selection text theme compatibility by adding
+  wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT colour index.
 
 wxUniv:
 

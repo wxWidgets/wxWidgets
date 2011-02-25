@@ -308,8 +308,10 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             color = gs_objects.m_colListBoxText;
             break;
 
-        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         {
+            // This is for the text in a list control (or tree) when the
+            // item is selected, but not focused
             if (!gs_objects.m_colListBoxUnfocusedText.Ok())
             {
                 if (GetColourFromGTKWidget(gdkColor, wxGTK_LIST, GTK_STATE_ACTIVE, wxGTK_TEXT))
@@ -323,6 +325,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
         case wxSYS_COLOUR_CAPTIONTEXT:
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
             if (!gs_objects.m_colBtnText.Ok())
             {

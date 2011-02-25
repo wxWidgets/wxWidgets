@@ -2549,16 +2549,10 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 #ifdef __WXMAC__
             colText = *wxWHITE;
 #else
-
-#ifdef __WXGTK__
-            if (m_hasFocus)
-                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-            else
-                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-#else
+        if (m_hasFocus)
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-#endif
-
+        else
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
 #endif
         }
         else

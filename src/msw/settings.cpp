@@ -132,6 +132,11 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         // there is no standard colour with this index, map to another one
         index = wxSYS_COLOUR_WINDOWTEXT;
     }
+    else if ( index == wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT)
+    {
+        // there is no standard colour with this index, map to another one
+        index = wxSYS_COLOUR_HIGHLIGHTTEXT;
+    }
     else if ( index == wxSYS_COLOUR_LISTBOX )
     {
         // there is no standard colour with this index, map to another one

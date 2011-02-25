@@ -1428,14 +1428,10 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     }
 #else
     {
-#ifdef __WXGTK__
-        if (m_owner->HasFocus())
-            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-        else
-            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-#else
-        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-#endif
+      if (m_owner->HasFocus())
+          colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+      else
+          colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
     }
 #endif
     else if ( attr && attr->HasTextColour() )

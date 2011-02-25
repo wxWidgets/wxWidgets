@@ -84,7 +84,8 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::TITLEBAR_TEXT /* wxSYS_COLOUR_GRADIENTINACTIVECAPTION */,
         wxColourScheme::SHADOW_DARK /* wxSYS_COLOUR_MENUHILIGHT */,
         wxColourScheme::CONTROL /* wxSYS_COLOUR_MENUBAR */,
-        wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_LISTBOXTEXT */
+        wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_LISTBOXTEXT */,
+        wxColourScheme::HIGHLIGHT_TEXT /* wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT */
     };
 
     wxCHECK_MSG( index < (int)WXSIZEOF(s_mapSysToThemeCol), wxNullColour,

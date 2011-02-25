@@ -172,6 +172,7 @@ wxColour wxSystemSettingsNative::GetColour(
             vSysClr = SYSCLR_SCROLLBAR;
             break;
 
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             vSysClr = SYSCLR_HILITEFOREGROUND;
             break;

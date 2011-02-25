@@ -283,6 +283,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return gs_objects.m_colTooltipText;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
             {
                 wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);

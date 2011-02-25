@@ -106,6 +106,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT :
 #if 0 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
             // NB: enable this case as desired
             resultColor = *wxWHITE ;
