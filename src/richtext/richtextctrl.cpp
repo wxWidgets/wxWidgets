@@ -3012,12 +3012,12 @@ void wxRichTextCtrl::Redo()
 
 bool wxRichTextCtrl::CanUndo() const
 {
-    return GetCommandProcessor()->CanUndo();
+    return GetCommandProcessor()->CanUndo() && IsEditable();
 }
 
 bool wxRichTextCtrl::CanRedo() const
 {
-    return GetCommandProcessor()->CanRedo();
+    return GetCommandProcessor()->CanRedo() && IsEditable();
 }
 
 // ----------------------------------------------------------------------------
