@@ -594,7 +594,7 @@ wxRichTextStyleDefinition* wxRichTextFormattingDialog::GetDialogStyleDefinition(
 void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox)
 {
     int unitsIdx = 0;
-    
+
     if (!dim.IsValid())
     {
         checkBox->SetValue(false);
@@ -611,8 +611,13 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
         {
             unitsIdx = 1;
-            float value = float(dim.GetValue()) / 10.0;
+            float value = float(dim.GetValue()) / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
+        }
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+        {
+            unitsIdx = 2;
+            valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
         }
         else
         {
@@ -634,6 +639,8 @@ void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxT
     {
         if (unitsCtrl->GetSelection() == 1)
             dim.SetUnits(wxTEXT_ATTR_UNITS_TENTHS_MM);
+        else if (unitsCtrl->GetSelection() == 2)
+            dim.SetUnits(wxTEXT_ATTR_UNITS_PERCENTAGE);
         else
             dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
 

@@ -2229,14 +2229,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -3050,7 +3042,7 @@
                       <string name="proxy-GrowableColumns">""</string>
                       <string name="proxy-GrowableRows">""</string>
                       <long name="proxy-Columns">2</long>
-                      <long name="proxy-Rows">4</long>
+                      <long name="proxy-Rows">0</long>
                       <long name="proxy-ColumnSpacing">0</long>
                       <long name="proxy-RowSpacing">0</long>
                       <string name="proxy-Member variable name">""</string>
@@ -4021,7 +4013,7 @@
                       <string name="proxy-GrowableColumns">"1"</string>
                       <string name="proxy-GrowableRows">""</string>
                       <long name="proxy-Columns">2</long>
-                      <long name="proxy-Rows">3</long>
+                      <long name="proxy-Rows">30</long>
                       <long name="proxy-ColumnSpacing">0</long>
                       <long name="proxy-RowSpacing">0</long>
                       <string name="proxy-Member variable name">""</string>
@@ -10562,14 +10554,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -11222,7 +11206,7 @@
                           <long name="proxy-X">-1</long>
                           <long name="proxy-Y">-1</long>
                           <long name="proxy-Width">-1</long>
-                          <long name="proxy-Height">140</long>
+                          <long name="proxy-Height">80</long>
                           <string name="proxy-AlignH">"Expand"</string>
                           <string name="proxy-AlignV">"Centre"</string>
                           <long name="proxy-Stretch factor">1</long>
@@ -13213,7 +13197,7 @@
                             <string name="proxy-GrowableColumns">""</string>
                             <string name="proxy-GrowableRows">""</string>
                             <long name="proxy-Columns">2</long>
-                            <long name="proxy-Rows">2</long>
+                            <long name="proxy-Rows">0</long>
                             <long name="proxy-ColumnSpacing">0</long>
                             <long name="proxy-RowSpacing">0</long>
                             <string name="proxy-Member variable name">""</string>
@@ -14047,7 +14031,7 @@
                             <string name="proxy-GrowableColumns">""</string>
                             <string name="proxy-GrowableRows">""</string>
                             <long name="proxy-Columns">2</long>
-                            <long name="proxy-Rows">2</long>
+                            <long name="proxy-Rows">0</long>
                             <long name="proxy-ColumnSpacing">0</long>
                             <long name="proxy-RowSpacing">0</long>
                             <string name="proxy-Member variable name">""</string>
@@ -14637,8 +14621,8 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
-                <bool name="proxy-wxBORDER_THEME">0</bool>
-                <bool name="proxy-wxSUNKEN_BORDER">1</bool>
+                <bool name="proxy-wxBORDER_THEME">1</bool>
+                <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
                 <bool name="proxy-wxWANTS_CHARS">0</bool>
@@ -14652,7 +14636,7 @@
                 <long name="proxy-X">-1</long>
                 <long name="proxy-Y">-1</long>
                 <long name="proxy-Width">350</long>
-                <long name="proxy-Height">180</long>
+                <long name="proxy-Height">140</long>
                 <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
@@ -15703,7 +15687,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsW"</string>
-                      <string name="proxy-Strings">"px|cm"</string>
+                      <string name="proxy-Strings">"px|cm|percent"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the object width."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -15939,7 +15923,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsH"</string>
-                      <string name="proxy-Strings">"px|cm"</string>
+                      <string name="proxy-Strings">"px|cm|percent"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the object height."</string>
                       <string name="proxy-Tooltip text">""</string>

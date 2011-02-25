@@ -201,7 +201,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     itemBoxSizer20->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer22 = new wxFlexGridSizer(4, 2, 0, 0);
+    wxFlexGridSizer* itemFlexGridSizer22 = new wxFlexGridSizer(0, 2, 0, 0);
     itemBoxSizer20->Add(itemFlexGridSizer22, 0, wxALIGN_CENTER_VERTICAL, 5);
 
     wxStaticText* itemStaticText23 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Left:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -279,7 +279,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     itemBoxSizer39->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer41 = new wxFlexGridSizer(3, 2, 0, 0);
+    wxFlexGridSizer* itemFlexGridSizer41 = new wxFlexGridSizer(30, 2, 0, 0);
     itemFlexGridSizer41->AddGrowableCol(1);
     itemBoxSizer39->Add(itemFlexGridSizer41, 0, wxALIGN_CENTER_VERTICAL, 5);
 

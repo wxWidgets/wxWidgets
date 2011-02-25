@@ -1919,7 +1919,8 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         // Assume this box only contains paragraphs
 
         wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
-        wxCHECK_MSG( child, false, wxT("Unknown object in layout") );
+        // Unsure if this is needed
+        // wxCHECK_MSG( child, false, wxT("Unknown object in layout") );
 
         if (child && child->IsShown())
         {
@@ -8630,8 +8631,6 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
             wxRichTextCell* cell = GetCell(j, i);
             if (cell->IsShown())
             {
-                wxASSERT(colWidths[i] > 0);
-
                 // Get max specified cell height
                 // Don't handle percentages for height
                 if (cell->GetAttributes().GetTextBoxAttr().GetHeight().IsValid() && cell->GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() != wxTEXT_ATTR_UNITS_PERCENTAGE)

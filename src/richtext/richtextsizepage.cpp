@@ -216,6 +216,7 @@ void wxRichTextSizePage::CreateControls()
     wxArrayString m_unitsWStrings;
     m_unitsWStrings.Add(_("px"));
     m_unitsWStrings.Add(_("cm"));
+    m_unitsWStrings.Add(_("percent"));
     m_unitsW = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXT_UNITS_W, _("px"), wxDefaultPosition, wxSize(60, -1), m_unitsWStrings, wxCB_READONLY );
     m_unitsW->SetStringSelection(_("px"));
     m_unitsW->SetHelpText(_("Units for the object width."));
@@ -242,6 +243,7 @@ void wxRichTextSizePage::CreateControls()
     wxArrayString m_unitsHStrings;
     m_unitsHStrings.Add(_("px"));
     m_unitsHStrings.Add(_("cm"));
+    m_unitsHStrings.Add(_("percent"));
     m_unitsH = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXT_UNITS_H, _("px"), wxDefaultPosition, wxSize(60, -1), m_unitsHStrings, wxCB_READONLY );
     m_unitsH->SetStringSelection(_("px"));
     m_unitsH->SetHelpText(_("Units for the object height."));

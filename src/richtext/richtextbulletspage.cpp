@@ -140,6 +140,8 @@ bool wxRichTextBulletsPage::Create( wxWindow* parent, wxWindowID id, const wxPoi
 
 void wxRichTextBulletsPage::CreateControls()
 {
+    m_dontUpdate = true;
+
 ////@begin wxRichTextBulletsPage content construction
     wxRichTextBulletsPage* itemRichTextDialogPage1 = this;
 
@@ -311,6 +313,8 @@ void wxRichTextBulletsPage::CreateControls()
     facenames.Sort();
 
     m_symbolFontCtrl->Append(facenames);
+
+    m_dontUpdate = false;
 }
 
 /// Transfer data from/to window
