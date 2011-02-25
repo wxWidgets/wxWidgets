@@ -2097,19 +2097,13 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
         if ( imSz.y != maxSz.y )
         {
-            // Create a memory DC
-            wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
-
-            wxMemoryDC dc;
-            dc.SelectObject(*bmpNew);
-
-            // Scale
-            // FIXME: This is ugly - use image or wait for scaling patch.
+            // Here we use high-quality wxImage scaling functions available
+            wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
-
-            dc.SetUserScale(scaleY, scaleY);
-
-            dc.DrawBitmap(bmp, 0, 0);
+            img.Rescale(((double)bmp.GetWidth())*scaleY,
+                        ((double)bmp.GetHeight())*scaleY,
+                        wxIMAGE_QUALITY_HIGH);
+            wxBitmap* bmpNew = new wxBitmap(img, 32);
 
             m_valueBitmap = bmpNew;
         }
