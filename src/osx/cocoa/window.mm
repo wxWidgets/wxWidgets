@@ -1179,6 +1179,12 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
         CGContextRestoreGState( context );
         CGContextSaveGState( context );
     }
+    // as we called restore above, we have to flip again if necessary
+    if ( !m_isFlipped )
+    {
+        CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
+        CGContextScaleCTM( context, 1, -1 );
+    }
     wxpeer->MacPaintChildrenBorders();
     wxpeer->MacSetCGContextRef( NULL );
     CGContextRestoreGState( context );
@@ -1660,6 +1666,20 @@ void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
     wxRect r = wxFromNSRect( [m_osxView superview], [m_osxView frame] );
     x = r.GetLeft();
     y = r.GetTop();
+    
+    // under Cocoa we might have a contentView in the wxParent to which we have to
+    // adjust the coordinates
+    wxWindowMac* parent = GetWXPeer()->GetParent();
+    if (parent && [m_osxView superview] != parent->GetHandle() )
+    {
+        int cx = 0,cy = 0,cw = 0,ch = 0;
+        if ( parent->GetPeer() )
+        {
+            parent->GetPeer()->GetContentArea(cx, cy, cw, ch);
+            x += cx;
+            y += cy;
+        }
+    }
 }
 
 void wxWidgetCocoaImpl::GetSize( int &width, int &height ) const
