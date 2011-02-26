@@ -11,7 +11,7 @@
 @page overview_archive Archive Formats
 
 The archive classes handle archive formats such as zip, tar, rar and cab.
-Currently wxZip and wxTar classes are included.
+Currently wxZip, wxTar and wxZlib classes are included.
 
 For each archive type, there are the following classes (using zip here as an
 example):
