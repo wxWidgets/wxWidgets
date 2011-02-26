@@ -2397,6 +2397,9 @@ void wxStaticBoxSizer::RecalcSizes()
         // in the wxBoxSizer::RecalcSizes() call below using coordinates relative
         // to the top-left corner of the staticbox:
         m_position.x = m_position.y = 0;
+#elif defined(__WXOSX__) && wxOSX_USE_COCOA
+        // the distance from the 'inner' content view to the embedded controls
+        m_position.x = m_position.y = 10;
 #else
         // if the wxStaticBox has childrens, then these windows must be placed
         // by the wxBoxSizer::RecalcSizes() call below using coordinates relative
