@@ -64,7 +64,7 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     ( style & wxALIGN_MASK ) | wxTE_NOHIDESEL | wxTE_PROCESS_ENTER)
+                     ( style & wxALIGN_MASK ) | wxTE_PROCESS_ENTER)
     {
         m_spin = spin;
 
