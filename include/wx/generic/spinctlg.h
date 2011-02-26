@@ -89,7 +89,7 @@ public:
 
     // forwarded events from children windows
     void OnSpinButton(wxSpinEvent& event);
-    void OnTextEnter(wxCommandEvent& event);
+    void OnTextLostFocus();
     void OnTextChar(wxKeyEvent& event);
 
     // this window itself is used only as a container for its sub windows so it

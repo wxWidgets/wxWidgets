@@ -64,7 +64,7 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     ( style & wxALIGN_MASK ) | wxTE_PROCESS_ENTER)
+                     style & wxALIGN_MASK)
     {
         m_spin = spin;
 
@@ -81,12 +81,6 @@ public:
         m_spin = NULL;
     }
 
-    void OnTextEnter(wxCommandEvent& event)
-    {
-        if (m_spin)
-            m_spin->OnTextEnter(event);
-    }
-
     void OnChar( wxKeyEvent &event )
     {
         if (m_spin)
@@ -96,10 +90,7 @@ public:
     void OnKillFocus(wxFocusEvent& event)
     {
         if (m_spin)
-        {
-            if ( m_spin->SyncSpinToText() )
-                m_spin->DoSendEvent();
-        }
+            m_spin->OnTextLostFocus();
 
         event.Skip();
     }
@@ -111,8 +102,6 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
-    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEnter)
-
     EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
 
     EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
@@ -367,11 +356,10 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
         DoSendEvent();
 }
 
-void wxSpinCtrlGenericBase::OnTextEnter(wxCommandEvent& event)
+void wxSpinCtrlGenericBase::OnTextLostFocus()
 {
     SyncSpinToText();
     DoSendEvent();
-    event.Skip();
 }
 
 void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
