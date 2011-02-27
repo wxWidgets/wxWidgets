@@ -85,6 +85,10 @@ protected:
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
     virtual void DoSetBitmapPosition(wxDirection dir);
 
+#if wxUSE_MARKUP
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
+
     // Increases the passed in size to account for the button image.
     //
     // Should only be called if we do have a button, i.e. if m_imageData is
@@ -93,6 +97,10 @@ protected:
 
     class wxButtonImageData *m_imageData;
 
+#if wxUSE_MARKUP
+    class wxMarkupText *m_markupText;
+#endif // wxUSE_MARKUP
+
     // true if the UAC symbol is shown
     bool m_authNeeded;
 
@@ -100,6 +108,9 @@ private:
     void Init()
     {
         m_imageData = NULL;
+#if wxUSE_MARKUP
+        m_markupText = NULL;
+#endif // wxUSE_MARKUP
         m_authNeeded = false;
     }
 

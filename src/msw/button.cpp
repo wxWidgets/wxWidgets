@@ -48,6 +48,10 @@
 #include "wx/msw/private/dc.h"
 #include "wx/private/window.h"
 
+#if wxUSE_MARKUP
+    #include "wx/generic/private/markuptext.h"
+#endif // wxUSE_MARKUP
+
 using namespace wxMSWImpl;
 
 #if wxUSE_UXTHEME
@@ -490,6 +494,9 @@ wxButton::~wxButton()
     }
 
     delete m_imageData;
+#if wxUSE_MARKUP
+    delete m_markupText;
+#endif // wxUSE_MARKUP
 }
 
 // ----------------------------------------------------------------------------
@@ -533,6 +540,23 @@ void wxButton::SetLabel(const wxString& label)
     wxMSWButton::UpdateMultilineStyle(GetHwnd(), label);
 
     wxButtonBase::SetLabel(label);
+
+#if wxUSE_MARKUP
+    // If we have a plain text label, we shouldn't be using markup any longer.
+    if ( m_markupText )
+    {
+        delete m_markupText;
+        m_markupText = NULL;
+
+        // Unfortunately we don't really know whether we can reset the button
+        // to be non-owner-drawn or not: if we had made it owner-drawn just
+        // because of a call to SetLabelMarkup(), we could, but not if there
+        // were [also] calls to Set{Fore,Back}groundColour(). If it's really a
+        // problem to have button remain owner-drawn forever just because it
+        // had markup label once, we should record the reason for our current
+        // owner-drawnness and check it here.
+    }
+#endif // wxUSE_MARKUP
 }
 
 // ----------------------------------------------------------------------------
@@ -616,7 +640,19 @@ wxSize wxButton::DoGetBestSize() const
         if ( GetAuthNeeded() )
             flags |= wxMSWButton::Size_AuthNeeded;
 
-        size = wxMSWButton::ComputeBestFittingSize(self, flags);
+#if wxUSE_MARKUP
+        if ( m_markupText )
+        {
+            wxClientDC dc(self);
+            size = wxMSWButton::GetFittingSize(self,
+                                               m_markupText->Measure(dc),
+                                               flags);
+        }
+        else // Normal plain text (but possibly multiline) label.
+#endif // wxUSE_MARKUP
+        {
+            size = wxMSWButton::ComputeBestFittingSize(self, flags);
+        }
     }
 
     if ( m_imageData )
@@ -1006,6 +1042,35 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
 }
 
 // ----------------------------------------------------------------------------
+// markup support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MARKUP
+
+bool wxButton::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxButtonBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    if ( !m_markupText )
+    {
+        m_markupText = new wxMarkupText(markup);
+        MakeOwnerDrawn();
+    }
+    else
+    {
+        // We are already owner-drawn so just update the text.
+        m_markupText->SetMarkup(markup);
+    }
+
+    Refresh();
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
+
+// ----------------------------------------------------------------------------
 // owner-drawn buttons support
 // ----------------------------------------------------------------------------
 
@@ -1035,12 +1100,8 @@ wxButton::State GetButtonState(wxButton *btn, UINT state)
 void DrawButtonText(HDC hdc,
                     RECT *pRect,
                     const wxString& text,
-                    COLORREF col,
                     int flags)
 {
-    wxTextColoursChanger changeFg(hdc, col, CLR_INVALID);
-    wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
-
     // center text horizontally in any case
     flags |= DT_CENTER;
 
@@ -1393,11 +1454,30 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
                             ? ::GetSysColor(COLOR_GRAYTEXT)
                             : wxColourToRGB(GetForegroundColour());
 
-        // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
-        // systems but by happy coincidence ODS_NOACCEL is not used under them
-        // neither so DT_HIDEPREFIX should never be used there
-        DrawButtonText(hdc, &rectBtn, GetLabel(), colFg,
-                       state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+        wxTextColoursChanger changeFg(hdc, colFg, CLR_INVALID);
+        wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
+
+#if wxUSE_MARKUP
+        if ( m_markupText )
+        {
+            wxDCTemp dc((WXHDC)hdc);
+            dc.SetTextForeground(wxColour(colFg));
+            dc.SetFont(GetFont());
+
+            m_markupText->Render(dc, wxRectFromRECT(rectBtn),
+                                 state & ODS_NOACCEL
+                                    ? wxMarkupText::Render_Default
+                                    : wxMarkupText::Render_ShowAccels);
+        }
+        else // Plain text label
+#endif // wxUSE_MARKUP
+        {
+            // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
+            // systems but by happy coincidence ODS_NOACCEL is not used under
+            // them neither so DT_HIDEPREFIX should never be used there
+            DrawButtonText(hdc, &rectBtn, GetLabel(),
+                           state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+        }
     }
 
     return true;
