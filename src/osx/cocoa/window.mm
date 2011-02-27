@@ -1020,8 +1020,12 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 
 bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-    return superimpl(slf, (SEL)_cmd, event);
+    if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
+    {
+        wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        return superimpl(slf, (SEL)_cmd, event);
+    }
+    return YES;
 }
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
