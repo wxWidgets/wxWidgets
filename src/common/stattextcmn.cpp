@@ -24,16 +24,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/private/stattext.h"
-
-const wxChar *const wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
-{
-    // the entities handled by SetLabel() when wxST_MARKUP is used and their referenced string
-
-    { wxT("&amp;"), wxT("&lt;"), wxT("&gt;"), wxT("&apos;"), wxT("&quot;") },
-    { wxT("&"),     wxT("<"),    wxT(">"),    wxT("'"),      wxT("\"")     }
-};
-
 #if wxUSE_STATTEXT
 
 #ifndef WX_PRECOMP
@@ -48,6 +38,8 @@ const wxChar *const wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 #endif
 
 #include "wx/textwrapper.h"
+
+#include "wx/private/markupparser.h"
 
 extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[] = "staticText";
 
@@ -236,109 +228,13 @@ wxString wxStaticTextBase::GetLabelText(const wxString& label)
 /* static */
 wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
 {
-    // strip out of "text" the markup for platforms which don't support it natively
-    bool inside_tag = false;
-
-    wxString label;
-    for ( wxString::const_iterator source = text.begin();
-          source != text.end(); ++source )
-    {
-        switch ( (*source).GetValue() )
-        {
-            case wxT('<'):
-                if (inside_tag)
-                {
-                    wxLogDebug(wxT("Invalid markup !"));
-                    return wxEmptyString;
-                }
-                inside_tag = true;
-                break;
-
-            case wxT('>'):
-                if (!inside_tag)
-                {
-                    wxLogDebug(wxT("Invalid markup !"));
-                    return wxEmptyString;
-                }
-                inside_tag = false;
-                break;
-
-            case wxT('&'):
-                {
-                    if ( source+1 == text.end() )
-                    {
-                        wxLogDebug(wxT("Cannot use & as last character of the string '%s'"),
-                                   text.c_str());
-                        return wxEmptyString;
-                    }
-
-                    // is this ampersand introducing a mnemonic or rather an entity?
-                    bool isMnemonic = true;
-                    size_t distanceFromEnd = text.end() - source;
-                    for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
-                    {
-                        const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
-                        size_t entityLen = wxStrlen(entity);
-
-                        if (distanceFromEnd >= entityLen &&
-                            wxString(source, source + entityLen) == entity)
-                        {
-                            // replace the &entity; string with the entity reference
-                            label << wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j];
-                            // little exception: when the entity reference is
-                            // "&" (i.e. when entity is "&amp;"), substitute it
-                            // with && instead of a single ampersand:
-                            if (*wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j] == wxT('&'))
-                                label << wxT('&');
-                            // the -1 is because main for() loop already
-                            // increments i:
-                            source += entityLen - 1;
-                            isMnemonic = false;
-                            break;
-                        }
-                    }
-
-                    if (isMnemonic)
-                        label << *source;
-                }
-                break;
-
-
-            default:
-                if (!inside_tag)
-                    label << *source;
-        }
-    }
-
-    return label;
+    return wxMarkupParser::Strip(text);
 }
 
 /* static */
 wxString wxStaticTextBase::EscapeMarkup(const wxString& text)
 {
-    wxString ret;
-
-    for (wxString::const_iterator source = text.begin();
-         source != text.end(); ++source)
-    {
-        bool isEntity = false;
-
-        // search in the list of the entities and eventually escape this character
-        for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
-        {
-            if (*source == *wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j])
-            {
-                ret << wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
-                isEntity = true;
-                break;
-            }
-        }
-
-        if (!isEntity)
-            ret << *source;     // this character does not need to be escaped
-    }
-
-    return ret;
+    return wxMarkupParser::Quote(text);
 }
 
 
