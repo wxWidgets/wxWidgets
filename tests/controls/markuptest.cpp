@@ -27,10 +27,12 @@ private:
     CPPUNIT_TEST_SUITE( MarkupTestCase );
         CPPUNIT_TEST( RoundTrip );
         CPPUNIT_TEST( Quote );
+        CPPUNIT_TEST( Strip );
     CPPUNIT_TEST_SUITE_END();
 
     void RoundTrip();
     void Quote();
+    void Strip();
 
     wxDECLARE_NO_COPY_CLASS(MarkupTestCase);
 };
@@ -195,4 +197,24 @@ void MarkupTestCase::Quote()
     CPPUNIT_ASSERT_EQUAL( "&lt;foo&gt;", wxMarkupParser::Quote("<foo>") );
     CPPUNIT_ASSERT_EQUAL( "B&amp;B", wxMarkupParser::Quote("B&B") );
     CPPUNIT_ASSERT_EQUAL( "&quot;&quot;", wxMarkupParser::Quote("\"\"") );
+}
+
+void MarkupTestCase::Strip()
+{
+    #define CHECK_STRIP( text, stripped ) \
+        CPPUNIT_ASSERT_EQUAL( stripped, wxMarkupParser::Strip(text) )
+
+    CHECK_STRIP( "", "" );
+    CHECK_STRIP( "foo", "foo" );
+    CHECK_STRIP( "&lt;foo&gt;", "<foo>" );
+    CHECK_STRIP( "<b>Big</b> problem", "Big problem" );
+    CHECK_STRIP( "<span foreground=\"red\">c</span>"
+                 "<span background=\"green\">o</span>"
+                 "<span background=\"blue\">l</span>"
+                 "<span background=\"green\">o</span>"
+                 "<span foreground=\"yellow\">u</span>"
+                 "<span background=\"green\">r</span>",
+                 "colour" );
+
+    #undef CHECK_STRIP
 }

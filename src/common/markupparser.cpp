@@ -425,3 +425,51 @@ wxString wxMarkupParser::Quote(const wxString& text)
 
     return quoted;
 }
+
+/* static */
+wxString wxMarkupParser::Strip(const wxString& text)
+{
+    class StripOutput : public wxMarkupParserOutput
+    {
+    public:
+        StripOutput() { }
+
+        const wxString& GetText() const { return m_text; }
+
+        virtual void OnText(const wxString& text) { m_text += text; }
+
+        virtual void OnBoldStart() { }
+        virtual void OnBoldEnd() { }
+
+        virtual void OnItalicStart() { }
+        virtual void OnItalicEnd() { }
+
+        virtual void OnUnderlinedStart() { }
+        virtual void OnUnderlinedEnd() { }
+
+        virtual void OnStrikethroughStart() { }
+        virtual void OnStrikethroughEnd() { }
+
+        virtual void OnBigStart() { }
+        virtual void OnBigEnd() { }
+
+        virtual void OnSmallStart() { }
+        virtual void OnSmallEnd() { }
+
+        virtual void OnTeletypeStart() { }
+        virtual void OnTeletypeEnd() { }
+
+        virtual void OnSpanStart(const wxMarkupSpanAttributes& WXUNUSED(a)) { }
+        virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(a)) { }
+
+    private:
+        wxString m_text;
+    };
+
+    StripOutput output;
+    wxMarkupParser parser(output);
+    if ( !parser.Parse(text) )
+        return wxString();
+
+    return output.GetText();
+}
