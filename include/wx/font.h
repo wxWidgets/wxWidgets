@@ -66,6 +66,18 @@ enum wxFontWeight
     wxFONTWEIGHT_MAX
 };
 
+// Symbolic font sizes as defined in CSS specification.
+enum wxFontSymbolicSize
+{
+    wxFONTSIZE_XX_SMALL = -3,
+    wxFONTSIZE_X_SMALL,
+    wxFONTSIZE_SMALL,
+    wxFONTSIZE_MEDIUM,
+    wxFONTSIZE_LARGE,
+    wxFONTSIZE_X_LARGE,
+    wxFONTSIZE_XX_LARGE
+};
+
 // the font flag bits for the new font ctor accepting one combined flags word
 enum wxFontFlag
 {
@@ -239,6 +251,19 @@ public:
 
     bool SetNativeFontInfo(const wxString& info);
     bool SetNativeFontInfoUserDesc(const wxString& info);
+
+    // Symbolic font sizes support: set the font size to "large" or "very
+    // small" either absolutely (i.e. compared to the default font size) or
+    // relatively to the given font size.
+    void SetSymbolicSize(wxFontSymbolicSize size);
+    void SetSymbolicSizeRelativeTo(wxFontSymbolicSize size, int base)
+    {
+        SetPointSize(AdjustToSymbolicSize(size, base));
+    }
+
+    // Adjust the base size in points according to symbolic size.
+    static int AdjustToSymbolicSize(wxFontSymbolicSize size, int base);
+
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)

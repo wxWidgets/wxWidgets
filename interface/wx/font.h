@@ -71,6 +71,27 @@ enum wxFontWeight
 };
 
 /**
+    Symbolic font sizes.
+
+    The elements of this enum correspond to CSS absolute size specifications,
+    see http://www.w3.org/TR/CSS21/fonts.html#font-size-props
+
+    @see wxFont::SetSymbolicSize()
+
+    @since 2.9.2
+ */
+enum wxFontSymbolicSize
+{
+    wxFONTSIZE_XX_SMALL = -3,   //!< Extra small.
+    wxFONTSIZE_X_SMALL,         //!< Very small.
+    wxFONTSIZE_SMALL,           //!< Small.
+    wxFONTSIZE_MEDIUM,          //!< Normal.
+    wxFONTSIZE_LARGE,           //!< Large.
+    wxFONTSIZE_X_LARGE,         //!< Very large.
+    wxFONTSIZE_XX_LARGE         //!< Extra large.
+};
+
+/**
     The font flag bits for the new font ctor accepting one combined flags word.
 */
 enum wxFontFlag
@@ -790,6 +811,28 @@ public:
         @see GetStyle()
     */
     virtual void SetStyle(wxFontStyle style);
+
+    /**
+        Sets the font size using a predefined symbolic size name.
+
+        This function allows to change font size to be (very) large or small
+        compared to the standard font size.
+
+        @see SetSymbolicSizeRelativeTo().
+
+        @since 2.9.2
+     */
+    void SetSymbolicSize(wxFontSymbolicSize size);
+
+    /**
+        Sets the font size compared to the base font size.
+
+        This is the same as SetSymbolicSize() except that it uses the given
+        font size as the normal font size instead of the standard font size.
+
+        @since 2.9.2
+     */
+    void SetSymbolicSizeRelativeTo(wxFontSymbolicSize size, int base);
 
     /**
         Sets underlining.
