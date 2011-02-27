@@ -186,10 +186,10 @@ void wxStaticText::SetLabel(const wxString& label)
 
 #ifdef SS_ENDELLIPSIS
     if ( styleReal & SS_ENDELLIPSIS )
-        DoSetLabel(GetLabelWithoutMarkup());
+        DoSetLabel(GetLabel());
     else
 #endif // SS_ENDELLIPSIS
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+        DoSetLabel(GetEllipsizedLabel());
 
     // adjust the size of the window to fit to the label unless autoresizing is
     // disabled

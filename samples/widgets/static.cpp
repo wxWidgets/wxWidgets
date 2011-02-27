@@ -216,7 +216,6 @@ void StaticWidgetsPage::CreateContent()
 
     m_chkGeneric = CreateCheckBoxAndAddToSizer(sizerLeft,
                                                "&Generic wxStaticText");
-    m_chkMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Support &markup");
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, "&Vertical line");
     m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit to text");
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
@@ -341,7 +340,6 @@ void StaticWidgetsPage::Reset()
     m_chkVert->SetValue(false);
     m_chkAutoResize->SetValue(true);
     m_chkEllipsize->SetValue(true);
-    m_chkMarkup->SetValue(true);
 
     m_radioHAlign->SetSelection(StaticHAlign_Left);
     m_radioVAlign->SetSelection(StaticVAlign_Top);
@@ -370,12 +368,6 @@ void StaticWidgetsPage::CreateStatic()
     {
         flagsText |= wxST_NO_AUTORESIZE;
         flagsDummyText |= wxST_NO_AUTORESIZE;
-    }
-
-    if ( m_chkMarkup->GetValue() )
-    {
-        flagsText |= wxST_MARKUP;
-        flagsDummyText |= wxST_MARKUP;
     }
 
     int align = 0;
@@ -457,7 +449,7 @@ void StaticWidgetsPage::CreateStatic()
                                              wxDefaultPosition, wxDefaultSize,
                                              flagsDummyText);
         m_statMarkup = new wxGenericStaticText(this, wxID_ANY,
-                                             m_textLabelWithMarkup->GetValue(),
+                                             wxString(),
                                              wxDefaultPosition, wxDefaultSize,
                                              flagsText);
     }
@@ -468,10 +460,13 @@ void StaticWidgetsPage::CreateStatic()
                                       wxDefaultPosition, wxDefaultSize,
                                       flagsDummyText);
         m_statMarkup = new wxStaticText(this, wxID_ANY,
-                                        m_textLabelWithMarkup->GetValue(),
+                                        wxString(),
                                         wxDefaultPosition, wxDefaultSize,
                                         flagsText);
     }
+
+    m_statMarkup->SetLabelMarkup(m_textLabelWithMarkup->GetValue());
+
     if ( m_chkGreen->GetValue() )
         m_statMarkup->SetBackgroundColour(*wxGREEN);
 #if wxUSE_STATLINE
@@ -539,7 +534,7 @@ void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& WXUNUSED(event))
 
 void StaticWidgetsPage::OnButtonLabelWithMarkupText(wxCommandEvent& WXUNUSED(event))
 {
-    m_statMarkup->SetLabel(m_textLabelWithMarkup->GetValue());
+    m_statMarkup->SetLabelMarkup(m_textLabelWithMarkup->GetValue());
 
     // test GetLabel() and GetLabelText(); the first should return the
     // label as it is written in the relative text control; the second should

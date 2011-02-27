@@ -38,6 +38,8 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/private/markupparser.h"
+
 const char wxControlNameStr[] = "control";
 
 // ============================================================================
@@ -228,6 +230,27 @@ wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(va
     attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
     return attrs;
+}
+
+// ----------------------------------------------------------------------------
+// wxControl markup support
+// ----------------------------------------------------------------------------
+
+/* static */
+wxString wxControlBase::RemoveMarkup(const wxString& markup)
+{
+    return wxMarkupParser::Strip(markup);
+}
+
+bool wxControlBase::DoSetLabelMarkup(const wxString& markup)
+{
+    const wxString label = RemoveMarkup(markup);
+    if ( label.empty() && !markup.empty() )
+        return false;
+
+    SetLabel(label);
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

@@ -56,6 +56,14 @@ protected:
 
     virtual wxString DoGetLabel() const;
     virtual void DoSetLabel(const wxString& str);
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+
+private:
+    // Common part of SetLabel() and DoSetLabelMarkup().
+    typedef void (wxStaticText::*GTKLabelSetter)(GtkLabel *, const wxString&);
+
+    void GTKDoSetLabel(GTKLabelSetter setter, const wxString& label);
+
 
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };

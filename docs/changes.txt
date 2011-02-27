@@ -316,6 +316,8 @@ Changes in behaviour which may result in compilation errors
   just "%" wxLongLongFmtSpec "x", i.e. simply remove wxT() from the strings you
   concatenate with it.
 
+- wxST_MARKUP doesn't exist any more, use wxControl::SetLabelMarkup() instead.
+
 
 Deprecated methods and their replacements
 -----------------------------------------

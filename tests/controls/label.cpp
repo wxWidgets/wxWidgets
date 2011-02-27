@@ -48,7 +48,7 @@ private:
     void GetLabelText();
     void Statics();
 
-    wxStaticText *m_st, *m_stWithMarkup;
+    wxStaticText *m_st;
 
     // we cannot test wxControl directly (it's abstract) so we rather test wxCheckBox
     wxCheckBox *m_cb;
@@ -71,20 +71,16 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( LabelTestCase, "LabelTestCase" );
 void LabelTestCase::setUp()
 {
     m_st = new wxStaticText(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL);
-    m_stWithMarkup = new wxStaticText(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL,
-                                      wxDefaultPosition, wxDefaultSize, wxST_MARKUP);
 
     m_cb = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL);
 
     CPPUNIT_ASSERT_EQUAL( ORIGINAL_LABEL, m_st->GetLabel() );
-    CPPUNIT_ASSERT_EQUAL( ORIGINAL_LABEL, m_stWithMarkup->GetLabel() );
     CPPUNIT_ASSERT_EQUAL( ORIGINAL_LABEL, m_cb->GetLabel() );
 }
 
 void LabelTestCase::tearDown()
 {
     wxDELETE(m_st);
-    wxDELETE(m_stWithMarkup);
     wxDELETE(m_cb);
 }
 
@@ -94,12 +90,10 @@ void LabelTestCase::tearDown()
 
 #define SET_LABEL(str)                              \
         m_st->SetLabel(str);                        \
-        m_stWithMarkup->SetLabel(str);              \
         m_cb->SetLabel(str);
 
 #define SET_LABEL_TEXT(str)                         \
         m_st->SetLabelText(str);                    \
-        m_stWithMarkup->SetLabelText(str);          \
         m_cb->SetLabelText(str);
 
 void LabelTestCase::GetLabel()
@@ -119,7 +113,6 @@ void LabelTestCase::GetLabel()
 
         // GetLabel() should always return the string passed to SetLabel()
         CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_st->GetLabel() );
-        CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_stWithMarkup->GetLabel() );
         CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_cb->GetLabel() );
     }
 
@@ -129,27 +122,23 @@ void LabelTestCase::GetLabel()
     const wxString& testLabel = "label without mnemonics and markup";
     SET_LABEL_TEXT(testLabel);
     CPPUNIT_ASSERT_EQUAL( testLabel, m_st->GetLabel() );
-    CPPUNIT_ASSERT_EQUAL( testLabel, m_stWithMarkup->GetLabel() );
     CPPUNIT_ASSERT_EQUAL( testLabel, m_cb->GetLabel() );
 
     const wxString& testLabel2 = "label with &mnemonic";
     const wxString& testLabelText2 = "label with &&mnemonic";
     SET_LABEL_TEXT(testLabel2);
     CPPUNIT_ASSERT_EQUAL( testLabelText2, m_st->GetLabel() );
-    CPPUNIT_ASSERT_EQUAL( "label with &amp;mnemonic", m_stWithMarkup->GetLabel() );
     CPPUNIT_ASSERT_EQUAL( testLabelText2, m_cb->GetLabel() );
 
     const wxString& testLabel3 = "label with <span foreground='blue'>some</span> <b>markup</b>";
     SET_LABEL_TEXT(testLabel3);
     CPPUNIT_ASSERT_EQUAL( testLabel3, m_st->GetLabel() );
-    CPPUNIT_ASSERT_EQUAL( "label with &lt;span foreground=&apos;blue&apos;&gt;some&lt;/span&gt; &lt;b&gt;markup&lt;/b&gt;", m_stWithMarkup->GetLabel() );
     CPPUNIT_ASSERT_EQUAL( testLabel3, m_cb->GetLabel() );
 
     const wxString& testLabel4 = "label with <span foreground='blue'>some</span> <b>markup</b> and &mnemonic";
     const wxString& testLabelText4 = "label with <span foreground='blue'>some</span> <b>markup</b> and &&mnemonic";
     SET_LABEL_TEXT(testLabel4);
     CPPUNIT_ASSERT_EQUAL( testLabelText4, m_st->GetLabel() );
-    CPPUNIT_ASSERT_EQUAL( "label with &lt;span foreground=&apos;blue&apos;&gt;some&lt;/span&gt; &lt;b&gt;markup&lt;/b&gt; and &amp;mnemonic", m_stWithMarkup->GetLabel() );
     CPPUNIT_ASSERT_EQUAL( testLabelText4, m_cb->GetLabel() );
 }
 
@@ -160,27 +149,23 @@ void LabelTestCase::GetLabelText()
     const wxString& testLabel = "label without mnemonics and markup";
     SET_LABEL(testLabel);
     CPPUNIT_ASSERT_EQUAL( testLabel, m_st->GetLabelText() );
-    CPPUNIT_ASSERT_EQUAL( testLabel, m_stWithMarkup->GetLabelText() );
     CPPUNIT_ASSERT_EQUAL( testLabel, m_cb->GetLabelText() );
 
     const wxString& testLabel2 = "label with &mnemonic";
     const wxString& testLabelText2 = "label with mnemonic";
     SET_LABEL(testLabel2);
     CPPUNIT_ASSERT_EQUAL( testLabelText2, m_st->GetLabelText() );
-    CPPUNIT_ASSERT_EQUAL( testLabelText2, m_stWithMarkup->GetLabelText() );
     CPPUNIT_ASSERT_EQUAL( testLabelText2, m_cb->GetLabelText() );
 
     const wxString& testLabel3 = "label with <span foreground='blue'>some</span> <b>markup</b>";
     SET_LABEL(testLabel3);
     CPPUNIT_ASSERT_EQUAL( testLabel3, m_st->GetLabelText() );
-    CPPUNIT_ASSERT_EQUAL( "label with some markup", m_stWithMarkup->GetLabelText() );
     CPPUNIT_ASSERT_EQUAL( testLabel3, m_cb->GetLabelText() );
 
     const wxString& testLabel4 = "label with <span foreground='blue'>some</span> <b>markup</b> and &mnemonic";
     const wxString& testLabelText4 = "label with <span foreground='blue'>some</span> <b>markup</b> and mnemonic";
     SET_LABEL(testLabel4);
     CPPUNIT_ASSERT_EQUAL( testLabelText4, m_st->GetLabelText() );
-    CPPUNIT_ASSERT_EQUAL( "label with some markup and mnemonic", m_stWithMarkup->GetLabelText() );
     CPPUNIT_ASSERT_EQUAL( testLabelText4, m_cb->GetLabelText() );
 
 
@@ -199,7 +184,6 @@ void LabelTestCase::GetLabelText()
 
         // GetLabelText() should always return the string passed to SetLabelText()
         CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_st->GetLabelText() );
-        CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_stWithMarkup->GetLabelText() );
         CPPUNIT_ASSERT_EQUAL( testLabelArray[s], m_cb->GetLabelText() );
     }
 }
@@ -209,7 +193,4 @@ void LabelTestCase::Statics()
     CPPUNIT_ASSERT_EQUAL( "mnemonic", wxControl::RemoveMnemonics("&mnemonic") );
     CPPUNIT_ASSERT_EQUAL( "&mnemonic", wxControl::RemoveMnemonics("&&mnemonic") );
     CPPUNIT_ASSERT_EQUAL( "&mnemonic", wxControl::RemoveMnemonics("&&&mnemonic") );
-    CPPUNIT_ASSERT_EQUAL( "", wxStaticText::RemoveMarkup("<b></b>") );
-    CPPUNIT_ASSERT_EQUAL( "&lt;b&gt;&lt;/b&gt;&amp;&quot;&quot;&apos;",
-                          wxStaticText::EscapeMarkup("<b></b>&\"\"'") );
 }

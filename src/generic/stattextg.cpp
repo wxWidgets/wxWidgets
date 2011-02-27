@@ -85,7 +85,7 @@ wxSize wxGenericStaticText::DoGetBestClientSize() const
 void wxGenericStaticText::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
-    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+    DoSetLabel(GetEllipsizedLabel());
     if ( !HasFlag(wxST_NO_AUTORESIZE) && !IsEllipsized() )
         InvalidateBestSize();
     Refresh();

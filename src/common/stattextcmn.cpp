@@ -195,49 +195,6 @@ void wxStaticTextBase::Wrap(int width)
     wrapper.WrapLabel(this, width);
 }
 
-wxString wxStaticTextBase::GetLabelText() const
-{
-    wxString ret(GetLabel());
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
-    return RemoveMnemonics(ret);
-}
-
-void wxStaticTextBase::SetLabelText(const wxString& text)
-{
-    wxString str = text;
-
-    if (HasFlag(wxST_MARKUP))
-        str = EscapeMarkup(str);        // escapes markup and the & characters (which are also mnemonics)
-    else
-        str = EscapeMnemonics(text);    // escape only the mnemonics
-    SetLabel(str);
-}
-
-/* static */
-wxString wxStaticTextBase::GetLabelText(const wxString& label)
-{
-    wxString ret = RemoveMarkup(label);
-        // always remove the markup (this function is static
-        // and cannot check for wxST_MARKUP presence/absence)
-
-    return RemoveMnemonics(ret);
-}
-
-/* static */
-wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
-{
-    return wxMarkupParser::Strip(text);
-}
-
-/* static */
-wxString wxStaticTextBase::EscapeMarkup(const wxString& text)
-{
-    return wxMarkupParser::Quote(text);
-}
-
-
 // ----------------------------------------------------------------------------
 // wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
 // ----------------------------------------------------------------------------
@@ -247,7 +204,7 @@ void wxStaticTextBase::UpdateLabel()
     if (!IsEllipsized())
         return;
 
-    wxString newlabel = GetEllipsizedLabelWithoutMarkup();
+    wxString newlabel = GetEllipsizedLabel();
 
     // we need to touch the "real" label (i.e. the text set inside the control,
     // using port-specific functions) instead of the string returned by GetLabel().
@@ -260,29 +217,13 @@ void wxStaticTextBase::UpdateLabel()
     DoSetLabel(newlabel);
 }
 
-wxString wxStaticTextBase::GetLabelWithoutMarkup() const
-{
-    wxString ret(m_labelOrig);
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
-
-    // unlike GetLabelText() we don't remove the mnemonics here!
-    return ret;
-}
-
-wxString wxStaticTextBase::GetEllipsizedLabelWithoutMarkup() const
+wxString wxStaticTextBase::GetEllipsizedLabel() const
 {
     // this function should be used only by ports which do not support
     // ellipsis in static texts: we first remove markup (which cannot
     // be handled safely by Ellipsize()) and then ellipsize the result.
 
     wxString ret(m_labelOrig);
-
-    // the order of the following two blocks is important!
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
 
     if (IsEllipsized())
         ret = Ellipsize(ret);

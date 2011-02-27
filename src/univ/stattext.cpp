@@ -74,8 +74,8 @@ void wxStaticText::SetLabel(const wxString& str)
     // save original label
     m_labelOrig = str;
 
-    // draw as real label the result of GetEllipsizedLabelWithoutMarkup:
-    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+    // draw as real label the abbreviated version of it
+    DoSetLabel(GetEllipsizedLabel());
 }
 
 void wxStaticText::DoSetLabel(const wxString& str)

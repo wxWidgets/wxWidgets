@@ -62,11 +62,11 @@ void wxStaticText::SetLabel(const wxString& label)
     )
     {
         // leave ellipsization to the OS
-        DoSetLabel(GetLabelWithoutMarkup());
+        DoSetLabel(GetLabel());
     }
     else // not supported natively
     {
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+        DoSetLabel(GetEllipsizedLabel());
     }
 
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) &&
