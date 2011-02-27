@@ -110,6 +110,7 @@ All (GUI):
   cursor without needing a selection, and setting the default style now
   avoids duplicating character attributes in subsequently typed text when
   they exist in the paragraph style.
+- wxRTC: fixed IsPositionVisible to scroll a position into view correctly.
 - Fixed error in generic tree control CalculatePositions.
 - Added wxFD_FILE_MUST_EXIST to wxFileSelector function.
 - Added wxDataViewCtrl Get/SetValueByRow functions for forward compatibility
