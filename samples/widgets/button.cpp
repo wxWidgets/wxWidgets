@@ -128,7 +128,9 @@ protected:
                *m_chkTextAndBitmap,
                *m_chkFit,
                *m_chkAuthNeeded,
+#if wxUSE_COMMANDLINKBUTTON
                *m_chkCommandLink,
+#endif // wxUSE_COMMANDLINKBUTTON
                *m_chkDefault;
 
     // more checkboxes for wxBitmapButton only
@@ -204,7 +206,9 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkTextAndBitmap =
     m_chkFit =
     m_chkAuthNeeded =
+#if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink =
+#endif // wxUSE_COMMANDLINKBUTTON
     m_chkDefault =
     m_chkUsePressed =
     m_chkUseFocused =
