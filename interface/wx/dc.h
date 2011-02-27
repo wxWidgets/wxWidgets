@@ -79,6 +79,28 @@ enum wxMappingMode
     wxMM_POINTS
 };
 
+/**
+    Simple collection of various font metrics.
+
+    This object is returned by wxDC::GetFontMetrics().
+
+    @since 2.9.2
+
+    @library{wxcore}
+    @category{dc,gdi}
+ */
+struct wxFontMetrics
+{
+    /// Constructor initializes all fields to 0.
+    wxFontMetrics();
+
+    int height,             ///< Total character height.
+        ascent,             ///< Part of the height above the baseline.
+        descent,            ///< Part of the height below the baseline.
+        internalLeading,    ///< Intra-line spacing.
+        externalLeading,    ///< Inter-line spacing.
+        averageWidth;       ///< Average font width, a.k.a. "x-width".
+};
 
 
 /**
@@ -772,6 +794,21 @@ public:
         Gets the average character width of the currently set font.
     */
     wxCoord GetCharWidth() const;
+
+    /**
+        Returns the various font characteristics.
+
+        This method allows to retrieve some of the font characteristics not
+        returned by GetTextExtent(), notably internal leading and average
+        character width.
+
+        Currently this method returns correct results only under wxMSW, in the
+        other ports the internal leading will always be 0 and the average
+        character width will be computed as the width of the character 'x'.
+
+        @since 2.9.2
+     */
+    wxFontMetrics GetFontMetrics() const;
 
     /**
         Gets the dimensions of the string using the currently selected font.

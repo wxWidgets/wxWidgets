@@ -165,6 +165,12 @@ protected:
     void RealizeScaleAndOrigin();
 
 public:
+    virtual void DoGetFontMetrics(int *height,
+                                  int *ascent,
+                                  int *descent,
+                                  int *internalLeading,
+                                  int *externalLeading,
+                                  int *averageWidth) const;
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,

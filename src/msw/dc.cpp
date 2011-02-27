@@ -1722,6 +1722,31 @@ wxCoord wxMSWDCImpl::GetCharWidth() const
     return lpTextMetric.tmAveCharWidth;
 }
 
+void wxMSWDCImpl::DoGetFontMetrics(int *height,
+                                   int *ascent,
+                                   int *descent,
+                                   int *internalLeading,
+                                   int *externalLeading,
+                                   int *averageWidth) const
+{
+    TEXTMETRIC tm;
+
+    GetTextMetrics(GetHdc(), &tm);
+
+    if ( height )
+        *height = tm.tmHeight;
+    if ( ascent )
+        *ascent = tm.tmAscent;
+    if ( descent )
+        *descent = tm.tmDescent;
+    if ( internalLeading )
+        *internalLeading = tm.tmInternalLeading;
+    if ( externalLeading )
+        *externalLeading = tm.tmExternalLeading;
+    if ( averageWidth )
+        *averageWidth = tm.tmAveCharWidth;
+}
+
 void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
                            const wxFont *font) const
@@ -1791,13 +1816,7 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
     if ( descent || externalLeading )
     {
-        TEXTMETRIC tm;
-        ::GetTextMetrics(GetHdc(), &tm);
-
-        if (descent)
-            *descent = tm.tmDescent;
-        if (externalLeading)
-            *externalLeading = tm.tmExternalLeading;
+        DoGetFontMetrics(NULL, NULL, descent, NULL, externalLeading, NULL);
     }
 
     if ( hfontOld )

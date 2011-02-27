@@ -1134,6 +1134,27 @@ void wxDCImpl::InheritAttributes(wxWindow *win)
     SetLayoutDirection(win->GetLayoutDirection());
 }
 
+void wxDCImpl::DoGetFontMetrics(int *height,
+                                int *ascent,
+                                int *descent,
+                                int *internalLeading,
+                                int *externalLeading,
+                                int *averageWidth) const
+{
+    // Average width is typically the same as width of 'x'.
+    wxCoord h, d;
+    DoGetTextExtent("x", averageWidth, &h, &d, externalLeading);
+
+    if ( height )
+        *height = h;
+    if ( ascent )
+        *ascent = h - d;
+    if ( descent )
+        *descent = d;
+    if ( internalLeading )
+        *internalLeading = 0;
+}
+
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
