@@ -27,6 +27,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
+    #include "wx/control.h"
     #include "wx/dc.h"
 #endif // WX_PRECOMP
 
