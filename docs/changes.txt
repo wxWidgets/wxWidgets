@@ -431,6 +431,7 @@ All:
 - Added wxNumberFormatter for dealing with thousands separators.
 - Added wxIntegerValidator<> and wxFloatingPointValidator<> validators.
 - Added wxIMAGE_OPTION_GIF_COMMENT to read and write GIF comments (troelsk).
+- Added wxStack<> template class.
 
 Unix:
 

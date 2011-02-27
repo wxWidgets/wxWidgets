@@ -53,8 +53,6 @@
 
 #include "wx/stack.h"
 
-WX_DECLARE_STACK(GraphicsState, GraphicsStates);
-
 namespace
 {
 
@@ -385,7 +383,7 @@ private:
                                   const wxGraphicsBrush& backgroundBrush);
 
     Graphics* m_context;
-    GraphicsStates m_stateStack;
+    wxStack<GraphicsState> m_stateStack;
     GraphicsState m_state1;
     GraphicsState m_state2;
 
