@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
-    wxButton() { m_imageData = NULL; }
+    wxButton() { Init(); }
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxString& label = wxEmptyString,
@@ -29,7 +29,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr)
     {
-        m_imageData = NULL;
+        Init();
 
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -97,6 +97,11 @@ protected:
     bool m_authNeeded;
 
 private:
+    void Init()
+    {
+        m_imageData = NULL;
+    }
+
     // Switches button into owner-drawn mode: this is used if we need to draw
     // something not supported by the native control, such as using non default
     // colours or a bitmap on pre-XP systems.
