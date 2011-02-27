@@ -513,7 +513,20 @@ wxFont& wxFont::MakeItalic()
 wxFont wxFont::Italic() const
 {
     wxFont font(*this);
-    font.SetStyle(wxFONTSTYLE_ITALIC);
+    font.MakeItalic();
+    return font;
+}
+
+wxFont& wxFont::MakeUnderlined()
+{
+    SetUnderlined(true);
+    return *this;
+}
+
+wxFont wxFont::Underlined() const
+{
+    wxFont font(*this);
+    font.MakeUnderlined();
     return font;
 }
 

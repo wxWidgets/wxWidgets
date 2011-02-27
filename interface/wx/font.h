@@ -575,6 +575,15 @@ public:
     wxFont Smaller() const;
 
     /**
+        Returns underlined version of this font.
+
+        @see MakeUnderlined()
+
+        @since 2.9.2
+     */
+    wxFont Underlined() const;
+
+    /**
         Changes this font to be bold.
 
         @see Bold()
@@ -615,6 +624,15 @@ public:
         @since 2.9.1
      */
     wxFont& MakeSmaller();
+
+    /**
+        Changes this font to be underlined.
+
+        @see Underlined()
+
+        @since 2.9.2
+     */
+    wxFont& MakeUnderlined();
 
     /**
         Changes the size of this font.

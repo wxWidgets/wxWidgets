@@ -303,12 +303,14 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     /* functions for modifying font in place */ \
     wxFont& MakeBold(); \
     wxFont& MakeItalic(); \
+    wxFont& MakeUnderlined(); \
     wxFont& MakeLarger() { return Scale(1.2f); } \
     wxFont& MakeSmaller() { return Scale(1/1.2f); } \
     wxFont& Scale(float x); \
     /* functions for creating fonts based on this one */ \
     wxFont Bold() const; \
     wxFont Italic() const; \
+    wxFont Underlined() const; \
     wxFont Larger() const { return Scaled(1.2f); } \
     wxFont Smaller() const { return Scaled(1/1.2f); } \
     wxFont Scaled(float x) const
