@@ -78,6 +78,7 @@ class wxMarkupParserOutput
 {
 public:
     wxMarkupParserOutput() { }
+    virtual ~wxMarkupParserOutput() { }
 
     // Virtual functions called by wxMarkupParser while parsing the markup.
 
