@@ -79,6 +79,9 @@ int wxPalette::GetColoursCount() const
 
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
+    if ( n < 0 || n > 255 )
+        return false;
+
     UnRef();
 
 #if defined(__WXMICROWIN__)
