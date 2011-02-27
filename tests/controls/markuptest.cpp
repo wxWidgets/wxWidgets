@@ -86,13 +86,13 @@ void MarkupTestCase::RoundTrip()
             m_text << "<span";
 
             if ( !attrs.m_fgCol.empty() )
-                m_text << " foreground=\"" << attrs.m_fgCol << "\"";
+                m_text << " foreground='" << attrs.m_fgCol << "'";
 
             if ( !attrs.m_bgCol.empty() )
-                m_text << " background=\"" << attrs.m_bgCol << "\"";
+                m_text << " background='" << attrs.m_bgCol << "'";
 
             if ( !attrs.m_fontFace.empty() )
-                m_text << " face=\"" << attrs.m_fontFace << "\"";
+                m_text << " face='" << attrs.m_fontFace << "'";
 
             wxString size;
             switch ( attrs.m_sizeKind )
@@ -125,7 +125,7 @@ void MarkupTestCase::RoundTrip()
             }
 
             if ( !size.empty() )
-                m_text << " size=\"" << size << '"';
+                m_text << " size='" << size << '\'';
 
             // TODO: Handle the rest of attributes.
 
@@ -162,17 +162,17 @@ void MarkupTestCase::RoundTrip()
     CHECK_PARSES_OK( "foo" );
     CHECK_PARSES_OK( "foo<b>bar</b>" );
     CHECK_PARSES_OK( "1<big>2<small>3</small>4<big>5</big></big>6" );
-    CHECK_PARSES_OK( "first <span foreground=\"red\">second</span> last" );
-    CHECK_PARSES_OK( "first <span foreground=\"red\" "
-                                 "background=\"#ffffff\">second </span> last" );
-    CHECK_PARSES_OK( "<span size=\"10240\">10pt</span>" );
-    CHECK_PARSES_OK( "<span size=\"x-small\">much smaller</span>" );
-    CHECK_PARSES_OK( "<span size=\"larger\">larger</span>" );
+    CHECK_PARSES_OK( "first <span foreground='red'>second</span> last" );
+    CHECK_PARSES_OK( "first <span foreground='red' "
+                                 "background='#ffffff'>second </span> last" );
+    CHECK_PARSES_OK( "<span size='10240'>10pt</span>" );
+    CHECK_PARSES_OK( "<span size='x-small'>much smaller</span>" );
+    CHECK_PARSES_OK( "<span size='larger'>larger</span>" );
     CHECK_PARSES_OK
     (
-        "<u>Please</u> notice: <i><b>any</b></i> <span foreground=\"grey\">"
-        "<s><tt>bugs</tt></s></span> in this code are <span foreground=\"red\" "
-        "size=\"xx-large\">NOT</span> allowed."
+        "<u>Please</u> notice: <i><b>any</b></i> <span foreground='grey'>"
+        "<s><tt>bugs</tt></s></span> in this code are <span foreground='red' "
+        "size='xx-large'>NOT</span> allowed."
     );
 
     CHECK_PARSES_OK( "foo&bar" );
@@ -208,12 +208,12 @@ void MarkupTestCase::Strip()
     CHECK_STRIP( "foo", "foo" );
     CHECK_STRIP( "&lt;foo&gt;", "<foo>" );
     CHECK_STRIP( "<b>Big</b> problem", "Big problem" );
-    CHECK_STRIP( "<span foreground=\"red\">c</span>"
-                 "<span background=\"green\">o</span>"
-                 "<span background=\"blue\">l</span>"
-                 "<span background=\"green\">o</span>"
-                 "<span foreground=\"yellow\">u</span>"
-                 "<span background=\"green\">r</span>",
+    CHECK_STRIP( "<span foreground='red'>c</span>"
+                 "<span background='green'>o</span>"
+                 "<span background='blue'>l</span>"
+                 "<span background='green'>o</span>"
+                 "<span foreground='yellow'>u</span>"
+                 "<span background='green'>r</span>",
                  "colour" );
 
     #undef CHECK_STRIP
