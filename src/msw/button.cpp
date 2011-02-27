@@ -410,22 +410,27 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
 {
     wxSize sizeBtn(size);
 
-    // all buttons have at least the standard size unless the user explicitly
-    // wants them to be of smaller size and used wxBU_EXACTFIT style when
-    // creating the button
+    // All buttons have at least the standard height and, unless the user
+    // explicitly wants them to be as small as possible and used wxBU_EXACTFIT
+    // style to indicate this, of at least the standard width too.
+    //
+    // Notice that we really want to make all buttons equally high, otherwise
+    // they look ugly and the existing code using wxBU_EXACTFIT only uses it to
+    // control width and not height.
+
+    // The 50x14 button size is documented in the "Recommended sizing and
+    // spacing" section of MSDN layout article.
+    //
+    // Note that we intentionally don't use GetDefaultSize() here, because
+    // it's inexact -- dialog units depend on this dialog's font.
+    const wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The 50x14 button size is documented in the "Recommended sizing and
-        // spacing" section of MSDN layout article.
-        //
-        // Note that we intentionally don't use GetDefaultSize() here, because
-        // it's inexact -- dialog units depend on this dialog's font.
-        wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
         if ( sizeBtn.x < sizeDef.x )
             sizeBtn.x = sizeDef.x;
-        if ( sizeBtn.y < sizeDef.y )
-            sizeBtn.y = sizeDef.y;
     }
+    if ( sizeBtn.y < sizeDef.y )
+        sizeBtn.y = sizeDef.y;
 
     btn->CacheBestSize(sizeBtn);
 
