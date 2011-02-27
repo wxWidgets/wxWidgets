@@ -146,10 +146,9 @@ public:
         Sets the controls label to a string using markup.
 
         Simple markup supported by this function can be used to apply different
-        fonts or colours to different parts of the control label when supported
-        (currently only wxStaticText under GTK+ 2). If markup is not supported
-        by the control or platform, it is simply stripped and SetLabel() is
-        used with the resulting string.
+        fonts or colours to different parts of the control label when supported.
+        If markup is not supported by the control or platform, it is simply
+        stripped and SetLabel() is used with the resulting string.
 
         For example,
         @code
@@ -284,15 +283,22 @@ public:
 
 
         @param markup
-            String containing markup for the label. It may contain newline
-            characters and the markup tags described above.
+            String containing markup for the label. It may contain markup tags
+            described above and newline characters but currently only wxGTK and
+            wxOSX support multiline labels with markup, the generic
+            implementation (also used in wxMSW) only handles single line markup
+            labels. Notice that the string must be well-formed (e.g. all tags
+            must be correctly closed) and won't be shown at all otherwise.
         @return
             @true if the new label was set (even if markup in it was ignored)
             or @false if we failed to parse the markup. In this case the label
             remains unchanged.
 
-        Note that the string must be well-formed (e.g. all tags must be correctly
-        closed) and won't be shown at all otherwise.
+
+        Currently wxButton supports markup in all major ports (wxMSW, wxGTK and
+        wxOSX/Cocoa) while wxStaticText supports it in wxGTK and wxOSX and its
+        generic version (which can be used under MSW if markup support is
+        required). Extending support to more controls is planned in the future.
 
         @since 2.9.2
     */

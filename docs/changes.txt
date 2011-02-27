@@ -441,6 +441,7 @@ Unix:
 
 All (GUI):
 
+- Implement support for markup in wxButton and wxStaticText.
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
 - Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
