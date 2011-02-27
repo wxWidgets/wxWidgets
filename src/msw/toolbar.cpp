@@ -620,10 +620,11 @@ void wxToolBar::CreateDisabledImageList()
             wxBitmap bmpDisabled = tool->GetDisabledBitmap();
             if ( bmpDisabled.Ok() )
             {
+                const wxSize sizeBitmap = bmpDisabled.GetSize();
                 m_disabledImgList = new wxImageList
                                         (
-                                            m_defaultWidth,
-                                            m_defaultHeight,
+                                            sizeBitmap.x,
+                                            sizeBitmap.y,
                                             bmpDisabled.GetMask() != NULL,
                                             GetToolsCount()
                                         );
