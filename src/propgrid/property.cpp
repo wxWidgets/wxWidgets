@@ -35,6 +35,8 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/image.h"
+
 #include "wx/propgrid/propgrid.h"
 
 
@@ -2097,6 +2099,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
         if ( imSz.y != maxSz.y )
         {
+        #if wxUSE_IMAGE
             // Here we use high-quality wxImage scaling functions available
             wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
@@ -2104,6 +2107,15 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
                         ((double)bmp.GetHeight())*scaleY,
                         wxIMAGE_QUALITY_HIGH);
             wxBitmap* bmpNew = new wxBitmap(img, 32);
+        #else
+            // This is the old, deprecated method of scaling the image
+            wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
+            wxMemoryDC dc;
+            dc.SelectObject(*bmpNew);
+            double scaleY = (double)maxSz.y / (double)imSz.y;
+            dc.SetUserScale(scaleY, scaleY);
+            dc.DrawBitmap(bmp, 0, 0);
+        #endif
 
             m_valueBitmap = bmpNew;
         }
