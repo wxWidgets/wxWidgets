@@ -25,7 +25,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/stattext.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
@@ -63,8 +62,11 @@ namespace
 
     wxString GetLabelForSysLink(const wxString& text, const wxString& url)
     {
-        return wxString("<A HREF=\"") + wxStaticText::RemoveMarkup(url) + "\">"
-            + wxStaticText::RemoveMarkup(text) + "</A>";
+        // Any "&"s in the text should appear on the screen and not be (mis)
+        // interpreted as mnemonics.
+        return wxString::Format("<A HREF=\"%s\">%s</A>",
+                                url,
+                                wxControl::EscapeMnemonics(text));
     }
 }
 
