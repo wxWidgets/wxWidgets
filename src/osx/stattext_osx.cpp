@@ -104,6 +104,20 @@ void wxStaticText::DoSetLabel(const wxString& label)
     m_peer->SetLabel(m_label , GetFont().GetEncoding() );
 }
 
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+
+bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxStaticTextBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    m_peer->SetLabelMarkup(markup);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
+
 wxString wxStaticText::DoGetLabel() const
 {
     return m_label;

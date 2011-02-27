@@ -18,6 +18,11 @@
 
 #include "wx/osx/private.h"
 
+#if wxUSE_MARKUP
+    #include "wx/osx/cocoa/private/markuptoattr.h"
+#endif // wxUSE_MARKUP
+
+
 wxSize wxButton::DoGetBestSize() const
 {
     // We only use help button bezel if we don't have any (non standard) label
@@ -123,6 +128,23 @@ public:
             [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle ];
 
         wxWidgetCocoaImpl::SetBitmap(bitmap);
+    }
+
+    virtual void SetLabelMarkup(const wxString& markup)
+    {
+        wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+        NSMutableAttributedString *attrString = toAttr.GetNSAttributedString();
+
+        // Button text is always centered.
+        NSMutableParagraphStyle *
+            paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setAlignment: NSCenterTextAlignment];
+        [attrString addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:NSMakeRange(0, [attrString length])];
+        [paragraphStyle release];
+
+        [GetNSButton() setAttributedTitle:attrString];
     }
 
     void SetPressedBitmap( const wxBitmap& bitmap )

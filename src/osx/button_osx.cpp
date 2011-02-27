@@ -142,6 +142,20 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
     InvalidateBestSize();
 }
 
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+
+bool wxButton::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxButtonBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    m_peer->SetLabelMarkup(markup);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
+
 wxWindow *wxButton::SetDefault()
 {
     wxWindow *btnOldDefault = wxButtonBase::SetDefault();

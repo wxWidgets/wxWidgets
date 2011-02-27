@@ -270,6 +270,9 @@ public :
     virtual void        SetDefaultButton( bool isDefault ) = 0;
     virtual void        PerformClick() = 0;
     virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
+#if wxOSX_USE_COCOA
+    virtual void        SetLabelMarkup( const wxString& WXUNUSED(markup) ) { }
+#endif
 
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
