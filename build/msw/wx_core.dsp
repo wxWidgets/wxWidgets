@@ -3119,6 +3119,10 @@ SOURCE=..\..\src\generic\logg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\markuptext.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\mdig.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"

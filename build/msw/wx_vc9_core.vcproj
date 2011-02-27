@@ -3749,6 +3749,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\markuptext.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\mdig.cpp"
 				>
 				<FileConfiguration

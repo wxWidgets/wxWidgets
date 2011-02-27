@@ -785,6 +785,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/infobar.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
+    src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp

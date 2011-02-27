@@ -2132,6 +2132,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_infobar.obj \
 	$(OBJS)\monodll_listbkg.obj \
 	$(OBJS)\monodll_logg.obj \
+	$(OBJS)\monodll_markuptext.obj \
 	$(OBJS)\monodll_msgdlgg.obj \
 	$(OBJS)\monodll_numdlgg.obj \
 	$(OBJS)\monodll_panelg.obj \
@@ -2396,6 +2397,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_infobar.obj \
 	$(OBJS)\monodll_listbkg.obj \
 	$(OBJS)\monodll_logg.obj \
+	$(OBJS)\monodll_markuptext.obj \
 	$(OBJS)\monodll_msgdlgg.obj \
 	$(OBJS)\monodll_numdlgg.obj \
 	$(OBJS)\monodll_panelg.obj \
@@ -2897,6 +2899,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_infobar.obj \
 	$(OBJS)\monolib_listbkg.obj \
 	$(OBJS)\monolib_logg.obj \
+	$(OBJS)\monolib_markuptext.obj \
 	$(OBJS)\monolib_msgdlgg.obj \
 	$(OBJS)\monolib_numdlgg.obj \
 	$(OBJS)\monolib_panelg.obj \
@@ -3161,6 +3164,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_infobar.obj \
 	$(OBJS)\monolib_listbkg.obj \
 	$(OBJS)\monolib_logg.obj \
+	$(OBJS)\monolib_markuptext.obj \
 	$(OBJS)\monolib_msgdlgg.obj \
 	$(OBJS)\monolib_numdlgg.obj \
 	$(OBJS)\monolib_panelg.obj \
@@ -3610,6 +3614,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_infobar.obj \
 	$(OBJS)\coredll_listbkg.obj \
 	$(OBJS)\coredll_logg.obj \
+	$(OBJS)\coredll_markuptext.obj \
 	$(OBJS)\coredll_msgdlgg.obj \
 	$(OBJS)\coredll_numdlgg.obj \
 	$(OBJS)\coredll_panelg.obj \
@@ -3874,6 +3879,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_infobar.obj \
 	$(OBJS)\coredll_listbkg.obj \
 	$(OBJS)\coredll_logg.obj \
+	$(OBJS)\coredll_markuptext.obj \
 	$(OBJS)\coredll_msgdlgg.obj \
 	$(OBJS)\coredll_numdlgg.obj \
 	$(OBJS)\coredll_panelg.obj \
@@ -4152,6 +4158,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_infobar.obj \
 	$(OBJS)\corelib_listbkg.obj \
 	$(OBJS)\corelib_logg.obj \
+	$(OBJS)\corelib_markuptext.obj \
 	$(OBJS)\corelib_msgdlgg.obj \
 	$(OBJS)\corelib_numdlgg.obj \
 	$(OBJS)\corelib_panelg.obj \
@@ -4416,6 +4423,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_infobar.obj \
 	$(OBJS)\corelib_listbkg.obj \
 	$(OBJS)\corelib_logg.obj \
+	$(OBJS)\corelib_markuptext.obj \
 	$(OBJS)\corelib_msgdlgg.obj \
 	$(OBJS)\corelib_numdlgg.obj \
 	$(OBJS)\corelib_panelg.obj \
@@ -8513,6 +8521,11 @@ $(OBJS)\monodll_logg.obj: ..\..\src\generic\logg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_markuptext.obj: ..\..\src\generic\markuptext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\markuptext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 !endif
@@ -10850,6 +10863,11 @@ $(OBJS)\monolib_logg.obj: ..\..\src\generic\logg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_markuptext.obj: ..\..\src\generic\markuptext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\markuptext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 !endif
@@ -13181,6 +13199,11 @@ $(OBJS)\coredll_logg.obj: ..\..\src\generic\logg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_markuptext.obj: ..\..\src\generic\markuptext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\markuptext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 !endif
@@ -14570,6 +14593,11 @@ $(OBJS)\corelib_listbkg.obj: ..\..\src\generic\listbkg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_logg.obj: ..\..\src\generic\logg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\logg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_markuptext.obj: ..\..\src\generic\markuptext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\markuptext.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

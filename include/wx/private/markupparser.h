@@ -70,6 +70,10 @@ struct wxMarkupSpanAttributes
 // wxMarkupParserOutput: gathers the results of parsing markup.
 // ----------------------------------------------------------------------------
 
+// A class deriving directly from this one needs to implement all the pure
+// virtual functions below but as the handling of all simple tags (bold, italic
+// &c) is often very similar, it is usually more convenient to inherit from
+// wxMarkupParserFontOutput defined in wx/private/markupparserfont.h instead.
 class wxMarkupParserOutput
 {
 public:
