@@ -101,14 +101,17 @@ public:
         if ( !spanAttr.m_fontFace.empty() )
             font.SetFaceName(spanAttr.m_fontFace);
 
-        DoApplyToFont<wxFontWeight>(spanAttr.m_isBold, font, &wxFont::SetWeight,
-                      wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_BOLD);
+        FontModifier<wxFontWeight>()(spanAttr.m_isBold,
+                                     font, &wxFont::SetWeight,
+                                     wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_BOLD);
 
-        DoApplyToFont<wxFontStyle>(spanAttr.m_isItalic, font, &wxFont::SetStyle,
-                      wxFONTSTYLE_NORMAL, wxFONTSTYLE_ITALIC);
+        FontModifier<wxFontStyle>()(spanAttr.m_isItalic,
+                                    font, &wxFont::SetStyle,
+                                    wxFONTSTYLE_NORMAL, wxFONTSTYLE_ITALIC);
 
-        DoApplyToFont(spanAttr.m_isUnderlined, font, &wxFont::SetUnderlined,
-                      false, true);
+        FontModifier<bool>()(spanAttr.m_isUnderlined,
+                             font, &wxFont::SetUnderlined,
+                             false, true);
 
         // TODO: No support for strike-through yet.
 
@@ -191,28 +194,35 @@ private:
         OnAttrEnd(attr);
     }
 
+    // A helper class used to apply the given function to a wxFont object
+    // depending on the value of an OptionalBool.
     template <typename T>
-    void
-    DoApplyToFont(wxMarkupSpanAttributes::OptionalBool isIt,
-                  wxFont& font,
-                  void (wxFont::*func)(T),
-                  T noValue,
-                  T yesValue)
+    struct FontModifier
     {
-        switch ( isIt )
+        FontModifier() { }
+
+        void operator()(wxMarkupSpanAttributes::OptionalBool isIt,
+                        wxFont& font,
+                        void (wxFont::*func)(T),
+                        T noValue,
+                        T yesValue)
         {
-            case wxMarkupSpanAttributes::Unspecified:
-                break;
+            switch ( isIt )
+            {
+                case wxMarkupSpanAttributes::Unspecified:
+                    break;
 
-            case wxMarkupSpanAttributes::No:
-                (font.*func)(noValue);
-                break;
+                case wxMarkupSpanAttributes::No:
+                    (font.*func)(noValue);
+                    break;
 
-            case wxMarkupSpanAttributes::Yes:
-                (font.*func)(yesValue);
-                break;
+                case wxMarkupSpanAttributes::Yes:
+                    (font.*func)(yesValue);
+                    break;
+            }
         }
-    }
+    };
+
 
     wxStack<Attr> m_attrs;
 
