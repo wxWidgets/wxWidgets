@@ -123,9 +123,6 @@ void wxControl::GTKFixSensitivity(bool onlyIfUnderMouse)
 
 void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 {
-    // save the original label
-    wxControlBase::SetLabel(label);
-
     const wxString labelGTK = GTKConvertMnemonics(label);
     gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
 }
@@ -160,6 +157,8 @@ GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
 
 void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
 {
+    wxControlBase::SetLabel(label);
+
     GtkLabel* labelwidget = GTK_LABEL(gtk_frame_get_label_widget(w));
     GTKSetLabelForLabel(labelwidget, label);
 }

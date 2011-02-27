@@ -99,6 +99,9 @@ void wxRadioButton::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
 
+    // save the original label
+    wxControlBase::SetLabel(label);
+
     GTKSetLabelForLabel(GTK_LABEL(GTK_BIN(m_widget)->child), label);
 }
 
