@@ -24,6 +24,9 @@
 
 #include "wx/generic/stattextg.h"
 
+#if wxUSE_MARKUP
+    #include "wx/generic/private/markuptext.h"
+#endif // wxUSE_MARKUP
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticText, wxStaticTextBase)
 
@@ -46,12 +49,26 @@ bool wxGenericStaticText::Create(wxWindow *parent,
     return true;
 }
 
+wxGenericStaticText::~wxGenericStaticText()
+{
+#if wxUSE_MARKUP
+    delete m_markupText;
+#endif // wxUSE_MARKUP
+}
+
+void wxGenericStaticText::DoDrawLabel(wxDC& dc, const wxRect& rect)
+{
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        m_markupText->Render(dc, rect, wxMarkupText::Render_ShowAccels);
+    else
+#endif // wxUSE_MARKUP
+        dc.DrawLabel(m_label, rect, GetAlignment(), m_mnemonic);
+}
+
 void wxGenericStaticText::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if ( m_label.empty() )
-        return;
     wxPaintDC dc(this);
-    PrepareDC(dc);
 
     wxRect rect = GetClientRect();
     if ( IsEnabled() )
@@ -66,20 +83,24 @@ void wxGenericStaticText::OnPaint(wxPaintEvent& WXUNUSED(event))
                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT));
         wxRect rectShadow = rect;
         rectShadow.Offset(1, 1);
-        dc.DrawLabel(m_label, rectShadow, GetAlignment(), m_mnemonic);
+        DoDrawLabel(dc, rectShadow);
         dc.SetTextForeground(
                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
     }
-    dc.DrawLabel(m_label, wxNullBitmap, rect, GetAlignment(), m_mnemonic);
+    DoDrawLabel(dc, rect);
 }
 
 
 wxSize wxGenericStaticText::DoGetBestClientSize() const
 {
     wxClientDC dc(wxConstCast(this, wxGenericStaticText));
-    wxCoord width, height;
-    dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
-    return wxSize(width, height);
+
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        return m_markupText->Measure(dc);
+#endif // wxUSE_MARKUP
+
+    return dc.GetMultiLineTextExtent(GetLabel());
 }
 
 void wxGenericStaticText::SetLabel(const wxString& label)
@@ -88,6 +109,15 @@ void wxGenericStaticText::SetLabel(const wxString& label)
     DoSetLabel(GetEllipsizedLabel());
     if ( !HasFlag(wxST_NO_AUTORESIZE) && !IsEllipsized() )
         InvalidateBestSize();
+
+#if wxUSE_MARKUP
+    if ( m_markupText )
+    {
+        delete m_markupText;
+        m_markupText = NULL;
+    }
+#endif // wxUSE_MARKUP
+
     Refresh();
 }
 
@@ -95,6 +125,28 @@ void wxGenericStaticText::DoSetLabel(const wxString& label)
 {
     m_mnemonic = FindAccelIndex(label, &m_label);
 }
+
+#if wxUSE_MARKUP
+
+bool wxGenericStaticText::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxStaticTextBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    if ( !m_markupText )
+        m_markupText = new wxMarkupText(markup);
+    else
+        m_markupText->SetMarkup(markup);
+
+    if ( !HasFlag(wxST_NO_AUTORESIZE) )
+        InvalidateBestSize();
+
+    Refresh();
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
 
 bool wxGenericStaticText::SetFont(const wxFont &font)
 {
