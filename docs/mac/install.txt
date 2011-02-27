@@ -1,31 +1,89 @@
-wxWidgets for Mac installation
-------------------------------
+wxWidgets for Mac OS X installation
+-----------------------------------
 
-On MacOS X, you can download Apple's free developer tools (gcc
-and associated headers and libraries, such as the Carbon API).
-You can then use configure in a similar way to compiling
-wxWidgets on Linux (or on Windows using MinGW or Cygwin). See
-'Apple Developer Tools' below for more details on using
-configure.
+wxWidgets can be compiled using Apple's Carbon or Cocoa libraries.
+Carbon is the older library, and Cocoa is the more modern library.
 
-To target on MacOS 8 or 9, you need to buy Metrowerks
-CodeWarrior. You can then compile Mac Classic or MacOS X
-applications on Mac OS X, or compile Mac Classic or MacOS X
-applications on Mac Classic. However you can only run and debug
-each type of application on the target operating system.
+In wxWidgets 2.8.x, Carbon is the recommended library because it is the
+more stable.  Cocoa is incomplete in wxWidgets 2.8.x.  If you are interested 
+in using Cocoa, you should start with wxWidgets 2.9.x where Cocoa is 
+much more complete.
+
+Most Mac OS X developers should start by downloading and installing Xcode 
+from http://developer.apple.com.  It is a free IDE from Apple that provides
+all of the tools you need for working with wxWidgets.
+
+After Xcode is installed, download either wxWidgets-{version}.tar.gz or 
+wxMac-{version}.tar.gz and then double-click on it to unpack it to create 
+a wxWidgets directory.
+
+Next use Terminal (under Applications, Utilities, Terminal) to access a command 
+prompt.  Use cd to change directory to your wxWidgets directory and execute 
+one of the following sets of commands:
+
+---------
+
+# For Mac OS X 10.6 Snow Leopard or later, with a 64-bit processor, build the
+# Carbon libraries like this
+mkdir build-carbon-debug
+cd build-carbon-debug
+arch_flags="-arch i386"
+../configure CFLAGS="$arch_flags" CXXFLAGS="$arch_flags" CPPFLAGS="$arch_flags" LDFLAGS="$arch_flags" OBJCFLAGS="$arch_flags" OBJCXXFLAGS="$arch_flags" --enable-unicode --enable-debug --disable-shared
+make;cd ..
+# Build the samples and demos
+cd build-carbon-debug/samples;make;cd ../..
+cd build-carbon-debug/demos;  make;cd ../..
+
+---------
+
+# For Mac OS X 10.5 or older or with a 32-bit processor, build Carbon like this:
+mkdir build-carbon-debug
+cd build-carbon-debug
+../configure --enable-unicode --enable-debug --disable-shared
+make;cd ..
+# Build the samples and demos
+cd build-carbon-debug/samples;make;cd ../..
+cd build-carbon-debug/demos;  make;cd ../..
+
+---------
+
+# For Mac OS X 10.5 or older or with a 32-bit processor, you can build the
+# Cocoa libraries like this, but wxWidgets 2.9.x is really much better than 2.8.x
+mkdir build-cocoa-debug
+cd build-cocoa-debug
+../configure --enable-unicode --enable-debug --disable-shared --with-cocoa
+make;cd ..
+# Build the samples and demos
+cd build-cocoa-debug/samples; make;cd ../..
+cd build-cocoa-debug/demos;   make;cd ../..
+
+---------
+
+After the compilation completes, use Finder to run the samples and demos
+  Go to build-carbon-debug/samples to experiment with the Carbon samples.
+  Go to build-carbon-debug/demos to experiment with the Carbon demos.
+  Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
+  Go to biuld-cocoa-debug/demos to experiment with the Cocoa demos.
+Double-click on the executables which have an icon showing three small squares.
+The source code for the samples is in wxWidgets/samples
+The source code for the demos is in wxWidgets/demos
+
+---------
+
+More information about building on Mac OS X is available in the wxWiki.
+Here are two useful links
+  http://wiki.wxwidgets.org/Guides_%26_Tutorials
+  http://wiki.wxwidgets.org/Development:_wxMac 
+
+---------
+
+More advanced topics are covered below.
+
+---------
 
 
 Apple Developer Tools: command line
 -----------------------------------
-
-As in all Unix projects, you need to do something like this under MacOS X
-with the Apple Developer Tools installed:
-
-1) cd into the base dir
-2) mkdir osx-build
-3) cd osx-build
-4) ../configure
-5) make
 
 If you want to install the library into the system directories you'll need
 to do this as root.  The accepted way of running commands as root is to

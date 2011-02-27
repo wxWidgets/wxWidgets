@@ -1,3 +1,7 @@
+On Mac OS X, wxWidgets can be compiled using Apple's Carbon or Cocoa libraries.
+
+To compile using Carbon or Cocoa, see the instructions in docs/mac/install.txt
+
 wxCocoa is still a work in progress.
 
 To compile it, you will need Apple's Developer Tools.  However, please
