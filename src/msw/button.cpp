@@ -450,8 +450,6 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    m_authNeeded = false;
-
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
     {

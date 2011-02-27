@@ -100,6 +100,7 @@ private:
     void Init()
     {
         m_imageData = NULL;
+        m_authNeeded = false;
     }
 
     // Switches button into owner-drawn mode: this is used if we need to draw
