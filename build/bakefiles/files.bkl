@@ -726,6 +726,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/layout.cpp
     src/common/lboxcmn.cpp
     src/common/listctrlcmn.cpp
+    src/common/markupparser.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/mousemanager.cpp

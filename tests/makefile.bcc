@@ -163,6 +163,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_listboxtest.obj \
 	$(OBJS)\test_gui_listctrltest.obj \
 	$(OBJS)\test_gui_listviewtest.obj \
+	$(OBJS)\test_gui_markuptest.obj \
 	$(OBJS)\test_gui_notebooktest.obj \
 	$(OBJS)\test_gui_ownerdrawncomboboxtest.obj \
 	$(OBJS)\test_gui_pickerbasetest.obj \
@@ -811,6 +812,9 @@ $(OBJS)\test_gui_listctrltest.obj: .\controls\listctrltest.cpp
 
 $(OBJS)\test_gui_listviewtest.obj: .\controls\listviewtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\listviewtest.cpp
+
+$(OBJS)\test_gui_markuptest.obj: .\controls\markuptest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\markuptest.cpp
 
 $(OBJS)\test_gui_notebooktest.obj: .\controls\notebooktest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\notebooktest.cpp

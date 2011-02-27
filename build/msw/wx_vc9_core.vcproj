@@ -1119,6 +1119,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\markupparser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\matrix.cpp"
 				>
 			</File>

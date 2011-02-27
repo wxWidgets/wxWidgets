@@ -402,6 +402,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_listboxtest.obj &
 	$(OBJS)\test_gui_listctrltest.obj &
 	$(OBJS)\test_gui_listviewtest.obj &
+	$(OBJS)\test_gui_markuptest.obj &
 	$(OBJS)\test_gui_notebooktest.obj &
 	$(OBJS)\test_gui_ownerdrawncomboboxtest.obj &
 	$(OBJS)\test_gui_pickerbasetest.obj &
@@ -850,6 +851,9 @@ $(OBJS)\test_gui_listctrltest.obj :  .AUTODEPEND .\controls\listctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_listviewtest.obj :  .AUTODEPEND .\controls\listviewtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_markuptest.obj :  .AUTODEPEND .\controls\markuptest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_notebooktest.obj :  .AUTODEPEND .\controls\notebooktest.cpp

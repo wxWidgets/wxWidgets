@@ -566,6 +566,10 @@ SOURCE=..\..\src\common\listctrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\markupparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\matrix.cpp
 # End Source File
 # Begin Source File

@@ -427,6 +427,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_layout.obj &
 	$(OBJS)\monodll_lboxcmn.obj &
 	$(OBJS)\monodll_listctrlcmn.obj &
+	$(OBJS)\monodll_markupparser.obj &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_mousemanager.obj &
@@ -692,6 +693,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_layout.obj &
 	$(OBJS)\monodll_lboxcmn.obj &
 	$(OBJS)\monodll_listctrlcmn.obj &
+	$(OBJS)\monodll_markupparser.obj &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_mousemanager.obj &
@@ -1195,6 +1197,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_layout.obj &
 	$(OBJS)\monolib_lboxcmn.obj &
 	$(OBJS)\monolib_listctrlcmn.obj &
+	$(OBJS)\monolib_markupparser.obj &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_mousemanager.obj &
@@ -1460,6 +1463,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_layout.obj &
 	$(OBJS)\monolib_lboxcmn.obj &
 	$(OBJS)\monolib_listctrlcmn.obj &
+	$(OBJS)\monolib_markupparser.obj &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_mousemanager.obj &
@@ -1867,6 +1871,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_layout.obj &
 	$(OBJS)\coredll_lboxcmn.obj &
 	$(OBJS)\coredll_listctrlcmn.obj &
+	$(OBJS)\coredll_markupparser.obj &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_mousemanager.obj &
@@ -2132,6 +2137,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_layout.obj &
 	$(OBJS)\coredll_lboxcmn.obj &
 	$(OBJS)\coredll_listctrlcmn.obj &
+	$(OBJS)\coredll_markupparser.obj &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_mousemanager.obj &
@@ -2411,6 +2417,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_layout.obj &
 	$(OBJS)\corelib_lboxcmn.obj &
 	$(OBJS)\corelib_listctrlcmn.obj &
+	$(OBJS)\corelib_markupparser.obj &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_mousemanager.obj &
@@ -2676,6 +2683,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_layout.obj &
 	$(OBJS)\corelib_lboxcmn.obj &
 	$(OBJS)\corelib_listctrlcmn.obj &
+	$(OBJS)\corelib_markupparser.obj &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_mousemanager.obj &
@@ -8039,6 +8047,11 @@ $(OBJS)\monodll_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_markupparser.obj :  .AUTODEPEND ..\..\src\common\markupparser.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10371,6 +10384,11 @@ $(OBJS)\monolib_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_markupparser.obj :  .AUTODEPEND ..\..\src\common\markupparser.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -12697,6 +12715,11 @@ $(OBJS)\coredll_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_markupparser.obj :  .AUTODEPEND ..\..\src\common\markupparser.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -14080,6 +14103,11 @@ $(OBJS)\corelib_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_markupparser.obj :  .AUTODEPEND ..\..\src\common\markupparser.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

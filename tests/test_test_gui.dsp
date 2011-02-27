@@ -393,6 +393,10 @@ SOURCE=.\controls\listviewtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\markuptest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\graphics\measuring.cpp
 # End Source File
 # Begin Source File

@@ -1048,6 +1048,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\markuptest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\graphics\measuring.cpp"
 				>
 			</File>
