@@ -63,9 +63,6 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
-private:
-    void MakeOwnerDrawn();
-
 protected:
     // send a notification event, return true if processed
     bool SendClickEvent();
@@ -100,6 +97,11 @@ protected:
     bool m_authNeeded;
 
 private:
+    // Switches button into owner-drawn mode: this is used if we need to draw
+    // something not supported by the native control, such as using non default
+    // colours or a bitmap on pre-XP systems.
+    void MakeOwnerDrawn();
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 
