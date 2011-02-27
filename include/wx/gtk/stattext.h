@@ -56,7 +56,9 @@ protected:
 
     virtual wxString DoGetLabel() const;
     virtual void DoSetLabel(const wxString& str);
+#if wxUSE_MARKUP
     virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
 
 private:
     // Common part of SetLabel() and DoSetLabelMarkup().

@@ -95,6 +95,7 @@ public:
     virtual wxString GetLabelText() const { return GetLabelText(GetLabel()); }
 
 
+#if wxUSE_MARKUP
     // Set the label with markup (and mnemonics). Markup is a simple subset of
     // HTML with tags such as <b>, <i> and <span>. By default it is not
     // supported i.e. all the markup is simply stripped and SetLabel() is
@@ -113,6 +114,7 @@ public:
     {
         return DoSetLabelMarkup(markup);
     }
+#endif // wxUSE_MARKUP
 
 
     // controls by default inherit the colours of their parents, if a
@@ -183,10 +185,12 @@ protected:
                        const wxValidator& validator,
                        const wxString& name);
 
+#if wxUSE_MARKUP
     // This function may be overridden in the derived classes to implement
     // support for labels with markup. The base class version simply strips the
     // markup and calls SetLabel() with the remaining text.
     virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
 
 
     // initialize the common fields of wxCommandEvent
@@ -197,9 +201,11 @@ protected:
                                           wxEllipsizeMode mode, int maxWidth,
                                           int replacementWidth);
 
+#if wxUSE_MARKUP
     // Remove markup from the given string, returns empty string on error i.e.
     // if markup was syntactically invalid.
     static wxString RemoveMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
 
 
     // this field contains the label in wx format, i.e. with '&' mnemonics,

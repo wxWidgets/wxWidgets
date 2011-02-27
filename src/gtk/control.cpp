@@ -127,12 +127,15 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
     gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
 }
 
+#if wxUSE_MARKUP
+
 void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonicsWithMarkup(label);
     gtk_label_set_markup_with_mnemonic(w, wxGTK_CONV(labelGTK));
 }
 
+#endif // wxUSE_MARKUP
 
 // ----------------------------------------------------------------------------
 // GtkFrame helpers

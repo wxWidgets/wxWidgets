@@ -236,6 +236,8 @@ wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(va
 // wxControl markup support
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MARKUP
+
 /* static */
 wxString wxControlBase::RemoveMarkup(const wxString& markup)
 {
@@ -252,6 +254,8 @@ bool wxControlBase::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
+
+#endif // wxUSE_MARKUP
 
 // ----------------------------------------------------------------------------
 // wxControlBase - ellipsization code

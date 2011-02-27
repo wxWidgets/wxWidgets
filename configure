@@ -1804,6 +1804,7 @@ Optional Features:
   --enable-dnd            use Drag'n'Drop classes
   --enable-metafile       use win32 metafiles
   --disable-controls      disable compilation of all standard controls
+  --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
   --enable-artstd         use standard XPM icons in wxArtProvider
@@ -9784,6 +9785,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOOK=no
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_MARKUP=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -9810,6 +9812,51 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
 fi
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-markup" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-markup... $ECHO_C" >&6; }
+          # Check whether --enable-markup was given.
+if test "${enable_markup+set}" = set; then
+  enableval=$enable_markup;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_markup='wxUSE_MARKUP=yes'
+                          else
+                            wx_cv_use_markup='wxUSE_MARKUP=no'
+                          fi
+
+else
+
+                          wx_cv_use_markup='wxUSE_MARKUP=${'DEFAULT_wxUSE_MARKUP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_markup"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MARKUP = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_MARKUP
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
 
 
           enablestring=
@@ -47011,6 +47058,13 @@ fi
 USES_CONTROLS=0
 if test "$wxUSE_CONTROLS" = "yes"; then
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_MARKUP" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_MARKUP 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_ACCEL" = "yes"; then

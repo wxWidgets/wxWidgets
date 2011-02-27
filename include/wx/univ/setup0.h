@@ -713,6 +713,15 @@
 // Recommended setting: 1 (don't change except for very special programs)
 #define wxUSE_CONTROLS     1
 
+// Support markup in control labels, i.e. provide wxControl::SetLabelMarkup().
+// Currently markup is supported only by a few controls and only some ports but
+// their number will increase with time.
+//
+// Default is 1
+//
+// Recommended setting: 1 (may be set to 0 if you want to save on code size)
+#define wxUSE_MARKUP       1
+
 // wxPopupWindow class is a top level transient window. It is currently used
 // to implement wxTipWindow
 //

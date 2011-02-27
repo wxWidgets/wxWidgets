@@ -170,6 +170,7 @@ library:
 @itemdef{wxUSE_LONGLONG, Use wxLongLong class.}
 @itemdef{wxUSE_LONGLONG_NATIVE, Use native <tt>long long</tt> type in wxLongLong implementation.}
 @itemdef{wxUSE_LONGLONG_WX, Use generic wxLongLong implementation.}
+@itemdef{wxUSE_MARKUP, Provide wxControl::SetLabelMarkup() method.}
 @itemdef{wxUSE_MDI, Use wxMDIParentFrame, and wxMDIChildFrame}
 @itemdef{wxUSE_MDI_ARCHITECTURE, Use MDI-based document-view classes.}
 @itemdef{wxUSE_MEDIACTRL, Use wxMediaCtrl.}

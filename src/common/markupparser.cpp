@@ -23,8 +23,7 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
+#if wxUSE_MARKUP
 
 #include "wx/private/markupparser.h"
 
@@ -473,3 +472,5 @@ wxString wxMarkupParser::Strip(const wxString& text)
 
     return output.GetText();
 }
+
+#endif // wxUSE_MARKUP

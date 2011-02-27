@@ -133,6 +133,8 @@ void wxStaticText::SetLabel(const wxString& label)
     GTKDoSetLabel(&wxStaticText::GTKSetLabelForLabel, label);
 }
 
+#if wxUSE_MARKUP
+
 bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 {
     const wxString stripped = RemoveMarkup(markup);
@@ -145,6 +147,8 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
+
+#endif // wxUSE_MARKUP
 
 bool wxStaticText::SetFont( const wxFont &font )
 {

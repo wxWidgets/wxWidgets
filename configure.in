@@ -898,6 +898,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOOK=no
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_MARKUP=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -924,6 +925,9 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
 fi
+
+dnl features affecting multiple controls
+WX_ARG_FEATURE(markup,      [  --enable-markup         support wxControl::SetLabelMarkup], wxUSE_MARKUP)
 
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
@@ -6749,6 +6753,10 @@ dnl ---------------------------------------------------------------------------
 USES_CONTROLS=0
 if test "$wxUSE_CONTROLS" = "yes"; then
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_MARKUP" = "yes"; then
+  AC_DEFINE(wxUSE_MARKUP)
 fi
 
 if test "$wxUSE_ACCEL" = "yes"; then

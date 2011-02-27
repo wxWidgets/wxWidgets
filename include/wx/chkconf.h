@@ -829,6 +829,14 @@
 #   endif
 #endif /* !defined(wxUSE_LOG_DIALOG) */
 
+#ifndef wxUSE_MARKUP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MARKUP must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_MARKUP 0
+#   endif
+#endif /* !defined(wxUSE_MARKUP) */
+
 #ifndef wxUSE_MDI
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MDI must be defined, please read comment near the top of this file."
