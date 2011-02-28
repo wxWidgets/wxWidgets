@@ -2143,13 +2143,16 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
 
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 {
-    NSPoint location = [NSEvent mouseLocation];
-    location = [[m_osxView window] convertScreenToBase:location];
-    NSPoint locationInView = [m_osxView convertPoint:location fromView:nil];
-
-    if( NSMouseInRect(locationInView, [m_osxView bounds], YES) )
+    if ( !wxIsBusy() )
     {
-        [(NSCursor*)cursor.GetHCURSOR() set];
+        NSPoint location = [NSEvent mouseLocation];
+        location = [[m_osxView window] convertScreenToBase:location];
+        NSPoint locationInView = [m_osxView convertPoint:location fromView:nil];
+
+        if( NSMouseInRect(locationInView, [m_osxView bounds], YES) )
+        {
+            [(NSCursor*)cursor.GetHCURSOR() set];
+        }
     }
     [[m_osxView window] invalidateCursorRectsForView:m_osxView];
 }
