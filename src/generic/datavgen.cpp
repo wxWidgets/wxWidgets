@@ -863,15 +863,18 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-void wxDataViewToggleRenderer::WXOnActivate(wxDataViewModel *model,
-                                            const wxVariant& valueOld,
-                                            const wxDataViewItem & item,
+bool wxDataViewToggleRenderer::WXOnActivate(wxRect WXUNUSED(cell),
+                                            wxDataViewModel *model,
+                                            const wxDataViewItem& item,
                                             unsigned int col)
 {
     if (model->IsEnabled(item, col))
     {
-        model->ChangeValue(!valueOld.GetBool(), item, col);
+        model->ChangeValue(!m_toggle, item, col);
+        return true;
     }
+
+    return false;
 }
 
 wxSize wxDataViewToggleRenderer::GetSize() const
@@ -1023,12 +1026,12 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return GetTextExtent(m_date.FormatDate());
 }
 
-void wxDataViewDateRenderer::WXOnActivate(wxDataViewModel *model,
-                                          const wxVariant& valueOld,
-                                          const wxDataViewItem & item,
-                                          unsigned int col )
+bool wxDataViewDateRenderer::WXOnActivate(wxRect WXUNUSED(cell),
+                                          wxDataViewModel *model,
+                                          const wxDataViewItem& item,
+                                          unsigned int col)
 {
-    wxDateTime dtOld = valueOld.GetDateTime();
+    wxDateTime dtOld = m_date;
 
 #if wxUSE_DATE_RENDERER_POPUP
     wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
@@ -1040,6 +1043,8 @@ void wxDataViewDateRenderer::WXOnActivate(wxDataViewModel *model,
 #else // !wxUSE_DATE_RENDERER_POPUP
     wxMessageBox(dtOld.Format());
 #endif // wxUSE_DATE_RENDERER_POPUP/!wxUSE_DATE_RENDERER_POPUP
+
+    return true;
 }
 
 // ---------------------------------------------------------
@@ -3630,19 +3635,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             {
                 const unsigned colIdx = col->GetModelColumn();
 
-                wxVariant value;
-                model->GetValue( value, item, colIdx );
+                cell->PrepareForItem(model, item, colIdx);
 
-                cell->WXOnActivate(model, value, item, colIdx);
-
-                if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
-                {
-                    cell->PrepareForItem(model, item, colIdx);
-
-                    wxRect cell_rect( xpos, GetLineStart( current ),
-                                    col->GetWidth(), GetLineHeight( current ) );
-                    custom->Activate( cell_rect, model, item, colIdx );
-                }
+                wxRect cell_rect( xpos, GetLineStart( current ),
+                                col->GetWidth(), GetLineHeight( current ) );
+                cell->WXOnActivate( cell_rect, model, item, colIdx );
             }
             else
             {
@@ -3813,53 +3810,50 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Call LeftClick after everything else as under GTK+
         if (cell->GetMode() & wxDATAVIEW_CELL_ACTIVATABLE)
         {
-            if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
+            // notify cell about click
+            cell->PrepareForItem(model, item, col->GetModelColumn());
+
+            wxRect cell_rect( xpos, GetLineStart( current ),
+                              col->GetWidth(), GetLineHeight( current ) );
+
+            // Report position relative to the cell's custom area, i.e.
+            // no the entire space as given by the control but the one
+            // used by the renderer after calculation of alignment etc.
+
+            // adjust the rectangle ourselves to account for the alignment
+            wxRect rectItem = cell_rect;
+            const int align = cell->GetAlignment();
+            if ( align != wxDVR_DEFAULT_ALIGNMENT )
             {
-                // notify cell about click
-                custom->PrepareForItem(model, item, col->GetModelColumn());
+                const wxSize size = cell->GetSize();
 
-                wxRect cell_rect( xpos, GetLineStart( current ),
-                                  col->GetWidth(), GetLineHeight( current ) );
-
-                // Report position relative to the cell's custom area, i.e.
-                // no the entire space as given by the control but the one
-                // used by the renderer after calculation of alignment etc.
-
-                // adjust the rectangle ourselves to account for the alignment
-                wxRect rectItem = cell_rect;
-                const int align = custom->GetAlignment();
-                if ( align != wxDVR_DEFAULT_ALIGNMENT )
+                if ( size.x >= 0 && size.x < cell_rect.width )
                 {
-                    const wxSize size = custom->GetSize();
-
-                    if ( size.x >= 0 && size.x < cell_rect.width )
-                    {
-                        if ( align & wxALIGN_CENTER_HORIZONTAL )
-                            rectItem.x += (cell_rect.width - size.x)/2;
-                        else if ( align & wxALIGN_RIGHT )
-                            rectItem.x += cell_rect.width - size.x;
-                        // else: wxALIGN_LEFT is the default
-                    }
-
-                    if ( size.y >= 0 && size.y < cell_rect.height )
-                    {
-                        if ( align & wxALIGN_CENTER_VERTICAL )
-                            rectItem.y += (cell_rect.height - size.y)/2;
-                        else if ( align & wxALIGN_BOTTOM )
-                            rectItem.y += cell_rect.height - size.y;
-                        // else: wxALIGN_TOP is the default
-                    }
+                    if ( align & wxALIGN_CENTER_HORIZONTAL )
+                        rectItem.x += (cell_rect.width - size.x)/2;
+                    else if ( align & wxALIGN_RIGHT )
+                        rectItem.x += cell_rect.width - size.x;
+                    // else: wxALIGN_LEFT is the default
                 }
 
-                wxPoint pos( event.GetPosition() );
-                pos.x -= rectItem.x;
-                pos.y -= rectItem.y;
-
-                m_owner->CalcUnscrolledPosition( pos.x, pos.y, &pos.x, &pos.y );
-
-                 /* ignore ret */ custom->LeftClick( pos, cell_rect,
-                                  model, item, col->GetModelColumn());
+                if ( size.y >= 0 && size.y < cell_rect.height )
+                {
+                    if ( align & wxALIGN_CENTER_VERTICAL )
+                        rectItem.y += (cell_rect.height - size.y)/2;
+                    else if ( align & wxALIGN_BOTTOM )
+                        rectItem.y += cell_rect.height - size.y;
+                    // else: wxALIGN_TOP is the default
+                }
             }
+
+            wxPoint pos( event.GetPosition() );
+            pos.x -= rectItem.x;
+            pos.y -= rectItem.y;
+
+            m_owner->CalcUnscrolledPosition( pos.x, pos.y, &pos.x, &pos.y );
+
+             /* ignore ret */ cell->WXOnLeftClick( pos, cell_rect,
+                              model, item, col->GetModelColumn());
         }
     }
 }
