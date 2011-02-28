@@ -121,10 +121,11 @@ public:
     wxSize GetSize() const;
 
     // Implementation only, don't use nor override
-    virtual bool WXOnActivate(wxRect cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col);
+    virtual bool WXOnLeftClick(wxPoint cursor,
+                               wxRect cell,
+                               wxDataViewModel *model,
+                               const wxDataViewItem& item,
+                               unsigned int col);
 private:
     bool    m_toggle;
 

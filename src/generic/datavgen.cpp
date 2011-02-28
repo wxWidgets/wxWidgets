@@ -863,10 +863,11 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXOnActivate(wxRect WXUNUSED(cell),
-                                            wxDataViewModel *model,
-                                            const wxDataViewItem& item,
-                                            unsigned int col)
+bool wxDataViewToggleRenderer::WXOnLeftClick(wxPoint WXUNUSED(cursor),
+                                             wxRect WXUNUSED(cell),
+                                             wxDataViewModel *model,
+                                             const wxDataViewItem& item,
+                                             unsigned int col)
 {
     if (model->IsEnabled(item, col))
     {
