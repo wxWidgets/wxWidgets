@@ -49,26 +49,9 @@ void wxBell()
 
 #if wxUSE_GUI
 
-@interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
-{
-}
-
-- (void)applicationWillFinishLaunching:(NSApplication *)sender;
-
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
-- (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename;
-- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
-           withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
-- (void)applicationWillTerminate:(NSApplication *)sender;
-@end
-
 @implementation wxNSAppController
 
-- (void)applicationWillFinishLaunching:(NSApplication *)application {	
+- (void)applicationWillFinishLaunching:(NSNotification *)application {	
     wxUnusedVar(application);
 }
 
@@ -130,7 +113,7 @@ void wxBell()
     return NSTerminateNow;
 }
 
-- (void)applicationWillTerminate:(NSApplication *)application {
+- (void)applicationWillTerminate:(NSNotification *)application {
     wxUnusedVar(application);
     wxCloseEvent event;
     event.SetCanVeto(false);
