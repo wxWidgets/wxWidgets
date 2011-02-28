@@ -125,9 +125,6 @@ MyDialog::MyDialog(const wxString& title)
     Centre();
 
     m_taskBarIcon = new MyTaskBarIcon();
-#if defined(__WXCOCOA__)
-    m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
-#endif
 
     // we should be able to show up to 128 characters on recent Windows versions
     // (and 64 on Win9x)
@@ -139,6 +136,14 @@ MyDialog::MyDialog(const wxString& title)
     {
         wxLogError(wxT("Could not set icon."));
     }
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
+    if ( !m_dockIcon->SetIcon(wxICON(sample)) )
+    {
+        wxLogError(wxT("Could not set icon."));
+    }
+#endif
 }
 
 MyDialog::~MyDialog()
@@ -258,7 +263,7 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
     submenu->AppendSeparator();
     submenu->Append(PU_SUB2, wxT("Another submenu"));
     menu->Append(PU_SUBMAIN, wxT("Submenu"), submenu);
-#ifndef __WXMAC_OSX__ /*Mac has built-in quit menu*/
+#ifndef __WXOSX__ /*Mac has built-in quit menu*/
     menu->AppendSeparator();
     menu->Append(PU_EXIT,    wxT("E&xit"));
 #endif
