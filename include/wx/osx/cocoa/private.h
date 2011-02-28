@@ -386,7 +386,8 @@ const short kwxCursorSize = 11;
 const short kwxCursorSizeNESW = 12;
 const short kwxCursorSizeNWSE = 13;
 const short kwxCursorRoller = 14;
-const short kwxCursorLast = kwxCursorRoller;
+const short kwxCursorWatch = 15;
+const short kwxCursorLast = kwxCursorWatch;
 
 // exposing our fallback cursor map
 

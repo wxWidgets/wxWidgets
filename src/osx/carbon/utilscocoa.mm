@@ -516,8 +516,11 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
 
     case wxCURSOR_WATCH:
     case wxCURSOR_WAIT:
-        // should be displayed by the system when things are running
-        cursor = [[NSCursor arrowCursor] retain];
+        // an arrow should be displayed by the system when things are running
+        // according to the HIG
+        // cursor = [[NSCursor arrowCursor] retain];
+        // but for crossplatform compatibility we display a watch cursor
+        cursor = wxGetStockCursor(kwxCursorWatch);
         break;
 
     case wxCURSOR_IBEAM:
