@@ -13,6 +13,7 @@
 #if wxUSE_TASKBARICON
 
 #ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
     #include "wx/menu.h"
     #include "wx/icon.h"
     #include "wx/log.h"
