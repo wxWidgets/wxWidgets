@@ -273,6 +273,13 @@ void wxBeginBusyCursor(const wxCursor *cursor)
 {
     if (gs_wxBusyCursorCount++ == 0)
     {
+        NSEnumerator *enumerator = [[[NSApplication sharedApplication] windows] objectEnumerator];
+        id object;
+        
+        while ((object = [enumerator nextObject])) {
+            [(NSWindow*) object disableCursorRects];
+        }        
+
         gMacStoredActiveCursor = gMacCurrentCursor;
         cursor->MacInstall();
 
@@ -289,10 +296,17 @@ void wxEndBusyCursor()
 
     if (--gs_wxBusyCursorCount == 0)
     {
-        gMacStoredActiveCursor.MacInstall();
-        gMacStoredActiveCursor = wxNullCursor;
+        NSEnumerator *enumerator = [[[NSApplication sharedApplication] windows] objectEnumerator];
+        id object;
+        
+        while ((object = [enumerator nextObject])) {
+            [(NSWindow*) object enableCursorRects];
+        }        
 
         wxSetCursor(wxNullCursor);
+
+        gMacStoredActiveCursor.MacInstall();
+        gMacStoredActiveCursor = wxNullCursor;
     }
 }
 
