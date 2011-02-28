@@ -2072,16 +2072,19 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
                 // eventually we could setup a doCommandBySelector catcher and retransform this into the wx key chars
                 wxKeyEvent wxevent2(wxevent) ;
                 wxevent2.SetEventType(wxEVT_CHAR);
-                GetWXPeer()->OSXHandleKeyEvent(wxevent2);
+                result = GetWXPeer()->OSXHandleKeyEvent(wxevent2);
             }
             else
             {
-                if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
-                    [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
-                else
-                    [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+                if ( !wxevent.CmdDown() )
+                {
+                    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+                        [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
+                    else
+                        [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+                    result = true;
+                }
             }
-            result = true;
         }
     }
 
