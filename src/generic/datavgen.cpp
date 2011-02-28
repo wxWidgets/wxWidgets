@@ -3637,7 +3637,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
                 if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
                 {
-                    cell->SetValue( value );
+                    cell->PrepareForItem(model, item, colIdx);
 
                     wxRect cell_rect( xpos, GetLineStart( current ),
                                     col->GetWidth(), GetLineHeight( current ) );
