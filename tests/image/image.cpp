@@ -71,6 +71,7 @@ private:
         CPPUNIT_TEST( SizeImage );
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
+        CPPUNIT_TEST( SavePNG );
         CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
         CPPUNIT_TEST( GIFComment );
@@ -82,6 +83,7 @@ private:
     void SizeImage();
     void CompareLoadedImage();
     void CompareSavedImage();
+    void SavePNG();
     void SaveAnimatedGIF();
     void ReadCorruptedTGA();
     void GIFComment();
@@ -1023,77 +1025,78 @@ void ImageTestCase::CompareSavedImage()
         CompareImage(*handler, expected24);
         CompareImage(*handler, expected32, wxIMAGE_HAVE_ALPHA);
     }
+}
+
+void ImageTestCase::SavePNG()
+{
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+#if wxUSE_PALETTE
+    CPPUNIT_ASSERT( !expected24.HasPalette() );
+#endif // #if wxUSE_PALETTE
+
+    wxImage expected8 = expected24.ConvertToGreyscale();
+
+    /*
+    horse.png converted to greyscale should be saved without a palette.
+    */
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG), expected8);
+
+    /*
+    But if we explicitly ask for trying to save with a palette, it should work.
+    */
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_PALETTE);
 
 
-    expected8.LoadFile("horse.gif");
-    CPPUNIT_ASSERT( expected8.IsOk() );
+    CPPUNIT_ASSERT( expected8.LoadFile("horse.gif") );
 #if wxUSE_PALETTE
     CPPUNIT_ASSERT( expected8.HasPalette() );
 #endif // #if wxUSE_PALETTE
 
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_PALETTE);
+
+    /*
+    Add alpha to the image in such a way that there will still be a maximum
+    of 256 unique RGBA combinations. This should result in a saved
+    PNG image still being palettised and having alpha.
+    */
     expected8.SetAlpha();
 
-    width = expected8.GetWidth();
-    height = expected8.GetHeight();
+    int x, y;
+    const int width = expected8.GetWidth();
+    const int height = expected8.GetHeight();
     for (y = 0; y < height; ++y)
     {
         for (x = 0; x < width; ++x)
         {
-            expected8.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
+            expected8.SetAlpha(x, y, expected8.GetRed(x, y));
         }
     }
 
-    /*
-    Explicitly make known we want a palettised PNG. If we don't then this
-    particular image gets saved as a true colour image because there's an
-    alpha channel present and the PNG saver prefers to keep the alpha over
-    saving as a palettised image that has alpha converted to a mask.
-    */
-    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_ALPHA|wxIMAGE_HAVE_PALETTE);
 
     /*
-    The image contains 256 indexed colours and needs another palette entry
-    for storing the transparency index. This results in wanting 257 palette
-    entries but that amount is not supported by PNG, as such this image
-    should not contain a palette (but still have alpha) and be stored as a
-    true colour image instead.
+    Now change the alpha of the first pixel so that we can't save palettised
+    anymore because there will be 256+1 entries which is beyond PNGs limit
+    of 256 entries.
     */
+    expected8.SetAlpha(0, 0, 1);
+
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
         expected8, wxIMAGE_HAVE_ALPHA);
 
-#if wxUSE_PALETTE
     /*
-    Now do the same test again but remove one (random) palette entry. This
-    should result in saving the PNG with a palette.
+    Even if we explicitly ask for saving palettised it should not be done.
     */
-    unsigned char red[256], green[256], blue[256];
-    const wxPalette& pal = expected8.GetPalette();
-    const int paletteCount = pal.GetColoursCount();
-    for (i = 0; i < paletteCount; ++i)
-    {
-        expected8.GetPalette().GetRGB(i, &red[i], &green[i], &blue[i]);
-    }
-    wxPalette newPal(paletteCount - 1, red, green, blue);
-    expected8.Replace(
-        red[paletteCount-1], green[paletteCount-1], blue[paletteCount-1],
-        red[paletteCount-2], green[paletteCount-2], blue[paletteCount-2]);
-
-    expected8.SetPalette(newPal);
-
-    wxImage ref8 = expected8;
-
-    /*
-    Convert the alpha channel to a mask like the PNG saver does. Also convert
-    the colour used for transparency from 1,0,0 to 2,0,0. The latter gets
-    done by the PNG loader in search of an unused colour to use for
-    transparency (this should be fixed).
-    */
-    ref8.ConvertAlphaToMask();
-    ref8.Replace(1, 0, 0,  2, 0, 0);
-
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
-        expected8, wxIMAGE_HAVE_PALETTE, &ref8);
-#endif
+        expected8, wxIMAGE_HAVE_ALPHA);
+
 }
 
 void ImageTestCase::SaveAnimatedGIF()

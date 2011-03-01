@@ -646,27 +646,42 @@ error:
 }
 
 // ----------------------------------------------------------------------------
-// SaveFile() helpers
+// SaveFile() palette helpers
 // ----------------------------------------------------------------------------
 
-#if wxUSE_PALETTE
+typedef wxLongToLongHashMap PaletteMap;
 
-static int PaletteFind(const png_color& clr, const png_color *pal, int palCount)
+static unsigned long PaletteMakeKey(const png_color_8& clr)
 {
-   for (int i = 0; i < palCount; ++i)
-   {
-      if (    (clr.red   == pal[i].red)
-           && (clr.green == pal[i].green)
-           && (clr.blue  == pal[i].blue))
-      {
-         return i;
-      }
-   }
-
-   return wxNOT_FOUND;
+    return (wxImageHistogram::MakeKey(clr.red, clr.green, clr.blue) << 8) | clr.alpha;
 }
 
-#endif // wxUSE_PALETTE
+static long PaletteFind(const PaletteMap& palette, const png_color_8& clr)
+{
+    unsigned long value = PaletteMakeKey(clr);
+    PaletteMap::const_iterator it = palette.find(value);
+
+    return (it != palette.end()) ? it->second : wxNOT_FOUND;
+}
+
+static long PaletteAdd(PaletteMap *palette, const png_color_8& clr)
+{
+    unsigned long value = PaletteMakeKey(clr);
+    PaletteMap::const_iterator it = palette->find(value);
+    size_t index;
+
+    if (it == palette->end())
+    {
+        index = palette->size();
+        (*palette)[value] = index;
+    }
+    else
+    {
+        index = it->second;
+    }
+
+    return index;
+}
 
 // ----------------------------------------------------------------------------
 // writing PNGs
@@ -720,6 +735,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     //     explanation why this line is mandatory
     png_set_write_fn( png_ptr, &wxinfo, wx_PNG_stream_writer, NULL);
 
+    const int iHeight = image->GetHeight();
+    const int iWidth = image->GetWidth();
+
     const bool bHasPngFormatOption
         = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT);
 
@@ -730,49 +748,86 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     bool bHasAlpha = image->HasAlpha();
     bool bHasMask = image->HasMask();
 
+    bool bUsePalette = iColorType == wxPNG_TYPE_PALETTE
 #if wxUSE_PALETTE
-    /*
-    Only save as an indexed image if the number of palette entries does not
-    exceed libpng's limit (256).
-    We assume here that we will need an extra palette entry if there's an
-    alpha or mask, regardless of whether a possibly needed conversion from
-    alpha to a mask fails (unlikely), or whether the mask colour already
-    can be found in the palette (more likely). In the latter case an extra
-    palette entry would not be required later on and the image could actually
-    be saved as a palettised PNG (instead now it will be saved as true colour).
-    A little bit of precision is lost, but at the benefit of a lot more
-    simplified code.
-    */
-    bool bUsePalette =
-        (!bHasPngFormatOption || iColorType == wxPNG_TYPE_PALETTE)
-        && image->HasPalette()
-        && image->GetPalette().GetColoursCount()
-            + ((bHasAlpha || bHasMask) ? 1 : 0) <= PNG_MAX_PALETTE_LENGTH;
+        || (!bHasPngFormatOption && image->HasPalette() )
+#endif
+    ;
 
-    wxImage temp_image(*image);
-    if (bUsePalette && image->HasAlpha() && !bHasMask)
+    png_color_8 mask;
+
+    if (bHasMask)
     {
-        /*
-        Only convert alpha to mask if saving as a palettised image was
-        explicitly requested. We don't want to lose alpha's precision
-        by converting to a mask just to be able to save palettised.
-        */
-        if (iColorType == wxPNG_TYPE_PALETTE
-            && temp_image.ConvertAlphaToMask())
+        mask.red   = image->GetMaskRed();
+        mask.green = image->GetMaskGreen();
+        mask.blue  = image->GetMaskBlue();
+        mask.alpha = 0;
+        mask.gray  = 0;
+    }
+
+    PaletteMap palette;
+
+    if (bUsePalette)
+    {
+        png_color png_rgb  [PNG_MAX_PALETTE_LENGTH];
+        png_byte  png_trans[PNG_MAX_PALETTE_LENGTH];
+
+        const unsigned char *pColors = image->GetData();
+        const unsigned char* pAlpha  = image->GetAlpha();
+
+        if (bHasMask && !pAlpha)
         {
-            image = &temp_image;
-            bHasMask = true;
-            bHasAlpha = image->HasAlpha();
+            // Mask must be first
+            PaletteAdd(&palette, mask);
         }
-        else
+
+        for (int y = 0; y < iHeight; y++)
         {
-            bUsePalette = false;
-            iColorType = wxPNG_TYPE_COLOUR;
+            for (int x = 0; x < iWidth; x++)
+            {
+                png_color_8 rgba;
+
+                rgba.red   = *pColors++;
+                rgba.green = *pColors++;
+                rgba.blue  = *pColors++;
+                rgba.gray  = 0;
+                rgba.alpha = (pAlpha && !bHasMask) ? *pAlpha++ : 0;
+
+                // save in our palette
+                long index = PaletteAdd(&palette, rgba);
+
+                if (index < PNG_MAX_PALETTE_LENGTH)
+                {
+                    // save in libpng's palette
+                    png_rgb[index].red   = rgba.red;
+                    png_rgb[index].green = rgba.green;
+                    png_rgb[index].blue  = rgba.blue;
+                    png_trans[index]     = rgba.alpha;
+                }
+                else
+                {
+                    bUsePalette = false;
+                    break;
+                }
+            }
+        }
+
+        if (bUsePalette)
+        {
+            png_set_PLTE(png_ptr, info_ptr, png_rgb, palette.size());
+
+            if (bHasMask && !pAlpha)
+            {
+                wxASSERT(PaletteFind(palette, mask) == 0);
+                png_trans[0] = 0;
+                png_set_tRNS(png_ptr, info_ptr, png_trans, 1, NULL);
+            }
+            else if (pAlpha && !bHasMask)
+            {
+                png_set_tRNS(png_ptr, info_ptr, png_trans, palette.size(), NULL);
+            }
         }
     }
-#else
-    bool bUsePalette = false;
-#endif // wxUSE_PALETTE
 
     /*
     If saving palettised was requested but it was decided we can't use a
@@ -785,26 +840,14 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
     bool bUseAlpha = !bUsePalette && (bHasAlpha || bHasMask);
 
-    png_color mask;
-    if (bHasMask)
-    {
-        mask.red   = image->GetMaskRed();
-        mask.green = image->GetMaskGreen();
-        mask.blue  = image->GetMaskBlue();
-    }
-
-
     int iPngColorType;
 
-#if wxUSE_PALETTE
     if (bUsePalette)
     {
         iPngColorType = PNG_COLOR_TYPE_PALETTE;
         iColorType = wxPNG_TYPE_PALETTE;
     }
-    else
-#endif // wxUSE_PALETTE
-    if ( iColorType==wxPNG_TYPE_COLOUR )
+    else if ( iColorType==wxPNG_TYPE_COLOUR )
     {
         iPngColorType = bUseAlpha ? PNG_COLOR_TYPE_RGB_ALPHA
                                   : PNG_COLOR_TYPE_RGB;
@@ -839,62 +882,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                   PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,
                   PNG_FILTER_TYPE_BASE);
 
-#if wxUSE_PALETTE
-    png_colorp palette = NULL;
-    int numPalette = 0;
-
-    if (bUsePalette)
-    {
-        const wxPalette& pal = image->GetPalette();
-        const int palCount = pal.GetColoursCount();
-        palette = (png_colorp) malloc(
-            (palCount + 1 /*headroom for trans */) * sizeof(png_color));
-
-        if (!palette)
-        {
-            png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
-            if (verbose)
-            {
-               wxLogError(_("Couldn't save PNG image."));
-            }
-            return false;
-        }
-
-        for (int i = 0; i < palCount; ++i)
-        {
-            pal.GetRGB(i, &palette[i].red, &palette[i].green, &palette[i].blue);
-        }
-
-        numPalette = palCount;
-        if (bHasMask)
-        {
-            int index = PaletteFind(mask, palette, numPalette);
-
-            if (index)
-            {
-                if (index == wxNOT_FOUND)
-                {
-                    numPalette++;
-                    index = palCount;
-                    palette[index] = mask;
-                }
-
-                wxSwap(palette[0], palette[index]);
-            }
-
-            png_byte trans = 0;
-            png_set_tRNS(png_ptr, info_ptr, &trans, 1, NULL);
-        }
-
-        png_set_PLTE(png_ptr, info_ptr, palette, numPalette);
-        free (palette);
-        palette = NULL;
-
-        // Let palette point to libpng's copy of the palette.
-        (void) png_get_PLTE(png_ptr, info_ptr, &palette, &numPalette);
-    }
-#endif // wxUSE_PALETTE
-
     int iElements;
     png_color_8 sig_bit;
 
@@ -911,7 +898,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         iElements = 1;
     }
 
-    if ( iPngColorType & PNG_COLOR_MASK_ALPHA )
+    if ( bUseAlpha )
     {
         sig_bit.alpha = (png_byte)iBitDepth;
         iElements++;
@@ -960,22 +947,22 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         return false;
     }
 
-    unsigned char *
-        pAlpha = (unsigned char *)(bHasAlpha ? image->GetAlpha() : NULL);
-    int iHeight = image->GetHeight();
-    int iWidth = image->GetWidth();
+    const unsigned char *
+        pAlpha = (const unsigned char *)(bHasAlpha ? image->GetAlpha() : NULL);
 
-    unsigned char *pColors = image->GetData();
+    const unsigned char *pColors = image->GetData();
 
     for (int y = 0; y != iHeight; ++y)
     {
         unsigned char *pData = data;
         for (int x = 0; x != iWidth; x++)
         {
-            png_color clr;
+            png_color_8 clr;
             clr.red   = *pColors++;
             clr.green = *pColors++;
             clr.blue  = *pColors++;
+            clr.gray  = 0;
+            clr.alpha = (bUsePalette && pAlpha) ? *pAlpha++ : 0; // use with wxPNG_TYPE_PALETTE only
 
             switch ( iColorType )
             {
@@ -1016,12 +1003,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                         *pData++ = 0;
                     break;
 
-#if wxUSE_PALETTE
                 case wxPNG_TYPE_PALETTE:
-                    *pData++ = (unsigned char) PaletteFind(clr,
-                        palette, numPalette);
+                    *pData++ = (unsigned char) PaletteFind(palette, clr);
                     break;
-#endif // wxUSE_PALETTE
             }
 
             if ( bUseAlpha )
