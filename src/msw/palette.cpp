@@ -79,7 +79,9 @@ int wxPalette::GetColoursCount() const
 
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
-    if ( n < 0 || n > 255 )
+    // The number of colours in LOGPALETTE is a WORD so we can't create
+    // palettes with more entries than USHRT_MAX.
+    if ( n < 0 || n > 65535 )
         return false;
 
     UnRef();
