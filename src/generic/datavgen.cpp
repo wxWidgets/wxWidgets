@@ -863,8 +863,8 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXOnLeftClick(wxPoint WXUNUSED(cursor),
-                                             wxRect WXUNUSED(cell),
+bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& WXUNUSED(cursor),
+                                             const wxRect& WXUNUSED(cell),
                                              wxDataViewModel *model,
                                              const wxDataViewItem& item,
                                              unsigned int col)
@@ -1027,7 +1027,7 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return GetTextExtent(m_date.FormatDate());
 }
 
-bool wxDataViewDateRenderer::WXOnActivate(wxRect WXUNUSED(cell),
+bool wxDataViewDateRenderer::WXOnActivate(const wxRect& WXUNUSED(cell),
                                           wxDataViewModel *model,
                                           const wxDataViewItem& item,
                                           unsigned int col)

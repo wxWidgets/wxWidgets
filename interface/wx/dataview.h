@@ -1571,7 +1571,7 @@ public:
         Override this to react to double clicks or ENTER.
         This method will only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
-    virtual bool Activate( wxRect cell,
+    virtual bool Activate( const wxRect& cell,
                            wxDataViewModel* model,
                            const wxDataViewItem & item,
                            unsigned int col );
@@ -1640,8 +1640,8 @@ public:
         Override this to react to a left click.
         This method will only be called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
-    virtual bool LeftClick( wxPoint cursor,
-                            wxRect cell,
+    virtual bool LeftClick( const wxPoint& cursor,
+                            const wxRect& cell,
                             wxDataViewModel * model,
                             const wxDataViewItem & item,
                             unsigned int col );
@@ -1665,7 +1665,8 @@ public:
     /**
         Override this to start a drag operation. Not yet supported.
     */
-    virtual bool StartDrag(wxPoint cursor, wxRect cell,
+    virtual bool StartDrag(const wxPoint& cursor,
+                           const wxRect& cell,
                            wxDataViewModel* model,
                            const wxDataViewItem & item,
                            unsigned int col);

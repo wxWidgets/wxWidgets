@@ -189,7 +189,7 @@ public:
         return true;
     }
 
-    virtual bool Activate( wxRect WXUNUSED(cell),
+    virtual bool Activate( const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem &WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
@@ -198,7 +198,8 @@ public:
         return false;
     }
 
-    virtual bool LeftClick( wxPoint cursor, wxRect WXUNUSED(cell),
+    virtual bool LeftClick(const wxPoint& cursor,
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem &WXUNUSED(item),
                            unsigned int WXUNUSED(col) )

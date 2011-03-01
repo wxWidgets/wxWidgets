@@ -184,6 +184,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   wxAutomationInstance_SilentIfNone flag to prevent the error message if no
   currently running instances of this object are available.
 
+- Signatures of wxDataViewCustomRenderer::Activate(), LeftClick() and
+  StartDrag() virtual methods changed.  You will need to change them in your
+  derived renderer class too if you override them.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

@@ -230,21 +230,21 @@ public:
     // to drag it: by default they all simply return false indicating that the
     // events are not handled
 
-    virtual bool Activate(wxRect WXUNUSED(cell),
+    virtual bool Activate(const wxRect& WXUNUSED(cell),
                           wxDataViewModel *WXUNUSED(model),
                           const wxDataViewItem & WXUNUSED(item),
                           unsigned int WXUNUSED(col))
         { return false; }
 
-    virtual bool LeftClick(wxPoint WXUNUSED(cursor),
-                           wxRect WXUNUSED(cell),
+    virtual bool LeftClick(const wxPoint& WXUNUSED(cursor),
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem & WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
         { return false; }
 
-    virtual bool StartDrag(wxPoint WXUNUSED(cursor),
-                           wxRect WXUNUSED(cell),
+    virtual bool StartDrag(const wxPoint& WXUNUSED(cursor),
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem & WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
