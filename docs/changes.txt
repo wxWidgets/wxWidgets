@@ -495,7 +495,7 @@ OSX:
 2.9.1:
 ------
 
-INCOMPATIBLE CHANGE SINCE 2.9.0
+INCOMPATIBLE CHANGES SINCE 2.9.0
 
 - wxStandardPaths doesn't use vendor name by default under MSW and OSX to
   remain compatible with 2.8 behaviour but this makes it incompatible with
