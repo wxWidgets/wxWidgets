@@ -1482,7 +1482,7 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     if ( IsTopLevel() )
         return ;
 
-    bool hasFocus = m_peer->NeedsFocusRect() && m_peer->HasFocus() ;
+    bool hasFocus = m_peer->NeedsFocusRect() && HasFocus();
 
     // back to the surrounding frame rectangle
     int tx,ty,tw,th;
