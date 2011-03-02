@@ -2496,9 +2496,9 @@ bool wxWindowMac::IsShownOnScreen() const
 
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
-    bool handled = HandleWindowEvent( event ) ;
-    if ( handled && event.GetSkipped() )
-        handled = false ;
+    bool handled = false;
+    
+    // moved the ordinary key event sending AFTER the accel evaluation
 
 #if wxUSE_ACCEL
     if ( !handled && event.GetEventType() == wxEVT_KEY_DOWN)
@@ -2531,6 +2531,13 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
         }
     }
 #endif // wxUSE_ACCEL
+    
+    if ( !handled )
+    {
+        handled = HandleWindowEvent( event ) ;
+        if ( handled && event.GetSkipped() )
+            handled = false ;
+    }
 
     return handled ;
 }
