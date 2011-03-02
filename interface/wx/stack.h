@@ -31,7 +31,7 @@
     @since 2.9.2
 */
 template <typename T>
-class wxSort<T>
+class wxStack<T>
 {
 public:
     /// Type of the underlying container used.
