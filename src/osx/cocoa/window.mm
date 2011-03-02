@@ -999,7 +999,15 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     if ( [event type] == NSKeyDown )
+    {
+        // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically, 
+        // therefore we call the menubar directly here, exit if the menu is handling the shortcut
+        if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+            return;
+    
         m_lastKeyDownEvent = event;
+    }
+    
     if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
@@ -1020,7 +1028,31 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 
 bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
+    bool handled = false;
+    
+    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    SetupKeyEvent( wxevent, event );
+   
+    // because performKeyEquivalent is going up the entire view hierarchy, we don't have to
+    // walk up the ancestors ourselves but let cocoa do it
+    
+    int command = m_wxPeer->GetAcceleratorTable()->GetCommand( wxevent );
+    if (command != -1)
+    {
+        wxEvtHandler * const handler = m_wxPeer->GetEventHandler();
+        
+        wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+        handled = handler->ProcessEvent( command_event );
+        
+        if ( !handled )
+        {
+            // accelerators can also be used with buttons, try them too
+            command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
+            handled = handler->ProcessEvent( command_event );
+        }
+    }
+    
+    if ( !handled )
     {
         wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         return superimpl(slf, (SEL)_cmd, event);
