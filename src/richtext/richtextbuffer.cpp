@@ -6602,33 +6602,11 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 }
 
 /// Submit command to insert paragraphs
-bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags)
+bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int WXUNUSED(flags))
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
 
-    wxRichTextAttr attr(buffer->GetDefaultStyle());
-
-    wxRichTextAttr* p = NULL;
-    wxRichTextAttr paraAttr;
-    if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
-    {
-        paraAttr = GetStyleForNewParagraph(buffer, pos);
-        if (!paraAttr.IsDefault())
-            p = & paraAttr;
-    }
-    else
-        p = & attr;
-
     action->GetNewParagraphs() = paragraphs;
-
-    if (p && !p->IsDefault())
-    {
-        for (wxRichTextObjectList::compatibility_iterator node = action->GetNewParagraphs().GetChildren().GetFirst(); node; node = node->GetNext())
-        {
-            wxRichTextObject* child = node->GetData();
-            child->SetAttributes(*p);
-        }
-    }
 
     action->SetPosition(pos);
 
