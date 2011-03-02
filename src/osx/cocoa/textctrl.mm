@@ -218,6 +218,16 @@ protected :
     return [self isEditable];
 }
 
+- (void)textDidEndEditing:(NSNotification *)aNotification
+{
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        impl->DoNotifyFocusEvent( false, NULL );
+    }
+}
+
 @end
 
 @implementation wxNSTextField
@@ -764,6 +774,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
 
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
     }
+    c->SetNeedsFocusRect( true );
 
     return c;
 }
