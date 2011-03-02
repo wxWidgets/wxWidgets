@@ -130,6 +130,7 @@ public:
         wxWidgetCocoaImpl::SetBitmap(bitmap);
     }
 
+#if wxUSE_MARKUP
     virtual void SetLabelMarkup(const wxString& markup)
     {
         wxMarkupToAttrString toAttr(GetWXPeer(), markup);
@@ -146,6 +147,7 @@ public:
 
         [GetNSButton() setAttributedTitle:attrString];
     }
+#endif // wxUSE_MARKUP
 
     void SetPressedBitmap( const wxBitmap& bitmap )
     {
