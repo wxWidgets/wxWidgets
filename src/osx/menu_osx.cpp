@@ -627,26 +627,6 @@ void wxMenuBar::MacInstallMenuBar()
         
 #if 0
 
-    MenuBarHandle menubar = NULL ;
-
-    menubar = NewHandleClear( 6 /* sizeof( MenuBarHeader ) */ ) ;
-
-    ::SetMenuBar( menubar ) ;
-    DisposeMenuBar( menubar ) ;
-    MenuHandle appleMenu = NULL ;
-
-    verify_noerr( CreateNewMenu( kwxMacAppleMenuId , 0 , &appleMenu ) ) ;
-    verify_noerr( SetMenuTitleWithCFString( appleMenu , CFSTR( "\x14" ) ) );
-
-    // Add About/Preferences separator only on OS X
-    // KH/RN: Separator is always present on 10.3 but not on 10.2
-    // However, the change from 10.2 to 10.3 suggests it is preferred
-    InsertMenuItemTextWithCFString( appleMenu,
-                CFSTR(""), 0, kMenuItemAttrSeparator, 0);
-    InsertMenuItemTextWithCFString( appleMenu,
-                CFSTR("About..."), 0, 0, 0);
-    MacInsertMenu( appleMenu , 0 ) ;
-
     // if we have a mac help menu, clean it up before adding new items
     MenuHandle helpMenuHandle ;
     MenuItemIndex firstUserHelpMenuItem ;
