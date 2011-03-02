@@ -145,71 +145,59 @@ void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry*
         {
             switch ( key )
             {
-/*
-                // standard function keys from here
-                case WXK_TAB :
-                    modifiers |= NSFunctionKeyMask ;
-                    shortcut = NSTabCharacter ;
-                    break ;
-
-                case kEnterCharCode :
-                    modifiers |= NSFunctionKeyMask ;
-                    cocoaKey = NSTabCharacter ;
-                    break ;
-
-                case WXK_RETURN :
-                    modifiers |= NSFunctionKeyMask ;
-                    cocoaKey = NSTabCharacter ;
-                    break ;
-
-                case WXK_ESCAPE :
-                    modifiers |= NSFunctionKeyMask ;
-                    cocoaKey = kEscapeCharCode ;
-                    break ;
-
-                case WXK_SPACE :
-                    shortcut = ' ' ;
-                    break ;
-
-
                 case WXK_CLEAR :
-                    cocoaKey = kClearCharCode ;
+                    modifiers |= NSFunctionKeyMask;
+                    shortcut = NSDeleteCharacter ;
                     break ;
 
                 case WXK_PAGEUP :
-                    cocoaKey = kPageUpCharCode ;
+                    modifiers |= NSFunctionKeyMask;
+                    shortcut = NSPageUpFunctionKey ;
                     break ;
 
                 case WXK_PAGEDOWN :
-                    cocoaKey = kPageDownCharCode ;
+                    modifiers |= NSFunctionKeyMask;
+                    shortcut = NSPageDownFunctionKey ;
                     break ;
 
                 case WXK_LEFT :
-                    cocoaKey = kLeftArrowCharCode ;
+                    modifiers |= NSNumericPadKeyMask | NSFunctionKeyMask;
+                    shortcut = NSLeftArrowFunctionKey ;
                     break ;
 
                 case WXK_UP :
-                    cocoaKey = kUpArrowCharCode ;
+                    modifiers |= NSNumericPadKeyMask | NSFunctionKeyMask;
+                    shortcut = NSUpArrowFunctionKey ;
                     break ;
 
                 case WXK_RIGHT :
-                    cocoaKey = kRightArrowCharCode ;
+                    modifiers |= NSNumericPadKeyMask | NSFunctionKeyMask;
+                    shortcut = NSRightArrowFunctionKey ;
                     break ;
 
                 case WXK_DOWN :
-                    cocoaKey = kDownArrowCharCode ;
+                    modifiers |= NSNumericPadKeyMask | NSFunctionKeyMask;
+                    shortcut = NSDownArrowFunctionKey ;
                     break ;
 
                 case WXK_HOME :
-                    cocoaKey = kHomeCharCode ;
+                    modifiers |= NSFunctionKeyMask;
+                    shortcut = NSHomeFunctionKey ;
                     break ;
 
                 case WXK_END :
-                    cocoaKey = kEndCharCode ;
+                    modifiers |= NSFunctionKeyMask;
+                    shortcut = NSEndFunctionKey ;
                     break ;
-*/
-                // TODO Test all above with their function key equiv.
-                // from NSEvent.h
+
+                case WXK_NUMPAD_ENTER :
+                    shortcut = NSEnterCharacter;
+                    break;
+                    
+                case WXK_BACK :
+                case WXK_RETURN :
+                case WXK_TAB :
+                case WXK_ESCAPE :
                 default :
                     if(entry->GetFlags() & wxACCEL_SHIFT)
                         shortcut = toupper(key);
@@ -223,6 +211,10 @@ void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry*
         [menuItem setKeyEquivalentModifierMask:modifiers];
     }
 }
+
+@interface NSMenuItem(PossibleMethods)
+- (void)setHidden:(BOOL)hidden;
+@end
 
 class wxMenuItemCocoaImpl : public wxMenuItemImpl
 {
