@@ -2758,7 +2758,7 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *model,
+bool wxDataViewDateRenderer::Activate( const wxRect& WXUNUSED(cell), wxDataViewModel *model,
                                        const wxDataViewItem &item, unsigned int col )
 {
     wxVariant variant;

@@ -239,7 +239,7 @@ public:
 
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
-    virtual bool Activate( wxRect cell,
+    virtual bool Activate( const wxRect& cell,
                            wxDataViewModel *model,
                            const wxDataViewItem &item,
                            unsigned int col );
