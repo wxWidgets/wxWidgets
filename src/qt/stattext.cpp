@@ -37,7 +37,8 @@ bool wxStaticText::Create(wxWindow *parent,
 {
     m_qtLabel = new QLabel( wxQtConvertString( label ), parent->GetHandle() );
 
-    return wxStaticTextBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
+        && wxStaticTextBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 

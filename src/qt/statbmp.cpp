@@ -37,16 +37,26 @@ bool wxStaticBitmap::Create( wxWindow *parent,
              const wxString& name)
 {
     m_qtLabel = new QLabel( parent->GetHandle() );
+    SetBitmap( label );
 
-    return wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
+        && wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+}
+
+static void SetPixmap( QLabel *label, const QPixmap *pixMap )
+{
+    if ( pixMap != NULL )
+        label->setPixmap( *pixMap );
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)
 {
+    SetPixmap( m_qtLabel, icon.GetHandle() );
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
+    SetPixmap( m_qtLabel, bitmap.GetHandle() );
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const

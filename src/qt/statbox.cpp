@@ -33,12 +33,10 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    if ( !CreateControl( parent, id, pos, size, style, wxDefaultValidator, name ))
-        return false;
-
     m_qtGroupBox = new wxQtGroupBox( parent, label );
 
-    return true;
+    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
+       && wxStaticBoxBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 QGroupBox *wxStaticBox::GetHandle() const

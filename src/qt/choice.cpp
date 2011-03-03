@@ -63,13 +63,11 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
-        return false;
-
     m_qtComboBox = new wxQtComboBox( parent );
     m_qtComboBox->AddChoices( n, choices );
 
-    return true;
+    return CreateControl( parent, id, pos, size, style, validator, name )
+        && wxControl::Create( parent, id, pos, size, style, validator, name );
 }
 
 

@@ -38,7 +38,8 @@ bool wxStaticLine::Create( wxWindow *parent,
     else if ( style & wxLI_VERTICAL )
         m_qtFrame->setFrameStyle( QFrame::VLine );
 
-    return wxStaticLineBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
+        && wxStaticLineBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 QFrame *wxStaticLine::GetHandle() const

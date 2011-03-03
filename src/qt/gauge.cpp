@@ -41,7 +41,8 @@ bool wxGauge::Create(wxWindow *parent,
     m_qtProgressBar->setOrientation( wxQtConvertOrientation( style, wxGA_HORIZONTAL ));
     m_qtProgressBar->setRange( 0, range );
 
-    return wxGaugeBase::Create( parent, id, range, pos, size, style, validator, name );
+    return CreateControl( parent, id, pos, size, style, validator, name )
+        && wxGaugeBase::Create( parent, id, range, pos, size, style, validator, name );
 }
 
 

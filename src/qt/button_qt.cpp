@@ -18,6 +18,21 @@ wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler )
     connect( this, SIGNAL( clicked( bool )), this, SLOT( OnButtonClicked( bool )));
 }
 
+void wxQtPushButton::SetToggleable()
+{
+    setCheckable( true );
+}
+
+void wxQtPushButton::SetValue( bool state )
+{
+    setChecked( state );
+}
+
+bool wxQtPushButton::GetValue() const
+{
+    return isChecked();
+}
+
 void wxQtPushButton::SetDefault()
 {
     setDefault( true );

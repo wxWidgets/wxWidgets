@@ -42,18 +42,21 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton->SetToggleable();
     m_qtPushButton->SetBitmap( label );
 
-    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
+    return CreateControl( parent, id, pos, size, style, validator, name )
+        && wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 void wxBitmapToggleButton::SetValue(bool state)
 {
+    m_qtPushButton->SetValue( state );
 }
 
 bool wxBitmapToggleButton::GetValue() const
 {
-    return false;
+    return m_qtPushButton->GetValue();
 }
 
 QPushButton *wxBitmapToggleButton::GetHandle() const
@@ -88,6 +91,7 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton->SetToggleable();
     m_qtPushButton->SetLabel( label );
 
     return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
@@ -95,11 +99,12 @@ bool wxToggleButton::Create(wxWindow *parent,
 
 void wxToggleButton::SetValue(bool state)
 {
+    m_qtPushButton->SetValue( state );
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return false;
+    return m_qtPushButton->GetValue();
 }
 
 QPushButton *wxToggleButton::GetHandle() const

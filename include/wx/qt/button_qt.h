@@ -20,6 +20,11 @@ class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButt
 public:
     wxQtPushButton( wxWindow *parent, wxControl *handler );
 
+    void SetToggleable();
+
+    void SetValue( bool state );
+    bool GetValue() const;
+
     void SetDefault();
     void SetLabel( const wxString &label );
     void SetBitmap( const wxBitmap &bitmap );

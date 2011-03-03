@@ -122,8 +122,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     QtStoreWindowPointer( GetHandle(), this );
 
-    if ( parent != NULL && FindWindow( GetId() ) == NULL )
-        parent->AddChild( this );
+//    if ( parent != NULL && FindWindow( GetId() ) == NULL )
+//        parent->AddChild( this );
 
 //    if ( parent != NULL )
 //        parent->AddChild( this );

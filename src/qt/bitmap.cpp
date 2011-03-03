@@ -157,6 +157,7 @@ void wxBitmap::InitStandardHandlers()
 
 wxBitmap::wxBitmap()
 {
+    // m_refData = new wxBitmapRefData();
 }
 
 wxBitmap::wxBitmap(QPixmap pix)
@@ -368,7 +369,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
 
 QPixmap *wxBitmap::GetHandle() const
 {
-    return ((wxBitmapRefData *)m_refData)->m_qtPixmap;
+    return ( m_refData != NULL ) ? ((wxBitmapRefData *)m_refData)->m_qtPixmap : NULL;
 }
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const

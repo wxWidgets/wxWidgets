@@ -36,7 +36,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     m_qtTreeWidget = new QTreeWidget( parent->GetHandle() );
 
-    return wxTreeCtrlBase::Create( parent, id, pos, size, style, validator, name );
+    return CreateControl( parent, id, pos, size, style, validator, name )
+       && wxTreeCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 unsigned wxTreeCtrl::GetCount() const
@@ -47,11 +48,12 @@ unsigned wxTreeCtrl::GetCount() const
 
 unsigned wxTreeCtrl::GetIndent() const
 {
-    return 0;
+    return m_qtTreeWidget->columnCount();
 }
 
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
+    m_qtTreeWidget->setColumnCount( indent );
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)

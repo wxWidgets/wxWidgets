@@ -37,12 +37,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString &name)
 {
-    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
-        return false;
-
     m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
 
-    return true;
+    return CreateControl( parent, id, pos, size, style, validator, name )
+        && wxTextCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const

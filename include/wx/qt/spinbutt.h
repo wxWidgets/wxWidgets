@@ -9,6 +9,10 @@
 #ifndef _WX_QT_SPINBUTT_H_
 #define _WX_QT_SPINBUTT_H_
 
+#include "wx/spinbutt.h"
+#include "wx/qt/pointer_qt.h"
+#include <QtGui/QSpinBox>
+
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
@@ -30,9 +34,10 @@ public:
     virtual int GetValue() const;
     virtual void SetValue(int val);
 
-protected:
+    virtual QSpinBox *GetHandle() const;
 
 private:
+    wxQtPointer< QSpinBox > m_qtSpinBox;
 };
 
 #endif // _WX_QT_SPINBUTT_H_

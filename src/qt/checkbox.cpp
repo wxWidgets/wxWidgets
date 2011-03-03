@@ -28,9 +28,6 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
             const wxString& name )
 {
-    if ( !CreateControl( parent, id, pos, size, style, validator, name ))
-        return false;
-
     m_qtCheckBox = new QCheckBox( wxQtConvertString( label ), parent->GetHandle() );
 
     if ( style & wxCHK_2STATE )
@@ -45,7 +42,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( style & wxALIGN_RIGHT )
         m_qtCheckBox->setLayoutDirection( Qt::RightToLeft );
 
-    return true;
+    return CreateControl( parent, id, pos, size, style, validator, name )
+        && wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 

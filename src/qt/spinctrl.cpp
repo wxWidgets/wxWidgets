@@ -33,10 +33,6 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    if ( !CreateControl( parent, id, pos, size, style, wxDefaultValidator, name ))
-        return false;
-
-
     m_qtSpinBox = new Widget( parent->GetHandle() );
     wxMISSING_IMPLEMENTATION( wxSTRINGIZE( style ));
     SetValue( initial );
@@ -46,7 +42,9 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     if ( !value.IsEmpty() )
         SetValue( value );
 
-    return true;
+    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
+        && wxSpinCtrlBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+
 }
 
 template< typename T, typename Widget >
