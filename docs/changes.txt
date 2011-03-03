@@ -99,6 +99,7 @@ All:
 - Added wxT_2() for forward compatibility with wxWidgets 3. Use it in
   initialization of wxCmdLineEntryDesc struct elements and (very few) other
   places where wxT() is required currently but won't be allowed in v3.
+- Fixed crash on exit caused by deleting old logger in wxLogChain dtor.
 
 All (GUI):
 

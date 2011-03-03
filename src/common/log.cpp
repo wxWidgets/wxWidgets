@@ -199,7 +199,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
       wxString msg;
       msg << _T("(") << mask << _T(") ") << wxString::FormatV(szFormat, argptr);
-          
+
       wxLog::OnLog(wxLOG_Trace, msg, time(NULL));
     }
   }
@@ -631,7 +631,7 @@ wxLogChain::wxLogChain(wxLog *logger)
 
 wxLogChain::~wxLogChain()
 {
-    delete m_logOld;
+    wxLog::SetActiveTarget(m_logOld);
 
     if ( m_logNew != this )
         delete m_logNew;
