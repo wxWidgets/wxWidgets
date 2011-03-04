@@ -1809,13 +1809,19 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
+#if 1
+    // under 10.6 we are getting errors during construction otherwise
+    ::GetWindowBounds(window, kWindowGlobalPortRgn, inRect);
+#else
     GetWindowPortBounds(window, inRect);
+
     Point pt = { inRect->top ,inRect->left };
     wxMacLocalToGlobal( window, &pt ) ;
     inRect->bottom += pt.v - inRect->top;
     inRect->right += pt.h - inRect->left;
     inRect->top = pt.v;
     inRect->left = pt.h;
+#endif
 }
 
 static SInt32 wxShapedMacWindowGetFeatures(WindowRef window, SInt32 param)
@@ -1849,9 +1855,26 @@ static void wxShapedMacWindowContentRegion(WindowRef window, RgnHandle rgn)
     wxTopLevelWindowMac* win = wxFindWinFromMacWindow(window);
     if (win)
     {
-        Rect r ;
-        wxShapedMacWindowGetPos( window, &r ) ;
-        RectRgn( rgn , &r ) ;
+        Rect windowRect ;
+        wxShapedMacWindowGetPos( window, &windowRect ) ;
+#if 1
+        // the port rectangle of the window may be larger than the window was set,
+        // therefore we clip at the right and bottom of the shape
+        RgnHandle cachedRegion = (RgnHandle) GetWRefCon(window);
+        
+        if (cachedRegion)
+        {
+            CopyRgn(cachedRegion, rgn);                      // make a copy of our cached region
+            OffsetRgn(rgn, windowRect.left, windowRect.top); // position it over window
+            Rect r;
+            GetRegionBounds(rgn,&r);
+            r.left = windowRect.left;
+            r.top = windowRect.top;
+            RectRgn( rgn , &r ) ;
+        }
+#else
+        RectRgn( rgn , &windowRect ) ;
+#endif
     }
 }
 
