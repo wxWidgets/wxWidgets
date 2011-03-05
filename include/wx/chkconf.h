@@ -2084,6 +2084,15 @@
 #   endif
 #endif /* wxUSE_SVG */
 
+#if wxUSE_TASKBARICON && !wxUSE_MENUS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TASKBARICON requires wxUSE_MENUS"
+#   else
+#       undef wxUSE_TASKBARICON
+#       define wxUSE_TASKBARICON 0
+#   endif
+#endif /* wxUSE_TASKBARICON */
+
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
