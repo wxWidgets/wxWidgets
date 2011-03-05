@@ -55,6 +55,7 @@ class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowList;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // Arithmetic functions
@@ -714,7 +715,9 @@ private:
     // disable all windows except the given one (used by both ctors)
     void DoDisable(wxWindow *winToSkip = NULL);
 
-
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    wxEventLoop* m_modalEventLoop;
+#endif
     wxWindowList *m_winDisabled;
     bool m_disabled;
 

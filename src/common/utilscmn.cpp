@@ -1567,6 +1567,12 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+
+// defined in evtloop.mm
+
+#else
+
 wxWindowDisabler::wxWindowDisabler(bool disable)
 {
     m_disabled = disable;
@@ -1628,6 +1634,8 @@ wxWindowDisabler::~wxWindowDisabler()
 
     delete m_winDisabled;
 }
+
+#endif
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one
