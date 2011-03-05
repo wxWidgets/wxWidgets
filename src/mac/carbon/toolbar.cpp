@@ -487,7 +487,6 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         dc.DrawRoundedRectangle( 0, 0, w, h, 1.5 );
         dc.DrawBitmap( m_bmpNormal, 3, 3, true );
         
-        dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
         wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef);
