@@ -76,7 +76,6 @@ wxGBSizerItem::wxGBSizerItem( wxSizer *sizer,
 wxGBSizerItem::wxGBSizerItem()
     : wxSizerItem(),
       m_pos(-1,-1),
-      m_span(-1,-1),
       m_gbsizer(NULL)
 {
 }
