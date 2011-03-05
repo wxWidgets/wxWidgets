@@ -38,6 +38,8 @@ public:
 
 private:
     wxQtPointer< wxQtPushButton > m_qtPushButton;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 
 #endif // _WX_QT_BUTTON_H_

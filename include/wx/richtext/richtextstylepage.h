@@ -12,13 +12,15 @@
 #ifndef _RICHTEXTSTYLEPAGE_H_
 #define _RICHTEXTSTYLEPAGE_H_
 
+#include "wx/richtext/richtextdialogpage.h"
+
 /*!
  * Control identifiers
  */
 
 ////@begin control identifiers
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE wxRESIZE_BORDER|wxTAB_TRAVERSAL
-#define SYMBOL_WXRICHTEXTSTYLEPAGE_TITLE wxT("")
+#define SYMBOL_WXRICHTEXTSTYLEPAGE_TITLE wxEmptyString
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_IDNAME ID_RICHTEXTSTYLEPAGE
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION wxDefaultPosition
@@ -28,10 +30,11 @@
  * wxRichTextStylePage class declaration
  */
 
-class wxRichTextStylePage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextStylePage: public wxRichTextDialogPage
 {
     DECLARE_DYNAMIC_CLASS( wxRichTextStylePage )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors

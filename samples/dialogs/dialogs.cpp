@@ -539,8 +539,23 @@ bool MyApp::OnInit()
     menuHelp->Append(DIALOGS_ABOUTDLG_CUSTOM, wxT("About (&custom)...\tCtrl-Shift-F1"));
 #endif // wxUSE_ABOUTDLG
 
+    wxMenu* editMenu = new wxMenu;
+    editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
+    editMenu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_CUT, _("Cu&t\tCtrl+X"));
+    editMenu->Append(wxID_COPY, _("&Copy\tCtrl+C"));
+    editMenu->Append(wxID_PASTE, _("&Paste\tCtrl+V"));
+    editMenu->Append(wxID_CLEAR, _("&Delete"));
+    
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_SELECTALL, _("Select All\tCtrl+A"));
+
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuDlg, wxT("&Dialogs"));
+    
+    menubar->Append(editMenu, wxT("&Edit"));
+    
 #if wxUSE_ABOUTDLG
     menubar->Append(menuHelp, wxT("&Help"));
 #endif // wxUSE_ABOUTDLG

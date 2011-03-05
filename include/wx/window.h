@@ -525,12 +525,7 @@ public:
     // tells the item how much more space there is available in the opposite
     // direction (-1 if unknown).
     virtual bool
-    InformFirstDirection(int WXUNUSED(direction),
-                         int WXUNUSED(size),
-                         int WXUNUSED(availableOtherDir))
-    {
-        return false;
-    }
+    InformFirstDirection(int direction, int size, int availableOtherDir);
 
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
@@ -1370,10 +1365,11 @@ public:
 
         // virtual function for implementing internal idle
         // behaviour
-        virtual void OnInternalIdle() {}
+        virtual void OnInternalIdle();
 
-        // call internal idle recursively
-//        void ProcessInternalIdle() ;
+    // Send idle event to window and all subwindows
+    // Returns true if more idle time is requested.
+    virtual bool SendIdleEvents(wxIdleEvent& event);
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call

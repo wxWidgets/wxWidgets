@@ -25,6 +25,7 @@
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
 
 #include "wx/imagtiff.h"
+#include "wx/versioninfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -295,13 +296,23 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
 
+    uint16 photometric;
+    uint16 samplesPerPixel;
     uint16 extraSamples;
     uint16* samplesInfo;
+    TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
                           &extraSamples, &samplesInfo);
-    const bool hasAlpha = (extraSamples == 1 &&
-                           (samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA ||
-                            samplesInfo[0] == EXTRASAMPLE_UNASSALPHA));
+    if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric))
+    {
+        photometric = PHOTOMETRIC_MINISWHITE;
+    }
+    const bool hasAlpha = (extraSamples >= 1
+        && ((samplesInfo[0] == EXTRASAMPLE_UNSPECIFIED && samplesPerPixel > 3)
+            || samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA
+            || samplesInfo[0] == EXTRASAMPLE_UNASSALPHA))
+        || (extraSamples == 0 && samplesPerPixel == 4
+            && photometric == PHOTOMETRIC_RGB);
 
     // guard against integer overflow during multiplication which could result
     // in allocating a too small buffer and then overflowing it
@@ -626,5 +637,28 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 }
 
 #endif  // wxUSE_STREAMS
+
+/*static*/ wxVersionInfo wxTIFFHandler::GetLibraryVersionInfo()
+{
+    int major,
+        minor,
+        micro;
+
+    const wxString ver(::TIFFGetVersion());
+    if ( wxSscanf(ver, "LIBTIFF, Version %d.%d.%d", &major, &minor, &micro) != 3 )
+    {
+        wxLogDebug("Unrecognized libtiff version string \"%s\"", ver);
+
+        major =
+        minor =
+        micro = 0;
+    }
+
+    wxString copyright;
+    const wxString desc = ver.BeforeFirst('\n', &copyright);
+    copyright.Replace("\n", "");
+
+    return wxVersionInfo("libtiff", major, minor, micro, desc, copyright);
+}
 
 #endif  // wxUSE_LIBTIFF

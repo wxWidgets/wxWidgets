@@ -53,6 +53,8 @@ public:
 
 private:
     wxQtPointer< QSlider > m_qtSlider;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSlider );
 };
 
 #endif // _WX_QT_SLIDER_H_

@@ -16,6 +16,7 @@
 #include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+class wxToolTipOtherWindows;
 
 class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
@@ -64,11 +65,23 @@ public:
     // remove any tooltip from the window
     static void Remove(WXHWND hwnd, unsigned int id, const wxRect& rc);
 
-    // the rect we're associated with
+    // Set the rectangle we're associated with. This rectangle is only used for
+    // the main window, not any sub-windows added with Add() so in general it
+    // makes sense to use it for tooltips associated with a single window only.
     void SetRect(const wxRect& rc);
-    const wxRect& GetRect() const { return m_rect; }
 
 private:
+    // Adds a window other than our main m_window to this tooltip.
+    void DoAddOtherWindow(WXHWND hWnd);
+
+    // Perform the specified operation for the given window only.
+    void DoSetTip(WXHWND hWnd);
+    void DoRemove(WXHWND hWnd);
+
+    // Call the given function for all windows we're associated with.
+    void DoForAllWindows(void (wxToolTip::*func)(WXHWND));
+
+
     // the one and only one tooltip control we use - never access it directly
     // but use GetToolTipCtrl() which will create it when needed
     static WXHWND ms_hwndTT;
@@ -83,7 +96,8 @@ private:
     void Remove();
 
     wxString  m_text;           // tooltip text
-    wxWindow* m_window;         // window we're associated with
+    wxWindow* m_window;         // main window we're associated with
+    wxToolTipOtherWindows *m_others; // other windows associated with it or NULL
     wxRect    m_rect;           // the rect of the window for which this tooltip is shown
                                 // (or a rect with width/height == 0 to show it for the entire window)
     unsigned int m_id;          // the id of this tooltip (ignored when m_rect width/height is 0)

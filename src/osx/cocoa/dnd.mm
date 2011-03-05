@@ -43,6 +43,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
         default:
             wxFAIL_MSG("Unexpected result code");
     }
+    return wxDragNone;
 }
 
 @interface DropSourceDelegate : NSObject

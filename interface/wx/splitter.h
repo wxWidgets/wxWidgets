@@ -42,17 +42,17 @@
         The sash position is in the process of being changed.
         May be used to modify the position of the tracking bar to properly
         reflect the position that would be set if the drag were to be completed
-        at this point. Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
+        at this point. Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
     @event{EVT_SPLITTER_SASH_POS_CHANGED(id, func)}
         The sash position was changed. May be used to modify the sash position
         before it is set, or to prevent the change from taking place.
-        Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
+        Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
     @event{EVT_SPLITTER_UNSPLIT(id, func)}
-        The splitter has been just unsplit. Processes a wxEVT_COMMAND_SPLITTER_UNSPLIT event.
+        The splitter has been just unsplit. Processes a @c wxEVT_COMMAND_SPLITTER_UNSPLIT event.
     @event{EVT_SPLITTER_DCLICK(id, func)}
         The sash was double clicked. The default behaviour is to unsplit the
         window when this happens (unless the minimum pane size has been set
-        to a value greater than zero). Processes a wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
+        to a value greater than zero). Processes a @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
     @endEventTable
 
 
@@ -135,6 +135,18 @@ public:
         @see SetSashPosition()
     */
     int GetSashPosition() const;
+
+    /**
+        Returns the sash size in pixels.
+
+        The size of the sash is its width for a vertically split window and its
+        height for a horizontally split one. Its other direction is the same as
+        the client size of the window in the corresponding direction.
+
+        The sash size is platform-dependent because it conforms to the current
+        platform look-and-feel and cannot be changed.
+     */
+    int GetSashSize() const;
 
     /**
         Gets the split mode.
@@ -286,15 +298,6 @@ public:
     void SetSashPosition(int position, bool redraw = true);
 
     /**
-        Sets the sash size. Normally, the sash size is determined according to the
-        metrics
-        of each platform, but the application can override this, for example to show
-        a thin sash that the user is not expected to drag. If @a size is more -1,
-        the custom sash size will be used.
-    */
-    void SetSashSize(int size);
-
-    /**
         Sets the split mode.
 
         @param mode
@@ -407,17 +410,17 @@ public:
         The sash position is in the process of being changed.
         May be used to modify the position of the tracking bar to properly
         reflect the position that would be set if the drag were to be completed
-        at this point. Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
+        at this point. Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
     @event{EVT_SPLITTER_SASH_POS_CHANGED(id, func)}
         The sash position was changed. May be used to modify the sash position
         before it is set, or to prevent the change from taking place.
-        Processes a wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
+        Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
     @event{EVT_SPLITTER_UNSPLIT(id, func)}
-        The splitter has been just unsplit. Processes a wxEVT_COMMAND_SPLITTER_UNSPLIT event.
+        The splitter has been just unsplit. Processes a @c wxEVT_COMMAND_SPLITTER_UNSPLIT event.
     @event{EVT_SPLITTER_DCLICK(id, func)}
         The sash was double clicked. The default behaviour is to unsplit the
         window when this happens (unless the minimum pane size has been set
-        to a value greater than zero). Processes a wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
+        to a value greater than zero). Processes a @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
     @endEventTable
 
     @library{wxcore}

@@ -870,15 +870,16 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
+#endif
 
 #ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
 /* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxEnhMetaFileDC& dc)
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
 #endif
-
-#endif // wxUSE_PRINTING_ARCHITECTURE
+#endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {

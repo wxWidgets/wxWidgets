@@ -12,8 +12,6 @@
 #include "wx/scrolbar.h"
 #include "wx/qt/utils.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxScrollBar, wxScrollBarBase )
-
 wxScrollBar::wxScrollBar()
 {
 }

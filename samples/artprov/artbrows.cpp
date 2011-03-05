@@ -50,12 +50,13 @@
 static void FillClients(wxChoice *choice)
 {
     ART_CLIENT(wxART_OTHER)
+    ART_CLIENT(wxART_BUTTON)
     ART_CLIENT(wxART_TOOLBAR)
     ART_CLIENT(wxART_MENU)
     ART_CLIENT(wxART_FRAME_ICON)
     ART_CLIENT(wxART_CMN_DIALOG)
     ART_CLIENT(wxART_HELP_BROWSER)
-    ART_CLIENT(wxART_MESSAGE_BOX)
+    ART_CLIENT(wxART_MESSAGE_BOX) // Keep this last, it's the initial shown one
 }
 
 static void FillBitmaps(wxImageList *images, wxListCtrl *list,
@@ -79,6 +80,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_GO_DOWN)
     ART_ICON(wxART_GO_TO_PARENT)
     ART_ICON(wxART_GO_HOME)
+    ART_ICON(wxART_GOTO_FIRST)
+    ART_ICON(wxART_GOTO_LAST)
     ART_ICON(wxART_PRINT)
     ART_ICON(wxART_HELP)
     ART_ICON(wxART_TIP)
@@ -103,6 +106,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_PASTE)
     ART_ICON(wxART_UNDO)
     ART_ICON(wxART_REDO)
+    ART_ICON(wxART_PLUS)
+    ART_ICON(wxART_MINUS)
     ART_ICON(wxART_QUIT)
     ART_ICON(wxART_FIND)
     ART_ICON(wxART_FIND_AND_REPLACE)
@@ -164,7 +169,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     SetSizerAndFit(sizer);
 
-    choice->SetSelection(6/*wxART_MESSAGE_BOX*/);
+    choice->SetSelection(choice->GetCount() - 1);
     SetArtClient(wxART_MESSAGE_BOX);
 }
 
@@ -188,18 +193,18 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     m_list->SetItemState(sel, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 
     m_client = client;
-    SetArtBitmap((const wxChar*)m_list->GetItemData(sel), m_client);
+    SetArtBitmap((const char*)m_list->GetItemData(sel), m_client);
 }
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
 {
-    const wxChar *data = (const wxChar*)event.GetData();
+    const char *data = (const char*)event.GetData();
     SetArtBitmap(data, m_client, wxDefaultSize);
 }
 
 void wxArtBrowserDialog::OnChooseClient(wxCommandEvent &event)
 {
-    const wxChar *data = (const wxChar*)event.GetClientData();
+    const char *data = (const char*)event.GetClientData();
     SetArtClient(data);
 }
 

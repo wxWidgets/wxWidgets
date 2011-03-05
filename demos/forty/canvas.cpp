@@ -53,7 +53,7 @@ FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& siz
     m_arrowCursor = new wxCursor(wxCURSOR_ARROW);
 
     wxString name = wxTheApp->GetAppName();
-    if (name.Length() <= 0) name = wxT("forty");
+    if ( name.empty() ) name = wxT("forty");
     m_scoreFile = new ScoreFile(name);
     m_game = new Game(0, 0, 0);
     m_game->Deal();
@@ -75,7 +75,7 @@ Write the current player's score back to the score file
 */
 void FortyCanvas::UpdateScores()
 {
-    if (m_player.Length() > 0 && m_scoreFile && m_game)
+    if (!m_player.empty() && m_scoreFile && m_game)
     {
         m_scoreFile->WritePlayersScore(
             m_player,
@@ -94,12 +94,12 @@ void FortyCanvas::OnDraw(wxDC& dc)
 #if 0
     // if player name not set (and selection dialog is not displayed)
     // then ask the player for their name
-    if (m_player.Length() == 0 && !m_playerDialog)
+    if (m_player.empty() && !m_playerDialog)
     {
         m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
         m_playerDialog->ShowModal();
         m_player = m_playerDialog->GetPlayersName();
-        if (m_player.Length() > 0)
+        if ( !m_player.empty() )
         {
             // user entered a name - lookup their score
             int wins, games, score;
@@ -123,12 +123,12 @@ void FortyCanvas::ShowPlayerDialog()
 {
     // if player name not set (and selection dialog is not displayed)
     // then ask the player for their name
-    if (m_player.Length() == 0 && !m_playerDialog)
+    if (m_player.empty() && !m_playerDialog)
     {
         m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
         m_playerDialog->ShowModal();
         m_player = m_playerDialog->GetPlayersName();
-        if (m_player.Length() > 0)
+        if ( !m_player.empty() )
         {
             // user entered a name - lookup their score
             int wins, games, score;

@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/dynlib.h"
 #include "wx/wupdlock.h"
 #include "wx/msw/private.h"
 
@@ -53,69 +54,6 @@
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
-
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxComboBoxStyle )
-
-wxBEGIN_FLAGS( wxComboBoxStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxCB_SIMPLE)
-    wxFLAGS_MEMBER(wxCB_SORT)
-    wxFLAGS_MEMBER(wxCB_READONLY)
-    wxFLAGS_MEMBER(wxCB_DROPDOWN)
-
-wxEND_FLAGS( wxComboBoxStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxChoice,"wx/combobox.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxComboBox)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_COMBOBOX_SELECTED , wxCommandEvent )
-    wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
-
-    // TODO DELEGATES
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Value ,wxString, SetValue, GetValue, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxComboBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxComboBox)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
-
-#else
-
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxChoice)
-
-#endif
 
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_MENU(wxID_CUT, wxComboBox::OnCut)
@@ -438,6 +376,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
+#if wxUSE_DYNLIB_CLASS
 #if defined(WINVER) && WINVER >= 0x0500
     typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
     static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
@@ -455,7 +394,8 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
         (*s_pfnGetComboBoxInfo)(GetHwnd(), &info);
         return info.hwndItem;
     }
-#endif
+#endif // WINVER >= 0x0500
+#endif // wxUSE_DYNLIB_CLASS
 
     if (HasFlag(wxCB_SIMPLE))
     {

@@ -237,8 +237,6 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
 // wxListBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
-
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
@@ -580,9 +578,6 @@ void wxListBox::GTKSetItem(GtkTreeIter& iter, const GtkTreeEntry *entry)
 
 void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL,
-                 wxT("Invalid index passed to GetItemClientData") );
-
     wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
@@ -591,9 +586,6 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
 
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n),
-                 wxT("Invalid index passed to SetItemClientData") );
-
     wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
     wxCHECK_RET(entry, wxT("could not get entry"));
 
@@ -848,8 +840,17 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 #if wxUSE_TOOLTIPS
 void wxListBox::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
-    // RN: Is this needed anymore?
-    gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, NULL );
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if (!gtk_check_version(2, 12, 0))
+    {
+        gtk_widget_set_tooltip_text(GTK_WIDGET( m_treeview ), tip);
+    }
+    else
+#endif
+    {
+        // RN: Is this needed anymore?
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, NULL );
+    }
 }
 #endif // wxUSE_TOOLTIPS
 

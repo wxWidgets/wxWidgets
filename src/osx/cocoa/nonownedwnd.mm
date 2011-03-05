@@ -15,6 +15,8 @@
     #include "wx/frame.h"
     #include "wx/app.h"
     #include "wx/dialog.h"
+    #include "wx/menuitem.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/osx/private.h"
@@ -77,6 +79,7 @@ bool shouldHandleSelector(SEL selector)
             || selector == @selector(deleteForward:)
             || selector == @selector(insertNewline:)
             || selector == @selector(insertTab:)
+            || selector == @selector(insertBacktab:)
             || selector == @selector(keyDown:)
             || selector == @selector(keyUp:)
             || selector == @selector(scrollPageUp:)
@@ -199,11 +202,21 @@ bool shouldHandleSelector(SEL selector)
 {
 }
 
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
 - (void)sendEvent:(NSEvent *)event;
 @end
 
 @implementation wxNSPanel
+
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+{
+    wxNonOwnedWindowCocoaImpl* impl = (wxNonOwnedWindowCocoaImpl*) wxNonOwnedWindowImpl::FindFromWXWindow( self );
+    if (impl && impl->IsFullScreen())
+        return frameRect;
+    else
+        return [super constrainFrameRect:frameRect toScreen:screen];
+}
 
 - (BOOL)canBecomeKeyWindow
 {
@@ -252,12 +265,80 @@ bool shouldHandleSelector(SEL selector)
 
 @end
 
+extern int wxOSXGetIdFromSelector(SEL action );
+
 @implementation wxNonOwnedWindowController
 
 - (id) init
 {
     [super init];
     return self;
+}
+
+- (BOOL) triggerMenu:(SEL) action
+{
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
+    if ( mbar )
+    {
+        wxMenu* menu = NULL;
+        wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
+        if ( menu != NULL && menuitem != NULL)
+            return menu->HandleCommandProcess(menuitem);
+    }
+    return NO;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem 
+{    
+    SEL action = [menuItem action];
+
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
+    if ( mbar )
+    {
+        wxMenu* menu = NULL;
+        wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
+        if ( menu != NULL && menuitem != NULL)
+        {
+            if ( menu->HandleCommandUpdateStatus(menuitem) )
+                return menuitem->IsEnabled();
+        }
+    }
+    return YES;
+}
+
+- (void)undo:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)redo:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)cut:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)copy:(id)sender
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)paste:(id)sender
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)delete:(id)sender 
+{
+    [self triggerMenu:_cmd];
+}
+
+- (void)selectAll:(id)sender 
+{
+    [self triggerMenu:_cmd];
 }
 
 - (BOOL)windowShouldClose:(id)nwindow
@@ -578,7 +659,7 @@ WXWindow wxNonOwnedWindowCocoaImpl::GetWXWindow() const
 
 void wxNonOwnedWindowCocoaImpl::Raise()
 {
-    [m_macWindow orderWindow:NSWindowAbove relativeTo:0];
+    [m_macWindow makeKeyAndOrderFront:nil];
 }
 
 void wxNonOwnedWindowCocoaImpl::Lower()
@@ -703,8 +784,6 @@ void wxNonOwnedWindowCocoaImpl::GetSize( int &width, int &height ) const
 
 void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
-    NSRect outer = NSMakeRect(100,100,100,100);
-    NSRect content = [NSWindow contentRectForFrameRect:outer styleMask:[m_macWindow styleMask] ];
     NSRect rect = [[m_macWindow contentView] frame];
     left = (int)rect.origin.x;
     top = (int)rect.origin.y;
@@ -787,7 +866,14 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         data->m_formerFrame = [m_macWindow frame];
         CGDisplayCapture( kCGDirectMainDisplay );
         [m_macWindow setLevel:CGShieldingWindowLevel()];
-        [m_macWindow setFrame:[[NSScreen mainScreen] frame] display:YES];
+        NSRect screenframe = [[NSScreen mainScreen] frame];
+        NSRect frame = NSMakeRect (0, 0, 100, 100);
+        NSRect contentRect;
+        contentRect = [NSWindow contentRectForFrameRect: frame
+                                styleMask: NSTitledWindowMask];
+        screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
+        screenframe.size.height += (frame.size.height - contentRect.size.height);
+        [m_macWindow setFrame:screenframe display:YES];
     }
     else if ( m_macFullScreenData != NULL )
     {

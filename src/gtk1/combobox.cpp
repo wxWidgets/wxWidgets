@@ -170,8 +170,6 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
-
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
     EVT_CHAR(wxComboBox::OnChar)
@@ -746,7 +744,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
-    if (value.IsNull()) return;
+    if ( value.empty() ) return;
     gint pos = (gint)to;
 
 #if wxUSE_UNICODE

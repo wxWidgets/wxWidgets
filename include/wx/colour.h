@@ -35,10 +35,11 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 
 
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
-#define wxC2S_NAME              1   // return colour name, when possible
-#define wxC2S_CSS_SYNTAX        2   // return colour in rgb(r,g,b) syntax
-#define wxC2S_HTML_SYNTAX       4   // return colour in #rrggbb syntax
-
+enum {
+    wxC2S_NAME             = 1,   // return colour name, when possible
+    wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
+    wxC2S_HTML_SYNTAX      = 4    // return colour in #rrggbb syntax
+};
 
 const unsigned char wxALPHA_TRANSPARENT = 0;
 const unsigned char wxALPHA_OPAQUE = 0xff;
@@ -171,7 +172,7 @@ public:
     // ---------------
 
 #if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( static wxColour CreateByName(const wxString& name) );
+    static wxDEPRECATED( wxColour CreateByName(const wxString& name) );
     wxDEPRECATED( void InitFromName(const wxString& col) );
 #endif
 

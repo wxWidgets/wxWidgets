@@ -14,7 +14,7 @@
 
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"
-#include "wx/cmndata.h"
+#include "wx/colourdata.h"
 
 //-----------------------------------------------------------------------------
 // wxGenericColourButton: a button which brings up a wxColourDialog

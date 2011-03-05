@@ -67,6 +67,8 @@ library:
 @itemdef{wxUSE_ACCEL, Use wxAcceleratorTable/Entry classes and support for them in wxMenu, wxMenuBar.}
 @itemdef{wxUSE_AFM_FOR_POSTSCRIPT, In wxPostScriptDC class use AFM (adobe font metrics) file for character widths.}
 @itemdef{wxUSE_ANIMATIONCTRL, Use wxAnimationCtrl class.}
+@itemdef{wxUSE_ARTPROVIDER_STD, Use standard low quality icons in wxArtProvider.}
+@itemdef{wxUSE_ARTPROVIDER_TANGO, Use Tango icons in wxArtProvider.}
 @itemdef{wxUSE_ANY, Use wxAny class.}
 @itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines; see src/common/extended.c file.}
 @itemdef{wxUSE_ARCHIVE_STREAMS, Enable streams for archive formats.}
@@ -168,6 +170,7 @@ library:
 @itemdef{wxUSE_LONGLONG, Use wxLongLong class.}
 @itemdef{wxUSE_LONGLONG_NATIVE, Use native <tt>long long</tt> type in wxLongLong implementation.}
 @itemdef{wxUSE_LONGLONG_WX, Use generic wxLongLong implementation.}
+@itemdef{wxUSE_MARKUP, Provide wxControl::SetLabelMarkup() method.}
 @itemdef{wxUSE_MDI, Use wxMDIParentFrame, and wxMDIChildFrame}
 @itemdef{wxUSE_MDI_ARCHITECTURE, Use MDI-based document-view classes.}
 @itemdef{wxUSE_MEDIACTRL, Use wxMediaCtrl.}

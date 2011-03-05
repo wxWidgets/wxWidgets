@@ -131,9 +131,11 @@ public:
     virtual bool RemoveAll();
 
     /**
-        Returns the number of watched paths
+        Returns the number of currently watched paths.
+
+        @see GetWatchedPaths()
      */
-    int GetWatchedPathCount() const;
+    int GetWatchedPathsCount() const;
 
     /**
         Retrieves all watched paths and places them in @a paths. Returns
@@ -150,34 +152,6 @@ public:
         OnChange(), OnWarning() or OnError().
      */
     void SetOwner(wxEvtHandler* handler);
-
-protected:
-    /**
-        You may either connect your event handler to intercept file system
-        watcher events or override this member and handle them here.
-
-        Perform whatever action which is to be taken on file system change.
-     */
-    virtual void OnChange(int changeType, const wxFileName& path,
-                                        const wxFileName& newPath);
-
-    /**
-        You may either connect your event handler to intercept file system
-        watcher events or override this member and handle them here.
-
-        Perform whatever action which is to be taken when a warning condition
-        arises.
-     */
-    virtual void OnWarning(const wxString& errorMessage);
-
-    /**
-        You may either connect your event handler to intercept file system
-        watcher events or override this member and handle them here.
-
-        Perform whatever action which is to be taken when an error condition
-        arises.
-     */
-    virtual void OnError(const wxString& errorMessage);
 };
 
 

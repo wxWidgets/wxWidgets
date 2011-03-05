@@ -2413,9 +2413,7 @@ wxMouseState wxGetMouseState()
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowGTK, wxWindowBase)
-#else // __WXGTK__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif // __WXUNIVERSAL__/__WXGTK__
+#endif // __WXUNIVERSAL__
 
 void wxWindowGTK::Init()
 {
@@ -2962,8 +2960,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 }
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const

@@ -23,8 +23,6 @@
 #include <QtGui/QTextCharFormat>
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
-
 void wxCalendarCtrl::Init()
 {
     m_qtCalendar = NULL;

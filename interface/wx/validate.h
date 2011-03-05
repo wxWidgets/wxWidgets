@@ -38,7 +38,8 @@
     @stdobjects
     ::wxDefaultValidator
 
-    @see @ref overview_validator, wxTextValidator, wxGenericValidator
+    @see @ref overview_validator, wxTextValidator, wxGenericValidator,
+        wxIntegerValidator, wxFloatingPointValidator
 */
 class wxValidator : public wxEvtHandler
 {
@@ -131,5 +132,5 @@ public:
 /**
     An empty, "null" wxValidator instance.
 */
-wxValidator wxDefaultValidator;
+const wxValidator wxDefaultValidator;
 

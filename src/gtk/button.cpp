@@ -105,8 +105,6 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 // wxButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
-
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString &label,
@@ -264,6 +262,24 @@ void wxButton::SetLabel( const wxString &lbl )
     GTKApplyWidgetStyle( false );
 }
 
+bool wxButton::DoSetLabelMarkup(const wxString& markup)
+{
+    wxCHECK_MSG( m_widget != NULL, false, "invalid button" );
+
+    const wxString stripped = RemoveMarkup(markup);
+    if ( stripped.empty() && !markup.empty() )
+        return false;
+
+    wxControl::SetLabel(stripped);
+
+    GtkLabel * const label = GTKGetLabel();
+    wxCHECK_MSG( label, false, "no label in this button?" );
+
+    GTKSetLabelWithMarkupForLabel(label, markup);
+
+    return true;
+}
+
 bool wxButton::Enable( bool enable )
 {
     if (!base_type::Enable(enable))
@@ -282,6 +298,25 @@ bool wxButton::Enable( bool enable )
 GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     return GTK_BUTTON(m_widget)->event_window;
+}
+
+GtkLabel *wxButton::GTKGetLabel() const
+{
+    GtkWidget *child = GTK_BIN(m_widget)->child;
+    if ( GTK_IS_ALIGNMENT(child) )
+    {
+        GtkWidget *box = GTK_BIN(child)->child;
+        for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+        {
+            GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
+            if ( GTK_IS_LABEL(boxChild->widget) )
+                return GTK_LABEL(boxChild->widget);
+        }
+
+        return NULL;
+    }
+
+    return GTK_LABEL(child);
 }
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)

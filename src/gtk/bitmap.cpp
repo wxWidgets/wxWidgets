@@ -231,6 +231,13 @@ public:
     int             m_height;
     int             m_bpp;
     bool m_alphaRequested;
+
+private:
+    // We don't provide a copy ctor as copying m_pixmap and m_pixbuf properly
+    // is expensive and we don't want to do it implicitly (and possibly
+    // accidentally). wxBitmap::CloneGDIRefData() which does need to do it does
+    // it explicitly itself.
+    wxDECLARE_NO_COPY_CLASS(wxBitmapRefData);
 };
 
 wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
@@ -606,10 +613,8 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
                 rect.y + h <= bmpData->m_height,
                 ret, wxT("invalid bitmap region"));
 
-    wxBitmapRefData* newRef = new wxBitmapRefData(*bmpData);
+    wxBitmapRefData * const newRef = new wxBitmapRefData(w, h, bmpData->m_bpp);
     ret.m_refData = newRef;
-    newRef->m_width = w;
-    newRef->m_height = h;
 
     if (bmpData->m_pixbuf)
     {
@@ -626,7 +631,6 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
             newRef->m_pixmap, gc, bmpData->m_pixmap, rect.x, rect.y, 0, 0, w, h);
         g_object_unref(gc);
     }
-    newRef->m_mask = NULL;
     if (bmpData->m_mask && bmpData->m_mask->m_bitmap)
     {
         GdkPixmap* sub_mask = gdk_pixmap_new(bmpData->m_mask->m_bitmap, w, h, 1);
@@ -672,6 +676,8 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
     else
 #endif
     {
+        wxUnusedVar(type); // The type is detected automatically by GDK.
+
         UnRef();
         GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(name.fn_str(), NULL);
         if (pixbuf)
@@ -859,7 +865,9 @@ wxGDIRefData* wxBitmap::CreateGDIRefData() const
 wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 {
     const wxBitmapRefData* oldRef = static_cast<const wxBitmapRefData*>(data);
-    wxBitmapRefData* newRef = new wxBitmapRefData(*oldRef);
+    wxBitmapRefData * const newRef = new wxBitmapRefData(oldRef->m_width,
+                                                         oldRef->m_height,
+                                                         oldRef->m_bpp);
     if (oldRef->m_pixmap != NULL)
     {
         newRef->m_pixmap = gdk_pixmap_new(

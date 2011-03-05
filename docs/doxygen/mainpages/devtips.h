@@ -199,8 +199,15 @@ the wxWidgets delayed deletion can take effect. This waits until idle time
 (when all messages have been processed) to actually delete the window, to avoid
 problems associated with the GUI sending events to deleted windows.
 
-Don't create a window on the stack, because this will interfere with delayed
-deletion.
+In general wxWindow-derived objects should always be allocated on the heap
+as wxWidgets will destroy them itself. The only, but important, exception to
+this rule are the modal dialogs, i.e. wxDialog objects which are shown using
+wxDialog::ShowModal() method. They may be allocated on the stack and, indeed,
+usually are local variables to ensure that they are destroyed on scope exit as
+wxWidgets does not destroy them unlike with all the other windows. So while it
+is still possible to allocate modal dialogs on the heap, you should still
+destroy or delete them explicitly in this case instead of relying on wxWidgets
+doing it.
 
 If you decide to allocate a C++ array of objects (such as wxBitmap) that may be
 cleaned up by wxWidgets, make sure you delete the array explicitly before

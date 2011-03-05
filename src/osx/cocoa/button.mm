@@ -18,6 +18,11 @@
 
 #include "wx/osx/private.h"
 
+#if wxUSE_MARKUP
+    #include "wx/osx/cocoa/private/markuptoattr.h"
+#endif // wxUSE_MARKUP
+
+
 wxSize wxButton::DoGetBestSize() const
 {
     // We only use help button bezel if we don't have any (non standard) label
@@ -30,7 +35,11 @@ wxSize wxButton::DoGetBestSize() const
     m_peer->GetBestRect(&r);
 
     wxSize sz = r.GetSize();
-
+    sz.x  = sz.x  + MacGetLeftBorderSize() +
+    MacGetRightBorderSize();
+    sz.y = sz.y + MacGetTopBorderSize() +
+    MacGetBottomBorderSize();
+    
     const int wBtnStd = GetDefaultSize().x;
 
     if ( (sz.x < wBtnStd) && !HasFlag(wxBU_EXACTFIT) )
@@ -41,7 +50,7 @@ wxSize wxButton::DoGetBestSize() const
 
 wxSize wxButton::GetDefaultSize()
 {
-    return wxSize(84, 23);
+    return wxSize(84, 20);
 }
 
 @implementation wxNSButton
@@ -97,6 +106,10 @@ wxSize wxButton::GetDefaultSize()
 
 @end
 
+@interface NSView(PossibleSizeMethods)
+- (NSControlSize)controlSize;
+@end
+
 namespace
 {
 
@@ -117,6 +130,25 @@ public:
         wxWidgetCocoaImpl::SetBitmap(bitmap);
     }
 
+#if wxUSE_MARKUP
+    virtual void SetLabelMarkup(const wxString& markup)
+    {
+        wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+        NSMutableAttributedString *attrString = toAttr.GetNSAttributedString();
+
+        // Button text is always centered.
+        NSMutableParagraphStyle *
+            paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setAlignment: NSCenterTextAlignment];
+        [attrString addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:NSMakeRange(0, [attrString length])];
+        [paragraphStyle release];
+
+        [GetNSButton() setAttributedTitle:attrString];
+    }
+#endif // wxUSE_MARKUP
+
     void SetPressedBitmap( const wxBitmap& bitmap )
     {
         NSButton* button = GetNSButton();
@@ -124,6 +156,43 @@ public:
         [button setButtonType:NSMomentaryChangeButton];
     }
 
+    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+    {
+        left = top = right = bottom = 0;
+        NSControlSize size = NSRegularControlSize;
+        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
+            size = [m_osxView controlSize];
+        else if ([m_osxView respondsToSelector:@selector(cell)])
+        {
+            id cell = [(id)m_osxView cell];
+            if ([cell respondsToSelector:@selector(controlSize)])
+                size = [cell controlSize];
+        }
+        
+        if ( [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
+        {
+            switch( size )
+            {
+                case NSRegularControlSize:
+                    left = right = 6;
+                    top = 4;
+                    bottom = 8;
+                    break;
+                case NSSmallControlSize:
+                    left = right = 5;
+                    top = 4;
+                    bottom = 7;
+                    break;
+                case NSMiniControlSize:
+                    left = right = 1;
+                    top = 0;
+                    bottom = 2;
+                    break;
+            }
+        }
+    }
+    
+    
 private:
     NSButton *GetNSButton() const
     {
@@ -132,6 +201,8 @@ private:
         return static_cast<NSButton *>(m_osxView);
     }
 };
+
+} // anonymous namespace
 
 extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
     
@@ -155,7 +226,6 @@ void SetBezelStyleFromBorderFlags(NSButton *v, long style)
     }
 }
 
-} // anonymous namespace
 
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -188,10 +258,13 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
 {
-    if ( isDefault && [m_osxView isKindOfClass:[NSButton class]] )
-        // NOTE: setKeyEquivalent: nil will trigger an assert
-        // instead do not call in that case.
-        [(NSButton*)m_osxView setKeyEquivalent: @"\r" ];
+    if ( [m_osxView isKindOfClass:[NSButton class]] )
+    {
+        if ( isDefault )
+            [(NSButton*)m_osxView setKeyEquivalent: @"\r" ];
+        else
+            [(NSButton*)m_osxView setKeyEquivalent: @"" ];
+    }
 }
 
 void wxWidgetCocoaImpl::PerformClick()

@@ -103,10 +103,11 @@ public:
     bool IsOk() const;
 
     /**
-        Returns a wxString for this accelerator.
+        Returns a textual representation of this accelerator.
 
-        This function formats it using the @c "flags-keycode" format
-        where @c flags maybe a hyphen-separed list of @c "shift|alt|ctrl".
+        The returned string is of the form <code>[Alt+][Ctrl+][Shift+]Key</code>
+        where the modifier keys are present only if the corresponding flag is
+        set.
     */
     wxString ToString() const;
 
@@ -114,7 +115,14 @@ public:
         Parses the given string and sets the accelerator accordingly.
 
         @param str
-            Should be a string in the form "flags-keycode"
+            This string may be either in the same format as returned by
+            ToString(), i.e. contain the accelerator itself only, or have the
+            format of a full menu item text with i.e. <code>Label TAB
+            Accelerator</code>. In the latter case, the part of the string
+            before the TAB is ignored. Notice that the latter format is only
+            supported for the compatibility with the previous wxWidgets
+            versions and the new code should pass only the accelerator string
+            itself to this function.
 
         @return @true if the given string correctly initialized this object
                 (i.e. if IsOk() returns true after this call)

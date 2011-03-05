@@ -233,7 +233,7 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display a text message explaining the situation. 
+    Display a text message explaining the situation.
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
@@ -320,11 +320,32 @@ public:
 enum wxPG_KEYBOARD_ACTIONS
 {
     wxPG_ACTION_INVALID = 0,
+
+    /** Select the next property. */
     wxPG_ACTION_NEXT_PROPERTY,
+
+    /** Select the previous property. */
     wxPG_ACTION_PREV_PROPERTY,
+
+    /** Expand the selected property, if it has child items. */
     wxPG_ACTION_EXPAND_PROPERTY,
+
+    /** Collapse the selected property, if it has child items. */
     wxPG_ACTION_COLLAPSE_PROPERTY,
+
+    /** Cancel and undo any editing done in the currently active property
+        editor.
+    */
     wxPG_ACTION_CANCEL_EDIT,
+
+    /** Move focus to the editor control of the currently selected
+        property.
+    */
+    wxPG_ACTION_EDIT,
+
+    /** Causes editor's button (if any) to be pressed. */
+    wxPG_ACTION_PRESS_BUTTON,
+
     wxPG_ACTION_MAX
 };
 
@@ -380,53 +401,53 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
     @beginEventEmissionTable{wxPropertyGridEvent}
     @event{EVT_PG_SELECTED (id, func)}
-        Respond to wxEVT_PG_SELECTED event, generated when a property selection
+        Respond to @c wxEVT_PG_SELECTED event, generated when a property selection
         has been changed, either by user action or by indirect program
         function. For instance, collapsing a parent property programmatically
         causes any selected child property to become unselected, and may
         therefore cause this event to be generated.
     @event{EVT_PG_CHANGED(id, func)}
-        Respond to wxEVT_PG_CHANGED event, generated when property value
+        Respond to @c wxEVT_PG_CHANGED event, generated when property value
         has been changed by the user.
     @event{EVT_PG_CHANGING(id, func)}
-        Respond to wxEVT_PG_CHANGING event, generated when property value
+        Respond to @c wxEVT_PG_CHANGING event, generated when property value
         is about to be changed by user. Use wxPropertyGridEvent::GetValue()
         to take a peek at the pending value, and wxPropertyGridEvent::Veto()
         to prevent change from taking place, if necessary.
     @event{EVT_PG_HIGHLIGHTED(id, func)}
-        Respond to wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
+        Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
         moves over a property. Event's property is NULL if hovered area does
         not belong to any property.
     @event{EVT_PG_RIGHT_CLICK(id, func)}
-        Respond to wxEVT_PG_RIGHT_CLICK event, which occurs when property is
+        Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
         clicked on with right mouse button.
     @event{EVT_PG_DOUBLE_CLICK(id, func)}
-        Respond to wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
+        Respond to @c wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
         double-clicked on with left mouse button.
     @event{EVT_PG_ITEM_COLLAPSED(id, func)}
-        Respond to wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
+        Respond to @c wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
         a property or category.
     @event{EVT_PG_ITEM_EXPANDED(id, func)}
-        Respond to wxEVT_PG_ITEM_EXPANDED event, generated when user expands
+        Respond to @c wxEVT_PG_ITEM_EXPANDED event, generated when user expands
         a property or category.
     @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
-        Respond to wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
+        Respond to @c wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
         about to begin editing a property label. You can veto this event to
         prevent the action.
     @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
-        Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
+        Respond to @c wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
         about to end editing of a property label. You can veto this event to
         prevent the action.
     @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
-        Respond to wxEVT_PG_COL_BEGIN_DRAG event, generated when user
+        Respond to @c wxEVT_PG_COL_BEGIN_DRAG event, generated when user
         starts resizing a column - can be vetoed.
     @event{EVT_PG_COL_DRAGGING,(id, func)}
-        Respond to wxEVT_PG_COL_DRAGGING, event, generated when a
+        Respond to @c wxEVT_PG_COL_DRAGGING, event, generated when a
         column resize by user is in progress. This event is also generated
         when user double-clicks the splitter in order to recenter
         it.
     @event{EVT_PG_COL_END_DRAG(id, func)}
-        Respond to wxEVT_PG_COL_END_DRAG event, generated after column
+        Respond to @c wxEVT_PG_COL_END_DRAG event, generated after column
         resize by user has finished.
     @endEventTable
 
@@ -558,7 +579,7 @@ public:
 
     /**
         Forces updating the value of property from the editor control.
-        Note that wxEVT_PG_CHANGING and wxEVT_PG_CHANGED are dispatched using
+        Note that @c wxEVT_PG_CHANGING and @c wxEVT_PG_CHANGED are dispatched using
         ProcessEvent, meaning your event handlers will be called immediately.
 
         @return Returns @true if anything was changed.
@@ -916,7 +937,7 @@ public:
         fails if current value in editor is not valid.
 
         @remarks In wxPropertyGrid 1.4, this member function used to generate
-                 wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
+                 @c wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
                  does that.
 
         @remarks This clears any previous selection.
@@ -1074,7 +1095,7 @@ public:
         control over wxPropertyGrid behavior.
     */
     //@{
-    
+
     /**
         Override in derived class to display error messages in custom manner
         (these message usually only result from validation failure).
@@ -1215,7 +1236,7 @@ public:
         Returns property associated with this event.
 
         @remarks You should assume that this property can always be NULL.
-                 For instance, wxEVT_PG_SELECTED is emitted not only when
+                 For instance, @c wxEVT_PG_SELECTED is emitted not only when
                  a new property is selected, but also when selection is
                  cleared by user activity.
     */
@@ -1237,7 +1258,7 @@ public:
 
     /**
         Returns value of the associated property. Works for all event
-        types, but for wxEVT_PG_CHANGING this member function returns
+        types, but for @c wxEVT_PG_CHANGING this member function returns
         the value that is pending, so you can call Veto() if the
         value is not satisfactory.
 
@@ -1262,7 +1283,7 @@ public:
 
     /**
         Set override validation failure behavior. Only effective if Veto() was
-        also called, and only allowed if event type is wxEVT_PG_CHANGING.
+        also called, and only allowed if event type is @c wxEVT_PG_CHANGING.
     */
     void SetValidationFailureBehavior( wxPGVFBFlags flags );
 
@@ -1277,7 +1298,7 @@ public:
         signaling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
         returns true.
 
-        @remarks Currently only wxEVT_PG_CHANGING supports vetoing.
+        @remarks Currently only @c wxEVT_PG_CHANGING supports vetoing.
     */
     void Veto( bool veto = true );
 

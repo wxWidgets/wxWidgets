@@ -28,10 +28,10 @@ class wxArtProviderModule;
 typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
-#define wxART_MAKE_CLIENT_ID_FROM_STR(id)  (id + wxT("_C"))
-#define wxART_MAKE_CLIENT_ID(id)           wxT(#id) wxT("_C")
+#define wxART_MAKE_CLIENT_ID_FROM_STR(id)  ((id) + "_C")
+#define wxART_MAKE_CLIENT_ID(id)           (#id "_C")
 #define wxART_MAKE_ART_ID_FROM_STR(id)     (id)
-#define wxART_MAKE_ART_ID(id)              wxT(#id)
+#define wxART_MAKE_ART_ID(id)              (#id)
 
 // ----------------------------------------------------------------------------
 // Art clients
@@ -66,6 +66,8 @@ typedef wxString wxArtID;
 #define wxART_GO_DOWN              wxART_MAKE_ART_ID(wxART_GO_DOWN)
 #define wxART_GO_TO_PARENT         wxART_MAKE_ART_ID(wxART_GO_TO_PARENT)
 #define wxART_GO_HOME              wxART_MAKE_ART_ID(wxART_GO_HOME)
+#define wxART_GOTO_FIRST           wxART_MAKE_ART_ID(wxART_GOTO_FIRST)
+#define wxART_GOTO_LAST            wxART_MAKE_ART_ID(wxART_GOTO_LAST)
 #define wxART_FILE_OPEN            wxART_MAKE_ART_ID(wxART_FILE_OPEN)
 #define wxART_FILE_SAVE            wxART_MAKE_ART_ID(wxART_FILE_SAVE)
 #define wxART_FILE_SAVE_AS         wxART_MAKE_ART_ID(wxART_FILE_SAVE_AS)
@@ -101,6 +103,9 @@ typedef wxString wxArtID;
 #define wxART_UNDO                 wxART_MAKE_ART_ID(wxART_UNDO)
 #define wxART_REDO                 wxART_MAKE_ART_ID(wxART_REDO)
 
+#define wxART_PLUS                 wxART_MAKE_ART_ID(wxART_PLUS)
+#define wxART_MINUS                wxART_MAKE_ART_ID(wxART_MINUS)
+
 #define wxART_CLOSE                wxART_MAKE_ART_ID(wxART_CLOSE)
 #define wxART_QUIT                 wxART_MAKE_ART_ID(wxART_QUIT)
 
@@ -131,7 +136,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // use PushBack(), it's the same thing
-    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
+    static wxDEPRECATED( void Insert(wxArtProvider *provider) );
 #endif
 
     // Remove latest added provider and delete it.
@@ -184,20 +189,26 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_6
     // use the corresponding methods without redundant "Provider" suffix
-    wxDEPRECATED( static void PushProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static void InsertProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static bool PopProvider() );
+    static wxDEPRECATED( void PushProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( void InsertProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( bool PopProvider() );
 
     // use Delete() if this is what you really need, or just delete the
     // provider pointer, do not use Remove() as it does not delete the pointer
     // unlike RemoveProvider() which does
-    wxDEPRECATED( static bool RemoveProvider(wxArtProvider *provider) );
+    static wxDEPRECATED( bool RemoveProvider(wxArtProvider *provider) );
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     friend class wxArtProviderModule;
+#if wxUSE_ARTPROVIDER_STD
     // Initializes default provider
     static void InitStdProvider();
+#endif // wxUSE_ARTPROVIDER_STD
+    // Initializes Tango-based icon provider
+#if wxUSE_ARTPROVIDER_TANGO
+    static void InitTangoProvider();
+#endif // wxUSE_ARTPROVIDER_TANGO
     // Initializes platform's native provider, if available (e.g. GTK2)
     static void InitNativeProvider();
     // Destroy caches & all providers
@@ -242,7 +253,7 @@ private:
 
 #if !defined(__WXUNIVERSAL__) && \
     ((defined(__WXGTK__) && defined(__WXGTK20__)) || defined(__WXMSW__) || \
-     (defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON))
+     defined(__WXMAC__))
   // *some* (partial) native implementation of wxArtProvider exists; this is
   // not the same as wxArtProvider::HasNativeProvider()!
   #define wxHAS_NATIVE_ART_PROVIDER_IMPL

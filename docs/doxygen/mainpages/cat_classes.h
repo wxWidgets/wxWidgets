@@ -208,6 +208,8 @@ Related Overviews: @ref overview_validator
 @li wxValidator: Base validator class
 @li wxTextValidator: Text control validator class
 @li wxGenericValidator: Generic control validator class
+@li wxIntegerValidator: Text control validator class for integer numbers
+@li wxFloatingPointValidator: Text control validator class for floating point numbers
 
 
 

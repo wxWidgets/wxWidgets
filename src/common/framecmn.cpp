@@ -33,6 +33,9 @@
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
+extern WXDLLEXPORT_DATA(const char) wxFrameNameStr[] = "frame";
+extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
+
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
@@ -51,6 +54,79 @@ END_EVENT_TABLE()
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxFrameStyle )
+wxBEGIN_FLAGS( wxFrameStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+// frame styles
+wxFLAGS_MEMBER(wxSTAY_ON_TOP)
+wxFLAGS_MEMBER(wxCAPTION)
+#if WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxTHICK_FRAME)
+#endif // WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxSYSTEM_MENU)
+wxFLAGS_MEMBER(wxRESIZE_BORDER)
+#if WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxRESIZE_BOX)
+#endif // WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxCLOSE_BOX)
+wxFLAGS_MEMBER(wxMAXIMIZE_BOX)
+wxFLAGS_MEMBER(wxMINIMIZE_BOX)
+
+wxFLAGS_MEMBER(wxFRAME_TOOL_WINDOW)
+wxFLAGS_MEMBER(wxFRAME_FLOAT_ON_PARENT)
+
+wxFLAGS_MEMBER(wxFRAME_SHAPED)
+wxEND_FLAGS( wxFrameStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow, "wx/frame.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxFrame)
+wxEVENT_PROPERTY( Menu, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
+
+wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString(), 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY_FLAGS( WindowStyle, wxFrameStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxPROPERTY( MenuBar, wxMenuBar *, SetMenuBar, GetMenuBar, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxFrame)
+
+wxCONSTRUCTOR_6( wxFrame, wxWindow*, Parent, wxWindowID, Id, wxString, Title, \
+                wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 // ----------------------------------------------------------------------------
 // construction/destruction

@@ -351,7 +351,7 @@ void wxToolBar::Init()
 
 wxToolBar::~wxToolBar()
 {
-    if (m_tooltips)
+    if (m_tooltips) // always NULL if GTK >= 2.12
     {
         gtk_object_destroy(GTK_OBJECT(m_tooltips));
         g_object_unref(m_tooltips);
@@ -376,9 +376,12 @@ bool wxToolBar::Create( wxWindow *parent,
     FixupStyle();
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
-    m_tooltips = gtk_tooltips_new();
-    g_object_ref(m_tooltips);
-    gtk_object_sink(GTK_OBJECT(m_tooltips));
+    if (gtk_check_version(2, 12, 0))
+    {
+        m_tooltips = gtk_tooltips_new();
+        g_object_ref(m_tooltips);
+        gtk_object_sink(GTK_OBJECT(m_tooltips));
+    }
     GtkSetStyle();
 
     if (style & wxTB_DOCKABLE)
@@ -528,8 +531,18 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             }
             if (!HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty())
             {
-                gtk_tool_item_set_tooltip(tool->m_item,
-                    m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
+#if GTK_CHECK_VERSION(2, 12, 0)
+                if (!gtk_check_version(2, 12, 0))
+                {
+                    gtk_tool_item_set_tooltip_text(tool->m_item,
+                        wxGTK_CONV(tool->GetShortHelp()));
+                }
+                else
+#endif
+                {
+                    gtk_tool_item_set_tooltip(tool->m_item,
+                        m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
+                }
             }
             g_signal_connect(GTK_BIN(tool->m_item)->child, "button_press_event",
                 G_CALLBACK(button_press_event), tool);
@@ -695,8 +708,18 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
         (void)tool->SetShortHelp(helpString);
         if (tool->m_item)
         {
-            gtk_tool_item_set_tooltip(tool->m_item,
-                m_tooltips, wxGTK_CONV(helpString), "");
+#if GTK_CHECK_VERSION(2, 12, 0)
+            if (!gtk_check_version(2, 12, 0))
+            {
+                gtk_tool_item_set_tooltip_text(tool->m_item,
+                    wxGTK_CONV(helpString));
+            }
+            else
+#endif
+            {
+                gtk_tool_item_set_tooltip(tool->m_item,
+                    m_tooltips, wxGTK_CONV(helpString), "");
+            }
         }
     }
 }
@@ -723,20 +746,6 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
         tool->SetDisabledBitmap(bitmap);
     }
 }
-
-// ----------------------------------------------------------------------------
-// wxToolBar idle handling
-// ----------------------------------------------------------------------------
-
-void wxToolBar::OnInternalIdle()
-{
-    // Check if we have to show window now
-    if (GTKShowFromOnIdle()) return;
-
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 
 // ----------------------------------------------------------------------------
 

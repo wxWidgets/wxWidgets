@@ -29,6 +29,16 @@
 #define wxSTRINGIZE_T(x)            wxAPPLY_T(wxSTRINGIZE(x))
 
 /*
+    Special workarounds for compilers with broken "##" operator. For all the
+    other ones we can just use it directly.
+ */
+#ifdef wxCOMPILER_BROKEN_CONCAT_OPER
+    #define wxPREPEND_L(x)      L ## x
+    #define wxAPPEND_i64(x)     x ## i64
+    #define wxAPPEND_ui64(x)    x ## ui64
+#endif /* wxCOMPILER_BROKEN_CONCAT_OPER */
+
+/*
    Helper macros for wxMAKE_UNIQUE_NAME: normally this works by appending the
    current line number to the given identifier to reduce the probability of the
    conflict (it may still happen if this is used in the headers, hence you

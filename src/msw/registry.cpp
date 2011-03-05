@@ -27,8 +27,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/crt.h"
+    #include "wx/utils.h"
 #endif
 
+#include "wx/dynlib.h"
 #include "wx/file.h"
 #include "wx/wfstream.h"
 
@@ -64,6 +66,10 @@ typedef BYTE* RegBinary;
 
 #ifndef HKEY_DYN_DATA
     #define HKEY_DYN_DATA ((HKEY)0x80000006)
+#endif
+
+#ifndef KEY_WOW64_64KEY
+    #define KEY_WOW64_64KEY 0x0100
 #endif
 
 // ----------------------------------------------------------------------------
@@ -114,7 +120,19 @@ aStdKeys[] =
 static inline void RemoveTrailingSeparator(wxString& str);
 
 // returns true if given registry key exists
-static bool KeyExists(WXHKEY hRootKey, const wxString& szKey);
+static bool KeyExists(
+    WXHKEY hRootKey,
+    const wxString& szKey,
+    wxRegKey::WOW64ViewMode viewMode = wxRegKey::WOW64ViewMode_Default);
+
+// return the WOW64 registry view flag which can be used with MSW registry
+// functions for opening the key in the specified view
+static long GetMSWViewFlags(wxRegKey::WOW64ViewMode viewMode);
+
+// return the access rights which can be used with MSW registry functions for
+// opening the key in the specified mode
+static long
+GetMSWAccessFlags(wxRegKey::AccessMode mode, wxRegKey::WOW64ViewMode viewMode);
 
 // combines value and key name
 static wxString GetFullName(const wxRegKey *pKey);
@@ -195,14 +213,15 @@ wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(WXHKEY hkey)
 // ctors and dtor
 // ----------------------------------------------------------------------------
 
-wxRegKey::wxRegKey()
+wxRegKey::wxRegKey(WOW64ViewMode viewMode) : m_viewMode(viewMode)
 {
   m_hRootKey = (WXHKEY) aStdKeys[HKCR].hkey;
 
   Init();
 }
 
-wxRegKey::wxRegKey(const wxString& strKey) : m_strKey(strKey)
+wxRegKey::wxRegKey(const wxString& strKey, WOW64ViewMode viewMode)
+    : m_strKey(strKey), m_viewMode(viewMode)
 {
   m_hRootKey  = (WXHKEY) aStdKeys[ExtractKeyName(m_strKey)].hkey;
 
@@ -210,7 +229,10 @@ wxRegKey::wxRegKey(const wxString& strKey) : m_strKey(strKey)
 }
 
 // parent is a predefined (and preopened) key
-wxRegKey::wxRegKey(StdKey keyParent, const wxString& strKey) : m_strKey(strKey)
+wxRegKey::wxRegKey(StdKey keyParent,
+                   const wxString& strKey,
+                   WOW64ViewMode viewMode)
+    : m_strKey(strKey), m_viewMode(viewMode)
 {
   RemoveTrailingSeparator(m_strKey);
   m_hRootKey  = (WXHKEY) aStdKeys[keyParent].hkey;
@@ -220,7 +242,7 @@ wxRegKey::wxRegKey(StdKey keyParent, const wxString& strKey) : m_strKey(strKey)
 
 // parent is a normal regkey
 wxRegKey::wxRegKey(const wxRegKey& keyParent, const wxString& strKey)
-        : m_strKey(keyParent.m_strKey)
+    : m_strKey(keyParent.m_strKey), m_viewMode(keyParent.GetView())
 {
   // combine our name with parent's to get the full name
   if ( !m_strKey.empty() &&
@@ -316,7 +338,9 @@ void wxRegKey::SetHkey(WXHKEY hKey)
 bool wxRegKey::Exists() const
 {
   // opened key has to exist, try to open it if not done yet
-  return IsOpened() ? true : KeyExists(m_hRootKey, m_strKey.wx_str());
+  return IsOpened()
+      ? true
+      : KeyExists(m_hRootKey, m_strKey, m_viewMode);
 }
 
 // returns the full name of the key (prefix is abbreviated if bShortPrefix)
@@ -399,7 +423,7 @@ bool wxRegKey::Open(AccessMode mode)
                         (HKEY) m_hRootKey,
                         m_strKey.t_str(),
                         RESERVED,
-                        mode == Read ? KEY_READ : KEY_ALL_ACCESS,
+                        GetMSWAccessFlags(mode, m_viewMode),
                         &tmpKey
                     );
 
@@ -427,19 +451,17 @@ bool wxRegKey::Create(bool bOkIfExists)
     return true;
 
   HKEY tmpKey;
-#ifdef __WXWINCE__
   DWORD disposition;
-  m_dwLastError = RegCreateKeyEx((HKEY) m_hRootKey, m_strKey.wx_str(),
-      NULL, // reserved
-      NULL, // class string
-      0,
-      0,
-      NULL,
+  // Minimum supported OS for RegCreateKeyEx: Win 95, Win NT 3.1, Win CE 1.0
+  m_dwLastError = RegCreateKeyEx((HKEY) m_hRootKey, m_strKey.t_str(),
+      0,    // reserved and must be 0
+      NULL, // The user-defined class type of this key.
+      REG_OPTION_NON_VOLATILE, // supports other values as well; see MS docs
+      GetMSWAccessFlags(wxRegKey::Write, m_viewMode),
+      NULL, // pointer to a SECURITY_ATTRIBUTES structure
       &tmpKey,
       &disposition);
-#else
-  m_dwLastError = RegCreateKey((HKEY) m_hRootKey, m_strKey.t_str(), &tmpKey);
-#endif
+
   if ( m_dwLastError != ERROR_SUCCESS ) {
     wxLogSysError(m_dwLastError, _("Can't create registry key '%s'"),
                   GetName().c_str());
@@ -710,8 +732,25 @@ bool wxRegKey::DeleteSelf()
   // now delete this key itself
   Close();
 
-  m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey.t_str());
   // deleting a key which doesn't exist is not considered an error
+#if wxUSE_DYNLIB_CLASS
+  wxDynamicLibrary dllAdvapi32(wxT("advapi32"));
+  // Minimum supported OS for RegDeleteKeyEx: Vista, XP Pro x64, Win Server 2008, Win Server 2003 SP1
+  if(dllAdvapi32.HasSymbol(wxT("RegDeleteKeyEx")))
+  {
+    typedef LONG (WINAPI *RegDeleteKeyEx_t)(HKEY, LPCTSTR, REGSAM, DWORD);
+    wxDYNLIB_FUNCTION(RegDeleteKeyEx_t, RegDeleteKeyEx, dllAdvapi32);
+
+    m_dwLastError = (*pfnRegDeleteKeyEx)((HKEY) m_hRootKey, m_strKey.t_str(),
+        GetMSWViewFlags(m_viewMode),
+        0);    // This parameter is reserved and must be zero.
+  }
+  else
+#endif // wxUSE_DYNLIB_CLASS
+  {
+    m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey.t_str());
+  }
+
   if ( m_dwLastError != ERROR_SUCCESS &&
           m_dwLastError != ERROR_FILE_NOT_FOUND ) {
     wxLogSysError(m_dwLastError, _("Can't delete key '%s'"),
@@ -803,7 +842,7 @@ bool wxRegKey::HasSubKey(const wxString& szKey) const
   if ( !CONST_CAST Open(Read) )
     return false;
 
-  return KeyExists(m_hKey, szKey);
+  return KeyExists(m_hKey, szKey, m_viewMode);
 }
 
 wxRegKey::ValueType wxRegKey::GetValueType(const wxString& szValue) const
@@ -997,7 +1036,7 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey,
                                     RegValueStr(szValue),
                                     (DWORD) RESERVED, REG_SZ,
-                                    (RegString)strValue.wx_str(),
+                                    (RegString)strValue.t_str(),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return true;
@@ -1410,7 +1449,9 @@ bool wxRegKey::DoExport(wxOutputStream& ostr) const
 // implementation of global private functions
 // ============================================================================
 
-bool KeyExists(WXHKEY hRootKey, const wxString& szKey)
+bool KeyExists(WXHKEY hRootKey,
+               const wxString& szKey,
+               wxRegKey::WOW64ViewMode viewMode)
 {
     // don't close this key itself for the case of empty szKey!
     if ( szKey.empty() )
@@ -1422,7 +1463,8 @@ bool KeyExists(WXHKEY hRootKey, const wxString& szKey)
             (HKEY)hRootKey,
             szKey.t_str(),
             RESERVED,
-            KEY_READ,        // we might not have enough rights for rw access
+            // we might not have enough rights for rw access
+            GetMSWAccessFlags(wxRegKey::Read, viewMode),
             &hkeyDummy
          ) == ERROR_SUCCESS )
     {
@@ -1432,6 +1474,49 @@ bool KeyExists(WXHKEY hRootKey, const wxString& szKey)
     }
 
     return false;
+}
+
+long GetMSWViewFlags(wxRegKey::WOW64ViewMode viewMode)
+{
+    long samWOW64ViewMode = 0;
+
+    switch ( viewMode )
+    {
+        case wxRegKey::WOW64ViewMode_32:
+#ifdef __WIN64__    // the flag is only needed by 64 bit apps
+            samWOW64ViewMode = KEY_WOW64_32KEY;
+#endif // Win64
+            break;
+
+        case wxRegKey::WOW64ViewMode_64:
+#ifndef __WIN64__   // the flag is only needed by 32 bit apps
+            // 64 bit registry can only be accessed under 64 bit platforms
+            if ( wxIsPlatform64Bit() )
+                samWOW64ViewMode = KEY_WOW64_64KEY;
+#endif // Win32
+            break;
+
+        default:
+            wxFAIL_MSG("Unknown registry view.");
+            // fall through
+
+        case wxRegKey::WOW64ViewMode_Default:
+            // Use default registry view for the current application,
+            // i.e. 32 bits for 32 bit ones and 64 bits for 64 bit apps
+            ;
+    }
+
+    return samWOW64ViewMode;
+}
+
+long GetMSWAccessFlags(wxRegKey::AccessMode mode,
+    wxRegKey::WOW64ViewMode viewMode)
+{
+    long sam = mode == wxRegKey::Read ? KEY_READ : KEY_ALL_ACCESS;
+
+    sam |= GetMSWViewFlags(viewMode);
+
+    return sam;
 }
 
 wxString GetFullName(const wxRegKey *pKey, const wxString& szValue)

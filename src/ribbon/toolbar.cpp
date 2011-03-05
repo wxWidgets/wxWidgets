@@ -661,9 +661,15 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
             notification.SetBar(this);
             ProcessEvent(notification);
         }
-        m_active_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
-        m_active_tool = NULL;
-        Refresh(false);
+
+        // Notice that m_active_tool could have been reset by the event handler
+        // above so we need to test it again.
+        if (m_active_tool)
+        {
+            m_active_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+            m_active_tool = NULL;
+            Refresh(false);
+        }
     }
 }
 

@@ -268,7 +268,15 @@ SOURCE=..\..\src\common\artstd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\arttango.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\bmpbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\bmpbtncmn.cpp
 # End Source File
 # Begin Source File
 
@@ -281,6 +289,14 @@ SOURCE=..\..\src\common\btncmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\cairo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\checkboxcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\checklstcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -308,6 +324,10 @@ SOURCE=..\..\src\common\colourcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\colourdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\combocmn.cpp
 # End Source File
 # Begin Source File
@@ -328,10 +348,6 @@ SOURCE=..\..\src\common\ctrlsub.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\datacmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\dcbase.cpp
 # End Source File
 # Begin Source File
@@ -345,6 +361,10 @@ SOURCE=..\..\src\common\dcgraph.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\dcsvg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\dirctrlcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -411,6 +431,10 @@ SOURCE=..\..\src\common\fldlgcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\fontcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\fontdata.cpp
 # End Source File
 # Begin Source File
 
@@ -542,6 +566,10 @@ SOURCE=..\..\src\common\listctrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\markupparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\matrix.cpp
 # End Source File
 # Begin Source File
@@ -570,6 +598,10 @@ SOURCE=..\..\src\common\ownerdrwcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\panelcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -594,6 +626,10 @@ SOURCE=..\..\src\common\quantize.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\radiobtncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\radiocmn.cpp
 # End Source File
 # Begin Source File
@@ -610,11 +646,23 @@ SOURCE=..\..\src\common\rgncmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\scrolbarcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\settcmn.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\common\sizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\slidercmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\spinbtncmn.cpp
 # End Source File
 # Begin Source File
 
@@ -627,6 +675,18 @@ SOURCE=..\..\src\common\srchcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\statbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statbmpcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statboxcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\statlinecmn.cpp
 # End Source File
 # Begin Source File
 
@@ -675,6 +735,10 @@ SOURCE=..\..\src\common\valgen.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\validate.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\valnum.cpp
 # End Source File
 # Begin Source File
 
@@ -2680,37 +2744,6 @@ SOURCE=..\..\src\msw\treectrl.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\uiaction.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -3087,6 +3120,10 @@ SOURCE=..\..\src\generic\listctrl.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\logg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\markuptext.cpp
 # End Source File
 # Begin Source File
 
@@ -5853,11 +5890,11 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\bookctrl.h
+SOURCE=..\..\include\wx\bookctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\bookctrl.h
+SOURCE=..\..\include\wx\persist\bookctrl.h
 # End Source File
 # Begin Source File
 
@@ -5937,6 +5974,10 @@ SOURCE=..\..\include\wx\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\colourdata.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\combo.h
 # End Source File
 # Begin Source File
@@ -5946,6 +5987,10 @@ SOURCE=..\..\include\wx\combobox.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\commandlinkbutton.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\compositewin.h
 # End Source File
 # Begin Source File
 
@@ -6126,6 +6171,10 @@ SOURCE=..\..\include\wx\fmappriv.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fontdata.h
 # End Source File
 # Begin Source File
 
@@ -6481,6 +6530,10 @@ SOURCE=..\..\include\wx\radiobut.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\range.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\rawbmp.h
 # End Source File
 # Begin Source File
@@ -6677,11 +6730,11 @@ SOURCE=..\..\include\wx\tooltip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\toplevel.h
+SOURCE=..\..\include\wx\persist\toplevel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\toplevel.h
+SOURCE=..\..\include\wx\toplevel.h
 # End Source File
 # Begin Source File
 
@@ -6689,11 +6742,11 @@ SOURCE=..\..\include\wx\treebase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\treebook.h
+SOURCE=..\..\include\wx\persist\treebook.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\treebook.h
+SOURCE=..\..\include\wx\treebook.h
 # End Source File
 # Begin Source File
 
@@ -6710,6 +6763,10 @@ SOURCE=..\..\include\wx\valgen.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\validate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\valnum.h
 # End Source File
 # Begin Source File
 
@@ -6733,11 +6790,11 @@ SOURCE=..\..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\window.h
+SOURCE=..\..\include\wx\persist\window.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\window.h
+SOURCE=..\..\include\wx\window.h
 # End Source File
 # Begin Source File
 

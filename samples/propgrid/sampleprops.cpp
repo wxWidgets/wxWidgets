@@ -22,6 +22,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/fontdlg.h"
+
 // -----------------------------------------------------------------------
 
 
@@ -45,8 +47,6 @@ bool operator == (const wxFontData&, const wxFontData&)
 
 // Custom version of wxFontProperty that also holds colour in the value.
 // Original version by Vladimir Vainer.
-
-#include <wx/fontdlg.h>
 
 IMPLEMENT_VARIANT_OBJECT_SHALLOWCMP(wxFontData)
 
@@ -618,7 +618,7 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
 
     WX_PG_TOKENIZER1_BEGIN(text,delimiter)
 
-        if ( token.length() )
+        if ( !token.empty() )
         {
 
             // If token was invalid, exit the loop now

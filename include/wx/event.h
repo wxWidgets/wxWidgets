@@ -1691,6 +1691,7 @@ public:
         { m_eventType = wxEVT_SIZING; m_id = id; }
 
     wxSize GetSize() const { return m_size; }
+    void SetSize(wxSize size) { m_size = size; }
     wxRect GetRect() const { return m_rect; }
     void SetRect(const wxRect& rect) { m_rect = rect; }
 

@@ -58,8 +58,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -113,7 +111,7 @@ static int GetPageId(wxTabView *tabview, wxNotebookPage *page)
 void wxNotebook::Init()
 {
     m_tabView = NULL;
-    m_nSelection = -1;
+    m_selection = -1;
 }
 
 // default for dynamic class
@@ -274,10 +272,10 @@ bool wxNotebook::DeletePage(size_t nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), false );
 
-    if (m_nSelection != -1)
+    if (m_selection != -1)
     {
-        m_pages[m_nSelection]->Show(false);
-        m_pages[m_nSelection]->Lower();
+        m_pages[m_selection]->Show(false);
+        m_pages[m_selection]->Lower();
     }
 
     wxNotebookPage* pPage = GetPage(nPage);
@@ -289,16 +287,16 @@ bool wxNotebook::DeletePage(size_t nPage)
 
     if (m_pages.GetCount() == 0)
     {
-        m_nSelection = -1;
+        m_selection = -1;
         m_tabView->SetTabSelection(-1, false);
     }
-    else if (m_nSelection > -1)
+    else if (m_selection > -1)
     {
-        m_nSelection = -1;
+        m_selection = -1;
 
         m_tabView->SetTabSelection(GetPageId(m_tabView, GetPage(0)), false);
 
-        if (m_nSelection != 0)
+        if (m_selection != 0)
             ChangePage(-1, 0);
     }
 
@@ -337,16 +335,16 @@ wxWindow* wxNotebook::DoRemovePage(size_t nPage)
 
     if (m_pages.GetCount() == 0)
     {
-      m_nSelection = -1;
+      m_selection = -1;
       m_tabView->SetTabSelection(-1, true);
     }
-    else if (m_nSelection > -1)
+    else if (m_selection > -1)
     {
       // Only change the selection if the page we
       // deleted was the selection.
-      if (nPage == (size_t)m_nSelection)
+      if (nPage == (size_t)m_selection)
       {
-         m_nSelection = -1;
+         m_selection = -1;
          // Select the first tab. Generates a ChangePage.
          m_tabView->SetTabSelection(0, true);
       }
@@ -355,8 +353,8 @@ wxWindow* wxNotebook::DoRemovePage(size_t nPage)
         // We must adjust which tab we think is selected.
         // If greater than the page we deleted, it must be moved down
         // a notch.
-        if (size_t(m_nSelection) > nPage)
-          m_nSelection -- ;
+        if (size_t(m_selection) > nPage)
+          m_selection -- ;
       }
     }
 
@@ -427,7 +425,7 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     // some page must be selected: either this one or the first one if there is
     // still no selection
-    if ( m_nSelection == -1 )
+    if ( m_selection == -1 )
       ChangePage(-1, 0);
 
     RefreshLayout(false);
@@ -546,7 +544,7 @@ void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
     // is it our tab control?
     if ( event.GetEventObject() == this )
     {
-        if (event.GetSelection() != m_nSelection)
+        if (event.GetSelection() != m_selection)
           ChangePage(event.GetOldSelection(), event.GetSelection());
     }
 
@@ -557,8 +555,8 @@ void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
 void wxNotebook::OnSetFocus(wxFocusEvent& event)
 {
     // set focus to the currently selected page if any
-    if ( m_nSelection != -1 )
-        m_pages[m_nSelection]->SetFocus();
+    if ( m_selection != -1 )
+        m_pages[m_selection]->SetFocus();
 
     event.Skip();
 }
@@ -628,7 +626,7 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     pPage->Raise();
     pPage->SetFocus();
 
-    m_nSelection = nSel;
+    m_selection = nSel;
 }
 
 void wxNotebook::OnMouseEvent(wxMouseEvent& event)

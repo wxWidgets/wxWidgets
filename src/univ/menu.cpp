@@ -281,10 +281,6 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
 BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
 

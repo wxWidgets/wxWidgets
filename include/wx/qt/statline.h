@@ -35,6 +35,8 @@ public:
 
 private:
     wxQtPointer< QFrame > m_qtFrame;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticLine );
 };
 
 #endif // _WX_QT_STATLINE_H_

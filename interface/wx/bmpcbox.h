@@ -38,12 +38,12 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
-           Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
+           Process a @c wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected.
     @event{EVT_TEXT(id, func)}
-           Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes.
+           Process a @c wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes.
     @event{EVT_TEXT_ENTER(id, func)}
-           Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
+           Process a @c wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox.
     @endEventTable
 

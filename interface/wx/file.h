@@ -232,6 +232,32 @@ public:
     ~wxFile();
 
     /**
+        Returns the error code for the last unsuccessful operation.
+
+        The error code is system-dependent and corresponds to the value of the
+        standard @c errno variable when the last error occurred.
+
+        Notice that only simple accessors such as IsOpened() and Eof() (and
+        this method itself) don't modify the last error value, all other
+        methods can potentially change it if an error occurs, including the
+        const ones such as Tell() or Length().
+
+        @since 2.9.2
+
+        @see ClearLastError()
+    */
+    int GetLastError() const;
+
+    /**
+        Resets the error code.
+
+        GetLastError() will return 0 until the next error occurs.
+
+        @since 2.9.2
+    */
+    void ClearLastError();
+
+    /**
         This function verifies if we may access the given file in specified mode.
         Only values of @c wxFile::read or @c wxFile::write really make sense here.
     */

@@ -12,8 +12,6 @@
 #include "wx/combobox.h"
 #include "wx/qt/converter.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxComboBox, wxControl )
-
 wxComboBox::wxComboBox()
 {
 }

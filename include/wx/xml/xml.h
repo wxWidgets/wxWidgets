@@ -19,6 +19,7 @@
 #include "wx/string.h"
 #include "wx/object.h"
 #include "wx/list.h"
+#include "wx/versioninfo.h"
 
 #ifdef WXMAKINGDLL_XML
     #define WXDLLIMPEXP_XML WXEXPORT
@@ -34,7 +35,6 @@ class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 class WXDLLIMPEXP_FWD_XML wxXmlIOHandler;
 class WXDLLIMPEXP_FWD_BASE wxInputStream;
 class WXDLLIMPEXP_FWD_BASE wxOutputStream;
-
 
 // Represents XML node type.
 enum wxXmlNodeType
@@ -298,6 +298,8 @@ public:
     wxString GetEncoding() const { return m_encoding; }
     void SetEncoding(const wxString& enc) { m_encoding = enc; }
 #endif
+
+    static wxVersionInfo GetLibraryVersionInfo();
 
 private:
     wxString   m_version;

@@ -71,6 +71,58 @@ extern const char *wxDumpFont(const wxFont *font)
     return buf;
 }
 
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxBEGIN_ENUM( wxFontFamily )
+wxENUM_MEMBER( wxFONTFAMILY_DEFAULT )
+wxENUM_MEMBER( wxFONTFAMILY_DECORATIVE )
+wxENUM_MEMBER( wxFONTFAMILY_ROMAN )
+wxENUM_MEMBER( wxFONTFAMILY_SCRIPT )
+wxENUM_MEMBER( wxFONTFAMILY_SWISS )
+wxENUM_MEMBER( wxFONTFAMILY_MODERN )
+wxENUM_MEMBER( wxFONTFAMILY_TELETYPE )
+wxEND_ENUM( wxFontFamily )
+
+wxBEGIN_ENUM( wxFontStyle )
+wxENUM_MEMBER( wxFONTSTYLE_NORMAL )
+wxENUM_MEMBER( wxFONTSTYLE_ITALIC )
+wxENUM_MEMBER( wxFONTSTYLE_SLANT )
+wxEND_ENUM( wxFontStyle )
+
+wxBEGIN_ENUM( wxFontWeight )
+wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_LIGHT )
+wxENUM_MEMBER( wxFONTWEIGHT_BOLD )
+wxEND_ENUM( wxFontWeight )
+
+wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h")
+
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxFont>)
+
+wxBEGIN_PROPERTIES_TABLE(wxFont)
+wxPROPERTY( Size,int, SetPointSize, GetPointSize, 12, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Family, wxFontFamily , SetFamily, GetFamily, (wxFontFamily)wxDEFAULT, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group")) // wxFontFamily
+wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, (wxFontStyle)wxNORMAL, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group")) // wxFontStyle
+wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group")) // wxFontWeight
+wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
+           wxFONTENCODING_DEFAULT, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxCONSTRUCTOR_6( wxFont, int, Size, wxFontFamily, Family, wxFontStyle, Style, wxFontWeight, Weight, \
+                bool, Underlined, wxString, Face )
+
+wxEMPTY_HANDLERS_TABLE(wxFont)
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -439,6 +491,29 @@ bool wxFontBase::SetFaceName(const wxString& facename)
     return true;
 }
 
+void wxFontBase::SetSymbolicSize(wxFontSymbolicSize size)
+{
+    SetSymbolicSizeRelativeTo(size, wxNORMAL_FONT->GetPointSize());
+}
+
+/* static */
+int wxFontBase::AdjustToSymbolicSize(wxFontSymbolicSize size, int base)
+{
+    // Using a fixed factor (1.2, from CSS2) is a bad idea as explained at
+    // http://www.w3.org/TR/CSS21/fonts.html#font-size-props so use the values
+    // from http://style.cleverchimp.com/font_size_intervals/altintervals.html
+    // instead.
+    static const float factors[] = { 0.60f, 0.75f, 0.89f, 1.f, 1.2f, 1.5f, 2.f };
+
+    wxCOMPILE_TIME_ASSERT
+    (
+        WXSIZEOF(factors) == wxFONTSIZE_XX_LARGE - wxFONTSIZE_XX_SMALL + 1,
+        WrongFontSizeFactorsSize
+    );
+
+    return factors[size - wxFONTSIZE_XX_SMALL]*base;
+}
+
 wxFont& wxFont::MakeBold()
 {
     SetWeight(wxFONTWEIGHT_BOLD);
@@ -461,7 +536,20 @@ wxFont& wxFont::MakeItalic()
 wxFont wxFont::Italic() const
 {
     wxFont font(*this);
-    font.SetStyle(wxFONTSTYLE_ITALIC);
+    font.MakeItalic();
+    return font;
+}
+
+wxFont& wxFont::MakeUnderlined()
+{
+    SetUnderlined(true);
+    return *this;
+}
+
+wxFont wxFont::Underlined() const
+{
+    wxFont font(*this);
+    font.MakeUnderlined();
     return font;
 }
 

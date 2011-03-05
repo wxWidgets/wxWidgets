@@ -25,10 +25,7 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxFontData;
-class WXDLLIMPEXP_FWD_CORE wxFontBase;
 class WXDLLIMPEXP_FWD_CORE wxFont;
-class WXDLLIMPEXP_FWD_CORE wxSize;
 
 // ----------------------------------------------------------------------------
 // font constants
@@ -67,6 +64,18 @@ enum wxFontWeight
     wxFONTWEIGHT_LIGHT = wxLIGHT,
     wxFONTWEIGHT_BOLD = wxBOLD,
     wxFONTWEIGHT_MAX
+};
+
+// Symbolic font sizes as defined in CSS specification.
+enum wxFontSymbolicSize
+{
+    wxFONTSIZE_XX_SMALL = -3,
+    wxFONTSIZE_X_SMALL,
+    wxFONTSIZE_SMALL,
+    wxFONTSIZE_MEDIUM,
+    wxFONTSIZE_LARGE,
+    wxFONTSIZE_X_LARGE,
+    wxFONTSIZE_XX_LARGE
 };
 
 // the font flag bits for the new font ctor accepting one combined flags word
@@ -243,6 +252,19 @@ public:
     bool SetNativeFontInfo(const wxString& info);
     bool SetNativeFontInfoUserDesc(const wxString& info);
 
+    // Symbolic font sizes support: set the font size to "large" or "very
+    // small" either absolutely (i.e. compared to the default font size) or
+    // relatively to the given font size.
+    void SetSymbolicSize(wxFontSymbolicSize size);
+    void SetSymbolicSizeRelativeTo(wxFontSymbolicSize size, int base)
+    {
+        SetPointSize(AdjustToSymbolicSize(size, base));
+    }
+
+    // Adjust the base size in points according to symbolic size.
+    static int AdjustToSymbolicSize(wxFontSymbolicSize size, int base);
+
+
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)
     wxString GetFamilyString() const;
@@ -306,12 +328,14 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     /* functions for modifying font in place */ \
     wxFont& MakeBold(); \
     wxFont& MakeItalic(); \
+    wxFont& MakeUnderlined(); \
     wxFont& MakeLarger() { return Scale(1.2f); } \
     wxFont& MakeSmaller() { return Scale(1/1.2f); } \
     wxFont& Scale(float x); \
     /* functions for creating fonts based on this one */ \
     wxFont Bold() const; \
     wxFont Italic() const; \
+    wxFont Underlined() const; \
     wxFont Larger() const { return Scaled(1.2f); } \
     wxFont Smaller() const { return Scaled(1/1.2f); } \
     wxFont Scaled(float x) const
@@ -380,6 +404,11 @@ extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 // compilers as it compares elements of different enums
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
 
+// Unfortunately some compilers have ambiguity issues when enum comparisons are
+// overloaded so we have to disable the overloads in this case, see
+// wxCOMPILER_NO_OVERLOAD_ON_ENUM definition in wx/platform.h for more details.
+#ifndef wxCOMPILER_NO_OVERLOAD_ON_ENUM
+
 inline bool operator==(wxFontFamily s, wxDeprecatedGUIConstants t)
 { return static_cast<int>(s) == static_cast<int>(t); }
 inline bool operator!=(wxFontFamily s, wxDeprecatedGUIConstants t)
@@ -392,6 +421,8 @@ inline bool operator==(wxFontWeight s, wxDeprecatedGUIConstants t)
 { return static_cast<int>(s) == static_cast<int>(t); }
 inline bool operator!=(wxFontWeight s, wxDeprecatedGUIConstants t)
 { return !(s == t); }
+
+#endif // // wxCOMPILER_NO_OVERLOAD_ON_ENUM
 
 #endif // FUTURE_WXWIN_COMPATIBILITY_3_0
 

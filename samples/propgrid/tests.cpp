@@ -616,6 +616,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         dt2.SetYear(dt2.GetYear()-10);
 #endif
 
+        wxColour colWithAlpha(1, 128, 254, 100);
+        wxString colWithAlphaStr(colWithAlpha.GetAsString(wxC2S_CSS_SYNTAX));
+
 #define FLAG_TEST_SET1 (wxCAPTION|wxCLOSE_BOX|wxSYSTEM_MENU|wxRESIZE_BORDER)
 #define FLAG_TEST_SET2 (wxSTAY_ON_TOP|wxCAPTION|wxICONIZE|wxSYSTEM_MENU)
 
@@ -752,6 +755,25 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             wxLogDebug("Did not match: Car.Convertible=%s", pgman->GetPropertyValueAsString("Car.Convertible").c_str());
             RT_FAILURE();
         }
+
+        // SetPropertyValueString for special cases such as wxColour
+        pgman->SetPropertyValueString("ColourProperty", "(123,4,255)");
+        col << pgman->GetPropertyValue("ColourProperty");
+        if ( col != wxColour(123, 4, 255) )
+            RT_FAILURE();
+        pgman->SetPropertyValueString("ColourProperty", "#FE860B");
+        col << pgman->GetPropertyValue("ColourProperty");
+        if ( col != wxColour(254, 134, 11) )
+            RT_FAILURE();
+
+        pgman->SetPropertyValueString("ColourPropertyWithAlpha",
+                                      "(10, 20, 30, 128)");
+        col << pgman->GetPropertyValue("ColourPropertyWithAlpha");
+        if ( col != wxColour(10, 20, 30, 128) )
+            RT_FAILURE();
+        if ( pgman->GetPropertyValueAsString("ColourPropertyWithAlpha")
+                != "(10,20,30,128)" )
+            RT_FAILURE();
     }
 
     {
@@ -865,6 +887,27 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         prop->SetAttribute(wxT("Dummy Attribute"), wxVariant());
 
         if ( !prop->GetAttribute(wxT("Dummy Attribute")).IsNull() )
+            RT_FAILURE();
+    }
+
+    {
+        RT_START_TEST(DoubleToString)
+
+        // Locale-specific decimal separator
+        wxString sep = wxString::Format("%g", 1.1)[1];
+
+        wxString s;
+
+        if ( wxPropertyGrid::DoubleToString(s, 123.123, 2, true) !=
+                wxString::Format("123%s12", sep.c_str()) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -123.123, 4, false) !=
+                wxString::Format("-123%s1230", sep.c_str()) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -0.02, 1, false) !=
+                wxString::Format("0%s0", sep) )
+            RT_FAILURE();
+        if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != "0" )
             RT_FAILURE();
     }
 

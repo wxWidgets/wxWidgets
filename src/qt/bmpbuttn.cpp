@@ -11,6 +11,9 @@
 
 #include "wx/bmpbuttn.h"
 
+wxBEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
+wxEND_EVENT_TABLE()
+
 wxBitmapButton::wxBitmapButton()
 {
 }

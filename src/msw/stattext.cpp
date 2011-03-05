@@ -30,59 +30,6 @@
 
 #include "wx/msw/private.h"
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxStaticTextStyle )
-
-wxBEGIN_FLAGS( wxStaticTextStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxST_NO_AUTORESIZE)
-    wxFLAGS_MEMBER(wxALIGN_LEFT)
-    wxFLAGS_MEMBER(wxALIGN_RIGHT)
-    wxFLAGS_MEMBER(wxALIGN_CENTRE)
-
-wxEND_FLAGS( wxStaticTextStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl,"wx/stattext.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxStaticText)
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxStaticTextStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxStaticText)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_6( wxStaticText , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-#endif
-
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,
                           const wxString& label,
@@ -164,6 +111,25 @@ wxSize wxStaticText::DoGetBestClientSize() const
         widthTextMax += 2;
 #endif // __WXWINCE__
 
+    // It looks like the static control needs "slightly" more vertical space
+    // than the character height and while the text isn't actually truncated if
+    // we use just the minimal height, it is positioned differently than when
+    // the control has enough space and this result in the text in edit and
+    // static controls not being aligned when the controls themselves are. As
+    // this is something you really should be able to count on, increase the
+    // space allocated for the control so that the base lines do align
+    // correctly. Notice that while the above is true at least for the single
+    // line controls, there doesn't seem to do any harm to allocate two extra
+    // pixels in multi-line case neither so do it always for consistency.
+    //
+    // I still have no idea why exactly is this needed nor why should we use 2
+    // and not something else. This seems to work in all the configurations
+    // though (small/large fonts, different OS versions, ...) so just hard code
+    // it for now. If we need something better later it might be worth looking
+    // at the height of the text control returned by ::GetComboBoxInfo() as it
+    // seems to be the "minimal acceptable" height.
+    heightTextTotal += 2;
+
     return wxSize(widthTextMax, heightTextTotal);
 }
 
@@ -220,10 +186,10 @@ void wxStaticText::SetLabel(const wxString& label)
 
 #ifdef SS_ENDELLIPSIS
     if ( styleReal & SS_ENDELLIPSIS )
-        DoSetLabel(GetLabelWithoutMarkup());
+        DoSetLabel(GetLabel());
     else
 #endif // SS_ENDELLIPSIS
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+        DoSetLabel(GetEllipsizedLabel());
 
     // adjust the size of the window to fit to the label unless autoresizing is
     // disabled

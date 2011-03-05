@@ -29,7 +29,6 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
-    #include "wx/cmndata.h"
     #include "wx/choice.h"
     #include "wx/textctrl.h"
     #include "wx/layout.h"
@@ -437,64 +436,6 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 // wxGenericDirCtrl
 //-----------------------------------------------------------------------------
 
-
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxGenericDirCtrlStyle )
-
-wxBEGIN_FLAGS( wxGenericDirCtrlStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxDIRCTRL_DIR_ONLY)
-    wxFLAGS_MEMBER(wxDIRCTRL_3D_INTERNAL)
-    wxFLAGS_MEMBER(wxDIRCTRL_SELECT_FIRST)
-    wxFLAGS_MEMBER(wxDIRCTRL_MULTIPLE)
-
-wxEND_FLAGS( wxGenericDirCtrlStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl,"wx/dirctrl.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
-    wxHIDE_PROPERTY( Children )
-    wxPROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Filter , wxString , SetFilter , GetFilter  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY_FLAGS( WindowStyle, wxGenericDirCtrlStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, EMPTY_MACROVALUE , 0, wxT("Helpstring"), wxT("group") )
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_8( wxGenericDirCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , DefaultPath ,
-                 wxPoint , Position , wxSize , Size , long , WindowStyle , wxString , Filter , int , DefaultFilter )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
-#endif
-
 BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_ITEM_EXPANDING     (wxID_TREECTRL, wxGenericDirCtrl::OnExpandItem)
   EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
@@ -761,14 +702,9 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
     //     ctor when wxTR_HIDE_ROOT was specified
 
     if (!m_rootId.IsOk())
-
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
-    if ( m_treeCtrl->GetChildrenCount(parentId, false) == 0 )
-    {
-        m_treeCtrl->SetItemHasChildren(parentId, false);
-    }
 }
 
 void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
@@ -793,7 +729,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
     m_treeCtrl->Thaw();
 }
 
-void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
+void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 {
     wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
 
@@ -892,6 +828,10 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         filenames.Sort(wxDirCtrlStringCompareFunction);
     }
 
+    // Now we really know whether we have any children so tell the tree control
+    // about it.
+    m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+
     // Add the sorted dirs
     size_t i;
     for (i = 0; i < dirs.GetCount(); i++)
@@ -911,7 +851,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         // assume that it does have children by default as it can take a long
         // time to really check for this (think remote drives...)
         //
-        // and if we're wrong, we'll correct it later in OnExpandItem() if
+        // and if we're wrong, we'll correct the icon later if
         // the user really tries to open this item
         m_treeCtrl->SetItemHasChildren(id);
     }
@@ -934,6 +874,12 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
         }
     }
+}
+
+void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
+{
+    // ExpandDir() will not actually expand the tree node, just populate it
+    PopulateNode(parentId);
 }
 
 void wxGenericDirCtrl::ReCreateTree()

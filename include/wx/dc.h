@@ -29,7 +29,7 @@
 #include "wx/dynarray.h"
 #include "wx/math.h"
 #include "wx/image.h"
-#include "wx/cmndata.h"
+#include "wx/region.h"
 
 #define wxUSE_NEW_DC 1
 
@@ -112,6 +112,27 @@ enum wxMappingMode
     wxMM_LOMETRIC,
     wxMM_TWIPS,
     wxMM_POINTS
+};
+
+// Description of text characteristics.
+struct wxFontMetrics
+{
+    wxFontMetrics()
+    {
+        height =
+        ascent =
+        descent =
+        internalLeading =
+        externalLeading =
+        averageWidth = 0;
+    }
+
+    int height,             // Total character height.
+        ascent,             // Part of the height above the baseline.
+        descent,            // Part of the height below the baseline.
+        internalLeading,    // Intra-line spacing.
+        externalLeading,    // Inter-line spacing.
+        averageWidth;       // Average font width, a.k.a. "x-width".
 };
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -375,6 +396,18 @@ public:
 
     virtual wxCoord GetCharHeight() const = 0;
     virtual wxCoord GetCharWidth() const = 0;
+
+    // The derived classes should really override DoGetFontMetrics() to return
+    // the correct values in the future but for now provide a default
+    // implementation in terms of DoGetTextExtent() to avoid breaking the
+    // compilation of all other ports as wxMSW is the only one to implement it.
+    virtual void DoGetFontMetrics(int *height,
+                                  int *ascent,
+                                  int *descent,
+                                  int *internalLeading,
+                                  int *externalLeading,
+                                  int *averageWidth) const;
+
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
@@ -839,6 +872,15 @@ public:
         { return m_pimpl->GetCharHeight(); }
     wxCoord GetCharWidth() const
         { return m_pimpl->GetCharWidth(); }
+
+    wxFontMetrics GetFontMetrics() const
+    {
+        wxFontMetrics fm;
+        m_pimpl->DoGetFontMetrics(&fm.height, &fm.ascent, &fm.descent,
+                                  &fm.internalLeading, &fm.externalLeading,
+                                  &fm.averageWidth);
+        return fm;
+    }
 
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,

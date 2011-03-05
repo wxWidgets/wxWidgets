@@ -21,8 +21,6 @@
 
 #import <AppKit/NSImageView.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-
 BEGIN_EVENT_TABLE(wxStaticBitmap, wxControl)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxStaticBitmap,NSTextField,NSControl,NSView)

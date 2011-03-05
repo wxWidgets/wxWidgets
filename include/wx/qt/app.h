@@ -28,7 +28,7 @@ private:
     int m_qtArgc;
     char **m_qtArgv;
     
-    DECLARE_DYNAMIC_CLASS_NO_COPY( wxApp )
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxApp );
 };
     
 #endif // _WX_QT_APP_H_

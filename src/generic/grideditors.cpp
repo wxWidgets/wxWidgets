@@ -28,12 +28,12 @@
     #include "wx/textctrl.h"
     #include "wx/checkbox.h"
     #include "wx/combobox.h"
-    #include "wx/valtext.h"
     #include "wx/intl.h"
     #include "wx/math.h"
     #include "wx/listbox.h"
 #endif
 
+#include "wx/valnum.h"
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
 #include "wx/tokenzr.h"
@@ -660,7 +660,7 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
         wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-        Text()->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+        Text()->SetValidator(wxIntegerValidator<int>());
 #endif
     }
 }
@@ -875,7 +875,7 @@ void wxGridCellFloatEditor::Create(wxWindow* parent,
     wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-    Text()->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+    Text()->SetValidator(wxFloatingPointValidator<double>(m_precision));
 #endif
 }
 
@@ -1506,7 +1506,6 @@ void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 
     Combo()->SetSelection(m_index);
-    Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
 
 }

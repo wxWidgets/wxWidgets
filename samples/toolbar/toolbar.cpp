@@ -315,8 +315,6 @@ bool MyApp::OnInit()
 
     wxInitAllImageHandlers();
 
-    SetTopWindow(frame);
-
     return true;
 }
 

@@ -537,5 +537,9 @@ typedef struct
     #endif
 #endif  // defined __WINE__
 
+#ifndef INVALID_FILE_ATTRIBUTES
+    #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+#endif
+
 #endif
     // _WX_MISSING_H_

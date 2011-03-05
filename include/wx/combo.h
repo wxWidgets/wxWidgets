@@ -45,6 +45,7 @@
 #include "wx/control.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
+#include "wx/textentry.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxComboPopup;
@@ -139,13 +140,14 @@ struct wxComboCtrlFeatures
 };
 
 
-class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl,
+                                         public wxTextEntry
 {
     friend class wxComboPopup;
     friend class wxComboPopupEvtHandler;
 public:
     // ctors and such
-    wxComboCtrlBase() : wxControl() { Init(); }
+    wxComboCtrlBase() : wxControl(), wxTextEntry() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -158,7 +160,17 @@ public:
 
     virtual ~wxComboCtrlBase();
 
-    // show/hide popup window
+    // Show/hide popup window (wxComboBox-compatible methods)
+    virtual void Popup();
+    virtual void Dismiss()
+    {
+        HidePopup(true);
+    }
+
+    // Show/hide popup window.
+    // TODO: Maybe deprecate in favor of Popup()/Dismiss().
+    //       However, these functions are still called internally
+    //       so it is not straightforward.
     virtual void ShowPopup();
     virtual void HidePopup(bool generateEvent=false);
 
@@ -196,26 +208,56 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool SetFont(const wxFont& font);
-#if wxUSE_VALIDATORS
-    virtual void SetValidator(const wxValidator &validator);
-    virtual wxValidator *GetValidator();
-#endif // wxUSE_VALIDATORS
 
-    // wxTextCtrl methods - for readonly combo they should return
-    // without errors.
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    //
+    // wxTextEntry methods
+    //
+    // NB: We basically need to override all of them because there is
+    //     no guarantee how platform-specific wxTextEntry is implemented.
+    //
+    virtual void SetValue(const wxString& value)
+        { wxTextEntryBase::SetValue(value); }
+    virtual void ChangeValue(const wxString& value)
+        { wxTextEntryBase::ChangeValue(value); }
+
+    virtual void WriteText(const wxString& text);
+    virtual void AppendText(const wxString& text)
+        { wxTextEntryBase::AppendText(text); }
+
+    virtual wxString GetValue() const
+        { return wxTextEntryBase::GetValue(); }
+
+    virtual wxString GetRange(long from, long to) const
+        { return wxTextEntryBase::GetRange(from, to); }
+
+    // Replace() and DoSetValue() need to be fully re-implemented since
+    // EventSuppressor utility class does not work with the way
+    // wxComboCtrl is implemented.
+    virtual void Replace(long from, long to, const wxString& value);
+
+    virtual void Remove(long from, long to);
+
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
+
     virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
     virtual long GetLastPosition() const;
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
+
     virtual void SetSelection(long from, long to);
-    virtual void Undo();
+    virtual void GetSelection(long *from, long *to) const;
+
+    virtual bool IsEditable() const;
+    virtual void SetEditable(bool editable);
+
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
 
     // This method sets the text without affecting list selection
     // (ie. wxComboPopup::SetStringValue doesn't get called).
@@ -223,7 +265,13 @@ public:
 
     // This method sets value and also optionally sends EVT_TEXT
     // (needed by combo popups)
-    void SetValueWithEvent(const wxString& value, bool withEvent = true);
+    wxDEPRECATED( void SetValueWithEvent(const wxString& value,
+                                         bool withEvent = true) );
+
+    // Changes value of the control as if user had done it by selecting an
+    // item from a combo box drop-down list. Needs to be public so that
+    // derived popup classes can call it.
+    void SetValueByUser(const wxString& value);
 
     //
     // Popup customization methods
@@ -387,21 +435,6 @@ public:
     const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
     const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
 
-    // Hint functions mirrored from TextEntryBase
-    virtual bool SetHint(const wxString& hint);
-    virtual wxString GetHint() const;
-
-    // Margins functions mirrored from TextEntryBase
-    // (wxComboCtrl does not inherit from wxTextEntry, but may embed a
-    // wxTextCtrl, so we need these). Also note that these functions
-    // have replaced SetTextIndent() in wxWidgets 2.9.1 and later.
-    bool SetMargins(const wxPoint& pt)
-        { return DoSetMargins(pt); }
-    bool SetMargins(wxCoord left, wxCoord top = -1)
-        { return DoSetMargins(wxPoint(left, top)); }
-    wxPoint GetMargins() const
-        { return DoGetMargins(); }
-
     // Set custom style flags for embedded wxTextCtrl. Usually must be used
     // with two-step creation, before Create() call.
     void SetTextCtrlStyle( int style );
@@ -463,7 +496,11 @@ protected:
 
     // Creates wxTextCtrl.
     //   extraStyle: Extra style parameters
-    void CreateTextCtrl( int extraStyle, const wxValidator& validator );
+    void CreateTextCtrl( int extraStyle );
+
+    // Called when text was changed programmatically
+    // (e.g. from WriteText())
+    void OnSetValue(const wxString& value);
 
     // Installs standard input handler to combo (and optionally to the textctrl)
     void InstallInputHandlers();
@@ -557,6 +594,11 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
+
+    // protected wxTextEntry methods
+    virtual void DoSetValue(const wxString& value, int flags);
+    virtual wxString DoGetValue() const;
+    virtual wxWindow *GetEditableWindow() { return this; }
 
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
@@ -731,6 +773,13 @@ public:
 
     // Gets displayed string representation of the value.
     virtual wxString GetStringValue() const = 0;
+
+    // Called to check if the popup - when an item container - actually
+    // has matching item. Case-sensitivity checking etc. is up to the
+    // implementation. If the found item matched the string, but is
+    // different, it should be written back to pItem. Default implementation
+    // always return true and does not alter trueItem.
+    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
 
     // This is called to custom paint in the combo control itself (ie. not the popup).
     // Default implementation draws value as string.

@@ -46,6 +46,9 @@ public:
     
     virtual bool IsChecked(unsigned int item) const;
     virtual void Check(unsigned int item, bool check = true);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
 };
 
 #endif // _WX_QT_CHECKLST_H_

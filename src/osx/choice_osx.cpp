@@ -22,8 +22,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
-
 wxChoice::~wxChoice()
 {
     if ( HasClientObjectData() )
@@ -126,7 +124,10 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
             m_strings.Insert( items[i], idx );
         }
 
-        m_popUpMenu->Insert( idx, i+1, items[i] );
+        wxString text = items[i];
+        if (text == wxEmptyString)
+            text = " ";  // menu items can't have empty labels
+        m_popUpMenu->Insert( idx, i+1, text );
         m_datas.Insert( NULL, idx );
         AssignNewItemClientData(idx, clientData, i, type);
     }
@@ -218,15 +219,11 @@ wxString wxChoice::GetString(unsigned int n) const
 // ----------------------------------------------------------------------------
 void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n), wxT("wxChoice::DoSetItemClientData: invalid index") );
-
     m_datas[n] = (char*)clientData ;
 }
 
 void * wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL, wxT("wxChoice::DoGetClientData: invalid index") );
-
     return (void *)m_datas[n];
 }
 

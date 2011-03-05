@@ -32,8 +32,6 @@
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -237,32 +235,24 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     return true;
 }
 
-void wxFrame::OnInternalIdle()
+bool wxFrame::SendIdleEvents(wxIdleEvent& event)
 {
-    wxFrameBase::OnInternalIdle();
+    bool needMore = wxFrameBase::SendIdleEvents(event);
 
-#if wxUSE_MENUS_NATIVE
-    if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
-#endif // wxUSE_MENUS_NATIVE
+#if wxUSE_MENUS
+    if (m_frameMenuBar && m_frameMenuBar->SendIdleEvents(event))
+        needMore = true;
+#endif
 #if wxUSE_TOOLBAR
-    if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
+    if (m_frameToolBar && m_frameToolBar->SendIdleEvents(event))
+        needMore = true;
 #endif
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar)
-    {
-        m_frameStatusBar->OnInternalIdle();
-
-        // There may be controls in the status bar that
-        // need to be updated
-        for ( wxWindowList::compatibility_iterator node = m_frameStatusBar->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-        {
-            wxWindow *child = node->GetData();
-            child->OnInternalIdle();
-        }
-    }
+    if (m_frameStatusBar && m_frameStatusBar->SendIdleEvents(event))
+        needMore = true;
 #endif
+
+    return needMore;
 }
 
 // ----------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 #if wxUSE_IMAGE && wxUSE_LIBJPEG
 
 #include "wx/imagjpeg.h"
+#include "wx/versioninfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -490,5 +491,10 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 }
 
 #endif   // wxUSE_STREAMS
+
+/*static*/ wxVersionInfo wxJPEGHandler::GetLibraryVersionInfo()
+{
+    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION/10, JPEG_LIB_VERSION%10);
+}
 
 #endif   // wxUSE_LIBJPEG

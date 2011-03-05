@@ -1,8 +1,12 @@
 # makefile for libpng
 # Copyright (C) 2002 Glenn Randers-Pehrson
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
-# For conditions of distribution and use, see copyright notice in png.h
-# modified for LC56/ATARI assumes libz.lib is in same dir and uses default
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
+#
+# Modified for LC56/ATARI assumes libz.lib is in same dir and uses default
 # rules for library management
 #
 CFLAGS=-I..\zlib -O

@@ -28,7 +28,7 @@ protected:
 private:
     wxQtPointer< QMenu > m_qtMenu;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu);
 };
 
 
@@ -54,7 +54,7 @@ public:
 private:
     wxQtPointer< QMenuBar > m_qtMenuBar;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar);
 };
 
 #endif // _WX_QT_MENU_H_

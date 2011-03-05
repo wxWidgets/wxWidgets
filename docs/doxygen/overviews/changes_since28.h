@@ -176,5 +176,11 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
   wxScrolled<T>::GetSizeAvailableForScrollTarget() method to compute the size
   available for the scroll target as function of the main window size, please
   see the documentation of this method for more details.
+
+- Signatures of wxDataViewCustomRenderer::Activate(),
+  wxDataViewCustomRenderer::LeftClick() and
+  wxDataViewCustomRenderer::StartDrag() virtual methods changed.  You will need
+  to change them in your derived renderer class too if you override them.
+
 */
 

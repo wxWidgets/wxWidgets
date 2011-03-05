@@ -1,15 +1,21 @@
-.TH LIBPNGPF 3 "December 18, 2008"
+.TH LIBPNGPF 3 "September 23, 2010"
 .SH NAME
-libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
+libpng \- Portable Network Graphics (PNG) Reference Library 1.4.4
 (private functions)
 .SH SYNOPSIS
 \fB#include <png.h>\fP
 
-\fI\fB
+\fB#include \fI"pngpriv.h"
 
 \fI\fB
 
-\fBvoid png_build_gamma_table (png_structp \fIpng_ptr\fP\fB);\fP
+\fBvoid png_64bit_product (long \fP\fIv1\fP\fB, long \fP\fIv2\fP\fB, unsigned long \fI*hi_product,
+
+\fBunsigned long \fI*lo_product\fP\fB);\fP
+
+\fI\fB
+
+\fBvoid png_build_gamma_table (png_structp \fP\fIpng_ptr\fP\fB, png_byte \fIbit_depth\fP\fB);\fP
 
 \fI\fB
 
@@ -27,6 +33,12 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
+\fBint png_check_cHRM_fixed (png_structp \fP\fIpng_ptr\fP\fB, png_fixed_point \fP\fIint_white_x\fP\fB, png_fixed_point \fP\fIint_white_y\fP\fB, png_fixed_point \fP\fIint_red_x\fP\fB, png_fixed_point \fP\fIint_red_y\fP\fB, png_fixed_point \fP\fIint_green_x\fP\fB, png_fixed_point \fP\fIint_green_y\fP\fB, png_fixed_point \fP\fIint_blue_x\fP\fB, png_fixed_point \fIint_blue_y\fP\fB);\fP
+
+\fI\fB
+
+\fI\fB
+
 \fBvoid png_check_chunk_name (png_structp \fP\fIpng_ptr\fP\fB, png_bytep \fIchunk_name\fP\fB);\fP
 
 \fI\fB
@@ -34,6 +46,12 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 \fI\fB
 
 \fBpng_size_t png_check_keyword (png_structp \fP\fIpng_ptr\fP\fB, png_charp \fP\fIkey\fP\fB, png_charpp \fInew_key\fP\fB);\fP
+
+\fI\fB
+
+\fI\fB
+
+\fBvoid png_check_IHDR (png_structp \fP\fIpng_ptr\fP\fB, png_uint_32 \fP\fIwidth\fP\fB, png_uint_32 \fP\fIheight\fP\fB, int \fP\fIbit_depth\fP\fB, int \fP\fIcolor_type\fP\fB, int \fP\fIinterlace_type\fP\fB, int \fP\fIcompression_type\fP\fB, int \fIfilter_type\fP\fB);\fP
 
 \fI\fB
 
@@ -81,7 +99,19 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
-\fBvoid png_decompress_chunk (png_structp \fP\fIpng_ptr\fP\fB, int \fP\fIcomp_type\fP\fB, png_charp \fP\fIchunkdata\fP\fB, png_size_t \fP\fIchunklength\fP\fB, png_size_t \fP\fIprefix_length\fP\fB, png_size_t \fI*data_length\fP\fB);\fP
+\fBint png_debug(int \fP\fIlevel\fP\fB, png_const_charp \fImessage\fP\fB);\fP
+
+\fI\fB
+
+\fBint png_debug1(int \fP\fIlevel\fP\fB, png_const_charp \fP\fImessage\fP\fB, \fIp1\fP\fB);\fP
+
+\fI\fB
+
+\fBint png_debug2(int \fP\fIlevel\fP\fB, png_const_charp \fP\fImessage\fP\fB, \fP\fIp1\fP\fB, \fIp2\fP\fB);\fP
+
+\fI\fB
+
+\fBvoid png_decompress_chunk (png_structp \fP\fIpng_ptr\fP\fB, int \fP\fIcomp_type\fP\fB, png_size_t \fP\fIchunklength\fP\fB, png_size_t \fP\fIprefix_length\fP\fB, png_size_t \fI*data_length\fP\fB);\fP
 
 \fI\fB
 
@@ -99,7 +129,7 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
-\fBvoid png_do_background (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fP\fIrow\fP\fB, png_color_16p \fP\fItrans_values\fP\fB, png_color_16p \fP\fIbackground\fP\fB, png_color_16p \fP\fIbackground_1\fP\fB, png_bytep \fP\fIgamma_table\fP\fB, png_bytep \fP\fIgamma_from_1\fP\fB, png_bytep \fP\fIgamma_to_1\fP\fB, png_uint_16pp \fP\fIgamma_16\fP\fB, png_uint_16pp \fP\fIgamma_16_from_1\fP\fB, png_uint_16pp \fP\fIgamma_16_to_1\fP\fB, int \fIgamma_shift\fP\fB);\fP
+\fBvoid png_do_background (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fP\fIrow\fP\fB, png_color_16p \fP\fItrans_color\fP\fB, png_color_16p \fP\fIbackground\fP\fB, png_color_16p \fP\fIbackground_1\fP\fB, png_bytep \fP\fIgamma_table\fP\fB, png_bytep \fP\fIgamma_from_1\fP\fB, png_bytep \fP\fIgamma_to_1\fP\fB, png_uint_16pp \fP\fIgamma_16\fP\fB, png_uint_16pp \fP\fIgamma_16_from_1\fP\fB, png_uint_16pp \fP\fIgamma_16_to_1\fP\fB, int \fIgamma_shift\fP\fB);\fP
 
 \fI\fB
 
@@ -112,14 +142,6 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 \fI\fB
 
 \fBvoid png_do_chop (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fIrow\fP\fB);\fP
-
-\fI\fB
-
-\fI\fB
-
-\fBvoid png_do_dither (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fP\fIrow\fP\fB, png_bytep \fP\fIpalette_lookup\fP\fB, png_bytep \fIdither_lookup\fP\fB);\fP
-
-\fI\fB
 
 \fI\fB
 
@@ -165,6 +187,12 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
+\fBvoid png_do_quantize (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fP\fIrow\fP\fB, png_bytep \fP\fIpalette_lookup\fP\fB, png_bytep \fIquantize_lookup\fP\fB);\fP
+
+\fI\fB
+
+\fI\fB
+
 \fBvoid png_do_read_filler (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fP\fIrow\fP\fB, png_uint_32 \fP\fIfiller\fP\fB, png_uint_32 \fIflags\fP\fB);\fP
 
 \fI\fB
@@ -178,8 +206,6 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 \fI\fB
 
 \fBvoid png_do_read_invert_alpha (png_row_infop \fP\fIrow_info\fP\fB, png_bytep \fIrow\fP\fB);\fP
-
-\fI\fB
 
 \fI\fB
 
@@ -537,15 +563,11 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
-\fBpng_uint_32 png_read_chunk_header (png_structp \fIpng_ptr\fP\fB);\fP
-
-\fI\fB
-
-\fI\fB
-
 \fBvoid png_read_data (png_structp \fP\fIpng_ptr\fP\fB, png_bytep \fP\fIdata\fP\fB, png_size_t \fIlength\fP\fB);\fP
 
 \fI\fB
+
+\fBvoid png_read_destroy (png_structp \fP\fIpng_ptr\fP\fB, png_infop \fP\fIinfo_ptr\fP\fB, png_infop \fIend_info_ptr\fP\fB);\fP
 
 \fI\fB
 
@@ -606,6 +628,8 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 \fBvoid png_write_data (png_structp \fP\fIpng_ptr\fP\fB, png_bytep \fP\fIdata\fP\fB, png_size_t \fIlength\fP\fB);\fP
 
 \fI\fB
+
+\fBvoid png_write_destroy (png_structp \fIpng_ptr\fP\fB);\fP
 
 \fI\fB
 
@@ -717,12 +741,6 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.2.34
 
 \fI\fB
 
-\fBvoid png_write_sig (png_structp \fIpng_ptr\fP\fB);\fP
-
-\fI\fB
-
-\fI\fB
-
 \fBvoid png_write_sRGB (png_structp \fP\fIpng_ptr\fP\fB, int \fIintent\fP\fB);\fP
 
 \fI\fB
@@ -785,6 +803,6 @@ are listed alphabetically here as an aid to libpng maintainers.
 See png.h for more information on these functions.
 
 .SH SEE ALSO
-.IR libpng(3) ", " png(5)
+.BR "png"(5), " libpng"(3), " zlib"(3), " deflate"(5), " " and " zlib"(5)
 .SH AUTHOR
 Glenn Randers-Pehrson

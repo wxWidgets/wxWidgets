@@ -18,8 +18,6 @@
 
 #if wxUSE_MSGDLG
 
-#include "wx/ptr_scpd.h"
-
 // there is no hook support under CE so we can't use the code for message box
 // positioning there
 #ifndef __WXWINCE__
@@ -29,21 +27,21 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msgdlg.h"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
-    #include "wx/dialog.h"
+    #include "wx/msw/private.h"
     #if wxUSE_MSGBOX_HOOK
         #include "wx/hashmap.h"
     #endif
 #endif
 
+#include "wx/ptr_scpd.h"
 #include "wx/dynlib.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
-#include "wx/msgdlg.h"
 
 #if wxUSE_MSGBOX_HOOK
     #include "wx/fontutil.h"
@@ -598,6 +596,19 @@ int wxMessageDialog::ShowModal()
 #endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
+}
+
+void wxMessageDialog::DoCentre(int dir)
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    // Task dialog is always centered on its parent window and trying to center
+    // it manually doesn't work because its HWND is not created yet so don't
+    // even try as this would only result in (debug) error messages.
+    if ( HasNativeTaskDialog() )
+        return;
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxMessageDialogBase::DoCentre(dir);
 }
 
 // ----------------------------------------------------------------------------

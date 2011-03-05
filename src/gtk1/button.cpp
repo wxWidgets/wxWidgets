@@ -94,8 +94,6 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
 // wxButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
-
 wxButton::wxButton()
 {
 }

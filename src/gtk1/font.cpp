@@ -23,8 +23,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/settings.h"
-    #include "wx/cmndata.h"
     #include "wx/gdicmn.h"
+    #include "wx/encinfo.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -449,8 +449,6 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
 // ----------------------------------------------------------------------------
 // wxFont creation
 // ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 wxFont::wxFont(const wxNativeFontInfo& info)
 {

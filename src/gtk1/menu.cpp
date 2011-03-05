@@ -25,6 +25,7 @@
 #endif // wxUSE_ACCEL
 
 #include "wx/gtk1/private.h"
+#include "wx/gtk1/private/mnemonics.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -173,8 +174,6 @@ static void gtk_menu_close_callback( GtkWidget *WXUNUSED(widget), wxMenuBar *men
 //-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
@@ -432,7 +431,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (wxMenuItem::GetLabelText(wxConvertFromGTKToWXLabel(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
+    if (wxMenuItem::GetLabelText(menu->GetTitle()) == wxMenuItem::GetLabelText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -525,7 +524,7 @@ wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return wxConvertFromGTKToWXLabel(menu->GetTitle());
+    return menu->GetTitle();
 }
 
 void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
@@ -691,8 +690,6 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 //-----------------------------------------------------------------------------
 // wxMenuItem
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
@@ -917,8 +914,6 @@ bool wxMenuItem::IsChecked() const
 // wxMenu
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
-
 void wxMenu::Init()
 {
     m_accel = gtk_accel_group_new();
@@ -962,6 +957,11 @@ wxMenu::~wxMenu()
        if ( m_owner )
            gtk_widget_destroy( m_menu );
    }
+}
+
+wxString wxMenu::GetTitle() const
+{
+    return wxConvertMnemonicsFromGTK(wxMenuBase::GetTitle());
 }
 
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)

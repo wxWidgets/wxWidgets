@@ -63,8 +63,6 @@ static void wxMenuItemDisarmCallback(Widget w, XtPointer clientData, XtPointer p
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
 // ----------------------------------------------------------------------------
 // wxMenuItem
 // ----------------------------------------------------------------------------

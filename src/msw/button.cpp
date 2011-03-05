@@ -37,15 +37,20 @@
     #include "wx/dcscreen.h"
     #include "wx/dcclient.h"
     #include "wx/toplevel.h"
+    #include "wx/msw/wrapcctl.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 #include "wx/imaglist.h"
 #include "wx/stockitem.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
 #include "wx/private/window.h"
-#include "wx/msw/missing.h"
+
+#if wxUSE_MARKUP
+    #include "wx/generic/private/markuptext.h"
+#endif // wxUSE_MARKUP
 
 using namespace wxMSWImpl;
 
@@ -224,13 +229,13 @@ public:
 
         m_data.himl = GetHimagelistOf(&m_iml);
 
-        // use default margins
+        // no margins by default
         m_data.margin.left =
-        m_data.margin.right = btn->GetCharWidth();
+        m_data.margin.right =
         m_data.margin.top =
-        m_data.margin.bottom = btn->GetCharHeight() / 2;
+        m_data.margin.bottom = 0;
 
-        // and default alignment
+        // use default alignment
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
 
         UpdateImageInfo();
@@ -353,67 +358,6 @@ private:
 // macros
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxButtonStyle )
-
-wxBEGIN_FLAGS( wxButtonStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxBU_LEFT)
-    wxFLAGS_MEMBER(wxBU_RIGHT)
-    wxFLAGS_MEMBER(wxBU_TOP)
-    wxFLAGS_MEMBER(wxBU_BOTTOM)
-    wxFLAGS_MEMBER(wxBU_EXACTFIT)
-wxEND_FLAGS( wxButtonStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxButton)
-    wxEVENT_PROPERTY( Click , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
-
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Label, wxString , SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-
-    wxPROPERTY_FLAGS( WindowStyle , wxButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxButton)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_6( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle  )
-
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -448,7 +392,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     wxSize sizeBtn = sizeLabel;
 
     sizeBtn.x += 3*win->GetCharWidth();
-    sizeBtn.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(sizeLabel.y)/10;
+    sizeBtn.y += win->GetCharHeight()/2;
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
@@ -457,29 +401,41 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     return sizeBtn;
 }
 
-wxSize wxMSWButton::ComputeBestSize(wxControl *btn, int flags)
+wxSize wxMSWButton::ComputeBestFittingSize(wxControl *btn, int flags)
 {
     wxClientDC dc(btn);
 
     wxSize sizeBtn;
     dc.GetMultiLineTextExtent(btn->GetLabelText(), &sizeBtn.x, &sizeBtn.y);
 
-    sizeBtn = GetFittingSize(btn, sizeBtn, flags);
+    return GetFittingSize(btn, sizeBtn, flags);
+}
 
-    // all buttons have at least the standard size unless the user explicitly
-    // wants them to be of smaller size and used wxBU_EXACTFIT style when
-    // creating the button
+wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size)
+{
+    wxSize sizeBtn(size);
+
+    // All buttons have at least the standard height and, unless the user
+    // explicitly wants them to be as small as possible and used wxBU_EXACTFIT
+    // style to indicate this, of at least the standard width too.
+    //
+    // Notice that we really want to make all buttons equally high, otherwise
+    // they look ugly and the existing code using wxBU_EXACTFIT only uses it to
+    // control width and not height.
+
+    // The 50x14 button size is documented in the "Recommended sizing and
+    // spacing" section of MSDN layout article.
+    //
+    // Note that we intentionally don't use GetDefaultSize() here, because
+    // it's inexact -- dialog units depend on this dialog's font.
+    const wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The size of a standard button in the dialog units is 50x14, use it.
-        // Note that we intentionally don't use GetDefaultSize() here, because
-        // it's inexact -- dialog units depend on this dialog's font.
-        wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
         if ( sizeBtn.x < sizeDef.x )
             sizeBtn.x = sizeDef.x;
-        if ( sizeBtn.y < sizeDef.y )
-            sizeBtn.y = sizeDef.y;
     }
+    if ( sizeBtn.y < sizeDef.y )
+        sizeBtn.y = sizeDef.y;
 
     btn->CacheBestSize(sizeBtn);
 
@@ -499,8 +455,6 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    m_authNeeded = false;
-
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
     {
@@ -540,6 +494,9 @@ wxButton::~wxButton()
     }
 
     delete m_imageData;
+#if wxUSE_MARKUP
+    delete m_markupText;
+#endif // wxUSE_MARKUP
 }
 
 // ----------------------------------------------------------------------------
@@ -583,6 +540,23 @@ void wxButton::SetLabel(const wxString& label)
     wxMSWButton::UpdateMultilineStyle(GetHwnd(), label);
 
     wxButtonBase::SetLabel(label);
+
+#if wxUSE_MARKUP
+    // If we have a plain text label, we shouldn't be using markup any longer.
+    if ( m_markupText )
+    {
+        delete m_markupText;
+        m_markupText = NULL;
+
+        // Unfortunately we don't really know whether we can reset the button
+        // to be non-owner-drawn or not: if we had made it owner-drawn just
+        // because of a call to SetLabelMarkup(), we could, but not if there
+        // were [also] calls to Set{Fore,Back}groundColour(). If it's really a
+        // problem to have button remain owner-drawn forever just because it
+        // had markup label once, we should record the reason for our current
+        // owner-drawnness and check it here.
+    }
+#endif // wxUSE_MARKUP
 }
 
 // ----------------------------------------------------------------------------
@@ -591,8 +565,7 @@ void wxButton::SetLabel(const wxString& label)
 
 void wxButton::AdjustForBitmapSize(wxSize &size) const
 {
-    if ( !m_imageData )
-        return;
+    wxCHECK_RET( m_imageData, wxT("shouldn't be called if no image") );
 
     // account for the bitmap size
     const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
@@ -656,28 +629,36 @@ void wxButton::AdjustForBitmapSize(wxSize &size) const
 
 wxSize wxButton::DoGetBestSize() const
 {
+    wxButton * const self = const_cast<wxButton *>(this);
+
     wxSize size;
 
-    // account for the text part if we have it or if we don't have any image at
-    // all (buttons initially created with empty label should still have a non
-    // zero size)
-    if ( ShowsLabel() || !m_imageData )
+    // Account for the text part if we have it.
+    if ( ShowsLabel() )
     {
         int flags = 0;
         if ( GetAuthNeeded() )
             flags |= wxMSWButton::Size_AuthNeeded;
 
-        size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this), flags);
+#if wxUSE_MARKUP
+        if ( m_markupText )
+        {
+            wxClientDC dc(self);
+            size = wxMSWButton::GetFittingSize(self,
+                                               m_markupText->Measure(dc),
+                                               flags);
+        }
+        else // Normal plain text (but possibly multiline) label.
+#endif // wxUSE_MARKUP
+        {
+            size = wxMSWButton::ComputeBestFittingSize(self, flags);
+        }
     }
 
     if ( m_imageData )
-    {
         AdjustForBitmapSize(size);
 
-        CacheBestSize(size);
-    }
-
-    return size;
+    return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
 
 /* static */
@@ -1061,6 +1042,35 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
 }
 
 // ----------------------------------------------------------------------------
+// markup support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MARKUP
+
+bool wxButton::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxButtonBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    if ( !m_markupText )
+    {
+        m_markupText = new wxMarkupText(markup);
+        MakeOwnerDrawn();
+    }
+    else
+    {
+        // We are already owner-drawn so just update the text.
+        m_markupText->SetMarkup(markup);
+    }
+
+    Refresh();
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
+
+// ----------------------------------------------------------------------------
 // owner-drawn buttons support
 // ----------------------------------------------------------------------------
 
@@ -1090,12 +1100,8 @@ wxButton::State GetButtonState(wxButton *btn, UINT state)
 void DrawButtonText(HDC hdc,
                     RECT *pRect,
                     const wxString& text,
-                    COLORREF col,
                     int flags)
 {
-    wxTextColoursChanger changeFg(hdc, col, CLR_INVALID);
-    wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
-
     // center text horizontally in any case
     flags |= DT_CENTER;
 
@@ -1448,11 +1454,30 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
                             ? ::GetSysColor(COLOR_GRAYTEXT)
                             : wxColourToRGB(GetForegroundColour());
 
-        // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
-        // systems but by happy coincidence ODS_NOACCEL is not used under them
-        // neither so DT_HIDEPREFIX should never be used there
-        DrawButtonText(hdc, &rectBtn, GetLabel(), colFg,
-                       state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+        wxTextColoursChanger changeFg(hdc, colFg, CLR_INVALID);
+        wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
+
+#if wxUSE_MARKUP
+        if ( m_markupText )
+        {
+            wxDCTemp dc((WXHDC)hdc);
+            dc.SetTextForeground(wxColour(colFg));
+            dc.SetFont(GetFont());
+
+            m_markupText->Render(dc, wxRectFromRECT(rectBtn),
+                                 state & ODS_NOACCEL
+                                    ? wxMarkupText::Render_Default
+                                    : wxMarkupText::Render_ShowAccels);
+        }
+        else // Plain text label
+#endif // wxUSE_MARKUP
+        {
+            // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
+            // systems but by happy coincidence ODS_NOACCEL is not used under
+            // them neither so DT_HIDEPREFIX should never be used there
+            DrawButtonText(hdc, &rectBtn, GetLabel(),
+                           state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+        }
     }
 
     return true;

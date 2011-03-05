@@ -138,6 +138,172 @@ public:
      */
     void SetLabelText(const wxString& text);
 
+    // NB: when writing docs for the following function remember that Doxygen
+    //     will always expand HTML entities (e.g. &quot;) and thus we need to
+    //     write e.g. "&amp;lt;" to have in the output the "&lt;" string.
+
+    /**
+        Sets the controls label to a string using markup.
+
+        Simple markup supported by this function can be used to apply different
+        fonts or colours to different parts of the control label when supported.
+        If markup is not supported by the control or platform, it is simply
+        stripped and SetLabel() is used with the resulting string.
+
+        For example,
+        @code
+            wxStaticText *text;
+            ...
+            text->SetLabelMarkup("<b>&amp;Bed</b> &amp;mp; "
+                                 "<span foreground='red'>breakfast</span> "
+                                 "available <big>HERE</big>");
+        @endcode
+        would show the string using bold, red and big for the corresponding
+        words under wxGTK but will simply show the string "Bed &amp; breakfast
+        available HERE" on the other platforms. In any case, the "B" of "Bed"
+        will be underlined to indicate that it can be used as a mnemonic for
+        this control.
+
+        The supported tags are:
+        <TABLE>
+            <TR>
+                <TD><b>Tag</b></TD>
+                <TD><b>Description</b></TD>
+            </TR>
+            <TR>
+                <TD>&lt;b&gt;</TD>
+                <TD>bold text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;big&gt;</TD>
+                <TD>bigger text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;i&gt;</TD>
+                <TD>italic text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;s&gt;</TD>
+                <TD>strike-through text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;small&gt;</TD>
+                <TD>smaller text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;tt&gt;</TD>
+                <TD>monospaced text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;u&gt;</TD>
+                <TD>underlined text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;span&gt;</TD>
+                <TD>generic formatter tag, see the table below for supported
+                attributes.
+                </TD>
+            </TR>
+        </TABLE>
+
+        Supported @c &lt;span&gt; attributes:
+        <TABLE>
+            <TR>
+                <TD><b>Name</b></TD>
+                <TD><b>Description</b></TD>
+            </TR>
+            <TR>
+                <TD>foreground, fgcolor, color</TD>
+                <TD>Foreground text colour, can be a name or RGB value.</TD>
+            </TR>
+            <TR>
+                <TD>background, bgcolor</TD>
+                <TD>Background text colour, can be a name or RGB value.</TD>
+            </TR>
+            <TR>
+                <TD>font_family, face</TD>
+                <TD>Font face name.</TD>
+            </TR>
+            <TR>
+                <TD>font_weight, weight</TD>
+                <TD>Numeric value in 0..900 range or one of "ultralight",
+                "light", "normal" (all meaning non-bold), "bold", "ultrabold"
+                and "heavy" (all meaning bold).</TD>
+            </TR>
+            <TR>
+                <TD>font_style, style</TD>
+                <TD>Either "oblique" or "italic" (both with the same meaning)
+                or "normal".</TD>
+            </TR>
+            <TR>
+                <TD>size</TD>
+                <TD>The font size can be specified either as "smaller" or
+                "larger" relatively to the current font, as a CSS font size
+                name ("xx-small", "x-small", "small", "medium", "large",
+                "x-large" or "xx-large") or as a number giving font size in
+                1024th parts of a point, i.e. 10240 for a 10pt font.</TD>
+            </TR>
+        </TABLE>
+
+        This markup language is a strict subset of Pango markup (described at
+        http://library.gnome.org/devel/pango/unstable/PangoMarkupFormat.html)
+        and any tags and span attributes not documented above can't be used
+        under non-GTK platforms.
+
+        Also note that you need to escape the following special characters:
+        <TABLE>
+            <TR>
+                <TD><b>Special character</b></TD>
+                <TD><b>Escape as</b></TD>
+            </TR>
+            <TR>
+                <TD>@c &amp;</TD>
+                <TD>@c &amp;amp; or as @c &amp;&amp;</TD>
+            </TR>
+            <TR>
+                <TD>@c &apos;</TD>
+                <TD>@c &amp;apos;</TD>
+            </TR>
+            <TR>
+                <TD>@c &quot;</TD>
+                <TD>@c &amp;quot;</TD>
+            </TR>
+            <TR>
+                <TD>@c &lt;</TD>
+                <TD>@c &amp;lt;</TD>
+            </TR>
+            <TR>
+                <TD>@c &gt;</TD>
+                <TD>@c &amp;gt;</TD>
+            </TR>
+        </TABLE>
+
+        The non-escaped ampersand @c &amp; characters are interpreted as
+        mnemonics as with wxControl::SetLabel.
+
+
+        @param markup
+            String containing markup for the label. It may contain markup tags
+            described above and newline characters but currently only wxGTK and
+            wxOSX support multiline labels with markup, the generic
+            implementation (also used in wxMSW) only handles single line markup
+            labels. Notice that the string must be well-formed (e.g. all tags
+            must be correctly closed) and won't be shown at all otherwise.
+        @return
+            @true if the new label was set (even if markup in it was ignored)
+            or @false if we failed to parse the markup. In this case the label
+            remains unchanged.
+
+
+        Currently wxButton supports markup in all major ports (wxMSW, wxGTK and
+        wxOSX/Cocoa) while wxStaticText supports it in wxGTK and wxOSX and its
+        generic version (which can be used under MSW if markup support is
+        required). Extending support to more controls is planned in the future.
+
+        @since 2.9.2
+    */
+    bool SetLabelMarkup(const wxString& markup);
+
 
 public:     // static functions
     
@@ -149,9 +315,8 @@ public:     // static functions
     /**
         Returns the given @a str string without mnemonics ("&" characters).
         
-        @note This function is identic to GetLabelText() and is provided both for symmetry
-              with the wxStaticText::RemoveMarkup() function and to allow to write more
-              readable code (since this function has a more descriptive name respect GetLabelText()).
+        @note This function is identical to GetLabelText() and is provided
+              mostly for symmetry with EscapeMnemonics().
     */
     static wxString RemoveMnemonics(const wxString& str);
 
@@ -179,11 +344,11 @@ public:     // static functions
 
     /**
         Replaces parts of the @a label string with ellipsis, if needed, so
-        that it doesn't exceed @a maxWidth.
-        
-        Note that this functions is guaranteed to always returns a string
-        whose rendering on the given DC takes less than @a maxWidth pixels
-        in horizontal.
+        that it fits into @a maxWidth pixels if possible.
+
+        Note that this function does @em not guarantee that the returned string
+        will always be shorter than @a maxWidth; if @a maxWidth is extremely
+        small, ellipsized text may be larger.
 
         @param label
             The string to ellipsize

@@ -909,15 +909,6 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_TREE_ITEM_GETTOOLTIP(wxID_ANY, wxGenericTreeCtrl::OnGetToolTip)
 END_EVENT_TABLE()
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
-/*
- * wxTreeCtrl has to be a real class or we have problems with
- * the run-time information.
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxGenericTreeCtrl)
-#endif
-
 // -----------------------------------------------------------------------------
 // construction/destruction
 // -----------------------------------------------------------------------------
@@ -2768,7 +2759,10 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
 #ifdef __WXMAC__
             colText = *wxWHITE;
 #else
-            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+            if (m_hasFocus)
+                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+            else
+                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
 #endif
         }
         else

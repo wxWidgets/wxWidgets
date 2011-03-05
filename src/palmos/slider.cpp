@@ -29,73 +29,6 @@
 #include <Form.h>
 #include <Control.h>
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxSliderStyle )
-
-wxBEGIN_FLAGS( wxSliderStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxSL_HORIZONTAL)
-    wxFLAGS_MEMBER(wxSL_VERTICAL)
-    wxFLAGS_MEMBER(wxSL_AUTOTICKS)
-    wxFLAGS_MEMBER(wxSL_LABELS)
-    wxFLAGS_MEMBER(wxSL_LEFT)
-    wxFLAGS_MEMBER(wxSL_TOP)
-    wxFLAGS_MEMBER(wxSL_RIGHT)
-    wxFLAGS_MEMBER(wxSL_BOTTOM)
-    wxFLAGS_MEMBER(wxSL_BOTH)
-    wxFLAGS_MEMBER(wxSL_SELRANGE)
-
-wxEND_FLAGS( wxSliderStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/slider.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxSlider)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
-    wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
-
-    wxPROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Minimum , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Maximum , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxSliderStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxSlider)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_8( wxSlider , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-#endif
-
 // Slider
 void wxSlider::Init()
 {
@@ -235,7 +168,7 @@ void wxSlider::SetRange(int WXUNUSED(minValue), int WXUNUSED(maxValue))
     // unsupported feature
 }
 
-void wxSlider::SetTickFreq(int WXUNUSED(n), int WXUNUSED(pos))
+void wxSlider::DoSetTickFreq(int WXUNUSED(n))
 {
     // unsupported feature
 }

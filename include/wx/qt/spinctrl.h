@@ -103,6 +103,9 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrl )
 };
 
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >
@@ -131,6 +134,9 @@ public:
 
     void SetDigits(unsigned digits);
     unsigned GetDigits() const;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrlDouble );
 };
 
 #endif // _WX_QT_SPINCTRL_H_

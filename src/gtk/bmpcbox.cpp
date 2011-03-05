@@ -277,6 +277,15 @@ int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
     return n;
 }
 
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+                             unsigned int pos, void *clientData)
+{
+    const int n = wxComboBox::Insert(item, pos, clientData);
+    if ( n != wxNOT_FOUND )
+        SetItemBitmap(n, bitmap);
+    return n;
+}
+
 void wxBitmapComboBox::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );

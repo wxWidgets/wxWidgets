@@ -226,7 +226,6 @@ bool App::OnInit () {
     // open application frame
     m_frame->Layout ();
     m_frame->Show (true);
-    SetTopWindow (m_frame);
 
     return true;
 }

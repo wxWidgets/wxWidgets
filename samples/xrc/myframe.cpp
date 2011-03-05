@@ -49,6 +49,8 @@
 #include "derivdlg.h"
 // Our custom class, for the custom class example.
 #include "custclas.h"
+// And our objref dialog, for the object reference and ID range example.
+#include "objrefdlg.h"
 // For functions to manipulate our wxTreeCtrl and wxListCtrl
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
@@ -83,6 +85,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
     EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("obj_ref_tool_or_menuitem"), MyFrame::OnObjRefToolOrMenuCommand)
     EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
     EVT_MENU(XRCID("art_provider_tool_or_menuitem"), MyFrame::OnArtProviderToolOrMenuCommand)
@@ -265,6 +268,22 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("uncentered_dialog"));
     dlg.ShowModal();
+}
+
+
+void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
+{
+    // The dialog redirects log messages, so save the old log target first
+    wxLog* oldlogtarget = wxLog::SetActiveTarget(NULL);
+
+    // Make an instance of the dialog
+    ObjrefDialog* objrefDialog = new ObjrefDialog(this);
+    // Show the instance of the dialog, modally.
+    objrefDialog->ShowModal();
+    objrefDialog->Destroy();
+
+    // Restore the old log target
+    delete wxLog::SetActiveTarget(oldlogtarget);
 }
 
 

@@ -620,10 +620,11 @@ void wxToolBar::CreateDisabledImageList()
             wxBitmap bmpDisabled = tool->GetDisabledBitmap();
             if ( bmpDisabled.Ok() )
             {
+                const wxSize sizeBitmap = bmpDisabled.GetSize();
                 m_disabledImgList = new wxImageList
                                         (
-                                            m_defaultWidth,
-                                            m_defaultHeight,
+                                            sizeBitmap.x,
+                                            sizeBitmap.y,
                                             bmpDisabled.GetMask() != NULL,
                                             GetToolsCount()
                                         );
@@ -1721,10 +1722,18 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
             {
                 // for some reason TB_GETITEMRECT returns a rectangle 1 pixel
                 // shorter than the full window size (at least under Windows 7)
-                // but we need to erase the full height below
+                // but we need to erase the full width/height below
                 RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
-                rcItem.top = 0;
-                rcItem.bottom = rectTotal.height;
+                if ( IsVertical() )
+                {
+                    rcItem.left = 0;
+                    rcItem.right = rectTotal.width;
+                }
+                else
+                {
+                    rcItem.top = 0;
+                    rcItem.bottom = rectTotal.height;
+                }
 
                 rgnDummySeps.Union(wxRectFromRECT(rcItem));
             }

@@ -63,21 +63,42 @@ void wxToolTip::GTKApply( wxWindow *win )
 /* static */
 void wxToolTip::GTKApply(GtkWidget *w, const gchar *tip)
 {
-    if ( !gs_tooltips )
-        gs_tooltips = gtk_tooltips_new();
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if (!gtk_check_version(2, 12, 0))
+    {
+        gtk_widget_set_tooltip_text(w, tip);
+    }
+    else
+#endif
+    {
+        if ( !gs_tooltips )
+            gs_tooltips = gtk_tooltips_new();
 
-    gtk_tooltips_set_tip(gs_tooltips, w, tip, NULL);
+        gtk_tooltips_set_tip(gs_tooltips, w, tip, NULL);
+    }
 }
 
 void wxToolTip::Enable( bool flag )
 {
-    if (!gs_tooltips)
-        return;
-
-    if (flag)
-        gtk_tooltips_enable( gs_tooltips );
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if (!gtk_check_version(2, 12, 0))
+    {
+        GtkSettings* settings = gtk_settings_get_default();
+        if(!settings)
+            return;
+        gtk_settings_set_long_property(settings, "gtk-enable-tooltips", flag?TRUE:FALSE, NULL);
+    }
     else
-        gtk_tooltips_disable( gs_tooltips );
+#endif
+    {
+        if (!gs_tooltips)
+            return;
+
+        if (flag)
+            gtk_tooltips_enable( gs_tooltips );
+        else
+            gtk_tooltips_disable( gs_tooltips );
+    }
 }
 
 G_BEGIN_DECLS
@@ -87,12 +108,24 @@ G_END_DECLS
 
 void wxToolTip::SetDelay( long msecs )
 {
-    if (!gs_tooltips)
-        return;
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if (!gtk_check_version(2, 12, 0))
+    {
+        GtkSettings* settings = gtk_settings_get_default();
+        if(!settings)
+            return;
+        gtk_settings_set_long_property(settings, "gtk-tooltip-timeout", msecs, NULL);
+    }
+    else
+#endif
+    {
+        if (!gs_tooltips)
+            return;
 
-    // FIXME: This is a deprecated function and might not even have an effect.
-    // Try to not use it, after which remove the prototype above.
-    gtk_tooltips_set_delay( gs_tooltips, (int)msecs );
+        // FIXME: This is a deprecated function and might not even have an effect.
+        // Try to not use it, after which remove the prototype above.
+        gtk_tooltips_set_delay( gs_tooltips, (int)msecs );
+    }
 }
 
 void wxToolTip::SetAutoPop( long WXUNUSED(msecs) )

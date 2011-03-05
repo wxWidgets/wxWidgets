@@ -46,7 +46,9 @@ changes:
 - Some structure fields which used to be of type "const wxChar *" (such as
   wxCmdLineEntryDesc::shortName, longName and description fields) are now of
   type "const char *", you need to remove wxT() or _T() around the values used
-  to initialize them (which should normally always be ASCII).
+  to initialize them (which should normally always be ASCII). If you want your
+  code to remain compatible with Unicode build of previous wx version, please
+  use the special wxT_2, which is the same as wxT in 2.x only, instead.
 
 - wxIPC classes didn't work correctly in Unicode build before, this was fixed
   but at a price of breaking backwards compatibility: many methods which used
@@ -68,7 +70,7 @@ Also the "applet", "deprecated", "fl", "mmedia" and "plot" contrib libraries
 were removed as they were unmaintained and broken since several years.
 The "gizmos", "ogl", "net" and "foldbar" contribs have been moved to
 wxCode (see http://wxcode.sourceforge.net/complist.php); they are now
-open for futher development by volunteers.
+open for further development by volunteers.
 
 The "stc" and "svg" contribs instead have been moved respectively into a new
 "official" library stc and in the core lib.
@@ -168,6 +170,23 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxLOCALE_CONV_ENCODING flag has no effect now, catalogs are converted
   regardless of whether the flag was specified or not. This only affects
   legacy ANSI builds.
+
+- wxNotebook::GetSelection() returns the new page index when called from
+  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event handler in wxMSW, not the old one.
+  The new behaviour is consistent with wxGTK and more logical but different
+  from the previous versions. Using wxNotebookEvent::GetSelection() instead of
+  querying the notebook selection avoids the problem and is recommended.
+
+- wxMSW-specific wxAutomationObject::GetInstance() method now creates a new
+  instance if needed instead of failing if the application providing the
+  requested ProgID is not running. Pass wxAutomationInstance_UseExistingOnly
+  flag to it to revert to the old behaviour. It is also possible to use the
+  wxAutomationInstance_SilentIfNone flag to prevent the error message if no
+  currently running instances of this object are available.
+
+- Signatures of wxDataViewCustomRenderer::Activate(), LeftClick() and
+  StartDrag() virtual methods changed.  You will need to change them in your
+  derived renderer class too if you override them.
 
 
 Changes in behaviour which may result in compilation errors
@@ -301,6 +320,8 @@ Changes in behaviour which may result in compilation errors
   just "%" wxLongLongFmtSpec "x", i.e. simply remove wxT() from the strings you
   concatenate with it.
 
+- wxST_MARKUP doesn't exist any more, use wxControl::SetLabelMarkup() instead.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -366,7 +387,9 @@ Deprecated methods and their replacements
   with more expected semantics.
 - wxPORTRAIT and wxLANDSCAPE are now elements of wxPrintOrientation enum and
   wxPrintData::SetOrientation(int) takes wxPrintOrientation and not int.
-
+- Second parameter of wxSlider::SetTickFreq(int n, int pos) is deprecated,
+  simply remove it from your code and use wxSlider::SetTickFreq(int n) as it
+  was never used anyhow.
 
 Major new features in this release
 ----------------------------------
@@ -408,24 +431,55 @@ All:
 - Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
+- Added wxFile::GetLastError() and ClearLastError() (ryazanov).
+- Added negatable command line switches (Armel Asselin).
+- Added wxVersionInfo and various GetLibraryVersionInfo() functions (troelsk).
+- Added wxNumberFormatter for dealing with thousands separators.
+- Added wxIntegerValidator<> and wxFloatingPointValidator<> validators.
+- Added wxIMAGE_OPTION_GIF_COMMENT to read and write GIF comments (troelsk).
+- Added wxStack<> template class.
+
+Unix:
+
+- Fix spurious errors when writing to child process pipe (ryazanov).
 
 All (GUI):
 
+- Implement support for markup in wxButton and wxStaticText.
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
 - Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
 - wxAUI: support auto-orientable toolbars (wsu).
+- wxAUI: add support for icons in pane title bars (triton).
 - Added wxDataViewCtrl::Set/GetCurrentItem().
+- Added possibility to disable individual wxDataViewCtrl items (Neno Ganchev).
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
+- wxRibbon: allow hiding the panels and showing tabs only (snowleopard).
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 - Consistency fixes for keyboard events across all major ports.
 - Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
 - Fix display of right aligned columns in wxGenericListCtrl (jl).
 - Restore text drag-and-drop in wxSTC broken by Scintilla 2 update (Jens Lody).
 - Improve wxGTK print/page setup dialog (rafravago).
+- Add support for id ranges to XRC (David Hart).
 - Added wxToolbook XRC handler (Andrea Zanellato).
 - Added wxDocManager::FindTemplate() (troelsk).
+- Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
+- Fixed resizing columns in wxGrid when they were reordered.
+- Added wxImage::Rotate180() (Jeff Tupper).
+- Added support for saving TGA files.
+- Added wxArtProvider returning higher quality icons from Tango project.
+- wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
+- Added support for saving PNG files with palette (troelsk).
+- Added support for saving as GIF and animated GIF (troelsk).
+- Fix wxWrapSizer minimal size calculation (Catalin Raceanu).
+- Added wxFont::Underlined() and MakeUnderlined() methods.
+- Added wxFont::SetSymbolicSize() and related methods.
+
+GTK:
+
+- Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
 
 MSW:
 
@@ -434,13 +488,18 @@ MSW:
 - Fix Cygwin 1.7 build (David Gangola).
 - Allow using wxDC::DrawText() with multiline texts.
 - Fix wxBitmapButton best size determination broken in 2.9.1.
+- Center task dialog-based wxProgressDialog on the parent (John Roberts).
+- wxAutomationObject::GetInstance() creates objects on demand (Kolya Kosenko).
 
+OSX:
+
+- Implement switching to default video mode in wxDisplay (soren).
 
 
 2.9.1:
 ------
 
-INCOMPATIBLE CHANGE SINCE 2.9.0
+INCOMPATIBLE CHANGES SINCE 2.9.0
 
 - wxStandardPaths doesn't use vendor name by default under MSW and OSX to
   remain compatible with 2.8 behaviour but this makes it incompatible with
@@ -607,6 +666,7 @@ MSW:
 - In some rare cases wxOwnerDrawnComboBox drop-down animation could display
   as garbage. This has now been greatly reduced (mcben).
 - Fixed wxComboCtrl::SetButtonPosition() on Vista/Win7.
+- Allow accessing 64/32 bit registry from 32/64 bit code (Rickard Westerlund).
 
 i18n:
 

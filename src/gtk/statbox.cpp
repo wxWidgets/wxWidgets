@@ -48,8 +48,6 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 wxStaticBox::wxStaticBox()
 {
 }

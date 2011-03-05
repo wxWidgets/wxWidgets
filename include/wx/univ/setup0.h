@@ -688,6 +688,19 @@
 #   define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
+// Enable wxGraphicsContext implementation using Cairo library.
+//
+// This is not needed under Windows and detected automatically by configure
+// under other systems, however you may set this to 1 manually if you installed
+// Cairo under Windows yourself and prefer to use it instead the native GDI+
+// implementation.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_CAIRO 0
+
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
@@ -699,6 +712,15 @@
 //
 // Recommended setting: 1 (don't change except for very special programs)
 #define wxUSE_CONTROLS     1
+
+// Support markup in control labels, i.e. provide wxControl::SetLabelMarkup().
+// Currently markup is supported only by a few controls and only some ports but
+// their number will increase with time.
+//
+// Default is 1
+//
+// Recommended setting: 1 (may be set to 0 if you want to save on code size)
+#define wxUSE_MARKUP       1
 
 // wxPopupWindow class is a top level transient window. It is currently used
 // to implement wxTipWindow
@@ -897,6 +919,29 @@
 
 // wxAcceleratorTable/Entry classes and support for them in wxMenu(Bar)
 #define wxUSE_ACCEL 1
+
+// Use the standard art provider. The icons returned by this provider are
+// embedded into the library as XPMs so disabling it reduces the library size
+// somewhat but this should only be done if you use your own custom art
+// provider returning the icons or never use any icons not provided by the
+// native art provider (which might not be implemented at all for some
+// platforms) or by the Tango icons provider (if it's not itself disabled
+// below).
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you use your own custom art provider.
+#define wxUSE_ARTPROVIDER_STD 1
+
+// Use art provider providing Tango icons: this art provider has higher quality
+// icons than the default ones using smaller size XPM icons without
+// transparency but the embedded PNG icons add to the library size.
+//
+// Default is 1 under non-GTK ports. Under wxGTK the native art provider using
+// the GTK+ stock icons replaces it so it is normally not necessary.
+//
+// Recommended setting: 1 but can be turned off to reduce the library size.
+#define wxUSE_ARTPROVIDER_TANGO 1
 
 // Hotkey support (currently Windows only)
 #define wxUSE_HOTKEY 1

@@ -187,7 +187,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                         if ( !attribList[arg++] )
                             break;
 
-                        return false;
+                        return nil;
                     }
 
                     data[p++] = NSOpenGLPFASampleBuffers;
@@ -204,7 +204,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                         if ( !attribList[arg++] )
                             break;
 
-                        return false;
+                        return nil;
                     }
 
                     data[p++] = NSOpenGLPFASamples;

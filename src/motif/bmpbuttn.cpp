@@ -30,8 +30,6 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr);
 
 // Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-
 wxBitmapButton::wxBitmapButton()
 {
     m_marginX = m_marginY = wxDEFAULT_BUTTON_MARGIN;

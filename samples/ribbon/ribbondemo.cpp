@@ -28,6 +28,7 @@
 #include "wx/colordlg.h"
 #include "wx/artprov.h"
 #include "wx/combobox.h"
+#include "wx/tglbtn.h"
 #include "wx/wrapsizer.h"
 
 // -- application --
@@ -71,6 +72,7 @@ public:
         ID_POSITION_LEFT,
         ID_POSITION_LEFT_LABELS,
         ID_POSITION_LEFT_BOTH,
+        ID_TOGGLE_PANELS
     };
 
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -106,6 +108,8 @@ public:
     void OnPositionLeftBoth(wxCommandEvent& evt);
     void OnPositionLeftDropdown(wxRibbonToolBarEvent& evt);
 
+    void OnTogglePanels(wxCommandEvent& evt);
+
 protected:
     wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
         int gallery_id);
@@ -122,6 +126,8 @@ protected:
     wxRibbonGallery* m_primary_gallery;
     wxRibbonGallery* m_secondary_gallery;
     wxTextCtrl* m_logwindow;
+    wxToggleButton* m_togglePanels;
+
     wxColourData m_colour_data;
     wxColour m_default_primary;
     wxColour m_default_secondary;
@@ -139,7 +145,6 @@ bool MyApp::OnInit()
         return false;
 
     wxFrame* frame = new MyFrame;
-    SetTopWindow(frame);
     frame->Show();
 
     return true;
@@ -180,6 +185,7 @@ EVT_MENU(ID_POSITION_LEFT_BOTH, MyFrame::OnPositionLeftBoth)
 EVT_MENU(ID_POSITION_TOP, MyFrame::OnPositionTopLabels)
 EVT_MENU(ID_POSITION_TOP_ICONS, MyFrame::OnPositionTopIcons)
 EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
+EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -318,10 +324,14 @@ MyFrame::MyFrame()
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
         wxTE_LEFT | wxTE_BESTWRAP | wxBORDER_NONE);
 
+    m_togglePanels = new wxToggleButton(this, ID_TOGGLE_PANELS, "&Toggle panels");
+    m_togglePanels->SetValue(true);
+
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
 
     s->Add(m_ribbon, 0, wxEXPAND);
     s->Add(m_logwindow, 1, wxEXPAND);
+    s->Add(m_togglePanels, wxSizerFlags().Border());
 
     SetSizer(s);
 }
@@ -664,6 +674,11 @@ void MyFrame::OnPositionLeftDropdown(wxRibbonToolBarEvent& evt)
     menu.Append(ID_POSITION_LEFT_LABELS, wxT("Left with Labels"));
     menu.Append(ID_POSITION_LEFT_BOTH, wxT("Left with Both"));
     evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnTogglePanels(wxCommandEvent& WXUNUSED(evt))
+{
+    m_ribbon->ShowPanels(m_togglePanels->GetValue());
 }
 
 void MyFrame::AddText(wxString msg)

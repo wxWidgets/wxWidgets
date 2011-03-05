@@ -173,15 +173,17 @@ LRESULT APIENTRY _EXPORT wxTimerWndProc(HWND hWnd, UINT message,
     {
         wxTimerMap::iterator node = TimerMap().find(wParam);
 
-        wxCHECK_MSG( node != TimerMap().end(), 0, wxT("bogus timer id in wxTimerProc") );
+        if ( node != TimerMap().end() )
+        {
+            wxProcessTimer(*(node->second));
 
-        wxProcessTimer(*(node->second));
+            return 0;
+        }
+        //else: Unknown timer, probably one of our timers that had fired just
+        //      before being removed from the timers map by Stop().
     }
-    else
-    {
-        return ::DefWindowProc(hWnd, message, wParam, lParam);
-    }
-    return 0;
+
+    return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------

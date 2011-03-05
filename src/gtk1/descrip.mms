@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 December 2008                                                     *
+# Date : 14 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -15,7 +15,7 @@ CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)
+	   /assume=(nostdnew,noglobal_array_new)/list/show=all
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 .endif
 
@@ -90,7 +90,7 @@ OBJECTS0= \
 	toolbar.obj,\
 	textctrl.obj,\
 	tglbtn.obj,\
-	msgdlg.obj
+	msgdlg.obj,mnemonics.obj
 
 SOURCES =\
 	app.cpp,\
@@ -154,7 +154,7 @@ SOURCES =\
 	utilsgtk.cpp,\
 	utilsres.cpp,\
         win_gtk.c,\
-	window.cpp
+	window.cpp,mnemonics.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -167,6 +167,9 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 	library [--.lib]libwx_gtk.olb $(OBJECTS0)
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
+$(OBJECTS0) : [--.include.wx]setup.h
 
 app.obj : app.cpp
 bitmap.obj : bitmap.cpp
@@ -230,3 +233,4 @@ utilsgtk.obj : utilsgtk.cpp
 utilsres.obj : utilsres.cpp
 win_gtk.obj : win_gtk.c
 window.obj : window.cpp
+mnemonics.obj : mnemonics.cpp

@@ -260,13 +260,25 @@ void* wxMessageDialog::ConstructNSAlert()
     // the MSW implementation even shows an OK button if it is not specified, we'll do the same
     else
     {
-        [alert addButtonWithTitle:cfOKString.AsNSString()];
-        m_buttonId[ m_buttonCount++ ] = wxID_OK;
-        if (style & wxCANCEL)
+        if ( style & wxCANCEL_DEFAULT )
         {
             [alert addButtonWithTitle:cfCancelString.AsNSString()];
             m_buttonId[ m_buttonCount++ ] = wxID_CANCEL;
+
+            [alert addButtonWithTitle:cfOKString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_OK;
         }
+        else 
+        {
+            [alert addButtonWithTitle:cfOKString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_OK;
+            if (style & wxCANCEL)
+            {
+                [alert addButtonWithTitle:cfCancelString.AsNSString()];
+                m_buttonId[ m_buttonCount++ ] = wxID_CANCEL;
+            }
+        }
+
     }
     return alert;
 }

@@ -214,7 +214,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                         if ( !attribList[arg++] )
                             break;
 
-                        return false;
+                        return NULL;
                     }
 
                     data[p++] = AGL_SAMPLE_BUFFERS_ARB;
@@ -231,7 +231,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                         if ( !attribList[arg++] )
                             break;
 
-                        return false;
+                        return NULL;
                     }
 
                     data[p++] = AGL_SAMPLES_ARB;

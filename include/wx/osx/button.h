@@ -68,6 +68,11 @@ protected:
         InvalidateBestSize();
     }
 
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
+
+
     // the margins around the bitmap
     int m_marginX;
     int m_marginY;

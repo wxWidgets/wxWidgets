@@ -32,7 +32,6 @@
     #include "wx/checkbox.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
-    #include "wx/cmndata.h"
     #include "wx/sizer.h"
 #endif
 
@@ -507,10 +506,10 @@ void wxGenericFontDialog::CreateWidgets()
     if (m_colourChoice)
     {
         wxString name(wxTheColourDatabase->FindName(m_fontData.GetColour()));
-        if (name.length())
-            m_colourChoice->SetStringSelection(name);
-        else
+        if ( name.empty() )
             m_colourChoice->SetStringSelection(wxT("BLACK"));
+        else
+            m_colourChoice->SetStringSelection(name);
     }
 
     if (m_underLineCheckBox)

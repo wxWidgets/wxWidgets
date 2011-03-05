@@ -47,23 +47,21 @@ void ItemContainerTestCase::Insert()
 {
     wxItemContainer * const container = GetContainer();
 
-    container->Insert("item 0", 0);
-
+    CPPUNIT_ASSERT_EQUAL( 0, container->Insert("item 0", 0) );
     CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
 
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    container->Insert(testitems, 0);
+    CPPUNIT_ASSERT_EQUAL( 1, container->Insert(testitems, 0) );
 
     CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(0));
     CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(1));
 
     wxString arritems[] = { "item 3", "item 4" };
 
-    container->Insert(2, arritems, 1);
-
+    CPPUNIT_ASSERT_EQUAL( 2, container->Insert(2, arritems, 1) );
     CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(1));
     CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(2));
 }
@@ -107,22 +105,27 @@ void ItemContainerTestCase::ItemSelection()
     testitems.Add("item 0");
     testitems.Add("item 1");
     testitems.Add("item 2");
-    testitems.Add("item 3");
+    testitems.Add("ITEM 2"); // The same as the last one except for case.
 
     container->Append(testitems);
 
     container->SetSelection(wxNOT_FOUND);
-
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("", container->GetStringSelection());
 
     container->SetSelection(1);
-
     CPPUNIT_ASSERT_EQUAL(1, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("item 1", container->GetStringSelection());
 
-    container->SetStringSelection("item 2");
+    CPPUNIT_ASSERT( container->SetStringSelection("item 2") );
+    CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
 
+    // Check that selecting a non-existent item fails.
+    CPPUNIT_ASSERT( !container->SetStringSelection("bloordyblop") );
+
+    // Check that SetStringSelection() is case-insensitive.
+    CPPUNIT_ASSERT( container->SetStringSelection("ITEM 2") );
     CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
     CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
 }
@@ -167,6 +170,9 @@ void ItemContainerTestCase::ClientData()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data),
                          container->GetClientObject(2));
+
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject((unsigned)-1, item0data) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject(12345, item0data) );
 }
 
 void ItemContainerTestCase::VoidData()
@@ -192,6 +198,9 @@ void ItemContainerTestCase::VoidData()
     container->Insert("item 2", 2, item2);
 
     CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
+
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
 }
 
 void ItemContainerTestCase::Set()

@@ -444,7 +444,7 @@ bool wxPGTextCtrlEditor::GetTextCtrlValueFromControl( wxVariant& variant, wxPGPr
     wxTextCtrl* tc = wxStaticCast(ctrl, wxTextCtrl);
     wxString textVal = tc->GetValue();
 
-    if ( property->UsesAutoUnspecified() && !textVal.length() )
+    if ( property->UsesAutoUnspecified() && textVal.empty() )
     {
         variant.MakeNull();
         return true;
@@ -1070,10 +1070,10 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     if ( index >= 0 && index < (int)cb->GetCount() )
     {
         cb->SetSelection( index );
-        if ( defString.length() )
+        if ( !defString.empty() )
             cb->SetText( defString );
     }
-    else if ( !(extraStyle & wxCB_READONLY) && defString.length() )
+    else if ( !(extraStyle & wxCB_READONLY) && !defString.empty() )
     {
         propGrid->SetupTextCtrlValue(defString);
         cb->SetValue( defString );
@@ -1283,7 +1283,7 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
     wxString textVal = cb->GetValue();
 
-    if ( property->UsesAutoUnspecified() && !textVal.length() )
+    if ( property->UsesAutoUnspecified() && textVal.empty() )
     {
         variant.MakeNull();
         return true;

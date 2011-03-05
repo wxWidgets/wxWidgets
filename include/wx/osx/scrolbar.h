@@ -46,7 +46,12 @@ public:
     virtual void SetScrollbar(int position, int thumbSize, int range,
             int pageSize, bool refresh = true);
 
-    // implementation only from now on
+    // needed for RTTI
+    void SetThumbSize( int s ) { SetScrollbar( GetThumbPosition() , s , GetRange() , GetPageSize() , true ) ; }
+    void SetPageSize( int s ) { SetScrollbar( GetThumbPosition() , GetThumbSize() , GetRange() , s , true ) ; }
+    void SetRange( int s ) { SetScrollbar( GetThumbPosition() , GetThumbSize() , s , GetPageSize() , true ) ; }
+
+        // implementation only from now on
     void Command(wxCommandEvent& event);
     virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
     virtual bool OSXHandleClicked( double timestampsec );

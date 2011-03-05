@@ -40,12 +40,9 @@
 #include "wx/dynlib.h"
 #include "wx/msw/private.h"
 
-// Set this to 1 to be _absolutely_ sure that repainting will work for all
-// comctl32.dll versions
-#define wxUSE_COMCTL32_SAFELY 0
-
 #include "wx/imaglist.h"
 #include "wx/msw/dragimag.h"
+#include "wx/msw/uxtheme.h"
 
 // macros to hide the cast ugliness
 // --------------------------------
@@ -601,72 +598,6 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxTreeCtrlStyle )
-
-wxBEGIN_FLAGS( wxTreeCtrlStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxTR_EDIT_LABELS)
-    wxFLAGS_MEMBER(wxTR_NO_BUTTONS)
-    wxFLAGS_MEMBER(wxTR_HAS_BUTTONS)
-    wxFLAGS_MEMBER(wxTR_TWIST_BUTTONS)
-    wxFLAGS_MEMBER(wxTR_NO_LINES)
-    wxFLAGS_MEMBER(wxTR_FULL_ROW_HIGHLIGHT)
-    wxFLAGS_MEMBER(wxTR_LINES_AT_ROOT)
-    wxFLAGS_MEMBER(wxTR_HIDE_ROOT)
-    wxFLAGS_MEMBER(wxTR_ROW_LINES)
-    wxFLAGS_MEMBER(wxTR_HAS_VARIABLE_ROW_HEIGHT)
-    wxFLAGS_MEMBER(wxTR_SINGLE)
-    wxFLAGS_MEMBER(wxTR_MULTIPLE)
-#if WXWIN_COMPATIBILITY_2_8
-    wxFLAGS_MEMBER(wxTR_EXTENDED)
-#endif
-    wxFLAGS_MEMBER(wxTR_DEFAULT_STYLE)
-
-wxEND_FLAGS( wxTreeCtrlStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl,"wx/treectrl.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxTreeCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
-    wxEVENT_RANGE_PROPERTY( TreeEvent , wxEVT_COMMAND_TREE_BEGIN_DRAG , wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK , wxTreeEvent )
-    wxPROPERTY_FLAGS( WindowStyle , wxTreeCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxTreeCtrl)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxTreeCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -806,24 +737,24 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle, pos, size) )
         return false;
 
-#if wxUSE_COMCTL32_SAFELY
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#elif 1
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#else
-    // This works around a bug in the Windows tree control whereby for some versions
-    // of comctrl32, setting any colour actually draws the background in black.
-    // This will initialise the background to the system colour.
-    // THIS FIX NOW REVERTED since it caused problems on _other_ systems.
-    // Assume the user has an updated comctl32.dll.
-    ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
-#endif
 
     wxSetCCUnicodeFormat(GetHwnd());
+
+    if ( m_windowStyle & wxTR_TWIST_BUTTONS )
+    {
+        // Under Vista and later Explorer uses rotating ("twist") buttons
+        // instead of the default "+/-" ones so apply its theme to the tree
+        // control to implement this style.
+        if ( wxGetWinVersion() >= wxWinVersion_Vista )
+        {
+            if ( wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive() )
+            {
+                theme->SetWindowTheme(GetHwnd(), L"EXPLORER", NULL);
+            }
+        }
+    }
 
     return true;
 }
@@ -943,24 +874,20 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
 bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
 {
-#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
     ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
-#endif
 
     return true;
 }
 
 bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 {
-#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetForegroundColour(colour) )
         return false;
 
     ::SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
-#endif
 
     return true;
 }
@@ -3520,7 +3447,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         // instead of explicitly checking for _WIN32_IE, check if the
         // required symbols are available in the headers
-#if defined(CDDS_PREPAINT) && !wxUSE_COMCTL32_SAFELY
+#if defined(CDDS_PREPAINT)
         case NM_CUSTOMDRAW:
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;

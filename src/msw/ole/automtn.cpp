@@ -56,12 +56,12 @@
 
 #if wxUSE_OLE_AUTOMATION
 
-// Report an OLE error to the user via wxLog.
+// Report an OLE error when calling the specified method to the user via wxLog.
 static void
 ShowException(const wxString& member,
               HRESULT hr,
-              EXCEPINFO *pexcep,
-              unsigned int uiArgErr);
+              EXCEPINFO *pexcep = NULL,
+              unsigned int uiArgErr = 0);
 
 // wxAutomationObject
 
@@ -88,15 +88,12 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     if (!m_dispatchPtr)
         return false;
 
-    // nonConstMember is necessary because the wxString class doesn't have enough consts...
-    wxString nonConstMember(member);
-
-    int ch = nonConstMember.Find('.');
+    int ch = member.Find('.');
     if (ch != -1)
     {
         // Use dot notation to get the next object
-        wxString member2(nonConstMember.Left((size_t) ch));
-        wxString rest(nonConstMember.Right(nonConstMember.length() - ch - 1));
+        wxString member2(member.Left((size_t) ch));
+        wxString rest(member.Right(member.length() - ch - 1));
         wxAutomationObject obj;
         if (!GetObject(obj, member2))
             return false;
@@ -112,7 +109,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     int namedArgCount = 0;
     int i;
     for (i = 0; i < noArgs; i++)
-        if (!INVOKEARG(i).GetName().IsNull())
+        if ( !INVOKEARG(i).GetName().empty() )
         {
             namedArgCount ++;
         }
@@ -127,7 +124,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     int j = 0;
     for (i = 0; i < namedArgCount; i++)
     {
-        if (!INVOKEARG(i).GetName().IsNull())
+        if ( !INVOKEARG(i).GetName().empty() )
         {
             argNames[(namedArgCount-j)] = wxConvertStringToOle(INVOKEARG(i).GetName());
             j ++;
@@ -147,7 +144,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
                                 1 + namedArgCount, LOCALE_SYSTEM_DEFAULT, dispIds);
     if (FAILED(hr))
     {
-        ShowException(member, hr, NULL, 0);
+        ShowException(member, hr);
         delete[] argNames;
         delete[] dispIds;
         return false;
@@ -489,40 +486,85 @@ bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& prop
         return false;
 }
 
+namespace
+{
+
+HRESULT wxCLSIDFromProgID(const wxString& progId, CLSID& clsId)
+{
+    HRESULT hr = CLSIDFromProgID(wxBasicString(progId), &clsId);
+    if ( FAILED(hr) )
+    {
+        wxLogSysError(hr, _("Failed to find CLSID of \"%s\""), progId);
+    }
+    return hr;
+}
+
+void *DoCreateInstance(const wxString& progId, const CLSID& clsId)
+{
+    // get the server IDispatch interface
+    //
+    // NB: using CLSCTX_INPROC_HANDLER results in failure when getting
+    //     Automation interface for Microsoft Office applications so don't use
+    //     CLSCTX_ALL which includes it
+    void *pDispatch = NULL;
+    HRESULT hr = CoCreateInstance(clsId, NULL, CLSCTX_SERVER,
+                                  IID_IDispatch, &pDispatch);
+    if (FAILED(hr))
+    {
+        wxLogSysError(hr, _("Failed to create an instance of \"%s\""), progId);
+        return NULL;
+    }
+
+    return pDispatch;
+}
+
+} // anonymous namespace
+
 // Get a dispatch pointer from the current object associated
-// with a class id
-bool wxAutomationObject::GetInstance(const wxString& classId) const
+// with a ProgID
+bool wxAutomationObject::GetInstance(const wxString& progId, int flags) const
 {
     if (m_dispatchPtr)
         return false;
 
-    HRESULT hr;
     CLSID clsId;
-    IUnknown * pUnk = NULL;
-
-    wxBasicString unicodeName(classId);
-
-    hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
+    HRESULT hr = wxCLSIDFromProgID(progId, clsId);
     if (FAILED(hr))
-    {
-        ShowException(classId, hr, NULL, 0);
-        wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
-    }
 
+    IUnknown *pUnk = NULL;
     hr = GetActiveObject(clsId, NULL, &pUnk);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
-        wxLogWarning(wxT("Cannot find an active object"));
+        if ( flags & wxAutomationInstance_CreateIfNeeded )
+        {
+            const_cast<wxAutomationObject *>(this)->
+                m_dispatchPtr = DoCreateInstance(progId, clsId);
+            if ( m_dispatchPtr )
+                return true;
+        }
+        else
+        {
+            // Log an error except if we're supposed to fail silently when the
+            // error is that no current instance exists.
+            if ( hr != MK_E_UNAVAILABLE ||
+                    !(flags & wxAutomationInstance_SilentIfNone) )
+            {
+                wxLogSysError(hr,
+                              _("Cannot get an active instance of \"%s\""),
+                              progId);
+            }
+        }
+
         return false;
     }
 
     hr = pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr);
     if (FAILED(hr))
     {
-        ShowException(classId, hr, NULL, 0);
-        wxLogWarning(wxT("Cannot find IDispatch interface"));
+        wxLogSysError(hr,
+                      _("Failed to get OLE automation interface for \"%s\""),
+                      progId);
         return false;
     }
 
@@ -530,40 +572,21 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
 }
 
 // Get a dispatch pointer from a new object associated
-// with the given class id
-bool wxAutomationObject::CreateInstance(const wxString& classId) const
+// with the given ProgID
+bool wxAutomationObject::CreateInstance(const wxString& progId) const
 {
     if (m_dispatchPtr)
         return false;
 
-    HRESULT hr;
     CLSID clsId;
-
-    wxBasicString unicodeName(classId);
-
-    hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
+    HRESULT hr = wxCLSIDFromProgID(progId, clsId);
     if (FAILED(hr))
-    {
-        ShowException(classId, hr, NULL, 0);
-        wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
-    }
 
-    // get the server IDispatch interface
-    //
-    // NB: using CLSCTX_INPROC_HANDLER results in failure when getting
-    //     Automation interface for Microsoft Office applications so don't use
-    //     CLSCTX_ALL which includes it
-    hr = CoCreateInstance(clsId, NULL, CLSCTX_SERVER, IID_IDispatch,
-                                (void**)&m_dispatchPtr);
-    if (FAILED(hr))
-    {
-        ShowException(classId, hr, NULL, 0);
-        wxLogWarning(wxT("Could not start an instance of this class."));
-        return false;
-    }
+    const_cast<wxAutomationObject *>(this)->
+        m_dispatchPtr = DoCreateInstance(progId, clsId);
 
-    return true;
+    return m_dispatchPtr != NULL;
 }
 
 static void
@@ -576,70 +599,68 @@ ShowException(const wxString& member,
     switch (GetScode(hr))
     {
         case DISP_E_UNKNOWNNAME:
-            message = wxT("Unknown name or named argument.");
+            message = _("Unknown name or named argument.");
             break;
 
         case DISP_E_BADPARAMCOUNT:
-            message = wxT("Incorrect number of arguments.");
+            message = _("Incorrect number of arguments.");
             break;
 
         case DISP_E_EXCEPTION:
+            if ( pexcep )
             {
-                message = wxT("Error Code (");
-                message << pexcep->wCode ;// unsigned short
-                message += wxT(")");
-                if (pexcep->bstrDescription != NULL)
-                    message += pexcep->bstrDescription;
-                else
-                    message += wxT("<<No Description>>");
+                if ( pexcep->bstrDescription )
+                    message << pexcep->bstrDescription << wxS(" ");
+                message += wxString::Format(wxS("error code %u"), pexcep->wCode);
+            }
+            else
+            {
+                message = _("Unknown exception");
             }
             break;
 
         case DISP_E_MEMBERNOTFOUND:
-            message = wxT("Method or property not found.");
+            message = _("Method or property not found.");
             break;
 
         case DISP_E_OVERFLOW:
-            message = wxT("Overflow while coercing argument values.");
+            message = _("Overflow while coercing argument values.");
             break;
 
         case DISP_E_NONAMEDARGS:
-            message = wxT("Object implementation does not support named arguments.");
+            message = _("Object implementation does not support named arguments.");
             break;
 
         case DISP_E_UNKNOWNLCID:
-            message = wxT("The locale ID is unknown.");
+            message = _("The locale ID is unknown.");
             break;
 
         case DISP_E_PARAMNOTOPTIONAL:
-            message = wxT("Missing a required parameter.");
+            message = _("Missing a required parameter.");
             break;
 
         case DISP_E_PARAMNOTFOUND:
-            message = wxT("Argument not found, argument.");
-            message << uiArgErr;
+            message.Printf(_("Argument %u not found."), uiArgErr);
             break;
 
         case DISP_E_TYPEMISMATCH:
-            message = wxT("Type mismatch, argument.");
-            message << uiArgErr;
+            message.Printf(_("Type mismatch in argument %u."), uiArgErr);
             break;
 
         case ERROR_FILE_NOT_FOUND:
-            message = wxT("The system cannot find the file specified.");
+            message = _("The system cannot find the file specified.");
             break;
 
         case REGDB_E_CLASSNOTREG:
-            message = wxT("Class not registered.");
+            message = _("Class not registered.");
             break;
 
         default:
-            message = wxT("Unknown error occurred. Return value is ");
-            message << hr;
+            message.Printf(_("Unknown error %08x"), hr);
             break;
     }
 
-    wxLogDebug("OLE Automation error in %s: %s", member, message);
+    wxLogError(_("OLE Automation error in %s: %s"), member, message);
 }
 
 #endif // wxUSE_OLE_AUTOMATION

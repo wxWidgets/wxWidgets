@@ -156,8 +156,6 @@ public:
     static long         MacRemoveBordersFromStyle( long style ) ;
 
 public:
-    void OnInternalIdle();
-
     // For implementation purposes:
     // sometimes decorations make the client area smaller
     virtual wxPoint GetClientAreaOrigin() const;
@@ -182,6 +180,7 @@ public:
     WXWindow            MacGetTopLevelWindowRef() const ;
     wxNonOwnedWindow*   MacGetTopLevelWindow() const ;
 
+    virtual long        MacGetWXBorderSize() const;
     virtual long        MacGetLeftBorderSize() const ;
     virtual long        MacGetRightBorderSize() const ;
     virtual long        MacGetTopBorderSize() const ;
@@ -267,6 +266,9 @@ public:
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
+    
+    float               GetContentScaleFactor() const ;
+    
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

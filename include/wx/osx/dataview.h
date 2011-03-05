@@ -95,8 +95,8 @@ private:
         m_flags = flags & ~wxDATAVIEW_COL_HIDDEN; // TODO
         m_maxWidth = 30000;
         m_minWidth = 0;
-        m_width = width >= 0 ? width : wxDVC_DEFAULT_WIDTH;
         m_alignment = align;
+        SetWidth(width);
     }
 
     bool m_ascending; // sorting order

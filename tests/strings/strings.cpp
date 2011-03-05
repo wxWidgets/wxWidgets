@@ -968,38 +968,48 @@ void StringTestCase::IndexedAccess()
 
 void StringTestCase::BeforeAndAfter()
 {
-    const wxString s(L"letter=\xe9;\xe7a=l\xe0");
+    // Construct a string with 2 equal signs in it by concatenating its three
+    // parts: before the first "=", in between the two "="s and after the last
+    // one. This allows to avoid duplicating the string contents (which has to
+    // be different for Unicode and ANSI builds) in the tests below.
+#if wxUSE_UNICODE
+    #define FIRST_PART L"letter"
+    #define MIDDLE_PART L"\xe9;\xe7a"
+    #define LAST_PART L"l\xe0"
+#else // !wxUSE_UNICODE
+    #define FIRST_PART "letter"
+    #define MIDDLE_PART "e;ca"
+    #define LAST_PART "la"
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    const wxString s(FIRST_PART wxT("=") MIDDLE_PART wxT("=") LAST_PART);
 
     wxString r;
 
-    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=', &r) );
-    CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", r );
+    CPPUNIT_ASSERT_EQUAL( FIRST_PART, s.BeforeFirst('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( MIDDLE_PART wxT("=") LAST_PART, r );
 
     CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!', &r) );
     CPPUNIT_ASSERT_EQUAL( "", r );
 
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';', &r) );
-    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
 
-
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=', &r) );
-    CPPUNIT_ASSERT_EQUAL( L"l\xe0", r );
+    CPPUNIT_ASSERT_EQUAL( FIRST_PART wxT("=") MIDDLE_PART, s.BeforeLast('=', &r) );
+    CPPUNIT_ASSERT_EQUAL( LAST_PART, r );
 
     CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!', &r) );
     CPPUNIT_ASSERT_EQUAL( s, r );
 
-    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';', &r) );
-    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", r );
 
-
-    CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", s.AfterFirst('=') );
+    CPPUNIT_ASSERT_EQUAL( MIDDLE_PART wxT("=") LAST_PART, s.AfterFirst('=') );
     CPPUNIT_ASSERT_EQUAL( "", s.AfterFirst('!') );
-    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterFirst(';') );
 
 
-    CPPUNIT_ASSERT_EQUAL( L"l\xe0", s.AfterLast('=') );
+    CPPUNIT_ASSERT_EQUAL( LAST_PART, s.AfterLast('=') );
     CPPUNIT_ASSERT_EQUAL( s, s.AfterLast('!') );
-    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterLast(';') );
+
+    #undef LAST_PART
+    #undef MIDDLE_PART
+    #undef FIRST_PART
 }
 
 void StringTestCase::ScopedBuffers()

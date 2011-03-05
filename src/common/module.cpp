@@ -30,7 +30,7 @@
 
 WX_DEFINE_LIST(wxModuleList)
 
-IMPLEMENT_CLASS(wxModule, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject)
 
 wxModuleList wxModule::m_modules;
 

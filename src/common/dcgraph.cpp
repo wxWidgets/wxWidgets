@@ -57,8 +57,10 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
 {
     switch ( function )
     {
-        case wxCOPY:       // (default) src
-            *op = wxCOMPOSITION_SOURCE; //
+        case wxCOPY: // src
+            // since we are supporting alpha, _OVER is closer to the intention than _SOURCE
+            // since the latter would overwrite even when alpha is is not set to opaque
+            *op = wxCOMPOSITION_OVER; 
             break;
         case wxOR:         // src OR dst
             *op = wxCOMPOSITION_ADD;
@@ -675,7 +677,7 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
     wxGraphicsPath path = m_graphicContext->CreatePath();
 
     wxPointList::compatibility_iterator node = points->GetFirst();
-    if (node == wxPointList::compatibility_iterator())
+    if ( !node )
         // empty list
         return;
 
@@ -943,7 +945,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawRotatedText - invalid DC") );
 
-    if ( str.length() == 0 )
+    if ( str.empty() )
         return;
     if ( !m_logicalFunctionSupported )
         return;
@@ -958,7 +960,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
 
-    if ( str.length() == 0 )
+    if ( str.empty() )
         return;
 
     if ( !m_logicalFunctionSupported )
@@ -1047,7 +1049,10 @@ void wxGCDCImpl::Clear(void)
     m_graphicContext->SetBrush( m_backgroundBrush );
     wxPen p = *wxTRANSPARENT_PEN;
     m_graphicContext->SetPen( p );
+    wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
+    m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
     DoDrawRectangle( 0, 0, 32000 , 32000 );
+    m_graphicContext->SetCompositionMode(formerMode);
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 }

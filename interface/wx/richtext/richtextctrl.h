@@ -154,8 +154,8 @@ public:
 
     wxRichTextCtrl sends notification events: see wxRichTextEvent.
 
-    It also sends the standard wxTextCtrl events wxEVT_COMMAND_TEXT_ENTER and
-    wxEVT_COMMAND_TEXT_UPDATED, and wxTextUrlEvent when URL content is clicked.
+    It also sends the standard wxTextCtrl events @c wxEVT_COMMAND_TEXT_ENTER and
+    @c wxEVT_COMMAND_TEXT_UPDATED, and wxTextUrlEvent when URL content is clicked.
 
     For more information, see the @ref overview_richtextctrl.
 

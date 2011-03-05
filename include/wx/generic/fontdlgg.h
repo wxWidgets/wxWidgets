@@ -12,11 +12,8 @@
 #ifndef _WX_GENERIC_FONTDLGG_H
 #define _WX_GENERIC_FONTDLGG_H
 
-#include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/font.h"
-#include "wx/dialog.h"
-#include "wx/cmndata.h"
 
 #ifdef __WXWINCE__
 #define USE_SPINCTRL_FOR_POINT_SIZE 1

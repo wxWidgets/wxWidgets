@@ -333,6 +333,21 @@
 #define wxUSE_DATAOBJ 0
 #endif
 
+#if wxUSE_UIACTIONSIMULATOR
+#undef wxUSE_UIACTIONSIMULATOR
+#define wxUSE_UIACTIONSIMULATOR 0
+#endif
+
+#if wxUSE_RICHMSGDLG
+#undef wxUSE_RICHMSGDLG
+#define wxUSE_RICHMSGDLG 0
+#endif
+
+#if wxUSE_RICHTEXT
+#undef wxUSE_RICHTEXT
+#define wxUSE_RICHTEXT 0
+#endif
+
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
 

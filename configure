@@ -1213,8 +1213,11 @@ enable_clipboard
 enable_dnd
 enable_metafile
 enable_controls
+enable_markup
 enable_accel
 enable_animatectrl
+enable_artstd
+enable_arttango
 enable_bmpbutton
 enable_bmpcombobox
 enable_button
@@ -2120,8 +2123,11 @@ Optional Features:
   --enable-dnd            use Drag'n'Drop classes
   --enable-metafile       use win32 metafiles
   --disable-controls      disable compilation of all standard controls
+  --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
+  --enable-artstd         use standard XPM icons in wxArtProvider
+  --enable-arttango       use Tango icons in wxArtProvider
   --enable-bmpbutton      use wxBitmapButton class
   --enable-bmpcombobox    use wxBitmapComboBox class
   --enable-button         use wxButton class
@@ -4043,6 +4049,7 @@ DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
+DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
@@ -4343,7 +4350,8 @@ $as_echo "$result" >&6; }
 
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
-                    DEFAULT_wxUSE_MEDIACTRL=no
+                    DEFAULT_wxUSE_ARTPROVIDER_TANGO=no
+    DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
 
@@ -10812,6 +10820,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOOK=no
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_MARKUP=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -10838,6 +10847,51 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
 fi
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-markup" >&5
+$as_echo_n "checking for --${enablestring:-enable}-markup... " >&6; }
+          # Check whether --enable-markup was given.
+if test "${enable_markup+set}" = set; then :
+  enableval=$enable_markup;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_markup='wxUSE_MARKUP=yes'
+                          else
+                            wx_cv_use_markup='wxUSE_MARKUP=no'
+                          fi
+
+else
+
+                          wx_cv_use_markup='wxUSE_MARKUP=${'DEFAULT_wxUSE_MARKUP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_markup"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MARKUP = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_MARKUP
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
 
 
           enablestring=
@@ -10922,6 +10976,94 @@ fi
             fi
           else
             result=$wxUSE_ANIMATIONCTRL
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-artstd" >&5
+$as_echo_n "checking for --${enablestring:-enable}-artstd... " >&6; }
+          # Check whether --enable-artstd was given.
+if test "${enable_artstd+set}" = set; then :
+  enableval=$enable_artstd;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=yes'
+                          else
+                            wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=no'
+                          fi
+
+else
+
+                          wx_cv_use_artstd='wxUSE_ARTPROVIDER_STD=${'DEFAULT_wxUSE_ARTPROVIDER_STD":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_artstd"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_ARTPROVIDER_STD = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_ARTPROVIDER_STD
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-arttango" >&5
+$as_echo_n "checking for --${enablestring:-enable}-arttango... " >&6; }
+          # Check whether --enable-arttango was given.
+if test "${enable_arttango+set}" = set; then :
+  enableval=$enable_arttango;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=yes'
+                          else
+                            wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=no'
+                          fi
+
+else
+
+                          wx_cv_use_arttango='wxUSE_ARTPROVIDER_TANGO=${'DEFAULT_wxUSE_ARTPROVIDER_TANGO":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_arttango"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_ARTPROVIDER_TANGO = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_ARTPROVIDER_TANGO
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -19861,11 +20003,11 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-if test "$ac_cv_sizeof_wchar_t" != 0; then
-    wxUSE_WCHAR_T=yes
-else
-    wxUSE_WCHAR_T=no
+if test "$ac_cv_sizeof_wchar_t" = 0; then
+    as_fn_error $? "wxWidgets requires wchar_t support." "$LINENO" 5
 fi
+$as_echo "#define wxUSE_WCHAR_T 1" >>confdefs.h
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for va_copy" >&5
 $as_echo_n "checking for va_copy... " >&6; }
@@ -21333,7 +21475,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
                                 if test -z "$x_includes" -o "$x_includes" = NONE; then
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /usr/include;
+for ac_dir in $SEARCH_INCLUDE /usr/include
   do
     if test -f "$ac_dir/X11/Intrinsic.h"; then
       ac_find_includes=$ac_dir
@@ -21346,7 +21488,7 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXt.$ac_extension"; then
@@ -22227,19 +22369,6 @@ subdirs="$subdirs src/tiff"
 fi
 
 
-if test "$wxUSE_WCHAR_T" != "yes"; then
-    if test "$wxUSE_EXPAT" != "no"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&5
-$as_echo "$as_me: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&2;}
-        wxUSE_EXPAT=no
-    fi
-    if test "$wxUSE_XML" != "no"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&5
-$as_echo "$as_me: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&2;}
-        wxUSE_XML=no
-    fi
-fi
-
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
     $as_echo "#define wxUSE_EXPAT 1" >>confdefs.h
@@ -22470,10 +22599,10 @@ fi
                         LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
-                WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+                WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 
         WIN32INSTALL=win32install
 
@@ -23611,7 +23740,7 @@ done
 $as_echo_n "checking for gpewidget library... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgpewidget.$ac_extension"; then
@@ -25058,7 +25187,7 @@ done
 $as_echo_n "checking for Motif/Lesstif headers... " >&6; }
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /usr/include;
+for ac_dir in $SEARCH_INCLUDE /usr/include
   do
     if test -f "$ac_dir/Xm/Xm.h"; then
       ac_find_includes=$ac_dir
@@ -25127,7 +25256,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for Motif/Lesstif library... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXm.$ac_extension"; then
@@ -25393,7 +25522,7 @@ $as_echo "$wx_cv_lib_lesstif" >&6; }
 $as_echo_n "checking for Xpm library... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXpm.$ac_extension"; then
@@ -25742,7 +25871,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
 $as_echo_n "checking for Xinerama... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
@@ -25797,7 +25926,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
 $as_echo_n "checking for Xxf86vm extension... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
@@ -25842,7 +25971,7 @@ if test "$wxUSE_DETECT_SM" = "yes"; then
 $as_echo_n "checking for -lSM - X11 session management... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libSM.$ac_extension"; then
@@ -25900,7 +26029,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 $as_echo_n "checking for OpenGL headers... " >&6; }
 
 ac_find_includes=
-for ac_dir in $SEARCH_INCLUDE /opt/graphics/OpenGL/include /usr/include;
+for ac_dir in $SEARCH_INCLUDE /opt/graphics/OpenGL/include /usr/include
   do
     if test -f "$ac_dir/GL/gl.h"; then
       ac_find_includes=$ac_dir
@@ -25944,7 +26073,7 @@ if test "x$ac_cv_header_GL_glu_h" = x""yes; then :
 $as_echo_n "checking for -lGL... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib;
+  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
@@ -25979,7 +26108,7 @@ $as_echo "found in $ac_find_libraries" >&6; }
 $as_echo_n "checking for -lGLU... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
@@ -26026,7 +26155,7 @@ $as_echo "no" >&6; }
 $as_echo_n "checking for -lMesaGL... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
+  for ac_dir in $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
@@ -26869,13 +26998,9 @@ if test "$wx_cv_struct_pw_gecos" = "yes"; then
 fi
 
 
-if test "$wxUSE_WCHAR_T" = "yes"; then
-    $as_echo "#define wxUSE_WCHAR_T 1" >>confdefs.h
-
-
-        WCSLEN_FOUND=0
-    WCHAR_LINK=
-    for ac_func in wcslen
+WCSLEN_FOUND=0
+WCHAR_LINK=
+for ac_func in wcslen
 do :
   ac_fn_c_check_func "$LINENO" "wcslen" "ac_cv_func_wcslen"
 if test "x$ac_cv_func_wcslen" = x""yes; then :
@@ -26887,9 +27012,9 @@ fi
 done
 
 
-    if test "$WCSLEN_FOUND" = 0; then
-        if test "$TOOLKIT" = "MSW"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcslen in -lmsvcrt" >&5
+if test "$WCSLEN_FOUND" = 0; then
+    if test "$TOOLKIT" = "MSW"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcslen in -lmsvcrt" >&5
 $as_echo_n "checking for wcslen in -lmsvcrt... " >&6; }
 if test "${ac_cv_lib_msvcrt_wcslen+set}" = set; then :
   $as_echo_n "(cached) " >&6
@@ -26929,8 +27054,8 @@ if test "x$ac_cv_lib_msvcrt_wcslen" = x""yes; then :
   WCHAR_OK=1
 fi
 
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcslen in -lw" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wcslen in -lw" >&5
 $as_echo_n "checking for wcslen in -lw... " >&6; }
 if test "${ac_cv_lib_w_wcslen+set}" = set; then :
   $as_echo_n "(cached) " >&6
@@ -26968,20 +27093,20 @@ fi
 $as_echo "$ac_cv_lib_w_wcslen" >&6; }
 if test "x$ac_cv_lib_w_wcslen" = x""yes; then :
 
-                            WCHAR_LINK=" -lw"
-                            WCSLEN_FOUND=1
+                        WCHAR_LINK=" -lw"
+                        WCSLEN_FOUND=1
 
 fi
 
-        fi
     fi
+fi
 
-    if test "$WCSLEN_FOUND" = 1; then
-        $as_echo "#define HAVE_WCSLEN 1" >>confdefs.h
+if test "$WCSLEN_FOUND" = 1; then
+    $as_echo "#define HAVE_WCSLEN 1" >>confdefs.h
 
-    fi
+fi
 
-    for ac_func in wcsdup strnlen wcsnlen wcscasecmp wcsncasecmp
+for ac_func in wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -26994,11 +27119,11 @@ fi
 done
 
 
-                    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
-    fi
+if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
+    CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
+fi
 
-                ac_fn_c_check_type "$LINENO" "mbstate_t" "ac_cv_type_mbstate_t" "#include <wchar.h>
+ac_fn_c_check_type "$LINENO" "mbstate_t" "ac_cv_type_mbstate_t" "#include <wchar.h>
 "
 if test "x$ac_cv_type_mbstate_t" = x""yes; then :
 
@@ -27019,10 +27144,6 @@ done
 
 fi
 
-else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Wide character support is unavailable" >&5
-$as_echo "$as_me: WARNING: Wide character support is unavailable" >&2;}
-fi
 
 for ac_func in snprintf vsnprintf vsscanf
 do :
@@ -32859,6 +32980,11 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   USES_CONTROLS=1
 fi
 
+if test "$wxUSE_MARKUP" = "yes"; then
+  $as_echo "#define wxUSE_MARKUP 1" >>confdefs.h
+
+fi
+
 if test "$wxUSE_ACCEL" = "yes"; then
   $as_echo "#define wxUSE_ACCEL 1" >>confdefs.h
 
@@ -33328,6 +33454,26 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
 fi
 
+if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then
+    $as_echo "#define wxUSE_ARTPROVIDER_STD 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then
+            if test "$wxUSE_GTK" != 1; then
+                if test "$wxUSE_LIBPNG" != no -a \
+                "$wxUSE_IMAGE" = yes -a \
+                "$wxUSE_STREAMS" = yes; then
+            wxUSE_ARTPROVIDER_TANGO="yes"
+        fi
+    fi
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "yes"; then
+    $as_echo "#define wxUSE_ARTPROVIDER_TANGO 1" >>confdefs.h
+
+fi
+
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     $as_echo "#define wxUSE_DRAGIMAGE 1" >>confdefs.h
 
@@ -33765,7 +33911,7 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CAIRO" >&5
@@ -33839,6 +33985,35 @@ else
 $as_echo "yes" >&6; }
 	wx_has_graphics=1
 fi
+        if test "$wx_has_graphics" = 1; then
+                                                save_LIBS="$LIBS"
+            LIBS="$LIBS $CAIRO_LIBS"
+            for ac_func in cairo_push_group
+do :
+  ac_fn_c_check_func "$LINENO" "cairo_push_group" "ac_cv_func_cairo_push_group"
+if test "x$ac_cv_func_cairo_push_group" = x""yes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CAIRO_PUSH_GROUP 1
+_ACEOF
+
+fi
+done
+
+            LIBS="$save_LIBS"
+            if test "$ac_cv_func_cairo_push_group" = "no"; then
+                wx_has_graphics=0
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cairo library is too old and misses cairo_push_group()" >&5
+$as_echo "$as_me: WARNING: Cairo library is too old and misses cairo_push_group()" >&2;}
+            else
+                $as_echo "#define wxUSE_CAIRO 1" >>confdefs.h
+
+
+                                                if test "$wxUSE_GTK" != 1; then
+                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+                fi
+            fi
+        fi
     else
                 wx_has_graphics=1
     fi
@@ -36513,10 +36688,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.8"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.8"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.9"
 
 
 
@@ -37681,7 +37856,7 @@ if test "$wxUSE_MSW" = 1 ; then
         as_fn_error $? "Required windres program not found" "$LINENO" 5
     fi
 
-    RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
+    RESCOMP="$WINDRES"
 fi
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then

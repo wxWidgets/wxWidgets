@@ -23,9 +23,12 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COMBOCTRL
-
+#if wxUSE_COMBOBOX
 #include "wx/combobox.h"
+extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
+#endif
+
+#if wxUSE_COMBOCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -41,6 +44,71 @@
 #include "wx/combo.h"
 
 
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxComboBoxStyle )
+wxBEGIN_FLAGS( wxComboBoxStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+wxFLAGS_MEMBER(wxCB_SIMPLE)
+wxFLAGS_MEMBER(wxCB_SORT)
+wxFLAGS_MEMBER(wxCB_READONLY)
+wxFLAGS_MEMBER(wxCB_DROPDOWN)
+
+wxEND_FLAGS( wxComboBoxStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxComboBox)
+wxEVENT_PROPERTY( Select, wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+
+// TODO DELEGATES
+wxPROPERTY( Font, wxFont, SetFont, GetFont, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY_COLLECTION( Choices, wxArrayString, wxString, AppendString, \
+                      GetStrings, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Value,wxString, SetValue, GetValue, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Selection,int, SetSelection, GetSelection, wxEMPTY_PARAMETER_VALUE, \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+wxPROPERTY_FLAGS( WindowStyle, wxComboBoxStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxComboBox)
+
+wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
+                wxString, Value, wxPoint, Position, wxSize, Size )
 
 // constants
 // ----------------------------------------------------------------------------
@@ -590,6 +658,12 @@ void wxComboPopup::SetStringValue( const wxString& WXUNUSED(value) )
 {
 }
 
+bool wxComboPopup::FindItem(const wxString& WXUNUSED(item),
+                            wxString* WXUNUSED(trueItem))
+{
+    return true;
+}
+
 bool wxComboPopup::LazyCreate()
 {
     return false;
@@ -673,7 +747,8 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
     //     wxEVT_SET_FOCUSes (since m_text->SetFocus is called
     //     from combo's focus event handler), they should be quite
     //     harmless.
-    wxFocusEvent evt2(event.GetEventType(),m_combo->GetId());
+    wxFocusEvent evt2(event);
+    evt2.SetId(m_combo->GetId());
     evt2.SetEventObject(m_combo);
     m_combo->GetEventHandler()->ProcessEvent(evt2);
 
@@ -962,7 +1037,7 @@ void wxComboCtrlBase::InstallInputHandlers()
 }
 
 void
-wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
+wxComboCtrlBase::CreateTextCtrl(int style)
 {
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
@@ -989,7 +1064,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         m_text = new wxComboCtrlTextCtrl();
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
-                       style, validator);
+                       style);
         m_text->SetHint(m_hintText);
     }
 }
@@ -1389,25 +1464,6 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
     }
 }
 #endif // wxUSE_TOOLTIPS
-
-#if wxUSE_VALIDATORS
-void wxComboCtrlBase::SetValidator(const wxValidator& validator)
-{
-    wxTextCtrl* textCtrl = GetTextCtrl();
-
-    if ( textCtrl )
-        textCtrl->SetValidator( validator );
-    else
-        wxControl::SetValidator( validator );
-}
-
-wxValidator* wxComboCtrlBase::GetValidator()
-{
-    wxTextCtrl* textCtrl = GetTextCtrl();
-
-    return textCtrl ? textCtrl->GetValidator() : wxControl::GetValidator();
-}
-#endif // wxUSE_VALIDATORS
 
 bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 {
@@ -2074,7 +2130,7 @@ void wxComboCtrlBase::DoSetPopupControl(wxComboPopup* iface)
     }
 
     // This must be done after creation
-    if ( m_valueString.length() )
+    if ( !m_valueString.empty() )
     {
         iface->SetStringValue(m_valueString);
         //Refresh();
@@ -2096,11 +2152,7 @@ void wxComboCtrlBase::OnButtonClick()
     {
         case Hidden:
         {
-            wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
-            event.SetEventObject(this);
-            HandleWindowEvent(event);
-
-            ShowPopup();
+            Popup();
             break;
         }
 
@@ -2111,6 +2163,15 @@ void wxComboCtrlBase::OnButtonClick()
             break;
         }
     }
+}
+
+void wxComboCtrlBase::Popup()
+{
+    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+
+    ShowPopup();
 }
 
 void wxComboCtrlBase::ShowPopup()
@@ -2406,7 +2467,7 @@ void wxComboCtrlBase::HidePopup(bool generateEvent)
 
     // transfer value and show it in textctrl, if any
     if ( !IsPopupWindowState(Animating) )
-        SetValue( m_popupInterface->GetStringValue() );
+        SetValueByUser( m_popupInterface->GetStringValue() );
 
     m_winPopup->Hide();
 
@@ -2563,47 +2624,70 @@ void wxComboCtrlBase::SetTextCtrlStyle( int style )
 }
 
 // ----------------------------------------------------------------------------
-// methods forwarded to wxTextCtrl
+// wxTextEntry interface
 // ----------------------------------------------------------------------------
 
-wxString wxComboCtrlBase::GetValue() const
+wxString wxComboCtrlBase::DoGetValue() const
 {
     if ( m_text )
         return m_text->GetValue();
     return m_valueString;
 }
 
-void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
+void wxComboCtrlBase::SetValueWithEvent(const wxString& value,
+                                        bool withEvent)
 {
+    DoSetValue(value, withEvent ? SetValue_SendEvent : 0);
+}
+
+void wxComboCtrlBase::OnSetValue(const wxString& value)
+{
+    // Note: before wxComboCtrl inherited from wxTextEntry,
+    //       this code used to be in SetValueWithEvent().
+
+    // Since wxComboPopup may want to paint the combo as well, we need
+    // to set the string value here (as well as sometimes in ShowPopup).
+    if ( m_valueString != value )
+    {
+        bool found = true;
+        wxString trueValue = value;
+
+        // Conform to wxComboBox behavior: read-only control can only accept
+        // valid list items and empty string
+        if ( m_popupInterface && HasFlag(wxCB_READONLY) && value.length() )
+        {
+            found = m_popupInterface->FindItem(value,
+                                               &trueValue);
+        }
+
+        if ( found )
+        {
+            m_valueString = trueValue;
+
+            EnsurePopupControl();
+
+            if ( m_popupInterface )
+                m_popupInterface->SetStringValue(trueValue);
+        }
+    }
+
+    Refresh();
+}
+
+void wxComboCtrlBase::SetValueByUser(const wxString& value)
+{
+    // NB: Order of function calls is important here. Otherwise
+    //     the SelectAll() may not work.
+
     if ( m_text )
     {
-        if ( !withEvent )
-            m_ignoreEvtText++;
-
         m_text->SetValue(value);
 
         if ( !(m_iFlags & wxCC_NO_TEXT_AUTO_SELECT) )
             m_text->SelectAll();
     }
 
-    // Since wxComboPopup may want to paint the combo as well, we need
-    // to set the string value here (as well as sometimes in ShowPopup).
-    if ( m_valueString != value )
-    {
-        m_valueString = value;
-
-        EnsurePopupControl();
-
-        if (m_popupInterface)
-            m_popupInterface->SetStringValue(value);
-    }
-
-    Refresh();
-}
-
-void wxComboCtrlBase::SetValue(const wxString& value)
-{
-    SetValueWithEvent(value, false);
+    OnSetValue(value);
 }
 
 // In this SetValue variant wxComboPopup::SetStringValue is not called
@@ -2648,12 +2732,6 @@ void wxComboCtrlBase::SetInsertionPoint(long pos)
         m_text->SetInsertionPoint(pos);
 }
 
-void wxComboCtrlBase::SetInsertionPointEnd()
-{
-    if ( m_text )
-        m_text->SetInsertionPointEnd();
-}
-
 long wxComboCtrlBase::GetInsertionPoint() const
 {
     if ( m_text )
@@ -2670,16 +2748,48 @@ long wxComboCtrlBase::GetLastPosition() const
     return 0;
 }
 
+void wxComboCtrlBase::WriteText(const wxString& text)
+{
+    if ( m_text )
+    {
+        m_text->WriteText(text);
+        OnSetValue(m_text->GetValue());
+    }
+    else
+    {
+        OnSetValue(text);
+    }
+}
+
+void wxComboCtrlBase::DoSetValue(const wxString& value, int flags)
+{
+    if ( m_text )
+    {
+        if ( flags & SetValue_SendEvent )
+            m_text->SetValue(value);
+        else
+            m_text->ChangeValue(value);
+    }
+
+    OnSetValue(value);
+}
+
 void wxComboCtrlBase::Replace(long from, long to, const wxString& value)
 {
     if ( m_text )
+    {
         m_text->Replace(from, to, value);
+        OnSetValue(m_text->GetValue());
+    }
 }
 
 void wxComboCtrlBase::Remove(long from, long to)
 {
     if ( m_text )
+    {
         m_text->Remove(from, to);
+        OnSetValue(m_text->GetValue());
+    }
 }
 
 void wxComboCtrlBase::SetSelection(long from, long to)
@@ -2688,10 +2798,58 @@ void wxComboCtrlBase::SetSelection(long from, long to)
         m_text->SetSelection(from, to);
 }
 
+void wxComboCtrlBase::GetSelection(long *from, long *to) const
+{
+    if ( m_text )
+    {
+        m_text->GetSelection(from, to);
+    }
+    else
+    {
+        *from = 0;
+        *to = 0;
+    }
+}
+
+bool wxComboCtrlBase::IsEditable() const
+{
+    if ( m_text )
+        return m_text->IsEditable();
+    return false;
+}
+
+void wxComboCtrlBase::SetEditable(bool editable)
+{
+    if ( m_text )
+        m_text->SetEditable(editable);
+}
+
 void wxComboCtrlBase::Undo()
 {
     if ( m_text )
         m_text->Undo();
+}
+
+void wxComboCtrlBase::Redo()
+{
+    if ( m_text )
+        m_text->Redo();
+}
+
+bool wxComboCtrlBase::CanUndo() const
+{
+    if ( m_text )
+        return m_text->CanUndo();
+
+    return false;
+}
+
+bool wxComboCtrlBase::CanRedo() const
+{
+    if ( m_text )
+        return m_text->CanRedo();
+
+    return false;
 }
 
 bool wxComboCtrlBase::SetHint(const wxString& hint)

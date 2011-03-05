@@ -161,100 +161,6 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 // implementation
 // ============================================================================
 
-#include "wx/listimpl.cpp"
-
-WX_DEFINE_LIST( wxMenuInfoList )
-
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxMenuStyle )
-
-wxBEGIN_FLAGS( wxMenuStyle )
-    wxFLAGS_MEMBER(wxMENU_TEAROFF)
-wxEND_FLAGS( wxMenuStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler,"wx/menu.h")
-
-wxCOLLECTION_TYPE_INFO( wxMenuItem * , wxMenuItemList ) ;
-
-template<> void wxCollectionToVariantArray( wxMenuItemList const &theList, wxxVariantArray &value)
-{
-    wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList , value ) ;
-}
-
-wxBEGIN_PROPERTIES_TABLE(wxMenu)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
-    wxPROPERTY( Title, wxString , SetTitle, GetTitle, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxREADONLY_PROPERTY_FLAGS( MenuStyle , wxMenuStyle , long , GetStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-    wxPROPERTY_COLLECTION( MenuItems , wxMenuItemList , wxMenuItem* , Append , GetMenuItems , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxMenu)
-wxEND_HANDLERS_TABLE()
-
-wxDIRECT_CONSTRUCTOR_2( wxMenu , wxString , Title , long , MenuStyle  )
-
-WX_DEFINE_FLAGS( wxMenuBarStyle )
-
-wxBEGIN_FLAGS( wxMenuBarStyle )
-    wxFLAGS_MEMBER(wxMB_DOCKABLE)
-wxEND_FLAGS( wxMenuBarStyle )
-
-// the negative id would lead the window (its superclass !) to vetoe streaming out otherwise
-bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxWriter * , wxPersister * , wxxVariantArray & )
-{
-    return true ;
-}
-
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow ,"wx/menu.h",wxMenuBarStreamingCallback)
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject , "wx/menu.h" )
-
-wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
-    wxREADONLY_PROPERTY( Menu , wxMenu* , GetMenu , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxREADONLY_PROPERTY( Title , wxString , GetTitle , wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxMenuInfo)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_2( wxMenuInfo , wxMenu* , Menu , wxString , Title )
-
-wxCOLLECTION_TYPE_INFO( wxMenuInfo * , wxMenuInfoList ) ;
-
-template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, wxxVariantArray &value)
-{
-    wxListCollectionToVariantArray<wxMenuInfoList::compatibility_iterator>( theList , value ) ;
-}
-
-wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
-    wxPROPERTY_COLLECTION( MenuInfos , wxMenuInfoList , wxMenuInfo* , Append , GetMenuInfos , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxMenuBar)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_DUMMY( wxMenuBar )
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
-#endif
-
-const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
-{
-    wxMenuInfoList* list = const_cast< wxMenuInfoList* >( &m_menuInfos ) ;
-    WX_CLEAR_LIST( wxMenuInfoList , *list ) ;
-    for( size_t i = 0 ; i < GetMenuCount() ; ++i )
-    {
-        wxMenuInfo* info = new wxMenuInfo() ;
-        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetMenuLabel(i) ) ;
-        list->Append( info ) ;
-    }
-    return m_menuInfos ;
-}
-
 // ---------------------------------------------------------------------------
 // wxMenu construction, adding and removing menu items
 // ---------------------------------------------------------------------------
@@ -491,8 +397,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pos = GetMenuItemCount() - 1;
     }
 
-    // adjust position to account for the title, if any
-    if ( !m_title.empty() )
+    // adjust position to account for the title of a popup menu, if any
+    if ( !GetMenuBar() && !m_title.empty() )
         pos += 2; // for the title itself and its separator
 
     BOOL ok = false;
@@ -1013,12 +919,13 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 {
     Init();
 
-    m_titles.Alloc(count);
-
     for ( size_t i = 0; i < count; i++ )
     {
+        // We just want to store the menu title in the menu itself, not to
+        // show it as a dummy item in the menu itself as we do with the popup
+        // menu titles in overridden wxMenu::SetTitle().
+        menus[i]->wxMenuBase::SetTitle(titles[i]);
         m_menus.Append(menus[i]);
-        m_titles.Add(titles[i]);
 
         menus[i]->Attach(this);
     }
@@ -1131,13 +1038,13 @@ WXHMENU wxMenuBar::Create()
     }
     else
     {
-        size_t count = GetMenuCount(), i;
-        wxMenuList::iterator it;
-        for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
+        for ( wxMenuList::iterator it = m_menus.begin();
+              it != m_menus.end();
+              ++it )
         {
             if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
                                (UINT_PTR)(*it)->GetHMenu(),
-                               m_titles[i].wx_str()) )
+                               (*it)->GetTitle().wx_str()) )
             {
                 wxLogLastError(wxT("AppendMenu"));
             }
@@ -1198,7 +1105,7 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
-    m_titles[pos] = label;
+    m_menus[pos]->wxMenuBase::SetTitle(label);
 
     if ( !IsAttached() )
     {
@@ -1257,7 +1164,7 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
                  wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
-    return m_titles[pos];
+    return m_menus[pos]->GetTitle();
 }
 
 // ---------------------------------------------------------------------------
@@ -1270,7 +1177,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     if ( !menuOld )
         return NULL;
 
-    m_titles[pos] = title;
+    menu->wxMenuBase::SetTitle(title);
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
     if (IsAttached())
@@ -1327,7 +1234,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
 
-    m_titles.Insert(title, pos);
+    menu->wxMenuBase::SetTitle(title);
 
     if ( isAttached )
     {
@@ -1383,7 +1290,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Append(menu, title) )
         return false;
 
-    m_titles.Add(title);
+    menu->wxMenuBase::SetTitle(title);
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
     if (IsAttached())
@@ -1473,8 +1380,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         if (IsAttached())
             Refresh();
     }
-
-    m_titles.RemoveAt(pos);
 
     return menu;
 }

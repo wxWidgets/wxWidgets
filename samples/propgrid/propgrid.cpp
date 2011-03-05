@@ -199,255 +199,6 @@ private:
 #endif // wxUSE_VALIDATORS
 
 // -----------------------------------------------------------------------
-// AdvImageFile Property
-// -----------------------------------------------------------------------
-
-class wxMyImageInfo;
-
-WX_DECLARE_OBJARRAY(wxMyImageInfo, wxArrayMyImageInfo);
-
-class wxMyImageInfo
-{
-public:
-    wxString    m_path;
-    wxBitmap*   m_pThumbnail1; // smaller thumbnail
-    wxBitmap*   m_pThumbnail2; // larger thumbnail
-
-    wxMyImageInfo ( const wxString& str )
-    {
-        m_path = str;
-        m_pThumbnail1 = (wxBitmap*) NULL;
-        m_pThumbnail2 = (wxBitmap*) NULL;
-    }
-    virtual ~wxMyImageInfo()
-    {
-        if ( m_pThumbnail1 )
-            delete m_pThumbnail1;
-        if ( m_pThumbnail2 )
-            delete m_pThumbnail2;
-    }
-
-};
-
-
-#include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY(wxArrayMyImageInfo);
-
-wxArrayMyImageInfo  g_myImageArray;
-
-
-// Preferred thumbnail height.
-#define PREF_THUMBNAIL_HEIGHT       64
-
-
-wxPGChoices wxAdvImageFileProperty::ms_choices;
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxAdvImageFileProperty,wxFileProperty,
-                               wxString,const wxString&,ChoiceAndButton)
-
-
-wxAdvImageFileProperty::wxAdvImageFileProperty( const wxString& label,
-                                                          const wxString& name,
-                                                          const wxString& value)
-    : wxFileProperty(label,name,value)
-{
-    m_wildcard = wxPGGetDefaultImageWildcard();
-
-    m_index = -1;
-
-    m_pImage = (wxImage*) NULL;
-
-    // Only show names.
-    m_flags &= ~(wxPG_PROP_SHOW_FULL_FILENAME);
-}
-
-wxAdvImageFileProperty::~wxAdvImageFileProperty ()
-{
-    // Delete old image
-    wxDELETE(m_pImage);
-}
-
-void wxAdvImageFileProperty::OnSetValue()
-{
-    wxFileProperty::OnSetValue();
-
-    // Delete old image
-    wxDELETE(m_pImage);
-
-    wxString imagename = GetValueAsString(0);
-
-    if ( imagename.length() )
-    {
-        wxFileName filename = GetFileName();
-        size_t prevCount = g_myImageArray.GetCount();
-        int index = ms_choices.Index(imagename);
-
-        // If not in table, add now.
-        if ( index == wxNOT_FOUND )
-        {
-            ms_choices.Add( imagename );
-            g_myImageArray.Add( new wxMyImageInfo( filename.GetFullPath() ) );
-
-            index = g_myImageArray.GetCount() - 1;
-        }
-
-        // If no thumbnail ready, then need to load image.
-        if ( !g_myImageArray[index].m_pThumbnail2 )
-        {
-            // Load if file exists.
-            if ( filename.FileExists() )
-                m_pImage = new wxImage( filename.GetFullPath() );
-        }
-
-        m_index = index;
-
-        wxPropertyGrid* pg = GetGrid();
-        wxWindow* control = pg->GetEditorControl();
-
-        if ( pg->GetSelection() == this && control )
-        {
-            wxString name = GetValueAsString(0);
-
-            if ( g_myImageArray.GetCount() != prevCount )
-            {
-                wxASSERT( g_myImageArray.GetCount() == (prevCount+1) );
-
-                // Add to the control's array.
-                // (should be added to own array earlier)
-
-                if ( control )
-                    GetEditorClass()->InsertItem(control, name, -1);
-            }
-
-            if ( control )
-               GetEditorClass()->UpdateControl(this, control);
-        }
-    }
-    else
-        m_index = -1;
-}
-
-bool wxAdvImageFileProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
-{
-    wxASSERT( number >= 0 );
-    return StringToValue( variant, ms_choices.GetLabel(number), wxPG_FULL_VALUE );
-}
-
-bool wxAdvImageFileProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* primary,
-   wxEvent& event )
-{
-    if ( propgrid->IsMainButtonEvent(event) )
-    {
-        return wxFileProperty::OnEvent(propgrid,primary,event);
-    }
-    return false;
-}
-
-wxSize wxAdvImageFileProperty::OnMeasureImage( int item ) const
-{
-    if ( item == -1 )
-        return wxPG_DEFAULT_IMAGE_SIZE;
-
-    return wxSize(PREF_THUMBNAIL_HEIGHT,PREF_THUMBNAIL_HEIGHT);
-}
-
-void wxAdvImageFileProperty::LoadThumbnails( size_t index )
-{
-    wxMyImageInfo& mii = g_myImageArray[index];
-
-    if ( !mii.m_pThumbnail2 )
-    {
-        wxFileName filename = GetFileName();
-
-        if ( !m_pImage || !m_pImage->Ok() ||
-             filename != mii.m_path
-           )
-        {
-            if ( m_pImage )
-                delete m_pImage;
-            m_pImage = new wxImage( mii.m_path );
-        }
-
-        if ( m_pImage && m_pImage->Ok() )
-        {
-            int im_wid = m_pImage->GetWidth();
-            int im_hei = m_pImage->GetHeight();
-            if ( im_hei > PREF_THUMBNAIL_HEIGHT )
-            {
-                // TNW = (TNH*IW)/IH
-                im_wid = (PREF_THUMBNAIL_HEIGHT*m_pImage->GetWidth())/m_pImage->GetHeight();
-                im_hei = PREF_THUMBNAIL_HEIGHT;
-            }
-
-            m_pImage->Rescale( im_wid, im_hei );
-
-            mii.m_pThumbnail2 = new wxBitmap( *m_pImage );
-
-            wxSize cis = GetParentState()->GetGrid()->GetImageSize();
-            m_pImage->Rescale ( cis.x, cis.y );
-
-            mii.m_pThumbnail1 = new wxBitmap( *m_pImage );
-
-        }
-
-        wxDELETE(m_pImage);
-    }
-}
-
-void wxAdvImageFileProperty::OnCustomPaint( wxDC& dc,
-                                                 const wxRect& rect,
-                                                 wxPGPaintData& pd )
-{
-    int index = m_index;
-    if ( pd.m_choiceItem >= 0 )
-        index = pd.m_choiceItem;
-
-    //wxLogDebug(wxT("%i"),index);
-
-    if ( index >= 0 )
-    {
-        LoadThumbnails(index);
-
-        // Is this a measure item call?
-        if ( rect.x < 0 )
-        {
-            // Variable height
-            //pd.m_drawnHeight = PREF_THUMBNAIL_HEIGHT;
-            wxBitmap* pBitmap = (wxBitmap*)g_myImageArray[index].m_pThumbnail2;
-            if ( pBitmap )
-                pd.m_drawnHeight = pBitmap->GetHeight();
-            else
-                pd.m_drawnHeight = 16;
-            return;
-        }
-
-        // Draw the thumbnail
-
-        wxBitmap* pBitmap;
-
-        if ( pd.m_choiceItem >= 0 )
-            pBitmap = (wxBitmap*)g_myImageArray[index].m_pThumbnail2;
-        else
-            pBitmap = (wxBitmap*)g_myImageArray[index].m_pThumbnail1;
-
-        if ( pBitmap )
-        {
-            dc.DrawBitmap ( *pBitmap, rect.x, rect.y, FALSE );
-
-            // Tell the caller how wide we drew.
-            pd.m_drawnWidth = pBitmap->GetWidth();
-
-            return;
-        }
-    }
-
-    // No valid file - just draw a white box.
-    dc.SetBrush ( *wxWHITE_BRUSH );
-    dc.DrawRectangle ( rect );
-}
-
-
-// -----------------------------------------------------------------------
 // wxVectorProperty
 // -----------------------------------------------------------------------
 
@@ -571,7 +322,7 @@ public:
         wxString s = ::wxGetSingleChoice(wxT("Message"),
                                          wxT("Caption"),
                                          m_choices.GetLabels());
-        if ( s.length() )
+        if ( !s.empty() )
         {
             SetValue(s);
             return true;
@@ -1381,12 +1132,6 @@ void FormMain::PopulateWithStandardItems ()
         wxT("with custom action (dir dialog popup) defined.")
         );
 
-    pg->Append( new wxAdvImageFileProperty(wxT("AdvImageFileProperty"),wxPG_LABEL) );
-    pg->SetPropertyHelpString( wxT("AdvImageFileProperty"),
-        wxT("This demonstrates wxAdvImageFileProperty class defined in this sample app. ")
-        wxT("Button can be used to add new images to the popup list.")
-        );
-
     wxArrayDouble arrdbl;
     arrdbl.Add(-1.0);
     arrdbl.Add(-0.5);
@@ -1514,12 +1259,18 @@ void FormMain::PopulateWithExamples ()
 #endif
 
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
-    //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
     pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
     pg->GetProperty(wxT("ColourProperty"))->SetAutoUnspecified(true);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
         wxT("editor of this property to wxPGEditor_ComboBox)"));
+
+    pid = pg->Append( new wxColourProperty("ColourPropertyWithAlpha",
+                                           wxPG_LABEL,
+                                           wxColour(15, 200, 95, 128)) );
+    pg->SetPropertyAttribute("ColourPropertyWithAlpha", "HasAlpha", true);
+    pg->SetPropertyHelpString("ColourPropertyWithAlpha",
+        "Attribute \"HasAlpha\" is set to true for this property.");
 
     //
     // This demonstrates using alternative editor for colour property

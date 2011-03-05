@@ -107,8 +107,6 @@ wxCFEventLoop::AddSourceForFD(int fd,
     if ( !cffd )
         return NULL;
 
-    source->SetFileDescriptor(cffd.release());
-
     wxCFRef<CFRunLoopSourceRef>
         cfsrc(CFFileDescriptorCreateRunLoopSource(kCFAllocatorDefault, cffd, 0));
     if ( !cfsrc )
@@ -116,6 +114,8 @@ wxCFEventLoop::AddSourceForFD(int fd,
 
     CFRunLoopRef cfloop = CFGetCurrentRunLoop();
     CFRunLoopAddSource(cfloop, cfsrc, kCFRunLoopDefaultMode);
+
+    source->SetFileDescriptor(cffd.release());
 
     return source.release();
 }

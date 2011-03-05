@@ -80,7 +80,7 @@ public:
         Constructor creating the top level window.
     */
     wxTopLevelWindow(wxWindow *parent,
-                    wxWindowID winid,
+                    wxWindowID id,
                     const wxString& title,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
@@ -288,6 +288,11 @@ public:
     */
     wxWindow* SetDefaultItem(wxWindow* win);
 
+    
+    wxWindow*  SetTmpDefaultItem(wxWindow * win);
+    wxWindow* GetTmpDefaultItem() const;
+
+    
     /**
         Sets the icon for this window.
 

@@ -11,8 +11,6 @@
 
 #include "wx/choice.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxChoice, wxChoiceBase )
-
 wxChoice::wxChoice()
 {
 }

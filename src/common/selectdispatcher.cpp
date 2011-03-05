@@ -220,8 +220,8 @@ int wxSelectDispatcher::DoSelect(wxSelectSets& sets, int timeout) const
     if ( timeout != TIMEOUT_INFINITE )
     {
         ptv = &tv;
-        tv.tv_sec = 0;
-        tv.tv_usec = timeout*1000;
+        tv.tv_sec = timeout / 1000;
+        tv.tv_usec = (timeout % 1000)*1000;
     }
     else // no timeout
     {

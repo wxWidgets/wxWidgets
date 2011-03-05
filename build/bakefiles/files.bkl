@@ -599,6 +599,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/mimecmn.cpp
     src/common/module.cpp
     src/common/mstream.cpp
+    src/common/numformatter.cpp
     src/common/object.cpp
     src/common/platinfo.cpp
     src/common/powercmn.cpp
@@ -727,6 +728,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msgout.h
     wx/msgqueue.h
     wx/mstream.h
+    wx/numformatter.h
     wx/object.h
     wx/platform.h
     wx/platinfo.h
@@ -736,6 +738,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ptr_shrd.h
     wx/recguard.h
     wx/regex.h
+    wx/rtti.h
     wx/scopedarray.h
     wx/scopedptr.h
     wx/scopeguard.h
@@ -775,6 +778,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/variant.h
     wx/vector.h
     wx/version.h
+    wx/versioninfo.h
     wx/volume.h
     wx/weakref.h
     wx/wfstream.h
@@ -786,7 +790,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxprec.h
     wx/xlocale.h
     wx/xti.h
+    wx/xti2.h
     wx/xtistrm.h
+    wx/xtictor.h
+    wx/xtihandler.h
+    wx/xtiprop.h
+    wx/xtitypes.h
     wx/zipstrm.h
     wx/zstream.h
     wx/meta/convertible.h
@@ -882,14 +891,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/appcmn.cpp
     src/common/artprov.cpp
     src/common/artstd.cpp
+    src/common/arttango.cpp
     src/common/bmpbase.cpp
+    src/common/bmpbtncmn.cpp
     src/common/bookctrl.cpp
     src/common/btncmn.cpp
     src/common/cairo.cpp
+    src/common/checkboxcmn.cpp
+    src/common/checklstcmn.cpp
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
     src/common/clrpickercmn.cpp
     src/common/colourcmn.cpp
+    src/common/colourdata.cpp
     src/common/combocmn.cpp
     src/common/cmdproc.cpp
     src/common/cmndata.cpp
@@ -897,11 +911,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/cshelp.cpp
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
-    src/common/datacmn.cpp
     src/common/dcbase.cpp
     src/common/dcbufcmn.cpp
     src/common/dcgraph.cpp
     src/common/dcsvg.cpp
+    src/common/dirctrlcmn.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
     src/common/dobjcmn.cpp
@@ -917,6 +931,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontpickercmn.cpp
     src/common/fldlgcmn.cpp
     src/common/fontcmn.cpp
+    src/common/fontdata.cpp
     src/generic/graphicc.cpp
     src/common/fontenumcmn.cpp
     src/common/fontmap.cpp
@@ -948,6 +963,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/layout.cpp
     src/common/lboxcmn.cpp
     src/common/listctrlcmn.cpp
+    src/common/markupparser.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/mousemanager.cpp
@@ -955,20 +971,28 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/overlaycmn.cpp
     src/common/ownerdrwcmn.cpp
     src/common/paper.cpp
+    src/common/panelcmn.cpp
     src/common/persist.cpp
     src/common/pickerbase.cpp
     src/common/popupcmn.cpp
     src/common/prntbase.cpp
     src/common/quantize.cpp
+    src/common/radiobtncmn.cpp
     src/common/radiocmn.cpp
     src/common/rearrangectrl.cpp
     src/common/rendcmn.cpp
     src/common/rgncmn.cpp
+    src/common/scrolbarcmn.cpp
     src/common/settcmn.cpp
     src/common/sizer.cpp
+    src/common/slidercmn.cpp
+    src/common/spinbtncmn.cpp
     src/common/spinctrlcmn.cpp
     src/common/srchcmn.cpp
     src/common/statbar.cpp
+    src/common/statbmpcmn.cpp
+    src/common/statboxcmn.cpp
+    src/common/statlinecmn.cpp
     src/common/stattextcmn.cpp
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
@@ -981,6 +1005,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/valgen.cpp
     src/common/validate.cpp
     src/common/valtext.cpp
+    src/common/valnum.cpp
     src/common/wincmn.cpp
     src/common/windowid.cpp
     src/common/wrapsizer.cpp
@@ -998,6 +1023,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/infobar.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
+    src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
@@ -1033,6 +1059,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/collpane.h
     wx/combo.h
     wx/combobox.h
+    wx/compositewin.h
     wx/control.h
     wx/ctrlsub.h
     wx/cursor.h
@@ -1101,6 +1128,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/position.h
     wx/radiobox.h
     wx/radiobut.h
+    wx/range.h
     wx/rearrangectrl.h
     wx/renderer.h
     wx/richmsgdlg.h
@@ -1122,6 +1150,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
+    wx/valnum.h
     wx/window.h
     wx/windowid.h
     wx/wrapsizer.h
@@ -1142,6 +1171,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cmdproc.h
     wx/colordlg.h
     wx/colour.h
+    wx/colourdata.h
     wx/cshelp.h
     wx/dataobj.h
     wx/dcmirror.h
@@ -1162,6 +1192,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/fontpicker.h
     wx/fmappriv.h
     wx/font.h
+    wx/fontdata.h
     wx/fontdlg.h
     wx/fontenum.h
     wx/fontutil.h
@@ -1548,6 +1579,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/listbox.cpp
     src/gtk1/mdi.cpp
     src/gtk1/menu.cpp
+    src/gtk1/mnemonics.cpp
     src/gtk1/notebook.cpp
     src/gtk1/radiobox.cpp
     src/gtk1/radiobut.cpp
@@ -1895,6 +1927,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/settings.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
+    src/msw/uiaction.cpp
     src/msw/utilsgui.cpp
     src/msw/uxtheme.cpp
     src/msw/window.cpp
@@ -1974,7 +2007,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
-    src/msw/uiaction.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2466,6 +2498,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/palette.cpp
     src/osx/pen.cpp
     src/osx/toplevel_osx.cpp
+    src/osx/uiaction_osx.cpp
     src/osx/utils_osx.cpp
     <!-- src/osx/treectrl.cpp -->
     src/osx/window_osx.cpp
@@ -2524,7 +2557,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/textctrl_osx.cpp
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
-    src/osx/uiaction_osx.cpp
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
@@ -2793,7 +2825,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
-    src/osx/iphone/glcanvas.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm
@@ -3136,7 +3167,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bmpcboxcmn.cpp
     src/common/calctrlcmn.cpp
     src/common/datavcmn.cpp
+    src/common/gridcmn.cpp
     src/common/hyperlnkcmn.cpp
+    src/common/odcombocmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp
@@ -3209,14 +3242,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
-    src/msw/commandlinkbutton.cpp
     src/msw/hyperlink.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/commandlinkbutton.h
     wx/msw/hyperlink.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
@@ -3228,12 +3259,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/animateg.cpp
     src/msw/bmpcbox.cpp
     src/msw/calctrl.cpp
+    src/msw/commandlinkbutton.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
     wx/msw/bmpcbox.h
+    wx/msw/commandlinkbutton.h
     wx/msw/calctrl.h
     wx/msw/datectrl.h
 </set>
@@ -3695,6 +3728,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OPENGL_SRC_PLATFORM" hints="files">
     <if cond="TOOLKIT=='OSX_CARBON'">src/osx/carbon/glcanvas.cpp src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='OSX_COCOA'">src/osx/cocoa/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
+    <if cond="TOOLKIT=='OSX_IPHONE'">src/osx/iphone/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp

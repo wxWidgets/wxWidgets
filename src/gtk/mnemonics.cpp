@@ -24,9 +24,22 @@
 #endif
 
 #include "wx/log.h"
-#include "wx/private/stattext.h"        // for wxMarkupEntities
-
 #include "wx/gtk/private/mnemonics.h"
+
+namespace
+{
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// Names of the standard XML entities.
+const char *const entitiesNames[] =
+{
+    "&amp;", "&lt;", "&gt;", "&apos;", "&quot;"
+};
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -67,9 +80,9 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
                     size_t distanceFromEnd = label.end() - i;
 
                     // is this ampersand introducing a mnemonic or rather an entity?
-                    for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
+                    for (size_t j=0; j < WXSIZEOF(entitiesNames); j++)
                     {
-                        const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
+                        const char *entity = entitiesNames[j];
                         size_t entityLen = wxStrlen(entity);
 
                         if (distanceFromEnd >= entityLen &&

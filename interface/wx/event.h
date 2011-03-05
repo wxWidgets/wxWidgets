@@ -110,8 +110,8 @@ public:
             The identifier of the object (window, timer, ...) which generated
             this event.
         @param eventType
-            The unique type of event, e.g. wxEVT_PAINT, wxEVT_SIZE or
-            wxEVT_COMMAND_BUTTON_CLICKED.
+            The unique type of event, e.g. @c wxEVT_PAINT, @c wxEVT_SIZE or
+            @c wxEVT_COMMAND_BUTTON_CLICKED.
     */
     wxEvent(int id = 0, wxEventType eventType = wxEVT_NULL);
 
@@ -1573,22 +1573,22 @@ public:
     @event{EVT_SCROLLWIN(func)}
         Process all scroll events.
     @event{EVT_SCROLLWIN_TOP(func)}
-        Process wxEVT_SCROLLWIN_TOP scroll-to-top events.
+        Process @c wxEVT_SCROLLWIN_TOP scroll-to-top events.
     @event{EVT_SCROLLWIN_BOTTOM(func)}
-        Process wxEVT_SCROLLWIN_BOTTOM scroll-to-bottom events.
+        Process @c wxEVT_SCROLLWIN_BOTTOM scroll-to-bottom events.
     @event{EVT_SCROLLWIN_LINEUP(func)}
-        Process wxEVT_SCROLLWIN_LINEUP line up events.
+        Process @c wxEVT_SCROLLWIN_LINEUP line up events.
     @event{EVT_SCROLLWIN_LINEDOWN(func)}
-        Process wxEVT_SCROLLWIN_LINEDOWN line down events.
+        Process @c wxEVT_SCROLLWIN_LINEDOWN line down events.
     @event{EVT_SCROLLWIN_PAGEUP(func)}
-        Process wxEVT_SCROLLWIN_PAGEUP page up events.
+        Process @c wxEVT_SCROLLWIN_PAGEUP page up events.
     @event{EVT_SCROLLWIN_PAGEDOWN(func)}
-        Process wxEVT_SCROLLWIN_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLLWIN_PAGEDOWN page down events.
     @event{EVT_SCROLLWIN_THUMBTRACK(func)}
-        Process wxEVT_SCROLLWIN_THUMBTRACK thumbtrack events
+        Process @c wxEVT_SCROLLWIN_THUMBTRACK thumbtrack events
         (frequent events sent as the user drags the thumbtrack).
     @event{EVT_SCROLLWIN_THUMBRELEASE(func)}
-        Process wxEVT_SCROLLWIN_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLLWIN_THUMBRELEASE thumb release events.
     @endEventTable
 
 
@@ -1621,6 +1621,9 @@ public:
         the window itself for the current position in that case.
     */
     int GetPosition() const;
+
+    void SetOrientation(int orient);
+    void SetPosition(int pos);    
 };
 
 
@@ -2024,8 +2027,8 @@ public:
     wxTextCtrl but other windows can generate these events as well) when its
     content gets copied or cut to, or pasted from the clipboard.
 
-    There are three types of corresponding events wxEVT_COMMAND_TEXT_COPY,
-    wxEVT_COMMAND_TEXT_CUT and wxEVT_COMMAND_TEXT_PASTE.
+    There are three types of corresponding events @c wxEVT_COMMAND_TEXT_COPY,
+    @c wxEVT_COMMAND_TEXT_CUT and @c wxEVT_COMMAND_TEXT_PASTE.
 
     If any of these events is processed (without being skipped) by an event
     handler, the corresponding operation doesn't take place which allows to
@@ -2171,25 +2174,25 @@ public:
     /**
         Constructor. Valid event types are:
 
-         @li wxEVT_ENTER_WINDOW
-         @li wxEVT_LEAVE_WINDOW
-         @li wxEVT_LEFT_DOWN
-         @li wxEVT_LEFT_UP
-         @li wxEVT_LEFT_DCLICK
-         @li wxEVT_MIDDLE_DOWN
-         @li wxEVT_MIDDLE_UP
-         @li wxEVT_MIDDLE_DCLICK
-         @li wxEVT_RIGHT_DOWN
-         @li wxEVT_RIGHT_UP
-         @li wxEVT_RIGHT_DCLICK
-         @li wxEVT_MOUSE_AUX1_DOWN
-         @li wxEVT_MOUSE_AUX1_UP
-         @li wxEVT_MOUSE_AUX1_DCLICK
-         @li wxEVT_MOUSE_AUX2_DOWN
-         @li wxEVT_MOUSE_AUX2_UP
-         @li wxEVT_MOUSE_AUX2_DCLICK
-         @li wxEVT_MOTION
-         @li wxEVT_MOUSEWHEEL
+         @li @c wxEVT_ENTER_WINDOW
+         @li @c wxEVT_LEAVE_WINDOW
+         @li @c wxEVT_LEFT_DOWN
+         @li @c wxEVT_LEFT_UP
+         @li @c wxEVT_LEFT_DCLICK
+         @li @c wxEVT_MIDDLE_DOWN
+         @li @c wxEVT_MIDDLE_UP
+         @li @c wxEVT_MIDDLE_DCLICK
+         @li @c wxEVT_RIGHT_DOWN
+         @li @c wxEVT_RIGHT_UP
+         @li @c wxEVT_RIGHT_DCLICK
+         @li @c wxEVT_AUX1_DOWN
+         @li @c wxEVT_AUX1_UP
+         @li @c wxEVT_AUX1_DCLICK
+         @li @c wxEVT_AUX2_DOWN
+         @li @c wxEVT_AUX2_UP
+         @li @c wxEVT_AUX2_DCLICK
+         @li @c wxEVT_MOTION
+         @li @c wxEVT_MOUSEWHEEL
     */
     wxMouseEvent(wxEventType mouseEventType = wxEVT_NULL);
 
@@ -2670,7 +2673,7 @@ public:
         to wxApp only, and only on Windows SmartPhone and PocketPC.
         It is generated when the system is low on memory; the application should free
         up as much memory as possible, and restore full working state when it receives
-        a wxEVT_ACTIVATE or wxEVT_ACTIVATE_APP event.
+        a @c wxEVT_ACTIVATE or @c wxEVT_ACTIVATE_APP event.
     @endEventTable
 
     @library{wxcore}
@@ -2728,7 +2731,7 @@ public:
     /**
         Constructor.
     */
-    wxContextMenuEvent(wxEventType id = wxEVT_NULL, int id = 0,
+    wxContextMenuEvent(wxEventType type = wxEVT_NULL, int id = 0,
                        const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -2835,6 +2838,8 @@ public:
         Warning: the window pointer may be @NULL!
     */
     wxWindow *GetWindow() const;
+
+    void SetWindow(wxWindow *win);
 };
 
 
@@ -2917,6 +2922,35 @@ public:
     */
     wxMouseCaptureLostEvent(wxWindowID windowId = 0);
 };
+
+
+
+class wxDisplayChangedEvent : public wxEvent
+{
+public:
+    wxDisplayChangedEvent();
+};
+
+
+class wxPaletteChangedEvent : public wxEvent
+{
+public:
+    wxPaletteChangedEvent(wxWindowID winid = 0);
+
+    void SetChangedWindow(wxWindow* win);
+    wxWindow* GetChangedWindow() const;
+};
+
+
+class wxQueryNewPaletteEvent : public wxEvent
+{
+public:
+    wxQueryNewPaletteEvent(wxWindowID winid = 0);
+    
+    void SetPaletteRealized(bool realized);
+    bool GetPaletteRealized();
+};
+
 
 
 
@@ -3168,45 +3202,45 @@ public:
     @event{EVT_SCROLL(func)}
         Process all scroll events.
     @event{EVT_SCROLL_TOP(func)}
-        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
     @event{EVT_SCROLL_BOTTOM(func)}
-        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
     @event{EVT_SCROLL_LINEUP(func)}
-        Process wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up events.
     @event{EVT_SCROLL_LINEDOWN(func)}
-        Process wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down events.
     @event{EVT_SCROLL_PAGEUP(func)}
-        Process wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up events.
     @event{EVT_SCROLL_PAGEDOWN(func)}
-        Process wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
     @event{EVT_SCROLL_THUMBTRACK(func)}
-        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the
+        Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent as the
         user drags the thumbtrack).
     @event{EVT_SCROLL_THUMBRELEASE(func)}
-        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLL_THUMBRELEASE thumb release events.
     @event{EVT_SCROLL_CHANGED(func)}
-        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+        Process @c wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
     @event{EVT_COMMAND_SCROLL(id, func)}
         Process all scroll events.
     @event{EVT_COMMAND_SCROLL_TOP(id, func)}
-        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
     @event{EVT_COMMAND_SCROLL_BOTTOM(id, func)}
-        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
     @event{EVT_COMMAND_SCROLL_LINEUP(id, func)}
-        Process wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up events.
     @event{EVT_COMMAND_SCROLL_LINEDOWN(id, func)}
-        Process wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down events.
     @event{EVT_COMMAND_SCROLL_PAGEUP(id, func)}
-        Process wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up events.
     @event{EVT_COMMAND_SCROLL_PAGEDOWN(id, func)}
-        Process wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
     @event{EVT_COMMAND_SCROLL_THUMBTRACK(id, func)}
-        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent
+        Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events (frequent events sent
         as the user drags the thumbtrack).
     @event{EVT_COMMAND_SCROLL_THUMBRELEASE(func)}
-        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+        Process @c wxEVT_SCROLL_THUMBRELEASE thumb release events.
     @event{EVT_COMMAND_SCROLL_CHANGED(func)}
-        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+        Process @c wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
     @endEventTable
 
     @library{wxcore}
@@ -3233,6 +3267,10 @@ public:
         Returns the position of the scrollbar.
     */
     int GetPosition() const;
+
+    
+    void SetOrientation(int orient);
+    void SetPosition(int pos);    
 };
 
 /**
@@ -3286,21 +3324,6 @@ public:
         Constructor.
     */
     wxIdleEvent();
-
-    /**
-        Returns @true if it is appropriate to send idle events to this window.
-
-        This function looks at the mode used (see wxIdleEvent::SetMode),
-        and the wxWS_EX_PROCESS_IDLE style in @a window to determine whether idle
-        events should be sent to this window now.
-
-        By default this will always return @true because the update mode is initially
-        wxIDLE_PROCESS_ALL. You can change the mode to only send idle events to
-        windows with the wxWS_EX_PROCESS_IDLE extra window style set.
-
-        @see SetMode()
-    */
-    static bool CanSend(wxWindow* window);
 
     /**
         Static function returning a value specifying how wxWidgets will send idle
@@ -3694,7 +3717,7 @@ public:
     /**
         Constructor.
     */
-    wxMenuEvent(wxEventType id = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
 
     /**
         Returns the menu which is being opened or closed. This method should only be
@@ -3818,6 +3841,8 @@ public:
 
     A move event holds information about wxTopLevelWindow move change events.
 
+    These events are currently only generated by wxMSW port.
+
     @beginEventTable{wxMoveEvent}
     @event{EVT_MOVE(func)}
         Process a @c wxEVT_MOVE event, which is generated when a window is moved.
@@ -3846,6 +3871,10 @@ public:
         Returns the position of the window generating the move change event.
     */
     wxPoint GetPosition() const;
+
+    wxRect GetRect() const;
+    void SetRect(const wxRect& rect);
+    void SetPosition(const wxPoint& pos);    
 };
 
 
@@ -3893,6 +3922,10 @@ public:
         such as wxFrame to find the size available for the window contents.
     */
     wxSize GetSize() const;
+    void SetSize(wxSize size);
+
+    wxRect GetRect() const;
+    void SetRect(wxRect rect);
 };
 
 
@@ -3980,6 +4013,8 @@ typedef int wxEventType;
     no type assigned.
 */
 wxEventType wxEVT_NULL;
+
+wxEventType wxEVT_ANY;
 
 /**
     Generates a new unique event type.
@@ -4172,6 +4207,131 @@ void wxPostEvent(wxEvtHandler* dest, const wxEvent& event);
         ownership of it.
  */
 void wxQueueEvent(wxEvtHandler* dest, wxEvent *event);
+
+
+
+wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
+wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
+wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
+wxEventType wxEVT_COMMAND_LISTBOX_SELECTED;
+wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
+wxEventType wxEVT_COMMAND_MENU_SELECTED;
+wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
+wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
+wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
+wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED;
+wxEventType wxEVT_COMMAND_VLBOX_SELECTED;
+wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
+wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
+wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
+wxEventType wxEVT_COMMAND_TOOL_ENTER;
+wxEventType wxEVT_COMMAND_COMBOBOX_DROPDOWN;
+wxEventType wxEVT_COMMAND_COMBOBOX_CLOSEUP;
+wxEventType wxEVT_COMMAND_THREAD;
+wxEventType wxEVT_LEFT_DOWN;
+wxEventType wxEVT_LEFT_UP;
+wxEventType wxEVT_MIDDLE_DOWN;
+wxEventType wxEVT_MIDDLE_UP;
+wxEventType wxEVT_RIGHT_DOWN;
+wxEventType wxEVT_RIGHT_UP;
+wxEventType wxEVT_MOTION;
+wxEventType wxEVT_ENTER_WINDOW;
+wxEventType wxEVT_LEAVE_WINDOW;
+wxEventType wxEVT_LEFT_DCLICK;
+wxEventType wxEVT_MIDDLE_DCLICK;
+wxEventType wxEVT_RIGHT_DCLICK;
+wxEventType wxEVT_SET_FOCUS;
+wxEventType wxEVT_KILL_FOCUS;
+wxEventType wxEVT_CHILD_FOCUS;
+wxEventType wxEVT_MOUSEWHEEL;
+wxEventType wxEVT_AUX1_DOWN;
+wxEventType wxEVT_AUX1_UP;
+wxEventType wxEVT_AUX1_DCLICK;
+wxEventType wxEVT_AUX2_DOWN;
+wxEventType wxEVT_AUX2_UP;
+wxEventType wxEVT_AUX2_DCLICK;
+wxEventType wxEVT_CHAR;
+wxEventType wxEVT_CHAR_HOOK;
+wxEventType wxEVT_NAVIGATION_KEY;
+wxEventType wxEVT_KEY_DOWN;
+wxEventType wxEVT_KEY_UP;
+wxEventType wxEVT_HOTKEY;
+wxEventType wxEVT_SET_CURSOR;
+wxEventType wxEVT_SCROLL_TOP;
+wxEventType wxEVT_SCROLL_BOTTOM;
+wxEventType wxEVT_SCROLL_LINEUP;
+wxEventType wxEVT_SCROLL_LINEDOWN;
+wxEventType wxEVT_SCROLL_PAGEUP;
+wxEventType wxEVT_SCROLL_PAGEDOWN;
+wxEventType wxEVT_SCROLL_THUMBTRACK;
+wxEventType wxEVT_SCROLL_THUMBRELEASE;
+wxEventType wxEVT_SCROLL_CHANGED;
+wxEventType wxEVT_SPIN_UP;
+wxEventType wxEVT_SPIN_DOWN;
+wxEventType wxEVT_SPIN;
+wxEventType wxEVT_SCROLLWIN_TOP;
+wxEventType wxEVT_SCROLLWIN_BOTTOM;
+wxEventType wxEVT_SCROLLWIN_LINEUP;
+wxEventType wxEVT_SCROLLWIN_LINEDOWN;
+wxEventType wxEVT_SCROLLWIN_PAGEUP;
+wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
+wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
+wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
+wxEventType wxEVT_SIZE;
+wxEventType wxEVT_MOVE;
+wxEventType wxEVT_CLOSE_WINDOW;
+wxEventType wxEVT_END_SESSION;
+wxEventType wxEVT_QUERY_END_SESSION;
+wxEventType wxEVT_ACTIVATE_APP;
+wxEventType wxEVT_ACTIVATE;
+wxEventType wxEVT_CREATE;
+wxEventType wxEVT_DESTROY;
+wxEventType wxEVT_SHOW;
+wxEventType wxEVT_ICONIZE;
+wxEventType wxEVT_MAXIMIZE;
+wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
+wxEventType wxEVT_MOUSE_CAPTURE_LOST;
+wxEventType wxEVT_PAINT;
+wxEventType wxEVT_ERASE_BACKGROUND;
+wxEventType wxEVT_NC_PAINT;
+wxEventType wxEVT_MENU_OPEN;
+wxEventType wxEVT_MENU_CLOSE;
+wxEventType wxEVT_MENU_HIGHLIGHT;
+wxEventType wxEVT_CONTEXT_MENU;
+wxEventType wxEVT_SYS_COLOUR_CHANGED;
+wxEventType wxEVT_DISPLAY_CHANGED;
+wxEventType wxEVT_QUERY_NEW_PALETTE;
+wxEventType wxEVT_PALETTE_CHANGED;
+wxEventType wxEVT_JOY_BUTTON_DOWN;
+wxEventType wxEVT_JOY_BUTTON_UP;
+wxEventType wxEVT_JOY_MOVE;
+wxEventType wxEVT_JOY_ZMOVE;
+wxEventType wxEVT_DROP_FILES;
+wxEventType wxEVT_INIT_DIALOG;
+wxEventType wxEVT_IDLE;
+wxEventType wxEVT_UPDATE_UI;
+wxEventType wxEVT_SIZING;
+wxEventType wxEVT_MOVING;
+wxEventType wxEVT_MOVE_START;
+wxEventType wxEVT_MOVE_END;
+wxEventType wxEVT_HIBERNATE;
+wxEventType wxEVT_COMMAND_TEXT_COPY;
+wxEventType wxEVT_COMMAND_TEXT_CUT;
+wxEventType wxEVT_COMMAND_TEXT_PASTE;
+wxEventType wxEVT_COMMAND_LEFT_CLICK;
+wxEventType wxEVT_COMMAND_LEFT_DCLICK;
+wxEventType wxEVT_COMMAND_RIGHT_CLICK;
+wxEventType wxEVT_COMMAND_RIGHT_DCLICK;
+wxEventType wxEVT_COMMAND_SET_FOCUS;
+wxEventType wxEVT_COMMAND_KILL_FOCUS;
+wxEventType wxEVT_COMMAND_ENTER;
+wxEventType wxEVT_HELP;
+wxEventType wxEVT_DETAILED_HELP;
+wxEventType wxEVT_COMMAND_TEXT_UPDATED;
+wxEventType wxEVT_COMMAND_TOOL_CLICKED;
+
+
 
 //@}
 

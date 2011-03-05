@@ -27,8 +27,6 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText,wxControl)
-
 wxStaticText::wxStaticText()
 {
 }

@@ -34,9 +34,11 @@
     #include "wx/valtext.h"
 #endif
 
+#include "wx/calctrl.h"
+#include "wx/combo.h"
+
 #include "wx/datectrl.h"
 #include "wx/generic/datectrl.h"
-
 
 // ----------------------------------------------------------------------------
 // constants
@@ -374,6 +376,16 @@ bool wxDatePickerCtrlGeneric::Destroy()
 wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 {
     return m_combo->GetBestSize();
+}
+
+wxWindowList wxDatePickerCtrlGeneric::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    if (m_combo)
+        parts.push_back(m_combo);
+    if (m_popup)
+        parts.push_back(m_popup);
+    return parts;
 }
 
 // ----------------------------------------------------------------------------

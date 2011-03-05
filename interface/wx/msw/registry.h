@@ -35,30 +35,28 @@
     @b Example:
 
     @code
-    wxRegKey *key = new wxRegKey("HKEY_LOCAL_MACHINE\\Software\\MyKey");
-
-    // Create the key if it does not exist.
-    if( !key->Exists() )
-        key->Create();
+    // This assume that the key already exists, use HasSubKey() to check
+    // for the key existence if necessary.
+    wxRegKey key(wxRegKey::HKLM, "Software\\MyKey");
 
     // Create a new value "MYVALUE" and set it to 12.
-    key->SetValue("MYVALUE", 12);
+    key.SetValue("MyValue", 12);
 
     // Read the value back.
     long value;
-    key->QueryValue("MYVALUE", &value);
+    key.QueryValue("MyValue", &value);
     wxMessageBox(wxString::Format("%d", value), "Registry Value", wxOK);
 
     // Get the number of subkeys and enumerate them.
     size_t subkeys;
-    key->GetKeyInfo(&subkeys, NULL, NULL, NULL);
+    key.GetKeyInfo(&subkeys, NULL, NULL, NULL);
 
     wxString key_name;
-    key->GetFirstKey(key_name, 1);
+    key.GetFirstKey(key_name, 1);
     for(int i = 0; i < subkeys; i++)
     {
         wxMessageBox(key_name, "Subkey Name", wxOK);
-        key->GetNextKey(key_name, 1);
+        key.GetNextKey(key_name, 1);
     }
     @endcode
 
@@ -71,20 +69,27 @@ class wxRegKey
 public:
     /**
         Default constructor, initializes to @c HKEY_CLASSES_ROOT.
+
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey();
+    wxRegKey(WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
         The constructor to set the full name of the key.
+
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey(const wxString& strKey);
+    wxRegKey(const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
         The constructor to set the full name of the key using one of the
         standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD, HKCC or HKDD.
+        The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
-    wxRegKey(StdKey keyParent, const wxString& strKey);
+    wxRegKey(StdKey keyParent, const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
-        The constructor to set the full name of the key under a previously created
-        parent.
+        The constructor to set the full name of the key under a previously
+        created parent. The registry view is inherited from the parent.
     */
     wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
 
@@ -130,6 +135,33 @@ public:
     Type_Resource_list,       ///< Resource list in the resource map
     Type_Full_resource_descriptor,  ///< Resource list in the hardware description
     Type_Resource_requirements_list ///<
+    };
+
+    /**
+        Used to determine how the registry will be viewed, either as
+        32-bit or 64-bit.
+
+        @since 2.9.2
+    */
+    enum WOW64ViewMode
+    {
+        /**
+            Uses 32-bit registry for 32-bit applications and
+            64-bit registry for 64-bit ones.
+        */
+        WOW64ViewMode_Default,
+
+        /**
+            Can be used in 64-bit apps to access the 32-bit registry,
+            has no effect (i.e. treated as default) in 32-bit apps.
+        */
+        WOW64ViewMode_32,
+
+        /**
+            Can be used in 32-bit apps to access the 64-bit registry,
+            has no effect (i.e. treated as default) in 64-bit apps.
+        */
+        WOW64ViewMode_64
     };
 
     /**
@@ -223,6 +255,15 @@ public:
         Gets the name of the registry key.
     */
     wxString GetName(bool bShortPrefix = true) const;
+
+    /**
+        Retrieves the registry view used by this key.
+
+        @since 2.9.2
+
+        @return The registry view given at the object's construction.
+    */
+    WOW64ViewMode GetView() const { return m_viewMode; }
 
     /**
         Gets the next key. Returns @true if successful.

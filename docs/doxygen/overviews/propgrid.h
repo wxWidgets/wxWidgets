@@ -39,6 +39,7 @@ should carefully read final section in @ref propgrid_compat.
 @li @ref propgrid_validating
 @li @ref propgrid_populating
 @li @ref propgrid_cellrender
+@li @ref propgrid_keyhandling
 @li @ref propgrid_customizing
 @li @ref propgrid_usage2
 @li @ref propgrid_subclassing
@@ -741,6 +742,53 @@ wxPGProperty::SetCell() for this purpose.
 
 In addition, it is possible to control these characteristics for
 wxPGChoices list items. See wxPGChoices class reference for more info.
+
+@section propgrid_keyhandling Customizing Keyboard Handling
+
+There is probably one preference for keyboard handling for every developer
+out there, and as a conveniency control wxPropertyGrid tries to cater for
+that. By the default arrow keys are used for navigating between properties,
+and TAB key is used to move focus between the property editor and the
+first column. When the focus is in the editor, arrow keys usually no longer
+work for navigation since they are consumed by the editor.
+
+There are mainly two functions which you can use this customize things,
+wxPropertyGrid::AddActionTrigger() and wxPropertyGrid::DedicateKey().
+First one can be used to set a navigation event to occur on a specific key
+press and the second is used to divert a key from property editors, making it
+possible for the grid to use keys normally consumed by the focused editors.
+
+For example, let's say you want to have an ENTER-based editing scheme. That
+is, editor is focused on ENTER press and the next property is selected when
+the user finishes editing and presses ENTER again. Code like this would
+accomplish the task:
+
+@code
+    // Have property editor focus on Enter
+    propgrid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
+    
+    // Have Enter work as action trigger even when editor is focused
+    propgrid->DedicateKey( WXK_RETURN );
+    
+    // Let Enter also navigate to the next property
+    propgrid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+
+@endcode
+
+wxPG_ACTION_EDIT is prioritized above wxPG_ACTION_NEXT_PROPERTY so that the
+above code can work without conflicts. For a complete list of available
+actions, see @ref propgrid_keyboard_actions.
+
+Here's another trick. Normally the up and down cursor keys are consumed by
+the focused wxTextCtrl editor and as such can't be used for navigating between
+properties when that editor is focused. However, using DedicateKey() we can
+change this so that instead of the cursor keys moving the caret inside the
+wxTextCtrl, they navigate between adjacent properties. As such:
+
+@code
+    propgrid->DedicateKey(WXK_UP);
+    propgrid->DedicateKey(WXK_DOWN);
+@endcode
 
 
 @section propgrid_customizing Customizing Properties (without sub-classing)

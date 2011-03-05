@@ -57,6 +57,7 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
     friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 public:
     wxBitmapRefData(int width , int height , int depth);
+    wxBitmapRefData(CGImageRef image);
     wxBitmapRefData();
     wxBitmapRefData(const wxBitmapRefData &tocopy);
 
@@ -111,6 +112,7 @@ public:
     int           GetBytesPerRow() const { return m_bytesPerRow; }
     private :
     bool Create(int width , int height , int depth);
+    bool Create( CGImageRef image );
     void Init();
 
     int           m_width;
@@ -278,6 +280,53 @@ wxBitmapRefData::wxBitmapRefData( int w , int h , int d )
 {
     Init() ;
     Create( w , h , d ) ;
+}
+
+wxBitmapRefData::wxBitmapRefData(CGImageRef image)
+{
+    Init();
+    Create( image );
+}    
+// code from Technical Q&A QA1509
+
+bool wxBitmapRefData::Create(CGImageRef image)
+{
+    if ( image != NULL )
+    {
+        m_width = CGImageGetWidth(image);
+        m_height = CGImageGetHeight(image);
+        m_depth = 32;
+        m_hBitmap = NULL;
+        
+        m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
+        size_t size = m_bytesPerRow * m_height ;
+        void* data = m_memBuf.GetWriteBuf( size ) ;
+        if ( data != NULL )
+        {
+            memset( data , 0 , size ) ;
+            m_memBuf.UngetWriteBuf( size ) ;
+            CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
+            if ( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipLast || alpha == kCGImageAlphaNoneSkipLast )
+            {
+                m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
+            }
+            else 
+            {
+                m_hasAlpha = true;
+                m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst );
+            }
+            CGRect rect = {{0,0},{m_width,m_height}}; 
+            CGContextDrawImage(m_hBitmap, rect, image);
+            
+            wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+            CGContextTranslateCTM( m_hBitmap, 0,  m_height );
+            CGContextScaleCTM( m_hBitmap, 1, -1 );
+        } /* data != NULL */
+    }
+    m_ok = ( m_hBitmap != NULL ) ;
+    
+    return m_ok ;
+    
 }
 
 bool wxBitmapRefData::Create( int w , int h , int d )
@@ -965,6 +1014,11 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
+wxBitmap::wxBitmap(CGImageRef image)
+{
+    (void) Create(image);
+}
+
 wxGDIRefData* wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
@@ -1109,6 +1163,16 @@ bool wxBitmap::Create(int w, int h, int d)
 
     m_refData = new wxBitmapRefData( w , h , d );
 
+    return M_BITMAPDATA->IsOk() ;
+}
+
+
+bool wxBitmap::Create(CGImageRef image)
+{
+    UnRef();
+    
+    m_refData = new wxBitmapRefData( image );
+    
     return M_BITMAPDATA->IsOk() ;
 }
 
@@ -1654,6 +1718,88 @@ WXHBITMAP wxMask::GetHBITMAP() const
 // Standard Handlers
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxBundleResourceHandler: public wxBitmapHandler
+{
+    DECLARE_ABSTRACT_CLASS(wxPNGResourceHandler)
+    
+public:
+    inline wxBundleResourceHandler()
+    {
+    };
+    
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight);
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxBundleResourceHandler, wxBitmapHandler);
+
+class WXDLLEXPORT wxPNGResourceHandler: public wxBundleResourceHandler
+{
+    DECLARE_DYNAMIC_CLASS(wxPNGResourceHandler)
+    
+public:
+    inline wxPNGResourceHandler()
+    {
+        SetName(wxT("PNG resource"));
+        SetExtension("PNG");
+        SetType(wxBITMAP_TYPE_PNG_RESOURCE);
+    };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBundleResourceHandler)
+
+class WXDLLEXPORT wxJPEGResourceHandler: public wxBundleResourceHandler
+{
+    DECLARE_DYNAMIC_CLASS(wxPNGResourceHandler)
+    
+public:
+    inline wxJPEGResourceHandler()
+    {
+        SetName(wxT("JPEG resource"));
+        SetExtension("JPEG");
+        SetType(wxBITMAP_TYPE_JPEG_RESOURCE);
+    };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler)
+
+bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
+                                     const wxString& name,
+                                     wxBitmapType WXUNUSED(type),
+                                     int WXUNUSED(desiredWidth),
+                                     int WXUNUSED(desiredHeight))
+{
+    wxString ext = GetExtension().Lower();
+    wxCFStringRef resname(name);
+    wxCFStringRef restype(ext);
+    
+    wxCFRef<CFURLRef> imageURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+    
+    if ( imageURL.get() != NULL )
+    {
+        // Create the data provider object
+        wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
+        CGImageRef image = NULL;
+        
+        if ( ext == "jpeg" )
+            image = CGImageCreateWithJPEGDataProvider (provider, NULL, true,
+                                                   kCGRenderingIntentDefault);
+        else if ( ext == "png" )
+            image = CGImageCreateWithPNGDataProvider (provider, NULL, true,
+                                                       kCGRenderingIntentDefault);
+        if ( image != NULL )
+        {
+            bitmap->Create(image);
+            CGImageRelease(image);
+        }
+    }
+        
+    return false ;
+}
+
 #if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
 
 class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
@@ -1713,9 +1859,11 @@ void wxBitmap::InitStandardHandlers()
 #if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
     AddHandler( new wxPICTResourceHandler ) ;
 #endif
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
     AddHandler( new wxICONResourceHandler ) ;
 #endif
+    AddHandler( new wxPNGResourceHandler );
+    AddHandler( new wxJPEGResourceHandler );
 }
 
 // ----------------------------------------------------------------------------

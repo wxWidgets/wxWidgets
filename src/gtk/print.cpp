@@ -2308,8 +2308,14 @@ void wxGtkPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        m_previewPrintout->SetPPIScreen(wxGetDisplayPPI());
-        m_previewPrintout->SetPPIPrinter( m_resolution, m_resolution );
+        const wxSize screenPPI = wxGetDisplayPPI();
+        int logPPIScreenX = screenPPI.GetWidth();
+        int logPPIScreenY = screenPPI.GetHeight();
+        int logPPIPrinterX = m_resolution;
+        int logPPIPrinterY = m_resolution;
+
+        m_previewPrintout->SetPPIScreen( logPPIScreenX, logPPIScreenY );
+        m_previewPrintout->SetPPIPrinter( logPPIPrinterX, logPPIPrinterY );
 
         // Get width and height in points (1/72th of an inch)
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
@@ -2336,8 +2342,8 @@ void wxGtkPrintPreview::DetermineScaling()
         m_previewPrintout->SetPaperRectPixels(wxRect(0, 0, m_pageWidth, m_pageHeight));
 
         // At 100%, the page should look about page-size on the screen.
-        m_previewScaleX = 0.8 * 72.0 / (double)m_resolution;
-        m_previewScaleY = m_previewScaleX;
+        m_previewScaleX = float(logPPIScreenX) / logPPIPrinterX;
+        m_previewScaleY = float(logPPIScreenY) / logPPIPrinterY;
     }
 }
 

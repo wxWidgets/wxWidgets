@@ -355,7 +355,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 
     if (is_dir)
     {
-        if (m_Path.length() > 0 && m_Path.Last() != wxT('/') && m_Path.Last() != wxT(':'))
+        if (!m_Path.empty() && m_Path.Last() != wxT('/') && m_Path.Last() != wxT(':'))
             m_Path << wxT('/');
     }
 

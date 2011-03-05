@@ -80,6 +80,22 @@ public:
 
 protected:
 
+    // Dummies for platform-specific wxTextEntry implementations
+#if defined(__WXUNIVERSAL__)
+    // Looks like there's nothing we need to override here
+#elif defined(__WXMOTIF__)
+    virtual WXWidget GetTextWidget() const { return NULL; }
+#elif defined(__WXGTK__)
+#if defined(__WXGTK20__)
+    virtual GtkEditable *GetEditable() const { return NULL; }
+    virtual GtkEntry *GetEntry() const { return NULL; }
+#endif
+#elif defined(__WXMAC__)
+    // Looks like there's nothing we need to override here
+#elif defined(__WXPM__)
+    virtual WXHWND GetEditHWND() const { return NULL; }
+#endif
+
     // Mandatory virtuals
     virtual void OnResize();
 

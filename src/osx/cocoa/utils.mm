@@ -49,30 +49,13 @@ void wxBell()
 
 #if wxUSE_GUI
 
-@interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
-{
-}
-
-- (void)applicationWillFinishLaunching:(NSApplication *)sender;
-
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
-- (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename;
-- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
-           withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
-- (void)applicationWillTerminate:(NSApplication *)sender;
-@end
-
 @implementation wxNSAppController
 
-- (void)applicationWillFinishLaunching:(NSApplication *)application {	
+- (void)applicationWillFinishLaunching:(NSNotification *)application {	
     wxUnusedVar(application);
 }
 
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename
 {
     wxUnusedVar(sender);
     wxCFStringRef cf(wxCFRetain(filename));
@@ -80,7 +63,7 @@ void wxBell()
     return YES;
 }
 
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
 {
     wxUnusedVar(sender);
     wxTheApp->MacNewFile() ;
@@ -130,7 +113,7 @@ void wxBell()
     return NSTerminateNow;
 }
 
-- (void)applicationWillTerminate:(NSApplication *)application {
+- (void)applicationWillTerminate:(NSNotification *)application {
     wxUnusedVar(application);
     wxCloseEvent event;
     event.SetCanVeto(false);
@@ -290,6 +273,13 @@ void wxBeginBusyCursor(const wxCursor *cursor)
 {
     if (gs_wxBusyCursorCount++ == 0)
     {
+        NSEnumerator *enumerator = [[[NSApplication sharedApplication] windows] objectEnumerator];
+        id object;
+        
+        while ((object = [enumerator nextObject])) {
+            [(NSWindow*) object disableCursorRects];
+        }        
+
         gMacStoredActiveCursor = gMacCurrentCursor;
         cursor->MacInstall();
 
@@ -306,10 +296,17 @@ void wxEndBusyCursor()
 
     if (--gs_wxBusyCursorCount == 0)
     {
-        gMacStoredActiveCursor.MacInstall();
-        gMacStoredActiveCursor = wxNullCursor;
+        NSEnumerator *enumerator = [[[NSApplication sharedApplication] windows] objectEnumerator];
+        id object;
+        
+        while ((object = [enumerator nextObject])) {
+            [(NSWindow*) object enableCursorRects];
+        }        
 
         wxSetCursor(wxNullCursor);
+
+        gMacStoredActiveCursor.MacInstall();
+        gMacStoredActiveCursor = wxNullCursor;
     }
 }
 
@@ -328,12 +325,9 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     wxSize sz = m_window->GetSize();
 
-    int left = subrect != NULL ? subrect->x : 0 ;
-    int top = subrect != NULL ? subrect->y : 0 ;
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
 
-    NSRect rect = NSMakeRect(left, top, width, height );
     NSView* view = (NSView*) m_window->GetHandle();
     [view lockFocus];
     // we use this method as other methods force a repaint, and this method can be

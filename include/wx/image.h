@@ -347,6 +347,7 @@ public:
                    bool interpolating = true, wxPoint * offset_after_rotation = NULL) const;
 
     wxImage Rotate90( bool clockwise = true ) const;
+    wxImage Rotate180() const;
     wxImage Mirror( bool horizontally = true ) const;
 
     // replace one colour with another
@@ -388,7 +389,7 @@ public:
     // automatically or using the specified colour for the mask), if it has
     // any, does nothing otherwise:
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
-    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
+    bool ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
 
@@ -560,15 +561,15 @@ public:
         }
     )
 
-    wxDEPRECATED(
-        static wxImageHandler *FindHandler(const wxString& ext, long type)
+    static wxDEPRECATED(
+        wxImageHandler *FindHandler(const wxString& ext, long type)
         {
             return FindHandler(ext, (wxBitmapType)type);
         }
     )
 
-    wxDEPRECATED(
-        static wxImageHandler *FindHandler(long imageType)
+    static wxDEPRECATED(
+        wxImageHandler *FindHandler(long imageType)
         {
             return FindHandler((wxBitmapType)imageType);
         }
@@ -589,6 +590,24 @@ protected:
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;
+
+    // Possible values for MakeEmptyClone() flags.
+    enum
+    {
+        // Create an image with the same orientation as this one. This is the
+        // default and only exists for symmetry with SwapOrientation.
+        Clone_SameOrientation = 0,
+
+        // Create an image with the same height as this image width and the
+        // same width as this image height.
+        Clone_SwapOrientation = 1
+    };
+
+    // Returns a new blank image with the same dimensions (or with width and
+    // height swapped if Clone_SwapOrientation flag is given), alpha, and mask
+    // as this image itself. This is used by several functions creating
+    // modified versions of this image.
+    wxImage MakeEmptyClone(int flags = Clone_SameOrientation) const;
 
 #if wxUSE_STREAMS
     // read the image from the specified stream updating image type if

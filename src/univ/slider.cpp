@@ -96,8 +96,6 @@ static const wxCoord SLIDER_LABEL_MARGIN = 2;
 // implementation of wxSlider
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-
 BEGIN_EVENT_TABLE(wxSlider, wxControl)
     EVT_SIZE(wxSlider::OnSize)
 END_EVENT_TABLE()
@@ -354,7 +352,7 @@ int wxSlider::GetThumbLength() const
 // wxSlider ticks
 // ----------------------------------------------------------------------------
 
-void wxSlider::SetTickFreq(int n, int WXUNUSED(dummy))
+void wxSlider::DoSetTickFreq(int n)
 {
     wxCHECK_RET (n > 0, wxT("invalid slider tick frequency"));
 

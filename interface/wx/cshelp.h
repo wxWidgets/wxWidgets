@@ -163,7 +163,7 @@ public:
 
     This class changes the cursor to a query and puts the application into a
     'context-sensitive help mode'.  When the user left-clicks on a window
-    within the specified window, a wxEVT_HELP event is sent to that control,
+    within the specified window, a @c wxEVT_HELP event is sent to that control,
     and the application may respond to it by popping up some help.
 
     For example:
@@ -232,7 +232,7 @@ public:
 
     Instances of this class may be used to add a question mark button that when
     pressed, puts the application into context-help mode. It does this by
-    creating a wxContextHelp object which itself generates a wxEVT_HELP event
+    creating a wxContextHelp object which itself generates a @c wxEVT_HELP event
     when the user clicks on a window.
 
     On Windows, you may add a question-mark icon to a dialog by use of the

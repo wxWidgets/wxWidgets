@@ -168,7 +168,6 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxPoserNSComboBox,NSComboBox)
 
 #import <AppKit/NSComboBox.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxComboBox,NSComboBox,NSTextField,NSView)

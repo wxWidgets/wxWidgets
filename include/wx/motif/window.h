@@ -138,9 +138,6 @@ public:
     void ClearUpdateRegion() { m_updateRegion.Clear(); }
     void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
 
-    // Process idle (send update events)
-    void OnInternalIdle();
-
     // post-creation activities
     void PostCreation();
 

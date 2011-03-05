@@ -46,8 +46,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent)
 // constants
 // ----------------------------------------------------------------------------
 
-// the margin between the text control and the spin
-static const wxCoord MARGIN = 2;
+// The margin between the text control and the spin: the value here is the same
+// as the margin between the spin button and its "buddy" text control in wxMSW
+// so the generic control looks similarly to the native one there, we might
+// need to use different value for the other platforms (and maybe even
+// determine it dynamically?).
+static const wxCoord MARGIN = 1;
 
 #define SPINCTRLBUT_MAX 32000 // large to avoid wrap around trouble
 
@@ -60,7 +64,7 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     ( style & wxALIGN_MASK ) | wxTE_NOHIDESEL | wxTE_PROCESS_ENTER)
+                     style & wxALIGN_MASK)
     {
         m_spin = spin;
 
@@ -77,12 +81,6 @@ public:
         m_spin = NULL;
     }
 
-    void OnTextEnter(wxCommandEvent& event)
-    {
-        if (m_spin)
-            m_spin->OnTextEnter(event);
-    }
-
     void OnChar( wxKeyEvent &event )
     {
         if (m_spin)
@@ -92,10 +90,7 @@ public:
     void OnKillFocus(wxFocusEvent& event)
     {
         if (m_spin)
-        {
-            if ( m_spin->SyncSpinToText() )
-                m_spin->DoSendEvent();
-        }
+            m_spin->OnTextLostFocus();
 
         event.Skip();
     }
@@ -107,8 +102,6 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
-    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEnter)
-
     EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
 
     EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
@@ -270,7 +263,7 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
     // position the subcontrols inside the client area
     wxSize sizeBtn = m_spinButton->GetSize();
 
-    wxCoord wText = width - sizeBtn.x;
+    wxCoord wText = width - sizeBtn.x - MARGIN;
     m_textCtrl->SetSize(x, y, wText, height);
     m_spinButton->SetSize(x + wText + MARGIN, y, wxDefaultCoord, height);
 }
@@ -363,11 +356,10 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
         DoSendEvent();
 }
 
-void wxSpinCtrlGenericBase::OnTextEnter(wxCommandEvent& event)
+void wxSpinCtrlGenericBase::OnTextLostFocus()
 {
     SyncSpinToText();
     DoSendEvent();
-    event.Skip();
 }
 
 void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
@@ -534,8 +526,6 @@ void wxSpinCtrlGenericBase::SetSelection(long from, long to)
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxSpinCtrlGenericBase)
 
 void wxSpinCtrl::DoSendEvent()
 {

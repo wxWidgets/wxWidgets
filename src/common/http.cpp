@@ -225,7 +225,7 @@ bool wxHTTP::ParseHeaders()
         if (m_lastError != wxPROTO_NOERR)
             return false;
 
-        if (line.length() == 0)
+        if ( line.empty() )
             break;
 
         wxString left_str = line.BeforeFirst(':');
@@ -312,7 +312,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
         case wxHTTP_POST:
             request = wxT("POST");
-            if ( GetHeader( wxT("Content-Length") ).IsNull() )
+            if ( GetHeader( wxT("Content-Length") ).empty() )
                 SetHeader( wxT("Content-Length"), wxString::Format( wxT("%lu"), (unsigned long)m_post_buf.Len() ) );
             break;
 
@@ -323,7 +323,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     m_http_response = 0;
 
     // If there is no User-Agent defined, define it.
-    if (GetHeader(wxT("User-Agent")).IsNull())
+    if ( GetHeader(wxT("User-Agent")).empty() )
         SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
 
     // Send authentication information

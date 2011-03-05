@@ -20,7 +20,7 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/osx/colordlg.h"
+#include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 
 // ============================================================================

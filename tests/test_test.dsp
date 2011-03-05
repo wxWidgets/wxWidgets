@@ -429,6 +429,10 @@ SOURCE=.\misc\module.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\numformatter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\interactive\output.cpp
 # End Source File
 # Begin Source File

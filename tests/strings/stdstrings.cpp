@@ -515,10 +515,12 @@ void StdStringTestCase::StdResize()
     CPPUNIT_ASSERT_EQUAL( wxT("abcABCdefDEF  "), s3 );
     CPPUNIT_ASSERT_EQUAL( wxT("abcABCdefDEFWW"), s4 );
 
+#if wxUSE_UNICODE
     wxString s =
         wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
     s.resize(3);
     CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8"), s);
+#endif // wxUSE_UNICODE
 }
 
 void StdStringTestCase::StdRiter()

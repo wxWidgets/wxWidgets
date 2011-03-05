@@ -14,11 +14,11 @@
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
-           The control will receive wxEVT_CHAR events for TAB pressed -
+           The control will receive @c wxEVT_CHAR events for TAB pressed -
            normally, TAB is used for passing to the next control in a dialog
            instead. For the control created with this style, you can still use
            Ctrl-Enter to pass to the next control from the keyboard.
@@ -43,13 +43,13 @@
     To retrieve actual search queries, use EVT_TEXT and EVT_TEXT_ENTER events,
     just as you would with wxTextCtrl.
     @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
-        Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
+        Respond to a @c wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
         search button is clicked. Note that this does not initiate a search on
         its own, you need to perform the appropriate action in your event
         handler. You may use @code event.GetString() @endcode to retrieve the
         string to search for in the event handler code.
     @event{EVT_SEARCHCTRL_CANCEL_BTN(id, func)}
-        Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the
+        Respond to a @c wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the
         cancel button is clicked.
     @endEventTable
 

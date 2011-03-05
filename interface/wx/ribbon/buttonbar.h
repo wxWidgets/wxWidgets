@@ -79,9 +79,14 @@ enum wxRibbonButtonBarButtonState
     wxRIBBON_BUTTONBAR_BUTTON_DISABLED          = 1 << 7,
     
     /**
+        The button is a toggle button which is currently in the toggled state.
+    */
+    wxRIBBON_BUTTONBAR_BUTTON_TOGGLED           = 1 << 8,
+    
+    /**
         A mask to extract button state from a combination of flags.
     */
-    wxRIBBON_BUTTONBAR_BUTTON_STATE_MASK        = 0xF8,
+    wxRIBBON_BUTTONBAR_BUTTON_STATE_MASK        = 0x1F8,
 };
 
 /**
@@ -191,6 +196,17 @@ public:
                 const wxString& help_string = wxEmptyString);
     
     /**
+        Add a toggle button to the button bar (simple version).
+        
+        @see AddButton()
+    */
+    virtual wxRibbonButtonBarButtonBase* AddToggleButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+    
+    /**
         Add a button to the button bar.
         
         @param button_id
@@ -223,6 +239,7 @@ public:
             
         @see AddDropdownButton()
         @see AddHybridButton()
+        @see AddToggleButton()
     */
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
@@ -267,13 +284,25 @@ public:
             @true to enable the button, @false to disable it.
     */
     virtual void EnableButton(int button_id, bool enable = true);
+    
+    /**
+        Set a toggle button to the checked or unchecked state.
+        
+        @param button_id
+            ID of the toggle button to manipulate.
+        @param checked
+            @true to set the button to the toggled/pressed/checked state,
+            @false to set it to the untoggled/unpressed/unchecked state.
+    */
+    virtual void ToggleButton(int button_id, bool checked);
 };
 
 /**
     @class wxRibbonButtonBarEvent
 
     Event used to indicate various actions relating to a button on a
-    wxRibbonButtonBar.
+    wxRibbonButtonBar. For toggle buttons, IsChecked() can be used to test
+    the state of the button.
 
     See wxRibbonButtonBar for available event types.
 

@@ -328,115 +328,7 @@ bool GetCursorPosWinCE(POINT* pt)
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
-#else // __WXMSW__
-#if wxUSE_EXTENDED_RTTI
-
-// windows that are created from a parent window during its Create method, eg. spin controls in a calendar controls
-// must never been streamed out separately otherwise chaos occurs. Right now easiest is to test for negative ids, as
-// windows with negative ids never can be recreated anyway
-
-bool wxWindowStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
-{
-    const wxWindow * win = dynamic_cast<const wxWindow*>(object) ;
-    if ( win && win->GetId() < 0 )
-        return false ;
-    return true ;
-}
-
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxWindow, wxWindowBase,"wx/window.h", wxWindowStreamingCallback)
-
-// make wxWindowList known before the property is used
-
-wxCOLLECTION_TYPE_INFO( wxWindow* , wxWindowList ) ;
-
-template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVariantArray &value)
-{
-    wxListCollectionToVariantArray<wxWindowList::compatibility_iterator>( theList , value ) ;
-}
-
-WX_DEFINE_FLAGS( wxWindowStyle )
-
-wxBEGIN_FLAGS( wxWindowStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-wxEND_FLAGS( wxWindowStyle )
-
-wxBEGIN_PROPERTIES_TABLE(wxWindow)
-    wxEVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
-    wxEVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
-    wxEVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
-    // Always constructor Properties first
-
-    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Id,wxWindowID, SetId, GetId, -1 /*wxID_ANY*/ , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxDefaultPosition , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
-    wxPROPERTY( Size,wxSize, SetSize, GetSize, wxDefaultSize , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
-    wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-
-    // Then all relations of the object graph
-
-    wxREADONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren , wxPROP_OBJECT_GRAPH /*flags*/ , wxT("Helpstring") , wxT("group"))
-
-   // and finally all other properties
-
-    wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
-    wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
-    wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
-    wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-#if 0
-    // possible property candidates (not in xrc) or not valid in all subclasses
-    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString )
-    wxPROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString )
-    // MaxHeight, Width , MinHeight , Width
-    // TODO switch label to control and title to toplevels
-
-    wxPROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
-    //wxPROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
-    // wxPROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
-    wxPROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
-
-
-
-#endif
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxWindow)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_DUMMY(wxWindow)
-
-#else
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif
-#endif // __WXUNIVERSAL__/__WXMSW__
+#endif // __WXUNIVERSAL__
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
@@ -1615,8 +1507,7 @@ void wxWindowMSW::OnInternalIdle()
     }
 #endif // !HAVE_TRACKMOUSEEVENT
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 }
 
 // Set this window to be the child of 'parent'.
@@ -2836,7 +2727,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
-#if 0
+
         case WM_ENTERSIZEMOVE:
             {
                 processed = HandleEnterSizeMove();
@@ -2848,7 +2739,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 processed = HandleExitSizeMove();
             }
             break;
-#endif
+
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -6545,7 +6436,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle(hwnd);
         if ( !win )
         {
-#if wxUSE_RADIOBOX
+#if wxUSE_RADIOBOX && !defined(__WXUNIVERSAL__)
             // native radiobuttons return DLGC_RADIOBUTTON here and for any
             // wxWindow class which overrides WM_GETDLGCODE processing to
             // do it as well, win would be already non NULL

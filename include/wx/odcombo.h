@@ -93,6 +93,7 @@ public:
     virtual void OnComboCharEvent( wxKeyEvent& event );
     virtual void OnComboDoubleClick();
     virtual bool LazyCreate();
+    virtual bool FindItem(const wxString& item, wxString* trueItem);
 
     // Item management
     void SetSelection( int item );
@@ -164,7 +165,6 @@ protected:
     // filter mouse move events happening outside the list box
     // move selection with cursor
     void OnMouseMove(wxMouseEvent& event);
-    void OnMouseWheel(wxMouseEvent& event);
     void OnKey(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnLeftClick(wxMouseEvent& event);
@@ -272,11 +272,11 @@ public:
 
     wxOwnerDrawnComboBox(wxWindow *parent,
                          wxWindowID id,
-                         const wxString& value,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         const wxArrayString& choices,
-                         long style,
+                         const wxString& value = wxEmptyString,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         const wxArrayString& choices = wxArrayString(),
+                         long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = wxComboBoxNameStr);
 
@@ -316,6 +316,12 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void Select(int n);
     virtual int GetSelection() const;
+
+    // Override these just to maintain consistency with virtual methods
+    // between classes.
+    virtual void Clear();
+    virtual void GetSelection(long *from, long *to) const;
+
     virtual void SetSelection(int n) { Select(n); }
 
 

@@ -29,9 +29,8 @@
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
+  EVT_SIZE(wxFrame::OnSize)
 END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 #define WX_MAC_STATUSBAR_HEIGHT 18
 
@@ -82,7 +81,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         {
             pt.x += w;
         }
-        else if ( HasFlag(wxTB_TOP) )
+        else if ( toolbar->HasFlag(wxTB_TOP) )
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
@@ -218,14 +217,12 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-void wxFrame::HandleResized( double timestampsec )
+
+void wxFrame::OnSize(wxSizeEvent& event)
 {
-    // according to the other ports we handle this within the OS level
-    // resize event, not within a wxSizeEvent
-
     PositionBars();
-
-    wxNonOwnedWindow::HandleResized( timestampsec );
+    
+    event.Skip();
 }
 
 #if wxUSE_MENUS
@@ -276,10 +273,15 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         int w, h;
         toolbar->GetSize(&w, &h);
 
-        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( toolbar->IsVertical() )
         {
             if ( x )
                 *x -= w;
+        }
+        else if ( toolbar->HasFlag( wxTB_BOTTOM ) )
+        {
+            if ( y )
+                *y -= h;
         }
         else
         {
@@ -361,7 +363,7 @@ void wxFrame::PositionToolBar()
 {
     int cw, ch;
 
-    GetSize( &cw , &ch ) ;
+    wxTopLevelWindow::DoGetClientSize( &cw , &ch );
 
     int statusX = 0 ;
     int statusY = 0 ;
@@ -369,7 +371,7 @@ void wxFrame::PositionToolBar()
 #if wxUSE_STATUSBAR
     if (GetStatusBar() && GetStatusBar()->IsShown())
     {
-        GetStatusBar()->GetClientSize(&statusX, &statusY);
+        GetStatusBar()->GetSize(&statusX, &statusY);
         ch -= statusY;
     }
 #endif
@@ -386,20 +388,25 @@ void wxFrame::PositionToolBar()
 
         tx = ty = 0 ;
         GetToolBar()->GetSize(&tw, &th);
-        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
+        if (GetToolBar()->HasFlag(wxTB_LEFT))
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
             // have the original client size.
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
-        else if (GetToolBar()->GetWindowStyleFlag() & wxTB_BOTTOM)
+        else if (GetToolBar()->HasFlag(wxTB_RIGHT))
         {
-            //FIXME: this positions the tool bar almost correctly, but still it doesn't work right yet,
-            //as 1) the space for the 'old' top toolbar is still taken up, and 2) the toolbar
-            //doesn't extend it's width to the width of the frame.
+            // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
+            // means, pretend we don't have toolbar/status bar, so we
+            // have the original client size.
+            tx = cw - tw;
+            GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
+        }
+        else if (GetToolBar()->HasFlag(wxTB_BOTTOM))
+        {
             tx = 0;
-            ty = ch - (th + statusY);
+            ty = ch - th;
             GetToolBar()->SetSize(tx, ty, cw, th, wxSIZE_NO_ADJUSTMENTS );
         }
         else

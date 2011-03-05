@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Name:        xmldemo.cpp
+// Name:        derivdlg.h
 // Purpose:     XML resources sample: A derived dialog
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
 // RCS-ID:      $Id$

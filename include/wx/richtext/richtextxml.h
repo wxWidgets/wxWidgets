@@ -94,6 +94,7 @@ public:
     wxString GetNodeContent(wxXmlNode *node);
     wxString GetParamValue(wxXmlNode *node, const wxString& param);
     wxString GetText(wxXmlNode *node, const wxString& param = wxEmptyString, bool translate = false);
+    static wxXmlNode* FindNode(wxXmlNode* node, const wxString& name);
 
 protected:
 #if wxUSE_STREAMS

@@ -39,6 +39,8 @@ public:
 
 private:
     wxQtPointer< QProgressBar > m_qtProgressBar;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);
 };
 
 #endif // _WX_QT_GAUGE_H_

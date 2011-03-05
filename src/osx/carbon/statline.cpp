@@ -20,9 +20,6 @@
     #include "wx/statbox.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
-
-
 bool wxStaticLine::Create( wxWindow *parent,
     wxWindowID id,
     const wxPoint &pos,

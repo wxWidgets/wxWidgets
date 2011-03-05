@@ -35,6 +35,8 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/image.h"
+
 #include "wx/propgrid/propgrid.h"
 
 
@@ -206,7 +208,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             {
                 text = propertyGrid->GetCommonValueLabel(cmnVal);
                 DrawText( dc, rect, 0, text );
-                if ( text.length() )
+                if ( !text.empty() )
                     return true;
             }
             return false;
@@ -258,15 +260,15 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             if ( propertyGrid->GetColumnCount() <= 2 )
             {
                 wxString unitsString = property->GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
-                if ( unitsString.length() )
+                if ( !unitsString.empty() )
                     text = wxString::Format(wxS("%s %s"), text.c_str(), unitsString.c_str() );
             }
         }
 
-        if ( text.length() == 0 )
+        if ( text.empty() )
         {
             text = property->GetHintText();
-            if ( text.length() > 0 )
+            if ( !text.empty() )
             {
                 res = true;
 
@@ -715,7 +717,7 @@ wxString wxPGProperty::GetName() const
 {
     wxPGProperty* parent = GetParent();
 
-    if ( !m_name.length() || !parent || parent->IsCategory() || parent->IsRoot() )
+    if ( m_name.empty() || !parent || parent->IsCategory() || parent->IsRoot() )
         return m_name;
 
     return m_parent->GetName() + wxS(".") + m_name;
@@ -924,7 +926,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
             (*childResults)[curChild->GetName()] = s;
 
         bool skip = false;
-        if ( (argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT) && !s.length() )
+        if ( (argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT) && s.empty() )
             skip = true;
 
         if ( !curChild->GetChildCount() || skip )
@@ -1172,7 +1174,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
                     token = text.substr(startPos,pos-startPos-1);
 
-                    if ( !token.length() )
+                    if ( token.empty() )
                         break;
 
                     const wxPGProperty* child = Item(curChild);
@@ -1848,7 +1850,7 @@ wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
         {
             const wxChar* fs = gs_propFlagToString[i];
             wxASSERT(fs);
-            if ( s.length() )
+            if ( !s.empty() )
                 s << wxS("|");
             s << fs;
         }
@@ -2097,19 +2099,23 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
         if ( imSz.y != maxSz.y )
         {
-            // Create a memory DC
+        #if wxUSE_IMAGE
+            // Here we use high-quality wxImage scaling functions available
+            wxImage img = bmp.ConvertToImage();
+            double scaleY = (double)maxSz.y / (double)imSz.y;
+            img.Rescale(((double)bmp.GetWidth())*scaleY,
+                        ((double)bmp.GetHeight())*scaleY,
+                        wxIMAGE_QUALITY_HIGH);
+            wxBitmap* bmpNew = new wxBitmap(img, 32);
+        #else
+            // This is the old, deprecated method of scaling the image
             wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
-
             wxMemoryDC dc;
             dc.SelectObject(*bmpNew);
-
-            // Scale
-            // FIXME: This is ugly - use image or wait for scaling patch.
             double scaleY = (double)maxSz.y / (double)imSz.y;
-
             dc.SetUserScale(scaleY, scaleY);
-
             dc.DrawBitmap(bmp, 0, 0);
+        #endif
 
             m_valueBitmap = bmpNew;
         }
@@ -2326,9 +2332,9 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     else
         allChildrenSpecified = true;
 
-    wxVariant childValue = list[0];
     unsigned int i;
     unsigned int n = 0;
+    wxVariant childValue = list[n];
 
     //wxLogDebug(wxT(">> %s.AdaptListToValue()"),GetBaseName().c_str());
 

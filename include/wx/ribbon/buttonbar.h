@@ -67,6 +67,12 @@ public:
                 const wxBitmap& bitmap,
                 const wxString& help_string = wxEmptyString);
 
+    virtual wxRibbonButtonBarButtonBase* AddToggleButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
@@ -82,6 +88,7 @@ public:
     virtual void ClearButtons();
     virtual bool DeleteButton(int button_id);
     virtual void EnableButton(int button_id, bool enable = true);
+    virtual void ToggleButton(int button_id, bool checked);
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     virtual bool IsSizingContinuous() const;

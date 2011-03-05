@@ -75,6 +75,7 @@
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp
             strings/iostream.cpp
+            strings/numformatter.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/tokenizer.cpp
@@ -149,6 +150,7 @@
             controls/gaugetest.cpp
             controls/gridtest.cpp
             controls/headerctrltest.cpp
+            controls/htmllboxtest.cpp
             controls/hyperlinkctrltest.cpp
             controls/itemcontainertest.cpp
             controls/label.cpp
@@ -157,7 +159,9 @@
             controls/listboxtest.cpp
             controls/listctrltest.cpp
             controls/listviewtest.cpp
+            controls/markuptest.cpp
             controls/notebooktest.cpp
+            controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
             controls/radioboxtest.cpp
@@ -173,6 +177,7 @@
             controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
+            controls/virtlistctrltest.cpp
             controls/windowtest.cpp
             events/clone.cpp
             events/propagation.cpp
@@ -180,7 +185,10 @@
             font/fonttest.cpp
             image/image.cpp
             image/rawbmp.cpp
+            html/htmlparser.cpp
             html/htmlwindow.cpp
+            menu/accelentry.cpp
+            menu/menu.cpp
             misc/guifuncs.cpp
             misc/selstoretest.cpp
             misc/garbage.cpp
@@ -192,8 +200,11 @@
              -->
             net/socket.cpp
             sizers/boxsizer.cpp
+            sizers/wrapsizer.cpp
+            validators/valnum.cpp
             window/clientsize.cpp
             window/setsize.cpp
+            xml/xrctest.cpp
         </sources>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>

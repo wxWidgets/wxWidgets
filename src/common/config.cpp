@@ -221,7 +221,15 @@ bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
     if ( !DoReadLong(key, &l) )
         return false;
 
-    wxASSERT_MSG( l == 0 || l == 1, wxT("bad bool value in wxConfig::DoReadInt") );
+    if ( l != 0 && l != 1 )
+    {
+        // Don't assert here as this could happen in the result of user editing
+        // the file directly and this not indicate a bug in the program but
+        // still complain that something is wrong.
+        wxLogWarning(_("Invalid value %ld for a boolean key \"%s\" in "
+                       "config file."),
+                     l, key);
+    }
 
     *val = l != 0;
 

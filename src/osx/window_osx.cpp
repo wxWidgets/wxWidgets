@@ -76,8 +76,6 @@
 
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
-#else
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
@@ -1117,6 +1115,11 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
     }
 }
 
+float wxWindowMac::GetContentScaleFactor() const 
+{
+    return m_peer->GetContentScaleFactor();
+}
+
 void wxWindowMac::SetLabel(const wxString& title)
 {
     if ( title == m_label )
@@ -1479,7 +1482,7 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     if ( IsTopLevel() )
         return ;
 
-    bool hasFocus = m_peer->NeedsFocusRect() && m_peer->HasFocus() ;
+    bool hasFocus = m_peer->NeedsFocusRect() && HasFocus();
 
     // back to the surrounding frame rectangle
     int tx,ty,tw,th;
@@ -1585,6 +1588,12 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
                                int range, bool refresh)
 {
 #if wxUSE_SCROLLBAR
+    // Updating scrollbars when window is being deleted is useless and
+    // currently results in asserts in client-to-screen coordinates conversion
+    // code which is used by DoUpdateScrollbarVisibility() so just skip it.
+    if ( m_isBeingDeleted )
+        return;
+
     if ( orient == wxHORIZONTAL && m_hScrollBar )
         m_hScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
     else if ( orient == wxVERTICAL && m_vScrollBar )
@@ -1677,14 +1686,6 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
 wxWindow *wxWindowBase::DoFindFocus()
 {
     return wxFindWindowFromWXWidget(wxWidgetImpl::FindFocus());
-}
-
-void wxWindowMac::OnInternalIdle()
-{
-    // This calls the UI-update mechanism (querying windows for
-    // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // Raise the window to the top of the Z order
@@ -2257,7 +2258,7 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
     }
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const
+long wxWindowMac::MacGetWXBorderSize() const
 {
     if ( IsTopLevel() )
         return 0 ;
@@ -2291,22 +2292,65 @@ long wxWindowMac::MacGetLeftBorderSize() const
     return border ;
 }
 
+long wxWindowMac::MacGetLeftBorderSize() const
+{
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+ 
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= left;
+    }
+    
+    return border;
+}
+
+
 long wxWindowMac::MacGetRightBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= right;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacGetTopBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= top;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacGetBottomBorderSize() const
 {
-    // they are all symmetric in mac themes
-    return MacGetLeftBorderSize() ;
+    // the wx borders are all symmetric in mac themes
+    long border = MacGetWXBorderSize() ;
+    
+    if ( m_peer )
+    {
+        int left, top, right, bottom;
+        m_peer->GetLayoutInset( left, top, right, bottom );
+        border -= bottom;
+    }
+    
+    return border;
 }
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )
@@ -2452,9 +2496,9 @@ bool wxWindowMac::IsShownOnScreen() const
 
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
-    bool handled = HandleWindowEvent( event ) ;
-    if ( handled && event.GetSkipped() )
-        handled = false ;
+    bool handled = false;
+    
+    // moved the ordinary key event sending AFTER the accel evaluation
 
 #if wxUSE_ACCEL
     if ( !handled && event.GetEventType() == wxEVT_KEY_DOWN)
@@ -2487,6 +2531,13 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
         }
     }
 #endif // wxUSE_ACCEL
+    
+    if ( !handled )
+    {
+        handled = HandleWindowEvent( event ) ;
+        if ( handled && event.GetSkipped() )
+            handled = false ;
+    }
 
     return handled ;
 }

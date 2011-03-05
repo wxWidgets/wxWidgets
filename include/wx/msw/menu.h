@@ -154,25 +154,6 @@ private:
 // Menu Bar (a la Windows)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMenuInfo : public wxObject
-{
-public :
-    wxMenuInfo() { m_menu = NULL; }
-    virtual ~wxMenuInfo() { }
-
-    void Create( wxMenu *menu , const wxString &title )
-    { m_menu = menu; m_title = title; }
-    wxMenu* GetMenu() const { return m_menu; }
-    wxString GetTitle() const { return m_title; }
-private :
-    wxMenu *m_menu;
-    wxString m_title;
-
-    DECLARE_DYNAMIC_CLASS(wxMenuInfo)
-};
-
-WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
-
 class WXDLLIMPEXP_CORE wxMenuBar : public wxMenuBarBase
 {
 public:
@@ -186,9 +167,6 @@ public:
     virtual ~wxMenuBar();
 
     // menubar construction
-    bool Append( wxMenuInfo *info ) { return Append( info->GetMenu() , info->GetTitle() ); }
-    const wxMenuInfoList& GetMenuInfos() const;
-
     virtual bool Append( wxMenu *menu, const wxString &title );
     virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
     virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
@@ -233,9 +211,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-
-    wxArrayString m_titles;
-    wxMenuInfoList m_menuInfos;
 
     WXHMENU       m_hMenu;
 

@@ -122,12 +122,13 @@ void wxCommandProcessor::Store(wxCommand *command)
         while (node)
         {
             wxList::compatibility_iterator next = node->GetNext();
-            delete (wxCommand *)node->GetData();
-            m_commands.Erase(node);
 
             // Make sure m_lastSavedCommand won't point to freed memory
-            if ( m_lastSavedCommand == node )
+            if ( m_lastSavedCommand && m_lastSavedCommand == node )
                 m_lastSavedCommand = wxList::compatibility_iterator();
+
+            delete (wxCommand *)node->GetData();
+            m_commands.Erase(node);
 
             node = next;
         }
@@ -136,13 +137,14 @@ void wxCommandProcessor::Store(wxCommand *command)
     if ( (int)m_commands.GetCount() == m_maxNoCommands )
     {
         wxList::compatibility_iterator firstNode = m_commands.GetFirst();
+
+        // Make sure m_lastSavedCommand won't point to freed memory
+        if ( m_lastSavedCommand && m_lastSavedCommand == firstNode )
+            m_lastSavedCommand = wxList::compatibility_iterator();
+
         wxCommand *firstCommand = (wxCommand *)firstNode->GetData();
         delete firstCommand;
         m_commands.Erase(firstNode);
-
-        // Make sure m_lastSavedCommand won't point to freed memory
-        if ( m_lastSavedCommand == firstNode )
-            m_lastSavedCommand = wxList::compatibility_iterator();
     }
 
     m_commands.Append(command);

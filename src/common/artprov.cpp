@@ -440,7 +440,12 @@ class wxArtProviderModule: public wxModule
 public:
     bool OnInit()
     {
+#if wxUSE_ARTPROVIDER_STD
         wxArtProvider::InitStdProvider();
+#endif // wxUSE_ARTPROVIDER_STD
+#if wxUSE_ARTPROVIDER_TANGO
+        wxArtProvider::InitTangoProvider();
+#endif // wxUSE_ARTPROVIDER_TANGO
         wxArtProvider::InitNativeProvider();
         return true;
     }

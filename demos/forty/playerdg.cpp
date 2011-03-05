@@ -114,7 +114,7 @@ void PlayerSelectionDialog::ButtonCallback(wxCommandEvent& event)
     if (event.GetId() == wxID_OK)
     {
         wxString name = m_textField->GetValue();
-        if (!name.IsNull() && name.Length() > 0)
+        if ( !name.empty() )
         {
             if (name.Contains(wxT('@')))
             {

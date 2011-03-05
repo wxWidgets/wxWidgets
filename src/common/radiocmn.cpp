@@ -38,9 +38,76 @@
     #include "wx/cshelp.h"
 #endif
 
+extern WXDLLEXPORT_DATA(const char) wxRadioBoxNameStr[] = "radioBox";
+
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+// TODO: wxCONSTRUCTOR
+#if 0 // wxUSE_EXTENDED_RTTI
+wxDEFINE_FLAGS( wxRadioBoxStyle )
+
+wxBEGIN_FLAGS( wxRadioBoxStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+wxFLAGS_MEMBER(wxRA_SPECIFY_COLS)
+wxFLAGS_MEMBER(wxRA_HORIZONTAL)
+wxFLAGS_MEMBER(wxRA_SPECIFY_ROWS)
+wxFLAGS_MEMBER(wxRA_VERTICAL)
+
+wxEND_FLAGS( wxRadioBoxStyle )
+
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl,"wx/radiobox.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxRadioBox)
+wxEVENT_PROPERTY( Select , wxEVT_COMMAND_RADIOBOX_SELECTED , wxCommandEvent )
+wxPROPERTY_FLAGS( WindowStyle , wxRadioBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+/*
+ selection
+ content
+ label
+ dimension
+ item
+ */
+
+#endif
+
+
+// ----------------------------------------------------------------------------
+// wxRadioBoxBase
+// ----------------------------------------------------------------------------
 
 void wxRadioBoxBase::SetMajorDim(unsigned int majorDim, long style)
 {

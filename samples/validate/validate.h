@@ -52,6 +52,9 @@ public:
     bool TransferDataToWindow();
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
+
+    wxTextCtrl *m_numericTextInt;
+    wxTextCtrl *m_numericTextDouble;
 };
 
 class MyData
@@ -71,6 +74,10 @@ public:
     // Comboboxes differ from listboxes--validators transfer
     // the string entered in the combobox's text-edit field.
     wxString m_combobox_choice;
+
+    // variables handled by wxNumericTextValidator
+    int m_intValue;
+    double m_doubleValue;
 
     bool m_checkbox_state;
     int m_radiobox_choice;

@@ -15,6 +15,8 @@
 /*!
  * Includes
  */
+
+#include "wx/richtext/richtextdialogpage.h"
 #include "wx/spinbutt.h"        // for wxSpinEvent
 
 /*!
@@ -32,7 +34,7 @@ class wxRichTextCtrl;
 
 ////@begin control identifiers
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_STYLE wxRESIZE_BORDER|wxTAB_TRAVERSAL
-#define SYMBOL_WXRICHTEXTBULLETSPAGE_TITLE wxT("")
+#define SYMBOL_WXRICHTEXTBULLETSPAGE_TITLE wxEmptyString
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_IDNAME ID_RICHTEXTBULLETSPAGE
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION wxDefaultPosition
@@ -42,10 +44,11 @@ class wxRichTextCtrl;
  * wxRichTextBulletsPage class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextBulletsPage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextBulletsPage: public wxRichTextDialogPage
 {
     DECLARE_DYNAMIC_CLASS( wxRichTextBulletsPage )
     DECLARE_EVENT_TABLE()
+    DECLARE_HELP_PROVISION()
 
 public:
     /// Constructors

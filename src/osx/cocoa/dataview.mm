@@ -24,6 +24,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
+#include "wx/stopwatch.h"
 
 // ============================================================================
 // Constants used locally
@@ -321,7 +322,6 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     );
 
     // setting the size related parameters:
-    const int width = column->GetWidthVariable();
     int resizingMask;
     if (column->IsResizeable())
     {
@@ -340,7 +340,6 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
                             : NSTableColumnNoResizing;
     }
     [nativeColumn setResizingMask:resizingMask];
-    [nativeColumn setWidth:width];
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     // setting the visibility:
@@ -1695,6 +1694,9 @@ outlineView:(NSOutlineView*)outlineView
     model->GetAttr(dvItem, colIdx, attr);
     renderer->OSXApplyAttr(attr);
 
+    // set the state (enabled/disabled) of the item
+    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
+
     // and finally do draw it
     renderer->MacRender();
 }
@@ -1942,8 +1944,130 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     [m_OutlineView addTableColumn:nativeColumn];
     if (pos != static_cast<unsigned int>([m_OutlineView numberOfColumns]-1))
         [m_OutlineView moveColumn:[m_OutlineView numberOfColumns]-1 toColumn:pos];
+
+    // set columns width now that it can be computed even for autosized columns:
+    columnPtr->SetWidth(columnPtr->GetWidthVariable());
+
     // done:
     return true;
+}
+
+void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
+{
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+    const int count = GetCount();
+    NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
+
+    class MaxWidthCalculator
+    {
+    public:
+        MaxWidthCalculator(wxCocoaOutlineView *view,
+                           NSTableColumn *column, unsigned columnIndex)
+            : m_width(0),
+              m_view(view),
+              m_column(columnIndex),
+              m_indent(0)
+        {
+            // account for indentation in the column with expander
+            if ( column == [m_view outlineTableColumn] )
+                m_indent = [m_view indentationPerLevel];
+        }
+
+        void UpdateWithWidth(int width)
+        {
+            m_width = wxMax(m_width, width);
+        }
+
+        void UpdateWithRow(int row)
+        {
+            NSCell *cell = [m_view preparedCellAtColumn:m_column row:row];
+            unsigned cellWidth = [cell cellSize].width + 1/*round the float up*/;
+
+            if ( m_indent )
+                cellWidth += m_indent * ([m_view levelForRow:row] + 1);
+
+            m_width = wxMax(m_width, cellWidth);
+        }
+
+        int GetMaxWidth() const { return m_width; }
+
+    private:
+        int m_width;
+        wxCocoaOutlineView *m_view;
+        unsigned m_column;
+        int m_indent;
+    };
+
+    MaxWidthCalculator calculator(m_OutlineView, column, pos);
+
+    if ( [column headerCell] )
+    {
+        calculator.UpdateWithWidth([[column headerCell] cellSize].width + 1/*round the float up*/);
+    }
+
+    // The code below deserves some explanation. For very large controls, we
+    // simply can't afford to calculate sizes for all items, it takes too
+    // long. So the best we can do is to check the first and the last N/2
+    // items in the control for some sufficiently large N and calculate best
+    // sizes from that. That can result in the calculated best width being too
+    // small for some outliers, but it's better to get slightly imperfect
+    // result than to wait several seconds after every update. To avoid highly
+    // visible miscalculations, we also include all currently visible items
+    // no matter what.  Finally, the value of N is determined dynamically by
+    // measuring how much time we spent on the determining item widths so far.
+
+#if wxUSE_STOPWATCH
+    int top_part_end = count;
+    static const long CALC_TIMEOUT = 20/*ms*/;
+    // don't call wxStopWatch::Time() too often
+    static const unsigned CALC_CHECK_FREQ = 100;
+    wxStopWatch timer;
+#else
+    // use some hard-coded limit, that's the best we can do without timer
+    int top_part_end = wxMin(500, count);
+#endif // wxUSE_STOPWATCH/!wxUSE_STOPWATCH
+
+    int row = 0;
+
+    for ( row = 0; row < top_part_end; row++ )
+    {
+#if wxUSE_STOPWATCH
+        if ( row % CALC_CHECK_FREQ == CALC_CHECK_FREQ-1 &&
+             timer.Time() > CALC_TIMEOUT )
+            break;
+#endif // wxUSE_STOPWATCH
+        calculator.UpdateWithRow(row);
+    }
+
+    // row is the first unmeasured item now; that's our value of N/2
+
+    if ( row < count )
+    {
+        top_part_end = row;
+
+        // add bottom N/2 items now:
+        const int bottom_part_start = wxMax(row, count - row);
+        for ( row = bottom_part_start; row < count; row++ )
+            calculator.UpdateWithRow(row);
+
+        // finally, include currently visible items in the calculation:
+        const NSRange visible = [m_OutlineView rowsInRect:[m_OutlineView visibleRect]];
+        const int first_visible = wxMax(visible.location, top_part_end);
+        const int last_visible = wxMin(first_visible + visible.length, bottom_part_start);
+
+        for ( row = first_visible; row < last_visible; row++ )
+            calculator.UpdateWithRow(row);
+
+        wxLogTrace("dataview",
+                   "determined best size from %d top, %d bottom plus %d more visible items out of %d total",
+                   top_part_end,
+                   count - bottom_part_start,
+                   wxMax(0, last_visible - first_visible),
+                   count);
+    }
+
+    [column setWidth:calculator.GetMaxWidth()];
+#endif // MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 }
 
 //
@@ -2487,6 +2611,11 @@ void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
         [(id)cell setTextColor:colText];
 }
 
+void wxDataViewRenderer::OSXApplyEnabled(bool enabled)
+{
+    [GetNativeData()->GetItemCell() setEnabled:enabled];
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 
 // ---------------------------------------------------------
@@ -2886,7 +3015,8 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
        m_title(title)
 {
     InitCommon(width, align, flags);
-    if (renderer && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (renderer && !renderer->IsCustomRenderer() &&
+        (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         renderer->SetAlignment(align);
 }
 
@@ -2900,7 +3030,8 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
       m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
     InitCommon(width, align, flags);
-    if (renderer && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (renderer && !renderer->IsCustomRenderer() &&
+        (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         renderer->SetAlignment(align);
 }
 
@@ -2924,7 +3055,8 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
 {
     m_alignment = align;
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-    if (m_renderer && (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    if (m_renderer && !m_renderer->IsCustomRenderer() &&
+        (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         m_renderer->SetAlignment(align);
 }
 
@@ -3017,8 +3149,29 @@ void wxDataViewColumn::SetTitle(const wxString& title)
 
 void wxDataViewColumn::SetWidth(int width)
 {
-    [m_NativeDataPtr->GetNativeColumnPtr() setWidth:width];
     m_width = width;
+
+    switch ( width )
+    {
+        case wxCOL_WIDTH_AUTOSIZE:
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+            if ( GetOwner() )
+            {
+                wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl*>(GetOwner()->GetPeer());
+                peer->FitColumnWidthToContent(GetOwner()->GetColumnPosition(this));
+                break;
+            }
+#endif
+            // fall through if unsupported (OSX < 10.5) or not yet settable
+
+        case wxCOL_WIDTH_DEFAULT:
+            width = wxDVC_DEFAULT_WIDTH;
+            // fall through
+
+        default:
+            [m_NativeDataPtr->GetNativeColumnPtr() setWidth:width];
+            break;
+    }
 }
 
 void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))

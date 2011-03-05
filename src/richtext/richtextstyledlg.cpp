@@ -67,6 +67,8 @@ BEGIN_EVENT_TABLE( wxRichTextStyleOrganiserDialog, wxDialog )
 
 END_EVENT_TABLE()
 
+IMPLEMENT_HELP_PROVISION(wxRichTextStyleOrganiserDialog)
+
 /*!
  * wxRichTextStyleOrganiserDialog constructors
  */
@@ -110,6 +112,7 @@ void wxRichTextStyleOrganiserDialog::Init()
     m_closeButton = NULL;
     m_bottomButtonSizer = NULL;
     m_restartNumberingCtrl = NULL;
+    m_stdButtonSizer = NULL;
     m_okButton = NULL;
     m_cancelButton = NULL;
 ////@end wxRichTextStyleOrganiserDialog member initialisation
@@ -277,22 +280,28 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
         m_restartNumberingCtrl->SetToolTip(_("Check to restart numbering."));
     m_bottomButtonSizer->Add(m_restartNumberingCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_bottomButtonSizer->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_stdButtonSizer = new wxStdDialogButtonSizer;
 
+    m_bottomButtonSizer->Add(m_stdButtonSizer, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     m_okButton = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_okButton->SetDefault();
-    m_okButton->SetHelpText(_("Click to confirm your selection."));
-    if (wxRichTextStyleOrganiserDialog::ShowToolTips())
-        m_okButton->SetToolTip(_("Click to confirm your selection."));
-    m_bottomButtonSizer->Add(m_okButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_stdButtonSizer->AddButton(m_okButton);
 
     m_cancelButton = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_cancelButton->SetHelpText(_("Click to cancel this window."));
-    if (wxRichTextStyleOrganiserDialog::ShowToolTips())
-        m_cancelButton->SetToolTip(_("Click to cancel this window."));
-    m_bottomButtonSizer->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_stdButtonSizer->AddButton(m_cancelButton);
+
+    wxButton* itemButton28 = new wxButton( itemDialog1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_stdButtonSizer->AddButton(itemButton28);
+
+    m_stdButtonSizer->Realize();
 
 ////@end wxRichTextStyleOrganiserDialog content construction
+
+    if (GetHelpId() == -1)
+    {
+        wxWindow* button = FindWindowById(wxID_HELP);
+        if (button)
+            m_stdButtonSizer->Show(button, false);
+    }
 
     if ((m_flags & wxRICHTEXT_ORGANISER_CREATE_STYLES) == 0)
     {
@@ -323,8 +332,8 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
 
     if ((m_flags & wxRICHTEXT_ORGANISER_OK_CANCEL) == 0)
     {
-        m_bottomButtonSizer->Show(m_okButton, false);
-        m_bottomButtonSizer->Show(m_cancelButton, false);
+        m_stdButtonSizer->Show(m_okButton, false);
+        m_stdButtonSizer->Show(m_cancelButton, false);
     }
     else
     {

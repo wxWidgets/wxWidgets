@@ -252,54 +252,6 @@ public:
 
 
     /**
-        @name Mac-specific functions
-    */
-    //@{
-
-    /**
-        Called in response of an "open-application" Apple event.
-        Override this to create a new document in your app.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacNewFile();
-
-    /**
-        Called in response of an "open-document" Apple event.
-
-        You need to override this method in order to open a document file after the
-        user double clicked on it or if the document file was dropped on either the
-        running application or the application icon in Finder.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacOpenFile(const wxString& fileName);
-
-    /**
-        Called in response of a "get-url" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacOpenURL(const wxString& url);
-
-    /**
-        Called in response of a "print-document" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacPrintFile(const wxString& fileName);
-
-    /**
-        Called in response of a "reopen-application" Apple event.
-
-        @onlyfor{wxosx}
-    */
-    virtual void MacReopenApp();
-
-    //@}
-
-
-    /**
         @name Callbacks for application-wide "events"
     */
     //@{
@@ -468,15 +420,21 @@ public:
     virtual int OnRun();
 
     /**
-        This function is called when an unhandled C++ exception occurs inside
-        OnRun() (the exceptions which occur during the program startup and shutdown
-        might not be caught at all). Notice that by now the main event loop has been
-        terminated and the program will exit, if you want to prevent this from happening
-        (i.e. continue running after catching an exception) you need to override
-        OnExceptionInMainLoop().
+        This function is called when an unhandled C++ exception occurs in user
+        code called by wxWidgets.
 
-        The default implementation shows information about the exception in debug build
-        but does nothing in the release build.
+        Any unhandled exceptions thrown from (overridden versions of) OnInit()
+        and OnExit() methods as well as any exceptions thrown from inside the
+        main loop and re-thrown by OnUnhandledException() will result in a call
+        to this function.
+
+        By the time this function is called, the program is already about to
+        exit and the exception can't be handled nor ignored any more, override
+        OnUnhandledException() or use explicit @c try/catch blocks around
+        OnInit() body to be able to handle the exception earlier.
+
+        The default implementation dumps information about the exception using
+        wxMessageOutputBest.
     */
     virtual void OnUnhandledException();
 
@@ -765,19 +723,6 @@ public:
     bool ProcessMessage(WXMSG* msg);
 
     /**
-        Sends idle events to a window and its children.
-        Please note that this function is internal to wxWidgets and shouldn't be used
-        by user code.
-
-        @remarks These functions poll the top-level windows, and their children,
-                 for idle event processing. If @true is returned, more OnIdle
-                 processing is requested by one or more window.
-
-        @see wxIdleEvent
-    */
-    virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-
-    /**
         Set display mode to use. This is only used in framebuffer wxWidgets
         ports (such as wxMGL or wxDFB).
     */
@@ -842,6 +787,66 @@ public:
             visual and abort the app if none is found.
     */
     void SetUseBestVisual(bool flag, bool forceTrueColour = false);
+
+
+    /**
+        @name Mac-specific functions
+    */
+    //@{
+
+    /**
+        Called in response of an "open-application" Apple event.
+        Override this to create a new document in your app.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacNewFile();
+
+    /**
+        Called in response of an "open-document" Apple event.
+
+        You need to override this method in order to open a document file after the
+        user double clicked on it or if the document file was dropped on either the
+        running application or the application icon in Finder.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacOpenFile(const wxString& fileName);
+
+    /**
+        Called in response of a "get-url" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacOpenURL(const wxString& url);
+
+    /**
+        Called in response of a "print-document" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacPrintFile(const wxString& fileName);
+
+    /**
+        Called in response of a "reopen-application" Apple event.
+
+        @onlyfor{wxosx}
+    */
+    virtual void MacReopenApp();
+
+
+    static long GetMacAboutMenuItemId();
+    static long GetMacPreferencesMenuItemId();
+    static long GetMacExitMenuItemId();
+    static wxString GetMacHelpMenuTitleName();
+
+    static void SetMacAboutMenuItemId(long val);
+    static void SetMacPreferencesMenuItemId(long val);
+    static void SetMacExitMenuItemId(long val);
+    static void SetMacHelpMenuTitleName(const wxString& val);
+
+    //@}
+
 };
 
 

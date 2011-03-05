@@ -56,8 +56,6 @@ static const int CHECK_MARK_WIDTH = 15;
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
-
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class
 // ----------------------------------------------------------------------------

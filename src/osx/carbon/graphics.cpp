@@ -798,9 +798,9 @@ void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFlo
     {
         // Start
         out[0] = stops.comps[0].red;
-        out[1] = stops.comps[1].green;
-        out[2] = stops.comps[2].blue;
-        out[3] = stops.comps[3].alpha;
+        out[1] = stops.comps[0].green;
+        out[2] = stops.comps[0].blue;
+        out[3] = stops.comps[0].alpha;
     }
     else if (f >= 1.0)
     {
@@ -1240,7 +1240,7 @@ public :
     virtual void Transform( const wxGraphicsMatrixData* matrix );
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y) const;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
     virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 private :
@@ -2756,8 +2756,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
         if (win_impl->GetWindow())
             cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
 
-        if (cgctx != 0)
-            return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        // having a cgctx being NULL is fine (will be created on demand)
+        // this is the case for all wxWindowDCs except wxPaintDC
+        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
     }
     return NULL;
 }

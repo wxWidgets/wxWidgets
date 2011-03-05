@@ -228,10 +228,9 @@ bool MyApp::OnInit()
     CreateMenuBarForFrame(frame, menuFile, m_menuEdit);
 
     frame->SetIcon(wxICON(doc));
-    frame->Centre(wxBOTH);
-    frame->Show(true);
+    frame->Centre();
+    frame->Show();
 
-    SetTopWindow(frame);
     return true;
 }
 
@@ -285,10 +284,11 @@ void MyApp::CreateMenuBarForFrame(wxFrame *frame, wxMenu *file, wxMenu *edit)
     frame->SetMenuBar(menubar);
 }
 
-wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
+wxFrame *MyApp::CreateChildFrame(wxView *view, bool isCanvas)
 {
     // create a child frame of appropriate class for the current mode
     wxFrame *subframe;
+    wxDocument *doc = view->GetDocument();
 #if wxUSE_MDI_ARCHITECTURE
     if ( GetMode() == Mode_MDI )
     {
@@ -317,7 +317,7 @@ wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
                             wxSize(300, 300)
                        );
 
-        subframe->Centre(wxBOTH);
+        subframe->Centre();
     }
 
     wxMenu *menuFile = new wxMenu;

@@ -117,54 +117,18 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #include <wtime.h>
 #endif
 
-#if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
-    #if defined(__WXPALMOS__)
+#if defined(__DJGPP__) || defined(__WINE__)
+    #include <sys/timeb.h>
+    #include <values.h>
+#endif
+
+#ifndef WX_GMTOFF_IN_TM
+    // Define it for some systems which don't (always) use configure but are
+    // known to have tm_gmtoff field.
+    #if defined(__WXPALMOS__) || defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
-    #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
-        #define WX_TIMEZONE _timezone
-    #elif defined(__MWERKS__)
-        long wxmw_timezone = 28800;
-        #define WX_TIMEZONE wxmw_timezone
-    #elif defined(__DJGPP__) || defined(__WINE__)
-        #include <sys/timeb.h>
-        #include <values.h>
-        static long wxGetTimeZone()
-        {
-            struct timeb tb;
-            ftime(&tb);
-            return tb.timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-    #elif defined(__DARWIN__)
-        #define WX_GMTOFF_IN_TM
-    #elif defined(__WXWINCE__) && defined(__VISUALC8__)
-        // _timezone is not present in dynamic run-time library
-        #if 0
-        // Solution (1): use the function equivalent of _timezone
-        static long wxGetTimeZone()
-        {
-            long t;
-            _get_timezone(& t);
-            return t;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #elif 1
-        // Solution (2): using GetTimeZoneInformation
-        static long wxGetTimeZone()
-        {
-            TIME_ZONE_INFORMATION tzi;
-            ::GetTimeZoneInformation(&tzi);
-            return tzi.Bias; // x 60
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #else
-        // Old method using _timezone: this symbol doesn't exist in the dynamic run-time library (i.e. using /MD)
-        #define WX_TIMEZONE _timezone
-        #endif
-    #else // unknown platform - try timezone
-        #define WX_TIMEZONE timezone
     #endif
-#endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
+#endif
 
 // NB: VC8 safe time functions could/should be used for wxMSW as well probably
 #if defined(__WXWINCE__) && defined(__VISUALC8__)
@@ -390,8 +354,33 @@ int GetTimeZone()
         gmtoffset = -tm.tm_gmtoff;
     }
     return (int)gmtoffset;
-#else // !WX_GMTOFF_IN_TM
+#elif defined(__DJGPP__) || defined(__WINE__)
+    struct timeb tb;
+    ftime(&tb);
+    return tb.timezone*60;
+#elif defined(__VISUALC__)
+    // We must initialize the time zone information before using it (this will
+    // be done only once internally).
+    _tzset();
+
+    // Starting with VC++ 8 timezone variable is deprecated and is not even
+    // available in some standard library version so use the new function for
+    // accessing it instead.
+    #if wxCHECK_VISUALC_VERSION(8)
+        long t;
+        _get_timezone(&t);
+        return t;
+    #else // VC++ < 8
+        return timezone;
+    #endif
+#elif defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
     return WX_TIMEZONE;
+#elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
+    return _timezone;
+#elif defined(__MWERKS__)
+    return 28800;
+#else // unknown platform -- assume it has timezone
+    return timezone;
 #endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
 }
 
@@ -533,9 +522,17 @@ wxDateTime::Tm::Tm(const struct tm& tm, const TimeZone& tz)
 
 bool wxDateTime::Tm::IsValid() const
 {
+    if ( mon == wxDateTime::Inv_Month )
+        return false;
+
+    // We need to check this here to avoid crashing in GetNumOfDaysInMonth() if
+    // somebody passed us "(wxDateTime::Month)1000".
+    wxCHECK_MSG( mon >= wxDateTime::Jan && mon < wxDateTime::Inv_Month, false,
+                 wxS("Invalid month value") );
+
     // we allow for the leap seconds, although we don't use them (yet)
     return (year != wxDateTime::Inv_Year) && (mon != wxDateTime::Inv_Month) &&
-           (mday <= GetNumOfDaysInMonth(year, mon)) &&
+           (mday > 0 && mday <= GetNumOfDaysInMonth(year, mon)) &&
            (hour < 24) && (min < 60) && (sec < 62) && (msec < 1000);
 }
 

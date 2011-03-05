@@ -39,6 +39,8 @@ public:
 
 private:
     wxQtPointer< QDialog > m_qtDialog;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
 };
 
 #endif // _WX_QT_DIALOG_H_

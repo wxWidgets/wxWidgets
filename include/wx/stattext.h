@@ -22,7 +22,7 @@
  * wxStaticText flags
  */
 #define wxST_NO_AUTORESIZE         0x0001
-#define wxST_MARKUP                0x0002
+// free 0x0002 bit
 #define wxST_ELLIPSIZE_START       0x0004
 #define wxST_ELLIPSIZE_MIDDLE      0x0008
 #define wxST_ELLIPSIZE_END         0x0010
@@ -50,47 +50,17 @@ public:
                HasFlag(wxST_ELLIPSIZE_END);
     }
 
-    // get the string without mnemonic characters ('&') and without markup
-    // (if the wxST_MARKUP style is set)
-    virtual wxString GetLabelText() const;
-
-    // set label text (mnemonics and markup, if the wxST_MARKUP style is set,
-    // will be escaped)
-    virtual void SetLabelText(const wxString& text);
-
-
-    // static utilities for markup handling
-    // (symmetric to those in wxControl about mnemonics)
-    // -------------------------------------------------
-
-    // get the string without mnemonic characters ('&') and without markup
-    // (note that markup is always removed; this function is static and cannot
-    //  check for wxST_MARKUP style presence/absence!)
-    static wxString GetLabelText(const wxString& label);
-
-    // removes the markup recognized by wxStaticText and returns the cleaned string
-    static wxString RemoveMarkup(const wxString& str);
-
-    // escapes all special symbols (<>"'&) present in the given string
-    // using the corresponding entities (&lt; &gt; &quot; &apos; &amp;)
-    static wxString EscapeMarkup(const wxString& str);
-
 protected:      // functions required for wxST_ELLIPSIZE_* support
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    // calls only RemoveMarkup() on the original label
-    // if the wxST_MARKUP style is set
-    // (but unlike GetLabelText won't remove mnemonics)
-    virtual wxString GetLabelWithoutMarkup() const;
+    // Calls Ellipsize() on the real label if necessary. Unlike GetLabelText(),
+    // keeps the mnemonics instead of removing them.
+    virtual wxString GetEllipsizedLabel() const;
 
-    // just calls RemoveMarkup() & Ellipsize() on the original label
-    // if the wxST_MARKUP & wxST_ELLIPSIZE_* styles are set
-    // (but unlike GetLabelText won't remove mnemonics)
-    virtual wxString GetEllipsizedLabelWithoutMarkup() const;
-
-    // replaces parts of the string with ellipsis if needed
+    // Replaces parts of the string with ellipsis according to the ellipsize
+    // style. Shouldn't be called if we don't have any.
     wxString Ellipsize(const wxString& label) const;
 
     // to be called when updating the size of the static text:

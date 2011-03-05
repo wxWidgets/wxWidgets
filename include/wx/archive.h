@@ -225,7 +225,7 @@ public:
         if (it.m_rep)
             it.m_rep.AddRef();
         if (m_rep)
-            m_rep.UnRef();
+            this->m_rep.UnRef();
         m_rep = it.m_rep;
         return *this;
     }

@@ -102,6 +102,7 @@ public:
     void CreateNewKey(const wxString& strName);
     void CreateNewTextValue(const wxString& strName);
     void CreateNewBinaryValue(const wxString& strName);
+    void SetRegistryView(wxRegKey::WOW64ViewMode viewMode);
 
     // information
     bool IsKeySelected() const;
@@ -119,6 +120,7 @@ private:
         TreeChildren  m_aChildren;  // array of subkeys/values
         bool          m_bKey;       // key or value?
         wxRegKey     *m_pKey;       // only may be !NULL if m_bKey == true
+        wxRegKey::WOW64ViewMode m_viewMode; // How to view the registry.
 
         // trivial accessors
         wxTreeItemId  Id()     const { return m_id;              }
@@ -135,6 +137,7 @@ private:
         bool DeleteChild(TreeNode *child);
         void DestroyChildren();
         const wxChar *FullName() const;
+        void SetRegistryView(wxRegKey::WOW64ViewMode viewMode);
 
         // get the associated key: make sure the pointer is !NULL
         wxRegKey& Key() { if ( !m_pKey ) OnExpand(); return *m_pKey; }
@@ -155,6 +158,8 @@ private:
 
     wxString     m_nameOld;           // the initial value of item being renamed
 
+    wxRegKey::WOW64ViewMode m_viewMode; // Registry view to use for keys.
+
     TreeNode *GetNode(const wxTreeEvent& event)
         { return (TreeNode *)GetItemData(event.GetItem()); }
 
@@ -163,7 +168,8 @@ public:
     TreeNode *InsertNewTreeNode(TreeNode *pParent,
         const wxString& strName,
         int idImage = RegImageList::ClosedKey,
-        const wxString *pstrValue = NULL);
+        const wxString *pstrValue = NULL,
+        wxRegKey::WOW64ViewMode viewMode = wxRegKey::WOW64ViewMode_Default);
 
     // add standard registry keys
     void AddStdKeys();
@@ -203,6 +209,8 @@ public:
 
     void OnInfo     (wxCommandEvent& event);
 
+    void OnViewChange (wxCommandEvent& event);
+
     DECLARE_EVENT_TABLE()
 
 private:
@@ -232,6 +240,10 @@ enum
     Menu_NewBinary,
     Menu_Delete,
     Menu_Info,
+    Menu_View,
+    Menu_ViewDefault,
+    Menu_View32,
+    Menu_View64,
 
     Ctrl_RegTree  = 200
 };
@@ -241,19 +253,22 @@ enum
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(RegFrame, wxFrame)
-    EVT_MENU(Menu_Test,     RegFrame::OnTest)
-    EVT_MENU(Menu_About,    RegFrame::OnAbout)
-    EVT_MENU(Menu_Quit,     RegFrame::OnQuit)
-    EVT_MENU(Menu_GoTo,     RegFrame::OnGoTo)
-    EVT_MENU(Menu_Expand,   RegFrame::OnExpand)
-    EVT_MENU(Menu_Collapse, RegFrame::OnCollapse)
-    EVT_MENU(Menu_Toggle,   RegFrame::OnToggle)
-    EVT_MENU(Menu_Refresh,  RegFrame::OnRefresh)
-    EVT_MENU(Menu_Delete,   RegFrame::OnDelete)
-    EVT_MENU(Menu_NewKey,   RegFrame::OnNewKey)
-    EVT_MENU(Menu_NewText,  RegFrame::OnNewText)
-    EVT_MENU(Menu_NewBinary,RegFrame::OnNewBinary)
-    EVT_MENU(Menu_Info,     RegFrame::OnInfo)
+    EVT_MENU(Menu_Test,        RegFrame::OnTest)
+    EVT_MENU(Menu_About,       RegFrame::OnAbout)
+    EVT_MENU(Menu_Quit,        RegFrame::OnQuit)
+    EVT_MENU(Menu_GoTo,        RegFrame::OnGoTo)
+    EVT_MENU(Menu_Expand,      RegFrame::OnExpand)
+    EVT_MENU(Menu_Collapse,    RegFrame::OnCollapse)
+    EVT_MENU(Menu_Toggle,      RegFrame::OnToggle)
+    EVT_MENU(Menu_Refresh,     RegFrame::OnRefresh)
+    EVT_MENU(Menu_Delete,      RegFrame::OnDelete)
+    EVT_MENU(Menu_NewKey,      RegFrame::OnNewKey)
+    EVT_MENU(Menu_NewText,     RegFrame::OnNewText)
+    EVT_MENU(Menu_NewBinary,   RegFrame::OnNewBinary)
+    EVT_MENU(Menu_Info,        RegFrame::OnInfo)
+    EVT_MENU(Menu_ViewDefault, RegFrame::OnViewChange)
+    EVT_MENU(Menu_View32,      RegFrame::OnViewChange)
+    EVT_MENU(Menu_View64,      RegFrame::OnViewChange)
 END_EVENT_TABLE()
 
 #if DO_REGTEST
@@ -295,6 +310,20 @@ wxMenu *CreateRegistryMenu()
     pMenuNew->Append(Menu_NewText,   wxT("&Text value"),   wxT("Create a new text value"));
     pMenuNew->Append(Menu_NewBinary, wxT("&Binary value"), wxT("Create a new binary value"));
 
+    wxMenu *pMenuView = new wxMenu;
+    pMenuView->AppendRadioItem(
+        Menu_ViewDefault,
+        wxT("&Default"),
+        wxT("Default registry view for the program environment."));
+    pMenuView->AppendRadioItem(
+        Menu_View32,
+        wxT("32-bit Registry"),
+        wxT("View 32-bit registry."));
+    pMenuView->AppendRadioItem(
+        Menu_View64,
+        wxT("64-bit Registry"),
+        wxT("View 64-bit registry."));
+
     wxMenu *pMenuReg = new wxMenu;
     pMenuReg->Append(Menu_New, wxT("&New"), pMenuNew);
     pMenuReg->Append(Menu_Delete,   wxT("&Delete..."), wxT("Delete selected key/value"));
@@ -305,6 +334,7 @@ wxMenu *CreateRegistryMenu()
     pMenuReg->Append(Menu_Toggle,   wxT("&Toggle"),    wxT("Toggle current key"));
     pMenuReg->AppendSeparator();
     pMenuReg->Append(Menu_Refresh,  wxT("&Refresh"),   wxT("Refresh the subtree"));
+    pMenuReg->Append(Menu_View,     wxT("&View"),      pMenuView);
     pMenuReg->AppendSeparator();
     pMenuReg->Append(Menu_Info,     wxT("&Properties"),wxT("Information about current selection"));
 
@@ -325,8 +355,6 @@ bool RegApp::OnInit()
     // create the main frame window and show it
     RegFrame *frame = new RegFrame(NULL, wxT("wxRegTest"), 50, 50, 600, 350);
     frame->Show(true);
-
-    SetTopWindow(frame);
 
     return true;
 }
@@ -496,6 +524,33 @@ void RegFrame::OnInfo(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
+void RegFrame::OnViewChange(wxCommandEvent& event)
+{
+#if DO_REGTEST
+    wxRegKey::WOW64ViewMode view;
+    switch ( event.GetId() )
+    {
+        case Menu_ViewDefault:
+            view = wxRegKey::WOW64ViewMode_Default;
+            break;
+
+        case Menu_View32:
+            view = wxRegKey::WOW64ViewMode_32;
+            break;
+
+        case Menu_View64:
+            view = wxRegKey::WOW64ViewMode_64;
+            break;
+
+        default:
+            wxFAIL_MSG("Unexpected event source for view change.");
+            return;
+    }
+
+    m_treeCtrl->SetRegistryView(view);
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // RegImageList
 // ----------------------------------------------------------------------------
@@ -517,10 +572,12 @@ RegImageList::RegImageList() : wxImageList(16, 16, true)
 // ----------------------------------------------------------------------------
 
 // create a new tree item and insert it into the tree
-RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(TreeNode *pParent,
-                                                      const wxString& strName,
-                                                      int idImage,
-                                                      const wxString *pstrValue)
+RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(
+    TreeNode *pParent,
+    const wxString& strName,
+    int idImage,
+    const wxString *pstrValue,
+    wxRegKey::WOW64ViewMode viewMode)
 {
     // create new item & insert it
     TreeNode *pNewNode = new TreeNode;
@@ -529,6 +586,7 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(TreeNode *pParent,
     pNewNode->m_strName = strName;
     pNewNode->m_bKey    = pstrValue == NULL;
     pNewNode->m_pKey    = NULL;
+    pNewNode->m_viewMode = viewMode;
     if (pParent)
     {
         pNewNode->m_id  = AppendItem(pParent->Id(),
@@ -574,6 +632,7 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
     // init members
     m_draggedItem = NULL;
     m_restoreStatus = false;
+    m_viewMode = wxRegKey::WOW64ViewMode_Default;
 
     // create the image list
     // ---------------------
@@ -582,7 +641,13 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
 
     // create root keys
     // ----------------
-    m_pRoot = InsertNewTreeNode(NULL, wxT("Registry Root"), RegImageList::Root);
+    m_pRoot =
+        InsertNewTreeNode(
+            NULL,
+            wxT("Registry Root"),
+            RegImageList::Root,
+            NULL,
+            m_viewMode);
 
     // create popup menu
     // -----------------
@@ -600,7 +665,12 @@ void RegTreeCtrl::AddStdKeys()
 {
     for ( unsigned int ui = 0; ui < wxRegKey::nStdKeys; ui++ )
     {
-        InsertNewTreeNode(m_pRoot, wxRegKey::GetStdKeyName(ui));
+        InsertNewTreeNode(
+            m_pRoot,
+            wxRegKey::GetStdKeyName(ui),
+            RegImageList::ClosedKey,
+            NULL,
+            m_viewMode);
     }
 }
 
@@ -930,7 +1000,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
     if ( Parent()->IsRoot() )
     {
         // we're a standard key
-        m_pKey = new wxRegKey(m_strName);
+        m_pKey = new wxRegKey(m_strName, m_viewMode);
     }
     else
     {
@@ -956,7 +1026,12 @@ bool RegTreeCtrl::TreeNode::OnExpand()
     bCont = m_pKey->GetFirstKey(str, l);
     while ( bCont )
     {
-        m_pTree->InsertNewTreeNode(this, str, RegImageList::ClosedKey);
+        m_pTree->InsertNewTreeNode(
+            this,
+            str,
+            RegImageList::ClosedKey,
+            NULL,
+            m_viewMode);
         bCont = m_pKey->GetNextKey(str, l);
 
         // we have at least this key...
@@ -1007,7 +1082,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
             icon = RegImageList::BinaryValue;
         }
 
-        m_pTree->InsertNewTreeNode(this, str, icon, &strItem);
+        m_pTree->InsertNewTreeNode(this, str, icon, &strItem, m_viewMode);
         bCont = m_pKey->GetNextValue(str, l);
 
         // we have at least this value...
@@ -1120,6 +1195,16 @@ const wxChar *RegTreeCtrl::TreeNode::FullName() const
 
         return s_strName;
     }
+}
+
+void RegTreeCtrl::TreeNode::SetRegistryView(wxRegKey::WOW64ViewMode viewMode)
+{
+    m_viewMode = viewMode;
+
+    // Update children with new view.
+    size_t nCount = m_aChildren.GetCount();
+    for (size_t n = 0; n < nCount; n++)
+        m_aChildren[n]->SetRegistryView(viewMode);
 }
 
 // ----------------------------------------------------------------------------
@@ -1274,6 +1359,13 @@ void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
 
     if ( pCurrent->Key().SetValue(strName, 0) )
         pCurrent->Refresh();
+}
+
+void RegTreeCtrl::SetRegistryView(wxRegKey::WOW64ViewMode viewMode)
+{
+    m_viewMode = viewMode;
+    m_pRoot->SetRegistryView(viewMode);
+    m_pRoot->Refresh();
 }
 
 void RegTreeCtrl::ShowProperties()

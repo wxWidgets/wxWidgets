@@ -840,6 +840,10 @@ bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 
     wxSizerItem *item = node->GetData();
     node->SetData(newitem);
+
+    if (item->IsWindow() && item->GetWindow())
+        item->GetWindow()->SetContainingSizer(NULL);
+
     delete item;
 
     return true;
@@ -1319,6 +1323,7 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
       m_vgap( vgap ),
       m_hgap( hgap )
 {
+    wxASSERT(cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
@@ -1327,6 +1332,7 @@ wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
       m_vgap( gap.GetHeight() ),
       m_hgap( gap.GetWidth() )
 {
+    wxASSERT(cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
@@ -1335,6 +1341,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
       m_vgap( vgap ),
       m_hgap( hgap )
 {
+    wxASSERT(rows >= 0 && cols >= 0);
 }
 
 wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
@@ -1343,6 +1350,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
       m_vgap( gap.GetHeight() ),
       m_hgap( gap.GetWidth() )
 {
+    wxASSERT(rows >= 0 && cols >= 0);
 }
 
 wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
@@ -2389,6 +2397,9 @@ void wxStaticBoxSizer::RecalcSizes()
         // in the wxBoxSizer::RecalcSizes() call below using coordinates relative
         // to the top-left corner of the staticbox:
         m_position.x = m_position.y = 0;
+#elif defined(__WXOSX__) && wxOSX_USE_COCOA
+        // the distance from the 'inner' content view to the embedded controls
+        m_position.x = m_position.y = 10;
 #else
         // if the wxStaticBox has childrens, then these windows must be placed
         // by the wxBoxSizer::RecalcSizes() call below using coordinates relative

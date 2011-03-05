@@ -30,6 +30,7 @@
 #include "wx/zstream.h"
 #include "wx/strconv.h"
 #include "wx/scopedptr.h"
+#include "wx/versioninfo.h"
 
 #include "expat.h" // from Expat
 
@@ -1033,6 +1034,14 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
            OutputNode(stream, GetRoot(), 0,
                       convMem.get(), convFile.get(), indentstep) &&
            OutputString(stream, wxS("\n"), convMem.get(), convFile.get());
+}
+
+/*static*/ wxVersionInfo wxXmlDocument::GetLibraryVersionInfo()
+{
+    return wxVersionInfo("expat",
+                         XML_MAJOR_VERSION,
+                         XML_MINOR_VERSION,
+                         XML_MICRO_VERSION);
 }
 
 #endif // wxUSE_XML

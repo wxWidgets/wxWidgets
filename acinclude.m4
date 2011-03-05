@@ -33,7 +33,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_INCLUDES],
 [
 ac_find_includes=
-for ac_dir in $1 /usr/include;
+for ac_dir in $1 /usr/include
   do
     if test -f "$ac_dir/$2"; then
       ac_find_includes=$ac_dir
@@ -49,7 +49,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
   ac_find_libraries=
-  for ac_dir in $1;
+  for ac_dir in $1
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then

@@ -28,6 +28,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/apptrait.h"
+#include "wx/fontmap.h"
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-program.h>
@@ -309,8 +310,24 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         // (2) if a non default locale is set, assume that the user wants his
         //     filenames in this locale too
         encName = wxLocale::GetSystemEncodingName().Upper();
+
+        // But don't consider ASCII in this case.
+        if ( !encName.empty() )
+        {
+#if wxUSE_FONTMAP
+            wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encName);
+            if ( enc == wxFONTENCODING_DEFAULT )
+#else // !wxUSE_FONTMAP
+            if ( encName == wxT("US-ASCII") )
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+            {
+                // This means US-ASCII when returned from GetEncodingFromName().
+                encName.clear();
+            }
+        }
+
         // (3) finally use UTF-8 by default
-        if (encName.empty() || encName == wxT("US-ASCII"))
+        if ( encName.empty() )
             encName = wxT("UTF-8");
         wxSetEnv(wxT("G_FILENAME_ENCODING"), encName);
     }

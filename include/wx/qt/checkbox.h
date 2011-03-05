@@ -40,6 +40,8 @@ protected:
 
 private:
     wxQtPointer< QCheckBox > m_qtCheckBox;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
 };
 
 #endif // _WX_QT_CHECKBOX_H_

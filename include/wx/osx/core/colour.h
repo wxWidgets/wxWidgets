@@ -60,7 +60,7 @@ public:
 #endif
 #if wxOSX_USE_COCOA
     wxColour(WX_NSColor color);
-    WX_NSColor OSXGetNSColor();
+    WX_NSColor OSXGetNSColor() const;
 #endif
     wxColour& operator=(CGColorRef col);
     wxColour& operator=(const wxColour& col);

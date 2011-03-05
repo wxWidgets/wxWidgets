@@ -1,5 +1,8 @@
 # makefile for libpng on OS/2 with gcc
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # Related files: pngos2.def
 
@@ -50,20 +53,20 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-png.o png.pic.o: png.h pngconf.h
-pngerror.o pngerror.pic.o: png.h pngconf.h
-pngrio.o pngrio.pic.o: png.h pngconf.h
-pngwio.o pngwio.pic.o: png.h pngconf.h
-pngmem.o pngmem.pic.o: png.h pngconf.h
-pngset.o pngset.pic.o: png.h pngconf.h
-pngget.o pngget.pic.o: png.h pngconf.h
-pngread.o pngread.pic.o: png.h pngconf.h
-pngrtran.o pngrtran.pic.o: png.h pngconf.h
-pngrutil.o pngrutil.pic.o: png.h pngconf.h
-pngtrans.o pngtrans.pic.o: png.h pngconf.h
-pngwrite.o pngwrite.pic.o: png.h pngconf.h
-pngwtran.o pngwtran.pic.o: png.h pngconf.h
-pngwutil.o pngwutil.pic.o: png.h pngconf.h
-pngpread.o pngpread.pic.o: png.h pngconf.h
+png.o png.pic.o: png.h pngconf.h pngpriv.h
+pngerror.o pngerror.pic.o: png.h pngconf.h pngpriv.h
+pngrio.o pngrio.pic.o: png.h pngconf.h pngpriv.h
+pngwio.o pngwio.pic.o: png.h pngconf.h pngpriv.h
+pngmem.o pngmem.pic.o: png.h pngconf.h pngpriv.h
+pngset.o pngset.pic.o: png.h pngconf.h pngpriv.h
+pngget.o pngget.pic.o: png.h pngconf.h pngpriv.h
+pngread.o pngread.pic.o: png.h pngconf.h pngpriv.h
+pngrtran.o pngrtran.pic.o: png.h pngconf.h pngpriv.h
+pngrutil.o pngrutil.pic.o: png.h pngconf.h pngpriv.h
+pngtrans.o pngtrans.pic.o: png.h pngconf.h pngpriv.h
+pngwrite.o pngwrite.pic.o: png.h pngconf.h pngpriv.h
+pngwtran.o pngwtran.pic.o: png.h pngconf.h pngpriv.h
+pngwutil.o pngwutil.pic.o: png.h pngconf.h pngpriv.h
+pngpread.o pngpread.pic.o: png.h pngconf.h pngpriv.h
 
 pngtest.o: png.h pngconf.h

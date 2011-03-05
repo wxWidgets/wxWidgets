@@ -38,8 +38,6 @@
 #define WIDTH_OVERHEAD_SUBTRACT 40
 #define HEIGHT_OVERHEAD 15
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
-
 void wxChoiceCallback (Widget w, XtPointer clientData,
                        XtPointer ptr);
 

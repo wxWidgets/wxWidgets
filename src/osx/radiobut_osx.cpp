@@ -16,9 +16,6 @@
 #include "wx/radiobut.h"
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-
-
 bool wxRadioButton::Create( wxWindow *parent,
     wxWindowID id,
     const wxString& label,

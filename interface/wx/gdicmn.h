@@ -266,10 +266,10 @@ public:
         This method is the opposite from Inflate(): Deflate(a, b) is equivalent
         to Inflate(-a, -b). Please refer to Inflate() for full description.
     */
-    void Deflate(wxCoord dx, wxCoord dy);
-    void Deflate(const wxSize& diff);
-    void Deflate(wxCoord diff);
-    wxRect Deflate(wxCoord dx, wxCoord dy) const;
+    wxRect& Deflate(wxCoord dx, wxCoord dy);
+    wxRect& Deflate(const wxSize& diff);
+    wxRect& Deflate(wxCoord diff);
+    wxRect  Deflate(wxCoord dx, wxCoord dy) const;
     //@}
 
     /**
@@ -374,9 +374,9 @@ public:
 
         @see Deflate()
     */
-    void Inflate(wxCoord dx, wxCoord dy);
-    void Inflate(const wxSize& diff);
-    void Inflate(wxCoord diff);
+    wxRect& Inflate(wxCoord dx, wxCoord dy);
+    wxRect& Inflate(const wxSize& diff);
+    wxRect& Inflate(wxCoord diff);
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
     //@}
 
@@ -623,7 +623,7 @@ public:
 
         @since 2.9.2
     */
-    void SetDefaults(const wxSize& sizeDefault);
+    void SetDefaults(const wxPoint& pt);
     //@}
 
     /**
@@ -640,7 +640,7 @@ public:
 /**
     Global instance of a wxPoint initialized with values (-1,-1).
 */
-wxPoint wxDefaultPosition;
+const wxPoint wxDefaultPosition;
 
 
 /**
@@ -948,7 +948,7 @@ public:
 /**
     Global instance of a wxSize object initialized to (-1,-1).
 */
-wxSize wxDefaultSize;
+const wxSize wxDefaultSize;
 
 
 

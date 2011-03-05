@@ -41,8 +41,6 @@ BEGIN_EVENT_TABLE(wxDialog,wxDialogBase)
     EVT_CLOSE   (wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
-
 void wxDialog::Init()
 {
     m_returnCode = 0;

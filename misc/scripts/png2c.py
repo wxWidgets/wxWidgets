@@ -13,8 +13,11 @@ import os.path
 import re
 import array
 
-USAGE = """png2c - Embed a PNG in a C header file (like XPM)
-Usage: png2c [file ..] Output input PNG files as C structures on stdout"""
+USAGE = """Usage: png2c [-s] [file...]
+Output input PNG files as C arrays to standard output. Used to embed PNG images
+in C code (like XPM but with full alpha channel support).
+
+  -s    embed the image size in the image names in generated code."""
 
 if len(sys.argv) < 2:
         print USAGE
@@ -22,11 +25,17 @@ if len(sys.argv) < 2:
 
 r = re.compile("^([a-zA-Z._][a-zA-Z._0-9]*)[.][pP][nN][gG]$")
 
+with_size = 0
+size_suffix = ''
 for path in sys.argv[1:]:
-        filename = os.path.basename(path)
+        if path == '-s':
+            with_size = 1
+            continue
+
+        filename = os.path.basename(path).replace('-','_')
         m = r.match(filename)
-        # Allow only filenames that make sense
-        # as C variable names
+
+        # Allow only filenames that make sense as C variable names
         if not(m):
                 print "Skipped file (unsuitable filename): " + filename
                 continue
@@ -35,9 +44,31 @@ for path in sys.argv[1:]:
         bytes = array.array('B', open(path, "rb").read())
         count = len(bytes)
 
+        # Check that it's actually a PNG to avoid problems when loading it
+        # later.
+        #
+        # Each PNG file starts with a 8 byte signature that should be followed
+        # by IHDR chunk which is always 13 bytes in length so the first 16
+        # bytes are fixed (or at least we expect them to be).
+        if bytes[0:16].tostring() != '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR':
+                print '"%s" doesn\'t seem to be a valid PNG file.' % filename
+                continue
+
+        # Try to naively get its size if necessary
+        if with_size:
+                def getInt(start):
+                        """ Convert 4 bytes in network byte order to an integer. """
+                        return 16777216*bytes[start]   + \
+                                  65536*bytes[start+1] + \
+                                    256*bytes[start+2] + \
+                                        bytes[start+3];
+
+                size_suffix = "_%dx%d" % (getInt(16), getInt(20))
+
         # Create the C header
         text = "/* %s - %d bytes */\n" \
-               "static const unsigned char %s_png[] = {\n" % (filename, count, m.group(1))
+               "static const unsigned char %s%s_png[] = {\n" % (
+                    filename, count, m.group(1), size_suffix)
 
         # Iterate the characters, we want
         # lines like:
@@ -51,10 +82,10 @@ for path in sys.argv[1:]:
                 # Then the hex data (up to 8 values per line)
                 text += "0x%02x" % (byte)
                 # Separate all but the last values
-                if (i + 1) < count:
-                        text += ", "
                 if (i % 8) == 7:
-                        text += '\n'
+                        text += ',\n'
+                elif (i + 1) < count:
+                        text += ", "
                 i += 1
 
         # Now conclude the C source

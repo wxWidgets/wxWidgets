@@ -13,7 +13,6 @@
 #define _WX_GTK_COLORDLG_H_
 
 #include "wx/dialog.h"
-#include "wx/cmndata.h"
 
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {

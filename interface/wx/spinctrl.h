@@ -17,7 +17,7 @@
     @style{wxSP_WRAP}
         The value wraps at the minimum and maximum.
     @style{wxTE_PROCESS_ENTER}
-        Indicates that the control should generate wxEVT_COMMAND_TEXT_ENTER
+        Indicates that the control should generate @c wxEVT_COMMAND_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
@@ -33,7 +33,8 @@
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
-        Generated whenever the numeric value of the spinctrl is updated
+        Process a wxEVT_COMMAND_SPINCTRL_UPDATED event, which is generated
+        whenever the numeric value of the spin control is updated.
     @endEventTable
 
     You may also use the wxSpinButton event macros, however the corresponding events

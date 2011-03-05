@@ -45,7 +45,6 @@ public:
     wxUString() { }
 
     wxUString( const wxChar32 *str )                            { assign(str); }
-    wxUString( const wxUString &str )                           { assign(str); }
     wxUString( const wxScopedU32CharBuffer &buf )                     { assign(buf); }
 
     wxUString( const char *str )                                { assign(str); }
@@ -579,8 +578,6 @@ public:
 
 
     // operator =
-    wxUString& operator=(const wxUString& s)
-        { return assign( s ); }
     wxUString& operator=(const wxString& s)
         { return assign( s ); }
     wxUString& operator=(const wxCStrData* s)

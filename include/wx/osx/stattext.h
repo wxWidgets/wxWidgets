@@ -47,6 +47,10 @@ protected :
 
   virtual wxSize DoGetBestSize() const ;
 
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };
 

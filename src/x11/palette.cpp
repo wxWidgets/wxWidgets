@@ -175,9 +175,12 @@ wxGDIRefData *wxPalette::CreateGDIRefData() const
     return new wxPaletteRefData;
 }
 
-wxGDIRefData *wxPalette::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxPalette::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxPaletteRefData(*static_cast<const wxPaletteRefData *>(data));
+    wxFAIL_MSG( wxS("Cloning palettes is not implemented in wxX11.") );
+
+    return new wxPaletteRefData;
 }
 
 int wxPalette::GetPixel(unsigned char WXUNUSED(red),

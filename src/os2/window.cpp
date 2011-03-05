@@ -170,9 +170,7 @@ static wxWindow*                    gpWinBeingCreated = NULL;
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowOS2, wxWindowBase)
-#else // __WXPM__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif // __WXUNIVERSAL__/__WXPM__
+#endif // __WXUNIVERSAL__
 
 BEGIN_EVENT_TABLE(wxWindowOS2, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowOS2::OnEraseBackground)
@@ -1089,8 +1087,6 @@ void wxWindowOS2::OnIdle(
             (void)HandleWindowEvent(rEvent);
         }
     }
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 } // end of wxWindowOS2::OnIdle
 
 //

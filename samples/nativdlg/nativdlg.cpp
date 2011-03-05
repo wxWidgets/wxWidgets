@@ -67,9 +67,6 @@ bool MyApp::OnInit(void)
   frame->panel = new wxWindow(frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400), 0, wxT("MyMainFrame"));
   frame->Show(true);
 
-  // Return the main frame window
-  SetTopWindow(frame);
-
   return true;
 }
 

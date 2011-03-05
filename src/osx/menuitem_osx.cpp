@@ -29,8 +29,6 @@ wxMenuItemImpl::~wxMenuItemImpl()
 {
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
 wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        int id,
                        const wxString& t,

@@ -22,6 +22,7 @@
 
 #include "wx/control.h"
 #include "wx/event.h"
+#include "wx/range.h"
 
 #define wxSPIN_BUTTON_NAME wxT("wxSpinButton")
 
@@ -46,6 +47,7 @@ public:
     virtual int GetValue() const = 0;
     virtual int GetMin() const { return m_min; }
     virtual int GetMax() const { return m_max; }
+    wxRange GetRange() const { return wxRange( GetMin(), GetMax() );}
 
     // operations
     virtual void SetValue(int val) = 0;
@@ -56,6 +58,7 @@ public:
         m_min = minVal;
         m_max = maxVal;
     }
+    void SetRange( const wxRange& range) { SetRange( range.GetMin(), range.GetMax()); }
 
     // is this spin button vertically oriented?
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }

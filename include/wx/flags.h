@@ -153,7 +153,9 @@ private :
     unsigned long m_data;
 };
 
-#define WX_DEFINE_FLAGS( flags ) \
+#if wxUSE_EXTENDED_RTTI
+
+#define wxDEFINE_FLAGS( flags ) \
     class WXDLLIMPEXP_BASE flags \
     {\
     public : \
@@ -161,5 +163,15 @@ private :
         long m_data ;\
         bool operator ==(const flags &rhs) const { return m_data == rhs.m_data; }\
     } ;
+
+#else
+
+#define wxDEFINE_FLAGS( flags )
+
+#endif
+
+#if WXWIN_COMPATIBILITY_2_8
+    #define WX_DEFINE_FLAGS     wxDEFINE_FLAGS
+#endif
 
 #endif

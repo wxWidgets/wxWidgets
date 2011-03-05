@@ -1,25 +1,69 @@
-wxWidgets for Mac installation
-------------------------------
-
-On MacOS X, you can download Apple's free developer tools (gcc
-and associated headers and libraries, such as the Carbon API).
-You can then use configure in a similar way to compiling
-wxWidgets on Linux (or on Windows using MinGW or Cygwin). See
-'Apple Developer Tools' below for more details on using
-configure.
-
-
-Apple Developer Tools: command line
+wxWidgets for Mac OS X installation
 -----------------------------------
 
-As in all Unix projects, you need to do something like this under MacOS X
-with the Apple Developer Tools installed:
+wxWidgets can be compiled using Apple's Carbon or Cocoa libraries.
+Carbon is the older library, and Cocoa is the more modern library.
 
-1) cd into the base dir
-2) mkdir osx-build
-3) cd osx-build
-4) ../configure (add --with-osx_cocoa for the Cocoa port)
-5) make
+In wxWidgets 2.9.x, Cocoa is the recommended library.  While Carbon is still
+supported by Apple, little new work is being done in Carbon.
+
+Most Mac OS X developers should start by downloading and installing Xcode 
+from http://developer.apple.com.  It is a free IDE from Apple that provides
+all of the tools you need for working with wxWidgets.
+
+After Xcode is installed, download either wxWidgets-{version}.tar.gz or 
+wxMac-{version}.tar.gz and then double-click on it to unpack it to create 
+a wxWidgets directory.
+
+Next use Terminal (under Applications, Utilities, Terminal) to access a command 
+prompt.  Use cd to change directories to your wxWidgets directory and execute 
+one of the following sets of commands from the wxWidgets directory
+
+---------
+
+# Build the library for Cocoa (wxWidgets 2.9.0 and later)
+mkdir build-cocoa-debug
+cd build-cocoa-debug
+../configure --enable-unicode --enable-debug --disable-shared --with-osx_cocoa
+make;cd ..
+# Build the samples and demos
+cd build-cocoa-debug/samples; make;cd ../..
+cd build-cocoa-debug/demos;   make;cd ../..
+
+---------
+
+# Build the library for Carbon
+mkdir build-carbon-debug
+cd build-carbon-debug
+../configure --enable-unicode --enable-debug --disable-shared
+make;cd ..
+# Build the samples and demos
+cd build-carbon-debug/samples;make;cd ../..
+cd build-carbon-debug/demos;  make;cd ../..
+
+---------
+
+After the compilation completes, use Finder to run the samples and demos
+  Go to build-carbon-debug/samples to experiment with the Carbon samples.
+  Go to build-carbon-debug/demos to experiment with the Carbon demos.
+  Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
+  Go to biuld-cocoa-debug/demos to experiment with the Cocoa demos.
+Double-click on the executables which have an icon showing three small squares.
+The source code for the samples is in wxWidgets/samples
+The source code for the demos is in wxWidgets/demos
+
+---------
+
+More information about building on Mac OS X is available in the wxWiki.
+Here are two useful links
+  http://wiki.wxwidgets.org/Guides_%26_Tutorials
+  http://wiki.wxwidgets.org/Development:_wxMac 
+
+---------
+
+More advanced topics are covered below.
+
+---------
 
 If you want to install the library into the system directories you'll need
 to do this as root.  The accepted way of running commands as root is to

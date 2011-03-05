@@ -93,7 +93,7 @@ public:
 
     /**
         Enable automatic checks for the connection status and sending of
-        wxEVT_DIALUP_CONNECTED/wxEVT_DIALUP_DISCONNECTED events. The interval
+        @c wxEVT_DIALUP_CONNECTED/wxEVT_DIALUP_DISCONNECTED events. The interval
         parameter is only for Unix where we do the check manually and specifies
         how often should we repeat the check (each minute by default). Under
         Windows, the notification about the change of connection status is sent

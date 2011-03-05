@@ -27,8 +27,6 @@
 
 #include <stdio.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
 
 bool wxStaticText::Create( wxWindow *parent,
     wxWindowID id,
@@ -64,11 +62,11 @@ void wxStaticText::SetLabel(const wxString& label)
     )
     {
         // leave ellipsization to the OS
-        DoSetLabel(GetLabelWithoutMarkup());
+        DoSetLabel(GetLabel());
     }
     else // not supported natively
     {
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+        DoSetLabel(GetEllipsizedLabel());
     }
 
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) &&
@@ -105,6 +103,20 @@ void wxStaticText::DoSetLabel(const wxString& label)
     m_label = RemoveMnemonics(label);
     m_peer->SetLabel(m_label , GetFont().GetEncoding() );
 }
+
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+
+bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxStaticTextBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    m_peer->SetLabelMarkup(markup);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
 
 wxString wxStaticText::DoGetLabel() const
 {

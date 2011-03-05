@@ -17,5 +17,3 @@
 #endif
 
 #include "wx/colour.h"
-
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)

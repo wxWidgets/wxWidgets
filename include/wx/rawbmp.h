@@ -317,9 +317,6 @@ struct wxPixelDataOut<wxImage>
             // the pixel format we use
             typedef wxImagePixelFormat PixelFormat;
 
-            // the type of the pixel components
-            typedef typename PixelFormat::ChannelType ChannelType;
-
             // the pixel data we're working with
             typedef
                 wxPixelDataOut<wxImage>::wxPixelDataIn<PixelFormat> PixelData;
@@ -415,10 +412,10 @@ struct wxPixelDataOut<wxImage>
             // -----------
 
             // access to individual colour components
-            ChannelType& Red() { return m_pRGB[PixelFormat::RED]; }
-            ChannelType& Green() { return m_pRGB[PixelFormat::GREEN]; }
-            ChannelType& Blue() { return m_pRGB[PixelFormat::BLUE]; }
-            ChannelType& Alpha() { return *m_pAlpha; }
+            PixelFormat::ChannelType& Red() { return m_pRGB[PixelFormat::RED]; }
+            PixelFormat::ChannelType& Green() { return m_pRGB[PixelFormat::GREEN]; }
+            PixelFormat::ChannelType& Blue() { return m_pRGB[PixelFormat::BLUE]; }
+            PixelFormat::ChannelType& Alpha() { return *m_pAlpha; }
 
             // address the pixel contents directly (always RGB, without alpha)
             //

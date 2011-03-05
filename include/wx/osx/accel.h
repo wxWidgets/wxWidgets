@@ -30,7 +30,5 @@ public:
     int GetCommand( wxKeyEvent &event );
 };
 
-// WXDLLIMPEXP_DATA_CORE(extern wxAcceleratorTable) wxNullAcceleratorTable;
-
 #endif
     // _WX_ACCEL_H_

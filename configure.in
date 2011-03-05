@@ -391,6 +391,7 @@ DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
 dnl automatic features
+DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
@@ -454,6 +455,7 @@ if test "$wxUSE_ALL_FEATURES" = "no"; then
     dnl reset all the options with default value of auto if all features are to
     dnl be disabled because we can't have an option with default value of
     dnl "auto-or-no-if-wxUSE_ALL_FEATURES-is-disabled"
+    DEFAULT_wxUSE_ARTPROVIDER_TANGO=no
     DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
@@ -900,6 +902,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOOK=no
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_MARKUP=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -927,9 +930,14 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TREECTRL=no
 fi
 
+dnl features affecting multiple controls
+WX_ARG_FEATURE(markup,      [  --enable-markup         support wxControl::SetLabelMarkup], wxUSE_MARKUP)
+
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
+WX_ARG_FEATURE(artstd,      [  --enable-artstd         use standard XPM icons in wxArtProvider], wxUSE_ARTPROVIDER_STD)
+WX_ARG_FEATURE(arttango,    [  --enable-arttango       use Tango icons in wxArtProvider], wxUSE_ARTPROVIDER_TANGO)
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
 WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
@@ -1668,11 +1676,10 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #include <stdio.h>
     ]
 )
-if test "$ac_cv_sizeof_wchar_t" != 0; then
-    wxUSE_WCHAR_T=yes
-else
-    wxUSE_WCHAR_T=no
+if test "$ac_cv_sizeof_wchar_t" = 0; then
+    AC_MSG_ERROR([wxWidgets requires wchar_t support.])
 fi
+AC_DEFINE(wxUSE_WCHAR_T)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -2753,17 +2760,6 @@ dnl ------------------------------------------------------------------------
 dnl Check for expat libraries
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_WCHAR_T" != "yes"; then
-    if test "$wxUSE_EXPAT" != "no"; then
-        AC_MSG_WARN([wxWidgets requires wchar_t to use expat, disabling])
-        wxUSE_EXPAT=no
-    fi
-    if test "$wxUSE_XML" != "no"; then
-        AC_MSG_WARN([wxWidgets requires wchar_t to use xml, disabling])
-        wxUSE_XML=no
-    fi
-fi
-
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
     AC_DEFINE(wxUSE_EXPAT)
@@ -2868,13 +2864,13 @@ if test "$USE_WIN32" = 1 ; then
     esac
 
     dnl This one is still used by some sample makefiles.
-    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
     dnl This lot we export to wx-config.  It must add the relevant
     dnl include directories at the point when they can be known.
     dnl (but are these (still) required anyway?)
-    WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+    WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
@@ -4255,50 +4251,43 @@ dnl ---------------------------------------------------------------------------
 dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
-dnl don't check for wchar_t functions if we haven't got wchar_t itself
-if test "$wxUSE_WCHAR_T" = "yes"; then
-    AC_DEFINE(wxUSE_WCHAR_T)
+dnl check for wcslen in all possible places
+WCSLEN_FOUND=0
+WCHAR_LINK=
+AC_CHECK_FUNCS(wcslen, WCSLEN_FOUND=1)
 
-    dnl check for wcslen in all possible places
-    WCSLEN_FOUND=0
-    WCHAR_LINK=
-    AC_CHECK_FUNCS(wcslen, WCSLEN_FOUND=1)
-
-    if test "$WCSLEN_FOUND" = 0; then
-        if test "$TOOLKIT" = "MSW"; then
-            AC_CHECK_LIB(msvcrt, wcslen, WCHAR_OK=1)
-        else
-            AC_CHECK_LIB(w, wcslen, [
-                            WCHAR_LINK=" -lw"
-                            WCSLEN_FOUND=1
-                        ])
-        fi
+if test "$WCSLEN_FOUND" = 0; then
+    if test "$TOOLKIT" = "MSW"; then
+        AC_CHECK_LIB(msvcrt, wcslen, WCHAR_OK=1)
+    else
+        AC_CHECK_LIB(w, wcslen, [
+                        WCHAR_LINK=" -lw"
+                        WCSLEN_FOUND=1
+                    ])
     fi
-
-    if test "$WCSLEN_FOUND" = 1; then
-        AC_DEFINE(HAVE_WCSLEN)
-    fi
-
-    AC_CHECK_FUNCS([wcsdup strnlen wcsnlen wcscasecmp wcsncasecmp])
-
-    dnl On HP-UX aCC need this define to find mbstrtowcs() &c
-    dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
-    dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
-    dnl flags when g++ is configured, it will declare it's own).
-    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
-    fi
-
-    dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
-    dnl libc versions if possible. AC_CHECK_FUNCS only checks it's in the
-    dnl library, not the header, so do a header check for mbstate_t first.
-    AC_CHECK_TYPES([mbstate_t],
-                   [AC_CHECK_FUNCS(wcsrtombs)],
-                   [],
-                   [#include <wchar.h>])
-else
-    AC_MSG_WARN([Wide character support is unavailable])
 fi
+
+if test "$WCSLEN_FOUND" = 1; then
+    AC_DEFINE(HAVE_WCSLEN)
+fi
+
+AC_CHECK_FUNCS([wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp])
+
+dnl On HP-UX aCC need this define to find mbstrtowcs() &c
+dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
+dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
+dnl flags when g++ is configured, it will declare it's own).
+if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
+    CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
+fi
+
+dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
+dnl libc versions if possible. AC_CHECK_FUNCS only checks it's in the
+dnl library, not the header, so do a header check for mbstate_t first.
+AC_CHECK_TYPES([mbstate_t],
+               [AC_CHECK_FUNCS(wcsrtombs)],
+               [],
+               [#include <wchar.h>])
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
 dnl
@@ -6784,6 +6773,10 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   USES_CONTROLS=1
 fi
 
+if test "$wxUSE_MARKUP" = "yes"; then
+  AC_DEFINE(wxUSE_MARKUP)
+fi
+
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
   USES_CONTROLS=1
@@ -7181,6 +7174,27 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
 fi
 
+if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then
+    AC_DEFINE(wxUSE_ARTPROVIDER_STD)
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "auto"; then
+    dnl Tango-based art provider is not needed in GTK-based ports as the
+    dnl native art provider completely replaces it.
+    if test "$wxUSE_GTK" != 1; then
+        dnl It also requires support for memory-mapped PNG images.
+        if test "$wxUSE_LIBPNG" != no -a \
+                "$wxUSE_IMAGE" = yes -a \
+                "$wxUSE_STREAMS" = yes; then
+            wxUSE_ARTPROVIDER_TANGO="yes"
+        fi
+    fi
+fi
+
+if test "$wxUSE_ARTPROVIDER_TANGO" = "yes"; then
+    AC_DEFINE(wxUSE_ARTPROVIDER_TANGO)
+fi
+
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dragimag"
@@ -7516,11 +7530,33 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
         PKG_CHECK_MODULES(CAIRO, cairo,
             [wx_has_graphics=1],
             [AC_MSG_WARN([Cairo library not found])]
         )
+        if test "$wx_has_graphics" = 1; then
+            dnl Check that Cairo library is new enough: wxGraphicsContext
+            dnl won't compile without cairo_push_group() and
+            dnl cairo_pop_group_to_source() which are new in 1.2.
+            save_LIBS="$LIBS"
+            LIBS="$LIBS $CAIRO_LIBS"
+            AC_CHECK_FUNCS([cairo_push_group])
+            LIBS="$save_LIBS"
+            if test "$ac_cv_func_cairo_push_group" = "no"; then
+                wx_has_graphics=0
+                AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
+            else
+                AC_DEFINE(wxUSE_CAIRO)
+
+                dnl We don't need to do this for wxGTK as we already get Cairo
+                dnl flags as part of GTK+ ones.
+                if test "$wxUSE_GTK" != 1; then
+                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+                fi
+            fi
+        fi
     else
         dnl assume it's ok, add more checks here if needed
         wx_has_graphics=1
@@ -8089,7 +8125,7 @@ if test "$wxUSE_MSW" = 1 ; then
         AC_MSG_ERROR([Required windres program not found])
     fi
 
-    RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
+    RESCOMP="$WINDRES"
 fi
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then

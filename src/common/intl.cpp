@@ -1407,7 +1407,7 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 } // anonymous namespace
 
 /* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
     wxUint32 lcid = LOCALE_USER_DEFAULT;
     if ( wxGetLocale() )
@@ -1425,8 +1425,18 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
     switch ( index )
     {
+        case wxLOCALE_THOUSANDS_SEP:
+            if ( ::GetLocaleInfo(lcid, LOCALE_STHOUSAND, buf, WXSIZEOF(buf)) )
+                str = buf;
+            break;
+
         case wxLOCALE_DECIMAL_POINT:
-            if ( ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buf, WXSIZEOF(buf)) )
+            if ( ::GetLocaleInfo(lcid,
+                                 cat == wxLOCALE_CAT_MONEY
+                                     ? LOCALE_SMONDECIMALSEP
+                                     : LOCALE_SDECIMAL,
+                                 buf,
+                                 WXSIZEOF(buf)) )
                 str = buf;
             break;
 

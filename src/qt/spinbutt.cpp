@@ -11,8 +11,6 @@
 
 #include "wx/spinbutt.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
-
 wxSpinButton::wxSpinButton()
 {
 }

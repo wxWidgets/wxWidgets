@@ -17,13 +17,13 @@
  * wxRichTextStylePage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextStylePage, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxRichTextStylePage, wxRichTextDialogPage )
 
 /*!
  * wxRichTextStylePage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextStylePage, wxPanel )
+BEGIN_EVENT_TABLE( wxRichTextStylePage, wxRichTextDialogPage )
 
 ////@begin wxRichTextStylePage event table entries
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, wxRichTextStylePage::OnNextStyleUpdate )
@@ -31,6 +31,8 @@ BEGIN_EVENT_TABLE( wxRichTextStylePage, wxPanel )
 ////@end wxRichTextStylePage event table entries
 
 END_EVENT_TABLE()
+
+IMPLEMENT_HELP_PROVISION(wxRichTextStylePage)
 
 /*!
  * wxRichTextStylePage constructors
@@ -67,7 +69,7 @@ void wxRichTextStylePage::Init()
 bool wxRichTextStylePage::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin wxRichTextStylePage creation
-    wxPanel::Create( parent, id, pos, size, style );
+    wxRichTextDialogPage::Create( parent, id, pos, size, style );
 
     CreateControls();
     if (GetSizer())
@@ -86,44 +88,44 @@ bool wxRichTextStylePage::Create( wxWindow* parent, wxWindowID id, const wxPoint
 void wxRichTextStylePage::CreateControls()
 {
 ////@begin wxRichTextStylePage content construction
-    wxRichTextStylePage* itemPanel1 = this;
+    wxRichTextStylePage* itemRichTextDialogPage1 = this;
 
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    itemPanel1->SetSizer(itemBoxSizer2);
+    itemRichTextDialogPage1->SetSizer(itemBoxSizer2);
 
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer3, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 5);
+    itemBoxSizer3->Add(itemBoxSizer4, 0, wxGROW, 5);
 
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer4->Add(itemBoxSizer5, 0, wxGROW, 5);
+    itemBoxSizer4->Add(itemBoxSizer5, 1, wxGROW, 5);
 
-    wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText6 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_styleName = new wxTextCtrl( itemPanel1, ID_RICHTEXTSTYLEPAGE_STYLE_NAME, wxT(""), wxDefaultPosition, wxSize(300, -1), wxTE_READONLY );
+    m_styleName = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXTSTYLEPAGE_STYLE_NAME, wxEmptyString, wxDefaultPosition, wxSize(300, -1), wxTE_READONLY );
     m_styleName->SetHelpText(_("The style name."));
     if (wxRichTextStylePage::ShowToolTips())
         m_styleName->SetToolTip(_("The style name."));
     itemBoxSizer5->Add(m_styleName, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText8 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Based on:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText8 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Based on:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText8, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_basedOnStrings;
-    m_basedOn = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_BASED_ON, wxT(""), wxDefaultPosition, wxDefaultSize, m_basedOnStrings, wxCB_DROPDOWN );
+    m_basedOn = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXTSTYLEPAGE_BASED_ON, wxEmptyString, wxDefaultPosition, wxSize(300, -1), m_basedOnStrings, wxCB_DROPDOWN );
     m_basedOn->SetHelpText(_("The style on which this style is based."));
     if (wxRichTextStylePage::ShowToolTips())
         m_basedOn->SetToolTip(_("The style on which this style is based."));
     itemBoxSizer5->Add(m_basedOn, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText10 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Next style:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText10 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Next style:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_nextStyleStrings;
-    m_nextStyle = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, wxT(""), wxDefaultPosition, wxDefaultSize, m_nextStyleStrings, wxCB_DROPDOWN );
+    m_nextStyle = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, wxEmptyString, wxDefaultPosition, wxSize(300, -1), m_nextStyleStrings, wxCB_DROPDOWN );
     m_nextStyle->SetHelpText(_("The default style for the next paragraph."));
     if (wxRichTextStylePage::ShowToolTips())
         m_nextStyle->SetToolTip(_("The default style for the next paragraph."));
@@ -156,14 +158,18 @@ bool wxRichTextStylePage::TransferDataFromWindow()
 bool wxRichTextStylePage::TransferDataToWindow()
 {
     wxPanel::TransferDataToWindow();
-
+    
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
     if (def)
     {
+        m_basedOn->Freeze();
+        m_nextStyle->Freeze();
+
         wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(def, wxRichTextParagraphStyleDefinition);
         wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
-        // wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
+        wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
         wxRichTextStyleSheet* sheet = wxRichTextFormattingDialog::GetDialog(this)->GetStyleSheet();
+        wxRichTextBoxStyleDefinition* boxDef = wxDynamicCast(def, wxRichTextBoxStyleDefinition);
 
         m_styleName->SetValue(def->GetName());
 
@@ -226,7 +232,17 @@ bool wxRichTextStylePage::TransferDataToWindow()
                             m_basedOn->Append(p->GetName());
                     }
                 }
-                else
+                else if (boxDef)
+                {
+                    size_t i;
+                    for (i = 0; i < sheet->GetBoxStyleCount(); i++)
+                    {
+                        wxRichTextBoxStyleDefinition* p = wxDynamicCast(sheet->GetBoxStyle(i), wxRichTextBoxStyleDefinition);
+                        if (p)
+                            m_basedOn->Append(p->GetName());
+                    }
+                }
+                else if (charDef)
                 {
                     size_t i;
                     for (i = 0; i < sheet->GetCharacterStyleCount(); i++)
@@ -240,6 +256,9 @@ bool wxRichTextStylePage::TransferDataToWindow()
         }
 
         m_basedOn->SetValue(def->GetBaseStyle());
+
+        m_nextStyle->Thaw();
+        m_basedOn->Thaw();
     }
 
     return true;

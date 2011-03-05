@@ -131,6 +131,11 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
 
             index += current * pixelSize;
 
+            if (index >= imageSize)
+            {
+                return wxTGA_IOERR;
+            }
+
             // Repeat the pixel length times.
             if ( !stream.Read(buf, pixelSize) )
                 return wxTGA_IOERR;
@@ -151,6 +156,11 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
 
             index += length;
 
+            if (index >= imageSize)
+            {
+                return wxTGA_IOERR;
+            }
+
             // Write the next length pixels directly to the image data.
             if ( !stream.Read(imageData, length) )
                 return wxTGA_IOERR;
@@ -160,6 +170,40 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
     }
 
     return wxTGA_OK;
+}
+
+/*
+Mimic the behaviour of wxPalette.GetRGB and the way the TGA image handler
+used it. That is: don't check the return value of GetRGB and continue decoding
+using previous RGB values.
+
+It might be better to check for palette index bounds and stop decoding if
+it's out of range (and add something like wxTGA_DATAERR to indicate unexpected
+pixel data).
+*/
+static
+void Palette_GetRGB(const unsigned char *palette, unsigned int paletteCount,
+    unsigned int index,
+    unsigned char *red, unsigned char *green, unsigned char *blue)
+{
+    if (index >= paletteCount)
+    {
+        return;
+    }
+
+    *red   = palette[index];
+    *green = palette[(paletteCount * 1) + index];
+    *blue  = palette[(paletteCount * 2) + index];
+}
+
+static
+void Palette_SetRGB(unsigned char *palette, unsigned int paletteCount,
+    unsigned int index,
+    unsigned char red, unsigned char green, unsigned char blue)
+{
+    palette[index] = red;
+    palette[(paletteCount * 1) + index] = green;
+    palette[(paletteCount * 2) + index] = blue;
 }
 
 static
@@ -172,7 +216,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     short offset = hdr[HDR_OFFSET] + HDR_SIZE;
     short colorType = hdr[HDR_COLORTYPE];
     short imageType = hdr[HDR_IMAGETYPE];
-    int paletteLength = hdr[HDR_PALETTELENGTH] + 256 * hdr[HDR_PALETTELENGTH + 1];
+    unsigned int paletteLength = hdr[HDR_PALETTELENGTH]
+        + 256 * hdr[HDR_PALETTELENGTH + 1];
     int width = (hdr[HDR_WIDTH] + 256 * hdr[HDR_WIDTH + 1]) -
                 (hdr[HDR_XORIGIN] + 256 * hdr[HDR_XORIGIN + 1]);
     int height = (hdr[HDR_HEIGHT] + 256 * hdr[HDR_HEIGHT + 1]) -
@@ -214,44 +259,39 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     if (stream.SeekI(offset, wxFromStart) == wxInvalidOffset)
         return wxTGA_INVFORMAT;
 
+    unsigned char *palette = NULL;
     // Load a palette if we have one.
     if (colorType == wxTGA_MAPPED)
     {
         unsigned char buf[3];
 
-        unsigned char* r = new unsigned char[paletteLength];
-        unsigned char* g = new unsigned char[paletteLength];
-        unsigned char* b = new unsigned char[paletteLength];
+        palette = (unsigned char *) malloc(paletteLength * 3);
 
-        for (int i = 0; i < paletteLength; i++)
+        for (unsigned int i = 0; i < paletteLength; i++)
         {
             stream.Read(buf, 3);
 
-            r[i] = buf[2];
-            g[i] = buf[1];
-            b[i] = buf[0];
+            Palette_SetRGB(palette, paletteLength, i, buf[2], buf[1], buf[0]);
         }
 
 #if wxUSE_PALETTE
         // Set the palette of the image.
-        image->SetPalette(wxPalette(paletteLength, r, g, b));
+        image->SetPalette(wxPalette((int) paletteLength, &palette[0],
+            &palette[paletteLength * 1], &palette[paletteLength * 2]));
 #endif // wxUSE_PALETTE
 
-        delete[] r;
-        delete[] g;
-        delete[] b;
     }
+
+    wxON_BLOCK_EXIT1(free, palette);
 
     // Handle the various TGA formats we support.
 
     switch (imageType)
     {
-#if wxUSE_PALETTE
         // Raw indexed.
 
         case 1:
         {
-            const wxPalette& palette = image->GetPalette();
             unsigned char r;
             unsigned char g;
             unsigned char b;
@@ -278,7 +318,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        palette.GetRGB(imageData[index], &r, &g, &b);
+                        Palette_GetRGB(palette, paletteLength,
+                            imageData[index], &r, &g, &b);
 
                         *(dst++) = r;
                         *(dst++) = g;
@@ -293,7 +334,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        palette.GetRGB(imageData[index], &r, &g, &b);
+                        Palette_GetRGB(palette, paletteLength,
+                            imageData[index], &r, &g, &b);
 
                         *(dst++) = r;
                         *(dst++) = g;
@@ -308,7 +350,6 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             }
         }
         break;
-#endif // wxUSE_PALETTE
 
         // Raw RGB.
 
@@ -441,12 +482,10 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
         }
         break;
 
-#if wxUSE_PALETTE
         // RLE indexed.
 
         case 9:
         {
-            const wxPalette& palette = image->GetPalette();
             unsigned char r;
             unsigned char g;
             unsigned char b;
@@ -475,7 +514,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        palette.GetRGB(imageData[index], &r, &g, &b);
+                        Palette_GetRGB(palette, paletteLength,
+                            imageData[index], &r, &g, &b);
 
                         *(dst++) = r;
                         *(dst++) = g;
@@ -490,7 +530,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        palette.GetRGB(imageData[index], &r, &g, &b);
+                        Palette_GetRGB(palette, paletteLength,
+                            imageData[index], &r, &g, &b);
 
                         *(dst++) = r;
                         *(dst++) = g;
@@ -505,7 +546,6 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             }
         }
         break;
-#endif // wxUSE_PALETTE
 
         // RLE RGB.
 
@@ -650,9 +690,70 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 }
 
 static
-int SaveTGA(wxImage* WXUNUSED(image), wxOutputStream& WXUNUSED(stream))
+int SaveTGA(const wxImage& image, wxOutputStream *stream)
 {
-    wxLogError(wxT("Saving in TGA format is not implemented."));
+    bool hasAlpha = image.HasAlpha();
+    unsigned bytesPerPixel = 3 + (hasAlpha ? 1 : 0);
+    wxSize size = image.GetSize();
+    size_t scanlineSize = size.x * bytesPerPixel;
+    unsigned char *scanlineData = (unsigned char *) malloc(scanlineSize);
+    if (!scanlineData)
+    {
+        return wxTGA_MEMERR;
+    }
+
+    wxON_BLOCK_EXIT1(free, scanlineData);
+
+    // Compose and write the TGA header
+    unsigned char hdr[HDR_SIZE];
+    (void) memset(&hdr, 0, HDR_SIZE);
+
+    hdr[HDR_COLORTYPE] = wxTGA_UNMAPPED;
+    hdr[HDR_IMAGETYPE] = 2 /* Uncompressed truecolour */;
+
+    hdr[HDR_WIDTH] =  size.x & 0xFF;
+    hdr[HDR_WIDTH + 1] =  (size.x >> 8) & 0xFF;
+
+    hdr[HDR_HEIGHT] =  size.y & 0xFF;
+    hdr[HDR_HEIGHT + 1] =  (size.y >> 8) & 0xFF;
+
+    hdr[HDR_BPP] = hasAlpha ? 32 : 24;
+    hdr[HDR_ORIENTATION] = 1 << 5; // set bit to indicate top-down order
+    if (hasAlpha)
+    {
+        hdr[HDR_ORIENTATION] |= 8; // number of alpha bits
+    }
+
+    if ( !stream->Write(hdr, HDR_SIZE) )
+    {
+        return wxTGA_IOERR;
+    }
+
+
+    // Write image data, converting RGB to BGR and adding alpha if applicable
+
+    unsigned char *src = image.GetData();
+    unsigned char *alpha = image.GetAlpha();
+    for (int y = 0; y < size.y; ++y)
+    {
+        unsigned char *dst = scanlineData;
+        for (int x = 0; x < size.x; ++x)
+        {
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
+            if (alpha)
+            {
+                dst[3] = *(alpha++);
+            }
+            src += 3;
+            dst += bytesPerPixel;
+        }
+        if ( !stream->Write(scanlineData, scanlineSize) )
+        {
+            return wxTGA_IOERR;
+        }
+    }
 
     return wxTGA_OK;
 }
@@ -712,7 +813,7 @@ bool wxTGAHandler::LoadFile(wxImage* image,
 
 bool wxTGAHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool verbose)
 {
-    int error = SaveTGA(image, stream);
+    int error = SaveTGA(*image, &stream);
 
     if ( error != wxTGA_OK )
     {
@@ -720,12 +821,12 @@ bool wxTGAHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool verbose
         {
             switch ( error )
             {
-                case wxTGA_INVFORMAT:
-                    wxLogError(wxT("TGA: invalid image."));
-                    break;
-
                 case wxTGA_MEMERR:
                     wxLogError(wxT("TGA: couldn't allocate memory."));
+                    break;
+
+                case wxTGA_IOERR:
+                    wxLogError(wxT("TGA: couldn't write image data."));
                     break;
 
                 default:

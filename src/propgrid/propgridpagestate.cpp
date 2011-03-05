@@ -477,9 +477,9 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 
     if ( parent->IsCategory() || parent->IsRoot() )
     {
-        if ( p->GetBaseName().length() )
+        if ( !p->GetBaseName().empty() )
             m_dictName.erase( p->GetBaseName() );
-        if ( newName.length() )
+        if ( !newName.empty() )
             m_dictName[newName] = (void*) p;
     }
 
@@ -1498,7 +1498,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
         wxASSERT( wxStrcmp(current->GetClassInfo()->GetClassName(),wxT("wxVariant")) == 0 );
 
         const wxString& name = current->GetName();
-        if ( name.length() > 0 )
+        if ( !name.empty() )
         {
             //
             // '@' signified a special entry
@@ -1557,7 +1557,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
             wxVariant *current = (wxVariant*)*node;
 
             const wxString& name = current->GetName();
-            if ( name.length() > 0 )
+            if ( !name.empty() )
             {
                 //
                 // '@' signified a special entry
@@ -1782,7 +1782,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     }
 
     // Only add name to hashmap if parent is root or category
-    if ( property->m_name.length() &&
+    if ( !property->m_name.empty() &&
         (parentIsCategory || parentIsRoot) )
         m_dictName[property->m_name] = (void*) property;
 
@@ -1919,7 +1919,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         }
     }
 
-    if ( item->GetBaseName().length() &&
+    if ( !item->GetBaseName().empty() &&
          (parent->IsCategory() || parent->IsRoot()) )
         m_dictName.erase(item->GetBaseName());
 

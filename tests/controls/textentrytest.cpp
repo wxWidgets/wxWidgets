@@ -144,6 +144,9 @@ void TextEntryTestCase::InsertionPoint()
     entry->WriteText("-"); // should move it after the written text
     CPPUNIT_ASSERT_EQUAL( 4, entry->GetLastPosition() );
     CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+
+    entry->SetValue("something different"); // should still reset the caret
+    CPPUNIT_ASSERT_EQUAL( 0, entry->GetInsertionPoint() );
 }
 
 void TextEntryTestCase::Replace()

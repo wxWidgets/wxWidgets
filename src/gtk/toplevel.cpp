@@ -1144,7 +1144,7 @@ wxSize& wxTopLevelWindowGTK::GetCachedDecorSize()
 
 void wxTopLevelWindowGTK::OnInternalIdle()
 {
-    wxWindow::OnInternalIdle();
+    wxTopLevelWindowBase::OnInternalIdle();
 
     // Synthetize activate events.
     if ( g_sendActivateEvent != -1 )

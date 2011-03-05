@@ -108,7 +108,7 @@ public:
     virtual bool Layout();
 
     /**
-        The default handler for wxEVT_SYS_COLOUR_CHANGED.
+        The default handler for @c wxEVT_SYS_COLOUR_CHANGED.
 
         @param event
             The colour change event.

@@ -103,9 +103,6 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 // wxSpinButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton,wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
-
 BEGIN_EVENT_TABLE(wxSpinButton, wxControl)
     EVT_SIZE(wxSpinButton::OnSize)
 END_EVENT_TABLE()

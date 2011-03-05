@@ -52,6 +52,16 @@ public:
         return true;
     }
 
+    // switch the given end of the pipe to non-blocking IO
+    bool MakeNonBlocking(Direction which)
+    {
+        const int flags = fcntl(m_fds[which], F_GETFL, 0);
+        if ( flags == -1 )
+            return false;
+
+        return fcntl(m_fds[which], F_SETFL, flags | O_NONBLOCK) == 0;
+    }
+
     // return TRUE if we were created successfully
     bool IsOk() const { return m_fds[Read] != INVALID_FD; }
 
@@ -106,6 +116,20 @@ public:
 
     // return TRUE if we have anything to read, don't block
     virtual bool CanRead() const;
+};
+
+// ----------------------------------------------------------------------------
+// wxPipeOutputStream: stream for writing to a pipe
+// ----------------------------------------------------------------------------
+
+class wxPipeOutputStream : public wxFileOutputStream
+{
+public:
+    wxPipeOutputStream(int fd) : wxFileOutputStream(fd) { }
+
+    // Override the base class version to ignore "pipe full" errors: this is
+    // not an error for this class.
+    size_t OnSysWrite(const void *buffer, size_t size);
 };
 
 #endif // wxUSE_STREAMS && wxUSE_FILE

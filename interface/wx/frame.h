@@ -103,7 +103,7 @@
     @style{wxFRAME_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
-           will send a wxEVT_HELP event if the user clicked on an application
+           will send a @c wxEVT_HELP event if the user clicked on an application
            window. Note that this is an extended style and must be set by
            calling SetExtraStyle before Create is called (two-step
            construction). You cannot use this style together with
@@ -436,5 +436,10 @@ public:
         Associates a toolbar with the frame.
     */
     virtual void SetToolBar(wxToolBar* toolBar);
+
+
+    void PushStatusText(const wxString &text, int number = 0);
+    void PopStatusText(int number = 0);
+
 };
 

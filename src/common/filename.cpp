@@ -153,13 +153,6 @@
 extern const wxULongLong wxInvalidSize = (unsigned)-1;
 #endif // wxUSE_LONGLONG
 
-#ifdef __WIN32__
-    // this define is missing from VC6 headers
-    #ifndef INVALID_FILE_ATTRIBUTES
-        #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
-    #endif
-#endif // __WIN32__
-
 namespace
 {
 
@@ -1455,15 +1448,24 @@ bool wxFileName::Normalize(int flags,
 
             if ( dir == wxT("..") )
             {
-                if ( m_dirs.IsEmpty() )
+                if ( m_dirs.empty() )
                 {
-                    wxLogError(_("The path '%s' contains too many \"..\"!"),
-                               GetFullPath().c_str());
-                    return false;
-                }
+                    // We have more ".." than directory components so far.
+                    // Don't treat this as an error as the path could have been
+                    // entered by user so try to handle it reasonably: if the
+                    // path is absolute, just ignore the extra ".." because
+                    // "/.." is the same as "/". Otherwise, i.e. for relative
+                    // paths, keep ".." unchanged because removing it would
+                    // modify the file a relative path refers to.
+                    if ( !m_relative )
+                        continue;
 
-                m_dirs.RemoveAt(m_dirs.GetCount() - 1);
-                continue;
+                }
+                else // Normal case, go one step up.
+                {
+                    m_dirs.pop_back();
+                    continue;
+                }
             }
         }
 

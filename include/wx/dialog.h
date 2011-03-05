@@ -317,6 +317,7 @@ public:
     // Create the scrolled window
     virtual wxScrolledWindow* CreateScrolledWindow(wxWindow* parent);
 
+#if wxUSE_BUTTON
     // Find a standard or horizontal box sizer
     virtual wxSizer* FindButtonSizer(bool stdButtonSizer, wxDialog* dialog, wxSizer* sizer, int& retBorder, int accumlatedBorder = 0);
 
@@ -328,6 +329,7 @@ public:
 
     // Find 'loose' main buttons in the existing layout and add them to the standard dialog sizer
     virtual bool FindLooseButtons(wxDialog* dialog, wxStdDialogButtonSizer* buttonSizer, wxSizer* sizer, int& count);
+#endif // wxUSE_BUTTON
 
     // Reparent the controls to the scrolled window, except those in buttonSizer
     virtual void ReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer = NULL);

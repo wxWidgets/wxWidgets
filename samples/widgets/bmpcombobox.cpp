@@ -884,7 +884,7 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 
     ::wxSetCursor( *wxHOURGLASS_CURSOR );
 
-    if ( filepath.length() )
+    if ( !filepath.empty() )
     {
         if ( pStr )
         {

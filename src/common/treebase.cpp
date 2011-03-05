@@ -29,6 +29,8 @@
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
 
+extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -54,6 +56,74 @@ wxDEFINE_EVENT( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEvent );
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxTreeCtrlStyle )
+wxBEGIN_FLAGS( wxTreeCtrlStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+wxFLAGS_MEMBER(wxTR_EDIT_LABELS)
+wxFLAGS_MEMBER(wxTR_NO_BUTTONS)
+wxFLAGS_MEMBER(wxTR_HAS_BUTTONS)
+wxFLAGS_MEMBER(wxTR_TWIST_BUTTONS)
+wxFLAGS_MEMBER(wxTR_NO_LINES)
+wxFLAGS_MEMBER(wxTR_FULL_ROW_HIGHLIGHT)
+wxFLAGS_MEMBER(wxTR_LINES_AT_ROOT)
+wxFLAGS_MEMBER(wxTR_HIDE_ROOT)
+wxFLAGS_MEMBER(wxTR_ROW_LINES)
+wxFLAGS_MEMBER(wxTR_HAS_VARIABLE_ROW_HEIGHT)
+wxFLAGS_MEMBER(wxTR_SINGLE)
+wxFLAGS_MEMBER(wxTR_MULTIPLE)
+#if WXWIN_COMPATIBILITY_2_8
+wxFLAGS_MEMBER(wxTR_EXTENDED)
+#endif
+wxFLAGS_MEMBER(wxTR_DEFAULT_STYLE)
+wxEND_FLAGS( wxTreeCtrlStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl, "wx/treectrl.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxTreeCtrl)
+wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
+wxEVENT_RANGE_PROPERTY( TreeEvent, wxEVT_COMMAND_TREE_BEGIN_DRAG, \
+                       wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, wxTreeEvent )
+
+wxPROPERTY_FLAGS( WindowStyle, wxTreeCtrlStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxTreeCtrl)
+
+wxCONSTRUCTOR_5( wxTreeCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 // ----------------------------------------------------------------------------
 // Tree event
@@ -253,8 +323,10 @@ void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
         CollapseAllChildren(idCurr);
     }
 
-    // then collapse this element too
-    Collapse(item);
+    // then collapse this element too unless it's the hidden root which can't
+    // be collapsed
+    if ( item != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT) )
+        Collapse(item);
     Thaw();
 }
 

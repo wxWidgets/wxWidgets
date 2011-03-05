@@ -633,8 +633,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_SIZE(wxTextCtrl::OnSize)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------

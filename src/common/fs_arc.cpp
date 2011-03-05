@@ -358,7 +358,7 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
         right = rightPart.GetFullPath(wxPATH_UNIX);
     }
 
-    if (right.Length() && right.GetChar(0) == wxT('/')) right = right.Mid(1);
+    if (!right.empty() && right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
     if (!m_cache)
         m_cache = new wxArchiveFSCache;

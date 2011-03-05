@@ -24,19 +24,18 @@
     #pragma hdrstop
 #endif
 
+#include "wx/fontutil.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/encinfo.h"
     #include "wx/wxcrtvararg.h"
+    #include "wx/msw/private.h"
 #endif //WX_PRECOMP
 
-#include "wx/msw/private.h"
-
-#include "wx/fontutil.h"
+#include "wx/encinfo.h"
 #include "wx/fontmap.h"
-
 #include "wx/tokenzr.h"
 
 // for MSVC5 and old w32api

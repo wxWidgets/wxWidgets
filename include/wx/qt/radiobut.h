@@ -43,6 +43,8 @@ protected:
 
 private:
     wxQtPointer< QRadioButton > m_qtRadioButton;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxRadioButton );
 };
 
 #endif // _WX_QT_RADIOBUT_H_

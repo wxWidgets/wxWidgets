@@ -172,6 +172,7 @@ wx/mousestate.h
 wx/msgout.h
 wx/msgqueue.h
 wx/mstream.h
+wx/numformatter.h
 wx/object.h
 wx/platform.h
 wx/platinfo.h
@@ -181,6 +182,7 @@ wx/ptr_scpd.h
 wx/ptr_shrd.h
 wx/recguard.h
 wx/regex.h
+wx/rtti.h
 wx/scopedarray.h
 wx/scopedptr.h
 wx/scopeguard.h
@@ -220,6 +222,7 @@ wx/utils.h
 wx/variant.h
 wx/vector.h
 wx/version.h
+wx/versioninfo.h
 wx/volume.h
 wx/weakref.h
 wx/wfstream.h
@@ -231,7 +234,12 @@ wx/wxcrtvararg.h
 wx/wxprec.h
 wx/xlocale.h
 wx/xti.h
+wx/xti2.h
 wx/xtistrm.h
+wx/xtictor.h
+wx/xtihandler.h
+wx/xtiprop.h
+wx/xtitypes.h
 wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h

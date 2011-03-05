@@ -14,19 +14,7 @@
 #ifndef _WX_PRIVATE_COCOA_H_
 #define _WX_PRIVATE_COCOA_H_
 
-#include "wx/osx/core/private.h"
-
-#include "wx/defs.h"
-
 #include <ApplicationServices/ApplicationServices.h>
-
-#if wxOSX_USE_ATSU_TEXT
-    // we need theming and atsu
-    #include <Carbon/Carbon.h>
-#else
-    // we only need theming, if we find a better include replace the following
-    #include <Carbon/Carbon.h>
-#endif
 
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
@@ -53,21 +41,9 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image );
 CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage );
-#endif
-
-long UMAGetSystemVersion() ;
-WXDLLIMPEXP_BASE void wxMacStringToPascal( const wxString&from , StringPtr to );
-WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
-WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
-WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
+wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
-
-//
-//
-//
-
-#if wxUSE_GUI
 
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
@@ -372,6 +348,11 @@ protected :
     - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
     @end
 
+    @interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
+    {
+    }
+
+    @end
 
 #endif // __OBJC__
 
@@ -405,7 +386,8 @@ const short kwxCursorSize = 11;
 const short kwxCursorSizeNESW = 12;
 const short kwxCursorSizeNWSE = 13;
 const short kwxCursorRoller = 14;
-const short kwxCursorLast = kwxCursorRoller;
+const short kwxCursorWatch = 15;
+const short kwxCursorLast = kwxCursorWatch;
 
 // exposing our fallback cursor map
 

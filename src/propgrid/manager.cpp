@@ -411,12 +411,6 @@ private:
 
 IMPLEMENT_CLASS(wxPropertyGridManager, wxPanel)
 
-#define ID_ADVTOOLBAR_OFFSET        1
-#define ID_ADVHELPCAPTION_OFFSET    2
-#define ID_ADVHELPCONTENT_OFFSET    3
-#define ID_ADVHEADERCTRL_OFFSET     4
-#define ID_ADVTBITEMSBASE_OFFSET    5   // Must be last.
-
 // -----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxPropertyGridManager, wxPanel)
@@ -508,6 +502,9 @@ void wxPropertyGridManager::Init1()
 
     m_nextDescBoxSize = -1;
 
+    m_categorizedModeToolId = -1;
+    m_alphabeticModeToolId = -1;
+
     m_extraHeight = 0;
     m_dragStatus = 0;
     m_onSplitter = 0;
@@ -555,8 +552,6 @@ void wxPropertyGridManager::Init2( int style )
     if ( baseId < 0 )
         baseId = wxPG_MAN_ALTERNATE_BASE_ID;
 
-    m_baseId = baseId;
-
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
@@ -590,9 +585,6 @@ void wxPropertyGridManager::Init2( int style )
 
     m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT);
 
-    m_nextTbInd = baseId+ID_ADVTBITEMSBASE_OFFSET + 2;
-
-
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
     //     (see wxPropertyGridManager::ProcessEvent).
@@ -603,11 +595,6 @@ void wxPropertyGridManager::Init2( int style )
     Connect(m_pPropGrid->GetId(),
             wxEVT_PG_COL_DRAGGING,
             wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
-
-    // Connect to toolbar button events.
-    Connect(baseId+ID_ADVTBITEMSBASE_OFFSET,baseId+ID_ADVTBITEMSBASE_OFFSET+50,
-            wxEVT_COMMAND_TOOL_CLICKED,
-            wxCommandEventHandler(wxPropertyGridManager::OnToolbarClick) );
 
     // Optional initial controls.
     m_width = -12345;
@@ -796,9 +783,9 @@ bool wxPropertyGridManager::DoSelectPage( int index )
     if ( m_pToolbar )
     {
         if ( index >= 0 )
-            m_pToolbar->ToggleTool( nextPage->m_id, true );
+            m_pToolbar->ToggleTool( nextPage->m_toolId, true );
         else
-            m_pToolbar->ToggleTool( prevPage->m_id, false );
+            m_pToolbar->ToggleTool( prevPage->m_toolId, false );
     }
 #endif
 
@@ -880,9 +867,6 @@ void wxPropertyGridManager::Clear()
     int i;
     for ( i=(int)GetPageCount()-1; i>=0; i-- )
         RemovePage(i);
-
-    // Reset toolbar ids
-    m_nextTbInd = m_baseId+ID_ADVTBITEMSBASE_OFFSET + 2;
 
     m_pPropGrid->Thaw();
 }
@@ -1002,14 +986,14 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
         state->InitNonCatMode();
     }
 
-    if ( label.length() )
+    if ( !label.empty() )
     {
         wxASSERT_MSG( !pageObj->m_label.length(),
                       wxT("If page label is given in constructor, empty label must be given in AddPage"));
         pageObj->m_label = label;
     }
 
-    pageObj->m_id = m_nextTbInd;
+    pageObj->m_toolId = -1;
 
     if ( !HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
         pageObj->m_dontCenterSplitter = true;
@@ -1032,14 +1016,23 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                  m_pToolbar->GetToolsCount() < 3 )
                 m_pToolbar->AddSeparator();
 
-            if ( &bmp != &wxNullBitmap )
-                m_pToolbar->AddTool(m_nextTbInd,label,bmp,label,wxITEM_RADIO);
-                //m_pToolbar->InsertTool(index+3,m_nextTbInd,bmp);
-            else
-                m_pToolbar->AddTool(m_nextTbInd,label,wxBitmap(gs_xpm_defpage),
-                    label,wxITEM_RADIO);
+            wxToolBarToolBase* tool;
 
-            m_nextTbInd++;
+            if ( &bmp != &wxNullBitmap )
+                tool = m_pToolbar->AddTool(wxID_ANY, label, bmp,
+                                           label, wxITEM_RADIO);
+            else
+                tool = m_pToolbar->AddTool(wxID_ANY, label,
+                                           wxBitmap(gs_xpm_defpage),
+                                           label, wxITEM_RADIO);
+
+            pageObj->m_toolId = tool->GetId();
+
+            // Connect to toolbar button events.
+            Connect(pageObj->m_toolId,
+                    wxEVT_COMMAND_TOOL_CLICKED,
+                    wxCommandEventHandler(
+                        wxPropertyGridManager::OnToolbarClick));
 
             m_pToolbar->Realize();
         }
@@ -1461,10 +1454,6 @@ void wxPropertyGridManager::RecreateControls()
     if ( was_shown )
         Show ( false );
 
-    wxWindowID baseId = m_pPropGrid->GetId();
-    if ( baseId < 0 )
-        baseId = wxPG_MAN_ALTERNATE_BASE_ID;
-
 #if wxUSE_TOOLBAR
     if ( m_windowStyle & wxPG_TOOLBAR )
     {
@@ -1475,8 +1464,9 @@ void wxPropertyGridManager::RecreateControls()
             if (GetExtraStyle() & wxPG_EX_NO_TOOLBAR_DIVIDER)
                 toolBarFlags |= wxTB_NODIVIDER;
 
-            m_pToolbar = new wxToolBar(this,baseId+ID_ADVTOOLBAR_OFFSET,
-                                       wxDefaultPosition,wxDefaultSize,
+            m_pToolbar = new wxToolBar(this, wxID_ANY,
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
                                        toolBarFlags);
             m_pToolbar->SetToolBitmapSize(wxSize(16, 15));
 
@@ -1503,32 +1493,62 @@ void wxPropertyGridManager::RecreateControls()
             {
                 wxString desc1(_("Categorized Mode"));
                 wxString desc2(_("Alphabetic Mode"));
-                m_pToolbar->AddTool(baseId+ID_ADVTBITEMSBASE_OFFSET+0,
-                    desc1,wxBitmap (gs_xpm_catmode),
-                    desc1,wxITEM_RADIO);
-                m_pToolbar->AddTool(baseId+ID_ADVTBITEMSBASE_OFFSET+1,
-                    desc2,wxBitmap (gs_xpm_noncatmode),
-                    desc2,wxITEM_RADIO);
+
+                wxToolBarToolBase* tool;
+
+                tool = m_pToolbar->AddTool(wxID_ANY,
+                                           desc1,
+                                           wxBitmap(gs_xpm_catmode),
+                                           desc1,
+                                           wxITEM_RADIO);
+                m_categorizedModeToolId = tool->GetId();
+
+                tool = m_pToolbar->AddTool(wxID_ANY,
+                                           desc2,
+                                           wxBitmap(gs_xpm_noncatmode),
+                                           desc2,
+                                           wxITEM_RADIO);
+                m_alphabeticModeToolId = tool->GetId();
+
                 m_pToolbar->Realize();
+
+                Connect(m_categorizedModeToolId,
+                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxCommandEventHandler(
+                            wxPropertyGridManager::OnToolbarClick));
+                Connect(m_alphabeticModeToolId,
+                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxCommandEventHandler(
+                            wxPropertyGridManager::OnToolbarClick));
+            }
+            else
+            {
+                m_categorizedModeToolId = -1;
+                m_alphabeticModeToolId = -1;
             }
 
         }
 
-        if ( (GetExtraStyle()&wxPG_EX_MODE_BUTTONS) )
+        if ( (GetExtraStyle() & wxPG_EX_MODE_BUTTONS) )
         {
             // Toggle correct mode button.
             // TODO: This doesn't work in wxMSW (when changing,
             // both items will get toggled).
-            int toggle_but_on_ind = ID_ADVTBITEMSBASE_OFFSET+0;
-            int toggle_but_off_ind = ID_ADVTBITEMSBASE_OFFSET+1;
+            int toggle_but_on_ind;
+            int toggle_but_off_ind;
             if ( m_pPropGrid->m_pState->IsInNonCatMode() )
             {
-                toggle_but_on_ind++;
-                toggle_but_off_ind--;
+                toggle_but_on_ind = m_alphabeticModeToolId;
+                toggle_but_off_ind = m_categorizedModeToolId;
+            }
+            else
+            {
+                toggle_but_on_ind = m_categorizedModeToolId;
+                toggle_but_off_ind = m_alphabeticModeToolId;
             }
 
-            m_pToolbar->ToggleTool(baseId+toggle_but_on_ind,true);
-            m_pToolbar->ToggleTool(baseId+toggle_but_off_ind,false);
+            m_pToolbar->ToggleTool(toggle_but_on_ind, true);
+            m_pToolbar->ToggleTool(toggle_but_off_ind, false);
         }
 
     }
@@ -1549,7 +1569,7 @@ void wxPropertyGridManager::RecreateControls()
         if ( !m_pHeaderCtrl )
         {
             hc = new wxPGHeaderCtrl(this);
-            hc->Create(this, baseId+ID_ADVHEADERCTRL_OFFSET);
+            hc->Create(this, wxID_ANY);
             m_pHeaderCtrl = hc;
         }
         else
@@ -1574,7 +1594,7 @@ void wxPropertyGridManager::RecreateControls()
         if ( !m_pTxtHelpCaption )
         {
             m_pTxtHelpCaption = new wxStaticText(this,
-                                                 baseId+ID_ADVHELPCAPTION_OFFSET,
+                                                 wxID_ANY,
                                                  wxT(""),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
@@ -1585,7 +1605,7 @@ void wxPropertyGridManager::RecreateControls()
         if ( !m_pTxtHelpContent )
         {
             m_pTxtHelpContent = new wxStaticText(this,
-                                                 baseId+ID_ADVHELPCONTENT_OFFSET,
+                                                 wxID_ANY,
                                                  wxT(""),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
@@ -1658,69 +1678,60 @@ bool wxPropertyGridManager::EnsureVisible( wxPGPropArg id )
 void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
 {
     int id = event.GetId();
-    if ( id >= 0 )
-    {
-        int baseId = m_pPropGrid->GetId();
-        if ( baseId < 0 )
-            baseId = wxPG_MAN_ALTERNATE_BASE_ID;
 
-        if ( id == ( baseId + ID_ADVTBITEMSBASE_OFFSET + 0 ) )
+    if ( id == m_categorizedModeToolId )
+    {
+        // Categorized mode.
+        if ( m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES )
         {
-            // Categorized mode.
-            if ( m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES )
+            if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
+                m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
+            m_pPropGrid->EnableCategories( true );
+        }
+    }
+    else if ( id == m_alphabeticModeToolId )
+    {
+        // Alphabetic mode.
+        if ( !(m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES) )
+        {
+            if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
+                m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+            else
+                m_pPropGrid->ClearInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+
+            m_pPropGrid->m_windowStyle |= wxPG_AUTO_SORT;
+            m_pPropGrid->EnableCategories( false );
+        }
+    }
+    else
+    {
+        // Page Switching.
+
+        int index = -1;
+        size_t i;
+        wxPropertyGridPage* pdc;
+
+        // Find page with given id.
+        for ( i=0; i<GetPageCount(); i++ )
+        {
+            pdc = m_arrPages[i];
+            if ( pdc->m_toolId == id )
             {
-                if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
-                    m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
-                m_pPropGrid->EnableCategories( true );
+                index = i;
+                break;
             }
         }
-        else if ( id == ( baseId + ID_ADVTBITEMSBASE_OFFSET + 1 ) )
-        {
-            // Alphabetic mode.
-            if ( !(m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES) )
-            {
-                if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
-                    m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
-                else
-                    m_pPropGrid->ClearInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
 
-                m_pPropGrid->m_windowStyle |= wxPG_AUTO_SORT;
-                m_pPropGrid->EnableCategories( false );
-            }
+        wxASSERT( index >= 0 );
+
+        if ( DoSelectPage( index ) )
+        {
+            // Event dispatching must be last.
+            m_pPropGrid->SendEvent(  wxEVT_PG_PAGE_CHANGED, NULL );
         }
         else
         {
-            // Page Switching.
-
-            int index = -1;
-            size_t i;
-            wxPropertyGridPage* pdc;
-
-            // Find page with given id.
-            for ( i=0; i<GetPageCount(); i++ )
-            {
-                pdc = m_arrPages[i];
-                if ( pdc->m_id == id )
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            wxASSERT( index >= 0 );
-
-            if ( DoSelectPage( index ) )
-            {
-
-                // Event dispatching must be last.
-                m_pPropGrid->SendEvent(  wxEVT_PG_PAGE_CHANGED, NULL );
-
-            }
-            else
-            {
-                // TODO: Depress the old button on toolbar.
-            }
-
+            // TODO: Depress the old button on toolbar.
         }
     }
 }

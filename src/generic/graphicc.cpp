@@ -29,6 +29,9 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
+    #ifdef __WXGTK__
+        #include "wx/window.h"
+    #endif
 #endif
 
 #include "wx/private/graphics.h"
@@ -785,7 +788,7 @@ void wxCairoFontData::Apply( wxGraphicsContext* context )
     cairo_set_font_face(ctext, m_font);
     cairo_set_font_size(ctext, m_size );
 #else
-    cairo_select_font_face(ctext, m_fontName, m_slant, m_weights );
+    cairo_select_font_face(ctext, m_fontName, m_slant, m_weight );
     cairo_set_font_size(ctext, m_size );
 #endif
 }
@@ -1071,6 +1074,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 {
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
+#ifdef wxHAS_RAW_BITMAP
     int bw = m_width = bmp.GetWidth();
     int bh = m_height = bmp.GetHeight();
     wxBitmap bmpSource = bmp;  // we need a non-const instance
@@ -1138,6 +1142,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
     m_pattern = cairo_pattern_create_for_surface(m_surface);
+#endif // wxHAS_RAW_BITMAP
 }
 
 wxCairoBitmapData::~wxCairoBitmapData()
@@ -1830,8 +1835,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * cont
 {
 #ifdef __WXMSW__
     return new wxCairoContext(this,(HDC)context);
-#endif
-#ifdef __WXGTK__
+#else
     return new wxCairoContext(this,(cairo_t*)context);
 #endif
 }

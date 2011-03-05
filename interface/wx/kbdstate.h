@@ -130,5 +130,12 @@ public:
         Notice that GetModifiers() should usually be used instead of this one.
      */
     bool CmdDown() const;
+
+    
+    void SetControlDown(bool down);
+    void SetShiftDown(bool down);
+    void SetAltDown(bool down);
+    void SetMetaDown(bool down);
+
 };
 

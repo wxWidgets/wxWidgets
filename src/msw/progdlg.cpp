@@ -25,8 +25,16 @@
 
 #if wxUSE_PROGRESSDLG && wxUSE_THREADS
 
-#include "wx/msw/private/msgdlg.h"
 #include "wx/progdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/msgdlg.h"
+    #include "wx/stopwatch.h"
+    #include "wx/msw/private.h"
+#endif
+
+#include "wx/msw/private/msgdlg.h"
 #include "wx/evtloop.h"
 
 using namespace wxMSWMessageDialog;
@@ -73,10 +81,12 @@ public:
         m_progressBarMarquee = false;
         m_skipped = false;
         m_notifications = 0;
+        m_parent = NULL;
     }
 
     wxCriticalSection m_cs;
 
+    wxWindow *m_parent;     // Parent window only used to center us over it.
     HWND m_hwnd;            // Task dialog handler
     long m_style;           // wxProgressDialog style
     int m_value;
@@ -632,6 +642,7 @@ bool wxProgressDialog::Show(bool show)
         m_sharedData->m_range = m_maximum;
         m_sharedData->m_state = Uncancelable;
         m_sharedData->m_style = GetPDStyle();
+        m_sharedData->m_parent = GetTopParent();
 
         if ( HasPDFlag(wxPD_CAN_ABORT) )
         {
@@ -820,6 +831,27 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                            TDM_SET_PROGRESS_BAR_RANGE,
                            0,
                            MAKELPARAM(0, sharedData->m_range) );
+
+            // We always create this task dialog with NULL parent because our
+            // parent in wx sense is a window created from a different thread
+            // and so can't be used as our real parent. However we still center
+            // this window on the parent one as the task dialogs do with their
+            // real parent usually.
+            if ( sharedData->m_parent )
+            {
+                wxRect rect(wxRectFromRECT(wxGetWindowRect(hwnd)));
+                rect = rect.CentreIn(sharedData->m_parent->GetRect());
+                ::SetWindowPos(hwnd,
+                               NULL,
+                               rect.x,
+                               rect.y,
+                               -1,
+                               -1,
+                               SWP_NOACTIVATE |
+                               SWP_NOOWNERZORDER |
+                               SWP_NOSIZE |
+                               SWP_NOZORDER);
+            }
 
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).

@@ -86,5 +86,5 @@ public:
 /**
     A global wxVideoMode instance used by wxDisplay.
 */
-wxVideoMode wxDefaultVideoMode;
+const wxVideoMode wxDefaultVideoMode;
 

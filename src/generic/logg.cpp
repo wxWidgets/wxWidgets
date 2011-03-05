@@ -610,6 +610,11 @@ wxLogWindow::wxLogWindow(wxWindow *pParent,
                          bool bShow,
                          bool bDoPass)
 {
+    // Initialize it to NULL to ensure that we don't crash if any log messages
+    // are generated before the frame is fully created (while this doesn't
+    // happen normally, it might, in principle).
+    m_pLogFrame = NULL;
+
     PassMessages(bDoPass);
 
     m_pLogFrame = new wxLogFrame(pParent, this, szTitle);
@@ -829,7 +834,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     // order should be the same as in the switch below!
-    static const wxChar* const icons[] =
+    static const char* const icons[] =
     {
         wxART_ERROR,
         wxART_WARNING,

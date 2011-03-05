@@ -34,6 +34,7 @@ class WXDLLIMPEXP_CORE wxMask: public wxObject
 {
 public:
     wxMask();
+    wxMask(const wxMask& mask);
     wxMask( const wxBitmap& bitmap, const wxColour& colour );
     wxMask( const wxBitmap& bitmap, int paletteIndex );
     wxMask( const wxBitmap& bitmap );
@@ -53,6 +54,7 @@ public:
 private:
     WXPixmap    m_bitmap;
     WXDisplay  *m_display;
+    wxSize m_size;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMask)

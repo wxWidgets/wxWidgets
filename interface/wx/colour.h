@@ -13,12 +13,16 @@
 
     @{
 */
-#define wxC2S_NAME              1   //!< Return colour name, when possible.
-#define wxC2S_CSS_SYNTAX        2   //!< Return colour in "rgb(r,g,b)" syntax.
-#define wxC2S_HTML_SYNTAX       4   //!< Return colour in "#rrggbb" syntax.
+enum {
+    wxC2S_NAME             = 1,   // return colour name, when possible
+    wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
+    wxC2S_HTML_SYNTAX      = 4    // return colour in #rrggbb syntax
+};
 
 //@}
 
+const unsigned char wxALPHA_TRANSPARENT = 0;
+const unsigned char wxALPHA_OPAQUE = 0xff;
 
 /**
     @class wxColour
@@ -78,6 +82,12 @@ public:
     */
     wxColour(const wxString& colourName);
 
+    /**
+        @param colRGB
+            A packed RGB value.
+    */
+    wxColour(unsigned long colRGB);
+    
     /**
         Copy constructor.
     */
@@ -155,7 +165,7 @@ public:
         On X, an allocated pixel value is returned.
         If the pixel is invalid (on X, unallocated), @c -1 is returned.
     */
-    int GetPixel() const;
+    wxIntPtr GetPixel() const;
 
     /**
         Returns the green intensity.

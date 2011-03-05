@@ -76,6 +76,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_APPWORKSPACE:
         case wxSYS_COLOUR_HIGHLIGHT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_BTNSHADOW:

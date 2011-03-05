@@ -248,9 +248,10 @@ time_t wxFileModificationTime(const wxString& filename);
 /**
     Renames @a file1 to @e file2, returning @true if successful.
 
-    If @a overwrite parameter is @true (default), the destination file is
-    overwritten if it exists, but if @a overwrite is @false, the functions
-    fails in this case.
+    If @a file2 is a directory, @a file1 is moved into it (@a overwrite is
+    ignored in this case). Otherwise, if @a file2 is an existing file, it is
+    overwritten if @a overwrite is @true (default) and the function fails if @a
+    overwrite is @false.
 
     @header{wx/filefn.h}
 */

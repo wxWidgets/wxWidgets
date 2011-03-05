@@ -49,6 +49,11 @@
     <object class="wxMenu" name="advanced_demos_menu">
         <label>_Advanced</label>
         <help>Advanced techniques with XRC</help>
+         <object class="wxMenuItem" name="obj_ref_tool_or_menuitem">
+            <label>_Object References Example</label>
+            <bitmap>objrefdlg.xpm</bitmap>
+            <help>Use of object references and event ranges</help>
+        </object>
          <object class="wxMenuItem" name="custom_class_tool_or_menuitem">
             <label>_Custom Class Example</label>
             <bitmap>custclas.xpm</bitmap>

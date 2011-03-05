@@ -128,7 +128,12 @@ protected:
                *m_chkTextAndBitmap,
                *m_chkFit,
                *m_chkAuthNeeded,
+#if wxUSE_COMMANDLINKBUTTON
                *m_chkCommandLink,
+#endif // wxUSE_COMMANDLINKBUTTON
+#if wxUSE_MARKUP
+               *m_chkUseMarkup,
+#endif // wxUSE_MARKUP
                *m_chkDefault;
 
     // more checkboxes for wxBitmapButton only
@@ -204,7 +209,12 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkTextAndBitmap =
     m_chkFit =
     m_chkAuthNeeded =
+#if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink =
+#endif // wxUSE_COMMANDLINKBUTTON
+#if wxUSE_MARKUP
+    m_chkUseMarkup =
+#endif // wxUSE_MARKUP
     m_chkDefault =
     m_chkUsePressed =
     m_chkUseFocused =
@@ -237,6 +247,9 @@ void ButtonWidgetsPage::CreateContent()
 #if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Use command &link button"));
 #endif
+#if wxUSE_MARKUP
+    m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup");
+#endif // wxUSE_MARKUP
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Default"));
 
     sizerLeft->AddSpacer(5);
@@ -347,6 +360,9 @@ void ButtonWidgetsPage::Reset()
 #if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink->SetValue(false);
 #endif
+#if wxUSE_MARKUP
+    m_chkUseMarkup->SetValue(false);
+#endif // wxUSE_MARKUP
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -543,12 +559,21 @@ void ButtonWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 
 void ButtonWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
 {
+    const wxString labelText = m_textLabel->GetValue();
+
 #if wxUSE_COMMANDLINKBUTTON
     if ( m_cmdLnkButton )
-        m_cmdLnkButton->SetMainLabel(m_textLabel->GetValue());
+        m_cmdLnkButton->SetMainLabel(labelText);
     else
 #endif // wxUSE_COMMANDLINKBUTTON
-        m_button->SetLabel(m_textLabel->GetValue());
+    {
+#if wxUSE_MARKUP
+        if ( m_chkUseMarkup->GetValue() )
+            m_button->SetLabelMarkup(labelText);
+        else
+#endif // wxUSE_MARKUP
+            m_button->SetLabel(labelText);
+    }
 
     m_sizerButton->Layout();
 }

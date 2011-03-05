@@ -16,13 +16,6 @@
 
 #include "wx/glcanvas.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/frame.h"
-    #include "wx/colour.h"
-    #include "wx/module.h"
-#endif // WX_PRECOMP
-
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
@@ -203,9 +196,12 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         long style,
                         const wxString& name,
                         const int *attribList,
-                        const wxPalette& WXUNUSED_UNLESS_DEBUG(palette))
+                        const wxPalette& palette)
 {
+#if wxUSE_PALETTE
     wxASSERT_MSG( !palette.IsOk(), wxT("palettes not supported") );
+#endif // wxUSE_PALETTE
+    wxUnusedVar(palette); // Unused when wxDEBUG_LEVEL==0
 
     m_exposed = false;
     m_noExpose = true;

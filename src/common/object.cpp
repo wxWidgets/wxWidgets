@@ -44,21 +44,20 @@
 
 #if wxUSE_EXTENDED_RTTI
 const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
- wxObject* wxVariantToObjectConverterwxObject ( wxxVariant &data )
-{ return data.wxTEMPLATED_MEMBER_CALL(Get , wxObject*) ; }
- wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data )
-{ return &data.wxTEMPLATED_MEMBER_CALL(Get , wxObject) ; }
- wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
- { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
+wxObject* wxVariantOfPtrToObjectConverterwxObject ( const wxAny &data )
+{ return wxANY_AS(data, wxObject*); }
+ wxAny wxObjectToVariantConverterwxObject ( wxObject *data )
+ { return wxAny( dynamic_cast<wxObject*> (data)  ) ; }
+
  wxClassInfo wxObject::ms_classInfo(ms_classParents , wxEmptyString , wxT("wxObject"),
             (int) sizeof(wxObject),                              \
             (wxObjectConstructorFn) 0   ,
             NULL,NULL,0 , 0 ,
-            0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);
- template<> void wxStringReadValue(const wxString & , wxObject * & ){ wxFAIL_MSG("unreachable"); }
+            0 , wxVariantOfPtrToObjectConverterwxObject , 0 , wxObjectToVariantConverterwxObject);
+
  template<> void wxStringWriteValue(wxString & , wxObject* const & ){ wxFAIL_MSG("unreachable"); }
- template<> void wxStringReadValue(const wxString & , wxObject & ){ wxFAIL_MSG("unreachable"); }
  template<> void wxStringWriteValue(wxString & , wxObject const & ){ wxFAIL_MSG("unreachable"); }
+
  wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject*).name() ) ;
  wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject).name() ) ;
 #else

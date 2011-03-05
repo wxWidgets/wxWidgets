@@ -664,8 +664,11 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     _xpg5_wcsftime(wchar_t *, size_t, const wchar_t *, const struct tm * );
     #define wxCRT_StrftimeW _xpg5_wcsftime
 #else
-    #ifndef __WXPALMOS__
-        // assume it's always available, this does seem to be the case for now
+    // Assume it's always available under non-Unix systems with the exception
+    // of Palm OS, this does seem to be the case for now. And under Unix we
+    // trust configure to detect it (except for SGI special case above).
+    #if defined(HAVE_WCSFTIME) || \
+        !(defined(__UNIX__) || defined(__WXPALMOS__))
         #define wxCRT_StrftimeW  wcsftime
     #endif /* ! __WXPALMOS__ */
 #endif

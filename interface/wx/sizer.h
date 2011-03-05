@@ -843,7 +843,8 @@ public:
         the sizer's minimal size. For windows with managed scrollbars this will set them
         appropriately.
 
-        @deprecated @todo provide deprecation description
+        @deprecated This is exactly the same as FitInside() in wxWidgets 2.9
+        and later, please replace calls to it with FitInside().
 
         @see wxScrolled::SetScrollbars()
     */

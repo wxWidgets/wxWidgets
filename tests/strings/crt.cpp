@@ -44,7 +44,9 @@ public:
 private:
     CPPUNIT_TEST_SUITE( CrtTestCase );
         CPPUNIT_TEST( SetGetEnv );
+#if wxUSE_UNICODE
         CPPUNIT_TEST( Strchr );
+#endif // wxUSE_UNICODE
         CPPUNIT_TEST( Strcmp );
         CPPUNIT_TEST( Strspn );
         CPPUNIT_TEST( Strcspn );
@@ -53,7 +55,9 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void SetGetEnv();
+#if wxUSE_UNICODE
     void Strchr();
+#endif // wxUSE_UNICODE
     void Strcmp();
     void Strspn();
     void Strcspn();
@@ -91,6 +95,7 @@ void CrtTestCase::SetGetEnv()
 #undef TESTVAR_NAME
 }
 
+#if wxUSE_UNICODE
 void CrtTestCase::Strchr()
 {
     // test that searching for a wide character in a narrow string simply
@@ -103,6 +108,7 @@ void CrtTestCase::Strchr()
     CPPUNIT_ASSERT( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
                     static_cast<wchar_t>(smiley)) );
 }
+#endif // wxUSE_UNICODE
 
 void CrtTestCase::Strcmp()
 {

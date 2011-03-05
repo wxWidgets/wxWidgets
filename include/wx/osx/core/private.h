@@ -32,12 +32,20 @@
     #define wxOSX_10_6_AND_LATER(x)
 #endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if !wxUSE_GUI || wxOSX_USE_COCOA_OR_CARBON
+
+// Carbon functions are currently still used in wxOSX/Cocoa too (including
+// wxBase part of it).
+#include <Carbon/Carbon.h>
 
 WXDLLIMPEXP_BASE long UMAGetSystemVersion() ;
 
 void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , unsigned char * to );
 wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from );
+
+WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
+WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
+WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
 #endif
 
@@ -106,6 +114,7 @@ class wxWidgetImpl;
 class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
+class wxSearchCtrl;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
@@ -141,7 +150,9 @@ public :
                        const wxString& strHelp,
                        wxItemKind kind,
                        wxMenu *pSubMenu );
-
+    
+    // handle OS specific menu items if they weren't handled during normal processing
+    virtual bool DoDefault() { return false; }
 protected :
     wxMenuItem* m_peer;
 
@@ -224,6 +235,17 @@ public :
     virtual void        GetPosition( int &x, int &y ) const = 0;
     virtual void        GetSize( int &width, int &height ) const = 0;
     virtual void        SetControlSize( wxWindowVariant variant ) = 0;
+    virtual float       GetContentScaleFactor() const 
+    {
+        return 1.0;
+    }
+    
+    // the native coordinates may have an 'aura' for shadows etc, if this is the case the layout
+    // inset indicates on which insets the real control is drawn
+    virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+    {
+        left = top = right = bottom = 0;
+    }
 
     // native view coordinates are topleft to bottom right (flipped regarding CoreGraphics origin)
     virtual bool        IsFlipped() const { return true; }
@@ -248,6 +270,9 @@ public :
     virtual void        SetDefaultButton( bool isDefault ) = 0;
     virtual void        PerformClick() = 0;
     virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+    virtual void        SetLabelMarkup( const wxString& WXUNUSED(markup) ) { }
+#endif
 
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
@@ -360,7 +385,7 @@ public :
                                     long style,
                                     long extraStyle) ;
 
-    static wxWidgetImplType*    CreateSearchControl( wxTextCtrl* wxpeer,
+    static wxWidgetImplType*    CreateSearchControl( wxSearchCtrl* wxpeer,
                                     wxWindowMac* parent,
                                     wxWindowID id,
                                     const wxString& content,
@@ -631,6 +656,7 @@ public :
 
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
+    virtual bool SetHint(const wxString& WXUNUSED(hint)) { return false; }
 private:
     wxTextEntry * const m_entry;
 

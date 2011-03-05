@@ -975,8 +975,13 @@ public:
         you are sure that this string contains a floating point number formatted with
         the rules of the locale currently in use (see wxLocale).
 
-        Refer to the docs of the standard function @c strtod() for more details about
-        the supported syntax.
+        Also notice that even this function is locale-specific it does not
+        support strings with thousands separators in them, even if the current
+        locale uses digits grouping. You may use wxNumberFormatter::FromString()
+        to parse such strings.
+
+        Please refer to the documentation of the standard function @c strtod()
+        for more details about the supported syntax.
 
         @see ToCDouble(), ToLong(), ToULong()
     */
@@ -1015,8 +1020,12 @@ public:
         that this string contains an integer number formatted with
         the rules of the locale currently in use (see wxLocale).
 
-        Refer to the docs of the standard function @c strtol() for more details about
-        the supported syntax.
+        As with ToDouble(), this function does not support strings containing
+        thousands separators even if the current locale uses digits grouping.
+        You may use wxNumberFormatter::FromString() to parse such strings.
+
+        Please refer to the documentation of the standard function @c strtol()
+        for more details about the supported syntax.
 
         @see ToCDouble(), ToDouble(), ToULong()
     */

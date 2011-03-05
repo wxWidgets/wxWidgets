@@ -41,29 +41,24 @@ public:
 
     // implementation
 
-    // this is a replacement for dynamic_cast<wxDataViewCustomRenderer> in the
-    // code checking whether the renderer is interested in mouse events, it's
-    // overridden in wxDataViewCustomRenderer to return the object itself but
-    // intentionally returns NULL for all the other renderer classes as the
-    // user should _not_ be able to override Activate/LeftClick() when deriving
-    // from them for consistency with the other ports and while we can't
-    // prevent this from working at compile-time because all renderers are
-    // custom renderers in the generic implementation, we at least make sure
-    // that it doesn't work at run-time because Activate/LeftClick() would
-    // never be called
-    virtual wxDataViewCustomRenderer *WXGetAsCustom() { return NULL; }
+    // These callbacks are used by generic implementation of wxDVC itself.
+    // They're different from the corresponding Activate/LeftClick() methods
+    // which should only be overridable for the custom renderers while the
+    // generic implementation uses these ones for all of them, including the
+    // standard ones.
 
-    // The generic implementation of some standard renderers reacts to item
-    // activation, so provide this internal function which is called by
-    // wxDataViewCtrl for them. It is called with the old value of the cell and
-    // is passed the model and cell coordinates to be able to change the model
-    // value for this cell.
-    virtual void WXOnActivate(wxDataViewModel * WXUNUSED(model),
-                              const wxVariant& WXUNUSED(valueOld),
-                              const wxDataViewItem& WXUNUSED(item),
+    virtual bool WXOnActivate(const wxRect& WXUNUSED(cell),
+                              wxDataViewModel *WXUNUSED(model),
+                              const wxDataViewItem & WXUNUSED(item),
                               unsigned int WXUNUSED(col))
-    {
-    }
+        { return false; }
+
+    virtual bool WXOnLeftClick(const wxPoint& WXUNUSED(cursor),
+                               const wxRect& WXUNUSED(cell),
+                               wxDataViewModel *WXUNUSED(model),
+                               const wxDataViewItem & WXUNUSED(item),
+                               unsigned int WXUNUSED(col) )
+        { return false; }
 
 private:
     int                          m_align;

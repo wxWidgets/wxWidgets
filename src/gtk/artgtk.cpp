@@ -81,6 +81,8 @@ wxString wxArtIDToStock(const wxArtID& id)
     ART(wxART_GO_DOWN,                             GTK_STOCK_GO_DOWN)
     ART(wxART_GO_TO_PARENT,                        GTK_STOCK_GO_UP)
     ART(wxART_GO_HOME,                             GTK_STOCK_HOME)
+    ART(wxART_GOTO_FIRST,                          GTK_STOCK_GOTO_FIRST)
+    ART(wxART_GOTO_LAST,                           GTK_STOCK_GOTO_LAST)
     ART(wxART_FILE_OPEN,                           GTK_STOCK_OPEN)
     ART(wxART_PRINT,                               GTK_STOCK_PRINT)
     ART(wxART_HELP,                                GTK_STOCK_HELP)
@@ -112,6 +114,9 @@ wxString wxArtIDToStock(const wxArtID& id)
 
     ART(wxART_UNDO,                                GTK_STOCK_UNDO)
     ART(wxART_REDO,                                GTK_STOCK_REDO)
+
+    ART(wxART_PLUS,                                GTK_STOCK_ADD)
+    ART(wxART_MINUS,                               GTK_STOCK_REMOVE)
 
     ART(wxART_CLOSE,                               GTK_STOCK_CLOSE)
     ART(wxART_QUIT,                                GTK_STOCK_QUIT)

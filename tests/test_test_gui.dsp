@@ -235,6 +235,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\menu\accelentry.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\asserthelper.cpp
 # End Source File
 # Begin Source File
@@ -337,6 +341,14 @@ SOURCE=.\controls\headerctrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\htmllboxtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\html\htmlparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\htmlwindow.cpp
 # End Source File
 # Begin Source File
@@ -381,11 +393,23 @@ SOURCE=.\controls\listviewtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\markuptest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\graphics\measuring.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\menu\menu.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\notebooktest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\ownerdrawncomboboxtest.cpp
 # End Source File
 # Begin Source File
 
@@ -497,7 +521,23 @@ SOURCE=.\controls\treectrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\validators\valnum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\virtlistctrltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\windowtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sizers\wrapsizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xml\xrctest.cpp
 # End Source File
 # End Group
 # End Target

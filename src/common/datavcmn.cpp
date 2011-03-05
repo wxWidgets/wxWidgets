@@ -790,6 +790,8 @@ void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     wxDataViewItemAttr attr;
     model->GetAttr(item, column, attr);
     SetAttr(attr);
+
+    SetEnabled(model->IsEnabled(item, column));
 }
 
 

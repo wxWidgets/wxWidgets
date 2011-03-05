@@ -41,8 +41,6 @@
 // wxMenu implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
-
 bool wxMenu::Create(const wxString& title, long style)
 {
     wxAutoNSAutoreleasePool pool;
@@ -115,7 +113,6 @@ void wxMenu::Cocoa_dealloc()
 // ============================================================================
 // wxMenuBar implementation
 // ============================================================================
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 bool wxMenuBar::Create(long style)
 {

@@ -12,149 +12,18 @@
 #ifndef _WX_CMNDATA_H_BASE_
 #define _WX_CMNDATA_H_BASE_
 
-#include "wx/window.h"
-#include "wx/font.h"
-#include "wx/encinfo.h"
-#include "wx/colour.h"
+#include "wx/defs.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/gdicmn.h"
 
 #if wxUSE_STREAMS
 #include "wx/stream.h"
 #endif
 
-
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 
-
-class WXDLLIMPEXP_CORE wxColourData : public wxObject
-{
-public:
-    // number of custom colours we store
-    enum
-    {
-        NUM_CUSTOM = 16
-    };
-
-    wxColourData();
-    wxColourData(const wxColourData& data);
-    wxColourData& operator=(const wxColourData& data);
-    virtual ~wxColourData();
-
-    void SetChooseFull(bool flag) { m_chooseFull = flag; }
-    bool GetChooseFull() const { return m_chooseFull; }
-    void SetColour(const wxColour& colour) { m_dataColour = colour; }
-    const wxColour& GetColour() const { return m_dataColour; }
-    wxColour& GetColour() { return m_dataColour; }
-
-    // SetCustomColour() modifies colours in an internal array of NUM_CUSTOM
-    // custom colours;
-    void SetCustomColour(int i, const wxColour& colour);
-    wxColour GetCustomColour(int i) const;
-
-    // Serialize the object to a string and restore it from it
-    wxString ToString() const;
-    bool FromString(const wxString& str);
-
-
-    // public for backwards compatibility only: don't use directly
-public:
-    wxColour        m_dataColour;
-    wxColour        m_custColours[NUM_CUSTOM];
-    bool            m_chooseFull;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxColourData)
-};
-
-class WXDLLIMPEXP_CORE wxFontData : public wxObject
-{
-public:
-    wxFontData();
-    virtual ~wxFontData();
-
-    wxFontData(const wxFontData& data)
-        : wxObject(),
-          m_fontColour(data.m_fontColour),
-          m_showHelp(data.m_showHelp),
-          m_allowSymbols(data.m_allowSymbols),
-          m_enableEffects(data.m_enableEffects),
-          m_initialFont(data.m_initialFont),
-          m_chosenFont(data.m_chosenFont),
-          m_minSize(data.m_minSize),
-          m_maxSize(data.m_maxSize),
-          m_encoding(data.m_encoding),
-          m_encodingInfo(data.m_encodingInfo)
-    {
-    }
-
-    wxFontData& operator=(const wxFontData& data)
-    {
-        if (&data != this)
-        {
-            wxObject::operator=(data);
-            m_fontColour     = data.m_fontColour;
-            m_showHelp       = data.m_showHelp;
-            m_allowSymbols   = data.m_allowSymbols;
-            m_enableEffects  = data.m_enableEffects;
-            m_initialFont    = data.m_initialFont;
-            m_chosenFont     = data.m_chosenFont;
-            m_minSize        = data.m_minSize;
-            m_maxSize        = data.m_maxSize;
-            m_encoding       = data.m_encoding;
-            m_encodingInfo   = data.m_encodingInfo;
-        }
-        return *this;
-    }
-
-    void SetAllowSymbols(bool flag) { m_allowSymbols = flag; }
-    bool GetAllowSymbols() const { return m_allowSymbols; }
-
-    void SetColour(const wxColour& colour) { m_fontColour = colour; }
-    const wxColour& GetColour() const { return m_fontColour; }
-
-    void SetShowHelp(bool flag) { m_showHelp = flag; }
-    bool GetShowHelp() const { return m_showHelp; }
-
-    void EnableEffects(bool flag) { m_enableEffects = flag; }
-    bool GetEnableEffects() const { return m_enableEffects; }
-
-    void SetInitialFont(const wxFont& font) { m_initialFont = font; }
-    wxFont GetInitialFont() const { return m_initialFont; }
-
-    void SetChosenFont(const wxFont& font) { m_chosenFont = font; }
-    wxFont GetChosenFont() const { return m_chosenFont; }
-
-    void SetRange(int minRange, int maxRange) { m_minSize = minRange; m_maxSize = maxRange; }
-
-    // encoding info is split into 2 parts: the logical wxWin encoding
-    // (wxFontEncoding) and a structure containing the native parameters for
-    // it (wxNativeEncodingInfo)
-    wxFontEncoding GetEncoding() const { return m_encoding; }
-    void SetEncoding(wxFontEncoding encoding) { m_encoding = encoding; }
-
-    wxNativeEncodingInfo& EncodingInfo() { return m_encodingInfo; }
-
-
-    // public for backwards compatibility only: don't use directly
-public:
-    wxColour        m_fontColour;
-    bool            m_showHelp;
-    bool            m_allowSymbols;
-    bool            m_enableEffects;
-    wxFont          m_initialFont;
-    wxFont          m_chosenFont;
-    int             m_minSize;
-    int             m_maxSize;
-
-private:
-    wxFontEncoding       m_encoding;
-    wxNativeEncodingInfo m_encodingInfo;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxFontData)
-};
-
-#if wxUSE_PRINTING_ARCHITECTURE
 /*
  * wxPrintData
  * Encapsulates printer information (not printer dialog information)

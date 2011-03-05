@@ -343,8 +343,13 @@
 #   define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
+#define wxUSE_CAIRO 0
+
+
 
 #define wxUSE_CONTROLS     0
+
+#define wxUSE_MARKUP       0
 
 #define wxUSE_POPUPWIN     0
 
@@ -422,6 +427,10 @@
 
 
 #define wxUSE_ACCEL 0
+
+#define wxUSE_ARTPROVIDER_STD 0
+
+#define wxUSE_ARTPROVIDER_TANGO 0
 
 #define wxUSE_HOTKEY 0
 
@@ -977,6 +986,9 @@
 
 /* Define if you have wcsdup function  */
 #undef HAVE_WCSDUP
+
+/* Define if you have wcsftime() function  */
+#undef HAVE_WCSFTIME
 
 /* Define if you have strnlen() function */
 #undef HAVE_STRNLEN

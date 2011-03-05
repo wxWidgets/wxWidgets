@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
-    wxButton() { m_imageData = NULL; }
+    wxButton() { Init(); }
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxString& label = wxEmptyString,
@@ -29,7 +29,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr)
     {
-        m_imageData = NULL;
+        Init();
 
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -63,9 +63,6 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
-private:
-    void MakeOwnerDrawn();
-
 protected:
     // send a notification event, return true if processed
     bool SendClickEvent();
@@ -88,16 +85,40 @@ protected:
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
     virtual void DoSetBitmapPosition(wxDirection dir);
 
-    // Increases the passed in size if necessary to account for the
-    // button image, if any
+#if wxUSE_MARKUP
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
+
+    // Increases the passed in size to account for the button image.
+    //
+    // Should only be called if we do have a button, i.e. if m_imageData is
+    // non-NULL.
     void AdjustForBitmapSize(wxSize& size) const;
 
     class wxButtonImageData *m_imageData;
+
+#if wxUSE_MARKUP
+    class wxMarkupText *m_markupText;
+#endif // wxUSE_MARKUP
 
     // true if the UAC symbol is shown
     bool m_authNeeded;
 
 private:
+    void Init()
+    {
+        m_imageData = NULL;
+#if wxUSE_MARKUP
+        m_markupText = NULL;
+#endif // wxUSE_MARKUP
+        m_authNeeded = false;
+    }
+
+    // Switches button into owner-drawn mode: this is used if we need to draw
+    // something not supported by the native control, such as using non default
+    // colours or a bitmap on pre-XP systems.
+    void MakeOwnerDrawn();
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 

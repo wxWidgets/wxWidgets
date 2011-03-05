@@ -59,6 +59,11 @@ public:
     wxXCursorList m_cursors;  // wxXCursor objects, one per display
     wxStockCursor m_cursorId; // wxWidgets standard cursor id
 
+private:
+    // There is no way to copy m_cursor so we can't implement a copy ctor
+    // properly.
+    wxDECLARE_NO_COPY_CLASS(wxCursorRefData);
+
     friend class wxCursor;
 };
 
@@ -304,9 +309,12 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
     return new wxCursorRefData;
 }
 
-wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxCursor::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxCursorRefData(*static_cast<const wxCursorRefData *>(data));
+    wxFAIL_MSG( wxS("Cloning cursors is not implemented in wxMotif.") );
+
+    return new wxCursorRefData;
 }
 
 // Motif-specific: create/get a cursor for the current display

@@ -634,7 +634,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     wxString faceName = font.GetFaceName();
     // If font was not in there, add it now
-    if ( faceName.length() &&
+    if ( !faceName.empty() &&
          wxPGGlobalVars->m_fontFamilyChoices->Index(faceName) == wxNOT_FOUND )
         wxPGGlobalVars->m_fontFamilyChoices->AddAsSorted(faceName);
 
@@ -797,7 +797,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
     else
         drawFace = m_value_wxFont.GetFaceName();
 
-    if ( drawFace.length() )
+    if ( !drawFace.empty() )
     {
         // Draw the background
         dc.SetBrush( wxColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)) );
@@ -1143,15 +1143,35 @@ wxColour wxSystemColourProperty::GetColour( int index ) const
     return wxSystemSettings::GetColour( (wxSystemColour)index );
 }
 
-wxString wxSystemColourProperty::ColourToString( const wxColour& col, int index ) const
+wxString wxSystemColourProperty::ColourToString( const wxColour& col,
+                                                 int index,
+                                                 int argFlags ) const
 {
+
     if ( index == wxNOT_FOUND )
-        return wxString::Format(wxT("(%i,%i,%i)"),
-                                (int)col.Red(),
-                                (int)col.Green(),
-                                (int)col.Blue());
+    {
+
+        if ( (argFlags & wxPG_FULL_VALUE) ||
+             GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) )
+        {
+            return wxString::Format(wxS("(%i,%i,%i,%i)"),
+                                    (int)col.Red(),
+                                    (int)col.Green(),
+                                    (int)col.Blue(),
+                                    (int)col.Alpha());
+        }
+        else
+        {
+            return wxString::Format(wxS("(%i,%i,%i)"),
+                                    (int)col.Red(),
+                                    (int)col.Green(),
+                                    (int)col.Blue());
+        }
+    }
     else
+    {
         return m_choices.GetLabel(index);
+    }
 }
 
 wxString wxSystemColourProperty::ValueToString( wxVariant& value,
@@ -1178,7 +1198,7 @@ wxString wxSystemColourProperty::ValueToString( wxVariant& value,
         index = m_choices.Index(val.m_type);
     }
 
-    return ColourToString(val.m_colour, index);
+    return ColourToString(val.m_colour, index, argFlags);
 }
 
 
@@ -1373,37 +1393,47 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 
 bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, int argFlags ) const
 {
-    //
-    // Accept colour format "[Name] [(R,G,B)]"
-    // Name takes precedence.
-    //
-    wxString colourName;
-    wxString colourRGB;
+    wxString custColName(m_choices.GetLabel(GetCustomColourIndex()));
+    wxString colStr(text);
+    colStr.Trim(true);
+    colStr.Trim(false);
 
-    int ppos = text.Find(wxT("("));
+    wxColour customColour;
+    bool conversionSuccess = false;
 
-    if ( ppos == wxNOT_FOUND )
+    if ( colStr != custColName )
     {
-        colourName = text;
+        if ( colStr.Find(wxS("(")) == 0 )
+        {
+            // Eliminate whitespace
+            colStr.Replace(wxS(" "), wxEmptyString);
+
+            int commaCount = colStr.Freq(wxS(','));
+            if ( commaCount == 2 )
+            {
+                // Convert (R,G,B) to rgb(R,G,B)
+                colStr = wxS("rgb") + colStr;
+            }
+            else if ( commaCount == 3 )
+            {
+                // We have int alpha, CSS format that wxColour takes as
+                // input processes float alpha. So, let's parse the colour
+                // ourselves instead of trying to convert it to a format
+                // that wxColour::FromString() understands.
+                int r = -1, g = -1, b = -1, a = -1;
+                wxSscanf(colStr, wxS("(%i,%i,%i,%i)"), &r, &g, &b, &a);
+                customColour.Set(r, g, b, a);
+                conversionSuccess = customColour.IsOk();
+            }
+        }
+
+        if ( !conversionSuccess )
+            conversionSuccess = customColour.Set(colStr);
     }
-    else
-    {
-        colourName = text.substr(0, ppos);
-        colourRGB = text.substr(ppos, text.length()-ppos);
-    }
 
-    // Strip spaces from extremities
-    colourName.Trim(true);
-    colourName.Trim(false);
-    colourRGB.Trim(true);
-
-    // Validate colourRGB string - (1,1,1) is shortest allowed
-    if ( colourRGB.length() < 7 )
-        colourRGB.clear();
-
-    if ( colourRGB.length() == 0 && m_choices.GetCount() &&
+    if ( !conversionSuccess && m_choices.GetCount() &&
          !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) &&
-         colourName == m_choices.GetLabel(GetCustomColourIndex()) )
+         colStr == custColName )
     {
         if ( !(argFlags & wxPG_EDITABLE_VALUE ))
         {
@@ -1421,10 +1451,12 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
         bool done = false;
 
-        if ( colourName.length() )
+        if ( !conversionSuccess )
         {
             // Try predefined colour first
-            bool res = wxEnumProperty::StringToValue(value, colourName, argFlags);
+            bool res = wxEnumProperty::StringToValue(value,
+                                                     colStr,
+                                                     argFlags);
             if ( res && GetIndex() >= 0 )
             {
                 val.m_type = GetIndex();
@@ -1437,22 +1469,11 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
                 done = true;
             }
         }
-        if ( colourRGB.length() && !done )
+        else
         {
-            // Then check custom colour.
             val.m_type = wxPG_COLOUR_CUSTOM;
-
-            int r = -1, g = -1, b = -1;
-            wxSscanf(colourRGB.c_str(),wxT("(%i,%i,%i)"),&r,&g,&b);
-
-            if ( r >= 0 && r <= 255 &&
-                 g >= 0 && g <= 255 &&
-                 b >= 0 && b <= 255 )
-            {
-                val.m_colour.Set(r,g,b);
-
-                done = true;
-            }
+            val.m_colour = customColour;
+            done = true;
         }
 
         if ( !done )
@@ -1761,7 +1782,7 @@ void wxCursorProperty::OnCustomPaint( wxDC&, const wxRect&, wxPGPaintData& ) { }
 const wxString& wxPGGetDefaultImageWildcard()
 {
     // Form the wildcard, if not done yet
-    if ( !wxPGGlobalVars->m_pDefaultImageWildcard.length() )
+    if ( wxPGGlobalVars->m_pDefaultImageWildcard.empty() )
     {
 
         wxString str;
@@ -2158,7 +2179,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
     if ( !dateTime.IsValid() )
         return wxT("Invalid");
 
-    if ( !ms_defaultDateFormat.length() )
+    if ( ms_defaultDateFormat.empty() )
     {
 #if wxUSE_DATEPICKCTRL
         bool showCentury = m_dpStyle & wxDP_SHOWCENTURY ? true : false;
@@ -2168,7 +2189,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
         ms_defaultDateFormat = DetermineDefaultDateFormat( showCentury );
     }
 
-    if ( m_format.length() &&
+    if ( !m_format.empty() &&
          !(argFlags & wxPG_FULL_VALUE) )
             format = m_format.c_str();
 

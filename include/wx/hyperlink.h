@@ -68,6 +68,8 @@ public:
     // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
+    virtual bool HasTransparentBackground() { return true; }
+
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 

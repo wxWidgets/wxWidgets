@@ -156,6 +156,23 @@ wxDEFINE_EVENT( wxEVT_GRID_EDITOR_SHOWN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent );
 
+// ----------------------------------------------------------------------------
+// private helpers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+    
+    // ensure that first is less or equal to second, swapping the values if
+    // necessary
+    void EnsureFirstLessThanSecond(int& first, int& second)
+    {
+        if ( first > second )
+            wxSwap(first, second);
+    }
+    
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1838,58 +1855,6 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 #define internalYToRow(y) YToRow(y, true)
 
 /////////////////////////////////////////////////////////////////////
-
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxGridStyle )
-
-wxBEGIN_FLAGS( wxGridStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-wxEND_FLAGS( wxGridStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow,"wx/grid.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxGrid)
-    wxHIDE_PROPERTY( Children )
-    wxPROPERTY_FLAGS( WindowStyle , wxGridStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxGrid)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxGrid , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-
-/*
- TODO : Expose more information of a list's layout, etc. via appropriate objects (e.g., NotebookPageInfo)
-*/
-#else
-IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
-#endif
 
 BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_PAINT( wxGrid::OnPaint )
@@ -4859,6 +4824,9 @@ void
 wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                                  int bottomRow, int rightCol)
 {
+    MakeCellVisible(m_selectedBlockCorner);
+    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
+
     if ( m_selection )
     {
         switch ( m_selection->GetSelectionMode() )
@@ -4894,9 +4862,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 return;
         }
     }
-
-    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
-    MakeCellVisible(m_selectedBlockCorner);
 
     EnsureFirstLessThanSecond(topRow, bottomRow);
     EnsureFirstLessThanSecond(leftCol, rightCol);
@@ -6281,7 +6246,9 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
         else if ( line > 0 &&
                     pos - oper.GetLineStartPos(this,
                                                line) < WXGRID_LABEL_EDGE_ZONE )
-            return line - 1;
+        {
+            return oper.GetLineBefore(this, line);
+        }
     }
 
     return -1;

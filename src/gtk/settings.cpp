@@ -14,7 +14,6 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/cmndata.h"
     #include "wx/toplevel.h"
 #endif
 
@@ -188,6 +187,12 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 
         case wxSYS_COLOUR_LISTBOXTEXT:
             color = wxColor(ListStyle()->text[GTK_STATE_NORMAL]);
+            break;
+
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+            // This is for the text in a list control (or tree) when the
+            // item is selected, but not focused
+            color = wxColor(ListStyle()->text[GTK_STATE_ACTIVE]);
             break;
 
         case wxSYS_COLOUR_MENUTEXT:

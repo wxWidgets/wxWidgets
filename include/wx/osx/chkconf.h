@@ -41,7 +41,8 @@
  * to configure the build otherwise and give error messages
  */
 
-#if !wxUSE_GRAPHICS_CONTEXT || ( defined( wxMAC_USE_CORE_GRAPHICS ) && !wxMAC_USE_CORE_GRAPHICS )
+#if wxUSE_GUI && (!wxUSE_GRAPHICS_CONTEXT || \
+    ( defined( wxMAC_USE_CORE_GRAPHICS ) && !wxMAC_USE_CORE_GRAPHICS ))
 #   error "OS X builds use CoreGraphics in this wx version, you cannot turn back to QuickDraw completely"
 #endif
 
@@ -70,7 +71,9 @@
         #undef wxOSX_USE_COCOA
         #define wxOSX_USE_COCOA 1
     #endif
-    #define wxOSX_USE_CARBON 0
+    #if wxOSX_USE_CARBON
+        #error "Carbon does not support 64bit"
+    #endif
     #define wxOSX_USE_IPHONE 0
 #else
     #ifdef __WXOSX_IPHONE__

@@ -37,6 +37,8 @@ protected:
 
 private:
     wxQtPointer< wxQtGroupBox > m_qtGroupBox;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticBox );
 };
 
 #endif // _WX_QT_STATBOX_H_

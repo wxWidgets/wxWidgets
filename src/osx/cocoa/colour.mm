@@ -19,23 +19,28 @@
 
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_COCOA
 wxColour::wxColour(WX_NSColor col)
 {
     size_t noComp = [col numberOfComponents];
-    
-    CGFloat *components = NULL;
-    if ( noComp >= 1 && noComp <= 4 )
+
+    CGFloat components[4];
+    CGFloat *p;
+    if ( noComp < 1 || noComp > WXSIZEOF(components) )
     {
         // TODO verify whether we really are on a RGB color space
         m_alpha = wxALPHA_OPAQUE;
         [col getComponents: components];
+        p = components;
     }
-    InitFromComponents(const_cast<const CGFloat*>(components), noComp);
+    else // Unsupported colour format.
+    {
+        p = NULL;
+    }
+
+    InitFromComponents(components, noComp);
 }
 
-WX_NSColor wxColour::OSXGetNSColor()
+WX_NSColor wxColour::OSXGetNSColor() const
 {
-    return [NSColor colorWithDeviceRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0]; 
+    return [NSColor colorWithDeviceRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0];
 }
-#endif

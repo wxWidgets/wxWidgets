@@ -58,8 +58,6 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
-
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
@@ -333,7 +331,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (wxMenuItem::GetLabelText(wxConvertMnemonicsFromGTK(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
+    if (wxMenuItem::GetLabelText(menu->GetTitle()) == wxMenuItem::GetLabelText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -426,7 +424,7 @@ wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return wxConvertMnemonicsFromGTK(menu->GetTitle());
+    return menu->GetTitle();
 }
 
 void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
@@ -518,8 +516,6 @@ static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
 //-----------------------------------------------------------------------------
 // wxMenuItem
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
@@ -678,8 +674,6 @@ static gboolean can_activate_accel(GtkWidget*, guint, wxMenu* menu)
 }
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
-
 void wxMenu::Init()
 {
     m_popupShown = false;
@@ -719,6 +713,11 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
+    // Destroying a menu generates a "hide" signal even if it's not shown
+    // currently, so disconnect it to avoid dummy wxEVT_MENU_CLOSE events
+    // generation.
+    g_signal_handlers_disconnect_by_func(m_menu, (gpointer)menu_hide, this);
+
     // see wxMenu::Init
     g_object_unref(m_menu);
 
@@ -740,6 +739,11 @@ void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
 wxLayoutDirection wxMenu::GetLayoutDirection() const
 {
     return wxWindow::GTKGetLayout(m_owner);
+}
+
+wxString wxMenu::GetTitle() const
+{
+    return wxConvertMnemonicsFromGTK(wxMenuBase::GetTitle());
 }
 
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)

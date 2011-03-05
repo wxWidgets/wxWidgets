@@ -27,8 +27,7 @@ the wxApp::OnInit member defined for a class derived from wxApp.
 @e OnInit will usually create a top window as a bare minimum. Unlike in earlier
 versions of wxWidgets, OnInit does not return a frame. Instead it returns a
 boolean value which indicates whether processing should continue (@true) or not
-(@false). You call wxApp::SetTopWindow to let wxWidgets know about the top
-window.
+(@false).
 
 Note that the program's command line arguments, represented by @e argc and
 @e argv, are available from within wxApp member functions.
@@ -59,7 +58,6 @@ bool DerivedApp::OnInit()
     wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
     ...
     the_frame->Show(true);
-    SetTopWindow(the_frame);
 
     return true;
 }

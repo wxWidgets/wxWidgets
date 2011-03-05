@@ -610,14 +610,9 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         uniChars = new wchar_t[ numChars ] ;
         GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
         charBuf[ numChars - 1 ] = 0;
-#if SIZEOF_WCHAR_T == 2
-        uniChars = (wchar_t*) charBuf ;
-/*        memcpy( uniChars , charBuf , numChars * 2 ) ;*/   // is there any point in copying charBuf over itself? (in fact, memcpy isn't even guaranteed to work correctly if the source and destination ranges overlap...)
-#else
         // the resulting string will never have more chars than the utf16 version, so this is safe
         wxMBConvUTF16 converter ;
         numChars = converter.MB2WC( uniChars , (const char*)charBuf , numChars ) ;
-#endif
     }
 
     switch ( GetEventKind( event ) )

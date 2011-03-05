@@ -32,6 +32,7 @@
     #include "wx/layout.h"
     #include "wx/choice.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
     #include "wx/dcmemory.h"
     #include "wx/dcclient.h"
@@ -46,6 +47,7 @@
 #include "wx/printdlg.h"
 #include "wx/print.h"
 #include "wx/dcprint.h"
+#include "wx/artprov.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -925,11 +927,18 @@ void wxPreviewCanvas::OnChar(wxKeyEvent &event)
     wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
     switch (event.GetKeyCode())
     {
-        case WXK_TAB:
-            controlBar->OnGoto();
-            return;
         case WXK_RETURN:
             controlBar->OnPrint();
+            return;
+        case (int)'+':
+        case WXK_NUMPAD_ADD:
+        case WXK_ADD:
+            controlBar->DoZoomIn();
+            return;
+        case (int)'-':
+        case WXK_NUMPAD_SUBTRACT:
+        case WXK_SUBTRACT:
+            controlBar->DoZoomOut();
             return;
     }
 
@@ -998,6 +1007,125 @@ void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
 
 #endif // wxUSE_MOUSEWHEEL
 
+// ----------------------------------------------------------------------------
+// wxPrintPageTextCtrl
+// ----------------------------------------------------------------------------
+
+// This text control contains the page number in the interval specified during
+// its construction. Invalid pages are not accepted and the control contents is
+// validated when it loses focus. Conversely, if the user changes the page to
+// another valid one or presses Enter, OnGotoPage() method of the preview object
+// will be called.
+class wxPrintPageTextCtrl : public wxTextCtrl
+{
+public:
+    wxPrintPageTextCtrl(wxPreviewControlBar *preview, int minPage, int maxPage)
+        : wxTextCtrl(preview,
+                     wxID_PREVIEW_GOTO,
+                     PageAsString(minPage),
+                     wxDefaultPosition,
+                     // We use hardcoded 99999 for the width instead of fitting
+                     // it to the values we can show because the control looks
+                     // uncomfortably narrow if the real page number is just
+                     // one or two digits.
+                     wxSize(preview->GetTextExtent("99999").x, wxDefaultCoord),
+                     wxTE_PROCESS_ENTER
+#if wxUSE_VALIDATORS
+                     , wxTextValidator(wxFILTER_DIGITS)
+#endif // wxUSE_VALIDATORS
+                    ),
+          m_preview(preview),
+          m_minPage(minPage),
+          m_maxPage(maxPage)
+    {
+        m_page = minPage;
+
+        Connect(wxEVT_KILL_FOCUS,
+                wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
+        Connect(wxEVT_COMMAND_TEXT_ENTER,
+                wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
+    }
+
+    // Helpers to conveniently set or get the current page number. Return value
+    // is 0 if the current controls contents is invalid.
+    void SetPageNumber(int page)
+    {
+        wxASSERT( IsValidPage(page) );
+
+        SetValue(PageAsString(page));
+    }
+
+    int GetPageNumber() const
+    {
+        long value;
+        if ( !GetValue().ToLong(&value) || !IsValidPage(value) )
+            return 0;
+
+        // Cast is safe because the value is less than (int) m_maxPage.
+        return static_cast<int>(value);
+    }
+
+private:
+    static wxString PageAsString(int page)
+    {
+        return wxString::Format("%d", page);
+    }
+
+    bool IsValidPage(int page) const
+    {
+        return page >= m_minPage && page <= m_maxPage;
+    }
+
+    bool DoChangePage()
+    {
+        const int page = GetPageNumber();
+
+        if ( !page )
+            return false;
+
+        if ( page != m_page )
+        {
+            // We have a valid page, remember it.
+            m_page = page;
+
+            // And notify the owner about the change.
+            m_preview->OnGotoPage();
+        }
+        //else: Nothing really changed.
+
+        return true;
+    }
+
+    void OnKillFocus(wxFocusEvent& event)
+    {
+        if ( !DoChangePage() )
+        {
+            // The current contents is invalid so reset it back to the last
+            // known good page index.
+            SetPageNumber(m_page);
+        }
+
+        event.Skip();
+    }
+
+    void OnTextEnter(wxCommandEvent& WXUNUSED(event))
+    {
+        DoChangePage();
+    }
+
+
+    wxPreviewControlBar * const m_preview;
+
+    const int m_minPage,
+              m_maxPage;
+
+    // This is the last valid page value that we had, we revert to it if an
+    // invalid page is entered.
+    int m_page;
+
+    wxDECLARE_NO_COPY_CLASS(wxPrintPageTextCtrl);
+};
+
 //----------------------------------------------------------------------------
 // wxPreviewControlBar
 //----------------------------------------------------------------------------
@@ -1011,9 +1139,19 @@ BEGIN_EVENT_TABLE(wxPreviewControlBar, wxPanel)
     EVT_BUTTON(wxID_PREVIEW_NEXT,     wxPreviewControlBar::OnNextButton)
     EVT_BUTTON(wxID_PREVIEW_FIRST,    wxPreviewControlBar::OnFirstButton)
     EVT_BUTTON(wxID_PREVIEW_LAST,     wxPreviewControlBar::OnLastButton)
-    EVT_BUTTON(wxID_PREVIEW_GOTO,     wxPreviewControlBar::OnGotoButton)
-    EVT_CHOICE(wxID_PREVIEW_ZOOM,     wxPreviewControlBar::OnZoom)
+    EVT_BUTTON(wxID_PREVIEW_ZOOM_IN,  wxPreviewControlBar::OnZoomInButton)
+    EVT_BUTTON(wxID_PREVIEW_ZOOM_OUT, wxPreviewControlBar::OnZoomOutButton)
+
+    EVT_UPDATE_UI(wxID_PREVIEW_PREVIOUS, wxPreviewControlBar::OnUpdatePreviousButton)
+    EVT_UPDATE_UI(wxID_PREVIEW_NEXT,     wxPreviewControlBar::OnUpdateNextButton)
+    EVT_UPDATE_UI(wxID_PREVIEW_FIRST,    wxPreviewControlBar::OnUpdateFirstButton)
+    EVT_UPDATE_UI(wxID_PREVIEW_LAST,     wxPreviewControlBar::OnUpdateLastButton)
+    EVT_UPDATE_UI(wxID_PREVIEW_ZOOM_IN,  wxPreviewControlBar::OnUpdateZoomInButton)
+    EVT_UPDATE_UI(wxID_PREVIEW_ZOOM_OUT, wxPreviewControlBar::OnUpdateZoomOutButton)
+
+    EVT_CHOICE(wxID_PREVIEW_ZOOM,     wxPreviewControlBar::OnZoomChoice)
     EVT_PAINT(wxPreviewControlBar::OnPaint)
+
 END_EVENT_TABLE()
 
 wxPreviewControlBar::wxPreviewControlBar(wxPrintPreviewBase *preview, long buttons,
@@ -1023,10 +1161,8 @@ wxPanel(parent, wxID_ANY, pos, size, style, name)
 {
     m_printPreview = preview;
     m_closeButton = NULL;
-    m_nextPageButton = NULL;
-    m_previousPageButton = NULL;
-    m_printButton = NULL;
     m_zoomControl = NULL;
+    m_currentPageText = NULL;
     m_buttonFlags = buttons;
 }
 
@@ -1057,155 +1193,288 @@ void wxPreviewControlBar::OnPrint(void)
     preview->Print(true);
 }
 
-void wxPreviewControlBar::OnNext(void)
+void wxPreviewControlBar::OnNext()
 {
-    wxPrintPreviewBase *preview = GetPrintPreview();
-    if (preview)
-    {
-        int currentPage = preview->GetCurrentPage();
-        if ((preview->GetMaxPage() > 0) &&
-            (currentPage < preview->GetMaxPage()) &&
-            preview->GetPrintout()->HasPage(currentPage + 1))
-        {
-            preview->SetCurrentPage(currentPage + 1);
-        }
-    }
+    if ( IsNextEnabled() )
+        DoGotoPage(GetPrintPreview()->GetCurrentPage() + 1);
 }
 
-void wxPreviewControlBar::OnPrevious(void)
+void wxPreviewControlBar::OnPrevious()
 {
-    wxPrintPreviewBase *preview = GetPrintPreview();
-    if (preview)
-    {
-        int currentPage = preview->GetCurrentPage();
-        if ((preview->GetMinPage() > 0) &&
-            (currentPage > preview->GetMinPage()) &&
-            preview->GetPrintout()->HasPage(currentPage - 1))
-        {
-            preview->SetCurrentPage(currentPage - 1);
-        }
-    }
+    if ( IsPreviousEnabled() )
+        DoGotoPage(GetPrintPreview()->GetCurrentPage() - 1);
 }
 
-void wxPreviewControlBar::OnFirst(void)
+void wxPreviewControlBar::OnFirst()
 {
-    wxPrintPreviewBase *preview = GetPrintPreview();
-    if (preview)
-    {
-        int currentPage = preview->GetMinPage();
-        if (preview->GetPrintout()->HasPage(currentPage))
-        {
-            preview->SetCurrentPage(currentPage);
-        }
-    }
+    if ( IsFirstEnabled() )
+        DoGotoPage(GetPrintPreview()->GetMinPage());
 }
 
-void wxPreviewControlBar::OnLast(void)
+void wxPreviewControlBar::OnLast()
 {
-    wxPrintPreviewBase *preview = GetPrintPreview();
-    if (preview)
-    {
-        int currentPage = preview->GetMaxPage();
-        if (preview->GetPrintout()->HasPage(currentPage))
-        {
-            preview->SetCurrentPage(currentPage);
-        }
-    }
+    if ( IsLastEnabled() )
+        DoGotoPage(GetPrintPreview()->GetMaxPage());
 }
 
-void wxPreviewControlBar::OnGoto(void)
+bool wxPreviewControlBar::IsNextEnabled() const
+{
+    wxPrintPreviewBase *preview = GetPrintPreview();
+    if ( !preview )
+        return false;
+
+    const int currentPage = preview->GetCurrentPage();
+    return currentPage < preview->GetMaxPage() &&
+                preview->GetPrintout()->HasPage(currentPage + 1);
+}
+
+bool wxPreviewControlBar::IsPreviousEnabled() const
+{
+    wxPrintPreviewBase *preview = GetPrintPreview();
+    if ( !preview )
+        return false;
+
+    const int currentPage = preview->GetCurrentPage();
+    return currentPage > preview->GetMinPage() &&
+                preview->GetPrintout()->HasPage(currentPage - 1);
+}
+
+bool wxPreviewControlBar::IsFirstEnabled() const
+{
+    wxPrintPreviewBase *preview = GetPrintPreview();
+    if (!preview)
+        return false;
+
+    return preview->GetPrintout()->HasPage(preview->GetMinPage());
+}
+
+bool wxPreviewControlBar::IsLastEnabled() const
+{
+    wxPrintPreviewBase *preview = GetPrintPreview();
+    if (!preview)
+        return false;
+
+    return preview->GetPrintout()->HasPage(preview->GetMaxPage());
+}
+
+void wxPreviewControlBar::DoGotoPage(int page)
+{
+    wxPrintPreviewBase *preview = GetPrintPreview();
+    wxCHECK_RET( preview, "Shouldn't be called if there is no preview." );
+
+    preview->SetCurrentPage(page);
+
+    if ( m_currentPageText )
+        m_currentPageText->SetPageNumber(page);
+}
+
+void wxPreviewControlBar::OnGotoPage()
 {
     wxPrintPreviewBase *preview = GetPrintPreview();
     if (preview)
     {
-        long currentPage;
-
         if (preview->GetMinPage() > 0)
         {
-            wxString strPrompt;
-            wxString strPage;
-
-            strPrompt.Printf( _("Enter a page number between %d and %d:"),
-                preview->GetMinPage(), preview->GetMaxPage());
-            strPage.Printf( wxT("%d"), preview->GetCurrentPage() );
-
-            strPage =
-                wxGetTextFromUser( strPrompt, _("Goto Page"), strPage, GetParent());
-
-            if ( strPage.ToLong( &currentPage ) )
+            long currentPage = m_currentPageText->GetPageNumber();
+            if ( currentPage )
+            {
                 if (preview->GetPrintout()->HasPage(currentPage))
                 {
                     preview->SetCurrentPage(currentPage);
                 }
+            }
         }
     }
 }
 
-void wxPreviewControlBar::OnZoom(wxCommandEvent& WXUNUSED(event))
+void wxPreviewControlBar::DoZoom()
 {
     int zoom = GetZoomControl();
     if (GetPrintPreview())
         GetPrintPreview()->SetZoom(zoom);
 }
 
-void wxPreviewControlBar::CreateButtons()
+bool wxPreviewControlBar::IsZoomInEnabled() const
 {
-    SetSize(0, 0, 400, 40);
+    if ( !m_zoomControl )
+        return false;
 
-    wxBoxSizer *item0 = new wxBoxSizer( wxHORIZONTAL );
+    const unsigned sel = m_zoomControl->GetSelection();
+    return sel < m_zoomControl->GetCount() - 1;
+}
 
-    m_closeButton = new wxButton( this, wxID_PREVIEW_CLOSE, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    item0->Add( m_closeButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+bool wxPreviewControlBar::IsZoomOutEnabled() const
+{
+    return m_zoomControl && m_zoomControl->GetSelection() > 0;
+}
 
-    if (m_buttonFlags & wxPREVIEW_PRINT)
+void wxPreviewControlBar::DoZoomIn()
+{
+    if (IsZoomInEnabled())
     {
-        m_printButton = new wxButton( this, wxID_PREVIEW_PRINT, _("&Print..."), wxDefaultPosition, wxDefaultSize, 0 );
-        item0->Add( m_printButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+        m_zoomControl->SetSelection(m_zoomControl->GetSelection() + 1);
+        DoZoom();
+    }
+}
+
+void wxPreviewControlBar::DoZoomOut()
+{
+    if (IsZoomOutEnabled())
+    {
+        m_zoomControl->SetSelection(m_zoomControl->GetSelection() - 1);
+        DoZoom();
+    }
+}
+
+namespace
+{
+
+// Helper class used by wxPreviewControlBar::CreateButtons() to add buttons
+// sequentially to it in the simplest way possible.
+class SizerWithButtons
+{
+public:
+    // Constructor creates the sizer that will hold the buttons and stores the
+    // parent that will be used for their creation.
+    SizerWithButtons(wxWindow *parent)
+        : m_sizer(new wxBoxSizer(wxHORIZONTAL)),
+          m_parent(parent)
+    {
+        m_hasContents =
+        m_needsSeparator = false;
     }
 
-    // Exact-fit buttons are too tiny on wxUniversal
-    int navButtonStyle;
-    wxSize navButtonSize;
-#ifdef __WXUNIVERSAL__
-    navButtonStyle = 0;
-    navButtonSize = wxSize(40, m_closeButton->GetSize().y);
-#else
-    navButtonStyle = wxBU_EXACTFIT;
-    navButtonSize = wxDefaultSize;
-#endif
+    // Destructor associates the sizer with the parent window.
+    ~SizerWithButtons()
+    {
+        m_parent->SetSizer(m_sizer);
+        m_sizer->Fit(m_parent);
+    }
 
+
+    // Add an arbitrary window to the sizer.
+    void Add(wxWindow *win)
+    {
+        if ( m_needsSeparator )
+        {
+            m_needsSeparator = false;
+
+            m_sizer->AddSpacer(2*wxSizerFlags::GetDefaultBorder());
+        }
+
+        m_hasContents = true;
+
+        m_sizer->Add(win,
+                     wxSizerFlags().Border(wxLEFT | wxTOP | wxBOTTOM).Center());
+    }
+
+    // Add a button with the specified id, bitmap and tooltip.
+    void AddButton(wxWindowID btnId,
+                   const wxArtID& artId,
+                   const wxString& tooltip)
+    {
+        // We don't use (smaller) images inside a button with a text label but
+        // rather toolbar-like bitmap buttons hence use wxART_TOOLBAR and not
+        // wxART_BUTTON here.
+        wxBitmap bmp = wxArtProvider::GetBitmap(artId, wxART_TOOLBAR);
+        wxBitmapButton * const btn = new wxBitmapButton(m_parent, btnId, bmp);
+        btn->SetToolTip(tooltip);
+
+        Add(btn);
+    }
+
+    // Add a control at the right end of the window. This should be called last
+    // as everything else added after it will be added on the right side too.
+    void AddAtEnd(wxWindow *win)
+    {
+        m_sizer->AddStretchSpacer();
+        m_sizer->Add(win,
+                     wxSizerFlags().Border(wxTOP | wxBOTTOM | wxRIGHT).Center());
+    }
+
+    // Indicates the end of a group of buttons, a separator will be added after
+    // it.
+    void EndOfGroup()
+    {
+        if ( m_hasContents )
+        {
+            m_needsSeparator = true;
+            m_hasContents = false;
+        }
+    }
+
+private:
+    wxSizer * const m_sizer;
+    wxWindow * const m_parent;
+
+    // If true, we have some controls since the last group beginning. This is
+    // used to avoid inserting two consecutive separators if EndOfGroup() is
+    // called twice.
+    bool m_hasContents;
+
+    // If true, a separator should be inserted before adding the next button.
+    bool m_needsSeparator;
+
+    wxDECLARE_NO_COPY_CLASS(SizerWithButtons);
+};
+
+} // anonymous namespace
+
+void wxPreviewControlBar::CreateButtons()
+{
+    SizerWithButtons sizer(this);
+
+    // Print button group (a single button).
+    if (m_buttonFlags & wxPREVIEW_PRINT)
+    {
+        sizer.AddButton(wxID_PREVIEW_PRINT, wxART_PRINT, _("Print"));
+        sizer.EndOfGroup();
+    }
+
+    // Page selection buttons group.
     if (m_buttonFlags & wxPREVIEW_FIRST)
     {
-        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, navButtonSize, navButtonStyle );
-        item0->Add( m_firstPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+        sizer.AddButton(wxID_PREVIEW_FIRST, wxART_GOTO_FIRST, _("First page"));
     }
 
     if (m_buttonFlags & wxPREVIEW_PREVIOUS)
     {
-        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, navButtonSize, navButtonStyle );
-        item0->Add( m_previousPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
-    }
-
-    if (m_buttonFlags & wxPREVIEW_NEXT)
-    {
-        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, navButtonSize, navButtonStyle );
-        item0->Add( m_nextPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
-    }
-
-    if (m_buttonFlags & wxPREVIEW_LAST)
-    {
-        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, navButtonSize, navButtonStyle );
-        item0->Add( m_lastPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
+        sizer.AddButton(wxID_PREVIEW_PREVIOUS, wxART_GO_BACK, _("Previous page"));
     }
 
     if (m_buttonFlags & wxPREVIEW_GOTO)
     {
-        m_gotoPageButton = new wxButton( this, wxID_PREVIEW_GOTO, _("&Goto..."), wxDefaultPosition, wxDefaultSize, 0 );
-        item0->Add( m_gotoPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+        int minPage, maxPage, pageFrom, pageTo;
+        m_printPreview->GetPrintout()->GetPageInfo(&minPage, &maxPage,
+                                                   &pageFrom, &pageTo);
+
+        m_currentPageText = new wxPrintPageTextCtrl(this, minPage, maxPage);
+        sizer.Add(m_currentPageText);
+
+        wxStaticText *
+            maxPageText = new wxStaticText(this, wxID_ANY,
+                                           wxString::Format("/ %d", maxPage));
+
+        sizer.Add(maxPageText);
     }
 
+    if (m_buttonFlags & wxPREVIEW_NEXT)
+    {
+        sizer.AddButton(wxID_PREVIEW_NEXT, wxART_GO_FORWARD, _("Next page"));
+    }
+
+    if (m_buttonFlags & wxPREVIEW_LAST)
+    {
+        sizer.AddButton(wxID_PREVIEW_LAST, wxART_GOTO_LAST, _("Last page"));
+    }
+
+    sizer.EndOfGroup();
+
+    // Zoom controls group.
     if (m_buttonFlags & wxPREVIEW_ZOOM)
     {
+        sizer.AddButton(wxID_PREVIEW_ZOOM_OUT, wxART_MINUS, _("Zoom Out"));
+
         wxString choices[] =
         {
             wxT("10%"), wxT("15%"), wxT("20%"), wxT("25%"), wxT("30%"), wxT("35%"), wxT("40%"), wxT("45%"), wxT("50%"), wxT("55%"),
@@ -1215,12 +1484,17 @@ void wxPreviewControlBar::CreateButtons()
         int n = WXSIZEOF(choices);
 
         m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(70,wxDefaultCoord), n, choices, 0 );
-        item0->Add( m_zoomControl, 0, wxALIGN_CENTRE|wxALL, 5 );
+        sizer.Add(m_zoomControl);
         SetZoomControl(m_printPreview->GetZoom());
+
+        sizer.AddButton(wxID_PREVIEW_ZOOM_IN, wxART_PLUS, _("Zoom In"));
+
+        sizer.EndOfGroup();
     }
 
-    SetSizer(item0);
-    item0->Fit(this);
+    // Close button group (single button again).
+    m_closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("&Close"));
+    sizer.AddAtEnd(m_closeButton);
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
@@ -1360,7 +1634,7 @@ void wxPreviewFrame::CreateControlBar()
     if (m_printPreview->GetPrintoutForPrinting())
         buttons |= wxPREVIEW_PRINT;
 
-    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(0,0), wxSize(400, 40));
+    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this);
     m_controlBar->CreateButtons();
 }
 
@@ -1406,8 +1680,8 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_previewFailed = false;
     m_currentPage = 1;
     m_currentZoom = 70;
-    m_topMargin = 40;
-    m_leftMargin = 40;
+    m_topMargin =
+    m_leftMargin = 2*wxSizerFlags::GetDefaultBorder();
     m_pageWidth = 0;
     m_pageHeight = 0;
     m_printingPrepared = false;

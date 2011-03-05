@@ -451,6 +451,10 @@ SOURCE=..\..\src\common\mstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\numformatter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\object.cpp
 # End Source File
 # Begin Source File
@@ -1415,6 +1419,10 @@ SOURCE=..\..\include\wx\mstream.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\numformatter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\object.h
 # End Source File
 # Begin Source File
@@ -1452,6 +1460,10 @@ SOURCE=..\..\include\wx\recguard.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\regex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\rtti.h
 # End Source File
 # Begin Source File
 
@@ -1607,6 +1619,10 @@ SOURCE=..\..\include\wx\version.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\versioninfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\volume.h
 # End Source File
 # Begin Source File
@@ -1651,7 +1667,27 @@ SOURCE=..\..\include\wx\xti.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xti2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtictor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtihandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtiprop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xtistrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xtitypes.h
 # End Source File
 # Begin Source File
 

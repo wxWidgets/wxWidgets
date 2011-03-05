@@ -47,6 +47,12 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
+#ifdef wxHAS_NATIVE_CALENDARCTRL
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
+
+#endif
+
 BEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
     EVT_PAINT(wxGenericCalendarCtrl::OnPaint)
 
@@ -57,65 +63,6 @@ BEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
 
     EVT_SYS_COLOUR_CHANGED(wxGenericCalendarCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
-
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxCalendarCtrlStyle )
-
-wxBEGIN_FLAGS( wxCalendarCtrlStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxCAL_SUNDAY_FIRST)
-    wxFLAGS_MEMBER(wxCAL_MONDAY_FIRST)
-    wxFLAGS_MEMBER(wxCAL_SHOW_HOLIDAYS)
-    wxFLAGS_MEMBER(wxCAL_NO_YEAR_CHANGE)
-    wxFLAGS_MEMBER(wxCAL_NO_MONTH_CHANGE)
-    wxFLAGS_MEMBER(wxCAL_SEQUENTIAL_MONTH_SELECTION)
-    wxFLAGS_MEMBER(wxCAL_SHOW_SURROUNDING_WEEKS)
-    wxFLAGS_MEMBER(wxCAL_SHOW_WEEK_NUMBERS)
-
-wxEND_FLAGS( wxCalendarCtrlStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxGenericCalendarCtrl)
-    wxEVENT_RANGE_PROPERTY( Updated , wxEVT_CALENDAR_SEL_CHANGED , wxEVT_CALENDAR_WEEK_CLICKED , wxCalendarEvent )
-    wxHIDE_PROPERTY( Children )
-    wxPROPERTY( Date,wxDateTime, SetDate , GetDate, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxCalendarCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxGenericCalendarCtrl)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_6( wxGenericCalendarCtrl , wxWindow* , Parent , wxWindowID , Id , wxDateTime , Date , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxGenericCalendarCtrl, wxControl)
-#endif
 
 // ============================================================================
 // implementation

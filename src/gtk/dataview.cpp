@@ -231,7 +231,7 @@ public:
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
-    bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     bool Cleared();
     bool BeforeReset();
     bool AfterReset();
@@ -1490,7 +1490,7 @@ public:
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemChanged( const wxDataViewItem &item );
-    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     virtual bool Cleared();
     virtual void Resort();
     virtual bool BeforeReset();
@@ -1591,7 +1591,7 @@ bool wxGtkDataViewModelNotifier::ItemChanged( const wxDataViewItem &item )
     return true;
 }
 
-bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsigned int model_col )
+bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsigned int model_column )
 {
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
     wxDataViewCtrl *ctrl = m_internal->GetOwner();
@@ -1601,7 +1601,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
     for (index = 0; index < ctrl->GetColumnCount(); index++)
     {
         wxDataViewColumn *column = ctrl->GetColumn( index );
-        if (column->GetModelColumn() == model_col)
+        if (column->GetModelColumn() == model_column)
         {
             GtkTreeView *widget = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
             GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
@@ -1624,7 +1624,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
 
-            m_internal->ValueChanged( item, model_col );
+            m_internal->ValueChanged( item, model_column );
 
             return true;
         }
@@ -1731,6 +1731,7 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
     wxDataViewRendererBase( varianttype, mode, align )
 {
     m_renderer = NULL;
+    m_mode = mode;
 
     // we haven't changed them yet
     m_usingDefaultAttrs = true;
@@ -1776,6 +1777,8 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
             return;
     }
 
+    m_mode = mode;
+    
     // This value is most often ignored in GtkTreeView
     GValue gvalue = { 0, };
     g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
@@ -2755,7 +2758,7 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *model,
+bool wxDataViewDateRenderer::Activate( const wxRect& WXUNUSED(cell), wxDataViewModel *model,
                                        const wxDataViewItem &item, unsigned int col )
 {
     wxVariant variant;
@@ -2929,6 +2932,22 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     cell->SetValue( value );
 
+    // deal with disabled items
+    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn() );
+
+    // a) this sets the appearance to disabled grey    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &gvalue, enabled );
+    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
+    g_value_unset( &gvalue );
+
+    // b) this actually disables the control/renderer
+    if (enabled)
+        cell->SetMode( cell->GtkGetMode() );
+    else
+        cell->SetMode( wxDATAVIEW_CELL_INERT );
+        
 
     // deal with attributes: if the renderer doesn't support them at all, we
     // don't even need to query the model for them
@@ -2945,6 +2964,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     }
     // else: no custom attributes specified and we're already using the default
     //       ones -- nothing to do
+    
 }
 
 } // extern "C"
@@ -3687,13 +3707,13 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
     return true;
 }
 
-bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int col )
+bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
-    event.SetColumn( col );
-    event.SetDataViewColumn( GetOwner()->GetColumn(col) );
+    event.SetColumn( view_column );
+    event.SetDataViewColumn( GetOwner()->GetColumn(view_column) );
     event.SetItem( item );
     m_owner->HandleWindowEvent( event );
 

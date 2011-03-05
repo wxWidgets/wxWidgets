@@ -251,7 +251,7 @@ bool wxURL::FetchProtocol()
     {
         if (m_scheme == info->m_protoname)
         {
-            if (m_port.IsNull())
+            if ( m_port.empty() )
                 m_port = info->m_servname;
             m_protoinfo = info;
             m_protocol = (wxProtocol *)m_protoinfo->m_cinfo->CreateObject();

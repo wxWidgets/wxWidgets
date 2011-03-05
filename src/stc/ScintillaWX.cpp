@@ -289,7 +289,7 @@ void ScintillaWX::StartDrag() {
     stc->GetEventHandler()->ProcessEvent(evt);
     dragText = evt.GetDragText();
 
-    if (dragText.length()) {
+    if ( !dragText.empty() ) {
         wxDropSource        source(stc);
         wxTextDataObject    data(dragText);
         wxDragResult        result;

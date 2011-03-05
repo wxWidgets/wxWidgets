@@ -25,8 +25,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-
 WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)

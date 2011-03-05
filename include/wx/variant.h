@@ -462,9 +462,6 @@ wxVariantData* CLASSNAME::VariantDataFactory(const wxAny& any) \
 } \
 REGISTER_WXANY_CONVERSION(T, CLASSNAME)
 
-// This is needed for wxVariantList conversion
-WX_DECLARE_LIST_WITH_DECL(wxAny, wxAnyList, class WXDLLIMPEXP_BASE);
-
 #else // if !wxUSE_ANY
 
 #define DECLARE_WXANY_CONVERSION()

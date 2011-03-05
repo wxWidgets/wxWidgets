@@ -29,6 +29,14 @@
         For convenience to document that no buttons are to be drawn.
     @style{wxTR_HAS_BUTTONS}
         Use this style to show + and - buttons to the left of parent items.
+    @style{wxTR_TWIST_BUTTONS}
+        Selects alternative style of @c +/@c - buttons and shows rotating
+        ("twisting") arrows instead. Currently this style is only implemented
+        under Microsoft Windows Vista and later Windows versions and is ignored
+        under the other platforms. Notice that under Vista this style results
+        in the same appearance as used by the tree control in Explorer and
+        other built-in programs and so using it may be preferable to the
+        default style.
     @style{wxTR_NO_LINES}
         Use this style to hide vertical level connectors.
     @style{wxTR_FULL_ROW_HIGHLIGHT}

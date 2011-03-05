@@ -1500,8 +1500,8 @@ const wxString& wxTranslations::GetString(const wxString& origString,
             TRACE_I18N,
             "string \"%s\"%s not found in %slocale '%s'.",
             origString,
-            n != UINT_MAX ? wxString::Format("[%ld]", (long)n) : wxString(),
-            !domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString(),
+            (n != UINT_MAX ? wxString::Format("[%ld]", (long)n) : wxString()),
+            (!domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString()),
             m_lang
         );
 
@@ -1741,7 +1741,7 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
           i != prefixes.end();
           ++i )
     {
-        if (i->length() == 0)
+        if ( i->empty() )
             continue;
         wxDir dir;
         if ( !dir.Open(*i) )

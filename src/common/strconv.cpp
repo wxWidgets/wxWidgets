@@ -2183,7 +2183,7 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
         {
 #if SIZEOF_WCHAR_T == 4
             wxT("UCS-4"),
-#elif SIZEOF_WCHAR_T = 2
+#elif SIZEOF_WCHAR_T == 2
             wxT("UCS-2"),
 #endif
             NULL
@@ -2945,7 +2945,41 @@ void wxCSConv::Init()
 {
     m_name = NULL;
     m_convReal =  NULL;
-    m_deferred = true;
+}
+
+void wxCSConv::SetEncoding(wxFontEncoding encoding)
+{
+    switch ( encoding )
+    {
+        case wxFONTENCODING_MAX:
+        case wxFONTENCODING_SYSTEM:
+            if ( m_name )
+            {
+                // It's ok to not have encoding value if we have a name for it.
+                m_encoding = wxFONTENCODING_SYSTEM;
+            }
+            else // No name neither.
+            {
+                // Fall back to the system default encoding in this case (not
+                // sure how much sense does this make but this is how the old
+                // code used to behave).
+#if wxUSE_INTL
+                m_encoding = wxLocale::GetSystemEncoding();
+                if ( m_encoding == wxFONTENCODING_SYSTEM )
+#endif // wxUSE_INTL
+                    m_encoding = wxFONTENCODING_ISO8859_1;
+            }
+            break;
+
+        case wxFONTENCODING_DEFAULT:
+            // wxFONTENCODING_DEFAULT is same as US-ASCII in this context
+            m_encoding = wxFONTENCODING_ISO8859_1;
+            break;
+
+        default:
+            // Just use the provided encoding.
+            m_encoding = encoding;
+    }
 }
 
 wxCSConv::wxCSConv(const wxString& charset)
@@ -2958,20 +2992,12 @@ wxCSConv::wxCSConv(const wxString& charset)
     }
 
 #if wxUSE_FONTMAP
-    m_encoding = wxFontMapperBase::GetEncodingFromName(charset);
-    if ( m_encoding == wxFONTENCODING_MAX )
-    {
-        // set to unknown/invalid value
-        m_encoding = wxFONTENCODING_SYSTEM;
-    }
-    else if ( m_encoding == wxFONTENCODING_DEFAULT )
-    {
-        // wxFONTENCODING_DEFAULT is same as US-ASCII in this context
-        m_encoding = wxFONTENCODING_ISO8859_1;
-    }
+    SetEncoding(wxFontMapperBase::GetEncodingFromName(charset));
 #else
-    m_encoding = wxFONTENCODING_SYSTEM;
+    SetEncoding(wxFONTENCODING_SYSTEM);
 #endif
+
+    m_convReal = DoCreate();
 }
 
 wxCSConv::wxCSConv(wxFontEncoding encoding)
@@ -2985,7 +3011,9 @@ wxCSConv::wxCSConv(wxFontEncoding encoding)
 
     Init();
 
-    m_encoding = encoding;
+    SetEncoding(encoding);
+
+    m_convReal = DoCreate();
 }
 
 wxCSConv::~wxCSConv()
@@ -2999,7 +3027,9 @@ wxCSConv::wxCSConv(const wxCSConv& conv)
     Init();
 
     SetName(conv.m_name);
-    m_encoding = conv.m_encoding;
+    SetEncoding(conv.m_encoding);
+
+    m_convReal = DoCreate();
 }
 
 wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
@@ -3007,7 +3037,9 @@ wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
     Clear();
 
     SetName(conv.m_name);
-    m_encoding = conv.m_encoding;
+    SetEncoding(conv.m_encoding);
+
+    m_convReal = DoCreate();
 
     return *this;
 }
@@ -3015,18 +3047,15 @@ wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
 void wxCSConv::Clear()
 {
     free(m_name);
-    wxDELETE(m_convReal);
-
     m_name = NULL;
+
+    wxDELETE(m_convReal);
 }
 
 void wxCSConv::SetName(const char *charset)
 {
-    if (charset)
-    {
+    if ( charset )
         m_name = wxStrdup(charset);
-        m_deferred = true;
-    }
 }
 
 #if wxUSE_FONTMAP
@@ -3049,8 +3078,7 @@ wxMBConv *wxCSConv::DoCreate() const
     // check for the special case of ASCII or ISO8859-1 charset: as we have
     // special knowledge of it anyhow, we don't need to create a special
     // conversion object
-    if ( m_encoding == wxFONTENCODING_ISO8859_1 ||
-            m_encoding == wxFONTENCODING_DEFAULT )
+    if ( m_encoding == wxFONTENCODING_ISO8859_1 )
     {
         // don't convert at all
         return NULL;
@@ -3225,33 +3253,8 @@ wxMBConv *wxCSConv::DoCreate() const
     return NULL;
 }
 
-void wxCSConv::CreateConvIfNeeded() const
-{
-    if ( m_deferred )
-    {
-        wxCSConv *self = const_cast<wxCSConv *>(this);
-
-        // if we don't have neither the name nor the encoding, use the default
-        // encoding for this system
-        if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
-        {
-#if wxUSE_INTL
-            self->m_encoding = wxLocale::GetSystemEncoding();
-#else
-            // fallback to some reasonable default:
-            self->m_encoding = wxFONTENCODING_ISO8859_1;
-#endif // wxUSE_INTL
-        }
-
-        self->m_convReal = DoCreate();
-        self->m_deferred = false;
-    }
-}
-
 bool wxCSConv::IsOk() const
 {
-    CreateConvIfNeeded();
-
     // special case: no convReal created for wxFONTENCODING_ISO8859_1
     if ( m_encoding == wxFONTENCODING_ISO8859_1 )
         return true; // always ok as we do it ourselves
@@ -3264,8 +3267,6 @@ bool wxCSConv::IsOk() const
 size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
                          const char *src, size_t srcLen) const
 {
-    CreateConvIfNeeded();
-
     if (m_convReal)
         return m_convReal->ToWChar(dst, dstLen, src, srcLen);
 
@@ -3288,8 +3289,6 @@ size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
 size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
                            const wchar_t *src, size_t srcLen) const
 {
-    CreateConvIfNeeded();
-
     if (m_convReal)
         return m_convReal->FromWChar(dst, dstLen, src, srcLen);
 
@@ -3325,12 +3324,8 @@ size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
 
 size_t wxCSConv::GetMBNulLen() const
 {
-    CreateConvIfNeeded();
-
     if ( m_convReal )
-    {
         return m_convReal->GetMBNulLen();
-    }
 
     // otherwise, we are ISO-8859-1
     return 1;
@@ -3339,12 +3334,8 @@ size_t wxCSConv::GetMBNulLen() const
 #if wxUSE_UNICODE_UTF8
 bool wxCSConv::IsUTF8() const
 {
-    CreateConvIfNeeded();
-
     if ( m_convReal )
-    {
         return m_convReal->IsUTF8();
-    }
 
     // otherwise, we are ISO-8859-1
     return false;
@@ -3443,8 +3434,9 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = wxGet_wxConvLibcPtr();
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = wxGet_wxConvLocalPtr();
 
 #ifdef __DARWIN__
-// The xnu kernel always communicates file paths in decomposed UTF-8.
-// WARNING: Are we sure that CFString's conversion will cause decomposition?
+// It is important to use this conversion object under Darwin as it ensures
+// that Unicode strings are (re)composed correctly even though xnu kernel uses
+// decomposed form internally (at least for the file names).
 static wxMBConv_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
 #endif
 

@@ -177,13 +177,13 @@ wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file)
     m_maxY = -10000;
     //  m_title = NULL;
 
-    if (!file.IsNull() && wxFileExists(file))
+    if ( wxFileExists(file) )
         wxRemoveFile(file);
 
-    if (!file.IsNull() && (file != wxEmptyString))
-        m_hDC = (WXHDC) CreateMetaFile(file);
-    else
+    if ( file.empty() )
         m_hDC = (WXHDC) CreateMetaFile(NULL);
+    else
+        m_hDC = (WXHDC) CreateMetaFile(file);
 
     m_ok = (m_hDC != (WXHDC) 0) ;
 

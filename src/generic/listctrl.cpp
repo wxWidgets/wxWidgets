@@ -25,15 +25,6 @@
 
 #include "wx/listctrl.h"
 
-#if ((!defined(__WXMSW__) && !(defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__))
-    // if we have a native version, its implementation file does all this
-    IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
-    IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-
-    IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
@@ -696,7 +687,10 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
         else
             colText = *wxBLACK;
 #else
-        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        if ( hasFocus )
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        else
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
 #endif
     }
     else if ( attr && attr->HasTextColour() )

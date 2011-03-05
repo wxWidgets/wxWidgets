@@ -40,8 +40,6 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
 static WXFARPROC fnWndProcSpinCtrl = (WXFARPROC)NULL;
 wxArraySpins                        wxSpinCtrl::m_svAllSpins;
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
     EVT_SPIN(wxID_ANY, wxSpinCtrl::OnSpinChange)

@@ -38,8 +38,6 @@ gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 // wxChoice
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
-
 void wxChoice::Init()
 {
     m_strings = NULL;

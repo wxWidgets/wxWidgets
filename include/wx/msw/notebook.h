@@ -23,40 +23,6 @@
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxNotebookPageInfo : public wxObject
-{
-public :
-    wxNotebookPageInfo() { m_page = NULL; m_imageId = -1; m_selected = false; }
-    virtual ~wxNotebookPageInfo() { }
-
-    void Create(wxNotebookPage *page,
-                const wxString& text,
-                bool selected,
-                int imageId)
-    {
-        m_page = page;
-        m_text = text;
-        m_selected = selected;
-        m_imageId = imageId;
-    }
-
-    wxNotebookPage* GetPage() const { return m_page; }
-    wxString GetText() const { return m_text; }
-    bool GetSelected() const { return m_selected; }
-    int GetImageId() const { return m_imageId; }
-
-private:
-    wxNotebookPage *m_page;
-    wxString m_text;
-    bool m_selected;
-    int m_imageId;
-
-    DECLARE_DYNAMIC_CLASS(wxNotebookPageInfo)
-};
-
-
-WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );
-
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
@@ -132,9 +98,6 @@ public:
                   bool bSelect = false,
                   int imageId = -1);
 
-  void AddPageInfo( wxNotebookPageInfo* info ) { AddPage( info->GetPage() , info->GetText() , info->GetSelected() , info->GetImageId() ); }
-  const wxNotebookPageInfoList& GetPageInfos() const;
-
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.
   void SetTabSize(const wxSize& sz);
@@ -148,7 +111,6 @@ public:
   // callbacks
   // ---------
   void OnSize(wxSizeEvent& event);
-  void OnSelChange(wxBookCtrlEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
 
   // base class virtuals
@@ -233,9 +195,6 @@ protected:
   // true if we have already subclassed our updown control
   bool m_hasSubclassedUpdown;
 #endif // __WXWINCE__
-
-
-  wxNotebookPageInfoList m_pageInfos;
 
 #if wxUSE_UXTHEME
   // background brush used to paint the tab control

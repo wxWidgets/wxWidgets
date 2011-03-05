@@ -531,7 +531,7 @@ void SliderWidgetsPage::DoSetTickFreq()
         return;
     }
 
-    m_slider->SetTickFreq(freq, 0 /* unused */);
+    m_slider->SetTickFreq(freq);
 }
 
 void SliderWidgetsPage::DoSetThumbLen()

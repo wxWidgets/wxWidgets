@@ -163,6 +163,9 @@ public:
     virtual bool SetValue( const wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col );
 
+    virtual bool IsEnabled( const wxDataViewItem &item,
+                            unsigned int col ) const;
+
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
     virtual bool IsContainer( const wxDataViewItem &item ) const;
     virtual unsigned int GetChildren( const wxDataViewItem &parent,
@@ -235,3 +238,12 @@ private:
     wxIcon           m_icon[2];
 };
 
+// ----------------------------------------------------------------------------
+// MyListStoreDerivedModel
+// ----------------------------------------------------------------------------
+
+class MyListStoreDerivedModel : public wxDataViewListStore
+{
+public:
+    virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const;
+};

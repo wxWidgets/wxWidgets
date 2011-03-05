@@ -50,6 +50,25 @@ enum wxShowEffect
     wxSHOW_EFFECT_EXPAND
 };
 
+
+
+/**
+   struct containing all the visual attributes of a control
+*/
+struct  wxVisualAttributes
+{
+    // the font used for control label/text inside it
+    wxFont font;
+
+    // the foreground colour
+    wxColour colFg;
+
+    // the background colour, may be wxNullColour if the controls background
+    // colour is not solid
+    wxColour colBg;
+};
+
+
 /**
     Different window variants, on platforms like eg mac uses different
     rendering sizes.
@@ -294,6 +313,13 @@ public:
     */
     virtual ~wxWindow();
 
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr);
 
     /**
         @name Focus functions
@@ -849,6 +875,11 @@ public:
     */
     virtual wxSize GetMinSize() const;
 
+    int GetMinWidth() const;
+    int GetMinHeight() const;
+    int GetMaxWidth() const;
+    int GetMaxHeight() const;
+
     /**
         Returns the size of the entire window in pixels, including title bar, border,
         scrollbars, etc.
@@ -895,11 +926,30 @@ public:
     void GetVirtualSize(int* width, int* height) const;
 
     /**
+       Return the largest of ClientSize and BestSize (as determined
+       by a sizer, interior children, or other means)
+    */
+    virtual wxSize GetBestVirtualSize() const;
+
+    /**
         Returns the size of the left/right and top/bottom borders of this window in x
         and y components of the result respectively.
     */
     virtual wxSize GetWindowBorderSize() const;
 
+    /**
+       wxSizer and friends use this to give a chance to a component to recalc
+       its min size once one of the final size components is known. Override
+       this function when that is useful (such as for wxStaticText which can
+       stretch over several lines). Parameter availableOtherDir
+       tells the item how much more space there is available in the opposite
+       direction (-1 if unknown).
+    */
+    virtual bool
+    InformFirstDirection(int direction,
+                         int size,
+                         int availableOtherDir);
+    
     /**
         Resets the cached best size value so it will be recalculated the next time it
         is needed.
@@ -975,6 +1025,11 @@ public:
         @overload
     */
     void SetClientSize(const wxSize& size);
+
+    /**
+        @overload
+    */
+    void SetClientSize(const wxRect& rect);
 
     /**
         This normally does not need to be called by user code.
@@ -1131,9 +1186,12 @@ public:
 
         @see wxTopLevelWindow::SetSizeHints, @ref overview_windowsizing
     */
-    void SetSizeHints( const wxSize& minSize,
-                       const wxSize& maxSize=wxDefaultSize,
-                       const wxSize& incSize=wxDefaultSize);
+    virtual void SetSizeHints( const wxSize& minSize,
+                               const wxSize& maxSize=wxDefaultSize,
+                               const wxSize& incSize=wxDefaultSize);
+    virtual void SetSizeHints( int minW, int minH,
+                               int maxW = -1, int maxH = -1,
+                               int incW = -1, int incH = -1 );
 
     /**
         Sets the virtual size of the window in pixels.
@@ -1198,20 +1256,6 @@ public:
     void CentreOnParent(int direction = wxBOTH);
 
     /**
-        Centres the window.
-
-        @param direction
-            Specifies the direction for the centring. May be wxHORIZONTAL,
-            wxVERTICAL or wxBOTH. It may also include the wxCENTRE_ON_SCREEN
-            flag.
-
-        @remarks This function is not meant to be called directly by user code,
-                 but via Centre, Center, CentreOnParent, or CenterOnParent.
-                 This function can be overriden to fine-tune centring behaviour.
-    */
-    virtual void DoCentre(int direction);
-
-    /**
         This gets the position of the window in pixels, relative to the parent window
         for the child windows or relative to the display origin for the top level windows.
 
@@ -1273,6 +1317,20 @@ public:
     wxRect GetScreenRect() const;
 
     /**
+       Get the origin of the client area of the window relative to the
+       window top left corner (the client area may be shifted because of
+       the borders, scrollbars, other decorations...)
+    */
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    /**
+       Get the client rectangle in window (i.e. client) coordinates
+    */
+    wxRect GetClientRect() const;
+
+
+    
+    /**
         Moves the window to the given position.
 
         @param x
@@ -1309,6 +1367,8 @@ public:
         @see SetSize()
     */
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
+
+    void SetPosition(const wxPoint& pt);
 
     //@}
 
@@ -1557,7 +1617,7 @@ public:
         @endWxPerlOnly
     */
     void GetTextExtent(const wxString& string,
-                        int* w, int* h,
+                       int* w, int* h,
                        int* descent = NULL,
                        int* externalLeading = NULL,
                        const wxFont* font = NULL) const;
@@ -1575,6 +1635,11 @@ public:
         @see wxRegion, wxRegionIterator
     */
     const wxRegion& GetUpdateRegion() const;
+
+    /**
+       Get the update rectangle bounding box in client coords
+    */
+    wxRect GetUpdateClientRect() const;
 
     /**
         Returns @true if this window background is transparent (as, for example,
@@ -1776,6 +1841,10 @@ public:
         by default so that the default look and feel is simulated best.
     */
     virtual void SetThemeEnabled(bool enable);
+
+    /**
+     */
+    virtual bool GetThemeEnabled() const;
 
     /**
         Returns @true if the system supports transparent windows and calling
@@ -2088,13 +2157,13 @@ public:
                  control. See also wxNavigationKeyEvent and
                  HandleAsNavigationKey.
     */
-    bool Navigate(int flags = IsForward);
+    bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
 
     /**
         Performs a keyboard navigation action inside this window.
         See Navigate() for more information.
     */
-    bool NavigateIn(int flags = IsForward);
+    bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward);
 
     //@}
 
@@ -2784,7 +2853,6 @@ public:
     */
     void SetConstraints(wxLayoutConstraints* constraints);
 
-
     /**
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
         for this window.
@@ -2813,6 +2881,8 @@ public:
         @see SetSizer(), SetConstraints()
     */
     void SetAutoLayout(bool autoLayout);
+
+    bool GetAutoLayout() const;
 
     //@}
 
@@ -2913,6 +2983,22 @@ public:
     */
     //@{
 
+    wxHitTest HitTest(wxCoord x, wxCoord y) const;
+    wxHitTest HitTest(const wxPoint& pt) const;
+
+    /**
+       Get the window border style from the given flags: this is different from
+       simply doing flags & wxBORDER_MASK because it uses GetDefaultBorder() to
+       translate wxBORDER_DEFAULT to something reasonable
+    */
+    wxBorder GetBorder(long flags) const;
+
+    /**
+       Get border for the flags of this window
+    */
+    wxBorder GetBorder() const;
+
+    
     /**
         Does the window-specific updating after processing the update event.
         This function is called by UpdateWindowUI() in order to check return
@@ -2997,6 +3083,8 @@ public:
     */
     virtual bool IsDoubleBuffered() const;
 
+    void SetDoubleBuffered(bool on);
+
     /**
         Returns @true if the window is retained, @false otherwise.
 
@@ -3030,6 +3118,7 @@ public:
     */
     virtual void MakeModal(bool modal = true);
 
+    
     /**
         This virtual function is normally only used internally, but
         sometimes an application may need it to implement functionality
@@ -3265,6 +3354,20 @@ public:
 
 
 protected:
+
+    /**
+        Centres the window.
+
+        @param direction
+            Specifies the direction for the centring. May be wxHORIZONTAL,
+            wxVERTICAL or wxBOTH. It may also include the wxCENTRE_ON_SCREEN
+            flag.
+
+        @remarks This function is not meant to be called directly by user code,
+                 but via Centre, Center, CentreOnParent, or CenterOnParent.
+                 This function can be overriden to fine-tune centring behaviour.
+    */
+    virtual void DoCentre(int direction);
 
     /**
         Gets the size which best suits the window: for a control, it would be

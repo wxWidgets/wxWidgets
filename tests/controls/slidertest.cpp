@@ -39,6 +39,9 @@ private:
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
         WXUISIM_TEST( Thumb );
+        CPPUNIT_TEST( PseudoTest_Inversed );
+        CPPUNIT_TEST( Value );
+        CPPUNIT_TEST( Range );
     CPPUNIT_TEST_SUITE_END();
 
     void PageUpDown();
@@ -47,11 +50,16 @@ private:
     void Value();
     void Range();
     void Thumb();
+    void PseudoTest_Inversed() { ms_inversed = true; }
+
+    static bool ms_inversed;
 
     wxSlider* m_slider;
 
     DECLARE_NO_COPY_CLASS(SliderTestCase)
 };
+
+bool SliderTestCase::ms_inversed = false;
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( SliderTestCase );
@@ -61,7 +69,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SliderTestCase, "SliderTestCase" );
 
 void SliderTestCase::setUp()
 {
-    m_slider = new wxSlider(wxTheApp->GetTopWindow(), wxID_ANY, 50, 0, 100);
+    long style = wxSL_HORIZONTAL;
+
+    if ( ms_inversed )
+        style |= wxSL_INVERSE;
+
+    m_slider = new wxSlider(wxTheApp->GetTopWindow(), wxID_ANY, 50, 0, 100,
+                            wxDefaultPosition, wxDefaultSize,
+                            style);
 }
 
 void SliderTestCase::tearDown()
@@ -162,6 +177,11 @@ void SliderTestCase::Range()
 {
     CPPUNIT_ASSERT_EQUAL(0, m_slider->GetMin());
     CPPUNIT_ASSERT_EQUAL(100, m_slider->GetMax());
+
+    // Changing range shouldn't change the value.
+    m_slider->SetValue(17);
+    m_slider->SetRange(0, 200);
+    CPPUNIT_ASSERT_EQUAL(17, m_slider->GetValue());
 
     //Test negative ranges
     m_slider->SetRange(-50, 0);

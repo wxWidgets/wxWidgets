@@ -241,6 +241,40 @@ protected:
 };
 
 /*!
+ * wxRichTextBoxStyleDefinition class declaration, for box attributes in objects such as wxRichTextBox.
+ */
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextBoxStyleDefinition: public wxRichTextStyleDefinition
+{
+    DECLARE_DYNAMIC_CLASS(wxRichTextBoxStyleDefinition)
+public:
+
+    /// Copy constructor
+    wxRichTextBoxStyleDefinition(const wxRichTextBoxStyleDefinition& def): wxRichTextStyleDefinition(def) { Copy(def); }
+
+    /// Default constructor
+    wxRichTextBoxStyleDefinition(const wxString& name = wxEmptyString):
+        wxRichTextStyleDefinition(name) {}
+
+    // Destructor
+    virtual ~wxRichTextBoxStyleDefinition() {}
+
+    /// Copies from def
+    void Copy(const wxRichTextBoxStyleDefinition& def);
+
+    /// Assignment operator
+    void operator =(const wxRichTextBoxStyleDefinition& def) { Copy(def); }
+
+    /// Equality operator
+    bool operator ==(const wxRichTextBoxStyleDefinition& def) const;
+
+    /// Clones the object
+    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextBoxStyleDefinition(*this); }
+
+protected:
+};
+
+/*!
  * The style sheet
  */
 
@@ -280,6 +314,9 @@ public:
     /// Add a definition to the list style list
     bool AddListStyle(wxRichTextListStyleDefinition* def);
 
+    /// Add a definition to the box style list
+    bool AddBoxStyle(wxRichTextBoxStyleDefinition* def);
+
     /// Add a definition to the appropriate style list
     bool AddStyle(wxRichTextStyleDefinition* def);
 
@@ -291,6 +328,9 @@ public:
 
     /// Remove a list style
     bool RemoveListStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_listStyleDefinitions, def, deleteStyle); }
+
+    /// Remove a box style
+    bool RemoveBoxStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_boxStyleDefinitions, def, deleteStyle); }
 
     /// Remove a style
     bool RemoveStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false);
@@ -304,6 +344,9 @@ public:
     /// Find a list definition by name
     wxRichTextListStyleDefinition* FindListStyle(const wxString& name, bool recurse = true) const { return (wxRichTextListStyleDefinition*) FindStyle(m_listStyleDefinitions, name, recurse); }
 
+    /// Find a box definition by name
+    wxRichTextBoxStyleDefinition* FindBoxStyle(const wxString& name, bool recurse = true) const { return (wxRichTextBoxStyleDefinition*) FindStyle(m_boxStyleDefinitions, name, recurse); }
+
     /// Find any definition by name
     wxRichTextStyleDefinition* FindStyle(const wxString& name, bool recurse = true) const;
 
@@ -316,6 +359,9 @@ public:
     /// Return the number of list styles
     size_t GetListStyleCount() const { return m_listStyleDefinitions.GetCount(); }
 
+    /// Return the number of box styles
+    size_t GetBoxStyleCount() const { return m_boxStyleDefinitions.GetCount(); }
+
     /// Return the nth character style
     wxRichTextCharacterStyleDefinition* GetCharacterStyle(size_t n) const { return (wxRichTextCharacterStyleDefinition*) m_characterStyleDefinitions.Item(n)->GetData(); }
 
@@ -324,6 +370,9 @@ public:
 
     /// Return the nth list style
     wxRichTextListStyleDefinition* GetListStyle(size_t n) const { return (wxRichTextListStyleDefinition*) m_listStyleDefinitions.Item(n)->GetData(); }
+
+    /// Return the nth box style
+    wxRichTextBoxStyleDefinition* GetBoxStyle(size_t n) const { return (wxRichTextBoxStyleDefinition*) m_boxStyleDefinitions.Item(n)->GetData(); }
 
     /// Delete all styles
     void DeleteStyles();
@@ -372,6 +421,7 @@ protected:
     wxList                  m_characterStyleDefinitions;
     wxList                  m_paragraphStyleDefinitions;
     wxList                  m_listStyleDefinitions;
+    wxList                  m_boxStyleDefinitions;
 
     wxRichTextStyleSheet*   m_previousSheet;
     wxRichTextStyleSheet*   m_nextSheet;
@@ -395,7 +445,8 @@ public:
         wxRICHTEXT_STYLE_ALL,
         wxRICHTEXT_STYLE_PARAGRAPH,
         wxRICHTEXT_STYLE_CHARACTER,
-        wxRICHTEXT_STYLE_LIST
+        wxRICHTEXT_STYLE_LIST,
+        wxRICHTEXT_STYLE_BOX
     };
 
     wxRichTextStyleListBox()

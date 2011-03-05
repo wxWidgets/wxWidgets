@@ -173,6 +173,12 @@
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
+/**
+    wxColourProperty and its kind: Set to True in order to support editing
+    alpha colour component.
+*/
+#define wxPG_COLOUR_HAS_ALPHA               wxS("HasAlpha")
+
 /** @}
 */
 
@@ -409,6 +415,12 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Default float-to-text precision is 6 decimals, but this can be changed
     by modifying wxPG_FLOAT_PRECISION attribute.
 
+    Note that when displaying the value, sign is omitted if the resulting
+    textual representation is effectively zero (for example, -0.0001 with
+    precision of 3 will become 0.0 instead of -0.0). This behavior is unlike 
+    what C standard library does, but should result in better end-user
+    experience in almost all cases.
+
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
@@ -520,6 +532,9 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Represents wxColour. wxButton is used to trigger a colour picker dialog.
     There are various sub-classing opportunities with this class. See
     below in wxSystemColourProperty section for details.
+
+    Setting "HasAlpha" attribute to @true for this property allows user to
+    edit the alpha colour component.
 
     @subsection wxFontProperty
 
@@ -847,7 +862,7 @@ public:
         usually processes most events. Some, such as button press events of
         TextCtrlAndButton class, can be handled here. Also, if custom handling
         for regular events is desired, then that can also be done (for example,
-        wxSystemColourProperty custom handles wxEVT_COMMAND_CHOICE_SELECTED
+        wxSystemColourProperty custom handles @c wxEVT_COMMAND_CHOICE_SELECTED
         to display colour picker dialog when 'custom' selection is made).
 
         If the event causes value to be changed, SetValueInEvent() should be called

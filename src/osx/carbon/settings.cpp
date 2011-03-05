@@ -110,6 +110,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT :
 #if wxOSX_USE_COCOA_OR_CARBON
             {
                 wxColour highlightcolor( wxMacCreateCGColorFromHITheme(-3 /* kThemeBrushPrimaryHighlightColor */) );

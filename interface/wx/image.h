@@ -55,7 +55,8 @@ enum wxImagePNGType
 {
     wxPNG_TYPE_COLOUR = 0,      ///< Colour PNG image.
     wxPNG_TYPE_GREY = 2,        ///< Greyscale PNG image converted from RGB.
-    wxPNG_TYPE_GREY_RED = 3     ///< Greyscale PNG image using red as grey.
+    wxPNG_TYPE_GREY_RED = 3,    ///< Greyscale PNG image using red as grey.
+    wxPNG_TYPE_PALETTE = 4      ///< Palette encoding.
 };
 
 /**
@@ -254,6 +255,20 @@ public:
             Handler name.
     */
     void SetName(const wxString& name);
+
+    /**
+        Retrieve the version information about the image library used by this
+        handler.
+
+        This method is not present in wxImageHandler class itself but is
+        present in a few of the classes deriving from it, currently
+        wxJPEGHandler, wxPNGHandler and wxTIFFHandler. It returns the
+        information about the version of the image library being used for the
+        corresponding handler implementation.
+
+        @since 2.9.2
+     */
+     static wxVersionInfo GetLibraryVersionInfo();
 };
 
 
@@ -301,10 +316,12 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
     While all images have RGB data, not all images have an alpha channel. Before
     using wxImage::GetAlpha you should check if this image contains an alpha
-    channel with wxImage::HasAlpha. Note that currently only the PNG format has
-    full alpha channel support so only the images loaded from PNG files can have
-    alpha and, if you initialize the image alpha channel yourself using
-    wxImage::SetAlpha, you should save it in PNG format to avoid losing it.
+    channel with wxImage::HasAlpha. Currently the BMP, PNG, and TIFF format
+    handlers have full alpha channel support for loading so if you want to use
+    alpha you have to use one of these formats. If you initialize the image
+    alpha channel yourself using wxImage::SetAlpha, you should save it in
+    either PNG or TGA format to avoid losing it as these are the only handlers
+    that currently support saving with alpha.
 
 
     @section image_handlers Available image handlers
@@ -314,14 +331,14 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     To use other image formats, install the appropriate handler with
     wxImage::AddHandler or call ::wxInitAllImageHandlers().
 
-    - wxBMPHandler: For loading and saving, always installed.
-    - wxPNGHandler: For loading (including alpha support) and saving.
+    - wxBMPHandler: For loading (including alpha support) and saving, always installed.
+    - wxPNGHandler: For loading and saving. Includes alpha support.
     - wxJPEGHandler: For loading and saving.
-    - wxGIFHandler: Only for loading, due to legal issues.
+    - wxGIFHandler: For loading and saving (see below).
     - wxPCXHandler: For loading and saving (see below).
     - wxPNMHandler: For loading and saving (see below).
-    - wxTIFFHandler: For loading and saving.
-    - wxTGAHandler: For loading only.
+    - wxTIFFHandler: For loading (including alpha support) and saving.
+    - wxTGAHandler: For loading and saving. Includes alpha support.
     - wxIFFHandler: For loading only.
     - wxXPMHandler: For loading and saving.
     - wxICOHandler: For loading and saving.
@@ -335,6 +352,8 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     Loading PNMs only works for ASCII or raw RGB images.
     When saving in PNM format, wxPNMHandler will always save as raw RGB.
 
+    Saving GIFs requires images of maximum 8 bpp (see wxQuantize), and the alpha channel converted to a mask (see wxImage::ConvertAlphaToMask).
+    Saving an animated GIF requires images of the same size (see wxGIFHandler::SaveAnimation)
 
     @library{wxcore}
     @category{gdi}
@@ -729,6 +748,13 @@ public:
     wxImage Rotate90(bool clockwise = true) const;
 
     /**
+        Returns a copy of the image rotated by 180 degrees.
+
+        @since 2.9.2
+    */
+    wxImage Rotate180() const;
+
+    /**
         Rotates the hue of each pixel in the image by @e angle, which is a double in
         the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0
         corresponds to +360 degrees.
@@ -815,7 +841,7 @@ public:
         FindFirstUnusedColour() by this function, see the overload below if you
         this is not appropriate.
 
-        @return @false if FindFirstUnusedColour returns @false, @true otherwise.
+        @return Returns @true on success, @false on error.
     */
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
@@ -841,8 +867,9 @@ public:
             are set. Pixels with the alpha values above the threshold are
             considered to be opaque.
 
+        @return Returns @true on success, @false on error.
      */
-    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
+    bool ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
     /**
@@ -1108,6 +1135,12 @@ public:
             (in bytes) for saving a PNG file. Ideally this should be as big as
             the resulting PNG file. Use this option if your application produces
             images with small size variation.
+
+        Options specific to wxGIFHandler:
+        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
+            or written to the GIF file. In an animated GIF each frame can have
+            its own comment. If there is only a comment in the first frame of
+            a GIF it will not be repeated in other frames.
 
         @param name
             The name of the option, case-insensitive.
@@ -1534,7 +1567,19 @@ public:
 
     /**
         Register an image handler.
-        See @ref image_handlers for a list of the available handlers.
+
+        Typical example of use:
+        @code
+            wxImage::AddHandler(new wxPNGHandler);
+        @endcode
+
+        See @ref image_handlers for a list of the available handlers. You can
+        also use ::wxInitAllImageHandlers() to add handlers for all the image
+        formats supported by wxWidgets at once.
+
+        @param handler
+            A heap-allocated handler object which will be deleted by wxImage
+            if it is removed later by RemoveHandler() or at program shutdown.
     */
     static void AddHandler(wxImageHandler* handler);
 
@@ -1626,7 +1671,8 @@ public:
 
     /**
         Finds the handler with the given name, and removes it.
-        The handler is not deleted.
+
+        The handler is also deleted.
 
         @param name
             The handler name.
@@ -1738,9 +1784,14 @@ wxImage wxNullImage;
 //@{
 
 /**
-    Initializes all available image handlers. For a list of available handlers,
-    see wxImage.
-    If you don't need/want all image handlers loaded
+    Initializes all available image handlers.
+
+    This function call wxImage::AddHandler() for all the available image
+    handlers (see @ref image_handlers for the full list). Calling it is the
+    simplest way to initialize wxImage but it creates and registers even the
+    handlers your program may not use. If you want to avoid the overhead of
+    doing this you need to call wxImage::AddHandler() manually just for the
+    handlers that you do want to use.
 
     @see wxImage, wxImageHandler
 

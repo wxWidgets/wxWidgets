@@ -11,8 +11,6 @@
 
 #include "wx/treectrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxTreeCtrl, wxTreeCtrlBase )
-
 wxTreeCtrl::wxTreeCtrl()
 {
 }

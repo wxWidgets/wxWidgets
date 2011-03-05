@@ -11,8 +11,9 @@
 
     This is a simple, type-safe, and reasonably efficient hash set class,
     whose interface is a subset of the interface of STL containers.
-    In particular, the interface is modeled after std::set, and the various,
-    non-standard, std::hash_map.
+
+    The interface is similar to std::tr1::hash_set or std::set classes but
+    notice that, unlike std::set, the contents of a hash set is not sorted.
 
     Example:
     @code

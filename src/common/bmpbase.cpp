@@ -32,6 +32,11 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxBitmap,WXDLLEXPORT)
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxBitmap>)
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxIcon>)
+#endif
+
 // ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------
@@ -134,16 +139,6 @@ public:
     bool OnInit() { wxBitmap::InitStandardHandlers(); return true; }
     void OnExit() { wxBitmap::CleanUpHandlers(); }
 };
-
-wxBitmap wxBitmapBase::ConvertToDisabled(unsigned char brightness) const
-{
-    wxBitmap bmp;
-#if wxUSE_IMAGE
-    wxImage image = ConvertToImage();
-    bmp = wxBitmap(image.ConvertToDisabled(brightness));
-#endif
-    return bmp;
-}
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
 

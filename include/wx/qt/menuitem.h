@@ -47,7 +47,7 @@ private:
     // Qt is using an action instead of a menu item.
     wxQtPointer< wxQtAction > m_qtAction;
 
-    wxDECLARE_NO_COPY_CLASS( wxMenuItem );
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxMenuItem );
 };
 
 

@@ -202,8 +202,8 @@ private:
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow );
 };
 
 #endif // _WX_QT_WINDOW_H_

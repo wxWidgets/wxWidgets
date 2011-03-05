@@ -46,15 +46,15 @@ public:
 
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
-    virtual void OnInternalIdle();
-
 protected:
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);
 
     // sets the label to the given string and also sets it for the given widget
     void GTKSetLabelForLabel(GtkLabel *w, const wxString& label);
+#if wxUSE_MARKUP
     void GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label);
+#endif // wxUSE_MARKUP
 
     // GtkFrame helpers
     GtkWidget* GTKCreateFrame(const wxString& label);

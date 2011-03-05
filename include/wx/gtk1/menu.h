@@ -73,6 +73,9 @@ public:
     virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem* DoRemove(wxMenuItem *item);
 
+    // Returns the title, with mnemonics translated to wx format
+    wxString GetTitle() const;
+
     // TODO: virtual void SetTitle(const wxString& title);
 
     // implementation

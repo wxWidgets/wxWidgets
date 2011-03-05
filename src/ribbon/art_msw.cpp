@@ -2021,6 +2021,13 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
+    if(kind == wxRIBBON_BUTTON_TOGGLE)
+    {
+        kind = wxRIBBON_BUTTON_NORMAL;
+        if(state & wxRIBBON_BUTTONBAR_BUTTON_TOGGLED)
+            state ^= wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+    }
+
     if(state & (wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK |
         wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK))
     {
@@ -2627,6 +2634,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
         switch(kind)
         {
         case wxRIBBON_BUTTON_NORMAL:
+        case wxRIBBON_BUTTON_TOGGLE:
             *normal_region = wxRect(*button_size);
             *dropdown_region = wxRect(0, 0, 0, 0);
             break;
@@ -2660,6 +2668,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                 dropdown_region->SetX(dropdown_region->GetX() + text_size);
                 // no break
             case wxRIBBON_BUTTON_NORMAL:
+            case wxRIBBON_BUTTON_TOGGLE:
                 normal_region->SetWidth(normal_region->GetWidth() + text_size);
                 break;
             }
@@ -2674,7 +2683,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             wxCoord best_width;
             dc.GetTextExtent(label, &best_width, &label_height);
             int last_line_extra_width = 0;
-            if(kind != wxRIBBON_BUTTON_NORMAL)
+            if(kind != wxRIBBON_BUTTON_NORMAL && kind != wxRIBBON_BUTTON_TOGGLE)
             {
                 last_line_extra_width += 8;
             }
@@ -2711,6 +2720,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                 dropdown_region->height = icon_size.GetHeight() - normal_region->height;
                 break;
             case wxRIBBON_BUTTON_NORMAL:
+            case wxRIBBON_BUTTON_TOGGLE:
                 *normal_region = wxRect(icon_size);
                 break;
             }

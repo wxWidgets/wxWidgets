@@ -201,10 +201,10 @@ protected:
     wxSize GetSizeForPage(const wxSize& size) const;
 
     // scroll the tabs so that the first page shown becomes the given one
-    void ScrollTo(int page);
+    void ScrollTo(size_t page);
 
     // scroll the tabs so that the first page shown becomes the given one
-    void ScrollLastTo(int page);
+    void ScrollLastTo(size_t page);
 
     // the pages titles
     wxArrayString m_titles;

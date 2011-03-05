@@ -116,6 +116,8 @@ public:
 
     virtual void SetAttr(const wxDataViewItemAttr& WXUNUSED(attr)) { }
 
+    virtual void SetEnabled(bool WXUNUSED(enabled)) { }
+
     wxString GetVariantType() const             { return m_variantType; }
 
     // helper that calls SetValue and SetAttr:
@@ -156,6 +158,9 @@ public:
     virtual bool FinishEditing();
 
     wxControl *GetEditorCtrl() { return m_editorCtrl; }
+
+    virtual bool IsCustomRenderer() const { return false; }
+
 
 protected:
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
@@ -227,21 +232,21 @@ public:
     // to drag it: by default they all simply return false indicating that the
     // events are not handled
 
-    virtual bool Activate(wxRect WXUNUSED(cell),
+    virtual bool Activate(const wxRect& WXUNUSED(cell),
                           wxDataViewModel *WXUNUSED(model),
                           const wxDataViewItem & WXUNUSED(item),
                           unsigned int WXUNUSED(col))
         { return false; }
 
-    virtual bool LeftClick(wxPoint WXUNUSED(cursor),
-                           wxRect WXUNUSED(cell),
+    virtual bool LeftClick(const wxPoint& WXUNUSED(cursor),
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem & WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
         { return false; }
 
-    virtual bool StartDrag(wxPoint WXUNUSED(cursor),
-                           wxRect WXUNUSED(cell),
+    virtual bool StartDrag(const wxPoint& WXUNUSED(cursor),
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem & WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
@@ -263,6 +268,11 @@ public:
     virtual void SetAttr(const wxDataViewItemAttr& attr) { m_attr = attr; }
     const wxDataViewItemAttr& GetAttr() const { return m_attr; }
 
+    // Store the enabled state of the item so that it can be accessed from
+    // Render() via GetEnabled() if needed.
+    virtual void SetEnabled(bool enabled) { m_enabled = enabled; }
+    bool GetEnabled() const { return m_enabled; }
+
 
     // Implementation only from now on
 
@@ -273,12 +283,15 @@ public:
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
 
+    virtual bool IsCustomRenderer() const { return true; }
+
 protected:
     // helper for GetSize() implementations, respects attributes
     wxSize GetTextExtent(const wxString& str) const;
 
 private:
     wxDataViewItemAttr m_attr;
+    bool m_enabled;
 
     wxDECLARE_NO_COPY_CLASS(wxDataViewCustomRendererBase);
 };

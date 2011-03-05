@@ -163,7 +163,7 @@ struct wxLinuxDistributionInfo
     @see ::wxGetOsVersion(), wxIsPlatformLittleEndian(), wxIsPlatform64Bit(),
          wxAppTraits, @ref group_funcmacro_networkuseros
 */
-class wxPlatformInfo : public wxObject
+class wxPlatformInfo 
 {
 public:
 

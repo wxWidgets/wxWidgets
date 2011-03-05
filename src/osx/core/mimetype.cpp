@@ -199,7 +199,7 @@ wxString GetPathForIconFile( CFBundleRef bundle, CFStringRef iconFile )
         OSStatus status = LSGetExtensionInfo( wholeString.length, buffer, &periodIndex );
 
         // Deallocate the buffer
-        delete buffer;
+        delete [] buffer;
 
         // If the period could not be located it will not be possible to get the URL
         if( status != noErr || periodIndex == kLSInvalidExtensionIndex )
@@ -577,7 +577,7 @@ bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
 {
     const UtiMap::const_iterator itr = m_utiMap.find( uti );
 
-    if( itr == m_utiMap.end() || itr->second.description.IsNull() )
+    if( itr == m_utiMap.end() || itr->second.description.empty() )
     {
         *desc = wxEmptyString;
         return false;

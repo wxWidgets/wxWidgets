@@ -407,6 +407,22 @@
 #   endif
 #endif /* !defined(wxUSE_ANIMATIONCTRL) */
 
+#ifndef wxUSE_ARTPROVIDER_STD
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ARTPROVIDER_STD must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ARTPROVIDER_STD 0
+#   endif
+#endif /* !defined(wxUSE_ARTPROVIDER_STD) */
+
+#ifndef wxUSE_ARTPROVIDER_TANGO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ARTPROVIDER_TANGO must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ARTPROVIDER_TANGO 0
+#   endif
+#endif /* !defined(wxUSE_ARTPROVIDER_TANGO) */
+
 #ifndef wxUSE_AUTOID_MANAGEMENT
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_AUTOID_MANAGEMENT must be defined, please read comment near the top of this file."
@@ -439,17 +455,13 @@
 #   endif
 #endif /* !defined(wxUSE_BUTTON) */
 
-/*
-    This one is special, it's only used under wxGTK currently so don't require
-    pre-defining it.
- */
 #ifndef wxUSE_CAIRO
-#   ifdef __WXGTK210__
-#        define wxUSE_CAIRO 1
-#    else
-#        define wxUSE_CAIRO 0
-#    endif
-#endif
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CAIRO must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_CAIRO 0
+#   endif
+#endif /* !defined(wxUSE_CAIRO) */
 
 #ifndef wxUSE_CALENDARCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -816,6 +828,14 @@
 #       define wxUSE_LOG_DIALOG 0
 #   endif
 #endif /* !defined(wxUSE_LOG_DIALOG) */
+
+#ifndef wxUSE_MARKUP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MARKUP must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_MARKUP 0
+#   endif
+#endif /* !defined(wxUSE_MARKUP) */
 
 #ifndef wxUSE_MDI
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -1619,6 +1639,17 @@
 #endif /* wxUSE_FILEDLG */
 
 /* common dependencies */
+#if wxUSE_ARTPROVIDER_TANGO
+#   if !(wxUSE_STREAMS && wxUSE_IMAGE && wxUSE_LIBPNG)
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Tango art provider requires wxImage with streams and PNG support"
+#       else
+#           undef wxUSE_ARTPROVIDER_TANGO
+#           define wxUSE_ARTPROVIDER_TANGO 0
+#       endif
+#   endif
+#endif /* wxUSE_ARTPROVIDER_TANGO */
+
 #if wxUSE_CALENDARCTRL
 #   if !(wxUSE_SPINBTN && wxUSE_COMBOBOX)
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -2052,6 +2083,15 @@
 #       define wxUSE_SVG 0
 #   endif
 #endif /* wxUSE_SVG */
+
+#if wxUSE_TASKBARICON && !wxUSE_MENUS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TASKBARICON requires wxUSE_MENUS"
+#   else
+#       undef wxUSE_TASKBARICON
+#       define wxUSE_TASKBARICON 0
+#   endif
+#endif /* wxUSE_TASKBARICON */
 
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL

@@ -170,6 +170,12 @@ void ListBoxTestCase::MultipleSelect()
     CPPUNIT_ASSERT(!m_list->IsSelected(1));
     CPPUNIT_ASSERT(m_list->IsSelected(2));
     CPPUNIT_ASSERT(!m_list->IsSelected(3));
+
+    m_list->SetSelection(0);
+    m_list->SetSelection(wxNOT_FOUND);
+
+    m_list->GetSelections(selected);
+    CPPUNIT_ASSERT_EQUAL(0, selected.Count());
 }
 
 void ListBoxTestCase::ClickEvents()

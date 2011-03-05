@@ -79,6 +79,10 @@ public:
     // in a single line text control
     virtual void SetMaxLength(unsigned long len);
 
+    // set the grayed out hint text
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
+
     // text control under some platforms supports the text styles: these
     // methods apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
@@ -152,6 +156,7 @@ protected:
 
 private :
     wxMenu  *m_privateContextMenu;
+    wxString m_hintString;
 
     DECLARE_EVENT_TABLE()
 };

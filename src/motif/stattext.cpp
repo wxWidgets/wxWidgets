@@ -26,8 +26,6 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
 bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
@@ -76,8 +74,8 @@ void wxStaticText::SetLabel(const wxString& label)
 {
     m_labelOrig = label;       // save original label
 
-    // Motif does not support neither ellipsize nor markup in static text:
-    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+    // Motif does not support ellipsized labels natively
+    DoSetLabel(GetEllipsizedLabel());
 }
 
 // for wxST_ELLIPSIZE_* support:

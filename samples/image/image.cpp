@@ -28,6 +28,7 @@
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
 #include "wx/stopwatch.h"
+#include "wx/versioninfo.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/dataobj.h"
@@ -654,7 +655,7 @@ MyFrame::MyFrame()
     menuImage->Append( ID_SHOWTHUMBNAIL, wxT("Test &thumbnail...\tCtrl-T"),
                         "Test scaling the image during load (try with JPEG)");
     menuImage->AppendSeparator();
-    menuImage->Append( ID_ABOUT, wxT("&About..."));
+    menuImage->Append( ID_ABOUT, wxT("&About...\tF1"));
     menuImage->AppendSeparator();
     menuImage->Append( ID_QUIT, wxT("E&xit\tCtrl-Q"));
     menu_bar->Append(menuImage, wxT("&Image"));
@@ -686,11 +687,35 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
     Close( true );
 }
 
+#if wxUSE_ZLIB && wxUSE_STREAMS
+#include "wx/zstream.h"
+#endif
+
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)wxMessageBox( "wxImage demo\n"
-                        "(c) Robert Roebling 1998-2005"
-                        "(c) Vadim Zeitlin 2005-2009",
+    wxArrayString array;
+
+    array.Add("wxImage demo");
+    array.Add("(c) Robert Roebling 1998-2005");
+    array.Add("(c) Vadim Zeitlin 2005-2009");
+
+    array.Add(wxEmptyString);
+    array.Add("Version of the libraries used:");
+
+#if wxUSE_LIBPNG
+    array.Add(wxPNGHandler::GetLibraryVersionInfo().ToString());
+#endif
+#if wxUSE_LIBJPEG
+    array.Add(wxJPEGHandler::GetLibraryVersionInfo().ToString());
+#endif
+#if wxUSE_LIBTIFF
+    array.Add(wxTIFFHandler::GetLibraryVersionInfo().ToString());
+#endif
+#if wxUSE_ZLIB && wxUSE_STREAMS
+    // zlib is used by libpng
+    array.Add(wxGetZlibVersionInfo().ToString());
+#endif
+    (void)wxMessageBox( wxJoin(array, '\n'),
                         "About wxImage Demo",
                         wxICON_INFORMATION | wxOK );
 }

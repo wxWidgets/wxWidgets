@@ -154,6 +154,8 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 template class wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >;
 
+wxIMPLEMENT_DYNAMIC_CLASS( wxSpinCtrlDouble, wxSpinCtrlBase );
+
 wxSpinCtrlDouble::wxSpinCtrlDouble()
 {
 }

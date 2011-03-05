@@ -545,8 +545,6 @@ bool MyApp::OnInit()
 
     frame->Show(true);
 
-    SetTopWindow(frame);
-
     // report success
     return true;
 }
@@ -1863,9 +1861,20 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
                 alignment = wxT("left-aligned");
             else if (attr.GetAlignment() == wxTEXT_ALIGNMENT_JUSTIFIED)
                 alignment = wxT("justified");
-            msg.Printf( "Facename: %s, wxColour(%d, %d, %d), %s", facename,
-                attr.GetTextColour().Red(), attr.GetTextColour().Green(), attr.GetTextColour().Blue(),
-                alignment );
+
+            msg.Printf("Facename: %s", facename);
+
+            if (attr.HasTextColour())
+            {
+                msg += wxString::Format(", colour: %s",
+                                        attr.GetTextColour().GetAsString());
+            }
+            else
+            {
+                msg += ", no colour";
+            }
+
+            msg << ", " << alignment;
 
             if (attr.HasFont())
             {

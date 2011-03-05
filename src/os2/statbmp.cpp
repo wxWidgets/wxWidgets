@@ -28,8 +28,6 @@
 // macros
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-
 BEGIN_EVENT_TABLE(wxStaticBitmap, wxWindow)
     EVT_PAINT(wxStaticBitmap::OnPaint)
 END_EVENT_TABLE()

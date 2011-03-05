@@ -69,9 +69,6 @@ const int BUTTON_DROPDOWN_WIDTH = 10;
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
-unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha);
-wxColor wxAuiStepColour(const wxColor& c, int percent);
-
 static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
 {
     wxImage image = bmp.ConvertToImage();
@@ -98,9 +95,9 @@ static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
             if (has_mask && *r == mr && *g == mg && *b == mb)
                 continue;
 
-            *r = wxAuiBlendColour(*r, 255, 0.4);
-            *g = wxAuiBlendColour(*g, 255, 0.4);
-            *b = wxAuiBlendColour(*b, 255, 0.4);
+            *r = wxColour::AlphaBlend(*r, 255, 0.4);
+            *g = wxColour::AlphaBlend(*g, 255, 0.4);
+            *b = wxColour::AlphaBlend(*b, 255, 0.4);
         }
     }
 
@@ -122,7 +119,7 @@ static wxColor GetBaseColor()
         (255-base_colour.Green()) +
         (255-base_colour.Blue()) < 60)
     {
-        base_colour = wxAuiStepColour(base_colour, 92);
+        base_colour = base_colour.ChangeLightness(92);
     }
 
     return base_colour;
@@ -158,7 +155,7 @@ private:
 
 
 static const unsigned char
-    DISABLED_TEXT_GREY_HUE = wxAuiBlendColour(0, 255, 0.4);
+    DISABLED_TEXT_GREY_HUE = wxColour::AlphaBlend(0, 255, 0.4);
 const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
                                    DISABLED_TEXT_GREY_HUE,
                                    DISABLED_TEXT_GREY_HUE);
@@ -175,11 +172,11 @@ wxAuiDefaultToolBarArt::wxAuiDefaultToolBarArt()
     m_gripper_size = 7;
     m_overflow_size = 16;
 
-    wxColor darker1_colour = wxAuiStepColour(m_base_colour, 85);
-    wxColor darker2_colour = wxAuiStepColour(m_base_colour, 75);
-    wxColor darker3_colour = wxAuiStepColour(m_base_colour, 60);
-    wxColor darker4_colour = wxAuiStepColour(m_base_colour, 50);
-    wxColor darker5_colour = wxAuiStepColour(m_base_colour, 40);
+    wxColor darker1_colour = m_base_colour.ChangeLightness(85);
+    wxColor darker2_colour = m_base_colour.ChangeLightness(75);
+    wxColor darker3_colour = m_base_colour.ChangeLightness(60);
+    wxColor darker4_colour = m_base_colour.ChangeLightness(50);
+    wxColor darker5_colour = m_base_colour.ChangeLightness(40);
 
     m_gripper_pen1 = wxPen(darker5_colour);
     m_gripper_pen2 = wxPen(darker3_colour);
@@ -247,8 +244,8 @@ void wxAuiDefaultToolBarArt::DrawBackground(
 {
     wxRect rect = _rect;
     rect.height++;
-    wxColour start_colour = wxAuiStepColour(m_base_colour, 150);
-    wxColour end_colour = wxAuiStepColour(m_base_colour, 90);
+    wxColour start_colour = m_base_colour.ChangeLightness(150);
+    wxColour end_colour = m_base_colour.ChangeLightness(90);
     dc.GradientFillLinear(rect, start_colour, end_colour, wxSOUTH);
 }
 
@@ -334,18 +331,18 @@ void wxAuiDefaultToolBarArt::DrawButton(
         if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
         {
             dc.SetPen(wxPen(m_highlight_colour));
-            dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 150)));
+            dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(150)));
             dc.DrawRectangle(rect);
         }
         else if ((item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky())
         {
             dc.SetPen(wxPen(m_highlight_colour));
-            dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 170)));
+            dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
 
             // draw an even lighter background for checked item hovers (since
             // the hover background is the same color as the check background)
             if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
-                dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 180)));
+                dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(180)));
 
             dc.DrawRectangle(rect);
         }
@@ -354,7 +351,7 @@ void wxAuiDefaultToolBarArt::DrawButton(
             // it's important to put this code in an else statment after the
             // hover, otherwise hovers won't draw properly for checked items
             dc.SetPen(wxPen(m_highlight_colour));
-            dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 170)));
+            dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
             dc.DrawRectangle(rect);
         }
     }
@@ -454,17 +451,17 @@ void wxAuiDefaultToolBarArt::DrawDropDownButton(
     if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
     {
         dc.SetPen(wxPen(m_highlight_colour));
-        dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 140)));
+        dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(140)));
         dc.DrawRectangle(button_rect);
 
-        dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 170)));
+        dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
         dc.DrawRectangle(dropdown_rect);
     }
     else if (item.GetState() & wxAUI_BUTTON_STATE_HOVER ||
              item.IsSticky())
     {
         dc.SetPen(wxPen(m_highlight_colour));
-        dc.SetBrush(wxBrush(wxAuiStepColour(m_highlight_colour, 170)));
+        dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
         dc.DrawRectangle(button_rect);
         dc.DrawRectangle(dropdown_rect);
     }
@@ -641,8 +638,8 @@ void wxAuiDefaultToolBarArt::DrawSeparator(
         rect.width = new_width;
     }
 
-    wxColour start_colour = wxAuiStepColour(m_base_colour, 80);
-    wxColour end_colour = wxAuiStepColour(m_base_colour, 80);
+    wxColour start_colour = m_base_colour.ChangeLightness(80);
+    wxColour end_colour = m_base_colour.ChangeLightness(80);
     dc.GradientFillLinear(rect, start_colour, end_colour, horizontal ? wxSOUTH : wxEAST);
 }
 
@@ -694,7 +691,7 @@ void wxAuiDefaultToolBarArt::DrawOverflowButton(wxDC& dc,
         state & wxAUI_BUTTON_STATE_PRESSED)
     {
         wxRect cli_rect = wnd->GetClientRect();
-        wxColor light_gray_bg = wxAuiStepColour(m_highlight_colour, 170);
+        wxColor light_gray_bg = m_highlight_colour.ChangeLightness(170);
 
         if (m_flags & wxAUI_TB_VERTICAL)
         {
@@ -975,7 +972,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = tool_id;
+    item.toolid = tool_id;
     item.state = 0;
     item.proportion = 0;
     item.kind = kind;
@@ -984,8 +981,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
-    if (item.id == wxID_ANY)
-        item.id = wxNewId();
+    if (item.toolid == wxID_ANY)
+        item.toolid = wxNewId();
 
     if (!item.disabled_bitmap.IsOk())
     {
@@ -1013,7 +1010,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = control->GetId();
+    item.toolid = control->GetId();
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_CONTROL;
@@ -1042,7 +1039,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = tool_id;
+    item.toolid = tool_id;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_LABEL;
@@ -1051,8 +1048,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
-    if (item.id == wxID_ANY)
-        item.id = wxNewId();
+    if (item.toolid == wxID_ANY)
+        item.toolid = wxNewId();
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1067,7 +1064,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
     item.disabled_bitmap = wxNullBitmap;
     item.active = true;
     item.dropdown = false;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_SEPARATOR;
@@ -1090,7 +1087,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = pixels;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = 0;
     item.kind = wxITEM_SPACER;
@@ -1113,7 +1110,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
     item.active = true;
     item.dropdown = false;
     item.spacer_pixels = 0;
-    item.id = -1;
+    item.toolid = -1;
     item.state = 0;
     item.proportion = proportion;
     item.kind = wxITEM_SPACER;
@@ -1170,7 +1167,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindTool(int tool_id) const
     for (i = 0, count = m_items.GetCount(); i < count; ++i)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
-        if (item.id == tool_id)
+        if (item.toolid == tool_id)
             return &item;
     }
 
@@ -1763,7 +1760,7 @@ int wxAuiToolBar::GetToolIndex(int tool_id) const
     for (i = 0; i < count; ++i)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
-        if (item.id == tool_id)
+        if (item.toolid == tool_id)
             return i;
     }
 
@@ -2172,10 +2169,10 @@ void wxAuiToolBar::DoIdleUpdate()
     {
         wxAuiToolBarItem& item = m_items.Item(i);
 
-        if (item.id == -1)
+        if (item.toolid == -1)
             continue;
 
-        wxUpdateUIEvent evt(item.id);
+        wxUpdateUIEvent evt(item.toolid);
         evt.SetEventObject(this);
 
         if (handler->ProcessEvent(evt))
@@ -2576,9 +2573,9 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         UnsetToolTip();
 
         // fire the tool dropdown event
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_action_item->id);
+        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_action_item->toolid);
         e.SetEventObject(this);
-        e.SetToolId(m_action_item->id);
+        e.SetToolId(m_action_item->toolid);
 
         int mouse_x = evt.GetX();
         wxRect rect = m_action_item->sizer_item->GetRect();
@@ -2639,14 +2636,14 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         {
             UnsetToolTip();
 
-            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
+            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->toolid);
             e.SetEventObject(this);
 
             if (hit_item->kind == wxITEM_CHECK || hit_item->kind == wxITEM_RADIO)
             {
                 const bool toggle = !(m_action_item->state & wxAUI_BUTTON_STATE_CHECKED);
 
-                ToggleTool(m_action_item->id, toggle);
+                ToggleTool(m_action_item->toolid, toggle);
 
                 // repaint immediately
                 Refresh(false);
@@ -2715,9 +2712,9 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
     {
         if (hit_item->kind == wxITEM_NORMAL)
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_action_item->id);
+            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_action_item->toolid);
             e.SetEventObject(this);
-            e.SetToolId(m_action_item->id);
+            e.SetToolId(m_action_item->toolid);
             e.SetClickPoint(m_action_pos);
             GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
@@ -2788,9 +2785,9 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
     {
         if (hit_item->kind == wxITEM_NORMAL)
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, m_action_item->id);
+            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, m_action_item->toolid);
             e.SetEventObject(this);
-            e.SetToolId(m_action_item->id);
+            e.SetToolId(m_action_item->toolid);
             e.SetClickPoint(m_action_pos);
             GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
@@ -2814,7 +2811,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         // event sent sometime in the future (see OnLeftUp())
         wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, GetId());
         e.SetEventObject(this);
-        e.SetToolId(m_action_item->id);
+        e.SetToolId(m_action_item->toolid);
         m_dragging = GetEventHandler()->ProcessEvent(e) && !e.GetSkipped();
 
         DoIdleUpdate();

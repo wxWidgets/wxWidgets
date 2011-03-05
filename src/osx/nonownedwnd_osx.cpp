@@ -115,13 +115,25 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     m_isShown = false;
 
     // use the appropriate defaults for the position and size if necessary
-    wxPoint pos(posOrig);
-    if ( !pos.IsFullySpecified() )
-        pos.SetDefaults(wxGetClientDisplayRect().GetPosition());
-
     wxSize size(sizeOrig);
     if ( !size.IsFullySpecified() )
         size.SetDefaults(wxTopLevelWindow::GetDefaultSize());
+
+    wxPoint pos(posOrig);
+    if ( !pos.IsFullySpecified() )
+    {
+        wxRect rectWin = wxRect(size).CentreIn(wxGetClientDisplayRect());
+
+        // The size of the window is often not really known yet, TLWs are often
+        // created with some small initial size and later are fitted to contain
+        // their children so centering the window will show it too much to the
+        // right and bottom, adjust for it by putting it more to the left and
+        // center.
+        rectWin.x /= 2;
+        rectWin.y /= 2;
+
+        pos.SetDefaults(rectWin.GetPosition());
+    }
 
     // create frame.
     m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow
@@ -455,8 +467,15 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
         return;
 
     int left, top, w, h;
+    // under iphone with a translucent status bar the m_nowpeer returns the
+    // inner area, while the content area extends under the translucent
+    // status bar, therefore we use the content view's area
+#ifdef __WXOSX_IPHONE__
+    m_peer->GetContentArea(left, top, w, h);
+#else
     m_nowpeer->GetContentArea(left, top, w, h);
-
+#endif
+    
     if (width)
        *width = w ;
     if (height)

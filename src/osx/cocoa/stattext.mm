@@ -25,6 +25,10 @@
 
 #include "wx/osx/private.h"
 
+#if wxUSE_MARKUP
+    #include "wx/osx/cocoa/private/markuptoattr.h"
+#endif // wxUSE_MARKUP
+
 #include <stdio.h>
 
 @interface wxNSStaticTextView : NSTextField
@@ -44,6 +48,25 @@
     }
 }
 
+- (void) setEnabled:(BOOL) flag 
+{ 
+    [super setEnabled: flag]; 
+    
+    if (![self drawsBackground]) { 
+        // Static text is drawn incorrectly when disabled. 
+        // For an explanation, see 
+        // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028 
+        if (flag)
+        { 
+            [self setTextColor: [NSColor controlTextColor]]; 
+        }
+        else 
+        { 
+            [self setTextColor: [NSColor secondarySelectedControlColor]]; 
+        } 
+    } 
+} 
+
 @end
 
 class wxStaticTextCocoaImpl : public wxWidgetCocoaImpl
@@ -56,26 +79,42 @@ public:
 
     virtual void SetLabel(const wxString& title, wxFontEncoding encoding)
     {
-        wxNSStaticTextView* v = (wxNSStaticTextView*)GetWXWidget();
-        wxWindow* wxpeer = GetWXPeer();
-        NSCell* cell = [v cell];
         wxCFStringRef text( title , encoding );
 
+        NSMutableAttributedString *
+            attrstring = [[NSMutableAttributedString alloc] initWithString:text.AsNSString()];
+        DoSetAttrString(attrstring);
+        [attrstring release];
+    }
+
+#if wxUSE_MARKUP
+    virtual void SetLabelMarkup( const wxString& markup)
+    {
+        wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+
+        DoSetAttrString(toAttr.GetNSAttributedString());
+    }
+#endif // wxUSE_MARKUP
+
+private:
+    void DoSetAttrString(NSMutableAttributedString *attrstring)
+    {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineBreakMode:m_lineBreak];
-        int style = wxpeer->GetWindowStyleFlag();
+        int style = GetWXPeer()->GetWindowStyleFlag();
         if (style & wxALIGN_CENTER)
             [paragraphStyle setAlignment: NSCenterTextAlignment];
         else if (style & wxALIGN_RIGHT)
             [paragraphStyle setAlignment: NSRightTextAlignment];
 
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:paragraphStyle, NSParagraphStyleAttributeName, nil];
-        NSAttributedString *attrstring = [[NSAttributedString alloc] initWithString:text.AsNSString() attributes:dict];
+        [attrstring addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:NSMakeRange(0, [attrstring length])];
+        NSCell* cell = [(wxNSStaticTextView *)GetWXWidget() cell];
         [cell setAttributedStringValue:attrstring];
-        [attrstring release];
         [paragraphStyle release];
     }
-private :
+
     NSLineBreakMode m_lineBreak;
 };
 

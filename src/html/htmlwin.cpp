@@ -1640,9 +1640,6 @@ void wxHtmlWindow::SelectAll()
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
 
-#if wxUSE_EXTENDED_RTTI
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
-
 wxBEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 /*
     TODO PROPERTIES
@@ -1657,9 +1654,8 @@ wxBEGIN_HANDLERS_TABLE(wxHtmlWindow)
 wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
-#endif
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
 
 BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)

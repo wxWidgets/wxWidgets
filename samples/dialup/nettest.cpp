@@ -161,9 +161,8 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(wxT("Dial-up wxWidgets demo"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    // Show it and tell the application that it's our main window
+    // Show it
     frame->Show(true);
-    SetTopWindow(frame);
 
     // Init dial up manager
     m_dial = wxDialUpManager::Create();

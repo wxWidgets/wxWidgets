@@ -119,7 +119,6 @@ private:
 
     void OnContextMenu( wxDataViewEvent &event );
 
-    void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
     void OnHideAttributes( wxCommandEvent &event);
@@ -190,7 +189,7 @@ public:
         return true;
     }
 
-    virtual bool Activate( wxRect WXUNUSED(cell),
+    virtual bool Activate( const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem &WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
@@ -199,7 +198,8 @@ public:
         return false;
     }
 
-    virtual bool LeftClick( wxPoint cursor, wxRect WXUNUSED(cell),
+    virtual bool LeftClick(const wxPoint& cursor,
+                           const wxRect& WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
                            const wxDataViewItem &WXUNUSED(item),
                            unsigned int WXUNUSED(col) )
@@ -243,7 +243,6 @@ bool MyApp::OnInit()
 
     MyFrame *frame =
         new MyFrame(NULL, "wxDataViewCtrl sample", 40, 40, 1000, 540);
-    SetTopWindow(frame);
 
     frame->Show(true);
     return true;
@@ -359,8 +358,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
 #endif // wxUSE_DRAG_AND_DROP
 
-    EVT_RIGHT_UP(MyFrame::OnRightClick)
-
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnAttrHeaderClick)
 
 END_EVENT_TABLE()
@@ -406,6 +403,14 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     SetMenuBar(menu_bar);
     CreateStatusBar();
+
+
+    // redirect logs from our event handlers to text control
+    m_log = new wxTextCtrl( this, wxID_ANY, wxString(), wxDefaultPosition,
+                            wxDefaultSize, wxTE_MULTILINE );
+    m_log->SetMinSize(wxSize(-1, 100));
+    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
+    wxLogMessage( "This is the log window" );
 
 
     // first page of the notebook
@@ -506,12 +511,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_notebook->AddPage(fourthPanel, "wxDataViewTreeCtrl");
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-
-    m_log = new wxTextCtrl( this, wxID_ANY, wxString(), wxDefaultPosition,
-                            wxDefaultSize, wxTE_MULTILINE );
-    m_log->SetMinSize(wxSize(-1, 100));
-    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
-    wxLogMessage( "This is the log window" );
 
     mainSizer->Add( m_notebook, 1, wxGROW );
     mainSizer->Add( m_log, 0, wxGROW );
@@ -653,6 +652,10 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                 new wxDataViewListCtrl( parent, wxID_ANY, wxDefaultPosition,
                                         wxDefaultSize, style );
             m_ctrl[2] = lc;
+
+            MyListStoreDerivedModel* page2_model = new MyListStoreDerivedModel();
+            lc->AssociateModel(page2_model);
+            page2_model->DecRef();
 
             lc->AppendToggleColumn( "Toggle" );
             lc->AppendTextColumn( "Text" );
@@ -960,9 +963,6 @@ void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %s;  Column: %d",
                   title, event.GetColumn() );
@@ -970,9 +970,6 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
 {
-    if(!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s", title );
 
@@ -984,9 +981,6 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
 {
-    if(!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     if (title.empty())
         title = "None";
@@ -996,9 +990,6 @@ void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
 
 void MyFrame::OnExpanding( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s", title );
 }
@@ -1011,9 +1002,6 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
     {
         event.Veto();
 
-        if (!m_log)
-           return;
-
         wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING vetoed. Artist: %s", artist );
     }
     else
@@ -1023,54 +1011,36 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item: %s", title );
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item: %s", title );
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s", title );
 }
 
 void MyFrame::OnCollapsing( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s", title );
 }
 
 void MyFrame::OnCollapsed( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s", title );
 }
 
 void MyFrame::OnContextMenu( wxDataViewEvent &event )
 {
-    if (!m_log)
-        return;
-
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s", title );
 
@@ -1088,9 +1058,6 @@ void MyFrame::OnAttrHeaderClick( wxDataViewEvent &event )
     // this column when it is clicked to take place
     event.Skip();
 
-    if (!m_log)
-        return;
-
     int pos = m_ctrl[1]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d", pos );
@@ -1103,9 +1070,6 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
     // this column when it is clicked to take place
     event.Skip();
 
-    if (!m_log)
-        return;
-
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d", pos );
@@ -1114,9 +1078,6 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 
 void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
 {
-    if(!m_log)
-        return;
-
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
@@ -1124,21 +1085,9 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
 
 void MyFrame::OnSorted( wxDataViewEvent &event )
 {
-    if(!m_log)
-        return;
-
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, Column position: %d", pos );
-}
-
-void MyFrame::OnRightClick( wxMouseEvent &event )
-{
-    if(!m_log)
-        return;
-
-    wxLogMessage( "wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d",
-                 event.GetX(), event.GetY() );
 }
 
 void MyFrame::OnDataViewChar(wxKeyEvent& event)

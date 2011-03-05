@@ -74,8 +74,6 @@ private:
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-
 BEGIN_EVENT_TABLE(wxScrollBar, wxScrollBarBase)
 END_EVENT_TABLE()
 

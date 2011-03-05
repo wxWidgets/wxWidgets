@@ -22,8 +22,6 @@
 
 #import <AppKit/NSColor.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-
 void wxColour::Init()
 {
     m_cocoaNSColor = NULL;

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 5 October 2009                                                      *
+# Date : 14 December 2010                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -69,6 +69,8 @@ all : $(SOURCES)
 .endif
 .endif
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
 
 regcomp.obj : regcomp.c
 regerror.obj : regerror.c

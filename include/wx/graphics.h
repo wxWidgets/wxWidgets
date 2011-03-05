@@ -57,7 +57,11 @@ class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 #if wxUSE_PRINTING_ARCHITECTURE
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
+#endif
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
 class WXDLLIMPEXP_FWD_CORE wxEnhMetaFileDC;
+#endif
 #endif
 class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsPath;
@@ -393,10 +397,12 @@ public:
     static wxGraphicsContext * Create( const wxMemoryDC& dc);
 #if wxUSE_PRINTING_ARCHITECTURE
     static wxGraphicsContext * Create( const wxPrinterDC& dc);
+#endif
 #ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
     static wxGraphicsContext * Create( const wxEnhMetaFileDC& dc);
 #endif
-#endif // wxUSE_PRINTING_ARCHITECTURE
+#endif
 
     static wxGraphicsContext* CreateFromNative( void * context );
 
@@ -714,10 +720,12 @@ public:
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0;
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) = 0;
+#endif
 #ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
     virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc) = 0;
 #endif
-#endif // wxUSE_PRINTING_ARCHITECTURE
+#endif
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 

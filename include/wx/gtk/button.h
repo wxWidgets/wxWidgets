@@ -67,6 +67,10 @@ protected:
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
     virtual void DoSetBitmapPosition(wxDirection dir);
 
+#if wxUSE_MARKUP
+    virtual bool DoSetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
+
 private:
     typedef wxButtonBase base_type;
 
@@ -90,6 +94,10 @@ private:
 
     // show the given bitmap (must be valid)
     void GTKDoShowBitmap(const wxBitmap& bitmap);
+
+    // Return the GtkLabel used by this button.
+    GtkLabel *GTKGetLabel() const;
+
 
     // the bitmaps for the different state of the buttons, all of them may be
     // invalid and the button only shows a bitmap at all if State_Normal bitmap

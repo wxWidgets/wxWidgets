@@ -352,8 +352,6 @@ wxSpinCtrlGTKBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxSpinCtrlGTKBase)
-
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------

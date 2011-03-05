@@ -728,7 +728,7 @@ public:
     wxPoint GetTopRight() const { return wxPoint(GetRight(), GetTop()); }
     wxPoint GetRightTop() const { return GetTopRight(); }
     void SetTopRight(const wxPoint &p) { SetRight(p.x); SetTop(p.y); }
-    void SetRightTop(const wxPoint &p) { SetTopLeft(p); }
+    void SetRightTop(const wxPoint &p) { SetTopRight(p); }
 
     wxPoint GetBottomLeft() const { return wxPoint(GetLeft(), GetBottom()); }
     wxPoint GetLeftBottom() const { return GetBottomLeft(); }

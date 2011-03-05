@@ -1362,7 +1362,7 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if (!p.IsToolbar())
+        if (!p.IsToolbar() && !p.IsFloating())
         {
             p.SetFlag(wxAuiPaneInfo::optionHidden,
                       p.HasFlag(wxAuiPaneInfo::savedHiddenState));
@@ -1570,10 +1570,15 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     if (part != wxT("layout2"))
         return false;
 
-    // mark all panes currently managed as docked and hidden
+    // Mark all panes currently managed as hidden. Also, dock all panes that are dockable.
     int pane_i, pane_count = m_panes.GetCount();
     for (pane_i = 0; pane_i < pane_count; ++pane_i)
-        m_panes.Item(pane_i).Dock().Hide();
+    {
+        wxAuiPaneInfo& p = m_panes.Item(pane_i);
+        if(p.IsDockable())
+            p.Dock();
+        p.Hide();
+    }
 
     // clear out the dock array; this will be reconstructed
     m_docks.Clear();

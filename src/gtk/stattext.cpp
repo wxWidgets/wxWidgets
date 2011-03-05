@@ -19,8 +19,6 @@
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText,wxControl)
-
 wxStaticText::wxStaticText()
 {
 }
@@ -103,38 +101,54 @@ bool wxStaticText::Create(wxWindow *parent,
     return true;
 }
 
-void wxStaticText::SetLabel( const wxString& str )
+void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    // save the label inside m_labelOrig in case user calls GetLabel() later
-    m_labelOrig = str;
-
     InvalidateBestSize();
 
-    wxString label(str);
-    if (gtk_check_version(2,6,0) &&
-        IsEllipsized())
+    if (gtk_check_version(2,6,0) && IsEllipsized())
     {
-        // GTK+ < 2.6 does not support ellipsization:
-        // since we need to use our generic code for ellipsization (which does not
-        // behaves well in conjunction with markup; i.e. it may break the markup
-        // validity erasing portions of the string), we also need to strip out
-        // the markup (if present) from the label.
-
-        label = GetEllipsizedLabelWithoutMarkup();
+        // GTK+ < 2.6 does not support ellipsization so we need to do it
+        // manually and as our ellipsization code doesn't deal with markup, we
+        // have no choice but to ignore it in this case and always use plain
+        // text.
+        GTKSetLabelForLabel(GTK_LABEL(m_widget), GetEllipsizedLabel());
     }
-
-    if ( HasFlag(wxST_MARKUP) )
-        GTKSetLabelWithMarkupForLabel(GTK_LABEL(m_widget), label);
-    else
-        GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
+    else // Ellipsization not needed or supported by GTK+.
+    {
+        (this->*setter)(GTK_LABEL(m_widget), label);
+    }
 
     // adjust the label size to the new label unless disabled
     if ( !HasFlag(wxST_NO_AUTORESIZE) &&
          !IsEllipsized() )  // if ellipsization is ON, then we don't want to get resized!
         SetSize( GetBestSize() );
 }
+
+void wxStaticText::SetLabel(const wxString& label)
+{
+    m_labelOrig = label;
+
+    GTKDoSetLabel(&wxStaticText::GTKSetLabelForLabel, label);
+}
+
+#if wxUSE_MARKUP
+
+bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
+{
+    const wxString stripped = RemoveMarkup(markup);
+    if ( stripped.empty() && !markup.empty() )
+        return false;
+
+    m_labelOrig = stripped;
+
+    GTKDoSetLabel(&wxStaticText::GTKSetLabelWithMarkupForLabel, markup);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
 
 bool wxStaticText::SetFont( const wxFont &font )
 {
@@ -230,11 +244,7 @@ wxString wxStaticText::DoGetLabel() const
 
 void wxStaticText::DoSetLabel(const wxString& str)
 {
-    // this function looks like GTKSetLabelForLabel() but here we just want to modify
-    // the GTK control without altering any internal wxStaticText variable
-
-    const wxString labelGTK = GTKConvertMnemonics(str);
-    gtk_label_set_text_with_mnemonic(GTK_LABEL(m_widget), wxGTK_CONV(labelGTK));
+    GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
 }
 
 // static

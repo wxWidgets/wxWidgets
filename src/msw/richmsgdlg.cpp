@@ -19,6 +19,10 @@
 
 #include "wx/richmsgdlg.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/msw/private.h"
+#endif
+
 // This will define wxHAS_MSW_TASKDIALOG if we have support for it in the
 // headers we use.
 #include "wx/msw/private/msgdlg.h"

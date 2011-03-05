@@ -1140,6 +1140,27 @@ void wxDCImpl::InheritAttributes(wxWindow *win)
     SetLayoutDirection(win->GetLayoutDirection());
 }
 
+void wxDCImpl::DoGetFontMetrics(int *height,
+                                int *ascent,
+                                int *descent,
+                                int *internalLeading,
+                                int *externalLeading,
+                                int *averageWidth) const
+{
+    // Average width is typically the same as width of 'x'.
+    wxCoord h, d;
+    DoGetTextExtent("x", averageWidth, &h, &d, externalLeading);
+
+    if ( height )
+        *height = h;
+    if ( ascent )
+        *ascent = h - d;
+    if ( descent )
+        *descent = d;
+    if ( internalLeading )
+        *internalLeading = 0;
+}
+
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
@@ -1302,7 +1323,14 @@ void wxDC::DrawLabel(const wxString& text,
         // it should be of the same colour as text
         SetPen(wxPen(GetTextForeground(), 0, wxPENSTYLE_SOLID));
 
-        yUnderscore--;
+        // This adjustment is relatively arbitrary: we need to draw the
+        // underline slightly higher to avoid overflowing the character cell
+        // but whether we should do it 1, 2 or 3 pixels higher is not clear.
+        //
+        // The currently used value seems to be compatible with native MSW
+        // behaviour, i.e. it results in the same appearance of the owner-drawn
+        // and normal labels.
+        yUnderscore -= 2;
 
         DrawLine(startUnderscore, yUnderscore, endUnderscore, yUnderscore);
     }

@@ -52,7 +52,7 @@
 // currently for some reasong the UITextField leads to a recursion when the keyboard should be shown, so let's leave the code
 // in case this gets resolved...
 
-#define wxOSX_IPHONE_USE_TEXTFIELD 0
+#define wxOSX_IPHONE_USE_TEXTFIELD 1
 
 class wxMacEditHelper
 {
@@ -81,7 +81,20 @@ protected :
 
 #if wxOSX_IPHONE_USE_TEXTFIELD
 
-@interface wxUITextField : UITextField<UITextFieldDelegate>
+@interface  wxUITextFieldDelegate : NSObject<UITextFieldDelegate>
+{
+}
+
+@end
+
+
+@interface wxUITextField : UITextField
+{
+}
+
+@end
+
+@interface wxNSSecureTextField : UITextField<UITextFieldDelegate>
 {
 }
 
@@ -119,6 +132,7 @@ protected :
 
 @end
 
+#if 0 
 @implementation wxUITextFieldEditor
 
 - (void) keyDown:(NSEvent*) event
@@ -161,6 +175,45 @@ protected :
 
 @end
 
+#endif
+
+
+@implementation wxUITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    // the user pressed the "Done" button, so dismiss the keyboard
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( textField );
+    if ( impl  )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+
+    [textField resignFirstResponder];
+    return YES;
+}
+
+/*
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField;        // return NO to disallow editing.
+- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField;          // return YES to allow editing to stop and to resign first responder status. NO to disallow the editing session to end
+- (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;   // return NO to not change text
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField;               // called when clear button pressed. return NO to ignore (no notifications)
+*/
+
+@end
+
+
 @implementation wxUITextField
 
 + (void)initialize
@@ -187,18 +240,6 @@ protected :
 {
     wxUnusedVar(textField);
     
-    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl  )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
-        {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
-    }
     
     return NO;
 }
@@ -271,22 +312,23 @@ protected :
 // wxUITextViewControl
 //
 
-wxUITextViewControl::wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* v) : wxWidgetIPhoneImpl(wxPeer, v)
+wxUITextViewControl::wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* v) : 
+    wxWidgetIPhoneImpl(wxPeer, v),
+    wxTextWidgetImpl(wxPeer)
 {
     m_textView = v;
-    wxUITextViewDelegate* d = [[wxUITextViewDelegate alloc] init];
+    m_delegate= [[wxUITextViewDelegate alloc] init];
     
-    [m_textView setDelegate:d];
+    [m_textView setDelegate:m_delegate];
 }
 
 wxUITextViewControl::~wxUITextViewControl()
 {
     if (m_textView)
     {
-        wxUITextViewDelegate* d = [m_textView delegate];
         [m_textView setDelegate: nil];
-        [d release];
     }
+    [m_delegate release];
 }
 
 bool wxUITextViewControl::CanFocus() const
@@ -400,9 +442,9 @@ bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
 {
     if (m_textView && position >=0)
     {   
-        UIFont* font = NULL;
-        NSColor* bgcolor = NULL;
-        NSColor* fgcolor = NULL;
+        // UIFont* font = NULL;
+        // NSColor* bgcolor = NULL;
+        // NSColor* fgcolor = NULL;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that UITextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
@@ -485,7 +527,12 @@ wxSize wxUITextViewControl::GetBestSize() const
     }
     return wxSize(0,0);
     */
-    return r.GetSize();
+    
+    wxSize sz = r.GetSize();
+    if ( sz.y < 31 )
+        sz.y = 31;
+
+    return sz;
 }
 
 #if wxOSX_IPHONE_USE_TEXTFIELD
@@ -494,11 +541,13 @@ wxSize wxUITextViewControl::GetBestSize() const
 // wxUITextFieldControl
 //
 
-wxUITextFieldControl::wxUITextFieldControl( wxWindow *wxPeer, UITextField* w ) : wxWidgetIPhoneImpl(wxPeer, w)
+wxUITextFieldControl::wxUITextFieldControl( wxTextCtrl *wxPeer, UITextField* w ) : 
+    wxWidgetIPhoneImpl(wxPeer, w),
+    wxTextWidgetImpl(wxPeer)
 {
-    UITextField wxOSX_10_6_AND_LATER(<UITextFieldDelegate>) *tf = (UITextField*) w;
-    m_textField = tf;
-    [m_textField setDelegate: tf];
+    m_textField = w;
+    m_delegate = [[wxUITextFieldDelegate alloc] init];
+    [m_textField setDelegate: m_delegate];
     m_selStart = m_selEnd = 0;
 }
 
@@ -506,6 +555,7 @@ wxUITextFieldControl::~wxUITextFieldControl()
 {
     if (m_textField)
         [m_textField setDelegate: nil];
+    [m_delegate release];
 }
 
 wxString wxUITextFieldControl::GetStringValue() const
@@ -517,6 +567,17 @@ void wxUITextFieldControl::SetStringValue( const wxString &str)
 {
 //    wxMacEditHelper helper(m_textField);
     [m_textField setText: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+}
+
+wxSize wxUITextFieldControl::GetBestSize() const
+{
+    wxRect r;
+    
+    GetBestRect(&r);
+    wxSize sz = r.GetSize();
+    if ( sz.y < 31 )
+        sz.y = 31;
+    return sz;
 }
 
 void wxUITextFieldControl::Copy()
@@ -609,6 +670,12 @@ void wxUITextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
+bool wxUITextFieldControl::SetHint(const wxString& hint)
+{
+    wxCFStringRef hintstring(hint);
+    [m_textField setPlaceholder:hintstring.AsNSString()];
+}
+
 #endif
 
 //
@@ -644,22 +711,19 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
 #if wxOSX_IPHONE_USE_TEXTFIELD
     else
     {
-        UITextField* v = [[UITextField alloc] initWithFrame:r];
+        wxUITextField* v = [[wxUITextField alloc] initWithFrame:r];
         tv = v;
 
 		v.textColor = [UIColor blackColor];
 		v.font = [UIFont systemFontOfSize:17.0];
-		v.placeholder = @"<enter text>";
 		v.backgroundColor = [UIColor whiteColor];
 		
-		v.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
+		v.clearButtonMode = UITextFieldViewModeNever;
 		
-        v.delegate = v;	// let us be the delegate so we know when the keyboard's "Done" button is pressed
-
         [v setBorderStyle:UITextBorderStyleBezel];
         if ( style & wxNO_BORDER )
             v.borderStyle = UITextBorderStyleNone;
-        
+         
         wxUITextFieldControl* tc = new wxUITextFieldControl( wxpeer, v );
         c = tc;
         t = tc;

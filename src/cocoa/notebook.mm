@@ -127,7 +127,7 @@ WX_IMPLEMENT_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 // ========================================================================
 // wxNotebook
 // ========================================================================
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
+
 BEGIN_EVENT_TABLE(wxNotebook, wxNotebookBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxNotebook,NSTabView,NSView,NSView)

@@ -42,7 +42,8 @@ enum wxCmdLineEntryFlags
     wxCMD_LINE_PARAM_OPTIONAL   = 0x02, // the parameter may be omitted
     wxCMD_LINE_PARAM_MULTIPLE   = 0x04, // the parameter may be repeated
     wxCMD_LINE_OPTION_HELP      = 0x08, // this option is a help request
-    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10  // must have sep before the value
+    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10, // must have sep before the value
+    wxCMD_LINE_SWITCH_NEGATABLE = 0x20  // this switch can be negated (e.g. /S-)
 };
 
 // an option value or parameter may be a string (the most common case), a
@@ -64,6 +65,14 @@ enum wxCmdLineEntryType
     wxCMD_LINE_PARAM,
     wxCMD_LINE_USAGE_TEXT,
     wxCMD_LINE_NONE         // to terminate the list
+};
+
+// Possible return values of wxCmdLineParser::FoundSwitch()
+enum wxCmdLineSwitchState
+{
+    wxCMD_SWITCH_OFF = -1,  // Found but turned off/negated.
+    wxCMD_SWITCH_NOT_FOUND, // Not found at all.
+    wxCMD_SWITCH_ON         // Found in normal state.
 };
 
 // ----------------------------------------------------------------------------
@@ -211,6 +220,12 @@ public:
 
     // returns true if the given switch was found
     bool Found(const wxString& name) const;
+
+    // Returns wxCMD_SWITCH_NOT_FOUND if the switch was not found at all,
+    // wxCMD_SWITCH_ON if it was found in normal state and wxCMD_SWITCH_OFF if
+    // it was found but negated (i.e. followed by "-", this can only happen for
+    // the switches with wxCMD_LINE_SWITCH_NEGATABLE flag).
+    wxCmdLineSwitchState FoundSwitch(const wxString& name) const;
 
     // returns true if an option taking a string value was found and stores the
     // value in the provided pointer

@@ -27,8 +27,6 @@
 
 #include <math.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-
 BEGIN_EVENT_TABLE(wxGauge, wxGaugeBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxGauge,NSProgressIndicator,NSView,NSView)

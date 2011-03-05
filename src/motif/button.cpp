@@ -34,8 +34,6 @@
 
 void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr);
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
 #define MIN_WIDTH 78
 #define MIN_LARGE_HEIGHT 30
 

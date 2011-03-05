@@ -12,7 +12,7 @@
 class MyTaskBarIcon : public wxTaskBarIcon
 {
 public:
-#if defined(__WXCOCOA__)
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
     MyTaskBarIcon(wxTaskBarIconType iconType = DEFAULT_TYPE)
     :   wxTaskBarIcon(iconType)
 #else
@@ -53,7 +53,7 @@ protected:
     void OnCloseWindow(wxCloseEvent& event);
 
     MyTaskBarIcon   *m_taskBarIcon;
-#if defined(__WXCOCOA__)
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
     MyTaskBarIcon   *m_dockIcon;
 #endif
 

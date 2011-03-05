@@ -845,10 +845,26 @@ public:
 
 
     /**
-        Create a new config object: this function will create the "best"
-        implementation of wxConfig available for the current platform, see
-        comments near the definition of wxCONFIG_WIN32_NATIVE for details. It
-        returns the created object and also sets it as the current one.
+        Create a new config object and sets it as the current one.
+
+        This function will create the most appropriate implementation of
+        wxConfig available for the current platform. By default this means that
+        the system registry will be used for storing the configuration
+        information under MSW and a file under the user home directory (see
+        wxStandardPaths::GetUserConfigDir()) elsewhere.
+
+        If you prefer to use the configuration files everywhere, you can define
+        @c wxUSE_CONFIG_NATIVE to 0 when compiling wxWidgets. Or you can simply
+        always create wxFileConfig explicitly.
+
+        Finally, if you want to create a custom wxConfig subclass you may
+        change this function behaviour by overriding wxAppTraits::CreateConfig()
+        to create it. An example when this could be useful could be an
+        application which could be installed either normally (in which case the
+        default behaviour of using wxRegConfig is appropriate) or in a
+        "portable" way in which case a wxFileConfig with a file in the program
+        directory would be used and the choice would be done in CreateConfig()
+        at run-time.
     */
     static wxConfigBase* Create();
 

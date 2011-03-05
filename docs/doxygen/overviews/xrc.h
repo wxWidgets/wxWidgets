@@ -36,65 +36,229 @@ There are several advantages to using XRC resources:
 
 XRC was written by Vaclav Slavik.
 
-@li @ref overview_xrc_concepts
+@li @ref overview_xrc_gettingstarted
+@li @ref overview_xrc_xrcsample
 @li @ref overview_xrc_binaryresourcefiles
 @li @ref overview_xrc_embeddedresource
-@li @ref overview_xrc_cppsample
-@li @ref overview_xrc_sample
 @li @ref overview_xrc_cppheader
 @li @ref overview_xrc_newresourcehandlers
 
-See also the separate @ref overview_xrcformat page for details about the XRC file format.
+See also the separate @ref overview_xrcformat page for more information, and
+details about the XRC file format.
 
-<hr>
 
+@section overview_xrc_gettingstarted Getting Started with XRC
 
-@section overview_xrc_concepts XRC Concepts
+<b> Creating an XRC file </b>
 
-These are the typical steps for using XRC files in your application.
+You will need to write an XRC file. Though this @e can be done by hand in a
+text editor, for all but the smallest files it is advisable to use a
+specialised tool. Examples of these include:
 
-@li Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice.
-@li If you are going to use XRS files (see
-    @ref overview_xrc_binaryresourcefiles), install wxFileSystem archive
-    handler first with wxFileSystem::AddHandler(new wxArchiveFSHandler);
-@li Call wxXmlResource::Get()->InitAllHandlers() from your wxApp::OnInit
-    function, and then call wxXmlResource::Get()->Load("myfile.xrc") to load
-    the resource file.
-@li To create a dialog from a resource, create it using the default
-    constructor, and then load it. For example:
-    wxXmlResource::Get()->LoadDialog(dlg, this, "dlg1");
-@li Set up event tables as usual but use the XRCID(str) macro to translate from
-    XRC string names to a suitable integer identifier, for example
-    <tt>EVT_MENU(XRCID("quit"), MyFrame::OnQuit)</tt>.
-
-To create an XRC file, you can use one of the following methods.
-
-@li Create the file by hand.
-@li Use wxDesigner <http://www.roebling.de/>, a commercial dialog designer/RAD
-    tool.
-@li Use DialogBlocks <http://www.anthemion.co.uk/dialogblocks/>, a commercial
+@e Non-free:
+@li wxDesigner <http://www.wxdesigner-software.de/>, a commercial dialog
+    designer/RAD tool.
+@li DialogBlocks <http://www.anthemion.co.uk/dialogblocks/>, a commercial
     dialog editor.
-@li Use XRCed <http://xrced.sf.net/>, a wxPython-based dialog editor that you
+
+@e Free:
+@li XRCed <http://xrced.sf.net/>, a wxPython-based dialog editor that you
     can find in the wxPython/tools subdirectory of the wxWidgets SVN archive.
-@li Use wxGlade <http://wxglade.sf.net/>, a GUI designer written in wxPython.
-    At the moment it can generate Python, C++ and XRC.
+@li wxFormBuilder <http://wxformbuilder.org/>, a C++-based dialog editor that
+    can output C++, XRC or python.
 
-A complete list of third-party tools that write to XRC can be found at
-<http://www.wxwidgets.org/wiki/index.php/Tools>.
+There's a more complete list at <http://www.wxwidgets.org/wiki/index.php/Tools>
 
-It is highly recommended that you use a resource editing tool, since it's
-fiddly writing XRC files by hand.
+This small demonstration XRC file contains a simple dialog:
+@code
+<?xml version="1.0" ?>
+<resource version="2.3.0.1">
+  <object class="wxDialog" name="SimpleDialog">
+    <title>Simple dialog</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxTextCtrl" name="text"/>
+        <option>1</option>
+        <flag>wxALL|wxEXPAND</flag>
+        <border>10</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxButton" name="clickme_btn">
+              <label>Click</label>
+            </object>
+            <flag>wxRIGHT</flag>
+            <border>10</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_OK">
+              <label>OK</label>
+            </object>
+            <flag>wxLEFT</flag>
+            <border>10</border>
+          </object>
+          <orient>wxHORIZONTAL</orient>
+        </object>
+        <flag>wxALL|wxALIGN_CENTRE</flag>
+        <border>10</border>
+      </object>
+    </object>
+  </object>
+</resource>
+@endcode
 
-You can use wxXmlResource::Load in a number of ways. You can pass an XRC file
-(XML-based text resource file) or a zip-compressed file (see
-@ref overview_xrc_binaryresourcefiles), with extension ZIP or XRS, containing
-other XRC.
+You can keep all your XRC elements together in one file, or split them between
+several.
 
-You can also use embedded C++ resources (see
-@ref overview_xrc_embeddedresource).
+<b> Loading XRC files </b>
+
+Before you can use XRC in an app, it must first be loaded. This code fragment
+shows how to load a single XRC file "resource.xrc" from the current working
+directory, plus all the *.xrc files contained in the subdirectory "rc".
+
+@code
+#include "wx/xrc/xmlres.h"
+
+bool MyApp::OnInit()
+{
+    ...
+    wxXmlResource::Get()->InitAllHandlers();
+
+    wxXmlResource::Get()->Load("resource.xrc");
+    wxXmlResource::Get()->LoadAllFiles("rc");
+    ...
+}
+@endcode
+
+It's normal to load any XRC files at the beginning of an app. Though it is
+possible to unload a file later, it's seldom necessary.
 
 
-@section overview_xrc_binaryresourcefiles Using Binary Resource Files
+<b> Using an XRC item </b>
+
+The XRC file(s) are now loaded into the app's virtual filesystem. From there,
+you must do another sort of load when you want to use an individual object.
+Yes, it's confusingly named, but you first Load() the file, and later load each
+top-level object when its needed.
+
+This is how you would use the above simple dialog in your code.
+
+@code
+void MyClass::ShowDialog()
+{
+    wxDialog dlg;
+    if (wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+        dlg.ShowModal();
+}
+@endcode
+
+See how simple the code is. All the instantiation is done invisibly by the XRC
+system.
+
+Though you'll most often use wxXmlResource::LoadDialog, there are also
+equivalents that load a frame, a menu etc; and the generic
+wxXmlResource::LoadObject. See wxXmlResource for more details.
+
+<b> Accessing XRC child controls </b>
+
+The last section showed how to load top-level windows like dialogs, but what
+about child windows like the wxTextCtrl named "text" that the dialog contains?
+You can't 'load' an individual child control in the same way. Instead you use
+the XRCCTRL macro to get a pointer to the child. To expand the previous code:
+
+@code
+void MyClass::ShowDialog()
+{
+    wxDialog dlg;
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+        return;
+
+    wxTextCtrl* pText = XRCCTRL(dlg, "text", wxTextCtrl);
+    if (pText)
+        pText->ChangeValue("This is a simple dialog");
+
+    dlg.ShowModal();
+}
+@endcode
+
+XRCCTRL takes a reference to the parent container and uses wxWindow::FindWindow
+to search inside it for a wxWindow with the supplied name (here "text"). It
+returns a pointer to that control, cast to the type in the third parameter; so
+a similar effect could be obtained by writing:
+
+@code
+pText = (wxTextCtrl*)(dlg.FindWindowByName("text"));
+@endcode
+
+<b> XRC and IDs </b>
+
+The ID of a control is often needed, e.g. for use in an event table
+or with wxEvtHandler::Bind. It can easily be found by passing the name of the
+control to the XRCID macro:
+
+@code
+void MyClass::ShowDialog()
+{
+    wxDialog dlg;
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+        return;
+
+    XRCCTRL(dlg, "text", wxTextCtrl)->Bind(wxEVT_COMMAND_TEXT_UPDATED,
+        wxTextEventHandler(MyClass::OnTextEntered), this, XRCID("text"));
+
+    XRCCTRL(dlg, "clickme_btn", wxButton)->Bind(wxEVT_COMMAND_BUTTON_CLICKED,
+        wxCommandEventHandler(MyClass::OnClickme), this, XRCID("clickme_btn"));
+
+    dlg.ShowModal();
+}
+@endcode
+
+A few points to note:
+@li The value of the int returned by XRCID("foo") is guaranteed to be unique
+within an app.
+@li However that value isn't predictable, and you shouldn't rely on it being
+consistent between runs. It certainly won't be the same in different apps.
+@li @ref page_stockitems such as wxID_OK work correctly without requiring XRCID
+(because, internally, XRCID("wxID_OK") is mapped to wxID_OK).
+@li Both XRCID and XRCCTRL use the 'name' of the control (as in
+wxWindow::GetName). This is different from the label that the user sees on
+e.g. a wxButton.
+
+<b> Subclassing in XRC </b>
+
+You will often want to use subclassed wx controls in your code. There are three
+ways to do this from XRC:
+@li Very rarely you might need to
+@ref overview_xrcformat_extending_custom "create your own wxXmlResourceHandler"
+@li Occasionally wxXmlResource::AttachUnknownControl may be best. See
+@ref overview_xrcformat_extending_unknown
+@li Usually though, the simple 'subclass' keyword will suffice.
+
+Suppose you wanted the wxTextCtrl named "text" to be created as your derived
+class MyTextCtrl. The only change needed in the XRC file would be in this line:
+
+@code
+        <object class="wxTextCtrl" name="text" subclass="MyTextCtrl"/>
+@endcode
+
+The only change in your code would be to use MyTextCtrl in XRCCTRL. However for
+the subclass to be created successfully, it's important to ensure that it uses
+wxWidget's RTTI mechanism: see @ref overview_xrcformat_extending_subclass for
+the details.
+
+
+
+@section overview_xrc_xrcsample The XRC sample
+
+A major resource for learning how to use XRC is the @sample{xrc}. This
+demonstrates all of the standard uses of XRC, and some of the less common ones.
+It is strongly suggested that you run it, and look at the well-commented
+source code to see how it works.
+
+
+@section overview_xrc_binaryresourcefiles Binary Resource Files
 
 To compile binary resource files, use the command-line @c wxrc utility. It
 takes one or more file parameters (the input XRC files) and the following
@@ -153,301 +317,6 @@ extern void InitXmlResource(); // defined in generated file
 wxXmlResource::Get()->InitAllHandlers();
 InitXmlResource();
 ...
-@endcode
-
-
-@section overview_xrc_cppsample XRC C++ Sample
-
-This is the C++ source file (xrcdemo.cpp) for the XRC sample.
-
-@code
-#include "wx/wx.h"
-#include "wx/image.h"
-#include "wx/xrc/xmlres.h"
-
-// the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-    #include "rc/appicon.xpm"
-#endif
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-// Define a new application type, each program should derive a class from wxApp
-class MyApp : public wxApp
-{
-public:
-    // override base class virtuals
-    // ----------------------------
-
-    // this one is called on application startup and is a good place for the
-    // app initialization (doing it here and not in the ctor allows to have an
-    // error return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
-};
-
-// Define a new frame type: this is going to be our main frame
-class MyFrame : public wxFrame
-{
-public:
-    // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-
-    // event handlers (these functions should _not_ be virtual)
-    void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    void OnDlg1(wxCommandEvent& event);
-    void OnDlg2(wxCommandEvent& event);
-
-private:
-    // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
-};
-
-// ----------------------------------------------------------------------------
-// event tables and other macros for wxWidgets
-// ----------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(XRCID("menu_quit"),  MyFrame::OnQuit)
-    EVT_MENU(XRCID("menu_about"), MyFrame::OnAbout)
-    EVT_MENU(XRCID("menu_dlg1"), MyFrame::OnDlg1)
-    EVT_MENU(XRCID("menu_dlg2"), MyFrame::OnDlg2)
-END_EVENT_TABLE()
-
-IMPLEMENT_APP(MyApp)
-
-// ----------------------------------------------------------------------------
-// the application class
-// ----------------------------------------------------------------------------
-
-// 'Main program' equivalent: the program execution "starts" here
-bool MyApp::OnInit()
-{
-    wxImage::AddHandler(new wxGIFHandler);
-    wxXmlResource::Get()->InitAllHandlers();
-    wxXmlResource::Get()->Load("rc/resource.xrc");
-
-    MyFrame *frame = new MyFrame("XML resources demo",
-                                 wxPoint(50, 50), wxSize(450, 340));
-    frame->Show(true);
-    return true;
-}
-
-// ----------------------------------------------------------------------------
-// main frame
-// ----------------------------------------------------------------------------
-
-// frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-: wxFrame((wxFrame *)NULL, -1, title, pos, size)
-{
-    SetIcon(wxICON(appicon));
-
-    SetMenuBar(wxXmlResource::Get()->LoadMenuBar("mainmenu"));
-    SetToolBar(wxXmlResource::Get()->LoadToolBar(this, "toolbar"));
-}
-
-// event handlers
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
-{
-    // true is to force the frame to close
-    Close(true);
-}
-
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
-{
-    wxString msg;
-    msg.Printf( wxT("This is the about dialog of XML resources demo.\n")
-                wxT("Welcome to %s"), wxVERSION_STRING);
-
-    wxMessageBox(msg, "About XML resources demo",
-                 wxOK | wxICON_INFORMATION, this);
-}
-
-void MyFrame::OnDlg1(wxCommandEvent& WXUNUSED(event))
-{
-    wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");
-    dlg.ShowModal();
-}
-
-void MyFrame::OnDlg2(wxCommandEvent& WXUNUSED(event))
-{
-    wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg2");
-    dlg.ShowModal();
-}
-@endcode
-
-
-@section overview_xrc_sample XRC Resource File Sample
-
-This is the XML file (resource.xrc) for the XRC sample.
-
-@code
-<?xml version="1.0"?>
-<resource version="2.3.0.1">
-  <object class="wxMenuBar" name="mainmenu">
-    <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="menu_file">
-      <label>_File</label>
-      <style>wxMENU_TEAROFF</style>
-      <object class="wxMenuItem" name="menu_about">
-        <label>_About...</label>
-        <bitmap>filesave.gif</bitmap>
-      </object>
-      <object class="separator"/>
-      <object class="wxMenuItem" name="menu_dlg1">
-        <label>Dialog 1</label>
-      </object>
-      <object class="wxMenuItem" name="menu_dlg2">
-        <label>Dialog 2</label>
-      </object>
-      <object class="separator"/>
-      <object class="wxMenuItem" name="menu_quit">
-        <label>E_xit\tAlt-X</label>
-      </object>
-    </object>
-  </object>
-  <object class="wxToolBar" name="toolbar">
-    <style>wxTB_FLAT|wxTB_DOCKABLE</style>
-    <margins>2,2</margins>
-    <object class="tool" name="menu_open">
-      <bitmap>fileopen.gif</bitmap>
-      <tooltip>Open catalog</tooltip>
-    </object>
-    <object class="tool" name="menu_save">
-      <bitmap>filesave.gif</bitmap>
-      <tooltip>Save catalog</tooltip>
-    </object>
-    <object class="tool" name="menu_update">
-      <bitmap>update.gif</bitmap>
-      <tooltip>Update catalog - synchronize it with sources</tooltip>
-    </object>
-    <separator/>
-    <object class="tool" name="menu_quotes">
-      <bitmap>quotes.gif</bitmap>
-      <toggle>1</toggle>
-      <tooltip>Display quotes around the string?</tooltip>
-    </object>
-    <object class="separator"/>
-    <object class="tool" name="menu_fuzzy">
-      <bitmap>fuzzy.gif</bitmap>
-      <tooltip>Toggled if selected string is fuzzy translation</tooltip>
-      <toggle>1</toggle>
-    </object>
-  </object>
-  <object class="wxDialog" name="dlg1">
-    <object class="wxBoxSizer">
-      <object class="sizeritem">
-        <object class="wxBitmapButton">
-          <bitmap>fuzzy.gif</bitmap>
-          <focus>fileopen.gif</focus>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxPanel">
-          <object class="wxStaticText">
-            <label>fdgdfgdfgdfg</label>
-          </object>
-          <style>wxBORDER\_SUNKEN</style>
-        </object>
-        <flag>wxALIGN_CENTER</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxButton">
-          <label>Buttonek</label>
-        </object>
-        <border>10d</border>
-        <flag>wxALL</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxHtmlWindow">
-          <htmlcode><h1>Hi,</h1>man</htmlcode>
-          <size>100,45d</size>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxNotebook">
-          <object class="notebookpage">
-            <object class="wxPanel">
-              <object class="wxBoxSizer">
-                <object class="sizeritem">
-                  <object class="wxHtmlWindow">
-                    <htmlcode>Hello, we are inside a <u>NOTEBOOK</u>...</htmlcode>
-                    <size>50,50d</size>
-                  </object>
-                  <option>1</option>
-                </object>
-              </object>
-            </object>
-            <label>Page</label>
-            <image>0</image>
-          </object>
-          <object class="notebookpage">
-            <object class="wxPanel">
-              <object class="wxBoxSizer">
-                <object class="sizeritem">
-                  <object class="wxHtmlWindow">
-                    <htmlcode>Hello, we are inside a <u>NOTEBOOK</u>...</htmlcode>
-                    <size>50,50d</size>
-                  </object>
-                </object>
-              </object>
-            </object>
-            <label>Page 2</label>
-            <image>1</image>
-          </object>
-          <usenotebooksizer>1</usenotebooksizer>
-        <imagelist>
-            <size>16,16</size>
-            <bitmap stock_id="wxART_QUESTION"/>
-            <bitmap stock_id="wxART_WARNING"/>
-        </imagelist>
-        </object>
-        <flag>wxEXPAND</flag>
-      </object>
-      <orient>wxVERTICAL</orient>
-    </object>
-  </object>
-  <object class="wxDialog" name="dlg2">
-    <object class="wxBoxSizer">
-      <orient>wxVERTICAL</orient>
-      <object class="sizeritem" name="dfgdfg">
-        <object class="wxTextCtrl">
-          <size>200,200d</size>
-          <style>wxTE_MULTILINE|wxBORDER_SUNKEN</style>
-          <value>Hello, this is an ordinary multiline\n         textctrl....</value>
-        </object>
-        <option>1</option>
-        <flag>wxEXPAND|wxALL</flag>
-        <border>10</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <object class="sizeritem">
-            <object class="wxButton" name="wxID_OK">
-              <label>Ok</label>
-              <default>1</default>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
-            </object>
-            <border>10</border>
-            <flag>wxLEFT</flag>
-          </object>
-        </object>
-        <flag>wxLEFT|wxRIGHT|wxBOTTOM|wxALIGN_RIGHT</flag>
-        <border>10</border>
-      </object>
-    </object>
-    <title>Second testing dialog</title>
-  </object>
-</resource>
 @endcode
 
 

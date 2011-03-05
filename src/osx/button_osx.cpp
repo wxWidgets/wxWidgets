@@ -42,8 +42,6 @@ bool IsHelpButtonWithStandardLabel(wxWindowID id, const wxString& label)
 
 } // anonymous namespace
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
 BEGIN_EVENT_TABLE(wxButton, wxControl)
     EVT_ENTER_WINDOW(wxButton::OnEnterWindow)
     EVT_LEAVE_WINDOW(wxButton::OnLeaveWindow)
@@ -143,6 +141,20 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
     m_peer->SetBitmapPosition(dir);
     InvalidateBestSize();
 }
+
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+
+bool wxButton::DoSetLabelMarkup(const wxString& markup)
+{
+    if ( !wxButtonBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    m_peer->SetLabelMarkup(markup);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP && wxOSX_USE_COCOA
 
 wxWindow *wxButton::SetDefault()
 {

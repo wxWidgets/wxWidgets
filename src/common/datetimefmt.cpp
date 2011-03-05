@@ -1625,9 +1625,10 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     while ( p != pEnd )
     {
         // skip white space and date delimiters
-        while ( wxStrchr(".,/-\t\r\n ", *p) )
+        if ( wxStrchr(".,/-\t\r\n ", *p) )
         {
             ++p;
+            continue;
         }
 
         // modify copy of the iterator as we're not sure if the next token is

@@ -855,7 +855,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200,
                              wxDefaultPosition, wxSize(155,wxDefaultCoord),
                              wxSL_AUTOTICKS | wxSL_LABELS);
-    m_slider->SetTickFreq(40, 0);
+    m_slider->SetTickFreq(40);
     sz->Add( m_slider, 0, wxALL, 10 );
 
     m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,

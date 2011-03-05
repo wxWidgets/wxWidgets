@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 28 June 2010                                                        *
+# Date : 7 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -61,7 +61,8 @@ OBJECTS = appunix.obj,apptraits.obj,\
 		sound_sdl.obj,\
 		stdpaths.obj,\
 		taskbarx11.obj,\
-		timerunx.obj,evtloopunix.obj,fdiounix.obj
+		timerunx.obj,evtloopunix.obj,fdiounix.obj,uiactionx11.obj,\
+		mediactrl.obj
 
 SOURCES = appunix.cpp,apptraits.cpp,\
 		dialup.cpp,\
@@ -81,7 +82,8 @@ SOURCES = appunix.cpp,apptraits.cpp,\
 		sound_sdl.cpp,\
 		stdpaths.cpp,\
 		taskbarx11.cpp,\
-		timerunx.cpp,evtloopunix.cpp,fdiounix.cpp
+		timerunx.cpp,evtloopunix.cpp,fdiounix.cpp,uiactionx11.cpp,\
+		mediactrl.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -128,3 +130,5 @@ timerunx.obj : timerunx.cpp
 evtloopunix.obj : evtloopunix.cpp
 	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn evtloopunix.cpp
 fdiounix.obj : fdiounix.cpp
+uiactionx11.obj : uiactionx11.cpp
+mediactrl.obj : mediactrl.cpp

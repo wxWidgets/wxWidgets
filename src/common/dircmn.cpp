@@ -356,6 +356,8 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
     return traverser.GetTotalSize();
 }
 
+#endif // wxUSE_LONGLONG
+
 // ----------------------------------------------------------------------------
 // wxDir helpers
 // ----------------------------------------------------------------------------
@@ -378,4 +380,3 @@ bool wxDir::Remove(const wxString &dir, int flags)
     return wxFileName::Rmdir(dir, flags);
 }
 
-#endif // wxUSE_LONGLONG

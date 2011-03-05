@@ -29,7 +29,18 @@
 #include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 
+enum
+{
+    GIF_MARKER_EXT       = '!', // 0x21
+    GIF_MARKER_SEP       = ',', // 0x2C
+    GIF_MARKER_ENDOFDATA = ';', // 0x3B
 
+    GIF_MARKER_EXT_GRAPHICS_CONTROL = 0xF9,
+    GIF_MARKER_EXT_COMMENT          = 0xFE,
+    GIF_MARKER_EXT_APP              = 0xFF
+};
+
+#define GetFrame(n)     ((GIFImage*)m_frames[n])
 
 //---------------------------------------------------------------------------
 // GIFImage
@@ -52,6 +63,7 @@ public:
     unsigned char *p;               // bitmap
     unsigned char *pal;             // palette
     unsigned int ncolours;          // number of colours
+    wxString comment;
 
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
@@ -180,6 +192,12 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
         *(dst++) = pal[3 * (*src) + 2];
     }
 
+    wxString comment = GetFrame(frame)->comment;
+    if ( !comment.empty() )
+    {
+        image->SetOption(wxIMAGE_OPTION_GIF_COMMENT, comment);
+    }
+
     return true;
 }
 
@@ -187,9 +205,6 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 //---------------------------------------------------------------------------
 // Data accessors
 //---------------------------------------------------------------------------
-
-#define GetFrame(n)     ((GIFImage*)m_frames[n])
-
 
 // Get data for current frame
 
@@ -254,7 +269,7 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
         // if no bytes left in this block, read the next block
         if (m_restbyte == 0)
         {
-            m_restbyte = (unsigned char)stream.GetC();
+            m_restbyte = stream.GetC();
 
             /* Some encoders are a bit broken: instead of issuing
              * an end-of-image symbol (ab_fin) they come up with
@@ -663,15 +678,16 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     int transparent = -1;
     disposal = wxANIM_UNSPECIFIED;
     delay = -1;
+    wxString comment;
 
     bool done = false;
     while (!done)
     {
-        type = (unsigned char)stream.GetC();
+        type = stream.GetC();
 
         /*
         If the end of file has been reached (or an error) and a ";"
-        (0x3B) hasn't been encountered yet, exit the loop. (Without this
+        (GIF_MARKER_ENDOFDATA) hasn't been encountered yet, exit the loop. (Without this
         check the while loop would loop endlessly.) Later on, in the next while
         loop, the file will be treated as being truncated (But still
         be decoded as far as possible). returning wxGIF_TRUNCATED is not
@@ -686,150 +702,179 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             break; // Alternative : "return wxGIF_INVFORMAT;"
         }
 
-        // end of data?
-        if (type == 0x3B)
+        switch (type)
         {
-            done = true;
-        }
-        else
-        // extension block?
-        if (type == 0x21)
-        {
-            if (((unsigned char)stream.GetC()) == 0xF9)
-            // graphics control extension, parse it
-            {
-                static const unsigned int gceSize = 6;
-                stream.Read(buf, gceSize);
-                if (stream.LastRead() != gceSize)
+            case GIF_MARKER_ENDOFDATA:
+                done = true;
+                break;
+            case GIF_MARKER_EXT:
+                switch (stream.GetC())
                 {
-                    Destroy();
-                    return wxGIF_INVFORMAT;
-                }
-
-                // read delay and convert from 1/100 of a second to ms
-                delay = 10 * (buf[2] + 256 * buf[3]);
-
-                // read transparent colour index, if used
-                transparent = buf[1] & 0x01 ? buf[4] : -1;
-
-                // read disposal method
-                disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
-            }
-            else
-            // other extension, skip
-            {
-                while ((i = (unsigned char)stream.GetC()) != 0)
-                {
-                    if (stream.Eof() || (stream.LastRead() == 0) ||
-                        stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                    case GIF_MARKER_EXT_GRAPHICS_CONTROL:
                     {
-                        done = true;
+                        // graphics control extension, parse it
+
+                        static const unsigned int gceSize = 6;
+                        stream.Read(buf, gceSize);
+                        if (stream.LastRead() != gceSize)
+                        {
+                            Destroy();
+                            return wxGIF_INVFORMAT;
+                        }
+
+                        // read delay and convert from 1/100 of a second to ms
+                        delay = 10 * (buf[2] + 256 * buf[3]);
+
+                        // read transparent colour index, if used
+                        transparent = buf[1] & 0x01 ? buf[4] : -1;
+
+                        // read disposal method
+                        disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
                         break;
                     }
-                }
-            }
-        }
-        else
-        // image descriptor block?
-        if (type == 0x2C)
-        {
-            // allocate memory for IMAGEN struct
-            GIFImagePtr pimg(new GIFImage());
-
-            wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
-
-            if ( !pimg.get() )
-                return wxGIF_MEMERR;
-
-            // fill in the data
-            static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
-            stream.Read(buf, idbSize);
-            if (stream.LastRead() != idbSize)
-                return wxGIF_INVFORMAT;
-
-            pimg->left = buf[0] + 256 * buf[1];
-            pimg->top = buf[2] + 256 * buf[3];
-/*
-            pimg->left = buf[4] + 256 * buf[5];
-            pimg->top = buf[4] + 256 * buf[5];
-*/
-            pimg->w = buf[4] + 256 * buf[5];
-            pimg->h = buf[6] + 256 * buf[7];
-
-            if ( anim )
-            {
-                // some GIF images specify incorrect animation size but we can
-                // still open them if we fix up the animation size, see #9465
-                if ( m_nFrames == 0 )
-                {
-                    if ( pimg->w > (unsigned)m_szAnimation.x )
-                        m_szAnimation.x = pimg->w;
-                    if ( pimg->h > (unsigned)m_szAnimation.y )
-                        m_szAnimation.y = pimg->h;
-                }
-                else // subsequent frames
-                {
-                    // check that we have valid size
-                    if ( (!pimg->w || pimg->w > (unsigned)m_szAnimation.x) ||
-                            (!pimg->h || pimg->h > (unsigned)m_szAnimation.y) )
+                    case GIF_MARKER_EXT_COMMENT:
                     {
-                        wxLogError(_("Incorrect GIF frame size (%u, %d) for "
-                                     "the frame #%u"),
-                                   pimg->w, pimg->h, m_nFrames);
-                        return wxGIF_INVFORMAT;
+                        int len = stream.GetC();
+                        while (len)
+                        {
+                            if ( stream.Eof() )
+                            {
+                                done = true;
+                                break;
+                            }
+
+                            wxCharBuffer charbuf(len);
+                            stream.Read(charbuf.data(), len);
+                            if ( (int) stream.LastRead() != len )
+                            {
+                                done = true;
+                                break;
+                            }
+
+                            comment += wxConvertMB2WX(charbuf.data());
+
+                            len = stream.GetC();
+                        }
+
+                        break;
+                    }
+                    default:
+                        // other extension, skip
+                        while ((i = stream.GetC()) != 0)
+                        {
+                            if (stream.Eof() || (stream.LastRead() == 0) ||
+                                stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                            {
+                                done = true;
+                                break;
+                            }
+                        }
+                        break;
+                }
+                break;
+            case GIF_MARKER_SEP:
+            {
+                // allocate memory for IMAGEN struct
+                GIFImagePtr pimg(new GIFImage());
+
+                wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
+
+                if ( !pimg.get() )
+                    return wxGIF_MEMERR;
+
+                // fill in the data
+                static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
+                stream.Read(buf, idbSize);
+                if (stream.LastRead() != idbSize)
+                    return wxGIF_INVFORMAT;
+
+                pimg->comment = comment;
+                comment.clear();
+                pimg->left = buf[0] + 256 * buf[1];
+                pimg->top = buf[2] + 256 * buf[3];
+    /*
+                pimg->left = buf[4] + 256 * buf[5];
+                pimg->top = buf[4] + 256 * buf[5];
+    */
+                pimg->w = buf[4] + 256 * buf[5];
+                pimg->h = buf[6] + 256 * buf[7];
+
+                if ( anim )
+                {
+                    // some GIF images specify incorrect animation size but we can
+                    // still open them if we fix up the animation size, see #9465
+                    if ( m_nFrames == 0 )
+                    {
+                        if ( pimg->w > (unsigned)m_szAnimation.x )
+                            m_szAnimation.x = pimg->w;
+                        if ( pimg->h > (unsigned)m_szAnimation.y )
+                            m_szAnimation.y = pimg->h;
+                    }
+                    else // subsequent frames
+                    {
+                        // check that we have valid size
+                        if ( (!pimg->w || pimg->w > (unsigned)m_szAnimation.x) ||
+                                (!pimg->h || pimg->h > (unsigned)m_szAnimation.y) )
+                        {
+                            wxLogError(_("Incorrect GIF frame size (%u, %d) for "
+                                         "the frame #%u"),
+                                       pimg->w, pimg->h, m_nFrames);
+                            return wxGIF_INVFORMAT;
+                        }
                     }
                 }
-            }
 
-            interl = ((buf[8] & 0x40)? 1 : 0);
-            size = pimg->w * pimg->h;
+                interl = ((buf[8] & 0x40)? 1 : 0);
+                size = pimg->w * pimg->h;
 
-            pimg->transparent = transparent;
-            pimg->disposal = disposal;
-            pimg->delay = delay;
+                pimg->transparent = transparent;
+                pimg->disposal = disposal;
+                pimg->delay = delay;
 
-            // allocate memory for image and palette
-            pimg->p   = (unsigned char *) malloc((unsigned int)size);
-            pimg->pal = (unsigned char *) malloc(768);
+                // allocate memory for image and palette
+                pimg->p   = (unsigned char *) malloc((unsigned int)size);
+                pimg->pal = (unsigned char *) malloc(768);
 
-            if ((!pimg->p) || (!pimg->pal))
-                return wxGIF_MEMERR;
+                if ((!pimg->p) || (!pimg->pal))
+                    return wxGIF_MEMERR;
 
-            // load local color map if available, else use global map
-            if ((buf[8] & 0x80) == 0x80)
-            {
-                unsigned int local_ncolors = 2 << (buf[8] & 0x07);
-                unsigned int numBytes = 3 * local_ncolors;
-                stream.Read(pimg->pal, numBytes);
-                pimg->ncolours = local_ncolors;
-                if (stream.LastRead() != numBytes)
+                // load local color map if available, else use global map
+                if ((buf[8] & 0x80) == 0x80)
+                {
+                    unsigned int local_ncolors = 2 << (buf[8] & 0x07);
+                    unsigned int numBytes = 3 * local_ncolors;
+                    stream.Read(pimg->pal, numBytes);
+                    pimg->ncolours = local_ncolors;
+                    if (stream.LastRead() != numBytes)
+                        return wxGIF_INVFORMAT;
+                }
+                else
+                {
+                    memcpy(pimg->pal, pal, 768);
+                    pimg->ncolours = global_ncolors;
+                }
+
+                // get initial code size from first byte in raster data
+                bits = stream.GetC();
+                if (bits == 0)
                     return wxGIF_INVFORMAT;
+
+                // decode image
+                wxGIFErrorCode result = dgif(stream, pimg.get(), interl, bits);
+                if (result != wxGIF_OK)
+                    return result;
+
+                guardDestroy.Dismiss();
+
+                // add the image to our frame array
+                m_frames.Add(pimg.release());
+                m_nFrames++;
+
+                // if this is not an animated GIF, exit after first image
+                if (!anim)
+                    done = true;
+                break;
             }
-            else
-            {
-                memcpy(pimg->pal, pal, 768);
-                pimg->ncolours = global_ncolors;
-            }
-
-            // get initial code size from first byte in raster data
-            bits = (unsigned char)stream.GetC();
-            if (bits == 0)
-                return wxGIF_INVFORMAT;
-
-            // decode image
-            wxGIFErrorCode result = dgif(stream, pimg.get(), interl, bits);
-            if (result != wxGIF_OK)
-                return result;
-
-            guardDestroy.Dismiss();
-
-            // add the image to our frame array
-            m_frames.Add(pimg.release());
-            m_nFrames++;
-
-            // if this is not an animated GIF, exit after first image
-            if (!anim)
-                done = true;
         }
     }
 
@@ -840,75 +885,80 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     }
 
     // try to read to the end of the stream
-    while (type != 0x3B)
+    while (type != GIF_MARKER_ENDOFDATA)
     {
         if (!stream.IsOk())
             return wxGIF_TRUNCATED;
 
-        type = (unsigned char)stream.GetC();
+        type = stream.GetC();
 
-        if (type == 0x21)
+        switch (type)
         {
-            // extension type
-            (void) stream.GetC();
+            case GIF_MARKER_EXT:
+                // extension type
+                (void) stream.GetC();
 
-            // skip all data
-            while ((i = (unsigned char)stream.GetC()) != 0)
+                // skip all data
+                while ((i = stream.GetC()) != 0)
+                {
+                    if (stream.Eof() || (stream.LastRead() == 0) ||
+                        stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                    {
+                        Destroy();
+                        return wxGIF_INVFORMAT;
+                    }
+                }
+                break;
+            case GIF_MARKER_SEP:
             {
-                if (stream.Eof() || (stream.LastRead() == 0) ||
-                    stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                // image descriptor block
+                static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
+                stream.Read(buf, idbSize);
+                if (stream.LastRead() != idbSize)
                 {
                     Destroy();
                     return wxGIF_INVFORMAT;
                 }
-            }
-        }
-        else if (type == 0x2C)
-        {
-            // image descriptor block
-            static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
-            stream.Read(buf, idbSize);
-            if (stream.LastRead() != idbSize)
-            {
-                Destroy();
-                return wxGIF_INVFORMAT;
-            }
 
-            // local color map
-            if ((buf[8] & 0x80) == 0x80)
-            {
-                unsigned int local_ncolors = 2 << (buf[8] & 0x07);
-                wxFileOffset numBytes = 3 * local_ncolors;
-                if (stream.SeekI(numBytes, wxFromCurrent) == wxInvalidOffset)
+                // local color map
+                if ((buf[8] & 0x80) == 0x80)
+                {
+                    unsigned int local_ncolors = 2 << (buf[8] & 0x07);
+                    wxFileOffset numBytes = 3 * local_ncolors;
+                    if (stream.SeekI(numBytes, wxFromCurrent) == wxInvalidOffset)
+                    {
+                        Destroy();
+                        return wxGIF_INVFORMAT;
+                    }
+                }
+
+                // initial code size
+                (void) stream.GetC();
+                if (stream.Eof() || (stream.LastRead() == 0))
                 {
                     Destroy();
                     return wxGIF_INVFORMAT;
                 }
-            }
 
-            // initial code size
-            (void) stream.GetC();
-            if (stream.Eof() || (stream.LastRead() == 0))
-            {
-                Destroy();
-                return wxGIF_INVFORMAT;
-            }
-
-            // skip all data
-            while ((i = (unsigned char)stream.GetC()) != 0)
-            {
-                if (stream.Eof() || (stream.LastRead() == 0) ||
-                    stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                // skip all data
+                while ((i = stream.GetC()) != 0)
                 {
-                    Destroy();
-                    return wxGIF_INVFORMAT;
+                    if (stream.Eof() || (stream.LastRead() == 0) ||
+                        stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
+                    {
+                        Destroy();
+                        return wxGIF_INVFORMAT;
+                    }
                 }
+                break;
             }
-        }
-        else if ((type != 0x3B) && (type != 00)) // testing
-        {
-            // images are OK, but couldn't read to the end of the stream
-            return wxGIF_TRUNCATED;
+            default:
+                if ((type != GIF_MARKER_ENDOFDATA) && (type != 00)) // testing
+                {
+                    // images are OK, but couldn't read to the end of the stream
+                    return wxGIF_TRUNCATED;
+                }
+                break;
         }
     }
 

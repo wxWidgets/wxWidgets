@@ -65,6 +65,78 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
 // hide the ugly cast
 #define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
 
+// ----------------------------------------------------------------------------
+// helper classes for temporarily changing HDC parameters
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// This class just stores an HDC.
+class HDCHandler
+{
+protected:
+    HDCHandler(HDC hdc) : m_hdc(hdc) { }
+
+    const HDC m_hdc;
+};
+
+class HDCTextColChanger : HDCHandler
+{
+public:
+    HDCTextColChanger(HDC hdc, COLORREF col)
+        : HDCHandler(hdc),
+          m_colOld(::SetTextColor(hdc, col))
+    {
+    }
+
+    ~HDCTextColChanger()
+    {
+        ::SetTextColor(m_hdc, m_colOld);
+    }
+
+private:
+    COLORREF m_colOld;
+};
+
+class HDCBgColChanger : HDCHandler
+{
+public:
+    HDCBgColChanger(HDC hdc, COLORREF col)
+        : HDCHandler(hdc),
+          m_colOld(::SetBkColor(hdc, col))
+    {
+    }
+
+    ~HDCBgColChanger()
+    {
+        ::SetBkColor(m_hdc, m_colOld);
+    }
+
+private:
+    COLORREF m_colOld;
+};
+
+class HDCBgModeChanger : HDCHandler
+{
+public:
+    HDCBgModeChanger(HDC hdc, int mode)
+        : HDCHandler(hdc),
+          m_modeOld(::SetBkMode(hdc, mode))
+    {
+    }
+
+    ~HDCBgModeChanger()
+    {
+        ::SetBkMode(m_hdc, m_modeOld);
+    }
+
+private:
+    int m_modeOld;
+};
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -134,49 +206,6 @@ const int TMT_SIZINGMARGINS  = 3601;
 // ----------------------------------------------------------------------------
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
-
-#if wxUSE_EXTENDED_RTTI
-
-bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
-{
-    const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;
-    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
-    {
-        // we don't stream out the first two items for menus with a title, they will be reconstructed
-        if ( mitem->GetMenu()->FindItemByPosition(0) == mitem || mitem->GetMenu()->FindItemByPosition(1) == mitem )
-            return false ;
-    }
-    return true ;
-}
-
-wxBEGIN_ENUM( wxItemKind )
-    wxENUM_MEMBER( wxITEM_SEPARATOR )
-    wxENUM_MEMBER( wxITEM_NORMAL )
-    wxENUM_MEMBER( wxITEM_CHECK )
-    wxENUM_MEMBER( wxITEM_RADIO )
-wxEND_ENUM( wxItemKind )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject,"wx/menuitem.h",wxMenuItemStreamingCallback)
-
-wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
-    wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Id,int, SetId, GetId, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Text, wxString , SetText, GetText, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Help, wxString , SetHelp, GetHelp, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxREADONLY_PROPERTY( Kind, wxItemKind , GetKind , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxMenuItem)
-wxEND_HANDLERS_TABLE()
-
-wxDIRECT_CONSTRUCTOR_6( wxMenuItem , wxMenu* , Parent , int , Id , wxString , Text , wxString , Help , wxItemKind , Kind , wxMenu* , SubMenu  )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxMenuItem
@@ -810,12 +839,12 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         *width += imgWidth + data->CheckBgMargin.GetTotalX();
     }
 
-    if ( m_bmpChecked.IsOk() || m_bmpChecked.IsOk() )
+    if ( m_bmpChecked.IsOk() || m_bmpUnchecked.IsOk() )
     {
         // get size of bitmap always return valid value (0 for invalid bitmap),
         // so we don't needed check if bitmap is valid ;)
         size_t heightBmp = wxMax(m_bmpChecked.GetHeight(), m_bmpUnchecked.GetHeight());
-        size_t widthtBmp = wxMax(m_bmpChecked.GetWidth(),  m_bmpUnchecked.GetWidth());
+        size_t widthBmp = wxMax(m_bmpChecked.GetWidth(),  m_bmpUnchecked.GetWidth());
 
         if ( IsOwnerDrawn() )
         {
@@ -824,7 +853,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         else
         {
             // we must allocate enough space for the bitmap
-            *width += widthtBmp;
+            *width += widthBmp;
         }
 
         // Is BMP height larger than text height?
@@ -860,11 +889,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         wxFont font;
         GetFontToUse(font);
 
-        wxColour colText1, colBack1;
-        GetColourToUse(stat, colText1, colBack1);
-
-        DWORD colText = wxColourToPalRGB(colText1);
-        DWORD colBack = wxColourToPalRGB(colBack1);
+        wxColour colText, colBack;
+        GetColourToUse(stat, colText, colBack);
 
         // calculate metrics of item parts
         RECT rcSelection = rect;
@@ -890,7 +916,11 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             rcText.top--;
 
 #if wxUSE_UXTHEME
-        wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
+        // If a custom background colour is explicitly specified, we should use
+        // it instead of the default theme background.
+        wxUxThemeEngine* const theme = GetBackgroundColour().IsOk()
+                                        ? NULL
+                                        : MenuDrawData::GetUxThemeEngine();
         if ( theme )
         {
             POPUPITEMSTATES state;
@@ -942,7 +972,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 return true;
             }
 
-            AutoHBRUSH hbr(colBack);
+            AutoHBRUSH hbr(colBack.GetPixel());
             SelectInHDC selBrush(hdc, hbr);
             ::FillRect(hdc, &rcSelection, hbr);
         }
@@ -951,21 +981,20 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         // draw text label
         // using native API because it recognizes '&'
 
-        COLORREF colOldText = ::SetTextColor(hdc, colText);
-        COLORREF colOldBack = ::SetBkColor(hdc, colBack);
-
-        int prevMode = SetBkMode(hdc, TRANSPARENT);
+        HDCTextColChanger changeTextCol(hdc, colText.GetPixel());
+        HDCBgColChanger changeBgCol(hdc, colBack.GetPixel());
+        HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
 
         SelectInHDC selFont(hdc, GetHfontOf(font));
 
 
-        // item text name without menemonic for calculating size
+        // item text name without mnemonic for calculating size
         wxString text = GetName();
 
         SIZE textSize;
         ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &textSize);
 
-        // item text name with menemonic
+        // item text name with mnemonic
         text = GetItemLabel().BeforeFirst('\t');
 
         int flags = DST_PREFIXTEXT;
@@ -1013,10 +1042,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             ::DrawState(hdc, NULL, NULL, (LPARAM)accel.wx_str(),
                         accel.length(), x, y, 0, 0, flags);
         }
-
-        ::SetBkMode(hdc, prevMode);
-        ::SetBkColor(hdc, colOldBack);
-        ::SetTextColor(hdc, colOldText);
     }
 
 
@@ -1103,9 +1128,9 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
     const COLORREF colBlack = RGB(0, 0, 0);
     const COLORREF colWhite = RGB(255, 255, 255);
 
-    COLORREF colOldText = ::SetTextColor(hdc, colBlack);
-    COLORREF colOldBack = ::SetBkColor(hdc, colWhite);
-    int prevMode = SetBkMode(hdc, TRANSPARENT);
+    HDCTextColChanger changeTextCol(hdc, colBlack);
+    HDCBgColChanger changeBgCol(hdc, colWhite);
+    HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
 
     // memory DC for color bitmap
     MemoryHDC hdcMem(hdc);
@@ -1132,10 +1157,6 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
         ::BitBlt(hdc, x, y, cx, cy, hdcCheckMask, 0, 0, SRCAND);
         ::BitBlt(hdc, x, y, cx, cy, hdcMem, 0, 0, SRCPAINT);
     }
-
-    ::SetBkMode(hdc, prevMode);
-    ::SetBkColor(hdc, colOldBack);
-    ::SetTextColor(hdc, colOldText);
 }
 
 } // anonymous namespace

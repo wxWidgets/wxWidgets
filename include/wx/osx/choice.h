@@ -17,8 +17,6 @@
 #include  "wx/dynarray.h"
 #include  "wx/arrstr.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxChoiceNameStr[];
-
 WX_DEFINE_ARRAY( char * , wxChoiceDataArray ) ;
 
 // Choice item

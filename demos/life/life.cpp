@@ -163,9 +163,8 @@ bool LifeApp::OnInit()
     // create the main application window
     LifeFrame *frame = new LifeFrame();
 
-    // show it and tell the application that it's our main window
+    // show it
     frame->Show(true);
-    SetTopWindow(frame);
 
     // just for Motif
 #ifdef __WXMOTIF__

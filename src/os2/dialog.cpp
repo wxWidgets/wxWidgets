@@ -33,7 +33,6 @@
 #define wxDIALOG_DEFAULT_WIDTH 500
 #define wxDIALOG_DEFAULT_HEIGHT 500
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 // ----------------------------------------------------------------------------
 // wxDialogModalData
@@ -115,7 +114,7 @@ bool wxDialog::Create( wxWindow*       pParent,
     //
     // Must defer setting the title until after dialog is created and sized
     //
-    if (!rsTitle.IsNull())
+    if ( !rsTitle.empty() )
         SetTitle(rsTitle);
     return true;
 } // end of wxDialog::Create

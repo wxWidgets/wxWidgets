@@ -118,8 +118,6 @@ gtk_button_release_event(GtkRange* range, GdkEventButton*, wxScrollBar* win)
 // wxScrollBar
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
-
 wxScrollBar::wxScrollBar()
 {
 }

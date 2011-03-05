@@ -63,80 +63,6 @@ const int TICK = 8;
 
 } // anonymous namespace
 
-// ----------------------------------------------------------------------------
-// XTI
-// ----------------------------------------------------------------------------
-
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxSliderStyle )
-
-wxBEGIN_FLAGS( wxSliderStyle )
-    // new style border flags, we put them first to
-    // use them for streaming out
-    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
-    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
-    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
-    wxFLAGS_MEMBER(wxBORDER_RAISED)
-    wxFLAGS_MEMBER(wxBORDER_STATIC)
-    wxFLAGS_MEMBER(wxBORDER_NONE)
-
-    // old style border flags
-    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
-    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
-    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
-    wxFLAGS_MEMBER(wxRAISED_BORDER)
-    wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
-
-    // standard window styles
-    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
-    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    wxFLAGS_MEMBER(wxVSCROLL)
-    wxFLAGS_MEMBER(wxHSCROLL)
-
-    wxFLAGS_MEMBER(wxSL_HORIZONTAL)
-    wxFLAGS_MEMBER(wxSL_VERTICAL)
-    wxFLAGS_MEMBER(wxSL_AUTOTICKS)
-    wxFLAGS_MEMBER(wxSL_LEFT)
-    wxFLAGS_MEMBER(wxSL_TOP)
-    wxFLAGS_MEMBER(wxSL_RIGHT)
-    wxFLAGS_MEMBER(wxSL_BOTTOM)
-    wxFLAGS_MEMBER(wxSL_BOTH)
-    wxFLAGS_MEMBER(wxSL_SELRANGE)
-    wxFLAGS_MEMBER(wxSL_INVERSE)
-    wxFLAGS_MEMBER(wxSL_MIN_MAX_LABELS)
-    wxFLAGS_MEMBER(wxSL_VALUE_LABEL)
-    wxFLAGS_MEMBER(wxSL_LABELS)
-
-wxEND_FLAGS( wxSliderStyle )
-
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/slider.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxSlider)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )
-    wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
-
-    wxPROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Minimum , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Maximum , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxSliderStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxSlider)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_8( wxSlider , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-#endif
-
 // ============================================================================
 // wxSlider implementation
 // ============================================================================
@@ -712,6 +638,11 @@ void wxSlider::SetValue(int value)
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
+    // Remember the old logical value if we need to update the physical control
+    // value after changing its range in wxSL_INVERSE case (and avoid an
+    // unnecessary call to GetValue() otherwise as it's just not needed).
+    const int valueOld = HasFlag(wxSL_INVERSE) ? GetValue() : 0;
+
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
 
@@ -725,12 +656,20 @@ void wxSlider::SetRange(int minValue, int maxValue)
         ::SetWindowText((*m_labels)[SliderLabel_Max],
                         Format(ValueInvertOrNot(m_rangeMax)).wx_str());
     }
+
+    // When emulating wxSL_INVERSE style in wxWidgets, we need to update the
+    // value after changing the range to ensure that the value seen by the user
+    // code, i.e. the one returned by GetValue(), does not change.
+    if ( HasFlag(wxSL_INVERSE) )
+    {
+        ::SendMessage(GetHwnd(), TBM_SETPOS, TRUE, ValueInvertOrNot(valueOld));
+    }
 }
 
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::DoSetTickFreq(int n)
 {
     m_tickFreq = n;
-    ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
+    ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) 0 );
 }
 
 void wxSlider::SetPageSize(int pageSize)

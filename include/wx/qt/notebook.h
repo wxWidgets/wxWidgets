@@ -56,6 +56,8 @@ protected:
 
 private:
     wxQtPointer< QTabWidget > m_qtTabWidget;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxNotebook );
 };
 
 #endif // _WX_QT_NOTEBOOK_H_

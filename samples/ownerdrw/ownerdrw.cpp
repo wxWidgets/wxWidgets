@@ -97,8 +97,6 @@ bool OwnerDrawnApp::OnInit(void)
         = new OwnerDrawnFrame(NULL, wxT("wxWidgets Ownerdraw Sample"),
                               50, 50, 450, 340);
 
-    SetTopWindow(pFrame);
-
     return true;
 }
 

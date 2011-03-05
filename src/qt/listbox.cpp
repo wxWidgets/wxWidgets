@@ -11,8 +11,6 @@
 
 #include "wx/listbox.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxListBox, wxListBoxBase )
-
 wxListBox::wxListBox()
 {
 }

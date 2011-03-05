@@ -104,8 +104,6 @@ class wxFontRefData: public wxGDIRefData
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)->m_qtFont
 
-IMPLEMENT_DYNAMIC_CLASS( wxFont, wxFontBase )
-
 wxFont::wxFont()
 {
     m_refData = new wxFontRefData();

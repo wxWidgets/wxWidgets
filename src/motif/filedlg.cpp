@@ -228,7 +228,7 @@ int wxFileDialog::ShowModal()
 
     Widget shell = XtParent(fileSel);
 
-    if (!m_message.IsNull())
+    if ( !m_message.empty() )
         XtVaSetValues(shell,
                       XmNtitle, (const char*)m_message.mb_str(),
                       NULL);

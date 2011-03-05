@@ -60,6 +60,7 @@ protected:
 private:
     wxQtPointer< QTextEdit > m_qtTextEdit;
 
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxTextCtrl );
 };
 
 #endif // _WX_QT_TEXTCTRL_H_

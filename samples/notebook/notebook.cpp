@@ -47,7 +47,6 @@ bool MyApp::OnInit()
 
     // Create the main window
     MyFrame *frame = new MyFrame();
-    SetTopWindow(frame);
 
     // Problem with generic wxNotebook implementation whereby it doesn't size
     // properly unless you set the size again
@@ -238,7 +237,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DELETE_CUR_PAGE, MyFrame::OnDeleteCurPage)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
-    EVT_MENU(ID_GO_HOME, MyFrame::OnGoHome)
+    EVT_MENU(ID_CHANGE_SELECTION, MyFrame::OnChangeSelection)
+    EVT_MENU(ID_SET_SELECTION, MyFrame::OnSetSelection)
 
 #if wxUSE_HELP
     EVT_MENU(ID_CONTEXT_HELP, MyFrame::OnContextHelp)
@@ -343,7 +343,8 @@ MyFrame::MyFrame()
     menuPageOperations->Append(ID_ADD_SUB_PAGE, wxT("Add s&ub page\tAlt-U"));
 #endif
     menuPageOperations->AppendSeparator();
-    menuPageOperations->Append(ID_GO_HOME, wxT("Go to the first page\tCtrl-F"));
+    menuPageOperations->Append(ID_CHANGE_SELECTION, wxT("&Change selection to 0\tCtrl-0"));
+    menuPageOperations->Append(ID_SET_SELECTION, wxT("&Set selection to 0\tShift-Ctrl-0"));
 
     wxMenu *menuOperations = new wxMenu;
 #if wxUSE_HELP
@@ -838,16 +839,20 @@ void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnGoHome(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnChangeSelection(wxCommandEvent& WXUNUSED(event))
 {
     wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
-    {
-        // ChangeSelection shouldn't send any events, SetSelection() should
         currBook->ChangeSelection(0);
-        //currBook->SetSelection(0);
-    }
+}
+
+void MyFrame::OnSetSelection(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase *currBook = GetCurrentBook();
+
+    if ( currBook )
+        currBook->SetSelection(0);
 }
 
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )

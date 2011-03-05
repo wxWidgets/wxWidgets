@@ -3,7 +3,10 @@
 
 # Copyright (C) 2000, Pawel Mrochen, based on makefile.msc which is
 # copyright 1995 Guy Eric Schalnat, Group 42, Inc.
-# For conditions of distribution and use, see copyright notice in png.h
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 # To use, do "wmake /f scripts\makefile.watcom"
 
@@ -46,52 +49,52 @@ OBJS3=pngrtran$(O) pngwtran$(O) pngrio$(O) pngwio$(O)
 
 all: test
 
-png$(O): png.h pngconf.h
+png$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngset$(O): png.h pngconf.h
+pngset$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngget$(O): png.h pngconf.h
+pngget$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngread$(O): png.h pngconf.h
+pngread$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngpread$(O): png.h pngconf.h
+pngpread$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngrtran$(O): png.h pngconf.h
+pngrtran$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngrutil$(O): png.h pngconf.h
+pngrutil$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngerror$(O): png.h pngconf.h
+pngerror$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngmem$(O): png.h pngconf.h
+pngmem$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngrio$(O): png.h pngconf.h
+pngrio$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngwio$(O): png.h pngconf.h
+pngwio$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
 pngtest$(O): png.h pngconf.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngtrans$(O): png.h pngconf.h
+pngtrans$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngwrite$(O): png.h pngconf.h
+pngwrite$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngwtran$(O): png.h pngconf.h
+pngwtran$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
-pngwutil$(O): png.h pngconf.h
+pngwutil$(O): png.h pngconf.h pngpriv.h
 	$(CC) $(CFLAGS) $*.c $(ERRFILE)
 
 libpng.lib: $(OBJS1) $(OBJS2) $(OBJS3)

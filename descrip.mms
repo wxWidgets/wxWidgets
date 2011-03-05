@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 23 March 2010                                                       *
+# Date : 7 January 2011                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -116,6 +116,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.event]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.exec]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.font]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.image]
@@ -123,6 +125,8 @@ gtk : [.include.wx]setup.h
 	set default [-.keyboard]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.mdi]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.mediaplayer]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -142,7 +146,9 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [--]
+	set default [--.tests]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)/ignore=warning
+	set default [-]
 
 gtk2 : [.include.wx]setup.h
 	@gnome$root:[000000]glib2

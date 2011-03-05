@@ -47,8 +47,6 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
 // wxRadioButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
-
 bool wxRadioButton::Create( wxWindow *parent,
                             wxWindowID id,
                             const wxString& label,
@@ -100,6 +98,9 @@ bool wxRadioButton::Create( wxWindow *parent,
 void wxRadioButton::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
+
+    // save the original label
+    wxControlBase::SetLabel(label);
 
     GTKSetLabelForLabel(GTK_LABEL(GTK_BIN(m_widget)->child), label);
 }

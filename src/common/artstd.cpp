@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ARTPROVIDER_STD
+
 #ifndef WX_PRECOMP
     #include "wx/image.h"
 #endif
@@ -93,6 +95,8 @@ protected:
 #include "../../art/helpicon.xpm"
 #include "../../art/tipicon.xpm"
 #include "../../art/home.xpm"
+#include "../../art/first.xpm"
+#include "../../art/last.xpm"
 #include "../../art/repview.xpm"
 #include "../../art/listview.xpm"
 #include "../../art/new_dir.xpm"
@@ -117,6 +121,8 @@ protected:
 #include "../../art/new.xpm"
 #include "../../art/undo.xpm"
 #include "../../art/redo.xpm"
+#include "../../art/plus.xpm"
+#include "../../art/minus.xpm"
 #include "../../art/close.xpm"
 #include "../../art/quit.xpm"
 #include "../../art/find.xpm"
@@ -149,6 +155,8 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_GO_DOWN,                             down)
     ART(wxART_GO_TO_PARENT,                        toparent)
     ART(wxART_GO_HOME,                             home)
+    ART(wxART_GOTO_FIRST,                          first)
+    ART(wxART_GOTO_LAST,                           last)
     ART(wxART_FILE_OPEN,                           fileopen)
     ART(wxART_PRINT,                               print)
     ART(wxART_HELP,                                helpicon)
@@ -176,6 +184,8 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_DELETE,                              delete)
     ART(wxART_UNDO,                                undo)
     ART(wxART_REDO,                                redo)
+    ART(wxART_PLUS,                                plus)
+    ART(wxART_MINUS,                               minus)
     ART(wxART_CLOSE,                               close)
     ART(wxART_QUIT,                                quit)
     ART(wxART_FIND,                                find)
@@ -238,3 +248,5 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
 
     return bmp;
 }
+
+#endif // wxUSE_ARTPROVIDER_STD

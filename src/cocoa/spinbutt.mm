@@ -19,9 +19,6 @@
 
 #import <AppKit/NSStepper.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
-
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 BEGIN_EVENT_TABLE(wxSpinButton, wxSpinButtonBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxSpinButton,NSStepper,NSControl,NSView)

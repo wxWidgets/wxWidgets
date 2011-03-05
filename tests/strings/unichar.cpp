@@ -38,7 +38,9 @@ private:
         CPPUNIT_TEST( CharCompare );
         CPPUNIT_TEST( CharCompareIntl );
         CPPUNIT_TEST( StringCompare );
+#if wxUSE_UNICODE
         CPPUNIT_TEST( StringCompareIntl );
+#endif // wxUSE_UNICODE
     CPPUNIT_TEST_SUITE_END();
 
     void CharCompare();
@@ -199,6 +201,7 @@ void UniCharTestCase::StringCompare()
     CPPUNIT_ASSERT( sb[0] != sa);
 }
 
+#if wxUSE_UNICODE
 void UniCharTestCase::StringCompareIntl()
 {
     // test string comparison with chars
@@ -234,3 +237,4 @@ void UniCharTestCase::StringCompareIntl()
     CPPUNIT_ASSERT( sa != sb[0]);
     CPPUNIT_ASSERT( sb[0] != sa);
 }
+#endif // wxUSE_UNICODE

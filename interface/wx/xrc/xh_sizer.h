@@ -62,7 +62,7 @@ protected:
         {
             ...
 
-        prottected:
+        protected:
             bool IsSizerNode(wxXmlNode *node) const
             {
                 return IsOfClass(node, "MySizer") ||

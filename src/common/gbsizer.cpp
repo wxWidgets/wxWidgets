@@ -76,7 +76,6 @@ wxGBSizerItem::wxGBSizerItem( wxSizer *sizer,
 wxGBSizerItem::wxGBSizerItem()
     : wxSizerItem(),
       m_pos(-1,-1),
-      m_span(-1,-1),
       m_gbsizer(NULL)
 {
 }
@@ -473,9 +472,9 @@ wxSize wxGridBagSizer::CalcMin()
             item->GetEndPos(endrow, endcol);
 
             // fill heights and widths upto this item if needed
-            while ( m_rowHeights.GetCount() <= (size_t)endrow )
+            while ( (int)m_rowHeights.GetCount() <= endrow )
                 m_rowHeights.Add(m_emptyCellSize.GetHeight());
-            while ( m_colWidths.GetCount() <= (size_t)endcol )
+            while ( (int)m_colWidths.GetCount() <= endcol )
                 m_colWidths.Add(m_emptyCellSize.GetWidth());
 
             // See if this item increases the size of its row(s) or col(s)

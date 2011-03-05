@@ -34,8 +34,6 @@
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-
 void wxFrame::Init()
 {
     m_frameNSView = nil;

@@ -94,12 +94,14 @@ public:
     virtual int GetThumbLength() const;
 
     // copied from (wxSliderCocoa.h)
-    virtual void SetTickFreq(int n, int pos);
     virtual int GetTickFreq() const;
-    virtual void ClearTicks() { SetTickFreq(0, 0); }
+    virtual void ClearTicks() { SetTickFreq(0); }
 
     virtual void SetTickPos(int pos);
 
+protected:
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int freq);
 };
 
 #endif

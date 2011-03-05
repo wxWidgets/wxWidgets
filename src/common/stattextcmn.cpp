@@ -24,29 +24,79 @@
     #pragma hdrstop
 #endif
 
-#include "wx/textwrapper.h"
-#include "wx/private/stattext.h"
+#if wxUSE_STATTEXT
 
 #ifndef WX_PRECOMP
+    #include "wx/stattext.h"
     #include "wx/button.h"
     #include "wx/dcclient.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
-    #include "wx/stattext.h"
     #include "wx/sizer.h"
     #include "wx/containr.h"
 #endif
 
-const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
-{
-    // the entities handled by SetLabel() when wxST_MARKUP is used and their referenced string
+#include "wx/textwrapper.h"
 
-    { wxT("&amp;"), wxT("&lt;"), wxT("&gt;"), wxT("&apos;"), wxT("&quot;") },
-    { wxT("&"),     wxT("<"),    wxT(">"),    wxT("'"),      wxT("\"")     }
-};
+#include "wx/private/markupparser.h"
 
-#if wxUSE_STATTEXT
+extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[] = "staticText";
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxStaticTextStyle )
+wxBEGIN_FLAGS( wxStaticTextStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxBORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+wxFLAGS_MEMBER(wxWANTS_CHARS)
+wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+wxFLAGS_MEMBER(wxVSCROLL)
+wxFLAGS_MEMBER(wxHSCROLL)
+
+wxFLAGS_MEMBER(wxST_NO_AUTORESIZE)
+wxFLAGS_MEMBER(wxALIGN_LEFT)
+wxFLAGS_MEMBER(wxALIGN_RIGHT)
+wxFLAGS_MEMBER(wxALIGN_CENTRE)
+wxEND_FLAGS( wxStaticTextStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl, "wx/stattext.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxStaticText)
+wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
+           wxT("Helpstring"), wxT("group"))
+wxPROPERTY_FLAGS( WindowStyle, wxStaticTextStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxStaticText)
+
+wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
+                wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
+
 
 // ----------------------------------------------------------------------------
 // wxTextWrapper
@@ -145,145 +195,6 @@ void wxStaticTextBase::Wrap(int width)
     wrapper.WrapLabel(this, width);
 }
 
-wxString wxStaticTextBase::GetLabelText() const
-{
-    wxString ret(GetLabel());
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
-    return RemoveMnemonics(ret);
-}
-
-void wxStaticTextBase::SetLabelText(const wxString& text)
-{
-    wxString str = text;
-
-    if (HasFlag(wxST_MARKUP))
-        str = EscapeMarkup(str);        // escapes markup and the & characters (which are also mnemonics)
-    else
-        str = EscapeMnemonics(text);    // escape only the mnemonics
-    SetLabel(str);
-}
-
-/* static */
-wxString wxStaticTextBase::GetLabelText(const wxString& label)
-{
-    wxString ret = RemoveMarkup(label);
-        // always remove the markup (this function is static
-        // and cannot check for wxST_MARKUP presence/absence)
-
-    return RemoveMnemonics(ret);
-}
-
-/* static */
-wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
-{
-    // strip out of "text" the markup for platforms which don't support it natively
-    bool inside_tag = false;
-
-    wxString label;
-    for ( wxString::const_iterator source = text.begin();
-          source != text.end(); ++source )
-    {
-        switch ( (*source).GetValue() )
-        {
-            case wxT('<'):
-                if (inside_tag)
-                {
-                    wxLogDebug(wxT("Invalid markup !"));
-                    return wxEmptyString;
-                }
-                inside_tag = true;
-                break;
-
-            case wxT('>'):
-                if (!inside_tag)
-                {
-                    wxLogDebug(wxT("Invalid markup !"));
-                    return wxEmptyString;
-                }
-                inside_tag = false;
-                break;
-
-            case wxT('&'):
-                {
-                    if ( source+1 == text.end() )
-                    {
-                        wxLogDebug(wxT("Cannot use & as last character of the string '%s'"),
-                                   text.c_str());
-                        return wxEmptyString;
-                    }
-
-                    // is this ampersand introducing a mnemonic or rather an entity?
-                    bool isMnemonic = true;
-                    size_t distanceFromEnd = text.end() - source;
-                    for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
-                    {
-                        const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
-                        size_t entityLen = wxStrlen(entity);
-
-                        if (distanceFromEnd >= entityLen &&
-                            wxString(source, source + entityLen) == entity)
-                        {
-                            // replace the &entity; string with the entity reference
-                            label << wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j];
-                            // little exception: when the entity reference is
-                            // "&" (i.e. when entity is "&amp;"), substitute it
-                            // with && instead of a single ampersand:
-                            if (*wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j] == wxT('&'))
-                                label << wxT('&');
-                            // the -1 is because main for() loop already
-                            // increments i:
-                            source += entityLen - 1;
-                            isMnemonic = false;
-                            break;
-                        }
-                    }
-
-                    if (isMnemonic)
-                        label << *source;
-                }
-                break;
-
-
-            default:
-                if (!inside_tag)
-                    label << *source;
-        }
-    }
-
-    return label;
-}
-
-/* static */
-wxString wxStaticTextBase::EscapeMarkup(const wxString& text)
-{
-    wxString ret;
-
-    for (wxString::const_iterator source = text.begin();
-         source != text.end(); ++source)
-    {
-        bool isEntity = false;
-
-        // search in the list of the entities and eventually escape this character
-        for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
-        {
-            if (*source == *wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j])
-            {
-                ret << wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
-                isEntity = true;
-                break;
-            }
-        }
-
-        if (!isEntity)
-            ret << *source;     // this character does not need to be escaped
-    }
-
-    return ret;
-}
-
-
 // ----------------------------------------------------------------------------
 // wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
 // ----------------------------------------------------------------------------
@@ -293,7 +204,7 @@ void wxStaticTextBase::UpdateLabel()
     if (!IsEllipsized())
         return;
 
-    wxString newlabel = GetEllipsizedLabelWithoutMarkup();
+    wxString newlabel = GetEllipsizedLabel();
 
     // we need to touch the "real" label (i.e. the text set inside the control,
     // using port-specific functions) instead of the string returned by GetLabel().
@@ -306,29 +217,13 @@ void wxStaticTextBase::UpdateLabel()
     DoSetLabel(newlabel);
 }
 
-wxString wxStaticTextBase::GetLabelWithoutMarkup() const
-{
-    wxString ret(m_labelOrig);
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
-
-    // unlike GetLabelText() we don't remove the mnemonics here!
-    return ret;
-}
-
-wxString wxStaticTextBase::GetEllipsizedLabelWithoutMarkup() const
+wxString wxStaticTextBase::GetEllipsizedLabel() const
 {
     // this function should be used only by ports which do not support
     // ellipsis in static texts: we first remove markup (which cannot
     // be handled safely by Ellipsize()) and then ellipsize the result.
 
     wxString ret(m_labelOrig);
-
-    // the order of the following two blocks is important!
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
 
     if (IsEllipsized())
         ret = Ellipsize(ret);

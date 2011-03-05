@@ -4251,6 +4251,10 @@ public:
 
     /**
         Column at which the event occurred.
+
+        Notice that for a @c wxEVT_GRID_SELECT_CELL event this column is the
+        column of the newly selected cell while the previously selected cell
+        can be retrieved using wxGrid::GetGridCursorCol().
     */
     virtual int GetCol();
 
@@ -4261,6 +4265,10 @@ public:
 
     /**
         Row at which the event occurred.
+
+        Notice that for a @c wxEVT_GRID_SELECT_CELL event this row is the row
+        of the newly selected cell while the previously selected cell can be
+        retrieved using wxGrid::GetGridCursorRow().
     */
     virtual int GetRow();
 

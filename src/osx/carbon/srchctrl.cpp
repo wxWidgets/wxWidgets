@@ -204,7 +204,7 @@ bool wxMacSearchFieldControl::SetFocus()
     return true;
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
+wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
                                     const wxString& str,

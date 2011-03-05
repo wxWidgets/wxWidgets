@@ -1688,7 +1688,7 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
 wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() == 0 )
+    if ( src_str.empty() )
     {
         dst_str = src_str;
         return src_str;
@@ -1747,7 +1747,7 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
 
 wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, wxString& src_str )
 {
-    if ( src_str.length() == 0 )
+    if ( src_str.empty() )
     {
         dst_str = src_str;
         return src_str;
@@ -3162,7 +3162,7 @@ wxStatusBar* wxPropertyGrid::GetStatusBar()
 
 void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), const wxString& msg )
 {
-    if ( !msg.length() )
+    if ( msg.empty() )
         return;
 
 #if wxUSE_STATUSBAR
@@ -3290,7 +3290,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
     {
         wxString msg = m_validationInfo.m_failureMessage;
 
-        if ( !msg.length() )
+        if ( msg.empty() )
             msg = _("You have entered invalid value. Press ESC to cancel editing.");
 
     #if wxUSE_STATUSBAR
@@ -3542,13 +3542,19 @@ bool wxPropertyGrid::DoEditorValidate()
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
+bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 {
+    //
+    // NB: We should return true if the event was recognized as
+    //     a dedicated wxPropertyGrid event, and as such was
+    //     either properly handled or ignored.
+    //
+
     // It is possible that this handler receives event even before
     // the control has been properly initialized. Let's skip the
     // event handling in that case.
     if ( !m_pState )
-        return;
+        return false;
 
     // Don't care about the event if it originated from the
     // 'label editor'. In this function we only care about the
@@ -3556,7 +3562,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     if ( m_labelEditor && event.GetId() == m_labelEditor->GetId() )
     {
         event.Skip();
-        return;
+        return true;
     }
 
     wxPGProperty* selected = GetSelection();
@@ -3570,10 +3576,10 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
           // similar is currently doing something (showing a
           // message box, for instance).
           m_processedEvent )
-        return;
+        return true;
 
     if ( m_iFlags & wxPG_FL_IN_HANDLECUSTOMEDITOREVENT )
-        return;
+        return true;
 
     wxVariant pendingValue(selected->GetValueRef());
     wxWindow* wnd = GetEditorControl();
@@ -3597,7 +3603,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             wxString newTcValue = tc->GetValue();
             if ( m_prevTcValue == newTcValue )
-                return;
+                return true;
             m_prevTcValue = newTcValue;
         }
         else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
@@ -3606,7 +3612,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             wxString newTcValue = cc->GetTextCtrl()->GetValue();
             if ( m_prevTcValue == newTcValue )
-                return;
+                return true;
             m_prevTcValue = newTcValue;
         }
     }
@@ -3615,6 +3621,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     bool validationFailure = false;
     bool buttonWasHandled = false;
+    bool result = false;
 
     //
     // Try common button handling
@@ -3642,6 +3649,8 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
             if ( editor->OnEvent( this, selected, editorWnd, event ) )
             {
+                result = true;
+
                 // If changes, validate them
                 if ( DoEditorValidate() )
                 {
@@ -3715,12 +3724,15 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         // Let unhandled button click events go to the parent
         if ( !buttonWasHandled && event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
         {
+            result = true;
             wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED,GetId());
             GetEventHandler()->AddPendingEvent(evt);
         }
     }
 
     ClearInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
+
+    return result;
 }
 
 // -----------------------------------------------------------------------
@@ -3895,6 +3907,14 @@ private:
         event.Skip();
 
         m_propGrid->HandleCustomEditorEvent(event);
+
+        //
+        // NB: We should return true if the event was recognized as
+        //     a dedicated wxPropertyGrid event, and as such was
+        //     either properly handled or ignored.
+        //
+        if ( m_propGrid->IsMainButtonEvent(event) )
+            return true;
 
         //
         // NB: On wxMSW, a wxTextCtrl with wxTE_PROCESS_ENTER
@@ -4319,7 +4339,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         wxStatusBar* statusbar = GetStatusBar();
         if ( statusbar )
         {
-            if ( pHelpString && pHelpString->length() )
+            if ( pHelpString && !pHelpString->empty() )
             {
                 // Set help box text.
                 statusbar->SetStatusText( *pHelpString );
@@ -4341,7 +4361,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         //
         // Show help as a tool tip on the editor control.
         //
-        if ( pHelpString && pHelpString->length() &&
+        if ( pHelpString && !pHelpString->empty() &&
              primaryCtrl )
         {
             primaryCtrl->SetToolTip(*pHelpString);
@@ -5667,6 +5687,12 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
         wxPGProperty* p = selected;
 
+        if ( action == wxPG_ACTION_EDIT && !editorFocused )
+        {
+            DoSelectProperty( p, wxPG_SEL_FOCUS );
+            wasHandled = true;
+        }
+
         // Travel and expand/collapse
         int selectDir = -2;
 
@@ -5994,7 +6020,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
         RegisterDefaultEditors();
 
     wxString name = editorName;
-    if ( name.length() == 0 )
+    if ( name.empty() )
         name = editorClass->GetName();
 
     // Existing editor under this name?
@@ -6395,7 +6421,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
     else
     {
         bool found = false;
-        if ( idString.length() )
+        if ( !idString.empty() )
         {
             wxPGHashMapS2P::iterator it = m_dictIdChoices.find(idString);
             if ( it != m_dictIdChoices.end() )
@@ -6471,7 +6497,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
             }
 
             // Assign to id
-            if ( idString.length() )
+            if ( !idString.empty() )
                 m_dictIdChoices[idString] = choices.GetData();
         }
     }
@@ -6512,7 +6538,7 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
     wxString valuel = value.Lower();
     wxVariant variant;
 
-    if ( type.length() == 0 )
+    if ( type.empty() )
     {
         long v;
 

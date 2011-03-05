@@ -11,8 +11,6 @@
 
 #include "wx/statbmp.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxStaticBitmap, wxStaticBitmapBase )
-
 wxStaticBitmap::wxStaticBitmap()
 {
 }

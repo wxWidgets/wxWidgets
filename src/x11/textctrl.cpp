@@ -131,8 +131,6 @@ WX_DEFINE_OBJARRAY(wxSourceLineArray);
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_PAINT(wxTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
@@ -1558,7 +1556,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
 
         size_t pos = 0;
         wxString token( GetNextToken( line, pos ) );
-        while (!token.IsNull())
+        while ( !token.empty() )
         {
             if (m_keywords.Index( token ) != wxNOT_FOUND)
             {

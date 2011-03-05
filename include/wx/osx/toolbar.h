@@ -17,8 +17,6 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxToolBarNameStr[];
-
 class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 {
   DECLARE_DYNAMIC_CLASS(wxToolBar)
@@ -82,6 +80,10 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 protected:
     // common part of all ctors
     void Init();
+    
+    void DoLayout();
+    
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
 #ifndef __WXOSX_IPHONE__
    virtual void DoGetSize(int *width, int *height) const;

@@ -118,8 +118,9 @@ void wxMemStruct::ErrorMsg ()
 */
 int wxMemStruct::AssertList ()
 {
-    if (wxDebugContext::GetHead () != 0 && ! (wxDebugContext::GetHead ())->AssertIt () ||
-        wxDebugContext::GetTail () != 0 && ! wxDebugContext::GetTail ()->AssertIt ()) {
+    if ((wxDebugContext::GetHead() && !wxDebugContext::GetHead()->AssertIt()) ||
+        (wxDebugContext::GetTail() && !wxDebugContext::GetTail()->AssertIt()))
+    {
         ErrorMsg ("Head or tail pointers trashed");
         return 0;
     }

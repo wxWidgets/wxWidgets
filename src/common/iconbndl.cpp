@@ -42,7 +42,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxIconBundle, wxGDIObject)
 class WXDLLEXPORT wxIconBundleRefData : public wxGDIRefData
 {
 public:
-    // default and copy ctors and assignment operators are ok
+    wxIconBundleRefData() { }
+
+    // We need the copy ctor for CloneGDIRefData() but notice that we use the
+    // base class default ctor in it and not the copy one which it doesn't have.
+    wxIconBundleRefData(const wxIconBundleRefData& other)
+        : wxGDIRefData(),
+          m_icons(other.m_icons)
+    {
+    }
+
+    // default assignment operator and dtor are ok
 
     virtual bool IsOk() const { return !m_icons.empty(); }
 

@@ -68,8 +68,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 // these functions live in dockart.cpp -- they'll eventually
 // be moved to a new utility cpp file
 
-wxColor wxAuiStepColour(const wxColor& c, int percent);
-
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
@@ -92,8 +90,8 @@ static void DrawButtons(wxDC& dc,
     if (button_state == wxAUI_BUTTON_STATE_HOVER ||
         button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
-        dc.SetBrush(wxBrush(wxAuiStepColour(bkcolour, 120)));
-        dc.SetPen(wxPen(wxAuiStepColour(bkcolour, 75)));
+        dc.SetBrush(wxBrush(bkcolour.ChangeLightness(120)));
+        dc.SetPen(wxPen(bkcolour.ChangeLightness(75)));
 
         // draw the background behind the button
         dc.DrawRectangle(rect.x, rect.y, 15, 15);
@@ -205,11 +203,11 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
         (255-base_colour.Green()) +
         (255-base_colour.Blue()) < 60)
     {
-        base_colour = wxAuiStepColour(base_colour, 92);
+        base_colour = base_colour.ChangeLightness(92);
     }
 
     m_base_colour = base_colour;
-    wxColor border_colour = wxAuiStepColour(base_colour, 75);
+    wxColor border_colour = base_colour.ChangeLightness(75);
 
     m_border_pen = wxPen(border_colour);
     m_base_colour_pen = wxPen(m_base_colour);
@@ -281,8 +279,8 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
 {
     // draw background
 
-    wxColor top_color       = wxAuiStepColour(m_base_colour, 90);
-    wxColor bottom_color   = wxAuiStepColour(m_base_colour, 170);
+    wxColor top_color       = m_base_colour.ChangeLightness(90);
+    wxColor bottom_color   = m_base_colour.ChangeLightness(170);
     wxRect r;
 
    if (m_flags &wxAUI_NB_BOTTOM)
@@ -483,7 +481,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         // -- draw top gradient fill for glossy look
         wxColor top_color = m_base_colour;
-        wxColor bottom_color = wxAuiStepColour(top_color, 160);
+        wxColor bottom_color = top_color.ChangeLightness(160);
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
 
         r.y += r.height;
@@ -505,7 +503,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     if (page.active)
     {
         if (m_flags &wxAUI_NB_BOTTOM)
-            dc.SetPen(wxPen(wxColour(wxAuiStepColour(m_base_colour, 170))));
+            dc.SetPen(wxPen(m_base_colour.ChangeLightness(170)));
         // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
         // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
         else //for wxAUI_NB_TOP

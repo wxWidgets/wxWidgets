@@ -121,7 +121,12 @@ wxToolBarToolBase(
     UIBarButtonItemStyle style = UIBarButtonItemStylePlain;
     wxUIToolbar* toolbar = (wxUIToolbar*) tbar->GetHandle();
     
-    if ( bmpNormal.Ok() )
+    if ( id == wxID_SEPARATOR )
+    {
+        [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        bui.width = 25.0f;
+    }
+    else if ( bmpNormal.Ok() )
     {
         [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
                       action:@selector(clickedAction:)];
@@ -259,6 +264,18 @@ bool wxToolBar::Realize()
     
     return true;
 }
+
+void wxToolBar::DoLayout()
+{
+    // TODO port back osx_cocoa layout solution
+}
+
+void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
+    
+    DoLayout();
+} 
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {

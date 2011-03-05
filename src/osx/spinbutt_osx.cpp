@@ -17,10 +17,6 @@
 #include "wx/osx/private.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()
 {

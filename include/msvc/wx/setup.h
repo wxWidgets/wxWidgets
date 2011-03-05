@@ -35,7 +35,8 @@
     #ifdef _UNICODE
         #define wxSUFFIX u
     #else // !_UNICODE
-        #define wxSUFFIX
+        // don't define wxSUFFIX at all as preprocessor operations don't work
+        // with empty values so we need to check for this case specially below
     #endif // _UNICODE/!_UNICODE
 #endif
 
@@ -84,8 +85,14 @@
 
 // the real setup.h header file we need is in the build-specific directory,
 // construct the path to it
-#define wxSETUPH_PATH \
-    wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /msw, wxSUFFIX, /wx/setup.h)
+#ifdef wxSUFFIX
+    #define wxSETUPH_PATH \
+        wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /msw, wxSUFFIX, /wx/setup.h)
+#else // suffix is empty
+    #define wxSETUPH_PATH \
+        wxCONCAT3(../../../lib/, wxLIB_SUBDIR, /msw/wx/setup.h)
+#endif
+
 #define wxSETUPH_PATH_STR wxSTRINGIZE(wxSETUPH_PATH)
 
 #include wxSETUPH_PATH_STR
@@ -93,7 +100,11 @@
 
 // the library names depend on the build, these macro builds the correct
 // library name for the given base name
-#define wxSUFFIX_STR wxSTRINGIZE(wxSUFFIX)
+#ifdef wxSUFFIX
+    #define wxSUFFIX_STR wxSTRINGIZE(wxSUFFIX)
+#else // suffix is empty
+    #define wxSUFFIX_STR ""
+#endif
 #define wxSHORT_VERSION_STRING \
     wxSTRINGIZE(wxMAJOR_VERSION) wxSTRINGIZE(wxMINOR_VERSION)
 

@@ -32,6 +32,10 @@ public:
     // return the font used for the text in the message box
     static wxFont GetMessageFont();
 
+protected:
+    // Override this as task dialogs are always centered on parent.
+    virtual void DoCentre(int dir);
+
 private:
     // hook procedure used to adjust the message box beyond what the standard
     // MessageBox() function can do for us

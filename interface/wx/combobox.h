@@ -13,7 +13,7 @@
 
     It can be displayed as static list with editable or read-only text field;
     or a drop-down list with text field; or a drop-down list without a text
-    field.
+    field depending on the platform and presence of wxCB_READONLY style.
 
     A combobox permits a single selection only. Combobox items are numbered
     from zero.
@@ -22,21 +22,26 @@
     wxOwnerDrawnComboBox, wxComboPopup and the ready-to-use wxBitmapComboBox.
 
     Please refer to wxTextEntry documentation for the description of methods
-    operating with the text entry part of the combobox.
+    operating with the text entry part of the combobox and to wxItemContainer
+    for the methods operating with the list of strings. Notice that at least
+    under MSW wxComboBox doesn't behave correctly if it contains strings
+    differing in case only so portable programs should avoid adding such
+    strings to this control.
 
     @beginStyleTable
     @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
     @style{wxCB_DROPDOWN}
-           Creates a combobox with a drop-down list.
+           Creates a combobox with a drop-down list. MSW and Motif only.
     @style{wxCB_READONLY}
-           Same as wxCB_DROPDOWN but only the strings specified as the combobox
-           choices can be selected, it is impossible to select (even from a
-           program) a string which is not in the choices list.
+           A combobox with this style behaves like a wxChoice (and may look in
+           the same way as well, although this is platform-dependent), i.e. it
+           allows the user to choose from the list of options but doesn't allow
+           to enter a value not present in the list.
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls). Windows
            only.
@@ -44,26 +49,26 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
-           Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
+           Process a @c wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue() returns the new
            value of selection.
     @event{EVT_TEXT(id, func)}
-           Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
+           Process a @c wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
            changes.
     @event{EVT_TEXT_ENTER(id, func)}
-           Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
+           Process a @c wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox (notice that the combobox must have been created with
            wxTE_PROCESS_ENTER style to receive this event).
     @event{EVT_COMBOBOX_DROPDOWN(id, func)}
-           Process a wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           Process a @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
            when the list box part of the combo box is shown (drops down).
            Notice that this event is currently only supported by wxMSW and
            wxGTK with GTK+ 2.10 or later.
     @event{EVT_COMBOBOX_CLOSEUP(id, func)}
-           Process a wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           Process a @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
            when the list box of the combo box disappears (closes up). This
            event is only generated for the same platforms as
-           wxEVT_COMMAND_COMBOBOX_DROPDOWN above. Also note that only wxMSW
+           @c wxEVT_COMMAND_COMBOBOX_DROPDOWN above. Also note that only wxMSW
            supports adding or deleting items in this event.
     @endEventTable
 
@@ -232,7 +237,7 @@ public:
     /**
         Sets the text for the combobox text field.
 
-        Notice that this method will generate a wxEVT_COMMAND_TEXT_UPDATED
+        Notice that this method will generate a @c wxEVT_COMMAND_TEXT_UPDATED
         event, use wxTextEntry::ChangeValue() if this is undesirable.
 
         @note For a combobox with @c wxCB_READONLY style the string must be in
@@ -250,7 +255,7 @@ public:
         Currently only implemented in wxMSW and wxGTK.
 
         Notice that calling this function will generate a
-        wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
 
         @since 2.9.1
     */
@@ -262,7 +267,7 @@ public:
         Currently only implemented in wxMSW and wxGTK.
 
         Notice that calling this function will generate a
-        wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
 
         @since 2.9.1
     */

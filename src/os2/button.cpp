@@ -39,8 +39,6 @@
 #define BST_CHECKED 0x0001
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
 // Button
 
 bool wxButton::Create( wxWindow*          pParent,

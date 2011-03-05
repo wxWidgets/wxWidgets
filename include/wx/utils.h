@@ -20,6 +20,7 @@
 #include "wx/list.h"
 #include "wx/filefn.h"
 #include "wx/hashmap.h"
+#include "wx/versioninfo.h"
 #include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI
@@ -54,6 +55,7 @@ class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowList;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // Arithmetic functions
@@ -139,6 +141,8 @@ WXDLLIMPEXP_BASE void wxBell();
 // Show wxWidgets information
 WXDLLIMPEXP_CORE void wxInfoMessageBox(wxWindow* parent);
 #endif // wxUSE_MSGDLG
+
+WXDLLIMPEXP_CORE wxVersionInfo wxGetLibraryVersionInfo();
 
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
@@ -711,7 +715,9 @@ private:
     // disable all windows except the given one (used by both ctors)
     void DoDisable(wxWindow *winToSkip = NULL);
 
-
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    wxEventLoop* m_modalEventLoop;
+#endif
     wxWindowList *m_winDisabled;
     bool m_disabled;
 

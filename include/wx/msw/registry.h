@@ -66,6 +66,22 @@ public:
       Write     // read and write
   };
 
+  // Different registry views supported under WOW64.
+  enum WOW64ViewMode
+  {
+      // 32 bit registry for 32 bit applications, 64 bit registry
+      // for 64 bit ones.
+      WOW64ViewMode_Default,
+
+      // Can be used in 64 bit apps to access 32 bit registry,
+      // has no effect (i.e. treated as default) in 32 bit apps.
+      WOW64ViewMode_32,
+
+      // Can be used in 32 bit apps to access 64 bit registry,
+      // has no effect (i.e. treated as default) in 64 bit apps.
+      WOW64ViewMode_64
+  };
+
   // information about standard (predefined) registry keys
     // number of standard keys
   static const size_t nStdKeys;
@@ -82,11 +98,17 @@ public:
 
   // ctors
     // root key is set to HKCR (the only root key under Win16)
-  wxRegKey();
+    wxRegKey(WOW64ViewMode viewMode = WOW64ViewMode_Default);
+
     // strKey is the full name of the key (i.e. starting with HKEY_xxx...)
-  wxRegKey(const wxString& strKey);
+    wxRegKey(const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
+
     // strKey is the name of key under (standard key) keyParent
-  wxRegKey(StdKey keyParent, const wxString& strKey);
+    wxRegKey(StdKey keyParent,
+        const wxString& strKey,
+        WOW64ViewMode viewMode = WOW64ViewMode_Default);
+
     // strKey is the name of key under (previously created) keyParent
   wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
     // dtor closes the key
@@ -105,6 +127,8 @@ public:
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
   wxString GetName(bool bShortPrefix = true) const;
+    // Retrieves the registry view used by this key.
+    WOW64ViewMode GetView() const { return m_viewMode; }
     // return true if the key exists
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
@@ -235,12 +259,12 @@ private:
   wxString FormatValue(const wxString& name) const;
 
 
-  WXHKEY      m_hKey,           // our handle
-              m_hRootKey;       // handle of the top key (i.e. StdKey)
-  wxString    m_strKey;         // key name (relative to m_hRootKey)
-
-  AccessMode  m_mode;           // valid only if key is opened
-  long        m_dwLastError;    // last error (0 if none)
+  WXHKEY        m_hKey,          // our handle
+                m_hRootKey;      // handle of the top key (i.e. StdKey)
+  wxString      m_strKey;        // key name (relative to m_hRootKey)
+  WOW64ViewMode m_viewMode;      // which view to select under WOW64
+  AccessMode    m_mode;          // valid only if key is opened
+  long          m_dwLastError;   // last error (0 if none)
 
 
   wxDECLARE_NO_COPY_CLASS(wxRegKey);

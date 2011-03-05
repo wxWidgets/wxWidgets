@@ -55,9 +55,6 @@ USHORT                              wxMenu::m_nextMenuId = 0;
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
-
 // ============================================================================
 // implementation
 // ============================================================================

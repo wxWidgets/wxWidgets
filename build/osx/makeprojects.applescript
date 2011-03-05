@@ -43,11 +43,11 @@ on parseLib(theElement, theVariables, theConditions)
 end parseLib
 
 on parseNode(anElement, theVariables, theConditions)
-	if class of anElement is XML element and Â¬
+	if class of anElement is XML element and Â
 		XML tag of anElement is "set" then
 		parseEntry(anElement, theVariables, theConditions)
 	else
-		if class of anElement is XML element and Â¬
+		if class of anElement is XML element and Â
 			XML tag of anElement is "lib" then
 			parseLib(anElement, theVariables, theConditions)
 		end if
@@ -203,84 +203,84 @@ end makeProject
 -- main
 
 init()
-set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_CARBON'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â¬
-	"wxcarbon", bklfiles:{Â¬
-	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â¬
-	{label:"base", entries:{"$(BASE_SRC)"}}, Â¬
-	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â¬
-	{label:"core", entries:{"$(CORE_SRC)"}}, Â¬
-	{label:"net", entries:{"$(NET_SRC)"}}, Â¬
-	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â¬
-	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â¬
-	{label:"html", entries:{"$(HTML_SRC)"}}, Â¬
-	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â¬
-	{label:"xml", entries:{"$(XML_SRC)"}}, Â¬
-	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â¬
-	{label:"aui", entries:{"$(AUI_SRC)"}}, Â¬
-	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â¬
-	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â¬
-	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â¬
-	{label:"stc", entries:{"$(STC_SRC)"}}, Â¬
-	{label:"libtiff", entries:{"$(wxtiff)"}}, Â¬
-	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â¬
-	{label:"libpng", entries:{"$(wxpng)"}}, Â¬
-	{label:"libregex", entries:{"$(wxregex)"}}, Â¬
-	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â¬
-	{label:"libexpat", entries:{"$(wxexpat)"}} Â¬
+set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_CARBON'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â
+	"wxcarbon", bklfiles:{Â
+	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â
+	{label:"base", entries:{"$(BASE_SRC)"}}, Â
+	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â
+	{label:"core", entries:{"$(CORE_SRC)"}}, Â
+	{label:"net", entries:{"$(NET_SRC)"}}, Â
+	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â
+	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â
+	{label:"html", entries:{"$(HTML_SRC)"}}, Â
+	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â
+	{label:"xml", entries:{"$(XML_SRC)"}}, Â
+	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â
+	{label:"aui", entries:{"$(AUI_SRC)"}}, Â
+	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â
+	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â
+	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â
+	{label:"stc", entries:{"$(STC_SRC)"}}, Â
+	{label:"libtiff", entries:{"$(wxtiff)"}}, Â
+	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â
+	{label:"libpng", entries:{"$(wxpng)"}}, Â
+	{label:"libregex", entries:{"$(wxregex)"}}, Â
+	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â
+	{label:"libexpat", entries:{"$(wxexpat)"}} Â
 		}}
 makeProject(theProject)
 
-set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_COCOA'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â¬
-	"wxcocoa", bklfiles:{Â¬
-	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â¬
-	{label:"base", entries:{"$(BASE_SRC)"}}, Â¬
-	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â¬
-	{label:"core", entries:{"$(CORE_SRC)"}}, Â¬
-	{label:"net", entries:{"$(NET_SRC)"}}, Â¬
-	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â¬
-	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â¬
-	{label:"html", entries:{"$(HTML_SRC)"}}, Â¬
-	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â¬
-	{label:"xml", entries:{"$(XML_SRC)"}}, Â¬
-	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â¬
-	{label:"aui", entries:{"$(AUI_SRC)"}}, Â¬
-	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â¬
-	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â¬
-	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â¬
-	{label:"stc", entries:{"$(STC_SRC)"}}, Â¬
-	{label:"libtiff", entries:{"$(wxtiff)"}}, Â¬
-	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â¬
-	{label:"libpng", entries:{"$(wxpng)"}}, Â¬
-	{label:"libregex", entries:{"$(wxregex)"}}, Â¬
-	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â¬
-	{label:"libexpat", entries:{"$(wxexpat)"}} Â¬
+set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_COCOA'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â
+	"wxcocoa", bklfiles:{Â
+	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â
+	{label:"base", entries:{"$(BASE_SRC)"}}, Â
+	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â
+	{label:"core", entries:{"$(CORE_SRC)"}}, Â
+	{label:"net", entries:{"$(NET_SRC)"}}, Â
+	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â
+	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â
+	{label:"html", entries:{"$(HTML_SRC)"}}, Â
+	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â
+	{label:"xml", entries:{"$(XML_SRC)"}}, Â
+	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â
+	{label:"aui", entries:{"$(AUI_SRC)"}}, Â
+	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â
+	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â
+	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â
+	{label:"stc", entries:{"$(STC_SRC)"}}, Â
+	{label:"libtiff", entries:{"$(wxtiff)"}}, Â
+	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â
+	{label:"libpng", entries:{"$(wxpng)"}}, Â
+	{label:"libregex", entries:{"$(wxregex)"}}, Â
+	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â
+	{label:"libexpat", entries:{"$(wxexpat)"}} Â
 		}}
 makeProject(theProject)
 
-set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_IPHONE'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â¬
-	"wxiphone", bklfiles:{Â¬
-	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â¬
-	{label:"base", entries:{"$(BASE_SRC)"}}, Â¬
-	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â¬
-	{label:"core", entries:{"$(CORE_SRC)"}}, Â¬
-	{label:"net", entries:{"$(NET_SRC)"}}, Â¬
-	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â¬
-	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â¬
-	{label:"html", entries:{"$(HTML_SRC)"}}, Â¬
-	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â¬
-	{label:"xml", entries:{"$(XML_SRC)"}}, Â¬
-	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â¬
-	{label:"aui", entries:{"$(AUI_SRC)"}}, Â¬
-	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â¬
-	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â¬
-	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â¬
-	{label:"stc", entries:{"$(STC_SRC)"}}, Â¬
-	{label:"libtiff", entries:{"$(wxtiff)"}}, Â¬
-	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â¬
-	{label:"libpng", entries:{"$(wxpng)"}}, Â¬
-	{label:"libregex", entries:{"$(wxregex)"}}, Â¬
-	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â¬
-	{label:"libexpat", entries:{"$(wxexpat)"}} Â¬
+set theProject to {conditions:{"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_IPHONE'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}, projectName:Â
+	"wxiphone", bklfiles:{Â
+	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â
+	{label:"base", entries:{"$(BASE_SRC)"}}, Â
+	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â
+	{label:"core", entries:{"$(CORE_SRC)"}}, Â
+	{label:"net", entries:{"$(NET_SRC)"}}, Â
+	{label:"adv", entries:{"$(ADVANCED_SRC)"}}, Â
+	{label:"media", entries:{"$(MEDIA_SRC)"}}, Â
+	{label:"html", entries:{"$(HTML_SRC)"}}, Â
+	{label:"xrc", entries:{"$(XRC_SRC)"}}, Â
+	{label:"xml", entries:{"$(XML_SRC)"}}, Â
+	{label:"opengl", entries:{"$(OPENGL_SRC)"}}, Â
+	{label:"aui", entries:{"$(AUI_SRC)"}}, Â
+	{label:"ribbon", entries:{"$(RIBBON_SRC)"}}, Â
+	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â
+	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â
+	{label:"stc", entries:{"$(STC_SRC)"}}, Â
+	{label:"libtiff", entries:{"$(wxtiff)"}}, Â
+	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â
+	{label:"libpng", entries:{"$(wxpng)"}}, Â
+	{label:"libregex", entries:{"$(wxregex)"}}, Â
+	{label:"libscintilla", entries:{"$(wxscintilla)"}}, Â
+	{label:"libexpat", entries:{"$(wxexpat)"}} Â
 		}}
 makeProject(theProject)
 

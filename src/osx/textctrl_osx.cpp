@@ -48,8 +48,6 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
@@ -602,6 +600,21 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
         return wxWindow::MacSetupCursor( pt ) ;
     else
         return true ;
+}
+
+bool wxTextCtrl::SetHint(const wxString& hint)
+{
+    m_hintString = hint;
+    
+    if ( GetTextPeer() && GetTextPeer()->SetHint(hint) )
+        return true;
+    
+    return false;
+}
+
+wxString wxTextCtrl::GetHint() const
+{
+    return m_hintString;
 }
 
 // ----------------------------------------------------------------------------

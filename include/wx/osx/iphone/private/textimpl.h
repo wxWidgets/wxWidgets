@@ -20,7 +20,7 @@
 class wxUITextFieldControl : public wxWidgetIPhoneImpl, public wxTextWidgetImpl
 {
 public :
-    wxUITextFieldControl( wxWindow *wxPeer, UITextField* w );
+    wxUITextFieldControl( wxTextCtrl *wxPeer, UITextField* w );
     virtual ~wxUITextFieldControl();
 
     virtual wxString GetStringValue() const ;
@@ -35,9 +35,14 @@ public :
     virtual void WriteText(const wxString& str) ;
     virtual bool HasOwnContextMenu() const { return true; }
 
+    virtual wxSize GetBestSize() const;    
+    
+    virtual bool SetHint(const wxString& hint);
+    
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
 protected :
     UITextField* m_textField;
+    NSObject<UITextFieldDelegate>* m_delegate;
     long m_selStart;
     long m_selEnd;
 };
@@ -71,6 +76,7 @@ public:
     virtual wxSize GetBestSize() const;
 
 protected:
+    NSObject<UITextViewDelegate>* m_delegate;
     UITextView* m_textView;
 };
 

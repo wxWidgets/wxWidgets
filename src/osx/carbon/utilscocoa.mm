@@ -244,7 +244,11 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
                     remainingTraits &= ~NSBoldFontMask;
                 }
             }
-            if ( remainingTraits & NSItalicFontMask)
+            // the code below causes crashes, because fontDescriptorWithMatrix is not returning a valid font descriptor
+            // it adds a NSCTFontMatrixAttribute as well which cannot be disposed of correctly by the autorelease pool
+            // so at the moment we have to disable this and cannot synthesize italic fonts if they are not available on the system
+#if 0
+            if ( remainingTraits & NSItalicFontMask )
             {
                 if ( nsFontWithTraits == nil )
                     nsFontWithTraits = nsFont;
@@ -260,6 +264,7 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
                         nsFontWithTraits = f;
                 }
             }
+#endif
             if ( nsFontWithTraits != nil )
                 nsFont = nsFontWithTraits;
         }
@@ -348,9 +353,27 @@ WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
     return( newImage );
 }
 
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+{
+#if 1
+    // unfortunately this only accesses images in the app bundle, not the system wide globals
+    wxCFStringRef cfname(name);
+    return wxBitmap( [[UIImage imageNamed:cfname.AsNSString()] CGImage] );
+#else
+    return wxBitmap();
+#endif
+}
+
 #endif
 
 #if wxOSX_USE_COCOA
+
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+{
+    wxCFStringRef cfname(name);
+    wxCFRef<CGImageRef> image( wxOSXCreateCGImageFromNSImage([NSImage imageNamed:cfname.AsNSString()]) );
+    return wxBitmap( image );
+}
 
 //  From "Cocoa Drawing Guide:Working with Images"
 WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
@@ -385,19 +408,23 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-    
-    NSSize imageSize = [nsimage size];
-    CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
-    CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
-    NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
-    [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-    [[NSColor whiteColor] setFill];
-    NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
-    [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-    [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-    CGImageRef image = CGBitmapContextCreateImage(context);
-    CFRelease(context);
+
+    CGImageRef image = NULL;
+    if (nsimage != nil)
+    {
+        NSSize imageSize = [nsimage size];
+        CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
+        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+        [[NSColor whiteColor] setFill];
+        NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
+        [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+        image = CGBitmapContextCreateImage(context);
+        CFRelease(context);
+    }
     return image;
  }
 
@@ -489,8 +516,11 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
 
     case wxCURSOR_WATCH:
     case wxCURSOR_WAIT:
-        // should be displayed by the system when things are running
-        cursor = [[NSCursor arrowCursor] retain];
+        // an arrow should be displayed by the system when things are running
+        // according to the HIG
+        // cursor = [[NSCursor arrowCursor] retain];
+        // but for crossplatform compatibility we display a watch cursor
+        cursor = wxGetStockCursor(kwxCursorWatch);
         break;
 
     case wxCURSOR_IBEAM:

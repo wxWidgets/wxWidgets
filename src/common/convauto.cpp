@@ -23,10 +23,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif //WX_PRECOMP
-
 #include "wx/convauto.h"
 
 // we use latin1 by default as it seems the least bad choice: the files we need

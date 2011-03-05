@@ -14,8 +14,6 @@
 #ifndef _WX_PRIVATE_IPHONE_H_
 #define _WX_PRIVATE_IPHONE_H_
 
-#include "wx/osx/core/private.h"
-
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
 #endif
@@ -28,6 +26,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 
 WX_UIImage WXDLLIMPEXP_CORE wxOSXGetUIImageFromCGImage( CGImageRef image );
+wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
@@ -57,7 +56,8 @@ public :
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
     virtual void        SetControlSize( wxWindowVariant variant );
-
+    virtual float       GetContentScaleFactor() const ;
+    
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
 

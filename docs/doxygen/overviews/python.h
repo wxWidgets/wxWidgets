@@ -206,8 +206,6 @@ python DialogUnits.py
 62:         frame = MyFrame(NULL, -1, "This is a test")
 63:         frame.Show(true)
 64:
-65:         # Tell wxWidgets that this is our main window
-66:         self.SetTopWindow(frame)
 67:
 68:         # Return a success flag
 69:         return true
@@ -257,8 +255,7 @@ Destroy() method as shown on line 36.
 
 Just like wxWidgets in C++, wxPython apps need to create a class derived from
 @c wxApp (line 56) that implements a method named @c OnInit, (line 59.) This
-method should create the application's main window (line 62) and use
-wxApp.SetTopWindow() (line 66) to inform wxWidgets about it.
+method should create the application's main window (line 62) and show it.
 
 And finally, at line 72 an instance of the application class is created. At
 this point wxPython finishes initializing itself, and calls the @c OnInit

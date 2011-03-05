@@ -24,6 +24,17 @@
 
 // work in progress
 
+@interface wxNSTableDataSource : NSObject wxOSX_10_6_AND_LATER(<NSComboBoxDataSource>)
+{
+    wxNSComboBoxControl* impl;
+}
+
+- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox;
+- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index;
+
+@end
+
+
 @interface wxNSComboBox : NSComboBox
 {
 }
@@ -144,9 +155,13 @@ wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
 
 int wxNSComboBoxControl::FindString(const wxString& text) const
 {
-    int result = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-    if (result == NSNotFound)
+    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+
+    int result;
+    if (nsresult == NSNotFound)
         result = wxNOT_FOUND;
+    else
+        result = (int) nsresult;
     return result;
 }
 

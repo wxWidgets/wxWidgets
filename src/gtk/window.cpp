@@ -2048,9 +2048,7 @@ wxMouseState wxGetMouseState()
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowGTK, wxWindowBase)
-#else // __WXGTK__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif // __WXUNIVERSAL__/__WXGTK__
+#endif // __WXUNIVERSAL__
 
 void wxWindowGTK::Init()
 {
@@ -2617,8 +2615,7 @@ void wxWindowGTK::OnInternalIdle()
         m_needsStyleChange = false;
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    wxWindowBase::OnInternalIdle();
 }
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const
@@ -3782,30 +3779,23 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
     {
         GtkWidget *w = GetConnectWidget();
         wxToolTip::GTKApply(w, NULL);
-#if GTK_CHECK_VERSION(2, 12, 0)
-        // Just applying NULL doesn't work on 2.12.0, so also use
-        // gtk_widget_set_has_tooltip. It is part of the new GtkTooltip API
-        // but seems also to work with the old GtkTooltips.
-        if (gtk_check_version(2, 12, 0) == NULL)
-            gtk_widget_set_has_tooltip(w, FALSE);
-#endif
     }
 }
 
 void wxWindowGTK::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
     GtkWidget *w = GetConnectWidget();
-    gtk_tooltips_set_tip(tips, w, tip, NULL);
 
 #if GTK_CHECK_VERSION(2, 12, 0)
-    if ( !tip || tip[0] == '\0' )
+    if (!gtk_check_version(2, 12, 0))
     {
-        // Just applying empty tool tip doesn't work on 2.12.0, so also use
-        // gtk_widget_set_has_tooltip.
-        if (gtk_check_version(2, 12, 0) == NULL)
-            gtk_widget_set_has_tooltip(w, FALSE);
+        gtk_widget_set_tooltip_text (w, tip);
     }
+    else
 #endif
+    {
+        gtk_tooltips_set_tip(tips, w, tip, NULL);
+    }
 }
 #endif // wxUSE_TOOLTIPS
 

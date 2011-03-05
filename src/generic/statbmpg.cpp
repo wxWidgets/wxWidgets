@@ -18,8 +18,6 @@
 
 #include "wx/generic/statbmpg.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticBitmap, wxStaticBitmapBase)
-
 bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                                    const wxBitmap& bitmap,
                                    const wxPoint& pos, const wxSize& size,
@@ -39,6 +37,13 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
     if (m_bitmap.IsOk())
         dc.DrawBitmap(m_bitmap, 0, 0, true);
 }
+
+// under OSX_cocoa is a define, avoid duplicate info
+#ifndef wxGenericStaticBitmap
+
+IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticBitmap, wxStaticBitmapBase)
+
+#endif
 
 #endif // wxUSE_STATBMP
 

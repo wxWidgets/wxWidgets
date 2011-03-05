@@ -26,14 +26,22 @@ public:
 #if wxOSX_USE_COCOA
         ,   CUSTOM_STATUSITEM
 #endif
-//    ,   STATUSITEM
-//    ,   MENUEXTRA
+#if wxOSX_USE_COCOA
+        ,   DEFAULT_TYPE = CUSTOM_STATUSITEM
+#else
         ,   DEFAULT_TYPE = DOCK
+#endif
         };
 
     wxTaskBarIcon(wxTaskBarIconType iconType = DEFAULT_TYPE);
     virtual ~wxTaskBarIcon();
 
+    // returns true if the taskbaricon is in the global menubar
+#if wxOSX_USE_COCOA
+    bool OSXIsStatusItem();
+#else
+    bool OSXIsStatusItem() { return false; }
+#endif
     bool IsOk() const { return true; }
 
     bool IsIconInstalled() const;
@@ -42,6 +50,7 @@ public:
     bool PopupMenu(wxMenu *menu);
 
 protected:
+    wxTaskBarIconType m_type;
     class wxTaskBarIconImpl* m_impl;
     friend class wxTaskBarIconImpl;
 };

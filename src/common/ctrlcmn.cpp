@@ -38,6 +38,8 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/private/markupparser.h"
+
 const char wxControlNameStr[] = "control";
 
 // ============================================================================
@@ -231,18 +233,171 @@ wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(va
 }
 
 // ----------------------------------------------------------------------------
+// wxControl markup support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MARKUP
+
+/* static */
+wxString wxControlBase::RemoveMarkup(const wxString& markup)
+{
+    return wxMarkupParser::Strip(markup);
+}
+
+bool wxControlBase::DoSetLabelMarkup(const wxString& markup)
+{
+    const wxString label = RemoveMarkup(markup);
+    if ( label.empty() && !markup.empty() )
+        return false;
+
+    SetLabel(label);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
+
+// ----------------------------------------------------------------------------
 // wxControlBase - ellipsization code
 // ----------------------------------------------------------------------------
 
 #define wxELLIPSE_REPLACEMENT       wxS("...")
 
+namespace
+{
+
+struct EllipsizeCalculator
+{
+    EllipsizeCalculator(const wxString& s, const wxDC& dc,
+                        int maxFinalWidthPx, int replacementWidthPx)
+        : 
+          m_initialCharToRemove(0),
+          m_nCharsToRemove(0),
+          m_outputNeedsUpdate(true),
+          m_str(s),
+          m_dc(dc),
+          m_maxFinalWidthPx(maxFinalWidthPx),
+          m_replacementWidthPx(replacementWidthPx)
+    {
+        m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
+        wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
+    }
+
+    bool IsOk() const { return m_isOk; }
+
+    bool EllipsizationNotNeeded() const
+    {
+        // NOTE: charOffsetsPx[n] is the width in pixels of the first n characters (with the last one INCLUDED)
+        //       thus charOffsetsPx[len-1] is the total width of the string
+        return m_charOffsetsPx.Last() <= m_maxFinalWidthPx;
+    }
+
+    void Init(size_t initialCharToRemove, size_t nCharsToRemove)
+    {
+        m_initialCharToRemove = initialCharToRemove;
+        m_nCharsToRemove = nCharsToRemove;
+    }
+
+    void RemoveFromEnd()
+    {
+        m_nCharsToRemove++;
+    }
+
+    void RemoveFromStart()
+    {
+        m_initialCharToRemove--;
+        m_nCharsToRemove++;
+    }
+
+    size_t GetFirstRemoved() const { return m_initialCharToRemove; }
+    size_t GetLastRemoved() const { return m_initialCharToRemove + m_nCharsToRemove - 1; }
+
+    const wxString& GetEllipsizedText()
+    {
+        if ( m_outputNeedsUpdate )
+        {
+            wxASSERT(m_initialCharToRemove <= m_str.length() - 1);  // see valid range for initialCharToRemove above
+            wxASSERT(m_nCharsToRemove >= 1 && m_nCharsToRemove <= m_str.length() - m_initialCharToRemove);  // see valid range for nCharsToRemove above
+
+            // erase m_nCharsToRemove characters after m_initialCharToRemove (included);
+            // e.g. if we have the string "foobar" (len = 6)
+            //                               ^
+            //                               \--- m_initialCharToRemove = 2
+            //      and m_nCharsToRemove = 2, then we get "foar"
+            m_output = m_str;
+            m_output.replace(m_initialCharToRemove, m_nCharsToRemove, wxELLIPSE_REPLACEMENT);
+        }
+
+        return m_output;
+    }
+
+    bool IsShortEnough()
+    {
+        if ( m_nCharsToRemove == m_str.length() )
+            return true; // that's the best we could do
+
+        // Width calculation using partial extents is just an inaccurate
+        // estimate: partial extents have sub-pixel precision and are rounded
+        // by GetPartialTextExtents(); replacing part of the string with "..."
+        // may change them too thanks to changes in ligatures, kerning etc.
+        //
+        // The correct algorithm would be to call GetTextExtent() in every step
+        // of ellipsization, but that would be too expensive, especially when
+        // the difference is just a few pixels. So we use partial extents to
+        // estimate string width and only verify it with GetTextExtent() when
+        // it looks good.
+
+        int estimatedWidth = m_replacementWidthPx; // length of "..."
+
+        // length of text before the removed part:
+        if ( m_initialCharToRemove > 0 )
+            estimatedWidth += m_charOffsetsPx[m_initialCharToRemove - 1];
+
+        // length of text after the removed part:
+
+        if ( GetLastRemoved() < m_str.length() )
+           estimatedWidth += m_charOffsetsPx.Last() - m_charOffsetsPx[GetLastRemoved()];
+
+        if ( estimatedWidth > m_maxFinalWidthPx )
+            return false;
+
+        return m_dc.GetTextExtent(GetEllipsizedText()).GetWidth() <= m_maxFinalWidthPx;
+    }
+
+    // calculation state:
+
+    // REMEMBER: indexes inside the string have a valid range of [0;len-1] if not otherwise constrained
+    //           lengths/counts of characters (e.g. nCharsToRemove) have a
+    //           valid range of [0;len] if not otherwise constrained
+    // NOTE: since this point we know we have for sure a non-empty string from which we need
+    //       to remove _at least_ one character (thus nCharsToRemove below is constrained to be >= 1)
+
+    // index of first character to erase, valid range is [0;len-1]:
+    size_t m_initialCharToRemove;
+    // how many chars do we need to erase? valid range is [0;len-m_initialCharToRemove]
+    size_t m_nCharsToRemove;
+
+    wxString m_output;
+    bool m_outputNeedsUpdate;
+
+    // inputs:
+    wxString m_str;
+    const wxDC& m_dc;
+    int m_maxFinalWidthPx;
+    int m_replacementWidthPx;
+    wxArrayInt m_charOffsetsPx;
+
+    bool m_isOk;
+};
+
+} // anonymous namespace
+
 /* static and protected */
 wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
                                               wxEllipsizeMode mode, int maxFinalWidthPx,
-                                              int replacementWidthPx, int marginWidthPx)
+                                              int replacementWidthPx)
 {
-    wxASSERT_MSG(replacementWidthPx > 0 && marginWidthPx > 0,
-                 "Invalid parameters");
+    wxASSERT_MSG(replacementWidthPx > 0, "Invalid parameters");
     wxASSERT_LEVEL_2_MSG(!curLine.Contains('\n'),
                          "Use Ellipsize() instead!");
 
@@ -254,44 +409,33 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     if (maxFinalWidthPx <= 0)
         return wxEmptyString;
 
-    wxArrayInt charOffsetsPx;
     size_t len = curLine.length();
-    if (len == 0 ||
-        !dc.GetPartialTextExtents(curLine, charOffsetsPx))
+    if (len <= 1 )
         return curLine;
 
-    wxASSERT(charOffsetsPx.GetCount() == len);
+    EllipsizeCalculator calc(curLine, dc, maxFinalWidthPx, replacementWidthPx);
 
-    // NOTE: charOffsetsPx[n] is the width in pixels of the first n characters (with the last one INCLUDED)
-    //       thus charOffsetsPx[len-1] is the total width of the string
-    size_t totalWidthPx = charOffsetsPx.Last();
-    if ( totalWidthPx <= (size_t)maxFinalWidthPx )
-        return curLine;     // we don't need to do any ellipsization!
+    if ( !calc.IsOk() )
+        return curLine;
 
-    int excessPx = wxMin(totalWidthPx - maxFinalWidthPx +
-                         replacementWidthPx +
-                         marginWidthPx,     // security margin
-                         totalWidthPx);
-    wxASSERT(excessPx>0);       // excessPx should be in the [1;totalWidthPx] range
-
-    // REMEMBER: indexes inside the string have a valid range of [0;len-1] if not otherwise constrained
-    //           lengths/counts of characters (e.g. nCharsToRemove) have a valid range of [0;len] if not otherwise constrained
-    // NOTE: since this point we know we have for sure a non-empty string from which we need
-    //       to remove _at least_ one character (thus nCharsToRemove below is constrained to be >= 1)
-
-    size_t initialCharToRemove,     // index of first character to erase, valid range is [0;len-1]
-           nCharsToRemove;          // how many chars do we need to erase? valid range is [1;len-initialCharToRemove]
+    if ( calc.EllipsizationNotNeeded() )
+        return curLine;
 
     // let's compute the range of characters to remove depending on the ellipsization mode:
     switch (mode)
     {
         case wxELLIPSIZE_START:
-            initialCharToRemove = 0;
-            for ( nCharsToRemove = 1;
-                  nCharsToRemove < len && charOffsetsPx[nCharsToRemove-1] < excessPx;
-                  nCharsToRemove++ )
-                ;
-            break;
+            {
+                calc.Init(0, 1);
+                while ( !calc.IsShortEnough() )
+                    calc.RemoveFromEnd();
+
+                // always show at least one character of the string:
+                if ( calc.m_nCharsToRemove == len )
+                    return wxString(wxELLIPSE_REPLACEMENT) + curLine[len-1];
+
+                break;
+            }
 
         case wxELLIPSIZE_MIDDLE:
             {
@@ -303,68 +447,59 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
                 // - the second one to remove, valid range [initialCharToRemove;endCharToRemove]
                 // - the third one to preserve, valid range [endCharToRemove+1;len-1] or the empty range if endCharToRemove==len-1
                 // NOTE: empty range != range [0;0] since the range [0;0] contains 1 character (the zero-th one)!
-                initialCharToRemove = len/2;
-                size_t endCharToRemove = len/2;     // index of the last character to remove; valid range is [0;len-1]
 
-                int removedPx = 0;
-                for ( ; removedPx < excessPx; )
+                calc.Init(len/2, 0);
+
+                bool removeFromStart = true;
+
+                while ( !calc.IsShortEnough() )
                 {
-                    // try to remove the last character of the first part of the string
-                    if (initialCharToRemove > 0)
-                    {
-                        // width of the (initialCharToRemove-1)-th character
-                        int widthPx;
-                        if (initialCharToRemove >= 2)
-                            widthPx = charOffsetsPx[initialCharToRemove-1] - charOffsetsPx[initialCharToRemove-2];
-                        else
-                            widthPx = charOffsetsPx[initialCharToRemove-1];
-                                // the (initialCharToRemove-1)-th character is the first char of the string
+                    const bool canRemoveFromStart = calc.GetFirstRemoved() > 0;
+                    const bool canRemoveFromEnd = calc.GetLastRemoved() < len - 1;
 
-                        wxASSERT(widthPx >= 0);     // widthPx is zero for e.g. tab characters
-
-                        // mark the (initialCharToRemove-1)-th character as removable
-                        initialCharToRemove--;
-                        removedPx += widthPx;
-                    }
-
-                    // try to remove the first character of the last part of the string
-                    if (endCharToRemove < len - 1 &&
-                        removedPx < excessPx)
-                    {
-                        // width of the (endCharToRemove+1)-th character
-                        int widthPx = charOffsetsPx[endCharToRemove+1] -
-                                      charOffsetsPx[endCharToRemove];
-
-                        wxASSERT(widthPx >= 0);     // widthPx is zero for e.g. tab characters
-
-                        // mark the (endCharToRemove+1)-th character as removable
-                        endCharToRemove++;
-                        removedPx += widthPx;
-                    }
-
-                    if (initialCharToRemove == 0 && endCharToRemove == len-1)
+                    if ( !canRemoveFromStart && !canRemoveFromEnd )
                     {
                         // we need to remove all the characters of the string!
                         break;
                     }
+
+                    // Remove from the beginning in even steps and from the end
+                    // in odd steps, unless we exhausted one side already:
+                    removeFromStart = !removeFromStart;
+                    if ( removeFromStart && !canRemoveFromStart )
+                        removeFromStart = false;
+                    else if ( !removeFromStart && !canRemoveFromEnd )
+                        removeFromStart = true;
+
+                    if ( removeFromStart )
+                        calc.RemoveFromStart();
+                    else
+                        calc.RemoveFromEnd();
                 }
 
-                nCharsToRemove = endCharToRemove - initialCharToRemove + 1;
+                // Always show at least one character of the string.
+                // Additionally, if there's only one character left, prefer
+                // "a..." to "...a":
+                if ( calc.m_nCharsToRemove == len ||
+                     calc.m_nCharsToRemove == len - 1 )
+                {
+                    return curLine[0] + wxString(wxELLIPSE_REPLACEMENT);
+                }
             }
             break;
 
         case wxELLIPSIZE_END:
             {
-                int maxWidthPx = totalWidthPx - excessPx;
+                calc.Init(len - 1, 1);
+                while ( !calc.IsShortEnough() )
+                    calc.RemoveFromStart();
 
-                // go backward from the end of the string toward the start
-                for ( initialCharToRemove = len-1;
-                      initialCharToRemove > 0 && charOffsetsPx[initialCharToRemove-1] > maxWidthPx;
-                      initialCharToRemove-- )
-                    ;
-                nCharsToRemove = len - initialCharToRemove;
+                // always show at least one character of the string:
+                if ( calc.m_nCharsToRemove == len )
+                    return curLine[0] + wxString(wxELLIPSE_REPLACEMENT);
+
+                break;
             }
-            break;
 
         case wxELLIPSIZE_NONE:
         default:
@@ -372,41 +507,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
             return curLine;
     }
 
-#ifdef __VMS
-#pragma message disable unscomzer
-   // suppress warnings on comparison of unsigned numbers
-#endif
-   wxASSERT(initialCharToRemove >= 0 && initialCharToRemove <= len-1);  // see valid range for initialCharToRemove above
-#ifdef __VMS
-#pragma message enable unscomzer
-   // suppress warnings on comparison of unsigned numbers
-#endif
-    wxASSERT(nCharsToRemove >= 1 && nCharsToRemove <= len-initialCharToRemove);  // see valid range for nCharsToRemove above
-
-    // erase nCharsToRemove characters after initialCharToRemove (included);
-    // e.g. if we have the string "foobar" (len = 6)
-    //                               ^
-    //                               \--- initialCharToRemove = 2
-    //      and nCharsToRemove = 2, then we get "foar"
-    wxString ret(curLine);
-    ret.erase(initialCharToRemove, nCharsToRemove);
-
-    int removedPx;
-    if (initialCharToRemove >= 1)
-        removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1] - charOffsetsPx[initialCharToRemove-1];
-    else
-        removedPx = charOffsetsPx[initialCharToRemove+nCharsToRemove-1];
-    wxASSERT(removedPx >= excessPx);
-
-    // if there is space for the replacement dots, add them
-    if ((int)totalWidthPx-removedPx+replacementWidthPx < maxFinalWidthPx)
-        ret.insert(initialCharToRemove, wxELLIPSE_REPLACEMENT);
-
-    // if everything was ok, we should have shortened this line
-    // enough to make it fit in maxFinalWidthPx:
-    wxASSERT_LEVEL_2(dc.GetTextExtent(ret).GetWidth() <= maxFinalWidthPx);
-
-    return ret;
+    return calc.GetEllipsizedText();
 }
 
 /* static */
@@ -420,7 +521,6 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
     // change because of e.g. a font change; however we calculate them only once
     // when ellipsizing multiline labels:
     int replacementWidth = dc.GetTextExtent(wxELLIPSE_REPLACEMENT).GetWidth();
-    int marginWidth = dc.GetCharWidth();
 
     // NB: we must handle correctly labels with newlines:
     wxString curLine;
@@ -429,7 +529,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
         if ( pc == label.end() || *pc == wxS('\n') )
         {
             curLine = DoEllipsizeSingleLine(curLine, dc, mode, maxFinalWidth,
-                                            replacementWidth, marginWidth);
+                                            replacementWidth);
 
             // add this (ellipsized) row to the rest of the label
             ret << curLine;

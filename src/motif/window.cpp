@@ -35,10 +35,10 @@
     #include "wx/layout.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
-    #include "wx/unix/utilsx11.h"
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/unix/utilsx11.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -131,8 +131,6 @@ static int str16len(const char *s)
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
-
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 
     BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
         EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
@@ -1652,14 +1650,6 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 
         node = node->GetNext();
     }
-}
-
-void wxWindow::OnInternalIdle()
-{
-    // This calls the UI-update mechanism (querying windows for
-    // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // ----------------------------------------------------------------------------

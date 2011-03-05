@@ -11,10 +11,6 @@
 
 #include "wx/listctrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-    
 wxListCtrl::wxListCtrl()
 {
 }

@@ -48,6 +48,68 @@
 #include "wx/display.h"
 #endif
 
+extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+wxDEFINE_FLAGS( wxDialogStyle )
+wxBEGIN_FLAGS( wxDialogStyle )
+// new style border flags, we put them first to
+// use them for streaming out
+wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+wxFLAGS_MEMBER(wxBORDER_RAISED)
+wxFLAGS_MEMBER(wxBORDER_STATIC)
+wxFLAGS_MEMBER(wxBORDER_NONE)
+
+// old style border flags
+wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+wxFLAGS_MEMBER(wxRAISED_BORDER)
+wxFLAGS_MEMBER(wxSTATIC_BORDER)
+wxFLAGS_MEMBER(wxNO_BORDER)
+
+// standard window styles
+wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+
+// dialog styles
+wxFLAGS_MEMBER(wxWS_EX_VALIDATE_RECURSIVELY)
+wxFLAGS_MEMBER(wxSTAY_ON_TOP)
+wxFLAGS_MEMBER(wxCAPTION)
+#if WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxTHICK_FRAME)
+#endif // WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxSYSTEM_MENU)
+wxFLAGS_MEMBER(wxRESIZE_BORDER)
+#if WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxRESIZE_BOX)
+#endif // WXWIN_COMPATIBILITY_2_6
+wxFLAGS_MEMBER(wxCLOSE_BOX)
+wxFLAGS_MEMBER(wxMAXIMIZE_BOX)
+wxFLAGS_MEMBER(wxMINIMIZE_BOX)
+wxEND_FLAGS( wxDialogStyle )
+
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow, "wx/dialog.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxDialog)
+wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString(), \
+           0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+wxPROPERTY_FLAGS( WindowStyle, wxDialogStyle, long, SetWindowStyleFlag, \
+                 GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
+                 wxT("Helpstring"), wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
+
+wxEMPTY_HANDLERS_TABLE(wxDialog)
+
+wxCONSTRUCTOR_6( wxDialog, wxWindow*, Parent, wxWindowID, Id, \
+                wxString, Title, wxPoint, Position, wxSize, Size, long, WindowStyle)
+
 // ----------------------------------------------------------------------------
 // wxDialogBase
 // ----------------------------------------------------------------------------
@@ -633,6 +695,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
         else
 #endif // wxUSE_BOOKCTRL
         {
+#if wxUSE_BUTTON
             // If we have an arbitrary dialog, create a scrolling area for the main content, and a button sizer
             // for the main buttons.
             wxScrolledWindow* scrolledWindow = CreateScrolledWindow(dialog);
@@ -679,6 +742,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
             scrolledWindow->SetSizer(oldSizer);
 
             FitWithScrolling(dialog, scrolledWindow);
+#endif // wxUSE_BUTTON
         }
     }
 
@@ -692,6 +756,8 @@ wxScrolledWindow* wxStandardDialogLayoutAdapter::CreateScrolledWindow(wxWindow* 
     wxScrolledWindow* scrolledWindow = new wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxVSCROLL|wxHSCROLL|wxBORDER_NONE);
     return scrolledWindow;
 }
+
+#if wxUSE_BUTTON
 
 /// Find and remove the button sizer, if any
 wxSizer* wxStandardDialogLayoutAdapter::FindButtonSizer(bool stdButtonSizer, wxDialog* dialog, wxSizer* sizer, int& retBorder, int accumlatedBorder)
@@ -789,6 +855,8 @@ bool wxStandardDialogLayoutAdapter::FindLooseButtons(wxDialog* dialog, wxStdDial
     }
     return true;
 }
+
+#endif // wxUSE_BUTTON
 
 /// Reparent the controls to the scrolled window
 void wxStandardDialogLayoutAdapter::ReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer)

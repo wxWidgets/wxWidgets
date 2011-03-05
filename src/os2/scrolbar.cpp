@@ -20,8 +20,6 @@
 
 #include "wx/os2/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-
 // Scrollbar
 bool wxScrollBar::Create(wxWindow* pParent,
                          wxWindowID vId,

@@ -294,6 +294,8 @@ public:
 
 private:
     wxQtPointer< QListWidget > m_qtListWidget;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxListCtrl );
 };
 
 #endif

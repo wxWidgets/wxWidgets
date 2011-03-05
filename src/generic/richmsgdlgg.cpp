@@ -84,7 +84,7 @@ bool wxGenericRichMessageDialog::IsCheckBoxChecked() const
 {
     // This function can be called before the dialog is shown and hence before
     // the check box is created.
-    return m_checkBox? m_checkBoxValue : m_checkBox->IsChecked();
+    return m_checkBox ? m_checkBox->IsChecked() : m_checkBoxValue;
 }
 
 #endif // wxUSE_RICHMSGDLG

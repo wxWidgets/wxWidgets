@@ -52,6 +52,7 @@
 #include "wx/uri.h"
 #include "wx/mimetype.h"
 #include "wx/config.h"
+#include "wx/versioninfo.h"
 
 #if defined(__WXWINCE__) && wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -548,7 +549,9 @@ wxString wxGetCurrentDir()
 // ----------------------------------------------------------------------------
 
 #ifdef __WXOSX__
+#if wxOSX_USE_COCOA_OR_CARBON
     #include <crt_externs.h>
+#endif
 #endif
 
 bool wxGetEnvMap(wxEnvVariableHashMap *map)
@@ -560,8 +563,9 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 #elif defined(__VMS)
    // Now this routine wil give false for OpenVMS
    // TODO : should we do something with logicals?
-    char **env;
+    char **env=NULL;
 #elif defined(__WXOSX__)
+#if wxOSX_USE_COCOA_OR_CARBON
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
     // environ(7) under Darwin
@@ -569,9 +573,17 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
     if ( !penv )
         return false;
     char **env = *penv;
+#else
+    char **env=NULL;
+    // todo translate NSProcessInfo environment into map
+#endif
 #else // non-MSVC non-Mac
     // Not sure if other compilers have _tenviron so use the (more standard)
     // ANSI version only for them.
+#ifdef __BSD__
+    // POSIX, but not in an include file
+    extern char **environ;
+#endif
     char **env = environ;
 #endif
 
@@ -1356,7 +1368,7 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     return wxCANCEL;
 }
 
-void wxInfoMessageBox(wxWindow* parent)
+wxVersionInfo wxGetLibraryVersionInfo()
 {
     // don't translate these strings, they're for diagnostics purposes only
     wxString msg;
@@ -1389,7 +1401,20 @@ void wxInfoMessageBox(wxWindow* parent)
                             GTK_MICRO_VERSION);
 #endif // __WXGTK__
 
-    msg += wxS("\nCopyright (c) 1995-2010 wxWidgets team");
+    return wxVersionInfo(wxS("wxWidgets"),
+                         wxMAJOR_VERSION,
+                         wxMINOR_VERSION,
+                         wxRELEASE_NUMBER,
+                         msg,
+                         wxS("Copyright (c) 1995-2010 wxWidgets team"));
+}
+
+void wxInfoMessageBox(wxWindow* parent)
+{
+    wxVersionInfo info = wxGetLibraryVersionInfo();
+    wxString msg = info.ToString();
+
+    msg << wxS("\n") << info.GetCopyright();
 
     wxMessageBox(msg, wxT("wxWidgets information"),
                  wxICON_INFORMATION | wxOK,
@@ -1542,6 +1567,12 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+
+// defined in evtloop.mm
+
+#else
+
 wxWindowDisabler::wxWindowDisabler(bool disable)
 {
     m_disabled = disable;
@@ -1603,6 +1634,8 @@ wxWindowDisabler::~wxWindowDisabler()
 
     delete m_winDisabled;
 }
+
+#endif
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one

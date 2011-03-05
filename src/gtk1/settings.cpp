@@ -14,7 +14,6 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/cmndata.h"
     #include "wx/toplevel.h"
 #endif
 
@@ -282,6 +281,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             }
             return gs_objects.m_colTooltipText;
 
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
             {

@@ -27,95 +27,13 @@
 #  endif
 #endif
 
-/*
-    WXOSX targets
-    __WXOSX_MAC__ means Mac OS X, non embedded
-    __WXOSX_IPHONE__ means OS X iPhone
-*/
-
-/*
-    Normally all of __WXOSX_XXX__, __WXOSX__ and __WXMAC__ are defined by
-    configure but ensure that we also define them if configure was not used for
-    whatever reason.
-
-    The primare symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
-    checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
-    for it.
- */
-#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
-#   ifndef __WXOSX__
-#       define __WXOSX__ 1
-#   endif
-#   ifndef __WXMAC__
-#       define __WXMAC__ 1
-#   endif
+#ifdef __WXMAC_XCODE__
+#    include <unistd.h>
+#    include <TargetConditionals.h>
+#    include <AvailabilityMacros.h>
+#    include "wx/osx/config_xcode.h"
 #endif
 
-#ifdef __WXOSX__
-/* setup precise defines according to sdk used */
-#   include <TargetConditionals.h>
-#   if defined(__WXOSX_IPHONE__)
-#       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
-#           error "incorrect SDK for an iPhone build"
-#       endif
-#   elif defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__)
-#       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
-#           error "incorrect SDK for a Mac OS X build"
-#       endif
-#       define __WXOSX_MAC__ 1
-#   else
-#       error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined"
-#   endif
-#endif
-
-#ifdef __WXOSX_MAC__
-#    if defined(__MACH__)
-#        include <AvailabilityMacros.h>
-#        ifndef MAC_OS_X_VERSION_10_4
-#           define MAC_OS_X_VERSION_10_4 1040
-#        endif
-#        ifndef MAC_OS_X_VERSION_10_5
-#           define MAC_OS_X_VERSION_10_5 1050
-#        endif
-#        ifndef MAC_OS_X_VERSION_10_6
-#           define MAC_OS_X_VERSION_10_6 1060
-#        endif
-#    else
-#        error "only mach-o configurations are supported"
-#    endif
-#endif
-
-/*
-    __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
-
-    DO NOT use this define in base library code.  Although wxMac has its own
-    private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
-    valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
-
-    To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
-    not compiling the base library.  We determine this by first checking if
-    wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
-    the base library, and possibly not building wx at all (but actually building
-    user code that's using wx). If it is defined then we must check to make sure
-    it is not true.  If it is true, we're building base.
-
-    If you want it in the common darwin base library then use __DARWIN__.  You
-    can use any Darwin-available libraries like CoreFoundation but please avoid
-    using OS X libraries like Carbon or CoreServices.
-
- */
-#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
-#   define __WXOSX_OR_COCOA__ 1
-#endif
-
-#ifdef __WXOSX_OR_COCOA__
-#    ifdef __WXMAC_XCODE__
-#        include <unistd.h>
-#        include <TargetConditionals.h>
-#        include <AvailabilityMacros.h>
-#        include "wx/osx/config_xcode.h"
-#    endif
-#endif
 /*
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
@@ -331,16 +249,38 @@
    test for old versions of Borland C, normally need at least 5.82, Turbo
    explorer, available for free at http://www.turboexplorer.com/downloads
 */
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x550)
-#   error "wxWidgets requires a newer version of Borland, we recommend upgrading to 5.82 (Turbo Explorer). You may at your own risk remove this line and try building but be prepared to get build errors."
-#endif /* __BORLANDC__ */
 
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x582) && (__BORLANDC__ > 0x559)
-#   ifndef _USE_OLD_RW_STL
-#       error "wxWidgets is incompatible with default Borland C++ 5.6 STL library, please add -D_USE_OLD_RW_STL to your bcc32.cfg to use RogueWave STL implementation."
-#   endif
-#endif /* __BORLANDC__ */
 
+/*
+    Older versions of Borland C have some compiler bugs that need
+    workarounds. Mostly pertains to the free command line compiler 5.5.1.
+*/
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+    /*
+        The Borland free compiler is unable to handle overloaded enum
+        comparisons under certain conditions e.g. when any class has a
+        conversion ctor for an integral type and there's an overload to
+        compare between an integral type and that class type.
+    */
+#   define wxCOMPILER_NO_OVERLOAD_ON_ENUM
+
+    /*
+        This is needed to overcome bugs in 5.5.1 STL, linking errors will
+        result if it is not defined.
+     */
+#   define _RWSTD_COMPILE_INSTANTIATE
+
+    /*
+        Preprocessor in older Borland compilers have major problems
+        concatenating with ##. Specifically, if the string operands being
+        concatenated have special meaning (e.g L"str", 123i64 etc)
+        then ## will not concatenate the operands correctly.
+
+        As a workaround, define wxPREPEND* and wxAPPEND* without using
+        wxCONCAT_HELPER.
+    */
+#   define wxCOMPILER_BROKEN_CONCAT_OPER
+#endif /* __BORLANDC__ */
 
 /*
    Define Watcom-specific macros.
@@ -703,6 +643,91 @@
 #        define SIZEOF_SIZE_T 4
 #    endif
 #endif
+
+/*
+    Define various OS X symbols before including wx/chkconf.h which uses them.
+
+    __WXOSX_MAC__ means Mac OS X, non embedded
+    __WXOSX_IPHONE__ means OS X iPhone
+ */
+
+/*
+    Normally all of __WXOSX_XXX__, __WXOSX__ and __WXMAC__ are defined by
+    configure but ensure that we also define them if configure was not used for
+    whatever reason.
+
+    The primary symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
+    checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
+    for it.
+ */
+#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) \
+        || (defined(__DARWIN__) && !wxUSE_GUI)
+#   ifndef __WXOSX__
+#       define __WXOSX__ 1
+#   endif
+#   ifndef __WXMAC__
+#       define __WXMAC__ 1
+#   endif
+#endif
+
+#ifdef __WXOSX__
+/* setup precise defines according to sdk used */
+#   include <TargetConditionals.h>
+#   if defined(__WXOSX_IPHONE__)
+#       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
+#           error "incorrect SDK for an iPhone build"
+#       endif
+#   else
+#       if wxUSE_GUI && !(defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__))
+#           error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined for the GUI build"
+#       endif
+#       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
+#           error "incorrect SDK for a Mac OS X build"
+#       endif
+#       define __WXOSX_MAC__ 1
+#   endif
+#endif
+
+#ifdef __WXOSX_MAC__
+#    if defined(__MACH__)
+#        include <AvailabilityMacros.h>
+#        ifndef MAC_OS_X_VERSION_10_4
+#           define MAC_OS_X_VERSION_10_4 1040
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_5
+#           define MAC_OS_X_VERSION_10_5 1050
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_6
+#           define MAC_OS_X_VERSION_10_6 1060
+#        endif
+#    else
+#        error "only mach-o configurations are supported"
+#    endif
+#endif
+
+/*
+    __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
+
+    DO NOT use this define in base library code.  Although wxMac has its own
+    private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
+    valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
+
+    To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
+    not compiling the base library.  We determine this by first checking if
+    wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
+    the base library, and possibly not building wx at all (but actually building
+    user code that's using wx). If it is defined then we must check to make sure
+    it is not true.  If it is true, we're building base.
+
+    If you want it in the common darwin base library then use __DARWIN__.  You
+    can use any Darwin-available libraries like CoreFoundation but please avoid
+    using OS X libraries like Carbon or CoreServices.
+
+ */
+#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
+#   define __WXOSX_OR_COCOA__ 1
+#endif
+
 /*
    check the consistency of the settings in setup.h: note that this must be
    done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
@@ -791,15 +816,6 @@
 
 #if !defined(wxUSE_WXDIB) && defined(__WXMSW__)
 #    define wxUSE_WXDIB 1
-#endif
-
-/*
-    We need AvailabilityMacros.h for ifdefing out things that don't exist on
-    OSX 10.2 and lower
-    FIXME:  We need a better way to detect for 10.3 then including a system header
-*/
-#ifdef __DARWIN__
-    #include <AvailabilityMacros.h>
 #endif
 
 #if defined (__WXPALMOS__)

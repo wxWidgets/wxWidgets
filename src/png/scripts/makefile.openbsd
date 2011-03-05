@@ -1,14 +1,17 @@
 # makefile for libpng
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
-# Copyright (C) 2007-2008 Glenn Randers-Pehrson
-# For conditions of distribution and use, see copyright notice in png.h
+# Copyright (C) 2007-2009 Glenn Randers-Pehrson
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 PREFIX?= /usr/local
 LIBDIR=	${PREFIX}/lib
 MANDIR= ${PREFIX}/man/cat
 
 SHLIB_MAJOR=	0
-SHLIB_MINOR=	1.2.34
+SHLIB_MINOR=	1.4.4
 
 LIB=	png
 SRCS=	png.c pngerror.c pngget.c pngmem.c pngpread.c \
@@ -18,7 +21,7 @@ SRCS=	png.c pngerror.c pngget.c pngmem.c pngpread.c \
 HDRS=	png.h pngconf.h
 
 CFLAGS+= -W -Wall
-CPPFLAGS+= -I${.CURDIR} -DPNG_NO_MMX_CODE 
+CPPFLAGS+= -I${.CURDIR}
 
 NOPROFILE= Yes
 
@@ -39,7 +42,7 @@ test:	pngtest
 
 beforeinstall:
 	if [ ! -d ${DESTDIR}${PREFIX}/include/libpng ]; then \
-	  ${INSTALL} -d -o root -g wheel ${DESTDIR}${PREFIX}/include/libpng; \
+	  ${INSTALL} -d -o root -g wheel ${DESTDIR}${PREFIX}/include; \
 	fi
 	if [ ! -d ${DESTDIR}${LIBDIR} ]; then \
 	  ${INSTALL} -d -o root -g wheel ${DESTDIR}${LIBDIR}; \
@@ -64,7 +67,7 @@ afterinstall:
 	@rm -f ${DESTDIR}${PREFIX}/include/pngconf.h
 	@rmdir ${DESTDIR}${LIBDIR}/debug 2>/dev/null || true
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
-		-m ${NONBINMODE} ${HDRS} ${DESTDIR}${PREFIX}/include/libpng
+		-m ${NONBINMODE} ${HDRS} ${DESTDIR}${PREFIX}/include
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
 		-m ${NONBINMODE} ${HDRS} ${DESTDIR}${PREFIX}/include
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \

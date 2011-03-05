@@ -168,6 +168,33 @@ public:
                          wxDataViewItemAttr& attr) const;
 
     /**
+        Override this to indicate that the item should be disabled.
+
+        Disabled items are displayed differently (e.g. grayed out) and cannot
+        be interacted with.
+
+        The base class version always returns @true, thus making all items
+        enabled by default.
+
+        @param item
+            The item whose enabled status is requested.
+        @param col
+            The column of the item whose enabled status is requested.
+        @return
+            @true if this item should be enabled, @false otherwise.
+
+        @note Currently disabling items is fully implemented only for the
+              native control implementation in wxOSX/Cocoa and wxGTK. 
+              This feature is only partially supported in the generic
+              version (used by wxMSW) and not supported by the wxOSX/Carbon
+              implementation.
+
+        @since 2.9.2
+    */
+    virtual bool IsEnabled(const wxDataViewItem &item,
+                           unsigned int col) const;
+
+    /**
         Override this so the control can query the child items of an item.
         Returns the number of items.
     */
@@ -249,7 +276,7 @@ public:
     /**
         Call this to inform the model that an item has changed.
 
-        This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
     */
     bool ItemChanged(const wxDataViewItem& item);
@@ -269,7 +296,7 @@ public:
     /**
         Call this to inform the model that several items have changed.
 
-        This will eventually emit wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
     */
     bool ItemsChanged(const wxDataViewItemArray& items);
@@ -310,7 +337,7 @@ public:
         This is also called from wxDataViewCtrl's internal editing code, e.g. when
         editing a text field in the control.
 
-        This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
+        This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
     */
     virtual bool ValueChanged(const wxDataViewItem& item,
@@ -370,6 +397,28 @@ public:
     */
     virtual bool GetAttrByRow(unsigned int row, unsigned int col,
                          wxDataViewItemAttr& attr) const;
+
+    /**
+        Override this if you want to disable specific items.
+
+        The base class version always returns @true, thus making all items
+        enabled by default.
+
+        @param row
+            The row of the item whose enabled status is requested.
+        @param col
+            The column of the item whose enabled status is requested.
+        @return
+            @true if the item at this row and column should be enabled,
+            @false otherwise.
+
+        @note See wxDataViewModel::IsEnabled() for the current status of
+              support for disabling the items under different platforms.
+
+        @since 2.9.2
+    */
+    virtual bool IsEnabledByRow(unsigned int row,
+                                unsigned int col) const;
 
     /**
         Returns the number of items (i.e. rows) in the list.
@@ -618,6 +667,8 @@ public:
            Multiple selection mode.
     @style{wxDV_ROW_LINES}
            Use alternating colours for rows if supported by platform and theme.
+           Currently only supported by the native GTK and OS X implementations
+           but not by the generic one.
     @style{wxDV_HORIZ_RULES}
            Display fine rules between row if supported.
     @style{wxDV_VERT_RULES}
@@ -1520,7 +1571,7 @@ public:
         Override this to react to double clicks or ENTER.
         This method will only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
-    virtual bool Activate( wxRect cell,
+    virtual bool Activate( const wxRect& cell,
                            wxDataViewModel* model,
                            const wxDataViewItem & item,
                            unsigned int col );
@@ -1589,8 +1640,8 @@ public:
         Override this to react to a left click.
         This method will only be called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
-    virtual bool LeftClick( wxPoint cursor,
-                            wxRect cell,
+    virtual bool LeftClick( const wxPoint& cursor,
+                            const wxRect& cell,
                             wxDataViewModel * model,
                             const wxDataViewItem & item,
                             unsigned int col );
@@ -1614,7 +1665,8 @@ public:
     /**
         Override this to start a drag operation. Not yet supported.
     */
-    virtual bool StartDrag(wxPoint cursor, wxRect cell,
+    virtual bool StartDrag(const wxPoint& cursor,
+                           const wxRect& cell,
                            wxDataViewModel* model,
                            const wxDataViewItem & item,
                            unsigned int col);
@@ -2641,7 +2693,7 @@ public:
     void SetColumn(int col);
 
     /**
-        For wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
+        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
     */
     void SetDataViewColumn(wxDataViewColumn* col);
 

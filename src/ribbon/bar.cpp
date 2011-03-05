@@ -109,6 +109,14 @@ bool wxRibbonBar::DismissExpandedPanel()
     return m_pages.Item(m_current_page).page->DismissExpandedPanel();
 }
 
+void wxRibbonBar::ShowPanels(bool show)
+{
+    m_arePanelsShown = show;
+    SetMinSize(wxSize(GetSize().GetWidth(), DoGetBestSize().GetHeight()));
+    Realise();
+    GetParent()->Layout();
+}
+
 void wxRibbonBar::SetWindowStyleFlag(long style)
 {
     m_flags = style;
@@ -538,6 +546,7 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_buttons_shown = false;
+    m_arePanelsShown = true;
 }
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
@@ -585,6 +594,7 @@ void wxRibbonBar::CommonInit(long style)
     m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_buttons_shown = false;
+    m_arePanelsShown = true;
 
     if(m_art == NULL)
     {
@@ -946,7 +956,7 @@ void wxRibbonBar::RecalculateMinSize()
     }
 
     m_minWidth = min_size.GetWidth();
-    m_minHeight = min_size.GetHeight();
+    m_minHeight = m_arePanelsShown ? min_size.GetHeight() : m_tab_height;
 }
 
 wxSize wxRibbonBar::DoGetBestSize() const
@@ -963,6 +973,10 @@ wxSize wxRibbonBar::DoGetBestSize() const
     else
     {
         best.IncBy(0, m_tab_height);
+    }
+    if(!m_arePanelsShown)
+    {
+        best.SetHeight(m_tab_height);
     }
     return best;
 }

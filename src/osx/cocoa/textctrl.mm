@@ -52,6 +52,8 @@
 @interface NSView(EditableView)
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
+- (BOOL)isSelectable;
+- (void)setSelectable:(BOOL)flag;
 @end
 
 class wxMacEditHelper
@@ -60,10 +62,11 @@ public :
     wxMacEditHelper( NSView* textView )
     {
         m_textView = textView;
-        m_formerState = YES;
+        m_formerEditable = YES;
         if ( textView )
         {
-            m_formerState = [textView isEditable];
+            m_formerEditable = [textView isEditable];
+            m_formerSelectable = [textView isSelectable];
             [textView setEditable:YES];
         }
     }
@@ -71,11 +74,15 @@ public :
     ~wxMacEditHelper()
     {
         if ( m_textView )
-            [m_textView setEditable:m_formerState];
+        {
+            [m_textView setEditable:m_formerEditable];
+            [m_textView setSelectable:m_formerSelectable];
+        }
     }
 
 protected :
-    BOOL m_formerState ;
+    BOOL m_formerEditable ;
+    BOOL m_formerSelectable;
     NSView* m_textView;
 } ;
 
@@ -192,6 +199,35 @@ protected :
         impl->controlTextDidChange();
 }
 
+- (void) setEnabled:(BOOL) flag
+{
+    // from Technical Q&A QA1461
+    if (flag) {
+        [self setTextColor: [NSColor controlTextColor]];
+
+    } else {
+        [self setTextColor: [NSColor disabledControlTextColor]];
+    }
+
+    [self setSelectable: flag];
+    [self setEditable: flag];
+}
+
+- (BOOL) isEnabled
+{
+    return [self isEditable];
+}
+
+- (void)textDidEndEditing:(NSNotification *)aNotification
+{
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        impl->DoNotifyFocusEvent( false, NULL );
+    }
+}
+
 @end
 
 @implementation wxNSTextField
@@ -253,29 +289,40 @@ protected :
         impl->controlTextDidChange();
 }
 
-typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl *control, NSTextView* textView, SEL commandSelector);
-
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
 {
     wxUnusedVar(textView);
     wxUnusedVar(control);
-    if (commandSelector == @selector(insertNewline:))
+    
+    BOOL handled = NO;
+
+    // send back key events wx' common code knows how to handle
+    
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl  )
     {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-        if ( impl  )
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
         {
-            wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
+            if (commandSelector == @selector(insertNewline:))
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
-                event.SetEventObject( wxpeer );
-                event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-                wxpeer->HandleWindowEvent( event );
+                [textView insertNewlineIgnoringFieldEditor:self];
+                handled = YES;
+            }
+            else if ( commandSelector == @selector(insertTab:))
+            {
+                [textView insertTabIgnoringFieldEditor:self];
+                handled = YES;
+            }
+            else if ( commandSelector == @selector(insertBacktab:))
+            {
+                [textView insertTabIgnoringFieldEditor:self];
+                handled = YES;
             }
         }
     }
-
-    return NO;
+    
+    return handled;
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
@@ -673,6 +720,13 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
+bool wxNSTextFieldControl::SetHint(const wxString& hint)
+{
+    wxCFStringRef hintstring(hint);
+    [[m_textField cell] setPlaceholderString:hintstring.AsNSString()];
+    return true;
+}
+
 //
 //
 //
@@ -720,6 +774,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
 
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
     }
+    c->SetNeedsFocusRect( true );
 
     return c;
 }

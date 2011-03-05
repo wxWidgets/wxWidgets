@@ -20,8 +20,6 @@
 // wxStaticBitmap
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap,wxControl)
-
 wxStaticBitmap::wxStaticBitmap(void)
 {
 }

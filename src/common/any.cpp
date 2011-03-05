@@ -471,7 +471,10 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplwxString)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstCharPtr)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstWchar_tPtr)
 
+#if wxUSE_DATETIME
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
+#endif // wxUSE_DATETIME
+
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxObject*>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxArrayString>)
 
@@ -513,6 +516,14 @@ public:
         return false;
     }
 
+#if wxUSE_EXTENDED_RTTI
+    virtual const wxTypeInfo* GetTypeInfo() const
+    {
+        wxFAIL_MSG("Null Type Info not available");
+        return NULL;
+    }
+#endif
+
 private:
 };
 
@@ -520,5 +531,8 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxAnyNullValue>)
 
 wxAnyValueType* wxAnyNullValueType =
     wxAnyValueTypeImpl<wxAnyNullValue>::GetInstance();
+
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxAnyList)
 
 #endif // wxUSE_ANY

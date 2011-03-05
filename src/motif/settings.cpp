@@ -128,6 +128,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
+    case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
     {
         return *wxWHITE;
     }

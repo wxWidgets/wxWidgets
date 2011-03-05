@@ -140,7 +140,7 @@ void wxBitmapComboBox::RecreateControl()
     DissociateHandle();
     ::DestroyWindow(hwnd);
 
-    if ( !MSWCreateControl(wxT("COMBOBOX"), value, pos, size) )
+    if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
         return;
 
     // initialize the controls contents
@@ -179,6 +179,10 @@ void wxBitmapComboBox::RecreateControl()
     }
 
     ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, 0, MeasureItem(0));
+
+    // Revert the old string value
+    if ( !HasFlag(wxCB_READONLY) )
+        ChangeValue(value);
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()

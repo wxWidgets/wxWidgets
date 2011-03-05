@@ -228,7 +228,7 @@ void wxVListBoxComboPopup::DismissWithEvent()
         m_stringValue = wxEmptyString;
 
     if ( m_stringValue != m_combo->GetValue() )
-        m_combo->SetValueWithEvent(m_stringValue);
+        m_combo->SetValueByUser(m_stringValue);
 
     m_value = selection;
 
@@ -371,7 +371,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
         return true;
 
     if ( value >= 0 )
-        m_combo->SetValue(m_strings[value]);
+        m_combo->ChangeValue(m_strings[value]);
 
     // The m_combo->SetValue() call above sets m_value to the index of this
     // string. But if there are more identical string, the index is of the
@@ -545,7 +545,7 @@ int wxVListBoxComboPopup::Append(const wxString& item)
 
         for ( i=0; i<strings.GetCount(); i++ )
         {
-            if ( item.CmpNoCase(strings.Item(i)) < 0 )
+            if ( item.CmpNoCase(strings.Item(i)) <= 0 )
             {
                 pos = (int)i;
                 break;
@@ -640,6 +640,16 @@ void wxVListBoxComboPopup::Delete( unsigned int item )
 int wxVListBoxComboPopup::FindString(const wxString& s, bool bCase) const
 {
     return m_strings.Index(s, bCase);
+}
+
+bool wxVListBoxComboPopup::FindItem(const wxString& item, wxString* trueItem)
+{
+    int idx = m_strings.Index(item, false);
+    if ( idx == wxNOT_FOUND )
+        return false;
+    if ( trueItem != NULL )
+        *trueItem = m_strings[idx];
+    return true;
 }
 
 unsigned int wxVListBoxComboPopup::GetCount() const
@@ -855,7 +865,7 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 
     // Find initial selection
     wxString strValue = m_combo->GetValue();
-    if ( strValue.length() )
+    if ( !strValue.empty() )
         m_value = m_strings.Index(strValue);
 }
 
@@ -866,21 +876,6 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 
 BEGIN_EVENT_TABLE(wxOwnerDrawnComboBox, wxComboCtrl)
 END_EVENT_TABLE()
-
-
-#if wxUSE_EXTENDED_RTTI
-IMPLEMENT_DYNAMIC_CLASS2_XTI(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems, "wx/odcombo.h")
-
-wxBEGIN_PROPERTIES_TABLE(wxOwnerDrawnComboBox)
-wxEND_PROPERTIES_TABLE()
-
-wxBEGIN_HANDLERS_TABLE(wxOwnerDrawnComboBox)
-wxEND_HANDLERS_TABLE()
-
-wxCONSTRUCTOR_5( wxOwnerDrawnComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
-#else
-IMPLEMENT_DYNAMIC_CLASS2(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems)
-#endif
 
 void wxOwnerDrawnComboBox::Init()
 {
@@ -993,7 +988,14 @@ void wxOwnerDrawnComboBox::DoClear()
 
     GetVListBoxComboPopup()->Clear();
 
+    // NB: This really needs to be SetValue() instead of ChangeValue(),
+    //     as wxTextEntry API expects an event to be sent.
     SetValue(wxEmptyString);
+}
+
+void wxOwnerDrawnComboBox::Clear()
+{
+    DoClear();
 }
 
 void wxOwnerDrawnComboBox::DoDeleteOneItem(unsigned int n)
@@ -1001,7 +1003,7 @@ void wxOwnerDrawnComboBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxOwnerDrawnComboBox::Delete") );
 
     if ( GetSelection() == (int) n )
-        SetValue(wxEmptyString);
+        ChangeValue(wxEmptyString);
 
     GetVListBoxComboPopup()->Delete(n);
 }
@@ -1055,7 +1057,7 @@ void wxOwnerDrawnComboBox::Select(int n)
 
     // Refresh text portion in control
     if ( m_text )
-        m_text->SetValue( str );
+        m_text->ChangeValue( str );
     else
         m_valueString = str;
 
@@ -1068,6 +1070,11 @@ int wxOwnerDrawnComboBox::GetSelection() const
         return m_initChs.Index(m_valueString);
 
     return GetVListBoxComboPopup()->GetSelection();
+}
+
+void wxOwnerDrawnComboBox::GetSelection(long *from, long *to) const
+{
+    wxComboCtrl::GetSelection(from, to);
 }
 
 int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,

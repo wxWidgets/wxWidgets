@@ -78,6 +78,9 @@ public:
     void SetLayoutDirection(const wxLayoutDirection dir);
     wxLayoutDirection GetLayoutDirection() const;
 
+    // Returns the title, with mnemonics translated to wx format
+    wxString GetTitle() const;
+
     // TODO: virtual void SetTitle(const wxString& title);
 
     // implementation GTK only

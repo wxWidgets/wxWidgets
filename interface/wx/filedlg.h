@@ -83,7 +83,7 @@
          "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
     @endcode
     It must be noted that wildcard support in the native Motif file dialog is quite
-    limited: only one alternative is supported, and it is displayed without the
+    limited: only one file type is supported, and it is displayed without the
     descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
     are errors.

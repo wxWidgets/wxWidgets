@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/tokenzr.h"
+#include "wx/vector.h"
 #include "wx/msw/private.h"
 
 #ifndef TTTOOLINFO_V1_SIZE
@@ -74,6 +75,12 @@ static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
+
+// This is simply a wrapper for vector<HWND> but defined as a class to hide the
+// details from the public header.
+class wxToolTipOtherWindows : public wxVector<WXHWND>
+{
+};
 
 // a wrapper around TOOLINFO Win32 structure
 #ifdef __VISUALC__
@@ -308,6 +315,7 @@ wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)
 {
     m_window = NULL;
+    m_others = NULL;
 
     // make sure m_rect.IsEmpty() == true
     m_rect.SetWidth(0);
@@ -321,6 +329,7 @@ wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const 
          : m_text(tip), m_rect(rc), m_id(id)
 {
     m_window = NULL;
+    m_others = NULL;
 
     SetWindow(win);
 }
@@ -330,6 +339,8 @@ wxToolTip::~wxToolTip()
     // the tooltip has to be removed before deleting. Otherwise, if it is visible
     // while being deleted, there will be a delay before it goes away.
     Remove();
+
+    delete m_others;
 }
 
 // ----------------------------------------------------------------------------
@@ -344,16 +355,36 @@ void wxToolTip::Remove(WXHWND hWnd, unsigned int id, const wxRect& rc)
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, &ti);
 }
 
-void wxToolTip::Remove()
+void wxToolTip::DoRemove(WXHWND hWnd)
 {
-    // remove this tool from the tooltip control
-    if ( m_window )
+    if ( m_window && hWnd == m_window->GetHWND() )
     {
-        Remove(m_window->GetHWND(), m_id, m_rect);
+        // Remove the tooltip from the main window.
+        Remove(hWnd, m_id, m_rect);
+    }
+    else
+    {
+        // Not really sure what to pass to remove in this case...
+        Remove(hWnd, 0, wxRect());
     }
 }
 
+void wxToolTip::Remove()
+{
+    DoForAllWindows(&wxToolTip::DoRemove);
+}
+
 void wxToolTip::Add(WXHWND hWnd)
+{
+    if ( !m_others )
+        m_others = new wxToolTipOtherWindows;
+
+    m_others->push_back(hWnd);
+
+    DoAddOtherWindow(hWnd);
+}
+
+void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
 
@@ -486,7 +517,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             HWND hwnd = GetDlgItem(GetHwndOf(m_window), id);
             if ( !hwnd )
             {
-                // may be it's a child of parent of the control, in fact?
+                // maybe it's a child of parent of the control, in fact?
                 // (radiobuttons are subcontrols, i.e. children of the radiobox
                 // for wxWidgets but are its siblings at Windows level)
                 hwnd = GetDlgItem(GetHwndOf(m_window->GetParent()), id);
@@ -516,19 +547,39 @@ void wxToolTip::SetTip(const wxString& tip)
 {
     m_text = tip;
 
+    DoForAllWindows(&wxToolTip::DoSetTip);
+}
+
+void wxToolTip::DoSetTip(WXHWND hWnd)
+{
+    // update the tip text shown by the control
+    wxToolInfo ti((HWND)hWnd, m_id, m_rect);
+
+    // for some reason, changing the tooltip text directly results in
+    // repaint of the controls under it, see #10520 -- but this doesn't
+    // happen if we reset it first
+    ti.lpszText = const_cast<wxChar *>(wxT(""));
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+
+    ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+}
+
+void wxToolTip::DoForAllWindows(void (wxToolTip::*func)(WXHWND))
+{
     if ( m_window )
     {
-        // update the tip text shown by the control
-        wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
+        (this->*func)(m_window->GetHWND());
+    }
 
-        // for some reason, changing the tooltip text directly results in
-        // repaint of the controls under it, see #10520 -- but this doesn't
-        // happen if we reset it first
-        ti.lpszText = const_cast<wxChar *>(wxT(""));
-        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
-
-        ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
-        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+    if ( m_others )
+    {
+        for ( wxToolTipOtherWindows::const_iterator it = m_others->begin();
+              it != m_others->end();
+              ++it )
+        {
+            (this->*func)(*it);
+        }
     }
 }
 

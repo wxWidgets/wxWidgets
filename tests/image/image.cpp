@@ -23,7 +23,9 @@
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
+#include "wx/anidecod.h" // wxImageArray
 #include "wx/image.h"
+#include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
 #include "wx/mstream.h"
@@ -33,20 +35,21 @@
 struct testData {
     const char* file;
     wxBitmapType type;
+    unsigned bitDepth;
 } g_testfiles[] =
 {
-    { "horse.ico", wxBITMAP_TYPE_ICO },
-    { "horse.xpm", wxBITMAP_TYPE_XPM },
-    { "horse.png", wxBITMAP_TYPE_PNG },
-    { "horse.ani", wxBITMAP_TYPE_ANI },
-    { "horse.bmp", wxBITMAP_TYPE_BMP },
-    { "horse.cur", wxBITMAP_TYPE_CUR },
-    { "horse.gif", wxBITMAP_TYPE_GIF },
-    { "horse.jpg", wxBITMAP_TYPE_JPEG },
-    { "horse.pcx", wxBITMAP_TYPE_PCX },
-    { "horse.pnm", wxBITMAP_TYPE_PNM },
-    { "horse.tga", wxBITMAP_TYPE_TGA },
-    { "horse.tif", wxBITMAP_TYPE_TIF }
+    { "horse.ico", wxBITMAP_TYPE_ICO, 4 },
+    { "horse.xpm", wxBITMAP_TYPE_XPM, 8 },
+    { "horse.png", wxBITMAP_TYPE_PNG, 24 },
+    { "horse.ani", wxBITMAP_TYPE_ANI, 24 },
+    { "horse.bmp", wxBITMAP_TYPE_BMP, 8 },
+    { "horse.cur", wxBITMAP_TYPE_CUR, 1 },
+    { "horse.gif", wxBITMAP_TYPE_GIF, 8 },
+    { "horse.jpg", wxBITMAP_TYPE_JPEG, 24 },
+    { "horse.pcx", wxBITMAP_TYPE_PCX, 8 },
+    { "horse.pnm", wxBITMAP_TYPE_PNM, 24 },
+    { "horse.tga", wxBITMAP_TYPE_TGA, 8 },
+    { "horse.tif", wxBITMAP_TYPE_TIF, 8 }
 };
 
 
@@ -66,12 +69,24 @@ private:
         CPPUNIT_TEST( LoadFromZipStream );
         CPPUNIT_TEST( LoadFromFile );
         CPPUNIT_TEST( SizeImage );
+        CPPUNIT_TEST( CompareLoadedImage );
+        CPPUNIT_TEST( CompareSavedImage );
+        CPPUNIT_TEST( SavePNG );
+        CPPUNIT_TEST( SaveAnimatedGIF );
+        CPPUNIT_TEST( ReadCorruptedTGA );
+        CPPUNIT_TEST( GIFComment );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
     void LoadFromZipStream();
     void LoadFromFile();
     void SizeImage();
+    void CompareLoadedImage();
+    void CompareSavedImage();
+    void SavePNG();
+    void SaveAnimatedGIF();
+    void ReadCorruptedTGA();
+    void GIFComment();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -823,6 +838,417 @@ void ImageTestCase::SizeImage()
          memcmp(actual.GetData(), expected.GetData(), data_len) == 0
        );
    }
+}
+
+void ImageTestCase::CompareLoadedImage()
+{
+    wxImage expected8("horse.xpm");
+    CPPUNIT_ASSERT( expected8.IsOk() );
+
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+
+    const size_t dataLen = expected8.GetWidth() * expected8.GetHeight() * 3;
+
+    for (size_t i=0; i<WXSIZEOF(g_testfiles); i++)
+    {
+        if ( !(g_testfiles[i].bitDepth == 8 || g_testfiles[i].bitDepth == 24)
+            || g_testfiles[i].type == wxBITMAP_TYPE_JPEG /*skip lossy JPEG*/)
+        {
+            continue;
+        }
+
+        wxImage actual(g_testfiles[i].file);
+
+        if ( actual.GetSize() != expected8.GetSize() )
+        {
+            continue;
+        }
+
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Compare test '%s' for loading failed", g_testfiles[i].file),
+
+            memcmp(actual.GetData(),
+                (g_testfiles[i].bitDepth == 8)
+                    ? expected8.GetData()
+                    : expected24.GetData(),
+                dataLen) == 0
+        );
+    }
+
+}
+
+enum
+{
+    wxIMAGE_HAVE_ALPHA = (1 << 0),
+    wxIMAGE_HAVE_PALETTE = (1 << 1)
+};
+
+static
+void CompareImage(const wxImageHandler& handler, const wxImage& image,
+    int properties = 0, const wxImage *compareTo = NULL)
+{
+    wxBitmapType type = handler.GetType();
+
+    const bool testPalette = (properties & wxIMAGE_HAVE_PALETTE) != 0;
+    /*
+    This is getting messy and should probably be transformed into a table
+    with image format features before it gets hairier.
+    */
+    if ( testPalette
+        && ( !(type == wxBITMAP_TYPE_BMP
+                || type == wxBITMAP_TYPE_GIF
+                || type == wxBITMAP_TYPE_PNG)
+            || type == wxBITMAP_TYPE_XPM) )
+    {
+        return;
+    }
+
+    const bool testAlpha = (properties & wxIMAGE_HAVE_ALPHA) != 0;
+    if (testAlpha
+        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA) )
+    {
+        // don't test images with alpha if this handler doesn't support alpha
+        return;
+    }
+
+    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
+        || type == wxBITMAP_TYPE_TIF)
+    {
+        /*
+        TIFF is skipped because the memory stream can't be loaded. Libtiff
+        looks for a TIFF directory at offset 120008 while the memory
+        stream size is only 120008 bytes (when saving as a file
+        the file size is 120280 bytes).
+        */
+        return;
+    }
+
+    wxMemoryOutputStream memOut;
+    if ( !image.SaveFile(memOut, type) )
+    {
+        // Unfortunately we can't know if the handler just doesn't support
+        // saving images, or if it failed to save.
+        return;
+    }
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage actual(memIn);
+    CPPUNIT_ASSERT(actual.IsOk());
+
+    const wxImage *expected = compareTo ? compareTo : &image;
+    CPPUNIT_ASSERT( actual.GetSize() == expected->GetSize() );
+
+    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
+    WX_ASSERT_MESSAGE
+    (
+        ("Compare test '%s (%d-bit)' for saving failed",
+            handler.GetExtension(), bitsPerPixel),
+
+        memcmp(actual.GetData(), expected->GetData(),
+            expected->GetWidth() * expected->GetHeight() * 3) == 0
+    );
+
+#if wxUSE_PALETTE
+    CPPUNIT_ASSERT(actual.HasPalette()
+        == (testPalette || type == wxBITMAP_TYPE_XPM));
+#endif
+
+    CPPUNIT_ASSERT( actual.HasAlpha() == testAlpha);
+
+    if (!testAlpha)
+    {
+        return;
+    }
+
+    WX_ASSERT_MESSAGE
+    (
+        ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
+
+        memcmp(actual.GetAlpha(), expected->GetAlpha(),
+            expected->GetWidth() * expected->GetHeight()) == 0
+    );
+}
+
+void ImageTestCase::CompareSavedImage()
+{
+    // FIXME-VC6: Pre-declare the loop variables for compatibility with
+    // pre-standard compilers such as MSVC6 that don't implement proper scope
+    // for the variables declared in the for loops.
+    int i, x, y;
+
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+    CPPUNIT_ASSERT( !expected24.HasAlpha() );
+
+    wxImage expected8 = expected24.ConvertToGreyscale();
+
+#if wxUSE_PALETTE
+    unsigned char greys[256];
+    for (i = 0; i < 256; ++i)
+    {
+        greys[i] = i;
+    }
+    wxPalette palette(256, greys, greys, greys);
+    expected8.SetPalette(palette);
+#endif // #if wxUSE_PALETTE
+
+    expected8.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_8BPP_PALETTE);
+
+    // Create an image with alpha based on the loaded image
+    wxImage expected32(expected24);
+    expected32.SetAlpha();
+
+    int width = expected32.GetWidth();
+    int height = expected32.GetHeight();
+    for (y = 0; y < height; ++y)
+    {
+        for (x = 0; x < width; ++x)
+        {
+            expected32.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
+        }
+    }
+
+    const wxList& list = wxImage::GetHandlers();
+    for ( wxList::compatibility_iterator node = list.GetFirst();
+        node; node = node->GetNext() )
+    {
+        wxImageHandler *handler = (wxImageHandler *) node->GetData();
+
+#if wxUSE_PALETTE
+        CompareImage(*handler, expected8, wxIMAGE_HAVE_PALETTE);
+#endif
+        CompareImage(*handler, expected24);
+        CompareImage(*handler, expected32, wxIMAGE_HAVE_ALPHA);
+    }
+}
+
+void ImageTestCase::SavePNG()
+{
+    wxImage expected24("horse.png");
+    CPPUNIT_ASSERT( expected24.IsOk() );
+#if wxUSE_PALETTE
+    CPPUNIT_ASSERT( !expected24.HasPalette() );
+#endif // #if wxUSE_PALETTE
+
+    wxImage expected8 = expected24.ConvertToGreyscale();
+
+    /*
+    horse.png converted to greyscale should be saved without a palette.
+    */
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG), expected8);
+
+    /*
+    But if we explicitly ask for trying to save with a palette, it should work.
+    */
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_PALETTE);
+
+
+    CPPUNIT_ASSERT( expected8.LoadFile("horse.gif") );
+#if wxUSE_PALETTE
+    CPPUNIT_ASSERT( expected8.HasPalette() );
+#endif // #if wxUSE_PALETTE
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_PALETTE);
+
+    /*
+    Add alpha to the image in such a way that there will still be a maximum
+    of 256 unique RGBA combinations. This should result in a saved
+    PNG image still being palettised and having alpha.
+    */
+    expected8.SetAlpha();
+
+    int x, y;
+    const int width = expected8.GetWidth();
+    const int height = expected8.GetHeight();
+    for (y = 0; y < height; ++y)
+    {
+        for (x = 0; x < width; ++x)
+        {
+            expected8.SetAlpha(x, y, expected8.GetRed(x, y));
+        }
+    }
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_ALPHA|wxIMAGE_HAVE_PALETTE);
+
+    /*
+    Now change the alpha of the first pixel so that we can't save palettised
+    anymore because there will be 256+1 entries which is beyond PNGs limit
+    of 256 entries.
+    */
+    expected8.SetAlpha(0, 0, 1);
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_ALPHA);
+
+    /*
+    Even if we explicitly ask for saving palettised it should not be done.
+    */
+    expected8.SetOption(wxIMAGE_OPTION_PNG_FORMAT, wxPNG_TYPE_PALETTE);
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
+        expected8, wxIMAGE_HAVE_ALPHA);
+
+}
+
+void ImageTestCase::SaveAnimatedGIF()
+{
+#if wxUSE_PALETTE
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    wxImageArray images;
+    images.Add(image);
+    int i;
+    for (i = 0; i < 4-1; ++i)
+    {
+        images.Add( images[i].Rotate90() );
+
+        images[i+1].SetPalette(images[0].GetPalette());
+    }
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    CPPUNIT_ASSERT_EQUAL(4, imageCount);
+
+    for (i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
+        memIn.SeekI(pos);
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Compare test for GIF frame number %d failed", i),
+            memcmp(image.GetData(), images[i].GetData(),
+                images[i].GetWidth() * images[i].GetHeight() * 3) == 0
+        );
+    }
+#endif // #if wxUSE_PALETTE
+}
+
+void ImageTestCase::ReadCorruptedTGA()
+{
+    static unsigned char corruptTGA[18+1+3] =
+    {
+        0,
+        0,
+        10, // RLE compressed image.
+        0, 0,
+        0, 0,
+        0,
+        0, 0,
+        0, 0,
+        1, 0, // Width is 1.
+        1, 0, // Height is 1.
+        24, // Bits per pixel.
+        0,
+
+        0xff, // Run length (repeat next pixel 127+1 times).
+        0xff, 0xff, 0xff // One 24-bit pixel.
+    };
+
+    wxMemoryInputStream memIn(corruptTGA, WXSIZEOF(corruptTGA));
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage tgaImage;
+    CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+
+
+    /*
+    Instead of repeating a pixel 127+1 times, now tell it there will
+    follow 127+1 uncompressed pixels (while we only should have 1 in total).
+    */
+    corruptTGA[18] = 0x7f;
+    CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+}
+
+static void TestGIFComment(const wxString& comment)
+{
+    wxImage image("horse.gif");
+
+    image.SetOption(wxIMAGE_OPTION_GIF_COMMENT, comment);
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_GIF));
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT( image.LoadFile(memIn) );
+
+    CPPUNIT_ASSERT_EQUAL(comment,
+        image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+}
+
+void ImageTestCase::GIFComment()
+{
+    // Test reading a comment.
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT_EQUAL("  Imported from GRADATION image: gray",
+        image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+
+
+    // Test writing a comment and reading it back.
+    TestGIFComment("Giving the GIF a gifted giraffe as a gift");
+
+
+    // Test writing and reading a comment again but with a long comment.
+    TestGIFComment(wxString(wxT('a'), 256)
+        + wxString(wxT('b'), 256)
+        + wxString(wxT('c'), 256));
+
+
+    // Test writing comments in an animated GIF and reading them back.
+    CPPUNIT_ASSERT( image.LoadFile("horse.gif") );
+
+    wxImageArray images;
+    int i;
+    for (i = 0; i < 4; ++i)
+    {
+        if (i)
+        {
+            images.Add( images[i-1].Rotate90() );
+            images[i].SetPalette(images[0].GetPalette());
+        }
+        else
+        {
+            images.Add(image);
+        }
+
+        images[i].SetOption(wxIMAGE_OPTION_GIF_COMMENT,
+            wxString::Format("GIF comment for frame #%d", i+1));
+
+    }
+
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    for (i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true /*verbose?*/, i) );
+
+        CPPUNIT_ASSERT_EQUAL(
+            wxString::Format("GIF comment for frame #%d", i+1),
+            image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
+        memIn.SeekI(pos);
+    }
 }
 
 #endif //wxUSE_IMAGE

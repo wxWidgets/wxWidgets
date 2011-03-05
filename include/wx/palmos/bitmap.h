@@ -96,6 +96,7 @@ public:
 
 #if wxUSE_IMAGE && wxUSE_WXDIB
     wxImage ConvertToImage() const;
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 #endif // wxUSE_IMAGE
 
     // get the given part of bitmap

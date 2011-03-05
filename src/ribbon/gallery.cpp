@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
     EVT_LEAVE_WINDOW(wxRibbonGallery::OnMouseLeave)
     EVT_LEFT_DOWN(wxRibbonGallery::OnMouseDown)
     EVT_LEFT_UP(wxRibbonGallery::OnMouseUp)
+    EVT_LEFT_DCLICK(wxRibbonGallery::OnMouseDClick)
     EVT_MOTION(wxRibbonGallery::OnMouseMove)
     EVT_PAINT(wxRibbonGallery::OnPaint)
     EVT_SIZE(wxRibbonGallery::OnSize)
@@ -372,6 +373,15 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
     }
 }
 
+void wxRibbonGallery::OnMouseDClick(wxMouseEvent& evt)
+{
+    // The 2nd click of a double-click should be handled as a click in the
+    // same way as the 1st click of the double-click. This is useful for
+    // scrolling through the gallery.
+    OnMouseDown(evt);
+    OnMouseUp(evt);
+}
+
 void wxRibbonGallery::SetItemClientObject(wxRibbonGalleryItem* itm,
                                           wxClientData* data)
 {
@@ -398,14 +408,31 @@ bool wxRibbonGallery::ScrollLines(int lines)
     if(m_scroll_limit == 0 || m_art == NULL)
         return false;
 
+    return ScrollPixels(lines * GetScrollLineSize());
+}
+
+int wxRibbonGallery::GetScrollLineSize() const
+{
+    if(m_art == NULL)
+        return 32;
+
     int line_size = m_bitmap_padded_size.GetHeight();
     if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
         line_size = m_bitmap_padded_size.GetWidth();
-    if(lines < 0)
+
+    return line_size;
+}
+
+bool wxRibbonGallery::ScrollPixels(int pixels)
+{
+    if(m_scroll_limit == 0 || m_art == NULL)
+        return false;
+
+    if(pixels < 0)
     {
         if(m_scroll_amount > 0)
         {
-            m_scroll_amount += lines * line_size;
+            m_scroll_amount += pixels;
             if(m_scroll_amount <= 0)
             {
                 m_scroll_amount = 0;
@@ -418,11 +445,11 @@ bool wxRibbonGallery::ScrollLines(int lines)
             return true;
         }
     }
-    else if(lines > 0)
+    else if(pixels > 0)
     {
         if(m_scroll_amount < m_scroll_limit)
         {
-            m_scroll_amount += lines * line_size;
+            m_scroll_amount += pixels;
             if(m_scroll_amount >= m_scroll_limit)
             {
                 m_scroll_amount = m_scroll_limit;

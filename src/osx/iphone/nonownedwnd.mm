@@ -273,6 +273,11 @@ void wxNonOwnedWindowIPhoneImpl::Iconize( bool iconize )
 
 void wxNonOwnedWindowIPhoneImpl::Maximize(bool maximize)
 {
+    if ( maximize )
+    {
+        CGRect r = [[UIScreen mainScreen] bounds];
+        [m_macWindow setFrame:r];
+    }
 }
 
 bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
@@ -407,15 +412,18 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 -(void) viewWillDisappear:(BOOL)animated
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
-    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-    wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
-    
-    if ( nowimpl->InitialShowEventSent() )
+    if( impl )
     {
-        wxShowEvent eventShow(now->GetId(), false);
-        eventShow.SetEventObject(now);
-    
-        now->HandleWindowEvent(eventShow);
+        wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+        wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
+        
+        if ( nowimpl->InitialShowEventSent() )
+        {
+            wxShowEvent eventShow(now->GetId(), false);
+            eventShow.SetEventObject(now);
+        
+            now->HandleWindowEvent(eventShow);
+        }
     }
 }
 

@@ -444,7 +444,8 @@ void wxListWidgetCocoaImpl::ListSetSelection( unsigned int n, bool select, bool 
 {
     // TODO
     if ( select )
-        [m_tableView selectRow: n byExtendingSelection:multi];
+        [m_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:n]
+		     byExtendingSelection:multi];
     else
         [m_tableView deselectRow: n];
 

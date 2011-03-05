@@ -4,22 +4,31 @@
 #
 # WARNING: if you run this you will change the versions
 # of the tools which are used and, maybe, required!
-        touch Makefile.am configure.ac
+
+# You can define your own replacements in your environment.
+# $AUTOCONF,  $AUTOMAKE, $AUTOHEADER, $AUTOPOINT, $ACLOCAL and $LIBTOOLIZE
+
+touch Makefile.am configure.ac
 {
-	echo "running libtoolize" >&2
-	libtoolize --force --copy --automake
+   LT=${LIBTOOLIZE-libtoolize}
+   echo "running $LT" >&2
+   $LT --force --copy --automake
 } && {
-	echo "running aclocal" >&2
-	aclocal
+   AL=${ACLOCAL-aclocal}
+   echo "running $AL" >&2
+   $AL
 } && {
-	echo "running autoheader [ignore the warnings]" >&2
-	autoheader
+   AH=${AUTOHEADER-autoheader}
+   echo "running $AH [ignore the warnings]" >&2
+   $AH
 } && {
-	echo "running automake" >&2
-	automake --force-missing --foreign -a -c
+   AM=${AUTOMAKE-automake}
+   echo "running $AM" >&2
+   $AM --force-missing --foreign -a -c
 } && {
-	echo "running autoconf" >&2
-	autoconf
+   AC=${AUTOCONF-autoconf}
+   echo "running $AC" >&2
+   $AC
 } &&
-	echo "autogen complete" >&2 ||
-	echo "ERROR: autogen.sh failed, autogen is incomplete" >&2
+   echo "autogen complete" >&2 ||
+   echo "ERROR: autogen.sh failed, autogen is incomplete" >&2

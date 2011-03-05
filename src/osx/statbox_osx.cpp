@@ -16,8 +16,6 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 bool wxStaticBox::Create( wxWindow *parent,
     wxWindowID id,
     const wxString& label,
@@ -42,6 +40,12 @@ bool wxStaticBox::Create( wxWindow *parent,
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
+#if wxOSX_USE_COCOA
+    int l,t,w,h;
+    m_peer->GetContentArea(l, t, w, h);
+    *borderTop = t + 10;
+    *borderOther = l + 10;
+#else
     static int extraTop = -1; // Uninitted
     static int other = 5;
 
@@ -63,6 +67,7 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         *borderTop += GetCharHeight();
 
     *borderOther = other;
+#endif
 }
 
 bool wxStaticBox::SetFont(const wxFont& font)

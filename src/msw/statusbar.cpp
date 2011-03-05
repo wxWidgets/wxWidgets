@@ -84,29 +84,15 @@ wxStatusBar::wxStatusBar()
     m_pDC = NULL;
 }
 
-bool wxStatusBar::Create(wxWindow *parent,
-                         wxWindowID id,
-                         long style,
-                         const wxString& name)
+WXDWORD wxStatusBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    wxCHECK_MSG( parent, false, "status bar must have a parent" );
-
-    SetName(name);
-    SetWindowStyleFlag(style);
-    SetParent(parent);
-
-    parent->AddChild(this);
-
-    m_windowId = id == wxID_ANY ? NewControlId() : id;
-
-    DWORD wstyle = WS_CHILD | WS_VISIBLE;
-
-    if ( style & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
+    WXDWORD msStyle = wxStatusBarBase::MSWGetStyle(style, exstyle);
 
     // wxSTB_SIZEGRIP is part of our default style but it doesn't make sense to
     // show size grip if this is the status bar of a non-resizeable TLW so turn
     // it off in such case
+    wxWindow * const parent = GetParent();
+    wxCHECK_MSG( parent, msStyle, wxS("Status bar must have a parent") );
     if ( parent->IsTopLevel() && !parent->HasFlag(wxRESIZE_BORDER) )
         style &= ~wxSTB_SIZEGRIP;
 
@@ -117,46 +103,37 @@ bool wxStatusBar::Create(wxWindow *parent,
     // is not given
     if ( !(style & wxSTB_SIZEGRIP) )
     {
-        wstyle |= CCS_TOP;
+        msStyle |= CCS_TOP;
     }
     else
     {
 #ifndef __WXWINCE__
         // may be some versions of comctl32.dll do need it - anyhow, it won't
         // do any harm
-        wstyle |= SBARS_SIZEGRIP;
+       msStyle |= SBARS_SIZEGRIP;
 #endif
     }
 
-    m_hWnd = CreateWindow
-             (
-                STATUSCLASSNAME,
-                wxT(""),
-                wstyle,
-                0, 0, 0, 0,
-                GetHwndOf(parent),
-                (HMENU)wxUIntToPtr(m_windowId.GetValue()),
-                wxGetInstance(),
-                NULL
-             );
-    if ( m_hWnd == 0 )
-    {
-        wxLogSysError(_("Failed to create a status bar."));
+    return msStyle;
+}
 
+bool wxStatusBar::Create(wxWindow *parent,
+                         wxWindowID id,
+                         long style,
+                         const wxString& name)
+{
+    if ( !CreateControl(parent, id, wxDefaultPosition, wxDefaultSize,
+                        style, wxDefaultValidator, name) )
         return false;
-    }
+
+    if ( !MSWCreateControl(STATUSCLASSNAME, wxString(),
+                           wxDefaultPosition, wxDefaultSize) )
+        return false;
 
     SetFieldsCount(1);
-    SubclassWin(m_hWnd);
 
     // cache the DC instance used by DoUpdateStatusText:
-    // NOTE: create the DC before calling InheritAttributes() since
-    //       it may result in a call to our SetFont()
     m_pDC = new wxClientDC(this);
-
-    InheritAttributes();
-
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
 
     // we must refresh the frame size when the statusbar is created, because
     // its client area might change
@@ -236,8 +213,11 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     widthAvailable -= extraWidth*(count - 1);   // extra space between fields
     widthAvailable -= MSWGetMetrics().textMargin;   // and for the last field
 
-    if ( HasFlag(wxSTB_SIZEGRIP) )
-        widthAvailable -= MSWGetMetrics().gripWidth;
+    // Deal with the grip: we shouldn't overflow onto the space occupied by it
+    // so the effectively available space is smaller.
+    const int gripWidth = HasFlag(wxSTB_SIZEGRIP) ? MSWGetMetrics().gripWidth
+                                                  : 0;
+    widthAvailable -= gripWidth;
 
     // distribute the available space (client width) among the various fields:
 
@@ -254,6 +234,11 @@ void wxStatusBar::MSWUpdateFieldsWidths()
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
     }
+
+    // The total width of the panes passed to Windows must be equal to the
+    // total width available, including the grip. Otherwise we get an extra
+    // separator line just before it.
+    pWidths[count - 1] += gripWidth;
 
     if ( !StatusBar_SetParts(GetHwnd(), count, pWidths) )
     {
@@ -451,14 +436,6 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 #endif
 
     wxCopyRECTToRect(r, rect);
-
-    // Windows seems to under-report the size of the last field rectangle,
-    // presumably in order to prevent the buggy applications from overflowing
-    // onto the size grip but we want to return the real size to wx users
-    if ( HasFlag(wxSTB_SIZEGRIP) && i == (int)m_panes.GetCount() - 1 )
-    {
-        rect.width += MSWGetMetrics().gripWidth - MSWGetBorderWidth();
-    }
 
     return true;
 }

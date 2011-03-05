@@ -238,10 +238,23 @@
     #if !wxUSE_UNICODE
         #define wxT(x) x
     #else /* Unicode */
-        /* use wxCONCAT_HELPER so that x could be expanded if it's a macro */
-        #define wxT(x) wxCONCAT_HELPER(L, x)
+        /*
+            Notice that we use an intermediate macro to allow x to be expanded
+            if it's a macro itself.
+         */
+        #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
+            #define wxT(x) wxCONCAT_HELPER(L, x)
+        #else
+            #define wxT(x) wxPREPEND_L(x)
+        #endif
     #endif /* ASCII/Unicode */
 #endif /* !defined(wxT) */
+
+/*
+    wxT_2 exists only for compatibility with wx 2.x and is the same as wxT() in
+    that version but nothing in the newer ones.
+ */
+#define wxT_2(x) x
 
 /*
    wxS ("wx string") macro can be used to create literals using the same
@@ -250,7 +263,14 @@
    builds everywhere (see wxStringCharType definition above).
  */
 #if wxUSE_UNICODE_WCHAR
-    #define wxS(x) wxCONCAT_HELPER(L, x)
+    /*
+        As above with wxT(), wxS() argument is expanded if it's a macro.
+     */
+    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
+        #define wxS(x) wxCONCAT_HELPER(L, x)
+    #else
+        #define wxS(x) wxPREPEND_L(x)
+    #endif
 #else /* wxUSE_UNICODE_UTF8 || ANSI */
     #define wxS(x) x
 #endif

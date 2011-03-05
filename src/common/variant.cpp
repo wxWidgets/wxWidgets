@@ -1977,8 +1977,6 @@ protected:
 // Convert to/from list of wxAnys
 //
 
-WX_DEFINE_LIST(wxAnyList)
-
 bool wxVariantDataList::GetAsAny(wxAny* any) const
 {
     wxAnyList dst;

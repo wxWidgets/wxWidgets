@@ -13,7 +13,8 @@
 
 #include "testprec.h"
 
-#if wxUSE_GRAPHICS_CONTEXT
+// wxCairoRenderer::CreateMeasuringContext() is not implement for wxX11
+#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
 
 #ifdef __BORLANDC__
     #pragma hdrstop

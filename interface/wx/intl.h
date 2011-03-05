@@ -235,7 +235,7 @@ public:
         translate the messages using the message catalogs for this locale.
     */
     wxLocale(const wxString& name,
-             const wxString& short = wxEmptyString,
+             const wxString& shortName = wxEmptyString,
              const wxString& locale = wxEmptyString,
              bool bLoadDefault = true);
 
@@ -459,7 +459,7 @@ public:
             given locale containing the translations of standard wxWidgets messages.
             This parameter would be rarely used in normal circumstances.
     */
-    bool Init(const wxString& name, const wxString& short = wxEmptyString,
+    bool Init(const wxString& name, const wxString& shortName = wxEmptyString,
               const wxString& locale = wxEmptyString, bool bLoadDefault = true);
 
     /**

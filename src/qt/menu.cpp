@@ -14,8 +14,6 @@
 #include "wx/qt/converter.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxMenu, wxMenuBase )
-
 static void ApplyStyle( QMenu *qtMenu, long style )
 {
     if ( style & wxMENU_TEAROFF )
@@ -133,8 +131,6 @@ QMenu *wxMenu::GetHandle() const
 
 
 //##############################################################################
-
-IMPLEMENT_DYNAMIC_CLASS( wxMenuBar, wxMenuBarBase )
 
 wxMenuBar::wxMenuBar()
 {

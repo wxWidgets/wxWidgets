@@ -59,8 +59,6 @@ static void wxTextWindowGainFocusProc(Widget w, XtPointer clientData, XmAnyCallb
 static void wxTextWindowLoseFocusProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *ptr);
 
-    IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
     BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
         EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
         EVT_CHAR(wxTextCtrl::OnChar)
@@ -163,7 +161,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 #if 0
         // TODO: Is this relevant? What does it do?
         int noCols = 2;
-        if (!value.IsNull() && (value.length() > (unsigned int) noCols))
+        if (!value.empty() && (value.length() > (unsigned int) noCols))
             noCols = value.length();
         XtVaSetValues((Widget) m_mainWidget,
                       XmNcolumns, noCols,

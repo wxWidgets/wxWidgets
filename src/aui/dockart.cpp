@@ -54,61 +54,6 @@
 // with custom dock art (probably by writing a new stand-alone class derived
 // from the wxAuiDockArt base class). The active dock art class can be set via
 // wxAuiManager::SetDockArt()
-
-
-// wxAuiBlendColour is used by wxAuiStepColour
-unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha)
-{
-    double result = bg + (alpha * (fg - bg));
-    if (result < 0.0)
-        result = 0.0;
-    if (result > 255)
-        result = 255;
-    return (unsigned char)result;
-}
-
-// wxAuiStepColour() it a utility function that simply darkens
-// or lightens a color, based on the specified percentage
-// ialpha of 0 would be completely black, 100 completely white
-// an ialpha of 100 returns the same colour
-wxColor wxAuiStepColour(const wxColor& c, int ialpha)
-{
-    if (ialpha == 100)
-        return c;
-
-    unsigned char r = c.Red(),
-                  g = c.Green(),
-                  b = c.Blue();
-    unsigned char bg;
-
-    // ialpha is 0..200 where 0 is completely black
-    // and 200 is completely white and 100 is the same
-    // convert that to normal alpha 0.0 - 1.0
-    ialpha = wxMin(ialpha, 200);
-    ialpha = wxMax(ialpha, 0);
-    double alpha = ((double)(ialpha - 100.0))/100.0;
-
-    if (ialpha > 100)
-    {
-        // blend with white
-        bg = 255;
-        alpha = 1.0 - alpha;  // 0 = transparent fg; 1 = opaque fg
-    }
-    else
-    {
-        // blend with black
-        bg = 0;
-        alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
-    }
-
-    r = wxAuiBlendColour(r, bg, alpha);
-    g = wxAuiBlendColour(g, bg, alpha);
-    b = wxAuiBlendColour(b, bg, alpha);
-
-    return wxColour(r, g, b);
-}
-
-
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;
@@ -118,7 +63,7 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
     if (c.Red() < 128 && c.Green() < 128 && c.Blue() < 128)
         amount = 160;
 
-    return wxAuiStepColour(c, amount);
+    return c.ChangeLightness(amount);
 }
 
 // wxAuiBitmapFromBits() is a utility function that creates a
@@ -213,21 +158,21 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
         (255-base_colour.Green()) +
         (255-base_colour.Blue()) < 60)
     {
-        base_colour = wxAuiStepColour(base_colour, 92);
+        base_colour = base_colour.ChangeLightness(92);
     }
 
     m_base_colour = base_colour;
-    wxColor darker1_colour = wxAuiStepColour(base_colour, 85);
-    wxColor darker2_colour = wxAuiStepColour(base_colour, 75);
-    wxColor darker3_colour = wxAuiStepColour(base_colour, 60);
-    //wxColor darker4_colour = wxAuiStepColour(base_colour, 50);
-    wxColor darker5_colour = wxAuiStepColour(base_colour, 40);
+    wxColor darker1_colour = base_colour.ChangeLightness(85);
+    wxColor darker2_colour = base_colour.ChangeLightness(75);
+    wxColor darker3_colour = base_colour.ChangeLightness(60);
+    //wxColor darker4_colour = base_colour.ChangeLightness(50);
+    wxColor darker5_colour = base_colour.ChangeLightness(40);
 
     m_active_caption_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_active_caption_gradient_colour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     m_active_caption_text_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactive_caption_colour = darker1_colour;
-    m_inactive_caption_gradient_colour = wxAuiStepColour(base_colour, 97);
+    m_inactive_caption_gradient_colour = base_colour.ChangeLightness(97);
     m_inactive_caption_text_colour = *wxBLACK;
 
     m_sash_brush = wxBrush(base_colour);
@@ -245,6 +190,28 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_caption_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 #endif
 
+    // default metric values
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
+    SInt32 height;
+    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height );
+    m_sash_size = height;
+#elif defined(__WXGTK__)
+    m_sash_size = wxRendererNative::Get().GetSplitterParams(NULL).widthSash;
+#else
+    m_sash_size = 4;
+#endif
+    m_caption_size = 17;
+    m_border_size = 1;
+    m_button_size = 14;
+    m_gripper_size = 9;
+    m_gradient_type = wxAUI_GRADIENT_VERTICAL;
+
+    InitBitmaps();
+}
+
+void
+wxAuiDefaultDockArt::InitBitmaps ()
+{
     // some built in bitmaps
 #if defined( __WXMAC__ )
      static const unsigned char close_bits[]={
@@ -311,22 +278,6 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 
     m_inactive_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
     m_active_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
-
-    // default metric values
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    SInt32 height;
-    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height );
-    m_sash_size = height;
-#elif defined(__WXGTK__)
-    m_sash_size = wxRendererNative::Get().GetSplitterParams(NULL).widthSash;
-#else
-    m_sash_size = 4;
-#endif
-    m_caption_size = 17;
-    m_border_size = 1;
-    m_button_size = 14;
-    m_gripper_size = 9;
-    m_gradient_type = wxAUI_GRADIENT_VERTICAL;
 }
 
 int wxAuiDefaultDockArt::GetMetric(int id)
@@ -394,11 +345,13 @@ void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
         case wxAUI_DOCKART_BORDER_COLOUR:                    m_border_pen.SetColour(colour); break;
         case wxAUI_DOCKART_GRIPPER_COLOUR:
             m_gripper_brush.SetColour(colour);
-            m_gripper_pen1.SetColour(wxAuiStepColour(colour, 40));
-            m_gripper_pen2.SetColour(wxAuiStepColour(colour, 60));
+            m_gripper_pen1.SetColour(colour.ChangeLightness(40));
+            m_gripper_pen2.SetColour(colour.ChangeLightness(60));
             break;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
+
+    InitBitmaps();
 }
 
 void wxAuiDefaultDockArt::SetFont(int id, const wxFont& font)
@@ -594,6 +547,14 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     DrawCaptionBackground(dc, rect,
                           (pane.state & wxAuiPaneInfo::optionActive)?true:false);
 
+    int caption_offset = 0;
+    if ( pane.icon.IsOk() )
+    {
+        DrawIcon(dc, rect, pane);
+
+        caption_offset += pane.icon.GetWidth() + 3;
+    }
+
     if (pane.state & wxAuiPaneInfo::optionActive)
         dc.SetTextForeground(m_active_caption_text_colour);
     else
@@ -616,8 +577,17 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 
     dc.SetClippingRegion(clip_rect);
-    dc.DrawText(draw_text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
+    dc.DrawText(draw_text, rect.x+3 + caption_offset, rect.y+(rect.height/2)-(h/2)-1);
     dc.DestroyClippingRegion();
+}
+
+void
+wxAuiDefaultDockArt::DrawIcon(wxDC& dc, const wxRect& rect, wxAuiPaneInfo& pane)
+{
+   // Draw the icon centered vertically
+   dc.DrawBitmap(pane.icon,
+                 rect.x+2, rect.y+(rect.height-pane.icon.GetHeight())/2,
+                 true);
 }
 
 void wxAuiDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),
@@ -732,13 +702,13 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     {
         if (pane.state & wxAuiPaneInfo::optionActive)
         {
-            dc.SetBrush(wxBrush(wxAuiStepColour(m_active_caption_colour, 120)));
-            dc.SetPen(wxPen(wxAuiStepColour(m_active_caption_colour, 70)));
+            dc.SetBrush(wxBrush(m_active_caption_colour.ChangeLightness(120)));
+            dc.SetPen(wxPen(m_active_caption_colour.ChangeLightness(70)));
         }
         else
         {
-            dc.SetBrush(wxBrush(wxAuiStepColour(m_inactive_caption_colour, 120)));
-            dc.SetPen(wxPen(wxAuiStepColour(m_inactive_caption_colour, 70)));
+            dc.SetBrush(wxBrush(m_inactive_caption_colour.ChangeLightness(120)));
+            dc.SetPen(wxPen(m_inactive_caption_colour.ChangeLightness(70)));
         }
 
         // draw the background behind the button

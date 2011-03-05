@@ -1057,15 +1057,28 @@ typedef wxUint32 wxDword;
         #define wxULongLong_t unsigned wxLongLong_t
     #endif
 
-    /*  these macros allow to define 64 bit constants in a portable way */
-    #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
-    #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
+    /*
+        wxLL() and wxULL() macros allow to define 64 bit constants in a
+        portable way.
+     */
+    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
+        #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
+        #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
+    #else
+        // Currently only Borland compiler has broken concatenation operator
+        // and this compiler is known to use [u]i64 suffix.
+        #define wxLL(x) wxAPPEND_i64(x)
+        #define wxULL(x) wxAPPEND_ui64(x)
+    #endif
 
     typedef wxLongLong_t wxInt64;
     typedef wxULongLong_t wxUint64;
 
     #define wxHAS_INT64 1
 
+    #ifndef wxLongLongIsLong
+        #define wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    #endif
 #elif wxUSE_LONGLONG
     /*  these macros allow to define 64 bit constants in a portable way */
     #define wxLL(x) wxLongLong(x)
@@ -1428,6 +1441,45 @@ typedef double wxDouble;
         #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
         #define wxINT64_SWAP_ON_BE(val)  (val)
     #endif
+#endif
+
+/*  ---------------------------------------------------------------------------- */
+/*  template workarounds for buggy compilers */
+/*  ---------------------------------------------------------------------------- */
+
+#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3, 4 )
+    // GCC <= 3.4 has buggy template support
+#  define wxUSE_MEMBER_TEMPLATES 0
+#endif
+
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+    // MSVC <= 6.0 has buggy template support
+#  define wxUSE_MEMBER_TEMPLATES 0
+#  define wxUSE_FUNC_TEMPLATE_POINTER 0
+#endif
+
+#ifndef wxUSE_MEMBER_TEMPLATES
+#  define wxUSE_MEMBER_TEMPLATES 1
+#endif
+
+#ifndef wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxUSE_FUNC_TEMPLATE_POINTER 1
+#endif
+
+#if wxUSE_MEMBER_TEMPLATES
+#  define wxTEMPLATED_MEMBER_CALL( method, type ) method<type>()
+#  define wxTEMPLATED_MEMBER_FIX( type )
+#else
+#  define wxTEMPLATED_MEMBER_CALL( method, type ) method((type*)NULL)
+#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
+#endif
+
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+#  define wxTEMPLATED_FUNCTION_FIX( type ), wxTEMPLATED_MEMBER_FIX(type)
+#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
+#else
+#  define wxTEMPLATED_FUNCTION_FIX( type )
+#  define wxINFUNC_CLASS_TYPE_FIX( type )
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -2108,6 +2160,13 @@ enum wxStandardID
     wxID_MDI_WINDOW_NEXT,
     wxID_MDI_WINDOW_LAST = wxID_MDI_WINDOW_NEXT,
 
+    /* OS X system menu ids */
+    wxID_OSX_MENU_FIRST = 5250,
+    wxID_OSX_HIDE = wxID_OSX_MENU_FIRST,
+    wxID_OSX_HIDEOTHERS,
+    wxID_OSX_SHOWALL,
+    wxID_OSX_MENU_LAST = wxID_OSX_SHOWALL,
+    
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
 

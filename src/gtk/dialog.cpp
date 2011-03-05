@@ -32,8 +32,6 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 // wxDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
-
 void wxDialog::Init()
 {
     m_modalLoop = NULL;

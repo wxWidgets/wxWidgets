@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 19 August 2010                                                     *
+ * Date : 3 January 2011                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -22,6 +22,11 @@
 
 /* Define as __inline if that's what the C compiler calls it.  */
 #undef inline
+
+#else
+
+#define __USE_STD_IOSTREAM 1
+#define _USE_STD_STAT 1
 
 #endif /* __cplusplus */
 
@@ -97,6 +102,12 @@ typedef pid_t GPid;
 #define G_GNUC_INTERNAL
 
 #endif
+#endif
+
+#ifdef VMS_GTK2
+#define wxUSE_CAIRO 1
+#else
+#define wxUSE_CAIRO 0
 #endif
 
 /*
@@ -225,7 +236,7 @@ typedef pid_t GPid;
         || (defined(_MSC_VER) && _MSC_VER < 1200)
     #define wxUSE_STD_DEFAULT  0
 #else
-    #define wxUSE_STD_DEFAULT  0
+    #define wxUSE_STD_DEFAULT  1
 #endif
 
 #define wxUSE_STD_IOSTREAM  wxUSE_STD_DEFAULT
@@ -447,6 +458,10 @@ typedef pid_t GPid;
 #define wxUSE_REARRANGECTRL 1
 
 #define wxUSE_ACCEL 1
+
+#define wxUSE_ARTPROVIDER_STD 1
+
+#define wxUSE_ARTPROVIDER_TANGO 1
 
 #define wxUSE_HOTKEY 1
 
@@ -1056,6 +1071,9 @@ typedef pid_t GPid;
 
 /* Define if you have wcsdup function  */
 #undef HAVE_WCSDUP
+
+/* Define if you have wcsftime() function  */
+#define HAVE_WCSFTIME 1
 
 /* Define if you have strnlen() function */
 #define HAVE_STRNLEN 1

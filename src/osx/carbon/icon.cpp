@@ -50,6 +50,9 @@ private:
     IconRef m_iconRef;
     int m_width;
     int m_height;
+
+    // We can (easily) copy m_iconRef so we don't implement the copy ctor.
+    wxDECLARE_NO_COPY_CLASS(wxIconRefData);
 };
 
 
@@ -124,9 +127,12 @@ wxGDIRefData *wxIcon::CreateGDIRefData() const
     return new wxIconRefData;
 }
 
-wxGDIRefData *wxIcon::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *
+wxIcon::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 {
-    return new wxIconRefData(*static_cast<const wxIconRefData *>(data));
+    wxFAIL_MSG( wxS("Cloning icons is not implemented in wxCarbon.") );
+
+    return new wxIconRefData;
 }
 
 WXHICON wxIcon::GetHICON() const
@@ -313,6 +319,26 @@ bool wxIcon::LoadIconFromBundleResource(const wxString& resourceName, int desire
             }
 
             ReleaseResource( resHandle ) ;
+        }
+    }
+    if ( iconRef == NULL )
+    {
+        wxCFStringRef name(resourceName);
+        FSRef iconFSRef;
+        
+        wxCFRef<CFURLRef> iconURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), name, CFSTR("icns"), NULL));
+
+        if (CFURLGetFSRef(iconURL, &iconFSRef))
+        {
+            // Get a handle on the icon family
+            IconFamilyHandle iconFamily;
+            OSStatus err = ReadIconFromFSRef( &iconFSRef, &iconFamily );
+            
+            if ( err == noErr )
+            {
+                err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
+            }
+            ReleaseResource( (Handle) iconFamily );
         }
     }
 

@@ -21,8 +21,6 @@
 // wxStaticLine
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
-
 wxStaticLine::wxStaticLine()
 {
 }

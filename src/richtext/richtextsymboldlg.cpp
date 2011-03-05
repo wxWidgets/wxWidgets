@@ -309,6 +309,8 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 
 END_EVENT_TABLE()
 
+IMPLEMENT_HELP_PROVISION(wxSymbolPickerDialog)
+
 /*!
  * wxSymbolPickerDialog constructors
  */
@@ -366,6 +368,7 @@ void wxSymbolPickerDialog::Init()
 #if defined(__UNICODE__)
     m_fromUnicodeCtrl = NULL;
 #endif
+    m_stdButtonSizer = NULL;
 ////@end wxSymbolPickerDialog member initialisation
     m_dontUpdate = false;
 }
@@ -460,25 +463,29 @@ void wxSymbolPickerDialog::CreateControls()
 
 #endif
 
-    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer20, 0, wxGROW, 5);
+    m_stdButtonSizer = new wxStdDialogButtonSizer;
 
-    itemBoxSizer20->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer3->Add(m_stdButtonSizer, 0, wxGROW|wxTOP|wxBOTTOM, 5);
+    wxButton* itemButton21 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton21->SetDefault();
+    m_stdButtonSizer->AddButton(itemButton21);
 
-    wxStdDialogButtonSizer* itemStdDialogButtonSizer22 = new wxStdDialogButtonSizer;
+    wxButton* itemButton22 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_stdButtonSizer->AddButton(itemButton22);
 
-    itemBoxSizer20->Add(itemStdDialogButtonSizer22, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
-    wxButton* itemButton23 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton23->SetDefault();
-    itemStdDialogButtonSizer22->AddButton(itemButton23);
+    wxButton* itemButton23 = new wxButton( itemDialog1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_stdButtonSizer->AddButton(itemButton23);
 
-    wxButton* itemButton24 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStdDialogButtonSizer22->AddButton(itemButton24);
-
-    itemStdDialogButtonSizer22->Realize();
+    m_stdButtonSizer->Realize();
 
 ////@end wxSymbolPickerDialog content construction
 
+    if (GetHelpId() == -1)
+    {
+        wxWindow* button = FindWindowById(wxID_HELP);
+        if (button)
+            m_stdButtonSizer->Show(button, false);
+    }
 }
 
 /// Data transfer

@@ -98,10 +98,6 @@
     #define _MAXPATHLEN 1024
 #endif
 
-#ifndef INVALID_FILE_ATTRIBUTES
-    #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
-#endif
-
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
@@ -735,16 +731,7 @@ wxChar *wxFileNameFromPath (wxChar *path)
 
 wxString wxFileNameFromPath (const wxString& path)
 {
-    wxString name, ext;
-    wxFileName::SplitPath(path, NULL, &name, &ext);
-
-    wxString fullname = name;
-    if ( !ext.empty() )
-    {
-        fullname << wxFILE_SEP_EXT << ext;
-    }
-
-    return fullname;
+    return wxFileName(path).GetFullName();
 }
 
 // Return just the directory, or NULL if no directory

@@ -29,8 +29,6 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
 //EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
 END_EVENT_TABLE()

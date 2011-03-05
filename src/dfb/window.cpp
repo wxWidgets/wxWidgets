@@ -1054,17 +1054,6 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     }
 }
 
-// ---------------------------------------------------------------------------
-// idle events processing
-// ---------------------------------------------------------------------------
-
-void wxWindowDFB::OnInternalIdle()
-{
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
-
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)

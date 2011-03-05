@@ -24,8 +24,6 @@
 #include "wx/os2/private.h"
 #include <stdio.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
 bool wxStaticText::Create( wxWindow*        pParent,
                            wxWindowID       vId,
                            const wxString&  rsLabel,
@@ -235,9 +233,8 @@ void wxStaticText::SetLabel(
 {
     m_labelOrig = rsLabel;       // save original label
 
-    // OS/2 does not support neither ellipsize nor markup in static text:
-    DoSetLabel(rsLabel);
-    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+    // OS/2 does not support ellipsized labels in static text:
+    DoSetLabel(GetEllipsizedLabel());
 
     //
     // Adjust the size of the window to fit to the label unless autoresizing is
