@@ -37,8 +37,13 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/win_gtk.h"
-#include <gdk/gdkkeysyms.h>
+
 #include <gdk/gdkx.h>
+
+#include <gdk/gdkkeysyms.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gdk/gdkkeysyms-compat.h>
+#endif
 
 #if !GTK_CHECK_VERSION(2,10,0)
     // GTK+ can reliably detect Meta key state only since 2.10 when
