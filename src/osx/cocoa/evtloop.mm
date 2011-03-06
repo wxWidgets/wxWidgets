@@ -307,6 +307,11 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
     
     if ( modalWindow )
     {
+        // we must show now, otherwise beginModalSessionForWindow does it but it
+        // also would do a centering of the window before overriding all our position
+        if ( !modalWindow->IsShownOnScreen() )
+            modalWindow->Show();
+        
         wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
         wxASSERT_MSG( now != NULL, "must pass in a toplevel window for modal event loop" );
         nsnow = now ? now->GetWXWindow() : nil;
