@@ -2637,49 +2637,61 @@ bool wxRichTextParagraphLayoutBox::CopyFragment(const wxRichTextRange& range, wx
     // Now top and tail the first and last paragraphs in our new fragment (which might be the same).
     if (!fragment.IsEmpty())
     {
-        wxRichTextRange topTailRange(range);
-
         wxRichTextParagraph* firstPara = wxDynamicCast(fragment.GetChildren().GetFirst()->GetData(), wxRichTextParagraph);
         wxASSERT( firstPara != NULL );
-
-        // Chop off the start of the paragraph
-        if (topTailRange.GetStart() > firstPara->GetRange().GetStart())
-        {
-            wxRichTextRange r(firstPara->GetRange().GetStart(), topTailRange.GetStart()-1);
-            firstPara->DeleteRange(r);
-
-            // Make sure the numbering is correct
-            long end;
-            fragment.CalculateRange(firstPara->GetRange().GetStart(), end);
-
-            // Now, we've deleted some positions, so adjust the range
-            // accordingly.
-            topTailRange.SetEnd(topTailRange.GetEnd() - r.GetLength());
-        }
 
         wxRichTextParagraph* lastPara = wxDynamicCast(fragment.GetChildren().GetLast()->GetData(), wxRichTextParagraph);
         wxASSERT( lastPara != NULL );
 
-        if (topTailRange.GetEnd() < (lastPara->GetRange().GetEnd()-1))
+        if (!firstPara || !lastPara)
+            return false;
+
+        bool isFragment = (range.GetEnd() < lastPara->GetRange().GetEnd());
+
+        long firstPos = firstPara->GetRange().GetStart();
+
+        // Adjust for renumbering from zero
+        wxRichTextRange topTailRange(range.GetStart() - firstPos, range.GetEnd() - firstPos);
+
+        long end;
+        fragment.CalculateRange(0, end);
+
+        // Chop off the start of the paragraph
+        if (topTailRange.GetStart() > 0)
         {
-            wxRichTextRange r(topTailRange.GetEnd()+1, lastPara->GetRange().GetEnd()-1); /* -1 since actual text ends 1 position before end of para marker */
-            lastPara->DeleteRange(r);
+            wxRichTextRange r(0, topTailRange.GetStart()-1);
+            firstPara->DeleteRange(r);
+
+            // Make sure the numbering is correct
+            fragment.CalculateRange(0, end);
+
+            // Now, we've deleted some positions, so adjust the range
+            // accordingly.
+            topTailRange.SetStart(range.GetLength());
+            topTailRange.SetEnd(fragment.GetOwnRange().GetEnd());
+        }
+        else
+        {
+            topTailRange.SetStart(range.GetLength());
+            topTailRange.SetEnd(fragment.GetOwnRange().GetEnd());
+        }
+
+        if (topTailRange.GetStart() < (lastPara->GetRange().GetEnd()-1))
+        {
+            lastPara->DeleteRange(topTailRange);
 
             // Make sure the numbering is correct
             long end;
-            fragment.CalculateRange(firstPara->GetRange().GetStart(), end);
+            fragment.CalculateRange(0, end);
 
             // We only have part of a paragraph at the end
             fragment.SetPartialParagraph(true);
         }
         else
         {
-            if (topTailRange.GetEnd() == (lastPara->GetRange().GetEnd() - 1))
-                // We have a partial paragraph (don't save last new paragraph marker)
-                fragment.SetPartialParagraph(true);
-            else
-                // We have a complete paragraph
-                fragment.SetPartialParagraph(false);
+            // We have a partial paragraph (don't save last new paragraph marker)
+            // or complete paragraph
+            fragment.SetPartialParagraph(isFragment);
         }
     }
 
