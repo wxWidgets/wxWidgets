@@ -11,7 +11,7 @@
 #ifndef _GTK_PRIVATE_MSGTYPE_H_
 #define _GTK_PRIVATE_MSGTYPE_H_
 
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 
 namespace wxGTKImpl
 {

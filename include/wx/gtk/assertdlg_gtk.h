@@ -14,8 +14,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <gtk/gtkdialog.h>
-#include <gtk/gtklabel.h>
+#include <gtk/gtk.h>
 
 #define GTK_TYPE_ASSERT_DIALOG            (gtk_assert_dialog_get_type ())
 #define GTK_ASSERT_DIALOG(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ASSERT_DIALOG, GtkAssertDialog))

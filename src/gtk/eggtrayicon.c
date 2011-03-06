@@ -109,7 +109,7 @@ Anders
 
 #if wxUSE_TASKBARICON
 
-#include <gtk/gtkversion.h>
+#include <gtk/gtk.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 
 #include <string.h>

@@ -36,7 +36,7 @@
 #include "wx/paper.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkpagesetupunixdialog.h>
+#include <gtk/gtkunixprint.h>
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"

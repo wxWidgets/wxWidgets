@@ -23,8 +23,6 @@ extern "C" {
 /* For FILE */
 #include <stdio.h>
 
-#include <gtk/gtkexpander.h>
-
 
 /* ----------------------------------------------------------------------------
    Constants
