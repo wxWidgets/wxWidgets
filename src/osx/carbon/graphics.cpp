@@ -2387,8 +2387,8 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
         wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
         Rect rect;
-        x += (int)(sin(angle) * FixedToInt(ascent));
-        y += (int)(cos(angle) * FixedToInt(ascent));
+        x += (int)(sin(angle) * FixedToFloat(ascent));
+        y += (int)(cos(angle) * FixedToFloat(ascent));
 
         status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
                                         IntToFixed(x) , IntToFixed(y) , &rect );
@@ -2446,13 +2446,8 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
         wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-        // round the returned extent: this is probably more correct anyhow but
-        // we also need to do it to be consistent with GetPartialTextExtents()
-        // below and avoid strange situation when the last partial extent
-        // returned by it could have been greater than the full extent returned
-        // by us
-        CGFloat a, d, l;
-        int w = CTLineGetTypographicBounds(line, &a, &d, &l) + 0.5;
+        CGFloat a, d, l, w;
+        w = CTLineGetTypographicBounds(line, &a, &d, &l);
 
         if ( height )
             *height = a+d+l;
@@ -2489,13 +2484,13 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
                                             &textBefore , &textAfter, &textAscent , &textDescent );
 
         if ( height )
-            *height = FixedToInt(textAscent + textDescent);
+            *height = FixedToFloat(textAscent + textDescent);
         if ( descent )
-            *descent = FixedToInt(textDescent);
+            *descent = FixedToFloat(textDescent);
         if ( externalLeading )
             *externalLeading = 0;
         if ( width )
-            *width = FixedToInt(textAfter - textBefore);
+            *width = FixedToFloat(textAfter - textBefore);
 
         ::ATSUDisposeTextLayout(atsuLayout);
 
@@ -2512,7 +2507,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         *height = sz.height;
         /*
     if ( descent )
-        *descent = FixedToInt(textDescent);
+        *descent = FixedToFloat(textDescent);
     if ( externalLeading )
         *externalLeading = 0;
         */
@@ -2583,7 +2578,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
             if (result != noErr || actualNumberOfBounds != 1 )
                 return;
 
-            widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
+            widths[pos] = FixedToFloat( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
             //unsigned char uch = s[i];
         }
 #else
@@ -2603,7 +2598,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         {
             for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
             {
-                widths[pos-1] = FixedToInt( layoutRecords[pos].realPos );
+                widths[pos-1] = FixedToFloat( layoutRecords[pos].realPos );
             }
         }
 
