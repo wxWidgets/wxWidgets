@@ -853,6 +853,8 @@ public :
     virtual void SetModified(bool WXUNUSED(modified)) { }
     virtual bool IsModified() const { return false; }
 
+    virtual CGWindowLevel GetWindowLevel() const { return kCGNormalWindowLevel; }
+    virtual void RestoreWindowLevel() {}
 protected :
     wxNonOwnedWindow*   m_wxPeer;
     DECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl)

@@ -240,7 +240,11 @@ public :
     virtual bool IsModified() const;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
+    
+    CGWindowLevel   GetWindowLevel() const { return m_macWindowLevel; }
+    void            RestoreWindowLevel();
 protected :
+    CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
     void *          m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)

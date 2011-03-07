@@ -632,6 +632,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     }
 
     [m_macWindow setLevel:level];
+    m_macWindowLevel = level;
 
     [m_macWindow setDelegate:controller];
 
@@ -742,6 +743,7 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
             level = kCGFloatingWindowLevel;
         
         [m_macWindow setLevel: level];
+        m_macWindowLevel = level;
     }
 }
 
@@ -950,6 +952,16 @@ bool wxNonOwnedWindowCocoaImpl::IsModified() const
     return [m_macWindow isDocumentEdited];
 }
 
+void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
+{
+    if ( [m_macWindow level] != m_macWindowLevel )
+        [m_macWindow setLevel:m_macWindowLevel];
+}
+
+//
+//
+//
+
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow nativeWindow)
 {
     wxNonOwnedWindowCocoaImpl* now = new wxNonOwnedWindowCocoaImpl( wxpeer );
@@ -964,3 +976,4 @@ wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWind
     now->Create( parent, pos, size, style , extraStyle, name );
     return now;
 }
+
