@@ -3982,20 +3982,7 @@ void wxPropertyGrid::FreeEditors()
     // Return focus back to canvas from children (this is required at least for
     // GTK+, which, unlike Windows, clears focus when control is destroyed
     // instead of moving it to closest parent).
-    wxWindow* focus = wxWindow::FindFocus();
-    if ( focus )
-    {
-        wxWindow* parent = focus->GetParent();
-        while ( parent )
-        {
-            if ( parent == this )
-            {
-                SetFocusOnCanvas();
-                break;
-            }
-            parent = parent->GetParent();
-        }
-    }
+    SetFocusOnCanvas();
 
     // Do not free editors immediately if processing events
     if ( m_wndEditor2 )
@@ -4691,7 +4678,24 @@ void wxPropertyGrid::SetVirtualWidth( int width )
 
 void wxPropertyGrid::SetFocusOnCanvas()
 {
-    SetFocus();
+    // To prevent wxPropertyGrid from stealing focus from other controls,
+    // only move focus to the grid if it was already in one if its child
+    // controls.
+    wxWindow* focus = wxWindow::FindFocus();
+    if ( focus )
+    {
+        wxWindow* parent = focus->GetParent();
+        while ( parent )
+        {
+            if ( parent == this )
+            {
+                SetFocus();
+                break;
+            }
+            parent = parent->GetParent();
+        }
+    }
+
     m_editorFocused = 0;
 }
 

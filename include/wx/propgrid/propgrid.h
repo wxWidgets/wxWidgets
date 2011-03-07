@@ -2238,6 +2238,8 @@ protected:
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
 
+    // This function only moves focus to the wxPropertyGrid if it already
+    // was on one of its child controls.
     void SetFocusOnCanvas();
 
     bool DoHideProperty( wxPGProperty* p, bool hide, int flags );
