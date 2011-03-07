@@ -39,6 +39,9 @@
 // wxEventLoop implementation
 // ============================================================================
 
+#if 0
+
+// in case we want to integrate this
 
 static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
 {
@@ -98,6 +101,7 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
     return mask;
 }
 
+#endif
 
 wxGUIEventLoop::wxGUIEventLoop()
 {
