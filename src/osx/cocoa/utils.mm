@@ -127,6 +127,49 @@ void wxBell()
     return NO;
 }
 
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+
+    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+         end = wxTopLevelWindows.end();
+         i != end;
+         ++i )
+    {
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : NULL;
+        WXWindow nswindow = win ? win->GetWXWindow() : nil;
+        
+        if ( nswindow && [nswindow hidesOnDeactivate] == NO && winimpl)
+            winimpl->RestoreWindowLevel();
+    }
+    if ( wxTheApp )
+        wxTheApp->SetActive( true , NULL ) ;
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+         end = wxTopLevelWindows.end();
+         i != end;
+         ++i )
+    {
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+        WXWindow nswindow = win ? win->GetWXWindow() : nil;
+        
+        if ( nswindow && [nswindow level] == kCGFloatingWindowLevel && [nswindow hidesOnDeactivate] == NO )
+            [nswindow setLevel:kCGNormalWindowLevel];
+    }
+}
+
+- (void)applicationDidResignActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    if ( wxTheApp )
+        wxTheApp->SetActive( false , NULL ) ;
+}
+
 @end
 
 /*
