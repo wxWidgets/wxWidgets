@@ -262,6 +262,7 @@ void wxButton::SetLabel( const wxString &lbl )
     GTKApplyWidgetStyle( false );
 }
 
+#if wxUSE_MARKUP
 bool wxButton::DoSetLabelMarkup(const wxString& markup)
 {
     wxCHECK_MSG( m_widget != NULL, false, "invalid button" );
@@ -279,6 +280,7 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
+#endif // wxUSE_MARKUP
 
 bool wxButton::Enable( bool enable )
 {
