@@ -2411,17 +2411,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         startPos = 0;
                     }
 
-                    int currentPos = startPos;
-                    do
+                    for ( int currentPos = startPos; ; )
                     {
-                        // wrap to the beginning if necessary
-                        if ( currentPos == maxPos )
-                        {
-                            // somewhat surprisingly, LVFI_WRAP isn't set in
-                            // flags but we still should wrap
-                            currentPos = 0;
-                        }
-
                         // does this item begin with searchstr?
                         if ( wxStrnicmp(searchstr,
                                             GetItemText(currentPos), len) == 0 )
@@ -2429,13 +2420,26 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             *result = currentPos;
                             break;
                         }
-                    }
-                    while ( ++currentPos != startPos );
 
-                    if ( *result == -1 )
-                    {
-                        // not found
-                        return false;
+                        // Go to next item with wrapping if necessary.
+                        if ( ++currentPos == maxPos )
+                        {
+                            // Surprisingly, LVFI_WRAP seems to be never set in
+                            // the flags so wrap regardless of it.
+                            currentPos = 0;
+                        }
+
+                        if ( currentPos == startPos )
+                        {
+                            // We examined all items without finding anything.
+                            //
+                            // Notice that we still return true as we did
+                            // perform the search, if we didn't do this the
+                            // message would have been considered unhandled and
+                            // the control seems to always select the first
+                            // item by default in this case.
+                            return true;
+                        }
                     }
 
                     SetItemState(*result,
