@@ -1606,10 +1606,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxMin( (int)(  GetLineAt( wxMax(0,update.y+update.height) ) - item_start + 1),
             (int)(GetRowCount( ) - item_start));
     unsigned int item_last = item_start + item_count;
-    // Get the parent of DataViewCtrl
-    wxWindow *parent = GetParent()->GetParent();
+
+    // Send the event to wxDataViewCtrl itself.
+    wxWindow * const parent = GetParent();
     wxDataViewEvent cache_event(wxEVT_COMMAND_DATAVIEW_CACHE_HINT, parent->GetId());
-    cache_event.SetEventObject(GetParent());
+    cache_event.SetEventObject(parent);
     cache_event.SetCache(item_start, item_last - 1);
     parent->ProcessWindowEvent(cache_event);
 
