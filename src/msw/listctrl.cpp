@@ -2391,10 +2391,25 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     // this is the first item we should examine, search from it
                     // wrapping if necessary
-                    const int startPos = pFindInfo->iStart;
+                    int startPos = pFindInfo->iStart;
                     const int maxPos = GetItemCount();
-                    wxCHECK_MSG( startPos <= maxPos, false,
-                                 wxT("bad starting position in LVN_ODFINDITEM") );
+
+                    // Check that the index is valid to ensure that our loop
+                    // below always terminates.
+                    if ( startPos < 0 || startPos >= maxPos )
+                    {
+                        // When the last item in the control is selected,
+                        // iStart is really set to (invalid) maxPos index so
+                        // accept this silently.
+                        if ( startPos != maxPos )
+                        {
+                            wxLogDebug(wxT("Ignoring invalid search start ")
+                                       wxT("position %d in list control with ")
+                                       wxT("%d items."), startPos, maxPos);
+                        }
+
+                        startPos = 0;
+                    }
 
                     int currentPos = startPos;
                     do
