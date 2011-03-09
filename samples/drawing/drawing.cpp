@@ -1650,15 +1650,15 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
         m_overlay.Reset();
         m_rubberBand = false;
 
-        int x,y,xx,yy ;
-        event.GetPosition(&x,&y);
-        CalcUnscrolledPosition( x, y, &xx, &yy );
+        wxPoint endpoint = CalcUnscrolledPosition(event.GetPosition());
 
-        wxString str;
-        str.Printf( wxT("Rectangle selection from %d,%d to %d,%d"),
-            m_anchorpoint.x, m_anchorpoint.y , (int)xx, (int)yy );
-        wxMessageBox( str , wxT("Rubber-Banding") );
-
+        // Don't pop up the message box if nothing was actually selected.
+        if ( endpoint != m_anchorpoint )
+        {
+            wxLogMessage("Selected rectangle from (%d, %d) to (%d, %d)",
+                         m_anchorpoint.x, m_anchorpoint.y,
+                         endpoint.x, endpoint.y);
+        }
     }
 }
 
