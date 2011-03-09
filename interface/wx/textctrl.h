@@ -1226,26 +1226,47 @@ public:
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
 
+    //@{
     /**
         This function finds the character at the specified position expressed
         in pixels.
 
+        The two overloads of this method allow to find either the position of
+        the character, as an index into the text control contents, or its row
+        and column.
+
         If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
-        character closest to this position are returned in the @a col and @a
-        row parameters (unless the pointers are @NULL which is allowed).
-        Please note that this function is currently only implemented in wxUniv, wxMSW
-        and wxGTK2 ports.
+        character closest to this position are returned, otherwise the output
+        parameters are not modified.
+
+        Please note that this function is currently only implemented in wxUniv,
+        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        other ports.
 
         @beginWxPerlOnly
         In wxPerl this function takes only the @a pt argument and
         returns a 3-element list (result, col, row).
         @endWxPerlOnly
 
+        @param pt
+            The position of the point to check, in window device coordinates.
+        @param col
+            Receives the column of the character at the given position. May be
+            @NULL.
+        @param row
+            Receives the row of the character at the given position. May be
+            @NULL.
+        @param pos
+            Receives the position of the character at the given position. May
+            be @NULL.
+
         @see PositionToXY(), XYToPosition()
     */
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                    wxTextCoord col,
-                                    wxTextCoord row) const;
+                                    wxTextCoord *col,
+                                    wxTextCoord *row) const;
+    //@}
 
     /**
         Returns @true if the text has been modified by user.
