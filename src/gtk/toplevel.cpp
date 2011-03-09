@@ -383,6 +383,14 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
     if (event->changed_mask & GDK_WINDOW_STATE_ICONIFIED)
         win->SetIconizeState((event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) != 0);
 
+    // if maximized bit changed and it is now set
+    if (event->changed_mask & event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+        wxMaximizeEvent event(win->GetId());
+        event.SetEventObject(win);
+        win->HandleWindowEvent(event);
+    }
+
     return false;
 }
 }
@@ -1210,10 +1218,8 @@ void wxTopLevelWindowGTK::Maximize(bool maximize)
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
-    if(!m_widget->window)
-        return false;
-
-    return gdk_window_get_state(m_widget->window) & GDK_WINDOW_STATE_MAXIMIZED;
+    return m_widget->window &&
+        (gdk_window_get_state(m_widget->window) & GDK_WINDOW_STATE_MAXIMIZED);
 }
 
 void wxTopLevelWindowGTK::Restore()

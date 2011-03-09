@@ -461,7 +461,6 @@ All (GUI):
 - Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
 - Fix display of right aligned columns in wxGenericListCtrl (jl).
 - Restore text drag-and-drop in wxSTC broken by Scintilla 2 update (Jens Lody).
-- Improve wxGTK print/page setup dialog (rafravago).
 - Add support for id ranges to XRC (David Hart).
 - Added wxToolbook XRC handler (Andrea Zanellato).
 - Added wxDocManager::FindTemplate() (troelsk).
@@ -479,7 +478,9 @@ All (GUI):
 
 GTK:
 
+- Improve print/page setup dialog (rafravago).
 - Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
+- wxTLW generates wxEVT_MAXIMIZE
 
 MSW:
 
