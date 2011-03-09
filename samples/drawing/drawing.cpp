@@ -419,7 +419,22 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxRED, wxCROSSDIAG_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Hatched red"), x + 10, y + 10);
+    dc.DrawText(wxT("Diagonally hatched red"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxBLUE, wxCROSS_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Cross hatched blue"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxCYAN, wxVERTICAL_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Vertically hatched cyan"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxBLACK, wxHORIZONTAL_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Horizontally hatched black"), x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*gs_bmpMask));
