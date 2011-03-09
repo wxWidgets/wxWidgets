@@ -40,7 +40,7 @@
 #if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
 #else
-#include <gtk/gtkpagesetupunixdialog.h.h>
+#include <gtk/gtkpagesetupunixdialog.h>
 #endif
 
 
