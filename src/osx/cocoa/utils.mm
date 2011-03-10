@@ -371,29 +371,32 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
 
-    NSView* view = (NSView*) m_window->GetHandle();
-    [view lockFocus];
-    // we use this method as other methods force a repaint, and this method can be
-    // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
-    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
-    [view unlockFocus];
-
     wxBitmap bitmap(width, height);
-    if ( [rep respondsToSelector:@selector(CGImage)] )
-    {
-        CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
 
-        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-        // since our context is upside down we dont use CGContextDrawImage
-        wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
-        CGImageRelease(cgImageRef);
-        cgImageRef = NULL;
-    }
-    else
+    NSView* view = (NSView*) m_window->GetHandle();
+    if ( [view isHiddenOrHasHiddenAncestor] == NO )
     {
-        // TODO for 10.4 in case we can support this for osx_cocoa
+        [view lockFocus];
+        // we use this method as other methods force a repaint, and this method can be
+        // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
+        NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
+        [view unlockFocus];
+        if ( [rep respondsToSelector:@selector(CGImage)] )
+        {
+            CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
+
+            CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+            // since our context is upside down we dont use CGContextDrawImage
+            wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+            CGImageRelease(cgImageRef);
+            cgImageRef = NULL;
+        }
+        else
+        {
+            // TODO for 10.4 in case we can support this for osx_cocoa
+        }
+        [rep release];
     }
-    [rep release];
 
     return bitmap;
 }
