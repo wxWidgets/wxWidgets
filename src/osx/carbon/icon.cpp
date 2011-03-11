@@ -440,8 +440,21 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
     UnRef() ;
 
     // as the bitmap owns that ref, we have to acquire it as well
-    IconRef iconRef = bmp.CreateIconRef() ;
-    m_refData = new wxIconRefData( (WXHICON) iconRef, bmp.GetWidth(), bmp.GetHeight()  ) ;
+    
+    int w = bmp.GetWidth() ;
+    int h = bmp.GetHeight() ;
+    int sz = wxMax( w , h ) ;
+
+    if ( sz == 24 || sz == 64 )
+    {
+        wxBitmap scaleBmp( bmp.ConvertToImage().Scale( w * 2 , h * 2 ) ) ;
+        m_refData = new wxIconRefData( (WXHICON) scaleBmp.CreateIconRef(), bmp.GetWidth(), bmp.GetHeight()  ) ;
+    }
+    else 
+    {
+        m_refData = new wxIconRefData( (WXHICON) bmp.CreateIconRef() , bmp.GetWidth(), bmp.GetHeight()  ) ;
+    }
+
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
