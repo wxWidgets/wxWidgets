@@ -3662,9 +3662,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config QtGui --cflags`"
-        LIBS="$LIBS `pkg-config QtCore --libs`"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config QtGui --libs`"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config QtGui QtTest --cflags`"
+        LIBS="$LIBS `pkg-config QtGui QtTest --libs`"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config QtGui QtTest --libs`"
     fi
 
     dnl the name of the directory where the files for this toolkit live
@@ -7835,7 +7835,7 @@ if test "x$INTELCXX" = "xyes" ; then
     dnl (for others see CWARNINGS above)
     CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419,1881,2259"
 elif test "$GXX" = yes ; then
-    CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
+    CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -fmessage-length=0"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
     dnl when building under Mac we currently get hundreds of deprecation
