@@ -162,6 +162,10 @@ void wxDataFormat::SetId( NativeFormat format )
     {
         m_type = wxDF_UNICODETEXT;
     }
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-external-plain-text") )  )
+    {
+        m_type = wxDF_UNICODETEXT;
+    }
     else if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
     {
         m_type = wxDF_TEXT;
