@@ -70,8 +70,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     m_qtComboBox = new wxQtComboBox( parent, value );
     m_qtComboBox->AddChoices( n, choices );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxControl::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxComboBox::SetSelection(int n)

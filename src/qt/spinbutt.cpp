@@ -39,8 +39,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     wxSize newSize( size );
     newSize.SetWidth( 18 );
 
-    return CreateControl( parent, id, pos, newSize, style, wxDefaultValidator, name )
-        && wxSpinButtonBase::Create( parent, id, pos, newSize, style, wxDefaultValidator, name );
+    return QtCreateControl( parent, id, pos, newSize, style, wxDefaultValidator, name );
 }
 
 int wxSpinButton::GetValue() const

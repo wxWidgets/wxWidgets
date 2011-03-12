@@ -37,8 +37,7 @@ bool wxStaticBitmap::Create( wxWindow *parent,
     m_qtLabel = new QLabel( parent->GetHandle() );
     SetBitmap( label );
 
-    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
-        && wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 static void SetPixmap( QLabel *label, const QPixmap *pixMap )

@@ -41,17 +41,9 @@ wxCalendarCtrl::~wxCalendarCtrl()
     }
 }
 
-bool wxCalendarCtrl::Create(wxWindow *parent,
-                            wxWindowID id,
-                            const wxDateTime& date,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            long style,
-                            const wxString& name)
+bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id, const wxDateTime& date,
+    const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return false;
-
     m_qtCalendar = new wxQtCalendarWidget( parent, this );
     m_qtCalendar->resize(m_qtCalendar->sizeHint());
 
@@ -91,7 +83,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     if ( date.IsValid() )
         SetDate(date);
 
-    return true;
+    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxCalendarCtrl::UpdateStyle()

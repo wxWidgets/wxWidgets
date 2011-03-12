@@ -36,8 +36,7 @@ bool wxScrollBar::Create( wxWindow *parent, wxWindowID id,
     m_qtScrollBar = new wxQtScrollBar( parent, this );
     m_qtScrollBar->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxControl::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 int wxScrollBar::GetThumbPosition() const

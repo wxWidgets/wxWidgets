@@ -54,6 +54,8 @@ public:
     virtual QTextEdit *GetHandle() const;
 
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
     

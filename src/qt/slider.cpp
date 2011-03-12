@@ -40,8 +40,7 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider = new QSlider( wxQtConvertOrientation( style, wxSL_HORIZONTAL ),
             parent->GetHandle() );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxSliderBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 int wxSlider::GetValue() const

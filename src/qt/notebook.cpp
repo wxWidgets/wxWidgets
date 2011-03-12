@@ -36,7 +36,7 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     m_qtTabWidget = new QTabWidget( parent->GetHandle() );
 
-    return wxNotebookBase::Create( parent, id, pos, size, style, name );
+    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxNotebook::SetPadding(const wxSize& padding)
@@ -79,7 +79,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
     m_qtTabWidget->setTabEnabled( n, bSelect );
 
-    AddChild( page );
+//    AddChild( page );
 
     return true;
 }

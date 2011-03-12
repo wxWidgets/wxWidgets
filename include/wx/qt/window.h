@@ -158,16 +158,15 @@ protected:
 
     // retrieve the position/size of the window
     virtual void DoGetPosition(int *x, int *y) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual wxSize DoGetBestSize() const;
 
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height);
-    
+    virtual void DoGetClientSize(int *width, int *height) const;
+
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 #if wxUSE_TOOLTIPS

@@ -39,10 +39,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
 {
     m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxTextCtrlBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
+wxSize wxTextCtrl::DoGetBestSize() const
+{
+    return wxSize( 100, 50 ); // wxTextCtrlBase::DoGetBestSize();
+
+}
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     return 0;

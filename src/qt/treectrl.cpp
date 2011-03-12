@@ -34,8 +34,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     m_qtTreeWidget = new QTreeWidget( parent->GetHandle() );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-       && wxTreeCtrlBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 unsigned wxTreeCtrl::GetCount() const

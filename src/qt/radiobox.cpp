@@ -86,9 +86,6 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    if ( !CreateControl( parent, id, pos, size, style, val, name ))
-        return false;
-
     m_qtGroupBox = new wxQtGroupBox( parent, title );
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
@@ -102,7 +99,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     else
         AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
 
-    return wxControl::Create( parent, id, pos, size, style, val, name );
+    return QtCreateControl( parent, id, pos, size, style, val, name );
 }
 
 static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )

@@ -37,8 +37,12 @@ bool wxStaticText::Create(wxWindow *parent,
 {
     m_qtLabel = new QLabel( wxQtConvertString( label ), parent->GetHandle() );
 
-    return CreateControl( parent, id, pos, size, style, wxDefaultValidator, name )
-        && wxStaticTextBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+    // QLabel will only draw the shortcut/mnemonic key when it has a 'buddy', but
+    // wxStaticText has no concept of a buddy, so we set it to itself:
+
+    m_qtLabel->setBuddy( m_qtLabel );
+
+    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 

@@ -45,8 +45,7 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
     m_qtPushButton->SetToggleable();
     m_qtPushButton->SetBitmap( label );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxBitmapToggleButton::SetValue(bool state)

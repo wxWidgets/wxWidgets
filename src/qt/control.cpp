@@ -42,9 +42,16 @@ bool wxControl::Create(wxWindow *parent, wxWindowID id,
     return isCreated;
 }
 
+bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
+    const wxPoint &pos, const wxSize &size, long style,
+    const wxValidator &validator, const wxString &name )
+{
+    // The Qt widget has been created without a position/size so move/resize it:
 
-//QWidget *wxControl::GetHandle() const
-//{
-//    return NULL;
-//}
+    wxSize bestSize = GetBestSize();
+    int width = ( size.GetWidth() == wxDefaultCoord ) ? bestSize.GetWidth() : size.GetWidth();
+    int height = ( size.GetHeight() == wxDefaultCoord ) ? bestSize.GetHeight() : size.GetHeight();
+    DoMoveWindow( pos.x, pos.y, width, height );
 
+    return CreateControl( parent, id, pos, size, style, validator, name );
+}

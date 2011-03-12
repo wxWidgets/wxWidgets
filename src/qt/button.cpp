@@ -33,10 +33,9 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxString& name )
 {
     m_qtPushButton = new wxQtPushButton( parent, this );
-    SetLabel( label );
+    SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxButtonBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 wxWindow *wxButton::SetDefault()

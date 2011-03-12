@@ -40,17 +40,17 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new QRadioButton( parent->GetHandle() );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxControl::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxRadioButton::SetValue(bool value)
 {
+    m_qtRadioButton->setChecked( value );
 }
 
 bool wxRadioButton::GetValue() const
 {
-    return false;
+    return m_qtRadioButton->isChecked();
 }
 
 QRadioButton *wxRadioButton::GetHandle() const

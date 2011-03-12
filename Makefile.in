@@ -4981,7 +4981,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
@@ -5022,7 +5021,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
@@ -5097,7 +5095,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_x11_bitmap.o \
 	monodll_x11_brush.o \
@@ -5325,7 +5322,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_generic_timer.o \
@@ -5959,7 +5955,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
@@ -6000,7 +5995,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
@@ -6075,7 +6069,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_x11_bitmap.o \
 	monodll_x11_brush.o \
@@ -6303,7 +6296,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_displayx11.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
-	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_generic_timer.o \
@@ -7109,7 +7101,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
@@ -7150,7 +7141,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
@@ -7225,7 +7215,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_x11_bitmap.o \
 	monolib_x11_brush.o \
@@ -7453,7 +7442,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_generic_timer.o \
@@ -8087,7 +8075,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
@@ -8128,7 +8115,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
@@ -8203,7 +8189,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_x11_bitmap.o \
 	monolib_x11_brush.o \
@@ -8431,7 +8416,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_displayx11.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
-	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_generic_timer.o \
@@ -9421,7 +9405,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
@@ -9462,7 +9445,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
@@ -9537,7 +9519,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_x11_bitmap.o \
 	coredll_x11_brush.o \
@@ -9765,7 +9746,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_generic_timer.o \
@@ -10399,7 +10379,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
@@ -10440,7 +10419,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
@@ -10515,7 +10493,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_x11_bitmap.o \
 	coredll_x11_brush.o \
@@ -10743,7 +10720,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_displayx11.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
-	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_generic_timer.o \
@@ -11210,7 +11186,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
@@ -11251,7 +11226,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
@@ -11326,7 +11300,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_x11_bitmap.o \
 	corelib_x11_brush.o \
@@ -11554,7 +11527,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_generic_timer.o \
@@ -12188,7 +12160,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
@@ -12229,7 +12200,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
@@ -12304,7 +12274,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_x11_bitmap.o \
 	corelib_x11_brush.o \
@@ -12532,7 +12501,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_displayx11.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
-	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_generic_timer.o \
@@ -18607,18 +18575,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
@@ -24240,18 +24196,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
@@ -30052,18 +29996,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
@@ -34329,18 +34261,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp

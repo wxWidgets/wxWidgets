@@ -42,8 +42,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( style & wxALIGN_RIGHT )
         m_qtCheckBox->setLayoutDirection( Qt::RightToLeft );
 
-    return CreateControl( parent, id, pos, size, style, validator, name )
-        && wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 

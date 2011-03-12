@@ -27,8 +27,8 @@
 
 //##############################################################################
 
-BEGIN_EVENT_TABLE( wxWindow, wxWindowBase )
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE( wxWindow, wxWindowBase )
+wxEND_EVENT_TABLE()
 
 
 // We use the QObject property capabilities to store the wxWindow pointer, so we
@@ -112,19 +112,19 @@ wxWindow::~wxWindow()
 bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         const wxSize & size, long style, const wxString &name )
 {
-    if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
-        return false;
+    // If the underlying control hasn't been created then this most probably means
+    // that a generic control, like wxPanel, is being created, so we need a very
+    // simple control as a base:
 
     if ( GetHandle() == NULL )
         m_qtWindow = new wxQtWidget( parent, this );
 
+    if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+        return false;
+
     QtStoreWindowPointer( GetHandle(), this );
 
-//    if ( parent != NULL && FindWindow( GetId() ) == NULL )
-//        parent->AddChild( this );
-
-//    if ( parent != NULL )
-//        parent->AddChild( this );
+    parent->AddChild( this );
 
     DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
 
@@ -280,6 +280,24 @@ int wxWindow::GetCharHeight() const
 int wxWindow::GetCharWidth() const
 {
     return ( GetHandle()->fontMetrics().averageCharWidth() );
+}
+
+void wxWindow::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
+        int *externalLeading, const wxFont *font ) const
+{
+    QFontMetrics fontMetrics( font != NULL ? font->GetHandle() : GetHandle()->font() );
+
+    if ( x != NULL )
+        *x = fontMetrics.width( wxQtConvertString( string ));
+
+    if ( y != NULL )
+        *y = fontMetrics.height();
+
+    if ( descent != NULL )
+        *descent = fontMetrics.descent();
+
+    if ( externalLeading != NULL )
+        *externalLeading = fontMetrics.lineSpacing();
 }
 
 /* Returns a scrollbar for the given orientation, or NULL if the scrollbar
@@ -524,12 +542,6 @@ void wxWindow::SetExtraStyle( long exStyle )
 {
 }
 
-void wxWindow::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
-    int *externalLeading, const wxFont *font ) const
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-}
-
 
 
 void wxWindow::DoClientToScreen( int *x, int *y ) const
@@ -625,6 +637,10 @@ void wxWindow::DoSetClientSize(int width, int height)
     qtWidget->setGeometry( geometry );
 }
 
+wxSize wxWindow::DoGetBestSize() const
+{
+    return wxQtConvertSize( GetHandle()->sizeHint() );
+}
 
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
