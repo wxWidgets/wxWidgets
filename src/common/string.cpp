@@ -1839,17 +1839,43 @@ bool wxString::ToCDouble(double *pVal) const
 // ----------------------------------------------------------------------------
 
 /* static */
-wxString wxString::FromCDouble(double val)
+wxString wxString::FromDouble(double val, int precision)
 {
+    wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
+
+    wxString format;
+    if ( precision == -1 )
+    {
+        format = "%g";
+    }
+    else // Use fixed precision.
+    {
+        format.Printf("%%.%df", precision);
+    }
+
+    return wxString::Format(format, val);
+}
+
+/* static */
+wxString wxString::FromCDouble(double val, int precision)
+{
+    wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
+
 #if wxUSE_STD_IOSTREAM && wxUSE_STD_STRING
     // We assume that we can use the ostream and not wstream for numbers.
     wxSTD ostringstream os;
+    if ( precision != -1 )
+    {
+        os.precision(precision);
+        os.setf(std::ios::fixed, std::ios::floatfield);
+    }
+
     os << val;
     return os.str();
 #else // !wxUSE_STD_IOSTREAM
     // Can't use iostream locale support, fall back to the manual method
     // instead.
-    wxString s = FromDouble(val);
+    wxString s = FromDouble(val, precision);
 #if wxUSE_INTL
     wxString sep = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
                                      wxLOCALE_CAT_NUMBER);

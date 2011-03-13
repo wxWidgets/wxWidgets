@@ -2326,12 +2326,12 @@ public:
       // convert to a double
   bool ToCDouble(double *val) const;
 
-  // create a string representing the given floating point number
+  // create a string representing the given floating point number with the
+  // default (like %g) or fixed (if precision >=0) precision
     // in the current locale
-  static wxString FromDouble(double val)
-    { return wxString::Format(wxS("%g"), val); }
+  static wxString FromDouble(double val, int precision = -1);
     // in C locale
-  static wxString FromCDouble(double val);
+  static wxString FromCDouble(double val, int precision = -1);
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output

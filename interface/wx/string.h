@@ -1535,29 +1535,37 @@ public:
 
         Unlike FromDouble() the string returned by this function always uses
         the period character as decimal separator, independently of the current
-        locale.
+        locale. Otherwise its behaviour is identical to the other function.
 
         @since 2.9.1
 
         @see ToCDouble()
      */
-    static wxString FromCDouble(double val);
+    static wxString FromCDouble(double val, int precision = -1);
 
     /**
         Returns a string with the textual representation of the number.
 
-        This is a simple wrapper for @code wxString::Format("%g", val)
-        @endcode.
+        For the default value of @a precision, this function behaves as a
+        simple wrapper for @code wxString::Format("%g", val) @endcode. If @a
+        precision is positive (or zero), the @c %.Nf format is used with the
+        given precision value.
 
         Notice that the string returned by this function uses the decimal
         separator appropriate for the current locale, e.g. @c "," and not a
         period in French locale. Use FromCDouble() if this is unwanted.
 
+        @param val
+            The value to format.
+        @param precision
+            The number of fractional digits to use in or -1 to use the most
+            appropriate format. This parameter is new in wxWidgets 2.9.2.
+
         @since 2.9.1
 
         @see ToDouble()
      */
-    static wxString FromDouble(double val);
+    static wxString FromDouble(double val, int precision = -1);
 
     //@{
     /**

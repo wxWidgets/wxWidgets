@@ -438,6 +438,7 @@ All:
 - Added wxIntegerValidator<> and wxFloatingPointValidator<> validators.
 - Added wxIMAGE_OPTION_GIF_COMMENT to read and write GIF comments (troelsk).
 - Added wxStack<> template class.
+- Added precision parameter to wxString::From[C]Double().
 
 Unix:
 
