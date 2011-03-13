@@ -1846,7 +1846,7 @@ wxString wxString::FromCDouble(double val)
     wxSTD ostringstream os;
     os << val;
     return os.str();
-#else // wxUSE_STD_IOSTREAM
+#else // !wxUSE_STD_IOSTREAM
     // Can't use iostream locale support, fall back to the manual method
     // instead.
     wxString s = FromDouble(val);
