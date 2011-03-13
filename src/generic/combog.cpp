@@ -265,10 +265,10 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.DrawRectangle(rect2);
     }
 
-#ifndef __WXMAC__  // see note in OnThemeChange
-    wxColour winCol = GetBackgroundColour();
-#else
+#if defined(__WXMAC__) || defined(__WXGTK__)  // see note in OnThemeChange
     wxColour winCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#else
+    wxColour winCol = GetBackgroundColour();
 #endif
     dc.SetBrush(winCol);
     dc.SetPen(winCol);
@@ -281,8 +281,14 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     
     if ( !m_btn )
     {
+    #ifdef __WXGTK__
+        // Under GTK+ this avoids drawing the button background with wrong
+        // colour
+        DrawButton(dc,rectb,0);
+    #else
         // Standard button rendering
         DrawButton(dc,rectb);
+    #endif
     }
 
     // paint required portion on the control

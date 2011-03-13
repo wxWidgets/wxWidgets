@@ -860,7 +860,13 @@ void wxComboCtrlBase::OnThemeChange()
 #ifndef __WXMAC__
     if ( !m_hasBgCol )
     {
+#ifdef __WXGTK__
+        // Set background to gtk_rc_get_style(m_widget)->bg[GTK_STATE_NORMAL],
+        // which can be different than the background of text entry.
+        wxColour bgCol = GetDefaultAttributes().colBg;
+#else
         wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#endif
         SetOwnBackgroundColour(bgCol);
         m_hasBgCol = false;
     }
@@ -1293,18 +1299,18 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
             // Honour the custom background colour
             bgCol = GetBackgroundColour();
         else
-#ifndef __WXMAC__  // see note in OnThemeChange
-            bgCol = GetBackgroundColour();
-#else
+#if defined(__WXMAC__) || defined(__WXGTK__)  // see note in OnThemeChange
             bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#else
+            bgCol = GetBackgroundColour();
 #endif
     }
     else
     {
-#ifndef __WXMAC__  // see note in OnThemeChange
-        bgCol = GetBackgroundColour();
-#else
+#if defined(__WXMAC__) || defined(__WXGTK__)  // see note in OnThemeChange
         bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#else
+        bgCol = GetBackgroundColour();
 #endif
     }
 

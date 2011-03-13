@@ -155,6 +155,8 @@ wxGTK:
   idle time if it is 0, otherwise no menu is shown.
 - Improved list control and tree control selection text theme compatibility by adding
   wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT colour index.
+- wxComboCtrl and wxOwnerDrawnComboBox had wrong background colours under some
+  themes (Marcin Wojdyr).
 
 wxUniv:
 
