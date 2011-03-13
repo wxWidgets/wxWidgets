@@ -152,6 +152,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_INFOBAR
 
 #if wxUSE_TEXTDLG
+    EVT_MENU(DIALOGS_LINE_ENTRY,                    MyFrame::LineEntry)
     EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
     EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
 #endif // wxUSE_TEXTDLG
@@ -395,7 +396,8 @@ bool MyApp::OnInit()
     wxMenu *entry_menu = new wxMenu;
 
     #if wxUSE_TEXTDLG
-        entry_menu->Append(DIALOGS_TEXT_ENTRY,  wxT("Text &entry\tCtrl-E"));
+        entry_menu->Append(DIALOGS_LINE_ENTRY,  wxT("Single line &entry\tCtrl-E"));
+        entry_menu->Append(DIALOGS_TEXT_ENTRY,  wxT("Multi line text &entry\tShift-Ctrl-E"));
         entry_menu->Append(DIALOGS_PASSWORD_ENTRY,  wxT("&Password entry\tCtrl-P"));
     #endif // wxUSE_TEXTDLG
 
@@ -978,7 +980,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
+void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
 {
     wxTextEntryDialog dialog(this,
                              wxT("This is a small sample\n")
@@ -990,6 +992,19 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxMessageBox(dialog.GetValue(), wxT("Got string"), wxOK | wxICON_INFORMATION, this);
+    }
+}
+
+void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextEntryDialog dialog(this, "You can enter a multiline string here.",
+                             "Please enter some text",
+                             "First line\nSecond one\nAnd another one too",
+                             wxOK | wxCANCEL | wxTE_MULTILINE);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxMessageBox(dialog.GetValue(), wxT("Got text"), wxOK | wxICON_INFORMATION, this);
     }
 }
 #endif // wxUSE_TEXTDLG

@@ -79,7 +79,8 @@ public:
         @param style
             A dialog style, specifying the buttons (wxOK, wxCANCEL)
             and an optional wxCENTRE style. Additionally, wxTextCtrl styles
-            (such as wxTE_PASSWORD) may be specified here.
+            (such as @c wxTE_PASSWORD or @c wxTE_MULTILINE) may be specified
+            here.
         @param pos
             Dialog position.
     */
@@ -128,6 +129,12 @@ public:
 
     If @c centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
+
+    This function is a wrapper around wxTextEntryDialog and while it is usually
+    more convenient to use, using the dialog directly is more flexible, e.g. it
+    allows you to specify the @c wxTE_MULTILINE to allow the user enter
+    multiple lines of text while this function is limited to single line entry
+    only.
 
     @header{wx/textdlg.h}
 */
