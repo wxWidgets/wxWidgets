@@ -381,6 +381,19 @@ bool wxPrinter::Setup(wxWindow *parent)
 
 bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
+    if ( !prompt && m_printDialogData.GetToPage() == 0 )
+    {
+        // If the dialog is not shown, set the pages range to print everything
+        // by default (as otherwise we wouldn't print anything at all which is
+        // certainly not a reasonable default behaviour).
+        int minPage, maxPage, selFrom, selTo;
+        printout->GetPageInfo(&minPage, &maxPage, &selFrom, &selTo);
+
+        wxPrintDialogData& pdd = m_pimpl->GetPrintDialogData();
+        pdd.SetFromPage(minPage);
+        pdd.SetToPage(maxPage);
+    }
+
     return m_pimpl->Print( parent, printout, prompt );
 }
 
