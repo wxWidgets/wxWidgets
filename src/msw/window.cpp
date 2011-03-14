@@ -228,6 +228,15 @@ EraseBgHooks gs_eraseBgHooks;
 
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
+// If this variable is strictly positive, EVT_CHAR_HOOK is not generated for
+// Escape key presses as it can't be intercepted because it's needed by some
+// currently shown window, e.g. IME entry.
+//
+// This is currently global as we allow using UI from the main thread only
+// anyhow but could be replaced with a thread-specific value in the future if
+// needed.
+int gs_modalEntryWindowCount = 0;
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -3169,6 +3178,17 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             {
                 processed = HandleChar((WORD)wParam, lParam);
             }
+            break;
+
+        case WM_IME_STARTCOMPOSITION:
+            // IME popup needs Escape as it should undo the changes in its
+            // entry window instead of e.g. closing the dialog for which the
+            // IME is used (and losing all the changes in the IME window).
+            gs_modalEntryWindowCount++;
+            break;
+
+        case WM_IME_ENDCOMPOSITION:
+            gs_modalEntryWindowCount--;
             break;
 
 #if wxUSE_HOTKEY
@@ -6497,29 +6517,36 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     {
         wchar_t uc;
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
-        if ( id != WXK_NONE
-#if wxUSE_UNICODE
-                || static_cast<int>(uc) != WXK_NONE
-#endif // wxUSE_UNICODE
-                )
+
+        // Don't intercept keyboard entry (notably Escape) if a modal window
+        // (not managed by wx, e.g. IME one) is currently opened as more often
+        // than not it needs all the keys for itself.
+        if ( !gs_modalEntryWindowCount )
         {
-            const wxWindow * const win = wxGetActiveWindow();
-
-            wxKeyEvent event(wxEVT_CHAR_HOOK);
-            MSWInitAnyKeyEvent(event, wParam, lParam, win);
-
-            event.m_keyCode = id;
+            if ( id != WXK_NONE
 #if wxUSE_UNICODE
-            event.m_uniChar = uc;
+                    || static_cast<int>(uc) != WXK_NONE
+#endif // wxUSE_UNICODE
+                    )
+            {
+                const wxWindow * const win = wxGetActiveWindow();
+
+                wxKeyEvent event(wxEVT_CHAR_HOOK);
+                MSWInitAnyKeyEvent(event, wParam, lParam, win);
+
+                event.m_keyCode = id;
+#if wxUSE_UNICODE
+                event.m_uniChar = uc;
 #endif // wxUSE_UNICODE
 
-            wxEvtHandler * const handler = win ? win->GetEventHandler()
-                                               : wxTheApp;
+                wxEvtHandler * const handler = win ? win->GetEventHandler()
+                                                   : wxTheApp;
 
-            if ( handler && handler->ProcessEvent(event) )
-            {
-                // processed
-                return 1;
+                if ( handler && handler->ProcessEvent(event) )
+                {
+                    // processed
+                    return 1;
+                }
             }
         }
     }
