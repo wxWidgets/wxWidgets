@@ -661,18 +661,18 @@ wxThreadError wxThread::Resume()
 // stopping thread
 // ---------------
 
-wxThread::ExitCode wxThread::Wait()
+wxThread::ExitCode wxThread::Wait(wxThreadWait waitMode)
 {
     // although under Windows we can wait for any thread, it's an error to
     // wait for a detached one in wxWin API
     wxCHECK_MSG( !IsDetached(), (ExitCode)-1,
                  wxT("can't wait for detached thread") );
     ExitCode rc = (ExitCode)-1;
-    (void)Delete(&rc);
+    (void)Delete(&rc, waitMode);
     return(rc);
 }
 
-wxThreadError wxThread::Delete(ExitCode *pRc)
+wxThreadError wxThread::Delete(ExitCode *pRc, wxThreadWait WXUNUSED(waitMode))
 {
     ExitCode rc = 0;
 

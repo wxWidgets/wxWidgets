@@ -467,12 +467,12 @@ wxThreadError wxThread::Resume()
 // stopping thread
 // ---------------
 
-wxThread::ExitCode wxThread::Wait()
+wxThread::ExitCode wxThread::Wait(wxThreadWait WXUNUSED(waitMode))
 {
     return 0;
 }
 
-wxThreadError wxThread::Delete(ExitCode *pRc)
+wxThreadError wxThread::Delete(ExitCode *pRc, wxThreadWait WXUNUSED(waitMode))
 {
     return wxTHREAD_NO_ERROR;
 }

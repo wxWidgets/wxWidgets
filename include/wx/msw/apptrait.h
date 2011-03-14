@@ -26,7 +26,7 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
     virtual bool DoMessageFromThreadWait();
-    virtual WXDWORD WaitForThread(WXHANDLE hThread);
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
 #ifndef __WXWINCE__
     virtual bool CanUseStderr() { return true; }
     virtual bool WriteToStderr(const wxString& text);
@@ -46,7 +46,7 @@ public:
 #endif
     virtual bool DoMessageFromThreadWait();
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
-    virtual WXDWORD WaitForThread(WXHANDLE hThread);
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
 
 #ifndef __WXWINCE__
     virtual bool CanUseStderr();

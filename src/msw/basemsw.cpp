@@ -88,7 +88,7 @@ wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 }
 
 
-WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
+WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread, int WXUNUSED(flags))
 {
     return DoSimpleWaitForThread(hThread);
 }

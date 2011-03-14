@@ -71,6 +71,21 @@ enum wxThreadKind
     wxTHREAD_JOINABLE
 };
 
+enum wxThreadWait
+{
+    wxTHREAD_WAIT_BLOCK,
+    wxTHREAD_WAIT_YIELD,       // process events while waiting; MSW only
+
+    // For compatibility reasons we use wxTHREAD_WAIT_YIELD by default as this
+    // was the default behaviour of wxMSW 2.8 but it should be avoided as it's
+    // dangerous and not portable.
+#if WXWIN_COMPATIBILITY_2_8
+    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
+#else
+    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_BLOCK
+#endif
+};
+
 // defines the interval of priority
 enum
 {
@@ -516,13 +531,14 @@ public:
         // does it!
         //
         // will fill the rc pointer with the thread exit code if it's !NULL
-    wxThreadError Delete(ExitCode *rc = NULL);
+    wxThreadError Delete(ExitCode *rc = NULL,
+                         wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
         // waits for a joinable thread to finish and returns its exit code
         //
         // Returns (ExitCode)-1 on error (for example, if the thread is not
         // joinable)
-    ExitCode Wait();
+    ExitCode Wait(wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
         // kills the thread without giving it any chance to clean up - should
         // not be used under normal circumstances, use Delete() instead.

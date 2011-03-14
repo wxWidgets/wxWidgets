@@ -592,6 +592,46 @@ public:
 };
 
 /**
+    The possible thread wait types.
+
+    @since 2.9.2
+*/
+enum wxThreadWait
+{
+    /**
+        No events are processed while waiting.
+
+        This is the default under all platforms except for wxMSW.
+     */
+    wxTHREAD_WAIT_BLOCK,
+
+    /**
+        Yield for event dispatching while waiting.
+
+        This flag is dangerous as it exposes the program using it to unexpected
+        reentrancies in the same way as calling wxYield() function does so you
+        are strongly advised to avoid its use and not wait for the thread
+        termination from the main (GUI) thread at all to avoid making your
+        application unresponsive.
+
+        Also notice that this flag is not portable as it is only implemented in
+        wxMSW and simply ignored under the other platforms.
+     */
+    wxTHREAD_WAIT_YIELD,
+
+    /**
+        Default wait mode for wxThread::Wait() and wxThread::Delete().
+
+        For compatibility reasons, the default wait mode is currently
+        wxTHREAD_WAIT_YIELD if WXWIN_COMPATIBILITY_2_8 is defined (and it is
+        by default). However, as mentioned above, you're strongly encouraged to
+        not use wxTHREAD_WAIT_YIELD and pass wxTHREAD_WAIT_BLOCK to wxThread
+        method explicitly.
+     */
+    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
+};
+
+/**
   The possible thread kinds.
 */
 enum wxThreadKind
@@ -1001,6 +1041,15 @@ public:
         Calling Delete() gracefully terminates a @b detached thread, either when
         the thread calls TestDestroy() or when it finishes processing.
 
+        @param rc
+            The thread exit code, if rc is not NULL.
+
+        @param waitMode
+            As described in wxThreadWait documentation, wxTHREAD_WAIT_BLOCK
+            should be used as the wait mode even although currently
+            wxTHREAD_WAIT_YIELD is for compatibility reasons. This parameter is
+            new in wxWidgets 2.9.2.
+
         @note
             This function works on a joinable thread but in that case makes
             the TestDestroy() function of the thread return @true and then
@@ -1009,7 +1058,8 @@ public:
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    wxThreadError Delete(void** rc = NULL);
+    wxThreadError Delete(ExitCode *rc = NULL,
+                         wxThreadWait waitMode = wxTHREAD_WAIT_BLOCK);
 
     /**
         Returns the number of system CPUs or -1 if the value is unknown.
@@ -1224,9 +1274,15 @@ public:
 
         This function can only be called from another thread context.
 
+        @param waitMode
+            As described in wxThreadWait documentation, wxTHREAD_WAIT_BLOCK
+            should be used as the wait mode even although currently
+            wxTHREAD_WAIT_YIELD is for compatibility reasons. This parameter is
+            new in wxWidgets 2.9.2.
+
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    ExitCode Wait();
+    ExitCode Wait(wxThreadWait flags = wxTHREAD_WAIT_BLOCK);
 
     /**
         Give the rest of the thread's time-slice to the system allowing the other

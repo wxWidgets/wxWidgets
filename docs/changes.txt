@@ -188,6 +188,13 @@ Changes in behaviour not resulting in compilation errors, please read this!
   StartDrag() virtual methods changed.  You will need to change them in your
   derived renderer class too if you override them.
 
+- wxThread::Wait() and wxThread::Delete() used to dispatch the events while
+  waiting for the thread to exit in wxMSW. They still do it in default build
+  with WXWIN_COMPATIBILITY_2_8 defined but won't dispatch any events, i.e. the
+  default wait mode will become wxTHREAD_WAIT_BLOCK in the next wxWidgets
+  release so you are strongly encouraged to upgrade your code to stop relying
+  on this behaviour.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -439,6 +446,7 @@ All:
 - Added wxIMAGE_OPTION_GIF_COMMENT to read and write GIF comments (troelsk).
 - Added wxStack<> template class.
 - Added precision parameter to wxString::From[C]Double().
+- Added wxThread::Wait() and Delete() "wait mode" parameter (Catalin Raceanu).
 
 Unix:
 

@@ -450,6 +450,7 @@ public:
     // (politely, this is not Kill()!) to do it
     wxThreadError WaitForTerminate(wxCriticalSection& cs,
                                    wxThread::ExitCode *pRc,
+                                   wxThreadWait waitMode,
                                    wxThread *threadToDelete = NULL);
 
     // kill the thread unconditionally
@@ -703,6 +704,7 @@ wxThreadError wxThreadInternal::Kill()
 wxThreadError
 wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                                    wxThread::ExitCode *pRc,
+                                   wxThreadWait waitMode,
                                    wxThread *threadToDelete)
 {
     // prevent the thread C++ object from disappearing as long as we are using
@@ -792,7 +794,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
         if ( traits )
         {
-            result = traits->WaitForThread(m_hThread);
+            result = traits->WaitForThread(m_hThread, waitMode);
         }
         else // can't wait for the thread
         {
@@ -1108,7 +1110,7 @@ wxThreadError wxThread::Resume()
 // stopping thread
 // ---------------
 
-wxThread::ExitCode wxThread::Wait()
+wxThread::ExitCode wxThread::Wait(wxThreadWait waitMode)
 {
     ExitCode rc = wxUIntToPtr(THREAD_ERROR_EXIT);
 
@@ -1117,14 +1119,14 @@ wxThread::ExitCode wxThread::Wait()
     wxCHECK_MSG( !IsDetached(), rc,
                  wxT("wxThread::Wait(): can't wait for detached thread") );
 
-    (void)m_internal->WaitForTerminate(m_critsect, &rc);
+    (void)m_internal->WaitForTerminate(m_critsect, &rc, waitMode);
 
     return rc;
 }
 
-wxThreadError wxThread::Delete(ExitCode *pRc)
+wxThreadError wxThread::Delete(ExitCode *pRc, wxThreadWait waitMode)
 {
-    return m_internal->WaitForTerminate(m_critsect, pRc, this);
+    return m_internal->WaitForTerminate(m_critsect, pRc, waitMode, this);
 }
 
 wxThreadError wxThread::Kill()
