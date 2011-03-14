@@ -987,6 +987,30 @@ wxBitmap wxButton::DoGetBitmap(State which) const
 
 void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
+#if wxUSE_UXTHEME
+    wxXPButtonImageData *oldData = NULL;
+#endif // wxUSE_UXTHEME
+
+    // Check if we already had bitmaps of different size.
+    if ( m_imageData &&
+          bitmap.GetSize() != m_imageData->GetBitmap(State_Normal).GetSize() )
+    {
+        wxASSERT_MSG( which == State_Normal,
+                      "Must set normal bitmap with the new size first" );
+
+#if wxUSE_UXTHEME
+        if ( ShowsLabel() && wxUxThemeEngine::GetIfActive() )
+        {
+            // We can't change the size of the images stored in wxImageList
+            // in wxXPButtonImageData::m_iml so force recreating it below but
+            // keep the current data to copy its values into the new one.
+            oldData = static_cast<wxXPButtonImageData *>(m_imageData);
+            m_imageData = NULL;
+        }
+#endif // wxUSE_UXTHEME
+        //else: wxODButtonImageData doesn't require anything special
+    }
+
     // allocate the image data when the first bitmap is set
     if ( !m_imageData )
     {
@@ -998,6 +1022,20 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         if ( ShowsLabel() && wxUxThemeEngine::GetIfActive() )
         {
             m_imageData = new wxXPButtonImageData(this, bitmap);
+
+            if ( oldData )
+            {
+                // Preserve the old values in case the user changed them.
+                m_imageData->SetBitmapPosition(oldData->GetBitmapPosition());
+
+                const wxSize oldMargins = oldData->GetBitmapMargins();
+                m_imageData->SetBitmapMargins(oldMargins.x, oldMargins.y);
+
+                // No need to preserve the bitmaps though as they were of wrong
+                // size anyhow.
+
+                delete oldData;
+            }
         }
         else
 #endif // wxUSE_UXTHEME

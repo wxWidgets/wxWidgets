@@ -78,7 +78,11 @@
         get reasonably good behaviour on all platforms.
 
     All of the bitmaps must be of the same size and the normal bitmap must be
-    set first (to a valid bitmap), before setting any other ones.
+    set first (to a valid bitmap), before setting any other ones. Also, if the
+    size of the bitmaps is changed later, you need to change the size of the
+    normal bitmap before setting any other bitmaps with the new size (and you
+    do need to reset all of them as their original values can be lost when the
+    normal bitmap size changes).
 
     The position of the image inside the button be configured using
     SetBitmapPosition(). By default the image is on the left of the text.
