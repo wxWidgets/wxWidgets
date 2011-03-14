@@ -1099,15 +1099,17 @@ wxButton::State GetButtonState(wxButton *btn, UINT state)
 
 void DrawButtonText(HDC hdc,
                     RECT *pRect,
-                    const wxString& text,
+                    wxButton *btn,
                     int flags)
 {
-    // center text horizontally in any case
-    flags |= DT_CENTER;
+    const wxString text = btn->GetLabel();
 
     if ( text.find(wxT('\n')) != wxString::npos )
     {
         // draw multiline label
+
+        // center text horizontally in any case
+        flags |= DT_CENTER;
 
         // first we need to compute its bounding rect
         RECT rc;
@@ -1127,10 +1129,31 @@ void DrawButtonText(HDC hdc,
     }
     else // single line label
     {
-        // centre text vertically too (notice that we must have DT_SINGLELINE
-        // for DT_VCENTER to work)
+        // translate wx button flags to alignment flags for DrawText()
+        if ( btn->HasFlag(wxBU_RIGHT) )
+        {
+            flags |= DT_RIGHT;
+        }
+        else if ( !btn->HasFlag(wxBU_LEFT) )
+        {
+            flags |= DT_CENTER;
+        }
+        //else: DT_LEFT is the default anyhow (and its value is 0 too)
+
+        if ( btn->HasFlag(wxBU_BOTTOM) )
+        {
+            flags |= DT_BOTTOM;
+        }
+        else if ( !btn->HasFlag(wxBU_TOP) )
+        {
+            flags |= DT_VCENTER;
+        }
+        //else: as above, DT_TOP is the default
+
+        // notice that we must have DT_SINGLELINE for vertical alignment flags
+        // to work
         ::DrawText(hdc, text.wx_str(), text.length(), pRect,
-                   flags | DT_SINGLELINE | DT_VCENTER);
+                   flags | DT_SINGLELINE );
     }
 }
 
@@ -1475,7 +1498,7 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
             // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
             // systems but by happy coincidence ODS_NOACCEL is not used under
             // them neither so DT_HIDEPREFIX should never be used there
-            DrawButtonText(hdc, &rectBtn, GetLabel(),
+            DrawButtonText(hdc, &rectBtn, this,
                            state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
         }
     }
