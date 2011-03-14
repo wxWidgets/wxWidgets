@@ -484,6 +484,7 @@ All (GUI):
 - Fix wxWrapSizer minimal size calculation (Catalin Raceanu).
 - Added wxFont::Underlined() and MakeUnderlined() methods.
 - Added wxFont::SetSymbolicSize() and related methods.
+- Fix SVG files generation in locales using decimal comma (snowleopard).
 
 GTK:
 

@@ -41,7 +41,10 @@
 // Global utilities
 // ----------------------------------------------------------
 
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+namespace
+{
+
+inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 wxString wxColStr ( wxColour c )
 {
@@ -75,6 +78,17 @@ wxString wxBrushString ( wxColour c, int style )
     s = s + newline;
     return s;
 }
+
+// This function returns a string representation of a floating point number in
+// C locale (i.e. always using "." for the decimal separator) and with the
+// fixed precision (which is 2 for some unknown reason but this is what it was
+// in this code originally).
+inline wxString NumStr(double f)
+{
+    return wxString::FromCDouble(f, 2);
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
@@ -127,9 +141,9 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
         write(s);
         s = wxT("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"> ") + newline;
         write(s);
-        s =  wxT("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ") + newline;
+        s = wxT("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ") + newline;
         write(s);
-        s.Printf( wxT("    width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"> \n"), float(Width)/dpi*2.54, float(Height)/dpi*2.54, Width, Height );
+        s.Printf( wxT("    width=\"%scm\" height=\"%scm\" viewBox=\"0 0 %d %d \"> \n"), NumStr(float(Width)/dpi*2.54), NumStr(float(Height)/dpi*2.54), Width, Height );
         write(s);
         s = wxT("<title>SVG Picture created as ") + wxFileName(filename).GetFullName() + wxT(" </title>") + newline;
         write(s);
@@ -238,7 +252,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"  "), x,y+desc-h, w, h );
         s = sTmp + wxT("style=\"fill:#") + wxColStr (m_textBackgroundColour) + wxT("; ");
         s = s + wxT("stroke-width:1; stroke:#") + wxColStr (m_textBackgroundColour) + wxT("; ");
-        sTmp.Printf ( wxT("\" transform=\"rotate( %.2g %d %d )  \">"), -angle, x,y );
+        sTmp.Printf ( wxT("\" transform=\"rotate( %s %d %d )  \">"), NumStr(-angle), x,y );
         s = s + sTmp + newline;
         write(s);
     }
@@ -258,7 +272,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     sTmp.Printf (wxT("font-size:%dpt; fill:#"), m_font.GetPointSize () );
     s = s + sTmp;
     s = s + wxColStr (m_textForegroundColour) + wxT("; stroke:#") + wxColStr (m_textForegroundColour) + wxT("; ");
-    sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %.2g %d %d )  \" >"),  -angle, x,y );
+    sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %s %d %d )  \" >"),  NumStr(-angle), x,y );
     s = s + sTmp + sText + wxT("</text> ") + newline;
     if (m_OK)
     {
@@ -278,8 +292,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     if (m_graphics_changed) NewGraphics ();
     wxString s;
 
-    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%.2g\" "),
-            x, y, width, height, radius );
+    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" "),
+            x, y, width, height, NumStr(radius) );
 
     s = s + wxT(" /> ") + newline;
     write(s);
@@ -371,8 +385,8 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
 
     int fSweep = 0;             // flag for sweep always 0
 
-    s.Printf ( wxT("<path d=\"M%d %d A%.2g %.2g 0.0 %d %d %d %d L%d %d z "),
-        x1,y1, r1, r2, fArc, fSweep, x2, y2, xc, yc );
+    s.Printf ( wxT("<path d=\"M%d %d A%s %s 0.0 %d %d %d %d L%d %d z "),
+        x1,y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, xc, yc );
 
     // the z means close the path and fill
     s = s + wxT(" \" /> ") + newline;
@@ -570,8 +584,8 @@ void wxSVGFileDCImpl::NewGraphics ()
             sWarn = sWarn + wxT("<!--- wxSVGFileDC::SetPen Call called to set a Style which is not available --> \n");
     }
 
-    sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%.2g %.2g) scale(%.2g %.2g)\">"),
-                w, double(m_logicalOriginX), double(m_logicalOriginY), m_scaleX, m_scaleY  );
+    sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%s %s) scale(%s %s)\">"),
+                w, NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + newline + sWarn;
     write(s);
