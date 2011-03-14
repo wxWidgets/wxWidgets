@@ -237,8 +237,12 @@ enum wxWindowVariant
         See wxKeyEvent.
     @event{EVT_KEY_UP(func)}
         Process a @c wxEVT_KEY_UP event (any key has been released).
+        See wxKeyEvent.
     @event{EVT_CHAR(func)}
         Process a @c wxEVT_CHAR event.
+        See wxKeyEvent.
+    @event{EVT_CHAR_HOOK(func)}
+        Process a @c wxEVT_CHAR_HOOK event.
         See wxKeyEvent.
     @event{EVT_MOUSE_CAPTURE_LOST(func)}
         Process a @c wxEVT_MOUSE_CAPTURE_LOST event. See wxMouseCaptureLostEvent.
