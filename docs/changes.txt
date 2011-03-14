@@ -195,6 +195,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   release so you are strongly encouraged to upgrade your code to stop relying
   on this behaviour.
 
+- wxEVT_CHAR_HOOK events are not generated any more if the mouse is captured to
+  prevent the parent wxTopLevelWindow from interfering with the keyboard
+  handling of the window that captured the mouse.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

@@ -884,17 +884,21 @@ bool
 SendCharHookAndCharEvents(const wxKeyEvent& event, wxWindow *win)
 {
     // wxEVT_CHAR_HOOK must be sent to the top level parent window to allow it
-    // to handle key events in all of its children.
-    wxWindow * const parent = wxGetTopLevelParent(win);
-    if ( parent )
+    // to handle key events in all of its children unless the mouse is captured
+    // in which case we consider that the keyboard should be "captured" too.
+    if ( !g_captureWindow )
     {
-        // We need to make a copy of the event object because it is
-        // modified while it's handled, notably its WasProcessed() flag
-        // is set after it had been processed once.
-        wxKeyEvent eventCharHook(event);
-        eventCharHook.SetEventType(wxEVT_CHAR_HOOK);
-        if ( parent->HandleWindowEvent(eventCharHook) )
-            return true;
+        wxWindow * const parent = wxGetTopLevelParent(win);
+        if ( parent )
+        {
+            // We need to make a copy of the event object because it is
+            // modified while it's handled, notably its WasProcessed() flag
+            // is set after it had been processed once.
+            wxKeyEvent eventCharHook(event);
+            eventCharHook.SetEventType(wxEVT_CHAR_HOOK);
+            if ( parent->HandleWindowEvent(eventCharHook) )
+                return true;
+        }
     }
 
     // As above, make a copy of the event first.

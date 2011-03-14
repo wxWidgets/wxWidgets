@@ -6521,7 +6521,13 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
         // Don't intercept keyboard entry (notably Escape) if a modal window
         // (not managed by wx, e.g. IME one) is currently opened as more often
         // than not it needs all the keys for itself.
-        if ( !gs_modalEntryWindowCount )
+        //
+        // Also don't catch it if a window currently captures the mouse as
+        // Escape is normally used to release the mouse capture and if you
+        // really need to catch all the keys in the window that has mouse
+        // capture it can be easily done in its own EVT_CHAR handler as it is
+        // certain to have focus while it has the capture.
+        if ( !gs_modalEntryWindowCount && !::GetCapture() )
         {
             if ( id != WXK_NONE
 #if wxUSE_UNICODE
