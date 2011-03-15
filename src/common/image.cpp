@@ -589,16 +589,16 @@ wxImage wxImage::ResampleBox(int width, int height) const
             averaged_pixels = 0;
             sum_r = sum_g = sum_b = sum_a = 0.0;
 
-            for ( int j = int(src_y - scale_factor_y/2.0 + 1);
-                  j <= int(src_y + scale_factor_y_2);
+            for ( int j = int(src_y - scale_factor_y/2.0 + 1), k = j;
+                  j <= int(src_y + scale_factor_y_2) || j < k + 2;
                   j++ )
             {
                 // We don't care to average pixels that don't exist (edges)
                 if ( j < 0 || j > M_IMGDATA->m_height - 1 )
                     continue;
 
-                for ( int i = int(src_x - scale_factor_x/2.0 + 1);
-                      i <= src_x + scale_factor_x_2;
+                for ( int i = int(src_x - scale_factor_x/2.0 + 1), e = i;
+                      i <= src_x + scale_factor_x_2 || i < e + 2;
                       i++ )
                 {
                     // Don't average edge pixels
