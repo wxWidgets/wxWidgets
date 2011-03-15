@@ -82,6 +82,9 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool Reparent(wxWindowBase *newParent);
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip(wxToolTip *tip);
+#endif // wxUSE_TOOLTIPS
 
     // get the subcontrols
     wxTextCtrl   *GetText() const       { return m_textCtrl; }

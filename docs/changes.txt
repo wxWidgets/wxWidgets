@@ -489,6 +489,7 @@ All (GUI):
 - Added wxFont::Underlined() and MakeUnderlined() methods.
 - Added wxFont::SetSymbolicSize() and related methods.
 - Fix SVG files generation in locales using decimal comma (snowleopard).
+- Fix setting tooltips for generic wxSpinCtrl (Catalin Raceanu).
 
 GTK:
 
