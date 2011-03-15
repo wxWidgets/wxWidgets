@@ -853,7 +853,11 @@ public :
     virtual void SetModified(bool WXUNUSED(modified)) { }
     virtual bool IsModified() const { return false; }
 
+#if wxOSX_USE_IPHONE
+    virtual CGFloat GetWindowLevel() const { return 0.0; }
+#else
     virtual CGWindowLevel GetWindowLevel() const { return kCGNormalWindowLevel; }
+#endif
     virtual void RestoreWindowLevel() {}
 protected :
     wxNonOwnedWindow*   m_wxPeer;
