@@ -497,17 +497,17 @@ void ButtonWidgetsPage::CreateButton()
             wxLEFT, wxRIGHT, wxTOP, wxBOTTOM
         };
 
-        m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION),
+        m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_BUTTON),
                             positions[m_radioImagePos->GetSelection()]);
 
         if ( m_chkUsePressed->GetValue() )
-            m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP));
+            m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP, wxART_BUTTON));
         if ( m_chkUseFocused->GetValue() )
-            m_button->SetBitmapFocus(wxArtProvider::GetIcon(wxART_ERROR));
+            m_button->SetBitmapFocus(wxArtProvider::GetIcon(wxART_ERROR, wxART_BUTTON));
         if ( m_chkUseCurrent->GetValue() )
-            m_button->SetBitmapCurrent(wxArtProvider::GetIcon(wxART_WARNING));
+            m_button->SetBitmapCurrent(wxArtProvider::GetIcon(wxART_WARNING, wxART_BUTTON));
         if ( m_chkUseDisabled->GetValue() )
-            m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE));
+            m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE, wxART_BUTTON));
     }
 
     m_chkUsePressed->Enable(showsBitmap);
