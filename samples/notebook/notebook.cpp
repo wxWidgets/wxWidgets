@@ -548,7 +548,8 @@ void MyFrame::RecreateBook()
 
     m_bookCtrl->Hide();
 
-    if ( m_chkShowImages )
+    // wxToolbook doesn't work without icons so always use them for it.
+    if ( m_chkShowImages || m_type == Type_Toolbook )
     {
         m_bookCtrl->SetImageList(m_imageList);
     }
