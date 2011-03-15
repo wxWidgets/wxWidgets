@@ -442,23 +442,16 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
     if ( old_width == width && old_height == height )
         return *this;
 
-    // resample the image using either the nearest neighbourhood, bilinear or
-    // bicubic method as specified
+    if (quality == wxIMAGE_QUALITY_HIGH)
+    {
+        quality = (width < old_width && height < old_height)
+            ? wxIMAGE_QUALITY_BOX_AVERAGE
+            : wxIMAGE_QUALITY_BICUBIC;
+    }
+
+    // Resample the image using the method as specified.
     switch ( quality )
     {
-        case wxIMAGE_QUALITY_BICUBIC:
-        case wxIMAGE_QUALITY_BILINEAR:
-            // both of these algorithms should be used for up-sampling the
-            // image only, when down-sampling always use box averaging for best
-            // results
-            if ( width < old_width && height < old_height )
-                image = ResampleBox(width, height);
-            else if ( quality == wxIMAGE_QUALITY_BILINEAR )
-                image = ResampleBilinear(width, height);
-            else if ( quality == wxIMAGE_QUALITY_BICUBIC )
-                image = ResampleBicubic(width, height);
-            break;
-
         case wxIMAGE_QUALITY_NEAREST:
             if ( old_width % width == 0 && old_width >= width &&
                 old_height % height == 0 && old_height >= height )
@@ -467,6 +460,18 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
             }
 
             image = ResampleNearest(width, height);
+            break;
+
+        case wxIMAGE_QUALITY_BILINEAR:
+            image = ResampleBilinear(width, height);
+            break;
+
+        case wxIMAGE_QUALITY_BICUBIC:
+            image = ResampleBicubic(width, height);
+            break;
+
+        case wxIMAGE_QUALITY_BOX_AVERAGE:
+            image = ResampleBox(width, height);
             break;
     }
 

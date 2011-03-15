@@ -39,10 +39,24 @@ enum wxImageResizeQuality
     /// Highest quality but slowest execution time.
     wxIMAGE_QUALITY_BICUBIC,
 
-    /// Default image resizing algorithm used by wxImage::Scale().
+    /**
+    Use surrounding pixels to calculate an average that will be used for
+    new pixels. This method is typically used when reducing the size of
+    an image.
+    wxIMAGE_QUALITY_BOX_AVERAGE,
+
+    /**
+    Default image resizing algorithm used by wxImage::Scale(). Currently
+    the same as wxIMAGE_QUALITY_NEAREST.
+    */
     wxIMAGE_QUALITY_NORMAL,
 
-    /// Best image resizing algorithm, currently same as wxIMAGE_QUALITY_BICUBIC.
+    /**
+    Best image resizing algorithm. Since version 2.9.2 this results in
+    wxIMAGE_QUALITY_BOX_AVERAGE being used when reducing the size of the
+    image (meaning that both the new width and height will be smaller than
+    the original size). Otherwise wxIMAGE_QUALITY_BICUBIC is used.
+    */
     wxIMAGE_QUALITY_HIGH
 };
 
