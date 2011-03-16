@@ -175,7 +175,7 @@ public:
 
 #define M_FONTDATA ((wxFontRefData*)m_refData)
 
-wxFontRefData::wxFontRefData(const wxFontRefData& data)
+wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
 {
     Init();
     m_info = data.m_info;

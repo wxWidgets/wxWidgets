@@ -239,7 +239,7 @@ wxCursorRefData::wxCursorRefData()
 #endif
 }
 
-wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor)
+wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor) : wxGDIRefData()
 {
     m_hCursor = NULL;
 

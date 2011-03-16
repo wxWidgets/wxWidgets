@@ -255,7 +255,7 @@ void wxBitmapRefData::Init()
     m_hasAlpha = false;
 }
 
-wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy)
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy) : wxGDIRefData()
 {
     Init();
     Create(tocopy.m_width, tocopy.m_height, tocopy.m_depth);
@@ -1531,7 +1531,7 @@ wxMask::wxMask()
     Init() ;
 }
 
-wxMask::wxMask(const wxMask &tocopy)
+wxMask::wxMask(const wxMask &tocopy) : wxObject()
 {
     Init();
 
