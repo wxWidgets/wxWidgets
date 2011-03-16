@@ -487,7 +487,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
-        if (position < [[m_textView string] length]) 
+        if (position < (long) [[m_textView string] length]) 
         {
             NSTextStorage* storage = [m_textView textStorage];
             font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL] autorelease];
