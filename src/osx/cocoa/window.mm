@@ -1266,7 +1266,7 @@ void wxWidgetCocoaImpl::controlTextDidChange()
 #else
 
 #define wxOSX_CLASS_ADD_METHOD( c, s, i, t ) \
-    { s, t, i },
+    { s, (char*) t, i },
 
 #endif
 
