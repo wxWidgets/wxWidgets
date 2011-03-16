@@ -295,7 +295,7 @@ public:
         Init(CFStringGetSystemEncoding()) ;
     }
 
-    wxMBConv_cf(const wxMBConv_cf& conv)
+    wxMBConv_cf(const wxMBConv_cf& conv) : wxMBConv()
     {
         m_encoding = conv.m_encoding;
     }
