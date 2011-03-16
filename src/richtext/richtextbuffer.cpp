@@ -7733,11 +7733,11 @@ bool wxRichTextBuffer::SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet)
 {
     wxRichTextStyleSheet* oldSheet = GetStyleSheet();
 
-    wxWindowID id = wxID_ANY;
+    wxWindowID winid = wxID_ANY;
     if (GetRichTextCtrl())
-        id = GetRichTextCtrl()->GetId();
+        winid = GetRichTextCtrl()->GetId();
 
-    wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, id);
+    wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, winid);
     event.SetEventObject(GetRichTextCtrl());
     event.SetContainer(GetRichTextCtrl()->GetFocusObject());
     event.SetOldStyleSheet(oldSheet);
