@@ -214,9 +214,9 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
                 return -1;
             default:
                 wxFAIL_MSG("unknown response code");
-                return -1;
                 break;
         }
+        return -1;
     }
     else 
     {        
