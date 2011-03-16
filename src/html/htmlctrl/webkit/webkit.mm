@@ -767,8 +767,8 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     if (IsShown())
         [(WebView*)m_webView display];
-    event.Skip();
 #endif
+    event.Skip();
 }
 
 void wxWebKitCtrl::MacVisibilityChanged(){
