@@ -43,7 +43,7 @@ wxMenuImpl::~wxMenuImpl()
 {
 }
 
-// the (popup) menu title has this special id
+// the (popup) menu title has this special menuid
 static const int idMenuTitle = -3;
 
 // ============================================================================
@@ -337,8 +337,8 @@ void wxMenu::DoRearrange()
 
 bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow )
 {
-    int id = item ? item->GetId() : 0;
-    wxUpdateUIEvent event(id);
+    int menuid = item ? item->GetId() : 0;
+    wxUpdateUIEvent event(menuid);
     event.SetEventObject( this );
 
     bool processed = false;
@@ -368,11 +368,11 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     {
         // if anything changed, update the changed attribute
         if (event.GetSetText())
-            SetLabel(id, event.GetText());
+            SetLabel(menuid, event.GetText());
         if (event.GetSetChecked())
-            Check(id, event.GetChecked());
+            Check(menuid, event.GetChecked());
         if (event.GetSetEnabled())
-            Enable(id, event.GetEnabled());
+            Enable(menuid, event.GetEnabled());
     }
     else
     {
@@ -381,11 +381,11 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         // always reset them ourselves
         UInt32 cmd = 0;
 
-        if ( id == wxApp::s_macExitMenuItemId )
+        if ( menuid == wxApp::s_macExitMenuItemId )
         {
             cmd = kHICommandQuit;
         }
-        else if (id == wxApp::s_macPreferencesMenuItemId )
+        else if (menuid == wxApp::s_macPreferencesMenuItemId )
         {
             cmd = kHICommandPreferences;
         }
@@ -406,18 +406,18 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
 
 bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 {
-    int id = item ? item->GetId() : 0;
+    int menuid = item ? item->GetId() : 0;
     bool processed = false;
     if (item->IsCheckable())
         item->Check( !item->IsChecked() ) ;
 
-    if ( SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
+    if ( SendEvent( menuid , item->IsCheckable() ? item->IsChecked() : -1 ) )
         processed = true ;
     else
     {
         if ( senderWindow != NULL )
         {
-            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , id);
+            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , menuid);
             event.SetEventObject(senderWindow);
             event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
 
@@ -436,8 +436,8 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 
 void wxMenu::HandleMenuItemHighlighted( wxMenuItem* item )
 {
-    int id = item ? item->GetId() : 0;
-    wxMenuEvent wxevent(wxEVT_MENU_HIGHLIGHT, id, this);
+    int menuid = item ? item->GetId() : 0;
+    wxMenuEvent wxevent(wxEVT_MENU_HIGHLIGHT, menuid, this);
     DoHandleMenuEvent( wxevent );
 }
 
@@ -598,13 +598,13 @@ void wxMenuBar::MacInstallMenuBar()
     
     // hide items in the apple menu that don't exist in the wx menubar
     
-    int id = 0;
+    int menuid = 0;
     wxMenuItem* appleItem = NULL;
     wxMenuItem* wxItem = NULL;
 
-    id = wxApp::s_macAboutMenuItemId;
-    appleItem = m_appleMenu->FindItem(id);
-    wxItem = FindItem(id);
+    menuid = wxApp::s_macAboutMenuItemId;
+    appleItem = m_appleMenu->FindItem(menuid);
+    wxItem = FindItem(menuid);
     if ( appleItem != NULL )
     {
         if ( wxItem == NULL )
@@ -613,9 +613,9 @@ void wxMenuBar::MacInstallMenuBar()
             appleItem->SetItemLabel(wxItem->GetItemLabel());
     }
     
-    id = wxApp::s_macPreferencesMenuItemId;
-    appleItem = m_appleMenu->FindItem(id);
-    wxItem = FindItem(id);
+    menuid = wxApp::s_macPreferencesMenuItemId;
+    appleItem = m_appleMenu->FindItem(menuid);
+    wxItem = FindItem(menuid);
     if ( appleItem != NULL )
     {
         if ( wxItem == NULL )

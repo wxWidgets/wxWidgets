@@ -470,7 +470,7 @@ void wxGenericDirCtrl::ExpandRoot()
 }
 
 bool wxGenericDirCtrl::Create(wxWindow *parent,
-                              const wxWindowID id,
+                              const wxWindowID treeid,
                               const wxString& dir,
                               const wxPoint& pos,
                               const wxSize& size,
@@ -479,7 +479,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
                               int defaultFilter,
                               const wxString& name)
 {
-    if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
+    if (!wxControl::Create(parent, treeid, pos, size, style, wxDefaultValidator, name))
         return false;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -562,9 +562,9 @@ void wxGenericDirCtrl::Init()
     m_filterListCtrl = NULL;
 }
 
-wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long treeStyle)
+wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID treeid, const wxPoint& pos, const wxSize& size, long treeStyle)
 {
-    return new wxTreeCtrl(parent, id, pos, size, treeStyle);
+    return new wxTreeCtrl(parent, treeid, pos, size, treeStyle);
 }
 
 void wxGenericDirCtrl::ShowHidden( bool show )
@@ -597,11 +597,11 @@ wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int ima
 {
     wxDirItemData *dir_item = new wxDirItemData(path,name,true);
 
-    wxTreeItemId id = AppendItem( m_rootId, name, imageId, -1, dir_item);
+    wxTreeItemId treeid = AppendItem( m_rootId, name, imageId, -1, dir_item);
 
-    m_treeCtrl->SetItemHasChildren(id);
+    m_treeCtrl->SetItemHasChildren(treeid);
 
-    return id;
+    return treeid;
 }
 
 void wxGenericDirCtrl::SetupSections()
@@ -665,8 +665,8 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
         return;
     }
 
-    wxTreeItemId id = event.GetItem();
-    wxDirItemData *data = (wxDirItemData*)m_treeCtrl->GetItemData( id );
+    wxTreeItemId treeid = event.GetItem();
+    wxDirItemData *data = (wxDirItemData*)m_treeCtrl->GetItemData( treeid );
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
@@ -843,9 +843,9 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         path += eachFilename;
 
         wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,true);
-        wxTreeItemId id = AppendItem( parentId, eachFilename,
+        wxTreeItemId treeid = AppendItem( parentId, eachFilename,
                                       wxFileIconsTable::folder, -1, dir_item);
-        m_treeCtrl->SetItemImage( id, wxFileIconsTable::folder_open,
+        m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
                                   wxTreeItemIcon_Expanded );
 
         // assume that it does have children by default as it can take a long
@@ -853,7 +853,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         //
         // and if we're wrong, we'll correct the icon later if
         // the user really tries to open this item
-        m_treeCtrl->SetItemHasChildren(id);
+        m_treeCtrl->SetItemHasChildren(treeid);
     }
 
     // Add the sorted filenames
@@ -960,15 +960,15 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
 bool wxGenericDirCtrl::ExpandPath(const wxString& path)
 {
     bool done = false;
-    wxTreeItemId id = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = id; // The last non-zero id
-    while (id.IsOk() && !done)
+    wxTreeItemId treeid = FindChild(m_rootId, path, done);
+    wxTreeItemId lastId = treeid; // The last non-zero treeid
+    while (treeid.IsOk() && !done)
     {
-        ExpandDir(id);
+        ExpandDir(treeid);
 
-        id = FindChild(id, path, done);
-        if (id.IsOk())
-            lastId = id;
+        treeid = FindChild(treeid, path, done);
+        if (treeid.IsOk())
+            lastId = treeid;
     }
     if (!lastId.IsOk())
         return false;
@@ -1016,17 +1016,17 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
 bool wxGenericDirCtrl::CollapsePath(const wxString& path)
 {
     bool done           = false;
-    wxTreeItemId id     = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = id; // The last non-zero id
+    wxTreeItemId treeid     = FindChild(m_rootId, path, done);
+    wxTreeItemId lastId = treeid; // The last non-zero treeid
 
-    while ( id.IsOk() && !done )
+    while ( treeid.IsOk() && !done )
     {
-        CollapseDir(id);
+        CollapseDir(treeid);
 
-        id = FindChild(id, path, done);
+        treeid = FindChild(treeid, path, done);
 
-        if ( id.IsOk() )
-            lastId = id;
+        if ( treeid.IsOk() )
+            lastId = treeid;
     }
 
     if ( !lastId.IsOk() )
@@ -1049,18 +1049,18 @@ wxString wxGenericDirCtrl::GetPath() const
         if (items.size() > 0)
         {
             // return first string only
-            wxTreeItemId id = items[0];
-            wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+            wxTreeItemId treeid = items[0];
+            wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
             return data->m_path;
         }
 
         return wxEmptyString;
     }
 
-    wxTreeItemId id = m_treeCtrl->GetSelection();
-    if (id)
+    wxTreeItemId treeid = m_treeCtrl->GetSelection();
+    if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
         return data->m_path;
     }
     else
@@ -1075,18 +1075,18 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
     m_treeCtrl->GetSelections(items);
     for ( unsigned n = 0; n < items.size(); n++ )
     {
-        wxTreeItemId id = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+        wxTreeItemId treeid = items[n];
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
         paths.Add(data->m_path);
     }
 }
 
 wxString wxGenericDirCtrl::GetFilePath() const
 {
-    wxTreeItemId id = m_treeCtrl->GetSelection();
-    if (id)
+    wxTreeItemId treeid = m_treeCtrl->GetSelection();
+    if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
         if (data->m_isDir)
             return wxEmptyString;
         else
@@ -1104,8 +1104,8 @@ void wxGenericDirCtrl::GetFilePaths(wxArrayString& paths) const
     m_treeCtrl->GetSelections(items);
     for ( unsigned n = 0; n < items.size(); n++ )
     {
-        wxTreeItemId id = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
+        wxTreeItemId treeid = items[n];
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
         if ( !data->m_isDir )
             paths.Add(data->m_path);
     }
@@ -1121,20 +1121,20 @@ void wxGenericDirCtrl::SetPath(const wxString& path)
 void wxGenericDirCtrl::SelectPath(const wxString& path, bool select)
 {
     bool done = false;
-    wxTreeItemId id = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = id; // The last non-zero id
-    while ( id.IsOk() && !done )
+    wxTreeItemId treeid = FindChild(m_rootId, path, done);
+    wxTreeItemId lastId = treeid; // The last non-zero treeid
+    while ( treeid.IsOk() && !done )
     {
-        id = FindChild(id, path, done);
-        if ( id.IsOk() )
-            lastId = id;
+        treeid = FindChild(treeid, path, done);
+        if ( treeid.IsOk() )
+            lastId = treeid;
     }
     if ( !lastId.IsOk() )
         return;
 
     if ( done )
     {
-        m_treeCtrl->SelectItem(id, select);
+        m_treeCtrl->SelectItem(treeid, select);
     }
 }
 
@@ -1157,9 +1157,9 @@ void wxGenericDirCtrl::UnselectAll()
 
 // Not used
 #if 0
-void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayString& filenames)
+void wxGenericDirCtrl::FindChildFiles(wxTreeItemId treeid, int dirFlags, wxArrayString& filenames)
 {
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(id);
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(treeid);
 
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
@@ -1315,7 +1315,7 @@ BEGIN_EVENT_TABLE(wxDirFilterListCtrl, wxChoice)
 END_EVENT_TABLE()
 
 bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
-                                 const wxWindowID id,
+                                 const wxWindowID treeid,
                                  const wxPoint& pos,
                                  const wxSize& size,
                                  long style)
@@ -1329,7 +1329,7 @@ bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
                                                         : wxBORDER_NONE;
     }
 
-    return wxChoice::Create(parent, id, pos, size, 0, NULL, style);
+    return wxChoice::Create(parent, treeid, pos, size, 0, NULL, style);
 }
 
 void wxDirFilterListCtrl::Init()
@@ -1484,9 +1484,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileIconsTableModule, wxModule)
 class wxFileIconEntry : public wxObject
 {
 public:
-    wxFileIconEntry(int i) { id = i; }
+    wxFileIconEntry(int i) { iconid = i; }
 
-    int id;
+    int iconid;
 };
 
 wxFileIconsTable::wxFileIconsTable()
@@ -1688,7 +1688,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     if (!extension.empty())
     {
         wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable->Get(extension);
-        if (entry) return (entry -> id);
+        if (entry) return (entry -> iconid);
     }
 
     wxFileType *ft = (mime.empty()) ?
@@ -1727,7 +1727,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 
     const unsigned int size = 16;
 
-    int id = m_smallImageList->GetImageCount();
+    int treeid = m_smallImageList->GetImageCount();
     if ((bmp.GetWidth() == (int) size) && (bmp.GetHeight() == (int) size))
     {
         m_smallImageList->Add(bmp);
@@ -1745,8 +1745,8 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     }
 #endif // wxUSE_IMAGE
 
-    m_HashTable->Put(extension, new wxFileIconEntry(id));
-    return id;
+    m_HashTable->Put(extension, new wxFileIconEntry(treeid));
+    return treeid;
 
 #else // !wxUSE_MIMETYPE
 
