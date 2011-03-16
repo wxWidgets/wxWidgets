@@ -887,7 +887,7 @@ void wxToolBar::DoLayout()
     
     // find the maximum tool width and height
     // and the number of stretchable items
-    unsigned numStretchableSpaces = 0;
+    int numStretchableSpaces = 0;
     wxToolBarTool *tool;
     wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
     while ( node )
