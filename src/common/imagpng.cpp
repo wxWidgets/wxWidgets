@@ -602,6 +602,47 @@ wxPNGHandler::LoadFile(wxImage *image,
     }
 #endif // wxUSE_PALETTE
 
+
+    // set the image resolution if it's available
+    png_uint_32 resX, resY;
+    int unitType;
+    if (png_get_pHYs(png_ptr, info_ptr, &resX, &resY, &unitType)
+        == PNG_INFO_pHYs)
+    {
+        wxImageResolution res = wxIMAGE_RESOLUTION_CM;
+
+        switch (unitType)
+        {
+            default:
+                wxLogWarning(_("Unknown PNG resolution unit %d"), unitType);
+                // fall through
+
+            case PNG_RESOLUTION_UNKNOWN:
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, resX);
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, resY);
+
+                res = wxIMAGE_RESOLUTION_NONE;
+                break;
+
+            case PNG_RESOLUTION_METER:
+                /*
+                Convert meters to centimeters.
+                Use a string to not lose precision (converting to cm and then
+                to inch would result in integer rounding error).
+                If an app wants an int, GetOptionInt will convert and round
+                down for them.
+                */
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX,
+                    wxString::FromCDouble((double) resX / 100.0, 2));
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY,
+                    wxString::FromCDouble((double) resY / 100.0, 2));
+                break;
+        }
+
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, res);
+    }
+
+
     png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
 
     // loaded successfully, now init wxImage with this data
