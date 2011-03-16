@@ -336,7 +336,7 @@ void wxApp::MacReopenApp()
     // if some windows are not hidden -> do nothing
 
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-    if ( node == NULL )
+    if ( !node )
     {
         MacNewFile() ;
     }
