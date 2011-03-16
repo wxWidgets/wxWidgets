@@ -677,14 +677,14 @@ void wxFileListCtrl::MakeDir()
     wxListItem item;
     item.m_itemId = 0;
     item.m_col = 0;
-    long id = Add( fd, item );
+    long itemid = Add( fd, item );
 
-    if (id != -1)
+    if (itemid != -1)
     {
         SortItems(m_sort_field, m_sort_forward);
-        id = FindItem( 0, wxPtrToUInt(fd) );
-        EnsureVisible( id );
-        EditLabel( id );
+        itemid = FindItem( 0, wxPtrToUInt(fd) );
+        EnsureVisible( itemid );
+        EditLabel( itemid );
     }
     else
         delete fd;

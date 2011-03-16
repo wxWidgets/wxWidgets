@@ -134,12 +134,12 @@ bool wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 class wxExtHelpMapEntry : public wxObject
 {
 public:
-    int      id;
+    int      entryid;
     wxString url;
     wxString doc;
 
     wxExtHelpMapEntry(int iid, wxString const &iurl, wxString const &idoc)
-        { id = iid; url = iurl; doc = idoc; }
+        { entryid = iid; url = iurl; doc = idoc; }
 };
 
 void wxExtHelpController::DeleteList()
@@ -325,7 +325,7 @@ bool wxExtHelpController::DisplayContents()
     while (node)
     {
         entry = (wxExtHelpMapEntry *)node->GetData();
-        if (entry->id == WXEXTHELP_CONTENTS_ID)
+        if (entry->entryid == WXEXTHELP_CONTENTS_ID)
         {
             contents = entry->url;
             break;
@@ -357,7 +357,7 @@ bool wxExtHelpController::DisplaySection(int sectionNo)
     while (node)
     {
         entry = (wxExtHelpMapEntry *)node->GetData();
-        if (entry->id == sectionNo)
+        if (entry->entryid == sectionNo)
             return DisplayHelp(entry->url);
         node = node->GetNext();
     }
