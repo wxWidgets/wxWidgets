@@ -175,7 +175,7 @@ void wxMessageDialog::ShowWindowModal()
     }
 }
 
-void wxMessageDialog::ModalFinishedCallback(void* panel, int resultCode)
+void wxMessageDialog::ModalFinishedCallback(void* WXUNUSED(panel), int resultCode)
 {
     int resultbutton = wxID_CANCEL;
     if ( resultCode < NSAlertFirstButtonReturn )

@@ -291,6 +291,8 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 @implementation wxNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
 - (NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
+    wxUnusedVar(sender);
+    
     return wxTaskBarIconDockImpl::OSXGetDockHMenu();
 }
 @end
@@ -303,6 +305,7 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 
 - (void) clickedAction: (id) sender
 {
+    wxUnusedVar(sender);
     wxMenu *menu = impl->CreatePopupMenu();
     if (menu)
     {

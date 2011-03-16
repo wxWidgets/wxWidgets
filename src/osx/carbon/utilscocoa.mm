@@ -368,7 +368,7 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, c
 
 #if wxOSX_USE_COCOA
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(size))
 {
     wxCFStringRef cfname(name);
     wxCFRef<CGImageRef> image( wxOSXCreateCGImageFromNSImage([NSImage imageNamed:cfname.AsNSString()]) );

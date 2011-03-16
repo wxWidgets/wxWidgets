@@ -308,36 +308,43 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (void)undo:(id)sender 
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)redo:(id)sender 
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)cut:(id)sender 
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)copy:(id)sender
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)paste:(id)sender
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)delete:(id)sender 
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 
 - (void)selectAll:(id)sender 
 {
+    wxUnusedVar(sender);
     [self triggerMenu:_cmd];
 }
 

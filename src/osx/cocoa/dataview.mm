@@ -494,6 +494,9 @@ outlineView:(NSOutlineView*)outlineView
     acceptDrop:(id<NSDraggingInfo>)info
     item:(id)item childIndex:(NSInteger)index
 {
+    wxUnusedVar(outlineView);
+    wxUnusedVar(index);
+    
     NSArray* supportedTypes(
         [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
     );
@@ -609,6 +612,8 @@ outlineView:(NSOutlineView*)outlineView
     child:(NSInteger)index
     ofItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     if ((item == currentParentItem) &&
             (index < ((NSInteger) [self getChildCount])))
         return [self getChild:index];
@@ -625,12 +630,16 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
     return model->IsContainer(wxDataViewItemFromItem(item));
 }
 
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     NSInteger noOfChildren;
 
     wxDataViewItemArray dataViewChildren;
@@ -650,6 +659,8 @@ outlineView:(NSOutlineView*)outlineView
     objectValueForTableColumn:(NSTableColumn*)tableColumn
     byItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
@@ -673,6 +684,8 @@ outlineView:(NSOutlineView*)outlineView
     forTableColumn:(NSTableColumn*)tableColumn
     byItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
 
     col->GetRenderer()->
@@ -681,6 +694,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
 {
+    wxUnusedVar(oldDescriptors);
+    
     // Warning: the new sort descriptors are guaranteed to be only of type
     // NSSortDescriptor! Therefore, the sort descriptors for the data source
     // have to be converted.
@@ -730,6 +745,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(NSDragOperation) outlineView:(NSOutlineView*)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
+    wxUnusedVar(outlineView);
+    wxUnusedVar(index);
+
     NSArray* supportedTypes([NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]);
 
     NSPasteboard* pasteboard([info draggingPasteboard]);
@@ -827,6 +845,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)writeItems toPasteboard:(NSPasteboard*)pasteboard
 {
+    wxUnusedVar(outlineView);
+
     // the pasteboard will be filled up with an array containing the data as
     // returned by the events (including the data type) and a concatenation of
     // text (string) data; the text data will only be put onto the pasteboard
@@ -1534,6 +1554,8 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(void) actionDoubleClick:(id)sender
 {
+    wxUnusedVar(sender);
+
     // actually the documentation (NSTableView 2007-10-31) for doubleAction:
     // and setDoubleAction: seems to be wrong as this action message is always
     // sent whether the cell is editable or not
@@ -1553,6 +1575,8 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(NSMenu*) menuForEvent:(NSEvent*)theEvent
 {
+    wxUnusedVar(theEvent);
+
     // this method does not do any special menu event handling but only sends
     // an event message; therefore, the user has full control if a context
     // menu should be shown or not
@@ -1624,6 +1648,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
@@ -1640,6 +1666,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
@@ -1656,6 +1684,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldSelectTableColumn:(NSTableColumn*)tableColumn
 {
+    wxUnusedVar(tableColumn);
+    wxUnusedVar(outlineView);
+
     return NO;
 }
 
@@ -1664,6 +1695,8 @@ outlineView:(NSOutlineView*)outlineView
     forTableColumn:(NSTableColumn*)tableColumn
     item:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl * const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
@@ -1749,6 +1782,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewSelectionDidChange:(NSNotification*)notification
 {
+    wxUnusedVar(notification);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
@@ -2156,6 +2191,8 @@ bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataVi
 
 bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
 {
+    wxUnusedVar(columnPtr);
+    
     return false;
 }
 
@@ -2966,6 +3003,8 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer(const wxString& label,
                                                        int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
+    wxUnusedVar(label);
+    
     NSLevelIndicatorCell* cell;
 
     cell = [[NSLevelIndicatorCell alloc] initWithLevelIndicatorStyle:NSContinuousCapacityLevelIndicatorStyle];
@@ -3083,6 +3122,7 @@ void wxDataViewColumn::SetMinWidth(int minWidth)
 
 void wxDataViewColumn::SetReorderable(bool reorderable)
 {
+    wxUnusedVar(reorderable);
 }
 
 void wxDataViewColumn::SetHidden(bool hidden)

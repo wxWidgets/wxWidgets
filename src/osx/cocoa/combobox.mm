@@ -168,7 +168,7 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
-                                    wxMenu* menu,
+                                    wxMenu* WXUNUSED(menu),
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
