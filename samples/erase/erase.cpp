@@ -257,8 +257,13 @@ MyCanvas::MyCanvas(wxFrame *parent)
 
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
 
+    new wxStaticText(this, wxID_ANY,
+                     "Left bitmap is a wxStaticBitmap,\n"
+                     "right one drawn directly",
+                     wxPoint(150, 20));
+
     SetFocusIgnoringChildren();
-    SetBackgroundColour(*wxBLUE);
+    SetBackgroundColour(*wxCYAN);
 }
 
 void MyCanvas::OnChar( wxKeyEvent &event )
