@@ -1345,8 +1345,8 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 
 IMPLEMENT_DYNAMIC_CLASS( wxWidgetCocoaImpl , wxWidgetImpl )
 
-wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl ) :
-    wxWidgetImpl( peer, isRootControl )
+wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
+    wxWidgetImpl( peer, isRootControl, isUserPane )
 {
     Init();
     m_osxView = w;

@@ -193,13 +193,15 @@ protected :
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
 {
 public :
-    wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false );
+    wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false, bool isUserPane = false );
     wxWidgetImpl();
     virtual ~wxWidgetImpl();
 
     void Init();
 
     bool                IsRootControl() const { return m_isRootControl; }
+    
+    bool                IsUserPane() const { return m_isUserPane; }
 
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
@@ -520,6 +522,7 @@ public :
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
 protected :
     bool                m_isRootControl;
+    bool                m_isUserPane;
     wxWindowMac*        m_wxPeer;
     bool                m_needsFocusRect;
     bool                m_needsFrame;

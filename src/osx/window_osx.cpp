@@ -2607,10 +2607,11 @@ void wxWidgetImpl::RemoveAssociations(wxWidgetImpl* impl)
 
 IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
 
-wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl )
+wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane )
 {
     Init();
     m_isRootControl = isRootControl;
+    m_isUserPane = isUserPane;
     m_wxPeer = peer;
     m_shouldSendEvents = true;
 }

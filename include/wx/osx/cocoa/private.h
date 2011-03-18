@@ -48,7 +48,7 @@ class WXDLLIMPEXP_FWD_CORE wxDialog;
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;
+    wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false, bool isUserPane = false ) ;
     wxWidgetCocoaImpl() ;
     ~wxWidgetCocoaImpl();
 

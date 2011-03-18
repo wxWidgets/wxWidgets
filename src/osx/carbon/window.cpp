@@ -868,8 +868,8 @@ wxMacControl::wxMacControl()
     Init();
 }
 
-wxMacControl::wxMacControl(wxWindowMac* peer , bool isRootControl ) :
-    wxWidgetImpl( peer, isRootControl )
+wxMacControl::wxMacControl(wxWindowMac* peer , bool isRootControl, bool isUserPane ) :
+    wxWidgetImpl( peer, isRootControl, isUserPane )
 {
     Init();
 }

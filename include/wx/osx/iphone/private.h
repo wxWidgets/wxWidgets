@@ -31,7 +31,7 @@ wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxSt
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false, bool isUserPane = false ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
