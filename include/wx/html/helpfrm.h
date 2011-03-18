@@ -115,9 +115,11 @@ public:
     // Override to add custom buttons to the toolbar
     virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
 
+    void SetShouldPreventAppExit(bool enable);
+
     // we don't want to prevent the app from closing just because a help window
     // remains opened
-    virtual bool ShouldPreventAppExit() const { return false; }
+    virtual bool ShouldPreventAppExit() const { return m_shouldPreventAppExit; }
 
 protected:
     void Init(wxHtmlHelpData* data = NULL);
@@ -143,6 +145,7 @@ protected:
     wxString m_TitleFormat;  // title of the help frame
     wxHtmlHelpWindow *m_HtmlHelpWin;
     wxHtmlHelpController* m_helpController;
+    bool m_shouldPreventAppExit;
 
 private:
 

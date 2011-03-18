@@ -48,6 +48,8 @@ public:
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
     virtual ~wxHtmlHelpController();
 
+    void SetShouldPreventAppExit(bool enable);
+
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
     bool AddBook(const wxString& book_url, bool show_wait_msg = false);
@@ -128,6 +130,8 @@ protected:
     int                 m_FrameStyle;
     wxHtmlHelpFrame*    m_helpFrame;
     wxHtmlHelpDialog*   m_helpDialog;
+
+    bool                m_shouldPreventAppExit;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlHelpController);
 };

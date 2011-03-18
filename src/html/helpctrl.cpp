@@ -52,6 +52,7 @@ wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
 #endif // wxUSE_CONFIG
     m_titleFormat = _("Help: %s");
     m_FrameStyle = style;
+    m_shouldPreventAppExit = false;
 }
 
 wxHtmlHelpController::~wxHtmlHelpController()
@@ -103,6 +104,13 @@ void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
     m_helpWindow = NULL;
     m_helpDialog = NULL;
     m_helpFrame = NULL;
+}
+
+void wxHtmlHelpController::SetShouldPreventAppExit(bool enable)
+{
+    m_shouldPreventAppExit = enable;
+    if ( m_helpFrame )
+        m_helpFrame->SetShouldPreventAppExit(enable);
 }
 
 void wxHtmlHelpController::SetTitleFormat(const wxString& title)
@@ -163,6 +171,7 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
 #endif // wxUSE_CONFIG
         );
     frame->SetTitleFormat(m_titleFormat);
+    frame->SetShouldPreventAppExit(m_shouldPreventAppExit);
     m_helpFrame = frame;
     return frame;
 }
