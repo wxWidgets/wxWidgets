@@ -34,6 +34,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/stopwatch.h"
     #include "wx/dcclient.h"
     #include "wx/textctrl.h"
 #endif
@@ -2366,12 +2367,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #ifdef HAVE_NMLVFINDITEM
             case LVN_ODFINDITEM:
-                // this message is only used with the virtual list control but
-                // even there we don't want to always use it: in a control with
-                // sufficiently big number of items (defined as > 1000 here),
-                // accidentally pressing a key could result in hanging an
-                // application waiting while it performs linear search
-                if ( IsVirtual() && GetItemCount() <= 1000 )
+                // Find an item in a (necessarily virtual) list control.
+                if ( IsVirtual() )
                 {
                     NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
 
@@ -2411,6 +2408,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         startPos = 0;
                     }
 
+                    // Linear search in a control with a lot of items can take
+                    // a long time so we limit the total time of the search to
+                    // ensure that the program doesn't appear to hang.
+#if wxUSE_STOPWATCH
+                    wxStopWatch sw;
+#endif // wxUSE_STOPWATCH
                     for ( int currentPos = startPos; ; )
                     {
                         // does this item begin with searchstr?
@@ -2440,6 +2443,26 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             // item by default in this case.
                             return true;
                         }
+
+#if wxUSE_STOPWATCH
+                        // Check the time elapsed only every thousand
+                        // iterations for performance reasons: if we did it
+                        // more often calling wxStopWatch::Time() could take
+                        // noticeable time on its own.
+                        if ( !((currentPos - startPos)%1000) )
+                        {
+                            // We use half a second to limit the search time
+                            // which is about as long as we can take without
+                            // annoying the user.
+                            if ( sw.Time() > 500 )
+                            {
+                                // As above, return true to prevent the control
+                                // from selecting the first item by default.
+                                return true;
+                            }
+                        }
+#endif // wxUSE_STOPWATCH
+
                     }
 
                     SetItemState(*result,
