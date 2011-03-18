@@ -365,7 +365,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 {
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
-  m_peer = ::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle());
+  SetPeer(::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle()));
 
   MacPostControlCreate(pos,size);
 

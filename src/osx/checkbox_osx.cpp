@@ -36,7 +36,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     m_labelOrig = m_label = label ;
 
     WXValidateStyle( &style );
-    m_peer = wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() )) ;
 
     MacPostControlCreate(pos, size) ;
 
@@ -72,12 +72,12 @@ void wxCheckBox::Command(wxCommandEvent & event)
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState)m_peer->GetValue() ;
+    return (wxCheckBoxState)GetPeer()->GetValue() ;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
 {
-    m_peer->SetValue( val ) ;
+    GetPeer()->SetValue( val ) ;
 }
 
 bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
@@ -85,7 +85,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     bool sendEvent = true;
     wxCheckBoxState newState = Get3StateValue();
 
-    if ( !m_peer->ButtonClickDidStateChange() )
+    if ( !GetPeer()->ButtonClickDidStateChange() )
     {
         wxCheckBoxState origState ;
 

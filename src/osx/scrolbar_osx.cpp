@@ -40,7 +40,7 @@ bool wxScrollBar::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateScrollBar( this, parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateScrollBar( this, parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -53,12 +53,12 @@ wxScrollBar::~wxScrollBar()
 
 void wxScrollBar::SetThumbPosition( int viewStart )
 {
-    m_peer->SetScrollThumb( viewStart, m_viewSize );
+    GetPeer()->SetScrollThumb( viewStart, m_viewSize );
 }
 
 int wxScrollBar::GetThumbPosition() const
 {
-    return m_peer->GetValue();
+    return GetPeer()->GetValue();
 }
 
 void wxScrollBar::SetScrollbar( int position,
@@ -73,8 +73,8 @@ void wxScrollBar::SetScrollbar( int position,
 
    int range1 = wxMax( (m_objectSize - m_viewSize), 0 );
 
-   m_peer->SetMaximum( range1 );
-   m_peer->SetScrollThumb( position, m_viewSize );
+   GetPeer()->SetMaximum( range1 );
+   GetPeer()->SetScrollThumb( position, m_viewSize );
 }
 
 void wxScrollBar::Command( wxCommandEvent& event )
@@ -85,7 +85,7 @@ void wxScrollBar::Command( wxCommandEvent& event )
 
 bool wxScrollBar::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    int new_pos = m_peer->GetValue();
+    int new_pos = GetPeer()->GetValue();
 
     wxScrollEvent event( wxEVT_SCROLL_THUMBRELEASE, m_windowId );
     if ( m_windowStyle & wxHORIZONTAL )
@@ -127,9 +127,9 @@ wxSize wxScrollBar::DoGetBestSize() const
 
 void wxScrollBar::TriggerScrollEvent( wxEventType scrollEvent )
 {
-    int position = m_peer->GetValue();
+    int position = GetPeer()->GetValue();
     int minPos = 0 ;
-    int maxPos = m_peer->GetMaximum();
+    int maxPos = GetPeer()->GetMaximum();
     int nScrollInc = 0;
 
     if ( scrollEvent == wxEVT_SCROLL_LINEUP )

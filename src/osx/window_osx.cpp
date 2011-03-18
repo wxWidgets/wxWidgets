@@ -268,6 +268,13 @@ WXWidget wxWindowMac::GetHandle() const
     return NULL;
 }
 
+void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
+{
+    wxDELETE(m_peer);
+    // todo event check handlers
+    m_peer = peer;
+}
+
 // ---------------------------------------------------------------------------
 // Utility Routines to move between different coordinate systems
 // ---------------------------------------------------------------------------

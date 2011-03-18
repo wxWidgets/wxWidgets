@@ -103,7 +103,7 @@ bool wxSlider::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateSlider( this, parent, id, value, minValue, maxValue, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateSlider( this, parent, id, value, minValue, maxValue, pos, size, style, GetExtraStyle() ));
 
     if (style & wxSL_VERTICAL)
         // Forces SetSize to use the proper width
@@ -146,7 +146,7 @@ wxSlider::~wxSlider()
 int wxSlider::GetValue() const
 {
     // We may need to invert the value returned by the widget
-    return ValueInvertOrNot( m_peer->GetValue() ) ;
+    return ValueInvertOrNot( GetPeer()->GetValue() ) ;
 }
 
 void wxSlider::SetValue(int value)
@@ -159,7 +159,7 @@ void wxSlider::SetValue(int value)
     }
 
     // We only invert for the setting of the actual native widget
-    m_peer->SetValue( ValueInvertOrNot( value ) );
+    GetPeer()->SetValue( ValueInvertOrNot( value ) );
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -175,8 +175,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
 
-    m_peer->SetMinimum( m_rangeMin );
-    m_peer->SetMaximum( m_rangeMax );
+    GetPeer()->SetMinimum( m_rangeMin );
+    GetPeer()->SetMaximum( m_rangeMax );
 
     if (m_macMinimumStatic)
     {
@@ -288,7 +288,7 @@ void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
-    int value = ValueInvertOrNot( m_peer->GetValue() );
+    int value = ValueInvertOrNot( GetPeer()->GetValue() );
 
     SetValue( value );
 
@@ -436,7 +436,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
         if (GetWindowStyle() & wxSL_VERTICAL)
             // If vertical, use current value
-            text.Printf(wxT("%d"), (int)m_peer->GetValue());
+            text.Printf(wxT("%d"), (int)GetPeer()->GetValue());
         else
             // Use max so that the current value doesn't drift as centering would need to change
             text.Printf(wxT("%d"), m_rangeMax);

@@ -54,7 +54,7 @@ bool wxStaticLine::Create( wxWindow *parent,
                                    style, wxDefaultValidator, name) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateStaticLine( this, parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateStaticLine( this, parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos,size) ;
 

@@ -55,7 +55,7 @@ wxSize wxButton::DoGetBestSize() const
 
 #if wxOSX_USE_CARBON
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
-    m_peer->GetBestRect( &bestsize ) ;
+    GetPeer()->GetBestRect( &bestsize ) ;
 
     int wBtn;
     if ( EmptyRect( &bestsize ) || ( GetWindowStyle() & wxBU_EXACTFIT) )
@@ -63,7 +63,7 @@ wxSize wxButton::DoGetBestSize() const
         Point bounds;
 
         ControlFontStyleRec controlFont;
-        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
+        OSStatus err = GetPeer()->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
 
         // GetThemeTextDimensions will cache strings and the documentation

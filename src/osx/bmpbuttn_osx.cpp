@@ -52,7 +52,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
 
     m_bitmaps[State_Normal] = bitmap;
 
-    m_peer = wxWidgetImpl::CreateBitmapButton( this, parent, id, bitmap, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateBitmapButton( this, parent, id, bitmap, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 

@@ -841,9 +841,9 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             [tlw setToolbar:(NSToolbar*) m_macToolbar];
             [(NSToolbar*) m_macToolbar setVisible:YES];
 
-            m_peer->Move(0,0,0,0 );
+            GetPeer()->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
-            m_peer->SetVisibility( false );
+            GetPeer()->SetVisibility( false );
             wxToolBarBase::Show( false );
         }
     }
@@ -855,7 +855,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             bResult = true;
             [(NSToolbar*) m_macToolbar setVisible:NO];
             MacUninstallNativeToolbar();
-            m_peer->SetVisibility( true );
+            GetPeer()->SetVisibility( true );
         }
     }
 

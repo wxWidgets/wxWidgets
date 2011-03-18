@@ -31,7 +31,7 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     m_labelOrig = m_label = label;
 
-    m_peer = wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 

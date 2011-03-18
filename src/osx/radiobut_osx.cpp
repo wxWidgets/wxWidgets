@@ -32,7 +32,7 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     m_labelOrig = m_label = label;
 
-    m_peer = wxWidgetImpl::CreateRadioButton( this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateRadioButton( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -74,10 +74,10 @@ wxRadioButton::~wxRadioButton()
 void wxRadioButton::SetValue(bool val)
 {
     wxRadioButton *cycle;
-    if (m_peer->GetValue() == val)
+    if (GetPeer()->GetValue() == val)
         return;
 
-    m_peer->SetValue( val );
+    GetPeer()->SetValue( val );
     if (val)
     {
         cycle = this->NextInCycle();
@@ -94,7 +94,7 @@ void wxRadioButton::SetValue(bool val)
 
 bool wxRadioButton::GetValue() const
 {
-    return m_peer->GetValue() != 0;
+    return GetPeer()->GetValue() != 0;
 }
 
 void wxRadioButton::Command(wxCommandEvent& event)
@@ -105,7 +105,7 @@ void wxRadioButton::Command(wxCommandEvent& event)
 
 bool wxRadioButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    if ( !m_peer->ButtonClickDidStateChange() )
+    if ( !GetPeer()->ButtonClickDidStateChange() )
     {
         // if already set -> no action
         if (GetValue())

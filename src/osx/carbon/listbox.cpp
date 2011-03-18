@@ -337,8 +337,8 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const 
     err = SetHasScrollBars( (style & wxHSCROLL) != 0 , true );
 #if 0
     // shouldn't be necessary anymore under 10.2
-    m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean)false );
-    m_peer->SetNeedsFocusRect( true );
+    GetPeer()->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean)false );
+    GetPeer()->SetNeedsFocusRect( true );
 #endif
 }
 

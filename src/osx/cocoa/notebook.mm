@@ -221,7 +221,7 @@ public:
     m_peer = new wxMacControl( this );
     OSStatus err = CreateTabsControl(
         MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        tabsize, tabstyle, 0, NULL, m_peer->GetControlRefAddr() );
+        tabsize, tabstyle, 0, NULL, GetPeer()->GetControlRefAddr() );
     verify_noerr( err );
 #endif
 */

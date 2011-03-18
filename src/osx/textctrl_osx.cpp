@@ -112,7 +112,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
 
-    m_peer = wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos, size) ;
 

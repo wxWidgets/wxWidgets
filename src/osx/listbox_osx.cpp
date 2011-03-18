@@ -85,7 +85,7 @@ bool wxListBox::Create(
     else
         m_strings.unsorted = new wxArrayString;
 
-    m_peer = wxWidgetImpl::CreateListBox( this, parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateListBox( this, parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -106,7 +106,7 @@ wxListBox::~wxListBox()
     m_blockEvents = false;
 
     // make sure no native events get sent to a object in destruction
-    wxDELETE(m_peer);
+    SetPeer(NULL);
 
     if ( IsSorted() )
         delete m_strings.sorted;

@@ -53,7 +53,7 @@ bool wxNotebook::Create( wxWindow *parent,
     if ( !wxNotebookBase::Create( parent, id, pos, size, style, name ) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateTabView(this,parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateTabView(this,parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -235,7 +235,7 @@ bool wxNotebook::InsertPage(size_t nPage,
         m_selection++;
 
         // while this still is the same page showing, we need to update the tabs
-        m_peer->SetValue( m_selection + 1 ) ;
+        GetPeer()->SetValue( m_selection + 1 ) ;
     }
 
     DoSetSelectionAfterInsertion(nPage, bSelect);
@@ -259,32 +259,32 @@ int wxNotebook::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(flags)) con
 
     HIPoint hipoint= { adjustedPt.x , adjustedPt.y } ;
     HIViewPartCode outPart = 0 ;
-    OSStatus err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
+    OSStatus err = HIViewGetPartHit( GetPeer()->GetControlRef(), &hipoint, &outPart );
 
-    int max = m_peer->GetMaximum() ;
+    int max = GetPeer()->GetMaximum() ;
     if ( outPart == 0 && max > 0 )
     {
         // this is a hack, as unfortunately a hit on an already selected tab returns 0,
         // so we have to go some extra miles to make sure we select something different
         // and try again ..
-        int val = m_peer->GetValue() ;
+        int val = GetPeer()->GetValue() ;
         int maxval = max ;
         if ( max == 1 )
         {
-            m_peer->SetMaximum( 2 ) ;
+            GetPeer()->SetMaximum( 2 ) ;
             maxval = 2 ;
         }
 
         if ( val == 1 )
-            m_peer->SetValue( maxval ) ;
+            GetPeer()->SetValue( maxval ) ;
         else
-             m_peer->SetValue( 1 ) ;
+             GetPeer()->SetValue( 1 ) ;
 
-        err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
+        err = HIViewGetPartHit( GetPeer()->GetControlRef(), &hipoint, &outPart );
 
-        m_peer->SetValue( val ) ;
+        GetPeer()->SetValue( val ) ;
         if ( max == 1 )
-            m_peer->SetMaximum( 1 ) ;
+            GetPeer()->SetMaximum( 1 ) ;
     }
 
     if ( outPart >= 1 && outPart <= countPages )
@@ -311,7 +311,7 @@ int wxNotebook::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(flags)) con
 //
 void wxNotebook::MacSetupTabs()
 {
-    m_peer->SetupTabs(*this);
+    GetPeer()->SetupTabs(*this);
     Refresh();
 }
 
@@ -494,14 +494,14 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     }
 
     m_selection = nSel;
-    m_peer->SetValue( m_selection + 1 ) ;
+    GetPeer()->SetValue( m_selection + 1 ) ;
 }
 
 bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     bool status = false ;
 
-    SInt32 newSel = m_peer->GetValue() - 1 ;
+    SInt32 newSel = GetPeer()->GetValue() - 1 ;
     if ( newSel != m_selection )
     {
         wxBookCtrlEvent changing(
@@ -520,7 +520,7 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
         }
         else
         {
-            m_peer->SetValue( m_selection + 1 ) ;
+            GetPeer()->SetValue( m_selection + 1 ) ;
         }
 
         status = true ;

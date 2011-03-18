@@ -32,7 +32,7 @@ wxSize wxButton::DoGetBestSize() const
         return wxSize( 23 , 23 ) ;
 
     wxRect r ;
-    m_peer->GetBestRect(&r);
+    GetPeer()->GetBestRect(&r);
 
     wxSize sz = r.GetSize();
     sz.x  = sz.x  + MacGetLeftBorderSize() +

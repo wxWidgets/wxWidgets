@@ -41,7 +41,7 @@ bool wxStaticText::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateStaticText( this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateStaticText( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -101,7 +101,7 @@ bool wxStaticText::SetFont(const wxFont& font)
 void wxStaticText::DoSetLabel(const wxString& label)
 {
     m_label = RemoveMnemonics(label);
-    m_peer->SetLabel(m_label , GetFont().GetEncoding() );
+    GetPeer()->SetLabel(m_label , GetFont().GetEncoding() );
 }
 
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
@@ -111,7 +111,7 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
     if ( !wxStaticTextBase::DoSetLabelMarkup(markup) )
         return false;
 
-    m_peer->SetLabelMarkup(markup);
+    GetPeer()->SetLabelMarkup(markup);
 
     return true;
 }

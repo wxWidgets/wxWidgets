@@ -68,7 +68,7 @@ void wxSearchCtrl::Init()
 
 wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const
 {
-    return dynamic_cast<wxSearchWidgetImpl*> (m_peer);
+    return dynamic_cast<wxSearchWidgetImpl*> (GetPeer());
 }
 
 wxSearchCtrl::~wxSearchCtrl()
@@ -185,7 +185,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
 
-    m_peer = wxWidgetImpl::CreateSearchControl( this, GetParent(), GetId(), value, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateSearchControl( this, GetParent(), GetId(), value, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos, size) ;
 

@@ -247,6 +247,7 @@ public:
 
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
+    void                SetPeer(wxOSXWidgetImpl* peer);
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // the NSView or NSWindow of this window: can be used for both child and
@@ -274,7 +275,6 @@ protected:
     wxList              m_subControls;
 
     // the peer object, allowing for cleaner API support
-    wxOSXWidgetImpl *   m_peer ;
 
     void *              m_cgContextRef ;
 
@@ -365,6 +365,7 @@ protected:
                                    unsigned timeout);
 
 private:
+    wxOSXWidgetImpl *   m_peer ;
     // common part of all ctors
     void Init();
 

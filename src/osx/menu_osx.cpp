@@ -111,7 +111,7 @@ void wxMenu::SetNoEventsMode( bool noEvents )
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
     wxASSERT_MSG( pItem != NULL, wxT("can't append NULL item to the menu") );
-    m_peer->InsertOrAppend( pItem, pos );
+    GetPeer()->InsertOrAppend( pItem, pos );
 
     if ( pItem->IsSeparator() )
     {
@@ -228,7 +228,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     wxOSXMenuRemoveItem(m_hMenu , pos );
     */
-    m_peer->Remove( item );
+    GetPeer()->Remove( item );
     // and from internal data structures
     return wxMenuBase::DoRemove(item);
 }
@@ -236,7 +236,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 void wxMenu::SetTitle(const wxString& label)
 {
     m_title = label ;
-    m_peer->SetTitle( wxStripMenuCodes( label ) );
+    GetPeer()->SetTitle( wxStripMenuCodes( label ) );
 }
 
 bool wxMenu::ProcessCommand(wxCommandEvent & event)

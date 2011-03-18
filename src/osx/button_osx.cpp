@@ -89,7 +89,7 @@ bool wxButton::Create(wxWindow *parent,
     m_labelOrig =
     m_label = label ;
 
-    m_peer = wxWidgetImpl::CreateButton( this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateButton( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -126,10 +126,10 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     m_bitmaps[which] = bitmap;
 
     if ( which == State_Normal )
-        m_peer->SetBitmap(bitmap);
+        GetPeer()->SetBitmap(bitmap);
     else if ( which == State_Pressed )
     {
-        wxButtonImpl* bi = dynamic_cast<wxButtonImpl*> (m_peer);
+        wxButtonImpl* bi = dynamic_cast<wxButtonImpl*> (GetPeer());
         if ( bi )
             bi->SetPressedBitmap(bitmap);
     }
@@ -138,7 +138,7 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 
 void wxButton::DoSetBitmapPosition(wxDirection dir)
 {
-    m_peer->SetBitmapPosition(dir);
+    GetPeer()->SetBitmapPosition(dir);
     InvalidateBestSize();
 }
 
@@ -149,7 +149,7 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
     if ( !wxButtonBase::DoSetLabelMarkup(markup) )
         return false;
 
-    m_peer->SetLabelMarkup(markup);
+    GetPeer()->SetLabelMarkup(markup);
 
     return true;
 }
@@ -165,27 +165,27 @@ wxWindow *wxButton::SetDefault()
         btnOldDefault->GetPeer()->SetDefaultButton( false );
     }
 
-    m_peer->SetDefaultButton( true );
+    GetPeer()->SetDefaultButton( true );
 
     return btnOldDefault;
 }
 
 void wxButton::Command (wxCommandEvent & WXUNUSED(event))
 {
-    m_peer->PerformClick() ;
+    GetPeer()->PerformClick() ;
     // ProcessCommand(event);
 }
 
 void wxButton::OnEnterWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Current ) );
+        GetPeer()->SetBitmap( DoGetBitmap( State_Current ) );
 }
 
 void wxButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Normal ) );
+        GetPeer()->SetBitmap( DoGetBitmap( State_Normal ) );
 }
 
 bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
@@ -208,7 +208,7 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateDisclosureTriangle(this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateDisclosureTriangle(this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
     // passing the text in the param doesn't seem to work, so lets do it again
@@ -219,12 +219,12 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
 
 void wxDisclosureTriangle::SetOpen( bool open )
 {
-    m_peer->SetValue( open ? 1 : 0 );
+    GetPeer()->SetValue( open ? 1 : 0 );
 }
 
 bool wxDisclosureTriangle::IsOpen() const
 {
-   return m_peer->GetValue() == 1;
+   return GetPeer()->GetValue() == 1;
 }
 
 bool wxDisclosureTriangle::OSXHandleClicked( double WXUNUSED(timestampsec) )

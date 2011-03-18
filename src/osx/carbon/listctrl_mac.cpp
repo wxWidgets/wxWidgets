@@ -678,11 +678,11 @@ bool wxListCtrl::Create(wxWindow *parent,
         if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
-        m_peer = m_dbImpl;
+        SetPeer(m_dbImpl);
 
         MacPostControlCreate( pos, size );
 
-        InstallControlEventHandler( m_peer->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
+        InstallControlEventHandler( GetPeer()->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, this,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
 

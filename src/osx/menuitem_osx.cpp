@@ -177,7 +177,7 @@ void wxMenuItem::UpdateItemBitmap()
 
     if ( m_bitmap.Ok() )
     {
-        m_peer->SetBitmap( m_bitmap );
+        GetPeer()->SetBitmap( m_bitmap );
     }
 }
 
@@ -190,11 +190,11 @@ void wxMenuItem::UpdateItemStatus()
         return ;
 
     if ( IsCheckable() && IsChecked() )
-        m_peer->Check( true );
+        GetPeer()->Check( true );
     else
-        m_peer->Check( false );
+        GetPeer()->Check( false );
 
-    m_peer->Enable( IsEnabled() );
+    GetPeer()->Enable( IsEnabled() );
 }
 
 void wxMenuItem::UpdateItemText()
@@ -210,7 +210,7 @@ void wxMenuItem::UpdateItemText()
     }
 
     wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
-    m_peer->SetLabel( text, entry );
+    GetPeer()->SetLabel( text, entry );
     delete entry ;
 }
 

@@ -54,7 +54,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 
     m_labelOrig = m_label = label ;
 
-    m_peer = wxWidgetImpl::CreateToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() )) ;
 
     MacPostControlCreate(pos,size) ;
 
@@ -75,12 +75,12 @@ wxSize wxToggleButton::DoGetBestSize() const
 
 void wxToggleButton::SetValue(bool val)
 {
-    m_peer->SetValue( val ) ;
+    GetPeer()->SetValue( val ) ;
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return m_peer->GetValue() ;
+    return GetPeer()->GetValue() ;
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)
@@ -121,7 +121,7 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateBitmapToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateBitmapToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos,size) ;
 
@@ -142,12 +142,12 @@ wxSize wxBitmapToggleButton::DoGetBestSize() const
 
 void wxBitmapToggleButton::SetValue(bool val)
 {
-    m_peer->SetValue( val ) ;
+    GetPeer()->SetValue( val ) ;
 }
 
 bool wxBitmapToggleButton::GetValue() const
 {
-    return m_peer->GetValue() ;
+    return GetPeer()->GetValue() ;
 }
 
 void wxBitmapToggleButton::Command(wxCommandEvent & event)

@@ -74,7 +74,7 @@ bool wxChoice::Create(wxWindow *parent,
     m_popUpMenu = new wxMenu();
     m_popUpMenu->SetNoEventsMode(true);
 
-    m_peer = wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -132,7 +132,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         AssignNewItemClientData(idx, clientData, i, type);
     }
 
-    m_peer->SetMaximum( GetCount() );
+    GetPeer()->SetMaximum( GetCount() );
 
     return pos - 1;
 }
@@ -148,7 +148,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
-    m_peer->SetMaximum( GetCount() ) ;
+    GetPeer()->SetMaximum( GetCount() ) ;
 
 }
 
@@ -162,7 +162,7 @@ void wxChoice::DoClear()
     m_strings.Empty() ;
     m_datas.Empty() ;
 
-    m_peer->SetMaximum( 0 ) ;
+    GetPeer()->SetMaximum( 0 ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -170,12 +170,12 @@ void wxChoice::DoClear()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return m_peer->GetValue();
+    return GetPeer()->GetValue();
 }
 
 void wxChoice::SetSelection( int n )
 {
-    m_peer->SetValue( n );
+    GetPeer()->SetValue( n );
 }
 
 // ----------------------------------------------------------------------------

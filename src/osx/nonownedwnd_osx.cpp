@@ -144,7 +144,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
                     name
                 );
     wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
-    m_peer = wxWidgetImpl::CreateContentView(this);
+    SetPeer(wxWidgetImpl::CreateContentView(this));
 
     DoSetWindowVariant( m_windowVariant ) ;
 
@@ -177,7 +177,7 @@ void wxNonOwnedWindow::SubclassWin(WXWindow nativeWindow)
     m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, GetParent(), nativeWindow );
     m_isNativeWindowWrapper = true;
     wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
-    m_peer = wxWidgetImpl::CreateContentView(this);
+    SetPeer(wxWidgetImpl::CreateContentView(this));
 }
 
 void wxNonOwnedWindow::UnsubclassWin()
@@ -189,7 +189,7 @@ void wxNonOwnedWindow::UnsubclassWin()
 
     wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;
     wxDELETE(m_nowpeer);
-    wxDELETE(m_peer);
+    SetPeer(NULL);
     m_isNativeWindowWrapper = false;
 }
 
@@ -471,7 +471,7 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // inner area, while the content area extends under the translucent
     // status bar, therefore we use the content view's area
 #ifdef __WXOSX_IPHONE__
-    m_peer->GetContentArea(left, top, w, h);
+    GetPeer()->GetContentArea(left, top, w, h);
 #else
     m_nowpeer->GetContentArea(left, top, w, h);
 #endif

@@ -448,28 +448,28 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     m_macIsUserPane = false;
     wxControl::Create(parent, winID, pos, size, style , validator , name);
 #if wxOSX_USE_CARBON
-    m_peer = new wxMacControl(this);
+    SetPeer(new wxMacControl(this));
     WebInitForCarbon();
-    HIWebViewCreate( m_peer->GetControlRefAddr() );
+    HIWebViewCreate( GetPeer()->GetControlRefAddr() );
 
-    m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
+    m_webView = (WebView*) HIWebViewGetWebView( GetPeer()->GetControlRef() );
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
+        HIViewChangeFeatures( GetPeer()->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
-    InstallControlEventHandler( m_peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
+    InstallControlEventHandler( GetPeer()->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_webKitCtrlEventHandler);
 #else
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     m_webView = [[WebView alloc] initWithFrame:r frameName:@"webkitFrame" groupName:@"webkitGroup"];
 
-    m_peer = new wxWidgetCocoaImpl( this, m_webView );
+    SetPeer(new wxWidgetCocoaImpl( this, m_webView ));
 #endif
     MacPostControlCreate(pos, size);
 #if wxOSX_USE_CARBON
-    HIViewSetVisible( m_peer->GetControlRef(), true );
+    HIViewSetVisible( GetPeer()->GetControlRef(), true );
 #endif
     [m_webView setHidden:false];
 
@@ -742,7 +742,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // and this tripped me up at first. But in fact, what we want is the root view, because we need to
     // make the y origin relative to the very top of the window, not its contents, since we later flip
     // the y coordinate for Cocoa.
-    HIViewConvertRect (&rect, m_peer->GetControlRef(),
+    HIViewConvertRect (&rect, GetPeer()->GetControlRef(),
                                 HIViewGetRoot( (WindowRef) MacGetTopLevelWindowRef() ) );
 
     x = (int)rect.origin.x;
@@ -773,7 +773,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
 void wxWebKitCtrl::MacVisibilityChanged(){
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
-    bool isHidden = !IsControlVisible( m_peer->GetControlRef());
+    bool isHidden = !IsControlVisible( GetPeer()->GetControlRef());
     if (!isHidden)
         [(WebView*)m_webView display];
 
