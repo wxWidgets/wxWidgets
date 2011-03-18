@@ -43,6 +43,7 @@ enum wxImageResizeQuality
     Use surrounding pixels to calculate an average that will be used for
     new pixels. This method is typically used when reducing the size of
     an image.
+    */
     wxIMAGE_QUALITY_BOX_AVERAGE,
 
     /**
