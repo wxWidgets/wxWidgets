@@ -4,7 +4,7 @@
 // Author:      David Elliott, Stefan Csomor
 // Modified by:
 // Created:     2004/01/24
-// RCS-ID:      $Id: taskbar.mm 35650 2005-09-23 12:56:45Z MR $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott, Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////

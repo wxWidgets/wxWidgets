@@ -3,7 +3,7 @@
 // Purpose:     helper functions for dealing with GTK+ mnemonics
 // Author:      Vadim Zeitlin
 // Created:     2007-11-12
-// RCS-ID:      $Id: mnemonics.h 49869 2007-11-12 19:41:38Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

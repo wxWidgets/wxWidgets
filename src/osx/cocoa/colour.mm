@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier
 // Modified by:
 // Created:     2009-10-31
-// RCS-ID:      $Id: colour.cpp 61724 2009-08-21 10:41:26Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 // Purpose:     wxStaticLine class
 // Author:      Stefan Csomor
 // Created:     28.06.99
-// Version:     $Id: statline.mm 54129 2008-06-11 19:30:52Z SC $
+// Version:     $Id$
 // Copyright:   (c) 2008 Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

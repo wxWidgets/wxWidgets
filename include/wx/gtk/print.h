@@ -3,7 +3,7 @@
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
-// RCS-ID:      $Id: print.h,v 1 2007-08-25 05:44:44 PC Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Anthony Bretaudeau
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
