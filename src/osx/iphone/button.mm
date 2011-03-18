@@ -32,7 +32,7 @@ wxSize wxButton::DoGetBestSize() const
 
     wxRect r ;
 
-    m_peer->GetBestRect(&r);
+    GetPeer()->GetBestRect(&r);
 
     if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
     {

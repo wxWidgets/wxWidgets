@@ -397,7 +397,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
             [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, 
             kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
             
-    m_peer = new wxWidgetIPhoneImpl( this, v );
+    SetPeer(new wxWidgetIPhoneImpl( this, v ));
 
     MacPostControlCreate(pos, size) ;
 #endif
@@ -415,7 +415,7 @@ bool wxGLCanvas::SwapBuffers()
     WXGLContext context = WXGLGetCurrentContext();
     wxCHECK_MSG(context, false, wxT("should have current context"));
 
-    wxUICustomOpenGLView* v = (wxUICustomOpenGLView*) m_peer->GetWXWidget();
+    wxUICustomOpenGLView* v = (wxUICustomOpenGLView*) GetPeer()->GetWXWidget();
     [v swapBuffers];
     return true;
 }

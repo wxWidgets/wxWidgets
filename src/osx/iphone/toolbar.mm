@@ -247,7 +247,7 @@ bool wxToolBar::Create(
     }
     m_macToolbar = toolbar;
 
-    m_peer = new wxWidgetIPhoneImpl( this, toolbar );    
+    SetPeer(new wxWidgetIPhoneImpl( this, toolbar ));    
     MacPostControlCreate(pos, size) ;
 }
 
