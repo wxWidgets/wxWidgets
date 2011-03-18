@@ -65,8 +65,8 @@ public:
     // get our clipboard item (depending on m_usePrimary value)
     GdkAtom GTKGetClipboardAtom() const;
 
-    // get the data object currently being used
-    wxDataObject *GTKGetDataObject() { return Data(); }
+    // get the data object currently being requested
+    wxDataObject *GTKGetDataObject( GdkAtom atom );
 
     // clear the data for the given clipboard kind
     void GTKClearData(Kind kind);

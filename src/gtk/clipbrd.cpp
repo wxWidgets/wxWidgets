@@ -262,7 +262,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !clipboard )
         return;
 
-    wxDataObject * const data = clipboard->GTKGetDataObject();
+    wxDataObject * const data = clipboard->GTKGetDataObject(selection_data->selection);
     if ( !data )
         return;
 
@@ -727,6 +727,29 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxLogTrace(TRACE_CLIPBOARD, wxT("GetData(): format not found"));
 
     return false;
+}
+
+wxDataObject* wxClipboard::GTKGetDataObject( GdkAtom atom )
+{
+    if ( atom == GDK_NONE )
+        return Data();
+
+    if ( atom == GDK_SELECTION_PRIMARY )
+    {
+        wxLogTrace(TRACE_CLIPBOARD, wxT("Primary selection requested" ));
+
+        return Data( wxClipboard::Primary );
+    }
+    else if ( atom == g_clipboardAtom )
+    {
+        wxLogTrace(TRACE_CLIPBOARD, wxT("Clipboard data requested" ));
+
+        return Data( wxClipboard::Clipboard );
+    }
+    else // some other selection, we're not concerned
+    {
+        return (wxDataObject*)NULL;
+    }
 }
 
 #endif // wxUSE_CLIPBOARD

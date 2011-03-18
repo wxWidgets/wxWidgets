@@ -496,7 +496,8 @@ GTK:
 
 - Improve print/page setup dialog (rafravago).
 - Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
-- wxTLW generates wxEVT_MAXIMIZE
+- wxTLW generates wxEVT_MAXIMIZE.
+- Fix copying clipboard data to primary selection (David Hart).
 
 MSW:
 
