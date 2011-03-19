@@ -2906,11 +2906,11 @@ public:
 /**
     @class wxMouseCaptureLostEvent
 
-    An mouse capture lost event is sent to a window that obtained mouse capture,
-    which was subsequently loss due to "external" event, for example when a dialog
-    box is shown or if another application captures the mouse.
+    A mouse capture lost event is sent to a window that had obtained mouse capture,
+    which was subsequently lost due to an "external" event (for example, when a dialog
+    box is shown or if another application captures the mouse).
 
-    If this happens, this event is sent to all windows that are on capture stack
+    If this happens, this event is sent to all windows that are on the capture stack
     (i.e. called CaptureMouse, but didn't call ReleaseMouse yet). The event is
     not sent if the capture changes because of a call to CaptureMouse or
     ReleaseMouse.
