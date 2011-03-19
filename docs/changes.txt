@@ -160,6 +160,7 @@ wxGTK:
   wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT colour index.
 - wxComboCtrl and wxOwnerDrawnComboBox had wrong background colours under some
   themes (Marcin Wojdyr).
+- Added thread-safe fixes to socket code.
 
 wxUniv:
 
