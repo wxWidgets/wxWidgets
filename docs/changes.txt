@@ -115,6 +115,7 @@ All (GUI):
 - wxRTC: fixed a problem with paste resetting the content paragraph style.
 - wxRTC: style list box now copes with names duplicated across style types.
   Also fixed wxRichTextStyleDefinition::GetStyleMergeWithBase similarly.
+- wxRTC: fixed very poor performance for XML loading on wxGTK.
 - Fixed error in generic tree control CalculatePositions.
 - Added wxFD_FILE_MUST_EXIST to wxFileSelector function.
 - Added wxDataViewCtrl Get/SetValueByRow functions for forward compatibility
