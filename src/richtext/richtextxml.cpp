@@ -738,9 +738,9 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
                     {
                         OutputIndentation(stream, indent);
                         OutputString(stream, wxT("<") + objectName, convMem, convFile);
-                        
+
                         OutputString(stream, style + wxT(">"), convMem, convFile);
-                        
+
                         if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
                         {
                             OutputString(stream, wxT("\""), convMem, convFile);
@@ -749,7 +749,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
                         }
                         else
                             OutputStringEnt(stream, fragment, convMem, convFile);
-                        
+
                         OutputString(stream, wxT("</text>"), convMem, convFile);
                     }
                 }
@@ -1190,8 +1190,14 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
     attr.SetFlags(fontFlags);
 
+    // FindOrCreateFont is an expensive operation on GTK+ (because pango functions are called)
+    // so only use it on other platforms
     if (attr.HasFlag(wxTEXT_ATTR_FONT))
+#ifdef __WXGTK__
+        attr.SetFont(wxFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
+#else
         attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
+#endif
 
     // Restore correct font flags
     attr.SetFlags(fontFlags);
