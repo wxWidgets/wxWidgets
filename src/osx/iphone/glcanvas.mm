@@ -382,7 +382,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
         return false;
 */
 #if USE_SEPARATE_VIEW
-    m_macIsUserPane = false ;
+    DontCreatePeer();
 #endif
 
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )

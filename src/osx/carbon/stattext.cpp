@@ -52,6 +52,7 @@ wxSize wxStaticText::DoGetBestSize() const
     GetPeer()->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
     GetPeer()->GetBestRect( &bestsize ) ;
     GetPeer()->SetData( kControlStaticTextIsMultilineTag, former );
+    
     if ( !EmptyRect( &bestsize ) )
     {
         bounds.h = bestsize.right - bestsize.left ;

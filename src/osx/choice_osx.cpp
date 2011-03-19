@@ -65,9 +65,9 @@ bool wxChoice::Create(wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxChoiceBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

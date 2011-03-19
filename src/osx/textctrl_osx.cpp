@@ -95,7 +95,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     const wxValidator& validator,
     const wxString& name )
 {
-    m_macIsUserPane = false ;
+    DontCreatePeer();
     m_editable = true ;
 
     if ( ! (style & wxNO_BORDER) )

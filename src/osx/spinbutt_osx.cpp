@@ -25,9 +25,8 @@ wxSpinButton::wxSpinButton()
 bool wxSpinButton::Create( wxWindow *parent,
     wxWindowID id, const wxPoint& pos, const wxSize& size,
     long style, const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
     if ( !wxSpinButtonBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 

@@ -33,8 +33,8 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxValidator& validator,
                              const wxString& name )
 {
-    m_macIsUserPane = false;
-
+    DontCreatePeer();
+    
     if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;

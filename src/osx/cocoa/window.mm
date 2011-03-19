@@ -988,7 +988,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
-        if (!m_wxPeer->MacIsUserPane())
+        if (!IsUserPane())
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
@@ -1062,7 +1062,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
-    if ( m_wxPeer->MacIsUserPane() )
+    if ( IsUserPane() )
         return m_wxPeer->AcceptsFocus();
     else
     {
@@ -2095,7 +2095,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
 
-    if ( m_wxPeer->MacIsUserPane() && [event type] == NSKeyDown)
+    if ( IsUserPane() && [event type] == NSKeyDown)
     {
         if ( !result )
         {
@@ -2219,7 +2219,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     [v registerForDraggedTypes:[NSArray arrayWithObjects:
         NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
     return c;
 }
 

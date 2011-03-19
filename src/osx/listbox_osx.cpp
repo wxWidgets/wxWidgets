@@ -71,8 +71,8 @@ bool wxListBox::Create(
     const wxValidator& validator,
     const wxString& name )
 {
+    DontCreatePeer();
     m_blockEvents = false;
-    m_macIsUserPane = false;
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   wxT("only a single listbox selection mode can be specified") );
@@ -327,7 +327,6 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 
 void wxListBox::OnItemInserted(unsigned int WXUNUSED(pos))
 {
-
 }
 
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,

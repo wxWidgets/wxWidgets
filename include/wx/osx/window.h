@@ -201,9 +201,9 @@ public:
     bool                MacIsReallyHilited() ;
 
 #if WXWIN_COMPATIBILITY_2_8
-    bool                MacIsUserPane() { return m_macIsUserPane; }
+    bool                MacIsUserPane();
 #endif
-    bool                MacIsUserPane() const { return m_macIsUserPane; }
+    bool                MacIsUserPane() const;
 
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;
 
@@ -246,8 +246,18 @@ public:
                                            int& w, int& h , bool adjustForOrigin ) const ;
 
     // the 'true' OS level control for this wxWindow
-    wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
+    wxOSXWidgetImpl*    GetPeer() const;
+    
+    // optimization to avoid creating a user pane in wxWindow::Create if we already know
+    // we will replace it with our own peer
+    void                DontCreatePeer();
+    
+    // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to 
+    // release existing peer
     void                SetPeer(wxOSXWidgetImpl* peer);
+    
+    // wraps the already existing peer with the wrapper
+    void                SetWrappingPeer(wxOSXWidgetImpl* wrapper);
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // the NSView or NSWindow of this window: can be used for both child and
@@ -288,9 +298,6 @@ protected:
     mutable wxRegion    m_cachedClippedRegionWithOuterStructure ;
     mutable wxRegion    m_cachedClippedRegion ;
     mutable wxRegion    m_cachedClippedClientRegion ;
-
-    // true if is is not a native control but a wxWindow control
-    bool                m_macIsUserPane ;
 
     // insets of the mac control from the wx top left corner
     wxPoint             m_macTopLeftInset ;

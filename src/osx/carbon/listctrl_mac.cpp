@@ -655,8 +655,6 @@ bool wxListCtrl::Create(wxWindow *parent,
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
             (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) )
     {
-        m_macIsUserPane = true;
-
         long paneStyle = style;
         paneStyle &= ~wxSIMPLE_BORDER;
         paneStyle &= ~wxDOUBLE_BORDER;
@@ -674,7 +672,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     else
     {
-        m_macIsUserPane = false;
+        DontCreatePeer();
         if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );

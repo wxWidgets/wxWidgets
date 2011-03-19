@@ -57,9 +57,9 @@ bool wxSlider::Create(wxWindow *parent,
     const wxSize& size, long style,
     const wxValidator& validator,
     const wxString& name)
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     m_macMinimumStatic = NULL;
     m_macMaximumStatic = NULL;
     m_macValueStatic = NULL;

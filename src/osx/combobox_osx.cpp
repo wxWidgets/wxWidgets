@@ -53,11 +53,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    DontCreatePeer();
+    
     m_text = NULL;
     m_choice = NULL;
-
-    m_macIsUserPane = false;
-
+    
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

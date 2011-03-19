@@ -34,9 +34,9 @@ bool wxScrollBar::Create( wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

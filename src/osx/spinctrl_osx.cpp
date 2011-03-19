@@ -229,7 +229,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int initial,
                         const wxString& name)
 {
-    m_macIsUserPane = true;
+    DontCreatePeer();
+    
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
     {

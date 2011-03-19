@@ -218,7 +218,7 @@ bool wxToolBar::Create(
                        long style,
                        const wxString& name )
 {
-    m_macIsUserPane = false ;
+    DontCreatePeer();
 
     if ( !wxToolBarBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;

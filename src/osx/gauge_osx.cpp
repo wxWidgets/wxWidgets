@@ -25,9 +25,9 @@ bool wxGauge::Create( wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxGaugeBase::Create( parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name ) )
         return false;
 

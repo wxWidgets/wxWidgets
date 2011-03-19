@@ -97,15 +97,14 @@ bool wxRadioBox::Create( wxWindow *parent,
     int n, const wxString choices[],
     int majorDim, long style,
     const wxValidator& val, const wxString& name )
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxControl::Create( parent, id, pos, size, style, val, name ) )
         return false;
 
-    int i;
-
-    m_noItems = (unsigned int)n;
+    // during construction we must keep this at 0, otherwise GetBestSize fails
+    m_noItems = 0;
     m_noRowsOrCols = majorDim;
     m_radioButtonCycle = NULL;
 
@@ -115,7 +114,7 @@ bool wxRadioBox::Create( wxWindow *parent,
 
     SetPeer(wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         wxRadioButton *radBtn = new wxRadioButton(
             this,
@@ -130,7 +129,13 @@ bool wxRadioBox::Create( wxWindow *parent,
 //        m_radioButtonCycle = radBtn->AddInCycle( m_radioButtonCycle );
     }
 
+    // as all radiobuttons have been set-up, set the correct dimensions
+    m_noItems = (unsigned int)n;
+    SetMajorDim( majorDim == 0 ? n : majorDim, style );
+
     SetSelection( 0 );
+    InvalidateBestSize();
+    SetInitialSize( size );
     MacPostControlCreate( pos, size );
 
     return true;

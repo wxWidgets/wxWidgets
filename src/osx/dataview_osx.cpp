@@ -351,7 +351,6 @@ void wxDataViewCtrl::Init()
 {
   m_CustomRendererPtr = NULL;
   m_Deleting          = false;
-  m_macIsUserPane     = false;
   m_cgContext         = NULL;
 }
 
@@ -363,6 +362,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
   SetPeer(::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle()));

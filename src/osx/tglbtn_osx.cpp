@@ -47,8 +47,8 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-
+    DontCreatePeer();
+    
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -111,8 +111,8 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-
+    DontCreatePeer();
+    
     m_bitmap = label;
 
     m_marginX =

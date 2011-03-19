@@ -23,9 +23,9 @@ bool wxStaticBox::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 

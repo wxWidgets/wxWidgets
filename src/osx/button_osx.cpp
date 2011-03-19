@@ -56,6 +56,8 @@ bool wxButton::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
+    DontCreatePeer();
+    
     m_marginX =
     m_marginY = 0;
 
@@ -81,7 +83,6 @@ bool wxButton::Create(wxWindow *parent,
                                                      : labelOrig;
     }
 
-    m_macIsUserPane = false ;
 
     if ( !wxButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
@@ -202,9 +203,8 @@ bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxString& label,
    const wxPoint& pos, const wxSize& size, long style,const wxValidator& validator, const wxString& name )
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 

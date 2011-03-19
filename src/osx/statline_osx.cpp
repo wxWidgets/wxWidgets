@@ -47,9 +47,9 @@ bool wxStaticLine::Create( wxWindow *parent,
                            const wxSize &size,
                            long style,
                            const wxString &name)
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxStaticLineBase::Create(parent, id, pos, size,
                                    style, wxDefaultValidator, name) )
         return false;

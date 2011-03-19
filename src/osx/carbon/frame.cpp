@@ -51,7 +51,6 @@ bool wxFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
-
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 

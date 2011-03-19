@@ -406,7 +406,6 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
                                  const wxValidator& validator,
                                  const wxString& name)
 {
-
     m_currentURL = strURL;
     //m_pageTitle = _("Untitled Page");
 
@@ -427,6 +426,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     }
 */
     // now create and attach WebKit view...
+    DontCreatePeer();
 #ifdef __WXCOCOA__
     wxControl::Create(parent, m_windowID, pos, sizeInstance, style , validator , name);
     SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
@@ -445,22 +445,24 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     if(m_parent) m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,sizeInstance);
 #else
-    m_macIsUserPane = false;
+    DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style , validator , name);
 #if wxOSX_USE_CARBON
-    SetPeer(new wxMacControl(this));
+    wxMacControl* peer = new wxMacControl(this);
     WebInitForCarbon();
-    HIWebViewCreate( GetPeer()->GetControlRefAddr() );
+    HIWebViewCreate( peer->GetControlRefAddr() );
 
-    m_webView = (WebView*) HIWebViewGetWebView( GetPeer()->GetControlRef() );
+    m_webView = (WebView*) HIWebViewGetWebView( peer->GetControlRef() );
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( GetPeer()->GetControlRef() , kHIViewIsOpaque , 0 ) ;
+        HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
-    InstallControlEventHandler( GetPeer()->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
+    InstallControlEventHandler( peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_webKitCtrlEventHandler);
+    
+    SetPeer(peer);
 #else
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     m_webView = [[WebView alloc] initWithFrame:r frameName:@"webkitFrame" groupName:@"webkitGroup"];

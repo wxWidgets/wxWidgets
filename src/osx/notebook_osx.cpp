@@ -44,9 +44,9 @@ bool wxNotebook::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
+    
     if (! (style & wxBK_ALIGN_MASK))
         style |= wxBK_TOP;
 

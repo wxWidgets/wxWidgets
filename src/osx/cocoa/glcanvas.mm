@@ -260,8 +260,8 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !m_glFormat )
         return false;
 
-   // m_macIsUserPane = false ;
-
+    // DontCreatePeer();
+    
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
