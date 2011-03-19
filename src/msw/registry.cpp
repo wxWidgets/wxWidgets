@@ -360,35 +360,56 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
                           size_t *pnValues,
                           size_t *pnMaxValueLen) const
 {
-    // old gcc headers incorrectly prototype RegQueryInfoKey()
-#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
-    #define REG_PARAM   (size_t *)
-#else
-    #define REG_PARAM   (LPDWORD)
-#endif
-
   // it might be unexpected to some that this function doesn't open the key
   wxASSERT_MSG( IsOpened(), wxT("key should be opened in GetKeyInfo") );
+
+  // We need to use intermediate variables in 64 bit build as the function
+  // parameters must be 32 bit DWORDs and not 64 bit size_t values.
+#ifdef __WIN64__
+  DWORD dwSubKeys = 0,
+        dwMaxKeyLen = 0,
+        dwValues = 0,
+        dwMaxValueLen = 0;
+
+  #define REG_PARAM(name) &dw##name
+#else // Win32
+  // Old gcc headers incorrectly prototype RegQueryInfoKey() as taking
+  // size_t but normally we need a cast, even when sizeof(size_t) is the same
+  // as sizeof(DWORD).
+  #if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
+    #define REG_PARAM(name) pn##name
+  #else
+    #define REG_PARAM(name)   (LPDWORD)(pn##name)
+  #endif
+#endif
+
 
   m_dwLastError = ::RegQueryInfoKey
                   (
                     (HKEY) m_hKey,
-                    NULL,           // class name
-                    NULL,           // (ptr to) size of class name buffer
+                    NULL,                   // class name
+                    NULL,                   // (ptr to) size of class name buffer
                     RESERVED,
-                    REG_PARAM
-                    pnSubKeys,      // [out] number of subkeys
-                    REG_PARAM
-                    pnMaxKeyLen,    // [out] max length of a subkey name
-                    NULL,           // longest subkey class name
-                    REG_PARAM
-                    pnValues,       // [out] number of values
-                    REG_PARAM
-                    pnMaxValueLen,  // [out] max length of a value name
-                    NULL,           // longest value data
-                    NULL,           // security descriptor
-                    NULL            // time of last modification
+                    REG_PARAM(SubKeys),     // [out] number of subkeys
+                    REG_PARAM(MaxKeyLen),   // [out] max length of a subkey name
+                    NULL,                   // longest subkey class name
+                    REG_PARAM(Values),      // [out] number of values
+                    REG_PARAM(MaxValueLen), // [out] max length of a value name
+                    NULL,                   // longest value data
+                    NULL,                   // security descriptor
+                    NULL                    // time of last modification
                   );
+
+#ifdef __WIN64__
+  if ( pnSubKeys )
+    *pnSubKeys = dwSubKeys;
+  if ( pnMaxKeyLen )
+    *pnMaxKeyLen = dwMaxKeyLen;
+  if ( pnValues )
+    *pnValues = dwValues;
+  if ( pnMaxValueLen )
+    *pnMaxValueLen = dwMaxValueLen;
+#endif // __WIN64__
 
 #undef REG_PARAM
 
