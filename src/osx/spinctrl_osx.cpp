@@ -229,8 +229,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int initial,
                         const wxString& name)
 {
-    DontCreatePeer();
-    
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
     {
