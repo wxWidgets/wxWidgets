@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        wx/generic/panelg.h
-// Purpose:     wxPanel: a container for child controls
-// Author:      Julian Smart
-// Modified by:
-// Created:     01/02/97
-// RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/univ/panel.h
+// Purpose:     wxUniversal-specific wxPanel class.
+// Author:      Vadim Zeitlin
+// Created:     2011-03-18
+// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_PANELG_H_
-#define _WX_GENERIC_PANELG_H_
+#ifndef _WX_UNIV_PANEL_H_
+#define _WX_UNIV_PANEL_H_
+
+// ----------------------------------------------------------------------------
+// wxPanel
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxPanel : public wxPanelBase
 {
 public:
     wxPanel() { }
 
-    // Old-style constructor (no default values for coordinates to avoid
-    // ambiguity with the new one)
     wxPanel(wxWindow *parent,
             int x, int y, int width, int height,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
@@ -27,7 +28,6 @@ public:
         Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), style, name);
     }
 
-    // Constructor
     wxPanel(wxWindow *parent,
             wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
@@ -38,8 +38,10 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
+    virtual bool IsCanvasWindow() const { return true; }
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
 
-#endif // _WX_GENERIC_PANELG_H_
+#endif // _WX_UNIV_PANEL_H_

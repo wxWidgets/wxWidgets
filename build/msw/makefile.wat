@@ -222,7 +222,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_ribbon_control.obj &
 	$(OBJS)\monodll_gallery.obj &
 	$(OBJS)\monodll_page.obj &
-	$(OBJS)\monodll_panel.obj &
+	$(OBJS)\monodll_ribbon_panel.obj &
 	$(OBJS)\monodll_ribbon_toolbar.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
@@ -275,6 +275,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_droptgt.obj &
 	$(OBJS)\monodll_oleutils.obj &
 	$(OBJS)\monodll_palette.obj &
+	$(OBJS)\monodll_msw_panel.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
 	$(OBJS)\monodll_printdlg.obj &
@@ -489,7 +490,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_markuptext.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
-	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
 	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
@@ -546,6 +546,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_droptgt.obj &
 	$(OBJS)\monodll_oleutils.obj &
 	$(OBJS)\monodll_palette.obj &
+	$(OBJS)\monodll_msw_panel.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
 	$(OBJS)\monodll_printdlg.obj &
@@ -756,7 +757,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_markuptext.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
-	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
 	$(OBJS)\monodll_printps.obj &
 	$(OBJS)\monodll_renderg.obj &
@@ -994,7 +994,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_ribbon_control.obj &
 	$(OBJS)\monolib_gallery.obj &
 	$(OBJS)\monolib_page.obj &
-	$(OBJS)\monolib_panel.obj &
+	$(OBJS)\monolib_ribbon_panel.obj &
 	$(OBJS)\monolib_ribbon_toolbar.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
@@ -1047,6 +1047,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_droptgt.obj &
 	$(OBJS)\monolib_oleutils.obj &
 	$(OBJS)\monolib_palette.obj &
+	$(OBJS)\monolib_msw_panel.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
 	$(OBJS)\monolib_printdlg.obj &
@@ -1261,7 +1262,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_markuptext.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
-	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
 	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
@@ -1318,6 +1318,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_droptgt.obj &
 	$(OBJS)\monolib_oleutils.obj &
 	$(OBJS)\monolib_palette.obj &
+	$(OBJS)\monolib_msw_panel.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
 	$(OBJS)\monolib_printdlg.obj &
@@ -1528,7 +1529,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_markuptext.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
-	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
 	$(OBJS)\monolib_printps.obj &
 	$(OBJS)\monolib_renderg.obj &
@@ -1723,6 +1723,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_droptgt.obj &
 	$(OBJS)\coredll_oleutils.obj &
 	$(OBJS)\coredll_palette.obj &
+	$(OBJS)\coredll_panel.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
 	$(OBJS)\coredll_printdlg.obj &
@@ -1937,7 +1938,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_markuptext.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
-	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
 	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
@@ -1994,6 +1994,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_droptgt.obj &
 	$(OBJS)\coredll_oleutils.obj &
 	$(OBJS)\coredll_palette.obj &
+	$(OBJS)\coredll_panel.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
 	$(OBJS)\coredll_printdlg.obj &
@@ -2204,7 +2205,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_markuptext.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
-	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
 	$(OBJS)\coredll_printps.obj &
 	$(OBJS)\coredll_renderg.obj &
@@ -2271,6 +2271,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_droptgt.obj &
 	$(OBJS)\corelib_oleutils.obj &
 	$(OBJS)\corelib_palette.obj &
+	$(OBJS)\corelib_panel.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
 	$(OBJS)\corelib_printdlg.obj &
@@ -2485,7 +2486,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_markuptext.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
-	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
 	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
@@ -2542,6 +2542,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_droptgt.obj &
 	$(OBJS)\corelib_oleutils.obj &
 	$(OBJS)\corelib_palette.obj &
+	$(OBJS)\corelib_panel.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
 	$(OBJS)\corelib_printdlg.obj &
@@ -2752,7 +2753,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_markuptext.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
-	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
 	$(OBJS)\corelib_printps.obj &
 	$(OBJS)\corelib_renderg.obj &
@@ -7338,7 +7338,7 @@ $(OBJS)\monodll_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
 $(OBJS)\monodll_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+$(OBJS)\monodll_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
@@ -7551,6 +7551,11 @@ $(OBJS)\monodll_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_msw_panel.obj :  .AUTODEPEND ..\..\src\msw\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8361,11 +8366,6 @@ $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -9680,7 +9680,7 @@ $(OBJS)\monolib_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
 $(OBJS)\monolib_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+$(OBJS)\monolib_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
@@ -9893,6 +9893,11 @@ $(OBJS)\monolib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_msw_panel.obj :  .AUTODEPEND ..\..\src\msw\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10703,11 +10708,6 @@ $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12233,6 +12233,11 @@ $(OBJS)\coredll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_panel.obj :  .AUTODEPEND ..\..\src\msw\panel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13043,11 +13048,6 @@ $(OBJS)\coredll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\coredll_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\coredll_progdlgg.obj :  .AUTODEPEND ..\..\src\generic\progdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13626,6 +13626,11 @@ $(OBJS)\corelib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_panel.obj :  .AUTODEPEND ..\..\src\msw\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -14436,11 +14441,6 @@ $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

@@ -1672,7 +1672,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_ribbon_control.o \
 	$(OBJS)\monodll_gallery.o \
 	$(OBJS)\monodll_page.o \
-	$(OBJS)\monodll_panel.o \
+	$(OBJS)\monodll_ribbon_panel.o \
 	$(OBJS)\monodll_ribbon_toolbar.o \
 	$(OBJS)\monodll_richtextctrl.o \
 	$(OBJS)\monodll_richtextbuffer.o \
@@ -1724,6 +1724,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
 	$(OBJS)\monodll_palette.o \
+	$(OBJS)\monodll_msw_panel.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_printdlg.o \
@@ -1938,7 +1939,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_markuptext.o \
 	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
-	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
@@ -1995,6 +1995,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
 	$(OBJS)\monodll_palette.o \
+	$(OBJS)\monodll_msw_panel.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_printdlg.o \
@@ -2205,7 +2206,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_markuptext.o \
 	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
-	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
@@ -2439,7 +2439,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_ribbon_control.o \
 	$(OBJS)\monolib_gallery.o \
 	$(OBJS)\monolib_page.o \
-	$(OBJS)\monolib_panel.o \
+	$(OBJS)\monolib_ribbon_panel.o \
 	$(OBJS)\monolib_ribbon_toolbar.o \
 	$(OBJS)\monolib_richtextctrl.o \
 	$(OBJS)\monolib_richtextbuffer.o \
@@ -2491,6 +2491,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
 	$(OBJS)\monolib_palette.o \
+	$(OBJS)\monolib_msw_panel.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_printdlg.o \
@@ -2705,7 +2706,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_markuptext.o \
 	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
-	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
@@ -2762,6 +2762,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
 	$(OBJS)\monolib_palette.o \
+	$(OBJS)\monolib_msw_panel.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_printdlg.o \
@@ -2972,7 +2973,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_markuptext.o \
 	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
-	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
@@ -3156,6 +3156,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
 	$(OBJS)\coredll_palette.o \
+	$(OBJS)\coredll_panel.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_printdlg.o \
@@ -3370,7 +3371,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_markuptext.o \
 	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
-	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
@@ -3427,6 +3427,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
 	$(OBJS)\coredll_palette.o \
+	$(OBJS)\coredll_panel.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_printdlg.o \
@@ -3637,7 +3638,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_markuptext.o \
 	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
-	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
@@ -3702,6 +3702,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
 	$(OBJS)\corelib_palette.o \
+	$(OBJS)\corelib_panel.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_printdlg.o \
@@ -3916,7 +3917,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_markuptext.o \
 	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
-	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
@@ -3973,6 +3973,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
 	$(OBJS)\corelib_palette.o \
+	$(OBJS)\corelib_panel.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_printdlg.o \
@@ -4183,7 +4184,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_markuptext.o \
 	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
-	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
@@ -7079,7 +7079,7 @@ $(OBJS)\monodll_gallery.o: ../../src/ribbon/gallery.cpp
 $(OBJS)\monodll_page.o: ../../src/ribbon/page.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_panel.o: ../../src/ribbon/panel.cpp
+$(OBJS)\monodll_ribbon_panel.o: ../../src/ribbon/panel.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_ribbon_toolbar.o: ../../src/ribbon/toolbar.cpp
@@ -7292,6 +7292,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_palette.o: ../../src/msw/palette.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_msw_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8102,11 +8107,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_numdlgg.o: ../../src/generic/numdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_panelg.o: ../../src/generic/panelg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9421,7 +9421,7 @@ $(OBJS)\monolib_gallery.o: ../../src/ribbon/gallery.cpp
 $(OBJS)\monolib_page.o: ../../src/ribbon/page.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_panel.o: ../../src/ribbon/panel.cpp
+$(OBJS)\monolib_ribbon_panel.o: ../../src/ribbon/panel.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_ribbon_toolbar.o: ../../src/ribbon/toolbar.cpp
@@ -9634,6 +9634,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_palette.o: ../../src/msw/palette.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_msw_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10444,11 +10449,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_numdlgg.o: ../../src/generic/numdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_panelg.o: ../../src/generic/panelg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11974,6 +11974,11 @@ $(OBJS)\coredll_palette.o: ../../src/msw/palette.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_panel.o: ../../src/msw/panel.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_pen.o: ../../src/msw/pen.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12784,11 +12789,6 @@ $(OBJS)\coredll_numdlgg.o: ../../src/generic/numdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_panelg.o: ../../src/generic/panelg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_progdlgg.o: ../../src/generic/progdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13367,6 +13367,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_palette.o: ../../src/msw/palette.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14177,11 +14182,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_numdlgg.o: ../../src/generic/numdlgg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_panelg.o: ../../src/generic/panelg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

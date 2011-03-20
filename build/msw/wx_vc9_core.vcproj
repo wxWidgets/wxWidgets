@@ -2612,6 +2612,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\panel.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\pen.cpp"
 				>
 			</File>
@@ -3778,10 +3782,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\panelg.cpp"
 				>
 			</File>
 			<File
@@ -6487,6 +6487,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\univ\notebook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\univ\panel.h"
 				>
 			</File>
 			<File

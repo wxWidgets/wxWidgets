@@ -788,7 +788,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
-    src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp
@@ -1681,6 +1680,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/droptgt.cpp
     src/msw/ole/oleutils.cpp
     src/msw/palette.cpp
+    src/msw/panel.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
     src/msw/printdlg.cpp
@@ -2898,6 +2898,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/menu.h
     wx/univ/menuitem.h
     wx/univ/notebook.h
+    wx/univ/panel.h
     wx/univ/radiobox.h
     wx/univ/radiobut.h
     wx/univ/renderer.h

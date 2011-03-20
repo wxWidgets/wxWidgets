@@ -2073,6 +2073,10 @@ SOURCE=..\..\src\msw\palette.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\panel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\pen.cpp
 # End Source File
 # Begin Source File
@@ -3163,10 +3167,6 @@ SOURCE=..\..\src\generic\msgdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\numdlgg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\generic\panelg.cpp
 # End Source File
 # Begin Source File
 
@@ -5675,6 +5675,10 @@ SOURCE=..\..\include\wx\univ\menuitem.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\panel.h
 # End Source File
 # Begin Source File
 
