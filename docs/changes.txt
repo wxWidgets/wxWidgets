@@ -130,6 +130,7 @@ All (GUI):
 - Fixed bug in wxSizer::Replace(size_t, wxSizerItem *) whereby SetContainingSizer
   is not called.
 - Fixed compilation with libpng 1.5 and above.
+- Removed ugly black (simple) border around wxHTML help window.
 
 wxMSW:
 
