@@ -713,6 +713,9 @@ protected:
     // should the focus be reset to the textctrl in idle time?
     bool                    m_resetFocus;
 
+    // is the text-area background colour overridden?
+    bool                    m_hasTcBgCol;
+
 private:
     void Init();
 

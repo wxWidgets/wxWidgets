@@ -988,6 +988,7 @@ void wxComboCtrlBase::Init()
     m_timeCanAcceptClick = 0;
 
     m_resetFocus = false;
+    m_hasTcBgCol = false;
 }
 
 bool wxComboCtrlBase::Create(wxWindow *parent,
@@ -1083,7 +1084,7 @@ void wxComboCtrlBase::OnThemeChange()
     vattrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #endif
 
-    if ( !m_hasBgCol )
+    if ( !m_hasTcBgCol )
         m_tcBgCol = vattrs.colBg;
 
 #ifndef __WXMAC__
@@ -1483,7 +1484,7 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
     if ( m_text )
         m_text->SetBackgroundColour(colour);
     m_tcBgCol = colour;
-    m_hasBgCol = true;
+    m_hasTcBgCol = true;
     return true;
 }
 
@@ -1577,10 +1578,10 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
         {
             bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
         }
-        else if ( m_hasBgCol )
+        else if ( m_hasTcBgCol )
         {
             // Honour the custom background colour
-            bgCol = GetBackgroundColour();
+            bgCol = m_tcBgCol;
         }
         else
         {
