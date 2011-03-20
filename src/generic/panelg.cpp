@@ -23,12 +23,12 @@
     #pragma hdrstop
 #endif
 
-#ifdef wxHAS_GENERIC_PANEL
-
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/panel.h"
 #endif // WX_PRECOMP
+
+#ifdef wxHAS_GENERIC_PANEL
 
 // ============================================================================
 // implementation
