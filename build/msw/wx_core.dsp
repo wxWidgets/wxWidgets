@@ -3170,6 +3170,10 @@ SOURCE=..\..\src\generic\numdlgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\panelg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\printps.cpp
 # End Source File
 # Begin Source File

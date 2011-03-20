@@ -2817,6 +2817,9 @@
 				RelativePath="..\..\src\generic\numdlgg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\panelg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\printps.cpp">
 			</File>
 			<File

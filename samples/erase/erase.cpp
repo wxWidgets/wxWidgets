@@ -60,6 +60,14 @@ public:
     void UseBuffer(bool useBuffer) { m_useBuffer = useBuffer; Refresh(); }
     bool UsesBuffer() const { return m_useBuffer; }
 
+    void UseBgBitmap(bool useBgBmp)
+    {
+        m_useBgBmp = useBgBmp;
+        SetBackgroundBitmap(m_useBgBmp ? GetBgBitmap() : wxBitmap());
+
+        Refresh();
+    }
+
     void EraseBgInPaint(bool erase) { m_eraseBgInPaint = erase; Refresh(); }
 
 private:
@@ -69,12 +77,33 @@ private:
 
     void DoPaint(wxDC& dc);
 
+    // Create an easily recognizable background bitmap.
+    static wxBitmap GetBgBitmap()
+    {
+        static const int BMP_SIZE = 40;
+
+        wxBitmap bmp(BMP_SIZE, BMP_SIZE);
+        wxMemoryDC dc(bmp);
+        dc.SetBackground(*wxCYAN);
+        dc.Clear();
+
+        dc.SetPen(*wxBLUE_PEN);
+        dc.DrawLine(0, BMP_SIZE/2, BMP_SIZE/2, 0);
+        dc.DrawLine(BMP_SIZE/2, 0, BMP_SIZE, BMP_SIZE/2);
+        dc.DrawLine(BMP_SIZE, BMP_SIZE/2, BMP_SIZE/2, BMP_SIZE);
+        dc.DrawLine(BMP_SIZE/2, BMP_SIZE, 0, BMP_SIZE/2);
+
+        return bmp;
+    }
 
     wxBitmap    m_bitmap;
     wxString    m_text;
 
     // use wxMemoryDC in OnPaint()?
     bool m_useBuffer;
+
+    // use background bitmap?
+    bool m_useBgBmp;
 
     // erase background in OnPaint()?
     bool m_eraseBgInPaint;
@@ -90,6 +119,7 @@ public:
 
 private:
     void OnUseBuffer(wxCommandEvent& event);
+    void OnUseBgBitmap(wxCommandEvent& event);
     void OnEraseBgInPaint(wxCommandEvent& event);
     void OnChangeBgStyle(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
@@ -120,6 +150,7 @@ enum
 {
     // menu items
     Erase_Menu_UseBuffer = 100,
+    Erase_Menu_UseBgBitmap,
     Erase_Menu_EraseBgInPaint,
     Erase_Menu_BgStyleErase,
     Erase_Menu_BgStyleSystem,
@@ -153,6 +184,7 @@ bool MyApp::OnInit()
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Erase_Menu_UseBuffer, MyFrame::OnUseBuffer)
+    EVT_MENU(Erase_Menu_UseBgBitmap, MyFrame::OnUseBgBitmap)
     EVT_MENU(Erase_Menu_EraseBgInPaint, MyFrame::OnEraseBgInPaint)
     EVT_MENU_RANGE(Erase_Menu_BgStyleErase, Erase_Menu_BgStylePaint,
                    MyFrame::OnChangeBgStyle)
@@ -174,6 +206,8 @@ MyFrame::MyFrame()
 
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
     menuFile->AppendCheckItem(Erase_Menu_UseBuffer, "&Use memory DC\tCtrl-M");
+    menuFile->AppendCheckItem(Erase_Menu_UseBgBitmap,
+                              "Use background &bitmap\tCtrl-B");
     menuFile->AppendCheckItem(Erase_Menu_EraseBgInPaint,
                               "&Erase background in EVT_PAINT\tCtrl-R");
     menuFile->AppendSeparator();
@@ -203,6 +237,11 @@ MyFrame::MyFrame()
 void MyFrame::OnUseBuffer(wxCommandEvent& event)
 {
     m_canvas->UseBuffer(event.IsChecked());
+}
+
+void MyFrame::OnUseBgBitmap(wxCommandEvent& event)
+{
+    m_canvas->UseBgBitmap(event.IsChecked());
 }
 
 void MyFrame::OnEraseBgInPaint(wxCommandEvent& event)
@@ -249,6 +288,7 @@ MyCanvas::MyCanvas(wxFrame *parent)
         : wxScrolledWindow(parent, wxID_ANY)
 {
     m_useBuffer = false;
+    m_useBgBmp = false;
     m_eraseBgInPaint = false;
 
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
@@ -310,7 +350,7 @@ void MyCanvas::DoPaint(wxDC& dc)
 
     dc.DrawBitmap( m_bitmap, 20, 20, true );
 
-    dc.SetTextForeground(*wxWHITE);
+    dc.SetTextForeground(*wxRED);
     dc.DrawText("This text is drawn from OnPaint", 65, 65);
 
     wxString tmp;
@@ -342,6 +382,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void MyCanvas::OnEraseBackground( wxEraseEvent& event )
 {
+    // We must not erase the background ourselves if we asked wxPanel to erase
+    // it using a background bitmap.
+    if ( m_useBgBmp )
+    {
+        event.Skip();
+        return;
+    }
+
     wxASSERT_MSG
     (
         GetBackgroundStyle() == wxBG_STYLE_ERASE,

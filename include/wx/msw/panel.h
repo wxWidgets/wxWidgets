@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_PANEL_H_
 #define _WX_MSW_PANEL_H_
 
+class WXDLLIMPEXP_FWD_CORE wxBrush;
+
 // ----------------------------------------------------------------------------
 // wxPanel
 // ----------------------------------------------------------------------------
@@ -18,7 +20,7 @@
 class WXDLLIMPEXP_CORE wxPanel : public wxPanelBase
 {
 public:
-    wxPanel() { }
+    wxPanel() { Init(); }
 
     wxPanel(wxWindow *parent,
             wxWindowID winid = wxID_ANY,
@@ -27,6 +29,8 @@ public:
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
     {
+        Init();
+
         Create(parent, winid, pos, size, style, name);
     }
 
@@ -48,7 +52,18 @@ public:
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
+protected:
+    void Init()
+    {
+        m_backgroundBrush = NULL;
+    }
+
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp);
+    virtual WXHBRUSH MSWGetCustomBgBrush();
+
 private:
+    wxBrush *m_backgroundBrush;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
 

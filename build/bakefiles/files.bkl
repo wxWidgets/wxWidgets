@@ -788,6 +788,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
+    src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp

@@ -464,6 +464,7 @@ All (GUI):
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
 - wxAUI: support auto-orientable toolbars (wsu).
 - wxAUI: add support for icons in pane title bars (triton).
+- Added wxPanel::SetBackgroundBitmap().
 - Added wxDataViewCtrl::Set/GetCurrentItem().
 - Added possibility to disable individual wxDataViewCtrl items (Neno Ganchev).
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).

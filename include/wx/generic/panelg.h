@@ -12,6 +12,8 @@
 #ifndef _WX_GENERIC_PANELG_H_
 #define _WX_GENERIC_PANELG_H_
 
+#include "wx/bitmap.h"
+
 class WXDLLIMPEXP_CORE wxPanel : public wxPanelBase
 {
 public:
@@ -40,7 +42,18 @@ public:
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
+protected:
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp);
+
 private:
+    // Event handler for erasing the background which is only used when we have
+    // a valid background bitmap.
+    void OnEraseBackground(wxEraseEvent& event);
+
+
+    // The bitmap used for painting the background if valid.
+    wxBitmap m_bitmapBg;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
 

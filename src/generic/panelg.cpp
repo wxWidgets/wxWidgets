@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/panel.cpp
-// Purpose:     Implementation of wxMSW-specific wxPanel class.
+// Name:        src/generic/panelg.cpp
+// Purpose:     Generic wxPanel implementation.
 // Author:      Vadim Zeitlin
-// Created:     2011-03-18
+// Created:     2011-03-20
 // RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -23,8 +23,10 @@
     #pragma hdrstop
 #endif
 
+#ifdef wxHAS_GENERIC_PANEL
+
 #ifndef WX_PRECOMP
-    #include "wx/brush.h"
+    #include "wx/dc.h"
     #include "wx/panel.h"
 #endif // WX_PRECOMP
 
@@ -32,30 +34,36 @@
 // implementation
 // ============================================================================
 
-bool wxPanel::HasTransparentBackground()
-{
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-    {
-        if ( win->MSWHasInheritableBackground() )
-            return true;
-
-        if ( win->IsTopLevel() )
-            break;
-    }
-
-    return false;
-}
-
 void wxPanel::DoSetBackgroundBitmap(const wxBitmap& bmp)
 {
-    delete m_backgroundBrush;
-    m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : NULL;
+    m_bitmapBg = bmp;
+
+    if ( m_bitmapBg.IsOk() )
+    {
+        Connect(wxEVT_ERASE_BACKGROUND,
+                wxEraseEventHandler(wxPanel::OnEraseBackground));
+    }
+    else
+    {
+        Disconnect(wxEVT_ERASE_BACKGROUND,
+                   wxEraseEventHandler(wxPanel::OnEraseBackground));
+    }
 }
 
-WXHBRUSH wxPanel::MSWGetCustomBgBrush()
+void wxPanel::OnEraseBackground(wxEraseEvent& event)
 {
-    if ( m_backgroundBrush )
-        return (WXHBRUSH)m_backgroundBrush->GetResourceHandle();
+    wxDC& dc = *event.GetDC();
 
-    return wxPanelBase::MSWGetCustomBgBrush();
+    const wxSize clientSize = GetClientSize();
+    const wxSize bitmapSize = m_bitmapBg.GetSize();
+
+    for ( int x = 0; x < clientSize.x; x += bitmapSize.x )
+    {
+        for ( int y = 0; y < clientSize.y; y += bitmapSize.y )
+        {
+            dc.DrawBitmap(m_bitmapBg, x, y);
+        }
+    }
 }
+
+#endif // wxHAS_GENERIC_PANEL
