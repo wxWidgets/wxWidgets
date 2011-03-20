@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaglist.h
+// Name:        wx/osx/imaglist.h
 // Purpose:
 // Author:      Robert Roebling, Stefan Csomor
 // Created:     01/02/97

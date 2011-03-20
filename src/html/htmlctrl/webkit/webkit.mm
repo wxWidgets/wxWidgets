@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        webkit.mm
+// Name:        src/html/htmlctrl/webkit/webkit.mm
 // Purpose:     wxWebKitCtrl - embeddable web kit control
 // Author:      Jethro Grassie / Kevin Ollivier
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/dlmsw.cpp
+// Name:        src/msw/dlmsw.cpp
 // Purpose:     Win32-specific part of wxDynamicLibrary and related classes
 // Author:      Vadim Zeitlin
 // Modified by:

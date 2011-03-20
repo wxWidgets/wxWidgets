@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/nonownedwnd.mm
+// Name:        src/osx/iphone/nonownedwnd.mm
 // Purpose:     non owned window for iphone
 // Author:      Stefan Csomor
 // Modified by:

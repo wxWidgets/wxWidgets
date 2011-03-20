@@ -1,5 +1,5 @@
 /******************************************************************************
- * Name:        include/wx/palmos/missing.h
+ * Name:        wx/palmos/missing.h
  * Purpose:     the missing declarations for wxPalm
  * Author:      Yunhui Fu
  * Created:     2007-10-18

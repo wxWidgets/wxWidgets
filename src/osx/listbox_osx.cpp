@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/listbox.cpp
+// Name:        src/osx/listbox_osx.cpp
 // Purpose:     wxListBox
 // Author:      Stefan Csomor
 // Modified by:

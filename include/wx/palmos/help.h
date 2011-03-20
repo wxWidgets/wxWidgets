@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/palmos/helpwin.h
+// Name:        wx/palmos/help.h
 // Purpose:     Help system: WinHelp implementation
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:

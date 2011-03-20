@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.h
+// Name:        wx/osx/dialog.h
 // Purpose:     wxDialog class
 // Author:      Stefan Csomor
 // Modified by:

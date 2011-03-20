@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/window.cpp
+// Name:        src/osx/window_osx.cpp
 // Purpose:     wxWindowMac
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/corefoundation/utilsexc_base.cpp
+// Name:        src/osx/core/utilsexc_base.cpp
 // Purpose:     wxMacLaunch
 // Author:      Ryan Norton
 // Modified by:

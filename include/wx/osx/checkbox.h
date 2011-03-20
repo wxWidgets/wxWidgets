@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.h
+// Name:        wx/osx/checkbox.h
 // Purpose:     wxCheckBox class
 // Author:      Stefan Csomor
 // Modified by:

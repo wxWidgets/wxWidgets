@@ -1,5 +1,5 @@
 // -*- c++ -*- ///////////////////////////////////////////////////////////////
-// Name:        unix/net.cpp
+// Name:        src/unix/net.cpp
 // Purpose:     Network related wxWindows classes and functions
 // Author:      Karsten Ballüder
 // Modified by:

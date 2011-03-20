@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/fontutil.cpp
+// Name:        src/msw/fontutil.cpp
 // Purpose:     font-related helper functions for wxMSW
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/fswatcher.cpp
+// Name:        src/msw/fswatcher.cpp
 // Purpose:     wxMSWFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26

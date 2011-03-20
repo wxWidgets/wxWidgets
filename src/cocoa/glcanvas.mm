@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/glcanvas.mm
+// Name:        src/cocoa/glcanvas.mm
 // Purpose:     wxGLContext, wxGLCanvas
 // Author:      David Elliott
 // Modified by:

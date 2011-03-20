@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.h
+// Name:        wx/osx/icon.h
 // Purpose:     wxIcon class
 // Author:      Stefan Csomor
 // Modified by:

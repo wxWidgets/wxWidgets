@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/propgeid/propgridiface.h
+// Name:        wx/propgrid/propgridiface.h
 // Purpose:     wxPropertyGridInterface class
 // Author:      Jaakko Salli
 // Modified by:

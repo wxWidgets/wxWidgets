@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        x11/data.cpp
+// Name:        src/x11/data.cpp
 // Purpose:     Various X11-specific global data
 // Author:      Julian Smart
 // Modified by:

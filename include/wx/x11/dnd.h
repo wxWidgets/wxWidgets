@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.h
+// Name:        wx/x11/dnd.h
 // Purpose:     declaration of wxDropTarget, wxDropSource classes
 // Author:      Julian Smart
 // RCS-ID:      $Id$

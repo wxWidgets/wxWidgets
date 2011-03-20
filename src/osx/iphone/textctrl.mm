@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/textctrl.mm
+// Name:        src/osx/iphone/textctrl.mm
 // Purpose:     wxTextCtrl
 // Author:      Stefan Csomor
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)

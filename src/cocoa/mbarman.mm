@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/mbarman.cpp
+// Name:        src/cocoa/mbarman.mm
 // Purpose:     wxMenuBarManager implementation
 // Author:      David Elliott
 // Modified by:

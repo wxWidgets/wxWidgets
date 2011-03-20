@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/window.cpp
+// Name:        src/common/wincmn.cpp
 // Purpose:     common (to all ports) wxWindow functions
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by:

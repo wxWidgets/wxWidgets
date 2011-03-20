@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.h
+// Name:        wx/osx/button.h
 // Purpose:     wxButton class
 // Author:      Stefan Csomor
 // Modified by:

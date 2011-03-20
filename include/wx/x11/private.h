@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        private.h
+// Name:        wx/x11/private.h
 // Purpose:     Private declarations for X11 port
 // Author:      Julian Smart
 // Modified by:

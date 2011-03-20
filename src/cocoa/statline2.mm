@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/statline.mm
+// Name:        src/cocoa/statline2.mm
 // Purpose:     wxStaticLine
 // Author:      David Elliott
 // Modified by:

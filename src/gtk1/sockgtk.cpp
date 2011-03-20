@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/gsockgtk.cpp
+// Name:        src/gtk1/sockgtk.cpp
 // Purpose:     implementation of wxGTK-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999

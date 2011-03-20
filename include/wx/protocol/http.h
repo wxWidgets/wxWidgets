@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        http.h
+// Name:        wx/protocol/http.h
 // Purpose:     HTTP protocol
 // Author:      Guilhem Lavaux
 // Modified by: Simo Virokannas (authentication, Dec 2005)

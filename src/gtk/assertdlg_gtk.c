@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        assertdlg_gtk.c
+// Name:        src/gtk/assertdlg_gtk.c
 // Purpose:     GtkAssertDialog
 // Author:      Francesco Montorsi
 // Id:          $Id$

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/univ/frame.cpp
+// Name:        src/univ/framuniv.cpp
 // Purpose:     wxFrame class for wxUniversal
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.h
+// Name:        wx/osx/slider.h
 // Purpose:     wxSlider class
 // Author:      Stefan Csomor
 // Modified by:

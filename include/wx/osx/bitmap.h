@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.h
+// Name:        wx/osx/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Stefan Csomor
 // Modified by:

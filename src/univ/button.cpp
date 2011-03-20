@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/button.cpp
+// Name:        src/univ/button.cpp
 // Purpose:     wxButton
 // Author:      Vadim Zeitlin
 // Modified by:

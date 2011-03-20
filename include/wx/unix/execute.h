@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/execute.h
+// Name:        wx/unix/execute.h
 // Purpose:     private details of wxExecute() implementation
 // Author:      Vadim Zeitlin
 // Id:          $Id$

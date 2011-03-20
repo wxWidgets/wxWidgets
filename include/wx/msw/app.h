@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/msw/app.h
 // Purpose:     wxApp class
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wince/crt.cpp
+// Name:        src/msw/wince/crt.cpp
 // Purpose:     Implementation of CRT functions missing under Windows CE
 // Author:      Vadim Zeitlin
 // Modified by:

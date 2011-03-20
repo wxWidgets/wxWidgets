@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.h
+// Name:        wx/osx/accel.h
 // Purpose:     wxAcceleratorTable class
 // Author:      Stefan Csomor
 // Modified by:

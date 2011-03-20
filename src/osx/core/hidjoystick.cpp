@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/corefoundation/joystick.cpp
+// Name:        src/osx/core/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ryan Norton
 // Modified by:

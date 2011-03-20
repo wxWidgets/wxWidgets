@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextsizepage.h
+// Name:        wx/richtext/richtextsizepage.h
 // Purpose:
 // Author:      Julian Smart
 // Modified by:

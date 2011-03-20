@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        src/gtk/radiobut.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

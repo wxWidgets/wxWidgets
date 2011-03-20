@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/dataobj.cpp
+// Name:        src/msw/ole/dataobj.cpp
 // Purpose:     implementation of wx[I]DataObject class
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.h
+// Name:        wx/statbox.h
 // Purpose:     wxStaticBox base header
 // Author:      Julian Smart
 // Modified by:

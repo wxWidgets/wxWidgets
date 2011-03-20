@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/dccg.cpp
+// Name:        src/osx/carbon/graphics.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:

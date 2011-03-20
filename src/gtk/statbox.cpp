@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/statbox.cpp
+// Name:        src/gtk/statbox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

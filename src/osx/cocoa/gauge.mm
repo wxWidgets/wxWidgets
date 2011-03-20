@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.mm
+// Name:        src/osx/cocoa/gauge.mm
 // Purpose:     wxGauge class
 // Author:      Stefan Csomor
 // Modified by:

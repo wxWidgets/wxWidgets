@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/os2/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      David Webster
 // Modified by:

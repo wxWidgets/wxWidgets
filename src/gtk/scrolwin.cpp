@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/scrolwin.cpp
+// Name:        src/gtk/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Robert Roebling
 // Modified by: Ron Lee

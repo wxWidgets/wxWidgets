@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_arc.cpp
+// Name:        src/common/fs_arc.cpp
 // Purpose:     wxArchive file system
 // Author:      Vaclav Slavik, Mike Wetherell
 // Copyright:   (c) 1999 Vaclav Slavik, (c) 2006 Mike Wetherell

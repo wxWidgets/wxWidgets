@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSTextField.mm
+// Name:        src/cocoa/NSTextField.mm
 // Purpose:     wxCocoaNSTextField
 // Author:      David Elliott
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSView.mm
+// Name:        src/cocoa/NSView.mm
 // Purpose:     wxCocoaNSView
 // Author:      David Elliott
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        main.cpp
+// Name:        src/os2/main.cpp
 // Purpose:     Entry point
 // Author:      David Webster
 // Modified by:

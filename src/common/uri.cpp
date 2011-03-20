@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        uri.cpp
+// Name:        src/common/uri.cpp
 // Purpose:     Implementation of a URI parser
 // Author:      Ryan Norton,
 //              Vadim Zeitlin (UTF-8 URI support, many other changes)

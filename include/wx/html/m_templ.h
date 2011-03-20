@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        m_templ.h
+// Name:        wx/html/m_templ.h
 // Purpose:     Modules template file
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

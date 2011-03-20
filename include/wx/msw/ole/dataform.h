@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/dataform.h
+// Name:        wx/msw/ole/dataform.h
 // Purpose:     declaration of the wxDataFormat class
 // Author:      Vadim Zeitlin
 // Modified by:

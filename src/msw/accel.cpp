@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/accel.cpp
+// Name:        src/msw/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Julian Smart
 // Modified by:

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
-// Name:        src/aui/dockart.cpp
+// Name:        src/aui/auibar.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:

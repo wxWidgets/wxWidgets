@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/sstream.cpp
+// Name:        src/common/sstream.cpp
 // Purpose:     string-based streams implementation
 // Author:      Vadim Zeitlin
 // Modified by: Ryan Norton (UTF8 UNICODE)

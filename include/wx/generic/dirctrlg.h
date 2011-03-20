@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirctrlg.h
+// Name:        wx/generic/dirctrlg.h
 // Purpose:     wxGenericDirCtrl class
 //              Builds on wxDirCtrl class written by Robert Roebling for the
 //              wxFile application, modified by Harm van der Heijden.

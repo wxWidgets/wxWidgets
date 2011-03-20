@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        motif/sockmot.cpp
+// Name:        src/motif/sockmot.cpp
 // Purpose:     implementation of wxMotif-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999

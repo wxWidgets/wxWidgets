@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printwin.h
+// Name:        wx/osx/printmac.h
 // Purpose:     wxWindowsPrinter, wxWindowsPrintPreview classes
 // Author:      Julian Smart
 // Modified by:

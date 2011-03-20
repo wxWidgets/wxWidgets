@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/caret.h
+// Name:        wx/generic/caret.h
 // Purpose:     generic wxCaret class
 // Author:      Vadim Zeitlin (original code by Robert Roebling)
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.h
+// Name:        wx/os2/dcmemory.h
 // Purpose:     wxMemoryDC class
 // Author:      David Webster
 // Modified by:

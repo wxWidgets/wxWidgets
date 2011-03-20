@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwin.h
+// Name:        wx/msw/helpwin.h
 // Purpose:     Help system: WinHelp implementation
 // Author:      Julian Smart
 // Modified by:

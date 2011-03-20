@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.h
+// Name:        wx/os2/stattext.h
 // Purpose:     wxStaticText class
 // Author:      David Webster
 // Modified by:

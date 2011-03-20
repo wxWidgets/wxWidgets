@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/region.cpp
+// Name:        src/generic/regiong.cpp
 // Purpose:     generic wxRegion class
 // Author:      David Elliott
 // Modified by:

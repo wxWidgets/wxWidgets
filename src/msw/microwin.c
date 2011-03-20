@@ -1,6 +1,6 @@
 /*
 /////////////////////////////////////////////////////////////////////////////
-// Name:        microwin.cpp
+// Name:        src/msw/microwin.cpp
 // Purpose:     Extra implementation for MicroWindows
 // Author:      Julian Smart
 // Created:     2001-05-31

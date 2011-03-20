@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/generic/spinctlg.h
+// Name:        wx/osx/spinctrl.h
 // Purpose:     generic wxSpinCtrl class
 // Author:      Vadim Zeitlin
 // Modified by:

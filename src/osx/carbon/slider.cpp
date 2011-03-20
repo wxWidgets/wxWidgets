@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        src/osx/carbon/slider.cpp
 // Purpose:     wxSlider
 // Author:      Stefan Csomor
 // Modified by:

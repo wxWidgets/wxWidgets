@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        data.cpp
+// Name:        src/os2/data.cpp
 // Purpose:     Various OS/2-specific global data
 // Author:      David Webster
 // Modified by:

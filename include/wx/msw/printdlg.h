@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printdlg.h
+// Name:        wx/msw/printdlg.h
 // Purpose:     wxPrintDialog, wxPageSetupDialog classes
 // Author:      Julian Smart
 // Modified by:

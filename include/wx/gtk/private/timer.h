@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/gtk/timer.h
+// Name:        wx/gtk/private/timer.h
 // Purpose:     wxTimerImpl for wxGTK
 // Author:      Robert Roebling
 // Id:          $Id$

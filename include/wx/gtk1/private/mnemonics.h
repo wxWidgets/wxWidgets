@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/private/mnemonics.h
+// Name:        wx/gtk1/private/mnemonics.h
 // Purpose:     helper functions for dealing with GTK+ mnemonics
 // Author:      Vadim Zeitlin
 // Created:     2007-11-12

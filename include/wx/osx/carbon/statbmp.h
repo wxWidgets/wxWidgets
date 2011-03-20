@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.h
+// Name:        wx/osx/carbon/statbmp.h
 // Purpose:     wxStaticBitmap class
 // Author:      Stefan Csomor
 // Modified by:

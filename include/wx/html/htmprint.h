@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmprint.h
+// Name:        wx/html/htmprint.h
 // Purpose:     html printing classes
 // Author:      Vaclav Slavik
 // Created:     25/09/99

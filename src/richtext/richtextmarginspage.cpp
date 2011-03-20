@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextmarginspage.cpp
+// Name:        src/richtext/richtextmarginspage.cpp
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 

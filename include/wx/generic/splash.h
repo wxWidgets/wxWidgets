@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        splash.h
+// Name:        wx/generic/splash.h
 // Purpose:     Splash screen class
 // Author:      Julian Smart
 // Modified by:

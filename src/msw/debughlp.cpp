@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/debughlp.cpp
+// Name:        src/msw/debughlp.cpp
 // Purpose:     various Win32 debug helpers
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/dialog.cpp
+// Name:        src/osx/cocoa/dialog.mm
 // Purpose:     wxDialog class
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        valgen.h
+// Name:        wx/valgen.h
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
 // Created:     Jan 22 1999

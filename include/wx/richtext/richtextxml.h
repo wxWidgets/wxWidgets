@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/richtext/richeditxml.h
+// Name:        wx/richtext/richtextxml.h
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/thrimpl.cpp
+// Name:        wx/thrimpl.cpp
 // Purpose:     common part of wxThread Implementations
 // Author:      Vadim Zeitlin
 // Modified by:

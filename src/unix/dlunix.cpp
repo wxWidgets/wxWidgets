@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/dlunix.cpp
+// Name:        src/unix/dlunix.cpp
 // Purpose:     Unix-specific part of wxDynamicLibrary and related classes
 // Author:      Vadim Zeitlin
 // Modified by:

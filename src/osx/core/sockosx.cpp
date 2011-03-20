@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        osx/core/gsockosx.cpp
+// Name:        src/osx/core/gsockosx.cpp
 // Purpose:     wxSocketImpl implementation for OS X
 // Authors:     Brian Victor, Vadim Zeitlin
 // Created:     February 2002

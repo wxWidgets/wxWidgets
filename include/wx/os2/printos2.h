@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        print.h
+// Name:        wx/os2/printos2.h
 // Purpose:     wxOS2Printer, wxOS2PrintPreview classes
 // Author:      David Webster
 // Modified by:

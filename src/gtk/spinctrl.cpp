@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/spinbutt.cpp
+// Name:        src/gtk/spinctrl.cpp
 // Purpose:     wxSpinCtrl
 // Author:      Robert
 // Modified by:

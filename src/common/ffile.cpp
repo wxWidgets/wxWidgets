@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ffile.cpp
+// Name:        src/common/ffile.cpp
 // Purpose:     wxFFile encapsulates "FILE *" IO stream
 // Author:      Vadim Zeitlin
 // Modified by:

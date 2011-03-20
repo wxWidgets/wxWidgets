@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.h
+// Name:        wx/os2/accel.h
 // Purpose:     wxAcceleratorTable class
 // Author:      David Webster
 // Modified by:

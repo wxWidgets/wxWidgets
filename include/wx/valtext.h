@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        valtext.h
+// Name:        wx/valtext.h
 // Purpose:     wxTextValidator class
 // Author:      Julian Smart
 // Modified by: Francesco Montorsi

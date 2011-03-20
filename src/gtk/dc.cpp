@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/gtk/dc.cpp
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

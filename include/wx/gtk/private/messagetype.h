@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/private/msgtype.h
+// Name:        wx/gtk/private/messagetype.h
 // Purpose:     translate between wx and GtkMessageType
 // Author:      Vadim Zeitlin
 // Created:     2009-09-27

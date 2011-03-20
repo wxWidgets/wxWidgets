@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        win_gtk.h
+// Name:        wx/gtk/private/win_gtk.h
 // Purpose:     native GTK+ widget for wxWindow
 // Author:      Robert Roebling
 // Id:          $Id$

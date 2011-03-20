@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_html.cpp
+// Name:        src/xrc/xh_html.cpp
 // Purpose:     XRC resource for wxHtmlWindow
 // Author:      Bob Mitchell
 // Created:     2000/03/21

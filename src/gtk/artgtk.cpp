@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/artstd.cpp
+// Name:        src/gtk/artgtk.cpp
 // Purpose:     stock wxArtProvider instance with native GTK+ stock icons
 // Author:      Vaclav Slavik
 // Modified by:

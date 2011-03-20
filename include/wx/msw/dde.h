@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dde.h
+// Name:        wx/msw/dde.h
 // Purpose:     DDE class
 // Author:      Julian Smart
 // Modified by:

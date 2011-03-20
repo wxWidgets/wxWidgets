@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/srchctrl.cpp
+// Name:        src/osx/cocoa/srchctrl.mm
 // Purpose:     implements mac carbon wxSearchCtrl
 // Author:      Vince Harron
 // Created:     2006-02-19

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/tglbtn.cpp
+// Name:        src/univ/tglbtn.cpp
 // Purpose:     wxToggleButton
 // Author:      Vadim Zeitlin
 // Modified by: David Bjorkevik

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        ole/access.h
+// Name:        wx/msw/ole/access.h
 // Purpose:     declaration of the wxAccessible class
 // Author:      Julian Smart
 // Modified by:

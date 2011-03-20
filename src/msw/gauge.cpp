@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/gauge95.cpp
+// Name:        src/msw/gauge.cpp
 // Purpose:     wxGauge class
 // Author:      Julian Smart
 // Modified by:

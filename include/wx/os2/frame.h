@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        frame.h
+// Name:        wx/os2/frame.h
 // Purpose:     wxFrame class
 // Author:      David Webster
 // Modified by:

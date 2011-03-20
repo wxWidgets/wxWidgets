@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/statbr.h
+// Name:        wx/msw/statusbar.h
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
 // Modified by:

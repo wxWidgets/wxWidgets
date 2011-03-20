@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpxxxx.cpp
+// Name:        src/osx/carbon/helpxxxx.cpp
 // Purpose:     Help system: native implementation
 // Author:      Stefan Csomor
 // Modified by:

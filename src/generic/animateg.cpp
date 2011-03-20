@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        animateg.cpp
+// Name:        src/generic/animateg.cpp
 // Purpose:     wxAnimation and wxAnimationCtrl
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi

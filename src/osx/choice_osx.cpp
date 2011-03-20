@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/choice.cpp
+// Name:        src/osx/choice_osx.cpp
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
 // Modified by:

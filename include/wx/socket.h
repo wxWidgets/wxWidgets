@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        socket.h
+// Name:        wx/socket.h
 // Purpose:     Socket handling classes
 // Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Modified by:

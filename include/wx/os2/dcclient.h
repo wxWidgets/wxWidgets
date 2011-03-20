@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.h
+// Name:        wx/os2/dcclient.h
 // Purpose:     wxClientDC class
 // Author:      David Webster
 // Modified by:

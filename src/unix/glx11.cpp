@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/univ/glx11.cpp
+// Name:        src/unix/glx11.cpp
 // Purpose:     code common to all X11-based wxGLCanvas implementations
 // Author:      Vadim Zeitlin
 // Created:     2007-04-15

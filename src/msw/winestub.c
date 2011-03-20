@@ -1,5 +1,5 @@
 /****************************************************************************
- * Name:        winestub.cpp
+ * Name:        src/msw/winestub.cpp
  * Purpose:     wxWINE module mapping main() to WinMain()
  * Author:      Robert Roebling
  * Created:     04/01/98

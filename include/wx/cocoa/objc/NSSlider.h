@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/cocoa/objc/NSView.h
+// Name:        wx/cocoa/objc/NSSlider.h
 // Purpose:     WXNSSlider class
 // Author:      David Elliott
 // Modified by:

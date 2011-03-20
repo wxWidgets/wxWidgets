@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        assertdlg_gtk.h
+// Name:        wx/gtk/assertdlg_gtk.h
 // Purpose:     GtkAssertDialog
 // Author:      Francesco Montorsi
 // Id:          $Id$

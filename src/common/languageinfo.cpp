@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/language.cpp
+// Name:        src/common/languageinfo.cpp
 // Purpose:     wxLocale::InitLanguagesDB()
 // Author:      Vadim Zeitlin, Vaclav Slavik
 // Created:     2010-04-23

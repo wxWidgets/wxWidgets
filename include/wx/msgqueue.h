@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/thread.h
+// Name:        wx/msqqueue.h
 // Purpose:     Message queues for inter-thread communication
 // Author:      Evgeniy Tarassov
 // Created:     2007-10-31

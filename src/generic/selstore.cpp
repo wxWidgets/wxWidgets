@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/selstore.cpp
+// Name:        src/generic/selstore.cpp
 // Purpose:     wxSelectionStore implementation
 // Author:      Vadim Zeitlin
 // Modified by:

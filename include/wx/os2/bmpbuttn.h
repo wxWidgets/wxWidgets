@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.h
+// Name:        wx/os2/bmpbuttn.h
 // Purpose:     wxBitmapButton class
 // Author:      David Webster
 // Modified by:

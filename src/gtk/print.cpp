@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/print.cpp
+// Name:        src/gtk/print.cpp
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25

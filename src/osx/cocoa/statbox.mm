@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.cpp
+// Name:        src/osx/cocoa/statbox.mm
 // Purpose:     wxStaticBox
 // Author:      Stefan Csomor
 // Modified by:

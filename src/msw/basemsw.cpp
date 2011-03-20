@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/basemsw.cpp
+// Name:        src/msw/basemsw.cpp
 // Purpose:     misc stuff only used in console applications under MSW
 // Author:      Vadim Zeitlin
 // Modified by:

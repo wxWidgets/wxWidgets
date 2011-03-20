@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.cpp
+// Name:        src/gtk1/statbmp.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

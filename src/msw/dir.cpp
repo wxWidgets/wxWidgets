@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/dir.cpp
+// Name:        src/msw/dir.cpp
 // Purpose:     wxDir implementation for Win32
 // Author:      Vadim Zeitlin
 // Modified by:

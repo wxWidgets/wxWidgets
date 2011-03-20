@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/checkbox.cpp
+// Name:        src/osx/checkbox_osx.cpp
 // Purpose:     wxCheckBox
 // Author:      Stefan Csomor
 // Modified by:

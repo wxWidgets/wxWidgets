@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        main.cpp
+// Name:        src/motif/main.cpp
 // Purpose:     Entry point
 // Author:      Julian Smart
 // Modified by:

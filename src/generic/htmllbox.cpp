@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/htmllbox.cpp
+// Name:        src/generic/htmllbox.cpp
 // Purpose:     implementation of wxHtmlListBox
 // Author:      Vadim Zeitlin
 // Modified by:

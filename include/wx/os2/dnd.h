@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.h
+// Name:        wx/os2/dnd.h
 // Purpose:     declaration of the wxDropTarget class
 // Author:      David Webster
 // Modified by:

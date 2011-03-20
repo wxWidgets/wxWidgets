@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/statline.cpp
+// Name:        src/univ/statline.cpp
 // Purpose:     wxStaticLine implementation
 // Author:      Vadim Zeitlin
 // Modified by:

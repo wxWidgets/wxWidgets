@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.h
+// Name:        wx/stattext.h
 // Purpose:     wxStaticText base header
 // Author:      Julian Smart
 // Modified by:

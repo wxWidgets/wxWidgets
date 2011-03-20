@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.h
+// Name:        wx/gtk/scrolbar.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

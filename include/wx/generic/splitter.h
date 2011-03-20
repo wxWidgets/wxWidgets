@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/splitter.h
+// Name:        wx/generic/splitter.h
 // Purpose:     wxSplitterWindow class
 // Author:      Julian Smart
 // Modified by:

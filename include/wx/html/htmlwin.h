@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlwin.h
+// Name:        wx/html/htmlwin.h
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

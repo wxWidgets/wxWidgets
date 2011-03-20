@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/dir.cpp
+// Name:        src/unix/dir.cpp
 // Purpose:     wxDir implementation for Unix/POSIX systems
 // Author:      Vadim Zeitlin
 // Modified by:

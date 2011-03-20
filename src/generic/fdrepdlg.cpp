@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/fdrepgg.cpp
+// Name:        src/generic/fdrepdlg.cpp
 // Purpose:     Find/Replace dialogs
 // Author:      Markus Greither and Vadim Zeitlin
 // Modified by:

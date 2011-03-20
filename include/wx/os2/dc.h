@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/os2/dc.h
 // Purpose:     wxDC class
 // Author:      David Webster
 // Modified by:

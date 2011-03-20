@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/os2/app.h
 // Purpose:     wxApp class
 // Author:      David Webster
 // Modified by:

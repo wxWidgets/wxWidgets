@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/graphcmn.cpp
+// Name:        src/common/dcgraph.cpp
 // Purpose:     graphics context methods common to all platforms
 // Author:      Stefan Csomor
 // Modified by:

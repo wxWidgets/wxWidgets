@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/scrolbar.cpp
+// Name:        src/osx/scrolbar_osx.cpp
 // Purpose:     wxScrollBar
 // Author:      Stefan Csomor
 // Modified by:

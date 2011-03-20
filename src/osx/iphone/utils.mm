@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/utils.mm
+// Name:        src/osx/iphone/utils.mm
 // Purpose:     various cocoa utility functions
 // Author:      Stefan Csomor
 // Modified by:

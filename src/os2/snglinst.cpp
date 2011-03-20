@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/snglinst.cpp
+// Name:        src/os2/snglinst.cpp
 // Purpose:     implements wxSingleInstanceChecker class for OS/2 using
 //              named mutexes
 // Author:      Vadim Zeitlin

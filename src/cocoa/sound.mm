@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/cocoa/sound.mm
 // Purpose:     wxSound class implementation: optional
 // Authors:     David Elliott, Ryan Norton
 // Modified by: 

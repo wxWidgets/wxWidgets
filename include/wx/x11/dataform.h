@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        motif/dataform.h
+// Name:        wx/x11/dataform.h
 // Purpose:     declaration of the wxDataFormat class
 // Author:      Robert Roebling
 // Modified by:

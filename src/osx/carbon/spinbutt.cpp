@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        src/osx/carbon/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      Stefan Csomor
 // Modified by:

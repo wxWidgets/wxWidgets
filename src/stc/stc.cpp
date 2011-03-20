@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        stc.cpp
+// Name:        src/stc/stc.cpp
 // Purpose:     A wxWidgets implementation of Scintilla.  This class is the
 //              one meant to be used directly by wx applications.  It does not
 //              derive directly from the Scintilla classes, but instead

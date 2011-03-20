@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagjpeg.h
+// Name:        wx/imagjpeg.h
 // Purpose:     wxImage JPEG handler
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

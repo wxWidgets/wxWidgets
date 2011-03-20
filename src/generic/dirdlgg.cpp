@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/dirdlg.cpp
+// Name:        src/generic/dirdlgg.cpp
 // Purpose:     wxDirDialog
 // Author:      Harm van der Heijden, Robert Roebling & Julian Smart
 // Modified by:

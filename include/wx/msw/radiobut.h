@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.h
+// Name:        wx/msw/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      Julian Smart
 // Modified by:

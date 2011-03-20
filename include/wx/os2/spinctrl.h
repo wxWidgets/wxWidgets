@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/spinctrl.h
+// Name:        wx/os2/spinctrl.h
 // Purpose:     wxSpinCtrl class declaration for Win32
 // Author:      David Webster
 // Modified by:

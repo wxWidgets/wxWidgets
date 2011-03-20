@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/richtext/richeditctrl.cpp
+// Name:        src/richtext/richtextctrl.cpp
 // Purpose:     A rich edit control
 // Author:      Julian Smart
 // Modified by:

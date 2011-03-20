@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/caret.cpp
+// Name:        src/generic/caret.cpp
 // Purpose:     generic wxCaret class implementation
 // Author:      Vadim Zeitlin (original code by Robert Roebling)
 // Modified by:

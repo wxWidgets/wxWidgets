@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.h
+// Name:        wx/os2/combobox.h
 // Purpose:     wxComboBox class
 // Author:      David Webster
 // Modified by:

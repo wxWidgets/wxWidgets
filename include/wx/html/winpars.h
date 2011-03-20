@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        winpars.h
+// Name:        wx/html/winpars.h
 // Purpose:     wxHtmlWinParser class (parser to be used with wxHtmlWindow)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

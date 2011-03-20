@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl.h
+// Name:        wx/generic/listctrl.h
 // Purpose:     private definitions of wxListCtrl helpers
 // Author:      Robert Roebling
 //              Vadim Zeitlin (virtual list control support)

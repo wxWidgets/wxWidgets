@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/motif/scrollbar.h
+// Name:        wx/motif/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/cocoa/dirdlg.h
+// Name:        wx/cocoa/msgdlg.h
 // Purpose:     wxMessageDialog class
 // Author:      Gareth Simpson
 // Created:     2007-10-29

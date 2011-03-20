@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        laywin.cpp
+// Name:        src/generic/laywin.cpp
 // Purpose:     Implements a simple layout algorithm, plus
 //              wxSashLayoutWindow which is an example of a window with
 //              layout-awareness (via event handlers). This is suited to

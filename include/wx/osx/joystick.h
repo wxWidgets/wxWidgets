@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/osx/joystick.h
 // Purpose:     wxJoystick class
 // Author:      Stefan Csomor
 // Modified by:

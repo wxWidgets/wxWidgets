@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/stattext.mm
+// Name:        src/osx/iphone/stattext.mm
 // Purpose:     wxStaticText
 // Author:      Stefan Csomor
 // Modified by:

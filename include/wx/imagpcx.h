@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagpcx.h
+// Name:        wx/imagpcx.h
 // Purpose:     wxImage PCX handler
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // RCS-ID:      $Id$

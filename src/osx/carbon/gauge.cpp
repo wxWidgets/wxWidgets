@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.cpp
+// Name:        src/osx/carbon/gauge.cpp
 // Purpose:     wxGauge class
 // Author:      Stefan Csomor
 // Modified by:

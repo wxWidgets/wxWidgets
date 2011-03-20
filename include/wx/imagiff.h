@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagiff.h
+// Name:        wx/imagiff.h
 // Purpose:     wxImage handler for Amiga IFF images
 // Author:      Steffen Gutmann
 // RCS-ID:      $Id$

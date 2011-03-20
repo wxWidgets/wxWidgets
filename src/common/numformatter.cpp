@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        numformatter.cpp
+// Name:        src/common/numformatter.cpp
 // Purpose:     wxNumberFormatter
 // Author:      Fulvio Senore, Vadim Zeitlin
 // Created:     2010-11-06

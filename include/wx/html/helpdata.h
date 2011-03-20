@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpdata.h
+// Name:        wx/html/helpdata.h
 // Purpose:     wxHtmlHelpData
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik

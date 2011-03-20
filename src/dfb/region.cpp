@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:      src/mgl/region.cpp
+// Name:      src/dfb/region.cpp
 // Purpose:   Region handling for wxWidgets/DFB
 // Author:    Vaclav Slavik
 // Created:   2006-08-08

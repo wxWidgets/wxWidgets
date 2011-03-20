@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mgl/clipboard.h
+// Name:        wx/mgl/clipbrd.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpbase.h
+// Name:        wx/helpbase.h
 // Purpose:     Help system base classes
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/bmpcboxg.cpp
+// Name:        src/gtk/bmpcbox.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     2008-05-19

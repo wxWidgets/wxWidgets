@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/toplevel.cpp
+// Name:        src/osx/toplevel_osx.cpp
 // Purpose:     implements wxTopLevelWindow for Mac
 // Author:      Stefan Csomor
 // Modified by:

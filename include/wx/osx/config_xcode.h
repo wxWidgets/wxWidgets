@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        config_xcode.pch
+// Name:        wx/osx/config_xcode.h
 // Purpose:     configurations for xcode builds
 // Author:      Stefan Csomor
 // Modified by:

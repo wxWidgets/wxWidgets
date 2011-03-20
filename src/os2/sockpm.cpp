@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/sockpm.cpp
+// Name:        src/os2/sockpm.cpp
 // Purpose:     implementation of OS-2-specific handler event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999

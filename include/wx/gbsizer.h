@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gbsizer.h
+// Name:        wx/gbsizer.h
 // Purpose:     wxGridBagSizer:  A sizer that can lay out items in a grid,
 //              with items at specified cells, and with the option of row
 //              and/or column spanning

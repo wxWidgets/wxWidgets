@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/font.cpp
+// Name:        src/cocoa/font.mm
 // Purpose:     wxFont class
 // Author:      AUTHOR
 // Modified by:

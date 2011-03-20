@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_tglbtn.cpp
+// Name:        src/xrc/xh_tglbtn.cpp
 // Purpose:     XRC resource for wxToggleButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/statlmac.cpp
+// Name:        src/osx/statline_osx.cpp
 // Purpose:     a generic wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99

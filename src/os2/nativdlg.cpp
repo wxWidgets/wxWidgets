@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        nativdlg.cpp
+// Name:        src/os2/nativdlg.cpp
 // Purpose:     Native dialog loading code (part of wxWindow)
 // Author:      David Webster
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ftp.h
+// Name:        wx/protocol/ftp.h
 // Purpose:     FTP protocol
 // Author:      Vadim Zeitlin
 // Modified by: Mark Johnson, wxWindows@mj10777.de

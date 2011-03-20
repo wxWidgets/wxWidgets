@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/radiobox.cpp
+// Name:        src/osx/radiobox_osx.cpp
 // Purpose:     wxRadioBox
 // Author:      Stefan Csomor
 // Modified by: JS Lair (99/11/15) first implementation

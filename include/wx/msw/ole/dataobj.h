@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/dataobj.h
+// Name:        wx/msw/ole/dataobj.h
 // Purpose:     declaration of the wxDataObject class
 // Author:      Vadim Zeitlin
 // Modified by:

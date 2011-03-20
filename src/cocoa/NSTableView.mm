@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSTableView.mm
+// Name:        src/cocoa/NSTableView.mm
 // Purpose:     wxCocoaNSTableView / wxCocoaNSTableDataSource
 // Author:      David Elliott
 // Modified by:

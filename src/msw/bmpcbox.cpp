@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/bmpcboxg.cpp
+// Name:        src/msw/bmpcbox.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     2008-04-06

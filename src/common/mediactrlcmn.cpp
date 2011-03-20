@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/mediactrl.cpp
+// Name:        src/common/mediactrlcmn.cpp
 // Purpose:     wxMediaCtrl common code
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:

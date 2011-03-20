@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextborderspage.cpp
+// Name:        src/richtext/richtextborderspage.cpp
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 

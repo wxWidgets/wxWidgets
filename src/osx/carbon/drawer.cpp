@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        drawer.cpp
+// Name:        src/osx/carbon/drawer.cpp
 // Purpose:     Drawer child window classes.
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal

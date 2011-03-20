@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        url.h
+// Name:        wx/url.h
 // Purpose:     URL parser
 // Author:      Guilhem Lavaux
 // Modified by: Ryan Norton

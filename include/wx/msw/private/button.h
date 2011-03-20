@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/private/button.h
+// Name:        wx/msw/private/button.h
 // Purpose:     helper functions used with native BUTTON control
 // Author:      Vadim Zeitlin
 // Created:     2008-06-07

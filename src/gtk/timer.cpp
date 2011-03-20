@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/timer.cpp
+// Name:        src/gtk/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Robert Roebling
 // Id:          $Id$

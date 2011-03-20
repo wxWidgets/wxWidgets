@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlcell.h
+// Name:        wx/html/htmlcell.h
 // Purpose:     wxHtmlCell class is used by wxHtmlWindow/wxHtmlWinParser
 //              as a basic visual element of HTML page
 // Author:      Vaclav Slavik

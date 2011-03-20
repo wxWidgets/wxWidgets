@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/inphand.cpp
+// Name:        src/univ/inphand.cpp
 // Purpose:     (trivial) wxInputHandler implementation
 // Author:      Vadim Zeitlin
 // Modified by:

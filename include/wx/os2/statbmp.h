@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.h
+// Name:        wx/os2/statbmp.h
 // Purpose:     wxStaticBitmap class
 // Author:      David Webster
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/os2/sound.cpp
 // Purpose:     wxSound class implementation: optional
 // Author:      David Webster
 // Modified by:

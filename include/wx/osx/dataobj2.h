@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dataobj2.h
+// Name:        wx/osx/dataobj2.h
 // Purpose:     declaration of standard wxDataObjectSimple-derived classes
 // Author:      David Webster (adapted from Robert Roebling's gtk port
 // Modified by:

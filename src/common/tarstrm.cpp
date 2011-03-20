@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tarstrm.cpp
+// Name:        src/common/tarstrm.cpp
 // Purpose:     Streams for Tar files
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$

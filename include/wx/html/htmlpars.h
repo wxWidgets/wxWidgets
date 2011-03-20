@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlpars.h
+// Name:        wx/html/htmlpars.h
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

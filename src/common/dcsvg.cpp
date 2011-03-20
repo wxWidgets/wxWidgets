@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        svg.cpp
+// Name:        src/common/svg.cpp
 // Purpose:     SVG sample
 // Author:      Chris Elliott
 // Modified by:

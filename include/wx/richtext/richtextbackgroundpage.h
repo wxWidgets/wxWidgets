@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextbackgroundpage.h
+// Name:        wx/richtext/richtextbackgroundpage.h
 // Purpose:
 // Author:      Julian Smart
 // Modified by:

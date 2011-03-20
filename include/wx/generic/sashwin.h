@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sashwin.h
+// Name:        wx/generic/sashwin.h
 // Purpose:     wxSashWindow implementation. A sash window has an optional
 //              sash on each edge, allowing it to be dragged. An event
 //              is generated when the sash is released.

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        main.cpp
+// Name:        src/osx/carbon/main.cpp
 // Purpose:     Entry point
 // Author:      Stefan Csomor
 // Modified by:

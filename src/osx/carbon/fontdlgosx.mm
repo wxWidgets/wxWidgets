@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/fontdlgosx.cpp
+// Name:        src/osx/carbon/fontdlgosx.mm
 // Purpose:     wxFontDialog class.
 // Author:      Ryan Norton
 // Modified by:

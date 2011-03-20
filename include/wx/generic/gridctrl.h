@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// Name:        generic/gridctrl.h
+// Name:        wx/generic/gridctrl.h
 // Purpose:     wxGrid controls
 // Author:      Paul Gammans, Roger Gammans
 // Modified by:

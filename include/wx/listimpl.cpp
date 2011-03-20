@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listimpl.cpp
+// Name:        wx/listimpl.cpp
 // Purpose:     second-part of macro based implementation of template lists
 // Author:      Vadim Zeitlin
 // Modified by:

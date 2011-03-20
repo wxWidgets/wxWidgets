@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/utils.mm
+// Name:        src/osx/carbon/utilscocoa.mm
 // Purpose:     various cocoa mixin utility functions
 // Author:      Stefan Csomor
 // Modified by:

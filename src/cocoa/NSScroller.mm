@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSScroller.mm
+// Name:        src/cocoa/NSScroller.mm
 // Purpose:     wxCocoaNSScroller
 // Author:      David Elliott
 // Modified by:

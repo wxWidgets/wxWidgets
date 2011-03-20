@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSButton.cpp
+// Name:        src/cocoa/NSButton.mm
 // Purpose:     wxCocoaNSButton
 // Author:      David Elliott
 // Modified by:

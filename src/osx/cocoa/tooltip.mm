@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/tooltip.cpp
+// Name:        src/osx/cocoa/tooltip.mm
 // Purpose:     wxToolTip implementation
 // Author:      Stefan Csomor
 // Id:          $Id$

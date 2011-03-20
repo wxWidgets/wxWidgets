@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        paper.h
+// Name:        wx/paper.h
 // Purpose:     Paper database types and classes
 // Author:      Julian Smart
 // Modified by:

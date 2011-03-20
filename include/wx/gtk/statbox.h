@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/stabox.h
+// Name:        wx/gtk/statbox.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

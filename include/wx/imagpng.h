@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagpng.h
+// Name:        wx/imagpng.h
 // Purpose:     wxImage PNG handler
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

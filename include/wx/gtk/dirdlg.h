@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.h
+// Name:        wx/gtk/dirdlg.h
 // Purpose:     wxDirDialog
 // Author:      Francesco Montorsi
 // Id:          $Id$

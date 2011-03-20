@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.h
+// Name:        wx/os2/minifram.h
 // Purpose:     wxMiniFrame class. A small frame for e.g. floating toolbars.
 //              If there is no equivalent on your platform, just make it a
 //              normal frame.

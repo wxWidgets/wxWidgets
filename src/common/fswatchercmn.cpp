@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/fswatchercmn.cpp
+// Name:        src/common/fswatchercmn.cpp
 // Purpose:     wxMswFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26

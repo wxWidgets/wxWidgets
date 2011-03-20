@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        src/osx/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      AUTHOR
 // Modified by: JS Lair (99/11/15) adding the cyclic group notion for radiobox

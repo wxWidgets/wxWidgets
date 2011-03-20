@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mgl/dir.cpp
+// Name:        src/mgl/dirmgl.cpp
 // Purpose:     wxDir implementation for MGL
 // Author:      Vaclav Slavik, Vadim Zeitlin
 // Modified by:

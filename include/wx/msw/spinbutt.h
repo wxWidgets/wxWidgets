@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/univ/spinbutt.h
+// Name:        wx/msw/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Julian Smart
 // Modified by:

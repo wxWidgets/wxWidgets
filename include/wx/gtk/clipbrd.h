@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/clipboard.h
+// Name:        wx/gtk/clipbrd.h
 // Purpose:     wxClipboard for wxGTK
 // Author:      Robert Roebling, Vadim Zeitlin
 // Id:          $Id$

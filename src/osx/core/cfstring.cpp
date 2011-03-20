@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/corefoundation/cfstring.cpp
+// Name:        src/osx/core/cfstring.cpp
 // Purpose:     wxCFStringHolder and other string functions
 // Author:      Stefan Csomor
 // Modified by:

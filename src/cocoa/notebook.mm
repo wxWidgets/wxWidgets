@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/notebook.mm
+// Name:        src/cocoa/notebook.mm
 // Purpose:     wxNotebook
 // Author:      David Elliott
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        editlbox.cpp
+// Name:        src/generic/editlbox.cpp
 // Purpose:     ListBox with editable items
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

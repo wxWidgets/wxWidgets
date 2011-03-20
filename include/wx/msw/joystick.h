@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/msw/joystick.h
 // Purpose:     wxJoystick class
 // Author:      Julian Smart
 // Modified by:

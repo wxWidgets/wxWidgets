@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        prntdlgg.h
+// Name:        wx/generic/prntdlgg.h
 // Purpose:     wxGenericPrintDialog, wxGenericPrintSetupDialog,
 //              wxGenericPageSetupDialog
 // Author:      Julian Smart

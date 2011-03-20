@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpfrm.h
+// Name:        wx/html/helpfrm.h
 // Purpose:     wxHtmlHelpFrame
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik

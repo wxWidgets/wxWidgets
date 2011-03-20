@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinctrl.h
+// Name:        wx/spinctrl.h
 // Purpose:     wxSpinCtrlBase class
 // Author:      Vadim Zeitlin
 // Modified by:

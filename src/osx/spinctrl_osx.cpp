@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/spinbutt.cpp
+// Name:        src/osx/spinctrl_osx.cpp
 // Purpose:     wxSpinCtrl
 // Author:      Robert
 // Modified by: Mark Newsam (Based on GTK file)

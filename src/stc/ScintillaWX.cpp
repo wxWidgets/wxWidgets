@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        ScintillaWX.cxx
+// Name:        src/stc/ScintillaWX.cpp
 // Purpose:     A wxWidgets implementation of Scintilla.  A class derived
 //              from ScintillaBase that uses the "wx platform" defined in
 //              PlatformWX.cxx  This class is one end of a bridge between

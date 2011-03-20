@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.h
+// Name:        wx/msw/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
 // Modified by:

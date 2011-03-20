@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/statline.h
+// Name:        wx/os2/statline.h
 // Purpose:     MSW version of wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/mimetype.cpp
+// Name:        src/osx/carbon/mimetmac.cpp
 // Purpose:     Mac Carbon implementation for wx MIME-related classes
 // Author:      Ryan Norton
 // Modified by:

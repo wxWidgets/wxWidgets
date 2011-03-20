@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/clntdata.cpp
+// Name:        src/common/clntdata.cpp
 // Purpose:     A mixin class for holding a wxClientData or void pointer
 // Author:      Robin Dunn
 // Modified by:

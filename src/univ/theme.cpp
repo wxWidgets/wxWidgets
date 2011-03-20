@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/theme.cpp
+// Name:        src/univ/theme.cpp
 // Purpose:     implementation of wxTheme
 // Author:      Vadim Zeitlin
 // Modified by:

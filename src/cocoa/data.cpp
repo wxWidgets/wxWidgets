@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        data.cpp
+// Name:        src/cocoa/data.cpp
 // Purpose:     Various data
 // Author:      AUTHOR
 // Modified by:

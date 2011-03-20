@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        region.h
+// Name:        wx/osx/carbon/region.h
 // Purpose:     wxRegion class
 // Author:      Stefan Csomor
 // Modified by:

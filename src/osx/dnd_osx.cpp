@@ -36,7 +36,7 @@ wxDragResult wxDropTarget::OnDragOver(
 
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
-    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/carbon/dnd.cpp");
+    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/dnd_osx.cpp");
     return wxDF_INVALID;
 }
 

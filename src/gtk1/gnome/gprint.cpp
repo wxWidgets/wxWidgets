@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/gnome/gprint.cpp
+// Name:        src/gtk1/gnome/gprint.cpp
 // Author:      Robert Roebling
 // Purpose:     Implement GNOME printing support
 // Created:     09/20/04

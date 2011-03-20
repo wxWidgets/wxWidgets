@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        ole/droptgt.h
+// Name:        wx/msw/ole/droptgt.h
 // Purpose:     declaration of the wxDropTarget class
 // Author:      Vadim Zeitlin
 // Modified by:

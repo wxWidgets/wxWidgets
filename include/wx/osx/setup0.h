@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        setup.h
+// Name:        wx/osx/setup.h
 // Purpose:     Configuration for the library
 // Author:      Stefan Csomor
 // Modified by: Stefan Csomor

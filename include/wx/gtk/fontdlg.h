@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/fontdlgg.h
+// Name:        wx/gtk/fontdlg.h
 // Purpose:     wxFontDialog
 // Author:      Robert Roebling
 // Created:

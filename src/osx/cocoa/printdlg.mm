@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/printdlg.cpp
+// Name:        src/osx/cocoa/printdlg.mm
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Stefan Csomor
 // Modified by:

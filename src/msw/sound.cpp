@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/msw/sound.cpp
 // Purpose:     wxSound
 // Author:      Julian Smart
 // Modified by: 2005-07-29: Vadim Zeitlin: redesign

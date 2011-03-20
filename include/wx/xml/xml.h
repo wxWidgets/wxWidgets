@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xml.h
+// Name:        wx/xml/xml.h
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

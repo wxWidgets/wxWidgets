@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msdos/utils.cpp
+// Name:        src/msdos/utilsdos.cpp
 // Purpose:     DOS implementations of utility functions
 // Author:      Vaclav Slavik, M.J.Wetherell
 // Id:          $Id$

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/colordlg.cpp
+// Name:        src/gtk/colordlg.cpp
 // Purpose:     Native wxColourDialog for GTK+
 // Author:      Vaclav Slavik
 // Modified by:

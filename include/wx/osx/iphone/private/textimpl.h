@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textimpl.h
+// Name:        wx/osx/iphone/private/textimpl.h
 // Purpose:     textcontrol implementation classes that have to be exposed
 // Author:      Stefan Csomor
 // Modified by:

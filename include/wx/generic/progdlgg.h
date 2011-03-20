@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        progdlgg.h
+// Name:        wx/generic/progdlgg.h
 // Purpose:     wxGenericProgressDialog class
 // Author:      Karsten Ballueder
 // Modified by: Francesco Montorsi

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmltag.h
+// Name:        wx/html/htmltag.h
 // Purpose:     wxHtmlTag class (represents single tag)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

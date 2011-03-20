@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.h
+// Name:        wx/mgl/font.h
 // Author:      Vaclav Slavik
 // Id:          $Id$
 // Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)

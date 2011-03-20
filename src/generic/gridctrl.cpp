@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// Name:        generic/gridctrl.cpp
+// Name:        src/generic/gridctrl.cpp
 // Purpose:     wxGrid controls
 // Author:      Paul Gammans, Roger Gammans
 // Modified by:

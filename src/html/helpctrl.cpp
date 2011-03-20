@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpctrl.cpp
+// Name:        src/html/helpctrl.cpp
 // Purpose:     wxHtmlHelpController
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik

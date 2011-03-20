@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tooltip.h
+// Name:        wx/gtk/tooltip.h
 // Purpose:     wxToolTip class
 // Author:      Robert Roebling
 // Id:          $Id$

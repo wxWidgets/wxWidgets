@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textdlgg.h
+// Name:        wx/generic/textdlgg.h
 // Purpose:     wxTextEntryDialog class
 // Author:      Julian Smart
 // Modified by:

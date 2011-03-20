@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tooltip.h
+// Name:        wx/tooltip.h
 // Purpose:     wxToolTip base header
 // Author:      Robert Roebling
 // Modified by:

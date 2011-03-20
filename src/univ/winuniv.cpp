@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/univ/window.cpp
+// Name:        src/univ/winuniv.cpp
 // Purpose:     implementation of extra wxWindow methods for wxUniv port
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/wxexec.cpp
+// Name:        src/common/execcmn.cpp
 // Purpose:     defines wxStreamTempInputBuffer which is used by Unix and MSW
 //              implementations of wxExecute; this file is only used by the
 //              library and never by the user code

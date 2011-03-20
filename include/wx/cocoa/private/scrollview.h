@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/cocoa/scrollview.h
+// Name:        wx/cocoa/private/scrollview.h
 // Purpose:     wxWindowCocoaScrollView
 // Author:      David Elliott
 // Modified by:

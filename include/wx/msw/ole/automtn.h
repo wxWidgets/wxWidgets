@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        automtn.h
+// Name:        wx/msw/ole/automtn.h
 // Purpose:     OLE automation utilities
 // Author:      Julian Smart
 // Modified by:

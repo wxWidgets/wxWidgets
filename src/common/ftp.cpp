@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/ftp.cpp
+// Name:        src/common/ftp.cpp
 // Purpose:     FTP protocol
 // Author:      Guilhem Lavaux
 // Modified by: Mark Johnson, wxWindows@mj10777.de

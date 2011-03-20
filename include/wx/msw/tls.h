@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/unix/tls.h
+// Name:        wx/msw/tls.h
 // Purpose:     Win32 implementation of wxTlsValue<>
 // Author:      Vadim Zeitlin
 // Created:     2008-08-08

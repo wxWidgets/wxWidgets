@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx_cw_d.h
+// Name:        wx/wx_cw_d.h
 // Purpose:     wxWidgets definitions for CodeWarrior builds (Debug)
 // Author:      Stefan Csomor
 // Modified by:

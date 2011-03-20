@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/mgl/cursor.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$

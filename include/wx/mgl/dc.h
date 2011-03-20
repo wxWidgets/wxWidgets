@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/mgl/dc.h
 // Purpose:     wxDC class
 // Author:      Vaclav Slavik
 // Created:     2001/03/09

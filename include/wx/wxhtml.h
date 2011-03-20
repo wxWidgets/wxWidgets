@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxhtml.h
+// Name:        wx/wxhtml.h
 // Purpose:     wxHTML library for wxWidgets
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

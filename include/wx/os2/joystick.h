@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/os2/joystick.h
 // Purpose:     wxJoystick class
 // Author:      David Webster
 // Modified by:

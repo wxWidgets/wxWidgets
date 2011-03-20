@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        frame.h
+// Name:        wx/osx/frame.h
 // Purpose:     wxFrame class
 // Author:      Stefan Csomor
 // Modified by:

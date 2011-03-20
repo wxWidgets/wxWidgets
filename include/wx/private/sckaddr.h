@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/sockaddr.h
+// Name:        wx/private/sckaddr.h
 // Purpose:     wxSockAddressImpl
 // Author:      Vadim Zeitlin
 // Created:     2008-12-28

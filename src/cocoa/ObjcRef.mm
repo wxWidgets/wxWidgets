@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/ObjcRef.mm
+// Name:        src/cocoa/ObjcRef.mm
 // Purpose:     wxObjcAutoRefBase implementation
 // Author:      David Elliott
 // Modified by: 

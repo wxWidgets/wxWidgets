@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        osx/cocoa/aboutdlg.cpp
+// Name:        src/osx/cocoa/aboutdlg.mm
 // Purpose:     native wxAboutBox() implementation for wxMac
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08

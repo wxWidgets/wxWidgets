@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.h
+// Name:        wx/os2/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes.
 //              This doesn't have to be implemented just like Windows,
 //              it could be a tabbed design as in wxGTK.

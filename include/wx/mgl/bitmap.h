@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.h
+// Name:        wx/mgl/bitmap.h
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.h
+// Name:        wx/gtk/dcmemory.h
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

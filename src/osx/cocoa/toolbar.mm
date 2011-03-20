@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/toolbar.cpp
+// Name:        src/osx/cocoa/toolbar.mm
 // Purpose:     wxToolBar
 // Author:      Stefan Csomor
 // Modified by:

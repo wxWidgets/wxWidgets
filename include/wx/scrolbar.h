@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.h
+// Name:        wx/scrolbar.h
 // Purpose:     wxScrollBar base header
 // Author:      Julian Smart
 // Modified by:

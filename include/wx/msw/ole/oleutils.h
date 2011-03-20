@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        oleutils.h
+// Name:        wx/msw/ole/oleutils.h
 // Purpose:     OLE helper routines, OLE debugging support &c
 // Author:      Vadim Zeitlin
 // Modified by:

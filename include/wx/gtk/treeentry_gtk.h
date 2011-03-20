@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        treeentry_gtk.h
+// Name:        wx/gtk/treeentry_gtk.h
 // Purpose:     GtkTreeEntry - a string/userdata combo for use with treeview
 // Author:      Ryan Norton
 // Id:          $Id$

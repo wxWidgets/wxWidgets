@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_mem.h
+// Name:        wx/fs_mem.h
 // Purpose:     in-memory file system
 // Author:      Vaclav Slavik
 // Copyright:   (c) 2000 Vaclav Slavik
