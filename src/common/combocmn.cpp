@@ -1071,29 +1071,31 @@ wxComboCtrlBase::CreateTextCtrl(int style)
 
 void wxComboCtrlBase::OnThemeChange()
 {
-    // Leave the default bg on the Mac so the area used by the focus ring will
-    // be the correct colour and themed brush.  Instead we'll use
-    // wxSYS_COLOUR_WINDOW in the EVT_PAINT handler as needed.
-#ifndef __WXMAC__
-  #if defined(__WXMSW__) || defined(__WXGTK__)
+    // Because wxComboCtrl has transparent parts on most platforms, we
+    // don't want to touch the actual background colour. Instead, we just
+    // usually re-obtain m_tcBgCol here.
+
+#if defined(__WXMSW__) || defined(__WXGTK__)
     wxVisualAttributes vattrs = wxComboBox::GetClassDefaultAttributes();
-  #else
+#else
     wxVisualAttributes vattrs;
     vattrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     vattrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-  #endif
+#endif
 
+    if ( !m_hasBgCol )
+        m_tcBgCol = vattrs.colBg;
+
+#ifndef __WXMAC__
     // Only change the colours if application has not specified
     // custom ones.
     if ( !m_hasFgCol )
     {
         SetOwnForegroundColour(vattrs.colFg);
-        m_hasFgCol = false;
     }
-    if ( !m_hasBgCol )
+    if ( !HasTransparentBackground() )
     {
-        SetOwnBackgroundColour(vattrs.colBg);
-        m_hasBgCol = false;
+        SetOwnBackgroundColour(GetParent()->GetBackgroundColour());
     }
 #endif // !__WXMAC__
 }
@@ -1478,14 +1480,20 @@ bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 
 bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 {
-    if ( wxControl::SetBackgroundColour(colour) )
-    {
-        if ( m_text )
-            m_text->SetBackgroundColour(colour);
-        return true;
-    }
-    return false;
+    if ( m_text )
+        m_text->SetBackgroundColour(colour);
+    m_tcBgCol = colour;
+    m_hasBgCol = true;
+    return true;
 }
+
+wxColour wxComboCtrlBase::GetBackgroundColour() const
+{
+    if ( m_text )
+        return m_text->GetBackgroundColour();
+    return m_tcBgCol;
+}
+
 // ----------------------------------------------------------------------------
 // painting
 // ----------------------------------------------------------------------------
@@ -1644,7 +1652,9 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int flags )
             return;
 
         // Need to clear button background even if m_btn is present
-        if ( flags & Button_PaintBackground )
+        if ( (flags & Button_PaintBackground) &&
+                (!HasTransparentBackground() ||
+                 !(m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE)) )
         {
             wxColour bgCol;
 

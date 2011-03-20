@@ -201,8 +201,10 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
     // Add keyboard input handlers for main control and textctrl
     InstallInputHandlers();
 
-    // Set background
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM ); // for double-buffering
+    // Set background style for double-buffering, when needed
+    // (cannot use when system draws background automatically)
+    if ( !HasTransparentBackground() )
+        SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     // SetInitialSize should be called last
     SetInitialSize(size);
@@ -238,11 +240,19 @@ void wxGenericComboCtrl::OnResize()
 
 void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
-    wxSize sz = GetClientSize();
-    wxAutoBufferedPaintDC dc(this);
+    // Determine wxDC to use based on need to double-buffer or
+    // use system-generated transparent background portions
+    wxDC* dcPtr;
+    if ( HasTransparentBackground() )
+        dcPtr = new wxPaintDC(this);
+    else
+        dcPtr = new wxAutoBufferedPaintDC(this);
+    wxDC& dc = *dcPtr;
 
-    const wxRect& rectb = m_btnArea;
-    wxRect rect = m_tcArea;
+    wxSize sz = GetClientSize();
+    const wxRect& butRect = m_btnArea;
+    wxRect tcRect = m_tcArea;
+    wxRect fullRect(0, 0, sz.x, sz.y);
 
     // artificial simple border
     if ( m_widthCustomBorder )
@@ -256,10 +266,10 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.SetPen( pen1 );
 
         // area around both controls
-        wxRect rect2(0,0,sz.x,sz.y);
+        wxRect rect2(fullRect);
         if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
         {
-            rect2 = m_tcArea;
+            rect2 = tcRect;
             if ( customBorder == 1 )
             {
                 rect2.Inflate(1);
@@ -282,44 +292,49 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.DrawRectangle(rect2);
     }
 
-#ifndef __WXMAC__  // see note in OnThemeChange
-    wxColour winCol = GetBackgroundColour();
-#else
-    wxColour winCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#endif
-    dc.SetBrush(winCol);
-    dc.SetPen(winCol);
+    // Clear the main background if the system doesn't do it by itself
+    if ( !HasTransparentBackground() &&
+         (tcRect.x > 0 || tcRect.y > 0) )
+    {
+        wxColour winCol = GetParent()->GetBackgroundColour();
+        dc.SetBrush(winCol);
+        dc.SetPen(winCol);
 
-    //wxLogDebug(wxT("hei: %i tcy: %i tchei: %i"),GetClientSize().y,m_tcArea.y,m_tcArea.height);
-    //wxLogDebug(wxT("btnx: %i tcx: %i tcwid: %i"),m_btnArea.x,m_tcArea.x,m_tcArea.width);
-
-    // clear main background
-    dc.DrawRectangle(rect);
+        dc.DrawRectangle(fullRect);
+    }
 
     if ( !m_btn )
     {
         // Standard button rendering
-        DrawButton(dc,rectb);
+        DrawButton(dc, butRect);
     }
 
     // paint required portion on the control
-    if ( (!m_text || m_widthCustomPaint) )
+    if ( !m_text || m_widthCustomPaint )
     {
         wxASSERT( m_widthCustomPaint >= 0 );
+
+        // Clear the text-control area background
+        wxColour tcCol = GetBackgroundColour();
+        dc.SetBrush(tcCol);
+        dc.SetPen(tcCol);
+        dc.DrawRectangle(tcRect);
 
         // this is intentionally here to allow drawed rectangle's
         // right edge to be hidden
         if ( m_text )
-            rect.width = m_widthCustomPaint;
+            tcRect.width = m_widthCustomPaint;
 
         dc.SetFont( GetFont() );
 
-        dc.SetClippingRegion(rect);
+        dc.SetClippingRegion(tcRect);
         if ( m_popupInterface )
-            m_popupInterface->PaintComboControl(dc,rect);
+            m_popupInterface->PaintComboControl(dc, tcRect);
         else
-            wxComboPopup::DefaultPaintComboControl(this,dc,rect);
+            wxComboPopup::DefaultPaintComboControl(this, dc, tcRect);
     }
+
+    delete dcPtr;
 }
 
 void wxGenericComboCtrl::OnMouseEvent( wxMouseEvent& event )

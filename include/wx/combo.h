@@ -445,6 +445,9 @@ public:
     // Return true if Create has finished
     bool IsCreated() const { return m_iFlags & wxCC_IFLAG_CREATED ? true : false; }
 
+    // Need to override to return text area background colour
+    wxColour GetBackgroundColour() const;
+
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss(bool generateEvent);
 
@@ -670,6 +673,9 @@ protected:
     // The button and textctrl click/paint areas
     wxRect                  m_tcArea;
     wxRect                  m_btnArea;
+
+    // Colour of the the text area, in case m_text is NULL
+    wxColour                m_tcBgCol;
 
     // current button state (uses renderer flags)
     int                     m_btnState;
