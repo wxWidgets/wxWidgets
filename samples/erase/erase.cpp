@@ -72,7 +72,6 @@ public:
 
 private:
     void OnPaint( wxPaintEvent &event );
-    void OnChar( wxKeyEvent &event );
     void OnEraseBackground( wxEraseEvent &event );
 
     void DoPaint(wxDC& dc);
@@ -97,7 +96,6 @@ private:
     }
 
     wxBitmap    m_bitmap;
-    wxString    m_text;
 
     // use wxMemoryDC in OnPaint()?
     bool m_useBuffer;
@@ -280,7 +278,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
-    EVT_CHAR(MyCanvas::OnChar)
     EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
 END_EVENT_TABLE()
 
@@ -306,29 +303,6 @@ MyCanvas::MyCanvas(wxFrame *parent)
     SetBackgroundColour(*wxCYAN);
 }
 
-void MyCanvas::OnChar( wxKeyEvent &event )
-{
-#if wxUSE_UNICODE
-    if (event.m_uniChar)
-    {
-        m_text += event.m_uniChar;
-        Refresh();
-        return;
-    }
-#endif
-
-    // some test cases
-    switch (event.m_keyCode)
-    {
-        case WXK_UP: m_text += wxT( "<UP>" ); break;
-        case WXK_LEFT: m_text += wxT( "<LEFT>" ); break;
-        case WXK_RIGHT: m_text += wxT( "<RIGHT>" ); break;
-        case WXK_DOWN: m_text += wxT( "<DOWN>" ); break;
-        case WXK_RETURN: m_text += wxT( "<ENTER>" ); break;
-        default: m_text += (wxChar)event.m_keyCode; break;
-    }
-}
-
 void MyCanvas::DoPaint(wxDC& dc)
 {
     if ( m_eraseBgInPaint )
@@ -345,20 +319,10 @@ void MyCanvas::DoPaint(wxDC& dc)
                     "display corruption", 65, 110);
     }
 
-    dc.SetBrush( *wxBLACK_BRUSH );
-
     dc.DrawBitmap( m_bitmap, 20, 20, true );
 
     dc.SetTextForeground(*wxRED);
     dc.DrawText("This text is drawn from OnPaint", 65, 65);
-
-    wxString tmp;
-    tmp.Printf("Hit any key to display more text: %s", m_text);
-
-    int w,h;
-    dc.GetTextExtent( tmp, &w, &h );
-    dc.DrawRectangle( 65, 85, w, h );
-    dc.DrawText( tmp, 65, 85 );
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
