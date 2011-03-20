@@ -346,7 +346,6 @@ void MyCanvas::DoPaint(wxDC& dc)
     }
 
     dc.SetBrush( *wxBLACK_BRUSH );
-    dc.DrawRectangle( 10,10,60,50 );
 
     dc.DrawBitmap( m_bitmap, 20, 20, true );
 
