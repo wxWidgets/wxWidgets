@@ -4884,9 +4884,30 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC),
-                                   wxWindowMSW * WXUNUSED(child))
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
 {
+    // Test for the custom background brush first.
+    WXHBRUSH hbrush = MSWGetCustomBgBrush();
+    if ( hbrush )
+    {
+        // We assume that this is either a stipple or hatched brush and not a
+        // solid one as otherwise it would have been enough to set the
+        // background colour and such brushes need to be positioned correctly
+        // in order to align when different windows are painted, so do it here.
+        RECT rc;
+        ::GetWindowRect(GetHwndOf(child), &rc);
+
+        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
+
+        if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
+        {
+            wxLogLastError(wxT("SetBrushOrgEx(bg brush)"));
+        }
+
+        return hbrush;
+    }
+
+    // Otherwise see if we have a custom background colour.
     if ( m_hasBgCol )
     {
         wxBrush *

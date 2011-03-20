@@ -388,6 +388,18 @@ public:
     virtual void MSWDestroyWindow();
 
 
+    // Functions dealing with painting the window background. The derived
+    // classes should normally only need to reimplement MSWGetBgBrush() if they
+    // need to use a non-solid brush for erasing their background. This
+    // function is called by MSWGetBgBrushForChild() which only exists for the
+    // weird wxToolBar case and MSWGetBgBrushForChild() itself is used by
+    // MSWGetBgBrush() to actually find the right brush to use.
+
+    // The brush returned from here must remain valid at least until the next
+    // event loop iteration. Returning 0, as is done by default, indicates
+    // there is no custom background brush.
+    virtual WXHBRUSH MSWGetCustomBgBrush() { return 0; }
+
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background
     // on its children
