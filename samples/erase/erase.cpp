@@ -139,6 +139,34 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+class ControlWithTransparency : public wxWindow
+{
+public:
+    ControlWithTransparency(wxWindow *parent,
+                            const wxPoint& pos,
+                            const wxSize& size)
+        : wxWindow(parent, wxID_ANY, pos, size, wxBORDER_NONE)
+    {
+        Connect(wxEVT_PAINT,
+                wxPaintEventHandler(ControlWithTransparency::OnPaint));
+    }
+
+    virtual bool HasTransparentBackground() { return true; }
+
+private:
+    void OnPaint( wxPaintEvent& WXUNUSED(event) )
+    {
+        wxPaintDC dc(this);
+
+        dc.SetPen(*wxRED_PEN);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(GetClientSize());
+
+        dc.SetTextForeground(*wxBLUE);
+        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.DrawText("This is custom control with transparency", 0, 2);
+    }
+};
 
 // ----------------------------------------------------------------------------
 // constants
@@ -298,6 +326,8 @@ MyCanvas::MyCanvas(wxFrame *parent)
                      "Left bitmap is a wxStaticBitmap,\n"
                      "right one drawn directly",
                      wxPoint(150, 20));
+
+    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(300, 22));
 
     SetFocusIgnoringChildren();
     SetBackgroundColour(*wxCYAN);
