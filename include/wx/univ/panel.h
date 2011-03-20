@@ -21,14 +21,6 @@ public:
     wxPanel() { }
 
     wxPanel(wxWindow *parent,
-            int x, int y, int width, int height,
-            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-            const wxString& name = wxPanelNameStr)
-    {
-        Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), style, name);
-    }
-
-    wxPanel(wxWindow *parent,
             wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -39,6 +31,18 @@ public:
     }
 
     virtual bool IsCanvasWindow() const { return true; }
+
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_CONSTRUCTOR(
+    wxPanel(wxWindow *parent,
+            int x, int y, int width, int height,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr)
+    {
+        Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), style, name);
+    }
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
