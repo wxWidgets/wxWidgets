@@ -451,6 +451,7 @@ All:
 - Added wxStack<> template class.
 - Added precision parameter to wxString::From[C]Double().
 - Added wxThread::Wait() and Delete() "wait mode" parameter (Catalin Raceanu).
+- Allow showing milliseconds in wxLog time stamps (tan).
 
 Unix:
 
