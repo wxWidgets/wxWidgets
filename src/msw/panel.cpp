@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/panel.h"
 #endif // WX_PRECOMP
