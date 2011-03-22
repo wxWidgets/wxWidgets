@@ -157,6 +157,7 @@ public:
     wxODButtonImageData(wxButton *btn, const wxBitmap& bitmap)
     {
         SetBitmap(bitmap, wxButton::State_Normal);
+        SetBitmap(bitmap.ConvertToDisabled(), wxButton::State_Disabled);
 
         m_dir = wxLEFT;
 
@@ -225,10 +226,11 @@ public:
                 wxButton::State_Max),
           m_hwndBtn(GetHwndOf(btn))
     {
-        // initialize all bitmaps to normal state
+        // initialize all bitmaps except for the disabled one to normal state
         for ( int n = 0; n < wxButton::State_Max; n++ )
         {
-            m_iml.Add(bitmap);
+            m_iml.Add(n == wxButton::State_Disabled ? bitmap.ConvertToDisabled()
+                                                    : bitmap);
         }
 
         m_data.himl = GetHimagelistOf(&m_iml);
