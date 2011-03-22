@@ -983,7 +983,10 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
             return NULL;
         }
 
-        if ( !node.GetChildren() )
+        const bool hasOnlyRefAttr = node.GetAttributes() != NULL &&
+                                    node.GetAttributes()->GetNext() == NULL;
+
+        if ( hasOnlyRefAttr && !node.GetChildren() )
         {
             // In the typical, simple case, <object_ref> is used to link
             // to another node and doesn't have any content of its own that
