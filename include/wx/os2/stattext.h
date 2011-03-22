@@ -46,7 +46,7 @@ public:
     virtual bool SetFont(const wxFont &rFont);
 
     //
-    // Overriden base class virtuals
+    // Overridden base class virtuals
     //
     virtual bool AcceptsFocus() const { return FALSE; }
 

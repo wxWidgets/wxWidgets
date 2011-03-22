@@ -1258,45 +1258,45 @@ msgid "Ca&pitals"
 msgstr "Пр&описні"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Не вдалося створити синхронізацію."
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Не можу перелічити файли «%s»"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr " Не можу перелічити файли в каталозі «%s»"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Не вдалося відновити нитку %lu"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Не вдалося відновити нитку %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr " Не вдалося запустити нитку: помилка запису TLS."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr " Не вдалося призупинити нитку %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr " Не вдалося зупинити нитку %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr " Не вдалося дочекатись закінчення нитки"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5581,7 +5581,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Помилка ініціалізації модуля ниток: Не вдалося записати значення в "
@@ -6603,7 +6603,7 @@ msgstr "легкий"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "локаль «%s» не може бути встановлена."
 
 #: ../src/common/intl.cpp:1210

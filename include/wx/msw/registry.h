@@ -92,7 +92,7 @@ public:
     // get StdKey from root HKEY
   static StdKey GetStdKeyFromHkey(WXHKEY hkey);
 
-  // extacts the std key prefix from the string (return value) and
+  // extracts the std key prefix from the string (return value) and
   // leaves only the part after it (i.e. modifies the string passed!)
   static StdKey ExtractKeyName(wxString& str);
 

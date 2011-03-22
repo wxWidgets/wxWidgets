@@ -370,7 +370,7 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
 {
     if (!XAllocColor(d,cmp,xc))
     {
-        //          cout << "wxAllocColor : Warning : Can not allocate color, attempt find nearest !\n";
+        //          cout << "wxAllocColor : Warning : cannot allocate color, attempt find nearest !\n";
         wxAllocNearestColor(d,cmp,xc);
     }
 }

@@ -47,7 +47,7 @@ will return @true if two objects are identical and not only if they share the
 same data.
 
 Note that wxWidgets follows the <em>STL philosophy</em>: when a comparison
-operator can not be implemented efficiently (like for e.g. wxImage's ==
+operator cannot be implemented efficiently (like for e.g. wxImage's ==
 operator which would need to compare the entire image's data, pixel-by-pixel),
 it's not implemented at all. That's why not all reference counted classes
 provide comparison operators.

@@ -79,7 +79,7 @@ void wxGenericFontButton::InitFontData()
 
 void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
-    // update the wxFontData to be shown in the the dialog
+    // update the wxFontData to be shown in the dialog
     m_data.SetInitialFont(m_selectedFont);
 
     // create the font dialog and display it

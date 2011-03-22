@@ -154,7 +154,7 @@ protected:
         // Check EOF stream state.
         CPPUNIT_ASSERT_MESSAGE("EOF is not EOF?", stream_in.Eof());
 
-        // Ok we found the end, lets see if we can go past it.
+        // Ok we found the end, let's see if we can go past it.
         for (size_t i = 0; i < 100; i++)
             (void)stream_in.GetC();
 

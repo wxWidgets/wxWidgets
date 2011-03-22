@@ -26,7 +26,7 @@ and is obviously easier and faster.
 However there are situations where you need to show some particular kind of data
 which is not suited to any existing control.
 In these cases rather than hacking an existing control for something it has not
-been coinceived for, it's better to write a new widget.
+been conceived for, it's better to write a new widget.
 
 
 @section overview_customwidgets_how How to write the custom widget

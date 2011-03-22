@@ -1327,46 +1327,46 @@ msgid "Ca&pitals"
 msgstr "&Suuraakkoset"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Mutexin luonti epäonnistui"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Tiedostojen ”%s” luettelointi epäonnistui"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Hakemiston ”%s” tiedostojen luettelointi epäonnistui"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Säikeen %lu jatko epäonnistui"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Säikeen %x jatko epäonnistui"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Säikeen käynnistys epäonnistui: virhe TLS-kirjoituksessa."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Säikeen %lu keskeytys epäonnistui"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Säikeen %x keskeytys epäonnistui"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Ei voi odottaa säikeen keskeytystä"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5747,7 +5747,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "Tämä järjestelmä ei tue date picker kontrollia, ole hyvä ja päivitä comctl32.dll"
 
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Säiemoduulin käynnistys epäonnistui: arvoa ei voi tallentaa säikeen muistiin"
 
 #: ../src/unix/threadpsx.cpp:1686
@@ -6781,7 +6781,7 @@ msgstr "heikko"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "maa-arvoa ”%s” ei voida asettaa."
 
 #: ../src/common/intl.cpp:1210

@@ -1290,45 +1290,45 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "無法建立 mutex。"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "無法列舉檔案 '%s'"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "無法列舉目錄 '%s' 中的檔案"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "無法恢復執行緒 %lu"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "無法恢復執行緒 %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "無法啟動執行緒：寫入「執行緒內部儲存區」時發生錯誤。"
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "無法暫停執行緒 %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "無法暫停執行緒 %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "無法等候執行緒終結"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5672,7 +5672,7 @@ msgstr "本系統不支援日期獲取控制, 請升級您的comctl32.dll"
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr "執行緒模組初始化失敗：無法存值到「執行緒內部儲存區」"
 
@@ -6690,7 +6690,7 @@ msgstr "細體"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "無法設定地區為 '%s'。"
 
 #: ../src/common/intl.cpp:1210

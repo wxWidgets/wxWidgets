@@ -217,7 +217,7 @@ wxFindReplaceDialogImpl::FindMessageHandler(wxWindow * WXUNUSED(win),
 #if wxUSE_UNICODE_MSLU
     // This is a hack for a MSLU problem: Versions up to 1.0.4011
     // of UNICOWS.DLL send the correct UNICODE item after button press
-    // and a bogus ANSI mode item right after this, so lets ignore
+    // and a bogus ANSI mode item right after this, so let's ignore
     // the second bogus message
     if ( wxUsingUnicowsDll() && s_lastMsgFlags == pFR->Flags )
     {

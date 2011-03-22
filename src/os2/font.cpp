@@ -925,7 +925,7 @@ wxFont::~wxFont()
 // ----------------------------------------------------------------------------
 // real implementation
 // Boris' Kovalenko comments:
-//   Because OS/2 fonts are associated with PS we can not create the font
+//   Because OS/2 fonts are associated with PS we cannot create the font
 //   here, but we may check that font definition is true
 // ----------------------------------------------------------------------------
 

@@ -486,7 +486,7 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
     m_sizerCombo->Add(m_combobox, 0, wxGROW | wxALL, 5);
     m_sizerCombo->Layout();
 
-    // Allow changing height inorder to demonstrate flexible
+    // Allow changing height in order to demonstrate flexible
     // size of image "thumbnail" painted in the control itself.
     long h = 0;
     m_textChangeHeight->GetValue().ToLong(&h);

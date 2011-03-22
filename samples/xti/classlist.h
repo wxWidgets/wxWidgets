@@ -44,7 +44,7 @@
 
 class ClassListDialog: public wxDialog
 {    
-    // we explicitely don't want to use the following macro:
+    // we explicitly don't want to use the following macro:
     //     DECLARE_DYNAMIC_CLASS( ClassListDialog )
     // as otherwise the ClassListDialog class would appear in the list
     // shown by this dialog!

@@ -58,7 +58,7 @@ public:
 
     unsigned char  *m_colorCube;
 
-    // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
+    // Used by the wxGLApp and wxGLCanvas class for GL-based X visual
     // selection.
     void           *m_glVisualInfo; // this is actually an XVisualInfo*
     void           *m_glFBCInfo; // this is actually an GLXFBConfig*

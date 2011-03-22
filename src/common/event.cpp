@@ -959,7 +959,7 @@ void wxEventHashTable::InitHashTable()
         table = table->baseTable;
     }
 
-    // Lets free some memory.
+    // Let's free some memory.
     size_t i;
     for(i = 0; i < m_size; i++)
     {

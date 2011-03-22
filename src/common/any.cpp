@@ -152,7 +152,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
         if ( any.GetAs(&ll) )
         {
             // NB: Do not use LONG_MAX here. Explicitly using 32-bit
-            //     integer constraint yields more consistent behavior across
+            //     integer constraint yields more consistent behaviour across
             //     builds.
             if ( ll > wxINT32_MAX || ll < wxINT32_MIN )
                 *variant = wxLongLong(ll);

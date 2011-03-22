@@ -79,7 +79,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
                   wxT("invalid bitmap size in wxImageList: this might work ")
                   wxT("on this platform but definitely won't under Windows.") );
 
-    // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
+    // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
     // bitmap into sub-images of the correct size
     if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
     {

@@ -143,7 +143,7 @@ struct wxFontMetrics
     a device unit is a @e pixel. For a printer, the device unit is defined by the
     resolution of the printer (usually given in @c DPI: dot-per-inch).
 
-    All wxDC functions use instead @b logical units, unless where explicitely
+    All wxDC functions use instead @b logical units, unless where explicitly
     stated. Logical units are arbitrary units mapped to device units using
     the current mapping mode (see wxDC::SetMapMode).
 

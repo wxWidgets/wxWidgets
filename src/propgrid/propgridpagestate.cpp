@@ -1626,7 +1626,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 {
     wxPropertyGrid* propGrid = m_pPropGrid;
 
-    // This will allow better behavior.
+    // This will allow better behaviour.
     if ( scheduledParent == m_properties )
         scheduledParent = NULL;
 
@@ -1722,7 +1722,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
     bool res = PrepareToAddItem( property, (wxPropertyCategory*)parent );
 
-    // PrepareToAddItem() may just decide to use use current category
+    // PrepareToAddItem() may just decide to use current category
     // instead of adding new one.
     if ( !res )
         return m_currentCategory;

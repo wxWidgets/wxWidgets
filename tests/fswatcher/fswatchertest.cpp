@@ -295,7 +295,7 @@ public:
         // did we receive event already?
         if (!tested)
         {
-            // well, lets wait a bit more
+            // well, let's wait a bit more
             wxSleep(WAIT_DURATION);
         }
 

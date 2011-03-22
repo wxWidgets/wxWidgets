@@ -1345,7 +1345,7 @@ wxString wxFindFirstFile(const wxString& spec, int flags)
 
     if ( !gs_dir->IsOpened() )
     {
-        wxLogSysError(_("Can not enumerate files '%s'"), spec);
+        wxLogSysError(_("Cannot enumerate files '%s'"), spec);
         return wxEmptyString;
     }
 

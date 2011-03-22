@@ -1342,46 +1342,46 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Nem tudom létrehozni a mutex-et"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Nem tudom megszámolni a(z) '%s'  fájlokat"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Nem tudom megszámolni a(z) '%s' könyvtárban a fájlokat"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Nem tudom folytatni a(z) %lu szálat"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Nem tudom folytatni a(z) %x szálat"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Nem tudom elindítani a szálat: hiba a TLS írásakor."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Nem tudom felfüggeszteni a(z) %lu szálat"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Nem tudom felfüggeszteni a(z) %x szálat"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Nem tudom megvárni a szál befejezõdését"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5843,7 +5843,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "Ez a rendszer nem támogatja a dátumkiolvasó egységet, kérem frissítse a comctl32.dll-t."
 
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "A szál modul inicializálása nem sikerült: nem tudok értéket tárolni a szál helyi tárolójába"
 
 #: ../src/unix/threadpsx.cpp:1686
@@ -6879,7 +6879,7 @@ msgstr "vékony"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "A(z) '%s' helyi változó nem állítható be."
 
 #: ../src/common/intl.cpp:1210

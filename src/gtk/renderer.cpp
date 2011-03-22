@@ -632,7 +632,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
   );
 }
 
-// Draw the equivallent of a wxComboBox
+// Draw the equivalent of a wxComboBox
 void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *combo = wxGTKPrivate::GetComboBoxWidget();

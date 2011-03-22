@@ -1792,7 +1792,7 @@ wxWizardPageSimple classes. They both support the following properties
 @endTable
 
 wxWizardPageSimple pages are automatically chained together; wxWizardPage pages
-transitions must be handled programatically.
+transitions must be handled programmatically.
 
 
 @section overview_xrcformat_sizers Sizers

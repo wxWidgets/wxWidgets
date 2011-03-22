@@ -27,7 +27,7 @@
     for further information on how to use the class.
     Below we documented both the supported STL and the legacy API
     that originated from the old wxList class and which can still be used alternatively
-    for the the same class.
+    for the same class.
 
     Note that if you compile wxWidgets in STL mode (@c wxUSE_STL defined as 1)
     then wxList<T> will actually derive from @c std::list and just add a legacy

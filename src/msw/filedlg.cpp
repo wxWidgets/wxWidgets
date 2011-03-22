@@ -225,7 +225,7 @@ void wxFileDialog::DoCentre(int dir)
 
 void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
 {
-    // note the the dialog is the parent window: hDlg is a child of it when
+    // note the dialog is the parent window: hDlg is a child of it when
     // OFN_EXPLORER is used
     HWND hFileDlg = ::GetParent((HWND)hDlg);
 

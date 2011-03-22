@@ -170,7 +170,7 @@ public:
 
     For generic programming, when the worst case must be assumed, you can rely on
     all the fields of wxArchiveEntry being fully populated when
-    wxArchiveInputStream::GetNextEntry() returns, with the the following exceptions:
+    wxArchiveInputStream::GetNextEntry() returns, with the following exceptions:
 
     @li GetSize(): guaranteed to be available after the entry has been read to Eof(),
         or CloseEntry() has been called;

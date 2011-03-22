@@ -168,7 +168,7 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
 
     if (this->HasFlag(wxCP_NO_TLW_RESIZE))
     {
-        // the user asked to explicitely handle the resizing itself...
+        // the user asked to explicitly handle the resizing itself...
         return;
     }
 

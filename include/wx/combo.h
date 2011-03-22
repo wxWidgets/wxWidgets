@@ -87,7 +87,7 @@ enum
     wxCC_IFLAG_CREATED              = 0x0100,
     // Internal use: really put button outside
     wxCC_IFLAG_BUTTON_OUTSIDE       = 0x0200,
-    // Internal use: SetMargins has been succesfully called
+    // Internal use: SetMargins has been successfully called
     wxCC_IFLAG_LEFT_MARGIN_SET      = 0x0400,
     // Internal use: Set wxTAB_TRAVERSAL to parent when popup is dismissed
     wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800,
@@ -674,7 +674,7 @@ protected:
     wxRect                  m_tcArea;
     wxRect                  m_btnArea;
 
-    // Colour of the the text area, in case m_text is NULL
+    // Colour of the text area, in case m_text is NULL
     wxColour                m_tcBgCol;
 
     // current button state (uses renderer flags)

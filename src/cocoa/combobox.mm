@@ -12,7 +12,7 @@
 //
 // Impl notes:
 // There is no custom data source because doing so unnecessarily sacrifices
-// some native autocompletion behavior (we would have to make our own -
+// some native autocompletion behaviour (we would have to make our own -
 // the SimpleComboBox sample does so in the developer folder that
 // comes with OSX).  One reason you might want this would be to have
 // only one array or be able to display numbers returned by an NSNumber

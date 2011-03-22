@@ -73,7 +73,7 @@ public:
         @param message
             Message to show on the dialog.
         @param caption
-            The caption of the the dialog.
+            The caption of the dialog.
         @param value
             The default value, which may be the empty string.
         @param style

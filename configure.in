@@ -1138,7 +1138,7 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
         dnl --enable-universal_binary=SDK names a path to an SDK
         if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
             # Implicitly turn on the new --with-macosx-sdk using the default
-            # SDK which provides the behavior this option has always had.
+            # SDK which provides the behaviour this option has always had.
             if test "x$wxUSE_MACOSX_SDK" = "x"; then
                 AC_MSG_WARN([Enabling default SDK due to --enable-universal_binary.])
                 AC_MSG_WARN([If you don't want this, specify --without-macosx-sdk])
@@ -1448,7 +1448,7 @@ if test "$wxUSE_WINE" = "yes"; then
     LDFLAGS_GUI="-mwindows"
 fi
 
-dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
+dnl NB: The two tests below are *NOT* mutually exclusive! They should only
 dnl     take effect on Cygwin/Mingw and not other platforms.
 if test "$wants_win32" = 1 ; then
     USE_UNIX=0

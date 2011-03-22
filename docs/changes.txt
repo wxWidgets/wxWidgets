@@ -266,7 +266,7 @@ Changes in behaviour which may result in compilation errors
 
 - Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8
+- Functions that took wxChar* arguments that could be NULL in wxWidgets 2.8
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
 
@@ -321,7 +321,7 @@ Changes in behaviour which may result in compilation errors
   without enclosing parentheses results in warnings from g++ with -Wparentheses,
   add parentheses around the if statement body to work around it.
 
-- wxList::Member() now returns book and not a pointer/iterator. This shouldn't
+- wxList::Member() now returns bool and not a pointer/iterator. This shouldn't
   require any changes as it was always meant to be used for checking for the
   presence of an element in the list only. If you used it as Find(), simple do
   use Find() instead.
@@ -614,7 +614,7 @@ All (GUI):
   dismissed immediately as text control grabbed the focus).
 - wxPropertyGrid: added wxPG_EX_MULTIPLE_SELECTION.
 - wxPropertyGrid: added functions for editing property labels.
-- wxPropertyGrid: many fixes to property validation failure behavior. Added
+- wxPropertyGrid: many fixes to property validation failure behaviour. Added
   new flags: wxPG_VFB_SHOW_MESSAGEBOX and wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR.
 - wxPropertyGrid: Added wxPropertyGrid::DedicateKey().
 - wxPropertyGrid: wxArrayStringProperty now uses wxEditableListBox.
@@ -2245,7 +2245,7 @@ All:
 - Unicode support in wxODBC is now fully implemented
 - A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
   SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent
-  behavior between Unicode and non-unicode builds
+  behaviour between Unicode and non-unicode builds
 - BLOB example added to samples/db (thanks to Casey O'Donnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
 - wxGetOsDescription() is now more precise (Olly Betts)
@@ -2392,7 +2392,7 @@ All:
 - sped up wxHTTP and wxFTP
 - added wxStringInput/OutputStreams
 - added wxFileConfig::Save(wxOutputStream)
-- fixed wxString's behavior with inserted null characters
+- fixed wxString's behaviour with inserted null characters
 
 All (GUI):
 

@@ -84,7 +84,7 @@ int main (int argc, char *argv[])
     gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
     gtk_widget_show(notebook);
     
-    /* Now finally lets prepend pages to the notebook */
+    /* Now finally let's prepend pages to the notebook */
     
 	frame = gtk_frame_new ("frame");
 	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);

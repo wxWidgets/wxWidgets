@@ -28,7 +28,7 @@
     Changes to the item's state should be made through calls to wxToolBar methods,
     for example wxToolBar::EnableTool.
     Calls to @c wxToolBarToolBase methods (undocumented by purpose) will not change
-    the visible state of the item within the the tool bar.
+    the visible state of the item within the tool bar.
 
     <b>wxMSW note</b>: Note that under wxMSW toolbar paints tools to reflect
     system-wide colours. If you use more than 16 colours in your tool bitmaps,

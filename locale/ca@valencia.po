@@ -1319,45 +1319,45 @@ msgstr ""
 
 #: ../src/os2/thread.cpp:117
 #, fuzzy
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "No es pot crear un fil"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "No es pot enumerar els fitxers '%s'"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "No es pot enumerar els fitxers en el directori '%s'"
 
 #: ../src/os2/thread.cpp:526
 #, fuzzy, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "No es pot enumerar els fitxers en el directori '%s'"
 
 #: ../src/msw/thread.cpp:873
 #, fuzzy, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "No es pot enumerar els fitxers en el directori '%s'"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "No es pot iniciar la cadena: error en escriure TLS."
 
 #: ../src/os2/thread.cpp:512
 #, fuzzy, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "No es pot suspendre en fil %x"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "No es pot suspendre en fil %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "No es pot esperar per a l'acabament de cadena"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5779,7 +5779,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "La inicialització de mòduls de la cadena ha fallat: no es pot emmagatzemar "
@@ -6840,7 +6840,7 @@ msgstr "clar"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "la localització '%s' no es pot fixar"
 
 #: ../src/common/intl.cpp:1210

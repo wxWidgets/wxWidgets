@@ -612,7 +612,7 @@ static struct tm * __cdecl common_localtime(const time_t *t, BOOL bLocal)
     res->tm_wday = SystemTime.wDayOfWeek;
     res->tm_yday = __mon_yday[iLeap][res->tm_mon] + SystemTime.wDay - 1; // localtime returns year-day aligned to zero
 
-    // if localtime behavior and daylight saving
+    // if localtime behaviour and daylight saving
     if (bLocal && pTz.DaylightBias != 0)
         res->tm_isdst = 1;
     else

@@ -686,7 +686,7 @@ public:
 
         // when checking the result, the stream will
         // almost always show an error, even if the file was
-        // properly transfered, thus, lets just grab the result
+        // properly transfered, thus, let's just grab the result
 
         // we are looking for "226 transfer completed"
         char code = m_ftp->GetResult();

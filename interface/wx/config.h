@@ -9,7 +9,7 @@
 /**
     @class wxConfigBase
 
-    wxConfigBase defines the basic interface of all config classes. It can not
+    wxConfigBase defines the basic interface of all config classes. It cannot
     be used by itself (it is an abstract base class) and you will always use
     one of its derivations: wxFileConfig, wxRegConfig or any other.
 

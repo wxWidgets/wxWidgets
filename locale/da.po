@@ -1306,45 +1306,45 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Kan ikke oprette mutex."
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Kan ikke læse fillisten i mappen '%s'"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Kan ikke få liste af filer i mappen '%s'"
 
 #: ../src/os2/thread.cpp:526
 #, fuzzy, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Kan ikke genoptage tråd %x"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Kan ikke genoptage tråd %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Kan ikke starte tråd: fejl ved skrivning af TLS."
 
 #: ../src/os2/thread.cpp:512
 #, fuzzy, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Kan ikke suspendere tråd %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Kan ikke suspendere tråd %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Kan ikke vente på trådafslutning"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5755,7 +5755,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Trådmodul initialisering fejlede: kan ikke gemme værdi i trådens private "
@@ -6793,7 +6793,7 @@ msgstr "let"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "locale '%s' kan ikke sættes."
 
 #: ../src/common/intl.cpp:1210
@@ -7483,7 +7483,7 @@ msgstr ""
 #~ msgid "very small"
 #~ msgstr "meget lille"
 
-#~ msgid "Can not create mutex"
+#~ msgid "Cannot create mutex"
 #~ msgstr "Kan ikke oprette mutex."
 
 #~ msgid "Can't create the inter-process read pipe"
@@ -7529,7 +7529,7 @@ msgstr ""
 #~ msgid "Fatal error: %s\n"
 #~ msgstr "Fatal fejl: "
 
-#~ msgid "Can not create event object."
+#~ msgid "Cannot create event object."
 #~ msgstr "Kan ikke oprette hændelsesobjekt."
 
 #~ msgid "Can't find the serialization object '%s' for the object '%s'."
@@ -7667,19 +7667,19 @@ msgstr ""
 #~ msgid "Application Error"
 #~ msgstr "Program fejl"
 
-#~ msgid "Can not create tooltip control"
+#~ msgid "Cannot create tooltip control"
 #~ msgstr "Kan ikke oprette tooltip kontrol"
 
-#~ msgid "Can not get data in format '%s' from clipboard."
+#~ msgid "Cannot get data in format '%s' from clipboard."
 #~ msgstr "Kan ikke få data i format '%s' fra klippebordet."
 
-#~ msgid "Can not get priority range for scheduling policy %d."
+#~ msgid "Cannot get priority range for scheduling policy %d."
 #~ msgstr "Kan ikke få prioriteringsområde for afviklingsalgoritme %d."
 
-#~ msgid "Can not put data in format '%s' on clipboard."
+#~ msgid "Cannot put data in format '%s' on clipboard."
 #~ msgstr "Kan ikke skrive data i format '%s' til klippebordet."
 
-#~ msgid "Can not retrieve thread scheduling policy."
+#~ msgid "Cannot retrieve thread scheduling policy."
 #~ msgstr "Kan ikke hente trådafviklingsalgoritme."
 
 #~ msgid "Character '%c' is invalid in a config entry name."

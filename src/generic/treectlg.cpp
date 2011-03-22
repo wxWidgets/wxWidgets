@@ -3699,7 +3699,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             event.Skip(!GetEventHandler()->ProcessEvent(nevent));
 
             // Consistent with MSW (for now), send the ITEM_MENU *after*
-            // the RIGHT_CLICK event. TODO: This behavior may change.
+            // the RIGHT_CLICK event. TODO: This behaviour may change.
             wxTreeEvent nevent2(wxEVT_COMMAND_TREE_ITEM_MENU,  this, item);
             nevent2.m_pointDrag = CalcScrolledPosition(pt);
             GetEventHandler()->ProcessEvent(nevent2);

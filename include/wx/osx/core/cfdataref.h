@@ -40,7 +40,7 @@ public:
         @param p        The raw pointer to assume ownership of.  May be NULL.
         @discussion Like shared_ptr, it is assumed that the caller has a strong reference to p and intends
                     to transfer ownership of that reference to this ref holder.  If the object comes from
-                    a Create or Copy method then this is the correct behavior.  If the object comes from
+                    a Create or Copy method then this is the correct behaviour.  If the object comes from
                     a Get method then you must CFRetain it yourself before passing it to this constructor.
                     A handy way to do this is to use the non-member wxCFRefFromGet factory funcion.
                     This method is templated and takes an otherType *p.  This prevents implicit conversion

@@ -1305,45 +1305,45 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Klarte ikke opprette mutex."
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Klarte ikke telle opp filer «%s»"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Klarte ikke telle opp filer i mappen «%s»"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Klarte ikke gjenoppta tråden %lu"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Klarte ikke gjenoppta tråden %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Klarte ikke starte tråden: feil ved skriving til TLS."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Klarte ikke innstille tråden %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Klarte ikke innstille tråden %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Klarte ikke vente på trådens avslutning"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5736,7 +5736,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Initialisering av trådmodul feilet: klarte ikke lagre verdien i det lokale "
@@ -6761,7 +6761,7 @@ msgstr "lett"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "klarte ikke sette lokale «%s»."
 
 #: ../src/common/intl.cpp:1210

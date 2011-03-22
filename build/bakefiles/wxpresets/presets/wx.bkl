@@ -391,7 +391,7 @@
 
     <!-- Sets as output folder for the current target a directory
          called "$(value)/$(COMPILER_PREFIX)_lib|dll", just like wxWidgets does.
-         This makes it possible to keep separed the libraries/exes compiled with
+         This makes it possible to keep separated the libraries/exes compiled with
          different compilers and with a different value for WX_SHARED.
     -->
     <define-tag name="wxlike-dirname" rules="lib,dll,exe,module">
@@ -472,7 +472,7 @@
     <!--                                                            -->
 
     <!-- Sets the BUILDDIR variable using the same rules used by wxWidgets itself.
-         This makes it possible to keep separed the object files compiled with
+         This makes it possible to keep separated the object files compiled with
          different configuration settings.
     -->
     <define-global-tag name="set-wxlike-builddir">

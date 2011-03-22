@@ -192,7 +192,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
                 transCredits << translators[n] << wxT('\n');
             }
         }
-        else // no translators explicitely specified
+        else // no translators explicitly specified
         {
             // maybe we have translator credits in the message catalog?
             wxString translator = _("translator-credits");

@@ -391,7 +391,7 @@ public:
         You may use OnExit() to clean up anything initialized here, provided
         that the function returns @true.
 
-        Notice that if you want to to use the command line processing provided by
+        Notice that if you want to use the command line processing provided by
         wxWidgets you have to call the base class version in the derived class
         OnInit().
 

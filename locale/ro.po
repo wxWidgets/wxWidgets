@@ -1435,45 +1435,45 @@ msgid "Ca&pitals"
 msgstr "&Majuscule"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Nu se poate crea mutex."
 
 #: ../src/common/filefn.cpp:1359
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Nu se pot enumera fișierele '%s'"
 
 #: ../src/msw/dir.cpp:212
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Nu se pot enumera fișierele din directorul '%s'"
 
 #: ../src/os2/thread.cpp:528
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Nu se poate continua firul de execuție %lu"
 
 #: ../src/msw/thread.cpp:895
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Nu se poate continua firul de execuție %x"
 
 #: ../src/msw/thread.cpp:548
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Nu se poate porni firul de execuție: eroare la scrierea TLS."
 
 #: ../src/os2/thread.cpp:514
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Nu se poate suspenda firul de execuție %lu"
 
 #: ../src/msw/thread.cpp:880
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Nu se poate suspenda firul de execuție %x"
 
 #: ../src/msw/thread.cpp:803
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Nu se poate aștepta terminarea firului de execuție"
 
 #: ../src/common/cmdproc.cpp:266
@@ -6079,7 +6079,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "Acest sistem nu suportă controale de tip dată, trebuie să actualizați comctl32.dll la o versiune mai nouă"
 
 #: ../src/msw/thread.cpp:1264
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Inițializarea modulului pentru fire de execuție a eșuat: valoarea nu poate fi memorată în memoria locală a firului de execuție"
 
 #: ../src/unix/threadpsx.cpp:1694
@@ -7221,7 +7221,7 @@ msgstr "subțire"
 
 #: ../src/common/intl.cpp:297
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "locala '%s' nu poate fi setată."
 
 #: ../src/common/datetimefmt.cpp:1917

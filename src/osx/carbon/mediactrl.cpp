@@ -1158,7 +1158,7 @@ pascal void wxQTMediaBackend::PPRMProc(
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::MCFilterProc (static)
 //
-// Callback for when the movie controller recieves a message
+// Callback for when the movie controller receives a message
 //---------------------------------------------------------------------------
 pascal Boolean wxQTMediaBackend::MCFilterProc(
     MovieController WXUNUSED(theController),

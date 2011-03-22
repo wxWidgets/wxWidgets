@@ -1313,46 +1313,46 @@ msgid "Ca&pitals"
 msgstr "대문자(&P)"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "뮤텍스 생성 할 수 없습니다"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "'%s' 에 해당하는 파일을 찾을 수 없습니다"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "'%s' 폴더에서 파일을 찾을 수 없습니다."
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "쓰레드 %lu 를 다시시작 실패"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "쓰레드 %x 를 다시시작 할 수 없습니다"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "쓰레드 시작 실패: TLS 쓰기 오류."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "쓰레드 %lu 일시정지 할 수 없습니다"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "쓰레드 %x 일시정지 할 수 없습니다"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "쓰레드 종료 실패로 Thread를 강제로 종료합니다"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5713,7 +5713,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "현재 시스템은 데이타 컨트롤을 지원 하지 않습니다, comctl32.dll 업데이트를 확인하세요."
 
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "쓰레드 모듈 초기화 실패:TLS 초기화 실패 "
 
 #: ../src/unix/threadpsx.cpp:1686
@@ -6742,7 +6742,7 @@ msgstr "가늘게"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "문자 인코딩을 '%s' 로 설정할 수 없습니다."
 
 #: ../src/common/intl.cpp:1210

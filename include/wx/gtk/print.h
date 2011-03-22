@@ -249,7 +249,7 @@ public:
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
     void SetResolution(int ppi);
 
-    // overriden for wxPrinterDC Impl
+    // overridden for wxPrinterDC Impl
     virtual int GetResolution() const;
     virtual wxRect GetPaperRect() const;
 

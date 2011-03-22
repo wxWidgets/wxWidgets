@@ -794,7 +794,7 @@ wxTextCtrl, they navigate between adjacent properties. As such:
 @section propgrid_customizing Customizing Properties (without sub-classing)
 
 In this section are presented miscellaneous ways to have custom appearance
-and behavior for your properties without all the necessary hassle
+and behaviour for your properties without all the necessary hassle
 of sub-classing a property class etc.
 
 @subsection propgrid_customimage Setting Value Image
@@ -957,7 +957,7 @@ wxPropertyGrid::CenterSplitter() method. <b>However, be sure to call it after
 the sizer setup and SetSize calls!</b> (ie. usually at the end of the
 frame/dialog constructor)
 
-  Splitter centering behavior can be customized using
+  Splitter centering behaviour can be customized using
 wxPropertyGridInterface::SetColumnProportion(). Usually it is used to set
 non-equal column proportions, which in essence stops the splitter(s) from
 being 'centered' as such, and instead just auto-resized.
@@ -994,7 +994,7 @@ Version of wxPropertyGrid bundled with wxWidgets 2.9+ has various backward-
 incompatible changes from version 1.4, which had a stable API and will remain
 as the last separate branch.
 
-Note that in general any behavior-breaking changes should not compile or run
+Note that in general any behaviour-breaking changes should not compile or run
 without warnings or errors.
 
 @subsection propgrid_compat_general General Changes
@@ -1005,14 +1005,14 @@ without warnings or errors.
     with keyboard. This change allowed fixing broken tab traversal on wxGTK
     (which is open issue in wxPropertyGrid 1.4).
 
-  - wxPG_EX_UNFOCUS_ON_ENTER style is removed and is now default behavior.
+  - wxPG_EX_UNFOCUS_ON_ENTER style is removed and is now default behaviour.
     That is, when enter is pressed, editing is considered done and focus
     moves back to the property grid from the editor control.
 
   - A few member functions were removed from wxPropertyGridInterface.
     Please use wxPGProperty's counterparts from now on.
 
-  - wxPGChoices now has proper Copy-On-Write behavior.
+  - wxPGChoices now has proper Copy-On-Write behaviour.
 
   - wxPGChoices::SetExclusive() was renamed to AllocExclusive().
 
@@ -1026,15 +1026,15 @@ without warnings or errors.
     now use wxPropertyGridInterface::GetEditableState() instead.
 
   - wxPG_EX_DISABLE_TLP_TRACKING is now enabled by default. To get the old
-    behavior (recommended if you don't use a system that reparents the grid
+    behaviour (recommended if you don't use a system that reparents the grid
     on its own), use the wxPG_EX_ENABLE_TLP_TRACKING extra style.
 
   - Extended window style wxPG_EX_LEGACY_VALIDATORS was removed.
 
-  - Default property validation failure behavior has been changed to
+  - Default property validation failure behaviour has been changed to
     (wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGEBOX), which means that the
     cell is marked red and wxMessageBox is shown. This is more user-friendly
-    than the old behavior, which simply beeped and prevented leaving the
+    than the old behaviour, which simply beeped and prevented leaving the
     property editor until a valid value was entered.
 
   - wxPropertyGridManager now has same Get/SetSelection() semantics as

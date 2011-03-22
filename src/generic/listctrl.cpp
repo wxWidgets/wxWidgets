@@ -1046,7 +1046,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 // NB: The code below is not really Mac-specific, but since we are close
 // to 2.8 release and I don't have time to test on other platforms, I
-// defined this only for wxMac. If this behavior is desired on
+// defined this only for wxMac. If this behaviour is desired on
 // other platforms, please go ahead and revise or remove the #ifdef.
 #ifdef __WXMAC__
         if ( !m_owner->IsVirtual() && (item.m_mask & wxLIST_MASK_STATE) &&

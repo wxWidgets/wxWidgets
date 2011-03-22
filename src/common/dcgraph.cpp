@@ -341,7 +341,7 @@ void wxGCDCImpl::DestroyClippingRegion()
 {
     m_graphicContext->ResetClip();
     // currently the clip eg of a window extends to the area between the scrollbars
-    // so we must explicitely make sure it only covers the area we want it to draw
+    // so we must explicitly make sure it only covers the area we want it to draw
     int width, height ;
     GetOwner()->GetSize( &width , &height ) ;
     m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );

@@ -47,7 +47,7 @@ public:
     virtual void SetRange(int range);
     virtual void SetValue(int pos);
 
-    // overriden base class virtuals
+    // overridden base class virtuals
     virtual bool SetForegroundColour(const wxColour& col);
     virtual bool SetBackgroundColour(const wxColour& col);
 

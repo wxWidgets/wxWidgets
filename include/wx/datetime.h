@@ -173,7 +173,7 @@ public:
         // the time in the current time zone
         Local,
 
-        // zones from GMT (= Greenwhich Mean Time): they're guaranteed to be
+        // zones from GMT (= Greenwich Mean Time): they're guaranteed to be
         // consequent numbers, so writing something like `GMT0 + offset' is
         // safe if abs(offset) <= 12
 

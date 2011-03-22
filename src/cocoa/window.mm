@@ -357,9 +357,9 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 
 
 /*! @class WXManualScrollView
-    @abstract   An NSScrollView subclass which implements wx scroll behavior
+    @abstract   An NSScrollView subclass which implements wx scroll behaviour
     @discussion
-    Overrides default behavior of NSScrollView such that this class receives
+    Overrides default behaviour of NSScrollView such that this class receives
     the scroller action messages and allows the wxCocoaScrollView to act
     on them accordingly.  In particular, because the NSScrollView will not
     receive action messages from the scroller, it will not adjust the

@@ -205,7 +205,7 @@ struct objc_class* wx_GetObjcClass_ ## ObjcClass();
 // _s_objc_class_ptr_ObjcClass:
 //     .long L_OBJC_CLASS_ObjcClass
 // Once that static symbol is defined, the function implementation is easy for GCC to generate.
-// Do note that return &s_objc_class_data_ObjcClass won't work.  The code is wrong in the case.
+// Do note that return &s_objc_class_data_ObjcClass won't work.  The code is wrong in this case.
 #define WX_IMPLEMENT_OBJC_GET_COMPILED_CLASS(ObjcClass) \
 extern "C" objc_class s_objc_class_data_ ## ObjcClass asm("L_OBJC_CLASS_" #ObjcClass); \
 static objc_class * s_objc_class_ptr_ ## ObjcClass = &s_objc_class_data_ ## ObjcClass; \
@@ -278,7 +278,7 @@ inline objc_class * wxObjcCompilerInformation<ObjcClass>::GetCompiledClass() \
 }
 
 // TODO: __x86_64__, __ppc64__
-#else // Can't wrie inline asm to bust into __OBJC segment
+#else // Can't write inline asm to bust into __OBJC segment
 // This won't be used since the generic implementation takes precedence.
 
 #warning "Don't know how to implement wxObjcCompilerInformation<ObjcClass>::GetCompiledClass on this platform"

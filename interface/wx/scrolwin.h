@@ -517,7 +517,7 @@ protected:
     See wxScrolled for detailed description.
 
     @note Note that because this class derives from wxPanel, it shares its
-          behavior with regard to TAB traversal and focus handling (in
+          behaviour with regard to TAB traversal and focus handling (in
           particular, it forwards focus to its children). If you don't want
           this behaviour, use ::wxScrolledCanvas instead.
 

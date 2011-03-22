@@ -140,7 +140,7 @@ int wxMacDataBrowserListControl::DoListHitTest(const wxPoint& inpoint) const
                 // index(bounds) greater then key(point)
                 high = mid - 1;
             else
-                // index(bounds) less then key(point)
+                // index(bounds) less than key(point)
                 low = mid + 1;
         }
     }

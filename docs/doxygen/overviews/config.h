@@ -23,7 +23,7 @@ information. They were especially designed for this usage and, although may
 probably be used for many other things as well, should be limited to it. It
 means that this information should be:
 
-@li Typed, i.e. strings or numbers for the moment. You can not store binary
+@li Typed, i.e. strings or numbers for the moment. You cannot store binary
     data, for example.
 @li Small. For instance, it is not recommended to use the Windows registry for
     amounts of data more than a couple of kilobytes.

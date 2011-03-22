@@ -29,7 +29,7 @@ class WXDLLIMPEXP_CORE wxStaticBoxBase : public wxControl
 public:
     wxStaticBoxBase() { }
 
-    // overriden base class virtuals
+    // overridden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
     virtual bool HasTransparentBackground() { return true; }
 

@@ -94,7 +94,7 @@ wxFontInstance *wxFontFace::GetFontInstance(float ptSize, bool aa)
     }
 
     // Small characters don't look good when antialiased with the algorithm
-    // that FreeType uses (mere 2x2 supersampling), so lets disable AA
+    // that FreeType uses (mere 2x2 supersampling), so let's disable AA
     // completely for small fonts. Bitmap fonts are not antialiased either.
     if ( ptSize <= gs_antialiasingThreshold ||
          m_fontLib->fontLibType == MGL_BITMAPFONT_LIB )

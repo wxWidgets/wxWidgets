@@ -1964,7 +1964,7 @@ void wxStyledTextCtrl::SetWrapVisualFlags(int wrapVisualFlags)
     SendMsg(2460, wrapVisualFlags, 0);
 }
 
-// Retrive the display mode of visual flags for wrapped lines.
+// Retrieve the display mode of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlags() const
 {
     return SendMsg(2461, 0, 0);
@@ -1976,7 +1976,7 @@ void wxStyledTextCtrl::SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation)
     SendMsg(2462, wrapVisualFlagsLocation, 0);
 }
 
-// Retrive the location of visual flags for wrapped lines.
+// Retrieve the location of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlagsLocation() const
 {
     return SendMsg(2463, 0, 0);
@@ -1988,7 +1988,7 @@ void wxStyledTextCtrl::SetWrapStartIndent(int indent)
     SendMsg(2464, indent, 0);
 }
 
-// Retrive the start indent for wrapped lines.
+// Retrieve the start indent for wrapped lines.
 int wxStyledTextCtrl::GetWrapStartIndent() const
 {
     return SendMsg(2465, 0, 0);

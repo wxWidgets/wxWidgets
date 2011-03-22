@@ -32,7 +32,7 @@ act as modifiers: keeping down the <Ctrl> key at the moment of drop does
     There are several objects participating in a d&d operation. First of all,
 there is the data object itself. Second, there is the drop source which is
 responsible for creating the data object (if it doesn't exist yet) and starting
-the d&d operation. Finally, the drop target recieves the notification when
+the d&d operation. Finally, the drop target receives the notification when
 the data is dropped onto the associated window (see below) and is responsible
 for pasting the data and returning the result code (copy, move or failure).
 There is one class for each one of these roles in wxWindows d&d implementation,

@@ -64,7 +64,7 @@
     and a particular set of attributes.  Furthermore, the attributes instead of
     being flags as in NSFontManager are instead well-defined keys in a dictionary.
 
-    The only way to get that behavior without NSFontManager is to pare down the
+    The only way to get that behaviour without NSFontManager is to pare down the
     list as much as possible using the classic NSFontManager methods and then
     to instantiate each font in the list and match on each font's afmDictionary.
 
@@ -102,7 +102,7 @@ static wxNativeFontInfo MakeNativeFontInfo(int size, wxFontFamily family, wxFont
     wxNativeFontInfo so anyone who subclassed it or created one without going through
     wxFont should expect what they get (i.e. horrible breakage)
     There's a concern that wxFontRefData was in the public header when 2.8 shipped so
-    it's possible that someone did subclass it to get better font behavior.
+    it's possible that someone did subclass it to get better font behaviour.
 
     For right now, the plan is to write it strictly ABI compatible with 2.8 and eventually
     to enhance it in trunk to accurately represent font attributes as Cocoa sees them.

@@ -316,7 +316,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
     mainColumn->Add(
         m_sizerBmpAndPage,
         1, // Vertically stretchable
-        wxEXPAND // Horizonal stretching, no border
+        wxEXPAND // Horizontal stretching, no border
     );
     mainColumn->Add(0,5,
         0, // No vertical stretching

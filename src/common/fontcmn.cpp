@@ -1020,7 +1020,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
                 SetFamily(family);
             }
             // NB: the check on the facename is implemented in wxFontBase::SetFaceName
-            //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitely
+            //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitly
             //     call here wxFontEnumerator::IsValidFacename
             else if (
 #if wxUSE_FONTENUM
@@ -1039,7 +1039,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     if ( !face.empty() )
     {
         // NB: the check on the facename is implemented in wxFontBase::SetFaceName
-        //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitely
+        //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitly
         //     call here wxFontEnumerator::IsValidFacename
         if (
 #if wxUSE_FONTENUM

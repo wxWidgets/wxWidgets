@@ -822,7 +822,7 @@ void wxVarHVScrollHelper::RefreshRowColumn(size_t row, size_t column)
         h_rect.x += OnGetColumnWidth(n);
     }
 
-    // refresh but specialize the behavior if we have a single target window
+    // refresh but specialize the behaviour if we have a single target window
     if ( wxVarVScrollHelper::GetTargetWindow() == wxVarHScrollHelper::GetTargetWindow() )
     {
         v_rect.x = h_rect.x;
@@ -889,7 +889,7 @@ void wxVarHVScrollHelper::RefreshRowsColumns(size_t fromRow, size_t toRow,
         h_rect.width += OnGetColumnWidth(nBetween);
     }
 
-    // refresh but specialize the behavior if we have a single target window
+    // refresh but specialize the behaviour if we have a single target window
     if ( wxVarVScrollHelper::GetTargetWindow() == wxVarHScrollHelper::GetTargetWindow() )
     {
         v_rect.x = h_rect.x;

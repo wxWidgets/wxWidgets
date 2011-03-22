@@ -207,7 +207,7 @@ public:
         { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
     // InputAsChar() returns the value passed to ctor, only converted
-    // to char, while AsChar() takes the the string returned by InputAsChar()
+    // to char, while AsChar() takes the string returned by InputAsChar()
     // and does format string conversion on it as well (and similarly for
     // ..AsWChar() below)
     const char* InputAsChar();

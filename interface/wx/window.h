@@ -3369,7 +3369,7 @@ protected:
 
         @remarks This function is not meant to be called directly by user code,
                  but via Centre, Center, CentreOnParent, or CenterOnParent.
-                 This function can be overriden to fine-tune centring behaviour.
+                 This function can be overridden to fine-tune centring behaviour.
     */
     virtual void DoCentre(int direction);
 

@@ -44,7 +44,7 @@ public:
     inline static int    GetDefaultSize(void) { return 2; }
 
     //
-    // Overriden base class virtuals
+    // Overridden base class virtuals
     //
     inline virtual bool AcceptsFocus(void) const {return FALSE;}
 

@@ -12,7 +12,7 @@
 
 In addition to the wxWidgets libraries (see @ref page_libs), some utilities
 are available to the users in the @c utils hierarchy (even if some of them are
-explicitely coinceived for wxWidgets maintainance and will probably be of
+explicitly conceived for wxWidgets maintainance and will probably be of
 little use to others).
 
 Please note that these utilities do represent only the utilities developed
@@ -71,7 +71,7 @@ can even correct them automatically. It uses the XML outputs of the gccxml utili
 (see http://www.gccxml.org) and of the Doxygen utility (see http://www.doxygen.org)
 to do the comparisons.
 
-It's explicitely designed for wxWidgets documentation needs and is probably of little
+It's explicitly designed for wxWidgets documentation needs and is probably of little
 use for anything else than wxWidgets docs reviewing.
 
 You can find it in @c utils/ifacecheck.

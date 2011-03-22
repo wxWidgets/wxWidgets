@@ -81,7 +81,7 @@ public:
     // this function tries its best to deliver the size in bytes using BINARY
     // (the SIZE command reports different sizes depending on whether
     // type is set to ASCII or BINARY)
-    // returns -1 if file is non-existant or size could not be found
+    // returns -1 if file is non-existent or size could not be found
     int GetFileSize(const wxString& fileName);
 
        // Check to see if a file exists in the current dir

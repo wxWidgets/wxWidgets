@@ -650,7 +650,7 @@ void FormMain::OnPropertyGridChanging( wxPropertyGridEvent& event )
             event.Veto();
 
             // Since we ask a question, it is better if we omit any validation
-            // failure behavior.
+            // failure behaviour.
             event.SetValidationFailureBehavior(0);
         }
     }
@@ -1098,7 +1098,7 @@ void FormMain::PopulateWithStandardItems ()
     pg->SetPropertyAttribute(wxT("Y"), wxPG_ATTR_UNITS, wxT("Pixels") );
     pg->SetPropertyHelpString(wxT("Y"), wxT("This property uses \"Units\" attribute.") );
 
-    const wxChar* disabledHelpString = wxT("This property is simply disabled. Inorder to have label disabled as well, ")
+    const wxChar* disabledHelpString = wxT("This property is simply disabled. In order to have label disabled as well, ")
                                        wxT("you need to set wxPG_EX_GREY_LABEL_WHEN_DISABLED using SetExtraStyle.");
 
     pg->Append( new wxPropertyCategory(wxT("Environment"),wxPG_LABEL) );
@@ -1932,7 +1932,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     pgman->SetExtraStyle(extraStyle);
 
-    // This is the default validation failure behavior
+    // This is the default validation failure behaviour
     m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL |
                                                       wxPG_VFB_SHOW_MESSAGEBOX );
 

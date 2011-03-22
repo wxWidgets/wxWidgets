@@ -164,7 +164,7 @@ public:
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     virtual void        TriggerScrollEvent( wxEventType scrollEvent ) ;
-    // this should not be overriden in classes above wxWindowMac
+    // this should not be overridden in classes above wxWindowMac
     // because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
 

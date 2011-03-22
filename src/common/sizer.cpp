@@ -2093,7 +2093,7 @@ void wxBoxSizer::RecalcSizes()
 
     // Check for the degenerated case when we don't have enough space for even
     // the min sizes of all the items: in this case we really can't do much
-    // more than to to allocate the min size to as many of fixed size items as
+    // more than to allocate the min size to as many of fixed size items as
     // possible (on the assumption that variable size items such as text zones
     // or list boxes may use scrollbars to show their content even if their
     // size is less than min size but that fixed size items such as buttons

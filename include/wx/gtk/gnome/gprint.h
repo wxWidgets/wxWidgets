@@ -290,7 +290,7 @@ protected:
     void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }
 
-    // overriden for wxPrinterDC Impl
+    // overridden for wxPrinterDC Impl
     virtual wxRect GetPaperRect() const;
     virtual int GetResolution() const;
 

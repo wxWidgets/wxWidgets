@@ -251,7 +251,7 @@ check_yesno_option()
 
 # With just a little more complexity here we could have shortest
 # unique string matching for options, but that is probably overkill
-# today, so lets just get the job done.
+# today, so let's just get the job done.
 #
 # The important thing now then is that we simply read all input from
 # the user and don't try to act prematurely on partial information.
@@ -357,7 +357,7 @@ fi
 
 
 
-# Everything came in as a legal argument then, lets put some of
+# Everything came in as a legal argument then, let's put some of
 # the pieces together with a little self knowledge to see what
 # we should do next.
 # --------------------------------------------------------------
@@ -560,7 +560,7 @@ not()               { if "$@"; then false; else true; fi; }
 # and its downhill fast from here if we have to ride that boat.
 # Early pruning still gets that down to under half a second (up from about
 # .25), so we have some breathing space yet before a different search method
-# will be called for, but lets not squander it.
+# will be called for, but let's not squander it.
 do_find_best_delegate()
 {
   (
@@ -796,7 +796,7 @@ fi
 
 if not user_mask_fits "$this_config" ; then
 
-    # No?  Then lets see if it knows anybody who can.
+    # No?  Then let's see if it knows anybody who can.
     # But first, just be sure someone hasn't typo'd us into a loop.
     # In present day wx, correct delegation should never need more
     # than one hop so this is trivial to detect.

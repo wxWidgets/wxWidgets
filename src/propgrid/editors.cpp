@@ -149,7 +149,7 @@
 // Number added to image width for SetCustomPaintWidth
 #define ODCB_CUST_PAINT_MARGIN               6
 
-// Milliseconds to wait for two mouse-ups after focus inorder
+// Milliseconds to wait for two mouse-ups after focus in order
 // to trigger a double-click.
 #define DOUBLE_CLICK_CONVERSION_TRESHOLD        500
 

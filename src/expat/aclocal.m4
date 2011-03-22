@@ -5061,7 +5061,7 @@ EOF
       # that the semantics of dynamic libraries on AmigaOS, at least up
       # to version 4, is to share data among multiple programs linked
       # with the same dynamic library.  Since this doesn't match the
-      # behavior of shared libraries on other platforms, we can't use
+      # behaviour of shared libraries on other platforms, we can't use
       # them.
       _LT_AC_TAGVAR(ld_shlibs, $1)=no
       ;;

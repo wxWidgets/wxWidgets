@@ -408,7 +408,7 @@ public:
     void Centre(int dir = wxBOTH) { DoCentre(dir); }
     void Center(int dir = wxBOTH) { DoCentre(dir); }
 
-        // centre with respect to the the parent window
+        // centre with respect to the parent window
     void CentreOnParent(int dir = wxBOTH) { DoCentre(dir); }
     void CenterOnParent(int dir = wxBOTH) { CentreOnParent(dir); }
 
@@ -446,7 +446,7 @@ public:
 
 
         // Call these to override what GetBestSize() returns. This
-        // method is only virtual because it is overriden in wxTLW
+        // method is only virtual because it is overridden in wxTLW
         // as a different API for SetSizeHints().
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
@@ -1658,7 +1658,7 @@ protected:
     // (GetBorderSize() will be used to add them)
     virtual wxSize DoGetBestClientSize() const { return wxDefaultSize; }
 
-    // this is the virtual function to be overriden in any derived class which
+    // this is the virtual function to be overridden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
     // versions of these functions in the base class
     virtual void DoSetSize(int x, int y,

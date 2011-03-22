@@ -319,7 +319,7 @@ void wxApp::WakeUpIdle()
         done without exiting the runloop.
 
         Be careful if you decide to change the implementation of this method
-        as wxEventLoop::Exit depends on the current behavior.
+        as wxEventLoop::Exit depends on the current behaviour.
      */
     [m_cocoaApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined
             location:NSZeroPoint modifierFlags:NSAnyEventMask

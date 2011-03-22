@@ -54,7 +54,7 @@ After the documents are created, they must be added to the canvas.  The
 </DL>
 
 <P>
-The behavior of adding the same document to the canvas more than once
+The behaviour of adding the same document to the canvas more than once
 is undefined.  Documents can be removed from the canvas by using:
 
 <DL>
@@ -110,7 +110,7 @@ the location of the document.  Please refer to the code (<I>XsMDICanvas.C</I>)
 for more details.
 
 <P>
-<B>Canvas Behavior:</B>
+<B>Canvas Behaviour:</B>
 
 <P>
 The <I>XsMDICanvas</I> is implemented as an <I>XmScrolledWindow</I> with an
@@ -123,13 +123,13 @@ being clipped as they are moved around.
 By default, the <I>XmDrawingArea</I> work-window has its <I>XmNresizePolicy</I>
 set to <I>XmRESIZE_GROW</I>.  This will allow the work-area to grow to
 whatever size necessary, but it will not automatically shrink as windows
-are manipulated.  If different behavior is desired, the <I>XmNresizePolicy</I>
+are manipulated.  If different behaviour is desired, the <I>XmNresizePolicy</I>
 resource on the work-area can be set to <I>XmRESIZE_ANY</I>.  This will
 force the work-window to recompute its size as windows are manipulated, and
 it will grow and shrink as necessary.  However, the <I>XsMDICanvas</I> will
 still force the work-area to be at-least the size of the clip-window.
 
-<P>To change the default behavior, add the following resource:
+<P>To change the default behaviour, add the following resource:
 
 <DL>
 <DD>&ltXsMDICanvas name&gt*canvas.resizePolicy:   XmRESIZE_ANY</DD>

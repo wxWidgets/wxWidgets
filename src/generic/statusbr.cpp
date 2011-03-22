@@ -345,7 +345,7 @@ int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
     if (m_widthsAbs.IsEmpty())
         return wxNOT_FOUND;
 
-    // NOTE: we explicitely don't take in count the borders since they are only
+    // NOTE: we explicitly don't take in count the borders since they are only
     //       useful when rendering the status text, not for hit-test computations
 
     if (pt.y <= 0 || pt.y >= m_lastClientHeight)

@@ -1305,45 +1305,45 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Tidak bisa menciptakan mutex."
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Tidak bisa mengenumerasi file-file '%s'"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Tidak bisa mengenumerasi file-file di direktori '%s'"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Tidak bisa meneruskan thread %lu"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Tidak bisa meneruskan thread %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Tidak bisa memulai thread: kesalahan menulis TLS."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Tidak bisa menunda thread %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Tidak bisa menunda thread %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Tidak bisa menunggu penghentian thread"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5755,7 +5755,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Inisialisasi modul thread gagal: tidak bisa menyimpan nilai dalam "
@@ -6812,7 +6812,7 @@ msgstr "ringan"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "locale '%s' tidak bisa ditetapkan."
 
 #: ../src/common/intl.cpp:1210

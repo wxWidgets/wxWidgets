@@ -129,7 +129,7 @@ public:
     // flag set to true while we're inside "switch_page" callback
     bool m_inSwitchPage;
 
-    // flag set to true when the switch-page signal has been programatically generated
+    // flag set to true when the switch-page signal has been programmatically generated
     bool m_skipNextPageChangeEvent;
 
 protected:

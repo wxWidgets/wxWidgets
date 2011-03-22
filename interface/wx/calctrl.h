@@ -306,8 +306,8 @@ public:
     /**
         This function should be used instead of changing
         @c wxCAL_NO_MONTH_CHANGE style bit. It allows or disallows the user to
-        change the month interactively. Note that if the month can not be
-        changed, the year can not be changed neither.
+        change the month interactively. Note that if the month cannot be
+        changed, the year cannot be changed neither.
 
         @return @true if the value of this option really changed or @false if
                 it was already set to the requested value.

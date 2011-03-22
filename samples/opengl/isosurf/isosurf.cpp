@@ -210,7 +210,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
 
     {
         // we suppose to have in input a text file containing floating numbers
-        // space/newline-separed... first 3 numbers are the coordinates of a
+        // space/newline-separated... first 3 numbers are the coordinates of a
         // vertex and the following 3 are the relative vertex normal and so on...
 
         wxTextInputStream inFile(*stream);

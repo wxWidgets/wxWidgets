@@ -184,8 +184,8 @@ protected:
     bool                  m_savedYet;
 
     // Called by OnSaveDocument and OnOpenDocument to implement standard
-    // Save/Load behavior. Re-implement in derived class for custom
-    // behavior.
+    // Save/Load behaviour. Re-implement in derived class for custom
+    // behaviour.
     virtual bool DoSaveDocument(const wxString& file);
     virtual bool DoOpenDocument(const wxString& file);
 

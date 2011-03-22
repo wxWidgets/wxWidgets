@@ -1092,7 +1092,7 @@ public:
 
         The function is case-insensitive to @a name.
         If the given option is not present, the function returns 0.
-        Use HasOption() is 0 is a possibly valid value for the option.
+        Use HasOption() if 0 is a possibly valid value for the option.
 
         Generic options:
         @li @c wxIMAGE_OPTION_MAX_WIDTH and @c wxIMAGE_OPTION_MAX_HEIGHT: If either
@@ -1801,7 +1801,7 @@ wxImage wxNullImage;
 /**
     Initializes all available image handlers.
 
-    This function call wxImage::AddHandler() for all the available image
+    This function calls wxImage::AddHandler() for all the available image
     handlers (see @ref image_handlers for the full list). Calling it is the
     simplest way to initialize wxImage but it creates and registers even the
     handlers your program may not use. If you want to avoid the overhead of

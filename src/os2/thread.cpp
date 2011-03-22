@@ -114,7 +114,7 @@ wxMutexInternal::wxMutexInternal(wxMutexType WXUNUSED(eMutexType))
     APIRET ulrc = ::DosCreateMutexSem(NULL, &m_vMutex, 0L, FALSE);
     if (ulrc != 0)
     {
-        wxLogSysError(_("Can not create mutex."));
+        wxLogSysError(_("Cannot create mutex."));
         m_vMutex = NULL;
     }
 }
@@ -511,7 +511,7 @@ bool wxThreadInternal::Suspend()
 
     if (ulrc != 0)
     {
-        wxLogSysError(_("Can not suspend thread %lu"), m_hThread);
+        wxLogSysError(_("Cannot suspend thread %lu"), m_hThread);
         return false;
     }
     m_eState = STATE_PAUSED;
@@ -525,7 +525,7 @@ bool wxThreadInternal::Resume()
 
     if (ulrc != 0)
     {
-        wxLogSysError(_("Can not resume thread %lu"), m_hThread);
+        wxLogSysError(_("Cannot resume thread %lu"), m_hThread);
         return false;
     }
 

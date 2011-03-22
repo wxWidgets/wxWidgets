@@ -1576,7 +1576,7 @@ void wxHtmlWindow::SelectLine(const wxPoint& pos)
         {
             // We use following heuristic to find a "line": let the line be all
             // cells in same container as the cell under mouse cursor that are
-            // neither completely above nor completely bellow the clicked cell
+            // neither completely above nor completely below the clicked cell
             // (i.e. are likely to be words positioned on same line of text).
 
             int y1 = cell->GetAbsPos().y;

@@ -311,7 +311,7 @@ that previously allocated surface is associated with the context (e.g., no
 new surface is created) and the subsequent call to aglSetDrawable will
 attach that surface. This allows multiple contexts to be attached to a single
 surface. Using the default buffer name zero, returns to one surface per
-context behavior.
+context behaviour.
 */
 
 /*

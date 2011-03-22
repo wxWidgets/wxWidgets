@@ -1704,7 +1704,7 @@ wxString MyFrame::GetIntroText()
         "<li>Native, dockable floating frames</li>"
         "<li>Perspective saving and loading</li>"
         "<li>Native toolbars incorporating real-time, &quot;spring-loaded&quot; dragging</li>"
-        "<li>Customizable floating/docking behavior</li>"
+        "<li>Customizable floating/docking behaviour</li>"
         "<li>Completely customizable look-and-feel</li>"
         "<li>Optional transparent window effects (while dragging or docking)</li>"
         "<li>Splittable notebook control</li>"

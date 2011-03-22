@@ -39,7 +39,7 @@ public:
     // This function will modify the value returned by GetLabel()!
     void Wrap(int width);
 
-    // overriden base virtuals
+    // overridden base virtuals
     virtual bool AcceptsFocus() const { return false; }
     virtual bool HasTransparentBackground() { return true; }
 

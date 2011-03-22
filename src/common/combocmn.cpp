@@ -160,7 +160,7 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #endif
 
 // NB: Let's not be afraid to use wxGTK's wxPopupTransientWindow as a
-//     'perfect' popup, as it can succesfully host child controls even in
+//     'perfect' popup, as it can successfully host child controls even in
 //     popups that are shown in modal dialogs.
 
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
@@ -2645,7 +2645,7 @@ void wxComboCtrlBase::OnSetValue(const wxString& value)
         bool found = true;
         wxString trueValue = value;
 
-        // Conform to wxComboBox behavior: read-only control can only accept
+        // Conform to wxComboBox behaviour: read-only control can only accept
         // valid list items and empty string
         if ( m_popupInterface && HasFlag(wxCB_READONLY) && value.length() )
         {

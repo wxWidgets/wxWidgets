@@ -4828,7 +4828,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     }
 
                 // Do not Skip() the event after selection has been made.
-                // Otherwise default event handling behavior kicks in
+                // Otherwise default event handling behaviour kicks in
                 // and may revert focus back to the main canvas.
                 res = true;
             }

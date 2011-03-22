@@ -303,7 +303,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     // Get the computer name of a DC for the domain.
     if ( NetGetDCName( NULL, wszDomain, &ComputerName ) != NERR_Success )
     {
-        wxLogError(wxT("Can not find domain controller"));
+        wxLogError(wxT("Cannot find domain controller"));
 
         goto error;
     }

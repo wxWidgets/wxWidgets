@@ -211,7 +211,7 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
     SetPeer(wxWidgetImpl::CreateDisclosureTriangle(this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
-    // passing the text in the param doesn't seem to work, so lets do it again
+    // passing the text in the param doesn't seem to work, so let's do it again
     SetLabel( label );
 
     return true;

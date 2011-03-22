@@ -112,7 +112,7 @@ public:
     // OnInternalIdle
     virtual void OnInternalIdle();
 
-    // Internal represention of Update()
+    // Internal representation of Update()
     void GtkUpdate();
 
     // For compatibility across platforms (not in event table)

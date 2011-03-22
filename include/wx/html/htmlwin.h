@@ -195,7 +195,7 @@ protected:
 
     /**
         Called by HandleMouseClick when the user clicks on a cell.
-        Default behavior is to call wxHtmlWindowInterface::OnLinkClicked()
+        Default behaviour is to call wxHtmlWindowInterface::OnLinkClicked()
         if this cell corresponds to a hypertext link.
 
         @param cell   the cell the mouse is over
@@ -358,7 +358,7 @@ public:
     // (depending on the information passed to SetRelatedFrame() method)
     virtual void OnSetTitle(const wxString& title);
 
-    // Called when user clicked on hypertext link. Default behavior is to
+    // Called when user clicked on hypertext link. Default behaviour is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
 

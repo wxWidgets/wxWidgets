@@ -73,7 +73,7 @@ it, EMX is following the example of the unix ports.
 Compilation with VisualAge
 --------------------------
 
-In addition to VisualAge V3.0 Fixpack 8 you will need the following inorder
+In addition to VisualAge V3.0 Fixpack 8 you will need the following in order
 to successfully build and use wxWidgets for OS/2:
 
 1.  IBM OS/2 Toolkit Version 4.5 or later
@@ -130,7 +130,7 @@ the following three modules from your temp.def file, db.cpp, dbgrid.cpp and
 dbtable.cpp.  save you changes to temp.def.  Delete wx23.def and rename your
 temp.def to wx23.def and you are ready to go.
 
-I hope to clean up the .dll builds at some point before the the library is
+I hope to clean up the .dll builds at some point before the library is
 a full fledged production caliber product.  Fortunately EMX and Watcom can use
 the import and export pragmas successfully negating the need for manual .def
 files.  VA 3.0, unfortunately in C++ does not properly export the mangled

@@ -700,7 +700,7 @@ enum
     modeled after the POSIX thread API. This is different from the Win32 API
     where all threads are joinable.
 
-    By default wxThreads in wxWidgets use the @b detached behavior.
+    By default wxThreads in wxWidgets use the @b detached behaviour.
     Detached threads delete themselves once they have completed, either by themselves
     when they complete processing or through a call to Delete(), and thus
     @b must be created on the heap (through the new operator, for example).
@@ -957,10 +957,10 @@ enum
     A common problem users experience with wxThread is that in their main thread
     they will check the thread every now and then to see if it has ended through
     IsRunning(), only to find that their application has run into problems
-    because the thread is using the default behavior (i.e. it's @b detached) and
+    because the thread is using the default behaviour (i.e. it's @b detached) and
     has already deleted itself.
     Naturally, they instead attempt to use joinable threads in place of the previous
-    behavior. However, polling a wxThread for when it has ended is in general a
+    behaviour. However, polling a wxThread for when it has ended is in general a
     bad idea - in fact calling a routine on any running wxThread should be avoided
     if possible. Instead, find a way to notify yourself when the thread has ended.
 

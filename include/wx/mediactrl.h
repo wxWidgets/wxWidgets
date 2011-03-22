@@ -58,7 +58,7 @@ enum wxMediaState
 enum wxMediaCtrlPlayerControls
 {
     wxMEDIACTRLPLAYERCONTROLS_NONE           =   0,
-    //Step controls like fastfoward, step one frame etc.
+    //Step controls like fastforward, step one frame etc.
     wxMEDIACTRLPLAYERCONTROLS_STEP           =   1 << 0,
     //Volume controls like the speaker icon, volume slider, etc.
     wxMEDIACTRLPLAYERCONTROLS_VOLUME         =   1 << 1,

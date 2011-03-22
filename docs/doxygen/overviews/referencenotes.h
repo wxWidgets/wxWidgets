@@ -15,7 +15,7 @@ that descriptions of inherited member functions are not duplicated in derived
 classes unless their behaviour is different. So in using a class such as
 wxScrolledWindow, be aware that wxWindow functions may be relevant.
 
-Where not explicitely stated, size and position arguments may usually be given a
+Where not explicitly stated, size and position arguments may usually be given a
 value of ::wxDefaultSize and ::wxDefaultPosition, in which case wxWidgets will
 choose suitable values.
 

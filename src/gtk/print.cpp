@@ -2213,7 +2213,7 @@ void wxGtkPrinterDCImpl::SetPrintData(const wxPrintData& data)
     m_printData = data;
 }
 
-// overriden for wxPrinterDC Impl
+// overridden for wxPrinterDC Impl
 
 wxRect wxGtkPrinterDCImpl::GetPaperRect() const
 {

@@ -70,7 +70,7 @@ public:
     /**
         Creates the control with the given @a anim animation.
 
-        After control creation you must explicitely call Play() to start to play
+        After control creation you must explicitly call Play() to start to play
         the animation. Until that function won't be called, the first frame
         of the animation is displayed.
 

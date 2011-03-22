@@ -1162,7 +1162,7 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::MCFilterProc (static)
 //
-// Callback for when the movie controller recieves a message
+// Callback for when the movie controller receives a message
 //---------------------------------------------------------------------------
 Boolean wxQTMediaBackend::MCFilterProc(MovieController WXUNUSED(theController),
                                short action,

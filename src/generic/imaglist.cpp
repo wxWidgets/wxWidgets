@@ -76,7 +76,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     }
     else
     {
-        // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
+        // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
         // bitmap into sub-images of the correct size
         if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
         {

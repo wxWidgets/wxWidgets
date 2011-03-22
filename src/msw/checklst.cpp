@@ -410,7 +410,7 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     }
     else
     {
-        // implement default behavior on click outside of client zone
+        // implement default behaviour on click outside of client zone
         event.Skip();
     }
 }

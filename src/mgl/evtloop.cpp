@@ -73,9 +73,9 @@ void wxEventLoopImpl::Dispatch()
 {
     event_t evt;
 
-    // VS: The code bellow is equal to MGL's EVT_halt implementation, with
-    //     two things added: sleeping (busy waiting is stupid, lets make CPU's
-    //     life a bit easier) and timers updating
+    // VS: The code below is equal to MGL's EVT_halt implementation, with
+    //     two things added: sleeping (busy waiting is stupid, let's make CPU's
+    //     life a bit easier) and timers updating.
 
     // EVT_halt(&evt, EVT_EVERYEVT);
     for (;;)

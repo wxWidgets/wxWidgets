@@ -1352,48 +1352,48 @@ msgid "Ca&pitals"
 msgstr "Ka&pitalien"
 
 #: ../src/os2/thread.cpp:116
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Kann Mutex nicht anlegen."
 
 #: ../src/common/filefn.cpp:1383
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Kann Dateien '%s' nicht auflisten"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:201
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Kann Dateien in Verzeichnis '%s' nicht auflisten"
 
 #: ../src/os2/thread.cpp:516
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Kann Thread %lu nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:889
 #: ../src/mac/classic/thread.cpp:487
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Kann Thread %x nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:525
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Kann Thread nicht starten: Fehler beim  Beschreiben des TLS."
 
 #: ../src/os2/thread.cpp:502
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Kann Thread %lu nicht anhalten."
 
 #: ../src/msw/thread.cpp:874
 #: ../src/mac/classic/thread.cpp:460
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Kann Thread %x nicht anhalten."
 
 #: ../src/msw/thread.cpp:793
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Kann nicht auf Threadende warten"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5527,7 +5527,7 @@ msgid "This system doesn't support date picker control, please upgrade your vers
 msgstr "Dieses System unterstützt nicht die Komponente zur Darstellung der Datumsauswahl. Installieren Sie bitte eine neuere Version der comctl32.dll."
 
 #: ../src/msw/thread.cpp:1268
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Thread-Modul-Initialisierung gescheitert: Kann den Wert nicht im lokalen Speicherbereich des Thread gespeichert werden"
 
 #: ../src/unix/threadpsx.cpp:1618
@@ -6567,7 +6567,7 @@ msgstr "dünn"
 
 #: ../src/common/intl.cpp:1580
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "Lokale Umgebung '%s' kann nicht gesetzt werden."
 
 #: ../src/common/intl.cpp:1151

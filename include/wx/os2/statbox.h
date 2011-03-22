@@ -50,7 +50,7 @@ public:
                                  );
 
     //
-    // overriden base class virtuals
+    // overridden base class virtuals
     //
     inline virtual bool AcceptsFocus(void) const { return FALSE; }
 

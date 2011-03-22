@@ -90,7 +90,7 @@
     @endStyleTable
 
     The default frame style is for normal, resizeable frames.
-    To create a frame which can not be resized by user, you may use the following
+    To create a frame which cannot be resized by user, you may use the following
     combination of styles:
 
     @code

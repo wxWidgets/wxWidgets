@@ -43,7 +43,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// image can not have any transparent pixels at all, have only 100% opaque
+// image cannot have any transparent pixels at all, have only 100% opaque
 // and/or 100% transparent pixels in which case a simple mask is enough to
 // store this information in wxImage or have a real alpha channel in which case
 // we need to have it in wxImage as well

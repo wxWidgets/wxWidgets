@@ -115,7 +115,7 @@ public:
 
     virtual ~wxXmlNode();
 
-    // copy ctor & operator=. Note that this does NOT copy syblings
+    // copy ctor & operator=. Note that this does NOT copy siblings
     // and parent pointer, i.e. m_parent and m_next will be NULL
     // after using copy ctor and are never unmodified by operator=.
     // On the other hand, it DOES copy children and attributes.

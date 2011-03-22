@@ -230,7 +230,7 @@ problems:
   - Using a cast to force the issue (listed only for completeness):
     @code printf("Hello, %s", (const char *)s.c_str()) @endcode
 
- - The result of @c c_str() can not be cast to @c char* but only to @c const @c
+ - The result of @c c_str() cannot be cast to @c char* but only to @c const @c
    @c char*. Of course, modifying the string via the pointer returned by this
    method has never been possible but unfortunately it was occasionally useful
    to use a @c const_cast here to pass the value to const-incorrect functions.

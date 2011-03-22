@@ -29,7 +29,7 @@ public:
 
     void OnSetValue();
 
-    // Inorder to have different value type in a derived property
+    // In order to have different value type in a derived property
     // class, we will override GetValue to return custom variant,
     // instead of changing the base m_value. This allows the methods
     // in base class to function properly.

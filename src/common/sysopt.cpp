@@ -76,7 +76,7 @@ wxString wxSystemOptions::GetOption(const wxString& name)
     {
         val = gs_optionValues[idx];
     }
-    else // not set explicitely
+    else // not set explicitly
     {
         // look in the environment: first for a variable named "wx_appname_name"
         // which can be set to affect the behaviour or just this application

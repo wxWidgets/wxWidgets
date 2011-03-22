@@ -83,7 +83,7 @@ void wxGenericColourButton::InitColourData()
 
 void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
-    // update the wxColouData to be shown in the the dialog
+    // update the wxColouData to be shown in the dialog
     ms_data.SetColour(m_colour);
 
     // create the colour dialog and display it

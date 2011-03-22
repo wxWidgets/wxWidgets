@@ -778,7 +778,7 @@ void* wxJoystickThread::Entry()
 //---------------------------------------------------------------------------
 // wxJoystickThread::HIDCallback (static)
 //
-// Callback for the native HID device when it recieves input.
+// Callback for the native HID device when it receives input.
 //
 // This is where the REAL dirty work gets done.
 //

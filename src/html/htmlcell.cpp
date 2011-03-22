@@ -201,9 +201,9 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 #if WXWIN_COMPATIBILITY_2_6
     // NB: Older versions of wx used GetCursor() virtual method in place of
     //     GetMouseCursor(interface). This code ensures that user code that
-    //     overriden GetCursor() continues to work. The trick is that the base
+    //     overridden GetCursor() continues to work. The trick is that the base
     //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
-    //     know that GetCursor() was overriden iff it returns valid cursor.
+    //     know that GetCursor() was overridden iff it returns valid cursor.
     wxCursor cur = GetCursor();
     if (cur.Ok())
         return cur;

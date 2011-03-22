@@ -1316,46 +1316,46 @@ msgid "Ca&pitals"
 msgstr "Chữ viết &hoa"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Không thể tạo mutex."
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Không thể liệt kê các tệp tin '%s'"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Không thể đếm các tệp tin trong thư mục '%s'"
 
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Không thể phục hồi tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Không thể phục hồi tuyến trình %x"
 
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Không thể bắt đầu tuyến trình: lỗi ghi TLS."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Không thể đình chỉ tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Không thể đình chỉ tuyến trình %x"
 
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Không thể chờ tuyến trình kết thúc"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5700,7 +5700,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "Hệ thống không hỗ trợ điều khiển ngày tháng, xin hãy cập nhật phiên bản mới của comctl32.dll"
 
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Khởi tạo mô đun tuyến trình gặp lỗi: không thể lưu giá trị trong phần lưu trữ nội bộ tuyến trình"
 
 #: ../src/unix/threadpsx.cpp:1686
@@ -6727,7 +6727,7 @@ msgstr "ánh sáng"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "vị trí '%s' không thể đặt được."
 
 #: ../src/common/intl.cpp:1210

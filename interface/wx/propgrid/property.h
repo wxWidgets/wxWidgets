@@ -222,8 +222,8 @@ wxPG_PROP_COLLAPSED                 = 0x0020,
     value.
 
     If property is not selected, then indicates that the actual property
-    value has failed validation (NB: this behavior is not currently supported,
-    but may be used in future).
+    value has failed validation (NB: this behaviour is not currently supported,
+    but may be used in the future).
 */
 wxPG_PROP_INVALID_VALUE             = 0x0040,
 
@@ -417,15 +417,20 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
-    precision of 3 will become 0.0 instead of -0.0). This behavior is unlike 
+    precision of 3 will become 0.0 instead of -0.0). This behaviour is unlike 
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
+<<<<<<< .mine
+    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to
+    use check box instead.
+=======
     default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to use
     check box instead.
+>>>>>>> .r67279
 
     @subsection wxLongStringProperty
 
@@ -474,7 +479,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Like wxLongStringProperty, but the button triggers file selector instead.
     Default wildcard is "All files..." but this can be changed by setting
     wxPG_FILE_WILDCARD attribute (see wxFileDialog for format details).
-    Attribute wxPG_FILE_SHOW_FULL_PATH can be set to @false inorder to show
+    Attribute wxPG_FILE_SHOW_FULL_PATH can be set to @false in order to show
     only the filename, not the entire path.
 
     @subsection wxEnumProperty
@@ -767,7 +772,7 @@ public:
 
                 You might want to take into account that m_value is Null variant
                 if property value is unspecified (which is usually only case if
-                you explicitly enabled that sort behavior).
+                you explicitly enabled that sort behaviour).
     */
     virtual bool StringToValue( wxVariant& variant, const wxString& text, int argFlags = 0 ) const;
 
@@ -795,7 +800,7 @@ public:
           instead of OnEvent.
         - You might want to take into account that m_value is Mull variant if
           property value is unspecified (which is usually only case if you
-          explicitly enabled that sort behavior).
+          explicitly enabled that sort behaviour).
     */
     virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const;
 
@@ -818,7 +823,7 @@ public:
 
     /**
         Converts string to a value, and if successful, calls SetValue() on it.
-        Default behavior is to do nothing.
+        Default behaviour is to do nothing.
 
         @param text
             String to get the value from.
@@ -830,8 +835,13 @@ public:
     bool SetValueFromString( const wxString& text, int flags = 0 );
 
     /**
+<<<<<<< .mine
+        Converts integer to a value, and if successful, calls SetValue() on it.
+        Default behaviour is to do nothing.
+=======
         Converts integer to a value, and if successful, calls SetValue() on it.
         Default behavior is to do nothing.
+>>>>>>> .r67279
 
         @param value
             Int to get the value from.
@@ -851,7 +861,7 @@ public:
             Normally -1, but can be an index to the property's list of items.
 
         @remarks
-        - Default behavior is to return wxSize(0,0), which means no image.
+        - Default behaviour is to return wxSize(0,0), which means no image.
         - Default image width or height is indicated with dimension -1.
         - You can also return wxPG_DEFAULT_IMAGE_SIZE which equals wxSize(-1, -1).
     */
@@ -1540,7 +1550,7 @@ public:
         wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
 
         @param enable
-            Whether to enable or disable this behavior (it is disabled by
+            Whether to enable or disable this behaviour (it is disabled by
             default).
     */
     void SetAutoUnspecified( bool enable = true );

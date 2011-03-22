@@ -1494,7 +1494,7 @@ do
    { (exit 1); exit 1; }; }
 done
 
-# There might be people who depend on the old broken behavior: `$host'
+# There might be people who depend on the old broken behaviour: `$host'
 # used to hold the argument of --host etc.
 # FIXME: To remove some day.
 build=$build_alias
@@ -18719,7 +18719,7 @@ fi
     if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
                         if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
             # Implicitly turn on the new --with-macosx-sdk using the default
-            # SDK which provides the behavior this option has always had.
+            # SDK which provides the behaviour this option has always had.
             if test "x$wxUSE_MACOSX_SDK" = "x"; then
                 { echo "$as_me:$LINENO: WARNING: Enabling default SDK due to --enable-universal_binary." >&5
 echo "$as_me: WARNING: Enabling default SDK due to --enable-universal_binary." >&2;}
@@ -24842,8 +24842,8 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_c_bigendian" >&5
 echo "${ECHO_T}$ac_cv_c_bigendian" >&6; }
 if test $ac_cv_c_bigendian = unknown; then
-  { echo "$as_me:$LINENO: WARNING: Assuming little-endian target machine - this may be overriden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&5
-echo "$as_me: WARNING: Assuming little-endian target machine - this may be overriden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&2;}
+  { echo "$as_me:$LINENO: WARNING: Assuming little-endian target machine - this may be overridden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&5
+echo "$as_me: WARNING: Assuming little-endian target machine - this may be overridden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&2;}
 fi
 if test $ac_cv_c_bigendian = yes; then
   cat >>confdefs.h <<\_ACEOF

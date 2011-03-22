@@ -708,7 +708,7 @@ void MyFrame::OnInsertMenu(wxCommandEvent& WXUNUSED(event))
     wxString title;
     wxMenu *menu = CreateDummyMenu(&title);
     // Insert before the 'Help' menu
-    // Othewise repeated Deletes will remove the 'Test' menu
+    // Otherwise repeated Deletes will remove the 'Test' menu
     GetMenuBar()->Insert(4, menu, title);
 }
 

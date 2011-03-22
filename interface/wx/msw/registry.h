@@ -39,7 +39,7 @@
     // for the key existence if necessary.
     wxRegKey key(wxRegKey::HKLM, "Software\\MyKey");
 
-    // Create a new value "MYVALUE" and set it to 12.
+    // Create a new value "MyValue" and set it to 12.
     key.SetValue("MyValue", 12);
 
     // Read the value back.

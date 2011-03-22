@@ -283,7 +283,7 @@ public:
         If there is no property with such name, @NULL pointer is returned.
 
         @remarks Properties which have non-category, non-root parent
-                 can not be accessed globally by their name. Instead, use
+                 cannot be accessed globally by their name. Instead, use
                  "<property>.<subproperty>" instead of "<subproperty>".
     */
     wxPGProperty* GetProperty( const wxString& name ) const;
@@ -339,7 +339,7 @@ public:
         If there is no property with such name, @NULL pointer is returned.
 
         @remarks Properties which have non-category, non-root parent
-                 can not be accessed globally by their name. Instead, use
+                 cannot be accessed globally by their name. Instead, use
                  "<property>.<subproperty>" instead of "<subproperty>".
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;

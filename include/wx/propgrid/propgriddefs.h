@@ -392,7 +392,7 @@ enum wxPG_MISC_ARG_FLAGS
     // Used when dealing with fragments of composite string value
     wxPG_COMPOSITE_FRAGMENT             = 0x00000010,
 
-    // Means property for which final string value is for can not really be
+    // Means property for which final string value is for cannot really be
     // edited.
     wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
 

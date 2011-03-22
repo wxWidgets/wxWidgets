@@ -177,7 +177,7 @@ commands are optionals.
 
 Also note that if you use @section and @subsection in the class description
 (at the beginning), you should use as the section's anchor name "xxxx_yyyy"
-where "xxxx" is the the class name without the initial "wx" in lowercase
+where "xxxx" is the class name without the initial "wx" in lowercase
 and "yyyy" is a lowercase word which uniquely identifies that section.
 E.g.:
 

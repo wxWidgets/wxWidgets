@@ -770,7 +770,7 @@ public:
         (It will, of course, be larger or smaller in the preview image, depending on the
         zoom factor.)
 
-        Use this if you want WYSIWYG behavior, e.g., in a text editor.
+        Use this if you want WYSIWYG behaviour, e.g., in a text editor.
     */
     void MapScreenSizeToPaper();
 

@@ -425,7 +425,7 @@ bool wxDocument::Revert()
 #if WXWIN_COMPATIBILITY_2_8
 bool wxDocument::GetPrintableName(wxString& buf) const
 {
-    // this function can not only be overridden by the user code but also
+    // this function cannot only be overridden by the user code but also
     // called by it so we need to ensure that we return the same thing as
     // GetUserReadableName() but we can't call it because this would result in
     // an infinite recursion, hence we use the helper DoGetUserReadableName()
