@@ -298,7 +298,8 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
 {
     if ( GetPeer() )
     {
-        GetPeer()->RemoveFromParent();
+        if ( !GetPeer()->IsRootControl() )
+            GetPeer()->RemoveFromParent();
         wxDELETE(m_peer);
     }
 
