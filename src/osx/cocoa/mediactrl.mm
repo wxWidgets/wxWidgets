@@ -58,8 +58,18 @@
 #import <AppKit/NSMovie.h>
 #import <AppKit/NSMovieView.h>
 
+class WXDLLIMPEXP_FWD_MEDIA wxQTMediaBackend;
 
-class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackend
+@interface wxQTMovie : QTMovie {
+    
+    wxQTMediaBackend* m_backend;
+}
+
+-(BOOL)isPlaying;
+
+@end
+
+class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackendCommonBase
 {
 public:
 
@@ -104,119 +114,129 @@ private:
     void DoShowPlayerControls(wxMediaCtrlPlayerControls flags);
     
     wxSize m_bestSize;              //Original movie size
-    QTMovie* m_movie;               //QTMovie handle/instance
+    wxQTMovie* m_movie;               //QTMovie handle/instance
     QTMovieView* m_movieview;       //QTMovieView instance
-    wxControl* m_ctrl;              //Parent control
 
     wxMediaCtrlPlayerControls m_interfaceflags; // Saved interface flags
 
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
 
+// --------------------------------------------------------------------------
+// wxQTMovie
+// --------------------------------------------------------------------------
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
+@implementation wxQTMovie 
+
+- (id)initWithURL:(NSURL *)url error:(NSError **)errorPtr
+{
+    if ( [super initWithURL:url error:errorPtr] != nil )
+    {
+        m_backend = NULL;
+        
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc addObserver:self selector:@selector(movieDidEnd:) 
+                   name:QTMovieDidEndNotification object:nil];
+        [nc addObserver:self selector:@selector(movieRateChanged:) 
+                   name:QTMovieRateDidChangeNotification object:nil];
+        [nc addObserver:self selector:@selector(loadStateChanged:) 
+                   name:QTMovieLoadStateDidChangeNotification object:nil];
+        
+        return self;
+    }
+    else 
+        return nil;
+}
+
+-(void)dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc removeObserver:self];
+    
+	[super dealloc];    
+}
+
+-(wxQTMediaBackend*) backend;
+{
+    return m_backend;
+}
+
+-(void) setBackend:(wxQTMediaBackend*) backend
+{
+    m_backend = backend;
+}
+
+- (void)movieDidEnd:(NSNotification *)notification
+{
+    if ( m_backend )
+    {
+        if ( m_backend->SendStopEvent() )
+            m_backend->QueueFinishEvent();
+    }
+}
+
+- (void)movieRateChanged:(NSNotification *)notification
+{
+	NSDictionary *userInfo = [notification userInfo];
+	
+	NSNumber *newRate = [userInfo objectForKey:QTMovieRateDidChangeNotificationParameter];
+    
+	if ([newRate intValue] == 0)
+	{
+		m_backend->QueuePauseEvent();
+	}	
+    else if ( [self isPlaying] == NO )
+    {
+		m_backend->QueuePlayEvent();
+    }
+}
+
+-(void)loadStateChanged:(QTMovie *)movie
+{
+    long loadState = [[movie attributeForKey:QTMovieLoadStateAttribute] longValue];
+    if (loadState >= QTMovieLoadStatePlayable)
+    {
+        // the movie has loaded enough media data to begin playing
+    }
+    else if (loadState >= QTMovieLoadStateLoaded)
+    {
+        m_backend->FinishLoad();
+    }
+    else if (loadState == -1)
+    {
+        // error occurred 
+    }
+}
+
+-(BOOL)isPlaying
+{
+	if ([self rate] == 0)
+	{
+		return NO;
+	}
+	
+	return YES;
+}
+
+@end
+
+// --------------------------------------------------------------------------
 // wxQTMediaBackend
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// --------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
-//Time between timer calls
-#define MOVIE_DELAY 100
-
-// --------------------------------------------------------------------------
-//          wxQTTimer - Handle Asyncronous Playing
-// --------------------------------------------------------------------------
-class _wxQTTimer : public wxTimer
-{
-public:
-    _wxQTTimer(QTMovie movie, wxQTMediaBackend* parent) :
-        m_movie(movie), m_bPaused(false), m_parent(parent)
-    {
-    }
-
-    ~_wxQTTimer()
-    {
-    }
-
-    bool GetPaused() {return m_bPaused;}
-    void SetPaused(bool bPaused) {m_bPaused = bPaused;}
-
-    //-----------------------------------------------------------------------
-    // _wxQTTimer::Notify
-    //
-    // 1) Checks to see if the movie is done, and if not continues
-    //    streaming the movie
-    // 2) Sends the wxEVT_MEDIA_STOP event if we have reached the end of
-    //    the movie.
-    //-----------------------------------------------------------------------
-    void Notify()
-    {
-#if 0
-        if (!m_bPaused)
-        {
-            if(!IsMovieDone(m_movie))
-                MoviesTask(m_movie, MOVIE_DELAY);
-            else
-            {
-                wxMediaEvent theEvent(wxEVT_MEDIA_STOP,
-                                      m_parent->m_ctrl->GetId());
-                m_parent->m_ctrl->GetEventHandler()->ProcessEvent(theEvent);
-
-                if(theEvent.IsAllowed())
-                {
-                    Stop();
-                    m_parent->Stop();
-                    wxASSERT(::GetMoviesError() == noErr);
-
-                    //send the event to our child
-                    wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED,
-                                          m_parent->m_ctrl->GetId());
-                    m_parent->m_ctrl->GetEventHandler()->ProcessEvent(theEvent);
-                }
-            }
-        }
-#endif
-    }
-
-protected:
-    QTMovie m_movie;                  //Our movie instance
-    bool m_bPaused;                 //Whether we are paused or not
-    wxQTMediaBackend* m_parent;     //Backend pointer
-};
-
-//---------------------------------------------------------------------------
-// wxQTMediaBackend Constructor
-//
-// Sets m_timer to NULL signifying we havn't loaded anything yet
-//---------------------------------------------------------------------------
 wxQTMediaBackend::wxQTMediaBackend() : 
     m_interfaceflags(wxMEDIACTRLPLAYERCONTROLS_NONE),
-    m_movie(nil), m_movieview(nil), m_ctrl(NULL)
+    m_movie(nil), m_movieview(nil)
 {
 }
 
-//---------------------------------------------------------------------------
-// wxQTMediaBackend Destructor
-//
-// 1) Cleans up the QuickTime movie instance
-// 2) Decrements the QuickTime reference counter - if this reaches
-//    0, QuickTime shuts down
-// 3) Decrements the QuickTime Windows Media Layer reference counter -
-//    if this reaches 0, QuickTime shuts down the Windows Media Layer
-//---------------------------------------------------------------------------
 wxQTMediaBackend::~wxQTMediaBackend()
 {
-    [m_movie release];
+    Cleanup();
 }
 
-//---------------------------------------------------------------------------
-// wxQTMediaBackend::CreateControl
-//
-// 1) Intializes QuickTime
-// 2) Creates the control window
-//---------------------------------------------------------------------------
 bool wxQTMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
                                      wxWindowID wid,
                                      const wxPoint& pos,
@@ -227,14 +247,8 @@ bool wxQTMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 {
     wxMediaCtrl* mediactrl = (wxMediaCtrl*) inctrl;
 
-    //
-    // Create window
-    // By default wxWindow(s) is created with a border -
-    // so we need to get rid of those
-    //
-    // Since we don't have a child window like most other
-    // backends, we don't need wxCLIP_CHILDREN
-    //
+    mediactrl->DontCreatePeer();
+    
     if ( !mediactrl->wxControl::Create(
                                        parent, wid, pos, size,
                                        wxWindow::MacRemoveBordersFromStyle(style),
@@ -268,32 +282,28 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 
 bool wxQTMediaBackend::Load(const wxURI& location)
 {
-    wxString theURI = location.BuildURI();
-
-    QTMovie* movie = [[QTMovie alloc] initWithURL: [NSURL URLWithString: wxNSStringWithWxString(theURI)] error: nil ];
+    wxCFStringRef uri(location.BuildURI());
 
     [m_movie release];
-    m_movie = movie;
+    wxQTMovie* movie = [[wxQTMovie alloc] initWithURL: [NSURL URLWithString: uri.AsNSString()] error: nil ];
     
+    m_movie = movie;
+    [m_movie setBackend:this];
     [m_movieview setMovie:movie];
     
-    DoShowPlayerControls(m_interfaceflags);
-
-    FinishLoad();
-
     return movie != nil;
 }
 
 void wxQTMediaBackend::FinishLoad()
 {
+    DoShowPlayerControls(m_interfaceflags);
+    
     NSRect r =[m_movieview movieBounds];
     m_bestSize.x = r.size.width;
     m_bestSize.y = r.size.height;
+    
+    NotifyMovieLoaded();
 
-    m_ctrl->InvalidateBestSize();
-    m_ctrl->GetParent()->Layout();
-    m_ctrl->GetParent()->Refresh();
-    m_ctrl->GetParent()->Update();
 }
 
 bool wxQTMediaBackend::Play()
@@ -359,22 +369,22 @@ wxLongLong wxQTMediaBackend::GetDuration()
 
 wxMediaState wxQTMediaBackend::GetState()
 {
-    /*
-    if ( !m_timer || (m_timer->IsRunning() == false &&
-                      m_timer->GetPaused() == false) )
-        return wxMEDIASTATE_STOPPED;
-
-    if( m_timer->IsRunning() == true )
+    if ( [m_movie isPlaying] )
         return wxMEDIASTATE_PLAYING;
     else
-     */
-        return wxMEDIASTATE_PAUSED;
+    {
+        if ( GetPosition() == 0 )
+            return wxMEDIASTATE_STOPPED;
+        else
+            return wxMEDIASTATE_PAUSED;
+    }
 }
 
 void wxQTMediaBackend::Cleanup()
 {
-    [[m_movieview movie] release];
     [m_movieview setMovie:NULL];
+    [m_movie release];
+    m_movie = nil;
 }
 
 wxSize wxQTMediaBackend::GetVideoSize() const
