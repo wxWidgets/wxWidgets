@@ -31,6 +31,7 @@ public:
     virtual void AfterChildWaitLoop(void *data) = 0;
 
 
+#if wxUSE_THREADS
     // wxThread helpers
     // ----------------
 
@@ -41,6 +42,7 @@ public:
     // wait for the handle to be signaled, return WAIT_OBJECT_0 if it is or, in
     // the GUI code, WAIT_OBJECT_0 + 1 if a Windows message arrived
     virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags) = 0;
+#endif // wxUSE_THREADS
 
 
 #ifndef __WXWINCE__
@@ -60,9 +62,11 @@ public:
 #endif // !__WXWINCE__
 
 protected:
+#if wxUSE_THREADS
     // implementation of WaitForThread() for the console applications which is
-    // also used by the GUI code if it doesn't [yet|already} dispatch events
+    // also used by the GUI code if it doesn't [yet|already] dispatch events
     WXDWORD DoSimpleWaitForThread(WXHANDLE hThread);
+#endif // wxUSE_THREADS
 };
 
 #endif // _WX_MSW_APPTBASE_H_

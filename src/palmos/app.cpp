@@ -104,10 +104,12 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 {
 }
 
+#if wxUSE_THREADS
 bool wxGUIAppTraits::DoMessageFromThreadWait()
 {
     return false;
 }
+#endif // wxUSE_THREADS
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {

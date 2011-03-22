@@ -43,10 +43,12 @@
 // wxAppTraits implementation
 // ============================================================================
 
+#if wxUSE_THREADS
 WXDWORD wxAppTraits::DoSimpleWaitForThread(WXHANDLE hThread)
 {
     return ::WaitForSingleObject((HANDLE)hThread, INFINITE);
 }
+#endif // wxUSE_THREADS
 
 // ============================================================================
 // wxConsoleAppTraits implementation
@@ -63,11 +65,18 @@ void wxConsoleAppTraits::AfterChildWaitLoop(void * WXUNUSED(data))
     // nothing to do here
 }
 
+#if wxUSE_THREADS
 bool wxConsoleAppTraits::DoMessageFromThreadWait()
 {
     // nothing to process here
     return true;
 }
+
+WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread, int WXUNUSED(flags))
+{
+    return DoSimpleWaitForThread(hThread);
+}
+#endif // wxUSE_THREADS
 
 #if wxUSE_TIMER
 
@@ -87,11 +96,6 @@ wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 #endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 
-
-WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread, int WXUNUSED(flags))
-{
-    return DoSimpleWaitForThread(hThread);
-}
 
 bool wxConsoleAppTraits::WriteToStderr(const wxString& text)
 {

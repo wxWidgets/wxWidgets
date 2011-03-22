@@ -30,9 +30,11 @@ public:
     virtual void AfterChildWaitLoop(void *data);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) { return new wxPalmOSTimerImpl(timer); }
-#endif
+#endif // wxUSE_TIMER
+#if wxUSE_THREADS
     virtual bool DoMessageFromThreadWait();
     virtual WXDWORD WaitForThread(WXHANDLE hThread);
+#endif // wxUSE_THREADS
 };
 
 #if wxUSE_GUI
@@ -46,8 +48,10 @@ public:
 #if wxUSE_TIMER
     // there is no wxTimer support yet
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
-#endif
+#endif // wxUSE_TIMER
+#if wxUSE_THREADS
     virtual bool DoMessageFromThreadWait();
+#endif // wxUSE_THREADS
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 };
 
