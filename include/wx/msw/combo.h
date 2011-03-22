@@ -94,6 +94,8 @@ protected:
     void OnPaintEvent( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
 
+    virtual bool HasTransparentBackground() { return IsDoubleBuffered(); }
+
 private:
     void Init();
 
