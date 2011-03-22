@@ -355,7 +355,7 @@ public:
                 download_chunk(buffer, 1024);     // this takes time...
 
                 {
-                    // ensure noone reads m_data while we write it
+                    // ensure no one reads m_data while we write it
                     wxCriticalSectionLocker lock(m_dataCS);
                     memcpy(m_data+offset, buffer, 1024);
                     offset += 1024;
@@ -544,7 +544,7 @@ enum wxCriticalSectionType
 
     Finally, you should try to use wxCriticalSectionLocker class whenever
     possible instead of directly using wxCriticalSection for the same reasons
-    wxMutexLocker is preferrable to wxMutex - please see wxMutex for an example.
+    wxMutexLocker is preferable to wxMutex - please see wxMutex for an example.
 
     @library{wxbase}
     @category{threading}
@@ -697,7 +697,7 @@ enum
     @section thread_types Types of wxThreads
 
     There are two types of threads in wxWidgets: @e detached and @e joinable,
-    modeled after the the POSIX thread API. This is different from the Win32 API
+    modeled after the POSIX thread API. This is different from the Win32 API
     where all threads are joinable.
 
     By default wxThreads in wxWidgets use the @b detached behavior.
@@ -1027,7 +1027,7 @@ public:
             performance issues on those systems with small default stack since those
             typically use fully committed memory for the stack.
             On the contrary, if you use a lot of threads (say several hundred),
-            virtual adress space can get tight unless you explicitly specify a
+            virtual address space can get tight unless you explicitly specify a
             smaller amount of thread stack space for each thread.
 
         @return One of:

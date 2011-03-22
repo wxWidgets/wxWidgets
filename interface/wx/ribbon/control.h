@@ -10,8 +10,8 @@
     @class wxRibbonControl
 
     wxRibbonControl serves as a base class for all controls which share the
-    ribbon charactertics of having a ribbon art provider, and (optionally)
-    non-continous resizing. Despite what the name may imply, it is not the
+    ribbon characteristics of having a ribbon art provider, and (optionally)
+    non-continuous resizing. Despite what the name may imply, it is not the
     top-level control for creating a ribbon interface - that is wxRibbonBar.
   
     Ribbon controls often have a region which is "transparent", and shows the

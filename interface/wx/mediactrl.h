@@ -12,7 +12,7 @@ enum wxMediaCtrlPlayerControls
     /** No controls. return wxMediaCtrl to its default state. */
     wxMEDIACTRLPLAYERCONTROLS_NONE           =   0,
 
-    /** Step controls like fastfoward, step one frame etc. */
+    /** Step controls like fastforward, step one frame etc. */
     wxMEDIACTRLPLAYERCONTROLS_STEP           =   1 << 0,
 
     /** Volume controls like the speaker icon, volume slider, etc. */
@@ -119,9 +119,9 @@ public:
     When wxMediaCtrl stops, either by the @c EVT_MEDIA_STOP not being vetoed, or
     by manually calling Stop(), where it actually stops is not at the beginning,
     rather, but at the beginning of the stream. That is, when it stops and play
-    is called, playback is gauranteed to start at the beginning of the media.
+    is called, playback is guaranteed to start at the beginning of the media.
     This is because some streams are not seekable, and when stop is called on
-    them they return to the beginning, thus wxMediaCtrl tries to keep consistant
+    them they return to the beginning, thus wxMediaCtrl tries to keep consistent
     for all types of media.
 
     Note that when changing the state of the media through Play() and other methods,
@@ -134,11 +134,11 @@ public:
 
     By default, wxMediaCtrl will scale the size of the video to the requested
     amount passed to either its constructor or Create().
-    After calling wxMediaCtrl::Load or performing an equivilant operation,
+    After calling wxMediaCtrl::Load or performing an equivalent operation,
     you can subsequently obtain the "real" size of the video (if there is any)
     by calling wxMediaCtrl::GetBestSize(). Note that the actual result on the
     display will be slightly different when wxMediaCtrl::ShowPlayerControls is
-    activated and the actual video size will be less then specified due to the
+    activated and the actual video size will be less than specified due to the
     extra controls provided by the native toolkit.
     In addition, the backend may modify wxMediaCtrl::GetBestSize() to include
     the size of the extra controls - so if you want the real size of the video
@@ -184,7 +184,7 @@ public:
     - @b wxMEDIABACKEND_GSTREAMER, Use GStreamer. Unix Only.
       Requires GStreamer 0.8 along with at the very least the xvimagesink, xoverlay,
       and gst-play modules of gstreamer to function.
-      You need the correct modules to play the relavant files, for example the
+      You need the correct modules to play the relevant files, for example the
       mad module to play mp3s, etc.
     - @b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) -
       works on mobile machines with Windows Media Player 10 and desktop machines

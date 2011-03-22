@@ -324,7 +324,7 @@ public:
     void SetChar(size_t n, wxUniChar ch);
 
     /**
-        Returns a the last character.
+        Returns the last character.
 
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
@@ -447,7 +447,7 @@ public:
     const wxScopedCharBuffer utf8_str() const;
 
     /**
-        Converts the strings contents to the wide character represention
+        Converts the strings contents to the wide character representation
         and returns it as a temporary wxWCharBuffer object (Unix and OS X)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
@@ -1326,7 +1326,7 @@ public:
     /**
         @member_group_name{iter, Iterator interface}
 
-        These methods return iterators to the beginnnig or end of the string.
+        These methods return iterators to the beginning or end of the string.
 
         Please see any STL reference (e.g. http://www.cppreference.com/wiki/string/start)
         for their documentation.
@@ -1473,7 +1473,7 @@ public:
 
 
     // STATIC FUNCTIONS
-    // Keep these functions separed from the other groups or Doxygen gets confused
+    // Keep these functions separated from the other groups or Doxygen gets confused
     // -----------------------------------------------------------------------------
 
     /**

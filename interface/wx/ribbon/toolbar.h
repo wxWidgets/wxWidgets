@@ -138,7 +138,7 @@ public:
         Add a separator to the tool bar.
         
         Separators are used to separate tools into groups. As such, a separator
-        is not explicity drawn, but is visually seen as the gap between tool
+        is not explicitly drawn, but is visually seen as the gap between tool
         groups.
     */
     virtual wxRibbonToolBarToolBase* AddSeparator();
@@ -147,7 +147,7 @@ public:
         Set the number of rows to distribute tool groups over.
         
         Tool groups can be distributed over a variable number of rows. The way
-        in which groups are assigned to rows is not specificed, and the order
+        in which groups are assigned to rows is not specified, and the order
         of groups may change, but they will be distributed in such a way as to
         minimise the overall size of the tool bar.
         

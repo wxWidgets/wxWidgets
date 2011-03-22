@@ -18,7 +18,7 @@
 
     @beginEventTable{wxActiveXEvent}
     @event{EVT_ACTIVEX(func)}
-        Sent when the ActiveX control hosted by wxActiveXContainer recieves an
+        Sent when the ActiveX control hosted by wxActiveXContainer receives an
         ActiveX event.
     @endEventTable
 
@@ -268,7 +268,7 @@ public:
 
     wxIMPLEMENT_DYNAMIC_CLASS(wxPDFMediaBackend, wxMediaBackend);
     
-    // Put this in one of your existant source files and then create a wxMediaCtrl with
+    // Put this in one of your existing source files and then create a wxMediaCtrl with
     wxMediaCtrl* mymediactrl = new wxMediaCtrl(this, "myfile.pdf", wxID_ANY,
                                             wxDefaultPosition, wxSize(300,300),
                                             0, "wxPDFMediaBackend");

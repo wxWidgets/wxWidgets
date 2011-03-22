@@ -244,7 +244,7 @@ public:
                     int insert_level = wxAUI_INSERT_PANE);
 
     /**
-        LoadPaneInfo() is similar to to LoadPerspective, with the exception that it
+        LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.  It is used in combination with
         SavePaneInfo().
     */
@@ -442,7 +442,7 @@ public:
     wxAuiPaneInfo& DefaultPane();
 
     /**
-        DestroyOnClose() indicates whether a pane should be detroyed when it is closed.
+        DestroyOnClose() indicates whether a pane should be destroyed when it is closed.
         Normally a pane is simply hidden when the close button is clicked.
         Setting DestroyOnClose to @true will cause the window to be destroyed when
         the user clicks the pane's close button.

@@ -473,7 +473,7 @@ public:
            that it didn't handle the event in which case the search continues.
         -# Static events table of the handlers bound using event table
            macros is searched for this event handler. If this fails, the base
-           class event table table is tried, and so on until no more tables
+           class event table is tried, and so on until no more tables
            exist or an appropriate function was found. If a handler is found,
            the same logic as in the previous step applies.
         -# The search is applied down the entire chain of event handlers (usually the
@@ -779,7 +779,7 @@ public:
         more flexible as it also allows you to use ordinary functions and
         arbitrary functors as event handlers. It is also less restrictive then
         Connect() because you can use an arbitrary method as an event handler,
-        where as Connect() requires a wxEvtHandler derived handler.
+        whereas Connect() requires a wxEvtHandler derived handler.
 
         See @ref overview_events_bind for more detailed explanation
         of this function and the @ref page_samples_event sample for usage
@@ -1701,7 +1701,7 @@ public:
     */
     wxWindowCreateEvent(wxWindow* win = NULL);
 
-    /// Retutn the window being created.
+    /// Return the window being created.
     wxWindow *GetWindow() const;
 };
 
@@ -2629,7 +2629,7 @@ public:
         For the menu events, this method indicates if the menu item just has become
         checked or unchecked (and thus only makes sense for checkable menu items).
 
-        Notice that this method can not be used with wxCheckListBox currently.
+        Notice that this method cannot be used with wxCheckListBox currently.
     */
     bool IsChecked() const;
 
@@ -2868,7 +2868,7 @@ public:
     child if it loses it now and regains later.
 
     Notice that child window is the direct child of the window receiving event.
-    Use wxWindow::FindFocus() to retreive the window which is actually getting focus.
+    Use wxWindow::FindFocus() to retrieve the window which is actually getting focus.
 
     @beginEventTable{wxChildFocusEvent}
     @event{EVT_CHILD_FOCUS(func)}
@@ -3021,7 +3021,7 @@ public:
 /**
     @class wxThreadEvent
 
-    This class adds some simple functionalities to wxCommandEvent coinceived
+    This class adds some simple functionalities to wxCommandEvent conceived
     for inter-threads communications.
 
     This event is not natively emitted by any control/class: this is just
@@ -3449,7 +3449,7 @@ public:
     */
     wxWindowDestroyEvent(wxWindow* win = NULL);
 
-    /// Retutn the window being destroyed.
+    /// Return the window being destroyed.
     wxWindow *GetWindow() const;
 };
 

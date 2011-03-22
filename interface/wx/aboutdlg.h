@@ -83,7 +83,7 @@ public:
 
     /**
         Adds a translator name to be shown in the program credits. Notice that if no
-        translator names are specified explicitely, wxAboutBox() will try to use the
+        translator names are specified explicitly, wxAboutBox() will try to use the
         translation of the string @c translator-credits from the currently used message
         catalog -- this can be used to show just the name of the translator of the
         program in the current language.
@@ -129,7 +129,7 @@ public:
     const wxString& GetCopyright() const;
 
     /**
-        Sets the the list of artists to be shown in the program credits.
+        Sets the list of artists to be shown in the program credits.
 
         @see AddArtist()
     */

@@ -216,7 +216,7 @@ public:
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
-        of @a item or an invalid wxDataViewItem if the the root item is
+        of @a item or an invalid wxDataViewItem if the root item is
         the parent item.
     */
     virtual wxDataViewItem GetParent(const wxDataViewItem& item) const = 0;
@@ -231,7 +231,7 @@ public:
     /**
         Override this method to indicate if a container item merely acts as a
         headline (or for categorisation) or if it also acts a normal item with
-        entries for futher columns. By default returns @false.
+        entries for further columns. By default returns @false.
     */
     virtual bool HasContainerColumns(const wxDataViewItem& item) const;
 
@@ -1086,7 +1086,7 @@ public:
     void SetCurrentItem(const wxDataViewItem& item);
 
     /**
-        Sets the indendation.
+        Sets the indentation.
     */
     void SetIndent(int indent);
 
@@ -2054,7 +2054,7 @@ public:
     /**
          Sets the value in the store and update the control.
 
-         This method assumes that the a string is stored in respective
+         This method assumes that the string is stored in respective
          column.
     */
     void SetTextValue( const wxString &value, unsigned int row, unsigned int col );
@@ -2062,7 +2062,7 @@ public:
     /**
          Returns the value from the store.
 
-         This method assumes that the a string is stored in respective
+         This method assumes that the string is stored in respective
          column.
     */
     wxString GetTextValue( unsigned int row, unsigned int col ) const;
@@ -2070,7 +2070,7 @@ public:
     /**
          Sets the value in the store and update the control.
 
-         This method assumes that the a boolean value is stored in
+         This method assumes that the boolean value is stored in
          respective column.
     */
     void SetToggleValue( bool value, unsigned int row, unsigned int col );
@@ -2078,7 +2078,7 @@ public:
     /**
          Returns the value from the store.
 
-         This method assumes that the a boolean value is stored in
+         This method assumes that the boolean value is stored in
          respective column.
     */
     bool GetToggleValue( unsigned int row, unsigned int col ) const;
@@ -2393,23 +2393,23 @@ public:
     void DeleteAllItems();
 
     /**
-        Overriden from wxDataViewModel
+        Overridden from wxDataViewModel
     */
     virtual unsigned int GetColumnCount() const;
 
     /**
-        Overriden from wxDataViewModel
+        Overridden from wxDataViewModel
     */
     virtual wxString GetColumnType( unsigned int col ) const;
 
     /**
-        Overriden from wxDataViewIndexListModel
+        Overridden from wxDataViewIndexListModel
     */
     virtual void GetValueByRow( wxVariant &value,
                            unsigned int row, unsigned int col ) const;
 
     /**
-        Overriden from wxDataViewIndexListModel
+        Overridden from wxDataViewIndexListModel
     */
     virtual bool SetValueByRow( const wxVariant &value,
                            unsigned int row, unsigned int col );
@@ -2419,7 +2419,7 @@ public:
 /**
     @class wxDataViewTreeStore
 
-    wxDataViewTreeStore is a specialised wxDataViewModel for stroing simple
+    wxDataViewTreeStore is a specialised wxDataViewModel for storing simple
     trees very much like wxTreeCtrl does and it offers a similar API.
 
     This class actually stores the entire tree and the values (therefore its name)
@@ -2481,7 +2481,7 @@ public:
     int GetChildCount(const wxDataViewItem& parent) const;
 
     /**
-        Returns the client data asoociated with the item.
+        Returns the client data associated with the item.
     */
     wxClientData* GetItemData(const wxDataViewItem& item) const;
 
@@ -2678,7 +2678,7 @@ public:
     wxDataViewModel* GetModel() const;
 
     /**
-        Returns a the position of a context menu event in screen coordinates.
+        Returns the position of a context menu event in screen coordinates.
     */
     wxPoint GetPosition() const;
 

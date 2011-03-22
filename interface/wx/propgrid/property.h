@@ -131,7 +131,7 @@
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
 /**
-    wxArrayStringProperty's string delimiter character. If this is aquotation
+    wxArrayStringProperty's string delimiter character. If this is a quotation
     mark or hyphen, then strings will be quoted instead (with given
     character).
 
@@ -150,7 +150,7 @@
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
 /** SpinCtrl editor, int or double. How much number changes when button is
-    pressed (or up/down on keybard).
+    pressed (or up/down on keyboard).
 */
 #define wxPG_ATTR_SPINCTRL_STEP             wxS("Step")
 
@@ -221,7 +221,7 @@ wxPG_PROP_COLLAPSED                 = 0x0020,
     If property is selected, then indicates that validation failed for pending
     value.
 
-    If property is not selected, then indicates that the the actual property
+    If property is not selected, then indicates that the actual property
     value has failed validation (NB: this behavior is not currently supported,
     but may be used in future).
 */
@@ -424,7 +424,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true inorder to use
+    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to use
     check box instead.
 
     @subsection wxLongStringProperty
@@ -486,7 +486,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     Represents a bit set that fits in a long integer. wxBoolProperty sub-
     properties are created for editing individual bits. Textctrl is created to
-    manually edit the flags as a text; a continous sequence of spaces, commas
+    manually edit the flags as a text; a continuous sequence of spaces, commas
     and semicolons are considered as a flag id separator.
 
     <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
@@ -502,9 +502,9 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     @subsection wxDateProperty
 
-    wxDateTime property. Default editor is DatePickerCtrl, altough TextCtrl
+    wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
     should work as well. wxPG_DATE_FORMAT attribute can be used to change
-    string wxDateTime::Format uses (altough default is recommended as it is
+    string wxDateTime::Format uses (although default is recommended as it is
     locale-dependant), and wxPG_DATE_PICKER_STYLE allows changing window
     style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
     Using wxDP_ALLOWNONE will enable better unspecified value support.
@@ -566,7 +566,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @endcode
 
     in wxSystemColourProperty, and its derived class wxColourProperty, there
-    are various sub-classing features. To set basic list list of colour
+    are various sub-classing features. To set a basic list of colour
     names, call wxPGProperty::SetChoices().
 
     @code
@@ -830,7 +830,7 @@ public:
     bool SetValueFromString( const wxString& text, int flags = 0 );
 
     /**
-        Converts integer to a value, and if succesful, calls SetValue() on it.
+        Converts integer to a value, and if successful, calls SetValue() on it.
         Default behavior is to do nothing.
 
         @param value
@@ -881,7 +881,7 @@ public:
 
     /**
         Called after value of a child property has been altered. Must return
-        new value of the whole property (after any alterations warrented by
+        new value of the whole property (after any alterations warranted by
         child's new value).
 
         Note that this function is usually called at the time that value of
@@ -1492,7 +1492,7 @@ public:
     /**
         Returns true if property has editable wxTextCtrl when selected.
 
-        @remarks Altough disabled properties do not displayed editor, they still
+        @remarks Although disabled properties do not displayed editor, they still
                 return @true here as being disabled is considered a temporary
                 condition (unlike being read-only or having limited editing enabled).
     */
@@ -1903,7 +1903,7 @@ public:
     wxPGChoices Copy() const;
 
     /**
-        Returns labe of item.
+        Returns label of item.
     */
     const wxString& GetLabel( unsigned int ind ) const;
 

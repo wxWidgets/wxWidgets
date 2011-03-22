@@ -351,7 +351,7 @@ public:
 
         The left border is moved farther left and the right border is moved
         farther right by @a dx. The upper border is moved farther up and the
-        bottom border is moved farther down by @a dy. (Note the the width and
+        bottom border is moved farther down by @a dy. (Note that the width and
         height of the rectangle thus change by 2*dx and 2*dy, respectively.) If
         one or both of @a dx and @a dy are negative, the opposite happens: the
         rectangle size decreases in the respective direction.
@@ -768,7 +768,7 @@ public:
 
 
 /**
-    Global istance of a wxColourDatabase.
+    Global instance of a wxColourDatabase.
 */
 wxColourDatabase* wxTheColourDatabase;
 

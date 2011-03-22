@@ -100,7 +100,7 @@ public:
     /**
         Copy constructor.
 
-        Note that this does NOT copy syblings and parent pointer, i.e. GetParent()
+        Note that this does NOT copy siblings and parent pointer, i.e. GetParent()
         and GetNext() will return @NULL after using copy ctor and are never unmodified by operator=().
         On the other hand, it DOES copy children and attributes.
     */
@@ -175,7 +175,7 @@ public:
     const wxString& GetContent() const;
 
     /**
-        Returns the number of nodes which separe this node from @c grandparent.
+        Returns the number of nodes which separate this node from @c grandparent.
 
         This function searches only the parents of this node until it finds
         @a grandparent or the @NULL node (which is the parent of non-linked
@@ -300,7 +300,7 @@ public:
 
         Returns @true if the node was found and removed or @false if the node
         could not be found.
-        Note that the caller is reponsible for deleting the removed node in order
+        Note that the caller is responsible for deleting the removed node in order
         to avoid memory leaks.
     */
     virtual bool RemoveChild(wxXmlNode* child);
@@ -484,7 +484,7 @@ public:
     wxXmlDocument doc;
     doc.Load("myfile.xml", "UTF-8", wxXMLDOC_KEEP_WHITESPACE_NODES);
 
-    // myfile2.xml will be indentic to myfile.xml saving it this way:
+    // myfile2.xml will be identical to myfile.xml saving it this way:
     doc.Save("myfile2.xml", wxXML_NO_INDENTATION);
     @endcode
 
@@ -538,7 +538,7 @@ public:
         The document root node will be set to @NULL and thus IsOk() will
         return @false after calling this function.
 
-        Note that the caller is reponsible for deleting the returned node in order
+        Note that the caller is responsible for deleting the returned node in order
         to avoid memory leaks.
     */
     wxXmlNode* DetachRoot();
@@ -568,7 +568,7 @@ public:
         Returns the version of document.
 
         This is the value in the @c \<?xml version="1.0"?\> header of the XML document.
-        If the version attribute was not explicitely given in the header, this function
+        If the version attribute was not explicitly given in the header, this function
         returns an empty string.
     */
     const wxString& GetVersion() const;
