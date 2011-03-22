@@ -493,6 +493,8 @@ All (GUI):
 - Fix SVG files generation in locales using decimal comma (snowleopard).
 - Fix setting tooltips for generic wxSpinCtrl (Catalin Raceanu).
 - Added support for reading image resolutions from PNG images (scottb).
+- wxComboCtrl, wxOwnerDrawnComboBox: better support for themed and custom
+  panel backgrounds, especially on OS X.
 
 GTK:
 
