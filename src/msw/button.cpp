@@ -115,6 +115,10 @@ using namespace wxMSWImpl;
     #define BCM_SETSHIELD       0x160c
 #endif
 
+#if wxUSE_UXTHEME
+extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
+#endif // wxUSE_UXTHEME
+
 // ----------------------------------------------------------------------------
 // button image data
 // ----------------------------------------------------------------------------
@@ -1315,7 +1319,20 @@ void DrawXPBackground(wxButton *button, HDC hdc, RECT& rectBtn, UINT state)
                     iState
                  ) )
     {
+        // Set this button as the one whose background is being erased: this
+        // allows our WM_ERASEBKGND handler used by DrawThemeParentBackground()
+        // to correctly align the background brush with this window instead of
+        // the parent window to which WM_ERASEBKGND is sent. Notice that this
+        // doesn't work with custom user-defined EVT_ERASE_BACKGROUND handlers
+        // as they won't be aligned but unfortunately all the attempts to fix
+        // it by shifting DC origin before calling DrawThemeParentBackground()
+        // failed to work so we at least do this, even though this is far from
+        // being the perfect solution.
+        wxWindowBeingErased = button;
+
         engine->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
+
+        wxWindowBeingErased = NULL;
     }
 
     // draw background
