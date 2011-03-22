@@ -1064,7 +1064,7 @@ void wxWindowBase::SendSizeEvent(int flags)
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
     if ( flags & wxSEND_EVENT_POST )
-        wxPostEvent(this, event);
+        wxPostEvent(GetEventHandler(), event);
     else
         HandleWindowEvent(event);
 }
