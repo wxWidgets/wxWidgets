@@ -75,6 +75,7 @@ private:
         CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
         CPPUNIT_TEST( GIFComment );
+        CPPUNIT_TEST( DibPadding );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -87,6 +88,7 @@ private:
     void SaveAnimatedGIF();
     void ReadCorruptedTGA();
     void GIFComment();
+    void DibPadding();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -900,6 +902,7 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     if ( testPalette
         && ( !(type == wxBITMAP_TYPE_BMP
                 || type == wxBITMAP_TYPE_GIF
+                || type == wxBITMAP_TYPE_ICO
                 || type == wxBITMAP_TYPE_PNG)
             || type == wxBITMAP_TYPE_XPM) )
     {
@@ -1249,6 +1252,23 @@ void ImageTestCase::GIFComment()
             image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
         memIn.SeekI(pos);
     }
+}
+
+void ImageTestCase::DibPadding()
+{
+    /*
+    There used to be an error with calculating the DWORD aligned scan line
+    pitch for a BMP/ICO resulting in buffer overwrites (with at least MSVC9
+    Debug this gave a heap corruption assertion when saving the mask of
+    an ICO). Test for it here.
+    */
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    image = image.Scale(99, 99);
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_ICO),
+        image, wxIMAGE_HAVE_PALETTE);
 }
 
 #endif //wxUSE_IMAGE
