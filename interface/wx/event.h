@@ -1252,6 +1252,8 @@ enum wxKeyCategoryFlags
     Notice that currently no translation is done for the presses of @c [, @c
     \\, @c ], @c ^ and @c _ keys which might be mapped to ASCII values from 27
     to 31.
+    Since version 2.9.2, the enum values @c WXK_CONTROL_A - @c WXK_CONTROL_Z
+    can be used instead of the non-descriptive constant values 1-26.
 
     Finally, modifier keys only generate key events but no char events at all.
     The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
