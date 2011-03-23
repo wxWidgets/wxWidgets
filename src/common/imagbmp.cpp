@@ -136,8 +136,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     }
 
     unsigned width = image->GetWidth();
-    unsigned row_padding = (4 - int(width*bpp/8.0) % 4) % 4; // # bytes to pad to dword
-    unsigned row_width = int(width * bpp/8.0) + row_padding; // # of bytes per row
+    unsigned row_padding = (4 - ((width * bpp + 7) / 8) % 4) % 4; // # bytes to pad to dword
+    unsigned row_width = (width * bpp + 7) / 8 + row_padding; // # of bytes per row
 
     struct
     {
