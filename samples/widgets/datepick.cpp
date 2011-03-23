@@ -186,7 +186,7 @@ void DatePickerWidgetsPage::Reset()
 
     m_datePicker->SetValue(today);
     m_day->SetValue(wxString::Format(wxT("%d"), today.GetDay()));
-    m_month->SetValue(wxString::Format(wxT("%d"), today.GetMonth()));
+    m_month->SetValue(wxString::Format(wxT("%d"), today.GetMonth() + 1));
     m_year->SetValue(wxString::Format(wxT("%d"), today.GetYear()));
 }
 
