@@ -863,12 +863,16 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& WXUNUSED(cursor),
+bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& cursor,
                                              const wxRect& WXUNUSED(cell),
                                              wxDataViewModel *model,
                                              const wxDataViewItem& item,
                                              unsigned int col)
 {
+    // only react to clicks directly on the checkbox, not elsewhere in the same cell:
+    if (!wxRect(GetSize()).Contains(cursor))
+        return false;
+
     if (model->IsEnabled(item, col))
     {
         model->ChangeValue(!m_toggle, item, col);
