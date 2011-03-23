@@ -841,23 +841,6 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 // helpers
 // ----------------------------------------------------------------------------
 
-#if wxUSE_TOOLTIPS
-void wxListBox::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
-{
-#if GTK_CHECK_VERSION(2, 12, 0)
-    if (!gtk_check_version(2, 12, 0))
-    {
-        gtk_widget_set_tooltip_text(GTK_WIDGET( m_treeview ), tip);
-    }
-    else
-#endif
-    {
-        // RN: Is this needed anymore?
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, NULL );
-    }
-}
-#endif // wxUSE_TOOLTIPS
-
 GtkWidget *wxListBox::GetConnectWidget()
 {
     // the correct widget for listbox events (such as mouse clicks for example)

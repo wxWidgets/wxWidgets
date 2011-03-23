@@ -3778,33 +3778,20 @@ void wxWindowGTK::ClearBackground()
 #if wxUSE_TOOLTIPS
 void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
 {
-    wxWindowBase::DoSetToolTip(tip);
+    if (m_tooltip != tip)
+    {
+        wxWindowBase::DoSetToolTip(tip);
 
-    if (m_tooltip)
-    {
-        m_tooltip->GTKApply( (wxWindow *)this );
-    }
-    else
-    {
-        GtkWidget *w = GetConnectWidget();
-        wxToolTip::GTKApply(w, NULL);
+        if (m_tooltip)
+            m_tooltip->GTKSetWindow(static_cast<wxWindow*>(this));
+        else
+            GTKApplyToolTip(NULL);
     }
 }
 
-void wxWindowGTK::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
+void wxWindowGTK::GTKApplyToolTip(const char* tip)
 {
-    GtkWidget *w = GetConnectWidget();
-
-#if GTK_CHECK_VERSION(2, 12, 0)
-    if (!gtk_check_version(2, 12, 0))
-    {
-        gtk_widget_set_tooltip_text (w, tip);
-    }
-    else
-#endif
-    {
-        gtk_tooltips_set_tip(tips, w, tip, NULL);
-    }
+    wxToolTip::GTKApply(GetConnectWidget(), tip);
 }
 #endif // wxUSE_TOOLTIPS
 
