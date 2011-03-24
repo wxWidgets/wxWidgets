@@ -88,6 +88,14 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.13:
+-------
+
+All (GUI):
+
+- wxRTC: speeded up image saving to XML (WriteHex).
+
+
 2.8.12:
 -------
 
@@ -116,7 +124,6 @@ All (GUI):
 - wxRTC: style list box now copes with names duplicated across style types.
   Also fixed wxRichTextStyleDefinition::GetStyleMergeWithBase similarly.
 - wxRTC: fixed very poor performance for XML loading on wxGTK.
-- wxRTC: speeded up image saving to XML (WriteHex).
 - Fixed error in generic tree control CalculatePositions.
 - Added wxFD_FILE_MUST_EXIST to wxFileSelector function.
 - Added wxDataViewCtrl Get/SetValueByRow functions for forward compatibility
