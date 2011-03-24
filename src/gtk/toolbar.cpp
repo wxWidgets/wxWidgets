@@ -479,6 +479,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     GSList* radioGroup;
+    GtkWidget* bin_child;
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_BUTTON:
@@ -544,11 +545,12 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                         m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
                 }
             }
-            g_signal_connect(GTK_BIN(tool->m_item)->child, "button_press_event",
+            bin_child = gtk_bin_get_child(GTK_BIN(tool->m_item));
+            g_signal_connect(bin_child, "button_press_event",
                 G_CALLBACK(button_press_event), tool);
-            g_signal_connect(tool->m_item, "enter_notify_event",
+            g_signal_connect(bin_child, "enter_notify_event",
                 G_CALLBACK(enter_notify_event), tool);
-            g_signal_connect(tool->m_item, "leave_notify_event",
+            g_signal_connect(bin_child, "leave_notify_event",
                 G_CALLBACK(enter_notify_event), tool);
 
             if (tool->GetKind() == wxITEM_DROPDOWN)
