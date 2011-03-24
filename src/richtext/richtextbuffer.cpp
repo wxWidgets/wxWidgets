@@ -9531,8 +9531,13 @@ inline int wxRichTextHexToDec(const wxChar* buf)
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
-    const int bufSize = 512;
-    char buf[bufSize+1];
+    if (m_dataSize == 0)
+        return true;
+
+    int bufSize = 100000;
+    if (int(m_dataSize+1) < bufSize)
+        bufSize = m_dataSize+1;
+    char* buf = new char[bufSize+1];
 
     int left = m_dataSize;
     int n, i, j;
@@ -9558,6 +9563,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
         buf[n] = 0;
         stream.Write((const char*) buf, n);
     }
+    delete[] buf;
     return true;
 }
 
