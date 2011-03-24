@@ -51,6 +51,11 @@ void wxPanel::DoSetBackgroundBitmap(const wxBitmap& bmp)
 {
     delete m_backgroundBrush;
     m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : NULL;
+
+    // Our transparent children should use our background if we have it,
+    // otherwise try to restore m_inheritBgCol to some reasonable value: true
+    // if we also have non-default background colour or false otherwise.
+    m_inheritBgCol = bmp.IsOk() || UseBgCol();
 }
 
 WXHBRUSH wxPanel::MSWGetCustomBgBrush()
