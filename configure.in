@@ -3101,10 +3101,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl disable GTK runtime type checks
         TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -DG_DISABLE_CAST_CHECKS"
 
-        dnl enable useful GTK+ compile-time checks to ease transition to GTK+ 3:
-        GTK_CHECKS_FLAGS="-DGTK_DISABLE_SINGLE_INCLUDES"
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $GTK_CHECKS_FLAGS"
-
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
