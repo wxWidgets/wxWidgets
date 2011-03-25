@@ -10422,7 +10422,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 
     int bufSize = 100000;
     if (int(m_dataSize+1) < bufSize)
-        bufSize = m_dataSize+1;
+        bufSize = m_dataSize;
     char* buf = new char[bufSize+1];
 
     int left = m_dataSize;
