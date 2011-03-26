@@ -410,7 +410,7 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     if (!window) return;
     if (!window->m_wxwindow) return;
-    if (!GTK_WIDGET_DRAWABLE(window->m_wxwindow)) return;
+    if (!gtk_widget_is_drawable(window->m_wxwindow)) return;
 
     gtk_paint_handle
     (

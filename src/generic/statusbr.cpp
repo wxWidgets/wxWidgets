@@ -416,7 +416,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                                                            GDK_WINDOW_EDGE_SOUTH_EAST;
         gtk_paint_resize_grip( m_widget->style,
                             GTKGetDrawingWindow(),
-                            (GtkStateType) GTK_WIDGET_STATE (m_widget),
+                            gtk_widget_get_state(m_widget),
                             NULL,
                             m_widget,
                             "statusbar",

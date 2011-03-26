@@ -80,7 +80,8 @@ extern "C" {
 static void wxgtk_window_set_urgency_hint (GtkWindow *win,
                                            gboolean setting)
 {
-    wxASSERT_MSG( GTK_WIDGET_REALIZED(win), wxT("wxgtk_window_set_urgency_hint: GdkWindow not realized") );
+    wxASSERT_MSG( gtk_widget_get_realized(GTK_WIDGET(win)),
+                  wxT("wxgtk_window_set_urgency_hint: GdkWindow not realized") );
     GdkWindow *window = GTK_WIDGET(win)->window;
     XWMHints *wm_hints;
 
@@ -713,7 +714,7 @@ bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
     else
         m_gdkFunc &= ~GDK_FUNC_CLOSE;
 
-    if (GTK_WIDGET_REALIZED(m_widget) && (m_widget->window))
+    if (gtk_widget_get_realized(m_widget) && (m_widget->window))
         gdk_window_set_functions( m_widget->window, (GdkWMFunction)m_gdkFunc );
 
     return true;
@@ -820,7 +821,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
-        deferShow = m_deferShowAllowed && !GTK_WIDGET_REALIZED(m_widget);
+        deferShow = m_deferShowAllowed && !gtk_widget_get_realized(m_widget);
         if (deferShow)
         {
             deferShow = g_signal_handler_find(m_widget,
@@ -889,7 +890,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         return true;
     }
 
-    if (show && !GTK_WIDGET_REALIZED(m_widget))
+    if (show && !gtk_widget_get_realized(m_widget))
     {
         // size_allocate signals occur in reverse order (bottom to top).
         // Things work better if the initial wxSizeEvents are sent (from the
@@ -1194,7 +1195,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     // Setting icons before window is realized can cause a GTK assertion if
     // another TLW is realized before this one, and it has this one as it's
     // transient parent. The life demo exibits this problem.
-    if (GTK_WIDGET_REALIZED(m_widget))
+    if (gtk_widget_get_realized(m_widget))
     {
         GList* list = NULL;
         for (size_t i = icons.GetIconCount(); i--;)
@@ -1295,7 +1296,7 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
-    if ( GTK_WIDGET_REALIZED(m_widget) )
+    if ( gtk_widget_get_realized(m_widget) )
     {
         if ( m_wxwindow )
             do_shape_combine_region(m_wxwindow->window, region);
@@ -1334,7 +1335,7 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
 
     m_urgency_hint = -2;
 
-    if( GTK_WIDGET_REALIZED(m_widget) && !IsActive() )
+    if( gtk_widget_get_realized(m_widget) && !IsActive() )
     {
         new_hint_value = true;
 

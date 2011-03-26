@@ -295,7 +295,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
         wxCHECK_RET(widget, "DC needs a widget");
 
         m_gdkwindow = widget->window;
-        if (GTK_WIDGET_NO_WINDOW(widget))
+        if (!gtk_widget_get_has_window(widget))
             SetDeviceLocalOrigin(widget->allocation.x, widget->allocation.y);
     }
 

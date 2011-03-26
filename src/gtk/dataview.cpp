@@ -3028,7 +3028,7 @@ void wxDataViewColumn::OnInternalIdle()
     if (m_isConnected)
         return;
 
-    if (GTK_WIDGET_REALIZED(GetOwner()->m_treeview))
+    if (gtk_widget_get_realized(GetOwner()->m_treeview))
     {
         GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
         if (column->button)
@@ -4244,7 +4244,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem
 static void
 wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wxDataViewCtrl *dv )
 {
-    if (!GTK_WIDGET_REALIZED(dv->m_widget))
+    if (!gtk_widget_get_realized(dv->m_widget))
         return;
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
@@ -4326,7 +4326,7 @@ void wxDataViewCtrl::AddChildGTK(wxWindowGTK* child)
     GtkWidget* treeview = GtkGetTreeView();
 
     // Insert widget in GtkTreeView
-    if (GTK_WIDGET_REALIZED(treeview))
+    if (gtk_widget_get_realized(treeview))
         gtk_widget_set_parent_window( child->m_widget,
           gtk_tree_view_get_bin_window( GTK_TREE_VIEW(treeview) ) );
     gtk_widget_set_parent( child->m_widget, treeview );

@@ -689,7 +689,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         gtk_widget_add_events( GTK_WIDGET(m_text), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK );
 
-        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+        gtk_widget_set_can_focus(m_widget, FALSE);
     }
     else
     {

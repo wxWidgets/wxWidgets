@@ -1618,7 +1618,7 @@ window_scroll_event_hscrollbar(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* 
     GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Horz];
     if (!range) return FALSE;
 
-    if (range && GTK_WIDGET_VISIBLE (range))
+    if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
         GtkAdjustment *adj = range->adjustment;
         gdouble delta = adj->step_increment * 3;
@@ -1661,7 +1661,7 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
     if (!range) return FALSE;
 
-    if (range && GTK_WIDGET_VISIBLE (range))
+    if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
         GtkAdjustment *adj = range->adjustment;
         gdouble delta = adj->step_increment * 3;
@@ -2539,7 +2539,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         int bottom_border = 0;
 
         /* the default button has a border around it */
-        if (GTK_WIDGET_CAN_DEFAULT(m_widget))
+        if (gtk_widget_get_can_default(m_widget))
         {
             GtkBorder *default_border = NULL;
             gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
@@ -2583,7 +2583,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
 bool wxWindowGTK::GTKShowFromOnIdle()
 {
-    if (IsShown() && m_showOnIdle && !GTK_WIDGET_VISIBLE (m_widget))
+    if (IsShown() && m_showOnIdle && !gtk_widget_get_visible (m_widget))
     {
         GtkAllocation alloc;
         alloc.x = m_x;
@@ -2780,7 +2780,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 
     if (!m_wxwindow)
     {
-        if (GTK_WIDGET_NO_WINDOW (m_widget))
+        if (!gtk_widget_get_has_window(m_widget))
         {
             org_x += m_widget->allocation.x;
             org_y += m_widget->allocation.y;
@@ -2817,7 +2817,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 
     if (!m_wxwindow)
     {
-        if (GTK_WIDGET_NO_WINDOW (m_widget))
+        if (!gtk_widget_get_has_window(m_widget))
         {
             org_x += m_widget->allocation.x;
             org_y += m_widget->allocation.y;
@@ -3174,7 +3174,7 @@ void wxWindowGTK::SetFocus()
     GtkWidget *widget = m_wxwindow ? m_wxwindow : m_focusWidget;
 
     if ( GTK_IS_CONTAINER(widget) &&
-         !GTK_WIDGET_CAN_FOCUS(widget) )
+         !gtk_widget_get_can_focus(widget) )
     {
         wxLogTrace(TRACE_FOCUS,
                    wxT("Setting focus to a child of %s(%p, %s)"),
@@ -3192,17 +3192,11 @@ void wxWindowGTK::SetFocus()
 
 void wxWindowGTK::SetCanFocus(bool canFocus)
 {
-    if ( canFocus )
-        GTK_WIDGET_SET_FLAGS(m_widget, GTK_CAN_FOCUS);
-    else
-        GTK_WIDGET_UNSET_FLAGS(m_widget, GTK_CAN_FOCUS);
+    gtk_widget_set_can_focus(m_widget, canFocus);
 
     if ( m_wxwindow && (m_widget != m_wxwindow) )
     {
-        if ( canFocus )
-            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
-        else
-            GTK_WIDGET_UNSET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
+        gtk_widget_set_can_focus(m_wxwindow, canFocus);
     }
 }
 
@@ -3227,7 +3221,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     if (newParent)
     {
-        if (GTK_WIDGET_VISIBLE (newParent->m_widget))
+        if (gtk_widget_get_visible (newParent->m_widget))
         {
             m_showOnIdle = true;
             gtk_widget_hide( m_widget );
@@ -3393,10 +3387,10 @@ void wxWindowGTK::RealizeTabOrder()
                         // widget than m_widget, so if the main widget isn't
                         // focusable try the connect widget
                         GtkWidget* w = win->m_widget;
-                        if ( !GTK_WIDGET_CAN_FOCUS(w) )
+                        if ( !gtk_widget_get_can_focus(w) )
                         {
                             w = win->GetConnectWidget();
-                            if ( !GTK_WIDGET_CAN_FOCUS(w) )
+                            if ( !gtk_widget_get_can_focus(w) )
                                 w = NULL;
                         }
 
@@ -3583,7 +3577,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
         // Just return if the widget or one of its ancestors isn't mapped
         GtkWidget *w;
         for (w = m_wxwindow; w != NULL; w = w->parent)
-            if (!GTK_WIDGET_MAPPED (w))
+            if (!gtk_widget_get_mapped (w))
                 return;
 
         GdkWindow* window = GTKGetDrawingWindow();
@@ -3606,7 +3600,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
 
 void wxWindowGTK::Update()
 {
-    if (m_widget && GTK_WIDGET_MAPPED(m_widget))
+    if (m_widget && gtk_widget_get_mapped(m_widget))
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
         // Flush everything out to the server, and wait for it to finish.
@@ -3709,7 +3703,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                 if (!parent)
                     parent = (wxWindow*)this;
 
-                if (GTK_WIDGET_MAPPED(parent->m_widget))
+                if (gtk_widget_get_mapped(parent->m_widget))
                 {
                     wxRegionIterator upd( m_nativeUpdateRegion );
                     while (upd)
@@ -3722,7 +3716,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 
                         gtk_paint_flat_box( parent->m_widget->style,
                                     GTKGetDrawingWindow(),
-                                    (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
+                                    (GtkStateType)gtk_widget_get_state(m_wxwindow),
                                     GTK_SHADOW_NONE,
                                     &rect,
                                     parent->m_widget,
@@ -3767,7 +3761,7 @@ void wxWindowGTK::SetDoubleBuffered( bool on )
 
 bool wxWindowGTK::IsDoubleBuffered() const
 {
-    return GTK_WIDGET_DOUBLE_BUFFERED( m_wxwindow );
+    return gtk_widget_get_double_buffered( m_wxwindow );
 }
 
 void wxWindowGTK::ClearBackground()
@@ -4449,8 +4443,8 @@ extern "C"
 // is realized (and so can be frozen):
 static void wx_frozen_widget_realize(GtkWidget* w, wxWindowGTK* win)
 {
-    wxASSERT( w && !GTK_WIDGET_NO_WINDOW(w) );
-    wxASSERT( GTK_WIDGET_REALIZED(w) );
+    wxASSERT( w && gtk_widget_get_has_window(w) );
+    wxASSERT( gtk_widget_get_realized(w) );
 
     g_signal_handlers_disconnect_by_func
     (
@@ -4469,10 +4463,10 @@ static void wx_frozen_widget_realize(GtkWidget* w, wxWindowGTK* win)
 
 void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
 {
-    if ( !w || GTK_WIDGET_NO_WINDOW(w) )
+    if ( !w || !gtk_widget_get_has_window(w) )
         return; // window-less widget, cannot be frozen
 
-    if ( !GTK_WIDGET_REALIZED(w) )
+    if ( !gtk_widget_get_realized(w) )
     {
         // we can't thaw unrealized widgets because they don't have GdkWindow,
         // so set it up to be done immediately after realization:
@@ -4494,10 +4488,10 @@ void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
 
 void wxWindowGTK::GTKThawWidget(GtkWidget *w)
 {
-    if ( !w || GTK_WIDGET_NO_WINDOW(w) )
+    if ( !w || !gtk_widget_get_has_window(w) )
         return; // window-less widget, cannot be frozen
 
-    if ( !GTK_WIDGET_REALIZED(w) )
+    if ( !gtk_widget_get_realized(w) )
     {
         // the widget wasn't realized yet, no need to thaw
         g_signal_handlers_disconnect_by_func

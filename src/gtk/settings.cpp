@@ -316,7 +316,7 @@ static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
     GdkWindow *window = NULL;
-    if(win && GTK_WIDGET_REALIZED(win->GetHandle()))
+    if(win && gtk_widget_get_realized(win->GetHandle()))
         window = win->GetHandle()->window;
 
     switch (index)

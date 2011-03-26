@@ -83,7 +83,7 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 {
     /* the default button has a border around it */
     wxWindow* parent = win->GetParent();
-    if (parent && parent->m_wxwindow && GTK_WIDGET_CAN_DEFAULT(widget))
+    if (parent && parent->m_wxwindow && gtk_widget_get_can_default(widget))
     {
         GtkBorder* border = NULL;
         gtk_widget_style_get(widget, "default_border", &border, NULL);
@@ -181,7 +181,7 @@ wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+    gtk_widget_set_can_default(m_widget, TRUE);
     gtk_widget_grab_default( m_widget );
 
     // resize for default border
@@ -349,11 +349,11 @@ wxSize wxButton::DoGetBestSize() const
     // extra border around it, but we don't want to take it into account in
     // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
-    const bool isDefault = GTK_WIDGET_HAS_DEFAULT(m_widget);
+    const bool isDefault = gtk_widget_has_default(m_widget);
     if ( isDefault )
     {
         // temporarily unset default flag
-        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+        gtk_widget_set_can_default(m_widget, FALSE);
     }
 
     wxSize ret( wxControl::DoGetBestSize() );
@@ -361,7 +361,7 @@ wxSize wxButton::DoGetBestSize() const
     if ( isDefault )
     {
         // set it back again
-        GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+        gtk_widget_set_can_default(m_widget, TRUE);
     }
 
     if (!HasFlag(wxBU_EXACTFIT))
