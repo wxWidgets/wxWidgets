@@ -115,7 +115,7 @@
 #if !GTK_CHECK_VERSION(2,18,0)
     inline GtkStateType wx_gtk_widget_get_state(GtkWidget *widget)
     {
-        return GTK_WIDGET_STATE(widget);
+        return (GtkStateType)GTK_WIDGET_STATE(widget);
     }
     #define gtk_widget_get_state wx_gtk_widget_get_state
 #endif
