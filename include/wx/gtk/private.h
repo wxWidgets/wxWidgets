@@ -15,7 +15,7 @@
 #include <gtk/gtk.h>
 
 #include "wx/gtk/private/string.h"
-#include "wx/gtk/private/compat.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // pango_version_check symbol is quite recent ATM (4/2007)... so we
 // use our own wrapper which implements a smart trick.
