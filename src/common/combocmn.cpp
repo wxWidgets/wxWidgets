@@ -2089,7 +2089,34 @@ void wxComboCtrlBase::DestroyPopup()
 
     wxDELETE(m_popupEvtHandler);
 
-    wxDELETE(m_popupInterface);
+    if ( m_popupInterface )
+    {
+        // Here we make sure that the popup control's Destroy() gets called.
+        // This is necessary for the wxPersistentWindow to work properly.
+        wxWindow* popupCtrl = m_popupInterface->GetControl();
+        if ( popupCtrl )
+        {
+            // While all wxComboCtrl examples have m_popupInterface and
+            // popupCtrl as the same class (that will be deleted via the
+            // Destroy() call below), it is technically still possible to
+            // have implementations where they are in fact not same
+            // multiple-inherited class. Here we use C++ RTTI to check for
+            // this rare case.
+          #ifndef wxNO_RTTI
+            // It is probably better to delete m_popupInterface first, so
+            // that it retains access to its popup control window.
+            if ( dynamic_cast<void*>(m_popupInterface) !=
+                 dynamic_cast<void*>(popupCtrl) )
+                delete m_popupInterface;
+          #endif
+            popupCtrl->Destroy();
+        }
+        else
+        {
+            delete m_popupInterface;
+        }
+        m_popupInterface = NULL;
+    }
 
     if ( m_winPopup )
     {
