@@ -1612,11 +1612,7 @@ window_scroll_event_hscrollbar(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* 
         return false;
     }
 
-    wxMouseEvent event(wxEVT_MOUSEWHEEL);
-    InitMouseEvent(win, event, gdk_event);
-
     GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Horz];
-    if (!range) return FALSE;
 
     if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
@@ -1659,7 +1655,6 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
       return TRUE;
 
     GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
-    if (!range) return FALSE;
 
     if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
