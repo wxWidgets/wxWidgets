@@ -325,7 +325,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     if (win->HasFlag(wxBORDER_SIMPLE))
     {
         gdk_draw_rectangle(gdk_event->window,
-            widget->style->black_gc, false, x, y, w - 1, h - 1);
+            gtk_widget_get_style(widget)->black_gc, false, x, y, w - 1, h - 1);
     }
     else
     {
@@ -343,7 +343,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
             detail = "viewport";
 
         gtk_paint_shadow(
-           win->m_wxwindow->style, gdk_event->window, GTK_STATE_NORMAL,
+           gtk_widget_get_style(win->m_wxwindow), gdk_event->window, GTK_STATE_NORMAL,
            shadow, NULL, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
     }
     return false;
@@ -363,9 +363,10 @@ parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
         g_signal_handlers_disconnect_by_func(
             old_parent, (void*)expose_event_border, win);
     }
-    if (widget->parent)
+    GtkWidget* parent = gtk_widget_get_parent(widget);
+    if (parent)
     {
-        g_signal_connect_after(widget->parent, "expose_event",
+        g_signal_connect_after(parent, "expose_event",
             G_CALLBACK(expose_event_border), win);
     }
 }
@@ -1616,7 +1617,7 @@ window_scroll_event_hscrollbar(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* 
 
     if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
-        GtkAdjustment *adj = range->adjustment;
+        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         gdouble delta = adj->step_increment * 3;
         if (gdk_event->direction == GDK_SCROLL_LEFT)
             delta = -delta;
@@ -1658,10 +1659,10 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
     if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
-        GtkAdjustment *adj = range->adjustment;
+        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         gdouble delta = adj->step_increment * 3;
         if (gdk_event->direction == GDK_SCROLL_UP)
-          delta = -delta;
+            delta = -delta;
 
         gdouble new_value = CLAMP (adj->value + delta, adj->lower, adj->upper - adj->page_size);
 
@@ -3210,7 +3211,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
     if (oldParent)
-        gtk_container_remove( GTK_CONTAINER(m_widget->parent), m_widget );
+        gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(m_widget)), m_widget);
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
@@ -3527,14 +3528,14 @@ bool wxWindowGTK::DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units)
     GtkRange* range = m_scrollBar[dir];
     if ( range && units )
     {
-        GtkAdjustment* adj = range->adjustment;
+        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         gdouble inc = unit == ScrollUnit_Line ? adj->step_increment
                                               : adj->page_increment;
 
-        const int posOld = int(adj->value + 0.5);
+        const int posOld = int(gtk_adjustment_get_value(adj) + 0.5);
         gtk_range_set_value(range, posOld + units*inc);
 
-        changed = int(adj->value + 0.5) != posOld;
+        changed = int(gtk_adjustment_get_value(adj) + 0.5) != posOld;
     }
 
     return changed;
@@ -3571,7 +3572,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
     {
         // Just return if the widget or one of its ancestors isn't mapped
         GtkWidget *w;
-        for (w = m_wxwindow; w != NULL; w = w->parent)
+        for (w = m_wxwindow; w != NULL; w = gtk_widget_get_parent(w))
             if (!gtk_widget_get_mapped (w))
                 return;
 
@@ -3709,7 +3710,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                         rect.width = upd.GetWidth();
                         rect.height = upd.GetHeight();
 
-                        gtk_paint_flat_box( parent->m_widget->style,
+                        gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),
                                     GTKGetDrawingWindow(),
                                     (GtkStateType)gtk_widget_get_state(m_wxwindow),
                                     GTK_SHADOW_NONE,
@@ -3906,7 +3907,7 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
     if ( style )
     {
         DoApplyWidgetStyle(style);
-        gtk_rc_style_unref(style);
+        g_object_unref(style);
     }
 
     // Style change may affect GTK+'s size calculation:
