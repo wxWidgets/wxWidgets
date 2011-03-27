@@ -4203,16 +4203,15 @@ void wxWindowGTK::SetScrollbar(int orient,
     }
 
     GtkAdjustment * const adj = sb->adjustment;
-    adj->step_increment = 1;
-    adj->page_increment =
     adj->page_size = thumbVisible;
-    adj->value = pos;
 
     g_signal_handlers_block_by_func(
         sb, (void*)gtk_scrollbar_value_changed, this);
 
+    gtk_range_set_increments(sb, 1, thumbVisible);
     gtk_range_set_range(sb, 0, range);
-    m_scrollPos[dir] = sb->adjustment->value;
+    gtk_range_set_value(sb, pos);
+    m_scrollPos[dir] = gtk_range_get_value(sb);
 
     g_signal_handlers_unblock_by_func(
         sb, (void*)gtk_scrollbar_value_changed, this);
@@ -4232,7 +4231,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
             sb, (void*)gtk_scrollbar_value_changed, this);
 
         gtk_range_set_value(sb, pos);
-        m_scrollPos[dir] = sb->adjustment->value;
+        m_scrollPos[dir] = gtk_range_get_value(sb);
 
         g_signal_handlers_unblock_by_func(
             sb, (void*)gtk_scrollbar_value_changed, this);
@@ -4252,7 +4251,7 @@ int wxWindowGTK::GetScrollPos( int orient ) const
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
     wxCHECK_MSG( sb, 0, wxT("this window is not scrollable") );
 
-    return wxRound(sb->adjustment->value);
+    return wxRound(gtk_range_get_value(sb));
 }
 
 int wxWindowGTK::GetScrollRange( int orient ) const
@@ -4277,16 +4276,15 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
     wxASSERT(range == m_scrollBar[0] || range == m_scrollBar[1]);
 
     const int barIndex = range == m_scrollBar[1];
-    GtkAdjustment* adj = range->adjustment;
 
-    const int value = wxRound(adj->value);
+    const double value = gtk_range_get_value(range);
 
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
-    m_scrollPos[barIndex] = adj->value;
+    m_scrollPos[barIndex] = value;
     // If event should be ignored, or integral position has not changed
-    if (!m_hasVMT || g_blockEventsOnDrag || value == wxRound(oldPos))
+    if (!m_hasVMT || g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos))
     {
         return wxEVT_NULL;
     }
@@ -4295,9 +4293,10 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
     if (!m_isScrolling)
     {
         // Difference from last change event
-        const double diff = adj->value - oldPos;
+        const double diff = value - oldPos;
         const bool isDown = diff > 0;
 
+        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         if (IsScrollIncrement(adj->step_increment, diff))
         {
             eventType = isDown ? wxEVT_SCROLL_LINEDOWN : wxEVT_SCROLL_LINEUP;
