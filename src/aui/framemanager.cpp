@@ -223,6 +223,7 @@ END_EVENT_TABLE()
   // __WXGTK20__
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 static void
 gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )
@@ -237,7 +238,7 @@ gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )
                     if ((j*16+8)<amount)
                         region.Union(0, y, disp.x, 1);
                 }
-        gdk_window_shape_combine_region(m_widget->window, region.GetRegion(), 0, 0);
+        gdk_window_shape_combine_region(gtk_widget_get_window(m_widget), region.GetRegion(), 0, 0);
 }
 
 

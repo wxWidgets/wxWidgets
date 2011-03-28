@@ -580,6 +580,18 @@ gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 }
 
 //-----------------------------------------------------------------------------
+//  "mark_set"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void mark_set(GtkTextBuffer*, GtkTextIter*, GtkTextMark* mark, GSList** markList)
+{
+    if (gtk_text_mark_get_name(mark) == NULL)
+        *markList = g_slist_prepend(*markList, mark);
+}
+}
+
+//-----------------------------------------------------------------------------
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
@@ -620,10 +632,13 @@ void wxTextCtrl::Init()
 
     m_text = NULL;
     m_showPositionOnThaw = NULL;
+    m_anonymousMarkList = NULL;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
+    if (m_anonymousMarkList)
+        g_slist_free(m_anonymousMarkList);
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -660,10 +675,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if (multi_line)
     {
+        m_buffer = gtk_text_buffer_new(NULL);
+        gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         // Create view
-        m_text = gtk_text_view_new();
-
-        m_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        m_text = gtk_text_view_new_with_buffer(m_buffer);
+        // gtk_text_view_set_buffer adds its own reference
+        g_object_unref(m_buffer);
+        g_signal_handler_disconnect(m_buffer, sig_id);
 
         // create "ShowPosition" marker
         GtkTextIter iter;
@@ -678,7 +696,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
                                             ? GTK_POLICY_NEVER
                                             : GTK_POLICY_AUTOMATIC );
         // for ScrollLines/Pages
-        m_scrollBar[1] = (GtkRange*)((GtkScrolledWindow*)m_widget)->vscrollbar;
+        m_scrollBar[1] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(GTK_SCROLLED_WINDOW(m_widget)));
 
         // Insert view into scrolled window
         gtk_container_add( GTK_CONTAINER(m_widget), m_text );
@@ -1082,13 +1100,19 @@ void wxTextCtrl::WriteText( const wxString &text )
     // Insert the text
     wxGtkTextInsert( m_text, m_buffer, m_defaultStyle, buffer );
 
-    GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment( GTK_SCROLLED_WINDOW(m_widget) );
     // Scroll to cursor, but only if scrollbar thumb is at the very bottom
     // won't work when frozen, text view is not using m_buffer then
-    if (!IsFrozen() && wxIsSameDouble(adj->value, adj->upper - adj->page_size))
+    if (!IsFrozen())
     {
-        gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text),
-                gtk_text_buffer_get_insert( m_buffer ), 0.0, FALSE, 0.0, 1.0 );
+        GtkAdjustment* adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
+        const double value = gtk_adjustment_get_value(adj);
+        const double upper = gtk_adjustment_get_upper(adj);
+        const double page_size = gtk_adjustment_get_page_size(adj);
+        if (wxIsSameDouble(value, upper - page_size))
+        {
+            gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(m_text),
+                gtk_text_buffer_get_insert(m_buffer), 0, false, 0, 1);
+        }
     }
 }
 
@@ -1141,7 +1165,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     }
     else // single line control
     {
-        if ( pos <= GTK_ENTRY(m_text)->text_length )
+        if (pos <= gtk_entry_get_text_length(GTK_ENTRY(m_text)))
         {
             if ( y )
                 *y = 0;
@@ -1578,7 +1602,7 @@ GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     }
     else
     {
-        return GTK_ENTRY(m_text)->text_area;
+        return gtk_entry_get_text_window(GTK_ENTRY(m_text));
     }
 }
 
@@ -1804,16 +1828,24 @@ void wxTextCtrl::DoFreeze()
         // removing buffer dramatically speeds up insertion:
         g_object_ref(m_buffer);
         GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
-        GtkTextMark* mark = GTK_TEXT_VIEW(m_text)->first_para_mark;
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
         // gtk_text_view_set_buffer adds its own reference
         g_object_unref(buf_new);
-        // This mark should be deleted when the buffer is changed,
-        // but it's not (in GTK+ up to at least 2.10.6).
+        // These marks should be deleted when the buffer is changed,
+        // but they are not (in GTK+ up to at least 3.0.1).
         // Otherwise these anonymous marks start to build up in the buffer,
         // and Freeze takes longer and longer each time it is called.
-        if (GTK_IS_TEXT_MARK(mark) && !gtk_text_mark_get_deleted(mark))
-            gtk_text_buffer_delete_mark(m_buffer, mark);
+        if (m_anonymousMarkList)
+        {
+            for (GSList* item = m_anonymousMarkList; item; item = item->next)
+            {
+                GtkTextMark* mark = static_cast<GtkTextMark*>(item->data);
+                if (GTK_IS_TEXT_MARK(mark) && !gtk_text_mark_get_deleted(mark))
+                    gtk_text_buffer_delete_mark(m_buffer, mark);
+            }
+            g_slist_free(m_anonymousMarkList);
+            m_anonymousMarkList = NULL;
+        }
     }
 }
 
@@ -1822,8 +1854,10 @@ void wxTextCtrl::DoThaw()
     if ( HasFlag(wxTE_MULTILINE) )
     {
         // reattach buffer:
+        gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
         g_object_unref(m_buffer);
+        g_signal_handler_disconnect(m_buffer, sig_id);
 
         if (m_showPositionOnThaw != NULL)
         {

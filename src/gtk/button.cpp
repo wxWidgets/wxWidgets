@@ -287,7 +287,7 @@ bool wxButton::Enable( bool enable )
     if (!base_type::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+    gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
     if (enable)
         GTKFixSensitivity();
@@ -304,18 +304,21 @@ GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 GtkLabel *wxButton::GTKGetLabel() const
 {
-    GtkWidget *child = GTK_BIN(m_widget)->child;
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     if ( GTK_IS_ALIGNMENT(child) )
     {
-        GtkWidget *box = GTK_BIN(child)->child;
-        for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+        GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
+        GtkLabel* label = NULL;
+        GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+        for (GList* item = list; item; item = item->next)
         {
             GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
             if ( GTK_IS_LABEL(boxChild->widget) )
-                return GTK_LABEL(boxChild->widget);
+                label = GTK_LABEL(boxChild->widget);
         }
+        g_list_free(list);
 
-        return NULL;
+        return label;
     }
 
     return GTK_LABEL(child);
@@ -324,21 +327,23 @@ GtkLabel *wxButton::GTKGetLabel() const
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    GtkWidget *child = GTK_BIN(m_widget)->child;
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     gtk_widget_modify_style(child, style);
 
     // for buttons with images, the path to the label is (at least in 2.12)
     // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
     if ( GTK_IS_ALIGNMENT(child) )
     {
-        GtkWidget *box = GTK_BIN(child)->child;
+        GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         if ( GTK_IS_BOX(box) )
         {
-            for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+            GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+            for (GList* item = list; item; item = item->next)
             {
                 GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
                 gtk_widget_modify_style(boxChild->widget, style);
             }
+            g_list_free(list);
         }
     }
 }
@@ -460,7 +465,7 @@ void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
     GtkWidget *image;
     if ( DontShowLabel() )
     {
-        image = GTK_BIN(m_widget)->child;
+        image = gtk_bin_get_child(GTK_BIN(m_widget));
     }
     else // have both label and bitmap
     {

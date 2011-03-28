@@ -55,6 +55,15 @@ static inline gpointer wx_g_object_ref_sink(gpointer object)
 #define g_object_ref_sink wx_g_object_ref_sink
 
 // ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 2.12
+
+static inline void wx_gtk_about_dialog_set_program_name(GtkAboutDialog* about, const gchar* name)
+{
+    gtk_about_dialog_set_name(about, name);
+}
+#define gtk_about_dialog_set_program_name wx_gtk_about_dialog_set_program_name
+
+// ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.14
 
 static inline gdouble wx_gtk_adjustment_get_lower(GtkAdjustment* adjustment)
@@ -87,6 +96,12 @@ static inline gdouble wx_gtk_adjustment_get_upper(GtkAdjustment* adjustment)
 }
 #define gtk_adjustment_get_upper wx_gtk_adjustment_get_upper
 
+static inline void wx_gtk_adjustment_set_page_size(GtkAdjustment* adjustment, gdouble page_size)
+{
+    adjustment->page_size = page_size;
+}
+#define gtk_adjustment_set_page_size wx_gtk_adjustment_set_page_size
+
 static inline GtkWidget* wx_gtk_color_selection_dialog_get_color_selection(GtkColorSelectionDialog* csd)
 {
     return csd->colorsel;
@@ -105,6 +120,12 @@ static inline GtkWidget* wx_gtk_dialog_get_action_area(GtkDialog* dialog)
 }
 #define gtk_dialog_get_action_area wx_gtk_dialog_get_action_area
 
+static inline guint16 wx_gtk_entry_get_text_length(GtkEntry* entry)
+{
+    return entry->text_length;
+}
+#define gtk_entry_get_text_length wx_gtk_entry_get_text_length
+
 static inline GtkWidget* wx_gtk_font_selection_dialog_get_cancel_button(GtkFontSelectionDialog* fsd)
 {
     return fsd->cancel_button;
@@ -116,6 +137,12 @@ static inline GtkWidget* wx_gtk_font_selection_dialog_get_ok_button(GtkFontSelec
     return fsd->ok_button;
 }
 #define gtk_font_selection_dialog_get_ok_button wx_gtk_font_selection_dialog_get_ok_button
+
+static inline const guchar* wx_gtk_selection_data_get_data(GtkSelectionData* selection_data)
+{
+    return selection_data->data;
+}
+#define gtk_selection_data_get_data wx_gtk_selection_data_get_data
 
 static inline GdkAtom wx_gtk_selection_data_get_data_type(GtkSelectionData* selection_data)
 {
@@ -147,6 +174,12 @@ static inline GdkWindow* wx_gtk_widget_get_window(GtkWidget* widget)
 }
 #define gtk_widget_get_window wx_gtk_widget_get_window
 
+static inline GtkWidget* wx_gtk_window_get_default_widget(GtkWindow* window)
+{
+    return window->default_widget;
+}
+#define gtk_window_get_default_widget wx_gtk_window_get_default_widget
+
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.16
 
@@ -158,6 +191,20 @@ static inline GdkAtom wx_gtk_selection_data_get_selection(GtkSelectionData* sele
 
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.18
+
+static inline void wx_gtk_cell_renderer_get_alignment(GtkCellRenderer* cell, gfloat* xalign, gfloat* yalign)
+{
+    *xalign = cell->xalign;
+    *yalign = cell->yalign;
+}
+#define gtk_cell_renderer_get_alignment wx_gtk_cell_renderer_get_alignment
+
+static inline void wx_gtk_cell_renderer_get_padding(GtkCellRenderer* cell, gint* xpad, gint* ypad)
+{
+    *xpad = cell->xpad;
+    *ypad = cell->ypad;
+}
+#define gtk_cell_renderer_get_padding wx_gtk_cell_renderer_get_padding
 
 static inline void wx_gtk_widget_get_allocation(GtkWidget* widget, GtkAllocation* allocation)
 {
@@ -279,6 +326,12 @@ inline gboolean wx_gtk_widget_get_mapped(GtkWidget *widget)
     return GTK_WIDGET_MAPPED(widget);
 }
 #define gtk_widget_get_mapped wx_gtk_widget_get_mapped
+
+static inline void wx_gtk_widget_get_requisition(GtkWidget* widget, GtkRequisition* requisition)
+{
+    *requisition = widget->requisition;
+}
+#define gtk_widget_get_requisition wx_gtk_widget_get_requisition
 
 static inline GdkWindow* wx_gtk_entry_get_text_window(GtkEntry* entry)
 {

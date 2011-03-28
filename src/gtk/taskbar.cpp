@@ -180,7 +180,7 @@ void wxTaskBarIcon::Private::SetIcon()
         m_size = 0;
         if (m_eggTrayIcon)
         {
-            GtkWidget* image = GTK_BIN(m_eggTrayIcon)->child;
+            GtkWidget* image = gtk_bin_get_child(GTK_BIN(m_eggTrayIcon));
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), m_bitmap.GetPixbuf());
         }
         else
@@ -207,10 +207,22 @@ void wxTaskBarIcon::Private::SetIcon()
 
 #if GTK_CHECK_VERSION(2,10,0)
     if (m_statusIcon)
-        gtk_status_icon_set_tooltip(m_statusIcon, tip_text);
-    else
-#endif
     {
+#if GTK_CHECK_VERSION(2,16,0)
+        if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,16,0) == NULL)
+            gtk_status_icon_set_tooltip_text(m_statusIcon, tip_text);
+        else
+#endif
+        {
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+            gtk_status_icon_set_tooltip(m_statusIcon, tip_text);
+#endif
+        }
+    }
+    else
+#endif // GTK_CHECK_VERSION(2,10,0)
+    {
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
         if (tip_text && m_tooltips == NULL)
         {
             m_tooltips = gtk_tooltips_new();
@@ -219,6 +231,7 @@ void wxTaskBarIcon::Private::SetIcon()
         }
         if (m_tooltips)
             gtk_tooltips_set_tip(m_tooltips, m_eggTrayIcon, tip_text, "");
+#endif
     }
 #endif // wxUSE_TOOLTIPS
 }
@@ -240,7 +253,7 @@ void wxTaskBarIcon::Private::size_allocate(int width, int height)
         if (h > size) h = size;
         GdkPixbuf* pixbuf =
             gdk_pixbuf_scale_simple(m_bitmap.GetPixbuf(), w, h, GDK_INTERP_BILINEAR);
-        GtkImage* image = GTK_IMAGE(GTK_BIN(m_eggTrayIcon)->child);
+        GtkImage* image = GTK_IMAGE(gtk_bin_get_child(GTK_BIN(m_eggTrayIcon)));
         gtk_image_set_from_pixbuf(image, pixbuf);
         g_object_unref(pixbuf);
     }

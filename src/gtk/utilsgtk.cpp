@@ -100,7 +100,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_drawable_get_visual( wxGetRootWindow()->window )->depth;
+    return gtk_widget_get_visual(wxGetRootWindow())->depth;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -186,31 +186,25 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 // ----------------------------------------------------------------------------
 
 extern "C" {
-static
-void GTK_EndProcessDetector(gpointer data, gint source,
-                            GdkInputCondition WXUNUSED(condition))
+static gboolean EndProcessDetector(GIOChannel* source, GIOCondition, void* data)
 {
     wxEndProcessData * const
         proc_data = static_cast<wxEndProcessData *>(data);
 
     // child exited, end waiting
-    close(source);
-
-    // don't call us again!
-    gdk_input_remove(proc_data->tag);
+    close(g_io_channel_unix_get_fd(source));
 
     wxHandleProcessTermination(proc_data);
+
+    // don't call us again!
+    return false;
 }
 }
 
 int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-    int tag = gdk_input_add(fd,
-                            GDK_INPUT_READ,
-                            GTK_EndProcessDetector,
-                            (gpointer)proc_data);
-
-    return tag;
+    return g_io_add_watch(
+        g_io_channel_unix_new(fd), G_IO_IN, EndProcessDetector, proc_data);
 }
 
 

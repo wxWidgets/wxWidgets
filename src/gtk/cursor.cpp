@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/object.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxCursorRefData
@@ -109,8 +110,10 @@ wxCursor::wxCursor(const char bits[], int width, int height,
     if (hotSpotY < 0 || hotSpotY >= height)
         hotSpotY = 0;
 
-    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits, width, height );
-    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits, width, height);
+    GdkBitmap* data = gdk_bitmap_create_from_data(
+        gtk_widget_get_window(wxGetRootWindow()), const_cast<char*>(bits), width, height);
+    GdkBitmap* mask = gdk_bitmap_create_from_data(
+        gtk_widget_get_window(wxGetRootWindow()), const_cast<char*>(maskBits), width, height);
 
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
@@ -221,7 +224,7 @@ void wxCursor::InitFromImage( const wxImage & image )
     m_refData = new wxCursorRefData;
     wxImage image_copy(image);
 
-    GdkDisplay* display = gdk_drawable_get_display(wxGetRootWindow()->window);
+    GdkDisplay* display = gdk_drawable_get_display(gtk_widget_get_window(wxGetRootWindow()));
     if (gdk_display_supports_cursor_color(display))
     {
         if (!image.HasAlpha())
@@ -257,7 +260,7 @@ void wxCursor::InitFromImage( const wxImage & image )
             char* bits = new char[size];
             memset(bits, 0xff, size);
             maskRaw = gdk_bitmap_create_from_data(
-                wxGetRootWindow()->window, bits, w, h);
+                gtk_widget_get_window(wxGetRootWindow()), bits, w, h);
             delete[] bits;
         }
 
@@ -393,8 +396,12 @@ static void UpdateCursors(const wxWindowList& list, GdkDisplay*& display)
     for (size_t n = list.size(); n--; ++i)
     {
         wxWindow* win = *i;
-        if (display == NULL && win->m_widget && win->m_widget->window)
-            display = gdk_drawable_get_display(win->m_widget->window);
+        if (display == NULL && win->m_widget)
+        {
+            GdkWindow* w = gtk_widget_get_window(win->m_widget);
+            if (w)
+                display = gdk_drawable_get_display(w);
+        }
         win->GTKUpdateCursor(true, false);
         UpdateCursors(win->GetChildren(), display);
     }

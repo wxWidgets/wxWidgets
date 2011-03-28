@@ -493,11 +493,11 @@ static void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable       *s
                                                         gint                   sort_column_id,
                                                         GtkTreeIterCompareFunc func,
                                                         gpointer               data,
-                                                        GtkDestroyNotify       destroy);
+                                                        GDestroyNotify       destroy);
 static void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable       *sortable,
                                                         GtkTreeIterCompareFunc func,
                                                         gpointer               data,
-                                                        GtkDestroyNotify       destroy);
+                                                        GDestroyNotify       destroy);
 static gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable       *sortable);
 
 /* drag'n'drop */
@@ -966,7 +966,7 @@ wxgtk_tree_model_set_sort_func (GtkTreeSortable        *sortable,
                                 gint                    WXUNUSED(sort_column_id),
                                 GtkTreeIterCompareFunc  func,
                                 gpointer                WXUNUSED(data),
-                                GtkDestroyNotify        WXUNUSED(destroy))
+                                GDestroyNotify        WXUNUSED(destroy))
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
     g_return_if_fail (func != NULL);
@@ -976,7 +976,7 @@ static void
 wxgtk_tree_model_set_default_sort_func (GtkTreeSortable          *sortable,
                                         GtkTreeIterCompareFunc    func,
                                         gpointer                  WXUNUSED(data),
-                                        GtkDestroyNotify          WXUNUSED(destroy))
+                                        GDestroyNotify          WXUNUSED(destroy))
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
     g_return_if_fail (func != NULL);
@@ -1333,8 +1333,10 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
-    gint calc_width  = (gint) renderer->xpad * 2 + size.x;
-    gint calc_height = (gint) renderer->ypad * 2 + size.y;
+    int xpad, ypad;
+    gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
+    int calc_width  = xpad * 2 + size.x;
+    int calc_height = ypad * 2 + size.y;
 
     if (x_offset)
         *x_offset = 0;
@@ -1343,17 +1345,17 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     if (cell_area && size.x > 0 && size.y > 0)
     {
+        float xalign, yalign;
+        gtk_cell_renderer_get_alignment(renderer, &xalign, &yalign);
         if (x_offset)
         {
-            *x_offset = (gint)((renderer->xalign *
-                               (cell_area->width - calc_width - 2 * renderer->xpad)));
-            *x_offset = MAX (*x_offset, 0) + renderer->xpad;
+            *x_offset = int(xalign * (cell_area->width - calc_width - 2 * xpad));
+            *x_offset = MAX(*x_offset, 0) + xpad;
         }
         if (y_offset)
         {
-            *y_offset = (gint)((renderer->yalign *
-                               (cell_area->height - calc_height - 2 * renderer->ypad)));
-            *y_offset = MAX (*y_offset, 0) + renderer->ypad;
+            *y_offset = int(yalign * (cell_area->height - calc_height - 2 * ypad));
+            *y_offset = MAX(*y_offset, 0) + ypad;
         }
     }
 
@@ -1381,7 +1383,9 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
                                background_area, expose_area, flags);
 
     wxRect rect(wxRectFromGDKRect(cell_area));
-    rect = rect.Deflate(renderer->xpad, renderer->ypad);
+    int xpad, ypad;
+    gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
+    rect = rect.Deflate(xpad, ypad);
 
     wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
     wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
@@ -1431,8 +1435,10 @@ gtk_wx_cell_renderer_activate(
 
     rect.x += cell_area->x;
     rect.y += cell_area->y;
-    rect.width  -= renderer->xpad * 2;
-    rect.height -= renderer->ypad * 2;
+    int xpad, ypad;
+    gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
+    rect.width  -= xpad * 2;
+    rect.height -= ypad * 2;
 
     wxRect renderrect(wxRectFromGDKRect(&rect));
 
@@ -2303,7 +2309,7 @@ public:
 
         m_context = window->GTKGetPangoDefaultContext();
         m_layout = pango_layout_new( m_context );
-        m_fontdesc = pango_font_description_copy( widget->style->font_desc );
+        m_fontdesc = pango_font_description_copy(gtk_widget_get_style(widget)->font_desc);
 
         m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
 
@@ -2349,6 +2355,7 @@ GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
         // we create it on demand so need to do it even from a const function
         const_cast<wxDataViewCustomRenderer *>(this)->
         m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
+        g_object_ref_sink(m_text_renderer);
     }
 
     return m_text_renderer;
@@ -2406,7 +2413,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
         delete m_dc;
 
     if (m_text_renderer)
-        gtk_object_sink( GTK_OBJECT(m_text_renderer) );
+        g_object_unref(m_text_renderer);
 }
 
 wxDC *wxDataViewCustomRenderer::GetDC()
@@ -3565,21 +3572,22 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
     if ( !item )
         return FALSE;
 
-    if (!m_dragDataObject->IsSupported( selection_data->target ))
+    GdkAtom target = gtk_selection_data_get_target(selection_data);
+    if (!m_dragDataObject->IsSupported(target))
         return FALSE;
 
-    size_t size = m_dragDataObject->GetDataSize( selection_data->target );
+    size_t size = m_dragDataObject->GetDataSize(target);
     if (size == 0)
         return FALSE;
 
     void *buf = malloc( size );
 
     gboolean res = FALSE;
-    if (m_dragDataObject->GetDataHere( selection_data->target, buf ))
+    if (m_dragDataObject->GetDataHere(target, buf))
     {
         res = TRUE;
 
-        gtk_selection_data_set( selection_data, selection_data->target,
+        gtk_selection_data_set(selection_data, target,
             8, (const guchar*) buf, size );
     }
 
@@ -3601,9 +3609,9 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
-    event.SetDataFormat( selection_data->target );
-    event.SetDataSize( selection_data->length );
-    event.SetDataBuffer( selection_data->data );
+    event.SetDataFormat(gtk_selection_data_get_target(selection_data));
+    event.SetDataSize(gtk_selection_data_get_length(selection_data));
+    event.SetDataBuffer(const_cast<guchar*>(gtk_selection_data_get_data(selection_data)));
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
@@ -3626,7 +3634,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
-    event.SetDataFormat( selection_data->target );
+    event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 

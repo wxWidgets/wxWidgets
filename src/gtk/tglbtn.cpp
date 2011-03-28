@@ -132,7 +132,7 @@ void wxBitmapToggleButton::OnSetBitmap()
 {
     if (!m_bitmap.Ok()) return;
 
-    GtkWidget* image = ((GtkBin*)m_widget)->child;
+    GtkWidget* image = gtk_bin_get_child(GTK_BIN(m_widget));
     if (image == NULL)
     {
         image = gtk_image_new();
@@ -151,7 +151,7 @@ bool wxBitmapToggleButton::Enable(bool enable /*=true*/)
     if (!wxControl::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+    gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
     if (!isEnabled && enable)
     {
@@ -164,7 +164,7 @@ bool wxBitmapToggleButton::Enable(bool enable /*=true*/)
 void wxBitmapToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
+    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
 }
 
 GdkWindow *
@@ -267,7 +267,7 @@ bool wxToggleButton::GetValue() const
 {
     wxCHECK_MSG(m_widget != NULL, false, wxT("invalid toggle button"));
 
-    return GTK_TOGGLE_BUTTON(m_widget)->active;
+    return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widget)) != 0;
 }
 
 void wxToggleButton::SetLabel(const wxString& label)
@@ -288,7 +288,7 @@ bool wxToggleButton::Enable(bool enable /*=true*/)
     if (!base_type::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+    gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
     if (enable)
         GTKFixSensitivity();
@@ -299,7 +299,7 @@ bool wxToggleButton::Enable(bool enable /*=true*/)
 void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
+    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
 }
 
 GdkWindow *

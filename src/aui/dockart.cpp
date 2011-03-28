@@ -414,7 +414,7 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     gtk_paint_handle
     (
-        window->m_wxwindow->style,
+        gtk_widget_get_style(window->m_wxwindow),
         window->GTKGetDrawingWindow(),
         // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_STATE_NORMAL,

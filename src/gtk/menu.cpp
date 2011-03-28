@@ -440,7 +440,7 @@ void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
     menu->SetTitle( str );
 
     if (menu->m_owner)
-        gtk_label_set_text_with_mnemonic( GTK_LABEL( GTK_BIN(menu->m_owner)->child), wxGTK_CONV(str) );
+        gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menu->m_owner))), wxGTK_CONV(str));
 }
 
 //-----------------------------------------------------------------------------
@@ -581,7 +581,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
 void wxMenuItem::SetGtkLabel()
 {
     const wxString text = wxConvertMnemonicsToGTK(m_text.BeforeFirst('\t'));
-    GtkLabel* label = GTK_LABEL(GTK_BIN(m_menuItem)->child);
+    GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_menuItem)));
     gtk_label_set_text_with_mnemonic(label, wxGTK_CONV_SYS(text));
 #if wxUSE_ACCEL
     guint accel_key;
@@ -640,7 +640,7 @@ bool wxMenuItem::IsChecked() const
     wxCHECK_MSG( IsCheckable(), false,
                  wxT("can't get state of uncheckable item!") );
 
-    return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
+    return gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(m_menuItem)) != 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -682,8 +682,7 @@ void wxMenu::Init()
     m_menu = gtk_menu_new();
     // NB: keep reference to the menu so that it is not destroyed behind
     //     our back by GTK+ e.g. when it is removed from menubar:
-    g_object_ref(m_menu);
-    gtk_object_sink(GTK_OBJECT(m_menu));
+    g_object_ref_sink(m_menu);
 
     m_owner = NULL;
 

@@ -44,6 +44,7 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
+    #include "wx/gtk/private/gtk2-compat.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/private.h"
 #elif defined(__WXX11__)
@@ -343,7 +344,7 @@ bool wxPopupTransientWindow::Show( bool show )
     {
         gtk_grab_add( m_widget );
 
-        gdk_pointer_grab( m_widget->window, TRUE,
+        gdk_pointer_grab( gtk_widget_get_window(m_widget), true,
                           (GdkEventMask)
                             (GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |

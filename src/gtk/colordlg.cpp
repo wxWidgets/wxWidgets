@@ -69,8 +69,9 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     }
 
 #if !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-    GtkColorSelection *sel =
-        GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
+    GtkColorSelection* sel = GTK_COLOR_SELECTION(
+        gtk_color_selection_dialog_get_color_selection(
+        GTK_COLOR_SELECTION_DIALOG(m_widget)));
     gtk_color_selection_set_has_palette(sel, true);
 #endif // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
@@ -123,8 +124,9 @@ void wxColourDialog::ColourDataToDialog()
 
     hildon_color_chooser_dialog_set_color((HildonColorChooserDialog *)m_widget, &clr);
 #else // !wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-    GtkColorSelection *sel =
-        GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
+    GtkColorSelection* sel = GTK_COLOR_SELECTION(
+        gtk_color_selection_dialog_get_color_selection(
+        GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
     if ( col )
         gtk_color_selection_set_current_color(sel, col);
@@ -176,8 +178,9 @@ void wxColourDialog::DialogToColourData()
     m_data.SetColour(new_color);
 #else // !wxUSE_LIBHILDON2
 
-    GtkColorSelection *sel =
-        GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
+    GtkColorSelection* sel = GTK_COLOR_SELECTION(
+        gtk_color_selection_dialog_get_color_selection(
+        GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
     GdkColor clr;
     gtk_color_selection_get_current_color(sel, &clr);

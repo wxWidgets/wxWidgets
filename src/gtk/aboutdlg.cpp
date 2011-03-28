@@ -126,7 +126,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
             gs_aboutDialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
         GtkAboutDialog * const dlg = gs_aboutDialog;
-        gtk_about_dialog_set_name(dlg, wxGTK_CONV_SYS(info.GetName()));
+        gtk_about_dialog_set_program_name(dlg, wxGTK_CONV_SYS(info.GetName()));
         if ( info.HasVersion() )
             gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
         else

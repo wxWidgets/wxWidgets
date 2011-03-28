@@ -433,7 +433,7 @@ void wxListBox::Update()
     wxWindow::Update();
 
     if (m_treeview)
-        gdk_window_process_updates(GTK_WIDGET(m_treeview)->window, TRUE);
+        gdk_window_process_updates(gtk_widget_get_window(GTK_WIDGET(m_treeview)), true);
 }
 
 // ----------------------------------------------------------------------------

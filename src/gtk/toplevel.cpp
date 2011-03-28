@@ -80,9 +80,8 @@ extern "C" {
 static void wxgtk_window_set_urgency_hint (GtkWindow *win,
                                            gboolean setting)
 {
-    wxASSERT_MSG( gtk_widget_get_realized(GTK_WIDGET(win)),
-                  wxT("wxgtk_window_set_urgency_hint: GdkWindow not realized") );
-    GdkWindow *window = GTK_WIDGET(win)->window;
+    GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(win));
+    wxASSERT_MSG(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
     XWMHints *wm_hints;
 
     wm_hints = XGetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window));
@@ -219,8 +218,9 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
         win->m_oldClientWidth  = alloc->width;
         win->m_oldClientHeight = alloc->height;
 
-        wxSize size(win->m_widget->allocation.width,
-                    win->m_widget->allocation.height);
+        GtkAllocation a;
+        gtk_widget_get_allocation(win->m_widget, &a);
+        wxSize size(a.width, a.height);
         size += win->m_decorSize;
         win->m_width  = size.x;
         win->m_height = size.y;
@@ -309,16 +309,18 @@ static void
 gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
                              wxTopLevelWindowGTK *win )
 {
-    gdk_window_set_decorations(win->m_widget->window,
+    gdk_window_set_decorations(gtk_widget_get_window(win->m_widget),
                                (GdkWMDecoration)win->m_gdkDecor);
-    gdk_window_set_functions(win->m_widget->window,
+    gdk_window_set_functions(gtk_widget_get_window(win->m_widget),
                                (GdkWMFunction)win->m_gdkFunc);
 
     // GTK's shrinking/growing policy
     if ( !(win->m_gdkFunc & GDK_FUNC_RESIZE) )
         gtk_window_set_resizable(GTK_WINDOW(win->m_widget), FALSE);
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+#endif
 
     const wxIconBundle& icons = win->GetIcons();
     if (icons.GetIconCount())
@@ -565,7 +567,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 #endif
 
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
-    GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+    gtk_widget_set_can_focus(m_widget, false);
 
     g_signal_connect (m_widget, "delete_event",
                       G_CALLBACK (gtk_frame_delete_callback), this);
@@ -573,7 +575,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // m_mainWidget is a GtkVBox, holding the bars and client area (m_wxwindow)
     m_mainWidget = gtk_vbox_new(false, 0);
     gtk_widget_show( m_mainWidget );
-    GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
+    gtk_widget_set_can_focus(m_mainWidget, false);
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
     // m_wxwindow is the client area
@@ -583,7 +585,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     // we donm't allow the frame to get the focus as otherwise
     // the frame will grab it at arbitrary focus changes
-    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+    gtk_widget_set_can_focus(m_wxwindow, false);
 
     if (m_parent) m_parent->AddChild( this );
 
@@ -594,8 +596,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                       G_CALLBACK (wxgtk_tlw_size_request_callback), this);
     PostCreation();
 
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
+#endif
 
     //  we cannot set MWM hints and icons before the widget has
     //  been realized, so we do this directly after realization
@@ -714,8 +718,9 @@ bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
     else
         m_gdkFunc &= ~GDK_FUNC_CLOSE;
 
-    if (gtk_widget_get_realized(m_widget) && (m_widget->window))
-        gdk_window_set_functions( m_widget->window, (GdkWMFunction)m_gdkFunc );
+    GdkWindow* window = gtk_widget_get_window(m_widget);
+    if (window)
+        gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
     return true;
 }
@@ -744,7 +749,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     }
     else
     {
-        GdkWindow *window = m_widget->window;
+        GdkWindow* window = gtk_widget_get_window(m_widget);
 
         if (show)
         {
@@ -763,12 +768,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_set_decorations(window, (GdkWMDecoration)0);
             gdk_window_set_functions(window, (GdkWMFunction)0);
 
-            gdk_window_get_origin (m_widget->window, &root_x, &root_y);
-            gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
-                         &width, &height, NULL);
+            gdk_window_get_origin(window, &root_x, &root_y);
+            gdk_window_get_geometry(window, &client_x, &client_y, &width, &height, NULL);
 
-            gdk_window_move_resize (m_widget->window, -client_x, -client_y,
-                        screen_width + 1, screen_height + 1);
+            gdk_window_move_resize(
+                window, -client_x, -client_y, screen_width + 1, screen_height + 1);
 
             wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
@@ -810,8 +814,11 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
 
     gtk_widget_queue_draw( m_widget );
 
-    if (m_wxwindow && m_wxwindow->window)
-        gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
+    GdkWindow* window = NULL;
+    if (m_wxwindow)
+        window = gtk_widget_get_window(m_wxwindow);
+    if (window)
+        gdk_window_invalidate_rect(window, NULL, true);
 }
 
 bool wxTopLevelWindowGTK::Show( bool show )
@@ -864,23 +871,32 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // causes the widget tree to be size_allocated, which generates size
         // events in the wrong order. However, the size_allocates will not be
         // done if the allocation is not the default (1,1).
-        const int alloc_width = m_widget->allocation.width;
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(m_widget, &alloc);
+        const int alloc_width = alloc.width;
         if (alloc_width == 1)
-            m_widget->allocation.width = 2;
+        {
+            alloc.width = 2;
+            gtk_widget_set_allocation(m_widget, &alloc);
+        }
         gtk_widget_realize(m_widget);
         if (alloc_width == 1)
-            m_widget->allocation.width = 1;
+        {
+            alloc.width = 1;
+            gtk_widget_set_allocation(m_widget, &alloc);
+        }
 
         // send _NET_REQUEST_FRAME_EXTENTS
         XClientMessageEvent xevent;
         memset(&xevent, 0, sizeof(xevent));
         xevent.type = ClientMessage;
-        xevent.window = gdk_x11_drawable_get_xid(m_widget->window);
+        GdkWindow* window = gtk_widget_get_window(m_widget);
+        xevent.window = gdk_x11_drawable_get_xid(window);
         xevent.message_type = gdk_x11_atom_to_xatom_for_display(
-            gdk_drawable_get_display(m_widget->window),
+            gdk_drawable_get_display(window),
             gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false));
         xevent.format = 32;
-        Display* display = gdk_x11_drawable_get_xdisplay(m_widget->window);
+        Display* display = gdk_x11_drawable_get_xdisplay(window);
         XSendEvent(display, DefaultRootWindow(display), false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             (XEvent*)&xevent);
@@ -1219,8 +1235,8 @@ void wxTopLevelWindowGTK::Maximize(bool maximize)
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
-    return m_widget->window &&
-        (gdk_window_get_state(m_widget->window) & GDK_WINDOW_STATE_MAXIMIZED);
+    GdkWindow* window = gtk_widget_get_window(m_widget);
+    return window && (gdk_window_get_state(window) & GDK_WINDOW_STATE_MAXIMIZED);
 }
 
 void wxTopLevelWindowGTK::Restore()
@@ -1299,9 +1315,9 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
     if ( gtk_widget_get_realized(m_widget) )
     {
         if ( m_wxwindow )
-            do_shape_combine_region(m_wxwindow->window, region);
+            do_shape_combine_region(gtk_widget_get_window(m_wxwindow), region);
 
-        return do_shape_combine_region(m_widget->window, region);
+        return do_shape_combine_region(gtk_widget_get_window(m_widget), region);
     }
     else // not realized yet
     {
@@ -1403,14 +1419,17 @@ static Window wxGetTopmostWindowX11(Display *dpy, Window child)
 
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
-    if (!m_widget || !m_widget->window)
+    GdkWindow* window = NULL;
+    if (m_widget)
+        window = gtk_widget_get_window(m_widget);
+    if (window == NULL)
         return false;
 
-    Display* dpy = GDK_WINDOW_XDISPLAY (m_widget->window);
+    Display* dpy = GDK_WINDOW_XDISPLAY(window);
     // We need to get the X Window that has the root window as the immediate parent
     // and m_widget->window as a child. This should be the X Window that the WM manages and
     // from which the opacity property is checked from.
-    Window win = wxGetTopmostWindowX11(dpy, GDK_WINDOW_XID (m_widget->window));
+    Window win = wxGetTopmostWindowX11(dpy, GDK_WINDOW_XID(window));
 
 
     // Using pure Xlib to not have a GTK version check mess due to gtk2.0 not having GdkDisplay

@@ -195,12 +195,15 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
         return false;
 
     // draw disabled bitmap ourselves, GtkImage has no way to specify it
-    const GtkAllocation& alloc = widget->allocation;
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(widget, &alloc);
+    GtkRequisition req;
+    gtk_widget_get_requisition(widget, &req);
     gdk_draw_pixbuf(
-        widget->window, widget->style->black_gc, bitmap.GetPixbuf(),
+        gtk_widget_get_window(widget), gtk_widget_get_style(widget)->black_gc, bitmap.GetPixbuf(),
         0, 0,
-        alloc.x + (alloc.width - widget->requisition.width) / 2,
-        alloc.y + (alloc.height - widget->requisition.height) / 2,
+        alloc.x + (alloc.width - req.width) / 2,
+        alloc.y + (alloc.height - req.height) / 2,
         -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
     return true;
 }
@@ -250,7 +253,7 @@ void wxToolBar::AddChildGTK(wxWindowGTK* child)
     GtkToolItem* item = gtk_tool_item_new();
     gtk_container_add(GTK_CONTAINER(item), align);
     // position will be corrected in DoInsertTool if necessary
-    gtk_toolbar_insert(GTK_TOOLBAR(GTK_BIN(m_widget)->child), item, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(gtk_bin_get_child(GTK_BIN(m_widget))), item, -1);
 }
 
 // ----------------------------------------------------------------------------
@@ -284,7 +287,7 @@ void wxToolBarTool::CreateDropDown()
         box = gtk_hbox_new(false, 0);
         arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE);
     }
-    GtkWidget* tool_button = GTK_BIN(m_item)->child;
+    GtkWidget* tool_button = gtk_bin_get_child(GTK_BIN(m_item));
     gtk_widget_reparent(tool_button, box);
     GtkWidget* arrow_button = gtk_toggle_button_new();
     gtk_button_set_relief(GTK_BUTTON(arrow_button),
@@ -308,7 +311,8 @@ void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
         wxMenu* menu = GetDropdownMenu();
         if (menu)
         {
-            const GtkAllocation& alloc = GTK_WIDGET(button)->allocation;
+            GtkAllocation alloc;
+            gtk_widget_set_allocation(GTK_WIDGET(button), &alloc);
             int x = alloc.x;
             int y = alloc.y;
             if (toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT))
@@ -376,12 +380,14 @@ bool wxToolBar::Create( wxWindow *parent,
     FixupStyle();
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
     if (gtk_check_version(2, 12, 0))
     {
         m_tooltips = gtk_tooltips_new();
         g_object_ref(m_tooltips);
         gtk_object_sink(GTK_OBJECT(m_tooltips));
     }
+#endif
     GtkSetStyle();
 
     if (style & wxTB_DOCKABLE)
@@ -417,7 +423,7 @@ bool wxToolBar::Create( wxWindow *parent,
 
 GdkWindow *wxToolBar::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_WIDGET(m_toolbar)->window;
+    return gtk_widget_get_window(GTK_WIDGET(m_toolbar));
 }
 
 void wxToolBar::GtkSetStyle()
@@ -436,7 +442,11 @@ void wxToolBar::GtkSetStyle()
             style = GTK_TOOLBAR_BOTH_HORIZ;
     }
 
+#if GTK_CHECK_VERSION(3,0,0) || defined(GTK_DISABLE_DEPRECATED)
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(m_toolbar), orient);
+#else
     gtk_toolbar_set_orientation(m_toolbar, orient);
+#endif
     gtk_toolbar_set_style(m_toolbar, style);
 }
 
@@ -533,7 +543,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (!HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty())
             {
 #if GTK_CHECK_VERSION(2, 12, 0)
-                if (!gtk_check_version(2, 12, 0))
+                if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
                 {
                     gtk_tool_item_set_tooltip_text(tool->m_item,
                         wxGTK_CONV(tool->GetShortHelp()));
@@ -541,8 +551,10 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 else
 #endif
                 {
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
                     gtk_tool_item_set_tooltip(tool->m_item,
                         m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
+#endif
                 }
             }
             bin_child = gtk_bin_get_child(GTK_BIN(tool->m_item));
@@ -574,9 +586,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
         case wxTOOL_STYLE_CONTROL:
             wxWindow* control = tool->GetControl();
-            if (control->m_widget->parent == NULL)
+            if (gtk_widget_get_parent(control->m_widget) == NULL)
                 AddChildGTK(control);
-            tool->m_item = GTK_TOOL_ITEM(control->m_widget->parent->parent);
+            tool->m_item = GTK_TOOL_ITEM(gtk_widget_get_parent(gtk_widget_get_parent(control->m_widget)));
             if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))
             {
                 g_object_ref(tool->m_item);
@@ -611,7 +623,7 @@ bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase* toolBase)
         // while if we're called from DeleteTool() the control will
         // be destroyed when wxToolBarToolBase itself is deleted
         GtkWidget* widget = tool->GetControl()->m_widget;
-        gtk_container_remove(GTK_CONTAINER(widget->parent), widget);
+        gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(widget)), widget);
     }
     gtk_object_destroy(GTK_OBJECT(tool->m_item));
     tool->m_item = NULL;
@@ -711,7 +723,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
         if (tool->m_item)
         {
 #if GTK_CHECK_VERSION(2, 12, 0)
-            if (!gtk_check_version(2, 12, 0))
+            if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
             {
                 gtk_tool_item_set_tooltip_text(tool->m_item,
                     wxGTK_CONV(helpString));
@@ -719,8 +731,10 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
             else
 #endif
             {
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
                 gtk_tool_item_set_tooltip(tool->m_item,
                     m_tooltips, wxGTK_CONV(helpString), "");
+#endif
             }
         }
     }

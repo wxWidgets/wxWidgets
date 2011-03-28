@@ -414,7 +414,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         GdkWindowEdge edge =
             GetLayoutDirection() == wxLayout_RightToLeft ? GDK_WINDOW_EDGE_SOUTH_WEST :
                                                            GDK_WINDOW_EDGE_SOUTH_EAST;
-        gtk_paint_resize_grip( m_widget->style,
+        gtk_paint_resize_grip(gtk_widget_get_style(m_widget),
                             GTKGetDrawingWindow(),
                             gtk_widget_get_state(m_widget),
                             NULL,
