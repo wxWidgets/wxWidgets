@@ -253,14 +253,14 @@ inline gboolean wx_gtk_widget_get_can_focus(GtkWidget *widget)
 }
 #define gtk_widget_get_can_focus wx_gtk_widget_get_can_focus
 
-inline void wx_gtk_widset_set_can_focus(GtkWidget *widget, gboolean can)
+inline void wx_gtk_widget_set_can_focus(GtkWidget *widget, gboolean can)
 {
     if ( can )
         GTK_WIDGET_SET_FLAGS(widget, GTK_CAN_FOCUS);
     else
         GTK_WIDGET_UNSET_FLAGS(widget, GTK_CAN_FOCUS);
 }
-#define gtk_widset_set_can_focus wx_gtk_widset_set_can_focus
+#define gtk_widget_set_can_focus wx_gtk_widget_set_can_focus
 
 
 inline gboolean wx_gtk_widget_get_can_default(GtkWidget *widget)
