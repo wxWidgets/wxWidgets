@@ -236,7 +236,7 @@ GtkWidget* wxPizza::New(long windowStyle)
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
     // mask off border styles not useable with wxPizza
     pizza->m_border_style = int(windowStyle & BORDER_STYLES);
-#if GTK_CHECK_VERSION(2,20,0)
+#if GTK_CHECK_VERSION(3,0,0) || defined(GTK_DISABLE_DEPRECATED)
     gtk_widget_set_has_window(widget, true);
 #else
     gtk_fixed_set_has_window(GTK_FIXED(widget), true);
