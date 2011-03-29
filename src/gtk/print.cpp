@@ -667,8 +667,8 @@ int wxGtkPrintDialog::ShowModal()
     }
     else if (response == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
+        wxLogError(_("Error while printing: ") + wxString(gError ? gError->message : "???"));
         g_error_free (gError);
-        wxLogError(_("Error while printing: ") + wxString::Format(_("%s"), gError->message));
         return wxID_NO; // We use wxID_NO because there is no wxID_ERROR available
     }
 
