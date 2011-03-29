@@ -18,6 +18,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 #if WXWIN_COMPATIBILITY_2_8
 

@@ -43,6 +43,7 @@
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/renderer.h"
+#include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 
