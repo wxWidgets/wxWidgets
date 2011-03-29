@@ -475,7 +475,7 @@ bool wxRadioBox::IsItemEnabled(unsigned int item) const
 
     // don't use GTK_WIDGET_IS_SENSITIVE() here, we want to return true even if
     // the parent radiobox is disabled
-    return gtk_widget_is_sensitive(GTK_WIDGET(button));
+    return gtk_widget_get_sensitive(GTK_WIDGET(button));
 }
 
 bool wxRadioBox::Show(unsigned int item, bool show)
