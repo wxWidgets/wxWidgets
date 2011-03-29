@@ -995,7 +995,7 @@ wxMBConvStrictUTF8::ToWChar(wchar_t *dst, size_t dstLen,
 
     for ( const char *p = src; ; p++ )
     {
-        if ( !(srcLen == wxNO_LEN ? *p : srcLen) )
+        if ( (srcLen == wxNO_LEN ? !*p : !srcLen) )
         {
             // all done successfully, just add the trailing NULL if we are not
             // using explicit length
@@ -1115,7 +1115,7 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
 
     for ( const wchar_t *wp = src; ; wp++ )
     {
-        if ( !(srcLen == wxNO_LEN ? *wp : srcLen) )
+        if ( (srcLen == wxNO_LEN ? !*wp : !srcLen) )
         {
             // all done successfully, just add the trailing NULL if we are not
             // using explicit length
