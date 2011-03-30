@@ -10,6 +10,7 @@
 #include "wx/platform.h"
 #include <gtk/gtk.h>
 #include "wx/gtk/assertdlg_gtk.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 /* ----------------------------------------------------------------------------
    Constants
