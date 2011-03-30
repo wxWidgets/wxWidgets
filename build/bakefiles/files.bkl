@@ -1067,7 +1067,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
-    src/gtk/assertdlg_gtk.c
+    src/gtk/assertdlg_gtk.cpp
     src/gtk/bitmap.cpp
     src/gtk/brush.cpp
     src/gtk/clipbrd.cpp

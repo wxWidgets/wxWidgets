@@ -7,14 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef __GTK_ASSERTDLG_H__
-#define __GTK_ASSERTDLG_H__
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#include <gtk/gtk.h>
+#ifndef _WX_GTK_ASSERTDLG_H_
+#define _WX_GTK_ASSERTDLG_H_
 
 #define GTK_TYPE_ASSERT_DIALOG            (gtk_assert_dialog_get_type ())
 #define GTK_ASSERT_DIALOG(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ASSERT_DIALOG, GtkAssertDialog))
@@ -82,10 +76,4 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
                                           const gchar *sourcefile,
                                           guint line_number);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* __GTK_ASSERTDLG_H__ */
-
-
+#endif /* _WX_GTK_ASSERTDLG_H_ */

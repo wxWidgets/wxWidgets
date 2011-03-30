@@ -26,6 +26,9 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
 
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
+
 #if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"
     #if wxUSE_STACKWALKER
@@ -39,9 +42,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>   // for WNOHANG
 #include <unistd.h>
-
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
 #if wxUSE_DETECT_SM
     #include <X11/SM/SMlib.h>
@@ -322,14 +322,11 @@ private:
     GtkAssertDialog *m_dlg;
 };
 
-// the callback functions must be extern "C" to comply with GTK+ declarations
-extern "C"
+static void get_stackframe_callback(void* p)
 {
-    void get_stackframe_callback(StackDump *dump)
-    {
-        // skip over frames up to including wxOnAssert()
-        dump->ProcessFrames(3);
-    }
+    StackDump* dump = static_cast<StackDump*>(p);
+    // skip over frames up to including wxOnAssert()
+    dump->ProcessFrames(3);
 }
 
 #endif // wxDEBUG_LEVEL && wxUSE_STACKWALKER
@@ -356,7 +353,7 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         gtk_assert_dialog_set_backtrace_callback
         (
             GTK_ASSERT_DIALOG(dialog),
-            (GtkAssertDialogStackFrameCallback)get_stackframe_callback,
+            get_stackframe_callback,
             &dump
         );
 #endif // wxUSE_STACKWALKER
