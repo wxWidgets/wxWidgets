@@ -15,7 +15,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     #include "wx/object.h"
 #else
     class WXDLLIMPEXP_FWD_BASE wxObject;
@@ -80,7 +80,7 @@ protected:
 };
 
 class WXDLLIMPEXP_BASE wxHashTableBase
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     : public wxObject
 #endif
 {

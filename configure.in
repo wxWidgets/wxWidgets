@@ -372,6 +372,7 @@ dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
 dnl default)
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
+DEFAULT_wxUSE_STD_CONTAINERS=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
@@ -699,9 +700,11 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
+WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
+WX_ARG_ENABLE(std_containers,[  --enable-std_containers use standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
+WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
@@ -5968,12 +5971,20 @@ if test "$wxUSE_BUSYINFO" = "yes"; then
   AC_DEFINE(wxUSE_BUSYINFO)
 fi
 
+if test "$wxUSE_STD_CONTAINERS" = "yes"; then
+  AC_DEFINE(wxUSE_STD_CONTAINERS)
+fi
+
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
 fi
 
 if test "$wxUSE_STD_STRING" = "yes"; then
   AC_DEFINE(wxUSE_STD_STRING)
+fi
+
+if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
+  AC_DEFINE(wxUSE_STD_STRING_CONV_IN_WXSTRING)
 fi
 
 if test "$wxUSE_STDPATHS" = "yes"; then

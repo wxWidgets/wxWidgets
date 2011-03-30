@@ -2967,19 +2967,19 @@ wxAccessible* wxWindowBase::CreateAccessible()
 // list classes implementation
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList)
 
-#else // !wxUSE_STL
+#else // !wxUSE_STD_CONTAINERS
 
 void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
 }
 
-#endif // wxUSE_STL/!wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
 // ----------------------------------------------------------------------------
 // borders
@@ -3283,8 +3283,8 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
     wxWindowList::compatibility_iterator i = siblings.Find(win);
     wxCHECK_RET( i, wxT("MoveBefore/AfterInTabOrder(): win is not a sibling") );
 
-    // unfortunately, when wxUSE_STL == 1 DetachNode() is not implemented so we
-    // can't just move the node around
+    // unfortunately, when wxUSE_STD_CONTAINERS == 1 DetachNode() is not
+    // implemented so we can't just move the node around
     wxWindow *self = (wxWindow *)this;
     siblings.DeleteObject(self);
     if ( move == OrderAfter )

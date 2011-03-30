@@ -439,6 +439,8 @@ Major new features in this release
 
 All:
 
+- Use standard implementations of container classes by default, you need to
+  explicitly set wxUSE_STD_CONTAINERS to 0 to use wxWidgets implementations.
 - Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.

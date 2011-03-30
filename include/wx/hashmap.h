@@ -15,9 +15,9 @@
 #include "wx/string.h"
 #include "wx/wxcrt.h"
 
-// In wxUSE_STL build we prefer to use the standard hash map class but it can
-// be either in non-standard hash_map header (old g++ and some other STL
-// implementations) or in C++0x standard unordered_map which can in turn be
+// In wxUSE_STD_CONTAINERS build we prefer to use the standard hash map class
+// but it can be either in non-standard hash_map header (old g++ and some other
+// STL implementations) or in C++0x standard unordered_map which can in turn be
 // available either in std::tr1 or std namespace itself
 //
 // To summarize: if std::unordered_map is available use it, otherwise use tr1
@@ -28,7 +28,7 @@
     #define HAVE_STL_HASH_MAP
 #endif
 
-#if wxUSE_STL && \
+#if wxUSE_STD_CONTAINERS && \
     (defined(HAVE_STD_UNORDERED_MAP) || defined(HAVE_TR1_UNORDERED_MAP))
 
 #if defined(HAVE_STD_UNORDERED_MAP)
@@ -42,7 +42,7 @@
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
     typedef WX_HASH_MAP_NAMESPACE::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
 
-#elif wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+#elif wxUSE_STD_CONTAINERS && defined(HAVE_STL_HASH_MAP)
 
 #if defined(HAVE_EXT_HASH_MAP)
     #include <ext/hash_map>
@@ -59,7 +59,7 @@
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
     typedef WX_HASH_MAP_NAMESPACE::hash_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
 
-#else // !wxUSE_STL || no std::{hash,unordered}_map class available
+#else // !wxUSE_STD_CONTAINERS || no std::{hash,unordered}_map class available
 
 #define wxNEEDS_WX_HASH_MAP
 

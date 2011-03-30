@@ -28,7 +28,7 @@ inline int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
     return wxStringSortAscending(s2, s1);
 }
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 #include "wx/dynarray.h"
 
@@ -100,7 +100,7 @@ private:
     }
 };
 
-#else // if !wxUSE_STL
+#else // if !wxUSE_STD_CONTAINERS
 
 // this shouldn't be defined for compilers not supporting template methods or
 // without std::distance()
@@ -384,7 +384,7 @@ public:
     { Copy(array); }
 };
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
 // this class provides a temporary wxString* from a
 // wxArrayString

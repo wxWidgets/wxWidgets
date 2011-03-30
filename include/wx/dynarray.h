@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
     #include "wx/beforestd.h"
     #include <vector>
     #include <algorithm>
@@ -81,7 +81,7 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 //     you cast "SomeArray *" as "BaseArray *" and then delete it)
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 template<class T>
 class wxArray_SortFunction
@@ -203,12 +203,12 @@ public:                                                             \
   }                                                                 \
 }
 
-#else // if !wxUSE_STL
+#else // if !wxUSE_STD_CONTAINERS
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
 classexp name                                                       \
 {                                                                   \
-  typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STL */  \
+  typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STD_CONTAINERS */  \
 public:                                                             \
   name();                                                           \
   name(const name& array);                                          \
@@ -307,7 +307,7 @@ private:                                                            \
   T      *m_pItems;                                                 \
 }
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
 // ============================================================================
 // The private helper macros containing the core of the array classes
@@ -325,7 +325,7 @@ private:                                                            \
 // _WX_DEFINE_TYPEARRAY: array for simple types
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 // in STL case we don't need the entire base arrays hack as standard container
 // don't suffer from alignment/storage problems as our home-grown do
@@ -335,7 +335,7 @@ private:                                                            \
 #define  _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)         \
          _WX_DEFINE_TYPEARRAY(T, name, base, classexp)
 
-#else // if !wxUSE_STL
+#else // if !wxUSE_STD_CONTAINERS
 
 // common declaration used by both _WX_DEFINE_TYPEARRAY and
 // _WX_DEFINE_TYPEARRAY_PTR
@@ -505,7 +505,7 @@ public:                                                               \
 #define _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)          \
     _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP_NONE)
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
 // ----------------------------------------------------------------------------
 // _WX_DEFINE_SORTED_TYPEARRAY: sorted array for simple data types

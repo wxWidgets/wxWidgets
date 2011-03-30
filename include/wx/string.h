@@ -1345,12 +1345,13 @@ public:
   }
 #endif // wxUSE_STRING_POS_CACHE
 
-  // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
-  // implicit conversions from std::string to wxString and vice verse as this
-  // allows to use the same strings in non-GUI and GUI code, however we don't
-  // want to unconditionally add this ctor as it would make wx lib dependent on
-  // libstdc++ on some Linux versions which is bad, so instead we ask the
-  // client code to define this wxUSE_STD_STRING symbol if they need it
+  // even if we're not built with wxUSE_STD_STRING_CONV_IN_WXSTRING == 1 it is
+  // very convenient to allow implicit conversions from std::string to wxString
+  // and vice verse as this allows to use the same strings in non-GUI and GUI
+  // code, however we don't want to unconditionally add this ctor as it would
+  // make wx lib dependent on libstdc++ on some Linux versions which is bad, so
+  // instead we ask the client code to define this wxUSE_STD_STRING symbol if
+  // they need it
 #if wxUSE_STD_STRING
   #if wxUSE_UNICODE_WCHAR
     wxString(const wxStdWideString& str) : m_impl(str) {}
@@ -1368,10 +1369,8 @@ public:
   #endif
 #endif // wxUSE_STD_STRING
 
-  // Unlike ctor from std::string, we provide conversion to std::string only
-  // if wxUSE_STL and not merely wxUSE_STD_STRING (which is on by default),
-  // because it conflicts with operator const char/wchar_t* but we still
-  // provide explicit conversions to std::[w]string for convenience in any case
+  // Also always provide explicit conversions to std::[w]string in any case,
+  // see below for the implicit ones.
 #if wxUSE_STD_STRING
   // We can avoid a copy if we already use this string type internally,
   // otherwise we create a copy on the fly:
@@ -1408,13 +1407,14 @@ public:
     }
   #endif
 
-#if wxUSE_STL
-  // In wxUSE_STL case we also provide implicit conversions as there is no
-  // ambiguity with the const char/wchar_t* ones as they are disabled in this
-  // build (for consistency with std::basic_string<>)
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+    // Implicit conversions to std::[w]string are not provided by default as
+    // they conflict with the implicit conversions to "const char/wchar_t *"
+    // which we use for backwards compatibility but do provide them if
+    // explicitly requested.
   operator wxStringToStdStringRetType() const { return ToStdString(); }
   operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
-#endif // wxUSE_STL
+#endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 #undef wxStringToStdStringRetType
 #undef wxStringToStdWstringRetType
@@ -1654,11 +1654,12 @@ public:
     operator wxCStrData() const { return c_str(); }
 
     // the first two operators conflict with operators for conversion to
-    // std::string and they must be disabled in STL build; the next one only
-    // makes sense if conversions to char* are also defined and not defining it
-    // in STL build also helps us to get more clear error messages for the code
-    // which relies on implicit conversion to char* in STL build
-#if !wxUSE_STL
+    // std::string and they must be disabled if those conversions are enabled;
+    // the next one only makes sense if conversions to char* are also defined
+    // and not defining it in STL build also helps us to get more clear error
+    // messages for the code which relies on implicit conversion to char* in
+    // STL build
+#if !wxUSE_STD_STRING_CONV_IN_WXSTRING
     operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
 
@@ -1666,7 +1667,7 @@ public:
     // wxWidgets versions: this is the same as conversion to const char * so it
     // may fail!
     operator const void*() const { return c_str(); }
-#endif // wxUSE_STL
+#endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
 
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }

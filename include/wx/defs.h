@@ -89,6 +89,16 @@
        class 'bar'" */
 #   pragma warning(disable:4251)
 
+    /*
+        This is a similar warning which occurs when deriving from standard
+        containers. MSDN even mentions that it can be ignored in this case
+        (albeit only in debug build while the warning is the same in release
+        too and seems equally harmless).
+     */
+#if wxUSE_STD_CONTAINERS
+#   pragma warning(disable:4275)
+#endif /// wxUSE_STD_CONTAINERS
+
 #   ifdef __VISUALC5__
     /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
     /* is buggy, and occurs for code that does actually get executed */
@@ -2760,7 +2770,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 #endif
 
 #if defined(__CYGWIN__) && defined(__WXMSW__)
-#   if wxUSE_STL || defined(wxUSE_STD_STRING)
+#   if wxUSE_STD_CONTAINERS || defined(wxUSE_STD_STRING)
          /*
             NASTY HACK because the gethostname in sys/unistd.h which the gnu
             stl includes and wx builds with by default clash with each other

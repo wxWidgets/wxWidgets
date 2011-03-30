@@ -1048,11 +1048,11 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     while ((node = node->GetNext()) != NULL)
 #else
     while ((node = node->GetNext()))
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
     {
         p = (wxPoint *)node->GetData();
         x1 = x2;

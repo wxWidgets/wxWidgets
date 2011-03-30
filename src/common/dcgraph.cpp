@@ -696,13 +696,13 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 
     path.MoveToPoint( x1 , y1 );
     path.AddLineToPoint( cx1 , cy1 );
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
 
     while ((node = node->GetNext()) != NULL)
 #else
 
     while ((node = node->GetNext()))
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
     {
         p = node->GetData();

@@ -78,7 +78,7 @@ bool wxChoice::Create(wxWindow *parent,
 
     MacPostControlCreate( pos, size );
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     if ( style & wxCB_SORT )
         // autosort
         m_strings = wxArrayString( 1 );
@@ -109,7 +109,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
     {
         unsigned int idx;
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
         if ( IsSorted() )
         {
             wxArrayString::iterator
@@ -118,7 +118,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
             m_strings.insert( insertPoint, items[i] );
         }
         else
-#endif // wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS
         {
             idx = pos;
             m_strings.Insert( items[i], idx );
@@ -189,7 +189,7 @@ unsigned int wxChoice::GetCount() const
 
 int wxChoice::FindString( const wxString& s, bool bCase ) const
 {
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     // Avoid assert for non-default args passed to sorted array Index
     if ( IsSorted() )
         bCase = true;

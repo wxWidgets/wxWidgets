@@ -1494,7 +1494,7 @@ do
    { (exit 1); exit 1; }; }
 done
 
-# There might be people who depend on the old broken behaviour: `$host'
+# There might be people who depend on the old broken behavior: `$host'
 # used to hold the argument of --host etc.
 # FIXME: To remove some day.
 build=$build_alias
@@ -1689,9 +1689,11 @@ Optional Features:
   --enable-debug_cntxt    obsolete, don't use: use wxDebugContext
   --enable-mem_tracing    obsolete, don't use: create code with memory tracing
   --disable-shared        create static library instead of shared
-  --enable-stl            use STL for containers
+  --enable-stl            use standard C++ classes for everything
+  --enable-std_containers use standard C++ container classes
   --enable-std_iostreams  use standard C++ stream classes
   --enable-std_string     use standard C++ string classes
+ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
   --disable-unicode       compile without Unicode support
   --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)
   --enable-utf8           use UTF-8 representation for strings (Unix only)
@@ -2971,6 +2973,7 @@ esac
 
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
+DEFAULT_wxUSE_STD_CONTAINERS=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
@@ -4785,6 +4788,50 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-std_containers" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-std_containers... $ECHO_C" >&6; }
+          # Check whether --enable-std_containers was given.
+if test "${enable_std_containers+set}" = set; then
+  enableval=$enable_std_containers;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_std_containers='wxUSE_STD_CONTAINERS=yes'
+                          else
+                            wx_cv_use_std_containers='wxUSE_STD_CONTAINERS=no'
+                          fi
+
+else
+
+                          wx_cv_use_std_containers='wxUSE_STD_CONTAINERS=${'DEFAULT_wxUSE_STD_CONTAINERS":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_std_containers"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_STD_CONTAINERS = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_STD_CONTAINERS
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-std_iostreams" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-std_iostreams... $ECHO_C" >&6; }
           # Check whether --enable-std_iostreams was given.
@@ -4857,6 +4904,50 @@ fi
             fi
           else
             result=$wxUSE_STD_STRING
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-std_string_conv_in_wxstring" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-std_string_conv_in_wxstring... $ECHO_C" >&6; }
+          # Check whether --enable-std_string_conv_in_wxstring was given.
+if test "${enable_std_string_conv_in_wxstring+set}" = set; then
+  enableval=$enable_std_string_conv_in_wxstring;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_std_string_conv_in_wxstring='wxUSE_STD_STRING_CONV_IN_WXSTRING=yes'
+                          else
+                            wx_cv_use_std_string_conv_in_wxstring='wxUSE_STD_STRING_CONV_IN_WXSTRING=no'
+                          fi
+
+else
+
+                          wx_cv_use_std_string_conv_in_wxstring='wxUSE_STD_STRING_CONV_IN_WXSTRING=${'DEFAULT_wxUSE_STD_STRING_CONV_IN_WXSTRING":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_std_string_conv_in_wxstring"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_STD_STRING_CONV_IN_WXSTRING = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_STD_STRING_CONV_IN_WXSTRING
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -44881,6 +44972,13 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_STD_CONTAINERS" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_STD_CONTAINERS 1
+_ACEOF
+
+fi
+
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_STD_IOSTREAM 1
@@ -44891,6 +44989,13 @@ fi
 if test "$wxUSE_STD_STRING" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_STD_STRING 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_STD_STRING_CONV_IN_WXSTRING 1
 _ACEOF
 
 fi

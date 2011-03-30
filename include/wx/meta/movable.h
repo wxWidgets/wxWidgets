@@ -38,7 +38,7 @@ struct wxIsMovable
 // (NB: we don't put this into string.h and choose to include wx/string.h from
 // here instead so that rarely-used wxIsMovable<T> code isn't included by
 // everything)
-#if !wxUSE_STL && !wxUSE_STRING_POS_CACHE
+#if !wxUSE_STD_STRING && !wxUSE_STRING_POS_CACHE
 WX_DECLARE_TYPE_MOVABLE(wxString)
 #endif
 

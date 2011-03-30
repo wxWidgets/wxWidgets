@@ -11,7 +11,7 @@
 
 /*
     This header implements std::string-like string class, wxStringImpl, that is
-    used by wxString to store the data. Alternatively, if wxUSE_STL=1,
+    used by wxString to store the data. Alternatively, if wxUSE_STD_STRING=1,
     wxStringImpl is just a typedef to std:: string class.
 */
 
@@ -50,14 +50,8 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 
 
 // ----------------------------------------------------------------------------
-// deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
+// deal with various build options
 // ----------------------------------------------------------------------------
-
-// using STL implies using std::string
-#if wxUSE_STL
-    #undef wxUSE_STD_STRING
-    #define wxUSE_STD_STRING 1
-#endif
 
 // we use STL-based string internally if we use std::string at all now, there
 // should be no reason to prefer our internal implement but if you really need

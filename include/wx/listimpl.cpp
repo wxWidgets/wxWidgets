@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 #undef  WX_DEFINE_LIST
 #define WX_DEFINE_LIST(name)                                                  \
@@ -19,7 +19,7 @@
     }                                                                         \
     name::BaseListType name::EmptyList;
 
-#else // !wxUSE_STL
+#else // !wxUSE_STD_CONTAINERS
     #undef WX_DEFINE_LIST_2
     #define WX_DEFINE_LIST_2(T, name)     \
         void wx##name##Node::DeleteData() \
@@ -32,5 +32,5 @@
     #undef  WX_DEFINE_LIST
     #define WX_DEFINE_LIST(name) WX_DEFINE_LIST_2(_WX_LIST_ITEM_TYPE_##name, name)
 
-#endif // wxUSE_STL/!wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
