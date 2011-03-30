@@ -224,6 +224,8 @@
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
 
+#define wxUSE_IOSTREAMH     0
+
 
 
 #define wxUSE_LONGLONG      0
@@ -566,11 +568,6 @@
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
 
 #define wxUSE_SVG 0
-
-
-#define REMOVE_UNUSED_ARG   0
-
-#define wxUSE_IOSTREAMH     0
 
 
 

@@ -594,8 +594,6 @@ typedef pid_t GPid;
 
 #define wxUSE_SVG 1
 
-#define REMOVE_UNUSED_ARG   1
-
 #define wxUSE_IOSTREAMH     1
 
 

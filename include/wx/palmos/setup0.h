@@ -349,6 +349,17 @@
 // wxWidgets.
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
 
+// VC++ 4.2 and above allows <iostream> and <iostream.h> but you can't mix
+// them. Set this option to 1 to use <iostream.h>, 0 to use <iostream>.
+//
+// Note that newer compilers (including VC++ 7.1 and later) don't support
+// wxUSE_IOSTREAMH == 1 and so <iostream> will be used anyhow.
+//
+// Default is 0.
+//
+// Recommended setting: 0, only set to 1 if you use a really old compiler
+#define wxUSE_IOSTREAMH     0
+
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -1342,29 +1353,6 @@
 // Set to 1 to compile in support for wxSVGFileDC, a wxDC subclass which allows
 // to create files in SVG (Scalable Vector Graphics) format.
 #define wxUSE_SVG 1
-
-// ----------------------------------------------------------------------------
-// other compiler (mis)features
-// ----------------------------------------------------------------------------
-
-// Set this to 0 if your compiler can't cope with omission of prototype
-// parameters.
-//
-// Default is 1.
-//
-// Recommended setting: 1 (should never need to set this to 0)
-#define REMOVE_UNUSED_ARG   1
-
-// VC++ 4.2 and above allows <iostream> and <iostream.h> but you can't mix
-// them. Set this option to 1 to use <iostream.h>, 0 to use <iostream>.
-//
-// Note that newer compilers (including VC++ 7.1 and later) don't support
-// wxUSE_IOSTREAMH == 1 and so <iostream> will be used anyhow.
-//
-// Default is 0.
-//
-// Recommended setting: 0, only set to 1 if you use a really old compiler
-#define wxUSE_IOSTREAMH     0
 
 // ----------------------------------------------------------------------------
 // image format support
