@@ -88,7 +88,7 @@ private:
     wxEnumData s_enumData##e( s_enumDataMembers##e );                   \
     wxEnumData *wxGetEnumData(e) { return &s_enumData##e; }             \
     template<> void wxStringReadValue(const wxString& s, e &data )     \
-        { data = (e) s_enumData##e.GetEnumMemberValue(s); }             \
+        { data = (e) s_enumData##e.GetEnumMemberValue(s.c_str()); }     \
     template<> void wxStringWriteValue(wxString &s, const e &data )    \
         { s = s_enumData##e.GetEnumMemberName((int)data); }             \
     void FromLong##e( long data, wxAny& result )                  \
@@ -202,7 +202,7 @@ void wxFlagsFromString(const wxString &s, e &data )
     {
         flag = array[i];
         int ivalue;
-        if ( edata->HasEnumMemberValue( flag, &ivalue ) )
+        if ( edata->HasEnumMemberValue( flag.c_str(), &ivalue ) )
         {
             data.m_data |= ivalue;
         }

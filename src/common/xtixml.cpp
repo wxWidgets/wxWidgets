@@ -483,7 +483,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
                             wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid );
 
                             callbacks->SetConnect( objectID, classInfo, pi, sinkClassInfo,
-                                sinkClassInfo->FindHandlerInfo(handlerName),  sinkOid );
+                                sinkClassInfo->FindHandlerInfo(handlerName.c_str()),  sinkOid );
                         }
                         else
                         {
