@@ -22,6 +22,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/xml/xml.h"
+#include "wx/scopedptr.h"
 #include "wx/sstream.h"
 
 #include <stdarg.h>
@@ -33,7 +34,7 @@
 namespace
 {
 
-void CheckXml(wxXmlNode *n, ...)
+void CheckXml(const wxScopedPtr<wxXmlNode>& n, ...)
 {
     va_list args;
     va_start(args, n);
@@ -49,7 +50,7 @@ void CheckXml(wxXmlNode *n, ...)
         CPPUNIT_ASSERT( child );
         CPPUNIT_ASSERT_EQUAL( childName, child->GetName() );
         CPPUNIT_ASSERT( child->GetChildren() == NULL );
-        CPPUNIT_ASSERT( child->GetParent() == n );
+        CPPUNIT_ASSERT( child->GetParent() == n.get() );
 
         child = child->GetNext();
     }
@@ -96,7 +97,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( XmlTestCase, "XmlTestCase" );
 
 void XmlTestCase::InsertChild()
 {
-    wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "root");
+    wxScopedPtr<wxXmlNode> root(new wxXmlNode(wxXML_ELEMENT_NODE, "root"));
     root->AddChild(new wxXmlNode(wxXML_ELEMENT_NODE, "1"));
     wxXmlNode *two = new wxXmlNode(wxXML_ELEMENT_NODE, "2");
     root->AddChild(two);
@@ -116,7 +117,7 @@ void XmlTestCase::InsertChild()
 
 void XmlTestCase::InsertChildAfter()
 {
-    wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "root");
+    wxScopedPtr<wxXmlNode> root(new wxXmlNode(wxXML_ELEMENT_NODE, "root"));
 
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "1"), NULL);
     CheckXml(root, "1", NULL);
