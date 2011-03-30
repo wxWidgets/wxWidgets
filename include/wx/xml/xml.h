@@ -257,7 +257,7 @@ public:
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
                   const wxString& encoding = wxT("UTF-8"));
-    virtual ~wxXmlDocument() { wxDELETE(m_root); }
+    virtual ~wxXmlDocument() { wxDELETE(m_docNode); }
 
     wxXmlDocument(const wxXmlDocument& doc);
     wxXmlDocument& operator=(const wxXmlDocument& doc);
@@ -273,10 +273,13 @@ public:
     virtual bool Save(const wxString& filename, int indentstep = 2) const;
     virtual bool Save(wxOutputStream& stream, int indentstep = 2) const;
 
-    bool IsOk() const { return m_root != NULL; }
+    bool IsOk() const { return GetRoot() != NULL; }
 
     // Returns root node of the document.
-    wxXmlNode *GetRoot() const { return m_root; }
+    wxXmlNode *GetRoot() const;
+    // Returns the document node.
+    wxXmlNode *GetDocumentNode() const { return m_docNode; }
+
 
     // Returns version of document (may be empty).
     const wxString& GetVersion() const { return m_version; }
@@ -286,10 +289,13 @@ public:
     const wxString& GetFileEncoding() const { return m_fileEncoding; }
 
     // Write-access methods:
-    wxXmlNode *DetachRoot() { wxXmlNode *old=m_root; m_root=NULL; return old; }
-    void SetRoot(wxXmlNode *node) { wxDELETE(m_root); m_root = node; }
+    wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=NULL; return old; }
+    void SetDocumentNode(wxXmlNode *node) { wxDELETE(m_docNode); m_docNode = node; }
+    wxXmlNode *DetachRoot();
+    void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version) { m_version = version; }
     void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
+    void AppendToProlog(wxXmlNode *node);
 
 #if !wxUSE_UNICODE
     // Returns encoding of in-memory representation of the document
@@ -307,7 +313,7 @@ private:
 #if !wxUSE_UNICODE
     wxString   m_encoding;
 #endif
-    wxXmlNode *m_root;
+    wxXmlNode *m_docNode;
 
     void DoCopy(const wxXmlDocument& doc);
 

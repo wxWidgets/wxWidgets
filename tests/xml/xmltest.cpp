@@ -77,14 +77,20 @@ private:
         CPPUNIT_TEST( InsertChildAfter );
         CPPUNIT_TEST( LoadSave );
         CPPUNIT_TEST( CDATA );
+        CPPUNIT_TEST( PI );
         CPPUNIT_TEST( Escaping );
+        CPPUNIT_TEST( DetachRoot );
+        CPPUNIT_TEST( AppendToProlog );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
     void InsertChildAfter();
     void LoadSave();
     void CDATA();
+    void PI();
     void Escaping();
+    void DetachRoot();
+    void AppendToProlog();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -150,6 +156,7 @@ void XmlTestCase::LoadSave()
     const char *xmlText =
 "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
 "<resource xmlns=\"http://www.wxwidgets.org/wxxrc\" version=\"2.3.0.1\">\n"
+"  <!-- Test comment -->\n"
 "  <object class=\"wxDialog\" name=\"my_dialog\">\n"
 "    <children>\n"
 "      <grandchild id=\"1\"/>\n"
@@ -194,6 +201,30 @@ void XmlTestCase::LoadSave()
     CPPUNIT_ASSERT_EQUAL( wxString(utf8xmlText),
                           wxString(sos8.GetString().ToUTF8()) );
 #endif // wxUSE_UNICODE
+
+    const char *xmlTextProlog =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!-- Prolog comment -->\n"
+"<?xml-stylesheet href=\"style.css\" type=\"text/css\"?>\n"
+"<resource xmlns=\"http://www.wxwidgets.org/wxxrc\" version=\"2.3.0.1\">\n"
+"  <!-- Test comment -->\n"
+"  <object class=\"wxDialog\" name=\"my_dialog\">\n"
+"    <children>\n"
+"      <grandchild id=\"1\"/>\n"
+"    </children>\n"
+"    <subobject/>\n"
+"  </object>\n"
+"</resource>\n"
+"<!-- Trailing comment -->\n"
+    ;
+
+    wxStringInputStream sisp(xmlTextProlog);
+    CPPUNIT_ASSERT( doc.Load(sisp, "UTF-8") );
+
+    wxStringOutputStream sosp;
+    CPPUNIT_ASSERT( doc.Save(sosp) );
+
+    CPPUNIT_ASSERT_EQUAL( xmlTextProlog, sosp.GetString() );
 }
 
 void XmlTestCase::CDATA()
@@ -221,6 +252,28 @@ void XmlTestCase::CDATA()
     CPPUNIT_ASSERT_EQUAL( "Giovanni Mittone", n->GetContent() );
 }
 
+void XmlTestCase::PI()
+{
+    const char *xmlText =
+        "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n"
+        "<root>\n"
+        "  <?robot index=\"no\" follow=\"no\"?>\n"
+        "</root>\n"
+    ;
+
+    wxStringInputStream sis(xmlText);
+    wxXmlDocument doc;
+    CPPUNIT_ASSERT( doc.Load(sis) );
+
+    wxXmlNode *n = doc.GetRoot();
+    CPPUNIT_ASSERT( n );
+
+    n = n->GetChildren();
+    CPPUNIT_ASSERT( n );
+
+    CPPUNIT_ASSERT_EQUAL( "index=\"no\" follow=\"no\"", n->GetContent() );
+}
+
 void XmlTestCase::Escaping()
 {
     // Verify that attribute values are escaped correctly, see
@@ -242,4 +295,132 @@ void XmlTestCase::Escaping()
     CPPUNIT_ASSERT( doc.Save(sos) );
 
     CPPUNIT_ASSERT_EQUAL( xmlText, sos.GetString() );
+}
+
+void XmlTestCase::DetachRoot()
+{
+    const char *xmlTextProlog =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!-- Prolog comment -->\n"
+"<?xml-stylesheet href=\"style.css\" type=\"text/css\"?>\n"
+"<resource xmlns=\"http://www.wxwidgets.org/wxxrc\" version=\"2.3.0.1\">\n"
+"  <!-- Test comment -->\n"
+"  <object class=\"wxDialog\" name=\"my_dialog\">\n"
+"    <children>\n"
+"      <grandchild id=\"1\"/>\n"
+"    </children>\n"
+"    <subobject/>\n"
+"  </object>\n"
+"</resource>\n"
+"<!-- Trailing comment -->\n"
+    ;
+    const char *xmlTextHtm =
+"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n"
+"<html>\n"
+"  <head>\n"
+"    <title>Testing wxXml</title>\n"
+"  </head>\n"
+"  <body>\n"
+"    <p>Some body text</p>\n"
+"  </body>\n"
+"</html>\n"
+    ;
+    wxXmlDocument doc;
+
+    wxStringInputStream sish(xmlTextHtm);
+    CPPUNIT_ASSERT( doc.Load(sish) );
+
+    wxXmlNode *root = doc.DetachRoot();
+
+    wxStringInputStream sisp(xmlTextProlog);
+    CPPUNIT_ASSERT( doc.Load(sisp) );
+
+    doc.SetRoot(root);
+
+    wxStringOutputStream sos;
+    CPPUNIT_ASSERT( doc.Save(sos) );
+
+    const char *xmlTextResult1 =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!-- Prolog comment -->\n"
+"<?xml-stylesheet href=\"style.css\" type=\"text/css\"?>\n"
+"<html>\n"
+"  <head>\n"
+"    <title>Testing wxXml</title>\n"
+"  </head>\n"
+"  <body>\n"
+"    <p>Some body text</p>\n"
+"  </body>\n"
+"</html>\n"
+"<!-- Trailing comment -->\n"
+    ;
+    CPPUNIT_ASSERT_EQUAL( xmlTextResult1, sos.GetString() );
+
+    wxStringInputStream sisp2(xmlTextProlog);
+    CPPUNIT_ASSERT( doc.Load(sisp2) );
+
+    root = doc.DetachRoot();
+
+    wxStringInputStream sish2(xmlTextHtm);
+    CPPUNIT_ASSERT( doc.Load(sish2) );
+
+    doc.SetRoot(root);
+
+    wxStringOutputStream sos2;
+    CPPUNIT_ASSERT( doc.Save(sos2) );
+
+    const char *xmlTextResult2 =
+"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n"
+"<resource xmlns=\"http://www.wxwidgets.org/wxxrc\" version=\"2.3.0.1\">\n"
+"  <!-- Test comment -->\n"
+"  <object class=\"wxDialog\" name=\"my_dialog\">\n"
+"    <children>\n"
+"      <grandchild id=\"1\"/>\n"
+"    </children>\n"
+"    <subobject/>\n"
+"  </object>\n"
+"</resource>\n"
+    ;
+    CPPUNIT_ASSERT_EQUAL( xmlTextResult2, sos2.GetString() );
+}
+
+void XmlTestCase::AppendToProlog()
+{
+    const char *xmlText =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<root>\n"
+"  <p>Some text</p>\n"
+"</root>\n"
+    ;
+    wxXmlDocument rootdoc;
+    wxStringInputStream sis(xmlText);
+    CPPUNIT_ASSERT( rootdoc.Load(sis) );
+    wxXmlNode *root = rootdoc.DetachRoot();
+
+    wxXmlNode *comment1 = new wxXmlNode(wxXML_COMMENT_NODE, "comment",
+        " 1st prolog entry ");
+    wxXmlNode *pi = new wxXmlNode(wxXML_PI_NODE, "xml-stylesheet",
+        "href=\"style.css\" type=\"text/css\"");
+    wxXmlNode *comment2 = new wxXmlNode(wxXML_COMMENT_NODE, "comment",
+        " 3rd prolog entry ");
+
+    wxXmlDocument doc;
+    doc.AppendToProlog( comment1 );
+    doc.AppendToProlog( pi );
+    doc.SetRoot( root );
+    doc.AppendToProlog( comment2 );
+
+    wxStringOutputStream sos;
+    CPPUNIT_ASSERT( doc.Save(sos) );
+
+    const char *xmlTextResult =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!-- 1st prolog entry -->\n"
+"<?xml-stylesheet href=\"style.css\" type=\"text/css\"?>\n"
+"<!-- 3rd prolog entry -->\n"
+"<root>\n"
+"  <p>Some text</p>\n"
+"</root>\n"
+    ;
+    CPPUNIT_ASSERT_EQUAL( xmlTextResult, sos.GetString() );
 }
