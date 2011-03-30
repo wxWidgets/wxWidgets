@@ -214,6 +214,15 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         m_last3_rect = m_last2_rect;
         m_last2_rect = m_last_rect;
         m_last_rect = win_rect;
+
+        // However still update the internally stored position to avoid
+        // snapping back to the old one later.
+        if (m_owner_mgr)
+        {
+            m_owner_mgr->GetPane(m_pane_window).
+                floating_pos = win_rect.GetPosition();
+        }
+
         return;
     }
 
