@@ -21,6 +21,23 @@
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+// Check the colour components, with and without alpha.
+//
+// NB: These are macros and not functions to have correct line numbers in case
+//     of failure.
+#define ASSERT_EQUAL_RGB(c, r, g, b) \
+    CPPUNIT_ASSERT_EQUAL( r, (int)c.Red() ); \
+    CPPUNIT_ASSERT_EQUAL( g, (int)c.Green() ); \
+    CPPUNIT_ASSERT_EQUAL( b, (int)c.Blue() )
+
+#define ASSERT_EQUAL_RGBA(c, r, g, b, a) \
+    ASSERT_EQUAL_RGB(c, r, g, b); \
+    CPPUNIT_ASSERT_EQUAL( a, (int)c.Alpha() )
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -32,9 +49,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ColourTestCase );
         CPPUNIT_TEST( GetSetRGB );
+        CPPUNIT_TEST( FromString );
     CPPUNIT_TEST_SUITE_END();
 
     void GetSetRGB();
+    void FromString();
 
     DECLARE_NO_COPY_CLASS(ColourTestCase)
 };
@@ -76,5 +95,21 @@ void ColourTestCase::GetSetRGB()
 #ifndef __WXX11__
     CPPUNIT_ASSERT_EQUAL( 0xaabbccdd, c.GetRGBA() );
 #endif // __WXX11__
+}
+
+void ColourTestCase::FromString()
+{
+    ASSERT_EQUAL_RGB( wxColour("rgb(11, 22, 33)"), 11, 22, 33 );
+    ASSERT_EQUAL_RGBA( wxColour("rgba(11, 22, 33, 0.5)"), 11, 22, 33, 128 );
+    ASSERT_EQUAL_RGBA( wxColour("rgba( 11, 22, 33, 0.5 )"), 11, 22, 33, 128 );
+
+    ASSERT_EQUAL_RGB( wxColour("#aabbcc"), 0xaa, 0xbb, 0xcc );
+
+    ASSERT_EQUAL_RGB( wxColour("red"), 0xff, 0, 0 );
+
+    wxColour col;
+    CPPUNIT_ASSERT( !wxFromString("rgb(1, 2)", &col) );
+    CPPUNIT_ASSERT( !wxFromString("rgba(1, 2, 3.456)", &col) );
+    CPPUNIT_ASSERT( !wxFromString("rgba(1, 2, 3.456, foo)", &col) );
 }
 

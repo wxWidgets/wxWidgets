@@ -101,10 +101,48 @@ bool wxColourBase::FromString(const wxString& str)
             alpha = wxALPHA_OPAQUE;
         if ( str.length() > 3 && (str[3] == wxT('a') || str[3] == wxT('A')) )
         {
-            float a;
-            // TODO: use locale-independent function
-            if ( wxSscanf(str.wx_str() + 4, wxT("( %d , %d , %d , %f )"),
-                                                &red, &green, &blue, &a) != 4 )
+            // We can't use sscanf() for the alpha value as sscanf() uses the
+            // current locale while the floating point numbers in CSS always
+            // use point as decimal separator, regardless of locale. So parse
+            // the tail of the string manually by putting it in a buffer and
+            // using wxString::ToCDouble() below. Notice that we can't use "%s"
+            // for this as it stops at white space and we need "%c" to avoid
+            // this and really get all the rest of the string into the buffer.
+
+            const unsigned len = str.length(); // always big enough
+            wxCharBuffer alphaBuf(len);
+            char * const alphaPtr = alphaBuf.data();
+
+            for ( unsigned n = 0; n < len; n++ )
+                alphaPtr[n] = '\0';
+
+            // Construct the format string which ensures that the last argument
+            // receives all the rest of the string.
+            wxString formatStr;
+            formatStr << wxS("( %d , %d , %d , %") << len << 'c';
+
+            // Notice that we use sscanf() here because if the string is not
+            // ASCII it can't represent a valid RGB colour specification anyhow
+            // and like this we can be sure that %c corresponds to "char *"
+            // while with wxSscanf() it depends on the type of the string
+            // passed as first argument: if it is a wide string, then %c
+            // expects "wchar_t *" matching parameter under MSW for example.
+            if ( sscanf(str.c_str() + 4,
+                        formatStr,
+                        &red, &green, &blue, alphaPtr) != 4 )
+                return false;
+
+            // Notice that we must explicitly specify the length to get rid of
+            // trailing NULs.
+            wxString alphaStr(alphaPtr, wxStrlen(alphaPtr));
+            if ( alphaStr.empty() || alphaStr.Last() != ')' )
+                return false;
+
+            alphaStr.RemoveLast();
+            alphaStr.Trim();
+
+            double a;
+            if ( !alphaStr.ToCDouble(&a) )
                 return false;
 
             alpha = wxRound(a * 255);
@@ -181,9 +219,9 @@ wxString wxColourBase::GetAsString(long flags) const
             }
             else // use rgba() form
             {
-                // TODO: use locale-independent function
-                colName.Printf(wxT("rgba(%d, %d, %d, %.3f)"),
-                               red, green, blue, Alpha() / 255.);
+                colName.Printf(wxT("rgba(%d, %d, %d, %s)"),
+                               red, green, blue,
+                               wxString::FromCDouble(Alpha() / 255., 3));
             }
         }
         else if ( flags & wxC2S_HTML_SYNTAX )
