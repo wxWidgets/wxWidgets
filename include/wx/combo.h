@@ -767,6 +767,13 @@ public:
     // Return true for success.
     virtual bool Create(wxWindow* parent) = 0;
 
+    // Calls Destroy() for the popup control (i.e. one returned by
+    // GetControl()) and makes sure that 'this' is deleted at the end.
+    // Default implementation works for both cases where popup control
+    // class is multiple inherited or created on heap as a separate
+    // object.
+    virtual void DestroyPopup();
+
     // We must have an associated control which is subclassed by the combobox.
     virtual wxWindow *GetControl() = 0;
 
