@@ -37,6 +37,8 @@
     #include "wx/dcprint.h"
 #endif
 
+#include "wx/stack.h"
+
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
@@ -50,8 +52,6 @@
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
 #include <commdlg.h>
 #endif
-
-#include "wx/stack.h"
 
 namespace
 {
