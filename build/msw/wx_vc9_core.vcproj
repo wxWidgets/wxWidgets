@@ -2614,6 +2614,22 @@
 			<File
 				RelativePath="..\..\src\msw\panel.cpp"
 				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\pen.cpp"
@@ -6029,6 +6045,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\palette.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\panel.h"
 				>
 			</File>
 			<File

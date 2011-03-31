@@ -1681,7 +1681,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/droptgt.cpp
     src/msw/ole/oleutils.cpp
     src/msw/palette.cpp
-    src/msw/panel.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
     src/msw/printdlg.cpp
@@ -1753,6 +1752,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
+    src/msw/panel.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
@@ -1834,6 +1834,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/oleutils.h
     wx/msw/ownerdrw.h
     wx/msw/palette.h
+    wx/msw/panel.h
     wx/msw/pen.h
     wx/msw/printdlg.h
     wx/msw/printwin.h

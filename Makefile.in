@@ -2989,6 +2989,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
+	wx/msw/panel.h \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
 	wx/msw/printwin.h \
@@ -3513,6 +3514,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
+	wx/msw/panel.h \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
 	wx/msw/printwin.h \
@@ -5049,7 +5051,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
 	monodll_msw_palette.o \
-	monodll_msw_panel.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
 	monodll_msw_printdlg.o \
@@ -5109,7 +5110,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
 	monodll_msw_palette.o \
-	monodll_msw_panel.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
 	monodll_msw_printdlg.o \
@@ -5460,6 +5460,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_notebook.o \
 	monodll_access.o \
 	monodll_msw_ownerdrw.o \
+	monodll_msw_panel.o \
 	monodll_progdlg.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5694,6 +5695,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_notebook.o \
 	monodll_access.o \
 	monodll_msw_ownerdrw.o \
+	monodll_msw_panel.o \
 	monodll_progdlg.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5923,7 +5925,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
 	monodll_msw_palette.o \
-	monodll_msw_panel.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
 	monodll_msw_printdlg.o \
@@ -5983,7 +5984,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
 	monodll_msw_palette.o \
-	monodll_msw_panel.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
 	monodll_msw_printdlg.o \
@@ -6971,7 +6971,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
 	monolib_msw_palette.o \
-	monolib_msw_panel.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
 	monolib_msw_printdlg.o \
@@ -7031,7 +7030,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
 	monolib_msw_palette.o \
-	monolib_msw_panel.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
 	monolib_msw_printdlg.o \
@@ -7382,6 +7380,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_notebook.o \
 	monolib_access.o \
 	monolib_msw_ownerdrw.o \
+	monolib_msw_panel.o \
 	monolib_progdlg.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -7616,6 +7615,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_notebook.o \
 	monolib_access.o \
 	monolib_msw_ownerdrw.o \
+	monolib_msw_panel.o \
 	monolib_progdlg.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -7845,7 +7845,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
 	monolib_msw_palette.o \
-	monolib_msw_panel.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
 	monolib_msw_printdlg.o \
@@ -7905,7 +7904,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
 	monolib_msw_palette.o \
-	monolib_msw_panel.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
 	monolib_msw_printdlg.o \
@@ -9077,7 +9075,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
 	coredll_msw_palette.o \
-	coredll_panel.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
 	coredll_msw_printdlg.o \
@@ -9137,7 +9134,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
 	coredll_msw_palette.o \
-	coredll_panel.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
 	coredll_msw_printdlg.o \
@@ -9488,6 +9484,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_notebook.o \
 	coredll_access.o \
 	coredll_msw_ownerdrw.o \
+	coredll_panel.o \
 	coredll_progdlg.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -9722,6 +9719,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_notebook.o \
 	coredll_access.o \
 	coredll_msw_ownerdrw.o \
+	coredll_panel.o \
 	coredll_progdlg.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -9951,7 +9949,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
 	coredll_msw_palette.o \
-	coredll_panel.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
 	coredll_msw_printdlg.o \
@@ -10011,7 +10008,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
 	coredll_msw_palette.o \
-	coredll_panel.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
 	coredll_msw_printdlg.o \
@@ -10661,7 +10657,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
 	corelib_msw_palette.o \
-	corelib_panel.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
 	corelib_msw_printdlg.o \
@@ -10721,7 +10716,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
 	corelib_msw_palette.o \
-	corelib_panel.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
 	corelib_msw_printdlg.o \
@@ -11072,6 +11066,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_notebook.o \
 	corelib_access.o \
 	corelib_msw_ownerdrw.o \
+	corelib_panel.o \
 	corelib_progdlg.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -11306,6 +11301,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_notebook.o \
 	corelib_access.o \
 	corelib_msw_ownerdrw.o \
+	corelib_panel.o \
 	corelib_progdlg.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -11535,7 +11531,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
 	corelib_msw_palette.o \
-	corelib_panel.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
 	corelib_msw_printdlg.o \
@@ -11595,7 +11590,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
 	corelib_msw_palette.o \
-	corelib_panel.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
 	corelib_msw_printdlg.o \
@@ -18087,12 +18081,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_pen.o: $(srcdir)/src/msw/pen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/pen.cpp
 
@@ -19142,6 +19130,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
@@ -23382,12 +23376,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_pen.o: $(srcdir)/src/msw/pen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/pen.cpp
 
@@ -24437,6 +24425,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
@@ -28857,12 +28851,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_panel.o: $(srcdir)/src/msw/panel.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_panel.o: $(srcdir)/src/msw/panel.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_pen.o: $(srcdir)/src/msw/pen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/pen.cpp
 
@@ -29912,6 +29900,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_panel.o: $(srcdir)/src/msw/panel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_panel.o: $(srcdir)/src/msw/panel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
@@ -32835,12 +32829,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_panel.o: $(srcdir)/src/msw/panel.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_panel.o: $(srcdir)/src/msw/panel.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_pen.o: $(srcdir)/src/msw/pen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/pen.cpp
 
@@ -33890,6 +33878,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_panel.o: $(srcdir)/src/msw/panel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_panel.o: $(srcdir)/src/msw/panel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp

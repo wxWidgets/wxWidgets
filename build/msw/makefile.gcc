@@ -1724,7 +1724,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
 	$(OBJS)\monodll_palette.o \
-	$(OBJS)\monodll_msw_panel.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_printdlg.o \
@@ -1778,6 +1777,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_notebook.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_ownerdrw.o \
+	$(OBJS)\monodll_msw_panel.o \
 	$(OBJS)\monodll_progdlg.o \
 	$(OBJS)\monodll_msw_radiobox.o \
 	$(OBJS)\monodll_msw_radiobut.o \
@@ -1996,7 +1996,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
 	$(OBJS)\monodll_palette.o \
-	$(OBJS)\monodll_msw_panel.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
 	$(OBJS)\monodll_printdlg.o \
@@ -2493,7 +2492,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
 	$(OBJS)\monolib_palette.o \
-	$(OBJS)\monolib_msw_panel.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_printdlg.o \
@@ -2547,6 +2545,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_notebook.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_ownerdrw.o \
+	$(OBJS)\monolib_msw_panel.o \
 	$(OBJS)\monolib_progdlg.o \
 	$(OBJS)\monolib_msw_radiobox.o \
 	$(OBJS)\monolib_msw_radiobut.o \
@@ -2765,7 +2764,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
 	$(OBJS)\monolib_palette.o \
-	$(OBJS)\monolib_msw_panel.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
 	$(OBJS)\monolib_printdlg.o \
@@ -3160,7 +3158,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
 	$(OBJS)\coredll_palette.o \
-	$(OBJS)\coredll_panel.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_printdlg.o \
@@ -3214,6 +3211,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_notebook.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_ownerdrw.o \
+	$(OBJS)\coredll_panel.o \
 	$(OBJS)\coredll_progdlg.o \
 	$(OBJS)\coredll_msw_radiobox.o \
 	$(OBJS)\coredll_msw_radiobut.o \
@@ -3432,7 +3430,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
 	$(OBJS)\coredll_palette.o \
-	$(OBJS)\coredll_panel.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
 	$(OBJS)\coredll_printdlg.o \
@@ -3708,7 +3705,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
 	$(OBJS)\corelib_palette.o \
-	$(OBJS)\corelib_panel.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_printdlg.o \
@@ -3762,6 +3758,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_notebook.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_ownerdrw.o \
+	$(OBJS)\corelib_panel.o \
 	$(OBJS)\corelib_progdlg.o \
 	$(OBJS)\corelib_msw_radiobox.o \
 	$(OBJS)\corelib_msw_radiobut.o \
@@ -3980,7 +3977,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
 	$(OBJS)\corelib_palette.o \
-	$(OBJS)\corelib_panel.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
 	$(OBJS)\corelib_printdlg.o \
@@ -6514,6 +6510,9 @@ $(OBJS)\monodll_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\monodll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_msw_panel.o: ../../src/msw/panel.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_progdlg.o: ../../src/msw/progdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7300,11 +7299,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_palette.o: ../../src/msw/palette.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_msw_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8861,6 +8855,9 @@ $(OBJS)\monolib_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\monolib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_msw_panel.o: ../../src/msw/panel.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_progdlg.o: ../../src/msw/progdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9647,11 +9644,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_palette.o: ../../src/msw/palette.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_msw_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11619,6 +11611,9 @@ $(OBJS)\coredll_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\coredll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_panel.o: ../../src/msw/panel.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_progdlg.o: ../../src/msw/progdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11988,11 +11983,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_palette.o: ../../src/msw/palette.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13021,6 +13011,9 @@ $(OBJS)\corelib_access.o: ../../src/msw/ole/access.cpp
 $(OBJS)\corelib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\corelib_panel.o: ../../src/msw/panel.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\corelib_progdlg.o: ../../src/msw/progdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13390,11 +13383,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_palette.o: ../../src/msw/palette.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_panel.o: ../../src/msw/panel.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
