@@ -1189,6 +1189,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     const wxDCImpl *impl = dc.GetImpl();
     Init( (cairo_t*) impl->GetCairoContext() );
 
+    wxSize sz = dc.GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
+
     wxPoint org = dc.GetDeviceOrigin();
     cairo_translate( m_context, org.x, org.y );
 
@@ -1204,6 +1208,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
 : wxGraphicsContext(renderer)
 {
+    int width, height;
+    dc.GetSize( &width, &height );
+    m_width = width;
+    m_height = height;
+
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1226,8 +1235,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #endif
 
 #ifdef __WXMAC__
-    int width, height;
-    dc.GetSize( &width, &height );
     CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
@@ -1238,6 +1245,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
 : wxGraphicsContext(renderer)
 {
+    int width, height;
+    dc.GetSize( &width, &height );
+    m_width = width;
+    m_height = height;
+
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1260,8 +1272,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXMAC__
-    int width, height;
-    dc.GetSize( &width, &height );
     CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
@@ -1274,6 +1284,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawa
 : wxGraphicsContext(renderer)
 {
     Init( gdk_cairo_create( drawable ) );
+
+    int width, height;
+    gdk_drawable_get_size( drawable, &width, &height );
+    m_width = width;
+    m_height = height;
 }
 #endif
 
@@ -1282,9 +1297,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 : wxGraphicsContext(renderer)
 {
     m_mswSurface = cairo_win32_surface_create(handle);
-    m_context = cairo_create(m_mswSurface);
-    PushState();
-    PushState();
+    Init( cairo_create(m_mswSurface) );
+    m_width =
+    m_height = 0;
 }
 #endif
 
@@ -1293,6 +1308,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
     Init( context );
+    m_width =
+    m_height = 0;
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
@@ -1312,6 +1329,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     wxASSERT_MSG( window->m_wxwindow, wxT("wxCairoContext needs a widget") );
 
     Init(gdk_cairo_create(window->GTKGetDrawingWindow()));
+
+    wxSize sz = window->GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
 #endif
 }
 

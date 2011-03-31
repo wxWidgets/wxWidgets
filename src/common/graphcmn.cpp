@@ -575,12 +575,6 @@ wxDouble wxGraphicsContext::GetAlpha() const
 }
 #endif
 
-void wxGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
-{
-    *width = 10000.0;
-    *height = 10000.0;
-}
-
 void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
 {
     *dpiX = 72.0;

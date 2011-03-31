@@ -506,6 +506,7 @@ GTK:
 - Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
 - wxTLW generates wxEVT_MAXIMIZE.
 - Fix copying clipboard data to primary selection (David Hart).
+- Implement wxGraphicsContext::GetSize() (Marcin Wojdyr).
 
 MSW:
 

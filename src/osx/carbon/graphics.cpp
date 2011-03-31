@@ -1390,9 +1390,6 @@ public:
 
     void Init();
 
-    // returns the size of the graphics context in device coordinates
-    virtual void GetSize( wxDouble* width, wxDouble* height);
-
     virtual void StartPage( wxDouble width, wxDouble height );
 
     virtual void EndPage();
@@ -1506,8 +1503,6 @@ private:
 #endif
     bool m_contextSynthesized;
     CGAffineTransform m_windowTransform;
-    wxDouble m_width;
-    wxDouble m_height;
     bool m_invisible;
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -1642,12 +1637,6 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
-}
-
-void wxMacCoreGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
-{
-    *width = m_width;
-    *height = m_height;
 }
 
 

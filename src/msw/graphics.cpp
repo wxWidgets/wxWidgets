@@ -387,9 +387,6 @@ private:
     GraphicsState m_state1;
     GraphicsState m_state2;
 
-    wxDouble m_width;
-    wxDouble m_height;
-
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
 

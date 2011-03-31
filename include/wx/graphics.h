@@ -503,7 +503,13 @@ public:
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
     // returns the size of the graphics context in device coordinates
-    virtual void GetSize( wxDouble* width, wxDouble* height);
+    void GetSize(wxDouble* width, wxDouble* height)
+    {
+        if ( width )
+            *width = m_width;
+        if ( height )
+            *height = m_height;
+    }
 
     // returns the resolution of the graphics context in device points per inch
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
@@ -638,6 +644,9 @@ public:
     virtual bool ShouldOffset() const { return false; }
 
 protected:
+    // These fields must be initialized in the derived class ctors.
+    wxDouble m_width,
+             m_height;
 
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
