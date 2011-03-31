@@ -620,8 +620,10 @@ public:
     virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
                              const wxPoint2DDouble* endPoints);
     /**
-        Stroke disconnected lines from begin to end points, fastest method
-        available for this purpose.
+        Stroke lines connecting all the points.
+
+        Unlike the other overload of this function, this method draws a single
+        polyline and not a number of disconnected lines.
     */
     virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
 
