@@ -516,6 +516,7 @@ MSW:
 - Fix wxBitmapButton best size determination broken in 2.9.1.
 - Center task dialog-based wxProgressDialog on the parent (John Roberts).
 - wxAutomationObject::GetInstance() creates objects on demand (Kolya Kosenko).
+- Fix EVT_UPDATE_UI generation for items in submenus (wsu).
 
 OSX:
 

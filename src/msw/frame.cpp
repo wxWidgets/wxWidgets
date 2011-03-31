@@ -864,15 +864,7 @@ bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
     wxMenu* menu = NULL;
     if (GetMenuBar())
     {
-        int nCount = GetMenuBar()->GetMenuCount();
-        for (int n = 0; n < nCount; n++)
-        {
-            if (GetMenuBar()->GetMenu(n)->GetHMenu() == hMenu)
-            {
-                menu = GetMenuBar()->GetMenu(n);
-                break;
-            }
-        }
+        menu = GetMenuBar()->MSWGetMenu(hMenu);
     }
 
     wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);

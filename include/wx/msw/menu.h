@@ -102,6 +102,9 @@ public:
         m_maxAccelWidth = -1;
     }
 
+    // get the menu with given handle (recursively)
+    wxMenu* MSWGetMenu(WXHMENU hMenu);
+
 private:
     void CalculateMaxAccelWidth();
 
@@ -207,6 +210,9 @@ public:
     // To avoid compile warning
     void Refresh( bool eraseBackground,
                           const wxRect *rect = (const wxRect *) NULL ) { wxWindow::Refresh(eraseBackground, rect); }
+
+    // get the menu with given handle (recursively)
+    wxMenu* MSWGetMenu(WXHMENU hMenu);
 
 protected:
     // common part of all ctors

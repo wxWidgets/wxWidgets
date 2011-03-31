@@ -885,6 +885,30 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
     return true;
 }
 
+// get the menu with given handle (recursively)
+wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
+{
+    // check self
+    if ( GetHMenu() == hMenu )
+        return this;
+
+    // recursively query submenus
+    for ( size_t n = 0 ; n < GetMenuItemCount(); ++n )
+    {
+        wxMenuItem* item = FindItemByPosition(n);
+        wxMenu* submenu = item->GetSubMenu();
+        if ( submenu )
+        {
+            submenu = submenu->MSWGetMenu(hMenu);
+            if (submenu)
+                return submenu;
+        }
+    }
+
+    // unknown hMenu
+    return NULL;
+}
+
 // ---------------------------------------------------------------------------
 // Menu Bar
 // ---------------------------------------------------------------------------
@@ -1465,6 +1489,24 @@ bool wxMenuBar::AddAdornments(long style)
 void wxMenuBar::Detach()
 {
     wxMenuBarBase::Detach();
+}
+
+// get the menu with given handle (recursively)
+wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
+{
+    wxCHECK_MSG( GetHMenu() != hMenu, NULL,
+                 wxT("wxMenuBar::MSWGetMenu(): menu handle is wxMenuBar, not wxMenu") );
+
+    // query all menus
+    for ( size_t n = 0 ; n < GetMenuCount(); ++n )
+    {
+        wxMenu* menu = GetMenu(n)->MSWGetMenu(hMenu);
+        if ( menu )
+            return menu;
+    }
+
+    // unknown hMenu
+    return NULL;
 }
 
 #endif // wxUSE_MENUS
