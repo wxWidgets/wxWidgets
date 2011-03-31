@@ -37,6 +37,14 @@ public:
     /**
         Disables all top level windows of the applications with the exception
         of @a winToSkip if it is not @NULL.
+
+        Notice that under MSW if @a winToSkip appears in the taskbar, the user
+        will be able to close the entire application (even though its main
+        window is disabled) by right clicking on the taskbar icon and selecting
+        the appropriate "Close" command from the context menu. To prevent this
+        from happening you may want to use wxFRAME_TOOL_WINDOW, if applicable,
+        or wxFRAME_NO_TASKBAR style when creating the window that will remain
+        enabled.
     */
     wxWindowDisabler(wxWindow* winToSkip);
 
