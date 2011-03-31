@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All (GUI):
 
 - wxRTC: speeded up image saving to XML (WriteHex).
+- Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 
 
 2.8.12:
@@ -139,7 +140,6 @@ All (GUI):
   is not called.
 - Fixed compilation with libpng 1.5 and above.
 - Removed ugly black (simple) border around wxHTML help window.
-- Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 
 wxMSW:
 
