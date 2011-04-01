@@ -10,6 +10,8 @@
 #ifndef __GTKWINDOWH__
 #define __GTKWINDOWH__
 
+typedef struct _GtkTooltips GtkTooltips;
+
 // helper structure that holds class that holds GtkIMContext object and
 // some additional data needed for key events processing
 struct wxGtkIMData;
