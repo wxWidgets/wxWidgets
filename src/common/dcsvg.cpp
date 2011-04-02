@@ -139,7 +139,7 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
     ////////////////////code here
 
     m_outfile = new wxFileOutputStream(filename);
-    m_OK = m_outfile->Ok ();
+    m_OK = m_outfile->Ok();
     if (m_OK)
     {
         m_filename = filename;
@@ -187,7 +187,7 @@ wxSize wxSVGFileDCImpl::GetPPI() const
 
 void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     wxString s;
     s.Printf ( wxT("<path d=\"M%d %d L%d %d\" /> \n"), x1,y1,x2,y2 );
     if (m_OK)
@@ -196,7 +196,6 @@ void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2
     }
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
-    return;
 }
 
 void wxSVGFileDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxCoord yoffset )
@@ -211,7 +210,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxC
 void wxSVGFileDCImpl::DoDrawPoint (wxCoord x1, wxCoord y1)
 {
     wxString s;
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     s = wxT("<g style = \"stroke-linecap:round;\" > ") + wxString(wxT("\n"));
     write(s);
     DoDrawLine ( x1,y1,x1,y1 );
@@ -232,7 +231,7 @@ void wxSVGFileDCImpl::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
 void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y, double angle)
 {
     //known bug; if the font is drawn in a scaled DC, it will not behave exactly as wxMSW
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     wxString s, sTmp;
 
     // calculate bounding box
@@ -266,8 +265,8 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     //now do the text itself
     s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "),x,y );
 
-    sTmp = m_font.GetFaceName ();
-    if (sTmp.Len () > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
+    sTmp = m_font.GetFaceName();
+    if (sTmp.Len() > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
     else s += wxT("style=\" ");
 
     wxString fontweights [3] = { wxT("normal"), wxT("lighter"), wxT("bold") };
@@ -276,7 +275,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     wxString fontstyles [5] = { wxT("normal"), wxT("style error"), wxT("style error"), wxT("italic"), wxT("oblique") };
     s += wxT("font-style:") + fontstyles[m_font.GetStyle() - wxNORMAL] + wxT("; ");
 
-    sTmp.Printf (wxT("font-size:%dpt; "), m_font.GetPointSize () );
+    sTmp.Printf (wxT("font-size:%dpt; "), m_font.GetPointSize() );
     s += sTmp;
     //text will be solid, unless alpha value isn't opaque in the foreground colour
     s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
@@ -296,7 +295,7 @@ void wxSVGFileDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoo
 void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 
 {
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     wxString s;
 
     s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" "),
@@ -313,7 +312,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
                                     wxCoord xoffset, wxCoord yoffset,
                                     wxPolygonFillMode fillStyle)
 {
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     wxString s, sTmp;
     s = wxT("<polygon style=\"");
     if ( fillStyle == wxODDEVEN_RULE )
@@ -336,7 +335,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
 void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 {
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
 
     int rh = height /2;
     int rw = width  /2;
@@ -362,7 +361,7 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
 
     Might be better described as Pie drawing */
 
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
     wxString s;
 
     // we need the radius of the circle which has two estimates
@@ -421,7 +420,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
 
     //known bug: SVG draws with the current pen along the radii, but this does not happen in wxMSW
 
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
 
     wxString s;
     //radius
@@ -471,12 +470,11 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoor
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
-
 {
     wxScreenDC sDC;
     sDC.SetFont (m_font);
 
-    return ( sDC.GetCharHeight() );
+    return sDC.GetCharHeight();
 
 }
 
@@ -485,8 +483,7 @@ wxCoord wxSVGFileDCImpl::GetCharWidth() const
     wxScreenDC sDC;
     sDC.SetFont (m_font);
 
-    return ( sDC.GetCharWidth() );
-
+    return sDC.GetCharWidth();
 }
 
 
@@ -496,16 +493,13 @@ wxCoord wxSVGFileDCImpl::GetCharWidth() const
 
 void wxSVGFileDCImpl::SetBackground( const wxBrush &brush )
 {
-
     m_backgroundBrush = brush;
-    return;
 }
 
 
 void wxSVGFileDCImpl::SetBackgroundMode( int mode )
 {
     m_backgroundMode = mode;
-    return;
 }
 
 
@@ -527,14 +521,14 @@ void wxSVGFileDCImpl::SetPen(const wxPen& pen)
     m_graphics_changed = true;
 }
 
-void wxSVGFileDCImpl::NewGraphics ()
+void wxSVGFileDCImpl::NewGraphics()
 {
     wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast, sWarn;
 
-    sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour (), m_brush.GetStyle () )
+    sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour(), m_brush.GetStyle() )
             + wxPenString(m_pen.GetColour(), m_pen.GetStyle());
 
-    switch ( m_pen.GetCap () )
+    switch ( m_pen.GetCap() )
     {
         case  wxCAP_PROJECTING :
             sPenCap = wxT("stroke-linecap:square; ");
@@ -545,8 +539,9 @@ void wxSVGFileDCImpl::NewGraphics ()
         case    wxCAP_ROUND :
         default :
             sPenCap = wxT("stroke-linecap:round; ");
-    };
-    switch ( m_pen.GetJoin () )
+    }
+
+    switch ( m_pen.GetJoin() )
     {
         case  wxJOIN_BEVEL :
             sPenJoin = wxT("stroke-linejoin:bevel; ");
@@ -557,7 +552,7 @@ void wxSVGFileDCImpl::NewGraphics ()
         case    wxJOIN_ROUND :
         default :
             sPenJoin = wxT("stroke-linejoin:round; ");
-    };
+    }
 
     sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%s %s) scale(%s %s)\">"),
                 m_pen.GetWidth(), NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
@@ -607,12 +602,11 @@ void wxSVGFileDCImpl::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord
     memDC.DrawIcon(myIcon,0,0);
     memDC.SelectObject( wxNullBitmap );
     DoDrawBitmap(myBitmap, x, y);
-    return;
 }
 
 void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y , bool  WXUNUSED(bTransparent) /*=0*/ )
 {
-    if (m_graphics_changed) NewGraphics ();
+    if (m_graphics_changed) NewGraphics();
 
     wxString sTmp, s, sPNG;
     if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
@@ -649,9 +643,7 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     {
         write(s);
     }
-    m_OK = m_outfile->Ok () && bPNG_OK;
-
-    return;
+    m_OK = m_outfile->Ok() && bPNG_OK;
 }
 
 void wxSVGFileDCImpl::write(const wxString &s)
