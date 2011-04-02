@@ -343,9 +343,12 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
             // for scrollable ones
             detail = "viewport";
 
+        // clip rect is required to avoid painting background
+        // over upper left (w,h) of parent window
+        GdkRectangle clipRect = { x, y, w, h };
         gtk_paint_shadow(
            gtk_widget_get_style(win->m_wxwindow), gdk_event->window, GTK_STATE_NORMAL,
-           shadow, NULL, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
+           shadow, &clipRect, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
     }
     return false;
 }
