@@ -560,10 +560,11 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
     /* get formats from wxDataObjects */
-    wxDataFormat *array = new wxDataFormat[ data.GetFormatCount() ];
-    data.GetAllFormats( array );
+    const size_t count = data.GetFormatCount(wxDataObject::Set);
+    wxDataFormat* array = new wxDataFormat[count];
+    data.GetAllFormats(array, wxDataObject::Set);
 
-    for (size_t i = 0; i < data.GetFormatCount(); i++)
+    for (size_t i = 0; i < count; i++)
     {
         wxDataFormat format( array[i] );
 

@@ -96,6 +96,10 @@ All (GUI):
 - wxRTC: speeded up image saving to XML (WriteHex).
 - Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 
+wxGTK:
+
+- Fix wxClipboard::GetData() for asymmetric wxDataObjects (Timothy Lee).
+
 
 2.8.12:
 -------
