@@ -113,7 +113,7 @@ struct wxFontMetrics
     wxWidgets offers an alternative drawing API based on the modern drawing
     backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
     and related classes. There is also a wxGCDC linking the APIs by offering
-    the wxDC API ontop of a wxGraphicsContext.
+    the wxDC API on top of a wxGraphicsContext.
 
     wxDC is an abstract base class and cannot be created directly.
     Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
@@ -153,9 +153,14 @@ struct wxFontMetrics
 
     @section dc_alpha_support Support for Transparency / Alpha Channel
 
-    On Mac OS X colours with alpha channel are supported. Instances of wxPen
-    or wxBrush that are built from wxColour use the colour's alpha values
-    when stroking or filling.
+    In general wxDC methods don't support alpha transparency and the alpha
+    component of wxColour is simply ignored and you need to use wxGraphicsContext
+    for full transparency support. There are, however, a few exceptions: first,
+    under Mac OS X colours with alpha channel are supported in all the normal
+    wxDC-derived classes as they use wxGraphicsContext internally. Second,
+    under all platforms wxSVGFileDC also fully supports alpha channel. In both
+    of these cases the instances of wxPen or wxBrush that are built from
+    wxColour use the colour's alpha values when stroking or filling.
 
 
     @library{wxcore}

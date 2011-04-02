@@ -40,26 +40,6 @@ namespace
 
 inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
-wxString wxBrushString ( wxColour c, int style )
-{
-    wxString s = wxT("fill:") + c.GetAsString(wxC2S_HTML_SYNTAX)  + wxT("; ");
-    switch ( style )
-    {
-        case wxBRUSHSTYLE_SOLID :
-            s = s + wxT("fill-opacity:1.0; ");
-            break;
-        case wxBRUSHSTYLE_TRANSPARENT:
-            s = s + wxT("fill-opacity:0.0; ");
-            break;
-
-        default :
-            wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
-
-    }
-    s = s + wxT("\n");
-    return s;
-}
-
 // This function returns a string representation of a floating point number in
 // C locale (i.e. always using "." for the decimal separator) and with the
 // fixed precision (which is 2 for some unknown reason but this is what it was
@@ -67,6 +47,58 @@ wxString wxBrushString ( wxColour c, int style )
 inline wxString NumStr(double f)
 {
     return wxString::FromCDouble(f, 2);
+}
+
+wxString wxPenString(wxColour c, int style = wxPENSTYLE_SOLID)
+{
+    wxString s = wxT("stroke:") + c.GetAsString(wxC2S_HTML_SYNTAX)  + wxT("; ");
+    // Use the color's alpha value (if not opaque) for the opacity.
+    // Note that a transparent pen will override the alpha value.
+    if (c.Alpha() != wxALPHA_OPAQUE && style != wxPENSTYLE_TRANSPARENT)
+    {
+        s = s + wxString::Format(wxT("stroke-opacity:%s; "), NumStr(c.Alpha()/255.));
+    }
+    else
+    {
+        switch ( style )
+        {
+            case wxPENSTYLE_SOLID:
+                s = s + wxT("stroke-opacity:1.0; ");
+                break;
+            case wxPENSTYLE_TRANSPARENT:
+                s = s + wxT("stroke-opacity:0.0; ");
+                break;
+            default :
+                wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Pen Style not available"));
+        }
+    }
+    return s;
+}
+
+wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
+{
+    wxString s = wxT("fill:") + c.GetAsString(wxC2S_HTML_SYNTAX)  + wxT("; ");
+    // Use the color's alpha value (if not opaque) for the opacity.
+    // Note that a transparent brush will override the alpha value.
+    if (c.Alpha() != wxALPHA_OPAQUE && style != wxBRUSHSTYLE_TRANSPARENT)
+    {
+        s = s + wxString::Format(wxT("fill-opacity:%s; "), NumStr(c.Alpha()/255.));
+    }
+    else
+    {
+        switch ( style )
+        {
+            case wxBRUSHSTYLE_SOLID:
+                s = s + wxT("fill-opacity:1.0; ");
+                break;
+            case wxBRUSHSTYLE_TRANSPARENT:
+                s = s + wxT("fill-opacity:0.0; ");
+                break;
+            default :
+                wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
+        }
+    }
+    return s;
 }
 
 } // anonymous namespace
@@ -230,10 +262,10 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
 
         wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::Draw Rotated Text Call plotting text background"));
-        sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"  "), x,y+desc-h, w, h );
-        s = sTmp + wxT("style=\"fill:") + m_textBackgroundColour.GetAsString(wxC2S_HTML_SYNTAX) + wxT("; ");
-        s = s + wxT("stroke-width:1; stroke:") + m_textBackgroundColour.GetAsString(wxC2S_HTML_SYNTAX) + wxT("; ");
-        sTmp.Printf ( wxT("\" transform=\"rotate( %s %d %d )  \">"), NumStr(-angle), x,y );
+        sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x,y+desc-h, w, h );
+        s = sTmp + wxT("style=\"") + wxBrushString(m_textBackgroundColour);
+        s = s + wxT("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
+        sTmp.Printf ( wxT("\" transform=\"rotate( %s %d %d )  \" />"), NumStr(-angle), x,y );
         s = s + sTmp + wxT("\n");
         write(s);
     }
@@ -250,9 +282,10 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     wxString fontstyles [5] = { wxT("normal"), wxT("style error"), wxT("style error"), wxT("italic"), wxT("oblique") };
     s = s + wxT("font-style:") + fontstyles[m_font.GetStyle() - wxNORMAL] + wxT("; ");
 
-    sTmp.Printf (wxT("font-size:%dpt; fill:"), m_font.GetPointSize () );
+    sTmp.Printf (wxT("font-size:%dpt; "), m_font.GetPointSize () );
     s = s + sTmp;
-    s = s + m_textForegroundColour.GetAsString(wxC2S_HTML_SYNTAX) + wxT("; stroke:") + m_textForegroundColour.GetAsString(wxC2S_HTML_SYNTAX) + wxT("; ");
+    //text will be solid, unless alpha value isn't opaque in the foreground colour
+    s = s + wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
     sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %s %d %d )  \" >"),  NumStr(-angle), x,y );
     s = s + sTmp + sText + wxT("</text> ") + wxT("\n");
     if (m_OK)
@@ -516,14 +549,10 @@ void wxSVGFileDCImpl::SetPen(const wxPen& pen)
 
 void wxSVGFileDCImpl::NewGraphics ()
 {
-
-    int w = m_pen.GetWidth ();
-    wxColour c = m_pen.GetColour ();
-
     wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast, sWarn;
 
     sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour (), m_brush.GetStyle () )
-            + wxT("  stroke:") + c.GetAsString(wxC2S_HTML_SYNTAX) + wxT("; ");
+            + wxPenString(m_pen.GetColour(), m_pen.GetStyle());
 
     switch ( m_pen.GetCap () )
     {
@@ -550,21 +579,8 @@ void wxSVGFileDCImpl::NewGraphics ()
             sPenJoin = wxT("stroke-linejoin:round; ");
     };
 
-    switch ( m_pen.GetStyle () )
-    {
-        case  wxPENSTYLE_SOLID :
-            sPenStyle = wxT("stroke-opacity:1.0; stroke-opacity:1.0; ");
-            break;
-        case  wxPENSTYLE_TRANSPARENT :
-            sPenStyle = wxT("stroke-opacity:0.0; stroke-opacity:0.0; ");
-            break;
-        default :
-            wxASSERT_MSG(false, wxT("wxSVGFileDC::SetPen Call called to set a Style which is not available"));
-            sWarn = sWarn + wxT("<!--- wxSVGFileDC::SetPen Call called to set a Style which is not available --> \n");
-    }
-
     sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%s %s) scale(%s %s)\">"),
-                w, NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
+                m_pen.GetWidth(), NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n") + sWarn;
     write(s);
