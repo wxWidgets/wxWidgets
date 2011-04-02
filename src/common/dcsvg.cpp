@@ -276,7 +276,7 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" "),
             x, y, width, height, NumStr(radius) );
 
-    s = s + wxT(" /> ") + wxT("\n");
+    s = s + wxT(" /> \n");
     write(s);
 
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawRoundedRectangle Call executed"));
@@ -296,7 +296,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
     else
         s = s + wxT("fill-rule:nonzero; ");
 
-    s = s  + wxT("\" \npoints=\"");
+    s = s + wxT("\" \npoints=\"");
 
     for (int i = 0; i < n;  i++)
     {
@@ -304,8 +304,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
         s = s + sTmp + wxT("\n");
         CalcBoundingBox ( points [i].x+xoffset, points[i].y+yoffset);
     }
-    s = s + wxT("\" /> ");
-    s = s + wxT("\n");
+    s = s + wxT("\" /> \n");
     write(s);
 
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawPolygon Call executed"));
@@ -321,7 +320,7 @@ void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoor
 
     wxString s;
     s.Printf ( wxT("<ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\" "), x+rw,y+rh, rw, rh );
-    s = s + wxT(" /> ") + wxT("\n");
+    s = s + wxT(" /> \n");
 
     write(s);
 
@@ -370,7 +369,7 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         x1,y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, xc, yc );
 
     // the z means close the path and fill
-    s = s + wxT(" \" /> ") + wxT("\n");
+    s = s + wxT(" \" /> \n");
 
 
     if (m_OK)
@@ -433,8 +432,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
         int(xs), int(ys), int(rx), int(ry),
         fArc, fSweep, int(xe), int(ye), int(xc), int(yc)  );
 
-
-    s = s + wxT(" \" /> ") + wxT("\n");
+    s = s + wxT(" \" /> \n");
 
     if (m_OK)
     {
