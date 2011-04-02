@@ -28,9 +28,6 @@
 #include "wx/wfstream.h"
 #include "wx/filename.h"
 
-#define wxSVG_DEBUG false
-// or true to see the calls being executed
-
 // ----------------------------------------------------------
 // Global utilities
 // ----------------------------------------------------------
@@ -197,7 +194,6 @@ void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2
     {
         write(s);
     }
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DrawLine Call executed"));
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
     return;
@@ -231,7 +227,6 @@ void wxSVGFileDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1, wxCoord width, wxC
 void wxSVGFileDCImpl::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
 {
     DoDrawRotatedText(text, x1,y1,0.0);
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DrawText Call executed"));
 }
 
 void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y, double angle)
@@ -261,7 +256,6 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         // draw background first
         // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
 
-        wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::Draw Rotated Text Call plotting text background"));
         sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x,y+desc-h, w, h );
         s = sTmp + wxT("style=\"") + wxBrushString(m_textBackgroundColour);
         s += wxT("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
@@ -292,7 +286,6 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     {
         write(s);
     }
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DrawRotatedText Call executed"));
 }
 
 void wxSVGFileDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -312,7 +305,6 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     s += wxT(" /> \n");
     write(s);
 
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawRoundedRectangle Call executed"));
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + width, y + height);
 }
@@ -339,8 +331,6 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
     }
     s += wxT("\" /> \n");
     write(s);
-
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawPolygon Call executed"));
 }
 
 void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -357,7 +347,6 @@ void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoor
 
     write(s);
 
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawEllipse Call executed"));
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + width, y + height);
 }
@@ -409,8 +398,6 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     {
         write(s);
     }
-
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawArc Call executed"));
 }
 
 void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
@@ -471,8 +458,6 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
     {
         write(s);
     }
-
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawEllipticArc Call executed"));
 }
 
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , const wxFont *font) const
@@ -483,7 +468,6 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoor
     sDC.SetFont (m_font);
     if ( font != NULL ) sDC.SetFont ( *font );
     sDC.GetTextExtent(string, w,  h, descent, externalLeading );
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::GetTextExtent Call executed"));
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
@@ -492,7 +476,6 @@ wxCoord wxSVGFileDCImpl::GetCharHeight() const
     wxScreenDC sDC;
     sDC.SetFont (m_font);
 
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::GetCharHeight Call executing"));
     return ( sDC.GetCharHeight() );
 
 }
@@ -502,7 +485,6 @@ wxCoord wxSVGFileDCImpl::GetCharWidth() const
     wxScreenDC sDC;
     sDC.SetFont (m_font);
 
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::GetCharWidth Call executing"));
     return ( sDC.GetCharWidth() );
 
 }
@@ -533,7 +515,6 @@ void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
     m_brush = brush;
 
     m_graphics_changed = true;
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetBrush Call executed"));
 }
 
 
@@ -544,7 +525,6 @@ void wxSVGFileDCImpl::SetPen(const wxPen& pen)
     m_pen = pen;
 
     m_graphics_changed = true;
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetPen Call executed"));
 }
 
 void wxSVGFileDCImpl::NewGraphics ()
@@ -585,7 +565,6 @@ void wxSVGFileDCImpl::NewGraphics ()
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n") + sWarn;
     write(s);
     m_graphics_changed = false;
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::NewGraphics Call executed"));
 }
 
 
@@ -593,8 +572,6 @@ void wxSVGFileDCImpl::SetFont(const wxFont& font)
 
 {
     m_font = font;
-
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetFont Call executed"));
 }
 
 // export a bitmap as a raster image in png
@@ -619,7 +596,6 @@ bool wxSVGFileDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
     memDC.Blit(0, 0, width, height, source, xsrc, ysrc);
     memDC.SelectObject( wxNullBitmap );
     DoDrawBitmap(myBitmap, xdest, ydest);
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoBlit Call executed"));
     return false;
 }
 
@@ -631,7 +607,6 @@ void wxSVGFileDCImpl::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord
     memDC.DrawIcon(myIcon,0,0);
     memDC.SelectObject( wxNullBitmap );
     DoDrawBitmap(myBitmap, x, y);
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawIcon Call executed"));
     return;
 }
 
@@ -675,7 +650,6 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
         write(s);
     }
     m_OK = m_outfile->Ok () && bPNG_OK;
-    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DoDrawBitmap Call executed"));
 
     return;
 }
