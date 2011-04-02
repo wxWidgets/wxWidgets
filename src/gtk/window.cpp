@@ -451,6 +451,7 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 }
 }
 
+#if wxUSE_COMBOBOX
 extern "C" {
 static
 void wxgtk_combo_size_request_callback(GtkWidget *widget,
@@ -485,6 +486,7 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
     requisition->height = entry_req.height;
 }
 }
+#endif // wxUSE_COMBOBOX
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
@@ -2627,6 +2629,7 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (gtk_window_size_callback), this);
     }
 
+#if wxUSE_COMBOBOX
     if (GTK_IS_COMBO(m_widget))
     {
         GtkCombo *gcombo = GTK_COMBO(m_widget);
@@ -2635,16 +2638,17 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (wxgtk_combo_size_request_callback),
                           this);
     }
-#ifdef GTK_IS_FILE_CHOOSER_BUTTON
-    else if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
+    else
+#elif defined(GTK_IS_FILE_CHOOSER_BUTTON)
+    if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
     {
         // If we connect to the "size_request" signal of a GtkFileChooserButton
         // then that control won't be sized properly when placed inside sizers
         // (this can be tested removing this elseif and running XRC or WIDGETS samples)
         // FIXME: what should be done here ?
     }
-#endif
     else
+#endif
     {
         // This is needed if we want to add our windows into native
         // GTK controls, such as the toolbar. With this callback, the
