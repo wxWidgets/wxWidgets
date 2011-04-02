@@ -439,6 +439,8 @@ void wxSlider::GTKSetValue(int value)
 {
     GTKDisableEvents();
     gtk_range_set_value(GTK_RANGE (m_scale), value);
+    // GTK only updates value label if handle moves at least 1 pixel
+    gtk_widget_queue_draw(m_scale);
     GTKEnableEvents();
 }
 
