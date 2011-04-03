@@ -3415,11 +3415,10 @@ if test "$wxUSE_GUI" = "yes"; then
                                 GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
                                 GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
                             fi
-                            dnl solaris also requires -lX11 for static lib
-                            if test "$wxUSE_SHARED" != "yes"; then
-                                GTK_LIBS="$GTK_LIBS -lX11"
-                            fi
                     esac
+
+                    dnl we use symbols from X11 directly so we should link with it
+                    GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                 dnl detect GTK1.x
