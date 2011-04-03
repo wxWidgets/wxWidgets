@@ -75,7 +75,7 @@ enum wxSystemColour
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.
     wxSYS_COLOUR_INFOTEXT,            //!< Text colour for tooltip controls.
     wxSYS_COLOUR_INFOBK,              //!< Background colour for tooltip controls.
-    wxSYS_COLOUR_LISTBOX,             //!< Background colour for list-like contols.
+    wxSYS_COLOUR_LISTBOX,             //!< Background colour for list-like controls.
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
 
     /**
@@ -136,7 +136,7 @@ enum wxSystemColour
         //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
 
     /**
-        Synonim for @c wxSYS_COLOUR_BTNFACE.
+        Synonym for @c wxSYS_COLOUR_BTNFACE.
 
         On wxMSW this colour should be used as the background colour of
         wxFrames which are used as containers of controls; this is in fact the
@@ -273,7 +273,7 @@ public:
         The value of @a win determines if the metric returned is a global value or
         a wxWindow based value, in which case it might determine the widget, the
         display the window is on, or something similar. The window given should be as
-        close to the metric as possible (e.g a wxTopLevelWindow in case of the
+        close to the metric as possible (e.g. a wxTopLevelWindow in case of the
         wxSYS_CAPTION_Y metric).
 
         @a index can be one of the ::wxSystemMetric enum values.

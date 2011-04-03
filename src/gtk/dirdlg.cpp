@@ -135,7 +135,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent,
     // local-only property could be set to false to allow non-local files to be loaded.
     // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
     // and the GtkFileChooserDialog should probably also be created with a backend,
-    // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
+    // e.g. "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
     // Currently local-only is kept as the default - true:
     // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
 

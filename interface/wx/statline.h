@@ -14,7 +14,7 @@
 
     The line may be only vertical or horizontal. Moreover, not all ports
     (notably not wxGTK) support specifying the transversal direction of the
-    line (e.g. height for a horizontal line) so for maximial portability you
+    line (e.g. height for a horizontal line) so for maximal portability you
     should specify it as wxDefaultCoord.
 
     @beginStyleTable

@@ -139,7 +139,7 @@ protected:
     wxString GetPortCmdArgument(const wxIPV4address& Local, const wxIPV4address& New);
 
     // accept connection from server in active mode, returns the same socket as
-    // passed in in passive mode
+    // passed in passive mode
     wxSocketBase *AcceptIfActive(wxSocketBase *sock);
 
 

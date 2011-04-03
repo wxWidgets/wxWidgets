@@ -534,8 +534,8 @@ public:
     inline wxSize GetSize()
         { return wxSize((int) m_width, (int) m_height); }
 
-    // for the edge and corner accessors there are two setters conterparts, the Set.. functions keep the other corners at their
-        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners apropriately
+    // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
+        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
 
     inline wxDouble GetLeft() const { return m_x; }
     inline void SetLeft( wxDouble n ) { m_width += m_x - n; m_x = n; }
@@ -661,8 +661,8 @@ public:
       inline wxPoint2DInt GetPosition() { return wxPoint2DInt(m_x, m_y); }
        inline wxSize GetSize() { return wxSize(m_width, m_height); }
 
-        // for the edge and corner accessors there are two setters conterparts, the Set.. functions keep the other corners at their
-        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners apropriately
+        // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
+        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
 
       inline wxInt32 GetLeft() const { return m_x; }
        inline void SetLeft( wxInt32 n ) { m_width += m_x - n; m_x = n; }

@@ -2632,10 +2632,10 @@ void wxDataViewColumn::SetReorderable(bool reorderable)
   }
 }
 
-void wxDataViewColumn::SetResizeable(bool resizeable)
+void wxDataViewColumn::SetResizeable(bool resizable)
 {
  // first set the internal flag of the column:
-  if (resizeable)
+  if (resizable)
     m_flags |= wxDATAVIEW_COL_RESIZABLE;
   else
     m_flags &= ~wxDATAVIEW_COL_RESIZABLE;
@@ -2651,7 +2651,7 @@ void wxDataViewColumn::SetResizeable(bool resizeable)
       DataBrowserListViewHeaderDesc headerDescription;
 
       verify_noerr(macDataViewListCtrlPtr->GetHeaderDesc(GetNativeData()->GetPropertyID(),&headerDescription));
-      if (resizeable)
+      if (resizable)
       {
         if (GetMinWidth() >= GetMaxWidth())
         {

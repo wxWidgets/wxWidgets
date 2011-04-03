@@ -28,7 +28,7 @@
 class MyResizableListCtrl : public wxListCtrl
 {
     // Very helpful wxWidgets macro required for wxWidgets-RTTI tracing: By using this
-    // you will see "Leaked one object of type myResizeableListCtrl" in the debug log,
+    // you will see "Leaked one object of type myResizableListCtrl" in the debug log,
     // along with which line you if was created, but you forget to free the memory.
     // NOTE: Using this REQUIRES a default constructor: that means either: giving a
     // default value for all parameters in your constructor, or else having a dummy
@@ -60,7 +60,7 @@ public:
                          const wxString &name = wxT("myResizableListCtrl")
                        );
 
-    // Destuctor.
+    // Destructor.
     ~MyResizableListCtrl(){};
 
 protected:

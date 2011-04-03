@@ -1602,7 +1602,7 @@ void wxDCImpl::CalculateEllipticPoints( wxPointList* points,
             y2 = y2-y-y+1;
             --y;
         }
-        // old y now to big: set point with old y, old x
+        // old y now too big: set point with old y, old x
         if( bNewPoint && x>1)
         {
             int x1 = x - 1;

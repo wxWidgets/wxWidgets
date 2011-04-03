@@ -495,7 +495,7 @@ public:
         Also, the wizard will never be smaller than the default size.
 
         The recommended way to use this function is to lay out all wizard pages
-        using the sizers (even though the wizard is not resizeable) and then use
+        using the sizers (even though the wizard is not resizable) and then use
         wxSizer::CalcMin() in a loop to calculate the maximum of minimal sizes of
         the pages and pass it to SetPageSize().
     */

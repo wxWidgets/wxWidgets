@@ -187,7 +187,7 @@ public:
     /**
         Sets the RGB intensity values using the given values (first overload),
         extracting them from the packed long (second overload), using the given
-        string (third overloard).
+        string (third overload).
 
         When using third form, Set() accepts: colour names (those listed in
         wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax 

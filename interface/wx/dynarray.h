@@ -124,7 +124,7 @@
     however dumb, C++ compiler in the world.
 
     Remember to include @<wx/arrimpl.cpp@> just before each
-    WX_DEFINE_OBJARRAY() ocurrence in your code, even if you have several in
+    WX_DEFINE_OBJARRAY() occurrence in your code, even if you have several in
     the same file.
 
     Things are much simpler for wxArray and wxSortedArray however: it is enough

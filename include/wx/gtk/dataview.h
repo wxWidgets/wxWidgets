@@ -46,7 +46,7 @@ public:
     virtual void SetSortOrder( bool ascending );
     virtual void SetAsSortKey(bool sort = true);
 
-    virtual void SetResizeable( bool resizeable );
+    virtual void SetResizeable( bool resizable );
     virtual void SetHidden( bool hidden );
 
     virtual void SetMinWidth( int minWidth );

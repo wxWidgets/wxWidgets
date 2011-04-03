@@ -160,7 +160,7 @@ public:
     // is successful and after the next Layout the item will be resized.
     bool SetSpan( const wxGBSpan& span );
 
-    // Returns true if this item and the other item instersect
+    // Returns true if this item and the other item intersect
     bool Intersects(const wxGBSizerItem& other);
 
     // Returns true if the given pos/span would intersect with this item.

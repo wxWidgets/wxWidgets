@@ -864,7 +864,7 @@ protected:
     /**
         This member function is not normally called in application code.
         Instead, it can be implemented in a derived class to return default
-        wxComboPopup, incase @a popup is @NULL.
+        wxComboPopup, in case @a popup is @NULL.
 
         @note If you have implemented OnButtonClick() to do something else than
               show the popup, then DoSetPopupControl() must always set @a popup

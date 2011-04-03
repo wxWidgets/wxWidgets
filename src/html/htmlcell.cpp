@@ -870,7 +870,7 @@ void wxHtmlContainerCell::Layout(int w)
 
     /*
 
-    LAYOUTING :
+    LAYOUT :
 
     */
 
@@ -878,7 +878,7 @@ void wxHtmlContainerCell::Layout(int w)
     s_indent = (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
     s_width = m_Width - s_indent - ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
 
-    // my own layouting:
+    // my own layout:
     wxHtmlCell *cell = m_Cells,
                *line = m_Cells;
     while (cell != NULL)

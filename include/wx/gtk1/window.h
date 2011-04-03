@@ -155,7 +155,7 @@ public:
     void GtkUpdateScrollbar(int orient);
 
     // Called from GTK signal handlers. it indicates that
-    // the layouting functions have to be called later on
+    // the layout functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = false; }
 

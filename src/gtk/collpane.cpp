@@ -95,7 +95,7 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
 
     // 1) need to update our size hints
     // NB: this function call won't actually do any long operation
-    //     (redraw/relayouting/resizing) so that it's flicker-free
+    //     (redraw/relayout/resize) so that it's flicker-free
     p->SetMinSize(sz);
 
     if (p->HasFlag(wxCP_NO_TLW_RESIZE))
@@ -123,7 +123,7 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
             //    transition.  This may be sometimes undesired but *is*
             //    necessary and if you look carefully, all GTK+ programs using
             //    GtkExpander perform this trick (e.g. the standard "open file"
-            //    dialog of GTK+>=2.4 is not resizeable when the expander is
+            //    dialog of GTK+>=2.4 is not resizable when the expander is
             //    collapsed!)
             gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
 

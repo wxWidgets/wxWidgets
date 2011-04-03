@@ -480,7 +480,7 @@ public:
         // windows this is just the client area of the window, but for
         // some like scrolled windows it is more or less independent of
         // the screen window size.  You may override the DoXXXVirtual
-        // methods below for classes where that is is the case.
+        // methods below for classes where that is the case.
 
     void SetVirtualSize( const wxSize &size ) { DoSetVirtualSize( size.x, size.y ); }
     void SetVirtualSize( int x, int y ) { DoSetVirtualSize( x, y ); }

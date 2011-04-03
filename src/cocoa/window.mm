@@ -735,7 +735,7 @@ int wxWindowCocoaScrollView::GetScrollPos(wxOrientation orient)
         position is at range-thumbsize.
 
         The range of an NSScroller is 0.0 to 1.0.  Much easier! NOTE: Apple doesn't really specify
-        but GNUStep docs do say that 0.0 is top/left and 1.0 is bottom/right.  This is actualy
+        but GNUStep docs do say that 0.0 is top/left and 1.0 is bottom/right.  This is actually
         in contrast to NSSlider which generally has 1.0 at the TOP when it's done vertically.
      */
     CGFloat cocoaScrollPos = [cocoaScroller floatValue];

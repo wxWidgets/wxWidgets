@@ -106,7 +106,7 @@ public:
     
     /**
         If sizing is not continuous, then return a suitable size for the control
-        which is larger then the current size.
+        which is larger than the current size.
     
         @param direction
             The direction(s) in which the size should increase.
@@ -121,7 +121,7 @@ public:
     
     /**
         If sizing is not continuous, then return a suitable size for the control
-        which is larger then the given size.
+        which is larger than the given size.
     
         @param direction
             The direction(s) in which the size should increase.

@@ -180,7 +180,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 
         pos += col.GetWidth();
 
-        // if the column is resizeable, check if we're approximatively over the
+        // if the column is resizable, check if we're approximatively over the
         // line separating it from the next column
         //
         // TODO: don't hardcode sensitivity

@@ -471,7 +471,7 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellValue(7, 1, wxT("Big box!"));
 
-    // create a separator-like row: it's grey and it's non-resizeable
+    // create a separator-like row: it's grey and it's non-resizable
     grid->DisableRowResize(10);
     grid->SetRowSize(10, 30);
     attr = new wxGridCellAttr;

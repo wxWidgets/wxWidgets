@@ -88,7 +88,7 @@ enum wxDialogLayoutAdaptationMode
            Equivalent to a combination of wxCAPTION, wxCLOSE_BOX and
            wxSYSTEM_MENU (the last one is not used under Unix).
     @style{wxRESIZE_BORDER}
-           Display a resizeable frame around the window.
+           Display a resizable frame around the window.
     @style{wxSYSTEM_MENU}
            Display a system menu.
     @style{wxCLOSE_BOX}
@@ -638,7 +638,7 @@ public:
 /**
     @class wxDialogLayoutAdapter
 
-    This abstract class is the base for classes that help wxWidgets peform
+    This abstract class is the base for classes that help wxWidgets perform
     run-time layout adaptation of dialogs. Principally, this is to cater for
     small displays by making part of the dialog scroll, but the application
     developer may find other uses for layout adaption.

@@ -68,7 +68,7 @@ and use than MFC and other frameworks.
 
 As well as comprehensive support for the usual widgets, advanced
 features include: HTML viewing/printing, wxImage class providing
-handlers for reading and writing many image types, resizeable panels
+handlers for reading and writing many image types, resizable panels
 and dialogs on all platforms, document/view, OpenGL support,
 HTML-based and context-sensitive help, wizards, drag and drop,
 a grid class, ODBC support, threads, sockets, container classes,

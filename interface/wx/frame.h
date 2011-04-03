@@ -70,7 +70,7 @@
            recommended to only use it together with wxCAPTION for consistent
            behaviour under all platforms.
     @style{wxRESIZE_BORDER}
-           Displays a resizeable border around the window.
+           Displays a resizable border around the window.
     @style{wxFRAME_TOOL_WINDOW}
            Causes a frame with a small title bar to be created; the frame does
            not appear in the taskbar under Windows or GTK+.
@@ -89,7 +89,7 @@
            with the SetShape() method.
     @endStyleTable
 
-    The default frame style is for normal, resizeable frames.
+    The default frame style is for normal, resizable frames.
     To create a frame which cannot be resized by user, you may use the following
     combination of styles:
 

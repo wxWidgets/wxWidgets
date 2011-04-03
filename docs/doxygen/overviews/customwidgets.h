@@ -135,7 +135,7 @@ The organization used by wxWidgets consists in:
 - declaring the real widget class inheriting from the Base version in
   platform-specific headers; see for example the wxWidgets' @c "wx/gtk/button.h" file.
 
-- separing the different implementations in different source files, putting
+- separating the different implementations in different source files, putting
   all common stuff in a separate source.
   See for example the wxWidgets' @c "src/common/btncmn.cpp", @c "src/gtk/button.cpp"
   and @c "src/msw/button.cpp" files.

@@ -641,7 +641,7 @@ protected:
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
 
-    // used to prevent immediate re-popupping incase closed popup
+    // used to prevent immediate re-popupping in case closed popup
     // by clicking on the combo control (needed because of inconsistent
     // transient implementation across platforms).
     wxLongLong              m_timeCanAcceptClick;

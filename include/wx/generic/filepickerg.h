@@ -49,7 +49,7 @@ public:
 
     virtual wxControl *AsControl() { return this; }
 
-public:     // overrideable
+public:     // overridable
 
     virtual wxDialog *CreateDialog() = 0;
 
@@ -114,7 +114,7 @@ public:
                pos, size, style, validator, name);
     }
 
-public:     // overrideable
+public:     // overridable
 
     virtual long GetDialogStyle() const
     {
@@ -190,7 +190,7 @@ public:
                pos, size, style, validator, name);
     }
 
-public:     // overrideable
+public:     // overridable
 
     virtual long GetDialogStyle() const
     {

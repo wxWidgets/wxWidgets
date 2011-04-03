@@ -166,7 +166,7 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     topsizer->Add(m_dirCtrl, wxSizerFlags(flagsBorder2).Proportion(1).Expand());
 
 #ifndef __SMARTPHONE__
-    // Make the an option depending on a flag?
+    // TODO: Make this an option depending on a flag?
     wxCheckBox *
         check = new wxCheckBox(this, ID_SHOW_HIDDEN, _("Show &hidden directories"));
     topsizer->Add(check, wxSizerFlags(flagsBorder2).Right());

@@ -846,7 +846,7 @@ bool wxTGAHandler::DoCanRead(wxInputStream& stream)
     unsigned char hdr[HDR_SIZE];
     stream.Read(hdr, HDR_SIZE);     // it's ok to modify the stream position here
 
-    // Check wether we can read the file or not.
+    // Check whether we can read the file or not.
 
     short colorType = hdr[HDR_COLORTYPE];
     if ( colorType != wxTGA_UNMAPPED && colorType != wxTGA_MAPPED )

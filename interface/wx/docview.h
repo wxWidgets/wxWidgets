@@ -683,7 +683,7 @@ public:
         @param noTemplates
             Number of templates being pointed to by the templates pointer.
         @param sort
-            If more than one template is passed in in templates, then this
+            If more than one template is passed into templates, then this
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
@@ -709,7 +709,7 @@ public:
         @param noTemplates
             Number of templates being pointed to by the templates pointer.
         @param sort
-            If more than one template is passed in in templates, then this
+            If more than one template is passed into templates, then this
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.

@@ -137,7 +137,7 @@ int wxMacDataBrowserListControl::DoListHitTest(const wxPoint& inpoint) const
             }
 
             if ( point.y < bounds.top )
-                // index(bounds) greater then key(point)
+                // index(bounds) greater than key(point)
                 high = mid - 1;
             else
                 // index(bounds) less than key(point)

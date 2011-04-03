@@ -147,7 +147,7 @@ void ButtonTestCase::Auth()
 
 void ButtonTestCase::BitmapMargins()
 {
-    //Some functions only work on specific platfroms in which case we can use
+    //Some functions only work on specific platforms in which case we can use
     //a preprocessor check
 #ifdef __WXMSW__
     //We must set a bitmap before we can set its margins, when writing unit

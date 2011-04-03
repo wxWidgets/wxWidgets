@@ -1680,7 +1680,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
             break;
 
         default:
-            // unknwon button, don't process
+            // unknown button, don't process
             return FALSE;
     }
 

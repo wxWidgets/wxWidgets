@@ -372,7 +372,7 @@ public:
 
     /**
         This function may be called if something fatal happens: an unhandled
-        exception under Win32 or a a fatal signal under Unix, for example. However,
+        exception under Win32 or a fatal signal under Unix, for example. However,
         this will not happen by default: you have to explicitly call
         wxHandleFatalExceptions() to enable this.
 

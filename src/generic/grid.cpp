@@ -3069,7 +3069,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
         }
-        else // not on row separator or it's not resizeable
+        else // not on row separator or it's not resizable
         {
             row = YToRow(y);
             if ( row >=0 &&

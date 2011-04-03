@@ -329,7 +329,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
-    else // column is not resizeable [by user]
+    else // column is not resizable [by user]
     {
         // if the control doesn't show a header, make the columns resize
         // automatically, this is particularly important for the single column
@@ -3137,10 +3137,10 @@ bool wxDataViewColumn::IsHidden() const
     return [m_NativeDataPtr->GetNativeColumnPtr() isHidden];
 }
 
-void wxDataViewColumn::SetResizeable(bool resizeable)
+void wxDataViewColumn::SetResizeable(bool resizable)
 {
-    wxDataViewColumnBase::SetResizeable(resizeable);
-    if (resizeable)
+    wxDataViewColumnBase::SetResizeable(resizable);
+    if (resizable)
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];

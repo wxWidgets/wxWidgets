@@ -1442,7 +1442,7 @@ void wxListCtrl::InitEditControl(WXHWND hWnd)
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
 
-    // we must disallow TABbing away from the control while the edit contol is
+    // we must disallow TABbing away from the control while the edit control is
     // shown because this leaves it in some strange state (just try removing
     // this line and then pressing TAB while editing an item in  listctrl
     // inside a panel)

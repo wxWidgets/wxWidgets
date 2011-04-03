@@ -104,7 +104,7 @@ public:
 
     /**
         Returns @true if the caret is visible and @false if it is permanently
-        hidden (if it is is blinking and not shown currently but will be after
+        hidden (if it is blinking and not shown currently but will be after
         the next blink, this method still returns @true).
     */
     bool IsVisible() const;

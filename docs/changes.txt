@@ -948,7 +948,7 @@ wxMSW:
 - Fix centering wxFileDialog and allow positioning it.
 - Allow centering wxMessageDialog on its parent window (troelsk).
 - Use vertical scrollbar in wxMessageDialog if it's too big to fit on screen.
-- Show resize gripper on resizeable dialogs (Kolya Kosenko).
+- Show resize gripper on resizable dialogs (Kolya Kosenko).
 - Implement support for display enumeration under WinCE (Vince Harron).
 - Use different Win32 class names in different wx instances (Thomas Hauk).
 - Support multiline labels for wxCheckBox and wxToggleButton.
@@ -1720,7 +1720,7 @@ All (GUI):
 - Fixed centering of top level windows on secondary displays.
 - Implemented wxDisplay::GetFromWindow() for platforms other than MSW.
 - UpdateUI handler can now show/hide the window too (Ronald Weiss).
-- More than one filter allowed in in wxDocTemplate filter.
+- More than one filter allowed in wxDocTemplate filter.
 - Added wxListBox::HitTest().
 - Added wxDisplay::GetClientArea().
 - Indices and counts in wxControlWithItems derived API are unsigned.
@@ -2665,7 +2665,7 @@ wxMSW:
 - several fixes to owner drawn menu items (Christian Sturmlechner)
 - wxGauge now supports full 32 bit range (Miroslav Rajcic)
 - make it possible to give focus to the notebook tabs (Hajo Kirchhoff)
-- MDI child frames are not always resizeable any more (Andrei Fortuna)
+- MDI child frames are not always resizable any more (Andrei Fortuna)
 - fixed enumerating of entries/groups under '/' in wxRegConfig
 - added wxSYS_ICONTITLE_FONT (Andreas Pflug)
 - added wxPATH_NORM_SHORTCUT to wxFileName
@@ -2772,7 +2772,7 @@ All GUI ports:
 - added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames
 - added wxSplitterWindow and wxWizard handlers to XRC
-- wxWizard is now sizer-friendly and may be made resizeable (Robert Vazan)
+- wxWizard is now sizer-friendly and may be made resizable (Robert Vazan)
 - added proportion to wxFlexGridSizer::AddGrowableRow/Col (Maxim Babitski)
 - added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
@@ -3533,7 +3533,7 @@ wxMSW:
 - wxFileDialog: adjusts struct size if there's an error (struct
   sizes can be different on different versions of Windows)
 - wxImageList::GetSize() documented and added to wxMSW
-- fixed default dialog style to make them non resizeable again
+- fixed default dialog style to make them non resizable again
 - fixed wxFrame::IsShown() which always returned TRUE before
 
 wxGTK:

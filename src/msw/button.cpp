@@ -518,7 +518,7 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
                       );
 
     // we must use WS_CLIPSIBLINGS with the buttons or they would draw over
-    // each other in any resizeable dialog which has more than one button in
+    // each other in any resizable dialog which has more than one button in
     // the bottom
     msStyle |= WS_CLIPSIBLINGS;
 

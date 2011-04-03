@@ -3114,9 +3114,9 @@ void wxDataViewColumn::SetHidden( bool hidden )
     gtk_tree_view_column_set_visible( GTK_TREE_VIEW_COLUMN(m_column), !hidden );
 }
 
-void wxDataViewColumn::SetResizeable( bool resizeable )
+void wxDataViewColumn::SetResizeable( bool resizable )
 {
-    gtk_tree_view_column_set_resizable( GTK_TREE_VIEW_COLUMN(m_column), resizeable );
+    gtk_tree_view_column_set_resizable( GTK_TREE_VIEW_COLUMN(m_column), resizable );
 }
 
 void wxDataViewColumn::SetAlignment( wxAlignment align )

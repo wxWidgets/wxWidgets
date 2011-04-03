@@ -169,7 +169,7 @@ public:
     wxInputStream* GetInputStream() const;
 
     /**
-        It returns an output stream correspoding to the input stream of the subprocess.
+        It returns an output stream corresponding to the input stream of the subprocess.
 
         If it is @NULL, you have not turned on the redirection or already
         called CloseOutput().

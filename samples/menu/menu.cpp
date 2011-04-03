@@ -47,8 +47,8 @@
     #define USE_CONTEXT_MENU 1
 #endif
 
-// this sample is usefull when new port is developed
-// and usually new port has majority of flags turned off
+// this sample is useful when a new port is developed
+// and usually a new port has majority of flags turned off
 #if wxUSE_LOG && wxUSE_TEXTCTRL
     #define USE_LOG_WINDOW 1
 #else

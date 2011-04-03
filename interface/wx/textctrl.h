@@ -796,7 +796,7 @@ public:
     void SetTabs(const wxArrayInt& tabs);
 
     /**
-        Sets the text foreground colout.
+        Sets the text foreground colour.
     */
     void SetTextColour(const wxColour& colText);
 

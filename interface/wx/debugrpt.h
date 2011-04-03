@@ -253,7 +253,7 @@ public:
     /**
         Retrieves the name (relative to GetDirectory()) and the description of
         the file with the given index. If @a n is greater than or equal to the
-        number of filse, @false is returned.
+        number of files, then @false is returned.
     */
     bool GetFile(size_t n, wxString* name, wxString* desc) const;
 

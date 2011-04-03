@@ -311,7 +311,7 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
     while ( tk.HasMoreTokens() )
     {
         wxString tok = tk.GetNextToken();
-        //FIXME: this causes us to print an extra unnecesary
+        //FIXME: this causes us to print an extra unnecessary
         //       space at the end of the line. But it
         //       is invisible , simplifies the size calculation
         //       and ensures tokens are separated in the display

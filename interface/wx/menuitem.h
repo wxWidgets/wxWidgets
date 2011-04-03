@@ -349,7 +349,7 @@ public:
     /**
         Sets the label associated with the menu item.
         
-        Note that if the ID of this menu item corrisponds to a stock ID, then it is 
+        Note that if the ID of this menu item corresponds to a stock ID, then it is 
         not necessary to specify a label: wxWidgets will automatically use the stock
         item label associated with that ID. See the @ref wxMenuItem::wxMenuItem "constructor"
         for more info.

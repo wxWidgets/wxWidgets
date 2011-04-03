@@ -353,8 +353,8 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
     dlg->callback = NULL;
     dlg->userdata = NULL;
 
-    /* the resizeable property of this window is modified by the expander:
-       when it's collapsed, the window must be non-resizeable! */
+    /* the resizable property of this window is modified by the expander:
+       when it's collapsed, the window must be non-resizable! */
     gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
     gtk_widget_pop_composite_child ();
     gtk_widget_show_all (GTK_WIDGET(dlg));

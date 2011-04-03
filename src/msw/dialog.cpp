@@ -420,7 +420,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             }
 #endif // wxUSE_DIALOG_SIZEGRIP
 
-            // the Windows dialogs unfortunately are not meant to be resizeable
+            // the Windows dialogs unfortunately are not meant to be resizable
             // at all and their standard class doesn't include CS_[VH]REDRAW
             // styles which means that the window is not refreshed properly
             // after the resize and no amount of WS_CLIPCHILDREN/SIBLINGS can

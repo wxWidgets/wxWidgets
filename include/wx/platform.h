@@ -273,7 +273,7 @@
     /*
         Preprocessor in older Borland compilers have major problems
         concatenating with ##. Specifically, if the string operands being
-        concatenated have special meaning (e.g L"str", 123i64 etc)
+        concatenated have special meaning (e.g. L"str", 123i64 etc)
         then ## will not concatenate the operands correctly.
 
         As a workaround, define wxPREPEND* and wxAPPEND* without using

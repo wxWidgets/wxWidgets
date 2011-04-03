@@ -720,7 +720,7 @@ public:
     /**
         Set proportion of a auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
         window style needs to be used to indicate that columns are auto-
-        resizeable.
+        resizable.
 
         @returns Returns @false on failure.
 

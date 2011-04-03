@@ -75,7 +75,7 @@ public:
           know the ordering of Undos; the user can never Undo at an arbitrary
           position in the command history.
         - Restore the entire document state (perhaps using document
-          transactioning). Potentially very inefficient, but possibly easier to
+          transacting). Potentially very inefficient, but possibly easier to
           code if the user interface and data are complex, and an "inverse
           execute" operation is hard to write. The docview sample uses the
           first method, to remove or restore segments in the drawing.

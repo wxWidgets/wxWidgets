@@ -81,7 +81,7 @@ protected:
     virtual void InitColours();
 
     // true if the status bar shows the size grip: for this it must have
-    // wxSTB_SIZEGRIP style and the window it is attached to must be resizeable
+    // wxSTB_SIZEGRIP style and the window it is attached to must be resizable
     // and not maximized
     bool ShowsSizeGrip() const;
 

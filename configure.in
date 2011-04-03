@@ -534,7 +534,7 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
       done
     else
-      dnl try to guess the most apropriate toolkit for this platform
+      dnl try to guess the most appropriate toolkit for this platform
       for toolkit in $ALL_TOOLKITS; do
         var=DEFAULT_DEFAULT_wxUSE_$toolkit
         eval "wxUSE_$toolkit=\$${var}"
@@ -4275,7 +4275,7 @@ AC_CHECK_TYPES([mbstate_t],
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
 dnl
-dnl the trouble here is that on some systems (e.g HP-UX 10) this function is
+dnl the trouble here is that on some systems (e.g. HP-UX 10) this function is
 dnl present in libc but not in the system headers and so AC_CHECK_FUNCS (which,
 dnl stupidly, provides a dummy function declaration inside its extension)
 dnl succeeds, even with C++ compiler, but the compilation of wxWidgets fails

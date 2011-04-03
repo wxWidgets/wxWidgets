@@ -638,8 +638,8 @@ bool wxTopLevelWindowOS2::Create(
     {
         //
         // We have different dialog templates to allow creation of dialogs
-        // with & without captions under OS2indows, resizeable or not (but a
-        // resizeable dialog always has caption - otherwise it would look too
+        // with & without captions under OS2indows, resizable or not (but a
+        // resizable dialog always has caption - otherwise it would look too
         // strange)
         //
         ULONG                       ulDlgTemplate;

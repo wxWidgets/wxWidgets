@@ -32,7 +32,7 @@ enum wxScrollbarVisibility
 
     - ::wxScrolledCanvas, aka wxScrolled<wxWindow>, derives from wxWindow and
       so doesn't handle children specially. This is suitable e.g. for
-      implementating scrollable controls such as tree or list controls.
+      implementing scrollable controls such as tree or list controls.
 
     Starting from version 2.4 of wxWidgets, there are several ways to use a
     ::wxScrolledWindow (and now wxScrolled). In particular, there are

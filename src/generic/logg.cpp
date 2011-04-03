@@ -726,7 +726,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     // create the controls which are always shown and layout them: we use
-    // sizers even though our window is not resizeable to calculate the size of
+    // sizers even though our window is not resizable to calculate the size of
     // the dialog properly
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(isPda ? wxVERTICAL : wxHORIZONTAL);

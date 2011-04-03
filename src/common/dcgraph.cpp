@@ -59,7 +59,7 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
     {
         case wxCOPY: // src
             // since we are supporting alpha, _OVER is closer to the intention than _SOURCE
-            // since the latter would overwrite even when alpha is is not set to opaque
+            // since the latter would overwrite even when alpha is not set to opaque
             *op = wxCOMPOSITION_OVER; 
             break;
         case wxOR:         // src OR dst

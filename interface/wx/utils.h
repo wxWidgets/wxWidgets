@@ -711,7 +711,7 @@ wxString wxGetOsDescription();
     'uname -r' command); e.g. "2" and "6" if the machine is using kernel 2.6.19.
 
     For Mac OS X systems (@c wxOS_MAC) the major and minor version integers are the
-    natural version numbers associated with the OS; e.g. "10" and and "6" if the machine
+    natural version numbers associated with the OS; e.g. "10" and "6" if the machine
     is using Mac OS X Snow Leopard.    
     
     For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 

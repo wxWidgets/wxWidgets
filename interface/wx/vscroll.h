@@ -715,7 +715,7 @@ public:
                       const wxString& name = wxPanelNameStr);
 
     /**
-        Same as the non-default constuctor, but returns a status code: @true if
+        Same as the non-default constructor, but returns a status code: @true if
         ok, @false if the window couldn't be created.
 
         Just as with the constructor, the @c wxVSCROLL style is always used,
@@ -791,7 +791,7 @@ public:
                       const wxString& name = wxPanelNameStr);
 
     /**
-        Same as the non-default constuctor, but returns a status code: @true if
+        Same as the non-default constructor, but returns a status code: @true if
         ok, @false if the window couldn't be created.
 
         Just as with the constructor, the @c wxHSCROLL style is always used,
@@ -868,7 +868,7 @@ public:
                        const wxString& name = wxPanelNameStr);
 
     /**
-        Same as the non-default constuctor, but returns a status code: @true if
+        Same as the non-default constructor, but returns a status code: @true if
         ok, @false if the window couldn't be created.
 
         Just as with the constructor, the @c wxHSCROLL and @c wxVSCROLL styles

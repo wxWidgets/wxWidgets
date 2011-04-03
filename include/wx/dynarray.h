@@ -636,7 +636,7 @@ private:                                                                 \
 // that wants to export a wxArray daubed with your own import/export goo.
 //
 // Finally, you can define the macro below as something special to modify the
-// arrays defined by a simple WX_FOO_ARRAY as well. By default is is empty.
+// arrays defined by a simple WX_FOO_ARRAY as well. By default is empty.
 #define wxARRAY_DEFAULT_EXPORT
 
 // ----------------------------------------------------------------------------

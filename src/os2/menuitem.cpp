@@ -492,7 +492,7 @@ bool wxMenuItem::OnMeasureItem( size_t* pWidth, size_t* pHeight )
     if (m_bmpChecked.Ok())
     {
         //
-        // Is BMP height larger then text height?
+        // Is BMP height larger than text height?
         //
         size_t                      nAdjustedHeight = m_bmpChecked.GetHeight() +
                                                       wxSystemSettings::GetMetric(wxSYS_EDGE_Y);

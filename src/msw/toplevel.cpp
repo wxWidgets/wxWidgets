@@ -496,8 +496,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
     {
         // we have different dialog templates to allows creation of dialogs
-        // with & without captions under MSWindows, resizeable or not (but a
-        // resizeable dialog always has caption - otherwise it would look too
+        // with & without captions under MSWindows, resizable or not (but a
+        // resizable dialog always has caption - otherwise it would look too
         // strange)
 
         // we need 3 additional WORDs for dialog menu, class and title (as we

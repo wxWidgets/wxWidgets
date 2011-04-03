@@ -160,7 +160,7 @@ public:
     @class wxFileSystemWatcherEvent
 
     A class of events sent when a file system event occurs. Types of events
-    reported may vary depending on a platfrom, however all platforms report
+    reported may vary depending on a platform, however all platforms report
     at least creation of new file/directory and access, modification, move
     (rename) or deletion of an existing one.
 

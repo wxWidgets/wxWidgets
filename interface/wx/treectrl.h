@@ -15,7 +15,7 @@
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
 
-    A similar control with a fully native implemtation for GTK+ and OS X
+    A similar control with a fully native implementation for GTK+ and OS X
     as well is wxDataViewTreeCtrl.
 
     To intercept events from a tree control, use the event table macros

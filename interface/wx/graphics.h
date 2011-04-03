@@ -403,7 +403,7 @@ public:
     /**
         Creates a native brush with a radial gradient.
 
-        The brush originats at (@a xo, @a yc) and ends on a circle around
+        The brush originates at (@a xo, @a yc) and ends on a circle around
         (@a xc, @a yc) with the given @a radius.
 
         The gradient may be specified either by its start and end colours @a

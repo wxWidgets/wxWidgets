@@ -202,7 +202,7 @@ public:
 
         //@{
         /**
-            Data Access: Access to invidividual colour components.
+            Data Access: Access to individual colour components.
         */
         ChannelType& Red();
         ChannelType& Green();

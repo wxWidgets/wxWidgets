@@ -596,7 +596,7 @@ struct wxPixelDataOut<wxBitmap>
             // data access
             // -----------
 
-            // access to invidividual colour components
+            // access to individual colour components
             ChannelType& Red() { return m_ptr[PixelFormat::RED]; }
             ChannelType& Green() { return m_ptr[PixelFormat::GREEN]; }
             ChannelType& Blue() { return m_ptr[PixelFormat::BLUE]; }

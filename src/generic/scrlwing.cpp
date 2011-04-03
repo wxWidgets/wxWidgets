@@ -1111,7 +1111,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     // part of a wxComboCtrl visible and the button would still be outside the
     // scrolled area.  But do so only if the parent fits *entirely* inside the
     // scrolled window. In other situations, such as nested wxPanel or
-    // wxScrolledWindows, the parent might be way to big to fit inside the
+    // wxScrolledWindows, the parent might be way too big to fit inside the
     // scrolled window. If that is the case, then make only the focused window
     // visible
     if ( win->GetParent() != m_targetWindow)

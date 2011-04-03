@@ -463,8 +463,8 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
 
                 // Check if we are in an infinite loop by multiplying value_size
                 // by 5 to have a *much* bigger range then the real range.
-                // Note: Incase you ask your self, why 5, the answer is no reason...
-                //       it is not to big and not to small a size, nothing more
+                // Note: In case you ask yourself, why 5, the answer is no reason...
+                //       it is not too big and not to small a size, nothing more
                 //       nothing less to it.
                 if (i > (value_size*5))
                 {

@@ -2170,7 +2170,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( refdata->IsMonochrome() == 1 )
     {
-        // is is a mask, the '1' in the mask tell where to draw the current brush
+        // is a mask, the '1' in the mask tell where to draw the current brush
         if (  !m_brush.IsNull() )
         {
             if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )

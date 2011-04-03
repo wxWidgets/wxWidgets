@@ -354,7 +354,7 @@ static int sg_cApplicationWillUpdate = 0;
     before the run loop waits and send the idle events from there.
 
     It also has the desirable effect of only sending the wx idle events when
-    the event loop is actualy going to block.  If the event loop is being
+    the event loop is actually going to block.  If the event loop is being
     pumped manualy (e.g. like a PeekMessage) then the kCFRunLoopBeforeWaiting
     observer never fires.  Our Yield() method depends on this because sending
     idle events from within Yield would be bad.

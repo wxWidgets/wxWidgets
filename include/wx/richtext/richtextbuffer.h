@@ -1977,7 +1977,7 @@ public:
 
     virtual ~wxRichTextObject();
 
-// Overrideables
+// Overridables
 
     /**
         Draw the item, within the given range. Some objects may ignore the range (for
@@ -2519,7 +2519,7 @@ public:
     wxRichTextCompositeObject(wxRichTextObject* parent = NULL);
     virtual ~wxRichTextCompositeObject();
 
-// Overrideables
+// Overridables
 
     /// Hit-testing: returns a flag indicating hit test details, plus
     /// information about position
@@ -2619,7 +2619,7 @@ public:
     wxRichTextParagraphLayoutBox(const wxRichTextParagraphLayoutBox& obj): wxRichTextCompositeObject() { Init(); Copy(obj); }
     ~wxRichTextParagraphLayoutBox();
 
-// Overrideables
+// Overridables
 
     /// Hit-testing: returns a flag indicating hit test details, plus
     /// information about position
@@ -2955,7 +2955,7 @@ public:
 
     wxRichTextBox(const wxRichTextBox& obj): wxRichTextParagraphLayoutBox() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     /**
         Draws the item.
@@ -3017,7 +3017,7 @@ public:
     wxRichTextLine(const wxRichTextLine& obj) { Init( NULL); Copy(obj); }
     virtual ~wxRichTextLine() {}
 
-// Overrideables
+// Overridables
 
 // Accessors
 
@@ -3114,7 +3114,7 @@ public:
     virtual ~wxRichTextParagraph();
     wxRichTextParagraph(const wxRichTextParagraph& obj): wxRichTextCompositeObject() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
@@ -3245,7 +3245,7 @@ public:
     wxRichTextPlainText(const wxString& text = wxEmptyString, wxRichTextObject* parent = NULL, wxRichTextAttr* style = NULL);
     wxRichTextPlainText(const wxRichTextPlainText& obj): wxRichTextObject() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
@@ -3444,7 +3444,7 @@ public:
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxRichTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject(obj) { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
@@ -3949,7 +3949,7 @@ public:
 
     wxRichTextCell(const wxRichTextCell& obj): wxRichTextBox() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     /**
         Draws the item.
@@ -4017,7 +4017,7 @@ public:
 
     wxRichTextTable(const wxRichTextTable& obj): wxRichTextBox() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
     // Draws the object.
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
@@ -4156,7 +4156,7 @@ protected:
     // Problem: if boxes are immediate children of a box, this will cause problems
     // with wxRichTextParagraphLayoutBox functions (and functions elsewhere) that
     // expect to find just paragraphs. May have to adjust the way we handle the
-    // hierarchy to accept non-paragraph objects in a a paragraph layout box.
+    // hierarchy to accept non-paragraph objects in a paragraph layout box.
     // We'll be overriding much wxRichTextParagraphLayoutBox functionality so this
     // may not be such a problem. Perhaps the table should derive from a different
     // class?

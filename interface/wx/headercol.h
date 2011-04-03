@@ -221,7 +221,7 @@ public:
     /**
         Set the minimal column width.
 
-        This method can be used with resizeable columns (i.e. those for which
+        This method can be used with resizable columns (i.e. those for which
         wxCOL_RESIZABLE flag is set in GetFlags() or, alternatively,
         IsResizeable() returns @true) to prevent the user from making them
         narrower than the given width.
@@ -302,11 +302,11 @@ public:
         Call this to enable or disable interactive resizing of the column by
         the user.
 
-        By default, the columns are resizeable.
+        By default, the columns are resizable.
 
-        Equivalent to ChangeFlag(wxCOL_RESIZABLE, resizeable).
+        Equivalent to ChangeFlag(wxCOL_RESIZABLE, resizable).
      */
-    virtual void SetResizeable(bool resizeable);
+    virtual void SetResizeable(bool resizable);
 
     /**
         Allow clicking the column to sort the control contents by the field in

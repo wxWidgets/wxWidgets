@@ -37,7 +37,7 @@
 
     This macro can be used in the code which needs to compile with both
     wxWidgets 2 and 3 versions in places where v2 API requires a Unicode string
-    (in Unicode build) and v3 API only accepts a standard standard narrow
+    (in Unicode build) and v3 API only accepts a standard narrow
     string as in e.g. wxCmdLineEntryDesc structure objects initializers.
 
     Example of use:

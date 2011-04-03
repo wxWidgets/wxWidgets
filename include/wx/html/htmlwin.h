@@ -472,11 +472,11 @@ protected:
     // Each wxHtmlWindow has it's own parser because sharing one global
     // parser would be problematic (because of reentrancy)
     wxHtmlWinParser *m_Parser;
-    // contains name of actualy opened page or empty string if no page opened
+    // contains name of actually opened page or empty string if no page opened
     wxString m_OpenedPage;
     // contains name of current anchor within m_OpenedPage
     wxString m_OpenedAnchor;
-    // contains title of actualy opened page or empty string if no <TITLE> tag
+    // contains title of actually opened page or empty string if no <TITLE> tag
     wxString m_OpenedPageTitle;
     // class for opening files (file system)
     wxFileSystem* m_FS;

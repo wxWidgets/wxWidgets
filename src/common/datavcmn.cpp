@@ -2245,7 +2245,7 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
         wxDATAVIEW_CELL_EDITABLE,
         -1,                         // default width
         wxALIGN_NOT,                //  and alignment
-        0                           // not resizeable
+        0                           // not resizable
     );
 
     return true;

@@ -2247,7 +2247,7 @@ long wxListCtrl::InsertItem (
     vInsert.fInvalidateRecord = TRUE;
 
     //
-    // Check wether we need to allocate our internal data
+    // Check whether we need to allocate our internal data
     //
     bool                            bNeedInternalData = ((rInfo.GetMask() & wxLIST_MASK_DATA) ||
                                                           rInfo.HasAttributes()

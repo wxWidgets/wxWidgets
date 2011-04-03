@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 // ----------------------------------------------------------------------------
 
 /*
-    Summary of the bits used (some of them are defined in wx/frame.g and
+    Summary of the bits used (some of them are defined in wx/frame.h and
     wx/dialog.h and not here):
 
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+

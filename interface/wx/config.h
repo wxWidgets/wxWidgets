@@ -312,7 +312,7 @@ public:
             @n The @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS style can be helpful if your
             config file must be read or written to by a non-wxWidgets program
             (which might not understand the escape characters). Note, however,
-            that if @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is is
+            that if @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is
             now your application's responsibility to ensure that there is no
             newline or other illegal characters in a value, before writing that
             value to the file.
@@ -763,7 +763,7 @@ public:
 
     /**
         Delete the whole underlying object (disk file, registry key, ...).
-        Primarly for use by uninstallation routine.
+        Primarily for use by uninstallation routine.
     */
     virtual bool DeleteAll() = 0;
 

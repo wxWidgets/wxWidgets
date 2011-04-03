@@ -129,7 +129,7 @@ wxULongLong wxInvalidSize;
     wxFileName::IsDirReadable() use wxFileName::GetPath() whereas methods dealing
     with file names like wxFileName::IsFileReadable() use wxFileName::GetFullPath().
 
-    If it is not known wether a string contains a directory name or a complete
+    If it is not known whether a string contains a directory name or a complete
     file name (such as when interpreting user input) you need to use the static
     function wxFileName::DirExists() (or its identical variants wxDir::Exists() and
     wxDirExists()) and construct the wxFileName instance accordingly.
@@ -332,7 +332,7 @@ public:
                 wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Creates the file name from volumne, path, name and extension.
+        Creates the file name from volume, path, name and extension.
     */
     void Assign(const wxString& volume, const wxString& path,
                 const wxString& name,
@@ -341,7 +341,7 @@ public:
                 wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Creates the file name from volumne, path, name and extension.
+        Creates the file name from volume, path, name and extension.
     */
     void Assign(const wxString& volume, const wxString& path,
                 const wxString& name,
@@ -558,7 +558,7 @@ public:
         suffixes of B, KB, MB, GB, TB for bytes, kilobytes, megabytes,
         gigabytes and terabytes respectively. With the IEC convention the names
         of the units are changed to B, KiB, MiB, GiB and TiB for bytes,
-        kibibytes, mebibyes, gibibytes and tebibytes. Finally, with SI
+        kibibytes, mebibytes, gibibytes and tebibytes. Finally, with SI
         convention the same B, KB, MB, GB and TB suffixes are used but in their
         correct SI meaning, i.e. as multiples of 1000 and not 1024.
 

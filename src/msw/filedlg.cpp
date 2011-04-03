@@ -65,7 +65,7 @@
 // ----------------------------------------------------------------------------
 
 // standard dialog size for the old Windows systems where the dialog wasn't
-// resizeable
+// resizable
 static wxRect gs_rectDialog(0, 0, 428, 266);
 
 // ============================================================================

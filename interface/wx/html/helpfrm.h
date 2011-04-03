@@ -59,7 +59,7 @@ public:
     /**
         Sets the help controller associated with the frame.
     */
-    void SetController(wxHtmlHelpController* contoller);
+    void SetController(wxHtmlHelpController* controller);
 
     /**
         Sets the frame's title format.

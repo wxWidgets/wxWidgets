@@ -747,14 +747,14 @@ public:
     void MapScreenSizeToDevice();
 
     /**
-        This sets the user scale of the wxDC assocated with this wxPrintout to the same
+        This sets the user scale of the wxDC associated with this wxPrintout to the same
         scale as MapScreenSizeToPaper() but sets the logical origin to the top left corner
         of the page rectangle.
     */
     void MapScreenSizeToPage();
 
     /**
-        This sets the user scale of the wxDC assocated with this wxPrintout to the same
+        This sets the user scale of the wxDC associated with this wxPrintout to the same
         scale as MapScreenSizeToPageMargins() but sets the logical origin to the top left
         corner of the page margins specified by the given wxPageSetupDialogData object.
     */

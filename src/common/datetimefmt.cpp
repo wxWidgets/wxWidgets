@@ -320,7 +320,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     format.Replace("%X",wxLocale::GetInfo(wxLOCALE_TIME_FMT));
 #endif
     // we have to use our own implementation if the date is out of range of
-    // strftime() or if we use non standard specificators
+    // strftime() or if we use non standard specifiers
 #ifdef wxHAS_STRFTIME
     time_t time = GetTicks();
 
@@ -668,7 +668,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     }
 
                     // no, it wasn't the width
-                    wxFAIL_MSG(wxT("unknown format specificator"));
+                    wxFAIL_MSG(wxT("unknown format specifier"));
 
                     // fall through and just copy it nevertheless
 

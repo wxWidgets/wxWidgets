@@ -106,7 +106,7 @@ public:
     void Detach();
 
     /**
-        Returns @true if the an attempt has been made to read @e past
+        Returns @true if an attempt has been made to read @e past
         the end of the file.
 
         Note that the behaviour of the file descriptor based class  wxFile is different as
