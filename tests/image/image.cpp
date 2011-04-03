@@ -1267,8 +1267,8 @@ void ImageTestCase::DibPadding()
 
     image = image.Scale(99, 99);
 
-    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_ICO),
-        image, wxIMAGE_HAVE_PALETTE);
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( image.SaveFile(memOut, wxBITMAP_TYPE_ICO) );
 }
 
 #endif //wxUSE_IMAGE
