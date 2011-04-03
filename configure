@@ -29949,12 +29949,7 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
   rm -f conf.gtktest
 
 
-                                        case "${host}" in
-                        *-*-solaris2* )
-                            if test "$wxUSE_SHARED" != "yes"; then
-                                GTK_LIBS="$GTK_LIBS -lX11"
-                            fi
-                    esac
+                                        GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                                 if test -z "$wx_cv_lib_gtk"; then

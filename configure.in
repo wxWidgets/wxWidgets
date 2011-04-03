@@ -2949,13 +2949,8 @@ if test "$wxUSE_GUI" = "yes"; then
 
                     AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
-                    dnl Solaris also requires -lX11 for static lib
-                    case "${host}" in
-                        *-*-solaris2* )
-                            if test "$wxUSE_SHARED" != "yes"; then
-                                GTK_LIBS="$GTK_LIBS -lX11"
-                            fi
-                    esac
+                    dnl we use symbols from X11 directly so we should link with it
+                    GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                 dnl detect GTK1.x
