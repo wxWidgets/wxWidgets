@@ -861,14 +861,14 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
 
     wxString baseStyle = def->GetBaseStyle();
-    wxString baseStyleProp;
+    wxString baseStyleProp = wxT(" name=\"") + AttributeToXML(def->GetName()) + wxT("\"");
     if (!baseStyle.IsEmpty())
-        baseStyleProp = wxT(" basestyle=\"") + baseStyle + wxT("\"");
+        baseStyleProp = wxT(" basestyle=\"") + AttributeToXML(baseStyle) + wxT("\"");
 
     wxString descr = def->GetDescription();
     wxString descrProp;
     if (!descr.IsEmpty())
-        descrProp = wxT(" description=\"") + descr + wxT("\"");
+        descrProp = wxT(" description=\"") + AttributeToXML(descr) + wxT("\"");
 
     if (charDef)
     {
@@ -895,7 +895,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         OutputIndentation(stream, level);
 
         if (!listDef->GetNextStyle().IsEmpty())
-            baseStyleProp << wxT(" nextstyle=\"") << listDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << AttributeToXML(listDef->GetNextStyle()) << wxT("\"");
 
         OutputString(stream, wxT("<liststyle") + baseStyleProp + descrProp + wxT(">"), convMem, convFile);
 
@@ -936,7 +936,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         OutputIndentation(stream, level);
 
         if (!paraDef->GetNextStyle().IsEmpty())
-            baseStyleProp << wxT(" nextstyle=\"") << paraDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << AttributeToXML(paraDef->GetNextStyle()) << wxT("\"");
 
         OutputString(stream, wxT("<paragraphstyle") + baseStyleProp + descrProp + wxT(">"), convMem, convFile);
 
@@ -990,7 +990,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
             str << wxT(" fontunderlined=\"") << (int) attr.GetFont().GetUnderlined() << wxT("\"");
 
         if (attr.HasFontFaceName())
-            str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
+            str << wxT(" fontface=\"") << AttributeToXML(attr.GetFont().GetFaceName()) << wxT("\"");
     }
 
     if (attr.HasTextEffects())
@@ -1005,7 +1005,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
     }
 
     if (!attr.GetCharacterStyleName().empty())
-        str << wxT(" characterstyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
+        str << wxT(" characterstyle=\"") << AttributeToXML(attr.GetCharacterStyleName()) << wxT("\"");
 
     if (attr.HasURL())
         str << wxT(" url=\"") << AttributeToXML(attr.GetURL()) << wxT("\"");
@@ -1046,19 +1046,19 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
             if (!attr.GetBulletText().IsEmpty() && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL))
                 str << wxT(" bulletsymbol=\"") << (int) (attr.GetBulletText()[0]) << wxT("\"");
             else
-                str << wxT(" bullettext=\"") << attr.GetBulletText() << wxT("\"");
+                str << wxT(" bullettext=\"") << AttributeToXML(attr.GetBulletText()) << wxT("\"");
 
-            str << wxT(" bulletfont=\"") << attr.GetBulletFont() << wxT("\"");
+            str << wxT(" bulletfont=\"") << AttributeToXML(attr.GetBulletFont()) << wxT("\"");
         }
 
         if (attr.HasBulletName())
-            str << wxT(" bulletname=\"") << attr.GetBulletName() << wxT("\"");
+            str << wxT(" bulletname=\"") << AttributeToXML(attr.GetBulletName()) << wxT("\"");
 
         if (!attr.GetParagraphStyleName().empty())
-            str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
+            str << wxT(" parstyle=\"") << AttributeToXML(attr.GetParagraphStyleName()) << wxT("\"");
 
         if (!attr.GetListStyleName().empty())
-            str << wxT(" liststyle=\"") << wxString(attr.GetListStyleName()) << wxT("\"");
+            str << wxT(" liststyle=\"") << AttributeToXML(attr.GetListStyleName()) << wxT("\"");
 
         if (attr.HasTabs())
         {
