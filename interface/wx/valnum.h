@@ -5,7 +5,7 @@
 // Created:     2010-11-06
 // Copyright:   (c) 2010 wxWidgets team
 //              (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

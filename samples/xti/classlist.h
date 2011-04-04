@@ -6,7 +6,7 @@
 // Created:     03/06/2007 14:49:55
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Francesco Montorsi
-// Licence:     wxWidgets license
+// Licence:     wxWindows licence
 ////////////////////////////////////////////////////
 
 #ifndef _CLASSLIST_H_

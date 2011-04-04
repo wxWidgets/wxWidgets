@@ -4,7 +4,7 @@
 // Author:      Steven Lamerton
 // RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/frame.h"

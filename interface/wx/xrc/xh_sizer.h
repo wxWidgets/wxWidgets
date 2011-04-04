@@ -4,7 +4,7 @@
 // Author:      Kinaou Hervé
 // Created:     2010-10-24
 // Copyright:   (c) 2010 wxWidgets development team
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
