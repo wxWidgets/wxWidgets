@@ -240,12 +240,12 @@ void VarArgTestCase::ArgsValidation()
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
 
     // the following test (correctly) fails at compile-time with <type_traits>
-    // and it also (wrongly) fails when using VC6 because it somehow tries to
-    // use (inaccessible) VarArgTestCase copy ctor (FIXME-VC6)
-#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS) && \
-        !defined(__VISUALC6__)
-    VarArgTestCase& somePOD = *this;
-    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", somePOD) );
+#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+    wxObject obj;
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", obj) );
+
+    wxObject& ref = obj;
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", ref) );
 #endif
 
     // %c should accept integers too
