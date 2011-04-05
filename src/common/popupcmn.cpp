@@ -44,7 +44,11 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
-    #include "wx/gtk/private/gtk2-compat.h"
+    #if GTK_CHECK_VERSION(2,0,0)
+        #include "wx/gtk/private/gtk2-compat.h"
+    #else
+        #define gtk_widget_get_window(x) x->window
+    #endif
 #elif defined(__WXMSW__)
     #include "wx/msw/private.h"
 #elif defined(__WXX11__)
