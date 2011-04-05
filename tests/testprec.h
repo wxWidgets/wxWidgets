@@ -85,8 +85,12 @@ public:
                 CPPUNIT_FAIL("expected assertion not generated"); \
         }
 #else
-    // there are no assertions in this build so just check that it fails
-    #define WX_ASSERT_FAILS_WITH_ASSERT(cond) CPPUNIT_ASSERT(!(cond))
+    // there are no assertions in this build so we can't do anything (we used
+    // to check that the condition failed but this didn't work well as in
+    // normal build with wxDEBUG_LEVEL != 0 we can pass something not
+    // evaluating to a bool at all but it then would fail to compile in
+    // wxDEBUG_LEVEL == 0 case, so just don't do anything at all now).
+    #define WX_ASSERT_FAILS_WITH_ASSERT(cond)
 #endif
 
 // these functions can be used to hook into wxApp event processing and are
