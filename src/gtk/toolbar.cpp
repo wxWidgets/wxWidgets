@@ -312,7 +312,7 @@ void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
         if (menu)
         {
             GtkAllocation alloc;
-            gtk_widget_set_allocation(GTK_WIDGET(button), &alloc);
+            gtk_widget_get_allocation(GTK_WIDGET(button), &alloc);
             int x = alloc.x;
             int y = alloc.y;
             if (toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT))
