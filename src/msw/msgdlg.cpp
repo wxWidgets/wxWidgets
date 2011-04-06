@@ -253,8 +253,10 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     {
         if ( *i != '\n' )
         {
-            // found last non-newline char, remove everything after it and stop
-            text.erase(i.base() + 1, text.end());
+            // found last non-newline char, remove anything after it if
+            // necessary and stop in any case
+            if ( i != text.rbegin() )
+                text.erase(i.base() + 1, text.end());
             break;
         }
     }
