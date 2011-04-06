@@ -43,7 +43,11 @@
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/renderer.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#if GTK_CHECK_VERSION(2,0,0)
+   #include "wx/gtk/private/gtk2-compat.h"
+#else
+   #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
+#endif
 #endif
 
 
