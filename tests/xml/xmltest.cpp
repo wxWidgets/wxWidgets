@@ -34,7 +34,7 @@
 namespace
 {
 
-void CheckXml(const wxScopedPtr<wxXmlNode>& n, ...)
+void CheckXml(const wxXmlNode *n, ...)
 {
     va_list args;
     va_start(args, n);
@@ -50,7 +50,7 @@ void CheckXml(const wxScopedPtr<wxXmlNode>& n, ...)
         CPPUNIT_ASSERT( child );
         CPPUNIT_ASSERT_EQUAL( childName, child->GetName() );
         CPPUNIT_ASSERT( child->GetChildren() == NULL );
-        CPPUNIT_ASSERT( child->GetParent() == n.get() );
+        CPPUNIT_ASSERT( child->GetParent() == n );
 
         child = child->GetNext();
     }
@@ -108,17 +108,17 @@ void XmlTestCase::InsertChild()
     wxXmlNode *two = new wxXmlNode(wxXML_ELEMENT_NODE, "2");
     root->AddChild(two);
     root->AddChild(new wxXmlNode(wxXML_ELEMENT_NODE, "3"));
-    CheckXml(root, "1", "2", "3", NULL);
+    CheckXml(root.get(), "1", "2", "3", NULL);
 
     // check inserting in front:
     root->InsertChild(new wxXmlNode(wxXML_ELEMENT_NODE, "A"), NULL);
-    CheckXml(root, "A", "1", "2", "3", NULL);
+    CheckXml(root.get(), "A", "1", "2", "3", NULL);
     root->InsertChild(new wxXmlNode(wxXML_ELEMENT_NODE, "B"), root->GetChildren());
-    CheckXml(root, "B", "A", "1", "2", "3", NULL);
+    CheckXml(root.get(), "B", "A", "1", "2", "3", NULL);
 
     // and in the middle:
     root->InsertChild(new wxXmlNode(wxXML_ELEMENT_NODE, "C"), two);
-    CheckXml(root, "B", "A", "1", "C", "2", "3", NULL);
+    CheckXml(root.get(), "B", "A", "1", "C", "2", "3", NULL);
 }
 
 void XmlTestCase::InsertChildAfter()
@@ -126,23 +126,23 @@ void XmlTestCase::InsertChildAfter()
     wxScopedPtr<wxXmlNode> root(new wxXmlNode(wxXML_ELEMENT_NODE, "root"));
 
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "1"), NULL);
-    CheckXml(root, "1", NULL);
+    CheckXml(root.get(), "1", NULL);
 
     wxXmlNode *two = new wxXmlNode(wxXML_ELEMENT_NODE, "2");
     root->AddChild(two);
     wxXmlNode *three = new wxXmlNode(wxXML_ELEMENT_NODE, "3");
     root->AddChild(three);
-    CheckXml(root, "1", "2", "3", NULL);
+    CheckXml(root.get(), "1", "2", "3", NULL);
 
     // check inserting in the middle:
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "A"), root->GetChildren());
-    CheckXml(root, "1", "A", "2", "3", NULL);
+    CheckXml(root.get(), "1", "A", "2", "3", NULL);
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "B"), two);
-    CheckXml(root, "1", "A", "2", "B", "3", NULL);
+    CheckXml(root.get(), "1", "A", "2", "B", "3", NULL);
 
     // and at the end:
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "C"), three);
-    CheckXml(root, "1", "A", "2", "B", "3", "C", NULL);
+    CheckXml(root.get(), "1", "A", "2", "B", "3", "C", NULL);
 }
 
 void XmlTestCase::LoadSave()
