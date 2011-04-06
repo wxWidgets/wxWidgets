@@ -601,7 +601,9 @@ void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
     if (m_kind == wxITEM_NORMAL)
         m_bitmap = bitmap;
     else
+    {
         wxFAIL_MSG("only normal menu items can have bitmaps");
+    }
 }
 
 void wxMenuItem::Check( bool check )

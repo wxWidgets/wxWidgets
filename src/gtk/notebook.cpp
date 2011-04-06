@@ -418,7 +418,9 @@ bool wxNotebook::InsertPage( size_t position,
                 pageData->m_image, false, false, m_padding);
         }
         else
+        {
             wxFAIL_MSG("invalid notebook imagelist");
+        }
     }
 
     /* set the label text */
