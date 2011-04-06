@@ -728,7 +728,9 @@ long wxExecute(char **argv, int flags, wxProcess *process,
                 // it might not be the best idea.
                 wxLogSysError(_("Failed to set up non-blocking pipe, "
                                 "the program might hang."));
+#if wxUSE_LOG
                 wxLog::FlushActive();
+#endif
             }
 
             wxOutputStream *inStream =
