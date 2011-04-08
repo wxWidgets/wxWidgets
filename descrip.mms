@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 April 2011                                                        *
+# Date : 8 April 2011                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -57,8 +57,10 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk1]
@@ -181,8 +183,10 @@ gtk2 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.gtk]
@@ -251,14 +255,18 @@ x11 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.univ]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [--.demos.bombs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [--.samples.calendar]
