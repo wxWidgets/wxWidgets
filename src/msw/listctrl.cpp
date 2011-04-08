@@ -1858,7 +1858,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // works (why should this message exist in ANSI and Unicode is
             // beyond me as it doesn't deal with strings at all...)
             //
-            // note that fr HDN_TRACK another possibility could be to use
+            // note that for HDN_TRACK another possibility could be to use
             // HDN_ITEMCHANGING but it is sent even after HDN_ENDTRACK and when
             // something other than the item width changes so we'd have to
             // filter out the unwanted events then
