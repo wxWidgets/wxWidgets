@@ -595,7 +595,10 @@ void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 
 float wxWidgetIPhoneImpl::GetContentScaleFactor() const 
 {
-    return [m_osxView contentScaleFactor];
+    if ( [m_osxView respondsToSelector:@selector(contentScaleFactor) ])
+        return [m_osxView contentScaleFactor];
+    else 
+        return 1.0;
 }
 
 void wxWidgetIPhoneImpl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
