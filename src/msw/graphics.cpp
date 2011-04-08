@@ -325,6 +325,8 @@ public:
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
+
     // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
 
@@ -1360,6 +1362,31 @@ void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 void wxGDIPlusContext::ResetClip()
 {
     m_context->ResetClip();
+}
+
+void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
+    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
+    Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
+
+    if ( brush )
+    {
+        // the offset is used to fill only the inside of the rectangle and not paint underneath
+        // its border which may influence a transparent Pen
+        REAL offset = 0;
+        if ( pen )
+             offset = pen->GetWidth();
+        m_context->FillRectangle( brush, (REAL)x + offset/2, (REAL)y + offset/2, (REAL)w - offset, (REAL)h - offset);
+    }
+
+    if ( pen )
+    {
+        m_context->DrawRectangle( pen, (REAL)x, (REAL)y, (REAL)w, (REAL)h );
+    }
 }
 
 void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
