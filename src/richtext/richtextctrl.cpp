@@ -1071,6 +1071,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 SetDefaultStyleToCursorStyle();
                 ScrollIntoView(m_caretPosition, WXK_RIGHT);
 
+                cmdEvent.SetPosition(m_caretPosition);
                 GetEventHandler()->ProcessEvent(cmdEvent);
 
                 Update();
