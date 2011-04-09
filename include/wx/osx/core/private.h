@@ -32,7 +32,7 @@
     #define wxOSX_10_6_AND_LATER(x)
 #endif
 
-#if !wxUSE_GUI || wxOSX_USE_COCOA_OR_CARBON
+#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 // Carbon functions are currently still used in wxOSX/Cocoa too (including
 // wxBase part of it).
