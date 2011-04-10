@@ -500,6 +500,7 @@ All (GUI):
   panel backgrounds, especially on OS X.
 - Add WXK_CONTROL_A..WXK_CONTROL_Z constants (Jan van Dijk).
 - Add support for alpha channel in colours in wxSVGFileDC (snowleopard).
+- Allow customizing AUI tab colours in wxAuiTabArt (snowleopard).
 
 GTK:
 

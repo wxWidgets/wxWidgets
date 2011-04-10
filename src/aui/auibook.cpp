@@ -206,6 +206,7 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
         base_colour = base_colour.ChangeLightness(92);
     }
 
+    m_active_colour = base_colour;
     m_base_colour = base_colour;
     wxColor border_colour = base_colour.ChangeLightness(75);
 
@@ -438,8 +439,8 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         // draw base background color
         wxRect r(tab_x, tab_y, tab_width, tab_height);
-        dc.SetPen(m_base_colour_pen);
-        dc.SetBrush(m_base_colour_brush);
+        dc.SetPen(wxPen(m_active_colour));
+        dc.SetBrush(wxBrush(m_active_colour));
         dc.DrawRectangle(r.x+1, r.y+1, r.width-1, r.height-4);
 
         // this white helps fill out the gradient at the top of the tab
@@ -448,7 +449,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height-4);
 
         // these two points help the rounded corners appear more antialiased
-        dc.SetPen(m_base_colour_pen);
+        dc.SetPen(wxPen(m_active_colour));
         dc.DrawPoint(r.x+2, r.y+1);
         dc.DrawPoint(r.x+r.width-2, r.y+1);
 
@@ -461,7 +462,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         // draw gradient background
         wxColor top_color = *wxWHITE;
-        wxColor bottom_color = m_base_colour;
+        wxColor bottom_color = m_active_colour;
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
     }
     else
@@ -831,6 +832,18 @@ void wxAuiDefaultTabArt::SetMeasuringFont(const wxFont& font)
     m_measuring_font = font;
 }
 
+void wxAuiDefaultTabArt::SetColour(const wxColour& colour)
+{
+    m_base_colour = colour;
+    m_border_pen = wxPen(m_base_colour.ChangeLightness(75));
+    m_base_colour_pen = wxPen(m_base_colour);
+    m_base_colour_brush = wxBrush(m_base_colour);
+}
+
+void wxAuiDefaultTabArt::SetActiveColour(const wxColour& colour)
+{
+    m_active_colour = colour;
+}
 
 // -- wxAuiSimpleTabArt class implementation --
 
@@ -876,9 +889,8 @@ wxAuiSimpleTabArt::~wxAuiSimpleTabArt()
 
 wxAuiTabArt* wxAuiSimpleTabArt::Clone()
 {
-    return static_cast<wxAuiTabArt*>(new wxAuiSimpleTabArt);
+    return new wxAuiSimpleTabArt(*this);
 }
-
 
 void wxAuiSimpleTabArt::SetFlags(unsigned int flags)
 {
@@ -911,6 +923,19 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     if (m_fixed_tab_width > 220)
         m_fixed_tab_width = 220;
+}
+
+void wxAuiSimpleTabArt::SetColour(const wxColour& colour)
+{
+    m_bkbrush = wxBrush(colour);
+    m_normal_bkbrush = wxBrush(colour);
+    m_normal_bkpen = wxPen(colour);
+}
+
+void wxAuiSimpleTabArt::SetActiveColour(const wxColour& colour)
+{
+    m_selected_bkbrush = wxBrush(colour);
+    m_selected_bkpen = wxPen(colour);
 }
 
 void wxAuiSimpleTabArt::DrawBackground(wxDC& dc,
@@ -1363,6 +1388,16 @@ void wxAuiTabContainer::SetSelectedFont(const wxFont& font)
 void wxAuiTabContainer::SetMeasuringFont(const wxFont& font)
 {
     m_art->SetMeasuringFont(font);
+}
+
+void wxAuiTabContainer::SetColour(const wxColour& colour)
+{
+    m_art->SetColour(colour);
+}
+
+void wxAuiTabContainer::SetActiveColour(const wxColour& colour)
+{
+    m_art->SetActiveColour(colour);
 }
 
 void wxAuiTabContainer::SetRect(const wxRect& rect)
