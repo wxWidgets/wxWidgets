@@ -546,6 +546,8 @@ public:                                                               \
                                                                       \
   size_t Add(T lItem)                                                 \
     { return base::Add(lItem, (CMPFUNC)m_fnCompare); }                \
+  void push_back(T lItem)                                             \
+    { Add(lItem); }                                                   \
                                                                       \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
     { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
