@@ -455,7 +455,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         // set rectangle down a bit for gradient drawing
         r.SetHeight(r.GetHeight()/2);
         r.x += 2;
-        r.width -= 2;
+        r.width -= 3;
         r.y += r.height;
         r.y -= 2;
 
