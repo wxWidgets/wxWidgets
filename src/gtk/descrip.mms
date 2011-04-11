@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 September 2009                                                   *
+# Date : 11 April 2011                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -165,7 +165,7 @@ SOURCES =\
 	utilsgtk.cpp,\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
-	mnemonics.cpp,private.cpp,assertdlg_gtk.c,infobar.cpp
+	mnemonics.cpp,private.cpp,assertdlg_gtk.cpp,infobar.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -258,5 +258,5 @@ print.obj : print.cpp
 win_gtk.obj : win_gtk.cpp
 mnemonics.obj : mnemonics.cpp
 private.obj : private.cpp
-assertdlg_gtk.obj : assertdlg_gtk.c
+assertdlg_gtk.obj : assertdlg_gtk.cpp
 infobar.obj : infobar.cpp
