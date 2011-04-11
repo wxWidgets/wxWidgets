@@ -9,6 +9,9 @@
 
 #ifdef __VMS
 #include <types.h>
+typedef pid_t GPid;
+#define G_GNUC_INTERNAL 
+#define GSEAL(x) x
 #endif
 
 #include "wx/gtk/treeentry_gtk.h"
