@@ -7665,6 +7665,7 @@ wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichT
 bool wxRichTextImage::LoadFromBlock()
 {
     m_imageBlock.Load(m_image);
+    m_bitmap = wxNullBitmap;
     return m_imageBlock.Ok();
 }
 
