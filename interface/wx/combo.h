@@ -41,6 +41,10 @@ public:
         your popup class in non-standard way. The default implementation can
         handle both multiple-inherited popup control (as seen in wxComboCtrl
         samples) and one allocated separately in heap.
+
+        If you do completely re-implement this function, make sure it calls
+        Destroy() for the popup control and also deletes @a this object
+        (usually as the last thing).
     */
     virtual void DestroyPopup();
 
