@@ -1754,6 +1754,13 @@ void wxComboCtrlBase::RecalcAndRefresh()
 
 void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
 {
+    // Avoid infinite recursion
+    if ( event.GetEventObject() == this )
+    {
+        event.Skip();
+        return;
+    }
+
     if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
     {
         if ( m_ignoreEvtText > 0 )
@@ -1763,12 +1770,13 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
         }
     }
 
-    // Change event id, object and string before relaying it forward
-    event.SetId(GetId());
-    wxString s = event.GetString();
-    event.SetEventObject(this);
-    event.SetString(s);
-    event.Skip();
+    event.StopPropagation();
+
+    // For safety, completely re-create a new wxCommandEvent
+    wxCommandEvent evt2(event.GetEventType(), GetId());
+    evt2.SetEventObject(this);
+    evt2.SetString(event.GetString());
+    HandleWindowEvent(evt2);
 }
 
 // call if cursor is on button area or mouse is captured for the button
