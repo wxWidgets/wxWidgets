@@ -289,6 +289,29 @@ protected :
         impl->controlTextDidChange();
 }
 
+- (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
+ forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+{
+    NSMutableArray* matches = NULL;
+    NSString*       partialString;
+    
+    partialString = [[textView string] substringWithRange:charRange];
+    matches       = [NSMutableArray array];
+    
+    wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxArrayString completions;
+    
+    // adapt to whatever strategy we have for getting the strings
+    // impl->GetTextEntry()->GetCompletions(wxCFStringRef::AsString(partialString), completions);
+    
+    for (size_t i = 0; i < completions.GetCount(); ++i )
+        [matches addObject: wxCFStringRef(completions[i]).AsNSString()];
+
+    // [matches sortUsingSelector:@selector(compare:)];
+    
+    return matches;
+}
+
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
 {
     wxUnusedVar(textView);
