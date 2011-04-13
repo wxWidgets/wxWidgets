@@ -3608,6 +3608,12 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         }
         else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
         {
+            // In some cases we might stumble unintentionally on
+            // wxComboCtrl's embedded wxTextCtrl's events. Let's
+            // avoid them.
+            if ( editorWnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+                return false;
+
             wxComboCtrl* cc = (wxComboCtrl*) wnd;
 
             wxString newTcValue = cc->GetTextCtrl()->GetValue();
