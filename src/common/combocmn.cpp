@@ -1773,9 +1773,9 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
     event.StopPropagation();
 
     // For safety, completely re-create a new wxCommandEvent
-    wxCommandEvent evt2(event.GetEventType(), GetId());
+    wxCommandEvent evt2(event);
+    evt2.SetId(GetId());
     evt2.SetEventObject(this);
-    evt2.SetString(event.GetString());
     HandleWindowEvent(evt2);
 }
 
