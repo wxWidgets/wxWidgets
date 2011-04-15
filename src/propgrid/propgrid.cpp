@@ -375,9 +375,7 @@ void wxPropertyGrid::Init1()
     m_coloursCustomized = 0;
     m_frozen = 0;
 
-#if wxPG_DOUBLE_BUFFER
     m_doubleBuffer = NULL;
-#endif
 
 #ifndef wxPG_ICON_WIDTH
     m_expandbmp = NULL;
@@ -544,10 +542,8 @@ wxPropertyGrid::~wxPropertyGrid()
                       wxS("Close(false).)") );
     }
 
-#if wxPG_DOUBLE_BUFFER
     if ( m_doubleBuffer )
         delete m_doubleBuffer;
-#endif
 
     if ( m_iFlags & wxPG_FL_CREATEDSTATE )
         delete m_pState;
@@ -1127,9 +1123,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         }
         else
         {
-        #if wxPG_DOUBLE_BUFFER
             wxDELETE(m_doubleBuffer);
-        #endif
         }
     }
 
@@ -1965,7 +1959,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         wxDC* dcPtr = &dc;
         bool isBuffered = false;
 
-    #if wxPG_DOUBLE_BUFFER
         wxMemoryDC* bufferDC = NULL;
 
         if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
@@ -1986,7 +1979,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
                 isBuffered = true;
             }
         }
-    #endif
 
         if ( dcPtr )
         {
@@ -2005,7 +1997,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             }
         }
 
-    #if wxPG_DOUBLE_BUFFER
         if ( bufferDC )
         {
             dc.Blit( drawRect.x, drawRect.y, drawRect.width,
@@ -2013,7 +2004,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
                      bufferDC, 0, 0, wxCOPY );
             delete bufferDC;
         }
-    #endif
     }
     else
     {
@@ -2085,10 +2075,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int xRelMod = 0;
 
     //
-    // With wxPG_DOUBLE_BUFFER, do double buffering
+    // For now, do some manual calculation for double buffering
     // - buffer's y = 0, so align itemsRect and coordinates to that
     //
-#if wxPG_DOUBLE_BUFFER
+    // TODO: In future use wxAutoBufferedPaintDC (for example)
+    //
     int yRelMod = 0;
 
     wxRect cr2;
@@ -2107,9 +2098,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         firstItemTopY -= yRelMod;
         lastItemBottomY -= yRelMod;
     }
-#else
-    wxUnusedVar(isBuffered);
-#endif
 
     int x = m_marginWidth - xRelMod;
 
@@ -4619,7 +4607,6 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
     m_width = width;
     m_height = height;
 
-#if wxPG_DOUBLE_BUFFER
     if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
         int dblh = (m_lineHeight*2);
@@ -4646,8 +4633,6 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
             }
         }
     }
-
-#endif
 
     m_pState->OnClientWidthChange( width, event.GetSize().x - m_ncWidth, true );
     m_ncWidth = event.GetSize().x;
