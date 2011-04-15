@@ -107,4 +107,4 @@
     #include "wx/osx/cocoa/chkconf.h"
 #endif
 
-#endif // _WX_OSX_CHKCONF_H_
+#endif /* _WX_OSX_CHKCONF_H_ */

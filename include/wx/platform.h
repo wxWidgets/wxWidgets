@@ -820,7 +820,7 @@
 
 #if defined (__WXPALMOS__)
 #include "wx/palmos/missing.h"
-#endif // __WXPALMOS__
+#endif /* __WXPALMOS__ */
 
 #if !defined (__WXPALMOS5__)
 #define POSSEC_APPBASE
@@ -841,7 +841,7 @@
 #define POSSEC_FILE
 #define POSSEC_FILECONF
 #define POSSEC_FILEFN
-#endif // __WXPALMOS5__
+#endif /* __WXPALMOS5__ */
 
 /*
     Optionally supported C++ features.
@@ -866,6 +866,6 @@
 #           define wxNO_RTTI
 #       endif
 #   endif
-#endif // wxNO_RTTI
+#endif /* wxNO_RTTI */
 
 #endif /* _WX_PLATFORM_H_ */

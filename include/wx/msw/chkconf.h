@@ -239,7 +239,7 @@
    Compiler-specific checks.
  */
 
-// Borland
+/* Borland */
 #ifdef __BORLANDC__
 
 #if __BORLANDC__ < 0x500

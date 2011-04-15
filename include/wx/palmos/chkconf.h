@@ -306,8 +306,8 @@
 #undef wxUSE_URL
 #define wxUSE_URL 0
 
-//#undef wxUSE_WCHAR_T
-//#define wxUSE_WCHAR_T 1
+/* #undef wxUSE_WCHAR_T */
+/* #define wxUSE_WCHAR_T 1 */
 
 #undef wxUSE_WIZARDDLG
 #define wxUSE_WIZARDDLG 0
