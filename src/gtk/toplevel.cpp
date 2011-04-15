@@ -72,6 +72,10 @@ static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 // send any activate events at all
 static int g_sendActivateEvent = -1;
 
+// Whether _NET_REQUEST_FRAME_EXTENTS support is working
+//   0 == not tested yet, 1 == working, 2 == broken
+static int gs_requestFrameExtentsStatus;
+
 //-----------------------------------------------------------------------------
 // RequestUserAttention related functions
 //-----------------------------------------------------------------------------
@@ -441,6 +445,14 @@ static gboolean property_notify_event(
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     if (event->state == GDK_PROPERTY_NEW_VALUE && event->atom == property)
     {
+        if (win->m_netFrameExtentsTimerId)
+        {
+            // WM support for _NET_REQUEST_FRAME_EXTENTS is working
+            gs_requestFrameExtentsStatus = 1;
+            g_source_remove(win->m_netFrameExtentsTimerId);
+            win->m_netFrameExtentsTimerId = 0;
+        }
+
         wxSize decorSize = win->m_decorSize;
         int left, right, top, bottom;
         if (wxGetFrameExtents(event->window, &left, &right, &top, &bottom))
@@ -448,6 +460,24 @@ static gboolean property_notify_event(
 
         win->GTKUpdateDecorSize(decorSize);
     }
+    return false;
+}
+}
+
+extern "C" {
+static gboolean request_frame_extents_timeout(void* data)
+{
+    // WM support for _NET_REQUEST_FRAME_EXTENTS is broken
+    gs_requestFrameExtentsStatus = 2;
+    gdk_threads_enter();
+    wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
+    win->m_netFrameExtentsTimerId = 0;
+    wxSize decorSize = win->m_decorSize;
+    int left, right, top, bottom;
+    if (wxGetFrameExtents(gtk_widget_get_window(win->m_widget), &left, &right, &top, &bottom))
+        decorSize.Set(left + right, top + bottom);
+    win->GTKUpdateDecorSize(decorSize);
+    gdk_threads_leave();
     return false;
 }
 }
@@ -468,6 +498,7 @@ void wxTopLevelWindowGTK::Init()
     m_deferShow = true;
     m_deferShowAllowed = true;
     m_updateDecorSize = true;
+    m_netFrameExtentsTimerId = 0;
 
     m_urgency_hint = -2;
 }
@@ -828,7 +859,8 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
-        deferShow = m_deferShowAllowed && !gtk_widget_get_realized(m_widget);
+        deferShow = gs_requestFrameExtentsStatus != 2 &&
+            m_deferShowAllowed && !gtk_widget_get_realized(m_widget);
         if (deferShow)
         {
             deferShow = g_signal_handler_find(m_widget,
@@ -846,13 +878,6 @@ bool wxTopLevelWindowGTK::Show( bool show )
             // to m_decorSize, it breaks saving/restoring window size with
             // GetSize()/SetSize() because it makes window bigger between each
             // restore and save.
-            m_updateDecorSize = deferShow;
-        }
-        if (deferShow)
-        {
-            // Fluxbox support for _NET_REQUEST_FRAME_EXTENTS is broken
-            const char* name = gdk_x11_screen_get_window_manager_name(screen);
-            deferShow = strcmp(name, "Fluxbox") != 0;
             m_updateDecorSize = deferShow;
         }
 
@@ -900,6 +925,14 @@ bool wxTopLevelWindowGTK::Show( bool show )
         XSendEvent(display, DefaultRootWindow(display), false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             (XEvent*)&xevent);
+
+        if (gs_requestFrameExtentsStatus == 0)
+        {
+            // if WM does not respond to request within 1 second,
+            // we assume support for _NET_REQUEST_FRAME_EXTENTS is not working
+            m_netFrameExtentsTimerId =
+                g_timeout_add(1000, request_frame_extents_timeout, this);
+        }
 
         // defer calling gtk_widget_show()
         m_isShown = true;
