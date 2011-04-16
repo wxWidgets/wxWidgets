@@ -642,7 +642,14 @@ public:
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
-
+    
+    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on 
+    // bitmap devices like screen, by default this is turned off
+    virtual void EnableOffset(bool enable = true);
+    
+    void DisableOffset() { EnableOffset(false); }
+    bool OffsetEnabled() { return m_enableOffset; }
+    
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
@@ -653,6 +660,7 @@ protected:
     wxGraphicsFont m_font;
     wxAntialiasMode m_antialias;
     wxCompositionMode m_composition;
+    bool m_enableOffset;
 
 protected:
     // implementations of overloaded public functions: we use different names

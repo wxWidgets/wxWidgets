@@ -534,7 +534,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject)
 wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
     wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
-      m_composition(wxCOMPOSITION_OVER)
+      m_composition(wxCOMPOSITION_OVER),
+      m_enableOffset(false)
 {
 }
 
@@ -562,6 +563,11 @@ void wxGraphicsContext::EndPage()
 
 void wxGraphicsContext::Flush()
 {
+}
+
+void wxGraphicsContext::EnableOffset(bool enable) 
+{ 
+    m_enableOffset = enable; 
 }
 
 #if 0
