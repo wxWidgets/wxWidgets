@@ -303,9 +303,11 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // ----------------------------------------------------------------------------
 
 #if wxUSE_OLE
+
+#ifdef HAS_AUTOCOMPLETE
+
 bool wxTextEntry::DoAutoCompleteFileNames()
 {
-#ifdef HAS_AUTOCOMPLETE
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
     static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
     static wxDynamicLibrary s_dllShlwapi;
@@ -332,14 +334,10 @@ bool wxTextEntry::DoAutoCompleteFileNames()
         return false;
     }
     return true;
-#else // !HAS_AUTOCOMPLETE
-    return false;
-#endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
-#ifdef HAS_AUTOCOMPLETE
     // if we had an old enumerator we must reuse it as IAutoComplete doesn't
     // free it if we call Init() again (see #10968) -- and it's also simpler
     if ( m_enumStrings )
@@ -396,12 +394,24 @@ bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
     // to the auto completer object
     pAutoComplete->Release();
     return true;
-#else // !HAS_AUTOCOMPLETE
-    wxUnusedVar(choices);
-
-    return false;
-#endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
+
+#else // !HAS_AUTOCOMPLETE
+
+// We still need to define stubs as we declared these overrides in the header.
+
+bool wxTextEntry::DoAutoCompleteFileNames()
+{
+    return wxTextEntryBase::DoAutoCompleteFileNames();
+}
+
+bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
+{
+    return wxTextEntryBase::DoAutoCompleteStrings(choices);
+}
+
+#endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
+
 #endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
