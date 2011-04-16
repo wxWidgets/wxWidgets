@@ -1298,6 +1298,7 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd  )
     : wxGraphicsContext(renderer)
 {
     Init();
+    m_enableOffset = true;
     m_context = new Graphics( hwnd);
     RECT rect = wxGetWindowRect(hwnd);
     m_width = rect.right - rect.left;
@@ -1771,6 +1772,9 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 
 bool wxGDIPlusContext::ShouldOffset() const
 {
+    if ( !m_enableOffset )
+        return false;
+    
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
@@ -1900,7 +1904,9 @@ void wxGDIPlusRenderer::Unload()
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
+    context->EnableOffset(true);
+    return context;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1924,7 +1930,9 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
+    context->EnableOffset(true);
+    return context;
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
