@@ -340,6 +340,9 @@ public:
 
     virtual bool ShouldOffset() const
     {
+        if ( !m_enableOffset )
+            return false;
+        
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -1213,6 +1216,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     m_width = width;
     m_height = height;
 
+    m_enableOffset = true;
+
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1250,6 +1255,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     m_width = width;
     m_height = height;
 
+    m_enableOffset = true;
+    
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1315,6 +1322,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 : wxGraphicsContext(renderer)
 {
+    m_enableOffset = true;    
 #ifdef __WXGTK__
     // something along these lines (copied from dcclient)
 
