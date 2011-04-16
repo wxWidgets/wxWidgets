@@ -6741,6 +6741,10 @@ SOURCE=..\..\include\wx\tbarbase.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\textcompleter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\textctrl.h
 # End Source File
 # Begin Source File

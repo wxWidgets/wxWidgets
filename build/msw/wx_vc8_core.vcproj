@@ -7544,6 +7544,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\textcompleter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\textctrl.h"
 				>
 			</File>

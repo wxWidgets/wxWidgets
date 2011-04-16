@@ -3929,6 +3929,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/statbox.h \
 	wx/stattext.h \
 	wx/statusbr.h \
+	wx/textcompleter.h \
 	wx/textctrl.h \
 	wx/textdlg.h \
 	wx/textentry.h \

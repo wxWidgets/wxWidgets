@@ -31,6 +31,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
+#include "wx/textcompleter.h"
 #include "wx/clipbrd.h"
 
 // ----------------------------------------------------------------------------
@@ -366,6 +367,24 @@ bool wxTextEntryBase::SendTextUpdatedEvent(wxWindow *win)
 
     event.SetEventObject(win);
     return win->HandleWindowEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// auto-completion stubs
+// ----------------------------------------------------------------------------
+
+wxTextCompleter::~wxTextCompleter()
+{
+}
+
+bool wxTextEntryBase::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    // We don't do anything here but we still need to delete the completer for
+    // consistency with the ports that do implement this method and take
+    // ownership of the pointer.
+    delete completer;
+
+    return false;
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

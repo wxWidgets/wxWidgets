@@ -31,6 +31,7 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #include "wx/textentry.h"
+#include "wx/textcompleter.h"
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -54,6 +55,7 @@
 
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
+#include <shobjidl.h>
 
 #if defined(__MINGW32__) || defined (__WATCOMC__) || defined(__CYGWIN__)
     // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
@@ -74,15 +76,15 @@ DEFINE_GUID(CLSID_AutoComplete,
 class wxIEnumString : public IEnumString
 {
 public:
-    wxIEnumString(const wxArrayString& strings) : m_strings(strings)
+    wxIEnumString()
     {
         m_index = 0;
     }
 
-    void ChangeStrings(const wxArrayString& strings)
+    wxIEnumString(const wxIEnumString& other)
+        : m_strings(other.m_strings),
+          m_index(other.m_index)
     {
-        m_strings = strings;
-        Reset();
     }
 
     DECLARE_IUNKNOWN_METHODS;
@@ -145,8 +147,7 @@ public:
         if ( !ppEnum )
             return E_POINTER;
 
-        wxIEnumString *e = new wxIEnumString(m_strings);
-        e->m_index = m_index;
+        wxIEnumString *e = new wxIEnumString(*this);
 
         e->AddRef();
         *ppEnum = e;
@@ -165,7 +166,9 @@ private:
     wxArrayString m_strings;
     unsigned m_index;
 
-    wxDECLARE_NO_COPY_CLASS(wxIEnumString);
+    friend class wxTextAutoCompleteData;
+
+    wxDECLARE_NO_ASSIGN_CLASS(wxIEnumString);
 };
 
 BEGIN_IID_TABLE(wxIEnumString)
@@ -175,11 +178,243 @@ END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
 
+
+// This class gathers the auto-complete-related we use. It is allocated on
+// demand by wxTextEntry when AutoComplete() is called.
+class wxTextAutoCompleteData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+{
+public:
+    // The constructor associates us with the given text entry.
+    wxTextAutoCompleteData(wxTextEntry *entry)
+        : m_entry(entry),
+          m_win(entry->GetEditableWindow())
+    {
+        m_autoComplete = NULL;
+        m_autoCompleteDropDown = NULL;
+        m_enumStrings = NULL;
+        m_customCompleter = NULL;
+
+        m_connectedTextChangedEvent = false;
+
+        // Create an object exposing IAutoComplete interface which we'll later
+        // use to get IAutoComplete2 as the latter can't be created directly,
+        // apparently.
+        HRESULT hr = CoCreateInstance
+                     (
+                        CLSID_AutoComplete,
+                        NULL,
+                        CLSCTX_INPROC_SERVER,
+                        IID_IAutoComplete,
+                        reinterpret_cast<void **>(&m_autoComplete)
+                     );
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("CoCreateInstance(CLSID_AutoComplete)"), hr);
+            return;
+        }
+
+        // Create a string enumerator and initialize the completer with it.
+        m_enumStrings = new wxIEnumString;
+        m_enumStrings->AddRef();
+        hr = m_autoComplete->Init(m_entry->GetEditHWND(), m_enumStrings,
+                                  NULL, NULL);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("IAutoComplete::Init"), hr);
+
+            m_enumStrings->Release();
+            m_enumStrings = NULL;
+
+            return;
+        }
+
+        // As explained in DoRefresh(), we need to call IAutoCompleteDropDown::
+        // ResetEnumerator() if we want to be able to change the completions on
+        // the fly. In principle we could live without it, i.e. return true
+        // from IsOk() even if this QueryInterface() fails, but it doesn't look
+        // like this is ever going to have in practice anyhow as the shell-
+        // provided IAutoComplete always implements IAutoCompleteDropDown too.
+        hr = m_autoComplete->QueryInterface
+                             (
+                               IID_IAutoCompleteDropDown,
+                               reinterpret_cast<void **>(&m_autoCompleteDropDown)
+                             );
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("IAutoComplete::QI(IAutoCompleteDropDown)"), hr);
+            return;
+        }
+
+        // Finally set the completion options using IAutoComplete2.
+        IAutoComplete2 *pAutoComplete2 = NULL;
+        hr = m_autoComplete->QueryInterface
+                             (
+                               IID_IAutoComplete2,
+                               reinterpret_cast<void **>(&pAutoComplete2)
+                             );
+        if ( SUCCEEDED(hr) )
+        {
+            pAutoComplete2->SetOptions(ACO_AUTOSUGGEST |
+                                       ACO_UPDOWNKEYDROPSLIST);
+            pAutoComplete2->Release();
+        }
+    }
+
+    ~wxTextAutoCompleteData()
+    {
+        delete m_customCompleter;
+
+        if ( m_enumStrings )
+            m_enumStrings->Release();
+        if ( m_autoCompleteDropDown )
+            m_autoCompleteDropDown->Release();
+        if ( m_autoComplete )
+            m_autoComplete->Release();
+    }
+
+    // Must be called after creating this object to verify if initializing it
+    // succeeded.
+    bool IsOk() const
+    {
+        return m_autoComplete && m_autoCompleteDropDown && m_enumStrings;
+    }
+
+    void ChangeStrings(const wxArrayString& strings)
+    {
+        m_enumStrings->m_strings = strings;
+
+        DoRefresh();
+    }
+
+    // Takes ownership of the pointer if it is non-NULL.
+    bool ChangeCustomCompleter(wxTextCompleter *completer)
+    {
+        delete m_customCompleter;
+        m_customCompleter = completer;
+
+        if ( m_customCompleter )
+        {
+            // We postpone connecting to this event until we really need to do
+            // it (however we don't disconnect from it when we don't need it
+            // any more because we don't have wxUNBIND_OR_DISCONNECT_HACK...).
+            if ( !m_connectedTextChangedEvent )
+            {
+                m_connectedTextChangedEvent = true;
+
+                wxBIND_OR_CONNECT_HACK(m_win, wxEVT_COMMAND_TEXT_UPDATED,
+                                        wxCommandEventHandler,
+                                        wxTextAutoCompleteData::OnTextChanged,
+                                        this);
+            }
+
+            UpdateStringsFromCustomCompleter();
+        }
+
+        return true;
+    }
+
+    void DisableCompletion()
+    {
+        // We currently simply reset the list of possible strings as this seems
+        // to effectively disable auto-completion just fine. We could (and
+        // probably should) use IAutoComplete::Enable(FALSE) for this too but
+        // then we'd need to call Enable(TRUE) to turn it on back again later.
+
+        m_enumStrings->m_strings.clear();
+        m_enumStrings->Reset();
+
+        ChangeCustomCompleter(NULL);
+    }
+
+private:
+    // Must be called after changing wxIEnumString::m_strings to really make
+    // the changes stick.
+    void DoRefresh()
+    {
+        m_enumStrings->Reset();
+
+        // This is completely and utterly not documented and in fact the
+        // current MSDN seems to try to discourage us from using it by saying
+        // that "there is no reason to use this method unless the drop-down
+        // list is currently visible" but actually we absolutely must call it
+        // to force the auto-completer (and not just its drop-down!) to refresh
+        // the list of completions which could have changed now. Without this
+        // call the new choices returned by GetCompletions() that hadn't been
+        // returned by it before are simply silently ignored.
+        m_autoCompleteDropDown->ResetEnumerator();
+    }
+
+    // Update the strings returned by our string enumerator to correspond to
+    // the currently valid choices according to the custom completer.
+    void UpdateStringsFromCustomCompleter()
+    {
+        // For efficiency we access m_strings directly instead of creating
+        // another wxArrayString, normally this should save us an unnecessary
+        // memory allocation on the subsequent calls.
+        m_enumStrings->m_strings.clear();
+        m_customCompleter->GetCompletions(m_entry->GetValue(),
+                                          m_enumStrings->m_strings);
+
+        DoRefresh();
+    }
+
+    void OnTextChanged(wxCommandEvent& event)
+    {
+        if ( m_customCompleter )
+            UpdateStringsFromCustomCompleter();
+
+        event.Skip();
+    }
+
+
+    // The text entry we're associated with.
+    wxTextEntry * const m_entry;
+
+    // The window of this text entry.
+    wxWindow * const m_win;
+
+    // The auto-completer object itself.
+    IAutoComplete *m_autoComplete;
+
+    // Its IAutoCompleteDropDown interface needed for ResetEnumerator() call.
+    IAutoCompleteDropDown *m_autoCompleteDropDown;
+
+    // Enumerator for strings currently used for auto-completion.
+    wxIEnumString *m_enumStrings;
+
+    // Custom completer or NULL if none.
+    wxTextCompleter *m_customCompleter;
+
+    // Initially false, set to true after connecting OnTextChanged() handler.
+    bool m_connectedTextChangedEvent;
+
+
+    wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
+};
+
 #endif // HAS_AUTOCOMPLETE
 
 // ============================================================================
 // wxTextEntry implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// initialization and destruction
+// ----------------------------------------------------------------------------
+
+wxTextEntry::wxTextEntry()
+{
+#ifdef HAS_AUTOCOMPLETE
+    m_autoCompleteData = NULL;
+#endif // HAS_AUTOCOMPLETE
+}
+
+wxTextEntry::~wxTextEntry()
+{
+#ifdef HAS_AUTOCOMPLETE
+    delete m_autoCompleteData;
+#endif // HAS_AUTOCOMPLETE
+}
 
 // ----------------------------------------------------------------------------
 // operations on text
@@ -333,66 +568,65 @@ bool wxTextEntry::DoAutoCompleteFileNames()
 
         return false;
     }
+
+    // Disable the other kinds of completion now that we use the built-in file
+    // names completion.
+    if ( m_autoCompleteData )
+        m_autoCompleteData->DisableCompletion();
+
     return true;
+}
+
+wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
+{
+    if ( !m_autoCompleteData )
+    {
+        wxTextAutoCompleteData * const ac = new wxTextAutoCompleteData(this);
+        if ( ac->IsOk() )
+            m_autoCompleteData = ac;
+        else
+            delete ac;
+    }
+
+    return m_autoCompleteData;
 }
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
-    // if we had an old enumerator we must reuse it as IAutoComplete doesn't
-    // free it if we call Init() again (see #10968) -- and it's also simpler
-    if ( m_enumStrings )
-    {
-        m_enumStrings->ChangeStrings(choices);
-        return true;
-    }
-
-    // create an object exposing IAutoComplete interface (don't go for
-    // IAutoComplete2 immediately as, presumably, it might be not available on
-    // older systems as otherwise why do we have both -- although in practice I
-    // don't know when can this happen)
-    IAutoComplete *pAutoComplete = NULL;
-    HRESULT hr = CoCreateInstance
-                 (
-                    CLSID_AutoComplete,
-                    NULL,
-                    CLSCTX_INPROC_SERVER,
-                    IID_IAutoComplete,
-                    reinterpret_cast<void **>(&pAutoComplete)
-                 );
-    if ( FAILED(hr) )
-    {
-        wxLogApiError(wxT("CoCreateInstance(CLSID_AutoComplete)"), hr);
+    wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
+    if ( !ac )
         return false;
-    }
 
-    // associate it with our strings
-    m_enumStrings = new wxIEnumString(choices);
-    m_enumStrings->AddRef();
-    hr = pAutoComplete->Init(GetEditHwnd(), m_enumStrings, NULL, NULL);
-    m_enumStrings->Release();
-    if ( FAILED(hr) )
+    ac->ChangeStrings(choices);
+
+    return true;
+}
+
+bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    // First deal with the case when we just want to disable auto-completion.
+    if ( !completer )
     {
-        wxLogApiError(wxT("IAutoComplete::Init"), hr);
-        return false;
+        if ( m_autoCompleteData )
+            m_autoCompleteData->DisableCompletion();
+        //else: Nothing to do, we hadn't used auto-completion even before.
     }
-
-    // if IAutoComplete2 is available, set more user-friendly options
-    IAutoComplete2 *pAutoComplete2 = NULL;
-    hr = pAutoComplete->QueryInterface
-                        (
-                           IID_IAutoComplete2,
-                           reinterpret_cast<void **>(&pAutoComplete2)
-                        );
-    if ( SUCCEEDED(hr) )
+    else // Have a valid completer.
     {
-        pAutoComplete2->SetOptions(ACO_AUTOSUGGEST | ACO_UPDOWNKEYDROPSLIST);
-        pAutoComplete2->Release();
+        wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
+        if ( !ac )
+        {
+            // Delete the custom completer for consistency with the case when
+            // we succeed to avoid memory leaks in user code.
+            delete completer;
+            return false;
+        }
+
+        // This gives ownership of the custom completer to m_autoCompleteData.
+        if ( !ac->ChangeCustomCompleter(completer) )
+            return false;
     }
 
-    // the docs are unclear about when can we release it but it seems safe to
-    // do it immediately, presumably the edit control itself keeps a reference
-    // to the auto completer object
-    pAutoComplete->Release();
     return true;
 }
 

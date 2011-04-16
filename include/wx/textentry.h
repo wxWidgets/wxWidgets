@@ -16,6 +16,7 @@
 typedef long wxTextPos;
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_CORE wxTextCompleter;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
@@ -106,7 +107,7 @@ public:
 
     // these functions allow to auto-complete the text already entered into the
     // control using either the given fixed list of strings, the paths from the
-    // file system or, in the future, an arbitrary user-defined completer
+    // file system or an arbitrary user-defined completer
     //
     // they all return true if completion was enabled or false on error (most
     // commonly meaning that this functionality is not available under the
@@ -117,6 +118,12 @@ public:
 
     bool AutoCompleteFileNames()
         { return DoAutoCompleteFileNames(); }
+
+    // notice that we take ownership of the pointer and will delete it
+    //
+    // if the pointer is NULL auto-completion is disabled
+    bool AutoComplete(wxTextCompleter *completer)
+        { return DoAutoCompleteCustom(completer); }
 
 
     // status
@@ -224,6 +231,7 @@ protected:
     virtual bool DoAutoCompleteStrings(const wxArrayString& WXUNUSED(choices))
         { return false; }
     virtual bool DoAutoCompleteFileNames() { return false; }
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 
 
     // class which should be used to temporarily disable text change events

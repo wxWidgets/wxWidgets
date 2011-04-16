@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_TEXTENTRY_H_
 #define _WX_MSW_TEXTENTRY_H_
 
+class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
+
 // ----------------------------------------------------------------------------
 // wxTextEntry: common part of wxComboBox and (single line) wxTextCtrl
 // ----------------------------------------------------------------------------
@@ -18,12 +20,8 @@
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
-    wxTextEntry()
-    {
-#if wxUSE_OLE
-        m_enumStrings = NULL;
-#endif // wxUSE_OLE
-    }
+    wxTextEntry();
+    virtual ~wxTextEntry();
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text);
@@ -78,6 +76,7 @@ protected:
 #if wxUSE_OLE
     virtual bool DoAutoCompleteStrings(const wxArrayString& choices);
     virtual bool DoAutoCompleteFileNames();
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 #endif // wxUSE_OLE
 
 private:
@@ -85,8 +84,16 @@ private:
     virtual WXHWND GetEditHWND() const = 0;
 
 #if wxUSE_OLE
-    // enumerator for strings currently used for auto-completion or NULL
-    class wxIEnumString *m_enumStrings;
+    // Get the auto-complete object creating it if necessary. Returns NULL if
+    // creating it failed.
+    wxTextAutoCompleteData *GetOrCreateCompleter();
+
+    // Various auto-completion-related stuff, only used if any of AutoComplete()
+    // methods are called. Use the function above to access it.
+    wxTextAutoCompleteData *m_autoCompleteData;
+
+    // It needs to call our GetEditableWindow() and GetEditHWND() methods.
+    friend class wxTextAutoCompleteData;
 #endif // wxUSE_OLE
 };
 
