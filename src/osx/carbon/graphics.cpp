@@ -1457,6 +1457,9 @@ public:
 
     virtual bool ShouldOffset() const
     {
+        if ( !m_enableOffset )
+            return false;
+        
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -1585,6 +1588,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
     m_windowRef = window;
+    m_enableOffset = true;
 }
 #endif
 
@@ -1592,6 +1596,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
+    m_enableOffset = true;
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -2742,7 +2747,10 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
 
         // having a cgctx being NULL is fine (will be created on demand)
         // this is the case for all wxWindowDCs except wxPaintDC
-        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        wxMacCoreGraphicsContext *context = 
+            new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        context->EnableOffset(true);
+        return context;
     }
     return NULL;
 }
@@ -2756,8 +2764,10 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
     {
         int w, h;
         mem_impl->GetSize( &w, &h );
-        return new wxMacCoreGraphicsContext( this,
+        wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
+        context->EnableOffset(true);
+        return context;
     }
 #endif
     return NULL;
@@ -2789,7 +2799,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( v
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( void * window )
 {
 #if wxOSX_USE_CARBON
-    return new wxMacCoreGraphicsContext(this,(WindowRef)window);
+    wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext(this,(WindowRef)window);
+    context->EnableOffset(true);
+    return context;
 #else
     wxUnusedVar(window);
     return NULL;
