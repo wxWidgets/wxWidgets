@@ -194,7 +194,7 @@ public:
         m_enumStrings = NULL;
         m_customCompleter = NULL;
 
-        m_connectedTextChangedEvent = false;
+        m_connectedCharEvent = false;
 
         // Create an object exposing IAutoComplete interface which we'll later
         // use to get IAutoComplete2 as the latter can't be created directly,
@@ -255,6 +255,7 @@ public:
         if ( SUCCEEDED(hr) )
         {
             pAutoComplete2->SetOptions(ACO_AUTOSUGGEST |
+                                       ACO_AUTOAPPEND |
                                        ACO_UPDOWNKEYDROPSLIST);
             pAutoComplete2->Release();
         }
@@ -297,13 +298,25 @@ public:
             // We postpone connecting to this event until we really need to do
             // it (however we don't disconnect from it when we don't need it
             // any more because we don't have wxUNBIND_OR_DISCONNECT_HACK...).
-            if ( !m_connectedTextChangedEvent )
+            if ( !m_connectedCharEvent )
             {
-                m_connectedTextChangedEvent = true;
+                m_connectedCharEvent = true;
 
-                wxBIND_OR_CONNECT_HACK(m_win, wxEVT_COMMAND_TEXT_UPDATED,
-                                        wxCommandEventHandler,
-                                        wxTextAutoCompleteData::OnTextChanged,
+                // Use the special wxEVT_AFTER_CHAR and not the usual
+                // wxEVT_CHAR here because we need to have the updated value of
+                // the text control in this handler in order to provide
+                // completions for the correct prefix and unfortunately we
+                // don't have any way to let DefWindowProc() run from our
+                // wxEVT_CHAR handler (as we must also let the other handlers
+                // defined at wx level run first).
+                //
+                // Notice that we can't use wxEVT_COMMAND_TEXT_UPDATED here
+                // neither as, due to our use of ACO_AUTOAPPEND, we get
+                // EN_CHANGE notifications from the control every time
+                // IAutoComplete auto-appends something to it.
+                wxBIND_OR_CONNECT_HACK(m_win, wxEVT_AFTER_CHAR,
+                                        wxKeyEventHandler,
+                                        wxTextAutoCompleteData::OnAfterChar,
                                         this);
             }
 
@@ -348,19 +361,32 @@ private:
     // the currently valid choices according to the custom completer.
     void UpdateStringsFromCustomCompleter()
     {
+        // As we use ACO_AUTOAPPEND, the selected part of the text is usually
+        // the one appended by us so don't consider it as part of the
+        // user-entered prefix.
+        long from, to;
+        m_entry->GetSelection(&from, &to);
+
+        if ( to == from )
+            from = m_entry->GetLastPosition(); // Take all if no selection.
+
+        const wxString prefix = m_entry->GetRange(0, from);
+
         // For efficiency we access m_strings directly instead of creating
         // another wxArrayString, normally this should save us an unnecessary
         // memory allocation on the subsequent calls.
         m_enumStrings->m_strings.clear();
-        m_customCompleter->GetCompletions(m_entry->GetValue(),
-                                          m_enumStrings->m_strings);
+        m_customCompleter->GetCompletions(prefix, m_enumStrings->m_strings);
 
         DoRefresh();
     }
 
-    void OnTextChanged(wxCommandEvent& event)
+    void OnAfterChar(wxKeyEvent& event)
     {
-        if ( m_customCompleter )
+        // Notice that we must not refresh the completions when the user
+        // presses Backspace as this would result in adding back the just
+        // erased character(s) because of ACO_AUTOAPPEND option we use.
+        if ( m_customCompleter && event.GetKeyCode() != WXK_BACK )
             UpdateStringsFromCustomCompleter();
 
         event.Skip();
@@ -386,7 +412,7 @@ private:
     wxTextCompleter *m_customCompleter;
 
     // Initially false, set to true after connecting OnTextChanged() handler.
-    bool m_connectedTextChangedEvent;
+    bool m_connectedCharEvent;
 
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
