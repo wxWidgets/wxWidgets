@@ -303,7 +303,7 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // ----------------------------------------------------------------------------
 
 #if wxUSE_OLE
-bool wxTextEntry::AutoCompleteFileNames()
+bool wxTextEntry::DoAutoCompleteFileNames()
 {
 #ifdef HAS_AUTOCOMPLETE
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
@@ -337,7 +337,7 @@ bool wxTextEntry::AutoCompleteFileNames()
 #endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
 
-bool wxTextEntry::AutoComplete(const wxArrayString& choices)
+bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
 #ifdef HAS_AUTOCOMPLETE
     // if we had an old enumerator we must reuse it as IAutoComplete doesn't

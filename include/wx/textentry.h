@@ -112,12 +112,11 @@ public:
     // commonly meaning that this functionality is not available under the
     // current platform)
 
-    virtual bool AutoComplete(const wxArrayString& WXUNUSED(choices))
-    {
-        return false;
-    }
+    bool AutoComplete(const wxArrayString& choices)
+        { return DoAutoCompleteStrings(choices); }
 
-    virtual bool AutoCompleteFileNames() { return false; }
+    bool AutoCompleteFileNames()
+        { return DoAutoCompleteFileNames(); }
 
 
     // status
@@ -217,6 +216,14 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
+
+    // the derived classes should override these virtual methods to implement
+    // auto-completion, they do the same thing as their public counterparts but
+    // have different names to allow overriding just one of them without hiding
+    // the other one(s)
+    virtual bool DoAutoCompleteStrings(const wxArrayString& WXUNUSED(choices))
+        { return false; }
+    virtual bool DoAutoCompleteFileNames() { return false; }
 
 
     // class which should be used to temporarily disable text change events

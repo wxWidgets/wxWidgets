@@ -46,13 +46,6 @@ public:
         { DoSetSelection(from, to); }
     virtual void GetSelection(long *from, long *to) const;
 
-    // auto-completion uses COM under Windows so they won't work without
-    // wxUSE_OLE as OleInitialize() is not called then
-#if wxUSE_OLE
-    virtual bool AutoComplete(const wxArrayString& choices);
-    virtual bool AutoCompleteFileNames();
-#endif // wxUSE_OLE
-
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 
@@ -79,6 +72,13 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
+
+    // auto-completion uses COM under Windows so they won't work without
+    // wxUSE_OLE as OleInitialize() is not called then
+#if wxUSE_OLE
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices);
+    virtual bool DoAutoCompleteFileNames();
+#endif // wxUSE_OLE
 
 private:
     // implement this to return the HWND of the EDIT control

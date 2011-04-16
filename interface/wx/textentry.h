@@ -58,7 +58,7 @@ public:
 
         @see AutoCompleteFileNames()
     */
-    virtual bool AutoComplete(const wxArrayString& choices);
+    bool AutoComplete(const wxArrayString& choices);
 
     /**
         Call this function to enable auto-completion of the text typed in a
@@ -76,7 +76,7 @@ public:
 
         @see AutoComplete()
     */
-    virtual bool AutoCompleteFileNames();
+    bool AutoCompleteFileNames();
 
     /**
         Returns @true if the selection can be copied to the clipboard.

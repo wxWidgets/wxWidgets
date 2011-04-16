@@ -237,7 +237,7 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // auto completion
 // ----------------------------------------------------------------------------
 
-bool wxTextEntry::AutoComplete(const wxArrayString& choices)
+bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
     GtkEntry * const entry = GTK_ENTRY(GetEditable());
     wxCHECK_MSG(entry, false, "auto completion doesn't work with this control");
