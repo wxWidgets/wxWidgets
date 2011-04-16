@@ -599,6 +599,14 @@ protected:
                               WXWPARAM wParam,
                               WXLPARAM lParam = 0) const;
 
+    // Another helper for creating wxKeyEvent for wxEVT_CHAR and related types.
+    //
+    // The wParam and lParam here must come from WM_CHAR event parameters, i.e.
+    // wParam must be a character and not a virtual code.
+    wxKeyEvent CreateCharEvent(wxEventType evType,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam) const;
+
 
     // default OnEraseBackground() implementation, return true if we did erase
     // the background, false otherwise (i.e. the system should erase it)

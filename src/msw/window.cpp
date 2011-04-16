@@ -2255,10 +2255,23 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 
 WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    WXLRESULT rc;
     if ( m_oldWndProc )
-        return ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+        rc = ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
     else
-        return ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
+        rc = ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
+
+    // Special hack used by wxTextEntry auto-completion only: this event is
+    // sent after the normal keyboard processing so that its handler could use
+    // the updated contents of the text control, after taking the key that was
+    // pressed into account.
+    if ( nMsg == WM_CHAR )
+    {
+        wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
+        HandleWindowEvent(event);
+    }
+
+    return rc;
 }
 
 bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
@@ -5675,11 +5688,12 @@ wxWindowMSW::CreateKeyEvent(wxEventType evType,
     return event;
 }
 
-// isASCII is true only when we're called from WM_CHAR handler and not from
-// WM_KEYDOWN one
-bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
+wxKeyEvent
+wxWindowMSW::CreateCharEvent(wxEventType evType,
+                             WXWPARAM wParam,
+                             WXLPARAM lParam) const
 {
-    wxKeyEvent event(wxEVT_CHAR);
+    wxKeyEvent event(evType);
     InitAnyKeyEvent(event, wParam, lParam);
 
 #if wxUSE_UNICODE
@@ -5723,6 +5737,14 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
         event.m_altDown = false;
     }
 
+    return event;
+}
+
+// isASCII is true only when we're called from WM_CHAR handler and not from
+// WM_KEYDOWN one
+bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxKeyEvent event(CreateCharEvent(wxEVT_CHAR, wParam, lParam));
     return HandleWindowEvent(event);
 }
 

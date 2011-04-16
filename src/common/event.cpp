@@ -206,6 +206,7 @@ wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
 
 // Character input event type
 wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_AFTER_CHAR, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent );
 wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent );
