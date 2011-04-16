@@ -100,8 +100,7 @@ private:
 } // anonymity namespace
 
 // Implementation of string enumerator used by wxTextAutoCompleteData. This
-// class simply iterates over its strings except that it also can be told to
-// update them from the custom completer if one is used.
+// class simply forwards to wxTextCompleter associated with it.
 //
 // Notice that Next() method of this class is called by IAutoComplete
 // background thread and so we must care about thread safety here.
@@ -111,36 +110,35 @@ public:
     wxIEnumString()
     {
         Init();
-
-        m_index = 0;
     }
 
-    wxIEnumString(const wxIEnumString& other)
-        : m_strings(other.m_strings),
-          m_index(other.m_index)
+    void ChangeCompleter(wxTextCompleter *completer)
     {
-        Init();
-    }
+        // Indicate to Next() that it should bail out as soon as possible.
+        {
+            CSLock lock(m_csRestart);
 
-    void ChangeStrings(const wxArrayString& strings)
-    {
-        CSLock lock(m_csStrings);
+            m_restart = TRUE;
+        }
 
-        m_strings = strings;
-        m_index = 0;
-    }
+        // Now try to enter this critical section to ensure that Next() doesn't
+        // use the old pointer any more before changing it (this is vital as
+        // the old pointer will be destroyed after we return).
+        CSLock lock(m_csCompleter);
 
-    void UpdateStringsFromCompleter(wxTextCompleter *completer,
-                                    const wxString& prefix)
-    {
-        CSLock lock(m_csUpdate);
-
-        // We simply store the pointer here and will really update during the
-        // next call to our Next() method as we want to call GetCompletions()
-        // from the worker thread to prevent the main UI thread from blocking
-        // while the completions are generated.
         m_completer = completer;
+    }
+
+    void UpdatePrefix(const wxString& prefix)
+    {
+        CSLock lock(m_csRestart);
+
+        // We simply store the prefix here and will really update during the
+        // next call to our Next() method as we want to call Start() from the
+        // worker thread to prevent the main UI thread from blocking while the
+        // completions are generated.
         m_prefix = prefix;
+        m_restart = TRUE;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
@@ -156,16 +154,22 @@ public:
 
         *pceltFetched = 0;
 
-        CSLock lock(m_csStrings);
+        CSLock lock(m_csCompleter);
 
-        DoUpdateIfNeeded();
+        if ( !RestartIfNeeded() )
+            return S_FALSE;
 
-        for ( const unsigned count = m_strings.size(); celt--; ++m_index )
+        while ( celt-- )
         {
-            if ( m_index == count )
+            // Stop iterating if we need to update completions anyhow.
+            if ( m_restart )
                 return S_FALSE;
 
-            const wxWX2WCbuf wcbuf = m_strings[m_index].wc_str();
+            const wxString s = m_completer->GetNext();
+            if ( s.empty() )
+                return S_FALSE;
+
+            const wxWX2WCbuf wcbuf = s.wc_str();
             const size_t size = (wcslen(wcbuf) + 1)*sizeof(wchar_t);
             void *olestr = CoTaskMemAlloc(size);
             if ( !olestr )
@@ -183,13 +187,21 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Skip(ULONG celt)
     {
-        CSLock lock(m_csStrings);
+        if ( !celt )
+            return E_INVALIDARG;
 
-        m_index += celt;
-        if ( m_index > m_strings.size() )
-        {
-            m_index = m_strings.size();
+        CSLock lock(m_csCompleter);
+
+        if ( !RestartIfNeeded() )
             return S_FALSE;
+
+        while ( celt-- )
+        {
+            if ( m_restart )
+                return S_FALSE;
+
+            if ( m_completer->GetNext().empty() )
+                return S_FALSE;
         }
 
         return S_OK;
@@ -197,22 +209,9 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Reset()
     {
-        {
-            CSLock lock(m_csUpdate);
+        CSLock lock(m_csRestart);
 
-            if ( m_completer )
-            {
-                // We will update the string from completer soon (or maybe are
-                // already in process of doing it) so don't do anything now, it
-                // is useless at best and could also result in a deadlock if
-                // m_csStrings is already locked by Next().
-                return S_OK;
-            }
-        }
-
-        CSLock lock(m_csStrings);
-
-        m_index = 0;
+        m_restart = TRUE;
 
         return S_OK;
     }
@@ -222,11 +221,13 @@ public:
         if ( !ppEnum )
             return E_POINTER;
 
-        CSLock lock(m_csStrings);
+        CSLock lock(m_csCompleter);
 
-        wxIEnumString *e = new wxIEnumString(*this);
-
+        wxIEnumString * const e = new wxIEnumString;
         e->AddRef();
+
+        e->ChangeCompleter(m_completer);
+
         *ppEnum = e;
 
         return S_OK;
@@ -241,79 +242,79 @@ private:
     // (mistakenly) delete us directly instead of calling Release()
     virtual ~wxIEnumString()
     {
-        ::DeleteCriticalSection(&m_csStrings);
-        ::DeleteCriticalSection(&m_csUpdate);
+        ::DeleteCriticalSection(&m_csRestart);
+        ::DeleteCriticalSection(&m_csCompleter);
     }
 
     // Common part of all ctors.
     void Init()
     {
-        ::InitializeCriticalSection(&m_csUpdate);
-        ::InitializeCriticalSection(&m_csStrings);
+        ::InitializeCriticalSection(&m_csCompleter);
+        ::InitializeCriticalSection(&m_csRestart);
 
         m_completer = NULL;
+        m_restart = FALSE;
     }
 
-    void DoUpdateIfNeeded()
+    // Restart completions generation if needed. Should be only called from
+    // inside m_csCompleter.
+    //
+    // If false is returned, it means that there are no completions and that
+    // wxTextCompleter::GetNext() shouldn't be called at all.
+    bool RestartIfNeeded()
     {
-        wxTextCompleter *completer;
-        wxString prefix;
+        bool rc = true;
+        for ( ;; )
         {
-            CSLock lock(m_csUpdate);
-
-            completer = m_completer;
-            if ( !completer )
-                return;
-
-            prefix = m_prefix;
-        } // Unlock m_csUpdate to allow the main thread to call our
-          // UpdateStringsFromCompleter() without blocking while we are
-          // generating completions.
-
-        // Notice that m_csStrings is locked by our caller already so no need
-        // to enter it again.
-        m_index = 0;
-        m_strings.clear();
-        completer->GetCompletions(prefix, m_strings);
-
-        {
-            CSLock lock(m_csUpdate);
-
-            if ( m_completer == completer && m_prefix == prefix )
+            wxString prefix;
+            LONG restart;
             {
-                // There were no calls to UpdateStringsFromCompleter() while we
-                // generated the completions, so our completions are still
-                // pertinent.
-                m_completer = NULL;
-                return;
-            }
-            //else: Our completions are already out of date, regenerate them
-            //      once again.
+                CSLock lock(m_csRestart);
+
+                prefix = m_prefix;
+                restart = m_restart;
+
+                m_restart = FALSE;
+            } // Release m_csRestart before calling Start() to avoid blocking
+              // the main thread in UpdatePrefix() during its execution.
+
+            if ( !restart )
+                break;
+
+            rc = m_completer->Start(prefix);
         }
+
+        return rc;
     }
 
 
-    // Critical section protecting m_strings and m_index.
-    CRITICAL_SECTION m_csStrings;
+    // Critical section protecting m_completer itself. It must be entered when
+    // using the pointer to ensure that we don't continue using a dangling one
+    // after it is destroyed.
+    CRITICAL_SECTION m_csCompleter;
 
-    // The strings we iterate over and the current iteration index.
-    wxArrayString m_strings;
-    unsigned m_index;
-
-    // This one protects just m_completer, it is different from m_csStrings
-    // because the main thread should be able to update our completer prefix
-    // without blocking (as this would freeze the UI) even while we're inside a
-    // possibly long process of updating m_strings.
-    CRITICAL_SECTION m_csUpdate;
-
-    // If completer pointer is non-NULL, we must use it by calling its
-    // GetCompletions() method with the specified prefix to update the list of
-    // strings we iterate over when our Next() is called the next time.
+    // The completer we delegate to for the completions generation. It is never
+    // NULL after the initial ChangeCompleter() call.
     wxTextCompleter *m_completer;
+
+
+    // Critical section m_prefix and m_restart. It should be only entered for
+    // short periods of time, i.e. we shouldn't call any wxTextCompleter
+    // methods from inside, to prevent the main thread from blocking on it in
+    // UpdatePrefix().
+    CRITICAL_SECTION m_csRestart;
+
+    // If m_restart is true, we need to call wxTextCompleter::Start() with the
+    // given prefix to restart generating the completions.
     wxString m_prefix;
 
+    // Notice that we use LONG and not bool here to ensure that reading this
+    // value is atomic (32 bit reads are atomic operations under all Windows
+    // versions but reading bool isn't necessarily).
+    LONG m_restart;
 
-    wxDECLARE_NO_ASSIGN_CLASS(wxIEnumString);
+
+    wxDECLARE_NO_COPY_CLASS(wxIEnumString);
 };
 
 BEGIN_IID_TABLE(wxIEnumString)
@@ -324,8 +325,8 @@ END_IID_TABLE;
 IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
 
 
-// This class gathers the auto-complete-related we use. It is allocated on
-// demand by wxTextEntry when AutoComplete() is called.
+// This class gathers the all auto-complete-related stuff we use. It is
+// allocated on demand by wxTextEntry when AutoComplete() is called.
 class wxTextAutoCompleteData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
 {
 public:
@@ -337,6 +338,8 @@ public:
         m_autoComplete = NULL;
         m_autoCompleteDropDown = NULL;
         m_enumStrings = NULL;
+
+        m_fixedCompleter = NULL;
         m_customCompleter = NULL;
 
         m_connectedCharEvent = false;
@@ -409,6 +412,7 @@ public:
     ~wxTextAutoCompleteData()
     {
         delete m_customCompleter;
+        delete m_fixedCompleter;
 
         if ( m_enumStrings )
             m_enumStrings->Release();
@@ -427,7 +431,12 @@ public:
 
     void ChangeStrings(const wxArrayString& strings)
     {
-        m_enumStrings->ChangeStrings(strings);
+        if ( !m_fixedCompleter )
+            m_fixedCompleter = new wxTextCompleterFixed;
+
+        m_fixedCompleter->SetCompletions(strings);
+
+        m_enumStrings->ChangeCompleter(m_fixedCompleter);
 
         DoRefresh();
     }
@@ -435,6 +444,10 @@ public:
     // Takes ownership of the pointer if it is non-NULL.
     bool ChangeCustomCompleter(wxTextCompleter *completer)
     {
+        // Ensure that the old completer is not used any more before deleting
+        // it.
+        m_enumStrings->ChangeCompleter(completer);
+
         delete m_customCompleter;
         m_customCompleter = completer;
 
@@ -477,15 +490,33 @@ public:
         // to effectively disable auto-completion just fine. We could (and
         // probably should) use IAutoComplete::Enable(FALSE) for this too but
         // then we'd need to call Enable(TRUE) to turn it on back again later.
-
-        m_enumStrings->ChangeStrings(wxArrayString());
-
-        ChangeCustomCompleter(NULL);
+        ChangeStrings(wxArrayString());
     }
 
 private:
-    // Must be called after changing wxIEnumString::m_strings to really make
-    // the changes stick.
+    // Trivial wxTextCompleter implementation which always returns the same
+    // fixed array of completions.
+    class wxTextCompleterFixed : public wxTextCompleterSimple
+    {
+    public:
+        void SetCompletions(const wxArrayString& strings)
+        {
+            m_strings = strings;
+        }
+
+        virtual void GetCompletions(const wxString& WXUNUSED(prefix),
+                                    wxArrayString& res)
+        {
+            res = m_strings;
+        }
+
+    private:
+        wxArrayString m_strings;
+    };
+
+
+    // Must be called after changing the values to be returned by wxIEnumString
+    // to really make the changes stick.
     void DoRefresh()
     {
         m_enumStrings->Reset();
@@ -516,7 +547,7 @@ private:
 
         const wxString prefix = m_entry->GetRange(0, from);
 
-        m_enumStrings->UpdateStringsFromCompleter(m_customCompleter, prefix);
+        m_enumStrings->UpdatePrefix(prefix);
 
         DoRefresh();
     }
@@ -547,6 +578,9 @@ private:
 
     // Enumerator for strings currently used for auto-completion.
     wxIEnumString *m_enumStrings;
+
+    // Fixed string completer or NULL if none.
+    wxTextCompleterFixed *m_fixedCompleter;
 
     // Custom completer or NULL if none.
     wxTextCompleter *m_customCompleter;

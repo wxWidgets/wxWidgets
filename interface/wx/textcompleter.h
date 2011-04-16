@@ -21,6 +21,59 @@
     hierarchically, i.e. only the first component initially, then the second
     one after the user finished entering the first one and so on.
 
+    When inheriting from this class you need to implement its two pure virtual
+    methods. This allows to return the results incrementally and may or not be
+    convenient depending on where do they come from. If you prefer to return
+    all the completions at once, you should inherit from wxTextCompleterSimple
+    instead.
+
+    @since 2.9.2
+ */
+class wxTextCompleter
+{
+public:
+    /**
+        Function called to start iteration over the completions for the given
+        prefix.
+
+        This function could start a database query, for example, if the results
+        are read from a database.
+
+        Notice that under some platforms (currently MSW only) it is called from
+        another thread context and so the appropriate synchronization mechanism
+        should be used to access any data also used by the main UI thread.
+
+        @param prefix
+            The prefix for which completions are to be generated.
+        @return
+            @true to continue with calling GetNext() or @false to indicate that
+            there are no matches and GetNext() shouldn't be called at all.
+     */
+    virtual bool Start(const wxString& prefix) = 0;
+
+    /**
+        Called to retrieve the next completion.
+
+        All completions returned by this function should start with the prefix
+        passed to the last call to Start().
+
+        Notice that, as Start(), this method is called from a worker thread
+        context under MSW.
+
+        @return
+            The next completion or an empty string to indicate that there are
+            no more of them.
+     */
+    virtual wxString GetNext() = 0;
+};
+
+/**
+    A simpler base class for custom completer objects.
+
+    This class may be simpler to use than the base wxTextCompleter as it allows
+    to implement only a single virtual method instead of two of them (at the
+    price of storing all completions in a temporary array).
+
     Here is a simple example of a custom completer that completes the names of
     some chess pieces. Of course, as the total list here has only four items it
     would have been much simpler to just specify the array containing all the
@@ -28,7 +81,7 @@
     total number of completions is much higher provided the number of
     possibilities for each word is still relatively small:
     @code
-    class MyTextCompleter : public wxTextCompleter
+    class MyTextCompleter : public wxTextCompleterSimple
     {
     public:
         virtual void GetCompletions(const wxString& prefix, wxArrayString& res)
@@ -60,7 +113,7 @@
 
     @since 2.9.2
 */
-class wxTextCompleter
+class wxTextCompleterSimple : public wxTextCompleter
 {
 public:
     /**
@@ -75,8 +128,8 @@ public:
         in the first place useless.
 
         Notice that this function may be called from thread other than main one
-        (this is currently always the case under MSW) so care should be taken
-        if it needs to access any shared data.
+        (this is currently always the case under MSW) so the appropriate
+        synchronization mechanism should be used to protect the shared data.
 
         @param prefix
             The possibly empty prefix that the user had already entered.

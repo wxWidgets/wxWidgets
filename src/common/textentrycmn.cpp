@@ -377,6 +377,23 @@ wxTextCompleter::~wxTextCompleter()
 {
 }
 
+bool wxTextCompleterSimple::Start(const wxString& prefix)
+{
+    m_index = 0;
+    m_completions.clear();
+    GetCompletions(prefix, m_completions);
+
+    return !m_completions.empty();
+}
+
+wxString wxTextCompleterSimple::GetNext()
+{
+    if ( m_index == m_completions.size() )
+        return wxString();
+
+    return m_completions[m_index++];
+}
+
 bool wxTextEntryBase::DoAutoCompleteCustom(wxTextCompleter *completer)
 {
     // We don't do anything here but we still need to delete the completer for

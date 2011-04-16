@@ -1006,7 +1006,7 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     // known. This allows to avoid building the full 676000 item list of
     // possible strings all at once as the we have 1000 possibilities for the
     // first word (000..999) and 676 (aa..zz) for the second one.
-    class CustomTextCompleter : public wxTextCompleter
+    class CustomTextCompleter : public wxTextCompleterSimple
     {
     public:
         virtual void GetCompletions(const wxString& prefix, wxArrayString& res)
