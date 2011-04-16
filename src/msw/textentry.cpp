@@ -844,6 +844,11 @@ bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
     return wxTextEntryBase::DoAutoCompleteStrings(choices);
 }
 
+bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    return wxTextCompleter::DoAutoCompleteCustom(completer);
+}
+
 #endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 
 #endif // wxUSE_OLE
