@@ -74,6 +74,10 @@ public:
         otherwise they will be simply ignored, making adding them to the array
         in the first place useless.
 
+        Notice that this function may be called from thread other than main one
+        (this is currently always the case under MSW) so care should be taken
+        if it needs to access any shared data.
+
         @param prefix
             The possibly empty prefix that the user had already entered.
         @param res
