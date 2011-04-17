@@ -743,6 +743,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\affinematrix2d.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\anidecod.cpp"
 				>
 			</File>
@@ -6689,6 +6693,14 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\propgrid\advprops.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\affinematrix2d.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\affinematrix2dbase.h"
 				>
 			</File>
 			<File

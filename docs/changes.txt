@@ -502,6 +502,7 @@ All (GUI):
 - Add WXK_CONTROL_A..WXK_CONTROL_Z constants (Jan van Dijk).
 - Add support for alpha channel in colours in wxSVGFileDC (snowleopard).
 - Allow customizing AUI tab colours in wxAuiTabArt (snowleopard).
+- Added wxAffineMatrix2D class (Catalin Raceanu).
 
 GTK:
 

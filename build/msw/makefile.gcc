@@ -1802,6 +1802,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_accelcmn.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_anidecod.o \
+	$(OBJS)\monodll_affinematrix2d.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
@@ -2069,6 +2070,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_accelcmn.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_anidecod.o \
+	$(OBJS)\monodll_affinematrix2d.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
@@ -2570,6 +2572,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_accelcmn.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_anidecod.o \
+	$(OBJS)\monolib_affinematrix2d.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
@@ -2837,6 +2840,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_accelcmn.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_anidecod.o \
+	$(OBJS)\monolib_affinematrix2d.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
@@ -3236,6 +3240,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_accelcmn.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_anidecod.o \
+	$(OBJS)\coredll_affinematrix2d.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
@@ -3503,6 +3508,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_accelcmn.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_anidecod.o \
+	$(OBJS)\coredll_affinematrix2d.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
@@ -3783,6 +3789,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_accelcmn.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_anidecod.o \
+	$(OBJS)\corelib_affinematrix2d.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
@@ -4050,6 +4057,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_accelcmn.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_anidecod.o \
+	$(OBJS)\corelib_affinematrix2d.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
@@ -7428,6 +7436,11 @@ $(OBJS)\monodll_anidecod.o: ../../src/common/anidecod.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_affinematrix2d.o: ../../src/common/affinematrix2d.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9773,6 +9786,11 @@ $(OBJS)\monolib_anidecod.o: ../../src/common/anidecod.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_affinematrix2d.o: ../../src/common/affinematrix2d.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12112,6 +12130,11 @@ $(OBJS)\coredll_anidecod.o: ../../src/common/anidecod.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_affinematrix2d.o: ../../src/common/affinematrix2d.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13508,6 +13531,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_anidecod.o: ../../src/common/anidecod.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_affinematrix2d.o: ../../src/common/affinematrix2d.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

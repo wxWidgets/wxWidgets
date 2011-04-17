@@ -3833,6 +3833,8 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/univ/window.h
 @COND_USE_GUI_1_WXUNIV_1@GUI_CORE_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS)
 COND_USE_GUI_1_ALL_GUI_HEADERS =  \
+	wx/affinematrix2dbase.h \
+	wx/affinematrix2d.h \
 	wx/bmpbuttn.h \
 	wx/brush.h \
 	wx/button.h \
@@ -4482,6 +4484,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_accelcmn.o \
 	monodll_accesscmn.o \
 	monodll_anidecod.o \
+	monodll_affinematrix2d.o \
 	monodll_appcmn.o \
 	monodll_artprov.o \
 	monodll_artstd.o \
@@ -4698,6 +4701,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_accelcmn.o \
 	monodll_accesscmn.o \
 	monodll_anidecod.o \
+	monodll_affinematrix2d.o \
 	monodll_appcmn.o \
 	monodll_artprov.o \
 	monodll_artstd.o \
@@ -6402,6 +6406,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_accelcmn.o \
 	monolib_accesscmn.o \
 	monolib_anidecod.o \
+	monolib_affinematrix2d.o \
 	monolib_appcmn.o \
 	monolib_artprov.o \
 	monolib_artstd.o \
@@ -6618,6 +6623,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_accelcmn.o \
 	monolib_accesscmn.o \
 	monolib_anidecod.o \
+	monolib_affinematrix2d.o \
 	monolib_appcmn.o \
 	monolib_artprov.o \
 	monolib_artstd.o \
@@ -8506,6 +8512,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_accelcmn.o \
 	coredll_accesscmn.o \
 	coredll_anidecod.o \
+	coredll_affinematrix2d.o \
 	coredll_appcmn.o \
 	coredll_artprov.o \
 	coredll_artstd.o \
@@ -8722,6 +8729,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_accelcmn.o \
 	coredll_accesscmn.o \
 	coredll_anidecod.o \
+	coredll_affinematrix2d.o \
 	coredll_appcmn.o \
 	coredll_artprov.o \
 	coredll_artstd.o \
@@ -10088,6 +10096,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_accelcmn.o \
 	corelib_accesscmn.o \
 	corelib_anidecod.o \
+	corelib_affinematrix2d.o \
 	corelib_appcmn.o \
 	corelib_artprov.o \
 	corelib_artstd.o \
@@ -10304,6 +10313,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_accelcmn.o \
 	corelib_accesscmn.o \
 	corelib_anidecod.o \
+	corelib_affinematrix2d.o \
 	corelib_appcmn.o \
 	corelib_artprov.o \
 	corelib_artstd.o \
@@ -19765,6 +19775,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_anidecod.o: $(srcdir)/src/common/anidecod.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/anidecod.cpp
 
+@COND_USE_GUI_1@monodll_affinematrix2d.o: $(srcdir)/src/common/affinematrix2d.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/affinematrix2d.cpp
+
 @COND_USE_GUI_1@monodll_appcmn.o: $(srcdir)/src/common/appcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/appcmn.cpp
 
@@ -25059,6 +25072,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_anidecod.o: $(srcdir)/src/common/anidecod.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/anidecod.cpp
+
+@COND_USE_GUI_1@monolib_affinematrix2d.o: $(srcdir)/src/common/affinematrix2d.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/affinematrix2d.cpp
 
 @COND_USE_GUI_1@monolib_appcmn.o: $(srcdir)/src/common/appcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/appcmn.cpp
@@ -30535,6 +30551,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_anidecod.o: $(srcdir)/src/common/anidecod.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/anidecod.cpp
 
+@COND_USE_GUI_1@coredll_affinematrix2d.o: $(srcdir)/src/common/affinematrix2d.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/affinematrix2d.cpp
+
 @COND_USE_GUI_1@coredll_appcmn.o: $(srcdir)/src/common/appcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/appcmn.cpp
 
@@ -34512,6 +34531,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_anidecod.o: $(srcdir)/src/common/anidecod.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/anidecod.cpp
+
+@COND_USE_GUI_1@corelib_affinematrix2d.o: $(srcdir)/src/common/affinematrix2d.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/affinematrix2d.cpp
 
 @COND_USE_GUI_1@corelib_appcmn.o: $(srcdir)/src/common/appcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/appcmn.cpp

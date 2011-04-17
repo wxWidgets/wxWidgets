@@ -651,6 +651,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/accelcmn.cpp
     src/common/accesscmn.cpp
     src/common/anidecod.cpp
+    src/common/affinematrix2d.cpp
     src/common/appcmn.cpp
     src/common/artprov.cpp
     src/common/artstd.cpp
@@ -809,6 +810,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/vscroll.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
+    wx/affinematrix2dbase.h
+    wx/affinematrix2d.h
     wx/bmpbuttn.h
     wx/brush.h
     wx/button.h

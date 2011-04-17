@@ -252,6 +252,10 @@ SOURCE=..\..\src\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\affinematrix2d.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\anidecod.cpp
 # End Source File
 # Begin Source File
@@ -5890,6 +5894,14 @@ SOURCE=..\..\include\wx\access.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\propgrid\advprops.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\affinematrix2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\affinematrix2dbase.h
 # End Source File
 # Begin Source File
 
