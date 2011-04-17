@@ -738,7 +738,7 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 #else
         m_comboMonth->Move(x, y + (maxHeight - sizeCombo.y)/2);
 #endif
-        m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1, sizeStatic.y);
+        m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1);
 
         int xDiff = sizeCombo.x + HORZ_MARGIN;
 
