@@ -505,6 +505,12 @@ wxXmlNode *wxXmlDocument::DetachRoot()
 
 void wxXmlDocument::SetRoot(wxXmlNode *root)
 {
+    if (root)
+    {
+        wxASSERT_MSG( root->GetType() == wxXML_ELEMENT_NODE,
+                      "Can only set an element type node as root" );
+    }
+
     wxXmlNode *node = m_docNode;
     if (node)
     {
@@ -515,7 +521,7 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
             prev = node;
             node = node->GetNext();
         }
-        if (node)
+        if (node && root)
         {
             root->SetNext( node->GetNext() );
             wxDELETE(node);
@@ -528,8 +534,10 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
     else
     {
         m_docNode = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
+        m_docNode->SetChildren(root);
     }
-    root->SetParent(m_docNode);
+    if (root)
+        root->SetParent(m_docNode);
 }
 
 void wxXmlDocument::AppendToProlog(wxXmlNode *node)

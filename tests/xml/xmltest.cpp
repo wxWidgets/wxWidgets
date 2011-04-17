@@ -81,6 +81,7 @@ private:
         CPPUNIT_TEST( Escaping );
         CPPUNIT_TEST( DetachRoot );
         CPPUNIT_TEST( AppendToProlog );
+        CPPUNIT_TEST( SetRoot );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
@@ -91,6 +92,7 @@ private:
     void Escaping();
     void DetachRoot();
     void AppendToProlog();
+    void SetRoot();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -423,4 +425,47 @@ void XmlTestCase::AppendToProlog()
 "</root>\n"
     ;
     CPPUNIT_ASSERT_EQUAL( xmlTextResult, sos.GetString() );
+}
+
+void XmlTestCase::SetRoot()
+{
+    wxXmlDocument doc;
+    CPPUNIT_ASSERT( !doc.IsOk() );
+    wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "root");
+
+    // Test for the problem of http://trac.wxwidgets.org/ticket/13135
+    doc.SetRoot( root );
+    wxXmlNode *docNode = doc.GetDocumentNode();
+    CPPUNIT_ASSERT( docNode && root == docNode->GetChildren() );
+    CPPUNIT_ASSERT( doc.IsOk() );
+
+    // Other tests.
+    CPPUNIT_ASSERT( docNode == root->GetParent() );
+    doc.SetRoot(NULL); // Removes from doc but dosn't free mem, doc node left.
+    CPPUNIT_ASSERT( !doc.IsOk() );
+
+    wxXmlNode *comment = new wxXmlNode(wxXML_COMMENT_NODE, "comment", "Prolog Comment");
+    wxXmlNode *pi = new wxXmlNode(wxXML_PI_NODE, "target", "PI instructions");
+    doc.AppendToProlog(comment);
+    doc.SetRoot( root );
+    doc.AppendToProlog(pi);
+    CPPUNIT_ASSERT( doc.IsOk() );
+    wxXmlNode *node = docNode->GetChildren();
+    CPPUNIT_ASSERT( node );
+    CPPUNIT_ASSERT( node->GetType() == wxXML_COMMENT_NODE );
+    CPPUNIT_ASSERT( node->GetParent() == docNode );
+    node = node->GetNext();
+    CPPUNIT_ASSERT( node );
+    CPPUNIT_ASSERT( node->GetType() == wxXML_PI_NODE );
+    CPPUNIT_ASSERT( node->GetParent() == docNode );
+    node = node->GetNext();
+    CPPUNIT_ASSERT( node );
+    CPPUNIT_ASSERT( node->GetType() == wxXML_ELEMENT_NODE );
+    CPPUNIT_ASSERT( node->GetParent() == docNode );
+    node = node->GetNext();
+    CPPUNIT_ASSERT( !node );
+    doc.SetRoot(NULL);
+    CPPUNIT_ASSERT( !doc.IsOk() );
+    doc.SetRoot(root);
+    CPPUNIT_ASSERT( doc.IsOk() );
 }
