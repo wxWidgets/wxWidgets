@@ -705,7 +705,7 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
         width += 25;
 #endif
 
-        wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*6;
+        wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*8;
         if ( width < w2 )
             width = w2;
     }
