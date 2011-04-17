@@ -494,27 +494,6 @@ public:
     }
 
 private:
-    // Trivial wxTextCompleter implementation which always returns the same
-    // fixed array of completions.
-    class wxTextCompleterFixed : public wxTextCompleterSimple
-    {
-    public:
-        void SetCompletions(const wxArrayString& strings)
-        {
-            m_strings = strings;
-        }
-
-        virtual void GetCompletions(const wxString& WXUNUSED(prefix),
-                                    wxArrayString& res)
-        {
-            res = m_strings;
-        }
-
-    private:
-        wxArrayString m_strings;
-    };
-
-
     // Must be called after changing the values to be returned by wxIEnumString
     // to really make the changes stick.
     void DoRefresh()

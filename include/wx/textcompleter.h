@@ -55,5 +55,33 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTextCompleterSimple);
 };
 
+// ----------------------------------------------------------------------------
+// wxTextCompleterFixed: Trivial wxTextCompleter implementation which always
+// returns the same fixed array of completions.
+// ----------------------------------------------------------------------------
+
+// NB: This class is private and intentionally not documented as it is
+//     currently used only for implementation of completion with the fixed list
+//     of strings only by wxWidgets itself, do not use it outside of wxWidgets.
+
+class wxTextCompleterFixed : public wxTextCompleterSimple
+{
+public:
+    void SetCompletions(const wxArrayString& strings)
+    {
+        m_strings = strings;
+    }
+
+    virtual void GetCompletions(const wxString& WXUNUSED(prefix),
+                                wxArrayString& res)
+    {
+        res = m_strings;
+    }
+
+private:
+    wxArrayString m_strings;
+};
+
+
 #endif // _WX_TEXTCOMPLETER_H_
 
