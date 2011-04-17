@@ -525,6 +525,7 @@ MSW:
 
 OSX:
 
+- Implement auto-completion support in wxTextEntry.
 - Implement switching to default video mode in wxDisplay (soren).
 
 

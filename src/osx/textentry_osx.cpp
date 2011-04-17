@@ -45,8 +45,21 @@
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
+#include "wx/textcompleter.h"
 
 #include "wx/osx/private.h"
+
+wxTextEntry::wxTextEntry()
+{
+    m_completer = NULL;
+    m_editable = true;
+    m_maxLength = 0;
+}
+
+wxTextEntry::~wxTextEntry()
+{
+    delete m_completer;
+}
 
 wxString wxTextEntry::DoGetValue() const
 {
@@ -222,6 +235,25 @@ wxTextWidgetImpl * wxTextEntry::GetTextPeer() const
     wxWindow * const win = const_cast<wxTextEntry *>(this)->GetEditableWindow();
 
     return win ? dynamic_cast<wxTextWidgetImpl *>(win->GetPeer()) : NULL;
+}
+
+// ----------------------------------------------------------------------------
+// Auto-completion
+// ----------------------------------------------------------------------------
+
+bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
+{
+    wxTextCompleterFixed * const completer = new wxTextCompleterFixed;
+    completer->SetCompletions(choices);
+
+    return DoAutoCompleteCustom(completer);
+}
+
+bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    m_completer = completer;
+
+    return true;
 }
 
 #endif // wxUSE_TEXTCTRL

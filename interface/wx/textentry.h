@@ -46,8 +46,8 @@ public:
         Call this function to enable auto-completion of the text typed in a
         single-line text control using the given @a choices.
 
-        Notice that currently this function is only implemented in wxGTK2 and
-        wxMSW ports and does nothing under the other platforms.
+        Notice that currently this function is only implemented in wxGTK2,
+        wxMSW and wxOSX/Cocoa ports and does nothing under the other platforms.
 
         @since 2.9.0
 
@@ -75,7 +75,7 @@ public:
         Notice that you need to include @c wx/textcompleter.h in order to
         define your class inheriting from wxTextCompleter.
 
-        Currently this method is only implemented in wxMSW port.
+        Currently this method is only implemented in wxMSW and wxOSX/Cocoa.
 
         @since 2.9.2
 

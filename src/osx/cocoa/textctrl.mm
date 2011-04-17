@@ -45,6 +45,7 @@
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
+#include "wx/textcompleter.h"
 
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
@@ -293,22 +294,50 @@ protected :
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
 {
     NSMutableArray* matches = NULL;
-    NSString*       partialString;
-    
-    partialString = [[textView string] substringWithRange:charRange];
-    matches       = [NSMutableArray array];
-    
-    wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    wxArrayString completions;
-    
-    // adapt to whatever strategy we have for getting the strings
-    // impl->GetTextEntry()->GetCompletions(wxCFStringRef::AsString(partialString), completions);
-    
-    for (size_t i = 0; i < completions.GetCount(); ++i )
-        [matches addObject: wxCFStringRef(completions[i]).AsNSString()];
 
-    // [matches sortUsingSelector:@selector(compare:)];
-    
+    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+    wxTextEntry * const entry = impl->GetTextEntry();
+    wxTextCompleter * const completer = entry->OSXGetCompleter();
+    if ( completer )
+    {
+        const wxString prefix = entry->GetValue();
+        if ( completer->Start(prefix) )
+        {
+            const wxString
+                wordStart = wxCFStringRef::AsString(
+                              [[textView string] substringWithRange:charRange]
+                            );
+
+            matches = [NSMutableArray array];
+            for ( ;; )
+            {
+                const wxString s = completer->GetNext();
+                if ( s.empty() )
+                    break;
+
+                // Normally the completer should return only the strings
+                // starting with the prefix, but there could be exceptions
+                // and, for compatibility with MSW which simply ignores all
+                // entries that don't match the current text control contents,
+                // we ignore them as well. Besides, our own wxTextCompleterFixed
+                // doesn't respect this rule and, moreover, we need to extract
+                // just the rest of the string anyhow.
+                wxString completion;
+                if ( s.StartsWith(prefix, &completion) )
+                {
+                    // We discarded the entire prefix above but actually we
+                    // should include the part of it that consists of the
+                    // beginning of the current word, otherwise it would be
+                    // lost when completion is accepted as OS X supposes that
+                    // our matches do start with the "partial word range"
+                    // passed to us.
+                    const wxCFStringRef fullWord(wordStart + completion);
+                    [matches addObject: fullWord.AsNSString()];
+                }
+            }
+        }
+    }
+
     return matches;
 }
 
