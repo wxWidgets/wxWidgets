@@ -98,7 +98,7 @@ public:
         Call this function to enable auto-completion of the text typed in a
         single-line text control using all valid file system paths.
 
-        Notice that currently this function is only implemented in wxGTK2 port
+        Notice that currently this function is only implemented in wxMSW port
         and does nothing under the other platforms.
 
         @since 2.9.0
