@@ -287,9 +287,6 @@ void wxGenericCalendarCtrl::CreateYearSpinCtrl()
                                 wxDefaultSize,
                                 wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                                 -4300, 10000, GetDate().GetYear());
-#ifdef __WXMAC__
-    m_spinYear->SetSize( 90, -1 );
-#endif
 
     m_spinYear->Connect(m_spinYear->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
                         wxCommandEventHandler(wxGenericCalendarCtrl::OnYearTextChange),
@@ -700,10 +697,6 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
 
         height += wxMax(bestSizeCombo.y, m_spinYear->GetBestSize().y)
                     + VERT_MARGIN;
-#ifdef __WXMAC__
-        // the spin control get clipped otherwise
-        width += 25;
-#endif
 
         wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*8;
         if ( width < w2 )
@@ -733,11 +726,7 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 
         int maxHeight = wxMax(sizeSpin.y, sizeCombo.y);
         int dy = (maxHeight - sizeStatic.y) / 2;
-#ifdef __WXMAC__
-        m_comboMonth->Move(x, y + (maxHeight - sizeCombo.y)/2 + 2); // FIXME, something is reporting the wrong size..
-#else
         m_comboMonth->Move(x, y + (maxHeight - sizeCombo.y)/2);
-#endif
         m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1);
 
         int xDiff = sizeCombo.x + HORZ_MARGIN;
@@ -757,20 +746,7 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 
 void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
 {
-#ifdef __WXMAC__
     wxControl::DoGetSize( width, height );
-
-    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth && height )
-    {
-        wxSize sizeCombo = m_comboMonth->GetEffectiveMinSize();
-        wxSize sizeSpin = m_spinYear->GetSize();
-
-        int maxHeight = wxMax(sizeSpin.y, sizeCombo.y);
-        *height += maxHeight + VERT_MARGIN;
-    }
-#else
-    wxControl::DoGetSize( width, height );
-#endif
 }
 
 void wxGenericCalendarCtrl::RecalcGeometry()
