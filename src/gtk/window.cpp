@@ -2460,8 +2460,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
 bool wxWindowGTK::Destroy()
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-
     m_hasVMT = false;
 
     return wxWindowBase::Destroy();
