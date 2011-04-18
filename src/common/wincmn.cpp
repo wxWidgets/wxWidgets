@@ -554,7 +554,14 @@ void wxWindowBase::SendDestroyEvent()
 
 bool wxWindowBase::Destroy()
 {
-    SendDestroyEvent();
+    // If our handle is invalid, it means that this window has never been
+    // created, either because creating it failed or, more typically, because
+    // this wxWindow object was default-constructed and its Create() method had
+    // never been called. As we didn't send wxWindowCreateEvent in this case
+    // (which is sent after successful creation), don't send the matching
+    // wxWindowDestroyEvent neither.
+    if ( GetHandle() )
+        SendDestroyEvent();
 
     delete this;
 
