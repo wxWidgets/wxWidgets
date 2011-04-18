@@ -1770,13 +1770,13 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
         }
     }
 
-    event.StopPropagation();
-
     // For safety, completely re-create a new wxCommandEvent
     wxCommandEvent evt2(event);
     evt2.SetId(GetId());
     evt2.SetEventObject(this);
     HandleWindowEvent(evt2);
+
+    event.StopPropagation();
 }
 
 // call if cursor is on button area or mouse is captured for the button
