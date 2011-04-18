@@ -2651,7 +2651,7 @@ bool wxWindowBase::SendIdleEvents(wxIdleEvent& event)
 
 void wxWindowBase::OnInternalIdle()
 {
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
+    if ( wxUpdateUIEvent::CanUpdate(this) )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 

@@ -474,6 +474,13 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_UI_UPDATES) == 0)))
         return false;
 
+    // Don't update children of the hidden windows: this is useless as any
+    // change to their state won't be seen by the user anyhow. Notice that this
+    // argument doesn't apply to the hidden windows (with visible parent)
+    // themselves as they could be shown by their EVT_UPDATE_UI handler.
+    if ( win->GetParent() && !win->GetParent()->IsShownOnScreen() )
+        return false;
+
     if (sm_updateInterval == -1)
         return false;
 
