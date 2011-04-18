@@ -960,7 +960,6 @@ public:
 
 
 BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
-    EVT_TEXT(wxID_ANY,wxComboCtrlBase::OnTextCtrlEvent)
     EVT_SIZE(wxComboCtrlBase::OnSizeEvent)
     EVT_SET_FOCUS(wxComboCtrlBase::OnFocusEvent)
     EVT_KILL_FOCUS(wxComboCtrlBase::OnFocusEvent)
@@ -968,7 +967,6 @@ BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
     //EVT_BUTTON(wxID_ANY,wxComboCtrlBase::OnButtonClickEvent)
     EVT_KEY_DOWN(wxComboCtrlBase::OnKeyEvent)
     EVT_CHAR(wxComboCtrlBase::OnCharEvent)
-    EVT_TEXT_ENTER(wxID_ANY,wxComboCtrlBase::OnTextCtrlEvent)
     EVT_SYS_COLOUR_CHANGED(wxComboCtrlBase::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -1094,6 +1092,16 @@ wxComboCtrlBase::CreateTextCtrl(int style)
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
                        style);
+
+        // Connecting the events is currently the most reliable way
+        wxWindowID id = m_text->GetId();
+        m_text->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
+                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
+                        NULL, this);
+        m_text->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
+                        NULL, this);
+
         m_text->SetHint(m_hintText);
     }
 }
