@@ -203,8 +203,11 @@ static gboolean EndProcessDetector(GIOChannel* source, GIOCondition, void* data)
 
 int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-    return g_io_add_watch(
-        g_io_channel_unix_new(fd), G_IO_IN, EndProcessDetector, proc_data);
+    GIOChannel* channel = g_io_channel_unix_new(fd);
+    GIOCondition cond = GIOCondition(G_IO_IN | G_IO_HUP | G_IO_ERR);
+    unsigned id = g_io_add_watch(channel, cond, EndProcessDetector, proc_data);
+    g_io_channel_unref(channel);
+    return int(id);
 }
 
 
