@@ -163,6 +163,7 @@ wxFileDialog::wxFileDialog(
     long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
     : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
+    m_filterIndex = -1;
 }
 
 bool wxFileDialog::SupportsExtraControl() const
@@ -467,8 +468,6 @@ int wxFileDialog::ShowModal()
     m_path = wxEmptyString;
     m_fileNames.Clear();
     m_paths.Clear();
-    // since we don't support retrieving the matching filter
-    m_filterIndex = -1;
 
     wxNonOwnedWindow* parentWindow = NULL;
     int returnCode = -1;
@@ -490,8 +489,13 @@ int wxFileDialog::ShowModal()
     }
 
     m_firstFileTypeFilter = -1;
-    
-    if ( m_useFileTypeFilter )
+
+    if ( m_useFileTypeFilter
+        && m_filterIndex >= 0 && m_filterIndex < m_filterExtensions.GetCount() )
+    {
+        m_firstFileTypeFilter = m_filterIndex;
+    }
+    else if ( m_useFileTypeFilter )
     {
         types = nil;
         bool useDefault = true;
