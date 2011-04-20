@@ -592,6 +592,10 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_path = wxCFStringRef::AsString([sPanel filename]);
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
+            if (m_filterChoice)
+            {
+                m_filterIndex = m_filterChoice->GetSelection();
+            }
         }
     }
     else
