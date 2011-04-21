@@ -84,10 +84,10 @@ public:
     virtual HRESULT wxSTDCALL ResetEnumerator() = 0;
 };
 
-DEFINE_GUID(IID_IAutoCompleteDropDown,
+DEFINE_GUID(wxIID_IAutoCompleteDropDown,
     0x3cd141f4, 0x3c6a, 0x11d2, 0xbc, 0xaa, 0x00, 0xc0, 0x4f, 0xd9, 0x29, 0xdb);
 
-DEFINE_GUID(CLSID_AutoComplete,
+DEFINE_GUID(wxCLSID_AutoComplete,
     0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
 
 // Small helper class which can be used to ensure thread safety even when
@@ -363,7 +363,7 @@ public:
         // apparently.
         HRESULT hr = CoCreateInstance
                      (
-                        CLSID_AutoComplete,
+                        wxCLSID_AutoComplete,
                         NULL,
                         CLSCTX_INPROC_SERVER,
                         IID_IAutoComplete,
@@ -398,7 +398,7 @@ public:
         // provided IAutoComplete always implements IAutoCompleteDropDown too.
         hr = m_autoComplete->QueryInterface
                              (
-                               IID_IAutoCompleteDropDown,
+                               wxIID_IAutoCompleteDropDown,
                                reinterpret_cast<void **>(&m_autoCompleteDropDown)
                              );
         if ( FAILED(hr) )
