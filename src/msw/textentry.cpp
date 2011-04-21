@@ -59,6 +59,10 @@
 #if defined(__MINGW32__) || defined (__WATCOMC__) || defined(__CYGWIN__)
     // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
     #include <shlguid.h>
+
+    #ifndef ACO_AUTOAPPEND
+        #define ACO_AUTOAPPEND 0x02
+    #endif
 #endif
 
 #ifndef ACO_UPDOWNKEYDROPSLIST
