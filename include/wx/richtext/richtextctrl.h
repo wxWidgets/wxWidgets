@@ -146,6 +146,20 @@ public:
     /// Get the threshold in character positions for doing layout optimization during sizing
     long GetDelayedLayoutThreshold() const { return m_delayedLayoutThreshold; }
 
+#if wxABI_VERSION >= 20813
+    bool GetFullLayoutRequired() const { return m_fullLayoutRequired; }
+    void SetFullLayoutRequired(bool b) { m_fullLayoutRequired = b; }
+
+    wxLongLong GetFullLayoutTime() const { return m_fullLayoutTime; }
+    void SetFullLayoutTime(wxLongLong t) { m_fullLayoutTime = t; }
+
+    long GetFullLayoutSavedPosition() const { return m_fullLayoutSavedPosition; }
+    void SetFullLayoutSavedPosition(long p) { m_fullLayoutSavedPosition = p; }
+
+    // Force any pending layout due to large buffer
+    void ForceDelayedLayout();
+#endif
+
 #if wxABI_VERSION >= 20808
     /// Set text cursor
     void SetTextCursor(const wxCursor& cursor ) { m_textCursor = cursor; }

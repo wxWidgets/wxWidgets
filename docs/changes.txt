@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All (GUI):
 
 - wxRTC: speeded up image saving to XML (WriteHex).
+- wxRTC: added ForceDelayedLayout to override delayed layout for large buffers.
 - Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 
 wxGTK:

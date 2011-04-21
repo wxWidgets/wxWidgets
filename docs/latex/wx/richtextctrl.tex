@@ -550,6 +550,12 @@ changed. Selections are in caret positions.
 Helper function for finding the caret position for the next word. Direction
 is 1 (forward) or -1 (backwards).
 
+\membersection{wxRichTextCtrl::ForceDelayedLayout}\label{wxrichtextctrlforcedelayedlayout}
+
+\func{void}{ForceDelayedLayout}{\void}
+
+Call this function to ensure that the buffer is laid out fully even if there is a delayed layout operation pending on a large buffer.
+
 \membersection{wxRichTextCtrl::Freeze}\label{wxrichtextctrlfreeze}
 
 \func{void}{Freeze}{\void}
