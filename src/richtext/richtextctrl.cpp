@@ -2204,6 +2204,19 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+// Force any pending layout due to large buffer
+void wxRichTextCtrl::ForceDelayedLayout()
+{
+    if (m_fullLayoutRequired)
+    {
+        m_fullLayoutRequired = false;
+        m_fullLayoutTime = 0;
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        ShowPosition(m_fullLayoutSavedPosition);
+        Refresh(false);
+        Update();
+    }
+}
 
 /// Idle-time processing
 void wxRichTextCtrl::OnIdle(wxIdleEvent& event)

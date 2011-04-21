@@ -203,11 +203,11 @@ public:
     virtual void GetSelection(long* from, long* to) const;
 
     virtual wxString GetStringSelection() const;
-    
+
     const wxRichTextSelection& GetSelection() const { return m_selection; }
     wxRichTextSelection& GetSelection() { return m_selection; }
     void SetSelection(const wxRichTextSelection& sel) { m_selection = sel; }
-    
+
 
     /// Get filename
     wxString GetFilename() const { return m_filename; }
@@ -220,6 +220,18 @@ public:
 
     /// Get the threshold in character positions for doing layout optimization during sizing
     long GetDelayedLayoutThreshold() const { return m_delayedLayoutThreshold; }
+
+    bool GetFullLayoutRequired() const { return m_fullLayoutRequired; }
+    void SetFullLayoutRequired(bool b) { m_fullLayoutRequired = b; }
+
+    wxLongLong GetFullLayoutTime() const { return m_fullLayoutTime; }
+    void SetFullLayoutTime(wxLongLong t) { m_fullLayoutTime = t; }
+
+    long GetFullLayoutSavedPosition() const { return m_fullLayoutSavedPosition; }
+    void SetFullLayoutSavedPosition(long p) { m_fullLayoutSavedPosition = p; }
+
+    // Force any pending layout due to large buffer
+    void ForceDelayedLayout();
 
     /// Set text cursor
     void SetTextCursor(const wxCursor& cursor ) { m_textCursor = cursor; }
@@ -269,7 +281,7 @@ public:
     const wxRichTextContextMenuPropertiesInfo& GetContextMenuPropertiesInfo() const { return m_contextMenuPropertiesInfo; }
 
     /// The wxRichTextObject object that currently has the editing focus
-    wxRichTextParagraphLayoutBox* GetFocusObject() const { return m_focusObject; }    
+    wxRichTextParagraphLayoutBox* GetFocusObject() const { return m_focusObject; }
     bool SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setCaretPosition = true);
 
 // Operations
@@ -990,7 +1002,7 @@ private:
 
     /// Selection range in character positions. -2, -2 means no selection.
     wxRichTextSelection     m_selection;
-    
+
     wxRichTextCtrlSelectionState m_selectionState;
 
     /// Anchor so we know how to extend the selection
@@ -1026,7 +1038,7 @@ private:
     wxCursor                m_urlCursor;
 
     static wxArrayString    sm_availableFontNames;
-    
+
     wxRichTextContextMenuPropertiesInfo m_contextMenuPropertiesInfo;
 
     /// The object that currently has the editing focus
