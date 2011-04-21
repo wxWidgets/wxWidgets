@@ -55,7 +55,6 @@
 
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
-#include <shobjidl.h>
 
 #if defined(__MINGW32__) || defined (__WATCOMC__) || defined(__CYGWIN__)
     // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
@@ -70,11 +69,26 @@
     #define SHACF_FILESYS_ONLY 0x00000010
 #endif
 
-DEFINE_GUID(CLSID_AutoComplete,
-    0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
-
 namespace
 {
+
+// Normally this interface and its IID are defined in shobjidl.h header file
+// included in the platform SDK but MinGW and Cygwin don't have it so redefine
+// the interface ourselves and, as long as we do it all, do it for all
+// compilers to ensure we have the same behaviour for all of them and to avoid
+// the need to check for concrete compilers and maybe even their versions.
+class IAutoCompleteDropDown : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetDropDownStatus(DWORD *, LPWSTR *) = 0;
+    virtual HRESULT wxSTDCALL ResetEnumerator() = 0;
+};
+
+DEFINE_GUID(IID_IAutoCompleteDropDown,
+    0x3cd141f4, 0x3c6a, 0x11d2, 0xbc, 0xaa, 0x00, 0xc0, 0x4f, 0xd9, 0x29, 0xdb);
+
+DEFINE_GUID(CLSID_AutoComplete,
+    0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
 
 // Small helper class which can be used to ensure thread safety even when
 // wxUSE_THREADS==0 (and hence wxCriticalSection does nothing).
