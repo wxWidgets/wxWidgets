@@ -34,6 +34,8 @@
 #include "wx/textcompleter.h"
 #include "wx/dynlib.h"
 
+#include <initguid.h>
+
 #include "wx/msw/private.h"
 
 #if wxUSE_UXTHEME
