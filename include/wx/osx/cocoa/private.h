@@ -352,7 +352,7 @@ protected :
     - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
     @end
 
-    @interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
+    WXEXPORT @interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
     {
     }
 
