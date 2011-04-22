@@ -1590,9 +1590,9 @@ public:
         }
         @endcode
     */
-    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
-                                        wxRect labelRect,
-                                        const wxVariant& value);
+    virtual wxWindow* CreateEditorCtrl(wxWindow* parent,
+                                       wxRect labelRect,
+                                       const wxVariant& value);
 
     /**
         Return the attribute to be used for rendering.
@@ -1627,7 +1627,7 @@ public:
         }
         @endcode
     */
-    virtual bool GetValueFromEditorCtrl(wxControl* editor,
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor,
                                         wxVariant& value);
 
     /**

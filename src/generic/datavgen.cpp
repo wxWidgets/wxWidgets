@@ -732,7 +732,7 @@ bool wxDataViewTextRenderer::HasEditorCtrl() const
     return true;
 }
 
-wxControl* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
+wxWindow* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
         wxRect labelRect, const wxVariant &value )
 {
     wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, value,
@@ -746,7 +746,7 @@ wxControl* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
     return ctrl;
 }
 
-bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVariant &value )
+bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant &value )
 {
     wxTextCtrl *text = (wxTextCtrl*) editor;
     value = text->GetValue();
@@ -1106,7 +1106,7 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     return wxSize(80,20);
 }
 
-wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
+wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
 {
     wxDataViewIconText iconText;
     iconText << value;
@@ -1132,7 +1132,7 @@ wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect
     return ctrl;
 }
 
-bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVariant& value )
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant& value )
 {
     wxTextCtrl *text = (wxTextCtrl*) editor;
 

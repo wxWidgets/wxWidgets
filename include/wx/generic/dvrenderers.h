@@ -67,9 +67,9 @@ public:
 
     // in-place editing
     virtual bool HasEditorCtrl() const;
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
-                                         const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
+                                        const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
 
 protected:
     wxString   m_text;
@@ -177,9 +177,9 @@ public:
     virtual wxSize GetSize() const;
 
     virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
-                                         const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
+                                        const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
 
 private:
     wxDataViewIconText   m_value;

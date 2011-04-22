@@ -145,11 +145,11 @@ public:
     // in-place editing
     virtual bool HasEditorCtrl() const
         { return false; }
-    virtual wxControl* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
-                                        wxRect WXUNUSED(labelRect),
-                                        const wxVariant& WXUNUSED(value))
+    virtual wxWindow* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
+                                       wxRect WXUNUSED(labelRect),
+                                       const wxVariant& WXUNUSED(value))
         { return NULL; }
-    virtual bool GetValueFromEditorCtrl(wxControl * WXUNUSED(editor),
+    virtual bool GetValueFromEditorCtrl(wxWindow * WXUNUSED(editor),
                                         wxVariant& WXUNUSED(value))
         { return false; }
 
@@ -157,7 +157,7 @@ public:
     virtual void CancelEditing();
     virtual bool FinishEditing();
 
-    wxControl *GetEditorCtrl() { return m_editorCtrl; }
+    wxWindow *GetEditorCtrl() { return m_editorCtrl; }
 
     virtual bool IsCustomRenderer() const { return false; }
 
@@ -168,7 +168,7 @@ protected:
 
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
-    wxWeakRef<wxControl>    m_editorCtrl;
+    wxWeakRef<wxWindow>     m_editorCtrl;
     wxDataViewItem          m_item; // for m_editorCtrl
 
     // internal utility:
@@ -322,8 +322,8 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
     virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
     virtual bool Render( wxRect rect, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool SetValue( const wxVariant &value );
@@ -347,8 +347,8 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
     virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
     virtual bool Render( wxRect rect, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool SetValue( const wxVariant &value );
@@ -373,8 +373,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                               int alignment = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
 
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
