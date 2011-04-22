@@ -47,6 +47,11 @@ WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef add
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
+// keycode utils from app.cpp
+
+WXDLLIMPEXP_BASE CGKeyCode wxCharCodeWXToOSX(wxKeyCode code);
+WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
+
 #endif
 
 #if wxUSE_GUI

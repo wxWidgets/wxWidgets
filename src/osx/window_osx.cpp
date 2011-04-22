@@ -89,6 +89,18 @@ END_EVENT_TABLE()
 
 wxWidgetImplType* kOSXNoWidgetImpl = (wxWidgetImplType*) -1L;
 
+#if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
+
+typedef struct  {
+    EventHotKeyRef ref;
+    int keyId;
+    wxWindow* window;
+} wxHotKeyRec;
+
+wxVector<wxHotKeyRec> s_hotkeys;
+
+#endif
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -212,6 +224,21 @@ void wxWindowMac::Init()
 wxWindowMac::~wxWindowMac()
 {
     SendDestroyEvent();
+    
+#if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
+    for ( int i = s_hotkeys.size()-1; i>=0; -- i )
+    {
+        if ( s_hotkeys[i].window == this )
+        {
+            EventHotKeyRef ref = s_hotkeys[i].ref;
+            s_hotkeys.erase(s_hotkeys.begin() + i);
+            if ( UnregisterEventHotKey(ref) != noErr )
+            {
+                wxLogLastError(wxT("UnregisterHotKey"));
+            }
+        }
+    }    
+#endif
 
     MacInvalidateBorders() ;
 
@@ -2573,6 +2600,126 @@ bool wxWindowMac::IsShownOnScreen() const
     }
     return wxWindowBase::IsShownOnScreen();
 }
+
+#if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
+
+OSStatus wxHotKeyHandler(EventHandlerCallRef nextHandler,EventRef event, void *userData)
+{
+    EventHotKeyID hotKeyId;
+
+    GetEventParameter( event, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hotKeyId), NULL, &hotKeyId);
+
+    for ( int i = 0; i < s_hotkeys.size(); ++i )
+    {
+        if ( s_hotkeys[i].keyId == hotKeyId.id )
+        {
+            unsigned char charCode ;
+            UInt32 keyCode ;
+            UInt32 modifiers ;
+            Point where ;
+            UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+
+            GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+            GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
+            GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+            GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &where );
+            
+            UInt32 keymessage = (keyCode << 8) + charCode;
+            
+            wxKeyEvent wxevent(wxEVT_HOTKEY);
+            wxevent.SetId(hotKeyId.id);
+            wxTheApp->MacCreateKeyEvent( wxevent, s_hotkeys[i].window , keymessage , 
+                                        modifiers , when , where.h , where.v , 0 ) ;
+            
+            s_hotkeys[i].window->HandleWindowEvent(wxevent);
+        }
+    }
+    
+    return noErr;
+}
+
+bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
+{
+    for ( int i = 0; i < s_hotkeys.size(); ++i )
+    {
+        if ( s_hotkeys[i].keyId == hotkeyId )
+        {
+            wxLogLastError(wxT("hotkeyId already registered"));
+                
+            return false;
+        }
+    }
+    
+    static bool installed = false;
+    if ( !installed )
+    {
+        EventTypeSpec eventType;
+        eventType.eventClass=kEventClassKeyboard;
+        eventType.eventKind=kEventHotKeyPressed;
+
+        InstallApplicationEventHandler(&wxHotKeyHandler, 1, &eventType, NULL, NULL);
+        installed = true;
+    }
+    
+    UInt32 mac_modifiers=0;
+    if ( modifiers & wxMOD_ALT )
+        mac_modifiers |= optionKey;
+    if ( modifiers & wxMOD_SHIFT )
+        mac_modifiers |= shiftKey;
+    if ( modifiers & wxMOD_CONTROL )
+        mac_modifiers |= controlKey;
+    if ( modifiers & wxMOD_META )
+        mac_modifiers |= cmdKey;
+    
+    EventHotKeyRef hotKeyRef;
+    EventHotKeyID hotKeyIDmac;
+    
+    hotKeyIDmac.signature = 'WXMC';
+    hotKeyIDmac.id = hotkeyId;
+    
+    if ( RegisterEventHotKey(wxCharCodeWXToOSX((wxKeyCode)keycode), mac_modifiers, hotKeyIDmac,
+                        GetApplicationEventTarget(), 0, &hotKeyRef) != noErr )
+    {
+        wxLogLastError(wxT("RegisterHotKey"));
+        
+        return false;
+    }
+    else
+    {
+        wxHotKeyRec v;
+        v.ref = hotKeyRef;
+        v.keyId = hotkeyId;
+        v.window = this;
+        
+        s_hotkeys.push_back(v);
+    }
+    
+    return true;
+}
+
+bool wxWindowMac::UnregisterHotKey(int hotkeyId)
+{
+    for ( int i = s_hotkeys.size()-1; i>=0; -- i )
+    {
+        if ( s_hotkeys[i].keyId == hotkeyId )
+        {
+            EventHotKeyRef ref = s_hotkeys[i].ref;
+            s_hotkeys.erase(s_hotkeys.begin() + i);
+            if ( UnregisterEventHotKey(ref) != noErr )
+            {
+                wxLogLastError(wxT("UnregisterHotKey"));
+                
+                return false;
+            }
+            else 
+                return true;
+        }
+    }
+    
+    return false;
+}
+
+#endif // wxUSE_HOTKEY
 
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {

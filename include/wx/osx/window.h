@@ -114,6 +114,14 @@ public:
 
     virtual bool Reparent( wxWindowBase *newParent );
 
+#if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
+    // hot keys (system wide accelerators)
+    // -----------------------------------
+    
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int keycode);
+    virtual bool UnregisterHotKey(int hotkeyId);
+#endif // wxUSE_HOTKEY
+    
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif
