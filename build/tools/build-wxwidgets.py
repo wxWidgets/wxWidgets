@@ -201,7 +201,6 @@ def main(scriptName, args):
             
         if options.mac_universal_binary: 
             configure_opts.append("--enable-universal_binary")
-            configure_opts.append("--without-macosx-sdk") # don't let configure default it
             
         if options.cocoa:
             configure_opts.append("--with-old_cocoa")
@@ -231,6 +230,21 @@ def main(scriptName, args):
             wxpy_configure_opts.append("--with-sdl")
             wxpy_configure_opts.append("--with-gnomeprint")
                                         
+        # Ensure that the Carbon build stays compatible back to 10.4 and
+        # for the Cocoa build allow running on 10.5 and newer.  We only add
+        # them to the wxpy options because this is a hard-requirement for
+        # wxPython, but other cases it is optional and is left up to the
+        # developer.  TODO: there should be a command line option to set
+        # the SDK...
+        if sys.platform.startswith("darwin"):
+            if not options.osx_cocoa:
+                wxpy_configure_opts.append(
+                    "--with-macosx-sdk=/Developer/SDKs/MacOSX10.4u.sdk")
+            else:
+                wxpy_configure_opts.append(
+                    "--with-macosx-sdk=/Developer/SDKs/MacOSX10.5.sdk")
+
+
         if not options.mac_framework:
             if installDir and not prefixDir:
                 prefixDir = installDir
