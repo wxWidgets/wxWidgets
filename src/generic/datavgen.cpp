@@ -1597,6 +1597,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawRectangle(GetClientSize());
 #endif
 
+    if ( IsEmpty() )
+    {
+        // No items to draw.
+        return;
+    }
+
     // prepare the DC
     GetOwner()->PrepareDC( dc );
     dc.SetFont( GetFont() );
