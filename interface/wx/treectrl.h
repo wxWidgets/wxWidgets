@@ -812,9 +812,14 @@ public:
     virtual void ScrollTo(const wxTreeItemId& item);
 
     /**
-        Selects the given item. In multiple selection controls, can be also used
-        to deselect a currently selected item if the value of @a select is
-        @false.
+        Selects the given item.
+
+        In multiple selection controls, can be also used to deselect a
+        currently selected item if the value of @a select is @false.
+
+        Notice that calling this method will generate
+        @c wxEVT_COMMAND_TREE_SEL_CHANGING and @c wxEVT_COMMAND_TREE_SEL_CHANGED
+        events and that the change could be vetoed by the former event handler.
     */
     virtual void SelectItem(const wxTreeItemId& item, bool select = true);
 
