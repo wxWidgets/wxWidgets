@@ -297,7 +297,8 @@ protected:
         while ( nflags )
         {
             // when monitoring dir, this means create/delete
-            if ( nflags & NOTE_WRITE && wxDirExists(w.GetPath()) )
+            const wxString basepath = w.GetPath();
+            if ( nflags & NOTE_WRITE && wxDirExists(basepath) )
             {
                 // NOTE_LINK is set when the dir was created, but we
                 // don't care - we look for new names in directory
@@ -308,6 +309,7 @@ protected:
                 wxArrayString changedFiles;
                 wxArrayInt changedFlags;
                 FindChanges(w, changedFiles, changedFlags);
+
                 wxArrayString::iterator it = changedFiles.begin();
                 wxArrayInt::iterator changeType = changedFlags.begin();
                 for ( ; it != changedFiles.end(); ++it, ++changeType )
@@ -315,11 +317,13 @@ protected:
                     wxFileName path;
                     if ( wxDirExists(*it) )
                     {
-                        path = wxFileName::DirName(w.GetPath() + *it);
+                        path = wxFileName::DirName(
+                                basepath + wxFileName::GetPathSeparator() + *it
+                               );
                     }
                     else
                     {
-                        path = wxFileName::FileName(w.GetPath() + *it);
+                        path.Assign(basepath, *it);
                     }
 
                     wxFileSystemWatcherEvent event(*changeType, path, path);
@@ -333,28 +337,28 @@ protected:
                 // still we couldn't be sure we have the right name...
                 nflags &= ~NOTE_RENAME;
                 wxFileSystemWatcherEvent event(wxFSW_EVENT_RENAME,
-                                        w.GetPath(), wxFileName());
+                                        basepath, wxFileName());
                 SendEvent(event);
             }
             else if ( nflags & NOTE_WRITE || nflags & NOTE_EXTEND )
             {
                 nflags &= ~(NOTE_WRITE | NOTE_EXTEND);
                 wxFileSystemWatcherEvent event(wxFSW_EVENT_MODIFY,
-                                        w.GetPath(), w.GetPath());
+                                        basepath, basepath);
                 SendEvent(event);
             }
             else if ( nflags & NOTE_DELETE )
             {
                 nflags &= ~(NOTE_DELETE);
                 wxFileSystemWatcherEvent event(wxFSW_EVENT_DELETE,
-                                        w.GetPath(), w.GetPath());
+                                        basepath, basepath);
                 SendEvent(event);
             }
             else if ( nflags & NOTE_ATTRIB )
             {
                 nflags &= ~(NOTE_ATTRIB);
                 wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS,
-                                        w.GetPath(), w.GetPath());
+                                        basepath, basepath);
                 SendEvent(event);
             }
 
