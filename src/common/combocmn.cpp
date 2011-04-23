@@ -1048,7 +1048,7 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
     if ( size.x > 0 && size.y > 0 )
     {
         wxSizeEvent evt(size,GetId());
-        event.SetEventObject(this);
+        evt.SetEventObject(this);
         GetEventHandler()->AddPendingEvent(evt);
     }
 
@@ -1752,7 +1752,7 @@ void wxComboCtrlBase::RecalcAndRefresh()
     if ( IsCreated() )
     {
         wxSizeEvent evt(GetSize(),GetId());
-        event.SetEventObject(this);
+        evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
         Refresh();
     }
