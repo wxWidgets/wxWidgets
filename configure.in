@@ -1035,6 +1035,7 @@ WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 onl
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
+WX_ARG_FEATURE(dctransform,  [  --enable-dctransform    use wxDC::SetTransformMatrix and related], wxUSE_DC_TRANSFORM_MATRIX)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -6750,6 +6751,10 @@ fi
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+fi
+
+if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then
+    AC_DEFINE(wxUSE_DC_TRANSFORM_MATRIX)
 fi
 
 dnl ---------------------------------------------------------------------------

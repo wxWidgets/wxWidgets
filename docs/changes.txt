@@ -522,6 +522,7 @@ MSW:
 - Center task dialog-based wxProgressDialog on the parent (John Roberts).
 - wxAutomationObject::GetInstance() creates objects on demand (Kolya Kosenko).
 - Fix EVT_UPDATE_UI generation for items in submenus (wsu).
+- Added support for world transformation matrix to wxDC (Catalin Raceanu).
 
 OSX:
 

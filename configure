@@ -1899,6 +1899,7 @@ Optional Features:
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
+  --enable-dctransform    use wxDC::SetTransformMatrix and related
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -13996,6 +13997,50 @@ fi
             fi
           else
             result=$wxUSE_UIACTIONSIMULATOR
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dctransform" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-dctransform... $ECHO_C" >&6; }
+          # Check whether --enable-dctransform was given.
+if test "${enable_dctransform+set}" = set; then
+  enableval=$enable_dctransform;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_dctransform='wxUSE_DC_TRANSFORM_MATRIX=yes'
+                          else
+                            wx_cv_use_dctransform='wxUSE_DC_TRANSFORM_MATRIX=no'
+                          fi
+
+else
+
+                          wx_cv_use_dctransform='wxUSE_DC_TRANSFORM_MATRIX=${'DEFAULT_wxUSE_DC_TRANSFORM_MATRIX":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_dctransform"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DC_TRANSFORM_MATRIX = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_DC_TRANSFORM_MATRIX
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47152,6 +47197,13 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+fi
+
+if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_DC_TRANSFORM_MATRIX 1
+_ACEOF
+
 fi
 
 

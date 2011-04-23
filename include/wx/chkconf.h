@@ -615,6 +615,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATEPICKCTRL) */
 
+#ifndef wxUSE_DC_TRANSFORM_MATRIX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DC_TRANSFORM_MATRIX must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_DC_TRANSFORM_MATRIX 1
+#   endif
+#endif /* wxUSE_DC_TRANSFORM_MATRIX */
+
 #ifndef wxUSE_DIRPICKERCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DIRPICKERCTRL must be defined, please read comment near the top of this file."

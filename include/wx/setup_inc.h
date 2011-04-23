@@ -1359,6 +1359,16 @@
 // to create files in SVG (Scalable Vector Graphics) format.
 #define wxUSE_SVG 1
 
+// Should wxDC provide SetTransformMatrix() and related methods?
+//
+// Default is 1 but can be set to 0 if this functionality is not used. Notice
+// that currently only wxMSW supports this so setting this to 0 doesn't change
+// much for non-MSW platforms (although it will still save a few bytes
+// probably).
+//
+// Recommended setting: 1.
+#define wxUSE_DC_TRANSFORM_MATRIX 1
+
 // ----------------------------------------------------------------------------
 // image format support
 // ----------------------------------------------------------------------------

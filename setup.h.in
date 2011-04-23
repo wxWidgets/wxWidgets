@@ -573,6 +573,8 @@
 
 #define wxUSE_SVG 0
 
+#define wxUSE_DC_TRANSFORM_MATRIX 0
+
 
 
 #define wxUSE_IMAGE         0

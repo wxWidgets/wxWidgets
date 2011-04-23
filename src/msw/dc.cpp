@@ -273,6 +273,98 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 
+namespace
+{
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+
+// Class used to dynamically load world transform related API functions.
+class GdiWorldTransformFuncs
+{
+public:
+    static bool IsOk()
+    {
+        if ( !ms_worldTransformSymbolsLoaded )
+            LoadWorldTransformSymbols();
+
+        return ms_pfnSetGraphicsMode &&
+                ms_pfnSetWorldTransform &&
+                 ms_pfnGetWorldTransform &&
+                  ms_pfnModifyWorldTransform;
+    }
+
+    typedef int (WINAPI *SetGraphicsMode_t)(HDC, int);
+    static SetGraphicsMode_t SetGraphicsMode()
+    {
+        if ( !ms_worldTransformSymbolsLoaded )
+            LoadWorldTransformSymbols();
+
+        return ms_pfnSetGraphicsMode;
+    }
+
+    typedef BOOL (WINAPI *SetWorldTransform_t)(HDC, const XFORM *);
+    static SetWorldTransform_t SetWorldTransform()
+    {
+        if ( !ms_worldTransformSymbolsLoaded )
+            LoadWorldTransformSymbols();
+
+        return ms_pfnSetWorldTransform;
+    }
+
+    typedef BOOL (WINAPI *GetWorldTransform_t)(HDC, LPXFORM);
+    static GetWorldTransform_t GetWorldTransform()
+    {
+        if ( !ms_worldTransformSymbolsLoaded )
+            LoadWorldTransformSymbols();
+
+        return ms_pfnGetWorldTransform;
+    }
+
+    typedef BOOL (WINAPI *ModifyWorldTransform_t)(HDC, const XFORM *, DWORD);
+    static ModifyWorldTransform_t ModifyWorldTransform()
+    {
+        if ( !ms_worldTransformSymbolsLoaded )
+            LoadWorldTransformSymbols();
+
+        return ms_pfnModifyWorldTransform;
+    }
+
+private:
+    static void LoadWorldTransformSymbols()
+    {
+        wxDynamicLibrary dll(wxT("gdi32.dll"));
+
+        wxDL_INIT_FUNC(ms_pfn, SetGraphicsMode, dll);
+        wxDL_INIT_FUNC(ms_pfn, SetWorldTransform, dll);
+        wxDL_INIT_FUNC(ms_pfn, GetWorldTransform, dll);
+        wxDL_INIT_FUNC(ms_pfn, ModifyWorldTransform, dll);
+
+        ms_worldTransformSymbolsLoaded = true;
+    }
+
+    static SetGraphicsMode_t ms_pfnSetGraphicsMode;
+    static SetWorldTransform_t ms_pfnSetWorldTransform;
+    static GetWorldTransform_t ms_pfnGetWorldTransform;
+    static ModifyWorldTransform_t ms_pfnModifyWorldTransform;
+
+    static bool ms_worldTransformSymbolsLoaded;
+};
+
+GdiWorldTransformFuncs::SetGraphicsMode_t
+    GdiWorldTransformFuncs::ms_pfnSetGraphicsMode = NULL;
+GdiWorldTransformFuncs::SetWorldTransform_t
+    GdiWorldTransformFuncs::ms_pfnSetWorldTransform = NULL;
+GdiWorldTransformFuncs::GetWorldTransform_t
+    GdiWorldTransformFuncs::ms_pfnGetWorldTransform = NULL;
+GdiWorldTransformFuncs::ModifyWorldTransform_t
+    GdiWorldTransformFuncs::ms_pfnModifyWorldTransform = NULL;
+
+bool GdiWorldTransformFuncs::ms_worldTransformSymbolsLoaded = false;
+
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
+} // anonymous namespace
+
 #endif // wxUSE_DYNLIB_CLASS
 
 // ===========================================================================
@@ -2004,6 +2096,87 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
 }
+
+// ----------------------------------------------------------------------------
+// Transform matrix
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+
+bool wxMSWDCImpl::CanUseTransformMatrix() const
+{
+    return GdiWorldTransformFuncs::IsOk();
+}
+
+bool wxMSWDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
+{
+    if ( !GdiWorldTransformFuncs::IsOk() )
+        return false;
+
+    if ( matrix.IsIdentity() )
+    {
+        ResetTransformMatrix();
+        return true;
+    }
+
+    if ( !GdiWorldTransformFuncs::SetGraphicsMode()(GetHdc(), GM_ADVANCED) )
+    {
+        wxLogLastError(wxT("SetGraphicsMode"));
+        return false;
+    }
+
+    wxMatrix2D mat;
+    wxPoint2DDouble tr;
+    matrix.Get(&mat, &tr);
+
+    XFORM xform;
+    xform.eM11 = mat.m_11;
+    xform.eM12 = mat.m_12;
+    xform.eM21 = mat.m_21;
+    xform.eM22 = mat.m_22;
+    xform.eDx = tr.m_x;
+    xform.eDy = tr.m_y;
+
+    if ( !GdiWorldTransformFuncs::SetWorldTransform()(GetHdc(), &xform) )
+    {
+        wxLogLastError(wxT("SetWorldTransform"));
+        return false;
+    }
+
+    return true;
+}
+
+wxAffineMatrix2D wxMSWDCImpl::GetTransformMatrix() const
+{
+    wxAffineMatrix2D transform;
+
+    if ( !GdiWorldTransformFuncs::IsOk() )
+        return transform;
+
+    XFORM xform;
+    if ( !GdiWorldTransformFuncs::GetWorldTransform()(GetHdc(), &xform) )
+    {
+        wxLogLastError(wxT("GetWorldTransform"));
+        return transform;
+    }
+
+    wxMatrix2D m(xform.eM11, xform.eM12, xform.eM21, xform.eM22);
+    wxPoint2DDouble p(xform.eDx, xform.eDy);
+    transform.Set(m, p);
+
+    return transform;
+}
+
+void wxMSWDCImpl::ResetTransformMatrix()
+{
+    if ( GdiWorldTransformFuncs::IsOk() )
+    {
+        GdiWorldTransformFuncs::ModifyWorldTransform()(GetHdc(), NULL, MWT_IDENTITY);
+        GdiWorldTransformFuncs::SetGraphicsMode()(GetHdc(), GM_COMPATIBLE);
+    }
+}
+
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
 // ---------------------------------------------------------------------------
 // bit blit
