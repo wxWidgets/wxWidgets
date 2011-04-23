@@ -509,13 +509,10 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
         wxString buffer;
         buffer.Printf( "newpath\n"
                        "%f %f %f %f %f %f ellipse\n"
-                       "%f %f lineto\n"
-                       "closepath\n"
                        "stroke\n",
                 XLOG2DEV(xc), YLOG2DEV(yc),
                 XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius),
-                alpha1, alpha2,
-                XLOG2DEV(xc), YLOG2DEV(yc) );
+                alpha1, alpha2 );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
