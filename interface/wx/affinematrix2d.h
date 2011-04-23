@@ -51,7 +51,7 @@ public:
 
         The parameter matrix is the multiplicand.
 
-        @param wxAffineMatrix2DBase
+        @param t
             The multiplicand.
 
         @code
@@ -85,7 +85,7 @@ public:
     /**
         Check that this matrix is identical with @t.
 
-        @param wxAffineMatrix2DBase
+        @param t
             The matrix compared with this.
     */
     void IsEqual(const wxAffineMatrix2DBase& t);
@@ -95,7 +95,7 @@ public:
     /**
         Check that this matrix differs from @t.
 
-        @param wxAffineMatrix2DBase
+        @param t
             The matrix compared with this.
     */
     bool operator!=(const wxAffineMatrix2DBase& t) const;
@@ -140,7 +140,7 @@ public:
     /**
         Applies this matrix to the point.
 
-        @param src
+        @param p
             The point receiving the transformations.
 
         @return The point with the transformations applied.
@@ -151,7 +151,7 @@ public:
     /**
         Applies the linear part of this matrix, i.e. without translation.
 
-        @param src
+        @param p
             The source receiving the transformations.
 
         @return The source with the transformations applied.
