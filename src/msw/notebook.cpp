@@ -1314,10 +1314,12 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   event.SetEventObject(this);
   event.SetInt(idCtrl);
 
-  bool processed = HandleWindowEvent(event);
+  // Change the selection before generating the event as its handler should
+  // already see the new page selected.
   if ( hdr->code == TCN_SELCHANGE )
       UpdateSelection(event.GetSelection());
 
+  bool processed = HandleWindowEvent(event);
   *result = !event.IsAllowed();
   return processed;
 }

@@ -972,6 +972,12 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
              nameControl,
              veto;
     const wxEventType eventType = event.GetEventType();
+
+    // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
+    //     wxRTTI
+    const wxBookCtrlBase * const
+        book = static_cast<wxBookCtrlBase *>(event.GetEventObject());
+
     for ( size_t n = 0; n < WXSIZEOF(events); n++ )
     {
         const EventInfo& ei = events[n];
@@ -983,10 +989,6 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
         {
             const int idx = event.GetOldSelection();
 
-            // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
-            //     wxRTTI
-            const wxBookCtrlBase * const
-                book = static_cast<wxBookCtrlBase *>(event.GetEventObject());
             if ( idx != wxNOT_FOUND &&
                     book && book->GetPageText(idx) == VETO_PAGE_NAME )
             {
@@ -1017,13 +1019,14 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
 
     static int s_num = 0;
 
-    wxLogMessage(wxT("Event #%d: %s: %s (%d) new sel %d, old %d%s"),
+    wxLogMessage(wxT("Event #%d: %s: %s (%d) new sel %d, old %d, current %d%s"),
                  ++s_num,
                  nameControl.c_str(),
                  nameEvent.c_str(),
                  eventType,
                  event.GetSelection(),
                  event.GetOldSelection(),
+                 book->GetSelection(),
                  veto.c_str());
 
 #if USE_LOG
