@@ -1014,6 +1014,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
 
         // finally send an event allowing the window to relayout itself &c
         wxSizeEvent event(rect.GetSize(), GetId());
+        event.SetEventObject(this);
         HandleWindowEvent(event);
     }
     else // stop showing full screen

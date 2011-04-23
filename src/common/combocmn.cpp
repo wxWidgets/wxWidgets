@@ -1044,10 +1044,11 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
     m_iFlags |= wxCC_IFLAG_CREATED;
 
     // If x and y indicate valid size, wxSizeEvent won't be
-    // emitted automatically, so we need to add artifical one.
+    // emitted automatically, so we need to add artificial one.
     if ( size.x > 0 && size.y > 0 )
     {
         wxSizeEvent evt(size,GetId());
+        event.SetEventObject(this);
         GetEventHandler()->AddPendingEvent(evt);
     }
 
@@ -1751,6 +1752,7 @@ void wxComboCtrlBase::RecalcAndRefresh()
     if ( IsCreated() )
     {
         wxSizeEvent evt(GetSize(),GetId());
+        event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
         Refresh();
     }
