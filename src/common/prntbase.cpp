@@ -999,43 +999,106 @@ void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
 
 #endif // wxUSE_MOUSEWHEEL
 
+namespace
+{
+
+// This is by the controls in the print preview as the maximal (and hence
+// longest) page number we may have to display.
+enum { MAX_PAGE_NUMBER = 99999 };
+
+} // anonymous namespace
+
+// ----------------------------------------------------------------------------
+// wxPrintPageMaxCtrl
+// ----------------------------------------------------------------------------
+
+// A simple static control showing the maximal number of pages.
+class wxPrintPageMaxCtrl : public wxStaticText
+{
+public:
+    wxPrintPageMaxCtrl(wxWindow *parent)
+        : wxStaticText(
+                        parent,
+                        wxID_ANY,
+                        wxString(),
+                        wxDefaultPosition,
+                        wxSize
+                        (
+                         parent->GetTextExtent(MaxAsString(MAX_PAGE_NUMBER)).x,
+                         wxDefaultCoord
+                        ),
+                        wxST_NO_AUTORESIZE | wxALIGN_CENTRE
+                      )
+    {
+    }
+
+    // Set the maximal page to display once we really know what it is.
+    void SetMaxPage(int maxPage)
+    {
+        SetLabel(MaxAsString(maxPage));
+    }
+
+private:
+    static wxString MaxAsString(int maxPage)
+    {
+        return wxString::Format("/ %d", maxPage);
+    }
+
+    wxDECLARE_NO_COPY_CLASS(wxPrintPageMaxCtrl);
+};
+
 // ----------------------------------------------------------------------------
 // wxPrintPageTextCtrl
 // ----------------------------------------------------------------------------
 
-// This text control contains the page number in the interval specified during
-// its construction. Invalid pages are not accepted and the control contents is
-// validated when it loses focus. Conversely, if the user changes the page to
-// another valid one or presses Enter, OnGotoPage() method of the preview object
-// will be called.
+// This text control contains the page number in the specified interval.
+//
+// Invalid pages are not accepted and the control contents is validated when it
+// loses focus. Conversely, if the user changes the page to another valid one
+// or presses Enter, OnGotoPage() method of the preview object will be called.
 class wxPrintPageTextCtrl : public wxTextCtrl
 {
 public:
-    wxPrintPageTextCtrl(wxPreviewControlBar *preview, int minPage, int maxPage)
+    wxPrintPageTextCtrl(wxPreviewControlBar *preview)
         : wxTextCtrl(preview,
                      wxID_PREVIEW_GOTO,
-                     PageAsString(minPage),
+                     wxString(),
                      wxDefaultPosition,
-                     // We use hardcoded 99999 for the width instead of fitting
-                     // it to the values we can show because the control looks
-                     // uncomfortably narrow if the real page number is just
-                     // one or two digits.
-                     wxSize(preview->GetTextExtent("99999").x, wxDefaultCoord),
+                     // We use hardcoded maximal page number for the width
+                     // instead of fitting it to the values we can show because
+                     // the control looks uncomfortably narrow if the real page
+                     // number is just one or two digits.
+                     wxSize
+                     (
+                      preview->GetTextExtent(PageAsString(MAX_PAGE_NUMBER)).x,
+                      wxDefaultCoord
+                     ),
                      wxTE_PROCESS_ENTER
 #if wxUSE_VALIDATORS
                      , wxTextValidator(wxFILTER_DIGITS)
 #endif // wxUSE_VALIDATORS
                     ),
-          m_preview(preview),
-          m_minPage(minPage),
-          m_maxPage(maxPage)
+          m_preview(preview)
     {
-        m_page = minPage;
+        m_minPage =
+        m_maxPage =
+        m_page = 1;
 
         Connect(wxEVT_KILL_FOCUS,
                 wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
         Connect(wxEVT_COMMAND_TEXT_ENTER,
                 wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
+    }
+
+    // Update the pages range, must be called after OnPreparePrinting() as
+    // these values are not known before.
+    void SetPageInfo(int minPage, int maxPage)
+    {
+        m_minPage = minPage;
+        m_maxPage = maxPage;
+
+        // Show the first page by default.
+        SetPageNumber(minPage);
     }
 
     // Helpers to conveniently set or get the current page number. Return value
@@ -1108,8 +1171,8 @@ private:
 
     wxPreviewControlBar * const m_preview;
 
-    const int m_minPage,
-              m_maxPage;
+    int m_minPage,
+        m_maxPage;
 
     // This is the last valid page value that we had, we revert to it if an
     // invalid page is entered.
@@ -1155,6 +1218,7 @@ wxPanel(parent, wxID_ANY, pos, size, style, name)
     m_closeButton = NULL;
     m_zoomControl = NULL;
     m_currentPageText = NULL;
+    m_maxPageText = NULL;
     m_buttonFlags = buttons;
 }
 
@@ -1436,18 +1500,11 @@ void wxPreviewControlBar::CreateButtons()
 
     if (m_buttonFlags & wxPREVIEW_GOTO)
     {
-        int minPage, maxPage, pageFrom, pageTo;
-        m_printPreview->GetPrintout()->GetPageInfo(&minPage, &maxPage,
-                                                   &pageFrom, &pageTo);
-
-        m_currentPageText = new wxPrintPageTextCtrl(this, minPage, maxPage);
+        m_currentPageText = new wxPrintPageTextCtrl(this);
         sizer.Add(m_currentPageText);
 
-        wxStaticText *
-            maxPageText = new wxStaticText(this, wxID_ANY,
-                                           wxString::Format("/ %d", maxPage));
-
-        sizer.Add(maxPageText);
+        m_maxPageText = new wxPrintPageMaxCtrl(this);
+        sizer.Add(m_maxPageText);
     }
 
     if (m_buttonFlags & wxPREVIEW_NEXT)
@@ -1487,6 +1544,15 @@ void wxPreviewControlBar::CreateButtons()
     // Close button group (single button again).
     m_closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("&Close"));
     sizer.AddAtEnd(m_closeButton);
+}
+
+void wxPreviewControlBar::SetPageInfo(int minPage, int maxPage)
+{
+    if ( m_currentPageText )
+        m_currentPageText->SetPageInfo(minPage, maxPage);
+
+    if ( m_maxPageText )
+        m_maxPageText->SetMaxPage(maxPage);
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
@@ -1829,13 +1895,23 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
     m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
 
     // Need to delay OnPreparePrinting() until here, so we have enough
-    // information.
+    // information and a wxDC.
     if (!m_printingPrepared)
     {
+        m_printingPrepared = true;
+
         m_previewPrintout->OnPreparePrinting();
         int selFrom, selTo;
         m_previewPrintout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
-        m_printingPrepared = true;
+
+        // Update the wxPreviewControlBar page range display.
+        if ( m_previewFrame )
+        {
+            wxPreviewControlBar * const
+                controlBar = ((wxPreviewFrame*)m_previewFrame)->GetControlBar();
+            if ( controlBar )
+                controlBar->SetPageInfo(m_minPage, m_maxPage);
+        }
     }
 
     m_previewPrintout->OnBeginPrinting();

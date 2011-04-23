@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxPreviewFrame;
 class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
+class wxPrintPageMaxCtrl;
 class wxPrintPageTextCtrl;
 
 //----------------------------------------------------------------------------
@@ -453,6 +454,7 @@ public:
     virtual ~wxPreviewControlBar();
 
     virtual void CreateButtons();
+    virtual void SetPageInfo(int minPage, int maxPage);
     virtual void SetZoomControl(int zoom);
     virtual int GetZoomControl();
     virtual wxPrintPreviewBase *GetPrintPreview() const
@@ -496,7 +498,8 @@ protected:
     wxPrintPreviewBase*   m_printPreview;
     wxButton*             m_closeButton;
     wxChoice*             m_zoomControl;
-    wxPrintPageTextCtrl* m_currentPageText;
+    wxPrintPageTextCtrl*  m_currentPageText;
+    wxPrintPageMaxCtrl*   m_maxPageText;
 
     long                  m_buttonFlags;
 
