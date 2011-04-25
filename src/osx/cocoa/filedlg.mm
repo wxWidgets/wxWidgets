@@ -381,17 +381,20 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
     return extrapanel;
 }
 
-// An item has been selected in the file filter wxChoice:
-void wxFileDialog::OnFilterSelected( wxCommandEvent &WXUNUSED(event) )
+void wxFileDialog::DoOnFilterSelected(int index)
 {
-    int index = m_filterChoice->GetSelection();
-
     NSArray* types = GetTypesFromExtension(m_filterExtensions[index],m_currentExtensions);
     NSSavePanel* panel = (NSSavePanel*) GetWXWindow();
     if ( m_delegate )
         [panel validateVisibleColumns];
     else
         [panel setAllowedFileTypes:types];
+}
+
+// An item has been selected in the file filter wxChoice:
+void wxFileDialog::OnFilterSelected( wxCommandEvent &WXUNUSED(event) )
+{
+    DoOnFilterSelected( m_filterChoice->GetSelection() );
 }
 
 bool wxFileDialog::CheckFile( const wxString& filename )
@@ -546,6 +549,19 @@ int wxFileDialog::ShowModal()
 
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
+        }
+
+        /*
+        Let the file dialog know what file type should be used initially.
+        If this is not done then when setting the filter index
+        programmatically to 1 the file will still have the extension
+        of the first file type instead of the second one. E.g. when file
+        types are foo and bar, a filename "myletter" with SetDialogIndex(1)
+        would result in saving as myletter.foo, while we want myletter.bar.
+        */
+        if(m_firstFileTypeFilter > 0)
+        {
+            DoOnFilterSelected(m_firstFileTypeFilter);
         }
 
         returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];

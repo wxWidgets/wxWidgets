@@ -70,6 +70,7 @@ protected:
     
 #if wxOSX_USE_COCOA
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
+    void DoOnFilterSelected(int index);
     virtual void OnFilterSelected(wxCommandEvent &event);
 
     wxArrayString m_filterExtensions;
