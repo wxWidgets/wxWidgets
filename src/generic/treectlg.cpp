@@ -441,7 +441,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     rect.y -= 2;
     rect.width  += 8;
     rect.height += 4;
-#elif defined(__WXMAC__)
+#elif defined(wxOSX_USE_CARBON) && wxOSX_USE_CARBON
     int bestHeight = GetBestSize().y - 8;
     if ( rect.height > bestHeight )
     {
