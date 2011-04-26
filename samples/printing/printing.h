@@ -104,16 +104,18 @@ private:
 
 
 // constants:
+enum
+{
+    WXPRINT_PAGE_SETUP = 103,
 
-#define WXPRINT_PAGE_SETUP      103
+    WXPRINT_PRINT_PS,
+    WXPRINT_PAGE_SETUP_PS,
+    WXPRINT_PREVIEW_PS,
 
-#define WXPRINT_PRINT_PS        105
-#define WXPRINT_PAGE_SETUP_PS   107
-#define WXPRINT_PREVIEW_PS      108
-
-#define WXPRINT_ANGLEUP         110
-#define WXPRINT_ANGLEDOWN       111
+    WXPRINT_ANGLEUP,
+    WXPRINT_ANGLEDOWN
 
 #ifdef __WXMAC__
-    #define WXPRINT_PAGE_MARGINS 112
+    , WXPRINT_PAGE_MARGINS
 #endif
+};
