@@ -192,6 +192,12 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
+    // Return wxDataViewColumn matching the given GtkTreeViewColumn.
+    //
+    // If the input argument is NULL, return NULL too. Otherwise we must find
+    // the matching column and assert if we didn't.
+    wxDataViewColumn* FromGTKColumn(GtkTreeViewColumn *gtk_col) const;
+
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
     friend class wxDataViewCtrlInternal;

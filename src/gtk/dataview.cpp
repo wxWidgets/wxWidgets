@@ -4447,6 +4447,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
 wxDataViewCtrl::~wxDataViewCtrl()
 {
+    // Stop editing before destroying the control to remove any event handlers
+    // which are added when editing started: if we didn't do this, the base
+    // class dtor would assert as it checks for any leftover handlers.
+    if ( m_treeview )
+    {
+        GtkTreeViewColumn *col;
+        gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
+
+        wxDataViewColumn * const wxcol = FromGTKColumn(col);
+        if ( wxcol )
+        {
+            // This won't do anything if we're not editing it
+            wxcol->GetRenderer()->CancelEditing();
+        }
+    }
+
     m_cols.Clear();
 
     delete m_internal;
@@ -4689,10 +4705,9 @@ unsigned int wxDataViewCtrl::GetColumnCount() const
     return m_cols.GetCount();
 }
 
-wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
+wxDataViewColumn* wxDataViewCtrl::FromGTKColumn(GtkTreeViewColumn *gtk_col) const
 {
-    GtkTreeViewColumn *gtk_col = gtk_tree_view_get_column( GTK_TREE_VIEW(m_treeview), pos );
-    if (!gtk_col)
+    if ( !gtk_col )
         return NULL;
 
     wxDataViewColumnList::const_iterator iter;
@@ -4705,7 +4720,16 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
         }
     }
 
+    wxFAIL_MSG( "No matching column?" );
+
     return NULL;
+}
+
+wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
+{
+    GtkTreeViewColumn *gtk_col = gtk_tree_view_get_column( GTK_TREE_VIEW(m_treeview), pos );
+
+    return FromGTKColumn(gtk_col);
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )

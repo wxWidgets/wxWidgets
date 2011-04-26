@@ -728,11 +728,14 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::DestroyEditControl()
 {
+    // Remove our event handler first to prevent it from (recursively) calling
+    // us again as it would do via a call to FinishEditing() when the editor
+    // loses focus when we hide it below.
+    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+
     // Hide the control immediately but don't delete it yet as there could be
     // some pending messages for it.
     m_editorCtrl->Hide();
-
-    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
 
     wxPendingDelete.Append(handler);
     wxPendingDelete.Append(m_editorCtrl);
@@ -742,8 +745,6 @@ void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl)
         return;
-
-    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
     DestroyEditControl();
 }
