@@ -24,13 +24,14 @@
 #endif // WX_PRECOMP
 
 #include "wx/anidecod.h" // wxImageArray
-#include "wx/image.h"
 #include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
 #include "wx/mstream.h"
 #include "wx/zstream.h"
 #include "wx/wfstream.h"
+
+#include "testimage.h"
 
 struct testData {
     const char* file;
@@ -832,12 +833,10 @@ void ImageTestCase::SizeImage()
        CPPUNIT_ASSERT_EQUAL( actual.GetSize().x, expected.GetSize().x );
        CPPUNIT_ASSERT_EQUAL( actual.GetSize().y, expected.GetSize().y );
 
-       const unsigned data_len = 3 * expected.GetHeight() * expected.GetWidth();
-
-       WX_ASSERT_MESSAGE
+       WX_ASSERT_EQUAL_MESSAGE
        (
          ("Resize test #%u: (%d, %d), (%d, %d)", i, st.w, st.h, st.dx, st.dy),
-         memcmp(actual.GetData(), expected.GetData(), data_len) == 0
+         expected, actual
        );
    }
 }
@@ -849,8 +848,6 @@ void ImageTestCase::CompareLoadedImage()
 
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
-
-    const size_t dataLen = expected8.GetWidth() * expected8.GetHeight() * 3;
 
     for (size_t i=0; i<WXSIZEOF(g_testfiles); i++)
     {
@@ -868,15 +865,11 @@ void ImageTestCase::CompareLoadedImage()
         }
 
 
-        WX_ASSERT_MESSAGE
+        WX_ASSERT_EQUAL_MESSAGE
         (
             ("Compare test '%s' for loading failed", g_testfiles[i].file),
-
-            memcmp(actual.GetData(),
-                (g_testfiles[i].bitDepth == 8)
-                    ? expected8.GetData()
-                    : expected24.GetData(),
-                dataLen) == 0
+            g_testfiles[i].bitDepth == 8 ? expected8 : expected24,
+            actual
         );
     }
 
@@ -947,13 +940,12 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     CPPUNIT_ASSERT( actual.GetSize() == expected->GetSize() );
 
     unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
-    WX_ASSERT_MESSAGE
+    WX_ASSERT_EQUAL_MESSAGE
     (
         ("Compare test '%s (%d-bit)' for saving failed",
             handler.GetExtension(), bitsPerPixel),
-
-        memcmp(actual.GetData(), expected->GetData(),
-            expected->GetWidth() * expected->GetHeight() * 3) == 0
+        *expected,
+        actual
     );
 
 #if wxUSE_PALETTE
@@ -968,12 +960,11 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
-    WX_ASSERT_MESSAGE
+    WX_ASSERT_EQUAL_MESSAGE
     (
         ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
-
-        memcmp(actual.GetAlpha(), expected->GetAlpha(),
-            expected->GetWidth() * expected->GetHeight()) == 0
+        *expected,
+        actual
     );
 }
 
@@ -1133,11 +1124,11 @@ void ImageTestCase::SaveAnimatedGIF()
         CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
         memIn.SeekI(pos);
 
-        WX_ASSERT_MESSAGE
+        WX_ASSERT_EQUAL_MESSAGE
         (
             ("Compare test for GIF frame number %d failed", i),
-            memcmp(image.GetData(), images[i].GetData(),
-                images[i].GetWidth() * images[i].GetHeight() * 3) == 0
+            images[i],
+            image
         );
     }
 #endif // #if wxUSE_PALETTE
