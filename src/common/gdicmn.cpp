@@ -655,7 +655,19 @@ const wxFont* wxStockGDI::GetFont(Item item)
             font = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
             break;
         case FONT_SMALL:
-            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize() - 2, wxSWISS, wxNORMAL, wxNORMAL);
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize()
+                    // Using the font 2 points smaller than the normal one
+                    // results in font so small as to be unreadable under MSW.
+                    // We might want to actually use -1 under the other
+                    // platforms too but for now be conservative and keep -2
+                    // there for compatibility with the old behaviour as the
+                    // small font seems to be readable enough there as it is.
+#ifdef __WXMSW__
+                    - 1,
+#else
+                    - 2,
+#endif
+                    wxSWISS, wxNORMAL, wxNORMAL);
             break;
         case FONT_SWISS:
             font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(), wxSWISS, wxNORMAL, wxNORMAL);
