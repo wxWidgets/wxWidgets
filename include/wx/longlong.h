@@ -1075,6 +1075,31 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &st
 
 #endif
 
+// ----------------------------------------------------------------------------
+// Specialize numeric_limits<> for our long long wrapper classes.
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LONGLONG_NATIVE
+
+#include <limits>
+
+namespace std
+{
+
+template<> class numeric_limits<wxLongLong>
+    : public numeric_limits<wxLongLong_t>
+{
+};
+
+template<> class numeric_limits<wxULongLong>
+    : public numeric_limits<wxULongLong_t>
+{
+};
+
+} // namespace std
+
+#endif // wxUSE_LONGLONG_NATIVE
+
 #endif // wxUSE_LONGLONG
 
 #endif // _WX_LONGLONG_H
