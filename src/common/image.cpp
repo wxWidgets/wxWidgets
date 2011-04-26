@@ -1099,7 +1099,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     // we rotate the image in 21-pixel (63-byte) wide strips
     // to make better use of cpu cache - memory transfers
     // (note: while much better than single-pixel "strips",
-    //  our vertical strips will still generally straddle cachelines)
+    //  our vertical strips will still generally straddle 64-byte cachelines)
     for (long ii = 0; ii < width; )
     {
         long next_ii = wxMin(ii + 21, width);
@@ -1113,11 +1113,11 @@ wxImage wxImage::Rotate90( bool clockwise ) const
             {
                 if ( clockwise )
                 {
-                    target_data = data + (((i+1)*height) - j - 1)*3;
+                    target_data = data + ((i + 1)*height - j - 1)*3;
                 }
                 else
                 {
-                    target_data = data + ((height*(width - 1 - i)) + j)*3;
+                    target_data = data + (height*(width - 1 - i) + j)*3;
                 }
                 memcpy( target_data, source_data, 3 );
                 source_data += 3;
@@ -1134,21 +1134,30 @@ wxImage wxImage::Rotate90( bool clockwise ) const
         unsigned char *alpha_data = image.GetAlpha();
         unsigned char *target_alpha = 0 ;
 
-        for (long j = 0; j < height; j++)
+        for (long ii = 0; ii < width; )
         {
-            for (long i = 0; i < width; i++)
-            {
-                if ( clockwise )
-                {
-                    target_alpha = alpha_data + (((i+1)*height) - j - 1);
-                }
-                else
-                {
-                    target_alpha = alpha_data + ((height*(width-1)) + j - (i*height));
-                }
+            long next_ii = wxMin(ii + 64, width);
 
-                *target_alpha = *source_alpha++;
+            for (long j = 0; j < height; j++)
+            {
+                source_alpha = M_IMGDATA->m_alpha + j*width + ii;
+
+                for (long i = ii; i < next_ii; i++)
+                {
+                    if ( clockwise )
+                    {
+                        target_alpha = alpha_data + (i+1)*height - j - 1;
+                    }
+                    else
+                    {
+                        target_alpha = alpha_data + height*(width - i - 1) + j;
+                    }
+
+                    *target_alpha = *source_alpha++;
+                }
             }
+
+            ii = next_ii;
         }
     }
 
