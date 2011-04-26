@@ -832,6 +832,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\affinematrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\asserthelper.cpp"
 				>
 			</File>

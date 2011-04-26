@@ -239,6 +239,10 @@ SOURCE=.\menu\accelentry.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\affinematrix.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\asserthelper.cpp
 # End Source File
 # Begin Source File

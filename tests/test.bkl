@@ -136,6 +136,7 @@
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp
+            graphics/affinematrix.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp

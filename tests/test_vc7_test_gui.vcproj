@@ -569,6 +569,9 @@
 				RelativePath=".\menu\accelentry.cpp">
 			</File>
 			<File
+				RelativePath=".\graphics\affinematrix.cpp">
+			</File>
+			<File
 				RelativePath=".\asserthelper.cpp">
 			</File>
 			<File
