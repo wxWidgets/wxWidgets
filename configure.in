@@ -1219,10 +1219,8 @@ if test "x$wxUSE_MACOSX_SDK" != "x"; then
     else
         AC_MSG_RESULT([exists])
     fi
+    dnl CC and CXX will have these flags added below, after the compiler has been chosen
     MACOSX_SDK_OPTS="-isysroot $wxUSE_MACOSX_SDK"
-    eval "CC=\"$CC $MACOSX_SDK_OPTS\""
-    eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
-    eval "LD=\"$LD $MACOSX_SDK_OPTS\""
     retest_macosx_linking=yes
     dnl NOTE: When libtool is used in lieu of AR/RANLIB (i.e. in static mode)
     dnl the syslibroot makes no difference.  We aren't using libtool now but
@@ -1304,16 +1302,22 @@ if test "x$NEEDS_GCC40" == "xyes"; then
         CCVERSION=`$CC --version | grep 4.[[2-9]].`
         if test "x$CCVERSION" != "x"; then
             echo "$as_me:$LINENO: WARNING: gcc >= 4.2 cannot compile 10.4 compatible code. Using gcc 4.0 instead."
-            CC="/usr/bin/gcc-4.0"
+            CC="gcc-4.0"
         fi
     fi
 
     if test "x$CXX" = "xg++"; then
         CCVERSION=`$CXX --version | grep 4.[[2-9]].`
         if test "x$CCVERSION" != "x"; then
-            CXX="/usr/bin/g++-4.0"
+            CXX="g++-4.0"
         fi
     fi
+fi
+
+if test "x$MACOSX_SDK_OPTS" != "x"; then 
+    eval "CC=\"$CC $MACOSX_SDK_OPTS\""
+    eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
+    eval "LD=\"$LD $MACOSX_SDK_OPTS\""
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
