@@ -76,8 +76,7 @@ public:
     virtual int GetFlags() const { return GetFromIndividualFlags(); }
 
     // implementation
-    GtkWidget* GetGtkHandle() { return m_column; }
-    GtkWidget* GetConstGtkHandle() const { return m_column; }
+    GtkWidget* GetGtkHandle() const { return m_column; }
 
 private:
     // holds the GTK handle
