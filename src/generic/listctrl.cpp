@@ -4027,6 +4027,19 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     wxListLineData *line = new wxListLineData(this);
 
     line->SetItem( item.m_col, item );
+    if ( item.m_mask & wxLIST_MASK_IMAGE )
+    {
+        // Reset the buffered height if it's not big enough for the new image.
+        if (m_small_image_list)
+        {
+            int imageWidth, imageHeight;
+            m_small_image_list->GetSize(item.GetImage(),
+                                        imageWidth, imageHeight);
+
+            if ( imageHeight > m_lineHeight )
+                m_lineHeight = 0;
+        }
+    }
 
     m_lines.Insert( line, id );
 
