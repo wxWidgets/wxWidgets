@@ -345,8 +345,11 @@ bool wxAppConsoleBase::Dispatch()
 bool wxAppConsoleBase::Yield(bool onlyIfNeeded)
 {
     wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    if ( loop )
+       return loop->Yield(onlyIfNeeded);
 
-    return loop && loop->Yield(onlyIfNeeded);
+    wxScopedPtr<wxEventLoopBase> tmpLoop(CreateMainLoop());
+    return tmpLoop->Yield(onlyIfNeeded);
 }
 
 void wxAppConsoleBase::WakeUpIdle()

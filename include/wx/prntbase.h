@@ -54,6 +54,19 @@ enum wxPrinterError
     wxPRINTER_ERROR
 };
 
+// Preview frame modality kind used with wxPreviewFrame::Initialize()
+enum wxPreviewFrameModalityKind
+{
+    // Disable all the other top level windows while the preview is shown.
+    wxPreviewFrame_AppModal,
+
+    // Disable only the parent window while the preview is shown.
+    wxPreviewFrame_WindowModal,
+
+    // Don't disable any windows.
+    wxPreviewFrame_NonModal
+};
+
 //----------------------------------------------------------------------------
 // wxPrintFactory
 //----------------------------------------------------------------------------
@@ -386,7 +399,8 @@ public:
     virtual ~wxPreviewFrame();
 
     void OnCloseWindow(wxCloseEvent& event);
-    virtual void Initialize();
+    virtual void Initialize(wxPreviewFrameModalityKind kind
+                                = wxPreviewFrame_AppModal);
     virtual void CreateCanvas();
     virtual void CreateControlBar();
 
@@ -397,6 +411,9 @@ protected:
     wxPreviewControlBar*  m_controlBar;
     wxPrintPreviewBase*   m_printPreview;
     wxWindowDisabler*     m_windowDisabler;
+
+    wxPreviewFrameModalityKind m_modalityKind;
+
 
 private:
     void OnChar(wxKeyEvent& event);

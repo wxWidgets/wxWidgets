@@ -58,11 +58,14 @@ public:
     void OnPageMargins(wxCommandEvent& event);
 #endif
 
+    void OnPreviewFrameModalityKind(wxCommandEvent& event);
+
     void OnExit(wxCommandEvent& event);
     void OnPrintAbout(wxCommandEvent& event);
 
 private:
     MyCanvas* m_canvas;
+    wxPreviewFrameModalityKind m_previewModality;
 
     DECLARE_EVENT_TABLE()
 };
@@ -113,9 +116,13 @@ enum
     WXPRINT_PREVIEW_PS,
 
     WXPRINT_ANGLEUP,
-    WXPRINT_ANGLEDOWN
+    WXPRINT_ANGLEDOWN,
 
 #ifdef __WXMAC__
-    , WXPRINT_PAGE_MARGINS
+    WXPRINT_PAGE_MARGINS,
 #endif
+
+    WXPRINT_FRAME_MODAL_APP,
+    WXPRINT_FRAME_MODAL_WIN,
+    WXPRINT_FRAME_MODAL_NON
 };

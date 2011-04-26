@@ -1619,6 +1619,7 @@ wxFrame(parent, wxID_ANY, title, pos, size, style, name)
     m_controlBar = NULL;
     m_previewCanvas = NULL;
     m_windowDisabler = NULL;
+    m_modalityKind = wxPreviewFrame_NonModal;
 
     // Give the application icon
 #ifdef __WXMSW__
@@ -1630,14 +1631,6 @@ wxFrame(parent, wxID_ANY, title, pos, size, style, name)
 
 wxPreviewFrame::~wxPreviewFrame()
 {
-}
-
-void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-    if (m_windowDisabler)
-        delete m_windowDisabler;
-
-    // Need to delete the printout and the print preview
     wxPrintout *printout = m_printPreview->GetPrintout();
     if (printout)
     {
@@ -1648,12 +1641,33 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     }
 
     m_previewCanvas->SetPreview(NULL);
-    wxDELETE(m_printPreview);
+    delete m_printPreview;
+}
+
+void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+{
+    // Reenable any windows we disabled by undoing whatever we did in our
+    // Initialize().
+    switch ( m_modalityKind )
+    {
+        case wxPreviewFrame_AppModal:
+            delete m_windowDisabler;
+            m_windowDisabler = NULL;
+            break;
+
+        case wxPreviewFrame_WindowModal:
+            if ( GetParent() )
+                GetParent()->Enable();
+            break;
+
+        case wxPreviewFrame_NonModal:
+            break;
+    }
 
     Destroy();
 }
 
-void wxPreviewFrame::Initialize()
+void wxPreviewFrame::Initialize(wxPreviewFrameModalityKind kind)
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -1672,7 +1686,25 @@ void wxPreviewFrame::Initialize()
     SetAutoLayout( true );
     SetSizer( item0 );
 
-    m_windowDisabler = new wxWindowDisabler(this);
+    m_modalityKind = kind;
+    switch ( m_modalityKind )
+    {
+        case wxPreviewFrame_AppModal:
+            // Disable everything.
+            m_windowDisabler = new wxWindowDisabler( this );
+            break;
+
+        case wxPreviewFrame_WindowModal:
+            // Disable our parent if we have one.
+            if ( GetParent() )
+                GetParent()->Disable();
+            break;
+
+        case wxPreviewFrame_NonModal:
+            // Nothing to do, we don't need to disable any windows.
+            break;
+    }
+
 
     Layout();
 
