@@ -1967,11 +1967,39 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 #ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
-    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
-        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
+    // wxWidgets API assumes that the coordinate space is "infinite" (i.e. only
+    // limited by 2^32 range of the integer coordinates) but in MSW API we must
+    // actually specify the extents that we use. So we more or less arbitrarily
+    // decide to use "base" VIEWPORT_EXTENT and adjust it depending on scale.
+    //
+    // To avoid rounding errors we prefer to multiply by the scale if it's > 1
+    // and to divide by it if it's < 1.
+    int devExtX, devExtY,   // Viewport, i.e. device space, extents.
+        logExtX, logExtY;   // Window, i.e. logical coordinate space, extents.
+    if ( m_scaleX >= 1 )
+    {
+        devExtX = VIEWPORT_EXTENT*m_scaleX;
+        logExtX = m_signX*VIEWPORT_EXTENT;
+    }
+    else
+    {
+        devExtX = VIEWPORT_EXTENT;
+        logExtX = m_signX*VIEWPORT_EXTENT/m_scaleX;
+    }
 
-    ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    ::SetWindowExtEx(GetHdc(), width, height, NULL);
+    if ( m_scaleY >= 1 )
+    {
+        devExtY = VIEWPORT_EXTENT*m_scaleY;
+        logExtY = m_signY*VIEWPORT_EXTENT;
+    }
+    else
+    {
+        devExtY = VIEWPORT_EXTENT;
+        logExtY = m_signY*VIEWPORT_EXTENT/m_scaleY;
+    }
+
+    ::SetViewportExtEx(GetHdc(), devExtX, devExtY, NULL);
+    ::SetWindowExtEx(GetHdc(), logExtX, logExtY, NULL);
 
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
