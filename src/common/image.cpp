@@ -1428,12 +1428,15 @@ void wxImage::Paste( const wxImage &image, int x, int y )
     if (width < 1) return;
     if (height < 1) return;
 
-    if ((!HasMask() && !image.HasMask()) ||
-        (HasMask() && !image.HasMask()) ||
-       ((HasMask() && image.HasMask() &&
+    // If we can, copy the data using memcpy() as this is the fastest way. But
+    // for this  the image being pasted must have "compatible" mask with this
+    // one meaning that either it must not have one at all or it must use the
+    // same masked colour.
+    if ( !image.HasMask() ||
+        ((HasMask() &&
          (GetMaskRed()==image.GetMaskRed()) &&
          (GetMaskGreen()==image.GetMaskGreen()) &&
-         (GetMaskBlue()==image.GetMaskBlue()))))
+         (GetMaskBlue()==image.GetMaskBlue()))) )
     {
         const unsigned char* source_data = image.GetData() + 3*(xx + yy*image.GetWidth());
         int source_step = image.GetWidth()*3;
