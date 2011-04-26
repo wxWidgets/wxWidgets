@@ -82,7 +82,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl)
 // constants
 // ---------------------------------------------------------------------------
 
-static const int VIEWPORT_EXTENT = 1000;
+static const int VIEWPORT_EXTENT = 1024;
 
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
