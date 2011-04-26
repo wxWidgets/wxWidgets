@@ -3995,16 +3995,16 @@ if test "$wxUSE_SHARED" = "yes"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+libnames=\`cd \${2} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
 for i in \${libnames} ; do
-    ${HOST_PREFIX}install_name_tool -id \${1}/\${i} \${1}/\${i}
+    ${HOST_PREFIX}install_name_tool -id \${3}/\${i} \${1}/\${i}
     for dep in \${libnames} ; do
-        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${1}/\${dep} \${1}/\${i}
+        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${3}/\${dep} \${1}/\${i}
     done
 done
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \$(wx_top_builddir)/lib \${libdir}"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
