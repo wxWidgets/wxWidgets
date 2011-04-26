@@ -110,14 +110,24 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
             default:
                 break;
         }
+        
         if (newState == origState)
             sendEvent = false;
+        else
+            Set3StateValue( newState );
     }
-
+    else
+    {
+        // in case we cannot avoid this user state change natively (eg cocoa) we intercept it here
+        if ( newState == wxCHK_UNDETERMINED && !Is3rdStateAllowedForUser() )
+        {
+            newState = wxCHK_CHECKED;
+            Set3StateValue( newState );
+        }
+    }
+    
     if (sendEvent)
     {
-        Set3StateValue( newState );
-
         wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
         event.SetInt( newState );
         event.SetEventObject( this );
