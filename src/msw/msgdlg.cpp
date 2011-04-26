@@ -721,15 +721,28 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     }
     else // without Yes/No we're going to have an OK button
     {
-        AddTaskDialogButton(tdc, IDOK, TDCBF_OK_BUTTON, btnOKLabel);
-
         if ( style & wxCANCEL )
         {
+            AddTaskDialogButton(tdc, IDOK, TDCBF_OK_BUTTON, btnOKLabel);
             AddTaskDialogButton(tdc, IDCANCEL,
                                 TDCBF_CANCEL_BUTTON, btnCancelLabel);
 
             if ( style & wxCANCEL_DEFAULT )
                 tdc.nDefaultButton = IDCANCEL;
+        }
+        else // Only "OK"
+        {
+            // We actually create a "Cancel" button instead because we want to
+            // allow closing the dialog box with Escape (and also Alt-F4 or
+            // clicking the close button in the title bar) which wouldn't work
+            // without a Cancel button.
+            if ( !useCustomLabels )
+            {
+                useCustomLabels = true;
+                btnOKLabel = _("OK");
+            }
+
+            AddTaskDialogButton(tdc, IDCANCEL, TDCBF_CANCEL_BUTTON, btnOKLabel);
         }
     }
 }
