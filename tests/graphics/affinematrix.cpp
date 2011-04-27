@@ -117,10 +117,8 @@ void AffineTransformTestCase::VMirrorAndTranslate()
         dc.DrawBitmap(m_bmpOrig, 0, 0);
     }
 
-    wxImage imgUsingMatrix = bmpUsingMatrix.ConvertToImage();
-    wxImage imgOrigVMirrored = m_imgOrig.Mirror(false);
-
-    CPPUNIT_ASSERT_EQUAL( imgUsingMatrix, imgOrigVMirrored );
+    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrix.ConvertToImage(),
+                          m_imgOrig.Mirror(false) );
 }
 
 void AffineTransformTestCase::Rotate90Clockwise()
@@ -141,10 +139,8 @@ void AffineTransformTestCase::Rotate90Clockwise()
         dc.DrawBitmap(m_bmpOrig, 0, 0);
     }
 
-    wxImage imgUsingMatrix = bmpUsingMatrix.ConvertToImage();
-    wxImage imgOrigRotate90Clockwise = m_imgOrig.Rotate90(true);
-
-    CPPUNIT_ASSERT_EQUAL( imgUsingMatrix, imgOrigRotate90Clockwise );
+    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrix.ConvertToImage(),
+                          m_imgOrig.Rotate90(true) );
 }
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX
