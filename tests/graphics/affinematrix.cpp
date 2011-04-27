@@ -39,16 +39,20 @@ public:
 private:
     CPPUNIT_TEST_SUITE( AffineTransformTestCase );
         CPPUNIT_TEST( InvertMatrix );
+#if wxUSE_DC_TRANSFORM_MATRIX
         CPPUNIT_TEST( VMirrorAndTranslate );
         CPPUNIT_TEST( Rotate90Clockwise );
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     CPPUNIT_TEST_SUITE_END();
 
     void InvertMatrix();
+#if wxUSE_DC_TRANSFORM_MATRIX
     void VMirrorAndTranslate();
     void Rotate90Clockwise();
 
     wxImage m_imgOrig;
     wxBitmap m_bmpOrig;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     DECLARE_NO_COPY_CLASS(AffineTransformTestCase)
 };
@@ -61,11 +65,13 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AffineTransformTestCase, "AffineTransform
 
 void AffineTransformTestCase::setUp()
 {
+#if wxUSE_DC_TRANSFORM_MATRIX
     m_imgOrig.LoadFile("horse.jpg");
 
     CPPUNIT_ASSERT( m_imgOrig.IsOk() );
 
     m_bmpOrig = wxBitmap(m_imgOrig);
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
 void AffineTransformTestCase::InvertMatrix()
@@ -90,6 +96,8 @@ void AffineTransformTestCase::InvertMatrix()
     matrix2.Concat(matrix1);
     CPPUNIT_ASSERT( matrix2.IsIdentity() );
 }
+
+#if wxUSE_DC_TRANSFORM_MATRIX
 
 void AffineTransformTestCase::VMirrorAndTranslate()
 {
@@ -138,3 +146,5 @@ void AffineTransformTestCase::Rotate90Clockwise()
 
     CPPUNIT_ASSERT_EQUAL( imgUsingMatrix, imgOrigRotate90Clockwise );
 }
+
+#endif // wxUSE_DC_TRANSFORM_MATRIX
