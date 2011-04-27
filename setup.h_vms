@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 31 March 2011                                                      *
+ * Date : 27 April 2011                                                      *
  *                                                                           *
  *****************************************************************************/
 
@@ -837,6 +837,9 @@ typedef pid_t GPid;
  * Use the Hildon 2.0 framework
  */
 #define wxUSE_LIBHILDON2 0
+
+#define wxUSE_DC_TRANSFORM_MATRIX 1
+
 /*
  * Have glibc2
  */
