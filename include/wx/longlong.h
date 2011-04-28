@@ -1077,6 +1077,12 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &st
 
 #if wxUSE_LONGLONG_NATIVE
 
+// VC6 is known to not have __int64 specializations of numeric_limits<> in its
+// <limits> anyhow so don't bother including it, especially as it results in
+// tons of warnings because the standard header itself uses obsolete template
+// specialization syntax.
+#ifndef __VISUALC6__
+
 #include <limits>
 
 namespace std
@@ -1093,6 +1099,8 @@ template<> class numeric_limits<wxULongLong>
 };
 
 } // namespace std
+
+#endif // !VC6
 
 #endif // wxUSE_LONGLONG_NATIVE
 
