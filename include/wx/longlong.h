@@ -411,7 +411,16 @@ public:
     }
 
         // convert to double
+        //
+        // For some completely obscure reasons compiling the cast below with
+        // VC6 in DLL builds only (!) results in "error C2520: conversion from
+        // unsigned __int64 to double not implemented, use signed __int64" so
+        // we must use a different version for that compiler.
+#ifdef __VISUALC6__
+    double ToDouble() const;
+#else
     double ToDouble() const { return wx_truncate_cast(double, m_ll); }
+#endif
 
     // operations
         // addition
