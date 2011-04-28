@@ -235,7 +235,7 @@ inline gboolean wx_gtk_widget_get_visible(GtkWidget *widget)
 
 inline gboolean wx_gtk_widget_get_sensitive(GtkWidget *widget)
 {
-    return GTK_WIDGET_VISIBLE(widget);
+    return GTK_WIDGET_SENSITIVE(widget);
 }
 #define gtk_widget_get_sensitive wx_gtk_widget_get_sensitive
 
