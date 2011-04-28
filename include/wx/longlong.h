@@ -404,7 +404,7 @@ public:
         // convert to ulong with range checking in debug mode (only!)
     unsigned long ToULong() const
     {
-        wxASSERT_MSG( m_ll <= LONG_MAX,
+        wxASSERT_MSG( m_ll <= ULONG_MAX,
                       wxT("wxULongLong to long conversion loss of precision") );
 
         return wx_truncate_cast(unsigned long, m_ll);
