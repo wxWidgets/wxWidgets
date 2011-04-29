@@ -15,6 +15,7 @@ import optparse
 import platform
 import shutil
 import types
+import subprocess
 
 # builder object
 wxBuilder = None
@@ -43,7 +44,9 @@ def numCPUs():
             if isinstance(ncpus, int) and ncpus > 0:
                 return ncpus
         else: # OSX:
-            return int(os.popen2("sysctl -n hw.ncpu")[1].read())
+            p = subprocess.Popen("sysctl -n hw.ncpu", shell=True, stdout=subprocess.PIPE)
+            return p.stdout.read()
+            
     # Windows:
     if os.environ.has_key("NUMBER_OF_PROCESSORS"):
             ncpus = int(os.environ["NUMBER_OF_PROCESSORS"]);
@@ -182,6 +185,7 @@ def main(scriptName, args):
         "cairo"         : (False, "Build support for wxCairoContext (always true on GTK+)"),
         "extra_make"    : ("", "Extra args to pass on [n]make's command line."),
         "features"      : ("", "A comma-separated list of wxUSE_XYZ defines on Win, or a list of configure flags on unix."),
+        "verbose"       : (False, "Print commands as they are run, (to aid with debugging this script)"),
     }
         
     parser = optparse.OptionParser(usage="usage: %prog [options]", version="%prog 1.0")
@@ -197,7 +201,11 @@ def main(scriptName, args):
                           help=option_dict[opt][1])
     
     options, arguments = parser.parse_args(args=args)
-    
+
+    global verbose
+    if options.verbose:
+        verbose = True
+        
     # compiler / build system specific args
     buildDir = options.builddir
     args = []
@@ -454,6 +462,7 @@ def main(scriptName, args):
         if options.debug:
             build_string = "d"
 
+        fwname = getFrameworkName(options)
         version = commands.getoutput("bin/wx-config --release")
         basename = commands.getoutput("bin/wx-config --basename")
         configname = commands.getoutput("bin/wx-config --selected-config")
@@ -462,8 +471,8 @@ def main(scriptName, args):
         
         # we make wx the "actual" library file and link to it from libwhatever.dylib
         # so that things can link to wx and survive minor version changes
-        renameLibrary("lib/lib%s-%s.dylib" % (basename, version), "wx")
-        run("ln -s -f lib/wx.dylib wx")
+        renameLibrary("lib/lib%s-%s.dylib" % (basename, version), fwname)
+        run("ln -s -f lib/%s.dylib %s" % (fwname, fwname))
         
         run("ln -s -f include/wx Headers")
         
@@ -481,7 +490,7 @@ def main(scriptName, args):
                 corelibname = "lib/lib%s-%s.0.dylib" % (basename, version)
                 run("install_name_tool -id %s %s" % (os.path.join(prefixDir, lib), lib))
                 run("install_name_tool -change %s %s %s" % (os.path.join(frameworkRootDir, corelibname), os.path.join(prefixDir, corelibname), lib))
-                
+
         os.chdir("include")
         
         header_template = """        
@@ -508,16 +517,26 @@ def main(scriptName, args):
         run("ln -s -f %s Versions/Current" % getWxRelease())
         run("ln -s -f Versions/Current/Headers Headers")
         run("ln -s -f Versions/Current/Resources Resources")
-        run("ln -s -f Versions/Current/wx wx")
+        run("ln -s -f Versions/Current/%s %s" % (fwname, fwname))
         
         # sanity check to ensure the symlink works
         os.chdir("Versions/Current")
-        os.chdir("../..")
-
+    
+        # put info about the framework into wx-config
+        os.chdir(frameworkRootDir)
+        text = file('lib/wx/config/%s' % configname).read()
+        text = text.replace("MAC_FRAMEWORK=", "MAC_FRAMEWORK=%s" % getFrameworkName(options))
+        if options.mac_framework_prefix not in ['/Library/Frameworks',
+                                                '/System/Library/Frameworks']:
+            text = text.replace("MAC_FRAMEWORK_PREFIX=", 
+                         "MAC_FRAMEWORK_PREFIX=%s" % options.mac_framework_prefix)
+        file('lib/wx/config/%s' % configname, 'w').write(text)
+        
+        # The framework is finished!
         print "wxWidgets framework created at: " + \
               os.path.join( installDir, 
                             options.mac_framework_prefix,
-                            '%s.framework' % getFrameworkName(options))
+                            '%s.framework' % fwname)
         
         
     # adjust the install_name if needed
