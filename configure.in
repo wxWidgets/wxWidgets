@@ -4265,7 +4265,7 @@ AC_CHECK_FUNCS([wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp])
 dnl On HP-UX aCC need this define to find mbstrtowcs() &c
 dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
 dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
-dnl flags when g++ is configured, it will declare it's own).
+dnl flags when g++ is configured, it will declare its own).
 if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
     CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
 fi

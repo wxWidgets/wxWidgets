@@ -127,7 +127,7 @@ metafile picture. All of them are defined in wxDataObject::StdFormats
 enumeration. Of course, it's not always enough and you'll often need your
 own format for data transfer. The simple helper class wxDataFormat may help
 you: when you create an object of this class, it registers a new clipboard
-data format identified by the string passed to it's ctor.
+data format identified by the string passed to its ctor.
 
     After your new format is registered, you may use it as any other one.
 
@@ -138,7 +138,7 @@ data format identified by the string passed to it's ctor.
  
     In order to start the d&d operation you should call the DoDragDrop function
 (typically in reply to a "mouse button press" message). NB: DoDragDrop() is a
-blocking function which enters into it's own message loop and may return after
+blocking function which enters into its own message loop and may return after
 an arbitrarily long time interval. During it, the QueryContinueDrag() is called
 whenever the mouse or keyboard state changes. The default behaviour is quite
 reasonable for 99% of cases: the drag operation is cancelled if the <Esc> key

@@ -469,7 +469,7 @@ protected:
     // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
     // parser which is used to parse HTML input.
-    // Each wxHtmlWindow has it's own parser because sharing one global
+    // Each wxHtmlWindow has its own parser because sharing one global
     // parser would be problematic (because of reentrancy)
     wxHtmlWinParser *m_Parser;
     // contains name of actually opened page or empty string if no page opened
@@ -481,7 +481,7 @@ protected:
     // class for opening files (file system)
     wxFileSystem* m_FS;
 
-    // frame in which page title should be displayed & number of it's statusbar
+    // frame in which page title should be displayed & number of its statusbar
     // reserved for usage with this html window
     wxFrame *m_RelatedFrame;
 #if wxUSE_STATUSBAR

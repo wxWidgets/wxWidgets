@@ -276,7 +276,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                     propertyGrid->GetCellDisabledTextColour();
                 dc.SetTextForeground(hCol);
 
-                // Must make the editor NULL to override it's own rendering
+                // Must make the editor NULL to override its own rendering
                 // code.
                 editor = NULL;
             }
