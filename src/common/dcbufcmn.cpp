@@ -105,6 +105,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
 void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
 {
+    wxCHECK_RET( w >= -1 && h >= -1, "Invalid buffer size" );
+
     if ( !m_buffer || !m_buffer->IsOk() )
     {
         if ( w == -1 || h == -1 )
