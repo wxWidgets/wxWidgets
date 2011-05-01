@@ -127,6 +127,11 @@ bool wxANIDecoder::DoCanRead(wxInputStream& stream) const
     wxInt32 anih32;
     memcpy( &anih32, "anih", 4 );
 
+    if ( stream.SeekI(0) == wxInvalidOffset )
+    {
+        return false;
+    }
+
     if ( !stream.Read(&FCC1, 4) )
         return false;
 
@@ -219,6 +224,11 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     memcpy( &rate32, "rate", 4 );
     wxInt32 seq32;
     memcpy( &seq32, "seq ", 4 );
+
+    if ( stream.SeekI(0) == wxInvalidOffset)
+    {
+        return false;
+    }
 
     if ( !stream.Read(&FCC1, 4) )
         return false;

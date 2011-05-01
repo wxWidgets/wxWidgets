@@ -1335,6 +1335,11 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
+    if (stream.SeekI(0) == wxInvalidOffset)
+    {
+        return false;
+    }
+
     return DoLoadFile(image, stream, verbose, index);
 }
 
@@ -1423,10 +1428,16 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
 int wxICOHandler::DoGetImageCount(wxInputStream& stream)
 {
+    // It's ok to modify the stream position in this function.
+
+    if (stream.SeekI(0) == wxInvalidOffset)
+    {
+        return 0;
+    }
+
     ICONDIR IconDir;
 
     if (stream.Read(&IconDir, sizeof(IconDir)).LastRead() != sizeof(IconDir))
-             // it's ok to modify the stream position here
         return 0;
 
     return (int)wxUINT16_SWAP_ON_BE(IconDir.idCount);
@@ -1492,8 +1503,15 @@ int wxANIHandler::DoGetImageCount(wxInputStream& stream)
 
 static bool CanReadICOOrCUR(wxInputStream *stream, wxUint16 resourceType)
 {
+    // It's ok to modify the stream position in this function.
+
+    if ( stream->SeekI(0) == wxInvalidOffset)
+    {
+        return false;
+    }
+
     ICONDIR iconDir;
-    if ( !stream->Read(&iconDir, sizeof(iconDir)) )     // it's ok to modify the stream position here
+    if ( !stream->Read(&iconDir, sizeof(iconDir)) )
     {
         return false;
     }
