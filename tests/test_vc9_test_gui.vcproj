@@ -1140,6 +1140,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\toplevel\toplevel.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\treebooktest.cpp"
 				>
 			</File>

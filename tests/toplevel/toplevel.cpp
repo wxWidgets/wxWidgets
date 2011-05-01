@@ -18,8 +18,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/window.h"
+    #include "wx/dialog.h"
+    #include "wx/frame.h"
+    #include "wx/textctrl.h"
+    #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
 #include "wx/evtloop.h"
@@ -50,10 +52,10 @@ private:
 };
 
 // register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TopLevelWindowTestCase );
+//CPPUNIT_TEST_SUITE_REGISTRATION( TopLevelWindowTestCase );
 
 // also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TopLevelWindowTestCase, "TopLevelWindowTestCase" );
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TopLevelWindowTestCase, "fixme" );
 
 // ----------------------------------------------------------------------------
 // test initialization
@@ -93,7 +95,7 @@ void TopLevelWindowTestCase::TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     textCtrl->SetFocus();
     
 // only run this test on platforms where ShowWithoutActivating is implemented.
-#ifdef __WXMSW__ || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__)
     tlw->ShowWithoutActivating();
     CPPUNIT_ASSERT(tlw->IsShown());
     CPPUNIT_ASSERT(!tlw->IsActive());

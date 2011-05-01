@@ -201,6 +201,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
+	$(OBJS)\test_gui_toplevel.obj \
 	$(OBJS)\test_gui_valnum.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj \
@@ -927,6 +928,9 @@ $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 
 $(OBJS)\test_gui_wrapsizer.obj: .\sizers\wrapsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\wrapsizer.cpp
+
+$(OBJS)\test_gui_toplevel.obj: .\toplevel\toplevel.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\toplevel\toplevel.cpp
 
 $(OBJS)\test_gui_valnum.obj: .\validators\valnum.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\validators\valnum.cpp
