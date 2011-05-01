@@ -958,6 +958,18 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
+    // For compatibility with other ports (notably wxGTK) and because it's
+    // genuinely useful, we allow passing multiline strings to DrawText().
+    // However there is no native OSX function to draw them directly so we
+    // instead reuse the generic DrawLabel() method to render them. Of course,
+    // DrawLabel() itself will call back to us but with single line strings
+    // only so there won't be any infinite recursion here.
+    if ( str.find('\n') != wxString::npos )
+    {
+        GetOwner()->DrawLabel(str, wxRect(x, y, 0, 0));
+        return;
+    }
+
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
 
     if ( str.empty() )
