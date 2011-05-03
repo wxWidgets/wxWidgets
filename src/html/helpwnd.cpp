@@ -58,7 +58,7 @@
 #include "wx/spinctrl.h"
 
 // what is considered "small index"?
-#define INDEX_IS_SMALL 100
+#define INDEX_IS_SMALL 1000
 
 /* Motif defines this as a macro */
 #ifdef Below
