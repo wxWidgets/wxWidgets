@@ -138,7 +138,7 @@ bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
 {
     int flags = Watcher2NativeFlags(watch.GetFlags());
     int ret = ReadDirectoryChangesW(watch.GetHandle(), watch.GetBuffer(),
-                                    wxFSWatchEntryMSW::BUFFER_SIZE, TRUE,
+                                    wxFSWatchEntryMSW::BUFFER_SIZE, FALSE,
                                     flags, NULL,
                                     watch.GetOverlapped(), NULL);
     if (!ret)
