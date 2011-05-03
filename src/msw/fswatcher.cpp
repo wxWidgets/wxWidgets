@@ -136,9 +136,32 @@ void wxFSWatcherImplMSW::SendEvent(wxFileSystemWatcherEvent& evt)
 
 bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
 {
+    BOOL bWatchSubtree wxDUMMY_INITIALIZE(FALSE);
+
+    switch ( watch.GetType() )
+    {
+        case wxFSWPath_File:
+            wxLogError(_("Monitoring individual files for changes is not "
+                         "supported currently."));
+            return false;
+
+        case wxFSWPath_Dir:
+            bWatchSubtree = FALSE;
+            break;
+
+        case wxFSWPath_Tree:
+            bWatchSubtree = TRUE;
+            break;
+
+        case wxFSWPath_None:
+            wxFAIL_MSG( "Invalid watch type." );
+            return false;
+    }
+
     int flags = Watcher2NativeFlags(watch.GetFlags());
     int ret = ReadDirectoryChangesW(watch.GetHandle(), watch.GetBuffer(),
-                                    wxFSWatchEntryMSW::BUFFER_SIZE, FALSE,
+                                    wxFSWatchEntryMSW::BUFFER_SIZE,
+                                    bWatchSubtree,
                                     flags, NULL,
                                     watch.GetOverlapped(), NULL);
     if (!ret)
@@ -383,6 +406,32 @@ bool wxMSWFileSystemWatcher::Init()
     }
 
     return ret;
+}
+
+bool
+wxMSWFileSystemWatcher::AddTree(const wxFileName& path,
+                                int events,
+                                const wxString& filter)
+{
+    if ( !filter.empty() )
+    {
+        // Use the inefficient generic version as we can only monitor
+        // everything under the given directory.
+        //
+        // Notice that it would probably be better to still monitor everything
+        // natively and filter out the changes we're not interested in.
+        return wxFileSystemWatcherBase::AddTree(path, events, filter);
+    }
+
+
+    if ( !path.DirExists() )
+    {
+        wxLogError(_("Can't monitor non-existent directory \"%s\" for changes."),
+                   path.GetFullPath());
+        return false;
+    }
+
+    return DoAdd(path, events, wxFSWPath_Tree);
 }
 
 #endif // wxUSE_FSWATCHER
