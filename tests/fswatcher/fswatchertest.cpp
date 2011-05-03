@@ -412,6 +412,8 @@ private:
         CPPUNIT_TEST( TestEventAccess );
 #endif // __WXMSW__
 #endif // !wxHAS_KQUEUE
+
+        CPPUNIT_TEST( TestNoEventsAfterRemove );
     CPPUNIT_TEST_SUITE_END();
 
     void TestEventCreate();
@@ -419,6 +421,8 @@ private:
     void TestEventRename();
     void TestEventModify();
     void TestEventAccess();
+
+    void TestNoEventsAfterRemove();
 
     DECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase)
 };
@@ -601,6 +605,49 @@ void FileSystemWatcherTestCase::TestEventAccess()
     // we need to create a file to read from it and write sth to it
     EventGenerator::Get().CreateFile();
     EventGenerator::Get().ModifyFile();
+
+    EventTester tester;
+    tester.Run();
+}
+
+void FileSystemWatcherTestCase::TestNoEventsAfterRemove()
+{
+    class EventTester : public EventHandler,
+                        public wxTimer
+    {
+    public:
+        EventTester()
+        {
+            // We need to use an inactivity timer as we never get any file
+            // system events in this test, so we consider that the test is
+            // finished when this 1s timeout expires instead of, as usual,
+            // stopping after getting the file system events.
+            Start(1000, true);
+        }
+
+        virtual void GenerateEvent()
+        {
+            m_watcher->Remove(EventGenerator::GetWatchDir());
+            CPPUNIT_ASSERT(eg.CreateFile());
+        }
+
+        virtual void CheckResult()
+        {
+            CPPUNIT_ASSERT( m_events.empty() );
+        }
+
+        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        {
+            CPPUNIT_FAIL( "Shouldn't be called" );
+
+            return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
+        }
+
+        virtual void Notify()
+        {
+            SendIdle();
+        }
+    };
 
     EventTester tester;
     tester.Run();

@@ -108,9 +108,9 @@ bool wxFSWatcherImplMSW::DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch)
 }
 
 bool
-wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> WXUNUSED(watch))
+wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch)
 {
-    return true;
+    return m_iocp.ScheduleForRemoval(watch);
 }
 
 // TODO ensuring that we have not already set watch for this handle/dir?
@@ -215,6 +215,11 @@ bool wxIOCPThread::ReadEvents()
 
     wxLogTrace( wxTRACE_FSWATCHER, "[iocp] Read entry: path='%s'",
                 watch->GetPath());
+
+    // First check if we're still interested in this watch, we could have
+    // removed it in the meanwhile.
+    if ( m_iocp->CompleteRemoval(watch) )
+        return true;
 
     // extract events from buffer info our vector container
     wxVector<wxEventProcessingData> events;
