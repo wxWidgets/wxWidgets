@@ -248,7 +248,7 @@ public:
             break;
         case 2:
             // actual test
-            CPPUNIT_ASSERT(CheckResult());
+            CheckResult();
             Exit();
             break;
 
@@ -325,7 +325,7 @@ public:
         tested = true;
     }
 
-    virtual bool CheckResult()
+    virtual void CheckResult()
     {
         CPPUNIT_ASSERT_MESSAGE( "No events received", !m_events.empty() );
 
@@ -356,8 +356,6 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(expected.GetPath(), e->GetPath());
         CPPUNIT_ASSERT_EQUAL(expected.GetNewPath(), e->GetNewPath());
-
-        return true;
     }
 
     virtual void GenerateEvent() = 0;
