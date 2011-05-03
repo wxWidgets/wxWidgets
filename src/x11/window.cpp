@@ -1747,6 +1747,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
 bool wxWinModule::OnInit()
 {
     Display *xdisplay = wxGlobalDisplay();
+    if ( !xdisplay )
+    {
+        // This module may be linked into a console program when using
+        // monolithic library and in this case it's perfectly normal not to
+        // have a display, so just return without doing anything and avoid
+        // crashing below.
+        return true;
+    }
+
     int xscreen = DefaultScreen( xdisplay );
     Window xroot = RootWindow( xdisplay, xscreen );
     g_eraseGC = XCreateGC( xdisplay, xroot, 0, NULL );
