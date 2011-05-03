@@ -177,6 +177,15 @@ public:
     long GetFlags() const;
 
     /**
+        Returns a reference to the wxPageSetupDialogData associated with the
+        printing operations of this document manager.
+    */
+    //@{
+    wxPageSetupDialogData& GetPageSetupDialogData();
+    const wxPageSetupDialogData& GetPageSetupDialogData() const;
+    //@}
+
+    /**
         Returns the run-time class information that allows view instances
         to be constructed dynamically, as passed to the document template
         constructor.
