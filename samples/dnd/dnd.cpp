@@ -141,7 +141,7 @@ public:
     {
         wxPaintDC dc(this);
 
-        if ( m_bitmap.Ok() )
+        if ( m_bitmap.IsOk() )
         {
             PrepareDC(dc);
 
@@ -177,7 +177,7 @@ public:
     {
         wxPaintDC dc(this);
 
-        if ( m_metafile.Ok() )
+        if ( m_metafile.IsOk() )
         {
             PrepareDC(dc);
 
@@ -1327,7 +1327,7 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
                     wxBITMAP_TYPE_BMP
 #endif
                   );
-    if (!image.Ok())
+    if (!image.IsOk())
     {
         wxLogError( wxT("Invalid image file...") );
         return;

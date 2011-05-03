@@ -274,7 +274,7 @@ wxSize wxMetaFile::GetSize() const
 {
     wxSize dataSize = wxDefaultSize;
 
-    if (Ok())
+    if (IsOk())
     {
         dataSize.x = M_METAFILEDATA->GetWidth();
         dataSize.y = M_METAFILEDATA->GetHeight();

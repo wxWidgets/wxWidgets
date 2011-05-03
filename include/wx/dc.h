@@ -1344,13 +1344,13 @@ public:
 
     ~wxDCTextColourChanger()
     {
-        if ( m_colFgOld.Ok() )
+        if ( m_colFgOld.IsOk() )
             m_dc.SetTextForeground(m_colFgOld);
     }
 
     void Set(const wxColour& col)
     {
-        if ( !m_colFgOld.Ok() )
+        if ( !m_colFgOld.IsOk() )
             m_colFgOld = m_dc.GetTextForeground();
         m_dc.SetTextForeground(col);
     }
@@ -1378,7 +1378,7 @@ public:
 
     ~wxDCPenChanger()
     {
-        if ( m_penOld.Ok() )
+        if ( m_penOld.IsOk() )
             m_dc.SetPen(m_penOld);
     }
 
@@ -1405,7 +1405,7 @@ public:
 
     ~wxDCBrushChanger()
     {
-        if ( m_brushOld.Ok() )
+        if ( m_brushOld.IsOk() )
             m_dc.SetBrush(m_brushOld);
     }
 
@@ -1461,14 +1461,14 @@ public:
 
     void Set(const wxFont& font)
     {
-        if ( !m_fontOld.Ok() )
+        if ( !m_fontOld.IsOk() )
             m_fontOld = m_dc.GetFont();
         m_dc.SetFont(font);
     }
 
     ~wxDCFontChanger()
     {
-        if ( m_fontOld.Ok() )
+        if ( m_fontOld.IsOk() )
             m_dc.SetFont(m_fontOld);
     }
 

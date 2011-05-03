@@ -1708,7 +1708,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 
     delete ft;
 
-    if ( !ic.Ok() )
+    if ( !ic.IsOk() )
     {
         int newid = file;
         m_HashTable->Put(extension, new wxFileIconEntry(newid));
@@ -1718,7 +1718,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     wxBitmap bmp;
     bmp.CopyFromIcon(ic);
 
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         int newid = file;
         m_HashTable->Put(extension, new wxFileIconEntry(newid));

@@ -149,7 +149,7 @@ static int GetBestBytesPerRow( int rawBytes )
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType )
 {
     memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         wxBitmapRefData * bmap = bitmap.GetBitmapData() ;
         if ( bmap == NULL )
@@ -1031,28 +1031,28 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 
 void * wxBitmap::GetRawAccess() const
 {
-    wxCHECK_MSG( Ok() , NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , NULL , wxT("invalid bitmap") ) ;
 
     return M_BITMAPDATA->GetRawAccess() ;
 }
 
 void * wxBitmap::BeginRawAccess()
 {
-    wxCHECK_MSG( Ok() , NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , NULL , wxT("invalid bitmap") ) ;
 
     return M_BITMAPDATA->BeginRawAccess() ;
 }
 
 void wxBitmap::EndRawAccess()
 {
-    wxCHECK_RET( Ok() , wxT("invalid bitmap") ) ;
+    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
 
     M_BITMAPDATA->EndRawAccess() ;
 }
 
 CGImageRef wxBitmap::CreateCGImage() const
 {
-    wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
 
     return M_BITMAPDATA->CreateCGImage() ;
 }
@@ -1060,7 +1060,7 @@ CGImageRef wxBitmap::CreateCGImage() const
 #ifndef  __WXOSX_IPHONE__
 IconRef wxBitmap::GetIconRef() const
 {
-    wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
 
     return M_BITMAPDATA->GetIconRef() ;
 }
@@ -1094,14 +1094,14 @@ WX_UIImage wxBitmap::GetUIImage() const
 #endif
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
-    wxCHECK_MSG( Ok() &&
+    wxCHECK_MSG( IsOk() &&
                 (rect.x >= 0) && (rect.y >= 0) &&
                 (rect.x+rect.width <= GetWidth()) &&
                 (rect.y+rect.height <= GetHeight()),
                 wxNullBitmap, wxT("invalid bitmap or bitmap region") );
 
     wxBitmap ret( rect.width, rect.height, GetDepth() );
-    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+    wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
 
     int destwidth = rect.width ;
     int destheight = rect.height ;
@@ -1192,7 +1192,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     {
 #if wxUSE_IMAGE
         wxImage loadimage(filename, type);
-        if (loadimage.Ok())
+        if (loadimage.IsOk())
         {
             *this = loadimage;
 
@@ -1228,7 +1228,7 @@ bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
-    wxCHECK_RET( image.Ok(), wxT("invalid image") );
+    wxCHECK_RET( image.IsOk(), wxT("invalid image") );
 
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
@@ -1302,7 +1302,7 @@ wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid bitmap") );
 
     // create an wxImage object
     int width = GetWidth();
@@ -1434,35 +1434,35 @@ bool wxBitmap::SaveFile( const wxString& filename,
 
 int wxBitmap::GetHeight() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
    return M_BITMAPDATA->GetHeight();
 }
 
 int wxBitmap::GetWidth() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
    return M_BITMAPDATA->GetWidth() ;
 }
 
 int wxBitmap::GetDepth() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
    return M_BITMAPDATA->GetDepth();
 }
 
 wxMask *wxBitmap::GetMask() const
 {
-   wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
    return M_BITMAPDATA->m_bitmapMask;
 }
 
 bool wxBitmap::HasAlpha() const
 {
-   wxCHECK_MSG( Ok(), false , wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), false , wxT("invalid bitmap") );
 
    return M_BITMAPDATA->HasAlpha() ;
 }
@@ -1494,7 +1494,7 @@ void wxBitmap::SetOk(bool isOk)
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-   wxCHECK_MSG( Ok(), NULL, wxT("Invalid bitmap  GetPalette()") );
+   wxCHECK_MSG( IsOk(), NULL, wxT("Invalid bitmap  GetPalette()") );
 
    return &M_BITMAPDATA->m_bitmapPalette;
 }
@@ -1872,7 +1872,7 @@ void wxBitmap::InitStandardHandlers()
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int WXUNUSED(bpp))
 {
-    if ( !Ok() )
+    if ( !IsOk() )
         // no bitmap, no data (raw or otherwise)
         return NULL;
 

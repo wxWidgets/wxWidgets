@@ -260,7 +260,7 @@ bool wxCheckBox::SetForegroundColour(const wxColour& colour)
     // the only way to change the checkbox foreground colour under Windows XP
     // is to owner draw it
     if ( wxUxThemeEngine::GetIfActive() )
-        MakeOwnerDrawn(colour.Ok());
+        MakeOwnerDrawn(colour.IsOk());
 
     return true;
 }

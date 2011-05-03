@@ -4338,7 +4338,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     int lineSpacing = 0;
 
     // Let's assume line spacing of 10 is normal, 15 is 1.5, 20 is 2, etc.
-    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.GetFont().Ok())
+    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.GetFont().IsOk())
     {
         wxCheckSetFont(dc, attr.GetFont());
         lineSpacing = (int) (double(dc.GetCharHeight()) * (double(attr.GetLineSpacing())/10.0 - 1.0));
@@ -5949,7 +5949,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     int charHeight = dc.GetCharHeight();
 
     int x, y;
-    if ( textFont.Ok() )
+    if ( textFont.IsOk() )
     {
         if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) )
         {
@@ -6248,7 +6248,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     bool bScript(false);
     wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    if (font.Ok())
+    if (font.IsOk())
     {
         if ( textAttr.HasTextEffects() && ( (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
             || (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT) ) )
@@ -7792,7 +7792,7 @@ int wxRichTextBuffer::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, w
 
 bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& bulletAttr, const wxRect& rect)
 {
-    if (bulletAttr.GetTextColour().Ok())
+    if (bulletAttr.GetTextColour().IsOk())
     {
         wxCheckSetPen(dc, wxPen(bulletAttr.GetTextColour()));
         wxCheckSetBrush(dc, wxBrush(bulletAttr.GetTextColour()));
@@ -7892,7 +7892,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
 
         wxCheckSetFont(dc, font);
 
-        if (attr.GetTextColour().Ok())
+        if (attr.GetTextColour().IsOk())
             dc.SetTextForeground(attr.GetTextColour());
 
         dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
@@ -10153,7 +10153,7 @@ IMPLEMENT_CLASS(wxRichTextFileHandler, wxObject)
 bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileInputStream stream(filename);
-    if (stream.Ok())
+    if (stream.IsOk())
         return LoadFile(buffer, stream);
 
     return false;
@@ -10162,7 +10162,7 @@ bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& f
 bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileOutputStream stream(filename);
-    if (stream.Ok())
+    if (stream.IsOk())
         return SaveFile(buffer, stream);
 
     return false;
@@ -10496,7 +10496,7 @@ unsigned char* wxRichTextImageBlock::ReadBlock(wxInputStream& stream, size_t siz
 unsigned char* wxRichTextImageBlock::ReadBlock(const wxString& filename, size_t size)
 {
     wxFileInputStream stream(filename);
-    if (!stream.Ok())
+    if (!stream.IsOk())
         return NULL;
 
     return ReadBlock(stream, size);
@@ -10514,7 +10514,7 @@ bool wxRichTextImageBlock::WriteBlock(wxOutputStream& stream, unsigned char* blo
 bool wxRichTextImageBlock::WriteBlock(const wxString& filename, unsigned char* block, size_t size)
 {
     wxFileOutputStream outStream(filename);
-    if (!outStream.Ok())
+    if (!outStream.IsOk())
         return false;
 
     return WriteBlock(outStream, block, size);

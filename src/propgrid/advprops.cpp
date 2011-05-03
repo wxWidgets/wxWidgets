@@ -668,7 +668,7 @@ void wxFontProperty::OnSetValue()
     wxFont font;
     font << m_value;
 
-    if ( !font.Ok() )
+    if ( !font.IsOk() )
     {
         m_value << *wxNORMAL_FONT;
     }
@@ -906,7 +906,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 {
     wxColourPropertyValue cpv;
 
-    if ( colour.Ok() )
+    if ( colour.IsOk() )
         cpv.Init( type, colour );
     else
         cpv.Init( type, *wxWHITE );
@@ -1097,7 +1097,7 @@ void wxSystemColourProperty::OnSetValue()
         cpv << m_value;
         wxColour col = cpv.m_colour;
 
-        if ( !col.Ok() )
+        if ( !col.IsOk() )
         {
             SetValueToUnspecified();
             SetIndex(wxNOT_FOUND);
@@ -1120,7 +1120,7 @@ void wxSystemColourProperty::OnSetValue()
         wxColour col;
         col << m_value;
 
-        if ( !col.Ok() )
+        if ( !col.IsOk() )
         {
             SetValueToUnspecified();
             SetIndex(wxNOT_FOUND);
@@ -1383,7 +1383,7 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
         col = GetVal().m_colour;
     }
 
-    if ( col.Ok() )
+    if ( col.IsOk() )
     {
         dc.SetBrush(col);
         dc.DrawRectangle(rect);
@@ -1585,7 +1585,7 @@ wxColourProperty::~wxColourProperty()
 
 void wxColourProperty::Init( wxColour colour )
 {
-    if ( !colour.Ok() )
+    if ( !colour.IsOk() )
         colour = *wxWHITE;
     wxVariant variant;
     variant << colour;
@@ -1864,7 +1864,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
                                          const wxRect& rect,
                                          wxPGPaintData& )
 {
-    if ( m_pBitmap || (m_pImage && m_pImage->Ok() ) )
+    if ( m_pBitmap || (m_pImage && m_pImage->IsOk() ) )
     {
         // Draw the thumbnail
 

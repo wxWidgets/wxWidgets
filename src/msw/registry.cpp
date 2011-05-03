@@ -1235,7 +1235,7 @@ bool wxRegKey::Export(const wxString& filename) const
 
     wxFFileOutputStream ostr(filename, wxT("w"));
 
-    return ostr.Ok() && Export(ostr);
+    return ostr.IsOk() && Export(ostr);
 #else
     wxUnusedVar(filename);
     return false;

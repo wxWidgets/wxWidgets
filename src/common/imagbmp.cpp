@@ -91,7 +91,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 {
     wxCHECK_MSG( image, false, wxT("invalid pointer in wxBMPHandler::SaveFile") );
 
-    if ( !image->Ok() )
+    if ( !image->IsOk() )
     {
         if ( verbose )
         {
@@ -351,7 +351,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     // pointer to the image data, use quantized if available
     wxUint8 *data = (wxUint8*) image->GetData();
-    if (q_image) if (q_image->Ok()) data = (wxUint8*) q_image->GetData();
+    if (q_image) if (q_image->IsOk()) data = (wxUint8*) q_image->GetData();
 
     wxUint8 *buffer = new wxUint8[row_width];
     memset(buffer, 0, row_width);
@@ -1249,7 +1249,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         // wxCountingOutputStream::IsOk() always returns true for now and this
         // "if" provokes VC++ warnings in optimized build
 #if 0
-        if ( !cStream.Ok() )
+        if ( !cStream.IsOk() )
         {
             if ( verbose )
             {

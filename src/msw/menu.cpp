@@ -424,17 +424,17 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             // them in any case if the item has custom colours or font
             static const wxWinVersion winver = wxGetWinVersion();
             bool mustUseOwnerDrawn = winver < wxWinVersion_98 ||
-                                     pItem->GetTextColour().Ok() ||
-                                     pItem->GetBackgroundColour().Ok() ||
-                                     pItem->GetFont().Ok();
+                                     pItem->GetTextColour().IsOk() ||
+                                     pItem->GetBackgroundColour().IsOk() ||
+                                     pItem->GetFont().IsOk();
 
             if ( !mustUseOwnerDrawn )
             {
                 const wxBitmap& bmpUnchecked = pItem->GetBitmap(false),
                                 bmpChecked   = pItem->GetBitmap(true);
 
-                if ( (bmpUnchecked.Ok() && IsGreaterThanStdSize(bmpUnchecked)) ||
-                     (bmpChecked.Ok()   && IsGreaterThanStdSize(bmpChecked)) )
+                if ( (bmpUnchecked.IsOk() && IsGreaterThanStdSize(bmpUnchecked)) ||
+                     (bmpChecked.IsOk()   && IsGreaterThanStdSize(bmpChecked)) )
                 {
                     mustUseOwnerDrawn = true;
                 }

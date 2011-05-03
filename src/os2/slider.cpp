@@ -368,7 +368,7 @@ bool wxSlider::Create(
                                                  ,NULL                     // no control data
                                                  ,NULL                     // no Presentation parameters
                                                 );
-        if (GetFont().Ok())
+        if (GetFont().IsOk())
         {
             if (GetFont().GetResourceHandle())
             {

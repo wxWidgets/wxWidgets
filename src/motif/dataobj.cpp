@@ -160,7 +160,7 @@ size_t wxBitmapDataObject::GetDataSize() const
 
 bool wxBitmapDataObject::GetDataHere(void* buf) const
 {
-    if( !GetBitmap().Ok() )
+    if( !GetBitmap().IsOk() )
         return false;
 
     (*(Pixmap*)buf) = (Pixmap)GetBitmap().GetDrawable();

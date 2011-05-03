@@ -199,7 +199,7 @@ bool wxAcceleratorTable::Translate( WXHWND  hWnd,
                              ,GetHaccel()
                              ,pMsg
                             );
-    return (Ok() && rc);
+    return (IsOk() && rc);
 } // end of wxAcceleratorTable::Translate
 
 // ---------------------------------------------------------------------------

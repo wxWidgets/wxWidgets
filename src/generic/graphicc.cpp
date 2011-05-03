@@ -551,7 +551,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         {
             /*
             wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->Ok() )
+            if ( bmp && bmp->IsOk() )
             {
             wxDELETE( m_penImage );
             wxDELETE( m_penBrush );
@@ -666,7 +666,7 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush 
     else
     {
     wxBitmap* bmp = brush.GetStipple();
-    if ( bmp && bmp->Ok() )
+    if ( bmp && bmp->IsOk() )
     {
     wxDELETE( m_brushImage );
     m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),(HPALETTE)bmp->GetPalette()->GetHPALETTE());
@@ -1918,7 +1918,7 @@ wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble
 
 wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -1930,7 +1930,7 @@ wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -1967,7 +1967,7 @@ wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // sets the font
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxCairoFontData( this , font, col ));
@@ -1979,7 +1979,7 @@ wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour 
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxCairoBitmapData( this , bmp ));

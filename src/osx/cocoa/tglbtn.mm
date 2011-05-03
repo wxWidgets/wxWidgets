@@ -60,7 +60,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    if (label.Ok())
+    if (label.IsOk())
         [v setImage:label.GetNSImage() ];
 
     SetBezelStyleFromBorderFlags(v, style);

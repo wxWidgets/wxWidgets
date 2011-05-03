@@ -176,7 +176,7 @@ void wxMenuItem::UpdateItemBitmap()
     if ( !m_parentMenu )
         return;
 
-    if ( m_bitmap.Ok() )
+    if ( m_bitmap.IsOk() )
     {
         GetPeer()->SetBitmap( m_bitmap );
     }

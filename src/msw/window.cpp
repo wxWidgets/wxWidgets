@@ -838,7 +838,7 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     }
 
     // don't "overwrite" busy cursor
-    if ( m_cursor.Ok() && !wxIsBusy() )
+    if ( m_cursor.IsOk() && !wxIsBusy() )
     {
         // normally we should change the cursor only if it's over this window
         // but we should do it always if we capture the mouse currently
@@ -2140,7 +2140,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *externalLeading,
                                   const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
+    wxASSERT_MSG( !fontToUse || fontToUse->IsOk(),
                     wxT("invalid font in GetTextExtent()") );
 
     HFONT hfontToUse;
@@ -4181,7 +4181,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             // m_cursor if the user code caught EVT_SET_CURSOR() and returned
             // nothing from it - this is a way to say that our cursor shouldn't
             // be used for this point
-            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() )
             {
                 hcursor = GetHcursorOf(m_cursor);
             }
@@ -4189,7 +4189,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
-                if ( cursor && cursor->Ok() )
+                if ( cursor && cursor->IsOk() )
                 {
                     hcursor = GetHcursorOf(*cursor);
                 }
@@ -4626,7 +4626,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // to.
             wxLogNull logNo; // suppress error if we couldn't load the bitmap
             wxBitmap stdColourBitmap(wxT("wxBITMAP_STD_COLOURS"));
-            if ( stdColourBitmap.Ok() )
+            if ( stdColourBitmap.IsOk() )
             {
                 // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
                 wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,

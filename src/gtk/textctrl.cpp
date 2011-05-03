@@ -1289,7 +1289,7 @@ void wxTextCtrl::OnEnabled(bool WXUNUSED(enable))
     // disabled and enabled mode, or we end up with a different colour under the
     // text.
     wxColour oldColour = GetBackgroundColour();
-    if (oldColour.Ok())
+    if (oldColour.IsOk())
     {
         // Need to set twice or it'll optimize the useful stuff out
         if (oldColour == * wxWHITE)
@@ -1666,7 +1666,7 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     if ( !wxControl::SetBackgroundColour( colour ) )
         return false;
 
-    if (!m_backgroundColour.Ok())
+    if (!m_backgroundColour.IsOk())
         return false;
 
     // change active background color too

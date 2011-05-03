@@ -976,7 +976,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         // TODO
         menuItem = gtk_menu_item_new();
     }
-    else if (mitem->GetBitmap().Ok())
+    else if (mitem->GetBitmap().IsOk())
     {
         text = mitem->wxMenuItemBase::GetItemLabel();
         const wxBitmap *bitmap = &mitem->GetBitmap();

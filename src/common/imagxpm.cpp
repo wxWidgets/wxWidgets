@@ -97,7 +97,7 @@ bool wxXPMHandler::LoadFile(wxImage *image,
     wxXPMDecoder decoder;
 
     wxImage img = decoder.ReadFile(stream);
-    if ( !img.Ok() )
+    if ( !img.IsOk() )
         return false;
     *image = img;
     return true;

@@ -179,7 +179,7 @@ bool wxRegion::DoUnionWithRect(const wxRect& r)
 
 bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
+    wxCHECK_MSG( region.IsOk(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -198,7 +198,7 @@ bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 
 bool wxRegion::DoIntersect( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
+    wxCHECK_MSG( region.IsOk(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -215,7 +215,7 @@ bool wxRegion::DoIntersect( const wxRegion& region )
 
 bool wxRegion::DoSubtract( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
+    wxCHECK_MSG( region.IsOk(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -232,7 +232,7 @@ bool wxRegion::DoSubtract( const wxRegion& region )
 
 bool wxRegion::DoXor( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
+    wxCHECK_MSG( region.IsOk(), false, wxT("invalid region") );
 
     if (!m_refData)
     {

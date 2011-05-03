@@ -466,7 +466,7 @@ wxXSetBusyCursor (wxWindow * win, const wxCursor * cursor)
     else
     {
         // Restore old cursor
-        if (win->GetCursor().Ok())
+        if (win->GetCursor().IsOk())
             attrs.cursor = (Cursor) win->GetCursor().GetXCursor(display);
         else
             attrs.cursor = None;

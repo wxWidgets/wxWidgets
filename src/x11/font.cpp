@@ -711,14 +711,14 @@ void wxFont::Unshare()
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
     return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->m_faceName;
 }
@@ -730,35 +730,35 @@ wxFontFamily wxFont::DoGetFamily() const
 
 wxFontStyle wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxFONTSTYLE_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTSTYLE_MAX, wxT("invalid font") );
 
     return M_FONTDATA->m_style;
 }
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), wxFONTWEIGHT_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 
     return M_FONTDATA->m_weight;
 }
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
 
 wxFontEncoding wxFont::GetEncoding() const
 {
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
     return M_FONTDATA->m_encoding;
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
 
 #if wxUSE_UNICODE
 #else
@@ -771,7 +771,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 
 bool wxFont::IsFixedWidth() const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
 #if wxUSE_UNICODE
    return wxFontBase::IsFixedWidth();
@@ -864,7 +864,7 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 // font to list in the private data for future reference.
 wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 {
-    if ( !Ok() )
+    if ( !IsOk() )
         return NULL;
 
     long intScale = long(scale * 100.0 + 0.5); // key for wxXFont

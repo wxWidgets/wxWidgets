@@ -757,7 +757,7 @@ bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
 {
 #if wxUSE_IMAGE
     out = in.ConvertToGreyscale();
-    if ( out.Ok() )
+    if ( out.IsOk() )
         return true;
 #endif // wxUSE_IMAGE
     return false;

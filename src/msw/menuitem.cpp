@@ -1063,7 +1063,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                         - data->CheckBgMargin.cyBottomHeight
                         - data->CheckMargin.cyBottomHeight);
 
-    if ( IsCheckable() && !m_bmpChecked.Ok() )
+    if ( IsCheckable() && !m_bmpChecked.IsOk() )
     {
         if ( stat & wxODChecked )
         {
@@ -1079,25 +1079,25 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             bmp = GetDisabledBitmap();
         }
 
-        if ( !bmp.Ok() )
+        if ( !bmp.IsOk() )
         {
             // for not checkable bitmaps we should always use unchecked one
             // because their checked bitmap is not set
             bmp = GetBitmap(!IsCheckable() || (stat & wxODChecked));
 
 #if wxUSE_IMAGE
-            if ( bmp.Ok() && stat & wxODDisabled )
+            if ( bmp.IsOk() && stat & wxODDisabled )
             {
                 // we need to grey out the bitmap as we don't have any specific
                 // disabled bitmap
                 wxImage imgGrey = bmp.ConvertToImage().ConvertToGreyscale();
-                if ( imgGrey.Ok() )
+                if ( imgGrey.IsOk() )
                     bmp = wxBitmap(imgGrey);
             }
 #endif // wxUSE_IMAGE
         }
 
-        if ( bmp.Ok() )
+        if ( bmp.IsOk() )
         {
             wxMemoryDC dcMem(&dc);
             dcMem.SelectObjectAsSource(bmp);

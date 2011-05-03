@@ -1528,7 +1528,7 @@ public:
 
     void SetCursor(const wxCursor& cursor) { m_cursor = cursor; }
     const wxCursor& GetCursor() const { return m_cursor; }
-    bool HasCursor() const { return m_cursor.Ok(); }
+    bool HasCursor() const { return m_cursor.IsOk(); }
 
     virtual wxEvent *Clone() const { return new wxSetCursorEvent(*this); }
 

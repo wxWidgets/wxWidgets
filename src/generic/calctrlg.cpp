@@ -1002,13 +1002,13 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                             colBg = attr->GetBackgroundColour();
                         }
 
-                        if ( colFg.Ok() )
+                        if ( colFg.IsOk() )
                         {
                             dc.SetTextForeground(colFg);
                             changedColours = true;
                         }
 
-                        if ( colBg.Ok() )
+                        if ( colBg.IsOk() )
                         {
                             dc.SetTextBackground(colBg);
                             changedColours = true;

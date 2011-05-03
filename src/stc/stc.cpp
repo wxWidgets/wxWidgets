@@ -527,9 +527,9 @@ void wxStyledTextCtrl::MarkerDefine(int markerNumber, int markerSymbol,
                 const wxColour& background) {
 
                 SendMsg(2040, markerNumber, markerSymbol);
-                if (foreground.Ok())
+                if (foreground.IsOk())
                     MarkerSetForeground(markerNumber, foreground);
-                if (background.Ok())
+                if (background.IsOk())
                     MarkerSetBackground(markerNumber, background);
 }
 

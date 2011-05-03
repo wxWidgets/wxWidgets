@@ -59,9 +59,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     wxSize actualSize(size);
     // work around the cases where the bitmap is a wxNull(Icon/Bitmap)
     if (actualSize.x == -1)
-        actualSize.x = bitmap.Ok() ? bitmap.GetWidth() : 1;
+        actualSize.x = bitmap.IsOk() ? bitmap.GetWidth() : 1;
     if (actualSize.y == -1)
-        actualSize.y = bitmap.Ok() ? bitmap.GetHeight() : 1;
+        actualSize.y = bitmap.IsOk() ? bitmap.GetHeight() : 1;
 
     PostCreation();
     DoSetBitmap();
@@ -81,7 +81,7 @@ void wxStaticBitmap::DoSetBitmap()
     Widget widget = (Widget) m_mainWidget;
     int w2, h2;
 
-    if (m_messageBitmapOriginal.Ok())
+    if (m_messageBitmapOriginal.IsOk())
     {
         w2 = m_messageBitmapOriginal.GetWidth();
         h2 = m_messageBitmapOriginal.GetHeight();

@@ -198,14 +198,14 @@ bool wxBitmap::Create(int width, int height, int depth)
         SetMonoPalette(wxColour(255, 255, 255), wxColour(0, 0, 0));
     }
 
-    return Ok();
+    return IsOk();
 }
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     long width, height;
 
-    wxCHECK_RET( image.Ok(), wxT("invalid image") );
+    wxCHECK_RET( image.IsOk(), wxT("invalid image") );
 
     width = image.GetWidth();
     height = image.GetHeight();
@@ -237,14 +237,14 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
 wxImage wxBitmap::ConvertToImage() const
 {
-    wxCHECK_MSG( Ok(), wxImage(), wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), wxImage(), wxT("invalid bitmap") );
 
     int width, height;
     width = GetWidth();
     height = GetHeight();
 
     wxImage image(width, height);
-    wxASSERT_MSG( image.Ok(), wxT("cannot create image") );
+    wxASSERT_MSG( image.IsOk(), wxT("cannot create image") );
 
     MGLMemoryDC idc(width, height, 24, &gs_pixel_format_wxImage,
                     width * 3, (void*)image.GetData(), NULL);
@@ -299,35 +299,35 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 
 int wxBitmap::GetHeight() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_height;
 }
 
 int wxBitmap::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_width;
 }
 
 int wxBitmap::GetDepth() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_bpp;
 }
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_mask;
 }
 
 void wxBitmap::SetMask(wxMask *mask)
 {
-    wxCHECK_RET( Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
 
     AllocExclusive();
     delete M_BMPDATA->m_mask;
@@ -343,13 +343,13 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
-    wxCHECK_MSG( Ok() &&
+    wxCHECK_MSG( IsOk() &&
                  (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
                  wxNullBitmap, wxT("invalid bitmap or bitmap region") );
 
     wxBitmap ret( rect.width, rect.height, M_BMPDATA->m_bpp );
-    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+    wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
 
     if ( GetPalette() )
         ret.SetPalette(*GetPalette());
@@ -371,7 +371,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 
 void wxBitmap::SetMonoPalette(const wxColour& fg, const wxColour& bg)
 {
-    wxCHECK_RET( Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
 
     AllocExclusive();
     palette_t *mono = M_BMPDATA->m_bitmap->pal;
@@ -394,7 +394,7 @@ void wxBitmap::SetMonoPalette(const wxColour& fg, const wxColour& bg)
 
 MGLDevCtx *wxBitmap::CreateTmpDC() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
     MGLDevCtx *tdc = new MGLMemoryDC(GetWidth(), GetHeight(),
                                      M_BMPDATA->m_bitmap->bitsPerPixel,
@@ -446,7 +446,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
     if ( handler == NULL )
     {
         wxImage image;
-        if ( !image.LoadFile(name, type) || !image.Ok() )
+        if ( !image.LoadFile(name, type) || !image.IsOk() )
         {
             wxLogError("no bitmap handler for type %d defined.", type);
             return false;
@@ -463,7 +463,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 
 bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPalette *palette) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
     wxBitmapHandler *handler = FindHandler(type);
 
@@ -473,7 +473,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
         if ( palette )
             image.SetPalette(*palette);
 
-        if ( image.Ok() )
+        if ( image.IsOk() )
             return image.SaveFile(filename, type);
         else
         {
@@ -487,20 +487,20 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
 
 wxPalette *wxBitmap::GetPalette() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_palette;
 }
 
 void wxBitmap::SetPalette(const wxPalette& palette)
 {
-    wxCHECK_RET( Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
     wxCHECK_RET( GetDepth() > 1 && GetDepth() <= 8, wxT("cannot set palette for bitmap of this depth") );
 
     AllocExclusive();
     wxDELETE(M_BMPDATA->m_palette);
 
-    if ( !palette.Ok() ) return;
+    if ( !palette.IsOk() ) return;
 
     M_BMPDATA->m_palette = new wxPalette(palette);
 
@@ -614,7 +614,7 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
             if ( !MGL_getBitmapSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
                 return false;
             bitmap->Create(width, height, -1);
-            if ( !bitmap->Ok() ) return false;
+            if ( !bitmap->IsOk() ) return false;
             dc.SelectObject(*bitmap);
             if ( !dc.GetMGLDC()->loadBitmapIntoDC(fullname.mb_str(), 0, 0, TRUE) )
                 return false;
@@ -625,7 +625,7 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
             if ( !MGL_getJPEGSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
                 return false;
             bitmap->Create(width, height, -1);
-            if ( !bitmap->Ok() ) return false;
+            if ( !bitmap->IsOk() ) return false;
             dc.SelectObject(*bitmap);
             if ( !dc.GetMGLDC()->loadJPEGIntoDC(fullname.mb_str(), 0, 0, TRUE) )
                 return false;
@@ -636,7 +636,7 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
             if ( !MGL_getPNGSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
                 return false;
             bitmap->Create(width, height, -1);
-            if ( !bitmap->Ok() ) return false;
+            if ( !bitmap->IsOk() ) return false;
             dc.SelectObject(*bitmap);
             if ( !dc.GetMGLDC()->loadPNGIntoDC(fullname.mb_str(), 0, 0, TRUE) )
                 return false;
@@ -647,7 +647,7 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
             if ( !MGL_getPCXSize(fullname.mb_str(), &width, &height, &bpp) )
                 return false;
             bitmap->Create(width, height, -1);
-            if ( !bitmap->Ok() ) return false;
+            if ( !bitmap->IsOk() ) return false;
             dc.SelectObject(*bitmap);
             if ( !dc.GetMGLDC()->loadPCXIntoDC(fullname.mb_str(), 0, 0, TRUE) )
                 return false;
@@ -732,7 +732,7 @@ bool wxPNGBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
     if ( bmp == NULL ) return false;
 
     bitmap->Create(bmp->width, bmp->height, -1);
-    if ( !bitmap->Ok() ) return false;
+    if ( !bitmap->IsOk() ) return false;
 
     // convert bmp to display's depth and write it to *bitmap:
     wxMemoryDC dc;

@@ -217,8 +217,8 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   // Create the socket
   m_server = new wxSocketServer(addr);
 
-  // We use Ok() here to see if the server is really listening
-  if (! m_server->Ok())
+  // We use IsOk() here to see if the server is really listening
+  if (! m_server->IsOk())
   {
     wxLogMessage("Could not listen at the specified port !");
     return;

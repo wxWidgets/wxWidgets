@@ -126,7 +126,7 @@ wxToolBarToolBase(
         [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         bui.width = 25.0f;
     }
-    else if ( bmpNormal.Ok() )
+    else if ( bmpNormal.IsOk() )
     {
         [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
                       action:@selector(clickedAction:)];

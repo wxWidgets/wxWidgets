@@ -3083,7 +3083,7 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
     {
         GtkImage *gtk_image = GTK_IMAGE(m_image);
 

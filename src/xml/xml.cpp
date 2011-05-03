@@ -451,7 +451,7 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
 {
     wxFileInputStream stream(filename);
-    if (!stream.Ok())
+    if (!stream.IsOk())
         return false;
     return Load(stream, encoding, flags);
 }
@@ -459,7 +459,7 @@ bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int
 bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
 {
     wxFileOutputStream stream(filename);
-    if (!stream.Ok())
+    if (!stream.IsOk())
         return false;
     return Save(stream, indentstep);
 }

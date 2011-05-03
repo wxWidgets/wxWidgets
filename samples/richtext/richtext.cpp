@@ -1248,7 +1248,7 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
         fontData = dialog.GetFontData();
         attr.SetFlags(wxTEXT_ATTR_FONT);
         attr.SetFont(fontData.GetChosenFont());
-        if (attr.GetFont().Ok())
+        if (attr.GetFont().IsOk())
         {
             m_richTextCtrl->SetStyle(range, attr);
         }
@@ -1589,7 +1589,7 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
     m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr);
 
     wxString currentFontName;
-    if (attr.HasFont() && attr.GetFont().Ok())
+    if (attr.HasFont() && attr.GetFont().IsOk())
         currentFontName = attr.GetFont().GetFaceName();
 
     // Don't set the initial font in the dialog (so the user is choosing

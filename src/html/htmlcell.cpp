@@ -205,7 +205,7 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
     //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
     //     know that GetCursor() was overridden iff it returns valid cursor.
     wxCursor cur = GetCursor();
-    if (cur.Ok())
+    if (cur.IsOk())
         return cur;
 #endif // WXWIN_COMPATIBILITY_2_6
 

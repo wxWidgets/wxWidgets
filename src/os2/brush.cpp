@@ -215,7 +215,7 @@ bool wxBrush::RealizeResource()
                 break;
 
             case wxSTIPPLE:
-                if (M_BRUSHDATA->m_vStipple.Ok())
+                if (M_BRUSHDATA->m_vStipple.IsOk())
                 {
                     ::GpiSetBitmapId( M_BRUSHDATA->m_hBrush
                                      ,(USHORT)M_BRUSHDATA->m_vStipple.GetHBITMAP()
@@ -266,35 +266,35 @@ bool wxBrush::RealizeResource()
 
 wxColour wxBrush::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_vColour;
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_nStyle;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid brush") );
 
     return &(M_BRUSHDATA->m_vStipple);
 }
 
 int wxBrush::GetPS() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_hBrush;
 }
 
 WXHANDLE wxBrush::GetResourceHandle() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid brush") );
 
     return (WXHANDLE)M_BRUSHDATA->m_hBrush;
 } // end of wxBrush::GetResourceHandle

@@ -114,7 +114,7 @@ bool wxIcon::CreateFromXpm(const char* const* xpm)
 {
     wxBitmap bitmap(xpm);
     CopyFromBitmap(bitmap);
-    return Ok();
+    return IsOk();
 }
 
 bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
@@ -122,7 +122,7 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
 {
     wxBitmap bitmap(filename, type);
     CopyFromBitmap(bitmap);
-    return bitmap.Ok();
+    return bitmap.IsOk();
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
@@ -133,7 +133,7 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
     M_ICONDATA->m_height = bitmap.GetHeight();
     wxAutoNSAutoreleasePool pool;
     M_ICONDATA->m_cocoaNSImage = [bitmap.GetNSImage(true) retain];
-    M_ICONDATA->m_ok = bitmap.Ok();
+    M_ICONDATA->m_ok = bitmap.IsOk();
     M_ICONDATA->m_numColors = 0;
     M_ICONDATA->m_quality = 0;
 }

@@ -859,7 +859,7 @@ wxBitmap wxDisableBitmap(
     ::GpiSetBitmap(hPS, NULLHANDLE);
     ::GpiDestroyPS(hPS);
     ::DevCloseDC(hDC);
-    if (vNewBmp.Ok())
+    if (vNewBmp.IsOk())
         return(vNewBmp);
     return(wxNullBitmap);
 } // end of wxDisableBitmap

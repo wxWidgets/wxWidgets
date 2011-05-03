@@ -403,7 +403,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         if ( winTop )
         {
             wxIcon icon = winTop->GetIcon();
-            if ( icon.Ok() )
+            if ( icon.IsOk() )
             {
                 ::SendMessage(GetHwnd(), WM_SETICON,
                               (WPARAM)TRUE,

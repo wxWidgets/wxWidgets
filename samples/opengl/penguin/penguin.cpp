@@ -223,7 +223,7 @@ void TestGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 void TestGLCanvas::LoadDXF(const wxString& filename)
 {
     wxFileInputStream stream(filename);
-    if (stream.Ok())
+    if (stream.IsOk())
 #if wxUSE_ZLIB
     {
         if (filename.Right(3).Lower() == wxT(".gz"))

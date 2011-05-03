@@ -75,7 +75,7 @@ bool wxMemoryDCImpl::CocoaUnlockFocus()
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     wxAutoNSAutoreleasePool pool;
-    if(m_selectedBitmap.Ok())
+    if(m_selectedBitmap.IsOk())
     {
         CocoaTakeFocus();
         wxASSERT(m_cocoaNSImage);
@@ -95,7 +95,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     [m_cocoaNSImage release];
     m_cocoaNSImage = nil;
     m_selectedBitmap = bitmap;
-    if(m_selectedBitmap.Ok())
+    if(m_selectedBitmap.IsOk())
     {
         // Create an offscreen window of the same size
         m_cocoaNSImage = [[NSImage alloc]
@@ -137,7 +137,7 @@ bool wxMemoryDCImpl::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
     int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    if(!m_selectedBitmap.Ok())
+    if(!m_selectedBitmap.IsOk())
         return false;
 
     NSAffineTransform *transform = [NSAffineTransform transform];

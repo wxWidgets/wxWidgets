@@ -660,7 +660,7 @@ wxPalette *wxDIB::CreatePalette() const
 
 bool wxDIB::Create(const wxImage& image, PixelFormat pf)
 {
-    wxCHECK_MSG( image.Ok(), false, wxT("invalid wxImage in wxDIB ctor") );
+    wxCHECK_MSG( image.IsOk(), false, wxT("invalid wxImage in wxDIB ctor") );
 
     const int h = image.GetHeight();
     const int w = image.GetWidth();
@@ -753,7 +753,7 @@ wxImage wxDIB::ConvertToImage() const
     const int w = GetWidth();
     const int h = GetHeight();
     wxImage image(w, h, false /* don't bother clearing memory */);
-    if ( !image.Ok() )
+    if ( !image.IsOk() )
     {
         wxFAIL_MSG( wxT("could not allocate data for image") );
         return wxNullImage;

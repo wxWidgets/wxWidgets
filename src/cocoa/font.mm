@@ -350,7 +350,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.pointSize;
 }
 
@@ -364,7 +364,7 @@ bool wxFont::GetUnderlined() const
 
 wxFontStyle wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.style;
 }
 
@@ -375,13 +375,13 @@ wxFontFamily wxFont::DoGetFamily() const
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.weight;
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
     return &M_FONTDATA->m_info;
 }
 

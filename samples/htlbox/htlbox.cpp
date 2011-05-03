@@ -449,7 +449,7 @@ void MyFrame::OnGetItemRect(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = wxGetColourFromUser(this, m_hlbox->GetBackgroundColour());
-    if ( col.Ok() )
+    if ( col.IsOk() )
     {
         m_hlbox->SetBackgroundColour(col);
         m_hlbox->Refresh();
@@ -463,7 +463,7 @@ void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSetSelBgCol(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = wxGetColourFromUser(this, m_hlbox->GetSelectionBackground());
-    if ( col.Ok() )
+    if ( col.IsOk() )
     {
         m_hlbox->SetSelectionBackground(col);
         m_hlbox->Refresh();

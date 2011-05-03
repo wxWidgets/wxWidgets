@@ -377,7 +377,7 @@ void wxFileData::MakeItem( wxListItem &item )
     if (IsLink())
     {
         wxColour dg = wxTheColourDatabase->Find( wxT("MEDIUM GREY") );
-        if ( dg.Ok() )
+        if ( dg.IsOk() )
             item.SetTextColour(dg);
     }
     item.m_data = wxPtrToUInt(this);

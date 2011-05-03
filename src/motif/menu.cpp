@@ -454,7 +454,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
     XtSetArg (args[0], XmNnumColumns, m_numColumns);
     XtSetArg (args[1], XmNpacking, (m_numColumns > 1) ? XmPACK_COLUMN : XmPACK_TIGHT);
 
-    if ( !m_font.Ok() )
+    if ( !m_font.IsOk() )
     {
         if ( menuBar )
             m_font = menuBar->GetFont();
@@ -586,7 +586,7 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
 void wxMenu::SetBackgroundColour(const wxColour& col)
 {
     m_backgroundColour = col;
-    if (!col.Ok())
+    if (!col.IsOk())
         return;
     if (m_menuWidget)
         wxDoChangeBackgroundColour(m_menuWidget, (wxColour&) col);
@@ -611,7 +611,7 @@ void wxMenu::SetBackgroundColour(const wxColour& col)
 void wxMenu::SetForegroundColour(const wxColour& col)
 {
     m_foregroundColour = col;
-    if (!col.Ok())
+    if (!col.IsOk())
         return;
     if (m_menuWidget)
         wxDoChangeForegroundColour(m_menuWidget, (wxColour&) col);
@@ -637,7 +637,7 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
 {
     // Lesstif 0.87 hangs here, but 0.93 does not; MBN: sometimes it does
 #if !wxCHECK_LESSTIF() // || wxCHECK_LESSTIF_VERSION( 0, 93 )
-    if (!m_font.Ok() || !m_menuWidget)
+    if (!m_font.IsOk() || !m_menuWidget)
         return;
 
     Display* dpy = XtDisplay((Widget) m_menuWidget);
@@ -657,7 +657,7 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
           node = node->GetNext() )
     {
         wxMenuItem* item = node->GetData();
-        if (m_menuWidget && item->GetButtonWidget() && m_font.Ok())
+        if (m_menuWidget && item->GetButtonWidget() && m_font.IsOk())
         {
             XtVaSetValues ((Widget) item->GetButtonWidget(),
                            wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
@@ -681,7 +681,7 @@ bool wxMenuBar::SetBackgroundColour(const wxColour& col)
 {
     if (!wxWindowBase::SetBackgroundColour(col))
         return false;
-    if (!col.Ok())
+    if (!col.IsOk())
         return false;
     if (m_mainWidget)
         wxDoChangeBackgroundColour(m_mainWidget, (wxColour&) col);
@@ -697,7 +697,7 @@ bool wxMenuBar::SetForegroundColour(const wxColour& col)
 {
     if (!wxWindowBase::SetForegroundColour(col))
         return false;
-    if (!col.Ok())
+    if (!col.IsOk())
         return false;
     if (m_mainWidget)
         wxDoChangeForegroundColour(m_mainWidget, (wxColour&) col);

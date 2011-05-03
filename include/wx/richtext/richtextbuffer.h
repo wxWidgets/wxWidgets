@@ -3644,7 +3644,7 @@ public:
     /// image size.
     virtual wxTextAttrSize GetNaturalSize() const;
 
-    virtual bool IsEmpty() const { return false; /* !m_imageBlock.Ok(); */ }
+    virtual bool IsEmpty() const { return false; /* !m_imageBlock.IsOk(); */ }
 
     virtual bool CanEditProperties() const { return true; }
 

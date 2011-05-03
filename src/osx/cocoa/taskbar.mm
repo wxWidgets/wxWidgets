@@ -62,7 +62,7 @@ public:
     virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) = 0;
     virtual bool RemoveIcon() = 0;
     
-    bool IsIconInstalled() const { return m_icon.Ok(); }
+    bool IsIconInstalled() const { return m_icon.IsOk(); }
         
     virtual bool PopupMenu(wxMenu *menu) = 0;
     virtual ~wxTaskBarIconImpl();

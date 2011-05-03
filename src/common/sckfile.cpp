@@ -45,7 +45,7 @@ wxFileProto::~wxFileProto()
 wxInputStream *wxFileProto::GetInputStream(const wxString& path)
 {
     wxFileInputStream *retval = new wxFileInputStream(wxURI::Unescape(path));
-    if ( retval->Ok() )
+    if ( retval->IsOk() )
     {
         m_lastError = wxPROTO_NOERR;
         return retval;

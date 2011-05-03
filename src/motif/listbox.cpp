@@ -101,7 +101,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
               ( m_windowStyle & wxLB_EXTENDED ) ? XmEXTENDED_SELECT :
                                                   XmBROWSE_SELECT );
     ++count;
-    if( m_font.Ok() )
+    if( m_font.IsOk() )
     {
         XtSetArg( args[count],
                   (String)wxFont::GetFontTag(), m_font.GetFontTypeC(dpy) );

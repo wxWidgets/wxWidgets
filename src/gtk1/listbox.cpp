@@ -1012,7 +1012,7 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    if (m_hasBgCol && m_backgroundColour.Ok())
+    if (m_hasBgCol && m_backgroundColour.IsOk())
     {
         GdkWindow *window = GTK_WIDGET(m_list)->window;
         if ( window )
@@ -1039,9 +1039,9 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 void wxListBox::OnInternalIdle()
 {
     wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+    if (g_globalCursor.IsOk()) cursor = g_globalCursor;
 
-    if (GTK_WIDGET(m_list)->window && cursor.Ok())
+    if (GTK_WIDGET(m_list)->window && cursor.IsOk())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
            as setting the cursor in a parent window also effects the

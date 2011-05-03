@@ -346,7 +346,7 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // if background mode is solid, DrawText must paint text's background:
     if ( m_backgroundMode == wxSOLID )
     {
-        wxCHECK_RET( m_textBackgroundColour.Ok(),
+        wxCHECK_RET( m_textBackgroundColour.IsOk(),
                      wxT("invalid background color") );
 
         SelectColour(m_textBackgroundColour);
@@ -354,7 +354,7 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     }
 
     // finally draw the text itself:
-    wxCHECK_RET( m_textForegroundColour.Ok(),
+    wxCHECK_RET( m_textForegroundColour.IsOk(),
                  wxT("invalid foreground color") );
     SelectColour(m_textForegroundColour);
     m_surface->DrawString(text.utf8_str(), -1, xx, yy, DSTF_LEFT | DSTF_TOP);
@@ -379,14 +379,14 @@ void wxDFBDCImpl::DoDrawRotatedText(const wxString& WXUNUSED(text),
 
 void wxDFBDCImpl::SetPen(const wxPen& pen)
 {
-    m_pen = pen.Ok() ? pen : DEFAULT_PEN;
+    m_pen = pen.IsOk() ? pen : DEFAULT_PEN;
 
     SelectColour(m_pen.GetColour());
 }
 
 void wxDFBDCImpl::SetBrush(const wxBrush& brush)
 {
-    m_brush = brush.Ok() ? brush : DEFAULT_BRUSH;
+    m_brush = brush.IsOk() ? brush : DEFAULT_BRUSH;
 }
 
 void wxDFBDCImpl::SelectColour(const wxColour& clr)
@@ -408,7 +408,7 @@ void wxDFBDCImpl::SetFont(const wxFont& font)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    wxFont f(font.Ok() ? font : DEFAULT_FONT);
+    wxFont f(font.IsOk() ? font : DEFAULT_FONT);
 
     wxFont oldfont(m_font);
 
@@ -431,7 +431,7 @@ void wxDFBDCImpl::SetBackground(const wxBrush& brush)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    if (!brush.Ok()) return;
+    if (!brush.IsOk()) return;
 
     m_backgroundBrush = brush;
 }
@@ -478,7 +478,7 @@ void wxDFBDCImpl::EndPage()
 wxCoord wxDFBDCImpl::GetCharHeight() const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid dc") );
-    wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
+    wxCHECK_MSG( m_font.IsOk(), -1, wxT("no font selected") );
 
     int h = -1;
     GetCurrentFont()->GetHeight(&h);
@@ -488,7 +488,7 @@ wxCoord wxDFBDCImpl::GetCharHeight() const
 wxCoord wxDFBDCImpl::GetCharWidth() const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid dc") );
-    wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
+    wxCHECK_MSG( m_font.IsOk(), -1, wxT("no font selected") );
 
     int w = -1;
     GetCurrentFont()->GetStringWidth("H", 1, &w);
@@ -502,8 +502,8 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
                            const wxFont *theFont) const
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
-    wxCHECK_RET( m_font.Ok(), wxT("no font selected") );
-    wxCHECK_RET( !theFont || theFont->Ok(), wxT("invalid font") );
+    wxCHECK_RET( m_font.IsOk(), wxT("no font selected") );
+    wxCHECK_RET( !theFont || theFont->IsOk(), wxT("invalid font") );
 
     wxFont oldFont;
     if ( theFont != NULL )
@@ -640,7 +640,7 @@ bool wxDFBDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 void wxDFBDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
-    wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( bmp.IsOk(), wxT("invalid bitmap") );
 
     DoDrawSubBitmap(bmp,
                     0, 0, bmp.GetWidth(), bmp.GetHeight(),
@@ -659,7 +659,7 @@ void wxDFBDCImpl::DoDrawSubBitmap(const wxBitmap &bmp,
                            wxCoord destx, wxCoord desty, int rop, bool useMask)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
-    wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( bmp.IsOk(), wxT("invalid bitmap") );
 
     // NB: we could also support XOR here (via DSBLIT_XOR)
     //     and possibly others via SetSrc/DstBlendFunction()

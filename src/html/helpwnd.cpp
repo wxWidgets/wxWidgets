@@ -658,11 +658,11 @@ void wxHtmlHelpWindow::AddToolbarButtons(wxToolBar *toolBar, int style)
     wxBitmap woptionsBitmap =
         wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_TOOLBAR);
 
-    wxASSERT_MSG( (wpanelBitmap.Ok() && wbackBitmap.Ok() &&
-                   wforwardBitmap.Ok() && wupnodeBitmap.Ok() &&
-                   wupBitmap.Ok() && wdownBitmap.Ok() &&
-                   wopenBitmap.Ok() && wprintBitmap.Ok() &&
-                   woptionsBitmap.Ok()),
+    wxASSERT_MSG( (wpanelBitmap.IsOk() && wbackBitmap.IsOk() &&
+                   wforwardBitmap.IsOk() && wupnodeBitmap.IsOk() &&
+                   wupBitmap.IsOk() && wdownBitmap.IsOk() &&
+                   wopenBitmap.IsOk() && wprintBitmap.IsOk() &&
+                   woptionsBitmap.IsOk()),
                   wxT("One or more HTML help frame toolbar bitmap could not be loaded.")) ;
 
 

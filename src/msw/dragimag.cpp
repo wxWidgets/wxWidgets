@@ -301,7 +301,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
         return false;
     }
 
-    if (m_cursor.Ok())
+    if (m_cursor.IsOk())
     {
 #if wxUSE_SIMPLER_DRAGIMAGE
         m_oldCursor = window->GetCursor();
@@ -352,7 +352,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
     }
 
 #if !wxUSE_SIMPLER_DRAGIMAGE
-    if (m_cursor.Ok())
+    if (m_cursor.IsOk())
         ::ShowCursor(FALSE);
 #endif
 
@@ -397,7 +397,7 @@ bool wxDragImage::EndDrag()
     }
 
 #if wxUSE_SIMPLER_DRAGIMAGE
-    if (m_cursor.Ok() && m_oldCursor.Ok())
+    if (m_cursor.IsOk() && m_oldCursor.IsOk())
         m_window->SetCursor(m_oldCursor);
 #else
     ::ShowCursor(TRUE);

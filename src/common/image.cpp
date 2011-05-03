@@ -140,7 +140,7 @@ bool wxImage::Create(const char* const* xpmData)
 
     wxXPMDecoder decoder;
     (*this) = decoder.ReadData(xpmData);
-    return Ok();
+    return IsOk();
 #else
     return false;
 #endif
@@ -258,7 +258,7 @@ wxImage wxImage::MakeEmptyClone(int flags) const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxS("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxS("invalid image") );
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
@@ -293,7 +293,7 @@ wxImage wxImage::Copy() const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
 
     image.m_refData = CloneRefData(m_refData);
 
@@ -307,7 +307,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
 
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
 
     // can't scale to/from 0 size
     wxCHECK_MSG( (xFactor > 0) && (yFactor > 0), image,
@@ -426,7 +426,7 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
 
     // can't scale to/from 0 size
     wxCHECK_MSG( (width > 0) && (height > 0), image,
@@ -856,7 +856,7 @@ wxImage wxImage::BlurHorizontal(int blurRadius) const
 {
     wxImage ret_image(MakeEmptyClone());
 
-    wxCHECK( ret_image.Ok(), ret_image );
+    wxCHECK( ret_image.IsOk(), ret_image );
 
     const unsigned char* src_data = M_IMGDATA->m_data;
     unsigned char* dst_data = ret_image.GetData();
@@ -959,7 +959,7 @@ wxImage wxImage::BlurVertical(int blurRadius) const
 {
     wxImage ret_image(MakeEmptyClone());
 
-    wxCHECK( ret_image.Ok(), ret_image );
+    wxCHECK( ret_image.IsOk(), ret_image );
 
     const unsigned char* src_data = M_IMGDATA->m_data;
     unsigned char* dst_data = ret_image.GetData();
@@ -1074,7 +1074,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 {
     wxImage image(MakeEmptyClone(Clone_SwapOrientation));
 
-    wxCHECK( image.Ok(), image );
+    wxCHECK( image.IsOk(), image );
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
@@ -1168,7 +1168,7 @@ wxImage wxImage::Rotate180() const
 {
     wxImage image(MakeEmptyClone());
 
-    wxCHECK( image.Ok(), image );
+    wxCHECK( image.IsOk(), image );
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
@@ -1221,7 +1221,7 @@ wxImage wxImage::Mirror( bool horizontally ) const
 {
     wxImage image(MakeEmptyClone());
 
-    wxCHECK( image.Ok(), image );
+    wxCHECK( image.IsOk(), image );
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
@@ -1298,7 +1298,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
 
     wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) &&
                  (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight()),
@@ -1351,7 +1351,7 @@ wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
     wxCHECK_MSG( (size.GetWidth() > 0) && (size.GetHeight() > 0), image, wxT("invalid size") );
 
     int width = GetWidth(), height = GetHeight();
@@ -1399,8 +1399,8 @@ wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
 
 void wxImage::Paste( const wxImage &image, int x, int y )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
-    wxCHECK_RET( image.Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
+    wxCHECK_RET( image.IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -1503,7 +1503,7 @@ void wxImage::Paste( const wxImage &image, int x, int y )
 void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                        unsigned char r2, unsigned char g2, unsigned char b2 )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -1534,7 +1534,7 @@ wxImage wxImage::ConvertToGreyscale(double weight_r, double weight_g, double wei
 {
     wxImage image(MakeEmptyClone());
 
-    wxCHECK( image.Ok(), image );
+    wxCHECK( image.IsOk(), image );
 
     const unsigned char *src = M_IMGDATA->m_data;
     unsigned char *dest = image.GetData();
@@ -1568,7 +1568,7 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 {
     wxImage image;
 
-    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
 
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
 
@@ -1631,14 +1631,14 @@ wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
 
 int wxImage::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_width;
 }
 
 int wxImage::GetHeight() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_height;
 }
@@ -1662,7 +1662,7 @@ void wxImage::SetType(wxBitmapType type)
 
 long wxImage::XYToIndex(int x, int y) const
 {
-    if ( Ok() &&
+    if ( IsOk() &&
             x >= 0 && y >= 0 &&
                 x < M_IMGDATA->m_width && y < M_IMGDATA->m_height )
     {
@@ -1688,7 +1688,7 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
 
 void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, unsigned char b )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -1764,14 +1764,14 @@ bool wxImage::IsOk() const
 
 unsigned char *wxImage::GetData() const
 {
-    wxCHECK_MSG( Ok(), (unsigned char *)NULL, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), (unsigned char *)NULL, wxT("invalid image") );
 
     return M_IMGDATA->m_data;
 }
 
 void wxImage::SetData( unsigned char *data, bool static_data  )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     wxImageRefData *newRefData = new wxImageRefData();
 
@@ -1872,7 +1872,7 @@ wxImage::ConvertColourToAlpha(unsigned char r, unsigned char g, unsigned char b)
 
 void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -1890,7 +1890,7 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 
 unsigned char *wxImage::GetAlpha() const
 {
-    wxCHECK_MSG( Ok(), (unsigned char *)NULL, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), (unsigned char *)NULL, wxT("invalid image") );
 
     return M_IMGDATA->m_alpha;
 }
@@ -1948,7 +1948,7 @@ void wxImage::ClearAlpha()
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -1960,7 +1960,7 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 
 bool wxImage::GetOrFindMaskColour( unsigned char *r, unsigned char *g, unsigned char *b ) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     if (M_IMGDATA->m_hasMask)
     {
@@ -1978,28 +1978,28 @@ bool wxImage::GetOrFindMaskColour( unsigned char *r, unsigned char *g, unsigned 
 
 unsigned char wxImage::GetMaskRed() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskRed;
 }
 
 unsigned char wxImage::GetMaskGreen() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskGreen;
 }
 
 unsigned char wxImage::GetMaskBlue() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
 
     return M_IMGDATA->m_maskBlue;
 }
 
 void wxImage::SetMask( bool mask )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -2008,7 +2008,7 @@ void wxImage::SetMask( bool mask )
 
 bool wxImage::HasMask() const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     return M_IMGDATA->m_hasMask;
 }
@@ -2155,22 +2155,22 @@ bool wxImage::ConvertAlphaToMask(unsigned char mr,
 
 bool wxImage::HasPalette() const
 {
-    if (!Ok())
+    if (!IsOk())
         return false;
 
-    return M_IMGDATA->m_palette.Ok();
+    return M_IMGDATA->m_palette.IsOk();
 }
 
 const wxPalette& wxImage::GetPalette() const
 {
-    wxCHECK_MSG( Ok(), wxNullPalette, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), wxNullPalette, wxT("invalid image") );
 
     return M_IMGDATA->m_palette;
 }
 
 void wxImage::SetPalette(const wxPalette& palette)
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
 
     AllocExclusive();
 
@@ -2292,7 +2292,7 @@ bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
                         wxBitmapType WXUNUSED_UNLESS_STREAMS(type) ) const
 {
 #if HAS_FILE_STREAMS
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
@@ -2312,7 +2312,7 @@ bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
                         const wxString& WXUNUSED_UNLESS_STREAMS(mimetype) ) const
 {
 #if HAS_FILE_STREAMS
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
@@ -2343,7 +2343,7 @@ int wxImage::GetImageCount( const wxString& WXUNUSED_UNLESS_STREAMS(name),
 {
 #if HAS_FILE_STREAMS
     wxImageFileInputStream stream(name);
-    if (stream.Ok())
+    if (stream.IsOk())
         return GetImageCount(stream, type);
 #endif
 
@@ -2545,7 +2545,7 @@ bool wxImage::DoSave(wxImageHandler& handler, wxOutputStream& stream) const
 
 bool wxImage::SaveFile( wxOutputStream& stream, wxBitmapType type ) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandler(type);
     if ( !handler )
@@ -2559,7 +2559,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, wxBitmapType type ) const
 
 bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
     if ( !handler )

@@ -1528,7 +1528,7 @@ wxColour wxWindowBase::GetBackgroundColour() const
         // wxWidgets versions where GetBackgroundColour() always returned
         // something -- so give them something even if it doesn't make sense
         // for this window (e.g. it has a themed background)
-        if ( !colBg.Ok() )
+        if ( !colBg.IsOk() )
             colBg = GetClassDefaultAttributes().colBg;
 
         return colBg;
@@ -1540,7 +1540,7 @@ wxColour wxWindowBase::GetBackgroundColour() const
 wxColour wxWindowBase::GetForegroundColour() const
 {
     // logic is the same as above
-    if ( !m_hasFgCol && !m_foregroundColour.Ok() )
+    if ( !m_hasFgCol && !m_foregroundColour.IsOk() )
     {
         wxColour colFg = GetDefaultAttributes().colFg;
 
@@ -1562,7 +1562,7 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 
     m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;
-    SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.Ok() );
+    SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.IsOk() );
     return true;
 }
 
@@ -1574,7 +1574,7 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
     m_hasFgCol = colour.IsOk();
     m_inheritFgCol = m_hasFgCol;
     m_foregroundColour = colour;
-    SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.Ok() );
+    SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.IsOk() );
     return true;
 }
 

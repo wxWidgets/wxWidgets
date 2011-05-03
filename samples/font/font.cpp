@@ -553,7 +553,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
 
     wxFont font;
     font.SetNativeFontInfo(fontInfo);
-    if ( !font.Ok() )
+    if ( !font.IsOk() )
     {
         wxLogError(wxT("Font info string \"%s\" is invalid."),
                    fontInfo.c_str());
@@ -576,12 +576,12 @@ void MyFrame::OnSetNativeUserDesc(wxCommandEvent& WXUNUSED(event))
     wxFont font;
     if (font.SetNativeFontInfoUserDesc(fontUserInfo))
     {
-        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
+        wxASSERT_MSG(font.IsOk(), wxT("The font should now be valid"));
         DoChangeFont(font);
     }
     else
     {
-        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
+        wxASSERT_MSG(!font.IsOk(), wxT("The font should now be invalid"));
         wxMessageBox(wxT("Error trying to create a font with such description..."));
     }
 }
@@ -608,12 +608,12 @@ void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
     wxFont font(GetCanvas()->GetTextFont());
     if (font.SetFaceName(newFaceName))      // change facename only
     {
-        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
+        wxASSERT_MSG(font.IsOk(), wxT("The font should now be valid"));
         DoChangeFont(font);
     }
     else
     {
-        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
+        wxASSERT_MSG(!font.IsOk(), wxT("The font should now be invalid"));
         wxMessageBox(wxT("There is no font with such face name..."),
                      wxT("Invalid face name"), wxOK|wxICON_ERROR, this);
     }
@@ -806,12 +806,12 @@ void MyFrame::OnwxSystemSettingsFont(wxCommandEvent& event)
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 {
     m_canvas->SetTextFont(font);
-    if ( col.Ok() )
+    if ( col.IsOk() )
         m_canvas->SetColour(col);
     m_canvas->Refresh();
 
     m_textctrl->SetFont(font);
-    if ( col.Ok() )
+    if ( col.IsOk() )
         m_textctrl->SetForegroundColour(col);
 
     // update the state of the bold/italic/underlined menu items
@@ -968,7 +968,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
                     wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
                     wxFONTWEIGHT_NORMAL, false /* !underlined */,
                     wxEmptyString /* facename */, fontenc);
-        if ( font.Ok() )
+        if ( font.IsOk() )
         {
             DoChangeFont(font);
         }
@@ -1047,7 +1047,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText(fontInfo, x, y);
     y += hLine;
 
-    if ( m_font.Ok() )
+    if ( m_font.IsOk() )
     {
         const wxNativeFontInfo *info = m_font.GetNativeFontInfo();
         if ( info )

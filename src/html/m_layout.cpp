@@ -340,7 +340,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                 if ( is )
                 {
                     wxImage image(*is);
-                    if ( image.Ok() )
+                    if ( image.IsOk() )
                         winIface->SetHTMLBackgroundImage(image);
                 }
 

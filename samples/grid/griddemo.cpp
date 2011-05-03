@@ -702,7 +702,7 @@ void GridFrame::SetLabelTextColour( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SetLabelFont( wxCommandEvent& WXUNUSED(ev) )
 {
     wxFont font = wxGetFontFromUser(this);
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         grid->SetLabelFont(font);
     }
@@ -945,7 +945,7 @@ void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColour col = wxGetColourFromUser(this);
-    if ( col.Ok() )
+    if ( col.IsOk() )
     {
         grid->SetDefaultCellTextColour(col);
         grid->Refresh();
@@ -955,7 +955,7 @@ void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColour col = wxGetColourFromUser(this);
-    if ( col.Ok() )
+    if ( col.IsOk() )
     {
         // Check the new Refresh function by passing it a rectangle
         // which exactly fits the grid.

@@ -1534,7 +1534,7 @@ wxGnomePrinterDCImpl::DoDrawBitmap(const wxBitmap& bitmap,
                              wxCoord x, wxCoord y,
                              bool WXUNUSED(useMask))
 {
-    if (!bitmap.Ok()) return;
+    if (!bitmap.IsOk()) return;
 
     if (bitmap.HasPixbuf())
     {
@@ -1565,7 +1565,7 @@ wxGnomePrinterDCImpl::DoDrawBitmap(const wxBitmap& bitmap,
     {
         wxImage image = bitmap.ConvertToImage();
 
-        if (!image.Ok()) return;
+        if (!image.IsOk()) return;
 
         gs_libGnomePrint->gnome_print_gsave( m_gpc );
         double matrix[6];
@@ -1592,7 +1592,7 @@ void wxGnomePrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wx
     double xx = XLOG2DEV(x);
     double yy = YLOG2DEV(y);
 
-    bool underlined = m_font.Ok() && m_font.GetUnderlined();
+    bool underlined = m_font.IsOk() && m_font.GetUnderlined();
 
     const wxScopedCharBuffer data(text.utf8_str());
 
@@ -1610,7 +1610,7 @@ void wxGnomePrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wx
         pango_attr_list_unref(attrs);
     }
 
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         unsigned char red = m_textForegroundColour.Red();
         unsigned char blue = m_textForegroundColour.Blue();
@@ -1674,7 +1674,7 @@ void wxGnomePrinterDCImpl::SetFont( const wxFont& font )
 {
     m_font = font;
 
-    if (m_font.Ok())
+    if (m_font.IsOk())
     {
         if (m_fontdesc)
             pango_font_description_free( m_fontdesc );
@@ -1691,7 +1691,7 @@ void wxGnomePrinterDCImpl::SetFont( const wxFont& font )
 
 void wxGnomePrinterDCImpl::SetPen( const wxPen& pen )
 {
-    if (!pen.Ok()) return;
+    if (!pen.IsOk()) return;
 
     m_pen = pen;
 
@@ -1757,7 +1757,7 @@ void wxGnomePrinterDCImpl::SetPen( const wxPen& pen )
 
 void wxGnomePrinterDCImpl::SetBrush( const wxBrush& brush )
 {
-    if (!brush.Ok()) return;
+    if (!brush.IsOk()) return;
 
     m_brush = brush;
 

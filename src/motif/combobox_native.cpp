@@ -327,7 +327,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
 
 void wxComboBox::ChangeFont(bool keepOriginalSize)
 {
-    if( m_font.Ok() && m_mainWidget != NULL )
+    if( m_font.IsOk() && m_mainWidget != NULL )
     {
         wxDoChangeFont( GetXmText(this), m_font );
         wxDoChangeFont( GetXmList(this), m_font );

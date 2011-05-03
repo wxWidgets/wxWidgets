@@ -81,7 +81,7 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         OnSetBitmap();
     }
@@ -134,7 +134,7 @@ void wxToggleBitmapButton::SetLabel(const wxBitmap& label)
 
 void wxToggleBitmapButton::OnSetBitmap()
 {
-    if (!m_bitmap.Ok()) return;
+    if (!m_bitmap.IsOk()) return;
 
     GdkBitmap *mask = NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
@@ -179,11 +179,11 @@ void wxToggleBitmapButton::OnInternalIdle()
 {
     wxCursor cursor = m_cursor;
 
-    if (g_globalCursor.Ok())
+    if (g_globalCursor.IsOk())
         cursor = g_globalCursor;
 
     GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
-    if ( win && cursor.Ok() )
+    if ( win && cursor.IsOk() )
     {
       /* I now set the cursor the anew in every OnInternalIdle call
          as setting the cursor in a parent window also effects the
@@ -203,7 +203,7 @@ wxSize wxToggleBitmapButton::DoGetBestSize() const
 {
     wxSize best;
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         int border = HasFlag(wxNO_BORDER) ? 4 : 10;
         best.x = m_bitmap.GetWidth()+border;
@@ -320,11 +320,11 @@ void wxToggleButton::OnInternalIdle()
 {
     wxCursor cursor = m_cursor;
 
-    if (g_globalCursor.Ok())
+    if (g_globalCursor.IsOk())
         cursor = g_globalCursor;
 
     GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
-    if ( win && cursor.Ok() )
+    if ( win && cursor.IsOk() )
     {
       /* I now set the cursor the anew in every OnInternalIdle call
          as setting the cursor in a parent window also effects the

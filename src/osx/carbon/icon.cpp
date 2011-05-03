@@ -137,21 +137,21 @@ wxIcon::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 
 WXHICON wxIcon::GetHICON() const
 {
-    wxASSERT( Ok() ) ;
+    wxASSERT( IsOk() ) ;
 
     return (WXHICON) ((wxIconRefData*)m_refData)->GetHICON() ;
 }
 
 int wxIcon::GetWidth() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid icon") );
 
    return M_ICONDATA->GetWidth();
 }
 
 int wxIcon::GetHeight() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid icon") );
 
    return M_ICONDATA->GetHeight();
 }
@@ -414,7 +414,7 @@ bool wxIcon::LoadIconAsBitmap(const wxString& filename, wxBitmapType type, int d
     else
     {
         wxImage loadimage( filename, type );
-        if (loadimage.Ok())
+        if (loadimage.IsOk())
         {
             if ( desiredWidth == -1 )
                 desiredWidth = loadimage.GetWidth() ;
@@ -467,7 +467,7 @@ bool  wxICONResourceHandler::LoadFile(
     if ( icon.LoadFile( name , wxBITMAP_TYPE_ICON_RESOURCE , desiredWidth , desiredHeight ) )
     {
         bitmap->CopyFromIcon( icon ) ;
-        return bitmap->Ok() ;
+        return bitmap->IsOk() ;
     }
     return false;
 }

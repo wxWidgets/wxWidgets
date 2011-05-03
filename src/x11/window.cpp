@@ -582,7 +582,7 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
     wxCHECK_MSG( xwindow, false, wxT("invalid window") );
 
     wxCursor cursorToUse;
-    if (m_cursor.Ok())
+    if (m_cursor.IsOk())
         cursorToUse = m_cursor;
     else
         cursorToUse = *wxSTANDARD_CURSOR;
@@ -1031,7 +1031,7 @@ void wxWindowX11::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int inc
 int wxWindowX11::GetCharHeight() const
 {
     wxFont font(GetFont());
-    wxCHECK_MSG( font.Ok(), 0, wxT("valid window font needed") );
+    wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
@@ -1059,7 +1059,7 @@ int wxWindowX11::GetCharHeight() const
 int wxWindowX11::GetCharWidth() const
 {
     wxFont font(GetFont());
-    wxCHECK_MSG( font.Ok(), 0, wxT("valid window font needed") );
+    wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
@@ -1092,7 +1092,7 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
     wxFont fontToUse = GetFont();
     if (theFont) fontToUse = *theFont;
 
-    wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
+    wxCHECK_RET( fontToUse.IsOk(), wxT("invalid font") );
 
     if (string.empty())
     {

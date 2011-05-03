@@ -646,7 +646,7 @@ wxColour wxGTKColourScheme::GetBackground(wxWindow *win) const
     if ( !win->ShouldInheritColours() )
     {
         // doesn't depend on the state
-        if ( !col.Ok() )
+        if ( !col.IsOk() )
         {
             col = Get(WINDOW);
         }
@@ -657,7 +657,7 @@ wxColour wxGTKColourScheme::GetBackground(wxWindow *win) const
 
         // the colour set by the user should be used for the normal state
         // and for the states for which we don't have any specific colours
-        if ( !col.Ok() || (flags != 0) )
+        if ( !col.IsOk() || (flags != 0) )
         {
 #if wxUSE_SCROLLBAR
             if ( wxDynamicCast(win, wxScrollBar) )
@@ -1069,7 +1069,7 @@ void wxGTKRenderer::DrawDownZag(wxDC& dc,
 
 wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
 {
-    if ( !m_bitmapsCheckbox[0][0].Ok() )
+    if ( !m_bitmapsCheckbox[0][0].IsOk() )
     {
         // init the bitmaps once only
         wxRect rect;
@@ -1126,7 +1126,7 @@ wxBitmap wxGTKRenderer::GetRadioBitmap(int flags)
     GetIndicatorsFromFlags(flags, state, status);
 
     wxBitmap& bmp = m_bitmapsRadiobtn[state][status];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         const wxSize size = GetRadioBitmapSize();
 
@@ -1142,7 +1142,7 @@ wxBitmap wxGTKRenderer::GetRadioBitmap(int flags)
 
 wxBitmap wxGTKRenderer::GetLineWrapBitmap() const
 {
-    if ( !m_bmpLineWrap.Ok() )
+    if ( !m_bmpLineWrap.IsOk() )
     {
         // the line wrap bitmap as used by GTK+
         #define line_wrap_width 6
@@ -1153,7 +1153,7 @@ wxBitmap wxGTKRenderer::GetLineWrapBitmap() const
         };
 
         wxBitmap bmpLineWrap(line_wrap_bits, line_wrap_width, line_wrap_height);
-        if ( !bmpLineWrap.Ok() )
+        if ( !bmpLineWrap.IsOk() )
         {
             wxFAIL_MSG( wxT("Failed to create line wrap XBM") );
         }
@@ -1176,7 +1176,7 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
                                       int tbarStyle)
 {
     // we don't draw the separators at all
-    if ( !label.empty() || bitmap.Ok() )
+    if ( !label.empty() || bitmap.IsOk() )
     {
         wxRect rect = rectOrig;
         rect.Deflate(BORDER_THICKNESS);
@@ -1260,7 +1260,7 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
     dc.DrawBitmap(bmpLineWrap,
                   rect.x, rect.y + (rect.height - bmpLineWrap.GetHeight())/2);
 
-    if ( colFgOld.Ok() )
+    if ( colFgOld.IsOk() )
     {
         // restore old colour
         dc.SetTextForeground(colFgOld);
@@ -1677,12 +1677,12 @@ void wxGTKRenderer::DoDrawMenuItem(wxDC& dc,
     if ( geometryInfo )
     {
         wxBitmap bmp = bitmap;
-        if ( !bmp.Ok() && (flags & wxCONTROL_CHECKABLE) )
+        if ( !bmp.IsOk() && (flags & wxCONTROL_CHECKABLE) )
         {
             bmp = GetCheckBitmap(flags);
         }
 
-        if ( bmp.Ok() )
+        if ( bmp.IsOk() )
         {
             rect.SetRight(geometryInfo->GetLabelOffset());
             wxControlRenderer::DrawBitmap(dc, bmp, rect);
@@ -1796,7 +1796,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
             }
 
             const wxBitmap& bmp = item->GetBitmap();
-            if ( bmp.Ok() )
+            if ( bmp.IsOk() )
             {
                 wxCoord widthBmp = bmp.GetWidth();
                 if ( widthBmp > widthBmpMax )
@@ -1878,7 +1878,7 @@ void wxGTKRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
                                     wxBitmap *bmpPressed,
                                     wxBitmap *bmpDisabled)
 {
-    if ( !m_bitmapsCombo[ComboState_Normal].Ok() )
+    if ( !m_bitmapsCombo[ComboState_Normal].IsOk() )
     {
         InitComboBitmaps();
     }
@@ -2097,7 +2097,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
         case wxUP:
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_First]);
             dc.DrawPoint(ptArrow[Point_First]);
-            if ( penShadow[3].Ok() )
+            if ( penShadow[3].IsOk() )
             {
                 dc.SetPen(penShadow[3]);
                 dc.DrawLine(ptArrow[Point_First].x + 1, ptArrow[Point_First].y,
@@ -2109,7 +2109,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
             dc.DrawPoint(ptArrow[Point_Third]);
             dc.DrawLine(ptArrow[Point_Third].x - 2, ptArrow[Point_Third].y,
                         ptArrow[Point_First].x + 1, ptArrow[Point_First].y);
-            if ( penShadow[2].Ok() )
+            if ( penShadow[2].IsOk() )
             {
                 dc.SetPen(penShadow[2]);
                 dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,
@@ -2123,7 +2123,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
             dc.DrawLine(ptArrow[Point_First], ptArrow[Point_Second]);
             dc.DrawLine(ptArrow[Point_First].x + 2, ptArrow[Point_First].y,
                         ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y);
-            if ( penShadow[2].Ok() )
+            if ( penShadow[2].IsOk() )
             {
                 dc.SetPen(penShadow[2]);
                 dc.DrawLine(ptArrow[Point_Second].x, ptArrow[Point_Second].y - 1,
@@ -2137,7 +2137,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
         case wxLEFT:
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_First]);
             dc.DrawPoint(ptArrow[Point_First]);
-            if ( penShadow[2].Ok() )
+            if ( penShadow[2].IsOk() )
             {
                 dc.SetPen(penShadow[2]);
                 dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,

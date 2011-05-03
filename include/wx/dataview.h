@@ -163,7 +163,7 @@ public:
     void SetItalic( bool set ) { m_italic = set; }
 
     // accessors
-    bool HasColour() const { return m_colour.Ok(); }
+    bool HasColour() const { return m_colour.IsOk(); }
     const wxColour& GetColour() const { return m_colour; }
 
     bool HasFont() const { return m_bold || m_italic; }

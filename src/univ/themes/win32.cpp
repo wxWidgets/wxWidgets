@@ -1253,7 +1253,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
                 col = Get(CONTROL);
             else
             {
-                if ( !col.Ok() )
+                if ( !col.IsOk() )
                 {
                     // doesn't depend on the state
                     col = Get(WINDOW);
@@ -1262,7 +1262,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
         }
 #endif // wxUSE_TEXTCTRL
 
-        if (!col.Ok())
+        if (!col.IsOk())
             col = Get(CONTROL); // Most controls should be this colour, not WINDOW
     }
     else
@@ -1271,7 +1271,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
 
         // the colour set by the user should be used for the normal state
         // and for the states for which we don't have any specific colours
-        if ( !col.Ok() || (flags & wxCONTROL_PRESSED) != 0 )
+        if ( !col.IsOk() || (flags & wxCONTROL_PRESSED) != 0 )
         {
 #if wxUSE_SCROLLBAR
             if ( wxDynamicCast(win, wxScrollBar) )
@@ -1681,7 +1681,7 @@ void wxWin32Renderer::DrawCheckItemBitmap(wxDC& dc,
                                           int flags)
 {
     wxBitmap bmp;
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         bmp = bitmap;
     }
@@ -1691,7 +1691,7 @@ void wxWin32Renderer::DrawCheckItemBitmap(wxDC& dc,
                                 ? IndicatorStatus_Checked
                                 : IndicatorStatus_Unchecked;
 
-        if ( !m_bmpCheckBitmaps[i].Ok() )
+        if ( !m_bmpCheckBitmaps[i].IsOk() )
         {
             m_bmpCheckBitmaps[i] = wxBitmap(ms_xpmChecked[i]);
         }
@@ -1714,7 +1714,7 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
     GetIndicatorsFromFlags(flags, indState, indStatus);
 
     wxBitmap& bmp = m_bmpIndicators[indType][indState][indStatus];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         const char **xpm = ms_xpmIndicators[indType][indState][indStatus];
         if ( xpm )
@@ -2442,12 +2442,12 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
     // draw the bitmap: use the bitmap provided or the standard checkmark for
     // the checkable items
     wxBitmap bmp = bitmap;
-    if ( !bmp.Ok() && (flags & wxCONTROL_CHECKED) )
+    if ( !bmp.IsOk() && (flags & wxCONTROL_CHECKED) )
     {
         bmp = GetIndicator(IndicatorType_Menu, flags);
     }
 
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         rect.SetRight(geometryInfo.GetLabelOffset());
         wxControlRenderer::DrawBitmap(dc, bmp, rect);
@@ -2557,7 +2557,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
             }
 
             const wxBitmap& bmp = item->GetBitmap();
-            if ( bmp.Ok() )
+            if ( bmp.IsOk() )
             {
                 wxCoord widthBmp = bmp.GetWidth();
                 if ( widthBmp > widthBmpMax )
@@ -3205,7 +3205,7 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 wxBitmap wxWin32Renderer::GetFrameButtonBitmap(FrameButtonType type)
 {
     wxBitmap& bmp = m_bmpFrameButtons[type];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         bmp = wxBitmap(ms_xpmFrameButtons[type]);
     }

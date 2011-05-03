@@ -494,7 +494,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     {
         // create a tool with a custom bitmap for testing
         wxImage img(m_pathBmp);
-        if ( img.Ok() )
+        if ( img.IsOk() )
         {
             if ( img.GetWidth() > w && img.GetHeight() > h )
                 img = img.GetSubImage(wxRect(0, 0, w, h));

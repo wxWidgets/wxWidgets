@@ -308,7 +308,7 @@ void wxHtmlListBox::CacheItem(size_t n) const
             m_htmlParser->SetDC(new wxClientDC(self));
             m_htmlParser->SetFS(&self->m_filesystem);
 #if !wxUSE_UNICODE
-            if (GetFont().Ok())
+            if (GetFont().IsOk())
                 m_htmlParser->SetInputEncoding(GetFont().GetEncoding());
 #endif
             // use system's default GUI font by default:

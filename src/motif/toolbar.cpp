@@ -380,13 +380,13 @@ bool wxToolBar::Realize()
                     wxColour col;
                     col.SetPixel(backgroundPixel);
 
-                    if( bmp.Ok() && bmp.GetMask() )
+                    if( bmp.IsOk() && bmp.GetMask() )
                     {
                         bmp = wxCreateMaskedBitmap(bmp, col);
                         tool->SetNormalBitmap(bmp);
                     }
 
-                    if( insensBmp.Ok() && insensBmp.GetMask() )
+                    if( insensBmp.IsOk() && insensBmp.GetMask() )
                     {
                         insensBmp = wxCreateMaskedBitmap(insensBmp, col);
                         tool->SetDisabledBitmap(insensBmp);
@@ -410,7 +410,7 @@ bool wxToolBar::Realize()
                 {
                     wxBitmap tmp = tool->GetDisabledBitmap();
 
-                    insensPixmap = tmp.Ok() ?
+                    insensPixmap = tmp.IsOk() ?
                             (Pixmap)tmp.GetDrawable() :
                             tool->GetInsensPixmap();
                 }

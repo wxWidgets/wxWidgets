@@ -618,7 +618,7 @@ void wxToolBar::CreateDisabledImageList()
         {
             wxToolBarToolBase *tool = node->GetData();
             wxBitmap bmpDisabled = tool->GetDisabledBitmap();
-            if ( bmpDisabled.Ok() )
+            if ( bmpDisabled.IsOk() )
             {
                 const wxSize sizeBitmap = bmpDisabled.GetSize();
                 m_disabledImgList = new wxImageList
@@ -744,7 +744,7 @@ bool wxToolBar::Realize()
                 const int w = bmp.GetWidth();
                 const int h = bmp.GetHeight();
 
-                if ( bmp.Ok() )
+                if ( bmp.IsOk() )
                 {
                     int xOffset = wxMax(0, (m_defaultWidth - w)/2);
                     int yOffset = wxMax(0, (m_defaultHeight - h)/2);
@@ -762,7 +762,7 @@ bool wxToolBar::Realize()
                 {
                     wxBitmap bmpDisabled = tool->GetDisabledBitmap();
 #if wxUSE_IMAGE && wxUSE_WXDIB
-                    if ( !bmpDisabled.Ok() )
+                    if ( !bmpDisabled.IsOk() )
                     {
                         // no disabled bitmap specified but we still need to
                         // fill the space in the image list with something, so

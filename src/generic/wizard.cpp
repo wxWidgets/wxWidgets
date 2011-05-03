@@ -324,7 +324,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
     );
 
 #if wxUSE_STATBMP
-    if ( m_bitmap.Ok() )
+    if ( m_bitmap.IsOk() )
     {
         wxSize bitmapSize(wxDefaultSize);
         if (GetBitmapPlacement())
@@ -604,10 +604,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     if ( m_statbmp )
     {
         bmp = m_page->GetBitmap();
-        if ( !bmp.Ok() )
+        if ( !bmp.IsOk() )
             bmp = m_bitmap;
 
-        if ( !bmpPrev.Ok() )
+        if ( !bmpPrev.IsOk() )
             bmpPrev = m_bitmap;
 
         if (!GetBitmapPlacement())
@@ -928,7 +928,7 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
     if (!GetBitmapPlacement())
         return false;
 
-    if (bmp.Ok())
+    if (bmp.IsOk())
     {
         wxSize pageSize = m_sizerPage->GetSize();
         if (pageSize == wxSize(0,0))
@@ -936,7 +936,7 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
         int bitmapWidth = wxMax(bmp.GetWidth(), GetMinimumBitmapWidth());
         int bitmapHeight = pageSize.y;
 
-        if (!m_statbmp->GetBitmap().Ok() || m_statbmp->GetBitmap().GetHeight() != bitmapHeight)
+        if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetHeight() != bitmapHeight)
         {
             wxBitmap bitmap(bitmapWidth, bitmapHeight);
             {

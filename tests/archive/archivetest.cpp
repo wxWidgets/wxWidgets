@@ -680,7 +680,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         // then load the archive file
         {
             wxFFileInputStream in(tmparc);
-            if (in.Ok())
+            if (in.IsOk())
                 out.Write(in);
         }
 
@@ -690,7 +690,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         // for the non-seekable test, have the archiver output to "-"
         // and read the archive via a pipe
         PFileInputStream in(wxString::Format(archiver, wxT("-")));
-        if (in.Ok())
+        if (in.IsOk())
             out.Write(in);
     }
 }
@@ -893,7 +893,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
         // write the archive to a temporary file
         {
             wxFFileOutputStream out(tmparc);
-            if (out.Ok())
+            if (out.IsOk())
                 out.Write(in);
         }
 
@@ -905,7 +905,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
         // for the non-seekable test, have the archiver extract "-" and
         // feed it the archive via a pipe
         PFileOutputStream out(wxString::Format(unarchiver, wxT("-")));
-        if (out.Ok())
+        if (out.IsOk())
             out.Write(in);
     }
 
@@ -958,7 +958,7 @@ void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
             if (!isDir) {
                 wxFFileInputStream in(path);
                 CPPUNIT_ASSERT_MESSAGE(
-                    "entry not found in archive" + error_entry, in.Ok());
+                    "entry not found in archive" + error_entry, in.IsOk());
 
                 size_t size = (size_t)in.GetLength();
                 wxCharBuffer buf(size);

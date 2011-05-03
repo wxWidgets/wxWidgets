@@ -207,7 +207,7 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     wxBitmap bmp = wxDefaultArtProvider_CreateBitmap(id);
 
 #if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
-    if (bmp.Ok())
+    if (bmp.IsOk())
     {
         // fit into transparent image with desired size hint from the client
         if (reqSize == wxDefaultSize)
