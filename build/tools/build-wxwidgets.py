@@ -306,6 +306,13 @@ def main(scriptName, args):
             # plus the framework specific dir structure.
             prefixDir = getPrefixInFramework(options)
             configure_opts.append("--prefix=" + prefixDir)
+            
+            # the framework build adds symlinks above the installDir + prefixDir folder
+            # so we need to wipe from the framework root instead of inside the prefixDir.
+            frameworkRootDir = os.path.abspath(os.path.join(installDir + prefixDir, "..", ".."))
+            if os.path.exists(frameworkRootDir):
+                if os.path.exists(frameworkRootDir):
+                    shutil.rmtree(frameworkRootDir)
 
         if options.mac_universal_binary: 
             configure_opts.append("--enable-universal_binary")
@@ -420,7 +427,8 @@ def main(scriptName, args):
     if options.extra_make:
         args.append(options.extra_make)
      
-    args.append("--jobs=" + options.jobs)
+    if not sys.platform.startswith("win"):
+        args.append("--jobs=" + options.jobs)
     exitIfError(wxBuilder.build(dir=buildDir, options=args), "Error building")
     
     if options.wxpython and os.path.exists(contribDir):
@@ -464,17 +472,33 @@ def main(scriptName, args):
 
         fwname = getFrameworkName(options)
         version = commands.getoutput("bin/wx-config --release")
+        version_full = commands.getoutput("bin/wx-config --version")
         basename = commands.getoutput("bin/wx-config --basename")
         configname = commands.getoutput("bin/wx-config --selected-config")
-
-        run("ln -s -f bin Resources")
+        
+        os.makedirs("Resources")
+        wxplist = dict(
+            CFBundleDevelopmentRegion="English",
+            CFBundleIdentifier='org.wxwidgets.wxosxcocoa',
+            CFBundleName=fwname,
+            CFBundleVersion=version_full,
+            CFBundleExecutable=fwname,
+            CFBundleGetInfoString="%s %s" % (fwname, version_full),
+            CFBundlePackageType="FMWK",
+            CFBundleSignature="WXCO",
+            CFBundleShortVersionString=version_full,
+            CFBundleInfoDictionaryVersion="6.0",
+        )
+        
+        import plistlib
+        plistlib.writePlist(wxplist, os.path.join(frameworkRootDir, "Resources", "Info.plist"))
         
         # we make wx the "actual" library file and link to it from libwhatever.dylib
         # so that things can link to wx and survive minor version changes
         renameLibrary("lib/lib%s-%s.dylib" % (basename, version), fwname)
         run("ln -s -f lib/%s.dylib %s" % (fwname, fwname))
         
-        run("ln -s -f include/wx Headers")
+        run("ln -s -f include Headers")
         
         for lib in ["GL", "STC", "Gizmos", "Gizmos_xrc"]:  
             libfile = "lib/lib%s_%s-%s.dylib" % (basename, lib.lower(), version)
@@ -504,17 +528,19 @@ def main(scriptName, args):
         headers = ""
         header_dir = "wx-%s/wx" % version
         for include in glob.glob(header_dir + "/*.h"):
-            headers += "wx/" + os.path.basename(include) + "\n"
+            headers += "#include <wx/" + os.path.basename(include) + ">\n"
             
-        framework_header = open("wx.h", "w")
+        framework_header = open("%s.h" % fwname, "w")
         framework_header.write(header_template % headers)
         framework_header.close()
         
         run("ln -s -f %s wx" % header_dir)
-        run("ln -s -f ../../../lib/wx/include/%s/wx/setup.h wx/setup.h" % configname)
+        os.chdir("wx-%s/wx" % version)
+        run("ln -s -f ../../../lib/wx/include/%s/wx/setup.h setup.h" % configname)
         
-        os.chdir(os.path.join(frameworkRootDir, "..", ".."))
-        run("ln -s -f %s Versions/Current" % getWxRelease())
+        os.chdir(os.path.join(frameworkRootDir, ".."))
+        run("ln -s -f %s Current" % getWxRelease())
+        os.chdir("..")
         run("ln -s -f Versions/Current/Headers Headers")
         run("ln -s -f Versions/Current/Resources Resources")
         run("ln -s -f Versions/Current/%s %s" % (fwname, fwname))
@@ -578,8 +604,6 @@ def main(scriptName, args):
         run('hdiutil create -srcfolder %s -volname "%s" -imagekey zlib-level=9 %s.dmg' % (packagedir, packageName, packageName))
         
         shutil.rmtree(packagedir)
-        
-        
         
 if __name__ == '__main__':
     exitWithException = False  # use sys.exit instead
