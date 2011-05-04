@@ -3309,6 +3309,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
 </set>
+<set var="WEB_SRC_PLATFORM">
+    <if cond="TOOLKIT=='MSW'">
+        src/msw/webview.cpp
+    </if>
+    <if cond="PLATFORM_UNIX=='1'">
+        src/gtk/webview.cpp
+    </if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        src/osx/webview.mm
+    </if>
+</set>
+<set var="WEB_SRC" hints="files">
+    $(WEB_SRC_PLATFORM)
+    src/common/webview.cpp
+</set>
 <set var="MSW_HTML_HDR" hints="files">
     <if cond="TOOLKIT=='MSW'">wx/msw/helpbest.h</if>
 </set>
@@ -3334,7 +3349,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/htmllbox.h
     $(MSW_HTML_HDR)
 </set>
-
+<set var="PLATFORM_WEB_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">
+        wx/msw/webviewie.h
+    </if>
+    <if cond="PLATFORM_UNIX=='1'">
+        wx/gtk/webview.h
+    </if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        wx/osx/webview.h
+    </if>
+</set>
+<set var="WEB_HDR" hints="files">
+    $(PLATFORM_WEB_HDR)
+    wx/webview.h
+</set>
 
 
 <!-- ====================================================================== -->
