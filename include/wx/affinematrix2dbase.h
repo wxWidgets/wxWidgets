@@ -36,7 +36,8 @@ class WXDLLIMPEXP_CORE wxAffineMatrix2DBase
 {
 public:
     wxAffineMatrix2DBase() {}
-
+    virtual ~wxAffineMatrix2DBase() {}
+    
     // sets the matrix to the respective values
     virtual void Set(const wxMatrix2D& mat2D, const wxPoint2DDouble& tr) = 0;
 
