@@ -17,6 +17,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/timer.h"
+#endif
+
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/filefn.h"
