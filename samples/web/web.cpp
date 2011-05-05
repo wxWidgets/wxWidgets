@@ -585,7 +585,7 @@ bool wxMiniApp::OnInit()
                    wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
 
     // ---- Create the web view
-    m_browser_ctrl = wxWebView::GetNew(mainpane, wxID_ANY);
+    m_browser_ctrl = wxWebView::New(mainpane, wxID_ANY);
     
     // ---- Create the notification panel
     {
