@@ -10,6 +10,10 @@
 #ifndef _WX_WEB_VIEW_H_
 #define _WX_WEB_VIEW_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_WEB
+
 #include <wx/control.h>
 #include <wx/event.h>
 #include <wx/sstream.h>
@@ -401,10 +405,10 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebNavigationEvent);
 };
 
-wxDECLARE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebNavigationEvent );
-wxDECLARE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
-wxDECLARE_EVENT( wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
-wxDECLARE_EVENT( wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
 
 typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
              (wxWebNavigationEvent&);
@@ -428,4 +432,6 @@ typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
-#endif
+#endif // wxUSE_WEB
+
+#endif // _WX_WEB_VIEW_H_

@@ -10,6 +10,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_WEB
+
 #if defined(__BORLANDC__)
     #pragma hdrstop
 #endif
@@ -24,8 +26,8 @@
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxWEB")
 
-extern WXDLLEXPORT_DATA(const char) wxWebViewNameStr[] = "wxWebView";
-extern WXDLLEXPORT_DATA(const char) wxWebViewDefaultURLStr[] = "about:blank";
+extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[] = "wxWebView";
+extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[] = "about:blank";
 
 IMPLEMENT_DYNAMIC_CLASS(wxWebNavigationEvent, wxCommandEvent)
 
@@ -122,3 +124,5 @@ wxWebView* wxWebView::New(wxWindow* parent,
             return NULL;
     }
 }
+
+#endif // wxUSE_WEB

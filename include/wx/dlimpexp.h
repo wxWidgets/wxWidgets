@@ -266,10 +266,13 @@
 
 #ifdef WXMAKINGDLL_WEB
 #    define WXDLLIMPEXP_WEB WXEXPORT
+#    define WXDLLIMPEXP_DATA_WEB(type) WXEXPORT type
 #elif defined(WXUSINGDLL)
 #    define WXDLLIMPEXP_WEB WXIMPORT
+#    define WXDLLIMPEXP_DATA_WEB(type) WXIMPORT type
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_WEB
+#    define WXDLLIMPEXP_DATA_WEB(type) type
 #endif
 
 /*
