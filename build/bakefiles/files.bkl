@@ -3340,7 +3340,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="WEB_SRC_PLATFORM">
-    <if cond="TOOLKIT=='MSW'">src/msw/webview.cpp</if>
+    <if cond="TOOLKIT=='MSW'">src/msw/webviewie.cpp</if>
     <if cond="PLATFORM_UNIX=='1'">src/gtk/webview.cpp</if>
     <if cond="PLATFORM_MACOSX=='1'">src/osx/webview.mm</if>
 </set>

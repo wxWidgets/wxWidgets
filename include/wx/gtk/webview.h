@@ -114,3 +114,4 @@ private:
 
 #endif // if wxHAVE_WEB_BACKEND_GTK_WEBKIT
 
+#endif

@@ -7,11 +7,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+    #pragma hdrstop
+#endif
+
 #include "wx/webview.h"
 
-#include "wx/osx/webkit.h"
-#include "wx/gtk/webkit.h"
-#include "wx/msw/webkitie.h"
+#include "wx/osx/webview.h"
+#include "wx/gtk/webview.h"
+#include "wx/msw/webviewie.h"
 
 extern WXDLLEXPORT_DATA(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLEXPORT_DATA(const char) wxWebViewDefaultURLStr[] = "about:blank";

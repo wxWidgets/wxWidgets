@@ -52,7 +52,6 @@ EXTRALIBS = {
     'html' : '$(EXTRALIBS_HTML)',
     'adv' : '$(PLUGIN_ADV_EXTRALIBS)',
     'media' : '$(EXTRALIBS_MEDIA)',
-    'web' : '$(EXTRALIBS_WEB)',
 }
 
 def mkLibName(wxid):

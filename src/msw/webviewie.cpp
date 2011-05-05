@@ -7,7 +7,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/msw/webview.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+    #pragma hdrstop
+#endif
+
+#include "wx/msw/webviewie.h"
 
 #if wxHAVE_WEB_BACKEND_IE
 

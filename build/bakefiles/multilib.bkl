@@ -184,14 +184,8 @@
         <sources>$(WEB_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
-        <ldlibs>$(EXTRALIBS_WEB)</ldlibs>
         <msvc-headers>$(WEB_HDR)</msvc-headers>
     </dll>
-
-    <!-- use this to conditonally link against htmldll with <library>: -->
-    <set var="webdll_library_link">
-        <if cond="SHARED=='1' and USE_GUI=='1' and USE_WEB=='1' and MONOLITHIC=='0'">webdll</if>
-    </set>
 
     <lib id="weblib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEB=='1' and MONOLITHIC=='0'">

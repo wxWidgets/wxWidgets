@@ -63,8 +63,10 @@ enum wxWebNavigationError
 /** Type of refresh */
 enum wxWebViewReloadFlags
 {
-  /** Reload the current view without accessing the cache */
-  wxWEB_VIEW_RELOAD_NO_CACHE = 1
+    /** Default reload, will access cache */
+    wxWEB_VIEW_RELOAD_DEFAULT = 0,
+    /** Reload the current view without accessing the cache */
+    wxWEB_VIEW_RELOAD_NO_CACHE = 1
 };
 
 
@@ -216,7 +218,7 @@ public:
      * Reload the currently displayed URL.
      * @param flags A bit array that may optionnally contain reload options
      */
-    virtual void Reload(wxWebViewReloadFlags flags=0) = 0;
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
 
 
     /**
@@ -411,19 +413,19 @@ typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
     wxEVENT_HANDLER_CAST(wxWebNavigationEventFunction, func)
 
 #define EVT_WEB_VIEW_NAVIGATING(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATING, id,
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATING, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #define EVT_WEB_VIEW_NAVIGATED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATED, id,
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATED, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #define EVT_WEB_VIEW_LOADED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_LOADED, id,
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_LOADED, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #define EVT_WEB_VIEW_ERRROR(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id,
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #endif
