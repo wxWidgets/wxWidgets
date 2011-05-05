@@ -1335,7 +1335,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
-    if (stream.SeekI(0) == wxInvalidOffset)
+    if ( stream.IsSeekable() && stream.SeekI(0) == wxInvalidOffset )
     {
         return false;
     }
@@ -1430,7 +1430,7 @@ int wxICOHandler::DoGetImageCount(wxInputStream& stream)
 {
     // It's ok to modify the stream position in this function.
 
-    if (stream.SeekI(0) == wxInvalidOffset)
+    if ( stream.IsSeekable() && stream.SeekI(0) == wxInvalidOffset )
     {
         return 0;
     }
@@ -1505,7 +1505,7 @@ static bool CanReadICOOrCUR(wxInputStream *stream, wxUint16 resourceType)
 {
     // It's ok to modify the stream position in this function.
 
-    if ( stream->SeekI(0) == wxInvalidOffset)
+    if ( stream->IsSeekable() && stream->SeekI(0) == wxInvalidOffset )
     {
         return false;
     }
