@@ -20,6 +20,10 @@
 #include "wx/gtk/webview.h"
 #include "wx/msw/webviewie.h"
 
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxWEB")
+
 extern WXDLLEXPORT_DATA(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLEXPORT_DATA(const char) wxWebViewDefaultURLStr[] = "about:blank";
 

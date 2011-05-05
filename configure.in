@@ -843,6 +843,7 @@ WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUS
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
+WX_ARG_FEATURE(web,         [  --enable-web            use wxWeb library], wxUSE_WEB)
 
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
@@ -7340,6 +7341,13 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
 fi
 
+USE_WEB=0
+if test "$wxUSE_WEB" = "yes"; then
+   AC_DEFINE(wxUSE_WEB)
+   USE_WEB=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS web"
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl wxImage options
 dnl ---------------------------------------------------------------------------
@@ -7721,6 +7729,10 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_WEB" = "yes" ; then
+        STD_GUI_LIBS="web $STD_GUI_LIBS"
+        BUILT_WX_LIBS="web $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_XRC" = "yes" ; then
         STD_GUI_LIBS="xrc $STD_GUI_LIBS"
