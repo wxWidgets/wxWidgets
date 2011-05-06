@@ -70,7 +70,7 @@ enum wxWebViewReloadFlags
     /** Default reload, will access cache */
     wxWEB_VIEW_RELOAD_DEFAULT = 0,
     /** Reload the current view without accessing the cache */
-    wxWEB_VIEW_RELOAD_NO_CACHE = 1
+    wxWEB_VIEW_RELOAD_NO_CACHE 
 };
 
 

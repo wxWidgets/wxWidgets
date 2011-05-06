@@ -51,7 +51,7 @@ public:
     virtual void GoBack();
     virtual void GoForward();
     virtual void Stop();
-    virtual void Reload(wxWebViewReloadFlags flags=0);
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
 
     virtual wxString GetPageSource();
 

@@ -56,7 +56,7 @@ public:
     virtual bool CanGoForward();
     virtual void GoBack();
     virtual void GoForward();
-    virtual void Reload(wxWebViewReloadFlags flags = 0);
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
     virtual void Stop();
     virtual wxString GetPageSource();
     virtual void SetPageTitle(const wxString& title) { m_pageTitle = title; }
