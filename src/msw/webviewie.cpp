@@ -24,6 +24,7 @@
 #include <exdisp.h>
 #include <mshtml.h>
 
+#ifdef __MINGW32__
 // FIXME: Seems like MINGW does not have these, how to handle cleanly?
 #define DISPID_COMMANDSTATECHANGE   105
 typedef enum CommandStateChangeConstants {
@@ -67,10 +68,11 @@ typedef enum CommandStateChangeConstants {
 #define INET_E_CODE_INSTALL_SUPPRESSED 0x800C0400L
 
 #define REFRESH_COMPLETELY 3
+#endif
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
-EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
-EVT_ERASE_BACKGROUND(wxWebViewIE::onEraseBg)
+    EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
+    EVT_ERASE_BACKGROUND(wxWebViewIE::onEraseBg)
 END_EVENT_TABLE()
 
 bool wxWebViewIE::Create(wxWindow* parent,

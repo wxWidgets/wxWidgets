@@ -345,15 +345,7 @@ public:
     virtual bool IsBusy() = 0;
 };
 
-//class WXDLLIMPEXP_FWD_HTML wxWebNavigationEvent;
-
-// FIXME: get those WXDLLIMPEXP_HTML & DECLARE_DYNAMIC_CLASS right...
-//wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_HTML, wxEVT_COMMAND_WEB_VIEW_NAVIGATE,
-//                         wxWebNavigationEvent );
-
-
-// FIXME: get those WXDLLIMPEXP_HTML & DECLARE_DYNAMIC_CLASS right...
-class wxWebNavigationEvent : public wxCommandEvent
+class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent
 {
 public:
     wxWebNavigationEvent() {}

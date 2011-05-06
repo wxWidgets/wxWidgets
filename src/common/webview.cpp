@@ -53,7 +53,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
 
         #if wxHAVE_WEB_BACKEND_IE
             case wxWEB_VIEW_BACKEND_IE:
-                return new wxIEPanel();
+                return new wxWebViewIE();
         #endif
 
         case wxWEB_VIEW_BACKEND_DEFAULT:
@@ -67,7 +67,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
             #endif
 
             #if wxHAVE_WEB_BACKEND_IE
-            return new wxIEPanel();
+            return new wxWebViewIE();
             #endif
 
         // fall-through intended
@@ -102,7 +102,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
 
         #if wxHAVE_WEB_BACKEND_IE
             case wxWEB_VIEW_BACKEND_IE:
-                return new wxIEPanel(parent, id, url, pos, size, style, name);
+                return new wxWebViewIE(parent, id, url, pos, size, style, name);
         #endif
 
         case wxWEB_VIEW_BACKEND_DEFAULT:
@@ -116,7 +116,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
             #endif
 
             #if wxHAVE_WEB_BACKEND_IE
-            return new wxIEPanel(parent, id, url, pos, size, style, name);
+            return new wxWebViewIE(parent, id, url, pos, size, style, name);
             #endif
 
         // fall-through intended

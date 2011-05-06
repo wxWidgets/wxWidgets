@@ -12,6 +12,10 @@
 
 #include "wx/setup.h"
 
+#ifdef __WXMSW__
+    #define wxHAVE_WEB_BACKEND_IE 1
+#endif
+
 #if wxHAVE_WEB_BACKEND_IE
 
 #include "wx/control.h"
