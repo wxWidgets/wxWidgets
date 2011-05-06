@@ -19,17 +19,6 @@
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
 
-// TODO: move this to wx/msw/chkconf.h
-#if wxUSE_ACTIVEX != 1
-#error "wxUSE_ACTIVEX must be activated for this to work"
-#endif
-
-#if wxUSE_OLE_AUTOMATION != 1
-#error "wxUSE_OLE_AUTOMATION must be activated for this to work"
-#endif
-
-// FIXME: get those DLL export macros right...
-
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
 public:
