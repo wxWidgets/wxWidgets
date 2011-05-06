@@ -27,7 +27,7 @@
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxOSXWebKitCtrl : public wxWebView
+class WXDLLIMPEXP_WEB wxOSXWebKitCtrl : public wxWebView
 {
 public:
     wxDECLARE_DYNAMIC_CLASS(wxOSXWebKitCtrl);

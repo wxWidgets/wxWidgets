@@ -20,7 +20,7 @@
 // wxWebViewGTKWebKit
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWebViewGTKWebKit : public wxWebView
+class WXDLLIMPEXP_WEB wxWebViewGTKWebKit : public wxWebView
 {
 public:
     wxWebViewGTKWebKit() { Init(); }

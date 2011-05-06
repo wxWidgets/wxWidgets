@@ -93,8 +93,8 @@ enum wxWebViewBackend
     wxWEB_VIEW_BACKEND_IE
 };
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxWebViewNameStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxWebViewDefaultURLStr[];
+extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];
+extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[];
 
 /**
   * @class wxWebView
@@ -134,7 +134,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxWebViewDefaultURLStr[];
   *
   * @endEventTable
   */
-class wxWebView : public wxControl
+class WXDLLIMPEXP_WEB wxWebView : public wxControl
 {
 public:
 

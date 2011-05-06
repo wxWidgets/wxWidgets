@@ -30,7 +30,7 @@
 
 // FIXME: get those DLL export macros right...
 
-class wxWebViewIE : public wxWebView
+class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
 public:
 
