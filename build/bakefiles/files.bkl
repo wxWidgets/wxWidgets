@@ -3645,13 +3645,23 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextxml.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
+    wx/richtext/richtextbackgroundpage.h
+    wx/richtext/richtextborderspage.h
     wx/richtext/richtextbuffer.h
+    wx/richtext/richtextbulletspage.h
     wx/richtext/richtextctrl.h
+    wx/richtext/richtextdialogpage.h
+    wx/richtext/richtextfontpage.h
     wx/richtext/richtextformatdlg.h
     wx/richtext/richtexthtml.h
     wx/richtext/richtextimagedlg.h
+    wx/richtext/richtextindentspage.h
+    wx/richtext/richtextliststylepage.h
+    wx/richtext/richtextmarginspage.h
     wx/richtext/richtextprint.h
+    wx/richtext/richtextsizepage.h
     wx/richtext/richtextstyledlg.h
+    wx/richtext/richtextstylepage.h
     wx/richtext/richtextstyles.h
     wx/richtext/richtextsymboldlg.h
     wx/richtext/richtextuicustomization.h
