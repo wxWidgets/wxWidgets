@@ -4175,6 +4175,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/richtext/richtextstyledlg.h \
 	wx/richtext/richtextstyles.h \
 	wx/richtext/richtextsymboldlg.h \
+	wx/richtext/richtextuicustomization.h \
 	wx/richtext/richtextxml.h \
 	wx/stc/stc.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)

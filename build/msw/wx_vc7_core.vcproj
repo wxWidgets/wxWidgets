@@ -5580,6 +5580,9 @@
 				RelativePath="..\..\include\wx\richtext\richtextsymboldlg.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextuicustomization.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextxml.h">
 			</File>
 			<File

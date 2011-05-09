@@ -566,6 +566,10 @@ SOURCE=..\..\include\wx\richtext\richtextsymboldlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextuicustomization.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextxml.h
 # End Source File
 # End Group
