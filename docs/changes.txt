@@ -526,6 +526,8 @@ All (GUI):
 - Added support for saving TGA files.
 - Added wxArtProvider returning higher quality icons from Tango project.
 - wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
+- wxPropertyGrid: Disabling a property didn't work properly if a child item
+  was selected (Sébastien Gallou).
 - Added support for saving PNG files with palette (troelsk).
 - Added support for saving as GIF and animated GIF (troelsk).
 - Fix wxWrapSizer minimal size calculation (Catalin Raceanu).

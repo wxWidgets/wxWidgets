@@ -2600,7 +2600,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
-    if ( m_pState->DoIsPropertySelected(p) )
+    if ( m_pState->DoIsPropertySelected(p) || p->IsChildSelected() )
     {
         // NB: We must copy the selection.
         wxArrayPGProperty selection = m_pState->m_selection;

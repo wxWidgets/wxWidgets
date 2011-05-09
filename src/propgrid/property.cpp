@@ -2569,6 +2569,18 @@ void wxPGProperty::DeleteChildren()
     }
 }
 
+bool wxPGProperty::IsChildSelected() const
+{
+    size_t i;
+    for ( i = 0; i < GetChildCount(); i++ )
+    {
+        if ( m_parentState->DoIsPropertySelected( Item(i) ) )
+            return true;
+    }
+
+    return false;
+}
+
 wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
                                       int WXUNUSED(childIndex),
                                       wxVariant& WXUNUSED(childValue) ) const
