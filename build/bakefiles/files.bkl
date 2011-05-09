@@ -3633,28 +3633,28 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="RICHTEXT_SRC" hints="files">
-    src/richtext/richtextctrl.cpp
     src/richtext/richtextbuffer.cpp
-    src/richtext/richtextstyles.cpp
-    src/richtext/richtextxml.cpp
-    src/richtext/richtexthtml.cpp
+    src/richtext/richtextctrl.cpp
     src/richtext/richtextformatdlg.cpp
-    src/richtext/richtextsymboldlg.cpp
-    src/richtext/richtextstyledlg.cpp
-    src/richtext/richtextprint.cpp
+    src/richtext/richtexthtml.cpp
     src/richtext/richtextimagedlg.cpp
+    src/richtext/richtextprint.cpp
+    src/richtext/richtextstyledlg.cpp
+    src/richtext/richtextstyles.cpp
+    src/richtext/richtextsymboldlg.cpp
+    src/richtext/richtextxml.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
-    wx/richtext/richtextctrl.h
     wx/richtext/richtextbuffer.h
-    wx/richtext/richtexthtml.h
-    wx/richtext/richtextstyles.h
-    wx/richtext/richtextxml.h
+    wx/richtext/richtextctrl.h
     wx/richtext/richtextformatdlg.h
-    wx/richtext/richtextsymboldlg.h
-    wx/richtext/richtextstyledlg.h
-    wx/richtext/richtextprint.h
+    wx/richtext/richtexthtml.h
     wx/richtext/richtextimagedlg.h
+    wx/richtext/richtextprint.h
+    wx/richtext/richtextstyledlg.h
+    wx/richtext/richtextstyles.h
+    wx/richtext/richtextsymboldlg.h
+    wx/richtext/richtextxml.h
 </set>
 
 

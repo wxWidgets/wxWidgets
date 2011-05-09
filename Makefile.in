@@ -1899,16 +1899,16 @@ RICHTEXTDLL_CXXFLAGS = $(__richtextdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(PIC_FLAG) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  \
 	$(__richtextdll___win32rc) \
-	richtextdll_richtextctrl.o \
 	richtextdll_richtextbuffer.o \
-	richtextdll_richtextstyles.o \
-	richtextdll_richtextxml.o \
-	richtextdll_richtexthtml.o \
+	richtextdll_richtextctrl.o \
 	richtextdll_richtextformatdlg.o \
-	richtextdll_richtextsymboldlg.o \
-	richtextdll_richtextstyledlg.o \
+	richtextdll_richtexthtml.o \
+	richtextdll_richtextimagedlg.o \
 	richtextdll_richtextprint.o \
-	richtextdll_richtextimagedlg.o
+	richtextdll_richtextstyledlg.o \
+	richtextdll_richtextstyles.o \
+	richtextdll_richtextsymboldlg.o \
+	richtextdll_richtextxml.o
 RICHTEXTDLL_ODEP = $(_____pch_wxprec_richtextdll_wx_wxprec_h_gch___depname)
 RICHTEXTLIB_CXXFLAGS = $(__richtextlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1916,16 +1916,16 @@ RICHTEXTLIB_CXXFLAGS = $(__richtextlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  \
-	richtextlib_richtextctrl.o \
 	richtextlib_richtextbuffer.o \
-	richtextlib_richtextstyles.o \
-	richtextlib_richtextxml.o \
-	richtextlib_richtexthtml.o \
+	richtextlib_richtextctrl.o \
 	richtextlib_richtextformatdlg.o \
-	richtextlib_richtextsymboldlg.o \
-	richtextlib_richtextstyledlg.o \
+	richtextlib_richtexthtml.o \
+	richtextlib_richtextimagedlg.o \
 	richtextlib_richtextprint.o \
-	richtextlib_richtextimagedlg.o
+	richtextlib_richtextstyledlg.o \
+	richtextlib_richtextstyles.o \
+	richtextlib_richtextsymboldlg.o \
+	richtextlib_richtextxml.o
 RICHTEXTLIB_ODEP = $(_____pch_wxprec_richtextlib_wx_wxprec_h_gch___depname)
 STCDLL_CXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -4166,16 +4166,16 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/ribbon/page.h \
 	wx/ribbon/panel.h \
 	wx/ribbon/toolbar.h \
-	wx/richtext/richtextctrl.h \
 	wx/richtext/richtextbuffer.h \
-	wx/richtext/richtexthtml.h \
-	wx/richtext/richtextstyles.h \
-	wx/richtext/richtextxml.h \
+	wx/richtext/richtextctrl.h \
 	wx/richtext/richtextformatdlg.h \
-	wx/richtext/richtextsymboldlg.h \
-	wx/richtext/richtextstyledlg.h \
-	wx/richtext/richtextprint.h \
+	wx/richtext/richtexthtml.h \
 	wx/richtext/richtextimagedlg.h \
+	wx/richtext/richtextprint.h \
+	wx/richtext/richtextstyledlg.h \
+	wx/richtext/richtextstyles.h \
+	wx/richtext/richtextsymboldlg.h \
+	wx/richtext/richtextxml.h \
 	wx/stc/stc.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
@@ -4463,16 +4463,16 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_page.o \
 	monodll_ribbon_panel.o \
 	monodll_ribbon_toolbar.o \
-	monodll_richtextctrl.o \
 	monodll_richtextbuffer.o \
-	monodll_richtextstyles.o \
-	monodll_richtextxml.o \
-	monodll_richtexthtml.o \
+	monodll_richtextctrl.o \
 	monodll_richtextformatdlg.o \
-	monodll_richtextsymboldlg.o \
-	monodll_richtextstyledlg.o \
-	monodll_richtextprint.o \
+	monodll_richtexthtml.o \
 	monodll_richtextimagedlg.o \
+	monodll_richtextprint.o \
+	monodll_richtextstyledlg.o \
+	monodll_richtextstyles.o \
+	monodll_richtextsymboldlg.o \
+	monodll_richtextxml.o \
 	monodll_stc.o \
 	monodll_PlatWX.o \
 	monodll_ScintillaWX.o
@@ -6385,16 +6385,16 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_page.o \
 	monolib_ribbon_panel.o \
 	monolib_ribbon_toolbar.o \
-	monolib_richtextctrl.o \
 	monolib_richtextbuffer.o \
-	monolib_richtextstyles.o \
-	monolib_richtextxml.o \
-	monolib_richtexthtml.o \
+	monolib_richtextctrl.o \
 	monolib_richtextformatdlg.o \
-	monolib_richtextsymboldlg.o \
-	monolib_richtextstyledlg.o \
-	monolib_richtextprint.o \
+	monolib_richtexthtml.o \
 	monolib_richtextimagedlg.o \
+	monolib_richtextprint.o \
+	monolib_richtextstyledlg.o \
+	monolib_richtextstyles.o \
+	monolib_richtextsymboldlg.o \
+	monolib_richtextxml.o \
 	monolib_stc.o \
 	monolib_PlatWX.o \
 	monolib_ScintillaWX.o
@@ -14595,7 +14595,7 @@ install-wxconfig:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
 	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(libdir)/wx/config
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) ../lib/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
@@ -17354,35 +17354,35 @@ monodll_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONODLL_ODEP)
 monodll_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
-monodll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
-
 monodll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
-monodll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
-
-monodll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
-
-monodll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+monodll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
 monodll_richtextformatdlg.o: $(srcdir)/src/richtext/richtextformatdlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextformatdlg.cpp
 
-monodll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+monodll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
-monodll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+monodll_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
 
 monodll_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
 
-monodll_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
+monodll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+monodll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+monodll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+
+monodll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 monodll_stc.o: $(srcdir)/src/stc/stc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
@@ -22652,35 +22652,35 @@ monolib_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONOLIB_ODEP)
 monolib_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
-monolib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
-
 monolib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
-monolib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
-
-monolib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
-
-monolib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+monolib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
 monolib_richtextformatdlg.o: $(srcdir)/src/richtext/richtextformatdlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextformatdlg.cpp
 
-monolib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+monolib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
-monolib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+monolib_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
 
 monolib_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
 
-monolib_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
+monolib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+monolib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+monolib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+
+monolib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 monolib_stc.o: $(srcdir)/src/stc/stc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
@@ -36527,65 +36527,65 @@ propgridlib_props.o: $(srcdir)/src/propgrid/props.cpp $(PROPGRIDLIB_ODEP)
 richtextdll_version_rc.o: $(srcdir)/src/msw/version.rc $(RICHTEXTDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_RICHTEXT
 
-richtextdll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
-
 richtextdll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
-richtextdll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
-
-richtextdll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
-
-richtextdll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+richtextdll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
 richtextdll_richtextformatdlg.o: $(srcdir)/src/richtext/richtextformatdlg.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextformatdlg.cpp
 
-richtextdll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
-
-richtextdll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
-
-richtextdll_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(RICHTEXTDLL_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
+richtextdll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
 richtextdll_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
 
-richtextlib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
+richtextdll_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
+
+richtextdll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+richtextdll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+richtextdll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+
+richtextdll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 richtextlib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
-richtextlib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
-
-richtextlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
-
-richtextlib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+richtextlib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
 richtextlib_richtextformatdlg.o: $(srcdir)/src/richtext/richtextformatdlg.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextformatdlg.cpp
 
-richtextlib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+richtextlib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
-richtextlib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+richtextlib_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
 
 richtextlib_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
 
-richtextlib_richtextimagedlg.o: $(srcdir)/src/richtext/richtextimagedlg.cpp $(RICHTEXTLIB_ODEP)
-	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextimagedlg.cpp
+richtextlib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+richtextlib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+richtextlib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextsymboldlg.cpp
+
+richtextlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 stcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(STCDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC

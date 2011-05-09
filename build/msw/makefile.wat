@@ -224,16 +224,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_page.obj &
 	$(OBJS)\monodll_ribbon_panel.obj &
 	$(OBJS)\monodll_ribbon_toolbar.obj &
-	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
-	$(OBJS)\monodll_richtextstyles.obj &
-	$(OBJS)\monodll_richtextxml.obj &
-	$(OBJS)\monodll_richtexthtml.obj &
+	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextformatdlg.obj &
-	$(OBJS)\monodll_richtextsymboldlg.obj &
-	$(OBJS)\monodll_richtextstyledlg.obj &
-	$(OBJS)\monodll_richtextprint.obj &
+	$(OBJS)\monodll_richtexthtml.obj &
 	$(OBJS)\monodll_richtextimagedlg.obj &
+	$(OBJS)\monodll_richtextprint.obj &
+	$(OBJS)\monodll_richtextstyledlg.obj &
+	$(OBJS)\monodll_richtextstyles.obj &
+	$(OBJS)\monodll_richtextsymboldlg.obj &
+	$(OBJS)\monodll_richtextxml.obj &
 	$(OBJS)\monodll_stc.obj &
 	$(OBJS)\monodll_PlatWX.obj &
 	$(OBJS)\monodll_ScintillaWX.obj
@@ -999,16 +999,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_page.obj &
 	$(OBJS)\monolib_ribbon_panel.obj &
 	$(OBJS)\monolib_ribbon_toolbar.obj &
-	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
-	$(OBJS)\monolib_richtextstyles.obj &
-	$(OBJS)\monolib_richtextxml.obj &
-	$(OBJS)\monolib_richtexthtml.obj &
+	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextformatdlg.obj &
-	$(OBJS)\monolib_richtextsymboldlg.obj &
-	$(OBJS)\monolib_richtextstyledlg.obj &
-	$(OBJS)\monolib_richtextprint.obj &
+	$(OBJS)\monolib_richtexthtml.obj &
 	$(OBJS)\monolib_richtextimagedlg.obj &
+	$(OBJS)\monolib_richtextprint.obj &
+	$(OBJS)\monolib_richtextstyledlg.obj &
+	$(OBJS)\monolib_richtextstyles.obj &
+	$(OBJS)\monolib_richtextsymboldlg.obj &
+	$(OBJS)\monolib_richtextxml.obj &
 	$(OBJS)\monolib_stc.obj &
 	$(OBJS)\monolib_PlatWX.obj &
 	$(OBJS)\monolib_ScintillaWX.obj
@@ -4821,16 +4821,16 @@ RICHTEXTDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_dummy.obj &
-	$(OBJS)\richtextdll_richtextctrl.obj &
 	$(OBJS)\richtextdll_richtextbuffer.obj &
-	$(OBJS)\richtextdll_richtextstyles.obj &
-	$(OBJS)\richtextdll_richtextxml.obj &
-	$(OBJS)\richtextdll_richtexthtml.obj &
+	$(OBJS)\richtextdll_richtextctrl.obj &
 	$(OBJS)\richtextdll_richtextformatdlg.obj &
-	$(OBJS)\richtextdll_richtextsymboldlg.obj &
-	$(OBJS)\richtextdll_richtextstyledlg.obj &
+	$(OBJS)\richtextdll_richtexthtml.obj &
+	$(OBJS)\richtextdll_richtextimagedlg.obj &
 	$(OBJS)\richtextdll_richtextprint.obj &
-	$(OBJS)\richtextdll_richtextimagedlg.obj
+	$(OBJS)\richtextdll_richtextstyledlg.obj &
+	$(OBJS)\richtextdll_richtextstyles.obj &
+	$(OBJS)\richtextdll_richtextsymboldlg.obj &
+	$(OBJS)\richtextdll_richtextxml.obj
 RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -4842,16 +4842,16 @@ RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  &
 	$(OBJS)\richtextlib_dummy.obj &
-	$(OBJS)\richtextlib_richtextctrl.obj &
 	$(OBJS)\richtextlib_richtextbuffer.obj &
-	$(OBJS)\richtextlib_richtextstyles.obj &
-	$(OBJS)\richtextlib_richtextxml.obj &
-	$(OBJS)\richtextlib_richtexthtml.obj &
+	$(OBJS)\richtextlib_richtextctrl.obj &
 	$(OBJS)\richtextlib_richtextformatdlg.obj &
-	$(OBJS)\richtextlib_richtextsymboldlg.obj &
-	$(OBJS)\richtextlib_richtextstyledlg.obj &
+	$(OBJS)\richtextlib_richtexthtml.obj &
+	$(OBJS)\richtextlib_richtextimagedlg.obj &
 	$(OBJS)\richtextlib_richtextprint.obj &
-	$(OBJS)\richtextlib_richtextimagedlg.obj
+	$(OBJS)\richtextlib_richtextstyledlg.obj &
+	$(OBJS)\richtextlib_richtextstyles.obj &
+	$(OBJS)\richtextlib_richtextsymboldlg.obj &
+	$(OBJS)\richtextlib_richtextxml.obj
 STCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -7359,34 +7359,34 @@ $(OBJS)\monodll_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\monodll_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\monodll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
@@ -9709,34 +9709,34 @@ $(OBJS)\monolib_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 $(OBJS)\monolib_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\monolib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\monolib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
@@ -15637,67 +15637,67 @@ $(OBJS)\richtextdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\richtextdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RICHTEXT $<
 
-$(OBJS)\richtextdll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
-
 $(OBJS)\richtextdll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
-$(OBJS)\richtextdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
-
-$(OBJS)\richtextdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
-
-$(OBJS)\richtextdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\richtextdll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
 $(OBJS)\richtextdll_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
-$(OBJS)\richtextdll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
-
-$(OBJS)\richtextdll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
-
-$(OBJS)\richtextdll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+$(OBJS)\richtextdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
 $(OBJS)\richtextdll_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+$(OBJS)\richtextdll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
+$(OBJS)\richtextdll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
-
-$(OBJS)\richtextlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
-
-$(OBJS)\richtextlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\richtextlib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\richtextlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\richtextlib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
-$(OBJS)\richtextlib_richtextimagedlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\richtextlib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\stcdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

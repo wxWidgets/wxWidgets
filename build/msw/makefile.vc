@@ -1500,16 +1500,16 @@ RICHTEXTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_519)$(__DEBUGRUNTIME) /DWIN32 \
 	$(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  \
 	$(OBJS)\richtextdll_dummy.obj \
-	$(OBJS)\richtextdll_richtextctrl.obj \
 	$(OBJS)\richtextdll_richtextbuffer.obj \
-	$(OBJS)\richtextdll_richtextstyles.obj \
-	$(OBJS)\richtextdll_richtextxml.obj \
-	$(OBJS)\richtextdll_richtexthtml.obj \
+	$(OBJS)\richtextdll_richtextctrl.obj \
 	$(OBJS)\richtextdll_richtextformatdlg.obj \
-	$(OBJS)\richtextdll_richtextsymboldlg.obj \
-	$(OBJS)\richtextdll_richtextstyledlg.obj \
+	$(OBJS)\richtextdll_richtexthtml.obj \
+	$(OBJS)\richtextdll_richtextimagedlg.obj \
 	$(OBJS)\richtextdll_richtextprint.obj \
-	$(OBJS)\richtextdll_richtextimagedlg.obj
+	$(OBJS)\richtextdll_richtextstyledlg.obj \
+	$(OBJS)\richtextdll_richtextstyles.obj \
+	$(OBJS)\richtextdll_richtextsymboldlg.obj \
+	$(OBJS)\richtextdll_richtextxml.obj
 RICHTEXTDLL_RESOURCES =  \
 	$(OBJS)\richtextdll_version.res
 RICHTEXTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_534)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1525,16 +1525,16 @@ RICHTEXTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_534)$(__DEBUGRUNTIME) /DWIN32 \
 	/Fp"$(OBJS)\wxprec_richtextlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  \
 	$(OBJS)\richtextlib_dummy.obj \
-	$(OBJS)\richtextlib_richtextctrl.obj \
 	$(OBJS)\richtextlib_richtextbuffer.obj \
-	$(OBJS)\richtextlib_richtextstyles.obj \
-	$(OBJS)\richtextlib_richtextxml.obj \
-	$(OBJS)\richtextlib_richtexthtml.obj \
+	$(OBJS)\richtextlib_richtextctrl.obj \
 	$(OBJS)\richtextlib_richtextformatdlg.obj \
-	$(OBJS)\richtextlib_richtextsymboldlg.obj \
-	$(OBJS)\richtextlib_richtextstyledlg.obj \
+	$(OBJS)\richtextlib_richtexthtml.obj \
+	$(OBJS)\richtextlib_richtextimagedlg.obj \
 	$(OBJS)\richtextlib_richtextprint.obj \
-	$(OBJS)\richtextlib_richtextimagedlg.obj
+	$(OBJS)\richtextlib_richtextstyledlg.obj \
+	$(OBJS)\richtextlib_richtextstyles.obj \
+	$(OBJS)\richtextlib_richtextsymboldlg.obj \
+	$(OBJS)\richtextlib_richtextxml.obj
 STCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_550)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_vc$(VENDORTAG).pdb \
@@ -1872,16 +1872,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_page.obj \
 	$(OBJS)\monodll_ribbon_panel.obj \
 	$(OBJS)\monodll_ribbon_toolbar.obj \
-	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
-	$(OBJS)\monodll_richtextstyles.obj \
-	$(OBJS)\monodll_richtextxml.obj \
-	$(OBJS)\monodll_richtexthtml.obj \
+	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextformatdlg.obj \
-	$(OBJS)\monodll_richtextsymboldlg.obj \
-	$(OBJS)\monodll_richtextstyledlg.obj \
-	$(OBJS)\monodll_richtextprint.obj \
+	$(OBJS)\monodll_richtexthtml.obj \
 	$(OBJS)\monodll_richtextimagedlg.obj \
+	$(OBJS)\monodll_richtextprint.obj \
+	$(OBJS)\monodll_richtextstyledlg.obj \
+	$(OBJS)\monodll_richtextstyles.obj \
+	$(OBJS)\monodll_richtextsymboldlg.obj \
+	$(OBJS)\monodll_richtextxml.obj \
 	$(OBJS)\monodll_stc.obj \
 	$(OBJS)\monodll_PlatWX.obj \
 	$(OBJS)\monodll_ScintillaWX.obj
@@ -2642,16 +2642,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_page.obj \
 	$(OBJS)\monolib_ribbon_panel.obj \
 	$(OBJS)\monolib_ribbon_toolbar.obj \
-	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
-	$(OBJS)\monolib_richtextstyles.obj \
-	$(OBJS)\monolib_richtextxml.obj \
-	$(OBJS)\monolib_richtexthtml.obj \
+	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextformatdlg.obj \
-	$(OBJS)\monolib_richtextsymboldlg.obj \
-	$(OBJS)\monolib_richtextstyledlg.obj \
-	$(OBJS)\monolib_richtextprint.obj \
+	$(OBJS)\monolib_richtexthtml.obj \
 	$(OBJS)\monolib_richtextimagedlg.obj \
+	$(OBJS)\monolib_richtextprint.obj \
+	$(OBJS)\monolib_richtextstyledlg.obj \
+	$(OBJS)\monolib_richtextstyles.obj \
+	$(OBJS)\monolib_richtextsymboldlg.obj \
+	$(OBJS)\monolib_richtextxml.obj \
 	$(OBJS)\monolib_stc.obj \
 	$(OBJS)\monolib_PlatWX.obj \
 	$(OBJS)\monolib_ScintillaWX.obj
@@ -7530,35 +7530,35 @@ $(OBJS)\monodll_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
-$(OBJS)\monodll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
-
 $(OBJS)\monodll_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
 
-$(OBJS)\monodll_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
-
-$(OBJS)\monodll_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
-
-$(OBJS)\monodll_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\monodll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
 $(OBJS)\monodll_richtextformatdlg.obj: ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextformatdlg.cpp
 
-$(OBJS)\monodll_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\monodll_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
 
-$(OBJS)\monodll_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\monodll_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
 
 $(OBJS)\monodll_richtextprint.obj: ..\..\src\richtext\richtextprint.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextprint.cpp
 
-$(OBJS)\monodll_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\monodll_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+
+$(OBJS)\monodll_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
+
+$(OBJS)\monodll_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+
+$(OBJS)\monodll_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
 
 $(OBJS)\monodll_stc.obj: ..\..\src\stc\stc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\stc\stc.cpp
@@ -9880,35 +9880,35 @@ $(OBJS)\monolib_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\monolib_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
-$(OBJS)\monolib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
-
 $(OBJS)\monolib_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
 
-$(OBJS)\monolib_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
-
-$(OBJS)\monolib_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
-
-$(OBJS)\monolib_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\monolib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
 $(OBJS)\monolib_richtextformatdlg.obj: ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextformatdlg.cpp
 
-$(OBJS)\monolib_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\monolib_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
 
-$(OBJS)\monolib_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\monolib_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
 
 $(OBJS)\monolib_richtextprint.obj: ..\..\src\richtext\richtextprint.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextprint.cpp
 
-$(OBJS)\monolib_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\monolib_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+
+$(OBJS)\monolib_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
+
+$(OBJS)\monolib_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+
+$(OBJS)\monolib_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
 
 $(OBJS)\monolib_stc.obj: ..\..\src\stc\stc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\stc\stc.cpp
@@ -15808,68 +15808,68 @@ $(OBJS)\richtextdll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\richtextdll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_5) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62) $(__NDEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_63) $(__MSLU_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_vc$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_RICHTEXT ..\..\src\msw\version.rc
 
-$(OBJS)\richtextdll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
-
 $(OBJS)\richtextdll_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
 
-$(OBJS)\richtextdll_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
-
-$(OBJS)\richtextdll_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
-
-$(OBJS)\richtextdll_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\richtextdll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
 $(OBJS)\richtextdll_richtextformatdlg.obj: ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextformatdlg.cpp
 
-$(OBJS)\richtextdll_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
-
-$(OBJS)\richtextdll_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
-
-$(OBJS)\richtextdll_richtextprint.obj: ..\..\src\richtext\richtextprint.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextprint.cpp
+$(OBJS)\richtextdll_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
 
 $(OBJS)\richtextdll_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
 
+$(OBJS)\richtextdll_richtextprint.obj: ..\..\src\richtext\richtextprint.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextprint.cpp
+
+$(OBJS)\richtextdll_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+
+$(OBJS)\richtextdll_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
+
+$(OBJS)\richtextdll_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+
+$(OBJS)\richtextdll_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
+
 $(OBJS)\richtextlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
-
-$(OBJS)\richtextlib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
 $(OBJS)\richtextlib_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
 
-$(OBJS)\richtextlib_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
-
-$(OBJS)\richtextlib_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
-
-$(OBJS)\richtextlib_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
+$(OBJS)\richtextlib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
 $(OBJS)\richtextlib_richtextformatdlg.obj: ..\..\src\richtext\richtextformatdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextformatdlg.cpp
 
-$(OBJS)\richtextlib_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+$(OBJS)\richtextlib_richtexthtml.obj: ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtexthtml.cpp
 
-$(OBJS)\richtextlib_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+$(OBJS)\richtextlib_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
 
 $(OBJS)\richtextlib_richtextprint.obj: ..\..\src\richtext\richtextprint.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextprint.cpp
 
-$(OBJS)\richtextlib_richtextimagedlg.obj: ..\..\src\richtext\richtextimagedlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextimagedlg.cpp
+$(OBJS)\richtextlib_richtextstyledlg.obj: ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextstyledlg.cpp
+
+$(OBJS)\richtextlib_richtextstyles.obj: ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextstyles.cpp
+
+$(OBJS)\richtextlib_richtextsymboldlg.obj: ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextsymboldlg.cpp
+
+$(OBJS)\richtextlib_richtextxml.obj: ..\..\src\richtext\richtextxml.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTLIB_CXXFLAGS) ..\..\src\richtext\richtextxml.cpp
 
 $(OBJS)\stcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(STCDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
