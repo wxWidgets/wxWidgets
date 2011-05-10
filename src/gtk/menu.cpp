@@ -698,8 +698,6 @@ void wxMenu::Init()
         gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), tearoff);
     }
 
-    m_prevRadio = NULL;
-
     // append the title as the very first entry if we have it
     if ( !m_title.empty() )
     {
@@ -750,8 +748,6 @@ wxString wxMenu::GetTitle() const
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 {
     GtkWidget *menuItem;
-    GtkWidget* prevRadio = m_prevRadio;
-    m_prevRadio = NULL;
     switch (mitem->GetKind())
     {
         case wxITEM_SEPARATOR:
@@ -762,11 +758,44 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             break;
         case wxITEM_RADIO:
             {
+                // See if we need to create a new radio group for this item or
+                // add it to an existing one.
+                wxMenuItem* radioGroupItem = NULL;
+
+                const size_t numItems = GetMenuItemCount();
+                const size_t n = pos == -1 ? numItems
+                                           : static_cast<size_t>(pos);
+                if ( n > 0 )
+                {
+                    wxMenuItem* const itemPrev = FindItemByPosition(n - 1);
+                    if ( itemPrev->GetKind() == wxITEM_RADIO )
+                    {
+                        // Appending an item after an existing radio item puts
+                        // it into the same radio group.
+                        radioGroupItem = itemPrev;
+                    }
+                }
+
+                if ( n < numItems )
+                {
+                    wxMenuItem* const itemNext = FindItemByPosition(n);
+                    if ( itemNext->GetKind() == wxITEM_RADIO )
+                    {
+                        // Inserting an item before an existing radio item
+                        // also puts it into the existing radio group.
+                        radioGroupItem = itemNext;
+                    }
+                }
+
                 GSList* group = NULL;
-                if (prevRadio)
-                    group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(prevRadio));
+                if ( radioGroupItem )
+                {
+                    group = gtk_radio_menu_item_get_group(
+                              GTK_RADIO_MENU_ITEM(radioGroupItem->GetMenuItem())
+                            );
+                }
+
                 menuItem = gtk_radio_menu_item_new_with_label(group, "");
-                m_prevRadio = menuItem;
             }
             break;
         default:
@@ -835,14 +864,10 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    if ( !wxMenuBase::DoInsert(pos, item) )
-        return NULL;
-
-    // TODO
     if ( !GtkAppend(item, (int)pos) )
         return NULL;
 
-    return item;
+    return wxMenuBase::DoInsert(pos, item);
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
@@ -851,13 +876,6 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         return NULL;
 
     GtkWidget * const mitem = item->GetMenuItem();
-    if ( m_prevRadio == mitem )
-    {
-        // deleting an item starts a new radio group (has to as we shouldn't
-        // keep a deleted pointer anyhow)
-        m_prevRadio = NULL;
-    }
-
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
     gtk_widget_destroy(mitem);
     item->SetMenuItem(NULL);
