@@ -61,11 +61,6 @@ public:
     // Win32 API
     WXWPARAM GetMSWId() const;
 
-    // mark item as belonging to the given radio group
-    void SetAsRadioGroupStart();
-    void SetRadioGroupStart(int start);
-    void SetRadioGroupEnd(int end);
-
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
     wxDEPRECATED(
@@ -130,18 +125,6 @@ private:
     // common part of all ctors
     void Init();
 
-    // the positions of the first and last items of the radio group this item
-    // belongs to or -1: start is the radio group start and is valid for all
-    // but first radio group items (m_isRadioGroupStart == false), end is valid
-    // only for the first one
-    union
-    {
-        int start;
-        int end;
-    } m_radioGroup;
-
-    // does this item start a radio group?
-    bool m_isRadioGroupStart;
 
 #if wxUSE_OWNER_DRAWN
     // item bitmaps

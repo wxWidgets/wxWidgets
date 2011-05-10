@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/scopedarray.h"
+#include "wx/vector.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
@@ -85,8 +86,101 @@
 static const int idMenuTitle = wxID_NONE;
 
 // ----------------------------------------------------------------------------
-// private functions
+// private helper classes and functions
 // ----------------------------------------------------------------------------
+
+// Contains the data about the radio items groups in the given menu.
+class wxMenuRadioItemsData
+{
+public:
+    wxMenuRadioItemsData() { }
+
+    // Default copy ctor, assignment operator and dtor are all ok.
+
+    // Find the start and end of the group containing the given position or
+    // return false if it's not inside any range.
+    bool GetGroupRange(int pos, int *start, int *end) const
+    {
+        // We use a simple linear search here because there are not that many
+        // items in a menu and hence even fewer radio items ranges anyhow, so
+        // normally there is no need to do anything fancy (like keeping the
+        // array sorted and using binary search).
+        for ( Ranges::const_iterator it = m_ranges.begin();
+              it != m_ranges.end();
+              ++it )
+        {
+            const Range& r = *it;
+
+            if ( r.start <= pos && pos <= r.end )
+            {
+                if ( start )
+                    *start = r.start;
+                if ( end )
+                    *end = r.end;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Take into account the new radio item about to be added at the given
+    // position.
+    //
+    // Returns true if this item starts a new radio group, false if it extends
+    // an existing one.
+    bool UpdateOnInsert(int pos)
+    {
+        bool inExistingGroup = false;
+
+        for ( Ranges::iterator it = m_ranges.begin();
+              it != m_ranges.end();
+              ++it )
+        {
+            Range& r = *it;
+
+            if ( pos < r.start )
+            {
+                // Item is inserted before this range, update its indices.
+                r.start++;
+                r.end++;
+            }
+            else if ( pos <= r.end + 1 )
+            {
+                // Item is inserted in the middle of this range or immediately
+                // after it in which case it extends this range so make it span
+                // one more item in any case.
+                r.end++;
+
+                inExistingGroup = true;
+            }
+            //else: Item is inserted after this range, nothing to do for it.
+        }
+
+        if ( inExistingGroup )
+            return false;
+
+        // Make a new range for the group this item will belong to.
+        Range r;
+        r.start = pos;
+        r.end = pos;
+        m_ranges.push_back(r);
+
+        return true;
+    }
+
+private:
+    // Contains the inclusive positions of the range start and end.
+    struct Range
+    {
+        int start;
+        int end;
+    };
+
+    typedef wxVector<Range> Ranges;
+    Ranges m_ranges;
+};
 
 namespace
 {
@@ -168,8 +262,8 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 // Construct a menu with optional title (then use append)
 void wxMenu::Init()
 {
+    m_radioData = NULL;
     m_doBreak = false;
-    m_startRadioGroup = -1;
 
 #if wxUSE_OWNER_DRAWN
     m_ownerDrawn = false;
@@ -211,19 +305,14 @@ wxMenu::~wxMenu()
     // delete accels
     WX_CLEAR_ARRAY(m_accels);
 #endif // wxUSE_ACCEL
+
+    delete m_radioData;
 }
 
 void wxMenu::Break()
 {
     // this will take effect during the next call to Append()
     m_doBreak = true;
-}
-
-void wxMenu::Attach(wxMenuBarBase *menubar)
-{
-    wxMenuBase::Attach(menubar);
-
-    EndRadioGroup();
 }
 
 #if wxUSE_ACCEL
@@ -348,6 +437,11 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
 
 } // anonymous namespace
 
+bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
+{
+    return m_radioData && m_radioData->GetGroupRange(pos, start, end);
+}
+
 // append a new item or submenu to the menu
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
@@ -395,6 +489,21 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         // append at the end (note that the item is already appended to
         // internal data structures)
         pos = GetMenuItemCount() - 1;
+    }
+
+    // Update radio groups data if we're inserting a new radio item.
+    //
+    // NB: If we supported inserting non-radio items in the middle of existing
+    //     radio groups to break them into two subgroups, we'd need to update
+    //     m_radioData in this case too but currently this is not supported.
+    bool checkInitially = false;
+    if ( pItem->GetKind() == wxITEM_RADIO )
+    {
+        if ( !m_radioData )
+            m_radioData = new wxMenuRadioItemsData;
+
+        if ( m_radioData->UpdateOnInsert(pos) )
+            checkInitially = true;
     }
 
     // adjust position to account for the title of a popup menu, if any
@@ -600,6 +709,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     }
 
 
+    // Check the item if it should be initially checked.
+    if ( checkInitially )
+        pItem->Check(true);
+
     // if we just appended the title, highlight it
     if ( id == (UINT_PTR)idMenuTitle )
     {
@@ -616,67 +729,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     return true;
 }
 
-void wxMenu::EndRadioGroup()
-{
-    // we're not inside a radio group any longer
-    m_startRadioGroup = -1;
-}
-
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, NULL, wxT("NULL item in wxMenu::DoAppend") );
-
-    bool check = false;
-
-    if ( item->GetKind() == wxITEM_RADIO )
-    {
-        int count = GetMenuItemCount();
-
-        if ( m_startRadioGroup == -1 )
-        {
-            // start a new radio group
-            m_startRadioGroup = count;
-
-            // for now it has just one element
-            item->SetAsRadioGroupStart();
-            item->SetRadioGroupEnd(m_startRadioGroup);
-
-            // ensure that we have a checked item in the radio group
-            check = true;
-        }
-        else // extend the current radio group
-        {
-            // we need to update its end item
-            item->SetRadioGroupStart(m_startRadioGroup);
-            wxMenuItemList::compatibility_iterator node = GetMenuItems().Item(m_startRadioGroup);
-
-            if ( node )
-            {
-                node->GetData()->SetRadioGroupEnd(count);
-            }
-            else
-            {
-                wxFAIL_MSG( wxT("where is the radio group start item?") );
-            }
-        }
-    }
-    else // not a radio item
-    {
-        EndRadioGroup();
-    }
-
-    if ( !wxMenuBase::DoAppend(item) || !DoInsertOrAppend(item) )
-    {
-        return NULL;
-    }
-
-    if ( check )
-    {
-        // check the item initially
-        item->Check(true);
-    }
-
-    return item;
+    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item) ? item : NULL;
 }
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)

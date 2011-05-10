@@ -494,9 +494,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 void wxMenuItem::Init()
 {
-    m_radioGroup.start = -1;
-    m_isRadioGroupStart = false;
-
 #if  wxUSE_OWNER_DRAWN
 
     // when the color is not valid, wxOwnerDraw takes the default ones.
@@ -557,30 +554,6 @@ bool wxMenuItem::IsChecked() const
     return (flag & MF_CHECKED) != 0;
 }
 
-// radio group stuff
-// -----------------
-
-void wxMenuItem::SetAsRadioGroupStart()
-{
-    m_isRadioGroupStart = true;
-}
-
-void wxMenuItem::SetRadioGroupStart(int start)
-{
-    wxASSERT_MSG( !m_isRadioGroupStart,
-                  wxT("should only be called for the next radio items") );
-
-    m_radioGroup.start = start;
-}
-
-void wxMenuItem::SetRadioGroupEnd(int end)
-{
-    wxASSERT_MSG( m_isRadioGroupStart,
-                  wxT("should only be called for the first radio item") );
-
-    m_radioGroup.end = end;
-}
-
 // change item state
 // -----------------
 
@@ -634,17 +607,10 @@ void wxMenuItem::Check(bool check)
             int start,
                 end;
 
-            if ( m_isRadioGroupStart )
+            if ( !m_parentMenu->MSWGetRadioGroupRange(pos, &start, &end) )
             {
-                // we already have all information we need
-                start = pos;
-                end = m_radioGroup.end;
-            }
-            else // next radio group item
-            {
-                // get the radio group end from the start item
-                start = m_radioGroup.start;
-                end = items.Item(start)->GetData()->m_radioGroup.end;
+                wxFAIL_MSG( wxT("Menu radio item not part of radio group?") );
+                return;
             }
 
 #ifdef __WIN32__
