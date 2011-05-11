@@ -2001,6 +2001,10 @@ public:
         The function puts the position in @a textPosition if one is found.
         @a pt is in logical units (a zero y position is at the beginning of the buffer).
 
+        Pass wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS if you only want to consider objects
+        directly under the object you are calling HitTest on. Otherwise, it will recurse
+        and potentially find a nested object.
+
         @return One of the ::wxRichTextHitTestFlags values.
     */
 

@@ -351,31 +351,38 @@ public:
     long GetDelayedLayoutThreshold() const { return m_delayedLayoutThreshold; }
 
     /**
+        Gets the flag indicating that full layout is required.
     */
     bool GetFullLayoutRequired() const { return m_fullLayoutRequired; }
 
     /**
+        Sets the flag indicating that full layout is required.
     */
     void SetFullLayoutRequired(bool b) { m_fullLayoutRequired = b; }
 
     /**
+        Returns the last time full layout was performed.
     */
     wxLongLong GetFullLayoutTime() const { return m_fullLayoutTime; }
 
     /**
+        Sets the last time full layout was performed.
     */
     void SetFullLayoutTime(wxLongLong t) { m_fullLayoutTime = t; }
 
     /**
+        Returns the position that should be shown when full (delayed) layout is performed.
     */
     long GetFullLayoutSavedPosition() const { return m_fullLayoutSavedPosition; }
 
     /**
+        Sets the position that should be shown when full (delayed) layout is performed.
     */
     void SetFullLayoutSavedPosition(long p) { m_fullLayoutSavedPosition = p; }
 
-    // Force any pending layout due to large buffer
     /**
+        Forces any pending layout due to delayed, partial layout when the control
+        was resized.
     */
     void ForceDelayedLayout();
 
