@@ -361,7 +361,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     if (htmlWindowBorder == wxBORDER_SUNKEN)
         htmlWindowBorder = wxBORDER_SIMPLE;
 #else
-    wxBorder htmlWindowBorder = wxBORDER_SIMPLE;
+    wxBorder htmlWindowBorder = wxBORDER_SUNKEN;
 #endif
 
     if (helpStyle & (wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH))
