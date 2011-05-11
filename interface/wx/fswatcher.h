@@ -81,7 +81,7 @@ public:
         time to execute.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                         const wxString& filter = wxEmptyString) = 0;
+                         const wxString& filter = wxEmptyString);
 
     /**
         Removes @a path from the list of watched paths.
