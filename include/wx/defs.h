@@ -1162,7 +1162,13 @@ typedef wxUint32 wxDword;
    Define signed and unsigned integral types big enough to contain all of long,
    size_t and void *.
  */
-#if SIZEOF_SIZE_T >= SIZEOF_VOID_P
+#if SIZEOF_LONG >= SIZEOF_VOID_P
+    /*
+       Normal case when long is the largest integral type.
+     */
+    typedef long wxIntPtr;
+    typedef unsigned long wxUIntPtr;
+#elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
     /*
        Win64 case: size_t is the only integral type big enough for "void *".
 
@@ -1172,12 +1178,6 @@ typedef wxUint32 wxDword;
      */
     typedef wxW64 ssize_t wxIntPtr;
     typedef size_t wxUIntPtr;
-#elif SIZEOF_LONG >= SIZEOF_VOID_P
-    /*
-       Normal case when long is the largest integral type.
-     */
-    typedef long wxIntPtr;
-    typedef unsigned long wxUIntPtr;
 #else
     /*
        This should never happen for the current architectures but if you're
