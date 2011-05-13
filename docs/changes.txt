@@ -59,43 +59,6 @@ changes:
   their overridden OnExecute() or override a more convenient OnExec() instead.
 
 
-Use of STL containers by default
---------------------------------
-
-wxWidgets uses STL containers for the implementation of wxVector, wxList,
-wxDList and wxStack by default since 2.9.2 release. While the STL-based
-versions are mostly compatible with the old ones, there are some differences:
-
- - wxList::compatibility_iterator must be used instead of wxList::Node* when
-   iterating over the list contents. The compatibility_iterator class has the
-   same semantics as a Node pointer but it is an object and not a pointer, so
-   you need to write
-
-        for ( wxWindowList::compatibility_iterator it = list.GetFirst();
-              it;
-              it = it->GetNext() )
-            ...
-
-   instead of the old
-
-        for ( wxWindowList::Node *n = list.GetFirst(); n; n = n->GetNext() )
-            ...
-
- - wxSortedArrayString and wxArrayString are separate classes now and the
-   former doesn't derive from the latter. If you need to convert a sorted array
-   to a normal one, you must copy all the elements. Alternatively, you may
-   avoid the use of wxSortedArrayString by using a normal array and calling its
-   Sort() method when needed.
-
- - WX_DEFINE_ARRAY_INT(bool) cannot be used because of the differences in
-   std::vector<bool> specialization compared with the generic std::vector<>
-   class. Please either use std::vector<bool> directly or use an integer array
-   instead.
-
-Finally notice that you may set wxUSE_STD_CONTAINERS to 0 when compiling
-wxWidgets to use the non-STL containers.
-
-
 wxODBC and contrib libraries removal
 ------------------------------------
 
