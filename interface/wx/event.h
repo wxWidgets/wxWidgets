@@ -3769,8 +3769,6 @@ public:
     Notice that the event is not triggered when the application is iconized
     (minimized) or restored under wxMSW.
 
-    Currently only wxMSW, wxGTK and wxOS2 generate such events.
-
     @onlyfor{wxmsw,wxgtk,wxos2}
 
     @beginEventTable{wxShowEvent}
