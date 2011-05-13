@@ -953,7 +953,7 @@ public:
         using the specified @a fnSortCallBack function. This function must have the
         following prototype:
         @code
-        int wxCALLBACK wxListCompareFunction(long item1, long item2, wxIntPtr sortData)
+        int wxCALLBACK wxListCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData)
         @endcode
 
         It is called each time when the two items must be compared and should return 0

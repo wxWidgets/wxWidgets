@@ -1821,8 +1821,8 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
     wxMSWListItemData *data1 = (wxMSWListItemData *) lParam1;
     wxMSWListItemData *data2 = (wxMSWListItemData *) lParam2;
 
-    long d1 = (data1 == NULL ? 0 : data1->lParam);
-    long d2 = (data2 == NULL ? 0 : data2->lParam);
+    wxIntPtr d1 = (data1 == NULL ? 0 : data1->lParam);
+    wxIntPtr d2 = (data2 == NULL ? 0 : data2->lParam);
 
     return internalData->user_fn(d1, d2, internalData->data);
 
