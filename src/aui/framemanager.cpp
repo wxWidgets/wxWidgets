@@ -2889,7 +2889,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
 
     if (pt.x < layer_insert_offset &&
-        pt.x > layer_insert_offset-auiLayerInsertPixels)
+        pt.x > layer_insert_offset-auiLayerInsertPixels &&
+        pt.y > 0 &&
+        pt.y < cli_size.y)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_LEFT),
                                 GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)),
@@ -2905,7 +2907,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.y < layer_insert_offset &&
-             pt.y > layer_insert_offset-auiLayerInsertPixels)
+             pt.y > layer_insert_offset-auiLayerInsertPixels &&
+             pt.x > 0 &&
+             pt.x < cli_size.x)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_TOP),
                                 GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
@@ -2921,7 +2925,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.x >= cli_size.x - layer_insert_offset &&
-             pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels)
+             pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels &&
+             pt.y > 0 &&
+             pt.y < cli_size.y)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_RIGHT),
                                 GetMaxLayer(docks, wxAUI_DOCK_TOP)),
@@ -2937,7 +2943,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.y >= cli_size.y - layer_insert_offset &&
-             pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
+             pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels &&
+             pt.x > 0 &&
+             pt.x < cli_size.x)
     {
         int new_layer = wxMax( wxMax( GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
                                       GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
