@@ -362,10 +362,8 @@ void wxAuiDefaultToolBarArt::DrawButton(
     else
         bmp = item.GetBitmap();
 
-    if (!bmp.IsOk())
-        return;
-
-    dc.DrawBitmap(bmp, bmp_x, bmp_y, true);
+    if ( bmp.IsOk() )
+        dc.DrawBitmap(bmp, bmp_x, bmp_y, true);
 
     // set the item's text color based on if it is disabled
     dc.SetTextForeground(*wxBLACK);
