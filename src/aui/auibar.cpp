@@ -463,6 +463,15 @@ void wxAuiDefaultToolBarArt::DrawDropDownButton(
         dc.DrawRectangle(button_rect);
         dc.DrawRectangle(dropdown_rect);
     }
+    else if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
+    {
+        // Notice that this branch must come after the hover one to ensure the
+        // correct appearance when the mouse hovers over a checked item.
+        dc.SetPen(wxPen(m_highlight_colour));
+        dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
+        dc.DrawRectangle(button_rect);
+        dc.DrawRectangle(dropdown_rect);
+    }
 
     wxBitmap bmp;
     wxBitmap dropbmp;
@@ -2444,8 +2453,11 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         }
         else if (item.kind == wxITEM_CHECK)
         {
-            // draw a toggle button
-            m_art->DrawButton(dc, this, item, item_rect);
+            // draw either a regular or dropdown toggle button
+            if (!item.dropdown)
+                m_art->DrawButton(dc, this, item, item_rect);
+            else
+                m_art->DrawDropDownButton(dc, this, item, item_rect);
         }
         else if (item.kind == wxITEM_RADIO)
         {
