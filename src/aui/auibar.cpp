@@ -1535,13 +1535,13 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 
             if (idx >= 0 && idx < count)
             {
-                for (i = idx; i < count; ++i)
+                for (i = idx + 1; i < count; ++i)
                 {
                     if (m_items[i].kind != wxITEM_RADIO)
                         break;
                     m_items[i].state &= ~wxAUI_BUTTON_STATE_CHECKED;
                 }
-                for (i = idx; i > 0; i--)
+                for (i = idx - 1; i >= 0; i--)
                 {
                     if (m_items[i].kind != wxITEM_RADIO)
                         break;
