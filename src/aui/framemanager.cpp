@@ -1589,6 +1589,7 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     input.Replace(wxT("\\|"), wxT("\a"));
     input.Replace(wxT("\\;"), wxT("\b"));
 
+    m_has_maximized = false;
     while (1)
     {
         wxAuiPaneInfo pane;
@@ -1630,6 +1631,9 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         pane_part.Replace(wxT("\b"), wxT(";"));
 
         LoadPaneInfo(pane_part, pane);
+
+        if ( pane.IsMaximized() )
+            m_has_maximized = true;
 
         wxAuiPaneInfo& p = GetPane(pane.name);
         if (!p.IsOk())
