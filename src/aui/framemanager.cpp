@@ -3429,6 +3429,15 @@ void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
     m_action_window = pane_window;
     m_action_offset = offset;
     m_frame->CaptureMouse();
+
+    if (pane.frame)
+    {
+        wxRect window_rect = pane.frame->GetRect();
+        wxRect client_rect = pane.frame->GetClientRect();
+        wxPoint client_pt = pane.frame->ClientToScreen(client_rect.GetTopLeft());
+        wxPoint origin_pt = client_pt - window_rect.GetTopLeft();
+        m_action_offset += origin_pt;
+    }
 }
 
 
