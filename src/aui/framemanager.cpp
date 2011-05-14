@@ -3346,7 +3346,8 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             wxAuiPaneInfo& pane = m_panes.Item(i);
 
             if (pane.IsFloating() &&
-                pane.frame->IsShown())
+                    pane.frame &&
+                        pane.frame->IsShown())
             {
                 wxRect rect = pane.frame->GetRect();
 #ifdef __WXGTK__
