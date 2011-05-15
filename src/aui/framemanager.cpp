@@ -4623,6 +4623,15 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
     {
         if (m_action_window)
         {
+            // We can't move the child window so we need to get the frame that
+            // we want to be really moving. This is probably not the best place
+            // to do this but at least it fixes the bug (#13177) for now.
+            if (!m_action_window->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
+            {
+                wxAuiPaneInfo& pane = GetPane(m_action_window);
+                m_action_window = pane.frame;
+            }
+
             wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
             m_action_window->Move(pt.x - m_action_offset.x,
                                 pt.y - m_action_offset.y);
