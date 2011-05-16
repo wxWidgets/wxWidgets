@@ -1274,8 +1274,7 @@ wxString wxGetOsDescription()
                         switch ( info.dwMinorVersion )
                         {
                             case 0:
-                                str.Printf(_("Windows 2000 (build %lu"),
-                                           info.dwBuildNumber);
+                                str = _("Windows 2000");
                                 break;
 
                             case 2:
@@ -1284,15 +1283,13 @@ wxString wxGetOsDescription()
                                 // type to resolve this ambiguity
                                 if ( wxIsWindowsServer() == 1 )
                                 {
-                                    str.Printf(_("Windows Server 2003 (build %lu"),
-                                               info.dwBuildNumber);
+                                    str = _("Windows Server 2003");
                                     break;
                                 }
                                 //else: must be XP, fall through
 
                             case 1:
-                                str.Printf(_("Windows XP (build %lu"),
-                                           info.dwBuildNumber);
+                                str = _("Windows XP");
                                 break;
                         }
                         break;
@@ -1301,29 +1298,15 @@ wxString wxGetOsDescription()
                         switch ( info.dwMinorVersion )
                         {
                             case 0:
-                                if ( wxIsWindowsServer() == 1 )
-                                {
-                                    str.Printf(_("Windows Server 2008 (build %lu"),
-                                               info.dwBuildNumber);
-                                }
-                                else
-                                {
-                                     str.Printf(_("Windows Vista (build %lu"),
-                                               info.dwBuildNumber);
-                                }
+                                str = wxIsWindowsServer() == 1
+                                        ? _("Windows Server 2008")
+                                        : _("Windows Vista");
                                 break;
 
                             case 1:
-                                if ( wxIsWindowsServer() == 1 )
-                                {
-                                    str.Printf(_("Windows Server 2008 R2 (build %lu"),
-                                               info.dwBuildNumber);
-                                }
-                                else
-                                {
-                                     str.Printf(_("Windows 7 (build %lu"),
-                                               info.dwBuildNumber);
-                                }
+                                str = wxIsWindowsServer() == 1
+                                        ? _("Windows Server 2008 R2")
+                                        : _("Windows 7");
                                 break;
                         }
                         break;
@@ -1331,12 +1314,13 @@ wxString wxGetOsDescription()
 
                 if ( str.empty() )
                 {
-                    str.Printf(_("Windows NT %lu.%lu (build %lu"),
-                           info.dwMajorVersion,
-                           info.dwMinorVersion,
-                           info.dwBuildNumber);
+                    str.Printf(_("Windows NT %lu.%lu"),
+                               info.dwMajorVersion,
+                               info.dwMinorVersion);
                 }
 
+                str << wxT(" (")
+                    << wxString::Format(_("build %lu"), info.dwBuildNumber);
                 if ( !wxIsEmpty(info.szCSDVersion) )
                 {
                     str << wxT(", ") << info.szCSDVersion;
