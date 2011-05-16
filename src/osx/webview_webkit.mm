@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/webkit.mm
+// Name:        src/osx/webview_webkit.mm
 // Purpose:     wxOSXWebKitCtrl - embeddable web kit control,
 //                             OS X implementation of web view component
 // Author:      Jethro Grassie / Kevin Ollivier / Marianne Gagnon
@@ -12,7 +12,7 @@
 
 // http://developer.apple.com/mac/library/documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html
 
-#include "wx/osx/webview.h"
+#include "wx/osx/webview_webkit.h"
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/webviewie.cpp
+// Name:        src/msw/webview_ie.cpp
 // Purpose:     wxMSW wxWebViewIE class implementation for web view component
 // Author:      Marianne Gagnon
 // Id:          $Id$
@@ -14,7 +14,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/msw/webviewie.h"
+#include "wx/msw/webview_ie.h"
 
 #if wxHAVE_WEB_BACKEND_IE
 
@@ -384,9 +384,12 @@ void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
 
     if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
     {
-        VARIANTARG level;
-        level.vt = VT_I2;
-        level.iVal = 3;
+        wxVariant level(REFRESH_COMPLETELY, "VT_I2");
+        //level = 3;
+       // VARIANTARG level;
+       // VariantInit(&level);
+       // V_VT(&level) = VT_I2;
+       // V_I2(&level) = REFRESH_COMPLETELY;
         out = m_ie.CallMethod("Refresh2", &level);
     }
     else

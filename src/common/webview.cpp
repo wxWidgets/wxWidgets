@@ -18,9 +18,9 @@
 
 #include "wx/webview.h"
 
-#include "wx/osx/webview.h"
-#include "wx/gtk/webview.h"
-#include "wx/msw/webviewie.h"
+#include "wx/osx/webview_webkit.h"
+#include "wx/gtk/webview_webkit.h"
+#include "wx/msw/webview_ie.h"
 
 // DLL options compatibility check:
 #include "wx/app.h"

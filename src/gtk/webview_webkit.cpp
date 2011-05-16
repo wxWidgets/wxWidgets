@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/webview.cpp
+// Name:        src/gtk/webview_webkit.cpp
 // Purpose:     GTK WebKit backend for web view component
 // Author:      Marianne Gagnon, Robert Roebling
 // Id:          $Id$
@@ -14,7 +14,7 @@
 #if wxHAVE_WEB_BACKEND_GTK_WEBKIT
 
 #include "wx/stockitem.h"
-#include "wx/gtk/webview.h"
+#include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
 #include "wx/gtk/private.h"
 #include "webkit/webkit.h"
