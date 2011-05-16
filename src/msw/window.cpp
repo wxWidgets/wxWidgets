@@ -1787,6 +1787,15 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
+
+    // The size of the client window can't be negative but ::GetClientRect()
+    // can return negative size for an extremely small (1x1) window with
+    // borders so ensure that we correct it here as having negative sizes is
+    // completely unexpected.
+    if ( x && *x < 0 )
+        *x = 0;
+    if ( y && *y < 0 )
+        *y = 0;
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
