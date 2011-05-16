@@ -1298,10 +1298,33 @@ wxString wxGetOsDescription()
                         break;
 
                     case 6:
-                        if ( info.dwMinorVersion == 0 )
+                        switch ( info.dwMinorVersion )
                         {
-                            str.Printf(_("Windows Vista (build %lu"),
-                                       info.dwBuildNumber);
+                            case 0:
+                                if ( wxIsWindowsServer() == 1 )
+                                {
+                                    str.Printf(_("Windows Server 2008 (build %lu"),
+                                               info.dwBuildNumber);
+                                }
+                                else
+                                {
+                                     str.Printf(_("Windows Vista (build %lu"),
+                                               info.dwBuildNumber);
+                                }
+                                break;
+
+                            case 1:
+                                if ( wxIsWindowsServer() == 1 )
+                                {
+                                    str.Printf(_("Windows Server 2008 R2 (build %lu"),
+                                               info.dwBuildNumber);
+                                }
+                                else
+                                {
+                                     str.Printf(_("Windows 7 (build %lu"),
+                                               info.dwBuildNumber);
+                                }
+                                break;
                         }
                         break;
                 }
