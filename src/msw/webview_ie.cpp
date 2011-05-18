@@ -380,27 +380,23 @@ void wxWebViewIE::Stop()
 
 void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
 {
-    wxVariant out;
+    VARIANTARG level;
+    VariantInit(&level);
+    V_VT(&level) = VT_I2;
 
-    if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
+    switch(flags)
     {
-        wxVariant level(REFRESH_COMPLETELY, "VT_I2");
-        //level = 3;
-       // VARIANTARG level;
-       // VariantInit(&level);
-       // V_VT(&level) = VT_I2;
-       // V_I2(&level) = REFRESH_COMPLETELY;
-        out = m_ie.CallMethod("Refresh2", &level);
-    }
-    else
-    {
-        out = m_ie.CallMethod("Refresh");
+        case wxWEB_VIEW_RELOAD_DEFAULT:
+            V_I2(&level) = REFRESH_NORMAL;
+            break;
+        case wxWEB_VIEW_RELOAD_NO_CACHE:
+            V_I2(&level) = REFRESH_COMPLETELY;
+            break;
+        default:
+            wxFAIL_MSG("Unexpected reload type");
     }
 
-    if (out.GetType() != "null")
-    {
-        wxMessageBox("Non-null return message : " + out.GetType());
-    }
+    m_webBrowser->Refresh2(&level);
 }
 
 bool wxWebViewIE::IsOfflineMode()
