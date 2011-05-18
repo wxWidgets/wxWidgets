@@ -1703,16 +1703,10 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( m_cgContext )
         {
             CGContextSaveGState( m_cgContext );
-            CGContextConcatCTM( m_cgContext, m_windowTransform );
-            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
-            m_contextSynthesized = true;
 #if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
             {
-                // the clip region is in device coordinates, so we convert this again to user coordinates
                 wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
-                CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
-                HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
                 // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
                 if ( HIShapeIsEmpty(hishape))
                 {
@@ -1726,6 +1720,9 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                 }
             }
 #endif
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
+            m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
 
 #if 0 // turn on for debugging of clientdc
@@ -1955,6 +1952,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
+        r.size= CGSizeApplyAffineTransform(r.size, m_windowTransform);
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
 #else
     // allow usage as measuring context
