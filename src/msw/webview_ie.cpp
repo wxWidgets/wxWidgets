@@ -656,17 +656,15 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             {
                 m_canNavigateForward = enable;
             }
+            break;
         }
-
-        /*
         case DISPID_NEWWINDOW2:
-        //case DISPID_NEWWINDOW3:
         {
-            wxLogMessage("DISPID_NEWWINDOW2\n");
             wxActiveXEventNativeMSW* nativeParams = evt.GetNativeParameters();
             // Cancel the attempt to open a new window
             *V_BOOLREF(&nativeParams->pDispParams->rgvarg[0]) = VARIANT_TRUE;
-        }*/
+            break;
+        }
     }
 
     evt.Skip();

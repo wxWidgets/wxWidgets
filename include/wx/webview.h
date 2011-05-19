@@ -290,8 +290,8 @@ public:
     //       provide a behavior consistent across ports.
     // - OSX : I receive an event for new frames opened with HTML target, and
     //           currently block them all.
-    // - IE  : The DISPID_NEWWINDOW2 event looks like it should work, but I
-    //           receive way too many of them. A new IE instance opens.
+    // - IE  : An event is recieved for new frames and they are currently 
+    //           blocked
     // - GTK : All frame open requests are blocked. A slot exists that I could
     //           connect to to be notified if ever needed
 
