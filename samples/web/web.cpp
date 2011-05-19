@@ -281,7 +281,7 @@ public:
             frame->Layout();
         }
         
-        wxLogMessage("Navigation request to '" + evt.GetHref() + "' (target='" +
+        wxLogMessage("%s", "Navigation request to '" + evt.GetHref() + "' (target='" +
                    evt.GetTarget() + "')");
         
         wxASSERT(m_browser_ctrl->IsBusy());
@@ -301,7 +301,7 @@ public:
      */
     void onNavigationComplete(wxWebNavigationEvent& evt)
     {
-        wxLogMessage("Navigation complete; url='" + evt.GetHref() + "'");
+        wxLogMessage("%s", "Navigation complete; url='" + evt.GetHref() + "'");
         updateState();
     }
     
@@ -310,7 +310,7 @@ public:
      */
     void onDocumentLoaded(wxWebNavigationEvent& evt)
     {
-        wxLogMessage("Document loaded; url='" + evt.GetHref() + "'");
+        wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
         updateState();
         
         m_browser_ctrl->GetZoom();
