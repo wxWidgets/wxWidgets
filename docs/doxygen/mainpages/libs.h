@@ -39,6 +39,7 @@ digraph Dependancies
     wxRichText [fillcolor = green, URL = "\ref page_libs_wxrichtext"];
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
     wxXRC      [fillcolor = green, URL = "\ref page_libs_wxxrc"];
+    wxWeb      [fillcolor = green, URL = "\ref page_libs_wxweb"];
 
     wxCore -> wxBase;
     wxNet -> wxBase;
@@ -55,6 +56,7 @@ digraph Dependancies
     wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
     wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
+    wxWeb -> wxCore;
 }
 @enddot
 
@@ -199,6 +201,12 @@ Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 
 STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting
 text editor. See <http://www.scintilla.org/> for more info about Scintilla.
+
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+@section page_libs_wxweb wxWeb
+
+The wxWeb library contains the wxWebView control.
 
 Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 

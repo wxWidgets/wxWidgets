@@ -96,44 +96,6 @@ enum wxWebViewBackend
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[];
 
-/**
-  * @class wxWebView
-  *
-  * This control may be used to render web (HTML / CSS / javascript) documents.
-  * Capabilities of the HTML renderer will depend upon the backed.
-  * TODO: describe each backend and its capabilities here
-  *
-  * Note that errors are generally reported asynchronously though the
-  * wxEVT_COMMAND_WEB_VIEW_ERROR event described below.
-  *
-  * @beginEventEmissionTable{wxWebNavigationEvent}
-  * @event{EVT_BUTTON(id, func)}
-  *
-  * @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
-  * Process a wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
-  * to get a resource. This event may be vetoed to prevent navigating to this
-  * resource. Note that if the displayed HTML document has several frames, one
-  * such event will be generated per frame.
-  *
-  * @event{EVT_WEB_VIEW_NAVIGATED(id, func)}
-  * Process a wxEVT_COMMAND_WEB_VIEW_NAVIGATED event generated after it was
-  * confirmed that a resource would be requested. This event may not be vetoed.
-  * Note that if the displayed HTML document has several frames, one such event
-  * will be generated per frame.
-  *
-  * @event{EVT_WEB_VIEW_LOADED(id, func)}
-  * Process a wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
-  * is fully loaded and displayed.
-  *
-  * @event{EVT_WEB_VIEW_ERRROR(id, func)}
-  * Process a wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
-  * error occurs.
-  * The integer associated with this event will be a wxWebNavigationError item.
-  * The string associated with this event may contain a backend-specific more
-  * precise error message/code.
-  *
-  * @endEventTable
-  */
 class WXDLLIMPEXP_WEB wxWebView : public wxControl
 {
 public:
