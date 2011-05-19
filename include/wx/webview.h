@@ -46,29 +46,29 @@ enum wxWebViewZoomType
 enum wxWebNavigationError
 {
     /** Connection error (timeout, etc.) */
-    wxWEB_NAV_ERR_CONNECTION = 1,
+    wxWEB_NAV_ERR_CONNECTION,
     /** Invalid certificate */
-    wxWEB_NAV_ERR_CERTIFICATE = 2,
+    wxWEB_NAV_ERR_CERTIFICATE,
     /** Authentication required */
-    wxWEB_NAV_ERR_AUTH = 3,
+    wxWEB_NAV_ERR_AUTH,
     /** Other security error */
-    wxWEB_NAV_ERR_SECURITY = 4,
+    wxWEB_NAV_ERR_SECURITY,
     /** Requested resource not found */
-    wxWEB_NAV_ERR_NOT_FOUND = 5,
+    wxWEB_NAV_ERR_NOT_FOUND,
     /** Invalid request/parameters (e.g. bad URL, bad protocol,
       * unsupported resource type) */
-    wxWEB_NAV_ERR_REQUEST = 6,
+    wxWEB_NAV_ERR_REQUEST,
     /** The user cancelled (e.g. in a dialog) */
-    wxWEB_NAV_ERR_USER_CANCELLED = 7,
+    wxWEB_NAV_ERR_USER_CANCELLED,
     /** Another (exotic) type of error that didn't fit in other categories*/
-    wxWEB_NAV_ERR_OTHER = 8
+    wxWEB_NAV_ERR_OTHER
 };
 
 /** Type of refresh */
 enum wxWebViewReloadFlags
 {
     /** Default reload, will access cache */
-    wxWEB_VIEW_RELOAD_DEFAULT = 0,
+    wxWEB_VIEW_RELOAD_DEFAULT,
     /** Reload the current view without accessing the cache */
     wxWEB_VIEW_RELOAD_NO_CACHE 
 };
