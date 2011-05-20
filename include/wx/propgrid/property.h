@@ -2390,7 +2390,7 @@ protected:
     /**
         Returns true if child property is selected.
     */
-    bool IsChildSelected() const;
+    bool IsChildSelected( bool recursive = false ) const;
 
     // Removes child property with given pointer. Does not delete it.
     void RemoveChild( wxPGProperty* p );

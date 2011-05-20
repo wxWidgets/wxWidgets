@@ -2569,12 +2569,19 @@ void wxPGProperty::DeleteChildren()
     }
 }
 
-bool wxPGProperty::IsChildSelected() const
+bool wxPGProperty::IsChildSelected( bool recursive ) const
 {
     size_t i;
     for ( i = 0; i < GetChildCount(); i++ )
     {
-        if ( m_parentState->DoIsPropertySelected( Item(i) ) )
+        wxPGProperty* child = Item(i);
+
+        // Test child
+        if ( m_parentState->DoIsPropertySelected( child ) )
+            return true;
+
+        // Test sub-childs
+        if ( recursive && child->IsChildSelected( recursive ) )
             return true;
     }
 
