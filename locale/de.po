@@ -251,7 +251,7 @@ msgstr "Stil des &Gliederungspunktes:"
 #: ../src/generic/wizard.cpp:460
 #: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
-msgstr "Ab&bruch"
+msgstr "Ab&brechen"
 
 #: ../src/msw/mdi.cpp:171
 msgid "&Cascade"
@@ -551,11 +551,11 @@ msgstr "&Rechts:"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&Save"
-msgstr "&Sichern"
+msgstr "&Speichern"
 
 #: ../src/generic/logg.cpp:511
 msgid "&Save..."
-msgstr "&Sichern..."
+msgstr "&Speichern..."
 
 #: ../src/generic/tipdlg.cpp:268
 msgid "&Show tips at startup"
@@ -709,7 +709,7 @@ msgstr "(Hilfe)"
 #: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:281
 msgid "(None)"
-msgstr "(Unbenannt)"
+msgstr "(Kein)"
 
 #: ../src/richtext/richtextsymboldlg.cpp:524
 msgid "(Normal text)"
@@ -723,7 +723,7 @@ msgstr "(Lesezeichen)"
 
 #: ../src/richtext/richtextformatdlg.cpp:627
 msgid "(none)"
-msgstr "(namenlos)"
+msgstr "(Kein)"
 
 #: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:292
@@ -1547,7 +1547,7 @@ msgstr "Kann nicht in den gepackten Datenstrom schreiben: %s"
 #: ../src/mac/carbon/msgdlg.cpp:68
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
-msgstr "Abbruch"
+msgstr "Abbrechen"
 
 #: ../src/xrc/xmlres.cpp:1268
 #: ../src/xrc/xmlres.cpp:1316
@@ -3152,7 +3152,7 @@ msgstr "Suchen"
 
 #: ../src/html/helpwnd.cpp:1215
 msgid "Fixed font:"
-msgstr "Fixed font:"
+msgstr "Schrift fester Breite:"
 
 #: ../src/html/helpwnd.cpp:1275
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
@@ -5318,7 +5318,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "Die Zeichensatz '%s' ist nicht bekannt. Wählen Sie \n"
-"einen Ersatzzeichensatz oder 'Abbruch', \n"
+"einen Ersatzzeichensatz oder 'Abbrechen', \n"
 "falls er nicht ersetzt werden kann."
 
 #: ../src/msw/ole/dataobj.cpp:161
