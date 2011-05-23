@@ -466,6 +466,37 @@ SOURCE=..\..\src\msw\datectrl.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\hyperlink.cpp
+
+!IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 

@@ -2455,7 +2455,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wizard.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
-	$(OBJS)\monodll_hyperlink.obj \
 	$(OBJS)\monodll_notifmsg.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
@@ -2465,7 +2464,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_commandlinkbutton.obj \
 	$(OBJS)\monodll_datecontrols.obj \
-	$(OBJS)\monodll_datectrl.obj
+	$(OBJS)\monodll_datectrl.obj \
+	$(OBJS)\monodll_hyperlink.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
@@ -2499,7 +2499,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wizard.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
-	$(OBJS)\monodll_hyperlink.obj \
 	$(OBJS)\monodll_notifmsg.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
@@ -3225,7 +3224,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wizard.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
-	$(OBJS)\monolib_hyperlink.obj \
 	$(OBJS)\monolib_notifmsg.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
@@ -3235,7 +3233,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_commandlinkbutton.obj \
 	$(OBJS)\monolib_datecontrols.obj \
-	$(OBJS)\monolib_datectrl.obj
+	$(OBJS)\monolib_datectrl.obj \
+	$(OBJS)\monolib_hyperlink.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
@@ -3269,7 +3268,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wizard.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
-	$(OBJS)\monolib_hyperlink.obj \
 	$(OBJS)\monolib_notifmsg.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
@@ -4518,7 +4516,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_wizard.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
-	$(OBJS)\advdll_hyperlink.obj \
 	$(OBJS)\advdll_notifmsg.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
@@ -4528,7 +4525,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_commandlinkbutton.obj \
 	$(OBJS)\advdll_datecontrols.obj \
-	$(OBJS)\advdll_datectrl.obj
+	$(OBJS)\advdll_datectrl.obj \
+	$(OBJS)\advdll_hyperlink.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
@@ -4562,7 +4560,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_wizard.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
-	$(OBJS)\advdll_hyperlink.obj \
 	$(OBJS)\advdll_notifmsg.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
@@ -4611,7 +4608,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_wizard.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
-	$(OBJS)\advlib_hyperlink.obj \
 	$(OBJS)\advlib_notifmsg.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
@@ -4621,7 +4617,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_commandlinkbutton.obj \
 	$(OBJS)\advlib_datecontrols.obj \
-	$(OBJS)\advlib_datectrl.obj
+	$(OBJS)\advlib_datectrl.obj \
+	$(OBJS)\advlib_hyperlink.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
@@ -4655,7 +4652,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_wizard.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
-	$(OBJS)\advlib_hyperlink.obj \
 	$(OBJS)\advlib_notifmsg.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
@@ -7173,6 +7169,9 @@ $(OBJS)\monodll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 $(OBJS)\monodll_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
 
+$(OBJS)\monodll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
 $(OBJS)\monodll_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
 
@@ -8801,11 +8800,6 @@ $(OBJS)\monodll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
 !endif
@@ -9522,6 +9516,9 @@ $(OBJS)\monolib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 
 $(OBJS)\monolib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\monolib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
 
 $(OBJS)\monolib_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
@@ -11148,11 +11145,6 @@ $(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14770,6 +14762,9 @@ $(OBJS)\advdll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 $(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
 
+$(OBJS)\advdll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
 $(OBJS)\advdll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
 
@@ -14860,9 +14855,6 @@ $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 $(OBJS)\advdll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
 
-$(OBJS)\advdll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-
 $(OBJS)\advdll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
 
@@ -14895,6 +14887,9 @@ $(OBJS)\advlib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 
 $(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\advlib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
 
 $(OBJS)\advlib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
@@ -14985,9 +14980,6 @@ $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 
 $(OBJS)\advlib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
-
-$(OBJS)\advlib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
 
 $(OBJS)\advlib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp

@@ -946,6 +946,22 @@
 			<File
 				RelativePath="..\..\src\msw\hyperlink.cpp"
 				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\joystick.cpp"

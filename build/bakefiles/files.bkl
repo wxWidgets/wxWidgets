@@ -3012,13 +3012,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
-    src/msw/hyperlink.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/hyperlink.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
@@ -3032,6 +3030,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/commandlinkbutton.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
+    src/msw/hyperlink.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
@@ -3039,6 +3038,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/commandlinkbutton.h
     wx/msw/calctrl.h
     wx/msw/datectrl.h
+    wx/msw/hyperlink.h
 </set>
 
 <!-- not built on WindowsCE: -->
