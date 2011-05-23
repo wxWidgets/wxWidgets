@@ -6621,11 +6621,31 @@ SOURCE=..\..\include\wx\richmsgdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbackgroundpage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextborderspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextbuffer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbulletspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextdialogpage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextfontpage.h
 # End Source File
 # Begin Source File
 
@@ -6641,11 +6661,31 @@ SOURCE=..\..\include\wx\richtext\richtextimagedlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextindentspage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextliststylepage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextmarginspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextprint.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextsizepage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextstyledlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextstylepage.h
 # End Source File
 # Begin Source File
 

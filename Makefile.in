@@ -4166,13 +4166,23 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/ribbon/page.h \
 	wx/ribbon/panel.h \
 	wx/ribbon/toolbar.h \
+	wx/richtext/richtextbackgroundpage.h \
+	wx/richtext/richtextborderspage.h \
 	wx/richtext/richtextbuffer.h \
+	wx/richtext/richtextbulletspage.h \
 	wx/richtext/richtextctrl.h \
+	wx/richtext/richtextdialogpage.h \
+	wx/richtext/richtextfontpage.h \
 	wx/richtext/richtextformatdlg.h \
 	wx/richtext/richtexthtml.h \
 	wx/richtext/richtextimagedlg.h \
+	wx/richtext/richtextindentspage.h \
+	wx/richtext/richtextliststylepage.h \
+	wx/richtext/richtextmarginspage.h \
 	wx/richtext/richtextprint.h \
+	wx/richtext/richtextsizepage.h \
 	wx/richtext/richtextstyledlg.h \
+	wx/richtext/richtextstylepage.h \
 	wx/richtext/richtextstyles.h \
 	wx/richtext/richtextsymboldlg.h \
 	wx/richtext/richtextuicustomization.h \

@@ -7420,11 +7420,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbackgroundpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextborderspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextbuffer.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbulletspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextdialogpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextfontpage.h"
 				>
 			</File>
 			<File
@@ -7440,11 +7460,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextindentspage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextliststylepage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextmarginspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextsizepage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextstyledlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextstylepage.h"
 				>
 			</File>
 			<File
