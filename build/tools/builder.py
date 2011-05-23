@@ -200,7 +200,7 @@ class MSVCProjectBuilder(Builder):
         Builder.__init__(self, commandName="VCExpress.exe", formatName="msvcProject")
         for key in ["VS90COMNTOOLS", "VC80COMNTOOLS", "VC71COMNTOOLS"]:
             if os.environ.has_key(key):
-                self.prgoramDir = os.path.join(os.environ[key], "..", "IDE")
+                self.programDir = os.path.join(os.environ[key], "..", "IDE")
 
         if self.programDir == None:
             for version in ["9.0", "8", ".NET 2003"]:
