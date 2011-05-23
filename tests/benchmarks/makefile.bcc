@@ -37,6 +37,7 @@ BENCH_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
+	$(OBJS)\bench_datetime.obj \
 	$(OBJS)\bench_htmlpars.obj \
 	$(OBJS)\bench_htmltag.obj \
 	$(OBJS)\bench_ipcclient.obj \
@@ -211,6 +212,9 @@ data:
 
 $(OBJS)\bench_bench.obj: .\bench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_datetime.obj: .\datetime.cpp
+	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\datetime.cpp
 
 $(OBJS)\bench_htmlpars.obj: .\htmlparser\htmlpars.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\htmlparser\htmlpars.cpp
