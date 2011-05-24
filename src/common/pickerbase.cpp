@@ -126,7 +126,7 @@ void wxPickerBase::PostCreation()
     // For aesthetic reasons, make sure the picker is at least as high as the
     // associated text control and is always at least square.
     const wxSize pickerBestSize(m_picker->GetBestSize());
-    const wxSize textBestSize(m_text->GetBestSize());
+    const wxSize textBestSize( HasTextCtrl() ? m_text->GetBestSize() : wxSize());
     wxSize pickerMinSize;
     pickerMinSize.y = wxMax(pickerBestSize.y, textBestSize.y);
     pickerMinSize.x = wxMax(pickerMinSize.x, pickerMinSize.y);
