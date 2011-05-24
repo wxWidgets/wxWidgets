@@ -129,7 +129,7 @@ void wxPickerBase::PostCreation()
     const wxSize textBestSize( HasTextCtrl() ? m_text->GetBestSize() : wxSize());
     wxSize pickerMinSize;
     pickerMinSize.y = wxMax(pickerBestSize.y, textBestSize.y);
-    pickerMinSize.x = wxMax(pickerMinSize.x, pickerMinSize.y);
+    pickerMinSize.x = wxMax(pickerBestSize.x, pickerMinSize.y);
     if ( pickerMinSize != pickerBestSize )
         m_picker->SetMinSize(pickerMinSize);
 
