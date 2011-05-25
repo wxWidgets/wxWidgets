@@ -873,8 +873,10 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         m_macFullScreenData = data ;
         data->m_formerLevel = [m_macWindow level];
         data->m_formerFrame = [m_macWindow frame];
-        CGDisplayCapture( kCGDirectMainDisplay );
-        [m_macWindow setLevel:CGShieldingWindowLevel()];
+#if 0
+        // CGDisplayCapture( kCGDirectMainDisplay );
+        //[m_macWindow setLevel:NSMainMenuWindowLevel+1/*CGShieldingWindowLevel()*/];
+#endif
         NSRect screenframe = [[NSScreen mainScreen] frame];
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
@@ -883,15 +885,25 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
         screenframe.size.height += (frame.size.height - contentRect.size.height);
         [m_macWindow setFrame:screenframe display:YES];
+
+        OSStatus error = SetSystemUIMode(kUIModeAllHidden,
+                                kUIOptionDisableAppleMenu
+                                | kUIOptionDisableProcessSwitch
+                                | kUIOptionDisableForceQuit); 
     }
     else if ( m_macFullScreenData != NULL )
     {
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-        CGDisplayRelease( kCGDirectMainDisplay );
-        [m_macWindow setLevel:data->m_formerLevel];
+#if 0
+        // CGDisplayRelease( kCGDirectMainDisplay );
+        // [m_macWindow setLevel:data->m_formerLevel];
+#endif
+        
         [m_macWindow setFrame:data->m_formerFrame display:YES];
         delete data ;
         m_macFullScreenData = NULL ;
+
+        OSStatus error = SetSystemUIMode(kUIModeNormal, 0); 
     }
 
     return true;
