@@ -119,6 +119,10 @@ enum wxWebViewBackend
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
+    @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
+       Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
+       window is created. This event may be vetoed to prevent a new window showing,
+       for example if you want to open the url in the existing window or a new tab.
     @endEventTable
    
     @library{wxweb}
@@ -333,6 +337,10 @@ public:
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
+    @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
+       Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
+       window is created. This event may be vetoed to prevent a new window showing,
+       for example if you want to open the url in the existing window or a new tab.
     @endEventTable
 
     @library{wxweb}
@@ -357,24 +365,25 @@ public:
     */
     const wxString& GetTarget() const;
 
-    // default copy ctor, assignment operator and dtor are ok
     virtual wxEvent* Clone() const;
 
     /** 
         Get whether this event may be vetoed (stopped/prevented). Only
-        meaningful for events fired before navigation takes place.
+        meaningful for events fired before navigation takes place or new 
+        window events.
      */
     bool CanVeto() const;
 
     /** 
         Whether this event was vetoed (stopped/prevented). Only meaningful for
-        events fired before navigation takes place.
+        events fired before navigation takes place or new window events.
      */
     bool IsVetoed() const;
 
     /** 
         Veto (prevent/stop) this event. Only meaningful for events fired
-        before navigation takes place. Only valid if CanVeto() returned true.
+        before navigation takes place or new window events. Only valid 
+        if CanVeto() returned true.
      */
     void Veto();
 };

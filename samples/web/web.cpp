@@ -315,6 +315,17 @@ public:
         
         m_browser_ctrl->GetZoom();
     }
+
+    /**
+     * On new window, we veto to stop extra windows appearing
+     */
+    void onNewWindow(wxWebNavigationEvent& evt)
+    {
+        wxLogMessage("%s", "New window; url='" + evt.GetHref() + "'");
+        evt.Veto();
+
+        updateState();
+    }
     
     /**
      * Invoked when user selects the "View Source" menu item
@@ -625,6 +636,9 @@ bool wxMiniApp::OnInit()
             
     m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
                       wxWebNavigationEventHandler(wxMiniApp::onError), NULL, this);
+
+    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                      wxWebNavigationEventHandler(wxMiniApp::onNewWindow), NULL, this);
 
     frame->Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(wxMiniApp::onClose), NULL, this);
     Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxMiniApp::onQuitMenu), NULL, this);

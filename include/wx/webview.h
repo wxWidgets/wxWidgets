@@ -363,6 +363,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wx
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebNavigationEvent );
 
 typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
              (wxWebNavigationEvent&);
@@ -384,6 +385,10 @@ typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
 
 #define EVT_WEB_VIEW_ERRROR(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
+                     wxHtmlNavigatingEventHandler(fn))
+
+#define EVT_WEB_VIEW_NEWWINDOW(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #endif // wxUSE_WEB

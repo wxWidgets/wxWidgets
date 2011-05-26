@@ -658,11 +658,21 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             }
             break;
         }
-        case DISPID_NEWWINDOW2:
+        case DISPID_NEWWINDOW3:
         {
-            wxActiveXEventNativeMSW* nativeParams = evt.GetNativeParameters();
-            // Cancel the attempt to open a new window
-            *V_BOOLREF(&nativeParams->pDispParams->rgvarg[0]) = VARIANT_TRUE;
+            wxString url = evt[4].GetString();
+
+            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                                       GetId(), url, wxEmptyString, true);
+            event.SetEventObject(this);
+            HandleWindowEvent(event);
+
+            //If we veto the event then we cancel the new window
+            if (event.IsVetoed())
+            {
+                wxActiveXEventNativeMSW* nativeParams = evt.GetNativeParameters();
+                *V_BOOLREF(&nativeParams->pDispParams->rgvarg[3]) = VARIANT_TRUE;
+            }
             break;
         }
     }
