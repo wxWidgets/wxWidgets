@@ -320,12 +320,15 @@ public:
      */
     void onToolsClicked(wxCommandEvent& evt)
     {
+        if(m_browser_ctrl->GetCurrentURL() == "")
+            return;
+
         tinySize->Check(false);
         smallSize->Check(false); 
         mediumSize->Check(false);
         largeSize->Check(false);
         largestSize->Check(false);
-        
+
         wxWebViewZoom zoom = m_browser_ctrl->GetZoom();
         switch (zoom)
         {
