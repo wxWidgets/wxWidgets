@@ -538,8 +538,8 @@ bool wxMiniApp::OnInit()
     stop    = m_toolbar->AddTool(wxID_ANY, _("Stop"),    wxBitmap(stop_xpm));
     reload  = m_toolbar->AddTool(wxID_ANY, _("Reload"),  wxBitmap(refresh_xpm));
     
-    url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT("http://www.google.com"), 
-                         wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition,
+                         wxSize(400, -1), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(url, _("URL"));    
     tools   = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
     //m_toolbar->SetDropdownMenu(tools->GetId(), toolsMenu);
@@ -578,6 +578,7 @@ bool wxMiniApp::OnInit()
 
     // ---- Create the web view
     m_browser_ctrl = wxWebView::New(mainpane, wxID_ANY);
+    m_browser_ctrl->LoadUrl("http://www.wxwidgets.org");
     
     // ---- Create the notification panel
     {
