@@ -1,4 +1,0 @@
-#include "../sample.rc"
-
-dragicon ICON "dragicon.ico"
-
