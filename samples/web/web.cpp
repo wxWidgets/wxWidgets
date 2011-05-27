@@ -1,16 +1,36 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxiepanel.cpp
-// Purpose:     wxBetterHTMLControl test
+// Name:        web.cpp
+// Purpose:     wxWebView sample
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon
+// Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
-#include <wx/wx.h>
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 #include <wx/artprov.h>
 #include <wx/notifmsg.h>
 #include <wx/settings.h>
+#include <wx/webview.h>
+#include <wx/infobar.h>
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 #if wxUSE_STC
 #include <wx/stc/stc.h> 
@@ -18,99 +38,193 @@
 #error "wxStyledTextControl is needed by this sample"
 #endif
 
-#include "wx/webview.h"
 #include "wxlogo.xpm"
 #include "back.xpm"
 #include "forward.xpm"
 #include "stop.xpm"
 #include "refresh.xpm"
 
-// --------------------------------------------------------------------------------------------------
-//                                          SOURCE VIEW FRAME
-// --------------------------------------------------------------------------------------------------
+
+class WebApp : public wxApp
+{
+public:
+    virtual bool OnInit();
+};
+
+class WebFrame : public wxFrame
+{
+public:
+    WebFrame();
+
+    void OnAnimationTimer(wxTimerEvent& evt);
+    void UpdateState();
+    void OnUrl(wxCommandEvent& evt);
+    void OnBack(wxCommandEvent& evt);
+    void OnForward(wxCommandEvent& evt);
+    void OnStop(wxCommandEvent& evt);
+    void OnReload(wxCommandEvent& evt);
+    void OnNavigationRequest(wxWebNavigationEvent& evt);
+    void OnNavigationComplete(wxWebNavigationEvent& evt);
+    void OnDocumentLoaded(wxWebNavigationEvent& evt);
+    void OnNewWindow(wxWebNavigationEvent& evt);
+    void OnViewSourceRequest(wxCommandEvent& evt);
+    void OnToolsClicked(wxCommandEvent& evt);
+    void OnSetZoom(wxCommandEvent& evt);
+    void OnError(wxWebNavigationEvent& evt);
+    void OnPrint(wxCommandEvent& evt);
+
+private:
+    wxTextCtrl* m_url;
+    wxWebView* m_browser;
+
+    wxToolBar* m_toolbar;
+    wxToolBarToolBase* m_toolbar_back;
+    wxToolBarToolBase* m_toolbar_forward;
+    wxToolBarToolBase* m_toolbar_stop;
+    wxToolBarToolBase* m_toolbar_reload;
+    wxToolBarToolBase* m_toolbar_tools;
+
+    wxMenu* m_tools_menu;
+    wxMenuItem* m_tools_tiny;
+    wxMenuItem* m_tools_small;
+    wxMenuItem* m_tools_medium;
+    wxMenuItem* m_tools_large;
+    wxMenuItem* m_tools_largest;
+
+    wxTimer* m_timer;
+    int m_animation_angle;
+
+
+    wxInfoBar *m_info;
+    wxStaticText* m_info_text;
+};
 
 class SourceViewDialog : public wxDialog
 {
 public:
-    SourceViewDialog(wxWindow* parent, wxString source) :
-        wxDialog(parent, wxID_ANY, "Source Code",
-                 wxDefaultPosition, wxSize(700,500),
-                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-    {
-        wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
-
-        text->SetMarginWidth(1, 30);
-        text->SetMarginType(1, wxSTC_MARGIN_NUMBER); 
-        text->SetText(source);
-        
-        text->StyleClearAll();
-        text->SetLexer(wxSTC_LEX_HTML);
-        text->StyleSetForeground(wxSTC_H_DOUBLESTRING,     wxColour(255,0,0));
-        text->StyleSetForeground(wxSTC_H_SINGLESTRING,     wxColour(255,0,0));
-        text->StyleSetForeground(wxSTC_H_ENTITY,           wxColour(255,0,0));
-        text->StyleSetForeground(wxSTC_H_TAG,              wxColour(0,150,0));
-        text->StyleSetForeground(wxSTC_H_TAGUNKNOWN,       wxColour(0,150,0));
-        text->StyleSetForeground(wxSTC_H_ATTRIBUTE,        wxColour(0,0,150));
-        text->StyleSetForeground(wxSTC_H_ATTRIBUTEUNKNOWN, wxColour(0,0,150));
-        text->StyleSetForeground(wxSTC_H_COMMENT,          wxColour(150,150,150));
-
-
-        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-        sizer->Add(text, 1, wxEXPAND);
-        SetSizer(sizer);
-    }
+    SourceViewDialog(wxWindow* parent, wxString source);
 };
 
-// --------------------------------------------------------------------------------------------------
-//                                           MAIN BROWSER CLASS
-// --------------------------------------------------------------------------------------------------
-class wxMiniApp : public wxApp
+IMPLEMENT_APP(WebApp)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+bool WebApp::OnInit()
 {
-    wxTextCtrl* url;
-    wxWebView* m_browser_ctrl;
-    wxFrame* frame;
-     
-    wxToolBarToolBase* back;
-    wxToolBarToolBase* forward;
-    wxToolBarToolBase* stop;
-    wxToolBarToolBase* reload;
-    wxToolBarToolBase* tools;
+    if ( !wxApp::OnInit() )
+        return false;
+
+    WebFrame *frame = new WebFrame();
+    frame->Show();
+
+    return true;
+}
+
+WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
+{
+    // set the frame icon
+    SetIcon(wxICON(sample));
+    SetTitle("wxWebView Sample");
+
+    m_timer = NULL;
+    m_animation_angle = 0;
+
+
+    wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
+
+    // Create the toolbar
+    m_toolbar = CreateToolBar(wxTB_TEXT);
+    m_toolbar->SetToolBitmapSize(wxSize(32, 32));
     
-    wxMenu* toolsMenu;
-    wxMenuItem* tinySize;
-    wxMenuItem* smallSize;
-    wxMenuItem* mediumSize;
-    wxMenuItem* largeSize;
-    wxMenuItem* largestSize;
+    m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"),    wxBitmap(back_xpm));
+    m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), wxBitmap(forward_xpm));
+    m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"),    wxBitmap(stop_xpm));
+    m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  wxBitmap(refresh_xpm));
+    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    m_toolbar->AddControl(m_url, _("URL"));    
+    m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
+
+    m_toolbar->Realize();
+
+    // Create the info panel
+    m_info = new wxInfoBar(this);
+    topsizer->Add(m_info, wxSizerFlags().Expand());
+
+    // Create the webview
+    m_browser = wxWebView::New(this, wxID_ANY);
+    m_browser->LoadUrl("http://www.wxwidgets.org");
+    topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
+
+    SetSizer(topsizer);
+
+    // Create a log window
+    new wxLogWindow(this, _("Logging"));
+
+    // Create the Tools menu
+    m_tools_menu = new wxMenu();
+    wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
+    wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
+    m_tools_menu->AppendSeparator();
+    m_tools_tiny = m_tools_menu->AppendCheckItem(wxID_ANY, _("Tiny"));
+    m_tools_small = m_tools_menu->AppendCheckItem(wxID_ANY, _("Small"));
+    m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
+    m_tools_large = m_tools_menu->AppendCheckItem(wxID_ANY, _("Large"));
+    m_tools_largest = m_tools_menu->AppendCheckItem(wxID_ANY, _("Largest"));
+
+
+    // Connect the toolbar events
+    Connect(m_toolbar_back->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnBack), NULL, this );
+    Connect(m_toolbar_forward->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnForward), NULL, this );
+    Connect(m_toolbar_stop->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnStop), NULL, this );
+    Connect(m_toolbar_reload->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnReload),NULL, this );
+    Connect(m_toolbar_tools->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnToolsClicked), NULL, this );
+
+    Connect(m_url->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+            wxCommandEventHandler(WebFrame::OnUrl), NULL, this );
+
+    // Connect the webview events
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+            wxWebNavigationEventHandler(WebFrame::OnNavigationRequest), NULL, this);
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+            wxWebNavigationEventHandler(WebFrame::OnNavigationComplete), NULL, this);
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_LOADED,
+            wxWebNavigationEventHandler(WebFrame::OnDocumentLoaded), NULL, this);     
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
+            wxWebNavigationEventHandler(WebFrame::OnError), NULL, this);
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+            wxWebNavigationEventHandler(WebFrame::OnNewWindow), NULL, this);
+
+    // Connect the menu events
+    Connect(viewSource->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+           wxCommandEventHandler(WebFrame::OnViewSourceRequest),  NULL, this );
+    Connect(print->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnPrint),  NULL, this );
+    Connect(m_tools_tiny->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+    Connect(m_tools_small->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+    Connect(m_tools_medium->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+    Connect(m_tools_large->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+    Connect(m_tools_largest->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+}
+
+void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
+{
+    m_animation_angle += 15;
+    if (m_animation_angle > 360) m_animation_angle -= 360;
     
-    //wxMenuItem* offlineMode;
-    //wxMenuItem* onlineMode;
-    
-    wxLogWindow* logging;
-    wxToolBar* m_toolbar;
-    
-    wxTimer* m_timer;
-    int m_animation_angle;
-    
-    wxPanel* m_notification_panel;
-    wxStaticText* m_notification_text;
-    
-public:
-    // function called at the application initialization
-    virtual bool OnInit();
-    
-    /** 
-      * Implement timer to display the loading animation (OK, I admit this is totally irrelevant to
-      * the HTML control being demonstrated here, but it's fun ;)
-      */
-    void onAnimationTimer(wxTimerEvent& evt)
+    wxBitmap image(32, 32);    
     {
-        m_animation_angle += 15;
-        if (m_animation_angle > 360) m_animation_angle -= 360;
-        
-        wxBitmap image(32, 32);
-        
-        {
         wxMemoryDC dc;
         dc.SelectObject(image);
         dc.SetBackground(wxBrush(wxColour(255,0,255)));
@@ -121,7 +235,7 @@ public:
             dc.SetBrush(*wxYELLOW_BRUSH);
             dc.SetPen(*wxYELLOW_PEN);
             dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
-                          16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
+            16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
         }
         
         dc.DrawBitmap(wxBitmap(wxlogo_xpm), 0, 0, true);
@@ -131,506 +245,297 @@ public:
             dc.SetBrush(*wxYELLOW_BRUSH);
             dc.SetPen(*wxYELLOW_PEN);
             dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
-                          16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
+            16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
         }
-        }
-        
-        image.SetMask(new wxMask(image, wxColour(255,0,255)));
-        m_toolbar->SetToolNormalBitmap(tools->GetId(), image);
-    }
-    
-    /**
-     * Method that retrieves the current state from the web control and updates the GUI
-     * the reflect this current state.
-     */
-    void updateState()
-    {
-        m_toolbar->EnableTool( back->GetId(), m_browser_ctrl->CanGoBack() );
-        m_toolbar->EnableTool( forward->GetId(), m_browser_ctrl->CanGoForward() );
-        
-        if (m_browser_ctrl->IsBusy())
-        {
-            //tools->SetLabel(_("Loading..."));
-            
-            if (m_timer == NULL)
-            {
-                m_timer = new wxTimer(this);
-                this->Connect(wxEVT_TIMER, wxTimerEventHandler(wxMiniApp::onAnimationTimer), NULL, this);
-            }
-            m_timer->Start(100); // start animation timer
-            
-            m_toolbar->EnableTool( stop->GetId(), true );    
-        }
-        else
-        {
-            if (m_timer != NULL) m_timer->Stop(); // stop animation timer
-            
-            //tools->SetLabel(_("Tools"));
-            m_toolbar->SetToolNormalBitmap(tools->GetId(), wxBitmap(wxlogo_xpm));
-            m_toolbar->EnableTool( stop->GetId(), false );            
-        }
-        
-        frame->SetTitle( m_browser_ctrl->GetCurrentTitle() );
-        url->SetValue( m_browser_ctrl->GetCurrentURL() );
-    }
-    
-    /**
-     * Callback invoked when user entered an URL and pressed enter
-     */
-    void onUrl(wxCommandEvent& evt)
-    {
-        if (m_notification_panel->IsShown())
-        {
-            m_notification_panel->Hide();
-            frame->Layout();
-        }
-        
-        m_browser_ctrl->LoadUrl( url->GetValue() );
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when user pressed the "back" button
-     */
-    void onBack(wxCommandEvent& evt)
-    {
-        // First, hide notification panel if it was shown
-        if (m_notification_panel->IsShown())
-        {
-            m_notification_panel->Hide();
-            frame->Layout();
-        }
-        
-        m_browser_ctrl->GoBack();
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when user pressed the "forward" button
-     */
-    void onForward(wxCommandEvent& evt)
-    {
-        // First, hide notification panel if it was shown
-        if (m_notification_panel->IsShown())
-        {
-            m_notification_panel->Hide();
-            frame->Layout();
-        }
-        
-        m_browser_ctrl->GoForward();
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when user pressed the "stop" button
-     */
-    void onStop(wxCommandEvent& evt)
-    {
-        m_browser_ctrl->Stop();
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when user pressed the "reload" button
-     */
-    void onReload(wxCommandEvent& evt)
-    {
-        // First, hide notification panel if it was shown
-        if (m_notification_panel->IsShown())
-        {
-            m_notification_panel->Hide();
-            frame->Layout();
-        }
-        
-        m_browser_ctrl->Reload();
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when there is a request to load a new page (for instance
-     * when the user clicks a link)
-     */
-    void onNavigationRequest(wxWebNavigationEvent& evt)
-    {
-        // First, hide notification panel if it was shown
-        if (m_notification_panel->IsShown())
-        {
-            m_notification_panel->Hide();
-            frame->Layout();
-        }
-        
-        wxLogMessage("%s", "Navigation request to '" + evt.GetHref() + "' (target='" +
-                   evt.GetTarget() + "')");
-        
-        wxASSERT(m_browser_ctrl->IsBusy());
-        
-        // Uncomment this to see how to block navigation requests
-        //int answer = wxMessageBox("Proceed with navigation to '" + evt.GetHref() + "'?",
-        //                          "Proceed with navigation?", wxYES_NO );
-        //if (answer != wxYES)
-        //{
-        //    evt.Veto();
-        //}
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when a navigation request was accepted
-     */
-    void onNavigationComplete(wxWebNavigationEvent& evt)
-    {
-        wxLogMessage("%s", "Navigation complete; url='" + evt.GetHref() + "'");
-        updateState();
-    }
-    
-    /**
-     * Callback invoked when a page is finished loading
-     */
-    void onDocumentLoaded(wxWebNavigationEvent& evt)
-    {
-        wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
-        updateState();
-        
-        m_browser_ctrl->GetZoom();
-    }
+    }  
+    image.SetMask(new wxMask(image, wxColour(255,0,255)));
+    m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), image);
+}
 
-    /**
-     * On new window, we veto to stop extra windows appearing
-     */
-    void onNewWindow(wxWebNavigationEvent& evt)
-    {
-        wxLogMessage("%s", "New window; url='" + evt.GetHref() + "'");
-        evt.Veto();
-
-        updateState();
-    }
-    
-    /**
-     * Invoked when user selects the "View Source" menu item
-     */
-    void onViewSourceRequest(wxCommandEvent& evt)
-    {
-        SourceViewDialog dlg(frame, m_browser_ctrl->GetPageSource());
-        dlg.Center();
-        dlg.ShowModal();
-    }
-    
-    /**
-     * Invoked when user selects the "Menu" item
-     */
-    void onToolsClicked(wxCommandEvent& evt)
-    {
-        if(m_browser_ctrl->GetCurrentURL() == "")
-            return;
-
-        tinySize->Check(false);
-        smallSize->Check(false); 
-        mediumSize->Check(false);
-        largeSize->Check(false);
-        largestSize->Check(false);
-
-        wxWebViewZoom zoom = m_browser_ctrl->GetZoom();
-        switch (zoom)
-        {
-            case wxWEB_VIEW_ZOOM_TINY:
-                tinySize->Check();
-                break;
-            case wxWEB_VIEW_ZOOM_SMALL:
-                smallSize->Check();
-                break;
-            case wxWEB_VIEW_ZOOM_MEDIUM:
-                mediumSize->Check();
-                break;
-            case wxWEB_VIEW_ZOOM_LARGE:
-                largeSize->Check();
-                break;
-            case wxWEB_VIEW_ZOOM_LARGEST:
-                largestSize->Check();
-                break;
-        }
-        
-        //    bool IsOfflineMode();
-        //    void SetOfflineMode(bool offline);
-        
-        //offlineMode->Check(false);
-        //onlineMode->Check(false);
-        //const bool offline = m_browser_ctrl->IsOfflineMode();
-        //if (offline) offlineMode->Check();
-        //else         onlineMode->Check();
-        
-        wxPoint position = frame->ScreenToClient( wxGetMousePosition() );
-        frame->PopupMenu(toolsMenu, position.x, position.y);
-    }
-    
-    /**
-     * Invoked when user selects the zoom size in the menu
-     */
-    void onSetZoom(wxCommandEvent& evt)
-    {
-        if (evt.GetId() == tinySize->GetId())
-        {
-            m_browser_ctrl->SetZoom(wxWEB_VIEW_ZOOM_TINY);
-        }
-        else if (evt.GetId() == smallSize->GetId())
-        {
-            m_browser_ctrl->SetZoom(wxWEB_VIEW_ZOOM_SMALL);
-        }
-        else if (evt.GetId() == mediumSize->GetId())
-        {
-            m_browser_ctrl->SetZoom(wxWEB_VIEW_ZOOM_MEDIUM);
-        }
-        else if (evt.GetId() == largeSize->GetId())
-        {
-            m_browser_ctrl->SetZoom(wxWEB_VIEW_ZOOM_LARGE);
-        }
-        else if (evt.GetId() == largestSize->GetId())
-        {
-            m_browser_ctrl->SetZoom(wxWEB_VIEW_ZOOM_LARGEST);
-        }
-        else
-        {
-            wxASSERT(false);
-        }
-    }
-    
-    /*
-    void onChangeOnlineMode(wxCommandEvent& evt)
-    {
-        if (evt.GetId() == offlineMode->GetId())
-        {
-            m_browser_ctrl->SetOfflineMode(true);
-            m_browser_ctrl->SetPage("<html><body><h1>You are now in offline mode.</h1></body></html>");
-        }
-        else if (evt.GetId() == onlineMode->GetId())
-        {
-            m_browser_ctrl->SetOfflineMode(false);
-        }
-        else
-        {
-            wxASSERT(false);
-        }
-    }
-    */
-    
-    /**
-     * Callback invoked when a loading error occurs
-     */
-    void onError(wxWebNavigationEvent& evt)
-    {
-        wxString errorCategory;
-        switch (evt.GetInt())
-        {
-            case  wxWEB_NAV_ERR_CONNECTION:
-            errorCategory = "wxWEB_NAV_ERR_CONNECTION";
-            break;
-            
-            case wxWEB_NAV_ERR_CERTIFICATE:
-            errorCategory = "wxWEB_NAV_ERR_CERTIFICATE";
-            break;
-            
-            case wxWEB_NAV_ERR_AUTH:
-            errorCategory = "wxWEB_NAV_ERR_AUTH";
-            break;
-            
-            case wxWEB_NAV_ERR_SECURITY:
-            errorCategory = "wxWEB_NAV_ERR_SECURITY";
-            break;
-            
-            case wxWEB_NAV_ERR_NOT_FOUND:
-            errorCategory = "wxWEB_NAV_ERR_NOT_FOUND";
-            break;
-            
-            case wxWEB_NAV_ERR_REQUEST:
-            errorCategory = "wxWEB_NAV_ERR_REQUEST";
-            break;
-            
-            case wxWEB_NAV_ERR_USER_CANCELLED:
-            errorCategory = "wxWEB_NAV_ERR_USER_CANCELLED";
-            break;
-            
-            case wxWEB_NAV_ERR_OTHER:
-            errorCategory = "wxWEB_NAV_ERR_OTHER";
-            break;
-        }
-        
-        wxLogMessage("Error; url='" + evt.GetHref() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
-        
-        // show the notification panel
-        m_notification_text->SetLabel(_("An error occurred loading ") + evt.GetHref() + "\n" +
-                                      "'" + errorCategory + "' (" + evt.GetString() + ")");
-        m_notification_panel->Layout();
-        m_notification_panel->GetSizer()->SetSizeHints(m_notification_panel);
-        m_notification_panel->Show();
-        frame->Layout();
-    
-        updateState();
-    }
-    
-    /**
-     * Invoked when user clicks "Hide" in the notification panel
-     */
-    void onHideNotifBar(wxCommandEvent& evt)
-    {
-        m_notification_panel->Hide();
-        frame->Layout();
-    }
-    
-    void onClose(wxCloseEvent& evt)
-    {
-        frame->Destroy();
-    }
-    
-    void onQuitMenu(wxCommandEvent& evt)
-    {
-        frame->Destroy();
-    }
-    
-    /**
-     * Invoked when user selects "Print" from the menu
-     */
-    void onPrint(wxCommandEvent& evt)
-    {
-        m_browser_ctrl->Print();
-    }
-};
-
-IMPLEMENT_APP(wxMiniApp);
-
-bool wxMiniApp::OnInit()
+/**
+  * Method that retrieves the current state from the web control and updates the GUI
+  * the reflect this current state.
+  */
+void WebFrame::UpdateState()
 {
-    m_timer = NULL;
-    m_animation_angle = 0;
+    m_toolbar->EnableTool( m_toolbar_back->GetId(), m_browser->CanGoBack() );
+    m_toolbar->EnableTool( m_toolbar_forward->GetId(), m_browser->CanGoForward() );
     
-    frame = new wxFrame( NULL, -1, _("wxBetterHTMLControl Browser Example"), wxDefaultPosition, wxSize(800, 600) );
-    
-    // wx has a default mechanism to expand the only control of a frame; but since this mechanism
-    // does not involve sizers, invoking ->Layout on the frame does not udpate the layout which is
-    // not good.
-    wxBoxSizer* expandSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxPanel* mainpane = new wxPanel(frame, wxID_ANY);
-    expandSizer->Add(mainpane, 1, wxEXPAND);
-    frame->SetSizer(expandSizer);
-
-    wxLog::SetLogLevel(wxLOG_Max);
-    logging = new wxLogWindow(frame, _("Logging"));
-    wxLog::SetLogLevel(wxLOG_Max);
-    
-    // ---- Create the Tools menu
-    toolsMenu = new wxMenu();
-    wxMenuItem* print = toolsMenu->Append(wxID_ANY , _("Print"));
-    wxMenuItem* viewSource = toolsMenu->Append(wxID_ANY , _("View Source"));
-    toolsMenu->AppendSeparator();
-    tinySize    = toolsMenu->AppendCheckItem(wxID_ANY, _("Tiny"));
-    smallSize   = toolsMenu->AppendCheckItem(wxID_ANY, _("Small"));
-    mediumSize  = toolsMenu->AppendCheckItem(wxID_ANY, _("Medium"));
-    largeSize   = toolsMenu->AppendCheckItem(wxID_ANY, _("Large"));
-    largestSize = toolsMenu->AppendCheckItem(wxID_ANY, _("Largest"));
-    //toolsMenu->AppendSeparator();
-    //offlineMode = toolsMenu->AppendCheckItem(wxID_ANY, _("Offline Mode"));
-    //onlineMode  = toolsMenu->AppendCheckItem(wxID_ANY, _("Online Mode"));
-
-    // ---- Create the Toolbar
-    m_toolbar = frame->CreateToolBar(/*wxNO_BORDER |*/ wxTB_TEXT);
-    m_toolbar->SetToolBitmapSize(wxSize(32, 32));
-    
-    back    = m_toolbar->AddTool(wxID_ANY, _("Back"),    wxBitmap(back_xpm));
-    forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), wxBitmap(forward_xpm));
-    stop    = m_toolbar->AddTool(wxID_ANY, _("Stop"),    wxBitmap(stop_xpm));
-    reload  = m_toolbar->AddTool(wxID_ANY, _("Reload"),  wxBitmap(refresh_xpm));
-    
-    url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition,
-                         wxSize(400, -1), wxTE_PROCESS_ENTER );
-    m_toolbar->AddControl(url, _("URL"));    
-    tools   = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
-    //m_toolbar->SetDropdownMenu(tools->GetId(), toolsMenu);
-
-    m_toolbar->Realize();
-
-    m_toolbar->Connect(back->GetId(),    wxEVT_COMMAND_TOOL_CLICKED,
-                                         wxCommandEventHandler(wxMiniApp::onBack),    NULL, this );
-    m_toolbar->Connect(forward->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-                                         wxCommandEventHandler(wxMiniApp::onForward), NULL, this );
-    m_toolbar->Connect(stop->GetId(),    wxEVT_COMMAND_TOOL_CLICKED,
-                                         wxCommandEventHandler(wxMiniApp::onStop),    NULL, this );
-    m_toolbar->Connect(reload->GetId(),  wxEVT_COMMAND_TOOL_CLICKED,
-                                         wxCommandEventHandler(wxMiniApp::onReload),  NULL, this );
-    m_toolbar->Connect(tools->GetId(),   wxEVT_COMMAND_TOOL_CLICKED,
-                                         wxCommandEventHandler(wxMiniApp::onToolsClicked),  NULL, this );
-
-    url->Connect(url->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(wxMiniApp::onUrl), NULL, this );
-
-
-    frame->Connect(viewSource->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onViewSourceRequest),  NULL, this );
-    frame->Connect(print->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onPrint),  NULL, this );
-    
-    frame->Connect(tinySize->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
-    frame->Connect(smallSize->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
-    frame->Connect(mediumSize->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
-    frame->Connect(largeSize->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
-    frame->Connect(largestSize->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                   wxCommandEventHandler(wxMiniApp::onSetZoom),  NULL, this );
-
-    // ---- Create the web view
-    m_browser_ctrl = wxWebView::New(mainpane, wxID_ANY);
-    m_browser_ctrl->LoadUrl("http://www.wxwidgets.org");
-    
-    // ---- Create the notification panel
+    if (m_browser->IsBusy())
     {
-    wxBoxSizer* notification_sizer = new wxBoxSizer(wxHORIZONTAL);        
-    m_notification_panel = new wxPanel(mainpane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
-    m_notification_text = new wxStaticText(m_notification_panel, wxID_ANY, "[No message]");
-    notification_sizer->Add( new wxStaticBitmap(m_notification_panel, wxID_ANY,
-                                                    wxArtProvider::GetBitmap(wxART_WARNING, wxART_OTHER , wxSize(48, 48))),
-                                                    0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );    
-    notification_sizer->Add(m_notification_text, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALL, 5);
-    wxButton* hideNotif = new wxButton(m_notification_panel, wxID_ANY, _("Hide"));
-    notification_sizer->Add(hideNotif, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-    m_notification_panel->SetSizer(notification_sizer);
-    m_notification_panel->SetBackgroundColour(wxColor(255,225,110));
-    m_notification_panel->Hide();
-    hideNotif->Connect(hideNotif->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
-                       wxCommandEventHandler(wxMiniApp::onHideNotifBar), NULL, this);
+        if (m_timer == NULL)
+        {
+            m_timer = new wxTimer(this);
+            this->Connect(wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnAnimationTimer), NULL, this);
+        }
+        m_timer->Start(100); // start animation timer
+        
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), true );    
+    }
+    else
+    {
+        if (m_timer != NULL) m_timer->Stop(); // stop animation timer
+        m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );            
     }
     
+    SetTitle( m_browser->GetCurrentTitle() );
+    m_url->SetValue( m_browser->GetCurrentURL() );
+}
+
+/**
+  * Callback invoked when user entered an URL and pressed enter
+  */
+void WebFrame::OnUrl(wxCommandEvent& evt)
+{
+    m_browser->LoadUrl( m_url->GetValue() );
+    UpdateState();
+}
+
+/**
+    * Callback invoked when user pressed the "back" button
+    */
+void WebFrame::OnBack(wxCommandEvent& evt)
+{
+    m_browser->GoBack();
+    UpdateState();
+}
+
+/**
+  * Callback invoked when user pressed the "forward" button
+  */
+void WebFrame::OnForward(wxCommandEvent& evt)
+{
+    m_browser->GoForward();
+    UpdateState();
+}
+
+/**
+  * Callback invoked when user pressed the "stop" button
+  */
+void WebFrame::OnStop(wxCommandEvent& evt)
+{
+    m_browser->Stop();
+    UpdateState();
+}
+
+/**
+  * Callback invoked when user pressed the "reload" button
+  */
+void WebFrame::OnReload(wxCommandEvent& evt)
+{
+    m_browser->Reload();
+    UpdateState();
+}
+
+/**
+  * Callback invoked when there is a request to load a new page (for instance
+  * when the user clicks a link)
+  */
+void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
+{
+    wxLogMessage("%s", "Navigation request to '" + evt.GetHref() + "' (target='" +
+    evt.GetTarget() + "')");
+    
+    wxASSERT(m_browser->IsBusy());
+    
+    // Uncomment this to see how to block navigation requests
+    //int answer = wxMessageBox("Proceed with navigation to '" + evt.GetHref() + "'?",
+    //                          "Proceed with navigation?", wxYES_NO );
+    //if (answer != wxYES)
+    //{
+    //    evt.Veto();
+    //}
+    UpdateState();
+}
+
+/**
+  * Callback invoked when a navigation request was accepted
+  */
+void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
+{
+    wxLogMessage("%s", "Navigation complete; url='" + evt.GetHref() + "'");
+    UpdateState();
+}
+
+/**
+  * Callback invoked when a page is finished loading
+  */
+void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
+{
+    wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
+    UpdateState();
+}
+
+/**
+  * On new window, we veto to stop extra windows appearing
+  */
+void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
+{
+    wxLogMessage("%s", "New window; url='" + evt.GetHref() + "'");
+    evt.Veto();
+
+    UpdateState();
+}
+
+/**
+  * Invoked when user selects the "View Source" menu item
+  */
+void WebFrame::OnViewSourceRequest(wxCommandEvent& evt)
+{
+    SourceViewDialog dlg(this, m_browser->GetPageSource());
+    dlg.ShowModal();
+}
+
+/**
+  * Invoked when user selects the "Menu" item
+  */
+void WebFrame::OnToolsClicked(wxCommandEvent& evt)
+{
+    if(m_browser->GetCurrentURL() == "")
+        return;
+
+    m_tools_tiny->Check(false);
+    m_tools_small->Check(false); 
+    m_tools_medium->Check(false);
+    m_tools_large->Check(false);
+    m_tools_largest->Check(false);
+
+    wxWebViewZoom zoom = m_browser->GetZoom();
+    switch (zoom)
+    {
+    case wxWEB_VIEW_ZOOM_TINY:
+        m_tools_tiny->Check();
+        break;
+    case wxWEB_VIEW_ZOOM_SMALL:
+        m_tools_small->Check();
+        break;
+    case wxWEB_VIEW_ZOOM_MEDIUM:
+        m_tools_medium->Check();
+        break;
+    case wxWEB_VIEW_ZOOM_LARGE:
+        m_tools_large->Check();
+        break;
+    case wxWEB_VIEW_ZOOM_LARGEST:
+        m_tools_largest->Check();
+        break;
+    }
+    
+    wxPoint position = ScreenToClient( wxGetMousePosition() );
+    PopupMenu(m_tools_menu, position.x, position.y);
+}
+
+/**
+  * Invoked when user selects the zoom size in the menu
+  */
+void WebFrame::OnSetZoom(wxCommandEvent& evt)
+{
+    if (evt.GetId() == m_tools_tiny->GetId())
+    {
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
+    }
+    else if (evt.GetId() == m_tools_small->GetId())
+    {
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_SMALL);
+    }
+    else if (evt.GetId() == m_tools_medium->GetId())
+    {
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_MEDIUM);
+    }
+    else if (evt.GetId() == m_tools_large->GetId())
+    {
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_LARGE);
+    }
+    else if (evt.GetId() == m_tools_largest->GetId())
+    {
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_LARGEST);
+    }
+    else
+    {
+        wxFAIL;
+    }
+}
+
+/**
+  * Callback invoked when a loading error occurs
+  */
+void WebFrame::OnError(wxWebNavigationEvent& evt)
+{
+    wxString errorCategory;
+    switch (evt.GetInt())
+    {
+    case  wxWEB_NAV_ERR_CONNECTION:
+        errorCategory = "wxWEB_NAV_ERR_CONNECTION";
+        break;
+        
+    case wxWEB_NAV_ERR_CERTIFICATE:
+        errorCategory = "wxWEB_NAV_ERR_CERTIFICATE";
+        break;
+        
+    case wxWEB_NAV_ERR_AUTH:
+        errorCategory = "wxWEB_NAV_ERR_AUTH";
+        break;
+        
+    case wxWEB_NAV_ERR_SECURITY:
+        errorCategory = "wxWEB_NAV_ERR_SECURITY";
+        break;
+        
+    case wxWEB_NAV_ERR_NOT_FOUND:
+        errorCategory = "wxWEB_NAV_ERR_NOT_FOUND";
+        break;
+        
+    case wxWEB_NAV_ERR_REQUEST:
+        errorCategory = "wxWEB_NAV_ERR_REQUEST";
+        break;
+        
+    case wxWEB_NAV_ERR_USER_CANCELLED:
+        errorCategory = "wxWEB_NAV_ERR_USER_CANCELLED";
+        break;
+        
+    case wxWEB_NAV_ERR_OTHER:
+        errorCategory = "wxWEB_NAV_ERR_OTHER";
+        break;
+    }
+    
+    wxLogMessage("Error; url='" + evt.GetHref() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
+    
+    //Show the info bar with an error
+    m_info->ShowMessage(_("An error occurred loading ") + evt.GetHref() + "\n" +
+    "'" + errorCategory + "' (" + evt.GetString() + ")", wxICON_ERROR);
+    
+    UpdateState();
+}
+
+/**
+  * Invoked when user selects "Print" from the menu
+  */
+void WebFrame::OnPrint(wxCommandEvent& evt)
+{
+    m_browser->Print();
+}
+
+SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
+                  wxDialog(parent, wxID_ANY, "Source Code",
+                           wxDefaultPosition, wxSize(700,500),
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+    wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
+    text->SetMarginWidth(1, 30);
+    text->SetMarginType(1, wxSTC_MARGIN_NUMBER); 
+    text->SetText(source);
+
+    text->StyleClearAll();
+    text->SetLexer(wxSTC_LEX_HTML);
+    text->StyleSetForeground(wxSTC_H_DOUBLESTRING, wxColour(255,0,0));
+    text->StyleSetForeground(wxSTC_H_SINGLESTRING, wxColour(255,0,0));
+    text->StyleSetForeground(wxSTC_H_ENTITY, wxColour(255,0,0));
+    text->StyleSetForeground(wxSTC_H_TAG, wxColour(0,150,0));
+    text->StyleSetForeground(wxSTC_H_TAGUNKNOWN, wxColour(0,150,0));
+    text->StyleSetForeground(wxSTC_H_ATTRIBUTE, wxColour(0,0,150));
+    text->StyleSetForeground(wxSTC_H_ATTRIBUTEUNKNOWN, wxColour(0,0,150));
+    text->StyleSetForeground(wxSTC_H_COMMENT, wxColour(150,150,150));
+
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(m_notification_panel, 0,  wxEXPAND | wxALL, 5);
-    sizer->Add(m_browser_ctrl, 1, wxEXPAND | wxALL, 5);
-    
-    mainpane->SetSizer(sizer);
-    frame->Layout();
-    frame->Center();
-    frame->Show();
-    
-    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
-                      wxWebNavigationEventHandler(wxMiniApp::onNavigationRequest), NULL, this);
-    
-    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-                      wxWebNavigationEventHandler(wxMiniApp::onNavigationComplete), NULL, this);
-    
-    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_LOADED,
-                      wxWebNavigationEventHandler(wxMiniApp::onDocumentLoaded), NULL, this);
-            
-    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
-                      wxWebNavigationEventHandler(wxMiniApp::onError), NULL, this);
-
-    m_browser_ctrl->Connect(m_browser_ctrl->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
-                      wxWebNavigationEventHandler(wxMiniApp::onNewWindow), NULL, this);
-
-    frame->Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(wxMiniApp::onClose), NULL, this);
-    Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxMiniApp::onQuitMenu), NULL, this);
-
-    // You can test different zoom types (if supported by the backend)
-    // if (m_browser_ctrl->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
-    //     m_browser_ctrl->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
-
-    SetTopWindow(frame);
-    frame->Layout();
-
-    return true;
+    sizer->Add(text, 1, wxEXPAND);
+    SetSizer(sizer);
 }
