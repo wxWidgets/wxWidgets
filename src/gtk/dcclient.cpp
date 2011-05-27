@@ -1492,7 +1492,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
 
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-#if __WXGTK26__
+#ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
         x = XLOG2DEV(x);
