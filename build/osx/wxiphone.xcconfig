@@ -1,4 +1,0 @@
-WXTOOLKIT = iphone
-WXTOOLKITUPPER = IPHONE
-
-#include "wx.xcconfig"
