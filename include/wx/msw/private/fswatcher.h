@@ -50,7 +50,7 @@ public:
                                 m_path);
             }
         }
-        delete m_overlapped;
+        free(m_overlapped);
     }
 
     bool IsOk() const
