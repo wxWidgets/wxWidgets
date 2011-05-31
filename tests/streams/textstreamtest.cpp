@@ -129,7 +129,7 @@ void TextStreamTestCase::MiscTests()
 {
     wxString filename = wxT("testdata.fc");
     wxFileInputStream fsIn(filename);
-    if ( !fsIn.Ok() )
+    if ( !fsIn.IsOk() )
     {
         return;
     }

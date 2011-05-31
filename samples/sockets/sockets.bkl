@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <if cond="FORMAT=='gnu'">
+        <!-- as we can't (easily) test for GUI, build them always -->
+        <set var="cond_build_gui">1</set>
+    </if>
+    <if cond="FORMAT!='gnu'">
+        <set var="cond_build_gui">USE_GUI=='1'</set>
+    </if>
+
+    <exe id="client" template="wx_sample" template_append="wx_append" cond="$(cond_build_gui)">
+        <sources>client.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <exe id="server" template="wx_sample" template_append="wx_append" cond="$(cond_build_gui)">
+        <sources>server.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <exe id="baseclient" template="wx_sample_console"
+                      template_append="wx_append_base">
+        <sources>baseclient.cpp</sources>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <exe id="baseserver" template="wx_sample_console"
+                      template_append="wx_append_base">
+        <sources>baseserver.cpp</sources>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>

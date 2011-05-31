@@ -1546,7 +1546,7 @@ bool wxQuantize::Quantize(const wxImage& src, wxImage& dest,
 
     if (flags & wxQUANTIZE_FILL_DESTINATION_IMAGE)
     {
-        if (!dest.Ok())
+        if (!dest.IsOk())
             dest.Create(w, h);
 
         imgdt = dest.GetData();

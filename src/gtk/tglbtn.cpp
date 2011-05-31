@@ -130,7 +130,7 @@ void wxBitmapToggleButton::SetLabel(const wxBitmap& label)
 
 void wxBitmapToggleButton::OnSetBitmap()
 {
-    if (!m_bitmap.Ok()) return;
+    if (!m_bitmap.IsOk()) return;
 
     GtkWidget* image = gtk_bin_get_child(GTK_BIN(m_widget));
     if (image == NULL)
@@ -178,7 +178,7 @@ wxSize wxBitmapToggleButton::DoGetBestSize() const
 {
     wxSize best;
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         int border = HasFlag(wxNO_BORDER) ? 4 : 10;
         best.x = m_bitmap.GetWidth()+border;

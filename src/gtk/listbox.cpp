@@ -855,7 +855,7 @@ GdkWindow *wxListBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    if (m_hasBgCol && m_backgroundColour.Ok())
+    if (m_hasBgCol && m_backgroundColour.IsOk())
     {
         GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
         if (window)

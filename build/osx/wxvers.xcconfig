@@ -1,0 +1,4 @@
+// update this file with new version numbers
+
+DYLIB_COMPATIBILITY_VERSION = 2.9
+DYLIB_CURRENT_VERSION = 2.9.2

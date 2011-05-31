@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       csleobuild.xml
+    Purpose:
+    Author:
+    RCS-ID:     $Id$
+    Copyright:
+    Licence:
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/csleobuild.xml"/>
+
+<scheduler>
+    <name>branch_2_9_0</name>
+    <branch>branches/WX_2_9_0_BRANCH</branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
+</scheduler>
+
+<build>
+    <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
+    <builddir>csleo</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+  <build>
+    <name>OSX 10.5 Intel wxOSX Cocoa trunk</name>
+    <builddir>csleo_cocoa</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+        <configure options="--with-osx_cocoa"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+  </build>
+<build>
+    <name>OSX 10.5 Intel wxMac Stable</name>
+    <builddir>csleo_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

@@ -1,0 +1,3 @@
+#include "../sample.rc"
+
+svgbitmap               BITMAP  "SVGlogo24.bmp"

@@ -1,0 +1,160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Internationalization wxWidgets sample\n"
+"PO-Revision-Date: 2006-08-11 21:20+0200\n"
+"Last-Translator: Diaa Sami <diaasami@yahoo.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100 >= 11 && n%100 <= 99) ? 3 : n==2 ? 1 : (n >= 3 && n <= 10 ? 2 : 0);\n"
+"X-Poedit-Language: Arabic\n"
+"POT-Creation-Date: \n"
+
+#: ../internat.cpp:200
+msgid "&About..."
+msgstr "&عن البرنامج..."
+
+#: ../internat.cpp:202
+msgid "E&xit"
+msgstr "&خروج"
+
+#: ../internat.cpp:205
+msgid "&Open bogus file"
+msgstr "افتح &ملف غير موجود"
+
+#: ../internat.cpp:206
+msgid "&Play a game"
+msgstr "العب لعبة"
+
+#: ../internat.cpp:208
+msgid "&1 _() (gettext)"
+msgstr "&1 ‎_() (gettext)‎"
+
+#: ../internat.cpp:209
+msgid "&2 _N() (ngettext)"
+msgstr "&2 ‎_N() (ngettext)‎"
+
+#: ../internat.cpp:210
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)‎"
+
+#: ../internat.cpp:213
+msgid "&File"
+msgstr "&ملف"
+
+#: ../internat.cpp:214
+msgid "&Test"
+msgstr "&اختبار"
+
+#: ../internat.cpp:232
+msgid "International wxWidgets App"
+msgstr "‎تطبيق wxWidgets الدولي"
+
+#: ../internat.cpp:252
+msgid ""
+"Language: %s\n"
+"System locale name:\n"
+"%s\n"
+"Canonical locale name: %s\n"
+msgstr ""
+"اللغة: %s\n"
+"اسم المحل الخاص بالنظام: %s\n"
+"اسم المحل الرسمي: %s\n"
+
+#: ../internat.cpp:258
+msgid ""
+"I18n sample\n"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"نموذج I18n\n"
+"‪(c) 1998, 1999 Vadim Zeitlin i Julian Smart"
+
+#: ../internat.cpp:261
+msgid "About Internat"
+msgstr "عن Internat"
+
+#: ../internat.cpp:270
+msgid "Enter your number:"
+msgstr "ادخل رقما"
+
+#: ../internat.cpp:271
+msgid "Try to guess my number!"
+msgstr "حاول ان تحزر رقما"
+
+#: ../internat.cpp:285
+msgid "You've probably entered an invalid number."
+msgstr "لقد ادخلت رقما خاطئا"
+
+#: ../internat.cpp:299
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "تهانينا! لقد ربحت. الجملة السحرية هي:"
+
+#: ../internat.cpp:300
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "لم يمكن خلق fifo `%s'‎"
+
+#: ../internat.cpp:311
+msgid "Result"
+msgstr "النتيجة"
+
+#: ../internat.cpp:323
+msgid "Testing _() (gettext)"
+msgstr "اختبار ‎_() (gettext)‎"
+
+#: ../internat.cpp:324
+msgid "Please enter text to translate"
+msgstr "من فضلك ادخل جملة لتتم ترجمتها"
+
+#: ../internat.cpp:338
+msgid "Testing _N() (ngettext)"
+msgstr "اختبار ‎_N() (ngettext)‎"
+
+#: ../internat.cpp:340
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr "من فضلك ادخل مدي رقميا لصيغ الجمع لجملة \"س ملفات محذوفة\""
+
+#: ../internat.cpp:366
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "اختبار wxTRANSLATE() (gettext_noop)‎"
+
+#: ../internat.cpp:310
+msgid "Bad luck! try again..."
+msgstr "حظ سيئ، حاول مرة اخرى"
+
+#: ../internat.cpp:327
+msgid "default value"
+msgstr "القيمة الافتراضية"
+
+#: ../internat.cpp:364
+msgid "line 1"
+msgstr "السطر 1"
+
+#: ../internat.cpp:365
+msgid "line 2"
+msgstr "السطر 2"
+
+#: ../internat.cpp:366
+msgid "line 3"
+msgstr "السطر 3"
+
+# Four plural forms in arabic:
+# 1st: anything that doesn't fit below (like 0 1 100 1000 2000 3000 ...)
+# 2nd: 2
+# 3rd: 3-10
+# 4th: ends with 11-99(like 11, 125, 1055, etc ...)
+
+#: ../internat.cpp:353
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "ملف محذوف"
+msgstr[1] "ملفين محذوف"
+msgstr[2] "ملفات محذوف"
+msgstr[3] "ملفاً محذوفاً"
+

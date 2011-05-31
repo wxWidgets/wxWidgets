@@ -1,0 +1,38 @@
+#************************************************************************
+# Makefile for MDI under VMS
+# by Stefan Hammes
+# (incomplete) update history:
+# 11.04.95
+#************************************************************************
+
+#************************************************************************
+# Definition section
+# (cave: definitions and includes must begin with ',')
+#************************************************************************
+
+APPOPTS = 
+APPDEFS = 
+APPINCS = 
+
+#************************************************************************
+# Module section
+#************************************************************************
+
+# Name of main module
+MAIN = mdi
+
+# Object modules of the application.
+OBJS = mdi.obj
+OBJLIST =mdi.obj
+
+.include [--.src]makevms.env
+
+# main dependency
+$(MAIN).exe : $(OBJS)
+    $(LINK) $(LINKFLAGS) /exec=$(MAIN).exe $(OBJLIST),$(WXLIB)/lib,$(OPTSFILE)/option
+    - purge *.exe
+
+#************************************************************************
+# Header file depedencies following
+#************************************************************************
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       StellarWerx32.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86 wxGTK trunk STL</name>
+    <builddir>stellarwerx32_wxgtk</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--enable-stl --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxX11 stable</name>
+    <builddir>stellarwerx32_wxx11</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-x11"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk ANSI</name>
+    <builddir>stellarwerx32_wxgtk_ansi</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-unicode --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

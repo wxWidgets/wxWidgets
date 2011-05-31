@@ -143,8 +143,8 @@ wxTextAttr::wxTextAttr(const wxColour& colText,
 {
     Init();
 
-    if (m_colText.Ok()) m_flags |= wxTEXT_ATTR_TEXT_COLOUR;
-    if (m_colBack.Ok()) m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR;
+    if (m_colText.IsOk()) m_flags |= wxTEXT_ATTR_TEXT_COLOUR;
+    if (m_colBack.IsOk()) m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR;
     if (alignment != wxTEXT_ALIGNMENT_DEFAULT)
         m_flags |= wxTEXT_ATTR_ALIGNMENT;
 
@@ -422,7 +422,7 @@ wxFont wxTextAttr::GetFont() const
 // Get attributes from font.
 bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
 {
-    if (!font.Ok())
+    if (!font.IsOk())
         return false;
 
     if (flags & wxTEXT_ATTR_FONT_SIZE)
@@ -518,13 +518,13 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
             destStyle.SetFontFamily(style.GetFontFamily());
     }
 
-    if (style.GetTextColour().Ok() && style.HasTextColour())
+    if (style.GetTextColour().IsOk() && style.HasTextColour())
     {
         if (!(compareWith && compareWith->HasTextColour() && compareWith->GetTextColour() == style.GetTextColour()))
             destStyle.SetTextColour(style.GetTextColour());
     }
 
-    if (style.GetBackgroundColour().Ok() && style.HasBackgroundColour())
+    if (style.GetBackgroundColour().IsOk() && style.HasBackgroundColour())
     {
         if (!(compareWith && compareWith->HasBackgroundColour() && compareWith->GetBackgroundColour() == style.GetBackgroundColour()))
             destStyle.SetBackgroundColour(style.GetBackgroundColour());
@@ -670,30 +670,30 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     if (attr.HasFont())
         font = attr.GetFont();
 
-    if ( !font.Ok() )
+    if ( !font.IsOk() )
     {
         if (attrDef.HasFont())
             font = attrDef.GetFont();
 
-        if ( text && !font.Ok() )
+        if ( text && !font.IsOk() )
             font = text->GetFont();
     }
 
     wxColour colFg = attr.GetTextColour();
-    if ( !colFg.Ok() )
+    if ( !colFg.IsOk() )
     {
         colFg = attrDef.GetTextColour();
 
-        if ( text && !colFg.Ok() )
+        if ( text && !colFg.IsOk() )
             colFg = text->GetForegroundColour();
     }
 
     wxColour colBg = attr.GetBackgroundColour();
-    if ( !colBg.Ok() )
+    if ( !colBg.IsOk() )
     {
         colBg = attrDef.GetBackgroundColour();
 
-        if ( text && !colBg.Ok() )
+        if ( text && !colBg.IsOk() )
             colBg = text->GetBackgroundColour();
     }
 

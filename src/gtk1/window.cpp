@@ -2929,9 +2929,9 @@ void wxWindowGTK::OnInternalIdle()
     GtkUpdate();
 
     wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+    if (g_globalCursor.IsOk()) cursor = g_globalCursor;
 
-    if (cursor.Ok())
+    if (cursor.IsOk())
     {
         /* I now set the cursor anew in every OnInternalIdle call
            as setting the cursor in a parent window also effects the
@@ -2944,7 +2944,7 @@ void wxWindowGTK::OnInternalIdle()
             if (window)
                 gdk_window_set_cursor( window, cursor.GetCursor() );
 
-            if (!g_globalCursor.Ok())
+            if (!g_globalCursor.IsOk())
                 cursor = *wxSTANDARD_CURSOR;
 
             window = m_widget->window;
@@ -3218,7 +3218,7 @@ int wxWindowGTK::GetCharHeight() const
     wxCHECK_MSG( (m_widget != NULL), 12, wxT("invalid window") );
 
     wxFont font = GetFont();
-    wxCHECK_MSG( font.Ok(), 12, wxT("invalid font") );
+    wxCHECK_MSG( font.IsOk(), 12, wxT("invalid font") );
 
     GdkFont *gfont = font.GetInternalFont( 1.0 );
 
@@ -3230,7 +3230,7 @@ int wxWindowGTK::GetCharWidth() const
     wxCHECK_MSG( (m_widget != NULL), 8, wxT("invalid window") );
 
     wxFont font = GetFont();
-    wxCHECK_MSG( font.Ok(), 8, wxT("invalid font") );
+    wxCHECK_MSG( font.IsOk(), 8, wxT("invalid font") );
 
     GdkFont *gfont = font.GetInternalFont( 1.0 );
 
@@ -3246,7 +3246,7 @@ void wxWindowGTK::DoGetTextExtent(const wxString& string,
 {
     wxFont fontToUse = theFont ? *theFont : GetFont();
 
-    wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
+    wxCHECK_RET( fontToUse.IsOk(), wxT("invalid font") );
 
     if (string.empty())
     {
@@ -3697,7 +3697,7 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
     if (!wxWindowBase::SetBackgroundColour(colour))
         return false;
 
-    if (colour.Ok())
+    if (colour.IsOk())
     {
         // We need the pixel value e.g. for background clearing.
         m_backgroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
@@ -3720,7 +3720,7 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
         return false;
     }
 
-    if (colour.Ok())
+    if (colour.IsOk())
     {
         // We need the pixel value e.g. for background clearing.
         m_foregroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
@@ -3737,21 +3737,21 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 {
     // do we need to apply any changes at all?
     if ( !forceStyle &&
-         !m_font.Ok() &&
-         !m_foregroundColour.Ok() && !m_backgroundColour.Ok() )
+         !m_font.IsOk() &&
+         !m_foregroundColour.IsOk() && !m_backgroundColour.IsOk() )
     {
         return NULL;
     }
 
     GtkRcStyle *style = gtk_rc_style_new();
 
-    if ( m_font.Ok() )
+    if ( m_font.IsOk() )
     {
         wxString xfontname = m_font.GetNativeFontInfo()->GetXFontName();
         style->fontset_name = g_strdup(xfontname.c_str());
     }
 
-    if ( m_foregroundColour.Ok() )
+    if ( m_foregroundColour.IsOk() )
     {
         GdkColor *fg = m_foregroundColour.GetColor();
 
@@ -3765,7 +3765,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
         style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG;
     }
 
-    if ( m_backgroundColour.Ok() )
+    if ( m_backgroundColour.IsOk() )
     {
         GdkColor *bg = m_backgroundColour.GetColor();
 
@@ -3913,7 +3913,7 @@ void wxWindowGTK::DoCaptureMouse()
     wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
     const wxCursor* cursor = &m_cursor;
-    if (!cursor->Ok())
+    if (!cursor->IsOk())
         cursor = wxSTANDARD_CURSOR;
 
     gdk_pointer_grab( window, FALSE,

@@ -233,7 +233,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 bool wxDropSource::GiveFeedback(wxDragResult effect)
 {
     const wxCursor& cursor = GetCursor(effect);
-    if ( cursor.Ok() )
+    if ( cursor.IsOk() )
     {
         ::SetCursor((HCURSOR)cursor.GetHCURSOR());
 

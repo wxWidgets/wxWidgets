@@ -734,10 +734,10 @@ wxString wxTextCtrl::GetRange(long from, long to) const
                 wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
 
                 wxFont font = m_defaultStyle.GetFont();
-                if ( !font.Ok() )
+                if ( !font.IsOk() )
                     font = GetFont();
 
-                if ( font.Ok() )
+                if ( font.IsOk() )
                 {
                    encoding = font.GetEncoding();
                 }
@@ -1072,10 +1072,10 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
         if ( GetRichVersion() > 1 )
         {
             wxFont font = m_defaultStyle.GetFont();
-            if ( !font.Ok() )
+            if ( !font.IsOk() )
                 font = GetFont();
 
-            if ( font.Ok() )
+            if ( font.IsOk() )
             {
                wxFontEncoding encoding = font.GetEncoding();
                if ( encoding != wxFONTENCODING_SYSTEM )
@@ -2657,7 +2657,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         lf.lfWeight = FW_NORMAL;
 
     wxFont font = wxCreateFontFromLogFont(& lf);
-    if (font.Ok())
+    if (font.IsOk())
     {
         style.SetFont(font);
     }

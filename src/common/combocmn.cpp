@@ -1172,7 +1172,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     // its platform default or bitmap+pushbutton background is used, but not if
     // there is vertical size adjustment or horizontal spacing.
     if ( ( (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) ||
-                (m_bmpNormal.Ok() && m_blankButtonBg) ) &&
+                (m_bmpNormal.IsOk() && m_blankButtonBg) ) &&
          m_btnSpacingX == 0 &&
          m_btnHei <= 0 )
     {
@@ -1180,7 +1180,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
         btnBorder = 0;
     }
     else if ( (m_iFlags & wxCC_BUTTON_COVERS_BORDER) &&
-              m_btnSpacingX == 0 && !m_bmpNormal.Ok() )
+              m_btnSpacingX == 0 && !m_bmpNormal.IsOk() )
     {
         m_iFlags &= ~(wxCC_IFLAG_BUTTON_OUTSIDE);
         btnBorder = 0;
@@ -1237,7 +1237,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     //   It is larger
     //   OR
     //   button width is set to default and blank button bg is not drawn
-    if ( m_bmpNormal.Ok() )
+    if ( m_bmpNormal.IsOk() )
     {
         int bmpReqWidth = m_bmpNormal.GetWidth();
         int bmpReqHeight = m_bmpNormal.GetHeight();
@@ -1259,7 +1259,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
         {
             int newY = butHeight+(customBorder*2);
             SetClientSize(wxDefaultCoord,newY);
-            if ( m_bmpNormal.Ok() || m_btnArea.width != butWidth || m_btnArea.height != butHeight )
+            if ( m_bmpNormal.IsOk() || m_btnArea.width != butWidth || m_btnArea.height != butHeight )
                 m_iFlags |= wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
             else
                 m_iFlags &= ~wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
@@ -1368,16 +1368,16 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
     // TODO: Better method to calculate close-to-native control height.
 
     int fhei;
-    if ( m_font.Ok() )
+    if ( m_font.IsOk() )
         fhei = (m_font.GetPointSize()*2) + 5;
-    else if ( wxNORMAL_FONT->Ok() )
+    else if ( wxNORMAL_FONT->IsOk() )
         fhei = (wxNORMAL_FONT->GetPointSize()*2) + 5;
     else
         fhei = sizeText.y + 4;
 
     // Need to force height to accomodate bitmap?
     int btnSizeY = m_btnSize.y;
-    if ( m_bmpNormal.Ok() && fhei < btnSizeY )
+    if ( m_bmpNormal.IsOk() && fhei < btnSizeY )
         fhei = btnSizeY;
 
     // Control height doesn't depend on border
@@ -1702,7 +1702,7 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int flags )
         dc.DrawRectangle(rect);
     }
 
-    if ( !m_bmpNormal.Ok() )
+    if ( !m_bmpNormal.IsOk() )
     {
         if ( flags & Button_BitmapOnly )
             return;
@@ -2564,17 +2564,17 @@ void wxComboCtrlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
     m_bmpNormal = bmpNormal;
     m_blankButtonBg = blankButtonBg;
 
-    if ( bmpPressed.Ok() )
+    if ( bmpPressed.IsOk() )
         m_bmpPressed = bmpPressed;
     else
         m_bmpPressed = bmpNormal;
 
-    if ( bmpHover.Ok() )
+    if ( bmpHover.IsOk() )
         m_bmpHover = bmpHover;
     else
         m_bmpHover = bmpNormal;
 
-    if ( bmpDisabled.Ok() )
+    if ( bmpDisabled.IsOk() )
         m_bmpDisabled = bmpDisabled;
     else
         m_bmpDisabled = bmpNormal;

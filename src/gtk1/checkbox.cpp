@@ -172,10 +172,10 @@ bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
 void wxCheckBox::OnInternalIdle()
 {
     wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+    if (g_globalCursor.IsOk()) cursor = g_globalCursor;
 
     GdkWindow *event_window = TOGGLE_BUTTON_EVENT_WIN(m_widgetCheckbox);
-    if ( event_window && cursor.Ok() )
+    if ( event_window && cursor.IsOk() )
     {
         /* I now set the cursor the anew in every OnInternalIdle call
            as setting the cursor in a parent window also effects the

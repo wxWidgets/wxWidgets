@@ -46,7 +46,7 @@ public :
 
     // returns 0 in case of no Error, otherwise platform specific error codes
     virtual wxUint32 GetStatus() const = 0 ;
-    bool Ok() { return GetStatus() == 0 ; }
+    bool IsOk() { return GetStatus() == 0 ; }
 
     static wxNativePrinterDC* Create(wxPrintData* data) ;
 } ;
@@ -288,7 +288,7 @@ wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printda
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
     if ( m_nativePrinterDC )
     {
-        m_ok = m_nativePrinterDC->Ok() ;
+        m_ok = m_nativePrinterDC->IsOk() ;
         if ( !m_ok )
         {
             wxString message ;
@@ -329,7 +329,7 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     {
         // in case we have to do additional things when successful
     }
-    m_ok = m_nativePrinterDC->Ok() ;
+    m_ok = m_nativePrinterDC->IsOk() ;
     if ( !m_ok )
     {
         wxString message ;
@@ -347,7 +347,7 @@ void wxPrinterDCImpl::EndDoc(void)
         return ;
 
     m_nativePrinterDC->EndDoc( (wxPrinterDC*) GetOwner() ) ;
-    m_ok = m_nativePrinterDC->Ok() ;
+    m_ok = m_nativePrinterDC->IsOk() ;
 
     if ( !m_ok )
     {
@@ -397,7 +397,7 @@ void wxPrinterDCImpl::StartPage()
     m_backgroundBrush = *wxWHITE_BRUSH;
 
     m_nativePrinterDC->StartPage( (wxPrinterDC*) GetOwner() ) ;
-    m_ok = m_nativePrinterDC->Ok() ;
+    m_ok = m_nativePrinterDC->IsOk() ;
 
 }
 
@@ -407,7 +407,7 @@ void wxPrinterDCImpl::EndPage()
         return ;
 
     m_nativePrinterDC->EndPage( (wxPrinterDC*) GetOwner() );
-    m_ok = m_nativePrinterDC->Ok() ;
+    m_ok = m_nativePrinterDC->IsOk() ;
 }
 
 void wxPrinterDCImpl::DoGetSize(int *width, int *height) const

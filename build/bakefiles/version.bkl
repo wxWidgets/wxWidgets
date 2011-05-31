@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <!-- ================================================================== -->
+    <!--                      Handling of binary compatiblity:              -->
+    <!-- ================================================================== -->
+
+    <!--
+       We use libtool CURRENT:REVISION:AGE versioning scheme. Here are the
+       rules for updating the values below, this should be done whenever wx
+       version (wx/version.h) changes (we abbreviate WX_CURRENT:REVISION:AGE
+       as C:R:A respectively):
+
+       0. Set C:R:A = 0:0:0 if major or minor version has changed.
+
+       1. If any API has been removed or otherwise changed in backwards
+          incompatible way, then change C:R:A to C+1:0:0
+
+       2. Else, if any API has been added, change C:R:A to C+1:0:A+1
+
+       3. Else, i.e. if there were no changes at all to API but only internal
+          changes, change C:R:A to C:R+1:A
+    -->
+    <set var="WX_CURRENT">2</set>
+    <set var="WX_REVISION">0</set>
+    <set var="WX_AGE">0</set>
+
+
+    <!-- ================================================================== -->
+    <!--                        Library version number:                     -->
+    <!-- ================================================================== -->
+
+    <!-- extract wx version number from wx/version.h: -->
+    <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
+    <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
+    <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
+
+
+
+    <!-- ================================================================== -->
+    <!--                          Derived variables:                        -->
+    <!-- ================================================================== -->
+
+    <!-- set misc helper variables: -->
+
+    <set var="WX_RELEASE" make_var="1">
+        $(WXVER_MAJOR).$(WXVER_MINOR)
+    </set>
+    <set var="WX_RELEASE_NODOT" make_var="1">
+        $(WXVER_MAJOR)$(WXVER_MINOR)
+    </set>
+    <set var="WX_VERSION" make_var="1">
+        $(WX_RELEASE).$(WXVER_RELEASE)
+    </set>
+    <set var="WX_VERSION_NODOT" make_var="1">
+        $(WX_RELEASE_NODOT)$(WXVER_RELEASE)
+    </set>
+
+    <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
+
+    <!-- in unstable branch, binary compat. changes with every release, check
+         for it: -->
+    <if cond="WX_STABLE_BRANCH=='0' and int(WX_CURRENT)!=int(WXVER_RELEASE)">
+        <error>Forgot to update WX_CURRENT/WX_REVISION/WX_AGE?</error>
+    </if>
+    <set var="WXSOVERSION">
+        $(int(WX_CURRENT)-int(WX_AGE)).$(WX_AGE).$(WX_REVISION)
+    </set>
+
+    <!-- FIXME: until libtool scheme is implemented in bakefile -->
+    <set var="WXMACVERSION_CMD">
+        <if cond="PLATFORM_MACOSX=='1'">
+           <!-- Version can't be 0, so add 1 to it to force it to be non null -->
+            -compatibility_version $(int(WX_AGE)+1).0 -current_version $(int(WX_AGE)+1).$(WX_REVISION)
+        </if>
+    </set>
+
+    <set var="WXWIN32DLLVERSION">
+        <if cond="WX_STABLE_BRANCH=='1'">$(WX_RELEASE_NODOT)</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WX_VERSION_NODOT)</if>
+    </set>
+
+</makefile>

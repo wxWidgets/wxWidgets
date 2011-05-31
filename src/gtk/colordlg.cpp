@@ -105,7 +105,7 @@ int wxColourDialog::ShowModal()
 void wxColourDialog::ColourDataToDialog()
 {
     const GdkColor * const
-        col = m_data.GetColour().Ok() ? m_data.GetColour().GetColor()
+        col = m_data.GetColour().IsOk() ? m_data.GetColour().GetColor()
                                       : NULL;
 
 #if wxUSE_LIBHILDON
@@ -138,7 +138,7 @@ void wxColourDialog::ColourDataToDialog()
     for (unsigned i = 0; i < 16; i++)
     {
         wxColour c = m_data.GetCustomColour(i);
-        if (c.Ok())
+        if (c.IsOk())
         {
             colors[n_colors] = *c.GetColor();
             n_colors++;
@@ -161,7 +161,7 @@ void wxColourDialog::DialogToColourData()
         m_data.SetColour(*clr);
 #elif wxUSE_LIBHILDON2 // !wxUSE_LIBHILDON
     const GdkColor * const
-    col = m_data.GetColour().Ok() ? m_data.GetColour().GetColor() : NULL;
+    col = m_data.GetColour().IsOk() ? m_data.GetColour().GetColor() : NULL;
 
     GdkColor clr;
     if (col)

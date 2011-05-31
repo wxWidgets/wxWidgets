@@ -379,8 +379,8 @@ public:
     int GetOutlineLevel() const { return m_outlineLevel; }
 
     // accessors
-    bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
-    bool HasBackgroundColour() const { return m_colBack.Ok() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
+    bool HasTextColour() const { return m_colText.IsOk() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
+    bool HasBackgroundColour() const { return m_colBack.IsOk() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
     bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) && HasFlag(wxTEXT_ATTR_ALIGNMENT) ; }
     bool HasTabs() const { return HasFlag(wxTEXT_ATTR_TABS) ; }
     bool HasLeftIndent() const { return HasFlag(wxTEXT_ATTR_LEFT_INDENT); }

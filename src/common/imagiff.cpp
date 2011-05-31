@@ -140,7 +140,7 @@ bool wxIFFDecoder::ConvertToImage(wxImage *image) const
     // create the image
     image->Create(GetWidth(), GetHeight());
 
-    if (!image->Ok())
+    if (!image->IsOk())
         return false;
 
     unsigned char *pal = GetPalette();

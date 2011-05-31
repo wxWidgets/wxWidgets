@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       JTN.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86 wxQt Debug</name>
+    <builddir>wxQt-debug</builddir>
+    <scheduler>daily_0400</scheduler>
+    <steps>
+        <checkout branch="branches/wxQT/"/>
+        <configure options="--with-qt --enable-debug"/>
+        <compile-all samples="false" utils="false" demos="false" contrib="false" tests="false"/>
+        <!-- <run-tests/> -->
+    </steps>
+</build>
+
+</bot>

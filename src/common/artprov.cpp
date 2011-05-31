@@ -231,12 +231,12 @@ wxArtProvider::~wxArtProvider()
              node; node = node->GetNext())
         {
             bmp = node->GetData()->CreateBitmap(id, client, size);
-            if ( bmp.Ok() )
+            if ( bmp.IsOk() )
                 break;
         }
 
         wxSize sizeNeeded = size;
-        if ( !bmp.Ok() )
+        if ( !bmp.IsOk() )
         {
             // no bitmap created -- as a fallback, try if we can find desired
             // icon in a bundle

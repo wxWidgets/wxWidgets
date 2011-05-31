@@ -799,7 +799,7 @@ bool wxSearchCtrl::SetFont(const wxFont& font)
 void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
 {
     m_searchBitmap = bitmap;
-    m_searchBitmapUser = bitmap.Ok();
+    m_searchBitmapUser = bitmap.IsOk();
     if ( m_searchBitmapUser )
     {
         if ( m_searchButton && !HasMenu() )
@@ -819,7 +819,7 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
 void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 {
     m_searchMenuBitmap = bitmap;
-    m_searchMenuBitmapUser = bitmap.Ok();
+    m_searchMenuBitmapUser = bitmap.IsOk();
     if ( m_searchMenuBitmapUser )
     {
         if ( m_searchButton && m_menu )
@@ -839,7 +839,7 @@ void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 void wxSearchCtrl::SetCancelBitmap( const wxBitmap& bitmap )
 {
     m_cancelBitmap = bitmap;
-    m_cancelBitmapUser = bitmap.Ok();
+    m_cancelBitmapUser = bitmap.IsOk();
     if ( m_cancelBitmapUser )
     {
         if ( m_cancelButton )
@@ -1119,7 +1119,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_searchBitmapUser )
     {
         if (
-            !m_searchBitmap.Ok() ||
+            !m_searchBitmap.IsOk() ||
             m_searchBitmap.GetHeight() != bitmapHeight ||
             m_searchBitmap.GetWidth() != bitmapWidth
             )
@@ -1137,7 +1137,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_searchMenuBitmapUser )
     {
         if (
-            !m_searchMenuBitmap.Ok() ||
+            !m_searchMenuBitmap.IsOk() ||
             m_searchMenuBitmap.GetHeight() != bitmapHeight ||
             m_searchMenuBitmap.GetWidth() != bitmapWidth
             )
@@ -1155,7 +1155,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_cancelBitmapUser )
     {
         if (
-            !m_cancelBitmap.Ok() ||
+            !m_cancelBitmap.IsOk() ||
             m_cancelBitmap.GetHeight() != bitmapHeight ||
             m_cancelBitmap.GetWidth() != bitmapHeight
             )

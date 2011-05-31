@@ -325,7 +325,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
     // TODO: load colourmap.
     bitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), name.wx_str()));
 
-    if ( !bitmap->Ok() )
+    if ( !bitmap->IsOk() )
     {
         // it's probably not found
         wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
@@ -494,7 +494,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     icon->SetHICON((WXHICON)hicon);
     icon->SetSize(size.x, size.y);
 
-    return icon->Ok();
+    return icon->IsOk();
 }
 
 bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
@@ -559,7 +559,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 
     icon->SetHICON((WXHICON)hicon);
 
-    return icon->Ok();
+    return icon->IsOk();
 }
 
 // ----------------------------------------------------------------------------

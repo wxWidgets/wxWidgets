@@ -1,0 +1,59 @@
+\documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}%
+\parskip=10pt%
+\parindent=0pt%
+\title{Help Demo}%
+\author{by Julian Smart}%
+\makeindex%
+\begin{document}%
+\maketitle%
+\pagestyle{fancyplain}%
+\bibliographystyle{plain}%
+\pagenumbering{roman}%
+\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\tableofcontents%
+
+\chapter{Introduction}\label{intro}
+\pagenumbering{arabic}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This is a demo document for the wxWindows 'help' sample.
+
+You should process this file with Tex2RTF, for example:
+
+{\tt tex2rtf -winhelp -twice doc.tex doc.hlp}
+
+and then run:
+
+{\tt hc doc}
+
+where hc is the help compiler.
+
+Note that you can also generate HTML and Word RTF with Tex2RTF.
+
+\section{Classes}\label{classes}
+
+This would say something about classes, but doesn't yet.
+
+\section{Functions}\label{functions}
+
+This would say something about functions, but doesn't yet.
+
+\section{About}\label{about}
+
+About this HelpDemo: this file is really not much of a demo, but it's a start.
+
+\chapter{Chapter 2}\label{chapter2}
+\pagenumbering{arabic}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+Another chapter in this enticing little manual.
+
+\addcontentsline{toc}{chapter}{Index}
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\printindex%
+
+\end{document}

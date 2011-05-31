@@ -1,0 +1,22 @@
+/* XPM */
+static const char *const position_top_xpm[] = {
+"16 15 3 1",
+". c black",
+"a c #4040FF",
+"  c None",
+" .............. ",
+". a  a  a  a  a.",
+".a  a  a  a  a .",
+".  a  a  a  a  .",
+". a  a  a  a  a.",
+".a  a  a  a  a .",
+".  a  a  a  a  .",
+"................",
+".              .",
+".              .",
+".              .",
+".              .",
+".              .",
+".              .",
+" .............. "
+};

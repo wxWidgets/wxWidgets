@@ -517,7 +517,7 @@ XmString wxFindAcceleratorText (const char *s)
 // Change a widget's foreground and background colours.
 void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
 {
-    if (!foregroundColour.Ok())
+    if (!foregroundColour.IsOk())
         return;
 
     // When should we specify the foreground, if it's calculated
@@ -536,7 +536,7 @@ void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
 
 void wxDoChangeBackgroundColour(WXWidget widget, const wxColour& backgroundColour, bool changeArmColour)
 {
-    if (!backgroundColour.Ok())
+    if (!backgroundColour.IsOk())
         return;
 
     wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,

@@ -456,7 +456,7 @@ void wxCocoaDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool
 {
     wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
-    if(!bmp.Ok())
+    if(!bmp.IsOk())
         return;
 
 #if 0
@@ -540,13 +540,13 @@ void wxCocoaDCImpl::DoGetSizeMM( int* width, int* height ) const
 
 void wxCocoaDCImpl::SetTextForeground( const wxColour &col )
 {
-//  if (!Ok()) return;
+//  if (!IsOk()) return;
   m_textForegroundColour = col;
 };
 
 void wxCocoaDCImpl::SetTextBackground( const wxColour &col )
 {
-//  if (!Ok()) return;
+//  if (!IsOk()) return;
   m_textBackgroundColour = col;
 };
 

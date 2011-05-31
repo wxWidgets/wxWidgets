@@ -636,7 +636,7 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& rBitmap )
 {
     Init();
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         SetBitmap( rBitmap );
     }
@@ -651,7 +651,7 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 {
     Clear();
     wxBitmapDataObjectBase::SetBitmap( rBitmap );
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         CGImageRef cgImageRef = (CGImageRef) m_bitmap.CreateCGImage();
 
@@ -756,7 +756,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
         cgImageRef = NULL;
     }
 
-    return m_bitmap.Ok();
+    return m_bitmap.IsOk();
 }
 
 #endif

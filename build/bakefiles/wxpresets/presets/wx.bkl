@@ -1,0 +1,551 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!--
+    Presets for building wxWidgets applications.
+
+    These presets provide the following "public" interface:
+
+    OPTIONS:
+
+    - WX_* : used to let the user of the generated makefile choose a wxWidgets
+             build among those available; you can use them in your project to
+             e.g. build a target only if WX_SHARED is 0 or if WX_PORT is "msw".
+
+
+    VARIABLES:
+
+    - WXLIBPOSTFIX: contains the [u][d] string which is typically useful when
+                    defining names of directories/files which should coexist
+                    with other builds using different wxWidgets configurations.
+
+
+    TEMPLATES:
+
+    - wx, wx-lib: templates to be used respectively for <dll>/<exe> and <lib>
+                  targets; they add all the wxWidgets-related settings (e.g. the
+                  include and library search paths, the necessary preprocessor
+                  symbols, etc).
+
+    - wxgui: to be used when building GUI-mode applications.
+
+    - wxconsole: to be used when building console-only applications
+                 (NOTE: it doesn't add the wxUSE_GUI=0 define since you don't
+                 need it when compiling wxBase-only code).
+
+    - wxlike: this template should be combined with "wx" or "wx-lib" and will
+              make your project build with the same Unicode & shared
+              config as the wxWidgets build selected using the WX_* options.
+
+
+    TARGET TAGS:
+
+    - <wx-lib>: to define which wxWidgets libraries to link with;
+                please note that you should use them in the right order or
+                linking under Unix would result in errors, e.g.
+
+                    <wx-lib>core</wx-lib>
+                    <wx-lib>base</wx-lib>
+
+                is correct, but the reverse is not (if lib A depends on lib B, then
+                lib A must be listed before B). So <wx-lib>base</wx-lib>
+                (which must always be present) should be the last wx-lib tag.
+
+    - <wxlike-libname>,
+      <wxlike-dllname>: useful if you want to have a build logic similar to the
+                        wxWidgets build logic which allows different builds to
+                        coexist without conflicts. These tags helps you to name
+                        libraries using the same wxWidgets rules and thus avoid
+                        conflicts between libraries compiled in e.g. Unicode,
+                        shared mode and those compiled in ANSI, shared mode &c.
+
+    - <wxlike-lib>: if your library/application needs to link with both
+                    wxWidgets and some other wx-based library, which in turn
+                    follows the wxWidgets naming conventions, then this tag is
+                    what you need to reference the wx-based additional library.
+
+    - <wxlike-dirname>: sets the output directory for the current target to $(value)
+                        when on Unix and to e.g. $(value)/vc_lib when on Windows,
+                        i.e. acts like <dirname> just following wxWidgets naming rules.
+                        Useful to allow multiple builds of the
+
+    - <wxlike-paths>: if your library/application needs to compile & link with both
+                      wxWidgets and some other wx-based library, which in turn
+                      follows the wxWidgets naming conventions, then this tag is
+                      what you need to add to the compiler and linker flags the paths
+                      of the "include" and "lib" folders of the wx-based additional library.
+
+
+    GLOBAL TAGS:
+
+    - <set-wxlike-builddir>: sets BUILDDIR using wxWidgets naming rules to help
+                             to keep object files compiled with different
+                             settings separate.
+
+    - <set-wxlike>: sets a variable with the name of a library named with the same
+                    wxWidgets rules.
+
+
+ NOTE: as a reference here is a list of all wxWidgets libraries satisfying
+       the dependency constraints mentioned in <wx-lib> description:
+
+        <wx-lib>richtext</wx-lib>
+        <wx-lib>aui</wx-lib>
+        <wx-lib>ribbon</wx-lib>
+        <wx-lib>propgrid</wx-lib>
+        <wx-lib>stc</wx-lib>
+        <wx-lib>qa</wx-lib>
+        <wx-lib>gl</wx-lib>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>media</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+
+-->
+
+
+<makefile>
+
+    <requires version="0.2.2"/>
+
+    <using module="wx_presets"/>
+
+    <!-- this variable identifies the version of the wx presets.
+         this is changed only when major changes to wxpresets take place.
+    -->
+    <set var="WX_PRESETS_VERSION">4</set>
+
+    <!-- list of known libraries used by wx-lib tag defined in wx_unix.bkl and wx_win32.bkl
+         VERY IMPORTANT: when updating this list also update the <wx-lib> and <wx-all-libs>
+                         tag definitions.
+    -->
+    <set var="WX_LIB_LIST">
+        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc
+    </set>
+
+    <!-- if you define this variable to 0 before including wx presets, the
+         "test_for_selected_wxbuild" target which is added by default in win32 and GNU
+         makefiles, won't be added.
+         This is useful when e.g. you want to have wxWidgets as an optional
+         dependency and thus you don't want to perform that check unconditionally.
+    -->
+    <set var="WX_TEST_FOR_SELECTED_WXBUILD" overwrite="0">
+        1
+    </set>
+
+    <!-- this is a temporary variable until there is non general    -->
+    <!-- function in bakefiles for returning native markup for      -->
+    <!-- reading envrionment variables                              -->
+    <set var="ENV_VAR">
+        <if cond="FORMAT=='watcom'">%</if>
+        <if cond="FORMAT!='watcom'"></if>
+    </set>
+
+
+
+    <!--                        OPTIONS                             -->
+    <!--                                                            -->
+    <!--    These are essentially the configurations you            -->
+    <!--    want in bakefile.                                       -->
+    <!--                                                            -->
+    <!--    In MSVC these are the different build                   -->
+    <!--    configurations you can have (in the build menu),        -->
+    <!--    and in autoconf is enabled with enable-xxx=xx.          -->
+    <!--    For other compilers a separate configuration            -->
+    <!--    file is created (such as config.gcc on gcc)             -->
+    <!--    which has several options a user can modify.            -->
+    <!--                                                            -->
+    <!--    Note that the above only happens if an option           -->
+    <!--    is not constant, i.e. if it cannot be determined        -->
+    <!--    by bakefile itself.                                     -->
+    <!--    Also note that for 'autoconf' format these options      -->
+    <!--    are only useful when used together with wxpresets.m4    -->
+    <!--    macro file which contains macros for detecting the      -->
+    <!--    option values for wx-based projects. See wxpresets.m4   -->
+    <!--    comments for more info.                                 -->
+
+
+    <!-- Presets for limited dmars make.exe format: -->
+    <if cond="FORMAT=='dmars'">
+        <set var="WX_UNICODE">1</set>
+        <set var="WX_DEBUG">1</set>
+        <set var="WX_SHARED">0</set>
+    </if>
+
+    <!-- 'gnu' format needs to redefine the following options later in wx_unix.bkl -->
+    <if cond="FORMAT=='gnu'">
+        <set var="WX_UNICODE"/>
+        <set var="WX_SHARED"/>
+        <set var="WX_PORT"/>
+        <set var="WX_VERSION"/>
+    </if>
+
+
+    <!--    This is a standard option that determines               -->
+    <!--    whether the user wants to build this library as         -->
+    <!--    a dll or as a static library.                           -->
+    <if cond="not isdefined('WX_SHARED')">
+        <set var="WX_SHARED_DEFAULT" overwrite="0">0</set>
+        <option name="WX_SHARED">
+            <values>0,1</values>
+            <values-description>Static,DLL</values-description>
+            <default-value>$(WX_SHARED_DEFAULT)</default-value>
+            <description>
+                Use DLL build of wx library?
+            </description>
+        </option>
+    </if>
+
+    <!-- Configuration for building the bakefile with               -->
+    <!-- unicode strings or not (unicode or ansi).                  -->
+    <if cond="not isdefined('WX_UNICODE')">
+        <set var="WX_UNICODE_DEFAULT" overwrite="0">1</set>
+        <option name="WX_UNICODE">
+            <values>0,1</values>
+            <values-description>ANSI,Unicode</values-description>
+            <default-value>$(WX_UNICODE_DEFAULT)</default-value>
+            <description>
+                Use Unicode build of wxWidgets?
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_DEBUG')">
+        <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
+        <option name="WX_DEBUG">
+            <values>0,1</values>
+            <values-description>Release,Debug</values-description>
+            <default-value>$(WX_DEBUG_DEFAULT)</default-value>
+            <description>
+                Use debug build of wxWidgets (linked with debug CRT)?
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_VERSION')">
+        <set var="WX_VERSION_DEFAULT" overwrite="0">29</set>
+        <option name="WX_VERSION">
+            <default-value>$(WX_VERSION_DEFAULT)</default-value>
+            <description>
+                Version of the wx library to build against.
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_MONOLITHIC')">
+        <set var="WX_MONOLITHIC_DEFAULT" overwrite="0">0</set>
+        <option name="WX_MONOLITHIC">
+            <values>0,1</values>
+            <values-description>Multilib,Monolithic</values-description>
+            <default-value>$(WX_MONOLITHIC_DEFAULT)</default-value>
+            <description>
+                Use monolithic build of wxWidgets?
+            </description>
+        </option>
+    </if>
+
+    <!-- The directory where wxWidgets is installed: -->
+    <if cond="not isdefined('WX_DIR')">
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <option name="WX_DIR" category="path" never_empty="1">
+            <default-value>$(WX_DIR_DEFAULT)</default-value>
+            <description>
+                The directory where wxWidgets library is installed
+            </description>
+        </option>
+    </if>
+
+
+
+    <!--                     HELPER VARIABLES                       -->
+    <!--                                                            -->
+
+    <!--    These are handy ways of dealing with the                -->
+    <!--    extensions in the library names of the                  -->
+    <!--    wxWindows library.                                      -->
+    <set var="WXLIBPOSTFIX">
+        <if cond="WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
+        <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
+        <if cond="WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
+    </set>
+
+    <if cond="FORMAT!='autoconf'">
+        <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
+    </if>
+
+
+
+
+    <!--                    REAL IMPLEMENTATION                     -->
+    <!--                                                            -->
+
+    <set var="__wx_included_impl">0</set>
+
+    <if cond="FORMAT in ['autoconf','gnu']">
+        <include file="wx_unix.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+        <include file="wx_win32.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="FORMAT=='xcode2'">
+        <!-- xCode2 is an IDE and thus reuses almost nothing from unix part of wxpresets;
+             better use the win32 part! -->
+        <include file="wx_win32.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="__wx_included_impl=='0'">
+        <error>This format is not (yet) supported by wx preset.</error>
+    </if>
+
+
+
+
+    <!--                     HIGH-LEVEL TEMPLATE                    -->
+    <!--                                                            -->
+
+    <!-- Combine 'wxlike' with 'wx' or 'wx-lib' templates to have your
+         project build in the same configuration used by the selected
+         wxWidgets build -->
+    <template id="wxlike">
+        <!-- WX_DEBUG-dependent -->
+        <set var="_OPT">
+            <if cond="WX_DEBUG=='1'">off</if>
+            <if cond="WX_DEBUG=='0'">speed</if>
+        </set>
+        <set var="_DEBUGINFO">
+            <if cond="WX_DEBUG=='1'">on</if>
+            <if cond="WX_DEBUG=='0'">off</if>
+        </set>
+
+        <if cond="FORMAT!='autoconf'">
+            <optimize>$(_OPT)</optimize>
+            <debug-info>$(_DEBUGINFO)</debug-info>
+        </if>
+    </template>
+
+    <!-- Template for building wx-based GUI applications -->
+    <template id="wxgui" template="wx">
+        <app-type>gui</app-type>
+    </template>
+
+    <!-- Template for building wx-based console applications -->
+    <template id="wxconsole" template="wx">
+        <app-type>console</app-type>
+    </template>
+
+
+
+    <!--                       UTILITY TAGS                         -->
+    <!--                                                            -->
+
+    <!-- private helper tag: does the same thing as for <set-wxlike> except that:
+         - the variable created is always named "__temp"
+         - can be used (only) inside targets as this is a non-global tag
+    -->
+    <define-tag name="__setlibname" rules="lib,dll,module,exe">
+        <set var="__temp">
+            <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
+                $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
+            </if>
+            <if cond="FORMAT=='autoconf' or FORMAT=='gnu'">
+                $(attributes['prefix'])_$(WX_PORT)$(WXLIBPOSTFIX)_$(value)-$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+            </if>
+        </set>
+    </define-tag>
+
+    <!-- A simple tag which helps you to define a library name using the same rules used
+         by wxWidgets. Use the 'prefix' attribute to add your lib's prefix.
+         E.g.:
+             <wxlike-libname prefix='mylib'>module1</wxlike-libname>
+             <wxlike-libname prefix='mylib'>module2</wxlike-libname>
+    -->
+    <define-tag name="wxlike-libname" rules="lib">
+        <__setlibname prefix="$(attributes['prefix'])">$(value)</__setlibname>
+        <libname>$(__temp)</libname>
+    </define-tag>
+
+    <!-- exactly like <wxlike-libname> but this one sets the DLL name (and the DLL lib import name)
+         and thus must be used only inside a <dll> target...
+    -->
+    <define-tag name="wxlike-dllname" rules="dll,module">
+        <__setlibname prefix="$(attributes['prefix'])">$(value)</__setlibname>
+        <libname>$(__temp)</libname>
+        <dllname>$(__temp)</dllname>
+    </define-tag>
+
+    <!-- Links against a library which uses the same wxWidgets conventions.
+    -->
+    <define-tag name="wxlike-lib" rules="exe,lib,dll,module">
+        <__setlibname prefix="$(attributes['prefix'])">$(value)</__setlibname>
+        <sys-lib>$(__temp)</sys-lib>
+    </define-tag>
+
+    <!-- Sets as output folder for the current target a directory
+         called "$(value)/$(COMPILER_PREFIX)_lib|dll", just like wxWidgets does.
+         This makes it possible to keep separated the libraries/exes compiled with
+         different compilers and with a different value for WX_SHARED.
+    -->
+    <define-tag name="wxlike-dirname" rules="lib,dll,exe,module">
+        <if cond="FORMAT!='autoconf'">
+            <set var="_DIRNAME_SHARED_SUFFIX">
+                <if cond="WX_SHARED=='0'">lib</if>
+                <if cond="WX_SHARED=='1'">dll</if>
+            </set>
+            <set var="_DIRNAME">
+                $(value)/$(COMPILER_PREFIX)_$(_DIRNAME_SHARED_SUFFIX)
+            </set>
+
+            <dirname>$(_DIRNAME)</dirname>
+
+            <if cond="FORMAT_SUPPORTS_ACTIONS=='1'">
+                <set var="__mkdir_tgt">make_dir_$(id)</set>
+
+                <add-target target="$(__mkdir_tgt)" type="action"/>
+                <modify-target target="$(__mkdir_tgt)">
+                    <command cond="TOOLSET=='unix'">
+                        @mkdir -p $(_DIRNAME)
+                    </command>
+                    <command cond="TOOLSET in ['win32','os2','dos']">
+                        if not exist $(nativePaths(_DIRNAME)) mkdir $(nativePaths(_DIRNAME))
+                    </command>
+                </modify-target>
+
+                <!-- the following code is mostly equivalent to a:
+                          <dependency-of>$(id)</dependency-of>
+                     put into the __mkdir_tgt target, except that it does _prepend_
+                     the __mkdir_tgt dependency instead of appending it.
+
+                     This is required because some compilers (e.g. MSVC) need to store in the
+                     output folder some files (e.g. the PDB file) while compiling and thus
+                     the library output folder must have been created before _any_ source file
+                     is compiled, not just before the library is linked.
+                -->
+                <modify-target target="$(id)">
+                    <set var="__deps" prepend="1">
+                        $(substitute(__mkdir_tgt, lambda x: ref('__depname', x), 'DEP'))
+                    </set>
+                </modify-target>
+            </if>
+        </if>
+        <if cond="FORMAT=='autoconf'">
+            <set var="_DIRNAME">$(value)</set>
+            <dirname>$(_DIRNAME)</dirname>
+        </if>
+    </define-tag>
+
+    <!-- Adds to the compiler & linker flags the path for the "include" and the
+         "lib" folders of a library following wxWidgets conventions which is
+         located in $(value).
+    -->
+    <define-tag name="wxlike-paths" rules="exe,lib,dll,module">
+        <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
+            <!-- WXLIBPATH is a path like "/lib/vc_lib"
+                 NOTE: even if this template is going to be used for a "lib"
+                       target (which does not uses lib-paths at all), we can still
+                       use the <lib-path> target: it will just be discarded
+             -->
+            <lib-path>$(value)$(WXLIBPATH)</lib-path>
+
+            <!-- no special include paths for a lib following wxWidgets naming
+                 conventions -->
+            <include>$(value)/include</include>
+        </if>
+
+        <!-- for autoconf format the user should use CPPFLAGS and LDFLAGS to
+             specify non-system paths since the wx-based library should have
+             been installed in standard paths
+        -->
+    </define-tag>
+
+
+
+    <!--                   UTILITY GLOBAL TAGS                      -->
+    <!--                                                            -->
+
+    <!-- Sets the BUILDDIR variable using the same rules used by wxWidgets itself.
+         This makes it possible to keep separated the object files compiled with
+         different configuration settings.
+    -->
+    <define-global-tag name="set-wxlike-builddir">
+        <!-- note that the builddir for autoconf should always be '.' -->
+        <if cond="FORMAT!='autoconf'">
+            <set var="_BUILDDIR_SHARED_SUFFIX">
+                <if cond="WX_SHARED=='0'"></if>
+                <if cond="WX_SHARED=='1'">_dll</if>
+            </set>
+
+            <set var="BUILDDIR">
+                $(COMPILER_PREFIX)$(WX_PORT)$(WXLIBPOSTFIX)$(_BUILDDIR_SHARED_SUFFIX)
+            </set>
+        </if>
+    </define-global-tag>
+
+    <!-- Sets a variable with the name of the 'var' attribute value using the
+         same rules used for wxWidgets library naming.
+         E.g.
+
+            <set-wxlike var='MYMODULE_LIBNAME' prefix='mylib'>
+                mymodule
+            </set-wxlike>
+
+         This tag also supports a 'cond' attribute making it very powerful
+         for conditional linking a wx-based library:
+
+            <option name="USE_MYMODULE">
+                <values>0,1</values>
+            </option>
+            <set-wxlike var='MYMODULE_DEP'
+                        prefix='mylib'
+                        cond="USE_MYMODULE=='1'">
+                mymodule
+            </set-wxlike>
+            ...
+            <exe id="myexe">
+                <sys-lib>$(MYMODULE_DEP)</sys-lib>
+            </exe>
+    -->
+    <define-global-tag name="set-wxlike">
+        <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
+            <if cond="'cond' not in attributes">
+                <set var="$(attributes['var'])">
+                    $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
+                </set>
+            </if>
+            <if cond="'cond' in attributes">
+                <set var="$(attributes['var'])">
+                    <if cond="$(attributes['cond'])">
+                        $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
+                    </if>
+                </set>
+            </if>
+        </if>
+
+        <if cond="FORMAT=='autoconf' or FORMAT=='gnu'">
+            <if cond="'cond' not in attributes">
+                <set var="$(attributes['var'])">
+                    $(attributes['prefix'])_$(WX_PORT)$(WXLIBPOSTFIX)_$(value)-$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+                </set>
+            </if>
+            <if cond="'cond' in attributes">
+                <set var="$(attributes['var'])">
+                    <if cond="$(attributes['cond'])">
+                        $(attributes['prefix'])_$(WX_PORT)$(WXLIBPOSTFIX)_$(value)-$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+                    </if>
+                </set>
+            </if>
+        </if>
+    </define-global-tag>
+
+
+    <include file="wx_xrc.bkl"/>
+
+</makefile>

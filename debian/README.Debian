@@ -1,0 +1,77 @@
+wxwidgets for Debian
+----------------------
+
+The following packages are built from the wxWidgets CVS source.
+
+libwxbase		wxBase runtime shared libraries
+libwxbase-dev		extra files and static libs for building wxBase apps
+libwxbase-dbg		wxBase libraries built with -g and __WXDEBUG__
+
+libwxgtk		wxGTK runtime shared libraries, including selected
+			contrib libs.
+libwxgtk-dev		extra files required for building wxGTK apps
+libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
+
+python-wxgtk		Python binding to wxGTK  (from 2.2.3 onward, this
+			obsoletes the libwxgtk-python-contrib package as
+			all python modules are built into a single monolith)
+python-wxversion	The wxversion.py version selector, new to wxPython2.6
+python-wxtools		The ancillary tools from the wxPython distribution.
+
+wx-common		common helper files and support applications.
+wx-headers		common header files for building wxWidgets apps
+wx-doc			HTML version of the wxWidgets manual
+wx-examples		wxWidgets and wxPython demos and samples (source)
+wx-i18n			message catalogs for native language support
+
+
+	Note that static libraries are no longer supplied in these
+	packages.  Please read, or have understood:
+	http://people.redhat.com/drepper/no_static_linking.html
+	among others before reporting this as a bug.
+
+	The following binaries can be built from the source package
+	with the mingw32 cross compiler, but are not distributed
+	as a part of the main Debian distribution.
+
+	Please do *not* file bug reports for these packages to the
+	Debian bts.  But do feel free to email me personally if you
+	find problems and/or have patches to fix them.
+
+libwxmsw-dev		mingw32-cross wxMSW libs.
+libwxmsw-dbg		mingw32-cross wxMSW (debug) libs.
+wx-headers-msw		extra headers needed for wxMSW.
+
+	You can build these extra packages using the binary-cross target
+	in debian/rules.
+
+
+	It is also possible to build a python-wxgtk-dbg package.
+	There are some limitations (like this package cannot be installed
+	concurrently with the release version), but some developers may
+	find such a thing useful in any case.  It will transparently
+	replace the release package for installed apps that depend on the
+	release package, but should NEVER be used when preparing packages
+	for upload.  This package may be created from the source using the
+	binary-dbg-py target in debian/rules.  (note that doing this will
+	also destroy any release build that exists in the same tree, they
+	cannot coexist there either yet)
+
+
+	Finally, because all of these packages can take quite some time to
+	build, the source package supports the use of distcc.  The package
+	builds will automatically parallelise to suit the number of hosts
+	you have listed in DISTCC_HOSTS.  This will work for both native
+	and cross builds of the c++ libraries, if you have the relevant
+	compilers on all your build hosts.
+	You may override that heuristic by setting the CONCURRENCY_LEVEL
+	environment variable to the number of jobs you wish make to fork.
+	That variable is also supported by the kernel-package scripts and
+	is respected for consistency here.
+
+	wxPython builds cannot be parallelised at this stage and will run
+	serially regardless of your configuration.
+
+
+ -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030
+

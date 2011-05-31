@@ -139,7 +139,7 @@ wxOverlayImpl::~wxOverlayImpl()
 
 bool wxOverlayImpl::IsOk()
 {
-    return m_bmpSaved.Ok() ;
+    return m_bmpSaved.IsOk() ;
 }
 
 void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )

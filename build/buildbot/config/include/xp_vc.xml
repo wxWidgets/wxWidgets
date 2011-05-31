@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       include/xp_vc.xml
+    Purpose:    Declarations for the xp_vc slave
+    Author:     Michael Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2008 Michael Wetherell
+    Licence:    wxWindows licence
+-->
+
+<bot xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="defs.xml"/>
+
+<!--
+    build - Override <build> to add a slave lock. This has the effect of
+            serialising builds for the same branch on this machine.
+-->
+<xsl:template name="build">
+    <xsl:param name="content"/>
+    <xsl:variable name="checkout">
+        <xsl:apply-templates select="get:step('checkout')"/>
+    </xsl:variable>
+    <build>
+        <lock>
+            <xsl:value-of select="exsl:node-set($checkout)/svn/defaultBranch"/>
+        </lock>
+        <xsl:copy-of select="$content"/>
+    </build>
+</xsl:template>
+
+<!--
+    checkout - checks out to a shared directory
+
+    Checks out to a directory '../$branch' shared between builds. Then exports
+    it to a clean 'build' directory for the job to build in. This relies on
+    builds for the same branch being serialised with a lock so that one build
+    doesn't update the shared source while another is exporting them.
+
+    Usage typically just:
+        <checkout/>
+    for the trunk, or:
+        <checkout branch="branches/WX_2_8_BRANCH"/>
+    to checkout a branch.
+-->
+<xsl:template name="checkout">
+    <xsl:param name="content"/>
+    <xsl:param name="branch" select="'trunk'"/>
+    <xsl:variable name="nodes" select="exsl:node-set($content)"/>
+    <svn>
+        <xsl:if test="not($nodes/svnurl)">
+            <xsl:if test="not($nodes/baseURL)">
+                <baseURL><SVN_URL/></baseURL>
+            </xsl:if>
+            <xsl:if test="not($nodes/defaultBranch)">
+                <defaultBranch><xsl:value-of select="$branch"/></defaultBranch>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="not($nodes/workdir)">
+            <workdir>../<xsl:value-of select="$branch"/></workdir>
+        </xsl:if>
+        <xsl:copy-of select="$content"/>
+    </svn>
+    <shellcommand>
+        <description>creating build directory</description>
+        <descriptionDone>create build directory</descriptionDone>
+        <workdir>.</workdir>
+        <command>
+            <normalize-space>
+                (if exist build rmdir /s/q build) &amp;&amp;
+                svn export --native-eol CRLF
+                    ..\<xsl:value-of select="$branch"/> build
+            </normalize-space>
+        </command>
+    </shellcommand>
+</xsl:template>
+
+</bot>

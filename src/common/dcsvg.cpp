@@ -139,7 +139,7 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
     ////////////////////code here
 
     m_outfile = new wxFileOutputStream(filename);
-    m_OK = m_outfile->Ok();
+    m_OK = m_outfile->IsOk();
     if (m_OK)
     {
         m_filename = filename;
@@ -643,14 +643,14 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     {
         write(s);
     }
-    m_OK = m_outfile->Ok() && bPNG_OK;
+    m_OK = m_outfile->IsOk() && bPNG_OK;
 }
 
 void wxSVGFileDCImpl::write(const wxString &s)
 {
     const wxCharBuffer buf = s.utf8_str();
     m_outfile->Write(buf, strlen((const char *)buf));
-    m_OK = m_outfile->Ok();
+    m_OK = m_outfile->IsOk();
 }
 
 

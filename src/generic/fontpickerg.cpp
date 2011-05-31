@@ -97,7 +97,7 @@ void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 
 void wxGenericFontButton::UpdateFont()
 {
-    if ( !m_selectedFont.Ok() )
+    if ( !m_selectedFont.IsOk() )
         return;
 
     SetForegroundColour(m_data.GetColour());

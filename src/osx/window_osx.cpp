@@ -475,7 +475,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 {
     // Don't assert, in case we set the window variant before
     // the window is created
-    // wxASSERT( GetPeer()->Ok() ) ;
+    // wxASSERT( GetPeer()->IsOk() ) ;
 
     m_windowVariant = variant ;
 
@@ -588,7 +588,7 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 {
     if (m_growBox)
     {
-        if ( m_backgroundColour.Ok() )
+        if ( m_backgroundColour.IsOk() )
             m_growBox->SetBackgroundColour(m_backgroundColour);
         else
             m_growBox->SetBackgroundColour(*wxWHITE);
@@ -897,7 +897,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
             return false ;
     }
 
-    wxASSERT_MSG( m_cursor.Ok(),
+    wxASSERT_MSG( m_cursor.IsOk(),
         wxT("cursor must be valid after call to the base version"));
 
     if ( GetPeer() != NULL )
@@ -1560,7 +1560,7 @@ void  wxWindowMac::MacPaintGrowBox()
         CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
         CGContextSaveGState( cgContext );
 
-        if ( m_backgroundColour.Ok() )
+        if ( m_backgroundColour.IsOk() )
         {
             CGContextSetFillColorWithColor( cgContext, m_backgroundColour.GetCGColor() );
         }
@@ -1573,7 +1573,7 @@ void  wxWindowMac::MacPaintGrowBox()
 #else
         if (m_growBox)
         {
-             if ( m_backgroundColour.Ok() )
+             if ( m_backgroundColour.IsOk() )
                  m_growBox->SetBackgroundColour(m_backgroundColour);
              else
                  m_growBox->SetBackgroundColour(*wxWHITE);
@@ -1831,18 +1831,18 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt )
             // if the user code caught EVT_SET_CURSOR() and returned nothing from
             // it - this is a way to say that our cursor shouldn't be used for this
             // point
-            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() )
                 cursor = m_cursor ;
 
             if ( !wxIsBusy() && !GetParent() )
                 cursor = *wxSTANDARD_CURSOR ;
         }
 
-        if ( cursor.Ok() )
+        if ( cursor.IsOk() )
             cursor.MacInstall() ;
     }
 
-    return cursor.Ok() ;
+    return cursor.IsOk() ;
 }
 
 wxString wxWindowMac::MacGetToolTipString( wxPoint &WXUNUSED(pt) )

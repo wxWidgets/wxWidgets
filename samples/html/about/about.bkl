@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="about" template="wx_sample" template_append="wx_append">
+        <sources>about.cpp</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data_files">
+        <dstdir>$(BUILDDIR)/data</dstdir>
+        <srcdir>$(SRCDIR)/data</srcdir>
+        <files>
+            about.htm logo.png
+        </files>
+    </wx-data>
+
+</makefile>

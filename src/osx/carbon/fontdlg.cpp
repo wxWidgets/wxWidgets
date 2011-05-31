@@ -223,7 +223,7 @@ int wxFontDialog::ShowModal()
 
     OSStatus err ;
     wxFont font = *wxNORMAL_FONT ;
-    if ( m_fontData.m_initialFont.Ok() )
+    if ( m_fontData.m_initialFont.IsOk() )
     {
         font = m_fontData.m_initialFont ;
     }
@@ -316,7 +316,7 @@ void wxFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxSize size = GetSize();
     wxFont font = GetFont();
 
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         dc.SetFont(font);
         // Calculate vertical centre
@@ -604,7 +604,7 @@ void wxFontDialog::CreateControls()
 
     InitializeControls();
     m_previewCtrl->SetFont(m_dialogFont);
-    if (m_fontData.GetColour().Ok())
+    if (m_fontData.GetColour().IsOk())
     {
         m_previewCtrl->SetForegroundColour(m_fontData.GetColour());
     }
@@ -700,7 +700,7 @@ void wxFontDialog::InitializeFont()
     bool fontUnderline = false;
     wxString fontName;
 
-    if (m_fontData.m_initialFont.Ok())
+    if (m_fontData.m_initialFont.IsOk())
     {
         fontFamily = m_fontData.m_initialFont.GetFamily();
         fontWeight = m_fontData.m_initialFont.GetWeight();
@@ -738,7 +738,7 @@ void wxFontDialog::InitializeControls()
     }
     m_facenameCtrl->SetStringSelection(facename);
 
-    if (m_colourCtrl && m_fontData.GetColour().Ok())
+    if (m_colourCtrl && m_fontData.GetColour().IsOk())
     {
         m_colourCtrl->SetColour(m_fontData.GetColour());
         m_colourCtrl->Refresh();

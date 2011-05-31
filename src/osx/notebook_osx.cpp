@@ -245,10 +245,10 @@ bool wxNotebook::InsertPage(size_t nPage,
     return true;
 }
 
-int wxNotebook::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(flags)) const
+int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
     int resultV = wxNOT_FOUND;
-#if 0
+#ifdef __WXOSX_CARBON__
     const int countPages = GetPageCount();
 
     // we have to convert from Client to Window relative coordinates
@@ -300,6 +300,9 @@ int wxNotebook::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(flags)) con
         else
             *flags |= wxBK_HITTEST_NOWHERE;
     }
+#else
+    wxUnusedVar(pt);
+    wxUnusedVar(flags);
 #endif
     return resultV;
 }

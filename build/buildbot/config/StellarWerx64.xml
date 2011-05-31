@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       StellarWerx64.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86_64 wxGTK stable</name>
+    <builddir>stellarwerx64_wxgtk</builddir>
+    <scheduler>stable_quick</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--enable-compat26"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86_64 wxX11 trunk</name>
+    <builddir>stellarwerx64_wxx11</builddir>
+    <scheduler>daily_0700</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-x11 --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86_64 wxGTK stable ANSI</name>
+    <builddir>stellarwerx64_wxgtk_ansi</builddir>
+    <scheduler>daily_0700</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--disable-unicode"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

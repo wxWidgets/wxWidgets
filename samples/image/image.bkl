@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="image" template="wx_sample" template_append="wx_append">
+        <sources>image.cpp canvas.cpp</sources>
+        <headers>canvas.h</headers>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm
+            horse.tif horse.tga horse.xpm horse.cur horse.ico horse3.ani
+            smile.xbm toucan.png cmyk.jpg cursor.png
+        </files>
+    </wx-data>
+
+</makefile>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       example.xml
+    Purpose:    Buildbot example configuration.
+    Author:     Mike Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2007 Mike Wetherell
+    Licence:    wxWindows licence
+
+    There is one xml file such as this per build slave containing a <build>
+    element for each build the slave runs. Each <build> corresponds to a
+    column in the waterfall display.
+
+    For full documentation see:
+    http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!--
+    Common declarations.
+-->
+<xi:include href="include/defs.xml"/>
+
+<!--
+    Notes:
+
+    The elements marked 'Unique' below must be unique across all builds on
+    all slaves.
+
+    If a build is currently failing because of something other than a bug in
+    wxWidgets, e.g. out of space or missing libs, then comment it out, or
+    add '** Ignore **' to the beginning of the <name>, so that wxWidgets
+    developers know not to waste time investigating.
+-->
+<build>
+    <!--
+        Unique. Appears as the title in the waterfall display.
+    -->
+    <name>Linux x86_64 wxGTK Stable</name>
+
+    <!--
+        Unique. The name of a directory for the bulid.
+    -->
+    <builddir>example_gtk</builddir>
+
+    <!--
+        The name of a scheduler that will trigger this build. common.xml
+        currently defines:
+
+        * 'trunk_quick' and 'stable_quick'. These trigger a build after
+          every source change on the trunk and stable branches respectively.
+
+        * Weekly schedulers that fire once a week. There is one of these
+          for every half hour of the week, e.g. you have monday_0600,
+          monday_0630, etc..
+
+        * Daily schedulers that fire once a day. There is also one of these
+          for every half hour, e.g. daily_0600, daily_0630, etc..
+
+        An empty <scheduler/> element takes its value from the previous build
+        incremented in the following way:
+
+        * Weekly schedulers are incremented by a day, monday_0600 becomes
+          tuesday_0600, and at the end of the week the time is also bumped by
+          an hour, saturday_0600 becomes sunday_0700.
+
+        * Daily scheduler are incremented by an hour.
+
+        The <scheduler> element can be omitted, in which case the build
+        never runs automatically, but can still be triggered manually.
+        Or you can use several, e.g. you could use two weekly schedulers
+        that fire on different days to have a build run twice a week.
+    -->
+    <scheduler>monday_0600</scheduler>
+
+    <!--
+        The meaning of <sandbox> is specific to the build slave. There
+        should be a comment in the slave's configuration file saying if they
+        are allowed or required. On the testdrive it specifies the remote
+        machine that will run the bulid.
+    -->
+    <sandbox>debug</sandbox>
+
+    <!--
+        You can override the make command the compile steps will use using
+        this <make> element, if omitted defaults to 'make'. For Windows
+        builds this becomes the place to put build options as there is no
+        configure step.
+    -->
+    <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-I\cppunit\include CPPUNIT_LIBS=cppunit.lib</make>
+
+    <!--
+        The build steps.
+    -->
+    <steps>
+        <!--
+            Check out the sources, by default the trunk branch. Or for a
+            particular branch or tag, e.g.:
+                <checkout branch="{$STABLE_BRANCH}"/>
+                <checkout branch="branches/WX_2_6_BRANCH"/>
+        -->
+        <checkout/>
+
+        <!--
+            A <shellcommand> build step can be used anywhere you need to run
+            arbitrary commands not covered by the standard build steps.
+            <haltOnFailure/> specifies that the whole build fails if this
+            step fails, without it it continues with the next step anyway.
+        -->
+        <shellcommand>
+            <description>setting up</description>
+            <descriptionDone>set up</descriptionDone>
+            <haltOnFailure/>
+            <command>setup-script</command>
+        </shellcommand>
+
+        <!--
+            Configure. Options and environment variables can be added with
+            the 'options' attribute:
+                <configure options="-with-foobar CC=cc CXX=CC"/>
+            Omitted for Windows builds.
+        -->
+        <configure/>
+
+        <!--
+            Compile the wxWidgets library, subdirectories and tests.
+
+            Takes the following attributes which can all be either 'true' or
+            'false':
+                wx          - build the library
+                samples     - build the samples
+                utils       - build the utils
+                demos       - build the demos
+                contrib     - build the contrib
+                tests       - build the tests
+                msw         - the library makefile is under build\msw
+                gui         - if 'false' builds only a subset of the above
+
+            The attributes usually default to the right values.
+        -->
+        <compile-all/>
+
+        <!--
+            Run the test suites.
+        -->
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

@@ -1182,7 +1182,7 @@ void wxDC::DrawLabel(const wxString& text,
     GetMultiLineTextExtent(text, &widthText, &heightText, &heightLine);
 
     wxCoord width, height;
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         width = widthText + bitmap.GetWidth();
         height = bitmap.GetHeight();
@@ -1224,7 +1224,7 @@ void wxDC::DrawLabel(const wxString& text,
     wxCoord x0 = x,
             y0 = y,
             width0 = width;
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         DrawBitmap(bitmap, x, y, true /* use mask */);
 

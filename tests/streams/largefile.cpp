@@ -220,7 +220,7 @@ protected:
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
 {
     auto_ptr<wxFileInputStream> in(new wxFileInputStream(name));
-    CPPUNIT_ASSERT(in->Ok());
+    CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }
 
@@ -252,7 +252,7 @@ protected:
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 {
     auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(name));
-    CPPUNIT_ASSERT(in->Ok());
+    CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }
 

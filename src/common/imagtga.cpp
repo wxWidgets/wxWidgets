@@ -227,7 +227,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
     image->Create(width, height);
 
-    if (!image->Ok())
+    if (!image->IsOk())
     {
         return wxTGA_MEMERR;
     }

@@ -365,7 +365,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     HDC hdc = (HDC)pDC;
 
     WXHBRUSH hbr = 0;
-    if ( !colBg.Ok() )
+    if ( !colBg.IsOk() )
     {
         if ( wxWindow *win = wxFindWinFromHandle(hWnd) )
             hbr = win->MSWGetBgBrush(pDC);
@@ -380,7 +380,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     // use the background colour override if a valid colour is given: this is
     // used when the control is disabled to grey it out and also if colBg was
     // set just above
-    if ( colBg.Ok() )
+    if ( colBg.IsOk() )
     {
         wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg);
         hbr = (WXHBRUSH)brush->GetResourceHandle();

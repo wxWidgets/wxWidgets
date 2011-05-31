@@ -1,0 +1,8 @@
+libwxbase=V-dbg: non-dev-pkg-with-shlib-symlink
+libwxbase=V-dbg: package-name-doesnt-match-sonames
+libwxbase=SOV: package-name-doesnt-match-sonames
+libwxgtk=V-dbg: non-dev-pkg-with-shlib-symlink
+libwxgtk=V-dbg: package-name-doesnt-match-sonames
+libwxgtk=SOV: package-name-doesnt-match-sonames
+python-wxtools: python-script-but-no-python-dep
+

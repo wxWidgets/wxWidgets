@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <set var="USE_OPENGL">1</set>
+    </if>
+
+    <exe id="penguin" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
+        <sources>
+            penguin.cpp
+            dxfrenderer.cpp
+            trackball.c
+        </sources>
+        <headers>
+            dxfrenderer.h
+            penguin.h
+            trackball.h
+        </headers>
+        <wx-lib>gl</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            penguin.dxf.gz
+        </files>
+    </wx-data>
+
+</makefile>

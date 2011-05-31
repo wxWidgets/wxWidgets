@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="widgets" template="wx_sample" template_append="wx_append">
+        <sources>
+            bmpcombobox.cpp
+            button.cpp
+            checkbox.cpp
+            choice.cpp
+            clrpicker.cpp
+            combobox.cpp
+            datepick.cpp
+            dirctrl.cpp
+            dirpicker.cpp
+            editlbox.cpp
+            filectrl.cpp
+            filepicker.cpp
+            fontpicker.cpp
+            gauge.cpp
+            hyperlnk.cpp
+            itemcontainer.cpp
+            listbox.cpp
+            notebook.cpp
+            odcombobox.cpp
+            radiobox.cpp
+            searchctrl.cpp
+            slider.cpp
+            spinbtn.cpp
+            static.cpp
+            statbmp.cpp
+            textctrl.cpp
+            toggle.cpp
+            widgets.cpp
+        </sources>
+        <headers>widgets.h itemcontainer.h</headers>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>../sample.rc</win32-res>
+    </exe>
+
+</makefile>

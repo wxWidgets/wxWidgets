@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+WXPYTHONDIR="=WXPYDIR"
+PYVERS="=PYVERS"
+
+if [ "$1" = "configure" ]; then
+    for PY in $PYVERS; do
+	$PY    /usr/lib/$PY/compileall.py -q /usr/lib/$PY/site-pacakges/${WXPYTHONDIR}
+	$PY -O /usr/lib/$PY/compileall.py -q /usr/lib/$PY/site-pacakges/${WXPYTHONDIR}
+    done
+fi
+
+for PY in $PYVERS; do
+    update-alternatives --install /usr/lib/$PY/site-packages/wx.pth  wx.pth	\
+	  		          /usr/lib/wx/$PY/wx=V-dbg.pth    $(( =PRIO - 10 ))
+done
+
+#DEBHELPER#
+

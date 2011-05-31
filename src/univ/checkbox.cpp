@@ -116,7 +116,7 @@ void wxCheckBox::OnCheck()
 wxBitmap wxCheckBox::GetBitmap(State state, Status status) const
 {
     wxBitmap bmp = m_bitmaps[state][status];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
         bmp = m_bitmaps[State_Normal][status];
 
     return bmp;
@@ -178,7 +178,7 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 wxSize wxCheckBox::GetBitmapSize() const
 {
     wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
-    return bmp.Ok() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
+    return bmp.IsOk() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
                     : GetRenderer()->GetCheckBitmapSize();
 }
 

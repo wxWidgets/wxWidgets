@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <!-- ================================================================= -->
+    <!--                         OpenGL canvas library                     -->
+    <!-- ================================================================= -->
+
+    <set var="WXLIBGLDEP_CORE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
+    <set var="WXLIBGLDEP_BASE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('base')))</if>
+    </set>
+
+    <dll id="gldll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_OPENGL=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_GL</define>
+        <sources>$(OPENGL_SRC)</sources>
+        <msvc-headers>$(OPENGL_HDR)</msvc-headers>
+
+        <!-- link against base and core libs in multilib build: -->
+        <sys-lib>$(WXLIBGLDEP_CORE)</sys-lib>
+        <sys-lib>$(WXLIBGLDEP_BASE)</sys-lib>
+        <depends>basedll</depends>
+        <depends>coredll</depends>
+        <!-- link against the wxWin library in monolithic build: -->
+        <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <depends>monodll</depends>
+
+        <ldlibs>$(EXTRALIBS_OPENGL)</ldlibs>
+    </dll>
+
+    <lib id="gllib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_OPENGL=='1'">
+        <sources>$(OPENGL_SRC)</sources>
+        <msvc-headers>$(OPENGL_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxgl" cond="USE_GUI=='1' and USE_OPENGL=='1'"/>
+
+</makefile>

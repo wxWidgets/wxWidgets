@@ -31,6 +31,7 @@ BENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	$(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
+	$(OBJS)\bench_datetime.obj \
 	$(OBJS)\bench_htmlpars.obj \
 	$(OBJS)\bench_htmltag.obj \
 	$(OBJS)\bench_ipcclient.obj \
@@ -298,6 +299,9 @@ data:
 
 $(OBJS)\bench_bench.obj: .\bench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_datetime.obj: .\datetime.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\datetime.cpp
 
 $(OBJS)\bench_htmlpars.obj: .\htmlparser\htmlpars.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\htmlparser\htmlpars.cpp

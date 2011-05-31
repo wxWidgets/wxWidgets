@@ -1,0 +1,25 @@
+/* XPM */
+static const char *const italic_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1",
+". c Black",
+"X c #A6A6A6",
+"  c None",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"       .....    ",
+"        ..X     ",
+"       X..      ",
+"       ..X      ",
+"      X..       ",
+"      ..X       ",
+"     X..        ",
+"     ..X        ",
+"   ......       ",
+"                ",
+"                ",
+"                ",
+"                "
+};

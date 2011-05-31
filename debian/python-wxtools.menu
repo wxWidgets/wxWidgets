@@ -1,0 +1,10 @@
+?package(python-wxtools):needs="X11" section="Apps/Programming"\
+  title="pycrust" command="/usr/bin/pycrust"\
+  icon="/usr/share/pixmaps/pycrust.png"
+?package(python-wxtools):needs="X11" section="Apps/Programming"\
+  title="pyshell" command="/usr/bin/pyshell"\
+  icon="/usr/share/pixmaps/pyshell.png"
+?package(python-wxtools):needs="X11" section="Apps/Programming"\
+  title="xrced" command="/usr/bin/xrced"\
+  icon="/usr/share/pixmaps/xrced.png"
+

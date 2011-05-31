@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="common.bkl"/>
+
+    <!-- =============================================================== -->
+    <!--                    Template for wxWidgets samples:              -->
+    <!-- =============================================================== -->
+
+    <set var="WX_ENABLE_PRECOMP_HEADERS">0</set>
+
+    <set var="DLLFLAG">
+        <if cond="SHARED=='1'">WXUSINGDLL</if>
+    </set>
+
+    <template id="wx_util_b" template="wx">
+        <include>$(SRCDIR)</include>
+        <define>$(DLLFLAG)</define>
+    </template>
+
+    <template id="wx_util" template="wx_util_b">
+        <app-type>gui</app-type>
+        <!-- resource files includes: -->
+        <include>$(SRCDIR)/$(WXTOPDIR)samples</include>
+        <!-- this include is not added via <include> for autoconf, see
+             common.bkl: -->
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+        </if>
+
+        <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
+        <if cond="FORMAT=='autoconf'">
+            <wx-os2-lib-resource/>
+        </if>
+
+        <!-- FIXME: temporary, until bakefile can reuse existing pch files -->
+        <if cond="FORMAT!='autoconf'">
+            <if cond="WX_ENABLE_PRECOMP_HEADERS=='0'">
+                <define>NOPCH</define>
+            </if>
+        </if>
+    </template>
+
+    <template id="wx_util_console" template="wx_util_b">
+        <app-type>console</app-type>
+        <define>wxUSE_GUI=0</define>
+    </template>
+
+    <template id="wx_sample" template="wx_util">
+        <if cond="FORMAT=='autoconf'">
+            <wx-mac-app-bundle/>
+            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
+        </if>
+    </template>
+    <template id="wx_sample_console" template="wx_util_console">
+        <if cond="FORMAT=='autoconf'">
+            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
+        </if>
+    </template>
+
+
+    <!-- =============================================================== -->
+    <!--                    Support for samples data files:              -->
+    <!-- =============================================================== -->
+
+    <if cond="FORMAT_SUPPORTS_ACTIONS=='1'">
+        <define-rule name="wx-data" extends="copy-files">
+            <template>
+                <dependency-of>all</dependency-of>
+                <dstdir>$(BUILDDIR)</dstdir>
+                <srcdir>$(SRCDIR)</srcdir>
+            </template>
+
+            <!--
+            VS - FIXME:
+            Don't clean the files because it would wipe out sources files if
+            BUILDDIR==SRCDIR. This is same behaviour as in the old build system,
+            but it would be better to delete the files during "make clean" if
+            BUILDDIR!=SRCDIR.
+
+            <define-tag name="files">
+                <clean-files>
+                    $(' '.join(['$(BUILDDIR)$(DIRSEP)%s'%x for x in value.split()]))
+                </clean-files>
+            </define-tag>
+            -->
+        </define-rule>
+    </if>
+    <if cond="FORMAT_SUPPORTS_ACTIONS=='0'">
+        <!-- empty stub for project-files formats which don't support <command> -->
+        <define-rule name="wx-data" extends="action">
+            <define-tag name="dstdir"/>
+            <define-tag name="srcdir"/>
+            <define-tag name="files"/>
+        </define-rule>
+    </if>
+
+
+    <!-- =============================================================== -->
+    <!--                    Misc platform specialities:                  -->
+    <!-- =============================================================== -->
+
+    <if cond="FORMAT=='autoconf'">
+        <include file="mac_bundles.bkl"/>
+
+        <!--
+        A hack to include precompiled OS/2 resource file in apps instead of
+        compiling it from .rc file (gcc on OS/2 doesn't ship with resource
+        compiler):
+        -->
+        <define-tag name="wx-os2-lib-resource" rules="exe">
+            <set var="os2_lib_res">
+                <if cond="PLATFORM_OS2=='1'">
+                    $(TOP_SRCDIR)include/wx/os2/wx.res
+                </if>
+            </set>
+            <set var="__objects" append="1">$(os2_lib_res)</set>
+        </define-tag>
+    </if>
+
+</makefile>

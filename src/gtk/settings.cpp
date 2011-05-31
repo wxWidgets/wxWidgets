@@ -258,7 +258,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         case wxSYS_SYSTEM_FONT:
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
-            if (!gs_fontSystem.Ok())
+            if (!gs_fontSystem.IsOk())
             {
                 wxNativeFontInfo info;
                 info.description = ButtonStyle()->font_desc;

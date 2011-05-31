@@ -149,13 +149,13 @@ bool wxRegion::DoUnionWithRect(const wxRect& rect)
 
 bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 {
-    wxCHECK_MSG( region.Ok(), false, "invalid region" );
+    wxCHECK_MSG( region.IsOk(), false, "invalid region" );
     return DoUnionWithRect(M_REGION_OF(region)->m_rect);
 }
 
 bool wxRegion::DoIntersect(const wxRegion& region)
 {
-    wxCHECK_MSG( region.Ok(), false, "invalid region" );
+    wxCHECK_MSG( region.IsOk(), false, "invalid region" );
 
     AllocExclusive();
     M_REGION->m_rect.Intersect(M_REGION_OF(region)->m_rect);
@@ -164,8 +164,8 @@ bool wxRegion::DoIntersect(const wxRegion& region)
 
 bool wxRegion::DoSubtract(const wxRegion& region)
 {
-    wxCHECK_MSG( region.Ok(), false, "invalid region" );
-    wxCHECK_MSG( Ok(), false, "invalid region" );
+    wxCHECK_MSG( region.IsOk(), false, "invalid region" );
+    wxCHECK_MSG( IsOk(), false, "invalid region" );
 
     const wxRect& rect = M_REGION_OF(region)->m_rect;
 
@@ -190,7 +190,7 @@ bool wxRegion::DoSubtract(const wxRegion& region)
 
 bool wxRegion::DoXor(const wxRegion& region)
 {
-    wxCHECK_MSG( region.Ok(), false, "invalid region" );
+    wxCHECK_MSG( region.IsOk(), false, "invalid region" );
     wxFAIL_MSG( "Xor not implemented" );
     return false;
 }
@@ -202,7 +202,7 @@ bool wxRegion::DoXor(const wxRegion& region)
 
 wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
-    wxCHECK_MSG( Ok(), wxOutRegion, "invalid region" );
+    wxCHECK_MSG( IsOk(), wxOutRegion, "invalid region" );
 
     if (M_REGION->m_rect.Contains(x, y))
         return wxInRegion;
@@ -212,7 +212,7 @@ wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 
 wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
-    wxCHECK_MSG( Ok(), wxOutRegion, "invalid region" );
+    wxCHECK_MSG( IsOk(), wxOutRegion, "invalid region" );
 
     // 1) is the rectangle entirely covered by the region?
     if (M_REGION->m_rect.Contains(rect))

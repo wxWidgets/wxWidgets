@@ -1181,7 +1181,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
             preview = new wxPrintPreview(printout,
                                          view->OnCreatePrintout(),
                                          &printDialogData);
-        if ( !preview->Ok() )
+        if ( !preview->IsOk() )
         {
             delete preview;
             wxLogError(_("Print preview creation failed."));

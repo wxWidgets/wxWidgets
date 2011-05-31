@@ -1,0 +1,227 @@
+# wxWidgets internat sample
+# Copyright (C) 2009 wxWindows development team
+# This file is distributed under the same license as the wxWidgets package.
+# Francesco Montorsi
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: $Id$\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-08 16:16+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Francesco Montorsi <f18m_cpp217828@yahoo.it>\n"
+"Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../internat.cpp:175 ../internat.cpp:181
+msgid "locale"
+msgstr "locale"
+
+#: ../internat.cpp:193 ../internat.cpp:396 ../internat.cpp:199
+#: ../internat.cpp:418
+#, c-format
+msgid "Locale \"%s\" is unknown."
+msgstr "Il locale \"%s\" è sconosciuto."
+
+#: ../internat.cpp:213 ../internat.cpp:219
+msgid "Please choose language:"
+msgstr "Prego scegliere la lingua:"
+
+#: ../internat.cpp:214 ../internat.cpp:220
+msgid "Language"
+msgstr "Lingua"
+
+#: ../internat.cpp:225 ../internat.cpp:231
+msgid "This language is not supported by the system."
+msgstr "Questa lingua non è supportata dal sistema."
+
+#: ../internat.cpp:238 ../internat.cpp:244
+msgid "Couldn't find/load the 'internat' catalog."
+msgstr "Impossibile trovare/caricare il catalogo 'internat'."
+
+#: ../internat.cpp:259 ../internat.cpp:287
+msgid "&Test locale availability...\tCtrl-T"
+msgstr "&Verifica la disponibilità del locale...\tCtrl-T"
+
+#: ../internat.cpp:261 ../internat.cpp:292
+msgid "&About..."
+msgstr "&Informazioni su..."
+
+#: ../internat.cpp:263 ../internat.cpp:294
+msgid "E&xit"
+msgstr "&Chiudi"
+
+#: ../internat.cpp:266 ../internat.cpp:297
+msgid "&Open bogus file"
+msgstr "&Apri file inesistente"
+
+#: ../internat.cpp:267 ../internat.cpp:298
+msgid "&Play a game"
+msgstr "&Gioca"
+
+#: ../internat.cpp:269 ../internat.cpp:300
+msgid "&1 _() (gettext)"
+msgstr "&1 _() (gettext)"
+
+#: ../internat.cpp:270 ../internat.cpp:301
+msgid "&2 _N() (ngettext)"
+msgstr "&2 _N() (ngettext)"
+
+#: ../internat.cpp:271 ../internat.cpp:302
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)"
+
+#: ../internat.cpp:274 ../internat.cpp:305
+msgid "&File"
+msgstr "&File"
+
+#: ../internat.cpp:275 ../internat.cpp:306
+msgid "&Test"
+msgstr "&Prova"
+
+#: ../internat.cpp:293 ../internat.cpp:280
+msgid "International wxWidgets App"
+msgstr "Applicazione wxWidgets internazionale"
+
+#: ../internat.cpp:298 ../internat.cpp:314
+msgid "First"
+msgstr "Primo"
+
+#: ../internat.cpp:300 ../internat.cpp:316
+msgid "Second"
+msgstr "Secondo"
+
+#: ../internat.cpp:317 ../internat.cpp:333
+#, c-format
+msgid ""
+"Language: %s\n"
+"System locale name:\n"
+"%s\n"
+"Canonical locale name: %s\n"
+msgstr ""
+"Lingua: %s\n"
+"Nome del locale di sistema:\n"
+"%s\n"
+"Nome canonico del locale: %s\n"
+
+#: ../internat.cpp:322 ../internat.cpp:338
+msgid ""
+"I18n sample\n"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"Esempio I18n\n"
+"(c) 1998, 1999 Vadim Zeitlin e Julian Smart"
+
+#: ../internat.cpp:325 ../internat.cpp:341
+msgid "About Internat"
+msgstr "Informazioni su Internat"
+
+#: ../internat.cpp:335 ../internat.cpp:351
+msgid "Enter your number:"
+msgstr "Immetti il tuo numero:"
+
+#: ../internat.cpp:336 ../internat.cpp:352
+msgid "Try to guess my number!"
+msgstr "Prova ad indovinare il mio numero!"
+
+#: ../internat.cpp:350 ../internat.cpp:366
+msgid "You've probably entered an invalid number."
+msgstr "Hai probabilmente inserito un numero non valido."
+
+#: ../internat.cpp:364 ../internat.cpp:380
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "Congratulazioni! Hai vinto. Questa è la frase magica:"
+
+#: ../internat.cpp:365 ../internat.cpp:381
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "impossibile creare la fifo `%s'"
+
+#: ../internat.cpp:375 ../internat.cpp:390
+msgid "Bad luck! try again..."
+msgstr "Che sfortuna! prova ancora..."
+
+#: ../internat.cpp:376 ../internat.cpp:398
+msgid "Result"
+msgstr "Risultato"
+
+#: ../internat.cpp:384 ../internat.cpp:406
+msgid "Enter the locale to test"
+msgstr "Immetti il locale da testare"
+
+#: ../internat.cpp:401 ../internat.cpp:423
+#, c-format
+msgid "Locale \"%s\" is available."
+msgstr "Il locale \"%s\" è disponibile."
+
+#: ../internat.cpp:403 ../internat.cpp:425
+#, c-format
+msgid "Locale \"%s\" is not available."
+msgstr "Il locale \"%s\" è non disponibile."
+
+#: ../internat.cpp:415 ../internat.cpp:437
+msgid "Testing _() (gettext)"
+msgstr "Prova _() (gettext)"
+
+#: ../internat.cpp:416 ../internat.cpp:445
+msgid "Please enter text to translate"
+msgstr "Prego inserire il testo da tradurre"
+
+#: ../internat.cpp:417 ../internat.cpp:446
+msgid "default value"
+msgstr "valore di default"
+
+#: ../internat.cpp:430 ../internat.cpp:460
+msgid "Testing _N() (ngettext)"
+msgstr "Prova  _N() (ngettext)"
+
+#: ../internat.cpp:432 ../internat.cpp:462
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr ""
+"Prego inserire un intervallo per le forme plurali della frase \"n file "
+"rimossi\""
+
+#: ../internat.cpp:443 ../internat.cpp:474
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "file rimosso"
+msgstr[1] "file rimossi"
+
+#: ../internat.cpp:454 ../internat.cpp:485
+msgid "line 1"
+msgstr "linea 1"
+
+#: ../internat.cpp:455 ../internat.cpp:486
+msgid "line 2"
+msgstr "linea 2"
+
+#: ../internat.cpp:456 ../internat.cpp:487
+msgid "line 3"
+msgstr "linea 3"
+
+#: ../internat.cpp:458 ../internat.cpp:490
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "Prova  wxTRANSLATE() (gettext_noop)"
+
+#: ../internat.cpp:297
+msgid "Shows a wxWidgets localized error message"
+msgstr "Mostra un messaggio di errore di wxWidgets tradotto"
+
+#: ../internat.cpp:298
+msgid "A little game; hint: 17 is a lucky number for many"
+msgstr "Un piccolo gioco; consiglio: 17 è un numero fortunato per molti"
+
+#: ../internat.cpp:300
+msgid "Tests the _() macro"
+msgstr "Verifica la macro _()"
+
+#: ../internat.cpp:301
+msgid "Tests the _N() macro"
+msgstr "Verifica la macro _N()"
+
+#: ../internat.cpp:302
+msgid "Tests the wxTRANSLATE() macro"
+msgstr "Verifica la macro wxTRANSLATE()"

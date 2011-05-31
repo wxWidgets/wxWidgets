@@ -1,0 +1,803 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <requires version="0.2.7"/>
+
+    <!-- bakefile modules we need: -->
+    <using module="datafiles"/>
+
+    <!-- load python module with wxwindows helpers: -->
+    <using module="wxwin"/>
+
+    <!-- DFE: Add a platform meaning regular MacOS (not OS X) -->
+    <!-- FIXME: This will be handled in Bakefile but for now I wanted to
+         get my changes to the wx bakefiles in the tree but invisible to
+         windows toolkits and their config.xxx settings -->
+    <if cond="FORMAT=='autoconf'">
+        <option name="PLATFORM_MACOS"/>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="PLATFORM_MACOS">0</set>
+    </if>
+
+    <!-- FIXME: PalmOS is another candidate to bakefiles -->
+    <set var="PLATFORM_PALMOS">0</set>
+
+
+    <include file="config.bkl"/>
+
+    <include file="plugins_deps.bkl"/>
+
+
+    <!-- wxWidgets version numbers logic: -->
+    <include file="version.bkl"/>
+
+
+    <!-- ================================================================== -->
+    <!--                     Names of libraries and DLLs:                   -->
+    <!-- ================================================================== -->
+
+    <set var="PORTNAME">
+        <if cond="USE_GUI=='0'">base</if>
+        <if cond="USE_GUI=='1'">$(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)</if>
+    </set>
+
+    <set var="WXBASEPORT">
+        <if cond="TOOLKIT=='MAC'">_carbon</if>
+    </set>
+
+    <set var="COMPILERORGCC">
+        <if cond="isdefined('COMPILER')">$(COMPILER)</if>
+        <if cond="not isdefined('COMPILER')">gcc</if>
+    </set>
+    <set var="WXCOMPILER">
+        <if cond="PLATFORM_WIN32=='1'">_$(COMPILERORGCC)</if>
+    </set>
+
+    <set var="VENDORTAG">
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'"></if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(VENDOR)</if>
+    </set>
+
+    <!-- debug suffix used for Windows libraries which use debug CRT -->
+    <set var="WXDEBUGFLAG">
+        <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
+    </set>
+    <set var="WXUNICODEFLAG">
+        <!-- WinCE is Unicode-only platform: -->
+        <if cond="UNICODE=='1' and FORMAT!='msevc4prj'">u</if>
+    </set>
+    <set var="WX_U_D_SUFFIX">
+        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+    </set>
+    <set var="WXNAMESUFFIX">
+        $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)
+    </set>
+
+    <set var="WXUNIVNAME">
+        <if cond="WXUNIV=='1'">univ</if>
+    </set>
+    <set var="WXUNIV_DEFINE">
+        <if cond="WXUNIV=='1'">__WXUNIVERSAL__</if>
+    </set>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="WXNAMEPREFIX">wx_base$(WXBASEPORT)</set>
+        <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
+        <set var="WXVERSIONTAG">-$(WX_RELEASE)</set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="WXNAMEPREFIX">
+            wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)
+        </set>
+        <set var="WXNAMEPREFIXGUI">
+            wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)</set>
+        <set var="WXVERSIONTAG"></set>
+    </if>
+    <set var="WXDLLNAMEPREFIX">
+        <if cond="PLATFORM_WIN32=='1'">
+            wxbase$(WXBASEPORT)$(WXWIN32DLLVERSION)
+        </if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIX)</if>
+    </set>
+    <set var="WXDLLNAMEPREFIXGUI">
+        <if cond="PLATFORM_WIN32=='1'">
+            wx$(PORTNAME)$(WXUNIVNAME)$(WXWIN32DLLVERSION)
+        </if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIXGUI)</if>
+    </set>
+    <set var="WXDLLVERSIONTAG">
+        <if cond="PLATFORM_WIN32=='1'"></if>
+        <if cond="PLATFORM_WIN32=='0'">$(WXVERSIONTAG)</if>
+    </set>
+
+
+    <!-- =============================================================== -->
+    <!--                    Names of component libraries:                -->
+    <!-- =============================================================== -->
+
+    <set var="WXLIB_BASE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('base')))</if>
+    </set>
+    <set var="WXLIB_NET">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('net')))</if>
+    </set>
+    <set var="WXLIB_QA">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('qa')))</if>
+    </set>
+    <set var="WXLIB_CORE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
+    <set var="WXLIB_ADV">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('adv')))</if>
+    </set>
+    <set var="WXLIB_MEDIA">
+        <if cond="MONOLITHIC=='0' and USE_MEDIA=='1'">$(mk.evalExpr(wxwin.mkLibName('media')))</if>
+    </set>
+    <set var="WXLIB_HTML">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('html')))</if>
+    </set>
+    <set var="WXLIB_XML">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('xml')))</if>
+    </set>
+    <set var="WXLIB_XRC">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('xrc')))</if>
+    </set>
+    <set var="WXLIB_AUI">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('aui')))</if>
+    </set>
+    <set var="WXLIB_RIBBON">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('ribbon')))</if>
+    </set>
+    <set var="WXLIB_PROPGRID">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('propgrid')))</if>
+    </set>
+    <set var="WXLIB_RICHTEXT">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('richtext')))</if>
+    </set>
+    <set var="WXLIB_STC">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
+    </set>
+
+    <set var="WXLIB_MONO">
+        <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
+    </set>
+
+
+    <!-- =============================================================== -->
+    <!--             Where to store built libraries and objects:         -->
+    <!-- =============================================================== -->
+
+    <set var="DIR_SUFFIX_CPU">
+        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+        <if cond="TARGET_CPU=='amd64'">_amd64</if>
+        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="TARGET_CPU=='ia64'">_ia64</if>
+        <if cond="TARGET_CPU=='IA64'">_ia64</if>
+    </set>
+
+    <if cond="FORMAT!='autoconf'">
+        <set var="WXDLLFLAG">
+            <if cond="SHARED=='1'">dll</if>
+        </set>
+        <set var="CFG_NAME_PART">
+            $(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)$(WXDLLFLAG)$(CFG)
+        </set>
+
+        <!-- NB: this is make_var so that it can be overridden on command line
+                 like this: nmake -f makefile.vc COMPILER_PREFIX=vc6 -->
+        <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
+
+        <set var="OBJS" make_var="1">
+            $(COMPILER_PREFIX)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
+        </set>
+
+        <set var="BUILDDIR">$(OBJS)</set>
+    </if>
+
+    <set var="LIBTYPE_SUFFIX" make_var="1">
+        <if cond="FORMAT!='autoconf' and SHARED=='0' and PLATFORM_WIN32=='1'">lib</if>
+        <if cond="FORMAT!='autoconf' and SHARED=='1' and PLATFORM_WIN32=='1'">dll</if>
+        <if cond="FORMAT=='watcom' and SHARED=='0' and PLATFORM_WIN32=='0'">$(TOOLKIT_LOWERCASE)_lib</if>
+        <if cond="FORMAT=='watcom' and SHARED=='1' and PLATFORM_WIN32=='0'">$(TOOLKIT_LOWERCASE)_dll</if>
+    </set>
+
+    <set var="LIBDIRNAME" make_var="1">
+        <if cond="FORMAT=='autoconf'">$(wx_top_builddir)/lib</if>
+        <if cond="FORMAT!='autoconf'">
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
+        </if>
+    </set>
+
+    <if cond="FORMAT!='autoconf'">
+        <set var="SETUPHDIR" make_var="1">
+            $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)
+        </set>
+    </if>
+
+
+
+    <!-- =============================================================== -->
+    <!--                        Templates for libs:                      -->
+    <!-- =============================================================== -->
+
+    <set var="DEBUGINFO">
+        <if cond="BUILD=='debug' and DEBUG_INFO=='default'">on</if>
+        <if cond="DEBUG_INFO=='1'">on</if>
+        <if cond="BUILD=='release' and DEBUG_INFO=='default'">off</if>
+        <if cond="DEBUG_INFO=='0'">off</if>
+    </set>
+    <set var="DEBUGRUNTIME">
+        <if cond="DEBUG_RUNTIME_LIBS=='default' and BUILD=='debug'">on</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='default' and BUILD=='release'">off</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='0'">off</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='1'">on</if>
+    </set>
+    <set var="OPTIMIZEFLAG">
+        <if cond="BUILD=='debug'">off</if>
+        <if cond="BUILD=='release'">speed</if>
+    </set>
+    <set var="EXCEPTIONSFLAG">
+        <if cond="USE_EXCEPTIONS=='1'">on</if>
+        <if cond="USE_EXCEPTIONS=='0'">off</if>
+    </set>
+    <set var="RTTIFLAG">
+        <if cond="USE_RTTI=='1'">on</if>
+        <if cond="USE_RTTI=='0'">off</if>
+    </set>
+    <set var="THREADSFLAG">
+        <if cond="USE_THREADS=='1'">multi</if>
+        <if cond="USE_THREADS=='0'">single</if>
+    </set>
+
+    <set var="RTTI_DEFINE">
+        <if cond="USE_RTTI=='0'">wxNO_RTTI</if>
+    </set>
+    <set var="EXCEPTIONS_DEFINE">
+        <if cond="USE_EXCEPTIONS=='0'">wxNO_EXCEPTIONS</if>
+    </set>
+    <set var="THREAD_DEFINE">
+        <if cond="USE_THREADS=='0'">wxNO_THREADS</if>
+    </set>
+
+    <set var="DEBUG_DEFINE">
+        <if cond="DEBUG_FLAG=='0'">wxDEBUG_LEVEL=0</if>
+    </set>
+    <set var="NDEBUG_DEFINE">
+        <if cond="FORMAT!='autoconf' and DEBUG_RUNTIME_LIBS=='default' and BUILD=='release'">NDEBUG</if>
+        <if cond="FORMAT!='autoconf' and DEBUG_RUNTIME_LIBS=='0'">NDEBUG</if>
+    </set>
+
+    <!-- does not cover all cases, but better than nothing -->
+    <set var="NO_VC_CRTDBG">
+        <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
+        <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
+    </set>
+    <set var="UNICODE_DEFINE">
+        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
+        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
+    </set>
+    <set var="MSLU_DEFINE">
+        <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_UNICODE_MSLU=1</if>
+    </set>
+
+    <!-- fill for the specific case of the format/compiler -->
+    <set var="WIN32_WINNT">
+        <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
+    </set>
+
+    <set var="UNICOWS_LIB">
+        <if cond="MSLU=='1'">unicows</if>
+    </set>
+    <set var="CAIRO_LIB">
+        <if cond="USE_CAIRO=='1'">cairo</if>
+    </set>
+    <set var="CAIRO_LIBDIR">
+        <if cond="USE_CAIRO=='1'">$(DOLLAR)(CAIRO_ROOT)/lib</if>
+    </set>
+    <set var="CAIRO_INCLUDEDIR">
+        <if cond="USE_CAIRO=='1'">$(DOLLAR)(CAIRO_ROOT)/include/cairo</if>
+    </set>
+
+    <set var="LINK_TARGET_CPU">
+        <if cond="TARGET_CPU=='amd64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='AMD64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>
+        <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
+    </set>
+
+    <template id="common_settings">
+        <debug-info>$(DEBUGINFO)</debug-info>
+        <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
+        <optimize>$(OPTIMIZEFLAG)</optimize>
+        <threading>$(THREADSFLAG)</threading>
+        <runtime-libs>$(RUNTIME_LIBS)</runtime-libs>
+        <cxx-rtti>$(RTTIFLAG)</cxx-rtti>
+        <cxx-exceptions>$(EXCEPTIONSFLAG)</cxx-exceptions>
+        <if cond="FORMAT!='autoconf'">
+            <cppflags>$(EXTRACFLAGS)</cppflags>
+        </if>
+        <define>$(NO_VC_CRTDBG)</define>
+        <define>$(WIN32_WINNT)</define>
+        <if cond="FORMAT=='msvc'">
+            <ldflags>$(LINK_TARGET_CPU)</ldflags>
+        </if>
+        <include cond="FORMAT=='msevc4prj'">$(TOP_SRCDIR)build/wince/missing</include>
+    </template>
+
+    <template id="anylib">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <install-to>$(LIBDIR)</install-to>
+    </template>
+
+    <template id="3rdparty_lib" template="common_settings,anylib">
+        <if cond="FORMAT=='autoconf'">
+            <libname>$(id)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
+        </if>
+        <!--
+        we want to install 3rd party libs system-wide only with static
+        version of wxWidgets; otherwise they are embedded in shared libs:
+        -->
+        <install-if>SHARED=='0'</install-if>
+        <pic>$(substituteFromDict(SHARED, {'0':'off', '1':'on'}))</pic>
+
+        <!--
+            we don't want to have asserts in the 3rd party libraries code,
+            neither we nor wx users are interested in debugging them anyhow
+         -->
+        <define>NDEBUG</define>
+
+        <if cond="IS_MSVC">
+            <!--
+                we're not interested in deprecation warnings about the use of
+                standard C functions in the 3rd party libraries (these warnings
+                are only given by VC8+ but it's simpler to just always define
+                this symbol which disables them, even for previous VC versions)
+             -->
+            <define>_CRT_SECURE_NO_WARNINGS</define>
+        </if>
+    </template>
+
+
+    <!-- deal with the need to copy setup.h here: -->
+
+    <define-tag name="msvc-headers" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <msvc-project-files>
+                $(addPrefixToList('include\\', wxwin.headersOnly(value)))
+            </msvc-project-files>
+        </if>
+    </define-tag>
+
+    <set var="msvc_copy_setup_h_script">
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT not in ['msvc6prj','msevc4prj']">
+Creating $(SETUPHDIR)\wx\setup.h
+InputPath=..\..\include\wx\%s
+
+"$(SETUPHDIR)\wx\setup.h" : 
+$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+        </if>
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT in ['msvc6prj','msevc4prj']">
+Creating $(SETUPHDIR)\wx\setup.h
+InputPath=..\..\include\wx\%s
+
+"$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
+$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+        </if>
+    </set>
+
+    <define-tag name="msvc-headers-setup-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <msvc-headers>
+                $(addPrefixToList('wx/', value))
+            </msvc-headers>
+            <set var="_custom_build_files" append="1">
+                $(nativePaths(addPrefixToList('include/wx/', value)))
+            </set>
+        </if>
+    </define-tag>
+
+    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <if cond="FORMAT=='msevc4prj'">
+                <msvc-headers-setup-h>
+                    msw/wince/setup.h
+                </msvc-headers-setup-h>
+                <set var="_custom_build_include_wx_msw_wince_setup_h">
+                    $(msvc_copy_setup_h_script % 'msw\wince\setup.h')
+                </set>
+            </if>
+            <if cond="FORMAT!='msevc4prj'">
+                <msvc-headers-setup-h>
+                    msw/setup.h
+                    univ/setup.h
+                </msvc-headers-setup-h>
+                <set var="_custom_build_include_wx_msw_setup_h">
+                    <if cond="WXUNIV=='0'">
+                        $(msvc_copy_setup_h_script % 'msw\setup.h')
+                    </if>
+                </set>
+                <set var="_custom_build_include_wx_univ_setup_h">
+                    <if cond="WXUNIV=='1'">
+                        $(msvc_copy_setup_h_script % 'univ\setup.h')
+                    </if>
+                </set>
+            </if>
+        </if>
+    </define-tag>
+
+    <define-tag name="msvc-create-rcdefs-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <msvc-headers-setup-h>
+                msw/genrcdefs.h
+            </msvc-headers-setup-h>
+            <!-- FIXME: we need another way to get the compiler name -->
+            <set var="VC_COMPILER">
+                <if cond="FORMAT=='msevc4prj'">$(_COMPILER)</if>
+                <if cond="FORMAT!='msevc4prj'">cl</if>
+            </set>
+            <set var="_custom_build_include_wx_msw_genrcdefs_h">
+Creating $(SETUPHDIR)\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
+
+"$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(SETUPHDIR)\wx\msw"
+$(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+            </set>
+        </if>
+    </define-tag>
+
+    <template id="msvc_setup_h">
+        <msvc-copy-setup-h/>
+        <msvc-create-rcdefs-h/>
+    </template>
+
+    <!-- =============================================================== -->
+    <!--                         3rd party libs:                         -->
+    <!-- =============================================================== -->
+
+    <!-- 3rd party libraries: -->
+    <include file="regex.bkl"/>
+    <include file="zlib.bkl"/>
+    <include file="png.bkl"/>
+    <include file="jpeg.bkl"/>
+    <include file="tiff.bkl"/>
+    <include file="expat.bkl"/>
+    <include file="scintilla.bkl"/>
+
+
+    <!-- =============================================================== -->
+    <!--                  Templates for wxWidgets libs:                  -->
+    <!-- =============================================================== -->
+
+    <!-- NB: in monolithic build, even wxBase-only must be linked against
+             GUI extralibs, otherwise there would be unresolved references.
+             The variables below are defined so that all libs are used
+             in monolithic build, but not in multilib one. -->
+    <set var="EXTRALIBS_FOR_BASE">
+        <if cond="MONOLITHIC=='1'">$(EXTRALIBS) $(EXTRALIBS_GUI)</if>
+        <if cond="MONOLITHIC=='0'">$(EXTRALIBS)</if>
+    </set>
+    <set var="EXTRALIBS_FOR_GUI">
+        <if cond="MONOLITHIC=='1'"></if>
+        <if cond="MONOLITHIC=='0'">$(EXTRALIBS_GUI)</if>
+    </set>
+
+    <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
+        <set var="MGLLIBPATH">$(DOLLAR)(%SCITECH)/lib/$(BUILD)/dos32/ow10</set>
+        <set var="MGLPMLIBPATH">
+            <if cond="DOS32=='DOS4GW'">dos4gw</if>
+        </set>
+    </if>
+
+    <template id="wx" template="common_settings">
+        <set var="wxid">$(wxwin.mk_wxid(id))</set>
+        <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
+        <define>$(NDEBUG_DEFINE)</define>
+        <define>$(EXCEPTIONS_DEFINE)</define>
+        <define>$(RTTI_DEFINE)</define>
+        <define>$(THREAD_DEFINE)</define>
+        <define>$(UNICODE_DEFINE)</define>
+        <define>$(MSLU_DEFINE)</define>
+        <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
+        <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
+        <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
+        <lib-path>$(LIBDIRNAME)</lib-path>
+        <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
+            <lib-path>$(MGLLIBPATH)</lib-path>
+            <lib-path>$(MGLLIBPATH)/$(MGLPMLIBPATH)</lib-path>
+        </if>
+
+        <warnings>max</warnings>
+        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
+        <cppflags-watcom>
+            -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
+            -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
+            -wcd=657 <!-- define this function inside its class definition (could have improved code quality) -->
+            -wcd=667 <!-- 'va_start' macro will not work without an argument before '...' -->
+        </cppflags-watcom>
+        <cxxflags-mingw>
+            -Wno-ctor-dtor-privacy <!-- only defines a private destructor and has no friends -->
+        </cxxflags-mingw>
+    </template>
+
+    <!-- for both GUI and wxBase libs/samples: -->
+    <template id="wx_append_base_nomono">
+        <!-- link against builtin 3rd party libs, if needed: -->
+        <sys-lib>$(LIB_ZLIB)</sys-lib>
+        <sys-lib>$(LIB_REGEX)</sys-lib>
+        <sys-lib>$(LIB_EXPAT)</sys-lib>
+
+        <ldlibs>$(EXTRALIBS_FOR_BASE)</ldlibs>
+
+        <!-- system libraries on os2: -->
+        <if cond="FORMAT!='autoconf' and PLATFORM_OS2=='1'">
+            <if cond="FORMAT=='watcom'">
+                <sys-lib>upm32</sys-lib>
+            </if>
+        </if>
+
+        <!-- system libraries on mgl: -->
+        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
+            <sys-lib>mgl</sys-lib>
+            <sys-lib>mglcpp</sys-lib>
+            <sys-lib>pm</sys-lib>
+        </if>
+
+        <!-- system libraries on windows: -->
+        <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+            <sys-lib>$(UNICOWS_LIB)</sys-lib>
+            <sys-lib>$(CAIRO_LIB)</sys-lib>
+            <lib-path>$(CAIRO_LIBDIR)</lib-path>
+            <if cond="FORMAT=='borland'">
+                <sys-lib>ole2w32</sys-lib>
+            </if>
+            <if cond="FORMAT=='msevc4prj'">
+                <sys-lib>ole32</sys-lib>
+                <sys-lib>oleaut32</sys-lib>
+                <sys-lib>uuid</sys-lib>
+                <sys-lib>commctrl</sys-lib>
+                <sys-lib>winsock</sys-lib>
+                <sys-lib>wininet</sys-lib>
+            </if>
+            <if cond="FORMAT!='borland' and FORMAT!='msevc4prj'">
+                <sys-lib>kernel32</sys-lib>
+                <sys-lib>user32</sys-lib>
+                <sys-lib>gdi32</sys-lib>
+                <sys-lib>comdlg32</sys-lib>
+                <sys-lib>winspool</sys-lib>
+                <sys-lib>winmm</sys-lib>
+                <sys-lib>shell32</sys-lib>
+                <sys-lib>comctl32</sys-lib>
+                <sys-lib>ole32</sys-lib>
+                <sys-lib>oleaut32</sys-lib>
+                <sys-lib>uuid</sys-lib>
+                <sys-lib>rpcrt4</sys-lib>
+                <sys-lib>advapi32</sys-lib>
+                <sys-lib>wsock32</sys-lib>
+                <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
+                     know if it is here so just add it unconditionally -->
+                <sys-lib>wininet</sys-lib>
+            </if>
+            <if cond="FORMAT=='borland'">
+                <sys-lib>oleacc</sys-lib>
+            </if>
+        </if>
+    </template>
+
+
+    <!-- for GUI libs/samples: -->
+    <template id="wx_append_nomono" template_append="wx_append_base_nomono">
+        <sys-lib>$(LIB_TIFF)</sys-lib>
+        <sys-lib>$(LIB_JPEG)</sys-lib>
+        <sys-lib>$(LIB_PNG)</sys-lib>
+        <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
+    </template>
+
+    <set var="LIB_PNG_IF_MONO">
+        <if cond="MONOLITHIC=='1'">$(LIB_PNG)</if>
+    </set>
+
+    <template id="wx_append_base" template_append="wx_append_base_nomono">
+        <!-- Always link against the full wx library in monolithic build and
+             also against the PNG one as core code references it for Tango
+             icons and so it is pulled in even by the console programs. -->
+        <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <sys-lib>$(LIB_PNG_IF_MONO)</sys-lib>
+    </template>
+    <template id="wx_append" template_append="wx_append_nomono">
+        <!-- Always link against the wxWin library in monolithic build: -->
+        <sys-lib>$(WXLIB_MONO)</sys-lib>
+    </template>
+
+
+    <set var="WX_DISABLE_PRECOMP_HEADERS" overwrite="0">0</set>
+
+    <template id="wx_lib_b" template="wx,anylib">
+        <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
+        <libname>$(WXLIBNAME)</libname>
+
+        <define>WXBUILDING</define>
+
+        <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
+            <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL','PM','WINCE']">
+                <sources>$(WXTOPDIR)src/common/dummy.cpp</sources>
+                <precomp-headers-gen>
+                    $(WXTOPDIR)src/common/dummy.cpp
+                </precomp-headers-gen>
+            </if>
+            <precomp-headers-location>$(WXTOPDIR)include</precomp-headers-location>
+            <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
+            <precomp-headers>on</precomp-headers>
+            <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
+            <precomp-headers-exclude>
+                src/common/extended.c
+            </precomp-headers-exclude>
+        </if>
+
+        <if cond="IS_MSVC_PRJ=='1' and BUILDING_LIB=='1'">
+            <msvc-file-group>Common Sources:src/common/*</msvc-file-group>
+            <msvc-file-group>MSW Sources:src/msw/*</msvc-file-group>
+            <msvc-file-group>Generic Sources:src/generic/*</msvc-file-group>
+            <msvc-file-group>wxUniv Sources:src/univ/*</msvc-file-group>
+            <msvc-file-group>wxHTML Sources:src/html/*</msvc-file-group>
+            <msvc-file-group>Setup Headers:*/setup.h</msvc-file-group>
+            <msvc-file-group>MSW Headers:*wx/msw/*.h</msvc-file-group>
+            <msvc-file-group>Generic Headers:*wx/generic/*.h</msvc-file-group>
+            <msvc-file-group>wxUniv Headers:*wx/univ/*.h</msvc-file-group>
+            <msvc-file-group>wxHTML Headers:*wx/html/*.h</msvc-file-group>
+            <msvc-file-group>Common Headers:*wx/*.h</msvc-file-group>
+        </if>
+    </template>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="RCDEFDIR">
+            <if cond="TOOLKIT=='MSW'">
+                $(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+            </if>
+        </set>
+    </if>
+
+    <template id="wx_dll_b" template="wx_lib_b">
+        <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
+        <dllname>$(WXDLLNAME)</dllname>
+        <version>$(WX_VERSION)</version>
+        <so_version>$(WXSOVERSION)</so_version>
+
+        <!-- FIXME: until libtool scheme is implemented in bakefile -->
+        <ldflags cond="FORMAT=='autoconf'">$(WXMACVERSION_CMD)</ldflags>
+
+        <!-- version info resources: -->
+        <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+            <postlink-command>$(DYLIB_RPATH_POSTLINK)</postlink-command>
+        </if>
+        <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
+        
+    </template>
+
+    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">
+        <depends>wxtiff</depends>
+        <depends>wxjpeg</depends>
+        <depends>wxpng</depends>
+        <depends>wxscintilla</depends>
+    </template>
+
+    <template id="wx_3rdparty_dependencies"
+              template="wx_3rdparty_dependencies_gui">
+        <depends>wxexpat</depends>
+        <depends>wxzlib</depends>
+        <depends>wxregex</depends>
+    </template>
+
+    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
+        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
+            <include>$(DOLLAR)(%SCITECH)/include</include>
+        </if>
+        <include>$(INC_TIFF_BUILD)</include>
+        <include>$(INC_TIFF)</include>
+        <include>$(INC_JPEG)</include>
+        <include>$(INC_PNG)</include>
+    </template>
+
+    <template id="wx_3rdparty_includes"
+              template="wx_3rdparty_includes_gui">
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
+    </template>
+
+    <template id="wx_lib"
+              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h"/>
+    <template id="wx_base_lib"
+              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h">
+        <define>wxUSE_GUI=0</define>
+    </template>
+
+    <template id="wx_dll"
+              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template_append="msvc_setup_h,wx_append_nomono"/>
+    <template id="wx_base_dll"
+              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template_append="msvc_setup_h,wx_append_base_nomono">
+        <define>wxUSE_GUI=0</define>
+    </template>
+
+    <!-- =============================================================== -->
+    <!--             Templates for building wxWidgets plugins:           -->
+    <!-- =============================================================== -->
+
+    <if cond="WX_STABLE_BRANCH=='1'">
+        <set var="PLUGIN_VERSION0">
+            <if cond="PLATFORM_UNIX=='1'">$(WX_RELEASE)</if>
+            <if cond="PLATFORM_UNIX=='0'">$(WX_RELEASE_NODOT)</if>
+        </set>
+    </if>
+    <if cond="WX_STABLE_BRANCH=='0'">
+        <set var="PLUGIN_VERSION0">
+            <if cond="PLATFORM_UNIX=='1'">$(WX_VERSION)</if>
+            <if cond="PLATFORM_UNIX=='0'">$(WX_VERSION_NODOT)</if>
+        </set>
+    </if>
+    <set var="PLUGVERDELIM">
+        <if cond="PLATFORM_UNIX=='1'">-</if>
+        <if cond="PLATFORM_UNIX=='0'"></if>
+    </set>
+    <set var="PLUGIN_VERSION">$(PLUGVERDELIM)$(PLUGIN_VERSION0)</set>
+
+    <set var="PLUGINS_INST_DIR" make_var="1">
+        $(LIBDIR)/wx/$(PLUGIN_VERSION0)
+    </set>
+
+    <define-rule name="wx-base-plugin" extends="module">
+        <template>
+            <dllname>
+                $(id)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
+            </dllname>
+            <define>WXUSINGDLL</define>
+            <define>wxUSE_GUI=0</define>
+            <install-to>$(PLUGINS_INST_DIR)</install-to>
+        </template>
+    </define-rule>
+
+    <define-rule name="wx-gui-plugin" extends="module">
+        <template template="wx">
+            <dllname>
+                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
+            </dllname>
+            <define>WXUSINGDLL</define>
+            <install-to>$(PLUGINS_INST_DIR)</install-to>
+        </template>
+    </define-rule>
+
+    <!-- =============================================================== -->
+    <!--               Support for wxWidgets samples:                    -->
+    <!-- =============================================================== -->
+
+    <!-- Link against one wxWin library. Value must be literal! -->
+    <define-tag name="wx-lib" rules="exe,dll,module">
+        <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+        <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
+        <!-- msvs200?prj formats don't support external dependencies yet: -->
+        <if cond="FORMAT in ['msvc6prj','msevc4prj'] and MONOLITHIC=='0'">
+            <depends-on-dsp>$(wxwin.makeDspDependency(value))</depends-on-dsp>
+        </if>
+    </define-tag>
+
+
+    <!-- A hack to keep autoconf happy (we pass CPPFLAGS that contain
+         {top_srcdir} from configure, poor bakefile can't know that
+         and won't output top_srcdir = @top_srcdir@ line): -->
+    <set var="VARS_DONT_ELIMINATE" append="1">top_srcdir</set>
+
+
+</makefile>

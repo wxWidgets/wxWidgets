@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="helpview" template="wx_sample" template_append="wx_append">
+        <sources>helpview.cpp</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <files>test.zip</files>
+    </wx-data>
+
+</makefile>

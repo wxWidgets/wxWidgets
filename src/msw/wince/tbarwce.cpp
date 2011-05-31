@@ -429,7 +429,7 @@ bool wxToolMenuBar::Realize()
                 }
 
                 int n = 0;
-                if ( bmpToUse.Ok() )
+                if ( bmpToUse.IsOk() )
                 {
                     n = ::CommandBar_AddBitmap( (HWND) GetHWND(), NULL, (int) (HBITMAP) bmpToUse.GetHBITMAP(),
                                                     1, 16, 16 );

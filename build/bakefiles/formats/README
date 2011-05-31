@@ -1,0 +1,4 @@
+
+This directory contains misc Bakefile backends that are wxWidgets-specific:
+
+rpmspec     - generates part of .spec files with list of wxBase headers

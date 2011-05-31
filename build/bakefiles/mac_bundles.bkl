@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <!--
+    Support for application bundles, for wxWidgets samples.
+    -->
+    
+    <!-- 
+    Nasty hack: use $(srcdir) to obtain usable CFBundleIdentifier suffix;
+    converts $(srcdir) like "../../samples/minimal" to "samples.minimal".
+    -->
+    <set var="BUNDLE_IDENTIFIER">
+        `echo $(DOLLAR)(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`
+    </set>
+    
+    <set var="BUNDLE_PLIST" overwrite="0">
+        $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
+    </set>
+    <set var="BUNDLE_ICON" overwrite="0">
+        $(TOP_SRCDIR)src/osx/carbon/wxmac.icns
+    </set>
+    <set var="BUNDLE_RESOURCES" overwrite="0"></set>
+
+    <define-tag name="wx-mac-app-bundle" rules="exe">
+
+        <!-- bundle directory: -->
+        <set var="BUNDLE">$(id).app/Contents</set>
+        <set var="BUNDLE_TGT">$(BUNDLE)/PkgInfo</set>
+        <set var="BUNDLE_TGT_REF">
+            <!-- TODO Remove Mac -->
+            <if cond="TOOLKIT=='MAC'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_CARBON'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_COCOA'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_IPHONE'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='COCOA'">$(BUNDLE)/PkgInfo</if>
+        </set>
+
+        <add-target target="$(BUNDLE_TGT)" type="action"
+                    cond="target and PLATFORM_MACOSX=='1'"/>
+        <modify-target target="$(BUNDLE_TGT)">
+            <!-- required data: -->
+            <depends>$(id)</depends>
+            <depends-on-file>$(BUNDLE_PLIST)</depends-on-file>
+            <depends-on-file>$(BUNDLE_ICON)</depends-on-file>
+            <depends-on-file>$(BUNDLE_RESOURCES)</depends-on-file>
+
+            <command>
+                <!-- create the directories: -->
+                mkdir -p $(BUNDLE)
+                mkdir -p $(BUNDLE)/MacOS
+                mkdir -p $(BUNDLE)/Resources
+
+                <!-- Info.plist: -->
+                sed -e "s/IDENTIFIER/$(BUNDLE_IDENTIFIER)/" \
+                    -e "s/EXECUTABLE/$(id)/" \
+                    -e "s/VERSION/$(WX_VERSION)/" \
+                    $(BUNDLE_PLIST) >$(BUNDLE)/Info.plist
+
+                <!-- PkgInfo: -->
+                echo -n "APPL????" >$(BUNDLE)/PkgInfo
+
+                <!-- move the binary: -->
+                ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
+
+                <!-- copy the application icon: -->
+                cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
+	        </command>            
+            <if cond="BUNDLE_RESOURCES!=''">
+                <command>
+                    <!-- copy all other bundle resources: -->
+                    cp -f $(BUNDLE_RESOURCES) $(BUNDLE)/Resources
+                </command>
+            </if>
+ 
+        </modify-target>
+        
+        <!-- add pseudo target id_bundle: -->
+        <add-target target="$(id)_bundle" type="phony"
+                    cond="target and PLATFORM_MACOSX=='1'"/>
+        <modify-target target="$(id)_bundle">
+            <dependency-of>all</dependency-of>
+            <depends>$(BUNDLE_TGT_REF)</depends>
+        </modify-target>
+
+        <!-- "make clean" should delete the bundle: -->
+        <modify-target target="clean">
+            <command>rm -rf $(id).app</command>
+        </modify-target>
+        
+    </define-tag>
+
+</makefile>

@@ -889,7 +889,7 @@ bool wxMacDataViewDataBrowserListViewControl::InsertColumn(unsigned int pos, wxD
 
   UInt32 noOfColumns;
 
-  wxCFStringRef title(columnPtr->GetTitle(),m_font.Ok() ? dynamic_cast<wxDataViewCtrl*>(GetWXPeer())->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
+  wxCFStringRef title(columnPtr->GetTitle(),m_font.IsOk() ? dynamic_cast<wxDataViewCtrl*>(GetWXPeer())->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
 
 
  // try to get new ID for the column:
@@ -2339,7 +2339,7 @@ bool wxDataViewTextRenderer::MacRender()
 {
   wxCHECK_MSG(GetValue().GetType() == GetVariantType(),false,wxString(_("Text renderer cannot render value; value type: ")) << GetValue().GetType());
 
-  wxCFStringRef cfString(GetValue().GetString(),(GetView()->GetFont().Ok() ? GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+  wxCFStringRef cfString(GetValue().GetString(),(GetView()->GetFont().IsOk() ? GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
   return (::SetDataBrowserItemDataText(GetNativeData()->GetItemDataRef(),cfString) == noErr);
 }
 
@@ -2365,7 +2365,7 @@ bool wxDataViewBitmapRenderer::MacRender()
   wxBitmap bitmap;
 
   bitmap << GetValue();
-  return (!(bitmap.Ok()) || (::SetDataBrowserItemDataIcon(GetNativeData()->GetItemDataRef(),bitmap.GetIconRef()) == noErr));
+  return (!(bitmap.IsOk()) || (::SetDataBrowserItemDataIcon(GetNativeData()->GetItemDataRef(),bitmap.GetIconRef()) == noErr));
 }
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
@@ -2390,7 +2390,7 @@ bool wxDataViewIconTextRenderer::MacRender()
 
   iconText << GetValue();
 
-  wxCFStringRef cfString(iconText.GetText(),(GetView()->GetFont().Ok() ? GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+  wxCFStringRef cfString(iconText.GetText(),(GetView()->GetFont().IsOk() ? GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
 
   if (iconText.GetIcon().IsOk())
     if (::SetDataBrowserItemDataIcon(GetNativeData()->GetItemDataRef(),MAC_WXHICON(iconText.GetIcon().GetHICON())) != noErr)
@@ -2556,7 +2556,7 @@ void wxDataViewColumn::SetBitmap(wxBitmap const& bitmap)
       DataBrowserListViewHeaderDesc headerDescription;
 
       wxCHECK_RET(macDataViewListCtrlPtr->GetHeaderDesc(GetNativeData()->GetPropertyID(),&headerDescription) == noErr,_("Could not get header description."));
-      if (GetBitmap().Ok())
+      if (GetBitmap().IsOk())
         headerDescription.btnContentInfo.u.iconRef = GetBitmap().GetIconRef();
       else
         headerDescription.btnContentInfo.u.iconRef = NULL;
@@ -2735,7 +2735,7 @@ void wxDataViewColumn::SetTitle(wxString const& title)
     if (macDataViewListCtrlPtr != NULL)
     {
       DataBrowserListViewHeaderDesc headerDescription;
-      wxCFStringRef           cfTitle(title,(dataViewCtrlPtr->GetFont().Ok() ? dataViewCtrlPtr->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+      wxCFStringRef           cfTitle(title,(dataViewCtrlPtr->GetFont().IsOk() ? dataViewCtrlPtr->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
 
       wxCHECK_RET(macDataViewListCtrlPtr->GetHeaderDesc(GetNativeData()->GetPropertyID(),&headerDescription) == noErr,_("Could not get header description."));
       headerDescription.titleString = cfTitle;

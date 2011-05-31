@@ -314,17 +314,12 @@ protected:
                 wxArrayInt::iterator changeType = changedFlags.begin();
                 for ( ; it != changedFiles.end(); ++it, ++changeType )
                 {
-                    wxFileName path;
-                    if ( wxDirExists(*it) )
-                    {
-                        path = wxFileName::DirName(
-                                basepath + wxFileName::GetPathSeparator() + *it
-                               );
-                    }
-                    else
-                    {
-                        path.Assign(basepath, *it);
-                    }
+                    const wxString fullpath = w.GetPath() +
+                                                wxFileName::GetPathSeparator() +
+                                                  *it;
+                    const wxFileName path(wxDirExists(fullpath)
+                                            ? wxFileName::DirName(fullpath)
+                                            : wxFileName::FileName(fullpath));
 
                     wxFileSystemWatcherEvent event(*changeType, path, path);
                     SendEvent(event);

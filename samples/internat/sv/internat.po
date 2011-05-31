@@ -1,0 +1,153 @@
+# Translation for the wxWidgets internat sample.
+# Copyright © 2005 wxWidgets translation team
+
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWidgets 2.6 internat sample\n"
+"Report-Msgid-Bugs-To: wxDevelopers <wx-dev@lists.wxwidgets.org>\n"
+"POT-Creation-Date: 2005-06-02 13:21+0200\n"
+"PO-Revision-Date: 2005-06-02 13:45+0200\n"
+"Last-Translator: Jonas Rydberg <jonas@arbor.se>\n"
+"Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../internat.cpp:210
+msgid "&About..."
+msgstr "&Om..."
+
+#: ../internat.cpp:212
+msgid "E&xit"
+msgstr "&Avsluta"
+
+#: ../internat.cpp:215
+msgid "&Open bogus file"
+msgstr "&Öppna fingerad fil"
+
+#: ../internat.cpp:216
+msgid "&Play a game"
+msgstr "&Spela ett spel"
+
+#: ../internat.cpp:218
+msgid "&1 _() (gettext)"
+msgstr "&1 _() (gettext)"
+
+#: ../internat.cpp:219
+msgid "&2 _N() (ngettext)"
+msgstr "&2 _N() (ngettext)"
+
+#: ../internat.cpp:220
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)"
+
+#: ../internat.cpp:223
+msgid "&File"
+msgstr "&Arkiv"
+
+#: ../internat.cpp:224
+msgid "&Test"
+msgstr "&Test"
+
+#: ../internat.cpp:242
+msgid "International wxWidgets App"
+msgstr "Internationellt wxWidgetsprogram"
+
+#: ../internat.cpp:260
+#, c-format
+msgid ""
+"Language: %s\n"
+"System locale name:\n"
+"%s\n"
+"Canonical locale name: %s\n"
+msgstr ""
+"Språk: %s\n"
+"Systemlokalnamn:\n"
+"%s\n"
+"Kanoniskt lokalnamn: %s\n"
+
+#: ../internat.cpp:265
+msgid ""
+"I18n sample\n"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"I18n exempelprogram\n"
+"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+
+#: ../internat.cpp:268
+msgid "About Internat"
+msgstr "Om Internat"
+
+#: ../internat.cpp:278
+msgid "Enter your number:"
+msgstr "Skriv in ditt nummer:"
+
+#: ../internat.cpp:279
+msgid "Try to guess my number!"
+msgstr "Försök att gissa mitt nummer!"
+
+#: ../internat.cpp:293
+msgid "You've probably entered an invalid number."
+msgstr "Du har antagligen skrivit in ett felaktigt nummer."
+
+#. string must be split in two -- otherwise the translation would't be
+#. found
+#: ../internat.cpp:307
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "Gratulerar! Du har vunnit. Här är den magiska meningen:"
+
+#: ../internat.cpp:308
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "kan inte skapa fifo \"%s\""
+
+#:
+msgid "Bad luck! try again..."
+msgstr "Otur! Försök igen..."
+
+#: ../internat.cpp:319
+msgid "Result"
+msgstr "Resultat"
+
+#: ../internat.cpp:331
+msgid "Testing _() (gettext)"
+msgstr "Testar _() (gettext)"
+
+#: ../internat.cpp:332
+msgid "Please enter text to translate"
+msgstr "Skriv in text att översätta"
+
+#: ../internat.cpp:333
+msgid "default value"
+msgstr "förvalt värde"
+
+#: ../internat.cpp:346
+msgid "Testing _N() (ngettext)"
+msgstr "Testar _N() (ngettext)"
+
+#: ../internat.cpp:348
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr "Skriv in urval för pluralformer för meningen \"n filer borttagna\""
+
+#: ../internat.cpp:359
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "fil borttagen"
+msgstr[1] "filer borttagna"
+
+#: ../internat.cpp:370
+msgid "line 1"
+msgstr "rad 1"
+
+#: ../internat.cpp:371
+msgid "line 2"
+msgstr "rad 2"
+
+#: ../internat.cpp:372
+msgid "line 3"
+msgstr "rad 3"
+
+#: ../internat.cpp:374
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "Testar wxTRANSLATE() (gettext_noop)"

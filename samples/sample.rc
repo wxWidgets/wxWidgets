@@ -1,0 +1,32 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        samples/samples.rc
+// Purpose:     a standard Win32 .rc file for the wxWindows samples
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     04.08.03
+// RCS-ID:      $Id$
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+// this minimal resource file is all what is needed for most of the wxWindows
+// samples
+
+// note that the icon used by the Explorer (i.e. the programs icon) is the
+// first icon in the executable and the icons are sorted both by their order
+// (Win9x) and by alphabetically (!) (NT), so put this icon first and give it
+// a name starting with "a"
+aaaaaaaa ICON "sample.ico"
+
+// this icon is used with wxFrame::SetIcon()
+sample ICON "sample.ico"
+
+// set this to 1 if you don't want to use manifest resource (manifest resource
+// is needed to enable visual styles on Windows XP - see docs/msw/winxp.txt
+// for more information)
+#define wxUSE_NO_MANIFEST 0
+
+// this is not always needed but doesn't hurt (except making the executable
+// very slightly larger): this file contains the standard icons, cursors, ...
+#include "wx/msw/wx.rc"
+

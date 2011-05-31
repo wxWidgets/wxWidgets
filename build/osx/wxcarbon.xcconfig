@@ -1,0 +1,7 @@
+WXTOOLKIT = carbon
+WXTOOLKITUPPER = CARBON
+
+#include "wx.xcconfig"
+
+OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework AGL -framework OpenGL -framework QuickTime
+VALID_ARCHS = i386 ppc ppc7400 ppc970

@@ -1,0 +1,39 @@
+// Change this to your bundle identifier string
+#define kBundleIdentifier "org.wxwidgets.samples.minimal"
+
+// Change this to your short version string
+#define kBundleShortVersion __OUTPUT_FILENAME__ " version 1.0"
+
+// Change this to the string to display in the Finder's Get Info window
+#define kBundleGetInfo kBundleShortVersion ", Copyright © 2005 by wxWidgets."
+
+plist
+{
+    dictionary
+    {
+        key "CFBundleIdentifier" value string kBundleIdentifier
+        
+        key "CFBundleName" value string __OUTPUT_FILENAME__
+        key "CFBundleGetInfoString" value string kBundleGetInfo
+        key "CFBundleShortVersionString" value string kBundleShortVersion
+        
+        key "CFBundlePackageType" value string __OUTPUT_TYPE__
+        key "CFBundleSignature" value string __OUTPUT_CREATOR__
+        key "CFBundleExecutable" value string __OUTPUT_FILENAME__
+        key "CFBundleVersion" value string "1.0"
+        key "CFBundleIconFile" value string "sample"
+
+        key "CFBundleDevelopmentRegion" value string "English"
+        key "CFBundleInfoDictionaryVersion" value string "6.0"
+        key "LSRequiresCarbon" value boolean true
+    }
+}
+
+// Change this to be localized for English
+localize "English"
+{
+    comment "Localized versions of Info.plist keys"
+    key "CFBundleName" value string __OUTPUT_FILENAME__
+    key "CFBundleGetInfoString" value string kBundleGetInfo
+    key "CFBundleShortVersionString" value string kBundleShortVersion
+}

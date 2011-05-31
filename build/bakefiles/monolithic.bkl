@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+<makefile>
+
+    <set var="MONOLIB_GUI_SRC">
+        <if cond="USE_GUI=='1'">
+            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(QA_SRC)
+            $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC) $(RICHTEXT_SRC)
+            $(STC_SRC)
+        </if>
+    </set>
+    <set var="MONOLIB_SRC">
+        $(BASE_SRC) $(BASE_AND_GUI_SRC) $(NET_SRC) $(MONOLIB_GUI_SRC) $(XML_SRC)
+    </set>
+
+    <!-- settings common to mono{dll,lib} below -->
+    <template id="wx_monolib_or_dll" template="wxscintilla_cppflags">
+        <define>wxUSE_BASE=1</define>
+        <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
+        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+    </template>
+
+    <dll id="monodll" template="wx_dll,wx_monolib_or_dll"
+         cond="SHARED=='1' and MONOLITHIC=='1'">
+        <define>WXMAKINGDLL</define>
+        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+        <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
+        <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
+        <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
+        <library>$(wxscintilla_library_link)</library>
+    </dll>
+
+    <lib id="monolib" template="wx_lib,wx_monolib_or_dll"
+         cond="SHARED=='0' and MONOLITHIC=='1'">
+        <if cond="FORMAT=='watcom'">
+            <set var="LIB_PAGESIZE" overwrite="1">8192</set>
+        </if>
+    </lib>
+
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">mono=monolib+monodll</set>
+    <!-- included by wx.bkl from opengl.bkl -->
+    <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">gl=gllib+gldll</set>
+
+</makefile>

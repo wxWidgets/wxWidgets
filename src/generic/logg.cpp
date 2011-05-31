@@ -850,7 +850,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 
         // This may very well fail if there are insufficient colours available.
         // Degrade gracefully.
-        if ( !bmp.Ok() )
+        if ( !bmp.IsOk() )
         {
             loadedIcons = false;
 

@@ -1,0 +1,22 @@
+/* XPM */
+static const char *const north_xpm[] = {
+"16 16 3 1",
+" 	c None",
+".	c Black",
+"X	c Yellow",
+"                ",
+"       ..       ",
+"      .XX.      ",
+"      .XX.      ",
+"     .XXXX.     ",
+"     .XXXX.     ",
+"    .XXXXXX.    ",
+"    .XXXXXX.    ",
+"   .XXXXXXXX.   ",
+"   .XXXXXXXX.   ",
+"  .XXXXXXXXXX.  ",
+"  .XX......XX.  ",
+" .X..      ..X. ",
+" ..          .. ",
+"                ",
+"                "};

@@ -1100,7 +1100,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
         return;
 
     wxIcon icon = icons.GetIcon(-1);
-    if (icon.Ok())
+    if (icon.IsOk())
     {
         wxMask *mask = icon.GetMask();
         GdkBitmap *bm = NULL;

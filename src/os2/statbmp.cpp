@@ -134,7 +134,7 @@ bool wxStaticBitmap::Create( wxWindow*         pParent,
 
 bool wxStaticBitmap::ImageIsOk() const
 {
-    return(m_pImage && m_pImage->Ok());
+    return(m_pImage && m_pImage->IsOk());
 }
 
 void wxStaticBitmap::Free()

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+
+<bakefile-manifest xmlns="http://www.bakefile.org/schema/bakefile-formats">
+    
+    <format id="rpmspec">
+        <description>
+            wxBase headers list in wx{GTK,Motif,X11}.spec
+        </description>
+        <default-filename>xxx.spec</default-filename>
+    </format>
+    
+</bakefile-manifest>

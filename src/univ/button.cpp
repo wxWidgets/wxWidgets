@@ -125,7 +125,7 @@ bool wxButton::Create(wxWindow *parent,
 
     SetLabel(label);
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         SetBitmap(bitmap); // SetInitialSize called by SetBitmap()
     else
         SetInitialSize(size);
@@ -170,7 +170,7 @@ wxSize wxButton::DoGetBestClientSize() const
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
-    if ( m_bitmap.Ok() )
+    if ( m_bitmap.IsOk() )
     {
         // allocate extra space for the bitmap
         wxCoord heightBmp = m_bitmap.GetHeight() + 2*m_marginBmpY;
@@ -221,7 +221,7 @@ bool wxButton::DoDrawBackground(wxDC& dc)
     rect.width = size.x;
     rect.height = size.y;
 
-    if ( GetBackgroundBitmap().Ok() )
+    if ( GetBackgroundBitmap().IsOk() )
     {
         // get the bitmap and the flags
         int alignment;

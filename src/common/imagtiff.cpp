@@ -344,7 +344,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
     image->Create( (int)w, (int)h );
-    if (!image->Ok())
+    if (!image->IsOk())
     {
         if (verbose)
         {

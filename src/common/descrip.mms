@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 March 2011                                                       *
+# Date : 29 April 2011                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -222,7 +222,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
-		valnum.obj,numformatter.obj,markupparser.obj
+		valnum.obj,numformatter.obj,markupparser.obj,affinematrix2d.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -425,7 +425,7 @@ SOURCES = \
 		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
-		colourdata.cpp,fontdata.cpp
+		colourdata.cpp,fontdata.cpp affinematrix2d.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -700,3 +700,4 @@ fontdata.obj : fontdata.cpp
 valnum.obj : valnum.cpp
 numformatter.obj : numformatter.cpp
 markupparser.obj : markupparser.cpp
+affinematrix2d.obj : affinematrix2d.cpp

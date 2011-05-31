@@ -112,10 +112,10 @@ public:
     void SetHoliday(bool holiday) { m_holiday = holiday; }
 
     // accessors
-    bool HasTextColour() const { return m_colText.Ok(); }
-    bool HasBackgroundColour() const { return m_colBack.Ok(); }
-    bool HasBorderColour() const { return m_colBorder.Ok(); }
-    bool HasFont() const { return m_font.Ok(); }
+    bool HasTextColour() const { return m_colText.IsOk(); }
+    bool HasBackgroundColour() const { return m_colBack.IsOk(); }
+    bool HasBorderColour() const { return m_colBorder.IsOk(); }
+    bool HasFont() const { return m_font.IsOk(); }
     bool HasBorder() const { return m_border != wxCAL_BORDER_NONE; }
 
     bool IsHoliday() const { return m_holiday; }

@@ -449,7 +449,7 @@ void wxFrame::DoSetIcon(const wxIcon& icon)
     if (!m_frameShell)
         return;
 
-    if (!icon.Ok() || !icon.GetDrawable())
+    if (!icon.IsOk() || !icon.GetDrawable())
         return;
 
     XtVaSetValues((Widget) m_frameShell,

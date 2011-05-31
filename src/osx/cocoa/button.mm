@@ -289,7 +289,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
 
     SetBezelStyleFromBorderFlags(v, style);
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         [v setImage:bitmap.GetNSImage() ];
 
     [v setButtonType:NSMomentaryPushInButton];

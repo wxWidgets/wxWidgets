@@ -838,7 +838,7 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     }
 
     // don't "overwrite" busy cursor
-    if ( m_cursor.Ok() && !wxIsBusy() )
+    if ( m_cursor.IsOk() && !wxIsBusy() )
     {
         // normally we should change the cursor only if it's over this window
         // but we should do it always if we capture the mouse currently
@@ -1787,6 +1787,15 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
+
+    // The size of the client window can't be negative but ::GetClientRect()
+    // can return negative size for an extremely small (1x1) window with
+    // borders so ensure that we correct it here as having negative sizes is
+    // completely unexpected.
+    if ( x && *x < 0 )
+        *x = 0;
+    if ( y && *y < 0 )
+        *y = 0;
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
@@ -2140,7 +2149,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *externalLeading,
                                   const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
+    wxASSERT_MSG( !fontToUse || fontToUse->IsOk(),
                     wxT("invalid font in GetTextExtent()") );
 
     HFONT hfontToUse;
@@ -2204,18 +2213,16 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
 
+    wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
-        wxPoint mouse = ScreenToClient(wxGetMousePosition());
-        x = mouse.x; y = mouse.y;
+        pt = wxGetMousePosition();
+    }
+    else
+    {
+        pt = ClientToScreen(wxPoint(x, y));
     }
 
-    HWND hWnd = GetHwnd();
-    HMENU hMenu = GetHmenuOf(menu);
-    POINT point;
-    point.x = x;
-    point.y = y;
-    ::ClientToScreen(hWnd, &point);
 #if defined(__WXWINCE__)
     static const UINT flags = 0;
 #else // !__WXWINCE__
@@ -2233,7 +2240,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     }
 #endif // __WXWINCE__/!__WXWINCE__
 
-    ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
+    ::TrackPopupMenu(GetHmenuOf(menu), flags, pt.x, pt.y, 0, GetHwnd(), NULL);
 
     // we need to do it right now as otherwise the events are never going to be
     // sent to wxCurrentPopupMenu from HandleCommand()
@@ -4181,7 +4188,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             // m_cursor if the user code caught EVT_SET_CURSOR() and returned
             // nothing from it - this is a way to say that our cursor shouldn't
             // be used for this point
-            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() )
             {
                 hcursor = GetHcursorOf(m_cursor);
             }
@@ -4189,7 +4196,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
-                if ( cursor && cursor->Ok() )
+                if ( cursor && cursor->IsOk() )
                 {
                     hcursor = GetHcursorOf(*cursor);
                 }
@@ -4626,7 +4633,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // to.
             wxLogNull logNo; // suppress error if we couldn't load the bitmap
             wxBitmap stdColourBitmap(wxT("wxBITMAP_STD_COLOURS"));
-            if ( stdColourBitmap.Ok() )
+            if ( stdColourBitmap.IsOk() )
             {
                 // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
                 wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,

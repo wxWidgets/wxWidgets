@@ -80,7 +80,8 @@ bool wxBitmapButton::Create(wxWindow *parent,
                                      validator, name) )
         return false;
 
-    SetBitmapLabel(bitmap);
+    if ( bitmap.IsOk() )
+        SetBitmapLabel(bitmap);
 
     if ( !size.IsFullySpecified() )
     {

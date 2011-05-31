@@ -595,7 +595,7 @@ void wxGraphicsContext::SetPen( const wxGraphicsPen& pen )
 
 void wxGraphicsContext::SetPen( const wxPen& pen )
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         SetPen( wxNullGraphicsPen );
     else
         SetPen( CreatePen( pen ) );
@@ -609,7 +609,7 @@ void wxGraphicsContext::SetBrush( const wxGraphicsBrush& brush )
 
 void wxGraphicsContext::SetBrush( const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         SetBrush( wxNullGraphicsBrush );
     else
         SetBrush( CreateBrush( brush ) );
@@ -623,7 +623,7 @@ void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
 
 void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
         SetFont( CreateFont( font, colour ) );
     else
         SetFont( wxNullGraphicsFont );

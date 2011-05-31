@@ -587,9 +587,9 @@ wxSocketBase *wxFTP::GetActivePort()
     addrNew.Service(0); // pick an open port number.
 
     wxSocketServer *sockSrv = new wxSocketServer(addrNew);
-    if (!sockSrv->Ok())
+    if (!sockSrv->IsOk())
     {
-        // We use Ok() here to see if everything is ok
+        // We use IsOk() here to see if everything is ok
         m_lastError = wxPROTO_PROTERR;
         delete sockSrv;
         return NULL;

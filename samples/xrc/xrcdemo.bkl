@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="xrcdemo" template="wx_sample" template_append="wx_append">
+        <sources>
+            xrcdemo.cpp
+            myframe.cpp
+            derivdlg.cpp
+            custclas.cpp
+            objrefdlg.cpp
+        </sources>
+        <headers>
+            derivdlg.h
+            xrcdemo.h
+            myframe.h
+            custclas.h
+            objrefdlg.h
+        </headers>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <dstdir>$(BUILDDIR)/rc</dstdir>
+        <srcdir>$(SRCDIR)/rc</srcdir>
+        <files>
+            artprov.xpm artprov.xrc basicdlg.xpm
+            basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc
+            derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
+            fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif
+            resource.xrc toolbar.xrc uncenter.xpm
+            objref.xrc objrefdlg.xpm
+            uncenter.xrc update.gif variable.xpm variable.xrc
+            throbber.gif stop.xpm
+        </files>
+    </wx-data>
+
+</makefile>

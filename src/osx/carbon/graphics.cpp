@@ -225,7 +225,7 @@ class ImagePattern : public wxMacCoreGraphicsPattern
 public :
     ImagePattern( const wxBitmap* bmp , const CGAffineTransform& transform )
     {
-        wxASSERT( bmp && bmp->Ok() );
+        wxASSERT( bmp && bmp->IsOk() );
 #ifdef __WXMAC__
         Init( (CGImageRef) bmp->CreateCGImage() , transform );
 #endif
@@ -500,7 +500,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         case wxPENSTYLE_STIPPLE:
             {
                 wxBitmap* bmp = pen.GetStipple();
-                if ( bmp && bmp->Ok() )
+                if ( bmp && bmp->IsOk() )
                 {
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
                     m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
@@ -647,7 +647,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     {
         // now brush is a bitmap
         wxBitmap* bmp = brush.GetStipple();
-        if ( bmp && bmp->Ok() )
+        if ( bmp && bmp->IsOk() )
         {
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
@@ -1703,16 +1703,10 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( m_cgContext )
         {
             CGContextSaveGState( m_cgContext );
-            CGContextConcatCTM( m_cgContext, m_windowTransform );
-            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
-            m_contextSynthesized = true;
 #if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
             {
-                // the clip region is in device coordinates, so we convert this again to user coordinates
                 wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
-                CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
-                HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
                 // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
                 if ( HIShapeIsEmpty(hishape))
                 {
@@ -1726,6 +1720,9 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                 }
             }
 #endif
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
+            m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
 
 #if 0 // turn on for debugging of clientdc
@@ -1955,6 +1952,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
+        r.size= CGSizeApplyAffineTransform(r.size, m_windowTransform);
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
 #else
     // allow usage as measuring context
@@ -2842,7 +2840,7 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2854,7 +2852,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2866,7 +2864,7 @@ wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage(), bmp.GetDepth() == 1 ) );
@@ -2931,7 +2929,7 @@ wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // sets the font
 wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxMacCoreGraphicsFontData( this , font, col ));

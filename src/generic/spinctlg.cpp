@@ -85,13 +85,13 @@ public:
     void OnChar( wxKeyEvent &event )
     {
         if (m_spin)
-            m_spin->OnTextChar(event);
+            m_spin->ProcessWindowEvent(event);
     }
 
     void OnKillFocus(wxFocusEvent& event)
     {
         if (m_spin)
-            m_spin->OnTextLostFocus();
+            m_spin->ProcessWindowEvent(event);
 
         event.Skip();
     }
@@ -357,6 +357,11 @@ void wxSpinCtrlGenericBase::DoSetToolTip(wxToolTip *tip)
 // Handle sub controls events
 // ----------------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(wxSpinCtrlGenericBase, wxSpinCtrlBase)
+    EVT_CHAR(wxSpinCtrlGenericBase::OnTextChar)
+    EVT_KILL_FOCUS(wxSpinCtrlGenericBase::OnTextLostFocus)
+END_EVENT_TABLE()
+
 void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 {
     event.Skip();
@@ -388,10 +393,12 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
         DoSendEvent();
 }
 
-void wxSpinCtrlGenericBase::OnTextLostFocus()
+void wxSpinCtrlGenericBase::OnTextLostFocus(wxFocusEvent& event)
 {
     SyncSpinToText();
     DoSendEvent();
+
+    event.Skip();
 }
 
 void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)

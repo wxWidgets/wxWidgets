@@ -258,7 +258,7 @@ void wxWindow::SetBackground(const wxBitmap& bitmap,
 const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
                                                wxStretch *stretch) const
 {
-    if ( m_bitmapBg.Ok() )
+    if ( m_bitmapBg.IsOk() )
     {
         if ( alignment )
             *alignment = m_alignBgBitmap;
@@ -408,7 +408,7 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
 
 void wxWindow::EraseBackground(wxDC& dc, const wxRect& rect)
 {
-    if ( GetBackgroundBitmap().Ok() )
+    if ( GetBackgroundBitmap().IsOk() )
     {
         // Get the bitmap and the flags
         int alignment;

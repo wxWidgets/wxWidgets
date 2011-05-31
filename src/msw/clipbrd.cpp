@@ -214,7 +214,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxBitmap *bitmap = (wxBitmap *)data;
 
-                if ( bitmap && bitmap->Ok() )
+                if ( bitmap && bitmap->IsOk() )
                 {
                     wxDIB dib(*bitmap);
                     if ( dib.IsOk() )

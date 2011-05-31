@@ -139,7 +139,7 @@ void wxMemoryDCImpl::DoSelect(
     if (m_hOldBitmap)
     {
         ::GpiSetBitmap(m_hPS, NULLHANDLE);
-        if (m_vSelectedBitmap.Ok())
+        if (m_vSelectedBitmap.IsOk())
         {
             m_vSelectedBitmap.SetSelectedInto(NULL);
             m_vSelectedBitmap = wxNullBitmap;
@@ -201,7 +201,7 @@ void wxMemoryDCImpl::DoGetSize(
 , int*                              pHeight
 ) const
 {
-    if (!m_vSelectedBitmap.Ok())
+    if (!m_vSelectedBitmap.IsOk())
     {
         *pWidth  = 0;
         *pHeight = 0;

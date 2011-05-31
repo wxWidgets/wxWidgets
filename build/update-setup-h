@@ -1,0 +1,114 @@
+#!/bin/sh
+##############################################################################
+# Name:       build/update-setup.h
+# Purpose:    run from root wx directory to update wx/*/setup.h files: those
+#             having special comment markers in them will be update using
+#             include/wx/setup_inc.h contents
+# Created:    2005-01-15
+# RCS-ID:     $Id$
+# Copyright:  (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+# Licence:    wxWindows licence
+##############################################################################
+
+rc=0
+
+error()
+{
+    echo $* 1>&2
+}
+
+msg()
+{
+    # TODO: only output from here if "quiet" option is not given
+    echo "$*"
+}
+
+# write all the common options to stdout, massaging them specially if they are
+# meant to be included in a configure input file setup.h.in
+#
+# usage: cat_common_options_for setup_inc.h setup0.h
+cat_common_options_for()
+{
+    # get rid of the copyright header on top of the file
+    cmd="sed '1,/^\$/d' $1"
+
+    # the file used for configure is special: we need to get rid of C++
+    # comments in it because it is included by some C code and we also have to
+    # set all options to 0 by default as they're put to 1 only by configure
+    # (and hence any #ifdefs setting default values for them become unneeded)
+    if [ $2 = "setup.h.in" ]; then
+        cmd="$cmd | sed -e '/^\/\//d' \
+                        -e 's@ *//.*\$@@' \
+                        -e 's/# *define \(.\+\) \+1 *\$/#define \1 0/'"
+    fi
+
+    eval $cmd
+}
+
+# update the single setup.h file passed in as the parameter if it is out of
+# date
+#
+# usage: update_single_setup_h {common|MSW} setup_inc.h setup0.h
+update_single_setup_h()
+{
+    section=$1
+    shift
+    setup_inc=$1
+    shift
+
+    if [ $setup_inc -ot $1 ]; then
+        echo "Skipping $1 which is already up to date."
+        return 0
+    fi
+
+    echo -n "Updating $1 ..."
+
+    tmp=$i.$$.tmp
+    sed -e "/^\/\* --- start $section options --- \*\/\$/q" $1 > $tmp &&
+    cat_common_options_for $setup_inc $1 >> $tmp &&
+    sed -n -e "/^\/\* --- end $section options --- \*\/\$/,\$p" $1 >> $tmp &&
+    mv $tmp $1
+
+    if [ $? -ne 0 ]; then
+        msg " FAILED"
+        error "$0: failed to update file $1"
+        rc=2
+    else
+        msg " ok"
+    fi
+}
+
+# wrapper for update_single_setup_h which only updates the common options
+update_common_setup_h()
+{
+    update_single_setup_h common include/wx/setup_inc.h $1
+}
+
+# wrapper for update_single_setup_h which only updates the MSW options
+update_msw_setup_h()
+{
+    update_single_setup_h MSW include/wx/msw/setup_inc.h $1
+}
+
+# entry point
+if [ ! -f wxwin.m4 ]; then
+    error "$0: must be ran from root wx directory"
+    exit 1
+fi
+
+update_common_setup_h include/wx/motif/setup0.h
+update_common_setup_h include/wx/msw/setup0.h
+update_common_setup_h include/wx/msw/wince/setup.h
+update_common_setup_h include/wx/osx/setup0.h
+update_common_setup_h include/wx/os2/setup0.h
+update_common_setup_h include/wx/palmos/setup0.h
+update_common_setup_h include/wx/univ/setup0.h
+update_common_setup_h setup.h.in
+
+update_msw_setup_h include/wx/msw/setup0.h
+update_msw_setup_h setup.h.in
+
+update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup0.h
+
+exit $rc
+

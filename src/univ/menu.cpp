@@ -602,7 +602,7 @@ void wxPopupMenuWindow::DoDraw(wxControlRenderer *renderer)
                 bmp = item->GetDisabledBitmap();
             }
 
-            if ( !bmp.Ok() )
+            if ( !bmp.IsOk() )
             {
                 // strangely enough, for unchecked item we use the
                 // "checked" bitmap because this is the default one - this

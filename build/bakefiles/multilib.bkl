@@ -1,0 +1,391 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <define-rule name="wxshortcut" extends="phony">
+        <template>
+            <set var="name">$(id.replace('wx',''))</set>
+            <set var="namedll">
+                <if cond="SHARED=='1'">$(name)dll</if>
+            </set>
+            <set var="namelib">
+                <if cond="SHARED=='0'">$(name)lib</if>
+            </set>
+            <depends>$(namedll)</depends>
+            <depends>$(namelib)</depends>
+        </template>
+    </define-rule>
+
+    <!-- ================================================================= -->
+    <!--                            wxBase library                         -->
+    <!-- ================================================================= -->
+
+    <dll id="basedll" template="wx_base_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXMAKINGDLL_BASE</define>
+        <define>wxUSE_BASE=1</define>
+        <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
+        <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="baselib" template="wx_base_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <define>wxUSE_BASE=1</define>
+        <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
+        <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxbase" cond="MONOLITHIC=='0'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">base=baselib+basedll</set>
+
+
+    <!-- ================================================================= -->
+    <!--                             wxNet library                         -->
+    <!-- ================================================================= -->
+
+    <dll id="netdll" template="wx_base_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_NET</define>
+        <sources>$(NET_SRC)</sources>
+        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
+        <library>basedll</library>
+    </dll>
+
+    <lib id="netlib" template="wx_base_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <sources>$(NET_SRC)</sources>
+        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxnet" cond="MONOLITHIC=='0'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">net=netlib+netdll</set>
+
+
+    <!-- ================================================================= -->
+    <!--                           Main GUI library                        -->
+    <!-- ================================================================= -->
+
+    <dll id="coredll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_CORE</define>
+        <define>wxUSE_BASE=0</define>
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
+        <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
+        <library>basedll</library>
+    </dll>
+
+    <lib id="corelib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>wxUSE_BASE=0</define>
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
+        <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxcore" cond="MONOLITHIC=='0' and USE_GUI=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">core=corelib+coredll</set>
+
+
+    <!-- ================================================================= -->
+    <!--                     "Advanced" controls library                   -->
+    <!-- ================================================================= -->
+
+    <dll id="advdll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_ADV</define>
+        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
+        <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
+        <library>coredll</library>
+        <library>basedll</library>
+        <ldlibs>$(PLUGIN_ADV_EXTRALIBS)</ldlibs>
+    </dll>
+
+    <lib id="advlib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
+        <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxadv" cond="MONOLITHIC=='0' and USE_GUI=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">adv=advlib+advdll</set>
+
+
+    <!-- ================================================================= -->
+    <!--                     wxMedia classes library                       -->
+    <!-- ================================================================= -->
+
+    <dll id="mediadll" template="wx_dll"
+         cond="SHARED=='1' and USE_MEDIA=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_MEDIA</define>
+        <sources>$(MEDIA_SRC)</sources>
+        <msvc-headers>$(MEDIA_HDR)</msvc-headers>
+        <library>coredll</library>
+        <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
+    </dll>
+
+    <lib id="medialib" template="wx_lib"
+         cond="SHARED=='0' and USE_MEDIA=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <sources>$(MEDIA_SRC)</sources>
+        <msvc-headers>$(MEDIA_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxmedia" cond="MONOLITHIC=='0' and USE_GUI=='1' and USE_MEDIA=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">media=medialib+mediadll</set>
+
+
+    <!-- ================================================================ -->
+    <!--                               wxHTML                             -->
+    <!-- ================================================================ -->
+
+    <dll id="htmldll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_HTML</define>
+        <sources>$(HTML_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
+        <msvc-headers>$(HTML_HDR)</msvc-headers>
+    </dll>
+
+    <!-- use this to conditonally link against htmldll with <library>: -->
+    <set var="htmldll_library_link">
+        <if cond="SHARED=='1' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">htmldll</if>
+    </set>
+
+    <lib id="htmllib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
+        <sources>$(HTML_SRC)</sources>
+        <msvc-headers>$(HTML_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxhtml" cond="MONOLITHIC=='0' and USE_HTML=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">html=htmllib+htmldll</set>
+
+    <!-- ================================================================ -->
+    <!--                             OpenGL                               -->
+    <!-- ================================================================ -->
+
+    <!-- included by wx.bkl from opengl.bkl -->
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">gl=gllib+gldll</set>
+
+
+    <!-- ================================================================ -->
+    <!--                               QA                                 -->
+    <!-- ================================================================ -->
+
+    <dll id="qadll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_QA=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_QA</define>
+        <sources>$(QA_SRC)</sources>
+        <msvc-headers>$(QA_HDR)</msvc-headers>
+        <library>coredll</library>
+        <library>basedll</library>
+        <library>xmldll</library>
+    </dll>
+
+    <lib id="qalib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_QA=='1' and MONOLITHIC=='0'">
+        <sources>$(QA_SRC)</sources>
+        <msvc-headers>$(QA_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxqa" cond="MONOLITHIC=='0' and USE_QA=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">qa=qalib+qadll</set>
+
+    <!-- ================================================================ -->
+    <!--                              XML                                 -->
+    <!-- ================================================================ -->
+
+    <dll id="xmldll" template="wx_base_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_XML</define>
+        <sources>$(XML_SRC)</sources>
+        <msvc-headers>$(XML_HDR)</msvc-headers>
+        <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+    </dll>
+
+    <lib id="xmllib" template="wx_base_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <sources>$(XML_SRC)</sources>
+        <msvc-headers>$(XML_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxxml" cond="MONOLITHIC=='0'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xml=xmllib+xmldll</set>
+
+    <!-- ================================================================ -->
+    <!--                            XRC                                   -->
+    <!-- ================================================================ -->
+
+    <dll id="xrcdll" template="wx_dll"
+         cond="SHARED=='1' and USE_XRC=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_XRC</define>
+        <sources>$(XRC_SRC)</sources>
+        <library>$(htmldll_library_link)</library>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>xmldll</library>
+        <library>basedll</library>
+        <msvc-headers>$(XRC_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="xrclib" template="wx_lib"
+         cond="SHARED=='0' and USE_XRC=='1' and MONOLITHIC=='0'">
+        <sources>$(XRC_SRC)</sources>
+        <msvc-headers>$(XRC_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxxrc" cond="MONOLITHIC=='0' and USE_XRC=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xrc=xrclib+xrcdll</set>
+
+    <!-- ================================================================ -->
+    <!--                            AUI                                   -->
+    <!-- ================================================================ -->
+
+    <dll id="auidll" template="wx_dll"
+         cond="SHARED=='1' and USE_AUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_AUI</define>
+        <sources>$(AUI_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(AUI_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="auilib" template="wx_lib"
+         cond="SHARED=='0' and USE_AUI=='1' and MONOLITHIC=='0'">
+        <sources>$(AUI_SRC)</sources>
+        <msvc-headers>$(AUI_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxaui" cond="MONOLITHIC=='0' and USE_AUI=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
+    
+    <!-- ================================================================ -->
+    <!--                            RIBBON                                -->
+    <!-- ================================================================ -->
+
+    <dll id="ribbondll" template="wx_dll"
+         cond="SHARED=='1' and USE_RIBBON=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_RIBBON</define>
+        <sources>$(RIBBON_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="ribbonlib" template="wx_lib"
+         cond="SHARED=='0' and USE_RIBBON=='1' and MONOLITHIC=='0'">
+        <sources>$(RIBBON_SRC)</sources>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxribbon" cond="MONOLITHIC=='0' and USE_RIBBON=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">ribbon=ribbonlib+ribbondll</set>
+
+    <!-- ================================================================ -->
+    <!--                            PROPGRID                              -->
+    <!-- ================================================================ -->
+
+    <dll id="propgriddll" template="wx_dll"
+         cond="SHARED=='1' and USE_PROPGRID=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_PROPGRID</define>
+        <sources>$(PROPGRID_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="propgridlib" template="wx_lib"
+         cond="SHARED=='0' and USE_PROPGRID=='1' and MONOLITHIC=='0'">
+        <sources>$(PROPGRID_SRC)</sources>
+        <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxpropgrid" cond="MONOLITHIC=='0' and USE_PROPGRID=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">propgrid=propgridlib+propgriddll</set>
+
+    <!-- ================================================================ -->
+    <!--                            RICHTEXT                              -->
+    <!-- ================================================================ -->
+
+    <dll id="richtextdll" template="wx_dll"
+         cond="SHARED=='1' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_RICHTEXT</define>
+        <sources>$(RICHTEXT_SRC)</sources>
+        <library>advdll</library>
+        <library>$(htmldll_library_link)</library>
+        <library>xmldll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="richtextlib" template="wx_lib"
+         cond="SHARED=='0' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
+        <sources>$(RICHTEXT_SRC)</sources>
+        <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxrichtext" cond="MONOLITHIC=='0' and USE_RICHTEXT=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">richtext=richtextlib+richtextdll</set>
+
+    <!-- ================================================================ -->
+    <!--                            STC                                   -->
+    <!-- ================================================================ -->
+
+    <template id="stc_base" template="wxscintilla_cppflags">
+        <library>wxscintilla</library>
+    </template>
+
+    <dll id="stcdll" template="wx_dll,stc_base"
+         cond="SHARED=='1' and USE_STC=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_STC</define>
+        <sources>$(STC_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(STC_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="stclib" template="wx_lib,stc_base"
+         cond="SHARED=='0' and USE_STC=='1' and MONOLITHIC=='0'">
+        <sources>$(STC_SRC)</sources>
+        <msvc-headers>$(STC_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxstc" cond="MONOLITHIC=='0' and USE_STC=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">stc=stclib+stcdll</set>
+
+</makefile>

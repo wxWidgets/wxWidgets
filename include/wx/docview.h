@@ -474,6 +474,13 @@ public:
     // Get the current document manager
     static wxDocManager* GetDocumentManager() { return sm_docManager; }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxPageSetupDialogData& GetPageSetupDialogData()
+        { return m_pageSetupDialogData; }
+    const wxPageSetupDialogData& GetPageSetupDialogData() const
+        { return m_pageSetupDialogData; }
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 #if WXWIN_COMPATIBILITY_2_8
     // deprecated, override GetDefaultName() instead
     wxDEPRECATED_BUT_USED_INTERNALLY(

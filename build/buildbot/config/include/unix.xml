@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       include/unix.xml
+    Purpose:    Declarations for unix slaves
+    Author:     Michael Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) Michael Wetherell
+    Licence:    wxWindows licence
+-->
+
+<bot xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="defs.xml"/>
+
+<!--
+    build - Override <build> to add a slave lock. This has the effect of
+            serialising all the builds on this machine
+-->
+<xsl:template name="build">
+    <xsl:param name="content"/>
+    <build>
+        <lock>slave</lock>
+        <xsl:copy-of select="$content"/>
+    </build>
+</xsl:template>
+
+<!--
+    checkout - checks out to a shared directory
+
+    Checks out to a directory '../$branch' shared between builds. Then creates
+    a directory 'build' for this job to build in, and 'src' which is a link to
+    the shared sources. This relies on all builds for the same branch being
+    serialised with lock so that one build doesn't update the sources while
+    another is building them.
+
+    Usage typically just:
+        <checkout/>
+    for the trunk, or:
+        <checkout branch="branches/WX_2_8_BRANCH"/>
+    to checkout a branch.
+-->
+<xsl:template name="checkout">
+    <xsl:param name="content"/>
+    <xsl:param name="branch" select="'trunk'"/>
+    <xsl:variable name="nodes" select="exsl:node-set($content)"/>
+    <svn>
+        <xsl:if test="not($nodes/svnurl)">
+            <xsl:if test="not($nodes/baseURL)">
+                <baseURL><SVN_URL/></baseURL>
+            </xsl:if>
+            <xsl:if test="not($nodes/defaultBranch)">
+                <defaultBranch><xsl:value-of select="$branch"/></defaultBranch>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="not($nodes/workdir)">
+            <workdir>../<xsl:value-of select="$branch"/></workdir>
+        </xsl:if>
+        <xsl:copy-of select="$content"/>
+    </svn>
+    <shellcommand>
+        <description>creating build directory</description>
+        <descriptionDone>create build directory</descriptionDone>
+        <workdir>.</workdir>
+        <command>
+            rm -rf build &amp;&amp;
+            mkdir build &amp;&amp;
+            ln -sf ../<xsl:value-of select="$branch"/> src
+        </command>
+    </shellcommand>
+</xsl:template>
+
+<!--
+    configure - use '../src/configure' as the default configure command,
+                include disable-precomp-headers in the default options and
+                post process the Makefiles to use ccache.
+
+    Usage: <configure options="-with-foobar"/>
+-->
+<xsl:template name="configure">
+    <xsl:param name="content"/>
+    <xsl:param name="options"/>
+    <configure>
+        <copy-with-defaults content="{$content}">
+            <command>../src/configure --disable-precomp-headers --disable-compat28 --disable-compat26 <xsl:value-of select="normalize-space($options)"/></command>
+        </copy-with-defaults>
+        <command>find . -name Makefile | xargs perl -pi -e 's/^(?:CC|CXX) = /$&amp;ccache /'</command>
+    </configure>
+</xsl:template>
+
+</bot>

@@ -214,7 +214,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     image->Create(width, height);
 
-    if (!image->Ok())
+    if (!image->IsOk())
         return wxPCX_MEMERR;
 
     if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
@@ -331,7 +331,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     // according to PCX specs) and allocate space for one complete
     // scanline.
 
-    if (!image->Ok())
+    if (!image->IsOk())
         return wxPCX_INVFORMAT;
 
     width = image->GetWidth();

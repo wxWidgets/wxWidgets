@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Name:       xp_vc.xml
+    Purpose:    Buildbot xp_vc configuration.
+    Author:     Laurent Humbertclaude
+    RCS-ID:     $Id$
+    Copyright:  (c) 2008 Laurent Humbertclaude
+    Licence:    wxWindows licence
+-->
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="include/xp_vc.xml"/>
+    <build>
+        <name>XPSP2 VC9 wxMSW trunk release</name>
+        <builddir>XPSP2_VC9_wxMSW_trunk_release</builddir>
+        <scheduler>trunk_quick</scheduler>
+        <sandbox>VC9</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
+        <steps>
+            <checkout/>
+            <compile-all tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC9 wxMSW stable release</name>
+        <builddir>XPSP2_VC9_wxMSW_stable_release</builddir>
+        <scheduler>stable_quick</scheduler>
+        <sandbox>VC9</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
+        <steps>
+            <checkout branch="{$STABLE_BRANCH}"/>
+            <compile-all contrib="false" tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC9 wxMSW trunk debug</name>
+        <builddir>XPSP2_VC9_wxMSW_trunk_debug</builddir>
+        <scheduler>daily_0400</scheduler>
+        <sandbox>VC9</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunitd.lib</make>
+        <steps>
+            <checkout/>
+            <compile-all tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC9 wxMSW stable debug</name>
+        <builddir>XPSP2_VC9_wxMSW_stable_debug</builddir>
+        <scheduler>daily_0500</scheduler>
+        <sandbox>VC9</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunitd.lib</make>
+        <steps>
+            <checkout branch="{$STABLE_BRANCH}"/>
+            <compile-all contrib="false" tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC6 wxMSW trunk release</name>
+        <builddir>XPSP2_VC6_wxMSW_trunk_release</builddir>
+        <scheduler>trunk_quick</scheduler>
+        <sandbox>VC6</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunit.lib</make>
+        <steps>
+            <checkout/>
+            <compile-all tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC6 wxMSW stable release</name>
+        <builddir>XPSP2_VC6_wxMSW_stable_release</builddir>
+        <scheduler>stable_quick</scheduler>
+        <sandbox>VC6</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunit.lib</make>
+        <steps>
+            <checkout branch="{$STABLE_BRANCH}"/>
+            <compile-all contrib="false" tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC6 wxMSW trunk debug</name>
+        <builddir>XPSP2_VC6_wxMSW_trunk_debug</builddir>
+        <scheduler>daily_0600</scheduler>
+        <sandbox>VC6</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
+        <steps>
+            <checkout/>
+            <compile-all tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC6 wxMSW stable debug</name>
+        <builddir>XPSP2_VC6_wxMSW_stable_debug</builddir>
+        <scheduler>daily_0700</scheduler>
+        <sandbox>VC6</sandbox>
+        <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
+        <steps>
+            <checkout branch="{$STABLE_BRANCH}"/>
+            <compile-all contrib="false" tests="true"/>
+            <run-tests/>
+        </steps>
+    </build>
+</bot>

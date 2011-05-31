@@ -99,7 +99,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         XFreeGC((Display*) m_display, (GC) m_gc);
     m_gc = (WXGC) NULL;
 
-    if (m_bitmap.Ok() && (bitmap.GetDisplay() == m_display))
+    if (m_bitmap.IsOk() && (bitmap.GetDisplay() == m_display))
     {
         m_pixmap = m_bitmap.GetDrawable();
         Display* display = (Display*) m_display;
@@ -129,7 +129,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
 void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         if (width) (*width) = m_bitmap.GetWidth();
         if (height) (*height) = m_bitmap.GetHeight();

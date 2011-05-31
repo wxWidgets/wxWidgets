@@ -796,9 +796,9 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 
 bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         dc->DrawBitmap( m_bitmap, cell.x, cell.y );
-    else if (m_icon.Ok())
+    else if (m_icon.IsOk())
         dc->DrawIcon( m_icon, cell.x, cell.y );
 
     return true;
@@ -806,9 +806,9 @@ bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
 
 wxSize wxDataViewBitmapRenderer::GetSize() const
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         return wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
-    else if (m_icon.Ok())
+    else if (m_icon.IsOk())
         return wxSize( m_icon.GetWidth(), m_icon.GetHeight() );
 
     return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);

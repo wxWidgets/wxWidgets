@@ -153,7 +153,7 @@ WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 bool wxStaticBitmap::ImageIsOk() const
 {
-    return m_image && m_image->Ok();
+    return m_image && m_image->IsOk();
 }
 
 wxIcon wxStaticBitmap::GetIcon() const

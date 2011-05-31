@@ -627,6 +627,7 @@ protected:
     void OnTabBeginDrag(wxAuiNotebookEvent& evt);
     void OnTabDragMotion(wxAuiNotebookEvent& evt);
     void OnTabEndDrag(wxAuiNotebookEvent& evt);
+    void OnTabCancelDrag(wxAuiNotebookEvent& evt);
     void OnTabButton(wxAuiNotebookEvent& evt);
     void OnTabMiddleDown(wxAuiNotebookEvent& evt);
     void OnTabMiddleUp(wxAuiNotebookEvent& evt);

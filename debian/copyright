@@ -1,0 +1,222 @@
+This package was debianized by Ron Lee <ron@debian.org> on
+Sun, 13 Feb 2000 18:40:00 +1030.
+
+More information about wxWidgets, as well as the source these debs
+are produced from can be found at www.wxwidgets.org
+
+Note for Debian users:
+======================
+
+Most of the core wxWidgets library is licenced under the wxWindows Library
+Licence (included below), however some additional features of the library
+may include source licenced under terms which do not include the exception
+permitting you to licence binary object code versions of works based on the
+Library under terms of your own choice.  At any time and without warning,
+newer versions of the Debian binary packages may include such code.
+
+In short, if you plan to licence apps built against these debs under terms
+compatible with the GPL or LGPL, then you have nothing to worry about.  If
+you wish to release your code under a licence which does not grant all of
+the same rights as the LGPL would assert but would be permitted under the
+terms of the exception, then you are strongly advised to either check the
+licencing terms of all components that these debs (and all future versions
+that you use) are built with, or build your own binaries of wxWidgets which
+include only such code as is definitely covered by the exception.
+
+You should presume that these debs will fall under the provisions of the
+unmodified LGPL unless you can prove otherwise, however this note in no way
+alters the actual terms of the authorative licence detailed below, it is
+intended to be purely informative of the fact that the Debian binary packages
+will be built primarily with features useful to Free Software developers and
+may not be suitable "as is" for compiling software for distribution that is
+licenced incompatibly with the LGPL.  See /usr/share/common-licenses for
+the full text of the LGPL.
+
+Modifications and additions to the Library itself are encouraged to be
+placed under the wxWindows Library Licence.  We hope you find it useful.
+
+  -- Ron
+
+-----------------------------------------------------------------------------
+
+Preamble
+========
+
+The licensing of the wxWindows library is intended to protect the wxWindows
+library, its developers, and its users, so that the considerable investment
+it represents is not abused.
+
+Under the terms of the wxWindows Licence, you as a user are not
+obliged to distribute wxWindows source code with your products, if you
+distribute these products in binary form. However, you are prevented from
+restricting use of the library in source code form, or denying others the
+rights to use or distribute wxWindows library source code in the way
+intended.
+
+The wxWindows Licence establishes the copyright for the code and related
+material, and it gives you legal permission to copy, distribute and/or
+modify the library. It also asserts that no warranty is given by the authors
+for this or derived code.
+
+The core distribution of the wxWindows library contains files
+under two different licences:
+
+- Most files are distributed under the GNU Library General Public
+  Licence, version 2, with the special exception that you may create and
+  distribute object code versions built from the source code or modified
+  versions of it (even if these modified versions include code under a
+  different licence), and distribute such binaries under your own
+  terms.
+
+- Most core wxWindows manuals are made available under the "wxWindows
+  Free Documentation Licence", which allows you to distribute modified
+  versions of the manuals, such as versions documenting any modifications
+  made by you in your version of the library. However, you may not restrict
+  any third party from reincorporating your changes into the original
+  manuals.
+
+
+
+                wxWindows Library Licence, Version 3
+                ====================================
+
+  Copyright (c) 1998 Julian Smart, Robert Roebling et al
+
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
+
+                       WXWINDOWS LIBRARY LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+  
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Library General Public Licence as published by
+  the Free Software Foundation; either version 2 of the Licence, or (at
+  your option) any later version.
+  
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+  General Public Licence for more details.
+
+  You should have received a copy of the GNU Library General Public Licence
+  along with this software, usually in a file named COPYING.LIB.  If not,
+  write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+  Boston, MA 02110-1301, USA.
+
+  EXCEPTION NOTICE
+
+  1. As a special exception, the copyright holders of this library give
+  permission for additional uses of the text contained in this release of
+  the library as licenced under the wxWindows Library Licence, applying
+  either version 3 of the Licence, or (at your option) any later version of
+  the Licence as published by the copyright holders of version 3 of the
+  Licence document.
+
+  2. The exception is that you may use, copy, link, modify and distribute
+  under the user's own terms, binary object code versions of works based
+  on the Library.
+
+  3. If you copy code from files distributed under the terms of the GNU
+  General Public Licence or the GNU Library General Public Licence into a
+  copy of this library, as this licence permits, the exception does not
+  apply to the code that you add in this way.  To avoid misleading anyone as
+  to the status of such modified files, you must delete this exception
+  notice from such code and/or adjust the licensing conditions notice
+  accordingly.
+
+  4. If you write modifications of your own for this library, it is your
+  choice whether to permit this exception to apply to your modifications. 
+  If you do not wish that, you must delete the exception notice from such
+  code and/or adjust the licensing conditions notice accordingly.
+
+
+
+                wxWindows Free Documentation Licence, Version 3
+                ===============================================
+
+  Copyright (c) 1998 Julian Smart, Robert Roebling et al
+
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
+   
+                   WXWINDOWS FREE DOCUMENTATION LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  1. Permission is granted to make and distribute verbatim copies of this
+  manual or piece of documentation provided any copyright notice and this
+  permission notice are preserved on all copies.
+
+  2. Permission is granted to process this file or document through a
+  document processing system and, at your option and the option of any third
+  party, print the results, provided a printed document carries a copying
+  permission notice identical to this one.
+
+  3. Permission is granted to copy and distribute modified versions of this
+  manual or piece of documentation under the conditions for verbatim
+  copying, provided also that any sections describing licensing conditions
+  for this manual, such as, in particular, the GNU General Public Licence,
+  the GNU Library General Public Licence, and any wxWindows Licence are
+  included exactly as in the original, and provided that the entire
+  resulting derived work is distributed under the terms of a permission
+  notice identical to this one.
+
+  4. Permission is granted to copy and distribute translations of this
+  manual or piece of documentation into another language, under the above
+  conditions for modified versions, except that sections related to
+  licensing, including this paragraph, may also be included in translations
+  approved by the copyright holders of the respective licence documents in
+  addition to the original English.
+
+                            WARRANTY DISCLAIMER
+
+  5. BECAUSE THIS MANUAL OR PIECE OF DOCUMENTATION IS LICENSED FREE OF CHARGE,
+  THERE IS NO WARRANTY FOR IT, TO THE EXTENT PERMITTED BY APPLICABLE LAW. 
+  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+  PARTIES PROVIDE THIS MANUAL OR PIECE OF DOCUMENTATION "AS IS" WITHOUT
+  WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+  PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF
+  THE MANUAL OR PIECE OF DOCUMENTATION IS WITH YOU.  SHOULD THE MANUAL OR
+  PIECE OF DOCUMENTATION PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+  NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+  6. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL
+  ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+  REDISTRIBUTE THE MANUAL OR PIECE OF DOCUMENTATION AS PERMITTED ABOVE, BE
+  LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR
+  CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+  MANUAL OR PIECE OF DOCUMENTATION (INCLUDING BUT NOT LIMITED TO LOSS OF
+  DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+  PARTIES OR A FAILURE OF A PROGRAM BASED ON THE MANUAL OR PIECE OF
+  DOCUMENTATION TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR
+  OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+-----------------------------------------------------------------------------
+
+XRCed is released under the following terms:
+
+Copyright (c) 2002, Roman Rolinsky <rollrom@users.sourceforge.net>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+

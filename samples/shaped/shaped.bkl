@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="shaped" template="wx_sample" template_append="wx_append">
+        <sources>shaped.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <files>star.png</files>
+    </wx-data>
+
+</makefile>

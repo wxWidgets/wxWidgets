@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<bakefile-gen xmlns="http://www.bakefile.org/schema/bakefile-gen">
+
+    <add-flags formats="watcom">
+        -DPLATFORM_OS2=1
+    </add-flags>
+
+    <include file="../bakefiles/Bakefiles.bkgen"/>
+
+    <add-flags files="wx.bkl" formats="watcom">
+        -o../os2/makefile.wat
+    </add-flags>
+
+    <add-flags files="../bakefiles/wx.bkl" formats="watcom">
+        -DOPTIONS_FILE=config.wat
+    </add-flags>
+    <add-flags files="../../*/*" formats="watcom">
+        -DOPTIONS_FILE=../build/os2/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../build/os2/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../build/os2/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../../build/os2/config.wat
+    </add-flags>
+
+</bakefile-gen>

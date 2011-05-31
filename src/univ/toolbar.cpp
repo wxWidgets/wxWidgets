@@ -292,7 +292,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
 #if wxUSE_IMAGE
     // created disabled-state bitmap on demand
-    if ( !enable && !tool->GetDisabledBitmap().Ok() )
+    if ( !enable && !tool->GetDisabledBitmap().IsOk() )
     {
         wxImage image(tool->GetNormalBitmap().ConvertToImage());
 

@@ -1,0 +1,5 @@
+#include "../sample.rc"
+
+dnd_copy CURSOR "dnd_copy.cur"
+dnd_move CURSOR "dnd_move.cur"
+dnd_none CURSOR "dnd_none.cur"

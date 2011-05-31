@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+    
+    <if cond="not isdefined('OUT_OF_TREE_MAKEFILES')">
+        <set var="OUT_OF_TREE_MAKEFILES">0</set>
+    </if>
+
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <include file="common_samples_outoftree.bkl"/>
+    </if>
+    <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+        <include file="common_samples_intree.bkl"/>
+    </if>
+
+</makefile>
