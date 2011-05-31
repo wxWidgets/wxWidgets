@@ -185,7 +185,7 @@ public:
 
     virtual wxBorder GetDefaultBorder() const;
 
-    void StartEditor( const wxDataViewItem & item, unsigned int column );
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const;

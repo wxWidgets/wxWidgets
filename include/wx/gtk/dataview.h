@@ -158,6 +158,8 @@ public:
                           wxDataViewColumn *&column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem &item,
                                 const wxDataViewColumn *column = NULL ) const;
+                                
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );

@@ -2314,6 +2314,11 @@ void wxCocoaDataViewControl::Resort()
     [m_OutlineView reloadData];
 }
 
+void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
+}
+
 //
 // other methods (inherited from wxDataViewWidgetImpl)
 //

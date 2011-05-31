@@ -1095,6 +1095,14 @@ public:
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 
+    /** 
+        Programmatically starts editing the given item on the given column.
+        Currently not implemented on wxOSX Carbon.
+        @since 2.9.2
+    */
+    
+    virtual void StartEditor(const wxDataViewItem & item, unsigned int column);
+
     /**
         Unselect the given item.
     */

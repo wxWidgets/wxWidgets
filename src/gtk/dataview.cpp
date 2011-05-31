@@ -4836,6 +4836,33 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, NULL, FALSE);
 }
 
+void wxDataViewCtrl::StartEditor(const wxDataViewItem& item, unsigned int column)
+{
+    wxCHECK_RET( m_treeview,
+                 "Current item can't be set before creating the control." );
+
+    // We need to make sure the model knows about this item or the path would
+    // be invalid and gtk_tree_view_set_cursor() would silently do nothing.
+    ExpandAncestors(item);
+    
+    wxDataViewColumn *dvcolumn = GetColumn(column);
+    wxASSERT_MSG(dvcolumn, "Could not retrieve column");
+    GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(dvcolumn->GetGtkHandle());
+
+    // We also need to preserve the existing selection from changing.
+    // Unfortunately the only way to do it seems to use our own selection
+    // function and forbid any selection changes during set cursor call.
+    wxGtkTreeSelectionLock
+        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)));
+
+    // Do move the cursor now.
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, gcolumn, TRUE);
+}
+
 wxDataViewItem wxDataViewCtrl::GetSelection() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );

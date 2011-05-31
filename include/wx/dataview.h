@@ -700,6 +700,8 @@ public:
                                 const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
+    
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column ) { }
 
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
