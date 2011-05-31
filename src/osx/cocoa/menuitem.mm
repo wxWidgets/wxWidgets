@@ -100,8 +100,12 @@ SEL wxOSXGetSelectorFromID(int menuId )
     wxUnusedVar(menuItem);
     if( impl )
     {
-        if ( impl->GetWXPeer()->GetMenu()->HandleCommandUpdateStatus(impl->GetWXPeer()) )
-            return impl->GetWXPeer()->IsEnabled();
+        wxMenuItem* wxmenuitem = impl->GetWXPeer();
+        if ( wxmenuitem )
+        {
+            wxmenuitem->GetMenu()->HandleCommandUpdateStatus(wxmenuitem);
+            return wxmenuitem->IsEnabled();
+        }
     }
     return YES ;
 }
@@ -120,6 +124,12 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry* entry )
 {
+    if ( entry == NULL )
+    {
+        [menuItem setKeyEquivalent:@""];
+        return;
+    }
+         
     unsigned int modifiers = 0 ;
     int key = entry->GetKeyCode() ;
     if ( key )
@@ -256,9 +266,7 @@ public :
         wxCFStringRef cfText(text);
         [m_osxMenuItem setTitle:cfText.AsNSString()];
 
-        if ( entry )
-            wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
-
+        wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
     }
     
     bool DoDefault();
@@ -342,8 +350,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         }
         else
         {
-            if ( entry )
-                wxMacCocoaMenuItemSetAccelerator( menuitem, entry );
+            wxMacCocoaMenuItemSetAccelerator( menuitem, entry );
         }
         item = menuitem;
     }

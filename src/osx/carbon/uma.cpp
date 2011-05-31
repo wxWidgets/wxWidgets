@@ -79,7 +79,10 @@ void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding 
 void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
     if ( !entry )
+    {
+        SetMenuItemCommandKey(menu, item, false, 0); 
         return ;
+    }
 
     UInt8 modifiers = 0 ;
     SInt16 key = entry->GetKeyCode() ;

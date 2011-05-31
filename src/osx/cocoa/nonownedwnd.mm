@@ -299,8 +299,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
         wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
         if ( menu != NULL && menuitem != NULL)
         {
-            if ( menu->HandleCommandUpdateStatus(menuitem) )
-                return menuitem->IsEnabled();
+            menu->HandleCommandUpdateStatus(menuitem);
+            return menuitem->IsEnabled();
         }
     }
     return YES;
