@@ -301,9 +301,6 @@ private :
     cairo_font_slant_t m_slant;
     cairo_font_weight_t m_weight;
 #endif
-#ifdef __WXMSW__
-    wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
-#endif
 };
 
 class wxCairoBitmapData : public wxGraphicsObjectRefData
@@ -332,6 +329,9 @@ public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
 #ifdef __WXGTK__
     wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
+#endif
+#ifdef __WXMSW__
+    wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
 #endif
     wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context );
     wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window);
@@ -1342,6 +1342,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     m_width = sz.x;
     m_height = sz.y;
 #endif
+
+#ifdef __WXMSW__
+    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
+    Init(cairo_create(m_mswSurface));
+#endif
+
 }
 
 wxCairoContext::~wxCairoContext()
@@ -1349,10 +1355,6 @@ wxCairoContext::~wxCairoContext()
     if ( m_context )
     {
         PopState();
-#ifdef __WXMSW__
-    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
-    m_context = cairo_create(m_mswSurface);
-#endif
         PopState();
         cairo_destroy(m_context);
     }
@@ -1785,7 +1787,11 @@ public :
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
     virtual wxGraphicsContext * CreateMeasuringContext();
-
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
+#endif
+#endif
     // Path
 
     virtual wxGraphicsPath CreatePath();
@@ -1859,6 +1865,15 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 #endif
        return NULL;
 }
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+wxGraphicsContext * wxCairoRenderer::CreateContext( const wxEnhMetaFileDC& dc)
+{
+    return NULL;
+}
+#endif
+#endif
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {

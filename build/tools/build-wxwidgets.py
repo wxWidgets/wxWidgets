@@ -396,6 +396,11 @@ def main(scriptName, args):
                     args.append("BUILD=release")
                 else:
                     args.append("BUILD=debug")
+                   
+            if options.shared:
+                args.append("SHARED=1")
+            if options.cairo:
+                args.append("USE_CAIRO=1")
     
             wxBuilder = builder.MSVCBuilder()
             
@@ -416,11 +421,7 @@ def main(scriptName, args):
     
     if options.clean:
         print "Performing cleanup."
-        wxBuilder.clean()
-        
-        if options.wxpython:
-            exitIfError(wxBuilder.clean(os.path.join(contribDir, "gizmos")), "Error building gizmos")
-            exitIfError(wxBuilder.clean(os.path.join(contribDir, "stc")), "Error building stc")
+        wxBuilder.clean(dir=buildDir, options=args)
         
         sys.exit(0)
 
@@ -430,21 +431,12 @@ def main(scriptName, args):
     if not sys.platform.startswith("win"):
         args.append("--jobs=" + options.jobs)
     exitIfError(wxBuilder.build(dir=buildDir, options=args), "Error building")
-    
-    if options.wxpython and os.path.exists(contribDir):
-        exitIfError(wxBuilder.build(os.path.join(contribDir, "gizmos"), options=args), "Error building gizmos")
-        exitIfError(wxBuilder.build(os.path.join(contribDir, "stc"),options=args), "Error building stc")
         
     if options.install:
         extra=None
         if installDir:
             extra = ['DESTDIR='+installDir]
-        wxBuilder.install(dir=buildDir, options=extra) 
-        
-        if options.wxpython and os.path.exists(contribDir):
-            exitIfError(wxBuilder.install(os.path.join(contribDir, "gizmos"), options=extra), "Error building gizmos")
-            exitIfError(wxBuilder.install(os.path.join(contribDir, "stc"), options=extra), "Error building stc")
-            
+        wxBuilder.install(dir=buildDir, options=extra)             
             
     if options.install and options.mac_framework:
     
