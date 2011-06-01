@@ -42,9 +42,22 @@
 // check if we're currently in a paint event
 inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
+    if ( win->MacGetCGContextRef() != NULL )
+        return true;
+    
+    wxGCDCImpl* gcdc = wxDynamicCast( dc.GetImpl() , wxGCDCImpl);
+    
+    if ( gcdc )
+    {
+        if ( gcdc->GetGraphicsContext()->GetNativeContext() )
+            return true;
+    }
+    /*
     return win->MacGetCGContextRef() != NULL ||
            // wxMemoryDC's also have a valid CGContext.
            dc.IsKindOf( CLASSINFO(wxMemoryDC) );
+    */
+    return false;
 }
 
 

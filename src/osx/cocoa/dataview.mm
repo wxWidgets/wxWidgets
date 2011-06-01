@@ -25,6 +25,7 @@
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
+#include "wx/dcgraph.h"
 
 // ============================================================================
 // Constants used locally
@@ -1164,9 +1165,23 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
-    wxDC * const dc = renderer->GetDC();
-    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), dc, 0);
-    renderer->SetDC(NULL);
+    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSaveGState( context );
+    
+    if ( ![controlView isFlipped] )
+    {
+        CGContextTranslateCTM( context, 0,  [controlView bounds].size.height );
+        CGContextScaleCTM( context, 1, -1 );
+    }
+        
+    // wxDC * const dc = renderer->GetDC();
+    wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
+    wxGCDC dc;
+    dc.SetGraphicsContext(gc);
+    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, 0);
+
+    CGContextRestoreGState( context );
+    // renderer->SetDC(NULL);
 }
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
