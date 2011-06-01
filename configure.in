@@ -2957,7 +2957,7 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    AM_PATH_GTK_3_0(3.0.0, wx_cv_lib_gtk=3.0, , $GTK_MODULES)
 
                     dnl we use symbols from X11 directly so we should link with it
                     GTK_LIBS="$GTK_LIBS -lX11"
@@ -2993,6 +2993,9 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
 
         case "$wx_cv_lib_gtk" in
+            3.0)    WXGTK2=1
+                    TOOLKIT_VERSION=2
+                    ;;
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
@@ -3012,96 +3015,96 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        if test "$WXGTK2" = 1; then
-            save_CFLAGS="$CFLAGS"
-            save_LIBS="$LIBS"
-            CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
-            LIBS="$LIBS $wx_cv_libs_gtk"
+        #if test "$WXGTK2" = 1; then
+        #    save_CFLAGS="$CFLAGS"
+        #    save_LIBS="$LIBS"
+        #    CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
+        #    LIBS="$LIBS $wx_cv_libs_gtk"
 
-            dnl test if we have at least GTK+ 2.18:
-            AC_MSG_CHECKING([if GTK+ is version >= 2.18])
-            AC_TRY_COMPILE([
-                            #include <gtk/gtk.h>
-                           ],
-                           [
-                            #if !GTK_CHECK_VERSION(2,18,0)
-                            Not GTK+ 2.18
-                            #endif
-                           ],
-                           [
-                            AC_DEFINE(__WXGTK218__)
-                            AC_DEFINE(__WXGTK210__)
-                            AC_DEFINE(__WXGTK26__)
-                            AC_MSG_RESULT([yes])
-                            ac_wxgtk218=1
-                           ],
-                           [
-                            AC_MSG_RESULT([no])
-                            ac_wxgtk218=0
-                           ])
+        #    dnl test if we have at least GTK+ 2.18:
+        #    AC_MSG_CHECKING([if GTK+ is version >= 2.18])
+        #    AC_TRY_COMPILE([
+        #                    #include <gtk/gtk.h>
+        #                   ],
+        #                   [
+        #                    #if !GTK_CHECK_VERSION(2,18,0)
+        #                    Not GTK+ 2.18
+        #                    #endif
+        #                   ],
+        #                   [
+        #                    AC_DEFINE(__WXGTK218__)
+        #                    AC_DEFINE(__WXGTK210__)
+        #                    AC_DEFINE(__WXGTK26__)
+        #                    AC_MSG_RESULT([yes])
+        #                    ac_wxgtk218=1
+        #                   ],
+        #                   [
+        #                    AC_MSG_RESULT([no])
+        #                    ac_wxgtk218=0
+        #                   ])
 
-            if test "$ac_wxgtk218" = 0; then
-                dnl test if we have at least GTK+ 2.10:
-                AC_MSG_CHECKING([if GTK+ is version >= 2.10])
-                AC_TRY_COMPILE([
-                                #include <gtk/gtk.h>
-                               ],
-                               [
-                                #if !GTK_CHECK_VERSION(2,10,0)
-                                Not GTK+ 2.10
-                                #endif
-                               ],
-                               [
-                                AC_DEFINE(__WXGTK210__)
-                                AC_DEFINE(__WXGTK26__)
-                                AC_MSG_RESULT([yes])
-                                ac_wxgtk210=1
-                               ],
-                               [
-                                AC_MSG_RESULT([no])
-                                ac_wxgtk210=0
-                               ])
+        #    if test "$ac_wxgtk218" = 0; then
+        #        dnl test if we have at least GTK+ 2.10:
+        #        AC_MSG_CHECKING([if GTK+ is version >= 2.10])
+        #        AC_TRY_COMPILE([
+        #                        #include <gtk/gtk.h>
+        #                       ],
+        #                       [
+        #                        #if !GTK_CHECK_VERSION(2,10,0)
+        #                        Not GTK+ 2.10
+        #                        #endif
+        #                       ],
+        #                       [
+        #                        AC_DEFINE(__WXGTK210__)
+        #                        AC_DEFINE(__WXGTK26__)
+        #                        AC_MSG_RESULT([yes])
+        #                        ac_wxgtk210=1
+        #                       ],
+        #                       [
+        #                        AC_MSG_RESULT([no])
+        #                        ac_wxgtk210=0
+        #                       ])
 
-                if test "$ac_wxgtk210" = 0; then
-                    dnl test if we have at least GTK+ 2.6:
-                    AC_MSG_CHECKING([if GTK+ is version >= 2.6])
-                    AC_TRY_COMPILE([
-                                    #include <gtk/gtk.h>
-                                ],
-                                [
-                                    #if !GTK_CHECK_VERSION(2,6,0)
-                                    Not GTK+ 2.6
-                                    #endif
-                                ],
-                                [
-                                    AC_DEFINE(__WXGTK26__)
-                                    AC_MSG_RESULT([yes])
-                                    ac_wxgtk26=1
-                                ],
-                                [
-                                    AC_MSG_RESULT([no])
-                                    ac_wxgtk26=0
-                                ])
-                fi
-            fi
+        #        if test "$ac_wxgtk210" = 0; then
+        #            dnl test if we have at least GTK+ 2.6:
+        #            AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+        #            AC_TRY_COMPILE([
+        #                            #include <gtk/gtk.h>
+        #                        ],
+        #                        [
+        #                            #if !GTK_CHECK_VERSION(2,6,0)
+        #                            Not GTK+ 2.6
+        #                            #endif
+        #                        ],
+        #                        [
+        #                            AC_DEFINE(__WXGTK26__)
+        #                            AC_MSG_RESULT([yes])
+        #                            ac_wxgtk26=1
+        #                        ],
+        #                        [
+        #                            AC_MSG_RESULT([no])
+        #                            ac_wxgtk26=0
+        #                        ])
+        #        fi
+        #    fi
 
-            CFLAGS="$save_CFLAGS"
-            LIBS="$save_LIBS"
-        else
-            if test "$wxUSE_UNICODE" = "yes"; then
-                AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
-                wxUSE_UNICODE=no
-            fi
+        #    CFLAGS="$save_CFLAGS"
+        #    LIBS="$save_LIBS"
+        #else
+        #    if test "$wxUSE_UNICODE" = "yes"; then
+        #        AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
+        #        wxUSE_UNICODE=no
+        #    fi
 
-            dnl test for XIM support in libgdk
-            AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
+        #    dnl test for XIM support in libgdk
+        #    AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
 
-            dnl we need poll() in src/gtk1/app.cpp (we know that Darwin doesn't
-            dnl have it but we do the check for the others)
-            if test "$USE_DARWIN" != 1; then
-                AC_CHECK_FUNCS(poll)
-            fi
-        fi
+        #    dnl we need poll() in src/gtk1/app.cpp (we know that Darwin doesn't
+        #    dnl have it but we do the check for the others)
+        #    if test "$USE_DARWIN" != 1; then
+        #        AC_CHECK_FUNCS(poll)
+        #    fi
+        #fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
