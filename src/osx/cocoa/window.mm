@@ -2095,9 +2095,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
 
-    if ( IsUserPane() && [event type] == NSKeyDown)
+    if ( !result )
     {
-        if ( !result )
+        if ( IsUserPane() && [event type] == NSKeyDown)
         {
             if ( wxevent.GetKeyCode() < WXK_SPACE || wxevent.GetKeyCode() == WXK_DELETE || wxevent.GetKeyCode() >= WXK_START )
             {
