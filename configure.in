@@ -471,7 +471,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_carbon,    [  --with-osx_carbon       use Mac OS X (Carbon)], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -2896,6 +2896,7 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK12=
     WXGTK127=
     WXGTK2=
+    WXGTK3=
     WXGPE=
 
     if test "$wxUSE_OLD_COCOA" = 1 ; then
@@ -2943,9 +2944,9 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
-                dnl detect GTK2
+                dnl detect GTK3
                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"
+                if test "x$wxGTK_VERSION" = "x3"
                 then
                     dnl The gthread.pc that ships with Solaris returns '-mt',
                     dnl it's correct for Sun CC, but gcc requires '-pthreads'.
@@ -2961,6 +2962,27 @@ if test "$wxUSE_GUI" = "yes"; then
 
                     dnl we use symbols from X11 directly so we should link with it
                     GTK_LIBS="$GTK_LIBS -lX11"
+                fi
+
+                dnl detect GTK2
+                if test -z "$wx_cv_lib_gtk"; then
+                    if test "x$wxGTK_VERSION" = "x2"
+                    then
+                        dnl The gthread.pc that ships with Solaris returns '-mt',
+                        dnl it's correct for Sun CC, but gcc requires '-pthreads'.
+                        dnl So disable the compile check and remove the -mt below.
+                        case "${host}" in
+                            *-*-solaris2* )
+                                if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                                    enable_gtktest=no
+                                fi
+                        esac
+
+                        AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+
+                        dnl we use symbols from X11 directly so we should link with it
+                        GTK_LIBS="$GTK_LIBS -lX11"
+                    fi
                 fi
 
                 dnl detect GTK1.x
@@ -2993,8 +3015,8 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
 
         case "$wx_cv_lib_gtk" in
-            3.0)    WXGTK2=1
-                    TOOLKIT_VERSION=2
+            3.0)    WXGTK3=1
+                    TOOLKIT_VERSION=3
                     ;;
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
