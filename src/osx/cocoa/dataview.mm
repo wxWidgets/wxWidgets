@@ -1179,7 +1179,11 @@ outlineView:(NSOutlineView*)outlineView
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
     dc.SetGraphicsContext(gc);
 
-    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, 0);
+    int state = 0;
+    if ( [self isHighlighted] )
+        state |= wxDATAVIEW_CELL_SELECTED;
+
+    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, state);
 
     CGContextRestoreGState( context );
 }
