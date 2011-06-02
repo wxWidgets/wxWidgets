@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.10.3 -*- Autoconf -*-
+# generated automatically by aclocal 1.11.1 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 # 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
@@ -22,6 +22,7 @@ m4_include([build/aclocal/bakefile-lang.m4])
 m4_include([build/aclocal/bakefile.m4])
 m4_include([build/aclocal/cppunit.m4])
 m4_include([build/aclocal/gtk-2.0.m4])
+m4_include([build/aclocal/gtk-3.0.m4])
 m4_include([build/aclocal/gtk.m4])
 m4_include([build/aclocal/pkg.m4])
 m4_include([build/aclocal/sdl.m4])
