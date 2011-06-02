@@ -1165,6 +1165,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
+    // if this method is called everything is already setup correctly, 
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSaveGState( context );
     
@@ -1174,14 +1175,13 @@ outlineView:(NSOutlineView*)outlineView
         CGContextScaleCTM( context, 1, -1 );
     }
         
-    // wxDC * const dc = renderer->GetDC();
-    wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
     wxGCDC dc;
+    wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
     dc.SetGraphicsContext(gc);
+
     renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, 0);
 
     CGContextRestoreGState( context );
-    // renderer->SetDC(NULL);
 }
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
@@ -2329,11 +2329,12 @@ void wxCocoaDataViewControl::Resort()
     [m_OutlineView reloadData];
 }
 
+/*
 void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned int column )
 {
     [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
 }
-
+*/
 //
 // other methods (inherited from wxDataViewWidgetImpl)
 //
