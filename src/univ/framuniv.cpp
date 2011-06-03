@@ -271,10 +271,6 @@ void wxFrame::DoSetClientSize(int width, int height)
 #if wxUSE_TOOLBAR
     if ( m_frameToolBar )
     {
-#if wxUSE_STATUSBAR
-        height += m_frameStatusBar->GetSize().y;
-#endif // wxUSE_STATUSBAR
-
         if ( m_frameToolBar->GetWindowStyleFlag() & wxTB_VERTICAL )
             width += m_frameToolBar->GetSize().x;
         else
