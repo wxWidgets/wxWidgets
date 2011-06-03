@@ -128,6 +128,25 @@
     #define wxUSE_ON_FATAL_EXCEPTION 0
 #endif
 
+// Set this to 1 to be able to generate a human-readable (unlike
+// machine-readable minidump created by wxCrashReport::Generate()) stack back
+// trace when your program crashes using wxStackWalker
+//
+// Default is 1 if supported by the compiler.
+//
+// Recommended setting: 1, set to 0 if your programs never crash
+#define wxUSE_STACKWALKER 1
+
+// Set this to 1 to compile in wxDebugReport class which allows you to create
+// and optionally upload to your web site a debug report consisting of back
+// trace of the crash (if wxUSE_STACKWALKER == 1) and other information.
+//
+// Default is 1 if supported by the compiler.
+//
+// Recommended setting: 1, it is compiled into a separate library so there
+//                         is no overhead if you don't use it
+#define wxUSE_DEBUGREPORT 1
+
 // ----------------------------------------------------------------------------
 // Unicode support
 // ----------------------------------------------------------------------------
