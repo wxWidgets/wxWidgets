@@ -881,15 +881,17 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
         contentRect = [NSWindow contentRectForFrameRect: frame
-                                styleMask: NSTitledWindowMask];
+                                styleMask: [m_macWindow styleMask]];
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
         screenframe.size.height += (frame.size.height - contentRect.size.height);
         [m_macWindow setFrame:screenframe display:YES];
 
-        OSStatus error = SetSystemUIMode(kUIModeAllHidden,
+        SetSystemUIMode(kUIModeAllHidden,
                                 kUIOptionDisableAppleMenu
+                        /*
                                 | kUIOptionDisableProcessSwitch
-                                | kUIOptionDisableForceQuit); 
+                                | kUIOptionDisableForceQuit
+                         */); 
     }
     else if ( m_macFullScreenData != NULL )
     {
@@ -903,7 +905,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         delete data ;
         m_macFullScreenData = NULL ;
 
-        OSStatus error = SetSystemUIMode(kUIModeNormal, 0); 
+        SetSystemUIMode(kUIModeNormal, 0); 
     }
 
     return true;
