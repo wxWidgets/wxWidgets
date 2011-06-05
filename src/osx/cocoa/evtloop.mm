@@ -333,6 +333,7 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
         m_dummyWindow = nsnow;
     }
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
+    wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
 }
 
 void wxGUIEventLoop::EndModalSession()
