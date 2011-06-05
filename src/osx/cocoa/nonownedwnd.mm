@@ -716,8 +716,12 @@ bool wxNonOwnedWindowCocoaImpl::SetTransparent(wxByte alpha)
     return true;
 }
 
-bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& WXUNUSED(col) )
+bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& col )
 {
+    [m_macWindow setBackgroundColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
+                                                             green:(CGFloat) (col.Green() / 255.0)
+                                                              blue:(CGFloat) (col.Blue() / 255.0)
+                                                             alpha:(CGFloat) (col.Alpha() / 255.0)]];
     return true;
 }
 
