@@ -1,0 +1,2019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<anthemion-project version="1.0.0.0" xmlns="http://www.anthemion.co.uk">
+  <header>
+    <long name="name_counter">0</long>
+    <string name="html_path">""</string>
+    <string name="title">""</string>
+    <string name="author">""</string>
+    <string name="description">""</string>
+    <string name="xrc_filename">""</string>
+    <long name="image_mode">0</long>
+    <bool name="inline_images">0</bool>
+    <bool name="generate_cpp_for_xrc">0</bool>
+    <long name="working_mode">1</long>
+    <bool name="use_help_text_for_tooltips">1</bool>
+    <bool name="translate_strings">1</bool>
+    <bool name="make_unicode_strings">1</bool>
+    <bool name="extract_strings">0</bool>
+    <string name="user_name">"Julian Smart"</string>
+    <string name="copyright_string">""</string>
+    <string name="resource_prefix">""</string>
+    <bool name="use_two_step_construction">0</bool>
+    <bool name="use_enums">0</bool>
+    <bool name="generate_for_xrced">0</bool>
+    <bool name="generate_virtual_eventhandlers">0</bool>
+    <string name="current_platform">"&lt;All platforms&gt;"</string>
+    <string name="target_wx_version">"2.8.10"</string>
+    <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
+// Name:        %HEADER-FILENAME%
+// Purpose:     
+// Author:      %AUTHOR%
+// Modified by: 
+// Created:     %DATE%
+// RCS-ID:      
+// Copyright:   %COPYRIGHT%
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
+"</string>
+    <string name="cpp_implementation_comment">"/////////////////////////////////////////////////////////////////////////////
+// Name:        %SOURCE-FILENAME%
+// Purpose:     
+// Author:      %AUTHOR%
+// Modified by: 
+// Created:     %DATE%
+// RCS-ID:      
+// Copyright:   %COPYRIGHT%
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
+"</string>
+    <string name="cpp_symbols_file_comment">"/////////////////////////////////////////////////////////////////////////////
+// Name:        %SYMBOLS-FILENAME%
+// Purpose:     Symbols file
+// Author:      %AUTHOR%
+// Modified by: 
+// Created:     %DATE%
+// RCS-ID:      
+// Copyright:   %COPYRIGHT%
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
+"</string>
+    <string name="cpp_header_preamble">""</string>
+    <string name="cpp_implementation_preamble">"// For compilers that support precompilation, includes &quot;wx/wx.h&quot;.
+#include &quot;wx/wxprec.h&quot;
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include &quot;wx/wx.h&quot;
+#endif
+
+"</string>
+    <string name="cpp_function_declaration_comment">"	/// %BODY%
+"</string>
+    <string name="cpp_function_implementation_comment">"
+/*
+ * %BODY%
+ */
+
+"</string>
+    <string name="resource_file_header">"app_resources.h"</string>
+    <string name="resource_file_implementation">"app_resources.cpp"</string>
+    <string name="resource_class_name">"AppResources"</string>
+    <string name="app_file_header">"app.h"</string>
+    <string name="app_file_implementation">"app.cpp"</string>
+    <string name="app_class_name">"Application"</string>
+    <bool name="generate_app_class">0</bool>
+    <string name="external_symbol_filenames">""</string>
+    <string name="configuration">"VC++ Project Unicode Debug"</string>
+    <string name="source_encoding">"iso-8859-1"</string>
+    <string name="xrc_encoding">"utf-8"</string>
+    <string name="project_encoding">"utf-8"</string>
+    <string name="resource_archive">""</string>
+    <long name="text_file_type">0</long>
+    <bool name="use_tabs">0</bool>
+    <long name="indent_size">4</long>
+    <string name="whitespace_after_return_type">" "</string>
+    <string name="resource_xrc_cpp">""</string>
+    <bool name="use_resource_archive">0</bool>
+    <bool name="use_generated_xrc_cpp">0</bool>
+    <bool name="always_generate_xrc">1</bool>
+    <bool name="use_id_name_for_name">0</bool>
+    <bool name="archive_xrc_files">1</bool>
+    <bool name="archive_image_files">1</bool>
+    <bool name="archive_all_image_files">0</bool>
+    <bool name="xrc_retain_relative_paths">1</bool>
+    <bool name="xrc_generate_id_tags">0</bool>
+    <bool name="xrc_use_name_property">0</bool>
+  </header>
+  <data>
+    <document>
+      <string name="title">""</string>
+      <string name="type">"data-document"</string>
+      <string name="filename">""</string>
+      <string name="icon-name">""</string>
+      <long name="is-transient">0</long>
+      <long name="owns-file">1</long>
+      <long name="title-mode">0</long>
+      <long name="locked">0</long>
+      <document>
+        <string name="title">"Configurations"</string>
+        <string name="type">"config-data-document"</string>
+        <string name="filename">""</string>
+        <string name="icon-name">""</string>
+        <long name="is-transient">0</long>
+        <long name="owns-file">1</long>
+        <long name="title-mode">0</long>
+        <long name="locked">0</long>
+        <string name="template-name">""</string>
+        <bool name="dirty">1</bool>
+        <long name="makefile-last-written">-8519680</long>
+        <string name="Compiler name">""</string>
+        <string name="Build mode">"Debug"</string>
+        <string name="Unicode mode">"ANSI"</string>
+        <string name="Shared mode">"Static"</string>
+        <string name="Modularity">"Modular"</string>
+        <string name="GUI mode">"GUI"</string>
+        <string name="Toolkit">"wxMSW"</string>
+        <string name="Processor type">"32-bit"</string>
+        <string name="Runtime linking">"Dynamic"</string>
+        <string name="Use exceptions">"Yes"</string>
+        <string name="Use ODBC">"No"</string>
+        <string name="Use OpenGL">"No"</string>
+        <string name="Use wxMediaCtrl">"No"</string>
+        <string name="Use wxRichTextCtrl">"Yes"</string>
+        <string name="wxWidgets version">"%WXVERSION%"</string>
+        <string name="Executable name">"%EXECUTABLE%"</string>
+        <string name="Program arguments">""</string>
+        <string name="Working path">"%AUTO%"</string>
+        <string name="Output path">"%AUTO%"</string>
+        <string name="Objects path">"%AUTO%"</string>
+        <string name="Compiler location">"%AUTO%"</string>
+        <string name="wxWidgets location">"%AUTO%"</string>
+        <string name="C++ command">"%AUTO%"</string>
+        <string name="C command">"%AUTO%"</string>
+        <string name="Resource compiler">"%AUTO%"</string>
+        <string name="Make command">"%AUTO%"</string>
+        <string name="Project makefile">"%AUTO%"</string>
+        <string name="wxWidgets makefile">"%AUTO%"</string>
+        <string name="Compiler bin path">"%AUTO%"</string>
+        <string name="Compiler include path">"%AUTO%"</string>
+        <string name="Compiler lib path">"%AUTO%"</string>
+        <string name="Preprocessor flags">"%AUTO%"</string>
+        <string name="Optimizations">"%AUTO%"</string>
+        <string name="Warnings">"%AUTO%"</string>
+        <string name="Debug flags">"%AUTO%"</string>
+        <string name="Extra compile flags">"%AUTO%"</string>
+        <string name="Libraries">"%AUTO%"</string>
+        <string name="Library path">"%AUTO%"</string>
+        <string name="Linker flags">"%AUTO%"</string>
+        <string name="Include path">"%AUTO%"</string>
+        <string name="Resource flags">"%AUTO%"</string>
+        <string name="Resource path">"%AUTO%"</string>
+        <string name="wxWidgets build path">"%AUTO%"</string>
+        <string name="wxWidgets build command">"%AUTO%"</string>
+        <string name="wxWidgets clean command">"%AUTO%"</string>
+        <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
+        <string name="CFG">""</string>
+        <document>
+          <string name="title">"VC++ Project Unicode Debug"</string>
+          <string name="type">"vc-project-config-data-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">""</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="template-name">"VC++ Project"</string>
+          <bool name="dirty">0</bool>
+          <long name="makefile-last-written">-8519680</long>
+          <string name="Compiler name">"VC++ Project"</string>
+          <string name="Build mode">"Debug"</string>
+          <string name="Unicode mode">"Unicode"</string>
+          <string name="Shared mode">"Static"</string>
+          <string name="Modularity">"Modular"</string>
+          <string name="GUI mode">"GUI"</string>
+          <string name="Toolkit">"wxMSW"</string>
+          <string name="Processor type">"32-bit"</string>
+          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Use exceptions">"Yes"</string>
+          <string name="Use ODBC">"No"</string>
+          <string name="Use OpenGL">"No"</string>
+          <string name="Use wxMediaCtrl">"No"</string>
+          <string name="Use wxRichTextCtrl">"Yes"</string>
+          <string name="Compiler version">"6"</string>
+          <string name="wxWidgets version">"%WXVERSION%"</string>
+          <string name="Executable name">"%EXECUTABLE%"</string>
+          <string name="Program arguments">""</string>
+          <string name="Working path">"%AUTO%"</string>
+          <string name="Output path">"%AUTO%"</string>
+          <string name="Objects path">"%AUTO%"</string>
+          <string name="Compiler location">"%AUTO%"</string>
+          <string name="wxWidgets location">"%AUTO%"</string>
+          <string name="C++ command">"%AUTO%"</string>
+          <string name="C command">"%AUTO%"</string>
+          <string name="Resource compiler">"%AUTO%"</string>
+          <string name="Make command">"%AUTO%"</string>
+          <string name="Project makefile">"%AUTO%"</string>
+          <string name="wxWidgets makefile">"%AUTO%"</string>
+          <string name="Compiler bin path">"%AUTO%"</string>
+          <string name="Compiler include path">"%AUTO%"</string>
+          <string name="Compiler lib path">"%AUTO%"</string>
+          <string name="Preprocessor flags">"%AUTO%"</string>
+          <string name="Optimizations">"%AUTO%"</string>
+          <string name="Warnings">"%AUTO%"</string>
+          <string name="Debug flags">"%AUTO%"</string>
+          <string name="Extra compile flags">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO%"</string>
+          <string name="Library path">"%AUTO%"</string>
+          <string name="Linker flags">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,../../../include"</string>
+          <string name="Resource flags">"%AUTO%"</string>
+          <string name="Resource path">"%AUTO%"</string>
+          <string name="wxWidgets build path">"%AUTO%"</string>
+          <string name="wxWidgets build command">"%AUTO%"</string>
+          <string name="wxWidgets clean command">"%AUTO%"</string>
+          <string name="PATH variable">"%AUTO%"</string>
+          <bool name="Suppress source rules">0</bool>
+          <bool name="Enable makefile generation">1</bool>
+          <string name="CFG">""</string>
+          <string name="Project make command">"%AUTO%"</string>
+          <string name="Project build command">"%AUTO%"</string>
+          <string name="Project rebuild command">"%AUTO%"</string>
+          <string name="Project clean command">"%AUTO%"</string>
+          <string name="Project debug command">"%AUTO%"</string>
+          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Post-build command">"%AUTO%"</string>
+          <string name="Pre-link command">"%AUTO%"</string>
+          <string name="Ignore libraries">"%AUTO%"</string>
+        </document>
+        <document>
+          <string name="title">"VC++ Project Unicode Release"</string>
+          <string name="type">"vc-project-config-data-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">""</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="template-name">"VC++ Project"</string>
+          <bool name="dirty">0</bool>
+          <long name="makefile-last-written">-8519680</long>
+          <string name="Compiler name">"VC++ Project"</string>
+          <string name="Build mode">"Release"</string>
+          <string name="Unicode mode">"Unicode"</string>
+          <string name="Shared mode">"Static"</string>
+          <string name="Modularity">"Modular"</string>
+          <string name="GUI mode">"GUI"</string>
+          <string name="Toolkit">"wxMSW"</string>
+          <string name="Processor type">"32-bit"</string>
+          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Use exceptions">"Yes"</string>
+          <string name="Use ODBC">"No"</string>
+          <string name="Use OpenGL">"No"</string>
+          <string name="Use wxMediaCtrl">"No"</string>
+          <string name="Use wxRichTextCtrl">"Yes"</string>
+          <string name="Compiler version">"6"</string>
+          <string name="wxWidgets version">"%WXVERSION%"</string>
+          <string name="Executable name">"%EXECUTABLE%"</string>
+          <string name="Program arguments">""</string>
+          <string name="Working path">"%AUTO%"</string>
+          <string name="Output path">"%AUTO%"</string>
+          <string name="Objects path">"%AUTO%"</string>
+          <string name="Compiler location">"%AUTO%"</string>
+          <string name="wxWidgets location">"%AUTO%"</string>
+          <string name="C++ command">"%AUTO%"</string>
+          <string name="C command">"%AUTO%"</string>
+          <string name="Resource compiler">"%AUTO%"</string>
+          <string name="Make command">"%AUTO%"</string>
+          <string name="Project makefile">"%AUTO%"</string>
+          <string name="wxWidgets makefile">"%AUTO%"</string>
+          <string name="Compiler bin path">"%AUTO%"</string>
+          <string name="Compiler include path">"%AUTO%"</string>
+          <string name="Compiler lib path">"%AUTO%"</string>
+          <string name="Preprocessor flags">"%AUTO%"</string>
+          <string name="Optimizations">"%AUTO%"</string>
+          <string name="Warnings">"%AUTO%"</string>
+          <string name="Debug flags">"%AUTO%"</string>
+          <string name="Extra compile flags">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO%"</string>
+          <string name="Library path">"%AUTO%"</string>
+          <string name="Linker flags">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,../../../include"</string>
+          <string name="Resource flags">"%AUTO%"</string>
+          <string name="Resource path">"%AUTO%"</string>
+          <string name="wxWidgets build path">"%AUTO%"</string>
+          <string name="wxWidgets build command">"%AUTO%"</string>
+          <string name="wxWidgets clean command">"%AUTO%"</string>
+          <string name="PATH variable">"%AUTO%"</string>
+          <bool name="Suppress source rules">0</bool>
+          <bool name="Enable makefile generation">1</bool>
+          <string name="CFG">""</string>
+          <string name="Project make command">"%AUTO%"</string>
+          <string name="Project build command">"%AUTO%"</string>
+          <string name="Project rebuild command">"%AUTO%"</string>
+          <string name="Project clean command">"%AUTO%"</string>
+          <string name="Project debug command">"%AUTO%"</string>
+          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Post-build command">"%AUTO%"</string>
+          <string name="Pre-link command">"%AUTO%"</string>
+          <string name="Ignore libraries">"%AUTO%"</string>
+        </document>
+      </document>
+    </document>
+  </data>
+
+  <documents>
+    <document>
+      <string name="title">"Projects"</string>
+      <string name="type">"root-document"</string>
+      <string name="filename">""</string>
+      <string name="icon-name">"project"</string>
+      <long name="is-transient">1</long>
+      <long name="owns-file">1</long>
+      <long name="title-mode">0</long>
+      <long name="locked">1</long>
+      <document>
+        <string name="title">"Windows"</string>
+        <string name="type">"html-document"</string>
+        <string name="filename">""</string>
+        <string name="icon-name">"dialogsfolder"</string>
+        <long name="is-transient">1</long>
+        <long name="owns-file">1</long>
+        <long name="title-mode">0</long>
+        <long name="locked">1</long>
+        <document>
+          <string name="title">"MobileDemoApp"</string>
+          <string name="type">"dialog-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"app"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="proxy-type">"wbAppProxy"</string>
+          <long name="base-id">10000</long>
+          <bool name="use-id-prefix">0</bool>
+          <string name="id-prefix">""</string>
+          <bool name="use-id-suffix">0</bool>
+          <string name="id-suffix">""</string>
+          <long name="use-xrc">0</long>
+          <long name="working-mode">0</long>
+          <string name="proxy-Class">"MobileDemoApp"</string>
+          <string name="proxy-Base class">"wxMoApp"</string>
+          <string name="proxy-Implementation filename">"demoapp.cpp"</string>
+          <string name="proxy-Header filename">"demoapp.h"</string>
+          <string name="proxy-Event sources">""</string>
+          <string name="proxy-Main window">"ID_DEMOFRAME"</string>
+          <string name="proxy-Help filename">""</string>
+        </document>
+        <document>
+          <string name="title">"DemoFrame"</string>
+          <string name="type">"dialog-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"frame"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="proxy-type">"wbFrameProxy"</string>
+          <long name="base-id">10000</long>
+          <bool name="use-id-prefix">0</bool>
+          <string name="id-prefix">""</string>
+          <bool name="use-id-suffix">0</bool>
+          <string name="id-suffix">""</string>
+          <long name="use-xrc">0</long>
+          <long name="working-mode">0</long>
+          <string name="proxy-Id name">"ID_DEMOFRAME"</string>
+          <long name="proxy-Id value">10000</long>
+          <string name="proxy-Class">"DemoFrame"</string>
+          <string name="proxy-Base class">"wxIPhoneFrame"</string>
+          <string name="proxy-Implementation filename">"demoframe.cpp"</string>
+          <string name="proxy-Header filename">"demoframe.h"</string>
+          <string name="proxy-XRC filename">""</string>
+          <string name="proxy-Title">"DemoFrame"</string>
+          <bool name="proxy-Centre">1</bool>
+          <string name="proxy-Icon">""</string>
+          <bool name="proxy-Dialog units">0</bool>
+          <string name="proxy-Help text">""</string>
+          <string name="proxy-Tooltip text">""</string>
+          <string name="proxy-Background colour">""</string>
+          <string name="proxy-Foreground colour">""</string>
+          <string name="proxy-Font">""</string>
+          <bool name="proxy-Hidden">0</bool>
+          <bool name="proxy-Enabled">1</bool>
+          <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+          <string name="proxy-Data source">""</string>
+          <string name="proxy-Data class name">""</string>
+          <string name="proxy-Data class implementation filename">""</string>
+          <string name="proxy-Data class header filename">""</string>
+          <string name="proxy-Data class manager window">""</string>
+          <bool name="proxy-wxDEFAULT_FRAME_STYLE">0</bool>
+          <bool name="proxy-wxCAPTION">0</bool>
+          <bool name="proxy-wxRESIZE_BORDER">0</bool>
+          <bool name="proxy-wxSYSTEM_MENU">0</bool>
+          <bool name="proxy-wxMINIMIZE">0</bool>
+          <bool name="proxy-wxMAXIMIZE">0</bool>
+          <bool name="proxy-wxMINIMIZE_BOX">0</bool>
+          <bool name="proxy-wxMAXIMIZE_BOX">0</bool>
+          <bool name="proxy-wxCLOSE_BOX">0</bool>
+          <bool name="proxy-wxFRAME_TOOL_WINDOW">0</bool>
+          <bool name="proxy-wxFRAME_FLOAT_ON_PARENT">0</bool>
+          <bool name="proxy-wxFRAME_NO_TASKBAR">0</bool>
+          <bool name="proxy-wxSTAY_ON_TOP">0</bool>
+          <bool name="proxy-wxNO_BORDER">0</bool>
+          <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+          <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+          <bool name="proxy-wxRAISED_BORDER">0</bool>
+          <bool name="proxy-wxSTATIC_BORDER">0</bool>
+          <bool name="proxy-wxWANTS_CHARS">0</bool>
+          <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+          <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+          <bool name="proxy-wxCLIP_CHILDREN">0</bool>
+          <bool name="proxy-wxTAB_TRAVERSAL">0</bool>
+          <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
+          <bool name="proxy-wxWS_EX_BLOCK_EVENTS">0</bool>
+          <bool name="proxy-wxWS_EX_TRANSIENT">0</bool>
+          <string name="proxy-Custom styles">""</string>
+          <bool name="proxy-wxFRAME_EX_CONTEXTHELP">0</bool>
+          <bool name="proxy-Fit to content">0</bool>
+          <long name="proxy-X">-1</long>
+          <long name="proxy-Y">-1</long>
+          <long name="proxy-Width">400</long>
+          <long name="proxy-Height">300</long>
+          <bool name="proxy-AUI manager">0</bool>
+          <string name="proxy-Event sources">""</string>
+          <document>
+            <string name="title">"wxBoxSizer V"</string>
+            <string name="type">"dialog-control-document"</string>
+            <string name="filename">""</string>
+            <string name="icon-name">"sizer"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">1</long>
+            <long name="title-mode">0</long>
+            <long name="locked">0</long>
+            <string name="proxy-type">"wbBoxSizerProxy"</string>
+            <string name="proxy-Orientation">"Vertical"</string>
+            <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
+            <bool name="proxy-wxSHAPED">0</bool>
+            <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+            <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+            <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+            <document>
+              <string name="title">"wxPanel: ID_PANEL"</string>
+              <string name="type">"dialog-control-document"</string>
+              <string name="filename">""</string>
+              <string name="icon-name">"panel"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">1</long>
+              <long name="title-mode">0</long>
+              <long name="locked">0</long>
+              <string name="proxy-type">"wbPanelProxy"</string>
+              <string name="proxy-Id name">"ID_PANEL"</string>
+              <long name="proxy-Id value">10001</long>
+              <string name="proxy-Name">""</string>
+              <string name="proxy-Class">"wxPanel"</string>
+              <string name="proxy-Base class">"wxPanel"</string>
+              <bool name="proxy-External implementation">1</bool>
+              <bool name="proxy-Separate files">0</bool>
+              <string name="proxy-Implementation filename">""</string>
+              <string name="proxy-Header filename">""</string>
+              <string name="proxy-Member variable name">""</string>
+              <string name="proxy-Help text">""</string>
+              <string name="proxy-Tooltip text">""</string>
+              <string name="proxy-Background colour">""</string>
+              <string name="proxy-Foreground colour">""</string>
+              <string name="proxy-Font">""</string>
+              <bool name="proxy-Hidden">0</bool>
+              <bool name="proxy-Enabled">1</bool>
+              <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+              <string name="proxy-Data source">""</string>
+              <string name="proxy-Data class name">""</string>
+              <string name="proxy-Data class implementation filename">""</string>
+              <string name="proxy-Data class header filename">""</string>
+              <string name="proxy-Data class manager window">""</string>
+              <string name="proxy-Texture">""</string>
+              <string name="proxy-Texture style">"Tiled"</string>
+              <bool name="proxy-wxNO_BORDER">1</bool>
+              <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+              <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+              <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+              <bool name="proxy-wxRAISED_BORDER">0</bool>
+              <bool name="proxy-wxSTATIC_BORDER">0</bool>
+              <bool name="proxy-wxWANTS_CHARS">0</bool>
+              <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+              <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+              <bool name="proxy-wxCLIP_CHILDREN">0</bool>
+              <bool name="proxy-wxHSCROLL">0</bool>
+              <bool name="proxy-wxVSCROLL">0</bool>
+              <bool name="proxy-wxTAB_TRAVERSAL">1</bool>
+              <bool name="proxy-wxALWAYS_SHOW_SB">0</bool>
+              <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
+              <bool name="proxy-wxWS_EX_BLOCK_EVENTS">0</bool>
+              <string name="proxy-Custom styles">""</string>
+              <bool name="proxy-Fit to content">1</bool>
+              <long name="proxy-X">-1</long>
+              <long name="proxy-Y">-1</long>
+              <long name="proxy-Width">-1</long>
+              <long name="proxy-Height">-1</long>
+              <string name="proxy-AlignH">"Expand"</string>
+              <string name="proxy-AlignV">"Centre"</string>
+              <long name="proxy-Stretch factor">1</long>
+              <long name="proxy-Border">5</long>
+              <bool name="proxy-wxLEFT">0</bool>
+              <bool name="proxy-wxRIGHT">0</bool>
+              <bool name="proxy-wxTOP">0</bool>
+              <bool name="proxy-wxBOTTOM">0</bool>
+              <bool name="proxy-wxSHAPED">0</bool>
+              <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+              <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+              <string name="proxy-Custom arguments">""</string>
+              <string name="proxy-Custom ctor arguments">""</string>
+              <string name="proxy-Event sources">""</string>
+              <bool name="proxy-AUI manager">0</bool>
+              <document>
+                <string name="title">"wxBoxSizer V"</string>
+                <string name="type">"dialog-control-document"</string>
+                <string name="filename">""</string>
+                <string name="icon-name">"sizer"</string>
+                <long name="is-transient">0</long>
+                <long name="owns-file">1</long>
+                <long name="title-mode">0</long>
+                <long name="locked">0</long>
+                <string name="proxy-type">"wbBoxSizerProxy"</string>
+                <string name="proxy-Orientation">"Vertical"</string>
+                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignV">"Centre"</string>
+                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Border">5</long>
+                <bool name="proxy-wxLEFT">1</bool>
+                <bool name="proxy-wxRIGHT">1</bool>
+                <bool name="proxy-wxTOP">1</bool>
+                <bool name="proxy-wxBOTTOM">1</bool>
+                <bool name="proxy-wxSHAPED">0</bool>
+                <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                <document>
+                  <string name="title">"wxBoxSizer V"</string>
+                  <string name="type">"dialog-control-document"</string>
+                  <string name="filename">""</string>
+                  <string name="icon-name">"sizer"</string>
+                  <long name="is-transient">0</long>
+                  <long name="owns-file">1</long>
+                  <long name="title-mode">0</long>
+                  <long name="locked">0</long>
+                  <string name="proxy-type">"wbBoxSizerProxy"</string>
+                  <string name="proxy-Orientation">"Vertical"</string>
+                  <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-AlignH">"Expand"</string>
+                  <string name="proxy-AlignV">"Centre"</string>
+                  <long name="proxy-Stretch factor">1</long>
+                  <long name="proxy-Border">5</long>
+                  <bool name="proxy-wxLEFT">1</bool>
+                  <bool name="proxy-wxRIGHT">1</bool>
+                  <bool name="proxy-wxTOP">1</bool>
+                  <bool name="proxy-wxBOTTOM">1</bool>
+                  <bool name="proxy-wxSHAPED">0</bool>
+                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                  <document>
+                    <string name="title">"wxStaticText: wxID_STATIC"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"statictext"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="proxy-type">"wbStaticTextProxy"</string>
+                    <string name="proxy-Id name">"wxID_STATIC"</string>
+                    <long name="proxy-Id value">5105</long>
+                    <string name="proxy-Name">""</string>
+                    <string name="proxy-Class">"wxStaticText"</string>
+                    <string name="proxy-Base class">"wxStaticText"</string>
+                    <bool name="proxy-External implementation">1</bool>
+                    <bool name="proxy-Separate files">0</bool>
+                    <string name="proxy-Implementation filename">""</string>
+                    <string name="proxy-Header filename">""</string>
+                    <string name="proxy-Member variable name">""</string>
+                    <string name="proxy-Label">"Hello iPhone!
+
+The aim of wxMobile is to have a rough emulation of an iPod app on any wxWidgets platform. We'll have generic controls that mimic Cocoa Touch controls, at least the important bits for designing the UI and simulating event handling. This is experimental."</string>
+                    <long name="proxy-Wrapping width">300</long>
+                    <string name="proxy-Help text">""</string>
+                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Background colour">""</string>
+                    <string name="proxy-Foreground colour">""</string>
+                    <string name="proxy-Font">""</string>
+                    <bool name="proxy-Hidden">0</bool>
+                    <bool name="proxy-Enabled">1</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <string name="proxy-Data variable">""</string>
+                    <string name="proxy-Data validator">""</string>
+                    <string name="proxy-Data source">""</string>
+                    <string name="proxy-Data class name">""</string>
+                    <string name="proxy-Data class implementation filename">""</string>
+                    <string name="proxy-Data class header filename">""</string>
+                    <string name="proxy-Data class manager window">""</string>
+                    <bool name="proxy-wxALIGN_LEFT">0</bool>
+                    <bool name="proxy-wxALIGN_RIGHT">0</bool>
+                    <bool name="proxy-wxALIGN_CENTRE">1</bool>
+                    <bool name="proxy-wxST_NO_AUTORESIZE">0</bool>
+                    <bool name="proxy-wxNO_BORDER">0</bool>
+                    <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                    <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                    <bool name="proxy-wxRAISED_BORDER">0</bool>
+                    <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                    <bool name="proxy-wxWANTS_CHARS">0</bool>
+                    <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                    <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                    <string name="proxy-Custom styles">""</string>
+                    <long name="proxy-X">-1</long>
+                    <long name="proxy-Y">-1</long>
+                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Height">-1</long>
+                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">1</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">1</bool>
+                    <bool name="proxy-wxBOTTOM">1</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Custom arguments">""</string>
+                    <string name="proxy-Custom ctor arguments">""</string>
+                  </document>
+                  <document>
+                    <string name="title">"Spacer"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"spacer"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="proxy-type">"wbSpacerProxy"</string>
+                    <long name="proxy-Width">5</long>
+                    <long name="proxy-Height">5</long>
+                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">1</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">1</bool>
+                    <bool name="proxy-wxBOTTOM">1</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                  </document>
+                  <document>
+                    <string name="title">"wxBoxSizer H"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"sizer"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="proxy-type">"wbBoxSizerProxy"</string>
+                    <string name="proxy-Orientation">"Horizontal"</string>
+                    <string name="proxy-Member variable name">""</string>
+                    <string name="proxy-AlignH">"Expand"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">0</bool>
+                    <bool name="proxy-wxRIGHT">0</bool>
+                    <bool name="proxy-wxTOP">0</bool>
+                    <bool name="proxy-wxBOTTOM">0</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <document>
+                      <string name="title">"wxStaticText: wxID_STATIC"</string>
+                      <string name="type">"dialog-control-document"</string>
+                      <string name="filename">""</string>
+                      <string name="icon-name">"statictext"</string>
+                      <long name="is-transient">0</long>
+                      <long name="owns-file">1</long>
+                      <long name="title-mode">0</long>
+                      <long name="locked">0</long>
+                      <string name="proxy-type">"wbStaticTextProxy"</string>
+                      <string name="proxy-Id name">"wxID_STATIC"</string>
+                      <long name="proxy-Id value">5105</long>
+                      <string name="proxy-Name">""</string>
+                      <string name="proxy-Class">"wxStaticText"</string>
+                      <string name="proxy-Base class">"wxStaticText"</string>
+                      <bool name="proxy-External implementation">1</bool>
+                      <bool name="proxy-Separate files">0</bool>
+                      <string name="proxy-Implementation filename">""</string>
+                      <string name="proxy-Header filename">""</string>
+                      <string name="proxy-Member variable name">""</string>
+                      <string name="proxy-Label">"Text control:"</string>
+                      <long name="proxy-Wrapping width">-1</long>
+                      <string name="proxy-Help text">""</string>
+                      <string name="proxy-Tooltip text">""</string>
+                      <string name="proxy-Background colour">""</string>
+                      <string name="proxy-Foreground colour">""</string>
+                      <string name="proxy-Font">""</string>
+                      <bool name="proxy-Hidden">0</bool>
+                      <bool name="proxy-Enabled">1</bool>
+                      <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                      <string name="proxy-Data variable">""</string>
+                      <string name="proxy-Data validator">""</string>
+                      <string name="proxy-Data source">""</string>
+                      <string name="proxy-Data class name">""</string>
+                      <string name="proxy-Data class implementation filename">""</string>
+                      <string name="proxy-Data class header filename">""</string>
+                      <string name="proxy-Data class manager window">""</string>
+                      <bool name="proxy-wxALIGN_LEFT">0</bool>
+                      <bool name="proxy-wxALIGN_RIGHT">0</bool>
+                      <bool name="proxy-wxALIGN_CENTRE">0</bool>
+                      <bool name="proxy-wxST_NO_AUTORESIZE">0</bool>
+                      <bool name="proxy-wxNO_BORDER">0</bool>
+                      <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                      <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                      <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                      <bool name="proxy-wxRAISED_BORDER">0</bool>
+                      <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                      <bool name="proxy-wxWANTS_CHARS">0</bool>
+                      <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                      <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                      <string name="proxy-Custom styles">""</string>
+                      <long name="proxy-X">-1</long>
+                      <long name="proxy-Y">-1</long>
+                      <long name="proxy-Width">-1</long>
+                      <long name="proxy-Height">-1</long>
+                      <string name="proxy-AlignH">"Centre"</string>
+                      <string name="proxy-AlignV">"Centre"</string>
+                      <long name="proxy-Stretch factor">0</long>
+                      <long name="proxy-Border">5</long>
+                      <bool name="proxy-wxLEFT">1</bool>
+                      <bool name="proxy-wxRIGHT">1</bool>
+                      <bool name="proxy-wxTOP">1</bool>
+                      <bool name="proxy-wxBOTTOM">1</bool>
+                      <bool name="proxy-wxSHAPED">0</bool>
+                      <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                      <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                      <string name="proxy-Custom arguments">""</string>
+                      <string name="proxy-Custom ctor arguments">""</string>
+                    </document>
+                    <document>
+                      <string name="title">"wxTextCtrl: ID_TEXTCTRL"</string>
+                      <string name="type">"dialog-control-document"</string>
+                      <string name="filename">""</string>
+                      <string name="icon-name">"textctrl"</string>
+                      <long name="is-transient">0</long>
+                      <long name="owns-file">1</long>
+                      <long name="title-mode">0</long>
+                      <long name="locked">0</long>
+                      <string name="proxy-type">"wbTextCtrlProxy"</string>
+                      <string name="proxy-Id name">"ID_TEXTCTRL"</string>
+                      <long name="proxy-Id value">10002</long>
+                      <string name="proxy-Name">""</string>
+                      <string name="proxy-Class">"wxTextCtrl"</string>
+                      <string name="proxy-Base class">"wxTextCtrl"</string>
+                      <bool name="proxy-External implementation">1</bool>
+                      <bool name="proxy-Separate files">0</bool>
+                      <string name="proxy-Implementation filename">""</string>
+                      <string name="proxy-Header filename">""</string>
+                      <string name="proxy-Member variable name">""</string>
+                      <string name="proxy-Initial value">""</string>
+                      <long name="proxy-Max length">0</long>
+                      <string name="proxy-Help text">""</string>
+                      <string name="proxy-Tooltip text">""</string>
+                      <string name="proxy-Background colour">""</string>
+                      <string name="proxy-Foreground colour">""</string>
+                      <string name="proxy-Font">""</string>
+                      <bool name="proxy-Hidden">0</bool>
+                      <bool name="proxy-Enabled">1</bool>
+                      <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                      <string name="proxy-Data variable">""</string>
+                      <string name="proxy-Data validator">""</string>
+                      <string name="proxy-Data source">""</string>
+                      <string name="proxy-Data class name">""</string>
+                      <string name="proxy-Data class implementation filename">""</string>
+                      <string name="proxy-Data class header filename">""</string>
+                      <string name="proxy-Data class manager window">""</string>
+                      <bool name="proxy-wxTE_MULTILINE">0</bool>
+                      <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
+                      <bool name="proxy-wxTE_PROCESS_TAB">0</bool>
+                      <bool name="proxy-wxTE_PASSWORD">0</bool>
+                      <bool name="proxy-wxTE_READONLY">0</bool>
+                      <bool name="proxy-wxTE_RICH">0</bool>
+                      <bool name="proxy-wxTE_RICH2">0</bool>
+                      <bool name="proxy-wxTE_AUTO_URL">0</bool>
+                      <bool name="proxy-wxTE_NOHIDESEL">0</bool>
+                      <bool name="proxy-wxTE_LEFT">0</bool>
+                      <bool name="proxy-wxTE_CENTRE">0</bool>
+                      <bool name="proxy-wxTE_RIGHT">0</bool>
+                      <bool name="proxy-wxHSCROLL">0</bool>
+                      <bool name="proxy-wxTE_CHARWRAP">0</bool>
+                      <bool name="proxy-wxTE_WORDWRAP">0</bool>
+                      <bool name="proxy-wxTE_CAPITALIZE">0</bool>
+                      <bool name="proxy-wxNO_BORDER">0</bool>
+                      <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                      <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                      <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                      <bool name="proxy-wxRAISED_BORDER">0</bool>
+                      <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                      <bool name="proxy-wxWANTS_CHARS">0</bool>
+                      <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                      <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                      <string name="proxy-Custom styles">""</string>
+                      <long name="proxy-X">-1</long>
+                      <long name="proxy-Y">-1</long>
+                      <long name="proxy-Width">-1</long>
+                      <long name="proxy-Height">-1</long>
+                      <string name="proxy-AlignH">"Centre"</string>
+                      <string name="proxy-AlignV">"Centre"</string>
+                      <long name="proxy-Stretch factor">1</long>
+                      <long name="proxy-Border">5</long>
+                      <bool name="proxy-wxLEFT">1</bool>
+                      <bool name="proxy-wxRIGHT">1</bool>
+                      <bool name="proxy-wxTOP">1</bool>
+                      <bool name="proxy-wxBOTTOM">1</bool>
+                      <bool name="proxy-wxSHAPED">0</bool>
+                      <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                      <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                      <string name="proxy-Custom arguments">""</string>
+                      <string name="proxy-Custom ctor arguments">""</string>
+                    </document>
+                  </document>
+                  <document>
+                    <string name="title">"wxFlexGridSizer"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"sizer"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="proxy-type">"wbFlexGridSizerProxy"</string>
+                    <string name="proxy-GrowableColumns">""</string>
+                    <string name="proxy-GrowableRows">""</string>
+                    <long name="proxy-Columns">2</long>
+                    <long name="proxy-Rows">0</long>
+                    <long name="proxy-ColumnSpacing">0</long>
+                    <long name="proxy-RowSpacing">0</long>
+                    <string name="proxy-Member variable name">""</string>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">1</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">1</bool>
+                    <bool name="proxy-wxBOTTOM">1</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <document>
+                      <string name="title">"wxIPButton: ID_BUTTON"</string>
+                      <string name="type">"dialog-control-document"</string>
+                      <string name="filename">""</string>
+                      <string name="icon-name">"dialogcontrol"</string>
+                      <long name="is-transient">0</long>
+                      <long name="owns-file">1</long>
+                      <long name="title-mode">0</long>
+                      <long name="locked">0</long>
+                      <string name="proxy-type">"wbButtonProxy"</string>
+                      <string name="proxy-Id name">"ID_BUTTON"</string>
+                      <long name="proxy-Id value">10003</long>
+                      <string name="proxy-Name">""</string>
+                      <string name="proxy-Class">"wxIPButton"</string>
+                      <string name="proxy-Base class">"wxButton"</string>
+                      <bool name="proxy-External implementation">1</bool>
+                      <bool name="proxy-Separate files">0</bool>
+                      <string name="proxy-Implementation filename">""</string>
+                      <string name="proxy-Header filename">""</string>
+                      <string name="proxy-Member variable name">""</string>
+                      <string name="proxy-Label">"Button"</string>
+                      <bool name="proxy-Default">0</bool>
+                      <string name="proxy-Help text">""</string>
+                      <string name="proxy-Tooltip text">""</string>
+                      <string name="proxy-Data variable">""</string>
+                      <string name="proxy-Data validator">""</string>
+                      <string name="proxy-Data source">""</string>
+                      <string name="proxy-Data class name">""</string>
+                      <string name="proxy-Data class implementation filename">""</string>
+                      <string name="proxy-Data class header filename">""</string>
+                      <string name="proxy-Data class manager window">""</string>
+                      <string name="proxy-Background colour">""</string>
+                      <string name="proxy-Foreground colour">""</string>
+                      <string name="proxy-Font">""</string>
+                      <bool name="proxy-Hidden">0</bool>
+                      <bool name="proxy-Enabled">1</bool>
+                      <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                      <bool name="proxy-wxBU_LEFT">0</bool>
+                      <bool name="proxy-wxBU_RIGHT">0</bool>
+                      <bool name="proxy-wxBU_TOP">0</bool>
+                      <bool name="proxy-wxBU_BOTTOM">0</bool>
+                      <bool name="proxy-wxBU_EXACTFIT">0</bool>
+                      <bool name="proxy-wxNO_BORDER">0</bool>
+                      <bool name="proxy-wxWANTS_CHARS">0</bool>
+                      <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                      <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                      <string name="proxy-Custom styles">""</string>
+                      <long name="proxy-X">-1</long>
+                      <long name="proxy-Y">-1</long>
+                      <long name="proxy-Width">-1</long>
+                      <long name="proxy-Height">-1</long>
+                      <string name="proxy-AlignH">"Centre"</string>
+                      <string name="proxy-AlignV">"Centre"</string>
+                      <long name="proxy-Stretch factor">0</long>
+                      <long name="proxy-Border">5</long>
+                      <bool name="proxy-wxLEFT">1</bool>
+                      <bool name="proxy-wxRIGHT">1</bool>
+                      <bool name="proxy-wxTOP">1</bool>
+                      <bool name="proxy-wxBOTTOM">1</bool>
+                      <bool name="proxy-wxSHAPED">0</bool>
+                      <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                      <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                      <string name="proxy-Custom arguments">""</string>
+                      <string name="proxy-Custom ctor arguments">""</string>
+                    </document>
+                    <document>
+                      <string name="title">"wxIPBitmapButton: ID_BITMAPBUTTON"</string>
+                      <string name="type">"dialog-control-document"</string>
+                      <string name="filename">""</string>
+                      <string name="icon-name">"bitmapbutton"</string>
+                      <long name="is-transient">0</long>
+                      <long name="owns-file">1</long>
+                      <long name="title-mode">0</long>
+                      <long name="locked">0</long>
+                      <string name="proxy-type">"wbBitmapButtonProxy"</string>
+                      <string name="proxy-Id name">"ID_BITMAPBUTTON"</string>
+                      <long name="proxy-Id value">10004</long>
+                      <string name="proxy-Name">""</string>
+                      <string name="proxy-Class">"wxIPBitmapButton"</string>
+                      <string name="proxy-Base class">"wxBitmapButton"</string>
+                      <bool name="proxy-External implementation">1</bool>
+                      <bool name="proxy-Separate files">0</bool>
+                      <string name="proxy-Implementation filename">""</string>
+                      <string name="proxy-Header filename">""</string>
+                      <string name="proxy-Member variable name">""</string>
+                      <string name="proxy-Bitmap">"clock.xpm"</string>
+                      <string name="proxy-Bitmap (selected)">""</string>
+                      <string name="proxy-Bitmap (focused)">""</string>
+                      <string name="proxy-Bitmap (disabled)">""</string>
+                      <string name="proxy-Bitmap (hover)">""</string>
+                      <bool name="proxy-Default">0</bool>
+                      <string name="proxy-Help text">""</string>
+                      <string name="proxy-Tooltip text">""</string>
+                      <string name="proxy-Data variable">""</string>
+                      <string name="proxy-Data validator">""</string>
+                      <string name="proxy-Data source">""</string>
+                      <string name="proxy-Data class name">""</string>
+                      <string name="proxy-Data class implementation filename">""</string>
+                      <string name="proxy-Data class header filename">""</string>
+                      <string name="proxy-Data class manager window">""</string>
+                      <string name="proxy-Background colour">""</string>
+                      <string name="proxy-Foreground colour">""</string>
+                      <string name="proxy-Font">""</string>
+                      <bool name="proxy-Hidden">0</bool>
+                      <bool name="proxy-Enabled">1</bool>
+                      <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                      <bool name="proxy-wxBU_AUTODRAW">1</bool>
+                      <bool name="proxy-wxBU_LEFT">0</bool>
+                      <bool name="proxy-wxBU_RIGHT">0</bool>
+                      <bool name="proxy-wxBU_TOP">0</bool>
+                      <bool name="proxy-wxBU_BOTTOM">0</bool>
+                      <bool name="proxy-wxNO_BORDER">0</bool>
+                      <bool name="proxy-wxWANTS_CHARS">0</bool>
+                      <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                      <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                      <string name="proxy-Custom styles">""</string>
+                      <long name="proxy-X">-1</long>
+                      <long name="proxy-Y">-1</long>
+                      <long name="proxy-Width">-1</long>
+                      <long name="proxy-Height">-1</long>
+                      <string name="proxy-AlignH">"Centre"</string>
+                      <string name="proxy-AlignV">"Centre"</string>
+                      <long name="proxy-Stretch factor">0</long>
+                      <long name="proxy-Border">5</long>
+                      <bool name="proxy-wxLEFT">1</bool>
+                      <bool name="proxy-wxRIGHT">1</bool>
+                      <bool name="proxy-wxTOP">1</bool>
+                      <bool name="proxy-wxBOTTOM">1</bool>
+                      <bool name="proxy-wxSHAPED">0</bool>
+                      <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                      <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                      <string name="proxy-Custom arguments">""</string>
+                      <string name="proxy-Custom ctor arguments">""</string>
+                    </document>
+                  </document>
+                </document>
+              </document>
+            </document>
+          </document>
+        </document>
+      </document>
+      <document>
+        <string name="title">"Sources"</string>
+        <string name="type">"html-document"</string>
+        <string name="filename">""</string>
+        <string name="icon-name">"sourcesfolder"</string>
+        <long name="is-transient">1</long>
+        <long name="owns-file">1</long>
+        <long name="title-mode">0</long>
+        <long name="locked">1</long>
+        <document>
+          <string name="title">"app.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/app.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"barbutton.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/barbutton.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"bmpbutton.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/bmpbutton.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"button.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/button.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"buttonstrip.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/buttonstrip.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"defs.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/defs.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"frame.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/frame.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"gauge.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/gauge.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"iehtmlwin.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/web/iehtmlwin.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"keyboard.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/keyboard.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"listbox.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/listbox.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_app_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_app_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_barbutton_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_barbutton_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_bmpbutton_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_bmpbutton_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_button_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_button_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_buttonstrip_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_buttonstrip_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_frame_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_frame_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_gauge_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_gauge_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_keyboard_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_keyboard_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_listbox_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_listbox_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_navbar_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_navbar_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_navctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_navctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_navitem_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_navitem_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_notebook_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_notebook_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_pagectrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_pagectrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_panel_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_panel_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_scrollwin_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_scrollwin_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_searchctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_searchctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_segctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_segctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_settings_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_settings_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_sheets_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_sheets_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_simulator.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_simulator.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_slider_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_slider_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_statbmp_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_statbmp_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_stattext_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_stattext_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_switch_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_switch_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_tabctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_tabctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_tablecell_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_tablecell_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_tablectrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_tablectrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_textctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_textctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_toolbar_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_toolbar_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_utils_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_utils_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_viewcontroller_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_viewcontroller_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_vlbox_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_vlbox_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_vscroll_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_vscroll_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_webctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_webctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_wheelsctrl_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_wheelsctrl_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mo_window_g.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/generic/mo_window_g.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"mobiledemo.dsp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"mobiledemo.dsp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"navbar.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/navbar.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"navctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/navctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"navitem.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/navitem.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"notebook.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/notebook.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"pagectrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/pagectrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"panel.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/panel.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"scrollwin.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/scrollwin.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"searchctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/searchctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"segctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/segctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"settings.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/settings.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"sheets.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/sheets.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"simulator.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/simulator.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"slider.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/slider.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"statbmp.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/statbmp.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"stattext.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/stattext.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"switch.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/switch.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"tabctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/tabctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"tablecell.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/tablecell.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"tablectrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/tablectrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"textctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/textctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"toolbar.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/toolbar.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"utils.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/utils.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"viewcontroller.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/viewcontroller.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"vlbox.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/vlbox.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"vscroll.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/vscroll.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"webctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/webctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wheelsctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/wheelsctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"window.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../include/wx/mobile/generic/window.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxactivex.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../../../src/mobile/web/wxactivex.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/9/2009"</string>
+          <string name="language">""</string>
+        </document>
+      </document>
+      <document>
+        <string name="title">"Images"</string>
+        <string name="type">"html-document"</string>
+        <string name="filename">""</string>
+        <string name="icon-name">"bitmapsfolder"</string>
+        <long name="is-transient">1</long>
+        <long name="owns-file">1</long>
+        <long name="title-mode">0</long>
+        <long name="locked">1</long>
+        <document>
+          <string name="title">"clock.xpm"</string>
+          <string name="type">"image-document"</string>
+          <string name="filename">"clock.xpm"</string>
+          <string name="icon-name">"image"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <long name="zoom-level">100</long>
+        </document>
+        <document>
+          <string name="title">"app.xpm"</string>
+          <string name="type">"image-document"</string>
+          <string name="filename">"app.xpm"</string>
+          <string name="icon-name">"image"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <long name="zoom-level">100</long>
+        </document>
+      </document>
+    </document>
+  </documents>
+
+</anthemion-project>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="24"
+   height="12"
+   id="svg7053"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="iphonebattery.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1131"
+     inkscape:window-height="643"
+     id="namedview7763"
+     showgrid="false"
+     inkscape:zoom="18.571429"
+     inkscape:cx="16.784615"
+     inkscape:cy="7"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7053" />
+  <defs
+     id="defs7055" />
+  <metadata
+     id="metadata7058">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     style="fill:none;stroke:#000000;stroke-width:0.874349;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     id="rect7629"
+     y="1.3088728"
+     x="1.330377"
+     height="9.4837437"
+     width="18.433599" />
+  <rect
+     style="fill:#249f11;fill-opacity:1;stroke:none"
+     id="rect7631"
+     y="2.989512"
+     x="3.0061591"
+     height="6.122417"
+     width="13.019535" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#000000;stroke-width:0.874349px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="path7633"
+     d="m 19.892884,4.4301412 2.835939,0 0,2.7610689 -2.707033,0" />
+</svg>

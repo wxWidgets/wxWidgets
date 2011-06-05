@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="20"
+   height="20"
+   id="svg9576">
+  <defs
+     id="defs9578">
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="TriangleOutS"
+       style="overflow:visible">
+      <path
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         transform="scale(0.2,0.2)"
+         id="path10542"
+         style="fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;marker-start:none" />
+    </marker>
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="TriangleOutM"
+       style="overflow:visible">
+      <path
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         transform="scale(0.4,0.4)"
+         id="path10539"
+         style="fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;marker-start:none" />
+    </marker>
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="Arrow2Mend"
+       style="overflow:visible">
+      <path
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="scale(-0.6,-0.6)"
+         id="path10420"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" />
+    </marker>
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="Arrow1Send"
+       style="overflow:visible">
+      <path
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
+         id="path10408"
+         style="fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;marker-start:none" />
+    </marker>
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="Arrow1Mend"
+       style="overflow:visible">
+      <path
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         id="path10402"
+         style="fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;marker-start:none" />
+    </marker>
+    <marker
+       refX="0"
+       refY="0"
+       orient="auto"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         id="path10396"
+         style="fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;marker-start:none" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata9581">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-1032.3622)"
+     id="layer1">
+    <rect
+       width="13.866465"
+       height="12.799797"
+       x="0.73343474"
+       y="1037.3624"
+       id="rect9642"
+       style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <rect
+       width="9.9720812"
+       height="9.0995626"
+       x="2.5178833"
+       y="1039.2192"
+       id="rect10152"
+       style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       d="m 7.2231874,1044.6033 c 2.5275371,-4.2952 5.9880836,-5.2762 10.9262186,-5.9484"
+       id="path10388"
+       style="fill:none;stroke:#ffffff;stroke-width:1.61693382;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutS)" />
+  </g>
+</svg>

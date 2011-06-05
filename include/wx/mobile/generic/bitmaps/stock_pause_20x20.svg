@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="20"
+   height="20"
+   id="svg16627"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="stock_pause_20x20.svg">
+  <defs
+     id="defs16629" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8.7707969"
+     inkscape:cx="9.999673"
+     inkscape:cy="9.999673"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1150"
+     inkscape:window-height="652"
+     inkscape:window-x="20"
+     inkscape:window-y="20"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata16632">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1032.3622)">
+    <g
+       id="g17322"
+       transform="translate(29.415799,-9.2351927)">
+      <rect
+         transform="translate(0,1032.3622)"
+         y="10.308748"
+         x="-26.565432"
+         height="17.900312"
+         width="5.0166478"
+         id="rect17318"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none"
+         id="rect17320"
+         width="5.0166478"
+         height="17.900312"
+         x="-17.444254"
+         y="1042.5569" />
+    </g>
+  </g>
+</svg>

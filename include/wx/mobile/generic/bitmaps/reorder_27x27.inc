@@ -1,0 +1,37 @@
+/* XPM */
+static char *reorder_27x27_png[] = {
+/* columns rows colors chars-per-pixel */
+"27 27 4 1 ",
+"  c #76DB76DB76DB",
+". c #776B776B776B",
+"X c #780978097809",
+"o c None",
+/* pixels */
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooo.................ooooo",
+"ooooo.................ooooo",
+"ooooo.................ooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooo................Xooooo",
+"ooooo.................ooooo",
+"ooooo.................ooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooo............X....ooooo",
+"ooooo.................ooooo",
+"oooooXXXXXXXXXXXXXXXX.ooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo",
+"ooooooooooooooooooooooooooo"
+};
