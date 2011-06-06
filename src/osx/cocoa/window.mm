@@ -802,12 +802,31 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     // [NSWindow setAllowsConcurrentViewDrawing:NO] does not affect it.
     if ( !wxThread::IsMain() )
     {
-      // just call the superclass handler, we don't need any custom wx drawing
-      // here and it seems to work fine:
-      wxOSX_DrawRectHandlerPtr
-          superimpl = (wxOSX_DrawRectHandlerPtr)
-                        [[self superclass] instanceMethodForSelector:_cmd];
-      superimpl(self, _cmd, rect);
+        if ( impl->IsUserPane() )
+        {
+            wxWindow* win = impl->GetWXPeer();
+            if ( win->UseBgCol() )
+            {
+                
+                CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+                CGContextSaveGState( context );
+
+                CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
+                CGContextFillRect( context, NSRectToCGRect(rect) );
+
+                CGContextRestoreGState( context );
+            }
+        }
+        else 
+        {
+            // just call the superclass handler, we don't need any custom wx drawing
+            // here and it seems to work fine:
+            wxOSX_DrawRectHandlerPtr
+            superimpl = (wxOSX_DrawRectHandlerPtr)
+            [[self superclass] instanceMethodForSelector:_cmd];
+            superimpl(self, _cmd, rect);
+        }
+
       return;
     }
 #endif // wxUSE_THREADS
