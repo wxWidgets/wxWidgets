@@ -38,7 +38,7 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
-#    include <gdk/gdkx.h>           // for GDK_WINDOW_XWINDOW
+    #include <gdk/gdkx.h>           // for GDK_WINDOW_XWINDOW
 #endif
 
 //-----------------------------------------------------------------------------
@@ -262,7 +262,11 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     if(event->count > 0)
         return FALSE;
 
+#ifdef __WXGTK30__
+    GdkWindow *window = gtk_widget_get_window(widget);
+#else
     GdkWindow *window = widget->window;
+#endif
 
     // I've seen this reccommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
@@ -281,9 +285,19 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     else
     {
         // draw a black background like some other backends do....
+#ifdef __WXGTK30__
+        cairo_t *cr = gdk_cairo_create(window);
+        cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+        cairo_rectangle(cr, 0, 0, 
+                        gtk_widget_get_allocated_width(widget),
+                        gtk_widget_get_allocated_height(widget));
+        cairo_destroy(cr);
+#else
+        // draw a black background like some other backends do....
         gdk_draw_rectangle (window, widget->style->black_gc, TRUE, 0, 0,
                             widget->allocation.width,
                             widget->allocation.height);
+#endif
     }
 
     return FALSE;
@@ -305,12 +319,23 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
 {
     gdk_flush();
 
+#ifdef __WXGTK30__
+    GdkWindow *window = gtk_widget_get_window(widget);
+#else
     GdkWindow *window = widget->window;
+#endif
     wxASSERT(window);
 
+#ifdef __WXGTK30__
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
+                                gdk_x11_window_get_xid( window )
+                                );
+#else
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
                                 GDK_WINDOW_XWINDOW( window )
                                 );
+#endif
+
     g_signal_connect (be->GetControl()->m_wxwindow,
                       "expose_event",
                       G_CALLBACK(gtk_window_expose_callback), be);
@@ -698,7 +723,11 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 {
     // Use the xoverlay extension to tell gstreamer to play in our window
 #ifdef __WXGTK__
+    #if defined(__WXGTK30__)
+    if(!gtk_widget_get_realized(m_ctrl->m_wxwindow))
+    #else
     if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
+    #endif
     {
         // Not realized yet - set to connect at realization time
         g_signal_connect (m_ctrl->m_wxwindow,
@@ -709,14 +738,21 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     else
     {
         gdk_flush();
-
+    #ifdef __WXGTK30__
+        GdkWindow *window = gtk_widget_get_window(m_ctrl->m_wxwindow);
+    #else
         GdkWindow *window = m_ctrl->m_wxwindow->window;
+    #endif
         wxASSERT(window);
 #endif
 
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(m_xoverlay),
 #ifdef __WXGTK__
+    #ifdef __WXGTK30__
+                        gdk_x11_window_get_xid( window )
+    #else
                         GDK_WINDOW_XWINDOW( window )
+    #endif
 #else
                         ctrl->GetHandle()
 #endif
