@@ -331,7 +331,12 @@ public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
     wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
 #ifdef __WXGTK__
-    wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
+    // WXGTK3 doesn't support GdkDrawable
+    #if defined(__WXGTK30__) 
+        wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window );
+    #else
+        wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
+    #endif
 #endif
     wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context );
     wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window);
@@ -1286,6 +1291,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 }
 
+#ifdef __WXGTK30__
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window )
+: wxGraphicsContext(renderer)
+{
+    Init( gdk_cairo_create( window ) );
+
+    m_width = gdk_window_get_width(window);
+    m_height = gdk_window_get_height(window);
+}
+#endif
+
 #ifdef __WXGTK20__
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable )
 : wxGraphicsContext(renderer)
@@ -1850,7 +1866,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* context = (cairo_t*) impl->GetCairoContext();
     if (context)
@@ -1873,7 +1889,11 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * cont
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * window )
 {
 #ifdef __WXGTK__
-    return new wxCairoContext(this,(GdkDrawable*)window);
+    #if defined(__WXGTK30__) 
+        return new wxCairoContext(this,(GdkWindow*)window);
+    #else /* gtk+1.2/2.0 */
+        return new wxCairoContext(this,(GdkDrawable*)window);
+    #endif 
 #else
     return NULL;
 #endif
@@ -1885,7 +1905,7 @@ wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
     return CreateContextFromNativeWindow(gdk_get_default_root_window());
 #endif
     return NULL;
-    // TODO
+    // TODO 
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( wxWindow* window )
