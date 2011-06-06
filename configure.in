@@ -5390,6 +5390,11 @@ else
   fi
 fi
 
+if test "$WXGTK3" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK30__,$WXGTK3)
+  WXGTK3=1
+fi
+
 if test "$WXGTK2" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK2)
   WXGTK12=1
