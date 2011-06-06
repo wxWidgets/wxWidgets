@@ -3115,18 +3115,20 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
         else
-            if test "$wxUSE_UNICODE" = "yes"; then
-                AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
-                wxUSE_UNICODE=no
-            fi
+            if test "$WXGTK1" = 1; then
+                if test "$wxUSE_UNICODE" = "yes"; then
+                    AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
+                    wxUSE_UNICODE=no
+                fi
 
-            dnl test for XIM support in libgdk
-            AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
+                dnl test for XIM support in libgdk
+                AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
 
-            dnl we need poll() in src/gtk1/app.cpp (we know that Darwin doesn't
-            dnl have it but we do the check for the others)
-            if test "$USE_DARWIN" != 1; then
-                AC_CHECK_FUNCS(poll)
+                dnl we need poll() in src/gtk1/app.cpp (we know that Darwin doesn't
+                dnl have it but we do the check for the others)
+                if test "$USE_DARWIN" != 1; then
+                    AC_CHECK_FUNCS(poll)
+                fi
             fi
         fi
 

@@ -24081,13 +24081,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
         else
-            if test "$wxUSE_UNICODE" = "yes"; then
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unicode configuration not supported with GTK+ 1.x" >&5
+            if test "$WXGTK1" = 1; then
+                if test "$wxUSE_UNICODE" = "yes"; then
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unicode configuration not supported with GTK+ 1.x" >&5
 $as_echo "$as_me: WARNING: Unicode configuration not supported with GTK+ 1.x" >&2;}
-                wxUSE_UNICODE=no
-            fi
+                    wxUSE_UNICODE=no
+                fi
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gdk_im_open in -lgdk" >&5
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gdk_im_open in -lgdk" >&5
 $as_echo_n "checking for gdk_im_open in -lgdk... " >&6; }
 if test "${ac_cv_lib_gdk_gdk_im_open+set}" = set; then :
   $as_echo_n "(cached) " >&6
@@ -24129,8 +24130,8 @@ if test "x$ac_cv_lib_gdk_gdk_im_open" = x""yes; then :
 fi
 
 
-                                    if test "$USE_DARWIN" != 1; then
-                for ac_func in poll
+                                                if test "$USE_DARWIN" != 1; then
+                    for ac_func in poll
 do :
   ac_fn_c_check_func "$LINENO" "poll" "ac_cv_func_poll"
 if test "x$ac_cv_func_poll" = x""yes; then :
@@ -24141,6 +24142,7 @@ _ACEOF
 fi
 done
 
+                fi
             fi
         fi
 
