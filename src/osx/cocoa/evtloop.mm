@@ -107,12 +107,15 @@ wxGUIEventLoop::wxGUIEventLoop()
 {
     m_modalSession = nil;
     m_dummyWindow = nil;
+    m_modalNestedLevel = 0;
+    m_modalWindow = NULL;
 }
 
 wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT( m_modalSession == nil );
     wxASSERT( m_dummyWindow == nil );
+    wxASSERT( m_modalNestedLevel == 0 );
 }
 
 //-----------------------------------------------------------------------------
@@ -308,6 +311,16 @@ void wxModalEventLoop::DoStop()
 void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
 {
     WXWindow nsnow = nil;
+
+    if ( m_modalNestedLevel > 0 )
+    {
+        wxASSERT_MSG( m_modalWindow == modalWindow, "Nested Modal Sessions must be based on same window");
+        m_modalNestedLevel++;
+        return;
+    }
+    
+    m_modalWindow = modalWindow;
+    m_modalNestedLevel = 1;
     
     if ( modalWindow )
     {
@@ -339,12 +352,18 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
 void wxGUIEventLoop::EndModalSession()
 {
     wxASSERT_MSG(m_modalSession != NULL, "no modal session active");
-    [NSApp endModalSession:(NSModalSession)m_modalSession];
-    m_modalSession = nil;
-    if ( m_dummyWindow )
+    
+    wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
+    
+    if ( --m_modalNestedLevel == 0 )
     {
-        [m_dummyWindow release];
-        m_dummyWindow = nil;
+        [NSApp endModalSession:(NSModalSession)m_modalSession];
+        m_modalSession = nil;
+        if ( m_dummyWindow )
+        {
+            [m_dummyWindow release];
+            m_dummyWindow = nil;
+        }
     }
 }
 
