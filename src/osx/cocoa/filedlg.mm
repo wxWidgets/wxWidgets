@@ -433,7 +433,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         accView = m_filterPanel->GetHandle();
         if( HasFlag(wxFD_OPEN) )
         {
-            if ( 1 /* UMAGetSystemVersion() < 0x1060 */ )
+            if ( UMAGetSystemVersion() < 0x1060 )
             {
                 wxOpenPanelDelegate* del = [[wxOpenPanelDelegate alloc]init];
                 [del setFileDialog:this];
@@ -463,6 +463,8 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 
 int wxFileDialog::ShowModal()
 {
+    wxMacAutoreleasePool autoreleasepool;
+    
     wxCFStringRef cf( m_message );
 
     wxCFStringRef dir( m_dir );
@@ -564,7 +566,7 @@ int wxFileDialog::ShowModal()
             DoOnFilterSelected(m_firstFileTypeFilter);
         }
 
-        returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
+        returnCode = [sPanel runModalForDirectory: m_dir.IsEmpty() ? nil : dir.AsNSString() file:file.AsNSString() ];
         ModalFinishedCallback(sPanel, returnCode);
     }
     else
@@ -582,13 +584,14 @@ int wxFileDialog::ShowModal()
 
         if ( UMAGetSystemVersion() < 0x1060 )
         {
-            returnCode = [oPanel runModalForDirectory:dir.AsNSString()
+            returnCode = [oPanel runModalForDirectory:m_dir.IsEmpty() ? nil : dir.AsNSString()
                                                  file:file.AsNSString() types:(m_delegate == nil ? types : nil)];
         }
         else 
         {
             [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
-            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
+            if ( !m_dir.IsEmpty() )
+                [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
                                                isDirectory:YES]];
             returnCode = [oPanel runModal];
         }
