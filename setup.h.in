@@ -71,6 +71,9 @@
 /* Define this if your version of GTK+ is greater than 2.18 */
 #undef __WXGTK218__
 
+/* Define this if your version of GTK+ is greater than 2.18 */
+#undef __WXGTK30__
+
 /* Define this if you want to use GPE features */
 #undef __WXGPE__
 
