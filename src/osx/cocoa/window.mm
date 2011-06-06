@@ -812,7 +812,8 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
                 CGContextSaveGState( context );
 
                 CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
-                CGContextFillRect( context, NSRectToCGRect(rect) );
+                CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+                CGContextFillRect( context, r );
 
                 CGContextRestoreGState( context );
             }
