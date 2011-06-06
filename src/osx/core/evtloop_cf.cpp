@@ -179,25 +179,30 @@ void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(obs
 
     if ( activity & kCFRunLoopBeforeWaiting )
     {
+        if ( ProcessIdle() )
+        {
+            WakeUp();
+        }
+        else
+        {
 #if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
+            wxMutexGuiLeaveOrEnter();
 #endif
+        }
     }
 }
 
 void wxCFEventLoop::DefaultModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), int activity)
 {
+    /*
     if ( activity & kCFRunLoopBeforeTimers )
     {
     }
     
     if ( activity & kCFRunLoopBeforeWaiting )
     {
-        if ( ProcessIdle() )
-        {
-            WakeUp();
-        }
     }
+    */
 }
 
 
