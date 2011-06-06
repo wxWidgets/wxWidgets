@@ -665,9 +665,7 @@ wxGraphicsContext::DoDrawFilledText(const wxString &str,
     // to make sure our 'OffsetToPixelBoundaries' doesn't move the fill shape
     SetPen( wxNullGraphicsPen );
 
-    wxGraphicsPath path = CreatePath();
-    path.AddRectangle( x , y, width, height );
-    FillPath( path );
+    DrawRectangle(x , y, width, height);
 
     DrawText( str, x ,y);
     SetBrush( formerBrush );
