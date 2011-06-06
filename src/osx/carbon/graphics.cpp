@@ -1487,6 +1487,11 @@ public:
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    
+    // fast convenience methods
+    
+    
+    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
 
     void SetNativeContext( CGContextRef cg );
 
@@ -2609,6 +2614,27 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 void * wxMacCoreGraphicsContext::GetNativeContext()
 {
     return m_cgContext;
+}
+
+
+void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST) 
+        return; 
+
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    if ( !m_brush.IsNull() )
+    {
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+        CGContextFillRect(m_cgContext, rect);
+    }
+    
+    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    if ( !m_pen.IsNull() )
+    {
+        ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
+        CGContextStrokeRect(m_cgContext, rect);
+    }
 }
 
 // concatenates this transform with the current transform of this context
