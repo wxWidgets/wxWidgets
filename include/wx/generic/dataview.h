@@ -172,6 +172,8 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL ) const;
 
+    virtual bool SetRowHeight( int rowHeight );
+
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
     virtual bool IsExpanded( const wxDataViewItem & item ) const;

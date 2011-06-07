@@ -700,7 +700,9 @@ public:
                                 const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
-    
+
+    virtual bool SetRowHeight( int WXUNUSED(rowHeight) ) { return false; }
+
     virtual void StartEditor( const wxDataViewItem & WXUNUSED(item),
                               unsigned int WXUNUSED(column) )
         { }

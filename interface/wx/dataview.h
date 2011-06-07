@@ -1113,6 +1113,22 @@ public:
         This method only has effect if multiple selections are allowed.
     */
     virtual void UnselectAll();
+
+    /**
+        Sets the row height.
+
+        This function can only be used when all rows have the same height, i.e.
+        when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
+
+        Currently this is implemented in the generic version only and nothing
+        is done (and @false returned) when using the native GTK or OS X
+        versions.
+
+        @return @true if the line height was changed or @false otherwise.
+
+        @since 2.9.2
+    */
+    virtual bool SetRowHeight(int rowHeight);
 };
 
 

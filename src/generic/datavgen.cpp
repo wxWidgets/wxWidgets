@@ -532,6 +532,8 @@ public:
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
 
+    void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
+
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
     int GetRowByItem( const wxDataViewItem & item ) const;
@@ -4122,6 +4124,16 @@ void wxDataViewCtrl::DoSetIndent()
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
     return m_cols.GetCount();
+}
+
+bool wxDataViewCtrl::SetRowHeight( int lineHeight )
+{
+    if ( !m_clientArea )
+        return false;
+
+    m_clientArea->SetRowHeight(lineHeight);
+
+    return true;
 }
 
 wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int idx ) const
