@@ -2778,7 +2778,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 /*  ---------------------------------------------------------------------------- */
 
 /*  define this macro if font handling is done using the X font names */
-#if (defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__X__)
+#if (defined(__WXGTK__) && !(defined(__WXGTK20__) || defined(__WXGTK30__))) || defined(__X__)
     #define _WX_X_FONTLIKE
 #endif
 
@@ -3282,7 +3282,12 @@ typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
 typedef struct _GdkVisual       GdkVisual;
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK30__)
+typedef struct _GdkAtom        *GdkAtom;
+typedef struct _GdkWindow       GdkWindow;
+typedef struct _GdkDrawable     GdkBitmap;
+typedef struct _GdkDrawable     GdkPixmap;
+#elif defined(__WXGTK20__)  
 typedef struct _GdkAtom        *GdkAtom;
 typedef struct _GdkDrawable     GdkWindow;
 typedef struct _GdkDrawable     GdkBitmap;
@@ -3292,7 +3297,7 @@ typedef gulong                  GdkAtom;
 typedef struct _GdkWindow       GdkWindow;
 typedef struct _GdkWindow       GdkBitmap;
 typedef struct _GdkWindow       GdkPixmap;
-#endif /*  GTK+ 1.2/2.0 */
+#endif /*  GTK+ 1.2/2.0/3.0 */
 
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;
@@ -3327,7 +3332,7 @@ typedef GtkWidget *WXWidget;
 
 #endif /*  __WXGTK__ */
 
-#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#if defined(__WXGTK20__) || defined(__WXGTK30__) || (defined(__WXX11__) && wxUSE_UNICODE)
 #define wxUSE_PANGO 1
 #else
 #define wxUSE_PANGO 0

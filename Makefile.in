@@ -2578,6 +2578,41 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/toplevel.h \
 	wx/gtk/window.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_LOWLEVEL_HDR =  \
+	wx/generic/caret.h \
+	wx/generic/imaglist.h \
+	wx/unix/fontutil.h \
+	wx/unix/utilsx11.h \
+	wx/generic/icon.h \
+	wx/generic/paletteg.h \
+	wx/gtk/app.h \
+	wx/gtk/assertdlg_gtk.h \
+	wx/gtk/bitmap.h \
+	wx/gtk/brush.h \
+	wx/gtk/clipbrd.h \
+	wx/gtk/colour.h \
+	wx/gtk/cursor.h \
+	wx/gtk/dataform.h \
+	wx/gtk/dataobj.h \
+	wx/gtk/dataobj2.h \
+	wx/gtk/dc.h \
+	wx/gtk/dcclient.h \
+	wx/gtk/dcmemory.h \
+	wx/gtk/dcscreen.h \
+	wx/gtk/dnd.h \
+	wx/gtk/evtloop.h \
+	wx/gtk/evtloopsrc.h \
+	wx/gtk/font.h \
+	wx/gtk/filehistory.h \
+	wx/gtk/minifram.h \
+	wx/gtk/pen.h \
+	wx/gtk/popupwin.h \
+	wx/gtk/private/win_gtk.h \
+	wx/gtk/region.h \
+	wx/gtk/tooltip.h \
+	wx/gtk/toplevel.h \
+	wx/gtk/window.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_LOWLEVEL_HDR)
 COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
@@ -2857,6 +2892,60 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/tglbtn.h \
 	wx/gtk/treeentry_gtk.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
+	wx/generic/fdrepdlg.h \
+	wx/generic/filepickerg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/listctrl.h \
+	wx/generic/statusbr.h \
+	wx/gtk/accel.h \
+	wx/gtk/bmpbuttn.h \
+	wx/gtk/button.h \
+	wx/gtk/checkbox.h \
+	wx/gtk/checklst.h \
+	wx/gtk/chkconf.h \
+	wx/gtk/collpane.h \
+	wx/gtk/colordlg.h \
+	wx/gtk/choice.h \
+	wx/gtk/combobox.h \
+	wx/gtk/control.h \
+	wx/gtk/clrpicker.h \
+	wx/gtk/dialog.h \
+	wx/gtk/dirdlg.h \
+	wx/gtk/filectrl.h \
+	wx/gtk/filedlg.h \
+	wx/gtk/fontpicker.h \
+	wx/gtk/filepicker.h \
+	wx/gtk/fontdlg.h \
+	wx/gtk/frame.h \
+	wx/gtk/gauge.h \
+	wx/gtk/gnome/gprint.h \
+	wx/gtk/gnome/gvfs.h \
+	wx/gtk/infobar.h \
+	wx/gtk/listbox.h \
+	wx/gtk/mdi.h \
+	wx/gtk/menu.h \
+	wx/gtk/menuitem.h \
+	wx/gtk/msgdlg.h \
+	wx/gtk/notebook.h \
+	wx/gtk/print.h \
+	wx/gtk/radiobox.h \
+	wx/gtk/radiobut.h \
+	wx/gtk/scrolbar.h \
+	wx/gtk/scrolwin.h \
+	wx/gtk/slider.h \
+	wx/gtk/spinbutt.h \
+	wx/gtk/spinctrl.h \
+	wx/gtk/statbmp.h \
+	wx/gtk/statbox.h \
+	wx/gtk/statline.h \
+	wx/gtk/stattext.h \
+	wx/gtk/toolbar.h \
+	wx/gtk/textctrl.h \
+	wx/gtk/textentry.h \
+	wx/gtk/tglbtn.h \
+	wx/gtk/treeentry_gtk.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
 	wx/generic/collpaneg.h \
@@ -4951,7 +5040,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
 	monodll_gtk_app.o \
-	monodll_assertdlg_gtk.o \
+	monodll_gtk_assertdlg_gtk.o \
 	monodll_gtk_bitmap.o \
 	monodll_gtk_brush.o \
 	monodll_gtk_clipbrd.o \
@@ -4964,14 +5053,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_dcscreen.o \
 	monodll_gtk_dnd.o \
 	monodll_gtk_evtloop.o \
-	monodll_filectrl.o \
-	monodll_filehistory.o \
+	monodll_gtk_filectrl.o \
+	monodll_gtk_filehistory.o \
 	monodll_gtk_font.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
-	monodll_private.o \
+	monodll_gtk_private.o \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
@@ -4982,6 +5071,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_win_gtk.o \
 	monodll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_generic_caret.o \
+	monodll_generic_imaglist.o \
+	monodll_unix_dialup.o \
+	monodll_displayx11.o \
+	monodll_unix_fontenum.o \
+	monodll_unix_fontutil.o \
+	monodll_uiactionx11.o \
+	monodll_utilsx11.o \
+	monodll_generic_icon.o \
+	monodll_paletteg.o \
+	monodll_gtk3_app.o \
+	monodll_gtk3_assertdlg_gtk.o \
+	monodll_gtk3_bitmap.o \
+	monodll_gtk3_brush.o \
+	monodll_gtk3_clipbrd.o \
+	monodll_gtk3_colour.o \
+	monodll_gtk3_cursor.o \
+	monodll_gtk3_dataobj.o \
+	monodll_gtk3_dc.o \
+	monodll_gtk3_dcclient.o \
+	monodll_gtk3_dcmemory.o \
+	monodll_gtk3_dcscreen.o \
+	monodll_gtk3_dnd.o \
+	monodll_gtk3_evtloop.o \
+	monodll_gtk3_filectrl.o \
+	monodll_gtk3_filehistory.o \
+	monodll_gtk3_font.o \
+	monodll_gtk3_sockgtk.o \
+	monodll_gtk3_minifram.o \
+	monodll_gtk3_pen.o \
+	monodll_gtk3_popupwin.o \
+	monodll_gtk3_private.o \
+	monodll_gtk3_region.o \
+	monodll_gtk3_renderer.o \
+	monodll_gtk3_settings.o \
+	monodll_gtk3_timer.o \
+	monodll_gtk3_tooltip.o \
+	monodll_gtk3_toplevel.o \
+	monodll_gtk3_utilsgtk.o \
+	monodll_gtk3_win_gtk.o \
+	monodll_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
 	monodll_generic_caret.o \
@@ -5320,27 +5452,27 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
 	monodll_fontdlgg.o \
-	monodll_artgtk.o \
+	monodll_gtk_artgtk.o \
 	monodll_gtk_bmpbuttn.o \
 	monodll_gtk_button.o \
 	monodll_gtk_checkbox.o \
 	monodll_gtk_checklst.o \
 	monodll_gtk_choice.o \
-	monodll_collpane.o \
+	monodll_gtk_collpane.o \
 	monodll_gtk_colordlg.o \
 	monodll_gtk_combobox.o \
 	monodll_gtk_control.o \
-	monodll_clrpicker.o \
+	monodll_gtk_clrpicker.o \
 	monodll_gtk_dialog.o \
-	monodll_fontpicker.o \
-	monodll_filepicker.o \
+	monodll_gtk_fontpicker.o \
+	monodll_gtk_filepicker.o \
 	monodll_gtk_dirdlg.o \
 	monodll_gtk_filedlg.o \
 	monodll_gtk_fontdlg.o \
 	monodll_gtk_frame.o \
 	monodll_gtk_gauge.o \
-	monodll_gprint.o \
-	monodll_gvfs.o \
+	monodll_gtk_gnome_gprint.o \
+	monodll_gtk_gnome_gvfs.o \
 	monodll_gtk_infobar.o \
 	monodll_gtk_listbox.o \
 	monodll_gtk_mdi.o \
@@ -5365,8 +5497,63 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_textctrl.o \
 	monodll_gtk_textentry.o \
 	monodll_gtk_tglbtn.o \
-	monodll_treeentry_gtk.o
+	monodll_gtk_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
+	monodll_generic_accel.o \
+	monodll_generic_fdrepdlg.o \
+	monodll_filepickerg.o \
+	monodll_generic_listctrl.o \
+	monodll_prntdlgg.o \
+	monodll_generic_statusbr.o \
+	monodll_fontdlgg.o \
+	monodll_gtk3_artgtk.o \
+	monodll_gtk3_bmpbuttn.o \
+	monodll_gtk3_button.o \
+	monodll_gtk3_checkbox.o \
+	monodll_gtk3_checklst.o \
+	monodll_gtk3_choice.o \
+	monodll_gtk3_collpane.o \
+	monodll_gtk3_colordlg.o \
+	monodll_gtk3_combobox.o \
+	monodll_gtk3_control.o \
+	monodll_gtk3_clrpicker.o \
+	monodll_gtk3_dialog.o \
+	monodll_gtk3_fontpicker.o \
+	monodll_gtk3_filepicker.o \
+	monodll_gtk3_dirdlg.o \
+	monodll_gtk3_filedlg.o \
+	monodll_gtk3_fontdlg.o \
+	monodll_gtk3_frame.o \
+	monodll_gtk3_gauge.o \
+	monodll_gtk3_gnome_gprint.o \
+	monodll_gtk3_gnome_gvfs.o \
+	monodll_gtk3_infobar.o \
+	monodll_gtk3_listbox.o \
+	monodll_gtk3_mdi.o \
+	monodll_gtk3_menu.o \
+	monodll_gtk3_mnemonics.o \
+	monodll_gtk3_msgdlg.o \
+	monodll_gtk3_nativewin.o \
+	monodll_gtk3_notebook.o \
+	monodll_gtk3_print.o \
+	monodll_gtk3_radiobox.o \
+	monodll_gtk3_radiobut.o \
+	monodll_gtk3_scrolbar.o \
+	monodll_gtk3_scrolwin.o \
+	monodll_gtk3_slider.o \
+	monodll_gtk3_spinbutt.o \
+	monodll_gtk3_spinctrl.o \
+	monodll_gtk3_statbmp.o \
+	monodll_gtk3_statbox.o \
+	monodll_gtk3_statline.o \
+	monodll_gtk3_stattext.o \
+	monodll_gtk3_toolbar.o \
+	monodll_gtk3_textctrl.o \
+	monodll_gtk3_textentry.o \
+	monodll_gtk3_tglbtn.o \
+	monodll_gtk3_treeentry_gtk.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_motif_accel.o \
 	monodll_motif_app.o \
@@ -5825,7 +6012,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
 	monodll_gtk_app.o \
-	monodll_assertdlg_gtk.o \
+	monodll_gtk_assertdlg_gtk.o \
 	monodll_gtk_bitmap.o \
 	monodll_gtk_brush.o \
 	monodll_gtk_clipbrd.o \
@@ -5838,14 +6025,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_dcscreen.o \
 	monodll_gtk_dnd.o \
 	monodll_gtk_evtloop.o \
-	monodll_filectrl.o \
-	monodll_filehistory.o \
+	monodll_gtk_filectrl.o \
+	monodll_gtk_filehistory.o \
 	monodll_gtk_font.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
-	monodll_private.o \
+	monodll_gtk_private.o \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
@@ -5856,6 +6043,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_win_gtk.o \
 	monodll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_generic_caret.o \
+	monodll_generic_imaglist.o \
+	monodll_unix_dialup.o \
+	monodll_displayx11.o \
+	monodll_unix_fontenum.o \
+	monodll_unix_fontutil.o \
+	monodll_uiactionx11.o \
+	monodll_utilsx11.o \
+	monodll_generic_icon.o \
+	monodll_paletteg.o \
+	monodll_gtk3_app.o \
+	monodll_gtk3_assertdlg_gtk.o \
+	monodll_gtk3_bitmap.o \
+	monodll_gtk3_brush.o \
+	monodll_gtk3_clipbrd.o \
+	monodll_gtk3_colour.o \
+	monodll_gtk3_cursor.o \
+	monodll_gtk3_dataobj.o \
+	monodll_gtk3_dc.o \
+	monodll_gtk3_dcclient.o \
+	monodll_gtk3_dcmemory.o \
+	monodll_gtk3_dcscreen.o \
+	monodll_gtk3_dnd.o \
+	monodll_gtk3_evtloop.o \
+	monodll_gtk3_filectrl.o \
+	monodll_gtk3_filehistory.o \
+	monodll_gtk3_font.o \
+	monodll_gtk3_sockgtk.o \
+	monodll_gtk3_minifram.o \
+	monodll_gtk3_pen.o \
+	monodll_gtk3_popupwin.o \
+	monodll_gtk3_private.o \
+	monodll_gtk3_region.o \
+	monodll_gtk3_renderer.o \
+	monodll_gtk3_settings.o \
+	monodll_gtk3_timer.o \
+	monodll_gtk3_tooltip.o \
+	monodll_gtk3_toplevel.o \
+	monodll_gtk3_utilsgtk.o \
+	monodll_gtk3_win_gtk.o \
+	monodll_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
 	monodll_generic_caret.o \
@@ -6875,7 +7105,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
 	monolib_gtk_app.o \
-	monolib_assertdlg_gtk.o \
+	monolib_gtk_assertdlg_gtk.o \
 	monolib_gtk_bitmap.o \
 	monolib_gtk_brush.o \
 	monolib_gtk_clipbrd.o \
@@ -6888,14 +7118,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_dcscreen.o \
 	monolib_gtk_dnd.o \
 	monolib_gtk_evtloop.o \
-	monolib_filectrl.o \
-	monolib_filehistory.o \
+	monolib_gtk_filectrl.o \
+	monolib_gtk_filehistory.o \
 	monolib_gtk_font.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
-	monolib_private.o \
+	monolib_gtk_private.o \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
@@ -6906,6 +7136,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_win_gtk.o \
 	monolib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_generic_caret.o \
+	monolib_generic_imaglist.o \
+	monolib_unix_dialup.o \
+	monolib_displayx11.o \
+	monolib_unix_fontenum.o \
+	monolib_unix_fontutil.o \
+	monolib_uiactionx11.o \
+	monolib_utilsx11.o \
+	monolib_generic_icon.o \
+	monolib_paletteg.o \
+	monolib_gtk3_app.o \
+	monolib_gtk3_assertdlg_gtk.o \
+	monolib_gtk3_bitmap.o \
+	monolib_gtk3_brush.o \
+	monolib_gtk3_clipbrd.o \
+	monolib_gtk3_colour.o \
+	monolib_gtk3_cursor.o \
+	monolib_gtk3_dataobj.o \
+	monolib_gtk3_dc.o \
+	monolib_gtk3_dcclient.o \
+	monolib_gtk3_dcmemory.o \
+	monolib_gtk3_dcscreen.o \
+	monolib_gtk3_dnd.o \
+	monolib_gtk3_evtloop.o \
+	monolib_gtk3_filectrl.o \
+	monolib_gtk3_filehistory.o \
+	monolib_gtk3_font.o \
+	monolib_gtk3_sockgtk.o \
+	monolib_gtk3_minifram.o \
+	monolib_gtk3_pen.o \
+	monolib_gtk3_popupwin.o \
+	monolib_gtk3_private.o \
+	monolib_gtk3_region.o \
+	monolib_gtk3_renderer.o \
+	monolib_gtk3_settings.o \
+	monolib_gtk3_timer.o \
+	monolib_gtk3_tooltip.o \
+	monolib_gtk3_toplevel.o \
+	monolib_gtk3_utilsgtk.o \
+	monolib_gtk3_win_gtk.o \
+	monolib_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
 	monolib_generic_caret.o \
@@ -7244,27 +7517,27 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
 	monolib_fontdlgg.o \
-	monolib_artgtk.o \
+	monolib_gtk_artgtk.o \
 	monolib_gtk_bmpbuttn.o \
 	monolib_gtk_button.o \
 	monolib_gtk_checkbox.o \
 	monolib_gtk_checklst.o \
 	monolib_gtk_choice.o \
-	monolib_collpane.o \
+	monolib_gtk_collpane.o \
 	monolib_gtk_colordlg.o \
 	monolib_gtk_combobox.o \
 	monolib_gtk_control.o \
-	monolib_clrpicker.o \
+	monolib_gtk_clrpicker.o \
 	monolib_gtk_dialog.o \
-	monolib_fontpicker.o \
-	monolib_filepicker.o \
+	monolib_gtk_fontpicker.o \
+	monolib_gtk_filepicker.o \
 	monolib_gtk_dirdlg.o \
 	monolib_gtk_filedlg.o \
 	monolib_gtk_fontdlg.o \
 	monolib_gtk_frame.o \
 	monolib_gtk_gauge.o \
-	monolib_gprint.o \
-	monolib_gvfs.o \
+	monolib_gtk_gnome_gprint.o \
+	monolib_gtk_gnome_gvfs.o \
 	monolib_gtk_infobar.o \
 	monolib_gtk_listbox.o \
 	monolib_gtk_mdi.o \
@@ -7289,8 +7562,63 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_textctrl.o \
 	monolib_gtk_textentry.o \
 	monolib_gtk_tglbtn.o \
-	monolib_treeentry_gtk.o
+	monolib_gtk_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
+	monolib_generic_accel.o \
+	monolib_generic_fdrepdlg.o \
+	monolib_filepickerg.o \
+	monolib_generic_listctrl.o \
+	monolib_prntdlgg.o \
+	monolib_generic_statusbr.o \
+	monolib_fontdlgg.o \
+	monolib_gtk3_artgtk.o \
+	monolib_gtk3_bmpbuttn.o \
+	monolib_gtk3_button.o \
+	monolib_gtk3_checkbox.o \
+	monolib_gtk3_checklst.o \
+	monolib_gtk3_choice.o \
+	monolib_gtk3_collpane.o \
+	monolib_gtk3_colordlg.o \
+	monolib_gtk3_combobox.o \
+	monolib_gtk3_control.o \
+	monolib_gtk3_clrpicker.o \
+	monolib_gtk3_dialog.o \
+	monolib_gtk3_fontpicker.o \
+	monolib_gtk3_filepicker.o \
+	monolib_gtk3_dirdlg.o \
+	monolib_gtk3_filedlg.o \
+	monolib_gtk3_fontdlg.o \
+	monolib_gtk3_frame.o \
+	monolib_gtk3_gauge.o \
+	monolib_gtk3_gnome_gprint.o \
+	monolib_gtk3_gnome_gvfs.o \
+	monolib_gtk3_infobar.o \
+	monolib_gtk3_listbox.o \
+	monolib_gtk3_mdi.o \
+	monolib_gtk3_menu.o \
+	monolib_gtk3_mnemonics.o \
+	monolib_gtk3_msgdlg.o \
+	monolib_gtk3_nativewin.o \
+	monolib_gtk3_notebook.o \
+	monolib_gtk3_print.o \
+	monolib_gtk3_radiobox.o \
+	monolib_gtk3_radiobut.o \
+	monolib_gtk3_scrolbar.o \
+	monolib_gtk3_scrolwin.o \
+	monolib_gtk3_slider.o \
+	monolib_gtk3_spinbutt.o \
+	monolib_gtk3_spinctrl.o \
+	monolib_gtk3_statbmp.o \
+	monolib_gtk3_statbox.o \
+	monolib_gtk3_statline.o \
+	monolib_gtk3_stattext.o \
+	monolib_gtk3_toolbar.o \
+	monolib_gtk3_textctrl.o \
+	monolib_gtk3_textentry.o \
+	monolib_gtk3_tglbtn.o \
+	monolib_gtk3_treeentry_gtk.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_motif_accel.o \
 	monolib_motif_app.o \
@@ -7749,7 +8077,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
 	monolib_gtk_app.o \
-	monolib_assertdlg_gtk.o \
+	monolib_gtk_assertdlg_gtk.o \
 	monolib_gtk_bitmap.o \
 	monolib_gtk_brush.o \
 	monolib_gtk_clipbrd.o \
@@ -7762,14 +8090,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_dcscreen.o \
 	monolib_gtk_dnd.o \
 	monolib_gtk_evtloop.o \
-	monolib_filectrl.o \
-	monolib_filehistory.o \
+	monolib_gtk_filectrl.o \
+	monolib_gtk_filehistory.o \
 	monolib_gtk_font.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
-	monolib_private.o \
+	monolib_gtk_private.o \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
@@ -7780,6 +8108,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_win_gtk.o \
 	monolib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_generic_caret.o \
+	monolib_generic_imaglist.o \
+	monolib_unix_dialup.o \
+	monolib_displayx11.o \
+	monolib_unix_fontenum.o \
+	monolib_unix_fontutil.o \
+	monolib_uiactionx11.o \
+	monolib_utilsx11.o \
+	monolib_generic_icon.o \
+	monolib_paletteg.o \
+	monolib_gtk3_app.o \
+	monolib_gtk3_assertdlg_gtk.o \
+	monolib_gtk3_bitmap.o \
+	monolib_gtk3_brush.o \
+	monolib_gtk3_clipbrd.o \
+	monolib_gtk3_colour.o \
+	monolib_gtk3_cursor.o \
+	monolib_gtk3_dataobj.o \
+	monolib_gtk3_dc.o \
+	monolib_gtk3_dcclient.o \
+	monolib_gtk3_dcmemory.o \
+	monolib_gtk3_dcscreen.o \
+	monolib_gtk3_dnd.o \
+	monolib_gtk3_evtloop.o \
+	monolib_gtk3_filectrl.o \
+	monolib_gtk3_filehistory.o \
+	monolib_gtk3_font.o \
+	monolib_gtk3_sockgtk.o \
+	monolib_gtk3_minifram.o \
+	monolib_gtk3_pen.o \
+	monolib_gtk3_popupwin.o \
+	monolib_gtk3_private.o \
+	monolib_gtk3_region.o \
+	monolib_gtk3_renderer.o \
+	monolib_gtk3_settings.o \
+	monolib_gtk3_timer.o \
+	monolib_gtk3_tooltip.o \
+	monolib_gtk3_toplevel.o \
+	monolib_gtk3_utilsgtk.o \
+	monolib_gtk3_win_gtk.o \
+	monolib_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
 	monolib_generic_caret.o \
@@ -8983,7 +9354,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
 	coredll_gtk_app.o \
-	coredll_assertdlg_gtk.o \
+	coredll_gtk_assertdlg_gtk.o \
 	coredll_gtk_bitmap.o \
 	coredll_gtk_brush.o \
 	coredll_gtk_clipbrd.o \
@@ -8996,14 +9367,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_dcscreen.o \
 	coredll_gtk_dnd.o \
 	coredll_gtk_evtloop.o \
-	coredll_filectrl.o \
-	coredll_filehistory.o \
+	coredll_gtk_filectrl.o \
+	coredll_gtk_filehistory.o \
 	coredll_gtk_font.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
-	coredll_private.o \
+	coredll_gtk_private.o \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
@@ -9014,6 +9385,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_win_gtk.o \
 	coredll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_generic_caret.o \
+	coredll_generic_imaglist.o \
+	coredll_unix_dialup.o \
+	coredll_displayx11.o \
+	coredll_unix_fontenum.o \
+	coredll_unix_fontutil.o \
+	coredll_uiactionx11.o \
+	coredll_utilsx11.o \
+	coredll_generic_icon.o \
+	coredll_paletteg.o \
+	coredll_gtk3_app.o \
+	coredll_gtk3_assertdlg_gtk.o \
+	coredll_gtk3_bitmap.o \
+	coredll_gtk3_brush.o \
+	coredll_gtk3_clipbrd.o \
+	coredll_gtk3_colour.o \
+	coredll_gtk3_cursor.o \
+	coredll_gtk3_dataobj.o \
+	coredll_gtk3_dc.o \
+	coredll_gtk3_dcclient.o \
+	coredll_gtk3_dcmemory.o \
+	coredll_gtk3_dcscreen.o \
+	coredll_gtk3_dnd.o \
+	coredll_gtk3_evtloop.o \
+	coredll_gtk3_filectrl.o \
+	coredll_gtk3_filehistory.o \
+	coredll_gtk3_font.o \
+	coredll_gtk3_sockgtk.o \
+	coredll_gtk3_minifram.o \
+	coredll_gtk3_pen.o \
+	coredll_gtk3_popupwin.o \
+	coredll_gtk3_private.o \
+	coredll_gtk3_region.o \
+	coredll_gtk3_renderer.o \
+	coredll_gtk3_settings.o \
+	coredll_gtk3_timer.o \
+	coredll_gtk3_tooltip.o \
+	coredll_gtk3_toplevel.o \
+	coredll_gtk3_utilsgtk.o \
+	coredll_gtk3_win_gtk.o \
+	coredll_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
 	coredll_generic_caret.o \
@@ -9352,27 +9766,27 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
 	coredll_fontdlgg.o \
-	coredll_artgtk.o \
+	coredll_gtk_artgtk.o \
 	coredll_gtk_bmpbuttn.o \
 	coredll_gtk_button.o \
 	coredll_gtk_checkbox.o \
 	coredll_gtk_checklst.o \
 	coredll_gtk_choice.o \
-	coredll_collpane.o \
+	coredll_gtk_collpane.o \
 	coredll_gtk_colordlg.o \
 	coredll_gtk_combobox.o \
 	coredll_gtk_control.o \
-	coredll_clrpicker.o \
+	coredll_gtk_clrpicker.o \
 	coredll_gtk_dialog.o \
-	coredll_fontpicker.o \
-	coredll_filepicker.o \
+	coredll_gtk_fontpicker.o \
+	coredll_gtk_filepicker.o \
 	coredll_gtk_dirdlg.o \
 	coredll_gtk_filedlg.o \
 	coredll_gtk_fontdlg.o \
 	coredll_gtk_frame.o \
 	coredll_gtk_gauge.o \
-	coredll_gprint.o \
-	coredll_gvfs.o \
+	coredll_gtk_gnome_gprint.o \
+	coredll_gtk_gnome_gvfs.o \
 	coredll_gtk_infobar.o \
 	coredll_gtk_listbox.o \
 	coredll_gtk_mdi.o \
@@ -9397,8 +9811,63 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_textctrl.o \
 	coredll_gtk_textentry.o \
 	coredll_gtk_tglbtn.o \
-	coredll_treeentry_gtk.o
+	coredll_gtk_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
+	coredll_generic_accel.o \
+	coredll_generic_fdrepdlg.o \
+	coredll_filepickerg.o \
+	coredll_generic_listctrl.o \
+	coredll_prntdlgg.o \
+	coredll_generic_statusbr.o \
+	coredll_fontdlgg.o \
+	coredll_gtk3_artgtk.o \
+	coredll_gtk3_bmpbuttn.o \
+	coredll_gtk3_button.o \
+	coredll_gtk3_checkbox.o \
+	coredll_gtk3_checklst.o \
+	coredll_gtk3_choice.o \
+	coredll_gtk3_collpane.o \
+	coredll_gtk3_colordlg.o \
+	coredll_gtk3_combobox.o \
+	coredll_gtk3_control.o \
+	coredll_gtk3_clrpicker.o \
+	coredll_gtk3_dialog.o \
+	coredll_gtk3_fontpicker.o \
+	coredll_gtk3_filepicker.o \
+	coredll_gtk3_dirdlg.o \
+	coredll_gtk3_filedlg.o \
+	coredll_gtk3_fontdlg.o \
+	coredll_gtk3_frame.o \
+	coredll_gtk3_gauge.o \
+	coredll_gtk3_gnome_gprint.o \
+	coredll_gtk3_gnome_gvfs.o \
+	coredll_gtk3_infobar.o \
+	coredll_gtk3_listbox.o \
+	coredll_gtk3_mdi.o \
+	coredll_gtk3_menu.o \
+	coredll_gtk3_mnemonics.o \
+	coredll_gtk3_msgdlg.o \
+	coredll_gtk3_nativewin.o \
+	coredll_gtk3_notebook.o \
+	coredll_gtk3_print.o \
+	coredll_gtk3_radiobox.o \
+	coredll_gtk3_radiobut.o \
+	coredll_gtk3_scrolbar.o \
+	coredll_gtk3_scrolwin.o \
+	coredll_gtk3_slider.o \
+	coredll_gtk3_spinbutt.o \
+	coredll_gtk3_spinctrl.o \
+	coredll_gtk3_statbmp.o \
+	coredll_gtk3_statbox.o \
+	coredll_gtk3_statline.o \
+	coredll_gtk3_stattext.o \
+	coredll_gtk3_toolbar.o \
+	coredll_gtk3_textctrl.o \
+	coredll_gtk3_textentry.o \
+	coredll_gtk3_tglbtn.o \
+	coredll_gtk3_treeentry_gtk.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_motif_accel.o \
 	coredll_motif_app.o \
@@ -9857,7 +10326,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
 	coredll_gtk_app.o \
-	coredll_assertdlg_gtk.o \
+	coredll_gtk_assertdlg_gtk.o \
 	coredll_gtk_bitmap.o \
 	coredll_gtk_brush.o \
 	coredll_gtk_clipbrd.o \
@@ -9870,14 +10339,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_dcscreen.o \
 	coredll_gtk_dnd.o \
 	coredll_gtk_evtloop.o \
-	coredll_filectrl.o \
-	coredll_filehistory.o \
+	coredll_gtk_filectrl.o \
+	coredll_gtk_filehistory.o \
 	coredll_gtk_font.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
-	coredll_private.o \
+	coredll_gtk_private.o \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
@@ -9888,6 +10357,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_win_gtk.o \
 	coredll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_generic_caret.o \
+	coredll_generic_imaglist.o \
+	coredll_unix_dialup.o \
+	coredll_displayx11.o \
+	coredll_unix_fontenum.o \
+	coredll_unix_fontutil.o \
+	coredll_uiactionx11.o \
+	coredll_utilsx11.o \
+	coredll_generic_icon.o \
+	coredll_paletteg.o \
+	coredll_gtk3_app.o \
+	coredll_gtk3_assertdlg_gtk.o \
+	coredll_gtk3_bitmap.o \
+	coredll_gtk3_brush.o \
+	coredll_gtk3_clipbrd.o \
+	coredll_gtk3_colour.o \
+	coredll_gtk3_cursor.o \
+	coredll_gtk3_dataobj.o \
+	coredll_gtk3_dc.o \
+	coredll_gtk3_dcclient.o \
+	coredll_gtk3_dcmemory.o \
+	coredll_gtk3_dcscreen.o \
+	coredll_gtk3_dnd.o \
+	coredll_gtk3_evtloop.o \
+	coredll_gtk3_filectrl.o \
+	coredll_gtk3_filehistory.o \
+	coredll_gtk3_font.o \
+	coredll_gtk3_sockgtk.o \
+	coredll_gtk3_minifram.o \
+	coredll_gtk3_pen.o \
+	coredll_gtk3_popupwin.o \
+	coredll_gtk3_private.o \
+	coredll_gtk3_region.o \
+	coredll_gtk3_renderer.o \
+	coredll_gtk3_settings.o \
+	coredll_gtk3_timer.o \
+	coredll_gtk3_tooltip.o \
+	coredll_gtk3_toplevel.o \
+	coredll_gtk3_utilsgtk.o \
+	coredll_gtk3_win_gtk.o \
+	coredll_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
 	coredll_generic_caret.o \
@@ -10567,7 +11079,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
 	corelib_gtk_app.o \
-	corelib_assertdlg_gtk.o \
+	corelib_gtk_assertdlg_gtk.o \
 	corelib_gtk_bitmap.o \
 	corelib_gtk_brush.o \
 	corelib_gtk_clipbrd.o \
@@ -10580,14 +11092,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_dcscreen.o \
 	corelib_gtk_dnd.o \
 	corelib_gtk_evtloop.o \
-	corelib_filectrl.o \
-	corelib_filehistory.o \
+	corelib_gtk_filectrl.o \
+	corelib_gtk_filehistory.o \
 	corelib_gtk_font.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
-	corelib_private.o \
+	corelib_gtk_private.o \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
@@ -10598,6 +11110,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_win_gtk.o \
 	corelib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_generic_caret.o \
+	corelib_generic_imaglist.o \
+	corelib_unix_dialup.o \
+	corelib_displayx11.o \
+	corelib_unix_fontenum.o \
+	corelib_unix_fontutil.o \
+	corelib_uiactionx11.o \
+	corelib_utilsx11.o \
+	corelib_generic_icon.o \
+	corelib_paletteg.o \
+	corelib_gtk3_app.o \
+	corelib_gtk3_assertdlg_gtk.o \
+	corelib_gtk3_bitmap.o \
+	corelib_gtk3_brush.o \
+	corelib_gtk3_clipbrd.o \
+	corelib_gtk3_colour.o \
+	corelib_gtk3_cursor.o \
+	corelib_gtk3_dataobj.o \
+	corelib_gtk3_dc.o \
+	corelib_gtk3_dcclient.o \
+	corelib_gtk3_dcmemory.o \
+	corelib_gtk3_dcscreen.o \
+	corelib_gtk3_dnd.o \
+	corelib_gtk3_evtloop.o \
+	corelib_gtk3_filectrl.o \
+	corelib_gtk3_filehistory.o \
+	corelib_gtk3_font.o \
+	corelib_gtk3_sockgtk.o \
+	corelib_gtk3_minifram.o \
+	corelib_gtk3_pen.o \
+	corelib_gtk3_popupwin.o \
+	corelib_gtk3_private.o \
+	corelib_gtk3_region.o \
+	corelib_gtk3_renderer.o \
+	corelib_gtk3_settings.o \
+	corelib_gtk3_timer.o \
+	corelib_gtk3_tooltip.o \
+	corelib_gtk3_toplevel.o \
+	corelib_gtk3_utilsgtk.o \
+	corelib_gtk3_win_gtk.o \
+	corelib_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
 	corelib_generic_caret.o \
@@ -10936,27 +11491,27 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
 	corelib_fontdlgg.o \
-	corelib_artgtk.o \
+	corelib_gtk_artgtk.o \
 	corelib_gtk_bmpbuttn.o \
 	corelib_gtk_button.o \
 	corelib_gtk_checkbox.o \
 	corelib_gtk_checklst.o \
 	corelib_gtk_choice.o \
-	corelib_collpane.o \
+	corelib_gtk_collpane.o \
 	corelib_gtk_colordlg.o \
 	corelib_gtk_combobox.o \
 	corelib_gtk_control.o \
-	corelib_clrpicker.o \
+	corelib_gtk_clrpicker.o \
 	corelib_gtk_dialog.o \
-	corelib_fontpicker.o \
-	corelib_filepicker.o \
+	corelib_gtk_fontpicker.o \
+	corelib_gtk_filepicker.o \
 	corelib_gtk_dirdlg.o \
 	corelib_gtk_filedlg.o \
 	corelib_gtk_fontdlg.o \
 	corelib_gtk_frame.o \
 	corelib_gtk_gauge.o \
-	corelib_gprint.o \
-	corelib_gvfs.o \
+	corelib_gtk_gnome_gprint.o \
+	corelib_gtk_gnome_gvfs.o \
 	corelib_gtk_infobar.o \
 	corelib_gtk_listbox.o \
 	corelib_gtk_mdi.o \
@@ -10981,8 +11536,63 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_textctrl.o \
 	corelib_gtk_textentry.o \
 	corelib_gtk_tglbtn.o \
-	corelib_treeentry_gtk.o
+	corelib_gtk_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
+	corelib_generic_accel.o \
+	corelib_generic_fdrepdlg.o \
+	corelib_filepickerg.o \
+	corelib_generic_listctrl.o \
+	corelib_prntdlgg.o \
+	corelib_generic_statusbr.o \
+	corelib_fontdlgg.o \
+	corelib_gtk3_artgtk.o \
+	corelib_gtk3_bmpbuttn.o \
+	corelib_gtk3_button.o \
+	corelib_gtk3_checkbox.o \
+	corelib_gtk3_checklst.o \
+	corelib_gtk3_choice.o \
+	corelib_gtk3_collpane.o \
+	corelib_gtk3_colordlg.o \
+	corelib_gtk3_combobox.o \
+	corelib_gtk3_control.o \
+	corelib_gtk3_clrpicker.o \
+	corelib_gtk3_dialog.o \
+	corelib_gtk3_fontpicker.o \
+	corelib_gtk3_filepicker.o \
+	corelib_gtk3_dirdlg.o \
+	corelib_gtk3_filedlg.o \
+	corelib_gtk3_fontdlg.o \
+	corelib_gtk3_frame.o \
+	corelib_gtk3_gauge.o \
+	corelib_gtk3_gnome_gprint.o \
+	corelib_gtk3_gnome_gvfs.o \
+	corelib_gtk3_infobar.o \
+	corelib_gtk3_listbox.o \
+	corelib_gtk3_mdi.o \
+	corelib_gtk3_menu.o \
+	corelib_gtk3_mnemonics.o \
+	corelib_gtk3_msgdlg.o \
+	corelib_gtk3_nativewin.o \
+	corelib_gtk3_notebook.o \
+	corelib_gtk3_print.o \
+	corelib_gtk3_radiobox.o \
+	corelib_gtk3_radiobut.o \
+	corelib_gtk3_scrolbar.o \
+	corelib_gtk3_scrolwin.o \
+	corelib_gtk3_slider.o \
+	corelib_gtk3_spinbutt.o \
+	corelib_gtk3_spinctrl.o \
+	corelib_gtk3_statbmp.o \
+	corelib_gtk3_statbox.o \
+	corelib_gtk3_statline.o \
+	corelib_gtk3_stattext.o \
+	corelib_gtk3_toolbar.o \
+	corelib_gtk3_textctrl.o \
+	corelib_gtk3_textentry.o \
+	corelib_gtk3_tglbtn.o \
+	corelib_gtk3_treeentry_gtk.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_motif_accel.o \
 	corelib_motif_app.o \
@@ -11441,7 +12051,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
 	corelib_gtk_app.o \
-	corelib_assertdlg_gtk.o \
+	corelib_gtk_assertdlg_gtk.o \
 	corelib_gtk_bitmap.o \
 	corelib_gtk_brush.o \
 	corelib_gtk_clipbrd.o \
@@ -11454,14 +12064,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_dcscreen.o \
 	corelib_gtk_dnd.o \
 	corelib_gtk_evtloop.o \
-	corelib_filectrl.o \
-	corelib_filehistory.o \
+	corelib_gtk_filectrl.o \
+	corelib_gtk_filehistory.o \
 	corelib_gtk_font.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
-	corelib_private.o \
+	corelib_gtk_private.o \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
@@ -11472,6 +12082,49 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_win_gtk.o \
 	corelib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_generic_caret.o \
+	corelib_generic_imaglist.o \
+	corelib_unix_dialup.o \
+	corelib_displayx11.o \
+	corelib_unix_fontenum.o \
+	corelib_unix_fontutil.o \
+	corelib_uiactionx11.o \
+	corelib_utilsx11.o \
+	corelib_generic_icon.o \
+	corelib_paletteg.o \
+	corelib_gtk3_app.o \
+	corelib_gtk3_assertdlg_gtk.o \
+	corelib_gtk3_bitmap.o \
+	corelib_gtk3_brush.o \
+	corelib_gtk3_clipbrd.o \
+	corelib_gtk3_colour.o \
+	corelib_gtk3_cursor.o \
+	corelib_gtk3_dataobj.o \
+	corelib_gtk3_dc.o \
+	corelib_gtk3_dcclient.o \
+	corelib_gtk3_dcmemory.o \
+	corelib_gtk3_dcscreen.o \
+	corelib_gtk3_dnd.o \
+	corelib_gtk3_evtloop.o \
+	corelib_gtk3_filectrl.o \
+	corelib_gtk3_filehistory.o \
+	corelib_gtk3_font.o \
+	corelib_gtk3_sockgtk.o \
+	corelib_gtk3_minifram.o \
+	corelib_gtk3_pen.o \
+	corelib_gtk3_popupwin.o \
+	corelib_gtk3_private.o \
+	corelib_gtk3_region.o \
+	corelib_gtk3_renderer.o \
+	corelib_gtk3_settings.o \
+	corelib_gtk3_timer.o \
+	corelib_gtk3_tooltip.o \
+	corelib_gtk3_toplevel.o \
+	corelib_gtk3_utilsgtk.o \
+	corelib_gtk3_win_gtk.o \
+	corelib_gtk3_window.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
 	corelib_generic_caret.o \
@@ -15766,7 +16419,145 @@ monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 monodll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
-monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
+monodll_gtk3_artgtk.o: $(srcdir)/src/gtk3/artgtk.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/artgtk.cpp
+
+monodll_gtk3_bmpbuttn.o: $(srcdir)/src/gtk3/bmpbuttn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/bmpbuttn.cpp
+
+monodll_gtk3_button.o: $(srcdir)/src/gtk3/button.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/button.cpp
+
+monodll_gtk3_checkbox.o: $(srcdir)/src/gtk3/checkbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/checkbox.cpp
+
+monodll_gtk3_checklst.o: $(srcdir)/src/gtk3/checklst.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/checklst.cpp
+
+monodll_gtk3_choice.o: $(srcdir)/src/gtk3/choice.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/choice.cpp
+
+monodll_gtk3_collpane.o: $(srcdir)/src/gtk3/collpane.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/collpane.cpp
+
+monodll_gtk3_colordlg.o: $(srcdir)/src/gtk3/colordlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/colordlg.cpp
+
+monodll_gtk3_combobox.o: $(srcdir)/src/gtk3/combobox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/combobox.cpp
+
+monodll_gtk3_control.o: $(srcdir)/src/gtk3/control.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/control.cpp
+
+monodll_gtk3_clrpicker.o: $(srcdir)/src/gtk3/clrpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/clrpicker.cpp
+
+monodll_gtk3_dialog.o: $(srcdir)/src/gtk3/dialog.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dialog.cpp
+
+monodll_gtk3_fontpicker.o: $(srcdir)/src/gtk3/fontpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/fontpicker.cpp
+
+monodll_gtk3_filepicker.o: $(srcdir)/src/gtk3/filepicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/filepicker.cpp
+
+monodll_gtk3_dirdlg.o: $(srcdir)/src/gtk3/dirdlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dirdlg.cpp
+
+monodll_gtk3_filedlg.o: $(srcdir)/src/gtk3/filedlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/filedlg.cpp
+
+monodll_gtk3_fontdlg.o: $(srcdir)/src/gtk3/fontdlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/fontdlg.cpp
+
+monodll_gtk3_frame.o: $(srcdir)/src/gtk3/frame.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/frame.cpp
+
+monodll_gtk3_gauge.o: $(srcdir)/src/gtk3/gauge.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/gauge.cpp
+
+monodll_gtk3_gnome_gprint.o: $(srcdir)/src/gtk3/gnome/gprint.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gprint.cpp
+
+monodll_gtk3_gnome_gvfs.o: $(srcdir)/src/gtk3/gnome/gvfs.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gvfs.cpp
+
+monodll_gtk3_infobar.o: $(srcdir)/src/gtk3/infobar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/infobar.cpp
+
+monodll_gtk3_listbox.o: $(srcdir)/src/gtk3/listbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/listbox.cpp
+
+monodll_gtk3_mdi.o: $(srcdir)/src/gtk3/mdi.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/mdi.cpp
+
+monodll_gtk3_menu.o: $(srcdir)/src/gtk3/menu.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/menu.cpp
+
+monodll_gtk3_mnemonics.o: $(srcdir)/src/gtk3/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/mnemonics.cpp
+
+monodll_gtk3_msgdlg.o: $(srcdir)/src/gtk3/msgdlg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/msgdlg.cpp
+
+monodll_gtk3_nativewin.o: $(srcdir)/src/gtk3/nativewin.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/nativewin.cpp
+
+monodll_gtk3_notebook.o: $(srcdir)/src/gtk3/notebook.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/notebook.cpp
+
+monodll_gtk3_print.o: $(srcdir)/src/gtk3/print.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/print.cpp
+
+monodll_gtk3_radiobox.o: $(srcdir)/src/gtk3/radiobox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/radiobox.cpp
+
+monodll_gtk3_radiobut.o: $(srcdir)/src/gtk3/radiobut.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/radiobut.cpp
+
+monodll_gtk3_scrolbar.o: $(srcdir)/src/gtk3/scrolbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/scrolbar.cpp
+
+monodll_gtk3_scrolwin.o: $(srcdir)/src/gtk3/scrolwin.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/scrolwin.cpp
+
+monodll_gtk3_slider.o: $(srcdir)/src/gtk3/slider.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/slider.cpp
+
+monodll_gtk3_spinbutt.o: $(srcdir)/src/gtk3/spinbutt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/spinbutt.cpp
+
+monodll_gtk3_spinctrl.o: $(srcdir)/src/gtk3/spinctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/spinctrl.cpp
+
+monodll_gtk3_statbmp.o: $(srcdir)/src/gtk3/statbmp.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/statbmp.cpp
+
+monodll_gtk3_statbox.o: $(srcdir)/src/gtk3/statbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/statbox.cpp
+
+monodll_gtk3_statline.o: $(srcdir)/src/gtk3/statline.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/statline.cpp
+
+monodll_gtk3_stattext.o: $(srcdir)/src/gtk3/stattext.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/stattext.cpp
+
+monodll_gtk3_toolbar.o: $(srcdir)/src/gtk3/toolbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/toolbar.cpp
+
+monodll_gtk3_textctrl.o: $(srcdir)/src/gtk3/textctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/textctrl.cpp
+
+monodll_gtk3_textentry.o: $(srcdir)/src/gtk3/textentry.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/textentry.cpp
+
+monodll_gtk3_tglbtn.o: $(srcdir)/src/gtk3/tglbtn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/tglbtn.cpp
+
+monodll_gtk3_treeentry_gtk.o: $(srcdir)/src/gtk3/treeentry_gtk.c $(MONODLL_ODEP)
+	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk3/treeentry_gtk.c
+
+monodll_gtk_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
 monodll_gtk_bmpbuttn.o: $(srcdir)/src/gtk/bmpbuttn.cpp $(MONODLL_ODEP)
@@ -15784,7 +16575,7 @@ monodll_gtk_checklst.o: $(srcdir)/src/gtk/checklst.cpp $(MONODLL_ODEP)
 monodll_gtk_choice.o: $(srcdir)/src/gtk/choice.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/choice.cpp
 
-monodll_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONODLL_ODEP)
+monodll_gtk_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
 
 monodll_gtk_colordlg.o: $(srcdir)/src/gtk/colordlg.cpp $(MONODLL_ODEP)
@@ -15796,16 +16587,16 @@ monodll_gtk_combobox.o: $(srcdir)/src/gtk/combobox.cpp $(MONODLL_ODEP)
 monodll_gtk_control.o: $(srcdir)/src/gtk/control.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/control.cpp
 
-monodll_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONODLL_ODEP)
+monodll_gtk_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
 
 monodll_gtk_dialog.o: $(srcdir)/src/gtk/dialog.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dialog.cpp
 
-monodll_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONODLL_ODEP)
+monodll_gtk_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
 
-monodll_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONODLL_ODEP)
+monodll_gtk_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
 
 monodll_gtk_dirdlg.o: $(srcdir)/src/gtk/dirdlg.cpp $(MONODLL_ODEP)
@@ -15823,10 +16614,10 @@ monodll_gtk_frame.o: $(srcdir)/src/gtk/frame.cpp $(MONODLL_ODEP)
 monodll_gtk_gauge.o: $(srcdir)/src/gtk/gauge.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gauge.cpp
 
-monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
+monodll_gtk_gnome_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
-monodll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
+monodll_gtk_gnome_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 monodll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONODLL_ODEP)
@@ -15901,7 +16692,7 @@ monodll_gtk_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(MONODLL_ODEP)
 monodll_gtk_tglbtn.o: $(srcdir)/src/gtk/tglbtn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/tglbtn.cpp
 
-monodll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONODLL_ODEP)
+monodll_gtk_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
 monodll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONODLL_ODEP)
@@ -17545,6 +18336,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -17569,6 +18363,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
@@ -17587,6 +18384,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -17598,6 +18398,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
@@ -17611,6 +18414,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
 
@@ -17622,6 +18428,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
@@ -17635,6 +18444,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
@@ -17646,6 +18458,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
@@ -17661,6 +18476,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -17680,16 +18498,112 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_app.o: $(srcdir)/src/gtk3/app.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/app.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_assertdlg_gtk.o: $(srcdir)/src/gtk3/assertdlg_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/assertdlg_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_bitmap.o: $(srcdir)/src/gtk3/bitmap.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/bitmap.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_brush.o: $(srcdir)/src/gtk3/brush.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/brush.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_clipbrd.o: $(srcdir)/src/gtk3/clipbrd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/clipbrd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_colour.o: $(srcdir)/src/gtk3/colour.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/colour.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_cursor.o: $(srcdir)/src/gtk3/cursor.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/cursor.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dataobj.o: $(srcdir)/src/gtk3/dataobj.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dataobj.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dc.o: $(srcdir)/src/gtk3/dc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dc.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dnd.o: $(srcdir)/src/gtk3/dnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dnd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_evtloop.o: $(srcdir)/src/gtk3/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_filectrl.o: $(srcdir)/src/gtk3/filectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/filectrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_filehistory.o: $(srcdir)/src/gtk3/filehistory.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/filehistory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_font.o: $(srcdir)/src/gtk3/font.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_sockgtk.o: $(srcdir)/src/gtk3/sockgtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/sockgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_minifram.o: $(srcdir)/src/gtk3/minifram.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_pen.o: $(srcdir)/src/gtk3/pen.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/pen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_popupwin.o: $(srcdir)/src/gtk3/popupwin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/popupwin.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_private.o: $(srcdir)/src/gtk3/private.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/private.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_region.o: $(srcdir)/src/gtk3/region.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/region.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_renderer.o: $(srcdir)/src/gtk3/renderer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/renderer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_settings.o: $(srcdir)/src/gtk3/settings.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/settings.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_timer.o: $(srcdir)/src/gtk3/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_tooltip.o: $(srcdir)/src/gtk3/tooltip.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/tooltip.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_toplevel.o: $(srcdir)/src/gtk3/toplevel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/toplevel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_utilsgtk.o: $(srcdir)/src/gtk3/utilsgtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/utilsgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_win_gtk.o: $(srcdir)/src/gtk3/win_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/win_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_window.o: $(srcdir)/src/gtk3/window.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/window.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_app.o: $(srcdir)/src/gtk/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/app.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_bitmap.o: $(srcdir)/src/gtk/bitmap.cpp $(MONODLL_ODEP)
@@ -17728,10 +18642,10 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/filehistory.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONODLL_ODEP)
@@ -17749,7 +18663,7 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_popupwin.o: $(srcdir)/src/gtk/popupwin.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/popupwin.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_private.o: $(srcdir)/src/gtk/private.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_private.o: $(srcdir)/src/gtk/private.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/private.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_region.o: $(srcdir)/src/gtk/region.cpp $(MONODLL_ODEP)
@@ -18616,6 +19530,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@monodll_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -18627,6 +19544,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -18657,6 +19577,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -18691,6 +19614,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
 
@@ -18717,6 +19643,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
@@ -18748,6 +19677,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
@@ -18777,6 +19709,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
@@ -21064,7 +21999,145 @@ monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 monolib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
-monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
+monolib_gtk3_artgtk.o: $(srcdir)/src/gtk3/artgtk.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/artgtk.cpp
+
+monolib_gtk3_bmpbuttn.o: $(srcdir)/src/gtk3/bmpbuttn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/bmpbuttn.cpp
+
+monolib_gtk3_button.o: $(srcdir)/src/gtk3/button.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/button.cpp
+
+monolib_gtk3_checkbox.o: $(srcdir)/src/gtk3/checkbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/checkbox.cpp
+
+monolib_gtk3_checklst.o: $(srcdir)/src/gtk3/checklst.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/checklst.cpp
+
+monolib_gtk3_choice.o: $(srcdir)/src/gtk3/choice.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/choice.cpp
+
+monolib_gtk3_collpane.o: $(srcdir)/src/gtk3/collpane.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/collpane.cpp
+
+monolib_gtk3_colordlg.o: $(srcdir)/src/gtk3/colordlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/colordlg.cpp
+
+monolib_gtk3_combobox.o: $(srcdir)/src/gtk3/combobox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/combobox.cpp
+
+monolib_gtk3_control.o: $(srcdir)/src/gtk3/control.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/control.cpp
+
+monolib_gtk3_clrpicker.o: $(srcdir)/src/gtk3/clrpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/clrpicker.cpp
+
+monolib_gtk3_dialog.o: $(srcdir)/src/gtk3/dialog.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dialog.cpp
+
+monolib_gtk3_fontpicker.o: $(srcdir)/src/gtk3/fontpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/fontpicker.cpp
+
+monolib_gtk3_filepicker.o: $(srcdir)/src/gtk3/filepicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/filepicker.cpp
+
+monolib_gtk3_dirdlg.o: $(srcdir)/src/gtk3/dirdlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dirdlg.cpp
+
+monolib_gtk3_filedlg.o: $(srcdir)/src/gtk3/filedlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/filedlg.cpp
+
+monolib_gtk3_fontdlg.o: $(srcdir)/src/gtk3/fontdlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/fontdlg.cpp
+
+monolib_gtk3_frame.o: $(srcdir)/src/gtk3/frame.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/frame.cpp
+
+monolib_gtk3_gauge.o: $(srcdir)/src/gtk3/gauge.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/gauge.cpp
+
+monolib_gtk3_gnome_gprint.o: $(srcdir)/src/gtk3/gnome/gprint.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gprint.cpp
+
+monolib_gtk3_gnome_gvfs.o: $(srcdir)/src/gtk3/gnome/gvfs.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gvfs.cpp
+
+monolib_gtk3_infobar.o: $(srcdir)/src/gtk3/infobar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/infobar.cpp
+
+monolib_gtk3_listbox.o: $(srcdir)/src/gtk3/listbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/listbox.cpp
+
+monolib_gtk3_mdi.o: $(srcdir)/src/gtk3/mdi.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/mdi.cpp
+
+monolib_gtk3_menu.o: $(srcdir)/src/gtk3/menu.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/menu.cpp
+
+monolib_gtk3_mnemonics.o: $(srcdir)/src/gtk3/mnemonics.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/mnemonics.cpp
+
+monolib_gtk3_msgdlg.o: $(srcdir)/src/gtk3/msgdlg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/msgdlg.cpp
+
+monolib_gtk3_nativewin.o: $(srcdir)/src/gtk3/nativewin.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/nativewin.cpp
+
+monolib_gtk3_notebook.o: $(srcdir)/src/gtk3/notebook.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/notebook.cpp
+
+monolib_gtk3_print.o: $(srcdir)/src/gtk3/print.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/print.cpp
+
+monolib_gtk3_radiobox.o: $(srcdir)/src/gtk3/radiobox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/radiobox.cpp
+
+monolib_gtk3_radiobut.o: $(srcdir)/src/gtk3/radiobut.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/radiobut.cpp
+
+monolib_gtk3_scrolbar.o: $(srcdir)/src/gtk3/scrolbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/scrolbar.cpp
+
+monolib_gtk3_scrolwin.o: $(srcdir)/src/gtk3/scrolwin.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/scrolwin.cpp
+
+monolib_gtk3_slider.o: $(srcdir)/src/gtk3/slider.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/slider.cpp
+
+monolib_gtk3_spinbutt.o: $(srcdir)/src/gtk3/spinbutt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/spinbutt.cpp
+
+monolib_gtk3_spinctrl.o: $(srcdir)/src/gtk3/spinctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/spinctrl.cpp
+
+monolib_gtk3_statbmp.o: $(srcdir)/src/gtk3/statbmp.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/statbmp.cpp
+
+monolib_gtk3_statbox.o: $(srcdir)/src/gtk3/statbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/statbox.cpp
+
+monolib_gtk3_statline.o: $(srcdir)/src/gtk3/statline.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/statline.cpp
+
+monolib_gtk3_stattext.o: $(srcdir)/src/gtk3/stattext.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/stattext.cpp
+
+monolib_gtk3_toolbar.o: $(srcdir)/src/gtk3/toolbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/toolbar.cpp
+
+monolib_gtk3_textctrl.o: $(srcdir)/src/gtk3/textctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/textctrl.cpp
+
+monolib_gtk3_textentry.o: $(srcdir)/src/gtk3/textentry.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/textentry.cpp
+
+monolib_gtk3_tglbtn.o: $(srcdir)/src/gtk3/tglbtn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/tglbtn.cpp
+
+monolib_gtk3_treeentry_gtk.o: $(srcdir)/src/gtk3/treeentry_gtk.c $(MONOLIB_ODEP)
+	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk3/treeentry_gtk.c
+
+monolib_gtk_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
 monolib_gtk_bmpbuttn.o: $(srcdir)/src/gtk/bmpbuttn.cpp $(MONOLIB_ODEP)
@@ -21082,7 +22155,7 @@ monolib_gtk_checklst.o: $(srcdir)/src/gtk/checklst.cpp $(MONOLIB_ODEP)
 monolib_gtk_choice.o: $(srcdir)/src/gtk/choice.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/choice.cpp
 
-monolib_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONOLIB_ODEP)
+monolib_gtk_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
 
 monolib_gtk_colordlg.o: $(srcdir)/src/gtk/colordlg.cpp $(MONOLIB_ODEP)
@@ -21094,16 +22167,16 @@ monolib_gtk_combobox.o: $(srcdir)/src/gtk/combobox.cpp $(MONOLIB_ODEP)
 monolib_gtk_control.o: $(srcdir)/src/gtk/control.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/control.cpp
 
-monolib_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONOLIB_ODEP)
+monolib_gtk_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
 
 monolib_gtk_dialog.o: $(srcdir)/src/gtk/dialog.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dialog.cpp
 
-monolib_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONOLIB_ODEP)
+monolib_gtk_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
 
-monolib_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONOLIB_ODEP)
+monolib_gtk_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
 
 monolib_gtk_dirdlg.o: $(srcdir)/src/gtk/dirdlg.cpp $(MONOLIB_ODEP)
@@ -21121,10 +22194,10 @@ monolib_gtk_frame.o: $(srcdir)/src/gtk/frame.cpp $(MONOLIB_ODEP)
 monolib_gtk_gauge.o: $(srcdir)/src/gtk/gauge.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gauge.cpp
 
-monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
+monolib_gtk_gnome_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
-monolib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
+monolib_gtk_gnome_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 monolib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONOLIB_ODEP)
@@ -21199,7 +22272,7 @@ monolib_gtk_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(MONOLIB_ODEP)
 monolib_gtk_tglbtn.o: $(srcdir)/src/gtk/tglbtn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/tglbtn.cpp
 
-monolib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONOLIB_ODEP)
+monolib_gtk_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
 monolib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONOLIB_ODEP)
@@ -22843,6 +23916,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -22867,6 +23943,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
@@ -22885,6 +23964,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -22896,6 +23978,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
@@ -22909,6 +23994,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
 
@@ -22920,6 +24008,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
@@ -22933,6 +24024,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
@@ -22944,6 +24038,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
@@ -22959,6 +24056,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -22978,16 +24078,112 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_app.o: $(srcdir)/src/gtk3/app.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/app.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_assertdlg_gtk.o: $(srcdir)/src/gtk3/assertdlg_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/assertdlg_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_bitmap.o: $(srcdir)/src/gtk3/bitmap.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/bitmap.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_brush.o: $(srcdir)/src/gtk3/brush.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/brush.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_clipbrd.o: $(srcdir)/src/gtk3/clipbrd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/clipbrd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_colour.o: $(srcdir)/src/gtk3/colour.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/colour.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_cursor.o: $(srcdir)/src/gtk3/cursor.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/cursor.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dataobj.o: $(srcdir)/src/gtk3/dataobj.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dataobj.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dc.o: $(srcdir)/src/gtk3/dc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dc.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dnd.o: $(srcdir)/src/gtk3/dnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dnd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_evtloop.o: $(srcdir)/src/gtk3/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_filectrl.o: $(srcdir)/src/gtk3/filectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/filectrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_filehistory.o: $(srcdir)/src/gtk3/filehistory.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/filehistory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_font.o: $(srcdir)/src/gtk3/font.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_sockgtk.o: $(srcdir)/src/gtk3/sockgtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/sockgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_minifram.o: $(srcdir)/src/gtk3/minifram.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_pen.o: $(srcdir)/src/gtk3/pen.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/pen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_popupwin.o: $(srcdir)/src/gtk3/popupwin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/popupwin.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_private.o: $(srcdir)/src/gtk3/private.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/private.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_region.o: $(srcdir)/src/gtk3/region.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/region.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_renderer.o: $(srcdir)/src/gtk3/renderer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/renderer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_settings.o: $(srcdir)/src/gtk3/settings.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/settings.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_timer.o: $(srcdir)/src/gtk3/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_tooltip.o: $(srcdir)/src/gtk3/tooltip.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/tooltip.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_toplevel.o: $(srcdir)/src/gtk3/toplevel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/toplevel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_utilsgtk.o: $(srcdir)/src/gtk3/utilsgtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/utilsgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_win_gtk.o: $(srcdir)/src/gtk3/win_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/win_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_window.o: $(srcdir)/src/gtk3/window.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/window.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_app.o: $(srcdir)/src/gtk/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/app.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_bitmap.o: $(srcdir)/src/gtk/bitmap.cpp $(MONOLIB_ODEP)
@@ -23026,10 +24222,10 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/filehistory.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONOLIB_ODEP)
@@ -23047,7 +24243,7 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_popupwin.o: $(srcdir)/src/gtk/popupwin.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/popupwin.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_private.o: $(srcdir)/src/gtk/private.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_private.o: $(srcdir)/src/gtk/private.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/private.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_region.o: $(srcdir)/src/gtk/region.cpp $(MONOLIB_ODEP)
@@ -23914,6 +25110,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@monolib_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -23925,6 +25124,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -23955,6 +25157,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -23989,6 +25194,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
 
@@ -24015,6 +25223,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
@@ -24046,6 +25257,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
@@ -24075,6 +25289,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
@@ -27082,7 +28299,145 @@ coredll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(COREDLL_ODEP)
 coredll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
-coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
+coredll_gtk3_artgtk.o: $(srcdir)/src/gtk3/artgtk.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/artgtk.cpp
+
+coredll_gtk3_bmpbuttn.o: $(srcdir)/src/gtk3/bmpbuttn.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/bmpbuttn.cpp
+
+coredll_gtk3_button.o: $(srcdir)/src/gtk3/button.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/button.cpp
+
+coredll_gtk3_checkbox.o: $(srcdir)/src/gtk3/checkbox.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/checkbox.cpp
+
+coredll_gtk3_checklst.o: $(srcdir)/src/gtk3/checklst.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/checklst.cpp
+
+coredll_gtk3_choice.o: $(srcdir)/src/gtk3/choice.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/choice.cpp
+
+coredll_gtk3_collpane.o: $(srcdir)/src/gtk3/collpane.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/collpane.cpp
+
+coredll_gtk3_colordlg.o: $(srcdir)/src/gtk3/colordlg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/colordlg.cpp
+
+coredll_gtk3_combobox.o: $(srcdir)/src/gtk3/combobox.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/combobox.cpp
+
+coredll_gtk3_control.o: $(srcdir)/src/gtk3/control.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/control.cpp
+
+coredll_gtk3_clrpicker.o: $(srcdir)/src/gtk3/clrpicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/clrpicker.cpp
+
+coredll_gtk3_dialog.o: $(srcdir)/src/gtk3/dialog.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dialog.cpp
+
+coredll_gtk3_fontpicker.o: $(srcdir)/src/gtk3/fontpicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/fontpicker.cpp
+
+coredll_gtk3_filepicker.o: $(srcdir)/src/gtk3/filepicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/filepicker.cpp
+
+coredll_gtk3_dirdlg.o: $(srcdir)/src/gtk3/dirdlg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dirdlg.cpp
+
+coredll_gtk3_filedlg.o: $(srcdir)/src/gtk3/filedlg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/filedlg.cpp
+
+coredll_gtk3_fontdlg.o: $(srcdir)/src/gtk3/fontdlg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/fontdlg.cpp
+
+coredll_gtk3_frame.o: $(srcdir)/src/gtk3/frame.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/frame.cpp
+
+coredll_gtk3_gauge.o: $(srcdir)/src/gtk3/gauge.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/gauge.cpp
+
+coredll_gtk3_gnome_gprint.o: $(srcdir)/src/gtk3/gnome/gprint.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gprint.cpp
+
+coredll_gtk3_gnome_gvfs.o: $(srcdir)/src/gtk3/gnome/gvfs.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gvfs.cpp
+
+coredll_gtk3_infobar.o: $(srcdir)/src/gtk3/infobar.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/infobar.cpp
+
+coredll_gtk3_listbox.o: $(srcdir)/src/gtk3/listbox.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/listbox.cpp
+
+coredll_gtk3_mdi.o: $(srcdir)/src/gtk3/mdi.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/mdi.cpp
+
+coredll_gtk3_menu.o: $(srcdir)/src/gtk3/menu.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/menu.cpp
+
+coredll_gtk3_mnemonics.o: $(srcdir)/src/gtk3/mnemonics.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/mnemonics.cpp
+
+coredll_gtk3_msgdlg.o: $(srcdir)/src/gtk3/msgdlg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/msgdlg.cpp
+
+coredll_gtk3_nativewin.o: $(srcdir)/src/gtk3/nativewin.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/nativewin.cpp
+
+coredll_gtk3_notebook.o: $(srcdir)/src/gtk3/notebook.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/notebook.cpp
+
+coredll_gtk3_print.o: $(srcdir)/src/gtk3/print.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/print.cpp
+
+coredll_gtk3_radiobox.o: $(srcdir)/src/gtk3/radiobox.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/radiobox.cpp
+
+coredll_gtk3_radiobut.o: $(srcdir)/src/gtk3/radiobut.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/radiobut.cpp
+
+coredll_gtk3_scrolbar.o: $(srcdir)/src/gtk3/scrolbar.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/scrolbar.cpp
+
+coredll_gtk3_scrolwin.o: $(srcdir)/src/gtk3/scrolwin.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/scrolwin.cpp
+
+coredll_gtk3_slider.o: $(srcdir)/src/gtk3/slider.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/slider.cpp
+
+coredll_gtk3_spinbutt.o: $(srcdir)/src/gtk3/spinbutt.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/spinbutt.cpp
+
+coredll_gtk3_spinctrl.o: $(srcdir)/src/gtk3/spinctrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/spinctrl.cpp
+
+coredll_gtk3_statbmp.o: $(srcdir)/src/gtk3/statbmp.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/statbmp.cpp
+
+coredll_gtk3_statbox.o: $(srcdir)/src/gtk3/statbox.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/statbox.cpp
+
+coredll_gtk3_statline.o: $(srcdir)/src/gtk3/statline.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/statline.cpp
+
+coredll_gtk3_stattext.o: $(srcdir)/src/gtk3/stattext.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/stattext.cpp
+
+coredll_gtk3_toolbar.o: $(srcdir)/src/gtk3/toolbar.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/toolbar.cpp
+
+coredll_gtk3_textctrl.o: $(srcdir)/src/gtk3/textctrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/textctrl.cpp
+
+coredll_gtk3_textentry.o: $(srcdir)/src/gtk3/textentry.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/textentry.cpp
+
+coredll_gtk3_tglbtn.o: $(srcdir)/src/gtk3/tglbtn.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/tglbtn.cpp
+
+coredll_gtk3_treeentry_gtk.o: $(srcdir)/src/gtk3/treeentry_gtk.c $(COREDLL_ODEP)
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk3/treeentry_gtk.c
+
+coredll_gtk_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
 coredll_gtk_bmpbuttn.o: $(srcdir)/src/gtk/bmpbuttn.cpp $(COREDLL_ODEP)
@@ -27100,7 +28455,7 @@ coredll_gtk_checklst.o: $(srcdir)/src/gtk/checklst.cpp $(COREDLL_ODEP)
 coredll_gtk_choice.o: $(srcdir)/src/gtk/choice.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/choice.cpp
 
-coredll_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(COREDLL_ODEP)
+coredll_gtk_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
 
 coredll_gtk_colordlg.o: $(srcdir)/src/gtk/colordlg.cpp $(COREDLL_ODEP)
@@ -27112,16 +28467,16 @@ coredll_gtk_combobox.o: $(srcdir)/src/gtk/combobox.cpp $(COREDLL_ODEP)
 coredll_gtk_control.o: $(srcdir)/src/gtk/control.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/control.cpp
 
-coredll_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(COREDLL_ODEP)
+coredll_gtk_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
 
 coredll_gtk_dialog.o: $(srcdir)/src/gtk/dialog.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dialog.cpp
 
-coredll_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(COREDLL_ODEP)
+coredll_gtk_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
 
-coredll_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(COREDLL_ODEP)
+coredll_gtk_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
 
 coredll_gtk_dirdlg.o: $(srcdir)/src/gtk/dirdlg.cpp $(COREDLL_ODEP)
@@ -27139,10 +28494,10 @@ coredll_gtk_frame.o: $(srcdir)/src/gtk/frame.cpp $(COREDLL_ODEP)
 coredll_gtk_gauge.o: $(srcdir)/src/gtk/gauge.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gauge.cpp
 
-coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
+coredll_gtk_gnome_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
-coredll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
+coredll_gtk_gnome_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 coredll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(COREDLL_ODEP)
@@ -27217,7 +28572,7 @@ coredll_gtk_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(COREDLL_ODEP)
 coredll_gtk_tglbtn.o: $(srcdir)/src/gtk/tglbtn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/tglbtn.cpp
 
-coredll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(COREDLL_ODEP)
+coredll_gtk_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
@@ -28321,6 +29676,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -28345,6 +29703,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
@@ -28363,6 +29724,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -28374,6 +29738,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
@@ -28387,6 +29754,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
 
@@ -28398,6 +29768,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
@@ -28411,6 +29784,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
@@ -28422,6 +29798,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
@@ -28437,6 +29816,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -28456,16 +29838,112 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_app.o: $(srcdir)/src/gtk3/app.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/app.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_assertdlg_gtk.o: $(srcdir)/src/gtk3/assertdlg_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/assertdlg_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_bitmap.o: $(srcdir)/src/gtk3/bitmap.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/bitmap.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_brush.o: $(srcdir)/src/gtk3/brush.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/brush.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_clipbrd.o: $(srcdir)/src/gtk3/clipbrd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/clipbrd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_colour.o: $(srcdir)/src/gtk3/colour.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/colour.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_cursor.o: $(srcdir)/src/gtk3/cursor.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/cursor.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dataobj.o: $(srcdir)/src/gtk3/dataobj.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dataobj.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dc.o: $(srcdir)/src/gtk3/dc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dc.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dnd.o: $(srcdir)/src/gtk3/dnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dnd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_evtloop.o: $(srcdir)/src/gtk3/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_filectrl.o: $(srcdir)/src/gtk3/filectrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/filectrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_filehistory.o: $(srcdir)/src/gtk3/filehistory.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/filehistory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_font.o: $(srcdir)/src/gtk3/font.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_sockgtk.o: $(srcdir)/src/gtk3/sockgtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/sockgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_minifram.o: $(srcdir)/src/gtk3/minifram.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_pen.o: $(srcdir)/src/gtk3/pen.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/pen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_popupwin.o: $(srcdir)/src/gtk3/popupwin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/popupwin.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_private.o: $(srcdir)/src/gtk3/private.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/private.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_region.o: $(srcdir)/src/gtk3/region.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/region.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_renderer.o: $(srcdir)/src/gtk3/renderer.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/renderer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_settings.o: $(srcdir)/src/gtk3/settings.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/settings.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_timer.o: $(srcdir)/src/gtk3/timer.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_tooltip.o: $(srcdir)/src/gtk3/tooltip.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/tooltip.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_toplevel.o: $(srcdir)/src/gtk3/toplevel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/toplevel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_utilsgtk.o: $(srcdir)/src/gtk3/utilsgtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/utilsgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_win_gtk.o: $(srcdir)/src/gtk3/win_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/win_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_window.o: $(srcdir)/src/gtk3/window.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/window.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_app.o: $(srcdir)/src/gtk/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/app.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_bitmap.o: $(srcdir)/src/gtk/bitmap.cpp $(COREDLL_ODEP)
@@ -28504,10 +29982,10 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/filehistory.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(COREDLL_ODEP)
@@ -28525,7 +30003,7 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_popupwin.o: $(srcdir)/src/gtk/popupwin.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/popupwin.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_private.o: $(srcdir)/src/gtk/private.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_private.o: $(srcdir)/src/gtk/private.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/private.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_region.o: $(srcdir)/src/gtk/region.cpp $(COREDLL_ODEP)
@@ -29392,6 +30870,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@coredll_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -29403,6 +30884,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -29433,6 +30917,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -29467,6 +30954,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
 
@@ -29493,6 +30983,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
@@ -29524,6 +31017,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
@@ -29553,6 +31049,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
@@ -31063,7 +32562,145 @@ corelib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(CORELIB_ODEP)
 corelib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
-corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
+corelib_gtk3_artgtk.o: $(srcdir)/src/gtk3/artgtk.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/artgtk.cpp
+
+corelib_gtk3_bmpbuttn.o: $(srcdir)/src/gtk3/bmpbuttn.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/bmpbuttn.cpp
+
+corelib_gtk3_button.o: $(srcdir)/src/gtk3/button.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/button.cpp
+
+corelib_gtk3_checkbox.o: $(srcdir)/src/gtk3/checkbox.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/checkbox.cpp
+
+corelib_gtk3_checklst.o: $(srcdir)/src/gtk3/checklst.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/checklst.cpp
+
+corelib_gtk3_choice.o: $(srcdir)/src/gtk3/choice.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/choice.cpp
+
+corelib_gtk3_collpane.o: $(srcdir)/src/gtk3/collpane.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/collpane.cpp
+
+corelib_gtk3_colordlg.o: $(srcdir)/src/gtk3/colordlg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/colordlg.cpp
+
+corelib_gtk3_combobox.o: $(srcdir)/src/gtk3/combobox.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/combobox.cpp
+
+corelib_gtk3_control.o: $(srcdir)/src/gtk3/control.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/control.cpp
+
+corelib_gtk3_clrpicker.o: $(srcdir)/src/gtk3/clrpicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/clrpicker.cpp
+
+corelib_gtk3_dialog.o: $(srcdir)/src/gtk3/dialog.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dialog.cpp
+
+corelib_gtk3_fontpicker.o: $(srcdir)/src/gtk3/fontpicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/fontpicker.cpp
+
+corelib_gtk3_filepicker.o: $(srcdir)/src/gtk3/filepicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/filepicker.cpp
+
+corelib_gtk3_dirdlg.o: $(srcdir)/src/gtk3/dirdlg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dirdlg.cpp
+
+corelib_gtk3_filedlg.o: $(srcdir)/src/gtk3/filedlg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/filedlg.cpp
+
+corelib_gtk3_fontdlg.o: $(srcdir)/src/gtk3/fontdlg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/fontdlg.cpp
+
+corelib_gtk3_frame.o: $(srcdir)/src/gtk3/frame.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/frame.cpp
+
+corelib_gtk3_gauge.o: $(srcdir)/src/gtk3/gauge.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/gauge.cpp
+
+corelib_gtk3_gnome_gprint.o: $(srcdir)/src/gtk3/gnome/gprint.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gprint.cpp
+
+corelib_gtk3_gnome_gvfs.o: $(srcdir)/src/gtk3/gnome/gvfs.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/gnome/gvfs.cpp
+
+corelib_gtk3_infobar.o: $(srcdir)/src/gtk3/infobar.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/infobar.cpp
+
+corelib_gtk3_listbox.o: $(srcdir)/src/gtk3/listbox.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/listbox.cpp
+
+corelib_gtk3_mdi.o: $(srcdir)/src/gtk3/mdi.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/mdi.cpp
+
+corelib_gtk3_menu.o: $(srcdir)/src/gtk3/menu.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/menu.cpp
+
+corelib_gtk3_mnemonics.o: $(srcdir)/src/gtk3/mnemonics.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/mnemonics.cpp
+
+corelib_gtk3_msgdlg.o: $(srcdir)/src/gtk3/msgdlg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/msgdlg.cpp
+
+corelib_gtk3_nativewin.o: $(srcdir)/src/gtk3/nativewin.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/nativewin.cpp
+
+corelib_gtk3_notebook.o: $(srcdir)/src/gtk3/notebook.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/notebook.cpp
+
+corelib_gtk3_print.o: $(srcdir)/src/gtk3/print.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/print.cpp
+
+corelib_gtk3_radiobox.o: $(srcdir)/src/gtk3/radiobox.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/radiobox.cpp
+
+corelib_gtk3_radiobut.o: $(srcdir)/src/gtk3/radiobut.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/radiobut.cpp
+
+corelib_gtk3_scrolbar.o: $(srcdir)/src/gtk3/scrolbar.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/scrolbar.cpp
+
+corelib_gtk3_scrolwin.o: $(srcdir)/src/gtk3/scrolwin.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/scrolwin.cpp
+
+corelib_gtk3_slider.o: $(srcdir)/src/gtk3/slider.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/slider.cpp
+
+corelib_gtk3_spinbutt.o: $(srcdir)/src/gtk3/spinbutt.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/spinbutt.cpp
+
+corelib_gtk3_spinctrl.o: $(srcdir)/src/gtk3/spinctrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/spinctrl.cpp
+
+corelib_gtk3_statbmp.o: $(srcdir)/src/gtk3/statbmp.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/statbmp.cpp
+
+corelib_gtk3_statbox.o: $(srcdir)/src/gtk3/statbox.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/statbox.cpp
+
+corelib_gtk3_statline.o: $(srcdir)/src/gtk3/statline.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/statline.cpp
+
+corelib_gtk3_stattext.o: $(srcdir)/src/gtk3/stattext.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/stattext.cpp
+
+corelib_gtk3_toolbar.o: $(srcdir)/src/gtk3/toolbar.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/toolbar.cpp
+
+corelib_gtk3_textctrl.o: $(srcdir)/src/gtk3/textctrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/textctrl.cpp
+
+corelib_gtk3_textentry.o: $(srcdir)/src/gtk3/textentry.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/textentry.cpp
+
+corelib_gtk3_tglbtn.o: $(srcdir)/src/gtk3/tglbtn.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/tglbtn.cpp
+
+corelib_gtk3_treeentry_gtk.o: $(srcdir)/src/gtk3/treeentry_gtk.c $(CORELIB_ODEP)
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk3/treeentry_gtk.c
+
+corelib_gtk_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
 corelib_gtk_bmpbuttn.o: $(srcdir)/src/gtk/bmpbuttn.cpp $(CORELIB_ODEP)
@@ -31081,7 +32718,7 @@ corelib_gtk_checklst.o: $(srcdir)/src/gtk/checklst.cpp $(CORELIB_ODEP)
 corelib_gtk_choice.o: $(srcdir)/src/gtk/choice.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/choice.cpp
 
-corelib_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(CORELIB_ODEP)
+corelib_gtk_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
 
 corelib_gtk_colordlg.o: $(srcdir)/src/gtk/colordlg.cpp $(CORELIB_ODEP)
@@ -31093,16 +32730,16 @@ corelib_gtk_combobox.o: $(srcdir)/src/gtk/combobox.cpp $(CORELIB_ODEP)
 corelib_gtk_control.o: $(srcdir)/src/gtk/control.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/control.cpp
 
-corelib_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(CORELIB_ODEP)
+corelib_gtk_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
 
 corelib_gtk_dialog.o: $(srcdir)/src/gtk/dialog.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dialog.cpp
 
-corelib_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(CORELIB_ODEP)
+corelib_gtk_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
 
-corelib_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(CORELIB_ODEP)
+corelib_gtk_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
 
 corelib_gtk_dirdlg.o: $(srcdir)/src/gtk/dirdlg.cpp $(CORELIB_ODEP)
@@ -31120,10 +32757,10 @@ corelib_gtk_frame.o: $(srcdir)/src/gtk/frame.cpp $(CORELIB_ODEP)
 corelib_gtk_gauge.o: $(srcdir)/src/gtk/gauge.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gauge.cpp
 
-corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
+corelib_gtk_gnome_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
-corelib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
+corelib_gtk_gnome_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 corelib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(CORELIB_ODEP)
@@ -31198,7 +32835,7 @@ corelib_gtk_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(CORELIB_ODEP)
 corelib_gtk_tglbtn.o: $(srcdir)/src/gtk/tglbtn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/tglbtn.cpp
 
-corelib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(CORELIB_ODEP)
+corelib_gtk_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
@@ -32302,6 +33939,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -32326,6 +33966,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
@@ -32344,6 +33987,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -32355,6 +34001,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
@@ -32368,6 +34017,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_displayx11.o: $(srcdir)/src/unix/displayx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/displayx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
 
@@ -32379,6 +34031,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_unix_fontenum.o: $(srcdir)/src/unix/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontenum.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
@@ -32392,6 +34047,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_unix_fontutil.o: $(srcdir)/src/unix/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/fontutil.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
 
@@ -32403,6 +34061,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_uiactionx11.o: $(srcdir)/src/unix/uiactionx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/uiactionx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_utilsx11.o: $(srcdir)/src/unix/utilsx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/utilsx11.cpp
@@ -32418,6 +34079,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -32437,16 +34101,112 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_app.o: $(srcdir)/src/gtk3/app.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/app.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_assertdlg_gtk.o: $(srcdir)/src/gtk3/assertdlg_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/assertdlg_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_bitmap.o: $(srcdir)/src/gtk3/bitmap.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/bitmap.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_brush.o: $(srcdir)/src/gtk3/brush.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/brush.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_clipbrd.o: $(srcdir)/src/gtk3/clipbrd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/clipbrd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_colour.o: $(srcdir)/src/gtk3/colour.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/colour.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_cursor.o: $(srcdir)/src/gtk3/cursor.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/cursor.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dataobj.o: $(srcdir)/src/gtk3/dataobj.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dataobj.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dc.o: $(srcdir)/src/gtk3/dc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dc.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dnd.o: $(srcdir)/src/gtk3/dnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dnd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_evtloop.o: $(srcdir)/src/gtk3/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_filectrl.o: $(srcdir)/src/gtk3/filectrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/filectrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_filehistory.o: $(srcdir)/src/gtk3/filehistory.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/filehistory.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_font.o: $(srcdir)/src/gtk3/font.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_sockgtk.o: $(srcdir)/src/gtk3/sockgtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/sockgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_minifram.o: $(srcdir)/src/gtk3/minifram.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_pen.o: $(srcdir)/src/gtk3/pen.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/pen.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_popupwin.o: $(srcdir)/src/gtk3/popupwin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/popupwin.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_private.o: $(srcdir)/src/gtk3/private.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/private.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_region.o: $(srcdir)/src/gtk3/region.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/region.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_renderer.o: $(srcdir)/src/gtk3/renderer.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/renderer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_settings.o: $(srcdir)/src/gtk3/settings.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/settings.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_timer.o: $(srcdir)/src/gtk3/timer.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_tooltip.o: $(srcdir)/src/gtk3/tooltip.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/tooltip.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_toplevel.o: $(srcdir)/src/gtk3/toplevel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/toplevel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_utilsgtk.o: $(srcdir)/src/gtk3/utilsgtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/utilsgtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_win_gtk.o: $(srcdir)/src/gtk3/win_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/win_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_window.o: $(srcdir)/src/gtk3/window.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/window.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_app.o: $(srcdir)/src/gtk/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/app.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_bitmap.o: $(srcdir)/src/gtk/bitmap.cpp $(CORELIB_ODEP)
@@ -32485,10 +34245,10 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_filehistory.o: $(srcdir)/src/gtk/filehistory.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/filehistory.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(CORELIB_ODEP)
@@ -32506,7 +34266,7 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_popupwin.o: $(srcdir)/src/gtk/popupwin.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/popupwin.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_private.o: $(srcdir)/src/gtk/private.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_private.o: $(srcdir)/src/gtk/private.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/private.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_region.o: $(srcdir)/src/gtk/region.cpp $(CORELIB_ODEP)
@@ -33373,6 +35133,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@corelib_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -33384,6 +35147,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_generic_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -33414,6 +35180,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -33448,6 +35217,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
 
@@ -33474,6 +35246,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_generic_listctrl.o: $(srcdir)/src/generic/listctrl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/listctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
@@ -33505,6 +35280,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/prntdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
@@ -33534,6 +35312,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp

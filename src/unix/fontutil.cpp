@@ -43,7 +43,7 @@
 
 #include "pango/pango.h"
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     #include "wx/gtk/private.h"
     extern GtkWidget *wxGetRootWindow();
 

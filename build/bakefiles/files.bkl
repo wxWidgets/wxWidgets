@@ -1061,6 +1061,191 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/utilsx11.h
 </set>
 
+<!-- ====================================================================== -->
+<!--                                wxGTK3                                  -->
+<!-- ====================================================================== -->
+
+<set var="GTK3_LOWLEVEL_SRC" hints="files">
+    $(XWIN_LOWLEVEL_SRC)
+    src/generic/icon.cpp
+    src/generic/paletteg.cpp
+    src/gtk3/app.cpp
+    src/gtk3/assertdlg_gtk.cpp
+    src/gtk3/bitmap.cpp
+    src/gtk3/brush.cpp
+    src/gtk3/clipbrd.cpp
+    src/gtk3/colour.cpp
+    src/gtk3/cursor.cpp
+    src/gtk3/dataobj.cpp
+    src/gtk3/dc.cpp
+    src/gtk3/dcclient.cpp
+    src/gtk3/dcmemory.cpp
+    src/gtk3/dcscreen.cpp
+    src/gtk3/dnd.cpp
+    src/gtk3/evtloop.cpp
+    src/gtk3/filectrl.cpp
+    src/gtk3/filehistory.cpp
+    src/gtk3/font.cpp
+    src/gtk3/sockgtk.cpp
+    src/gtk3/minifram.cpp
+    src/gtk3/pen.cpp
+    src/gtk3/popupwin.cpp
+    src/gtk3/private.cpp
+    src/gtk3/region.cpp
+    src/gtk3/renderer.cpp
+    src/gtk3/settings.cpp
+    src/gtk3/timer.cpp
+    src/gtk3/tooltip.cpp
+    src/gtk3/toplevel.cpp
+    src/gtk3/utilsgtk.cpp
+    src/gtk3/win_gtk.cpp
+    src/gtk3/window.cpp
+</set>
+<set var="GTK3_LOWLEVEL_HDR" hints="files">
+    $(XWIN_LOWLEVEL_HDR)
+    wx/generic/icon.h
+    wx/generic/paletteg.h
+    wx/gtk/app.h
+    wx/gtk/assertdlg_gtk.h
+    wx/gtk/bitmap.h
+    wx/gtk/brush.h
+    wx/gtk/clipbrd.h
+    wx/gtk/colour.h
+    wx/gtk/cursor.h
+    wx/gtk/dataform.h
+    wx/gtk/dataobj.h
+    wx/gtk/dataobj2.h
+    wx/gtk/dc.h
+    wx/gtk/dcclient.h
+    wx/gtk/dcmemory.h
+    wx/gtk/dcscreen.h
+    wx/gtk/dnd.h
+    wx/gtk/evtloop.h
+    wx/gtk/evtloopsrc.h
+    wx/gtk/font.h
+    wx/gtk/filehistory.h
+    wx/gtk/minifram.h
+    wx/gtk/pen.h
+    wx/gtk/popupwin.h
+    wx/gtk/private/win_gtk.h
+    wx/gtk/region.h
+    wx/gtk/tooltip.h
+    wx/gtk/toplevel.h
+    wx/gtk/window.h
+</set>
+<set var="GTK3_SRC" hints="files">
+    <!-- Generic implementations used by wxGTK: -->
+    src/generic/accel.cpp
+    src/generic/fdrepdlg.cpp
+    <!-- Needed as long as we support GTK+ < 2.6 -->
+    src/generic/filepickerg.cpp
+    src/generic/listctrl.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/statusbr.cpp
+    <!-- Generic implementations used by wxGPE: -->
+    src/generic/fontdlgg.cpp
+    <!-- GTK+ specific files: -->
+    src/gtk3/artgtk.cpp
+    src/gtk3/bmpbuttn.cpp
+    src/gtk3/button.cpp
+    src/gtk3/checkbox.cpp
+    src/gtk3/checklst.cpp
+    src/gtk3/choice.cpp
+    src/gtk3/collpane.cpp
+    src/gtk3/colordlg.cpp
+    src/gtk3/combobox.cpp
+    src/gtk3/control.cpp
+    src/gtk3/clrpicker.cpp
+    src/gtk3/dialog.cpp
+    src/gtk3/fontpicker.cpp
+    src/gtk3/filepicker.cpp
+    src/gtk3/dirdlg.cpp
+    src/gtk3/filedlg.cpp
+    src/gtk3/fontdlg.cpp
+    src/gtk3/frame.cpp
+    src/gtk3/gauge.cpp
+    src/gtk3/gnome/gprint.cpp
+    src/gtk3/gnome/gvfs.cpp
+    src/gtk3/infobar.cpp
+    src/gtk3/listbox.cpp
+    src/gtk3/mdi.cpp
+    src/gtk3/menu.cpp
+    src/gtk3/mnemonics.cpp
+    src/gtk3/msgdlg.cpp
+    src/gtk3/nativewin.cpp
+    src/gtk3/notebook.cpp
+    src/gtk3/print.cpp
+    src/gtk3/radiobox.cpp
+    src/gtk3/radiobut.cpp
+    src/gtk3/scrolbar.cpp
+    src/gtk3/scrolwin.cpp
+    src/gtk3/slider.cpp
+    src/gtk3/spinbutt.cpp
+    src/gtk3/spinctrl.cpp
+    src/gtk3/statbmp.cpp
+    src/gtk3/statbox.cpp
+    src/gtk3/statline.cpp
+    src/gtk3/stattext.cpp
+    src/gtk3/toolbar.cpp
+    src/gtk3/textctrl.cpp
+    src/gtk3/textentry.cpp
+    src/gtk3/tglbtn.cpp
+    src/gtk3/treeentry_gtk.c
+</set>
+<set var="GTK3_HDR" hints="files">
+    wx/generic/fdrepdlg.h
+    wx/generic/filepickerg.h
+    wx/generic/fontdlgg.h
+    wx/generic/listctrl.h
+    wx/generic/statusbr.h
+    wx/gtk/accel.h
+    wx/gtk/bmpbuttn.h
+    wx/gtk/button.h
+    wx/gtk/checkbox.h
+    wx/gtk/checklst.h
+    wx/gtk/chkconf.h
+    wx/gtk/collpane.h
+    wx/gtk/colordlg.h
+    wx/gtk/choice.h
+    wx/gtk/combobox.h
+    wx/gtk/control.h
+    wx/gtk/clrpicker.h
+    wx/gtk/dialog.h
+    wx/gtk/dirdlg.h
+    wx/gtk/filectrl.h
+    wx/gtk/filedlg.h
+    wx/gtk/fontpicker.h
+    wx/gtk/filepicker.h
+    wx/gtk/fontdlg.h
+    wx/gtk/frame.h
+    wx/gtk/gauge.h
+    wx/gtk/gnome/gprint.h
+    wx/gtk/gnome/gvfs.h
+    wx/gtk/infobar.h
+    wx/gtk/listbox.h
+    wx/gtk/mdi.h
+    wx/gtk/menu.h
+    wx/gtk/menuitem.h
+    wx/gtk/msgdlg.h
+    wx/gtk/notebook.h
+    wx/gtk/print.h
+    wx/gtk/radiobox.h
+    wx/gtk/radiobut.h
+    wx/gtk/scrolbar.h
+    wx/gtk/scrolwin.h
+    wx/gtk/slider.h
+    wx/gtk/spinbutt.h
+    wx/gtk/spinctrl.h
+    wx/gtk/statbmp.h
+    wx/gtk/statbox.h
+    wx/gtk/statline.h
+    wx/gtk/stattext.h
+    wx/gtk/toolbar.h
+    wx/gtk/textctrl.h
+    wx/gtk/textentry.h
+    wx/gtk/tglbtn.h
+    wx/gtk/treeentry_gtk.h
+</set>
 
 <!-- ====================================================================== -->
 <!--                                wxGTK                                   -->
@@ -3777,6 +3962,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- GUI sources: -->
 
     <set var="LOWLEVEL_SRC" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK3_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
@@ -3792,6 +3978,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK3_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_HDR)</if>
@@ -3813,6 +4000,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <set var="GUI_SRC" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK3_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
@@ -3825,6 +4013,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK3_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
