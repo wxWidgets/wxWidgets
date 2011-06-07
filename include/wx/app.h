@@ -694,6 +694,8 @@ protected:
     #include "wx/mgl/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/app.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/app.h"
 #elif defined(__WXGTK__)
