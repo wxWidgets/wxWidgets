@@ -534,7 +534,7 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
 
                     if ( dataFormat == flavorFormat ||
-                        dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
+                        (dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT) )
                     {
                         hasData = true;
                     }
@@ -742,8 +742,8 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     if ( source )
     {
         cgImageRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
+        CFRelease( source );
     }
-    CFRelease( source );
     CFRelease( data );
 
     if ( cgImageRef )
