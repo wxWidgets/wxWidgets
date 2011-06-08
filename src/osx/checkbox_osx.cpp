@@ -89,7 +89,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     {
         wxCheckBoxState origState ;
 
-        newState = origState = Get3StateValue();
+        origState = Get3StateValue();
 
         switch (origState)
         {
