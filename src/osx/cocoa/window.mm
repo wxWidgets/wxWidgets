@@ -1444,7 +1444,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 - (id)init:(wxWindow *)win
 {
-    [super init];
+    self = [super init];
 
     m_win = win;
     m_isDone = false;

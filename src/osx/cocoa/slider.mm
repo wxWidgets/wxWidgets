@@ -90,6 +90,13 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
+    if ( size == wxDefaultSize )
+    {
+        if ( style & wxSL_VERTICAL )
+            r.size.height = r.size.width * 2;
+        else
+            r.size.width = r.size.height * 2;
+    }
     wxNSSlider* v = [[wxNSSlider alloc] initWithFrame:r];
 
     int tickMarks = 0;

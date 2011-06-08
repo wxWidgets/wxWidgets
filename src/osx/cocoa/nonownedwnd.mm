@@ -271,7 +271,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     return self;
 }
 
