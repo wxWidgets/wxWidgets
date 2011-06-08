@@ -521,7 +521,7 @@ outlineView:(NSOutlineView*)outlineView
     event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
 
-    BOOL dragSuccessful;
+    BOOL dragSuccessful = false;
     if ( [bestType compare:DataViewPboardType] == NSOrderedSame )
     {
         NSArray* dataArray((NSArray*)
@@ -757,7 +757,7 @@ outlineView:(NSOutlineView*)outlineView
     if (bestType == nil)
         return NSDragOperationNone;
 
-    NSDragOperation dragOperation;
+    NSDragOperation dragOperation = NSDragOperationNone;
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
 
     wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
@@ -863,7 +863,7 @@ outlineView:(NSOutlineView*)outlineView
     if ([writeItems count] > 0)
     {
         bool            dataStringAvailable(true); // a flag indicating if for all items a data string is available
-        NSMutableArray* dataArray = [[NSMutableArray arrayWithCapacity:[writeItems count]] retain]; // data of all items
+        NSMutableArray* dataArray = [NSMutableArray arrayWithCapacity:[writeItems count]]; // data of all items
         wxString        dataString; // contains the string data of all items
 
         // send a begin drag event for all selected items and proceed with
@@ -2804,9 +2804,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
 
     cell = [[NSPopUpButtonCell alloc] init];
     [cell setControlSize:NSMiniControlSize];
-    [cell setFont:[[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]] autorelease]];
+    [cell setFont:[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
     for (size_t i=0; i<choices.GetCount(); ++i)
-        [cell addItemWithTitle:[[wxCFStringRef(choices[i]).AsNSString() retain] autorelease]];
+        [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
