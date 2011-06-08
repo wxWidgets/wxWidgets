@@ -38,7 +38,7 @@
 
 - (id) initWithTitle:(NSString*) title
 {
-    [super initWithTitle:title];
+    self = [super initWithTitle:title];
     impl = NULL;
     return self;
 }
@@ -69,7 +69,7 @@
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     return self;
 }
 

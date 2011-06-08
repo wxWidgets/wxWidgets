@@ -74,8 +74,8 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 - (id) initWithTitle:(NSString *)aString action:(SEL)aSelector keyEquivalent:(NSString *)charCode
 {
-    [super initWithTitle:aString action:aSelector keyEquivalent:charCode];
-     return self;
+    self = [super initWithTitle:aString action:aSelector keyEquivalent:charCode];
+    return self;
 }
 
 - (void) clickedAction: (id) sender
