@@ -1580,6 +1580,8 @@ void wxMacCoreGraphicsContext::Init()
     m_view = NULL;
 #endif
     m_invisible = false;
+    m_antialias = wxANTIALIAS_DEFAULT;
+    m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1779,10 +1781,39 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
-bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
 {
-    // placeholder
-    return false;
+    if (!EnsureIsValid())
+        return true;
+    
+    if (m_interpolation == interpolation)
+        return true;
+
+    m_interpolation = interpolation;
+    CGInterpolationQuality quality;
+    
+    switch (interpolation) 
+    {
+        case wxINTERPOLATION_DEFAULT:
+            quality = kCGInterpolationDefault;
+            break;
+        case wxINTERPOLATION_NONE:
+            quality = kCGInterpolationNone;
+            break;
+        case wxINTERPOLATION_FAST:
+            quality = kCGInterpolationLow;
+            break;
+        case wxINTERPOLATION_GOOD:
+            quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+            break;
+        case wxINTERPOLATION_BEST:
+            quality = kCGInterpolationHigh;
+            break;
+        default:
+            return false;
+    }
+    CGContextSetInterpolationQuality(m_cgContext, quality);
+    return true;
 }
 
 bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
