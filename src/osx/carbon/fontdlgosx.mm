@@ -167,6 +167,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         NSRect rectBox = NSMakeRect( 0 , 0 , 192 , 40 );
         accessoryView = [[wxMacFontPanelAccView alloc] initWithFrame:rectBox];
         [fontPanel setAccessoryView:accessoryView];
+        [accessoryView release];
 
         [fontPanel setDefaultButtonCell:[[accessoryView okButton] cell]] ;
     }
@@ -220,7 +221,6 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         retval = wxID_OK ;
     }
     [fontPanel setAccessoryView:nil];
-    [accessoryView release];
 
     return retval ;
 }
