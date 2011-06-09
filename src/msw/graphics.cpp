@@ -335,6 +335,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1477,6 +1479,12 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     }
     m_context->SetSmoothingMode(antialiasMode);
     return true;
+}
+
+bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
 }
 
 bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)

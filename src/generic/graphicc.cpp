@@ -368,6 +368,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1692,6 +1694,12 @@ bool wxCairoContext::SetAntialiasMode(wxAntialiasMode antialias)
     }
     cairo_set_antialias(m_context, antialiasMode);
     return true;
+}
+
+bool wxCairoContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
 }
 
 bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
