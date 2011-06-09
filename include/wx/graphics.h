@@ -29,8 +29,10 @@ enum wxAntialiasMode
 
 enum wxInterpolationQuality
 {
+    // default interpolation
+    wxINTERPOLATION_DEFAULT,
     // no interpolation
-    wxINTERPOLATION_NONE, // should be 0
+    wxINTERPOLATION_NONE, 
     // fast interpolation, suited for interactivity
     wxINTERPOLATION_FAST,
     // better quality

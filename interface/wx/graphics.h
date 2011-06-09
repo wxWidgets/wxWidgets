@@ -217,6 +217,8 @@ enum wxAntialiasMode
  */
 enum wxInterpolationQuality
 {
+    /** default interpolation, based on type of context, in general medium quality */
+    wxINTERPOLATION_DEFAULT,
     /** no interpolation */
     wxINTERPOLATION_NONE, 
     /** fast interpolation, suited for interactivity */
