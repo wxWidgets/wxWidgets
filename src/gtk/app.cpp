@@ -229,6 +229,7 @@ bool wxApp::OnInitGui()
     if ( !wxAppBase::OnInitGui() )
         return false;
 
+#ifndef __WXGTK30__
     // if this is a wxGLApp (derived from wxApp), and we've already
     // chosen a specific visual, then derive the GdkVisual from that
     if ( GetXVisualInfo() )
@@ -266,6 +267,7 @@ bool wxApp::OnInitGui()
             }
         }
     }
+#endif
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     if ( !GetHildonProgram() )
