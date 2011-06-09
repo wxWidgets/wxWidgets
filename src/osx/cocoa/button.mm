@@ -379,7 +379,7 @@ wxCFRef<NSImage*> downArray ;
     static wxBitmap trianglebm(disc_triangle_xpm);
     if ( downArray.get() == NULL )
     {
-        downArray.reset( [wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] );
+        downArray.reset( [[wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] retain] );
     }
 
     if ( isOpen )
@@ -407,7 +407,7 @@ wxCFRef<NSImage*> downArray ;
         fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
 
     [newImage unlockFocus];
-    return newImage;
+    return [newImage autorelease];
 }
 
 @end
