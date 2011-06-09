@@ -1638,26 +1638,29 @@ bool wxMask::Create(const wxBitmap& bitmap)
     size_t size = m_bytesPerRow * m_height ;
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
     wxASSERT( destdatabase != NULL ) ;
-
-    memset( destdatabase , 0 , size ) ;
-    unsigned char * srcdata = (unsigned char*) bitmap.GetRawAccess() ;
-
-    for ( int y = 0 ; y < m_height ; ++y , destdatabase += m_bytesPerRow )
+    
+    if ( destdatabase )
     {
-        unsigned char *destdata = destdatabase ;
-        unsigned char r, g, b;
+        memset( destdatabase , 0 , size ) ;
+        unsigned char * srcdata = (unsigned char*) bitmap.GetRawAccess() ;
 
-        for ( int x = 0 ; x < m_width ; ++x )
+        for ( int y = 0 ; y < m_height ; ++y , destdatabase += m_bytesPerRow )
         {
-            srcdata++ ;
-            r = *srcdata++ ;
-            g = *srcdata++ ;
-            b = *srcdata++ ;
+            unsigned char *destdata = destdatabase ;
+            unsigned char r, g, b;
 
-            if ( ( r + g + b ) > 0x10 )
-                *destdata++ = 0xFF ;
-            else
-                *destdata++ = 0x00 ;
+            for ( int x = 0 ; x < m_width ; ++x )
+            {
+                srcdata++ ;
+                r = *srcdata++ ;
+                g = *srcdata++ ;
+                b = *srcdata++ ;
+
+                if ( ( r + g + b ) > 0x10 )
+                    *destdata++ = 0xFF ;
+                else
+                    *destdata++ = 0x00 ;
+            }
         }
     }
 
