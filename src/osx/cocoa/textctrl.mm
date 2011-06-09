@@ -258,7 +258,12 @@ protected :
 
 - (void) setFieldEditor:(wxNSTextFieldEditor*) editor
 {
-    fieldEditor = editor;
+    if ( editor != fieldEditor )
+    {
+        [editor retain];
+        [fieldEditor release];
+        fieldEditor = editor;
+    }
 }
 
 - (wxNSTextFieldEditor*) fieldEditor
@@ -630,7 +635,7 @@ wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
 
 void wxNSTextFieldControl::Init(WXWidget w)
 {
-    NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField*) w;
+    NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)*) w;
     m_textField = tf;
     [m_textField setDelegate: tf];
     m_selStart = m_selEnd = 0;

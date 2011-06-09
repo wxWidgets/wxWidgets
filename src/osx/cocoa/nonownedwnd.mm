@@ -452,6 +452,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
             [tf setFieldEditor:editor];
+            [editor release];
         }
         return editor;
     }
