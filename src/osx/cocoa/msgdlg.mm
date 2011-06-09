@@ -49,6 +49,13 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase(parent, message, caption, style)
 {
+    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
+    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
+}
+
+wxMessageDialog::~wxMessageDialog()
+{
+    [m_sheetDelegate release];
 }
 
 int wxMessageDialog::ShowModal()
@@ -167,9 +174,7 @@ void wxMessageDialog::ShowWindowModal()
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
-        [sheetDelegate setImplementation: this];
-        [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate
+        [alert beginSheetModalForWindow: nativeParent modalDelegate: m_sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
     }

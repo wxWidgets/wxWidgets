@@ -65,7 +65,7 @@
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     _dialog = NULL;
     return self;
 }
@@ -164,6 +164,13 @@ wxFileDialog::wxFileDialog(
     : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
     m_filterIndex = -1;
+    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
+    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
+}
+
+wxFileDialog::~wxFileDialog()
+{
+    [m_sheetDelegate release];
 }
 
 bool wxFileDialog::SupportsExtraControl() const
@@ -308,10 +315,8 @@ void wxFileDialog::ShowWindowModal()
         [sPanel setAllowsOtherFileTypes:NO];
         
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
-        [sheetDelegate setImplementation: this];
         [sPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString()
-            modalForWindow: nativeParent modalDelegate: sheetDelegate
+            modalForWindow: nativeParent modalDelegate: m_sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
     }
@@ -329,11 +334,9 @@ void wxFileDialog::ShowWindowModal()
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
         
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
-        [sheetDelegate setImplementation: this];
         [oPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString()
             types: types modalForWindow: nativeParent
-            modalDelegate: sheetDelegate
+            modalDelegate: m_sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
     }
