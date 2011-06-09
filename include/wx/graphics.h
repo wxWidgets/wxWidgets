@@ -508,10 +508,10 @@ public:
     // sets the antialiasing mode, returns true if it supported
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
-    // returns the current interpolation mode
+    // returns the current interpolation quality
     virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
     
-    // sets the interpolation mode, returns true if it supported
+    // sets the interpolation quality, returns true if it supported
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
     
     // returns the current compositing operator

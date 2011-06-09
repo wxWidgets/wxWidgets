@@ -213,6 +213,21 @@ enum wxAntialiasMode
 };
 
 /**
+    Interpolation quality used by wxGraphicsContext::SetInterpolationQuality().
+ */
+enum wxInterpolationQuality
+{
+    /** no interpolation */
+    wxINTERPOLATION_NONE, 
+    /** fast interpolation, suited for interactivity */
+    wxINTERPOLATION_FAST,
+    /** better quality */
+    wxINTERPOLATION_GOOD,
+    /** best quality, not suited for interactivity */
+    wxINTERPOLATION_BEST
+};
+
+/**
     Compositing is done using Porter-Duff compositions
     (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
     wxGraphicsContext::SetCompositionMode().
@@ -658,6 +673,16 @@ public:
     */
     virtual wxAntialiasMode GetAntialiasMode() const ;
 
+    /**
+        Sets the interpolation quality, returns true if it supported
+     */
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+    
+    /**
+        Returns the current interpolation quality
+     */
+    virtual wxInterpolationQuality GetInterpolationQuality() const;
+    
     /**
         Sets the compositing operator, returns true if it supported
     */
