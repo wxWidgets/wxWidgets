@@ -49,7 +49,7 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     return self;
 }
  
@@ -70,7 +70,7 @@
     partialString = [[textView string] substringWithRange:charRange];
     matches       = [NSMutableArray array];
     
-    wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    // wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     wxArrayString completions;
     
     // adapt to whatever strategy we have for getting the strings
