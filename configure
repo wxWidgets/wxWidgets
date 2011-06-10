@@ -21537,6 +21537,8 @@ SEARCH_INCLUDE="\
     /usr/X11R4/include        \
     /usr/include/X11R4        \
                               \
+    /opt/local/include        \
+						      \
     /usr/openwin/share/include"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libraries directory" >&5
@@ -26217,7 +26219,7 @@ if test "x$ac_cv_header_GL_glu_h" = xyes; then :
 $as_echo_n "checking for -lGL... " >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
+  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib /opt/local/lib
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
