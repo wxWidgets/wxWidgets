@@ -246,6 +246,9 @@ protected:
 #elif defined(__WXMOTIF__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/x11/bitmap.h"
+#elif defined(__WXGTK30__)
+    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
+    #include "wx/gtk/bitmap.h"
 #elif defined(__WXGTK20__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/gtk/bitmap.h"
