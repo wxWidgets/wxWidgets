@@ -1333,6 +1333,17 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
+    wxDataViewCtrl * const ctrl = cell->GetOwner()->GetOwner();
+
+    // Uniform row height, if specified, overrides the value returned by the
+    // renderer.
+    if ( !ctrl->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
+    {
+        const int uniformHeight = ctrl->GTKGetUniformRowHeight();
+        if ( uniformHeight > 0 )
+            size.y = uniformHeight;
+    }
+
     int xpad, ypad;
     gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
     int calc_width  = xpad * 2 + size.x;
@@ -4473,6 +4484,8 @@ void wxDataViewCtrl::Init()
     m_internal = NULL;
 
     m_cols.DeleteContents( true );
+
+    m_uniformRowHeight = -1;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -5101,6 +5114,12 @@ wxDataViewCtrl::GetItemRect(const wxDataViewItem& WXUNUSED(item),
                             const wxDataViewColumn *WXUNUSED(column)) const
 {
     return wxRect();
+}
+
+bool wxDataViewCtrl::SetRowHeight(int rowHeight)
+{
+    m_uniformRowHeight = rowHeight;
+    return true;
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()

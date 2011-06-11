@@ -158,7 +158,9 @@ public:
                           wxDataViewColumn *&column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem &item,
                                 const wxDataViewColumn *column = NULL ) const;
-                                
+
+    virtual bool SetRowHeight( int rowHeight );
+
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
     virtual void Expand( const wxDataViewItem & item );
@@ -181,6 +183,8 @@ public:
     wxDataViewItem GTKPathToItem(struct _GtkTreePath *path) const;
 
     virtual void OnInternalIdle();
+
+    int GTKGetUniformRowHeight() const { return m_uniformRowHeight; }
 
 protected:
     virtual void DoSetExpanderColumn();
@@ -208,6 +212,11 @@ private:
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
     wxDataViewItem           m_ensureVisibleDefered;
+
+    // By default this is set to -1 and the height of the rows is determined by
+    // GetRect() methods of the renderers but this can be set to a positive
+    // value to force the height of all rows to the given value.
+    int m_uniformRowHeight;
 
     virtual void AddChildGTK(wxWindowGTK* child);
     void GtkEnableSelectionEvents();

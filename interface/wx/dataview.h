@@ -1120,9 +1120,13 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic version only and nothing
-        is done (and @false returned) when using the native GTK or OS X
-        versions.
+        Currently this is implemented in the generic and native GTK versions
+        only and nothing is done (and @false returned) when using OS X port.
+
+        Also notice that this method can only be used to increase the row
+        height compared with the default one (as determined by the return value
+        of wxDataViewRenderer::GetSize()), if it is set to a too small value
+        then the minimum required by the renderers will be used.
 
         @return @true if the line height was changed or @false otherwise.
 
