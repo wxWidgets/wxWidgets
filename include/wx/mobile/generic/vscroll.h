@@ -27,9 +27,6 @@
 #undef _WX_VSCROLL_H_
 #endif
 
-#ifndef wxVScrolledWindow
-#define wxVScrolledWindow wxMoVScrolledWindowBase
-#endif
 
 #define wxPanel wxMoPanel
 
@@ -37,7 +34,10 @@
 // the define above. We then use it as the base class for wxMoVScrolledWindow.
 // We need to do this so that the class uses wxMoPanel as its base instead
 // of wxPanel, so we get more iPhone-like scroll facilities.
+//
+// See above for OS X note.
 #include "wx/vscroll.h"
+
 
 /**
     @class wxMoTouchVScrollHelper
@@ -80,7 +80,7 @@ protected:
     @category{wxMobile}
 */
 
-class WXDLLEXPORT wxMoVScrolledWindow: public wxMoVScrolledWindowBase
+class WXDLLEXPORT wxMoVScrolledWindow: public wxVScrolledWindow
 {
 public:
     /// Default constructor.

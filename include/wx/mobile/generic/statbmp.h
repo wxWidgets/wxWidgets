@@ -33,7 +33,7 @@ public:
     /// Constructor.
     wxMoStaticBitmap(wxWindow *parent,
                    wxWindowID id,
-                   const wxGDIImage& label,
+                   const wxImage& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,

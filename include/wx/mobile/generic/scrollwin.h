@@ -128,7 +128,7 @@ protected:
 */
 
 class WXDLLEXPORT wxMoScrolledWindow : public wxMoPanel,
-                                     public wxScrollHelperNative
+                                     public wxScrollHelper
 {
 public:
     /// Default constructor.
@@ -141,7 +141,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxScrolledWindowStyle,
                      const wxString& name = wxPanelNameStr)
-        : wxScrollHelperNative(this), m_touchScrollHelper(this)
+        : wxScrollHelper(this), m_touchScrollHelper(this)
     {
         Init();
 

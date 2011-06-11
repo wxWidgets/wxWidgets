@@ -461,9 +461,8 @@ void wxMoTouchScrollHelperBase::ShowTransientScrollbars(bool show)
                     wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL);
             }
 
-            m_scrollBarX->SetRange(horizRange);
+            m_scrollBarX->SetScrollbar(0, horizThumbSize, horizRange, horizThumbSize);
             m_scrollBarX->SetThumbPosition(horizThumbPosition);
-            m_scrollBarX->SetThumbSize(horizThumbSize);
 
             if (changePosition)
             {
@@ -511,9 +510,8 @@ void wxMoTouchScrollHelperBase::ShowTransientScrollbars(bool show)
                     wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL);
             }
 
-            m_scrollBarY->SetRange(vertRange);
+            m_scrollBarY->SetScrollbar(0, vertThumbSize, vertRange, vertThumbSize);
             m_scrollBarY->SetThumbPosition(vertThumbPosition);
-            m_scrollBarY->SetThumbSize(vertThumbSize);
 
             if (changePosition)
             {

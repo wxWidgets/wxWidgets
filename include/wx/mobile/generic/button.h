@@ -108,9 +108,9 @@ public:
 
     // Gets the border colour
     virtual wxColour GetBorderColour() const { return m_borderColour; }
-
+    
 protected:
-    wxSize IPGetDefaultSize();
+    wxSize IPGetDefaultSize() const;
 
     // send a notification event, return true if processed
     bool SendClickEvent();

@@ -31,18 +31,10 @@
 #include "wx/mobile/generic/simulator.h"
 #include "wx/mobile/generic/keyboard.h"
 #include "wx/mobile/generic/bitmaps/iphone.inc"
-#include "wx/mobile/generic/bitmaps/iphone_icon.xpm"
-#include "wx/mobile/generic/bitmaps/iphonebattery.xpm"
-
-#if 0
-////@begin XPM images
-#include "../../include/wx/mobile/generic/bitmaps/rotate_clock.xpm"
-#include "../../include/wx/mobile/generic/bitmaps/rotate_anticlock.xpm"
-////@end XPM images
-#endif
-
-#include "wx/mobile/generic/bitmaps/rotate_clock.xpm"
-#include "wx/mobile/generic/bitmaps/rotate_anticlock.xpm"
+#include "wx/mobile/generic/bitmaps/iphone_icon.inc"
+#include "wx/mobile/generic/bitmaps/iphonebattery.inc"
+#include "wx/mobile/generic/bitmaps/rotate_clock.inc"
+#include "wx/mobile/generic/bitmaps/rotate_anticlock.inc"
 
 /*
  * wxMoSimulatorFrame type definition
@@ -231,13 +223,13 @@ wxBitmap wxMoSimulatorFrame::GetBitmapResource( const wxString& name )
     wxUnusedVar(name);
     if (name == _T("../../include/wx/mobile/generic/bitmaps/rotate_clock.png"))
     {
-        wxBitmap bitmap(rotate_clock_xpm);
-        return bitmap;
+        wxMemoryInputStream is(rotate_clock_png, sizeof(rotate_clock_png));
+        return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
     }
     else if (name == _T("../../include/wx/mobile/generic/bitmaps/rotate_anticlock.png"))
     {
-        wxBitmap bitmap(rotate_anticlock_xpm);
-        return bitmap;
+        wxMemoryInputStream is(rotate_anticlock_png, sizeof(rotate_anticlock_png));
+        return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
     }
     return wxNullBitmap;
 ////@end wxMoSimulatorFrame bitmap retrieval
@@ -250,7 +242,11 @@ wxBitmap wxMoSimulatorFrame::GetBitmapResource( const wxString& name )
 wxIcon wxMoSimulatorFrame::GetIconResource( const wxString& WXUNUSED(name) )
 {
     // Icon retrieval
-    wxIcon icon(iphone_icon_xpm);
+    wxMemoryInputStream is(iphone_icon_png, sizeof(iphone_icon_png));
+    wxBitmap bIcon = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
+    wxIcon icon;
+    icon.CopyFromBitmap(bIcon);
+
     return icon;
 ////@end wxMoSimulatorFrame icon retrieval
 }
@@ -757,11 +753,9 @@ void wxMoSimulatorStatusBar::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 bool wxMoSimulatorStatusBar::LoadImages()
 {
-#if 0
-    m_logoBitmap = wxBitmap(iphonelogo_xpm);
-#endif
-    m_batteryBitmap = wxBitmap(iphonebattery_xpm);
-
+    wxMemoryInputStream is(iphonebattery_png, sizeof(iphonebattery_png));
+    m_batteryBitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
+    
     return true;
 }
 

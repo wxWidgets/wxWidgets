@@ -119,7 +119,7 @@ wxSize wxMoButton::DoGetBestSize() const
     // creating the button
     if ( !HasFlag(wxBU_EXACTFIT) )
     {
-        wxSize sz = GetDefaultSize();
+        wxSize sz = IPGetDefaultSize();
         if (wBtn > sz.x)
             sz.x = wBtn;
         if (hBtn > sz.y)
@@ -133,7 +133,7 @@ wxSize wxMoButton::DoGetBestSize() const
     return best;
 }
 
-wxSize wxMoButton::IPGetDefaultSize()
+wxSize wxMoButton::IPGetDefaultSize() const
 {
     static wxSize s_sizeBtn;
 

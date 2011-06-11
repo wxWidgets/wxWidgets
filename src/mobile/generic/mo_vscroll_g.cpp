@@ -21,9 +21,9 @@
 
 #include "wx/mobile/generic/vscroll.h"
 
-IMPLEMENT_CLASS(wxMoVScrolledWindow, wxMoVScrolledWindowBase)
+IMPLEMENT_CLASS(wxMoVScrolledWindow, wxVScrolledWindow)
 
-BEGIN_EVENT_TABLE(wxMoVScrolledWindow, wxMoVScrolledWindowBase)
+BEGIN_EVENT_TABLE(wxMoVScrolledWindow, wxVScrolledWindow)
 END_EVENT_TABLE()
 
 wxMoVScrolledWindow::wxMoVScrolledWindow(): m_touchScrollHelper(this)
@@ -44,7 +44,7 @@ bool wxMoVScrolledWindow::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    bool ok = wxMoVScrolledWindowBase::Create(parent, id, pos, size, style/*|wxHSCROLL|wxVSCROLL*/, name);
+    bool ok = wxVScrolledWindow::Create(parent, id, pos, size, style/*|wxHSCROLL|wxVSCROLL*/, name);
     
     wxWindow::SetScrollbar(wxHORIZONTAL, 0, 0, 0, false);
     wxWindow::SetScrollbar(wxVERTICAL, 0, 0, 0, false);
@@ -129,5 +129,3 @@ void wxMoTouchVScrollHelper::OnStartScrolling(const wxPoint& WXUNUSED(startPos))
         m_firstVisibleLine = scrolledWindow->GetFirstVisibleLine();
     }
 }
-
-#include "../src/generic/vscroll.cpp"

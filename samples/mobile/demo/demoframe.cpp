@@ -822,10 +822,12 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
                 staticBitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
             }
             
+#if 0
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Static bitmap:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxMoStaticBitmap* staticBitmapItem = new wxMoStaticBitmap( panel, wxID_ANY, staticBitmap);
             innerSizer->Add(staticBitmapItem, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+#endif
             
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Text control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
@@ -891,11 +893,13 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             
             innerSizer->Add(sliderCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             
+#if 0
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Web:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxMoWebCtrl* webCtrl = new wxMoWebCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), 0 );
             webCtrl->LoadURL(wxT("http://www.google.com"));
             innerSizer->Add(webCtrl, 1, wxGROW|wxALL, 5);
+#endif
             
             PushWindow(panel, _("More Controls"));
         }

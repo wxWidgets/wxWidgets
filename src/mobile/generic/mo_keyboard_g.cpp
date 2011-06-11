@@ -79,8 +79,9 @@ bool wxMoKeyboard::Create(wxWindow *parent)
     if ( !wxPopupWindow::Create(parent, wxBORDER_SIMPLE) )
         return false;
 #else
-    if ( !wxFrame::Create(parent, id, wxEmptyString, pos, size,
-        style|wxBORDER_SIMPLE|wxSTAY_ON_TOP|wxFRAME_NO_TASKBAR, name) )
+    if ( !wxFrame::Create(parent, -1, wxEmptyString, wxPoint(-1, -1), wxSize(-1, -1),
+                          (wxDEFAULT_FRAME_STYLE|wxBORDER_SIMPLE|wxSTAY_ON_TOP|wxFRAME_NO_TASKBAR),
+                          wxEmptyString))
         return false;
 #endif
 

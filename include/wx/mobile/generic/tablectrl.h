@@ -353,7 +353,7 @@ public:
     int GetSectionFooterHeight() const { return m_sectionFooterHeight; }
 
     /// Is the delete confirmation button showing for this path?
-    bool IsDeleteButtonShowing(const wxTablePath& path) const { m_deletePath == path; }
+    bool IsDeleteButtonShowing(const wxTablePath& path) const { return (m_deletePath == path); }
 
     /// Returns @true if row selection is allowed during editing. The default is @false.
     bool GetAllowSelectionDuringEditing() const { return m_allowsSelectionDuringEditing; }
@@ -404,6 +404,7 @@ public:
     // Load a bitmap from data
     wxBitmap LoadBitmap(const char* bitmapData, size_t len);
     wxBitmap LoadBitmap(unsigned char bitmapData[], size_t len) { return LoadBitmap((const char*) bitmapData, len); }
+    wxBitmap LoadBitmap(const void *bitmapData, size_t len) { return LoadBitmap((const char*) bitmapData, len); }
 
 protected:
 
