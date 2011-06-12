@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/artstd.cpp
+// Name:        src/gtk/artgtk.cpp
 // Purpose:     stock wxArtProvider instance with native GTK+ stock icons
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004-08-22
-// RCS-ID:      $Id: artgtk.cpp 66504 2010-12-31 17:39:01Z VZ $
+// RCS-ID:      $Id: artgtk.cpp 67326 2011-03-28 06:27:49Z PC $
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
     //        with "stock-id" representation (in addition to pixmap and pixbuf
     //        ones) and would convert it to pixbuf when rendered.
 
-    GtkStyle* style = wxGTKPrivate::GetButtonWidget()->style;
+    GtkStyle* style = gtk_widget_get_style(wxGTKPrivate::GetButtonWidget());
     GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
 
     if (!iconset)
@@ -310,7 +310,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
     const wxString stockid = wxArtIDToStock(id);
 
     // try to load the bundle as stock icon first
-    GtkStyle* style = wxGTKPrivate::GetButtonWidget()->style;
+    GtkStyle* style = gtk_widget_get_style(wxGTKPrivate::GetButtonWidget());
     GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid.utf8_str());
     if ( iconset )
     {
