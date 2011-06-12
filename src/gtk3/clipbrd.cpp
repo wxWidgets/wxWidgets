@@ -262,7 +262,8 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !clipboard )
         return;
 
-    wxDataObject * const data = clipboard->GTKGetDataObject();
+    wxDataObject * const data = clipboard->GTKGetDataObject(
+        gtk_selection_data_get_selection(selection_data));
     if ( !data )
         return;
 
