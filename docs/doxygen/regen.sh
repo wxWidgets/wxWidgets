@@ -106,6 +106,40 @@ if [[ "$1" = "qch" ]]; then
     qhelpgenerator out/html/index.qhp -o out/wx.qch
 fi
 
+if [[ "$1" = "docset" ]]; then
+    DOCSETNAME="org.wxwidgets.doxygen.wx29.docset"
+    ATOM="org.wxwidgets.doxygen.docset.wx29.atom"
+    ATOMDIR="http://docs.wxwidgets.org/docsets"
+    XAR="org.wxwidgets.doxygen.docset.wx29.xar"
+    XARDIR="http://docs.wxwidgets.org/docsets"
+    XCODE_INSTALL=`sh xcode-select -print-path`
+    
+    cp wxdocsettabs.css out/html/wxtabs.css
+    cp wxdocsetwidgets.css out/html/wxwidgets.css
+    cp img_downArrow.png out/html
+    cp background_navigation.png out/html
+    
+    cd out/html
+    DESTINATIONDIR=`pwd`
+    
+    rm -rf $DESTINATIONDIR/$DOCSETNAME
+    rm -f $DESTINATIONDIR/$XAR
+    
+    make 
+    
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 2.9 Library"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 2.9"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2011 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    
+    $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
+
+    cd ../..
+fi
+
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
