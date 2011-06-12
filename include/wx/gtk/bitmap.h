@@ -30,8 +30,13 @@ public:
     virtual ~wxMask();
 
     // implementation
-    GdkBitmap   *m_bitmap;
+#if defined(__WXGTK30__)
+    GdkPixbuf *m_bitmap;
+    GdkPixbuf *GetBitmap() const;
+#else
+    GdkBitmap *m_bitmap;
     GdkBitmap *GetBitmap() const;
+#endif
 
 protected:
     virtual void FreeData();
@@ -107,8 +112,10 @@ public:
     void SetDepth( int depth );
     void SetPixbuf(GdkPixbuf* pixbuf);
 
+#ifdef __WXGTK20__
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
+#endif
     bool HasPixbuf() const;
     GdkPixbuf *GetPixbuf() const;
 
@@ -127,10 +134,14 @@ protected:
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
 
 private:
+#if defined(__WXGTK20__)
     void SetPixmap(GdkPixmap* pixmap);
+#endif
 #if wxUSE_IMAGE
     // to be called from CreateFromImage only!
+  #if defined(__WXGTK20__)
     bool CreateFromImageAsPixmap(const wxImage& image, int depth);
+  #endif
     bool CreateFromImageAsPixbuf(const wxImage& image);
 #endif // wxUSE_IMAGE
 
