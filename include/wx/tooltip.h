@@ -20,6 +20,8 @@
 #include "wx/msw/tooltip.h"
 #elif defined(__WXMOTIF__)
 // #include "wx/motif/tooltip.h"
+#elif defined(__WXGTK30__)
+#include "wx/gtk/tooltip.h"
 #elif defined(__WXGTK20__)
 #include "wx/gtk/tooltip.h"
 #elif defined(__WXGTK__)

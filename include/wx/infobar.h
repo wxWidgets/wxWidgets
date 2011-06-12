@@ -55,7 +55,10 @@ private:
 #if defined(__WXGTK218__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/infobar.h"
     #define wxHAS_NATIVE_INFOBAR
-#endif // wxGTK2
+#elif defined(__WXGTK30__) && !defined(__WXUNIVERSAL__)
+    #include "wx/gtk/infobar.h"
+    #define wxHAS_NATIVE_INFOBAR
+#endif // wxGTK2/3
 
 // if the generic version is the only one we have, use it
 #ifndef wxHAS_NATIVE_INFOBAR

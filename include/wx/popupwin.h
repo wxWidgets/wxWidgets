@@ -56,6 +56,8 @@ public:
     #include "wx/msw/popupwin.h"
 #elif defined(__WXPM__)
     #include "wx/os2/popupwin.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/popupwin.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/popupwin.h"
 #elif defined(__WXGTK__)

@@ -195,6 +195,8 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
     #include "wx/msw/menuitem.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/menuitem.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/menuitem.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/menuitem.h"
 #elif defined(__WXGTK__)

@@ -123,7 +123,7 @@ protected:
 //       requires that all classes being mapped as wx{File|Dir}PickerWidget have the
 //       same prototype for the contructor...
 // since GTK >= 2.6, there is GtkFileButton
-#if defined(__WXGTK26__) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXGTK26__) || defined(__WXGTK30__)) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/filepicker.h"
     #define wxFilePickerWidget      wxFileButton
     #define wxDirPickerWidget       wxDirButton

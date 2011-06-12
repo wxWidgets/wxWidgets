@@ -43,6 +43,9 @@ public:
 #elif defined(__WXMOTIF__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_XBM
     #include "wx/motif/cursor.h"
+#elif defined(__WXGTK30__)
+    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+    #include "wx/gtk/cursor.h"
 #elif defined(__WXGTK20__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
     #include "wx/gtk/cursor.h"

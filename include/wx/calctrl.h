@@ -342,7 +342,7 @@ protected:
 #define wxCalendarNameStr "CalendarCtrl"
 
 #ifndef __WXUNIVERSAL__
-    #if defined(__WXGTK20__)
+    #if defined(__WXGTK20__) || defined(__WXGTK30__)
         #define wxHAS_NATIVE_CALENDARCTRL
         #include "wx/gtk/calctrl.h"
         #define wxCalendarCtrl wxGtkCalendarCtrl

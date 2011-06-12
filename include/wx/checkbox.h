@@ -184,6 +184,8 @@ private:
     #include "wx/msw/checkbox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/checkbox.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/checkbox.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/checkbox.h"
 #elif defined(__WXGTK__)

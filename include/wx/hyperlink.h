@@ -135,7 +135,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 
-#if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXGTK210__) || defined(__WXGTK30__)) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"
 // Note that the native control is only available in Unicode version under MSW.
 #elif defined(__WXMSW__) && wxUSE_UNICODE && !defined(__WXUNIVERSAL__)

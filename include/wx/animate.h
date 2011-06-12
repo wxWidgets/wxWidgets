@@ -115,7 +115,9 @@ private:
 // include the platform-specific version of the wxAnimationCtrl class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK30__) && !defined(__WXUNIVERSAL__)
+    #include "wx/gtk/animate.h"
+#elif defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/animate.h"
 #else
     #include "wx/generic/animate.h"

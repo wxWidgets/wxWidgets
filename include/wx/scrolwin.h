@@ -320,6 +320,8 @@ public:                                                                       \
 // include the declaration of the real wxScrollHelper
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
+#elif defined(__WXGTK30__) && !defined(__WXUNIVERSAL__)
+    #include "wx/gtk/scrolwin.h"
 #elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk1/scrolwin.h"
 #else

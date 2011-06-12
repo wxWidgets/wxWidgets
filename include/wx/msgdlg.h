@@ -274,7 +274,7 @@ private:
 
 #if defined(__WX_COMPILING_MSGDLGG_CPP__) || \
     defined(__WXUNIVERSAL__) || defined(__WXGPE__) || \
-    (defined(__WXGTK__) && !defined(__WXGTK20__))
+    (defined(__WXGTK__) && (!defined(__WXGTK20__) || !defined(__WXGTK30__)))
 
     #define wxMessageDialog wxGenericMessageDialog
 #elif defined(__WXCOCOA__)
@@ -285,6 +285,8 @@ private:
     #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/msgdlg.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/msgdlg.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/msgdlg.h"
 #elif defined(__WXMAC__)

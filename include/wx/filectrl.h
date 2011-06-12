@@ -68,7 +68,7 @@ void GenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void GenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString filename = wxEmptyString );
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXGTK20__) || defined(__WXGTK30__)) && !defined(__WXUNIVERSAL__)
     #define wxFileCtrl wxGtkFileCtrl
     #include "wx/gtk/filectrl.h"
 #else

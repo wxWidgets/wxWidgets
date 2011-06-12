@@ -66,6 +66,8 @@ public:
     #include "wx/msw/combobox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/combobox.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/combobox.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/combobox.h"
 #elif defined(__WXGTK__)

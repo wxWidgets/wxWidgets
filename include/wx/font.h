@@ -347,6 +347,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     #include "wx/msw/font.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/font.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/font.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/font.h"
 #elif defined(__WXGTK__)

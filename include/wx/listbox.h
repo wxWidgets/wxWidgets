@@ -148,6 +148,8 @@ private:
     #include "wx/msw/listbox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/listbox.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/listbox.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/listbox.h"
 #elif defined(__WXGTK__)

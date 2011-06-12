@@ -256,6 +256,8 @@ protected:
         #include "wx/palmos/frame.h"
     #elif defined(__WXMSW__)
         #include "wx/msw/frame.h"
+    #elif defined(__WXGTK30__)
+        #include "wx/gtk/frame.h"
     #elif defined(__WXGTK20__)
         #include "wx/gtk/frame.h"
     #elif defined(__WXGTK__)

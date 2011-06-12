@@ -151,6 +151,8 @@ private:
     #include "wx/msw/accel.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/accel.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/accel.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/accel.h"
 #elif defined(__WXGTK__)

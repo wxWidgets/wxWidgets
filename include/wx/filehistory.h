@@ -90,7 +90,7 @@ inline size_t wxFileHistoryBase::GetNoHistoryFiles() const
 #endif // WXWIN_COMPATIBILITY_2_6
 
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     #include "wx/gtk/filehistory.h"
 #else
     // no platform-specific implementation of wxFileHistory yet

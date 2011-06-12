@@ -252,7 +252,7 @@ private:
 
 
 #if !defined(__WXUNIVERSAL__) && \
-    ((defined(__WXGTK__) && defined(__WXGTK20__)) || defined(__WXMSW__) || \
+    ((defined(__WXGTK__) && (defined(__WXGTK20__) || defined(__WXGTK30__))) || defined(__WXMSW__) || \
      defined(__WXMAC__))
   // *some* (partial) native implementation of wxArtProvider exists; this is
   // not the same as wxArtProvider::HasNativeProvider()!

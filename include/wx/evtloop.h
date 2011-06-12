@@ -250,6 +250,8 @@ private:
     #include "wx/cocoa/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/evtloop.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/evtloop.h"
 #else // other platform

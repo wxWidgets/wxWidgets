@@ -182,7 +182,7 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 
 // make the default control appearance look more native-like depending on the
 // platform
-#if defined(__WXGTK20__)
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_NO_LINES)
 #elif defined(__WXMAC__)
     #define wxTR_DEFAULT_STYLE \

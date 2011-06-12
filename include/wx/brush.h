@@ -76,6 +76,8 @@ public:
     #include "wx/msw/brush.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/brush.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/brush.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/brush.h"
 #elif defined(__WXGTK__)

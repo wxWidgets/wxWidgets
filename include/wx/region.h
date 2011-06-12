@@ -217,6 +217,8 @@ protected:
     #include "wx/palmos/region.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/region.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/region.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/region.h"
 #elif defined(__WXGTK__)

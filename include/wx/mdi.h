@@ -344,6 +344,8 @@ public:
     #include "wx/generic/mdig.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/mdi.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/mdi.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/mdi.h"
 #elif defined(__WXGTK__)

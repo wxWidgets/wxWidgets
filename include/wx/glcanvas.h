@@ -189,7 +189,7 @@ public:
     #include "wx/msw/glcanvas.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/glcanvas.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK20__) || defined(__WXGTK30__)
     #include "wx/gtk/glcanvas.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/glcanvas.h"
