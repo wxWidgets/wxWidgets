@@ -1069,7 +1069,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(XWIN_LOWLEVEL_SRC)
     src/generic/icon.cpp
     src/generic/paletteg.cpp
-    src/gtk3/app.cpp
+    src/gtk/app.cpp
     src/gtk3/assertdlg_gtk.cpp
     src/gtk3/bitmap.cpp
     src/gtk3/brush.cpp
@@ -1116,7 +1116,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dataobj.h
     wx/gtk/dataobj2.h
     wx/gtk/dc.h
-    wx/gtk/dcclient.h
+    wx/gtk/dcclient_gtk3.h
     wx/gtk/dcmemory.h
     wx/gtk/dcscreen.h
     wx/gtk/dnd.h
@@ -1145,7 +1145,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
-    src/gtk3/artgtk.cpp
+    src/gtk/artgtk.cpp
     src/gtk3/bmpbuttn.cpp
     src/gtk3/button.cpp
     src/gtk3/checkbox.cpp

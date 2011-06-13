@@ -10,6 +10,10 @@
 #ifndef _WX_GTK_REGION_H_
 #define _WX_GTK_REGION_H_
 
+#ifdef __WXGTK30__
+    #include <cairo.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRegion
 // ----------------------------------------------------------------------------
@@ -57,11 +61,18 @@ public:
     virtual bool IsEmpty() const;
 
 public:
+
+#ifdef __WXGTK30__
+    wxRegion( cairo_region_t *region);
+
+    cairo_region_t *GetRegion() const;
+#else 
     // Init with GdkRegion, set ref count to 2 so that
     // the C++ class will not destroy the region!
     wxRegion( GdkRegion *region );
 
     GdkRegion *GetRegion() const;
+#endif
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
