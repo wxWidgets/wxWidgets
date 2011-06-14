@@ -71,7 +71,7 @@ behaviour).
 // If none is defined, decide on the most appropriate selection.
 #if !defined(wxMOBILE_HAVE_IPHONE) && !defined(wxMOBILE_HAVE_WINMOBILE) && !defined(wxMOBILE_HAVE_GENERIC_IPHONE) && !defined(wxMOBILE_HAVE_GENERIC_CUSTOM)
 
-#if wxOSX_USE_IPHONE
+#ifdef __WXOSX_IPHONE__
 #define wxMOBILE_HAVE_IPHONE                1
 #define wxMOBILE_HAVE_WINMOBILE             0
 #define wxMOBILE_HAVE_GENERIC_IPHONE        0

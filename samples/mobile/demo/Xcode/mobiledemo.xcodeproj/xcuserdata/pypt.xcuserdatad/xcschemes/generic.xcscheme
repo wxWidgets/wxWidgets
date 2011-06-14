@@ -15,7 +15,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B95E204D13A2D47C00DE91D8"
                BuildableName = "mobiledemo.app"
-               BlueprintName = "mobiledemo"
+               BlueprintName = "generic"
                ReferencedContainer = "container:mobiledemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,7 +42,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B95E204D13A2D47C00DE91D8"
             BuildableName = "mobiledemo.app"
-            BlueprintName = "mobiledemo"
+            BlueprintName = "generic"
             ReferencedContainer = "container:mobiledemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,7 +61,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B95E204D13A2D47C00DE91D8"
             BuildableName = "mobiledemo.app"
-            BlueprintName = "mobiledemo"
+            BlueprintName = "generic"
             ReferencedContainer = "container:mobiledemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

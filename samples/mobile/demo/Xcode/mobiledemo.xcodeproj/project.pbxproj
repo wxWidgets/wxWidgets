@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B95E205313A2D47C00DE91D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B95E205213A2D47C00DE91D8 /* Cocoa.framework */; };
+		B920393913A79555003B56C3 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B920393813A79555003B56C3 /* minimal.cpp */; };
+		B920393B13A79562003B56C3 /* sample.xpm in Resources */ = {isa = PBXBuildFile; fileRef = B920393A13A79562003B56C3 /* sample.xpm */; };
+		B920393D13A7956C003B56C3 /* wxiphonesample.png in Resources */ = {isa = PBXBuildFile; fileRef = B920393C13A7956C003B56C3 /* wxiphonesample.png */; };
 		B95E208213A2D4FF00DE91D8 /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B95E207413A2D4FF00DE91D8 /* demoapp.cpp */; };
 		B95E208313A2D4FF00DE91D8 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B95E207613A2D4FF00DE91D8 /* demoframe.cpp */; };
 		B95E208513A2D4FF00DE91D8 /* largedot.png in Resources */ = {isa = PBXBuildFile; fileRef = B95E207913A2D4FF00DE91D8 /* largedot.png */; };
@@ -131,10 +133,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B920391013A791FA003B56C3 /* mobiledemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobiledemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B920391A13A791FA003B56C3 /* mobiledemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mobiledemo-Info.plist"; sourceTree = "<group>"; };
+		B920391E13A791FA003B56C3 /* mobiledemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mobiledemo-Prefix.pch"; sourceTree = "<group>"; };
+		B920393813A79555003B56C3 /* minimal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = minimal.cpp; path = ../../../../../../wxiphonesample/minimal.cpp; sourceTree = "<group>"; };
+		B920393A13A79562003B56C3 /* sample.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sample.xpm; path = ../../../../../../wxiphonesample/sample.xpm; sourceTree = "<group>"; };
+		B920393C13A7956C003B56C3 /* wxiphonesample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wxiphonesample.png; path = ../../../../../../wxiphonesample/wxiphonesample.png; sourceTree = "<group>"; };
 		B95E204E13A2D47C00DE91D8 /* mobiledemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobiledemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B95E205213A2D47C00DE91D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		B95E205513A2D47C00DE91D8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		B95E205713A2D47C00DE91D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B95E205A13A2D47C00DE91D8 /* mobiledemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mobiledemo-Info.plist"; sourceTree = "<group>"; };
 		B95E207313A2D4FF00DE91D8 /* clock.xpm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = clock.xpm; path = ../../clock.xpm; sourceTree = "<group>"; };
 		B95E207413A2D4FF00DE91D8 /* demoapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoapp.cpp; path = ../../demoapp.cpp; sourceTree = "<group>"; };
@@ -380,22 +385,49 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B920390D13A791FA003B56C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B95E204B13A2D47C00DE91D8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B95E205313A2D47C00DE91D8 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B920391813A791FA003B56C3 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				B920393C13A7956C003B56C3 /* wxiphonesample.png */,
+				B920393A13A79562003B56C3 /* sample.xpm */,
+				B920393813A79555003B56C3 /* minimal.cpp */,
+				B920391913A791FA003B56C3 /* Supporting Files */,
+			);
+			name = ios;
+			path = mobiledemo;
+			sourceTree = "<group>";
+		};
+		B920391913A791FA003B56C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B920391A13A791FA003B56C3 /* mobiledemo-Info.plist */,
+				B920391E13A791FA003B56C3 /* mobiledemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		B95E204313A2D47B00DE91D8 = {
 			isa = PBXGroup;
 			children = (
-				B95E205813A2D47C00DE91D8 /* mobiledemo */,
-				B95E205113A2D47C00DE91D8 /* Frameworks */,
+				B95E205813A2D47C00DE91D8 /* generic */,
+				B920391813A791FA003B56C3 /* ios */,
 				B95E204F13A2D47C00DE91D8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -404,29 +436,12 @@
 			isa = PBXGroup;
 			children = (
 				B95E204E13A2D47C00DE91D8 /* mobiledemo.app */,
+				B920391013A791FA003B56C3 /* mobiledemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B95E205113A2D47C00DE91D8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B95E205213A2D47C00DE91D8 /* Cocoa.framework */,
-				B95E205413A2D47C00DE91D8 /* Other Frameworks */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B95E205413A2D47C00DE91D8 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B95E205513A2D47C00DE91D8 /* AppKit.framework */,
-				B95E205713A2D47C00DE91D8 /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
-			sourceTree = "<group>";
-		};
-		B95E205813A2D47C00DE91D8 /* mobiledemo */ = {
+		B95E205813A2D47C00DE91D8 /* generic */ = {
 			isa = PBXGroup;
 			children = (
 				B95E206F13A2D4CC00DE91D8 /* samples */,
@@ -436,6 +451,7 @@
 				B95E205A13A2D47C00DE91D8 /* mobiledemo-Info.plist */,
 				B9893C0A13A3101200C7ECF2 /* wxwidgets.png */,
 			);
+			name = generic;
 			path = mobiledemo;
 			sourceTree = "<group>";
 		};
@@ -494,6 +510,7 @@
 		B95E208E13A2D54F00DE91D8 /* mobile */ = {
 			isa = PBXGroup;
 			children = (
+				B95E209713A2D56000DE91D8 /* generic */,
 				B95E208F13A2D56000DE91D8 /* app.h */,
 				B95E209013A2D56000DE91D8 /* barbutton.h */,
 				B95E209113A2D56000DE91D8 /* bmpbutton.h */,
@@ -502,7 +519,6 @@
 				B95E209413A2D56000DE91D8 /* defs.h */,
 				B95E209513A2D56000DE91D8 /* frame.h */,
 				B95E209613A2D56000DE91D8 /* gauge.h */,
-				B95E209713A2D56000DE91D8 /* generic */,
 				B95E213213A2D56100DE91D8 /* keyboard.h */,
 				B95E213313A2D56100DE91D8 /* listbox.h */,
 				B95E213413A2D56100DE91D8 /* navbar.h */,
@@ -768,9 +784,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B95E204D13A2D47C00DE91D8 /* mobiledemo */ = {
+		B920390F13A791FA003B56C3 /* ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B95E206C13A2D47D00DE91D8 /* Build configuration list for PBXNativeTarget "mobiledemo" */;
+			buildConfigurationList = B920392D13A791FA003B56C3 /* Build configuration list for PBXNativeTarget "ios" */;
+			buildPhases = (
+				B920390C13A791FA003B56C3 /* Sources */,
+				B920390D13A791FA003B56C3 /* Frameworks */,
+				B920390E13A791FA003B56C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ios;
+			productName = mobiledemo;
+			productReference = B920391013A791FA003B56C3 /* mobiledemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B95E204D13A2D47C00DE91D8 /* generic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B95E206C13A2D47D00DE91D8 /* Build configuration list for PBXNativeTarget "generic" */;
 			buildPhases = (
 				B95E204A13A2D47C00DE91D8 /* Sources */,
 				B95E204B13A2D47C00DE91D8 /* Frameworks */,
@@ -780,7 +813,7 @@
 			);
 			dependencies = (
 			);
-			name = mobiledemo;
+			name = generic;
 			productName = mobiledemo;
 			productReference = B95E204E13A2D47C00DE91D8 /* mobiledemo.app */;
 			productType = "com.apple.product-type.application";
@@ -802,12 +835,22 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B95E204D13A2D47C00DE91D8 /* mobiledemo */,
+				B95E204D13A2D47C00DE91D8 /* generic */,
+				B920390F13A791FA003B56C3 /* ios */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B920390E13A791FA003B56C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B920393B13A79562003B56C3 /* sample.xpm in Resources */,
+				B920393D13A7956C003B56C3 /* wxiphonesample.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B95E204C13A2D47C00DE91D8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -900,6 +943,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B920390C13A791FA003B56C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B920393913A79555003B56C3 /* minimal.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B95E204A13A2D47C00DE91D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -948,6 +999,126 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		B920392E13A791FA003B56C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mobiledemo/mobiledemo-Prefix.pch";
+				GCC_VERSION = 4.2;
+				INFOPLIST_FILE = "mobiledemo/mobiledemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = (
+					"-I/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/wx/include/osx_iphone-unicode-static-2.9",
+					"-I/Users/pypt/Dropbox/etc-wxiOS/SOC2011_WXIOS/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D__WXOSX_IPHONE__",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					UIKit,
+					"-framework",
+					CFNetwork,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CoreFoundation,
+					"-framework",
+					CoreGraphics,
+					"-framework",
+					OpenGLES,
+					"-framework",
+					Foundation,
+					"-framework",
+					QuartzCore,
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_html-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_qa-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_adv-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_core-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu_xml-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu_net-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu-2.9.a",
+					"-lwxregexu-2.9",
+					"-lwxexpat-2.9",
+					"-lwxtiff-2.9",
+					"-lwxjpeg-2.9",
+					"-lwxpng-2.9",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				PRODUCT_NAME = mobiledemo;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		B920392F13A791FA003B56C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mobiledemo/mobiledemo-Prefix.pch";
+				GCC_VERSION = 4.2;
+				INFOPLIST_FILE = "mobiledemo/mobiledemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = (
+					"-I/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/wx/include/osx_iphone-unicode-static-2.9",
+					"-I/Users/pypt/Dropbox/etc-wxiOS/SOC2011_WXIOS/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D__WXOSX_IPHONE__",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					UIKit,
+					"-framework",
+					CFNetwork,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CoreFoundation,
+					"-framework",
+					CoreGraphics,
+					"-framework",
+					OpenGLES,
+					"-framework",
+					Foundation,
+					"-framework",
+					QuartzCore,
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_html-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_qa-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_adv-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_osx_iphoneu_core-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu_xml-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu_net-2.9.a",
+					"/Users/pypt/wxwork/build/iPhoneSimulatorDebug-4.3/lib/libwx_baseu-2.9.a",
+					"-lwxregexu-2.9",
+					"-lwxexpat-2.9",
+					"-lwxtiff-2.9",
+					"-lwxjpeg-2.9",
+					"-lwxpng-2.9",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				PRODUCT_NAME = mobiledemo;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		B95E206A13A2D47D00DE91D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1051,7 +1222,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "mobiledemo/mobiledemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = mobiledemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1065,7 +1236,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "mobiledemo/mobiledemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = mobiledemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1073,6 +1244,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B920392D13A791FA003B56C3 /* Build configuration list for PBXNativeTarget "ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B920392E13A791FA003B56C3 /* Debug */,
+				B920392F13A791FA003B56C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B95E204813A2D47B00DE91D8 /* Build configuration list for PBXProject "mobiledemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1082,7 +1262,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B95E206C13A2D47D00DE91D8 /* Build configuration list for PBXNativeTarget "mobiledemo" */ = {
+		B95E206C13A2D47D00DE91D8 /* Build configuration list for PBXNativeTarget "generic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B95E206D13A2D47D00DE91D8 /* Debug */,
