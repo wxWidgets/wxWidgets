@@ -299,6 +299,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_generic_statusbr.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
 	$(OBJS)\monodll_msw_accel.obj &
+	$(OBJS)\monodll_anybutton.obj &
 	$(OBJS)\monodll_artmsw.obj &
 	$(OBJS)\monodll_msw_bmpbuttn.obj &
 	$(OBJS)\monodll_msw_button.obj &
@@ -1073,6 +1074,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_generic_statusbr.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
 	$(OBJS)\monolib_msw_accel.obj &
+	$(OBJS)\monolib_anybutton.obj &
 	$(OBJS)\monolib_artmsw.obj &
 	$(OBJS)\monolib_msw_bmpbuttn.obj &
 	$(OBJS)\monolib_msw_button.obj &
@@ -1751,6 +1753,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_generic_statusbr.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
 	$(OBJS)\coredll_msw_accel.obj &
+	$(OBJS)\coredll_anybutton.obj &
 	$(OBJS)\coredll_artmsw.obj &
 	$(OBJS)\coredll_msw_bmpbuttn.obj &
 	$(OBJS)\coredll_msw_button.obj &
@@ -2302,6 +2305,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_generic_statusbr.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
 	$(OBJS)\corelib_msw_accel.obj &
+	$(OBJS)\corelib_anybutton.obj &
 	$(OBJS)\corelib_artmsw.obj &
 	$(OBJS)\corelib_msw_bmpbuttn.obj &
 	$(OBJS)\corelib_msw_button.obj &
@@ -6686,6 +6690,9 @@ $(OBJS)\monodll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.c
 $(OBJS)\monodll_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_anybutton.obj :  .AUTODEPEND ..\..\src\msw\anybutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -9032,6 +9039,9 @@ $(OBJS)\monolib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_anybutton.obj :  .AUTODEPEND ..\..\src\msw\anybutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
@@ -11793,6 +11803,9 @@ $(OBJS)\coredll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.c
 $(OBJS)\coredll_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_anybutton.obj :  .AUTODEPEND ..\..\src\msw\anybutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -13196,6 +13209,9 @@ $(OBJS)\corelib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.c
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_anybutton.obj :  .AUTODEPEND ..\..\src\msw\anybutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp

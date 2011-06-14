@@ -23,36 +23,6 @@
 #endif // wxUSE_MARKUP
 
 
-wxSize wxButton::DoGetBestSize() const
-{
-    // We only use help button bezel if we don't have any (non standard) label
-    // to display in the button. Otherwise even wxID_HELP buttons look like
-    // normal push buttons.
-    if ( GetId() == wxID_HELP && GetLabel().empty() )
-        return wxSize( 23 , 23 ) ;
-
-    wxRect r ;
-    GetPeer()->GetBestRect(&r);
-
-    wxSize sz = r.GetSize();
-    sz.x  = sz.x  + MacGetLeftBorderSize() +
-    MacGetRightBorderSize();
-    sz.y = sz.y + MacGetTopBorderSize() +
-    MacGetBottomBorderSize();
-    
-    const int wBtnStd = GetDefaultSize().x;
-
-    if ( (sz.x < wBtnStd) && !HasFlag(wxBU_EXACTFIT) )
-        sz.x = wBtnStd;
-
-    return sz ;
-}
-
-wxSize wxButton::GetDefaultSize()
-{
-    return wxSize(84, 20);
-}
-
 @implementation wxNSButton
 
 + (void)initialize

@@ -1396,6 +1396,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\anybutton.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\app.cpp"
 				>
 			</File>
@@ -5676,6 +5696,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\anybutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\app.h"
 				>
 			</File>
@@ -6713,6 +6737,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\animdecod.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\anybutton.h"
 				>
 			</File>
 			<File

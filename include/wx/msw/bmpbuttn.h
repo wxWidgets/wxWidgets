@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton() { Init(); }
+    wxBitmapButton() {}
 
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
@@ -30,8 +30,6 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxButtonNameStr)
     {
-        Init();
-
         Create(parent, id, bitmap, pos, size, style, validator, name);
     }
 
@@ -45,25 +43,6 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 protected:
-    // common part of all ctors
-    void Init()
-    {
-        m_disabledSetByUser =
-        m_hoverSetByUser = false;
-    }
-
-    // reimplement some base class virtuals
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
-
-    // true if disabled bitmap was set by user, false if we created it
-    // ourselves from the normal one
-    bool m_disabledSetByUser;
-
-    // true if hover bitmap was set by user, false if it was set from focused
-    // one
-    bool m_hoverSetByUser;
-
-
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };

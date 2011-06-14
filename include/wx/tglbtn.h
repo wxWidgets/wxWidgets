@@ -18,7 +18,7 @@
 #if wxUSE_TOGGLEBTN
 
 #include "wx/event.h"
-#include "wx/control.h"     // base class
+#include "wx/anybutton.h"     // base class
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
@@ -28,7 +28,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 
 // wxToggleButtonBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToggleButtonBase : public wxControl
+class WXDLLIMPEXP_CORE wxToggleButtonBase : public wxAnyButton
 {
 public:
     wxToggleButtonBase() { }

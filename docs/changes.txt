@@ -467,6 +467,7 @@ All (GUI):
 - Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
 - Added support for dynamic auto-completion in wxTextEntry.
+- Added images support to wxToggleButton (Garrick Meeker).
 - wxAUI: support auto-orientable toolbars (wsu).
 - wxAUI: add support for icons in pane title bars (triton).
 - Added wxPanel::SetBackgroundBitmap().
