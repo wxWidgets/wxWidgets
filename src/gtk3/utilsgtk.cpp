@@ -73,7 +73,11 @@ void wxBell()
 
 void *wxGetDisplay()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    return gdk_display_get_default();
+#else
     return GDK_DISPLAY();
+#endif
 }
 
 void wxDisplaySize( int *width, int *height )

@@ -764,7 +764,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     m_fsIsShowing = show;
 
     wxX11FullScreenMethod method =
-        wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
+        wxGetFullScreenMethodX11((WXDisplay*)gdk_display_get_default(),
                                  (WXWindow)GDK_ROOT_WINDOW());
 
     // NB: gtk_window_fullscreen() uses freedesktop.org's WMspec extensions
@@ -805,7 +805,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_move_resize(
                 window, -client_x, -client_y, screen_width + 1, screen_height + 1);
 
-            wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
+            wxSetFullScreenStateX11((WXDisplay*)gdk_display_get_default(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
                                     (WXWindow)GDK_WINDOW_XWINDOW(window),
                                     show, &m_fsSaveFrame, method);
