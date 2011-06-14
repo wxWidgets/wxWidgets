@@ -193,6 +193,9 @@ static void class_init(void* g_class, void*)
 
     // needed to make widget appear scrollable to GTK+
     klass->set_scroll_adjustments = set_scroll_adjustments;
+#if GTK_CHECK_VERSION(3,0,0)
+    // TODO Make widget appear scrollable to GTK3
+#else
     widget_class->set_scroll_adjustments_signal =
         g_signal_new(
             "set_scroll_adjustments",
@@ -202,6 +205,7 @@ static void class_init(void* g_class, void*)
             NULL, NULL,
             g_cclosure_user_marshal_VOID__OBJECT_OBJECT,
             G_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+#endif
 
     parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_class));
 }
