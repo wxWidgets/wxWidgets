@@ -559,16 +559,19 @@ void wxFrame::OnInternalIdle()
     wxFrameBase::OnInternalIdle();
 
 #if wxUSE_MENUS_NATIVE
-    if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
-
-    // UpdateMenuBarSize may return a height of zero on some
-    // systems (e.g. Ubuntu 11.04 Alpha as of 2010-12-06),
-    // when the menubar widget has not been fully realized.
-    // Update the menu bar size again at this point, otherwise
-    // the menu would not be visible at all.
-    if (!m_menuBarHeight)
+    if (m_frameMenuBar)
     {
-        UpdateMenuBarSize();
+        m_frameMenuBar->OnInternalIdle();
+
+        // UpdateMenuBarSize may return a height of zero on some
+        // systems (e.g. Ubuntu 11.04 Alpha as of 2010-12-06),
+        // when the menubar widget has not been fully realized.
+        // Update the menu bar size again at this point, otherwise
+        // the menu would not be visible at all.
+        if (!m_menuBarHeight)
+        {
+            UpdateMenuBarSize();
+        }
     }
 #endif // wxUSE_MENUS_NATIVE
 #if wxUSE_TOOLBAR
@@ -671,7 +674,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::UpdateMenuBarSize()
 {
-    int oldMenuBarHeight = m_menuBarHeight;
     m_menuBarHeight = 2;
 
     // this is called after Remove with a NULL m_frameMenuBar
@@ -688,8 +690,7 @@ void wxFrame::UpdateMenuBarSize()
     }
 
     // resize window in OnInternalIdle
-    if (oldMenuBarHeight != m_menuBarHeight)
-        GtkUpdateSize();
+    GtkUpdateSize();
 }
 
 #endif // wxUSE_MENUS_NATIVE
