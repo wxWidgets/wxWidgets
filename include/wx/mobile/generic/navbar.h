@@ -16,9 +16,9 @@
 #include "wx/bitmap.h"
 #include "wx/control.h"
 
-#include "wx/mobile/utils.h"
-#include "wx/mobile/barbutton.h"
-#include "wx/mobile/navitem.h"
+#include "wx/mobile/generic/utils.h"
+#include "wx/mobile/generic/barbutton.h"
+#include "wx/mobile/generic/navitem.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxNavigationBarNameStr[];
 

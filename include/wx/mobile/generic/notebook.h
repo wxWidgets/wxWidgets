@@ -13,7 +13,7 @@
 #define _WX_MOBILE_GENERIC_NOTEBOOK_H_
 
 #include "wx/notebook.h"
-#include "wx/mobile/tabctrl.h"
+#include "wx/mobile/generic/tabctrl.h"
 
 // Not currently needed
 #define wxBK_TEXT   0x00010000

@@ -14,7 +14,7 @@
 
 class WXDLLIMPEXP_CORE wxImageList;
 
-#include "wx/mobile/tabctrl.h"
+#include "wx/mobile/generic/tabctrl.h"
 
 /**
     @class wxMoSegmentedCtrl

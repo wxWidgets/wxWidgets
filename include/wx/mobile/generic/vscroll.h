@@ -20,8 +20,8 @@
 #include "wx/timer.h"
 #include "wx/scrolbar.h"
 
-#include "wx/mobile/window.h"
-#include "wx/mobile/scrollwin.h"
+#include "wx/mobile/generic/window.h"
+#include "wx/mobile/generic/scrollwin.h"
 
 #ifdef _WX_VSCROLL_H_
 #undef _WX_VSCROLL_H_
@@ -143,5 +143,5 @@ private:
     bool    m_showVerticalScrollIndicator;
 };
 
-#endif // _WX_MOBILE_GENERIC_VSCROLL_H_
-
+#endif
+    // _WX_MOBILE_GENERIC_VSCROLL_H_

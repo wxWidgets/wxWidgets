@@ -14,7 +14,7 @@
 
 #include "wx/dynarray.h"
 
-#include "wx/mobile/vscroll.h"
+#include "wx/mobile/generic/vscroll.h"
 
 class WXDLLEXPORT wxMoTableCell;
 class WXDLLEXPORT wxMoTableCtrl;

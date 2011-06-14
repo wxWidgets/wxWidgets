@@ -119,6 +119,16 @@ wxToolBarToolBase *wxMoToolBar::CreateTool(wxControl *control)
     return new wxMoToolBarTool(this, control);
 }
 
+wxToolBarToolBase *wxMoToolBar::CreateTool(wxControl *control,
+                                      const wxString& label)
+{
+    wxMoToolBarTool *toolbarTool = new wxMoToolBarTool(this, control);
+    if (toolbarTool != NULL) {
+        toolbarTool.SetLabel(label);
+    }
+    return toolbar;
+}
+
 // ----------------------------------------------------------------------------
 // wxMoToolBar construction
 // ----------------------------------------------------------------------------

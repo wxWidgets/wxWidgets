@@ -1,0 +1,149 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/mobile/native/settings.h
+// Purpose:     wxMobile/wxiOS (GSoC 2011)
+// Author:      Julian Smart, Linas Valiukas
+// Modified by:
+// Created:     2011-06-14
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart, Linas Valiukas
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_MOBILE_NATIVE_SETTINGS_H_
+#define _WX_MOBILE_NATIVE_SETTINGS_H_
+
+// System colours used by the iPhone emulator
+
+enum wxMoSystemColour
+{
+    wxMO_COLOUR_NORMAL_BUTTON_BG,
+    wxMO_COLOUR_NORMAL_BUTTON_TEXT,
+    wxMO_COLOUR_NORMAL_BUTTON_BORDER,
+    wxMO_COLOUR_ROUNDED_RECT_BUTTON_BG,
+    wxMO_COLOUR_ROUNDED_RECT_BUTTON_TEXT,
+    wxMO_COLOUR_DONE_BUTTON_BG,
+    
+    wxMO_COLOUR_SWITCH_OFF_BG,
+    wxMO_COLOUR_SWITCH_ON_BG,
+    wxMO_COLOUR_SWITCH_THUMB_BG,
+    wxMO_COLOUR_SWITCH_ON_TEXT,
+    wxMO_COLOUR_SWITCH_OFF_TEXT,
+    
+    wxMO_COLOUR_PAGE_SELECTED,
+    wxMO_COLOUR_PAGE_UNSELECTED,
+    
+    wxMO_COLOUR_GAUGE_BG,
+    wxMO_COLOUR_GAUGE_FILL,
+    
+    wxMO_COLOUR_SLIDER_BG,
+    wxMO_COLOUR_SLIDER_FILL,
+    wxMO_COLOUR_SLIDER_THUMB,
+    
+    wxMO_COLOUR_SEGCTRL_BG,
+    wxMO_COLOUR_SEGCTRL_SELECTED_BG,
+    wxMO_COLOUR_SEGCTRL_TEXT,
+    wxMO_COLOUR_SEGCTRL_BORDER,
+    
+    wxMO_COLOUR_NAVBAR_NORMAL_BG,
+    wxMO_COLOUR_NAVBAR_BLACK_OPAQUE_BG,
+    wxMO_COLOUR_NAVBAR_BLACK_TRANSLUCENT_BG,
+    wxMO_COLOUR_NAVBAR_TEXT,
+    wxMO_COLOUR_NAVBAR_NORMAL_BUTTON_BG,
+    wxMO_COLOUR_NAVBAR_BLACK_BUTTON_BG,
+    wxMO_COLOUR_NAVBAR_BUTTON_BORDER,
+    
+    wxMO_COLOUR_TOOLBAR_NORMAL_BG,
+    wxMO_COLOUR_TOOLBAR_BLACK_OPAQUE_BG,
+    wxMO_COLOUR_TOOLBAR_BLACK_TRANSLUCENT_BG,
+    wxMO_COLOUR_TOOLBAR_BLACK_BUTTON_BG,
+    wxMO_COLOUR_TOOLBAR_NORMAL_BUTTON_BG,
+    wxMO_COLOUR_TOOLBAR_TEXT,
+    wxMO_COLOUR_TOOLBAR_BUTTON_BORDER,
+    
+    wxMO_COLOUR_TAB_BG,
+    wxMO_COLOUR_TAB_BUTTON_BG,
+    wxMO_COLOUR_TAB_TEXT,
+    wxMO_COLOUR_TAB_BUTTON_BORDER,
+    wxMO_COLOUR_TAB_BADGE_BG,
+    
+    wxMO_COLOUR_PANEL_BG,
+    
+    wxMO_COLOUR_ACTION_SHEET_BG,
+    wxMO_COLOUR_ACTION_SHEET_OK_BG,
+    wxMO_COLOUR_ACTION_SHEET_CANCEL_BG,
+    wxMO_COLOUR_ACTION_SHEET_OTHER_BG,
+    wxMO_COLOUR_ACTION_SHEET_TEXT,
+    
+    wxMO_COLOUR_ALERT_SHEET_BG,
+    
+    wxMO_COLOUR_WHEELS_BG,
+    wxMO_COLOUR_WHEELS_TEXT,
+    wxMO_COLOUR_WHEELS_LIGHT_GREY,
+    wxMO_COLOUR_WHEELS_DARK_GREY,
+    
+    wxMO_COLOUR_GREY_SHADOW,
+    
+    wxMO_COLOUR_TABLE_SURROUND,
+    wxMO_COLOUR_TABLE_LINE,
+    wxMO_COLOUR_TABLE_BG,
+    wxMO_COLOUR_TABLE_PLAIN_SECTION_TEXT,
+    wxMO_COLOUR_TABLE_GROUPED_SECTION_TEXT,
+    wxMO_COLOUR_TABLE_ROW_TEXT,
+    wxMO_COLOUR_TABLE_SELECTED_TEXT,
+    wxMO_COLOUR_TABLE_BLUE_SELECTION,
+    wxMO_COLOUR_TABLE_GREY_SELECTION,
+    wxMO_COLOUR_TABLE_PLAIN_SECTION_HEADER,
+    wxMO_COLOUR_TABLE_PLAIN_TABLE_HEADER,
+    wxMO_COLOUR_TABLE_INDEX_TEXT,
+    wxMO_COLOUR_TABLE_DETAIL_TEXT_BLUE,
+    wxMO_COLOUR_TABLE_DETAIL_TEXT_GREY
+};
+
+#define wxMO_COLOUR(colId, red, green, blue) \
+if (id == colId) return wxColour(red, green, blue)
+
+// System fonts used by the iPhone emulator
+
+enum wxMoSystemFont
+{
+    wxMO_FONT_NORMAL_BUTTON,
+    
+    wxMO_FONT_ACTION_SHEET_BUTTON,
+    wxMO_FONT_ACTION_SHEET_TITLE,
+    
+    wxMO_FONT_ALERT_SHEET_BUTTON,
+    wxMO_FONT_ALERT_SHEET_TITLE,
+    wxMO_FONT_ALERT_SHEET_MESSAGE,
+    
+    wxMO_FONT_TOOLBAR,
+    wxMO_FONT_TAB,
+    wxMO_FONT_SEGMENTEDCTRL,
+    
+    wxMO_FONT_SWITCH,
+    wxMO_FONT_TEXTCTRL,
+    wxMO_FONT_WHEELSCTRL,
+    
+    wxMO_FONT_NAVBAR_TITLE,
+    wxMO_FONT_NAVBAR_BUTTON,
+    
+    wxMO_FONT_TABLE_ROWS,
+    wxMO_FONT_TABLE_DETAIL,
+    wxMO_FONT_TABLE_SECTIONS,
+    wxMO_FONT_TABLE_TABLE_HEADER,
+    wxMO_FONT_TABLE_INDEX
+};
+
+#define wxMO_FONT(fontId, font) \
+if (id == fontId) return font
+
+class wxMoSystemSettings
+{
+public:
+    wxMoSystemSettings() {}
+    
+    static wxColour GetColour(wxMoSystemColour id);
+    static wxFont GetFont(wxMoSystemFont id);
+};
+
+#endif
+    // _WX_MOBILE_NATIVE_SETTINGS_H_

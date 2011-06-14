@@ -12,7 +12,7 @@
 #ifndef _WX_MOBILE_GENERIC_VLBOX_H_
 #define _WX_MOBILE_GENERIC_VLBOX_H_
 
-#include "wx/mobile/vscroll.h"
+#include "wx/mobile/generic/vscroll.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSelectionStore;
 
@@ -294,5 +294,5 @@ private:
 };
 
 
-#endif // _WX_MOBILE_GENERIC_VLBOX_H_
-
+#endif
+    // _WX_MOBILE_GENERIC_VLBOX_H_

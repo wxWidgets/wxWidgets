@@ -15,8 +15,8 @@
 #include  "wx/event.h"
 #include  "wx/control.h"
 
-#include  "wx/mobile/defs.h"
-#include  "wx/mobile/settings.h"
+#include  "wx/mobile/generic/defs.h"
+#include  "wx/mobile/generic/settings.h"
 
 enum
 {

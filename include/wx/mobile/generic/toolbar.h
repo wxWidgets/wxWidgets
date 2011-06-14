@@ -231,6 +231,8 @@ protected:
                                           const wxString& shortHelp,
                                           const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
 
     // return the appropriate size and flags for the toolbar control
     virtual wxSize DoGetBestSize() const;
@@ -248,5 +250,4 @@ private:
 };
 
 #endif
- // _WX_MOBILE_GENERIC_TOOLBAR_H_
-
+    // _WX_MOBILE_GENERIC_TOOLBAR_H_

@@ -20,7 +20,7 @@
 #include "wx/timer.h"
 #include "wx/scrolbar.h"
 
-#include "wx/mobile/panel.h"
+#include "wx/mobile/generic/panel.h"
 
 class WXDLLEXPORT wxMoScrolledWindow;
 class WXDLLEXPORT wxTouchScrollEvent;
@@ -261,5 +261,5 @@ DECLARE_EVENT_TYPE(wxEVT_TOUCH_SCROLL_CANCEL_TOUCHES, 451)
 #define EVT_TOUCH_SCROLL_DRAG(func) wx__DECLARE_EVT0(wxEVT_TOUCH_SCROLL_DRAG, wxTouchScrollEventHandler(func))
 #define EVT_TOUCH_SCROLL_CANCEL_TOUCHES(func) wx__DECLARE_EVT0(wxEVT_TOUCH_SCROLL_CANCEL_TOUCHES, wxTouchScrollEventHandler(func))
 
-#endif // _WX_MOBILE_GENERIC_SCROLLWIN_H_
-
+#endif
+    // _WX_MOBILE_GENERIC_SCROLLWIN_H_

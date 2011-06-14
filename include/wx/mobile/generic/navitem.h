@@ -13,7 +13,7 @@
 #define _WX_MOBILE_GENERIC_NAVITEM_H_
 
 #include "wx/dynarray.h"
-#include "wx/mobile/barbutton.h"
+#include "wx/mobile/generic/barbutton.h"
 
 class WXDLLEXPORT wxMoViewController;
 

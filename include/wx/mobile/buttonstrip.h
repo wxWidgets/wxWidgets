@@ -14,7 +14,10 @@
 
 #include "wx/mobile/setup.h"
 
+#if wxUSE_MOBILE_NATIVE_BUTTONSTRIP
+#include "wx/mobile/native/buttonstrip.h"
+#else
 #include "wx/mobile/generic/buttonstrip.h"
+#endif
 
 #endif // _WX_MOBILE_BUTTONSTRIP_H_
-

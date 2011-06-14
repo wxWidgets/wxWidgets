@@ -78,5 +78,5 @@ private:
 };
 
 
-#endif // _WX_MOBILE_GENERIC_WINDOW_H_
-
+#endif
+    // _WX_MOBILE_GENERIC_WINDOW_H_

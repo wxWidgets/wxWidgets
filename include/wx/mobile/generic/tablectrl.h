@@ -14,9 +14,9 @@
 
 #include "wx/dynarray.h"
 
-#include "wx/mobile/scrollwin.h"
-#include "wx/mobile/tablecell.h"
-#include "wx/mobile/button.h"
+#include "wx/mobile/generic/scrollwin.h"
+#include "wx/mobile/generic/tablecell.h"
+#include "wx/mobile/generic/button.h"
 
 // Table control styles
 #define wxTC_PLAIN          0x0800

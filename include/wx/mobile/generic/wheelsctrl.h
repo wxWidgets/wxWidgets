@@ -15,8 +15,8 @@
 #include "wx/bitmap.h"
 #include "wx/control.h"
 #include "wx/dynarray.h"
-#include "wx/mobile/utils.h"
-#include "wx/mobile/vlbox.h"
+#include "wx/mobile/generic/utils.h"
+#include "wx/mobile/generic/vlbox.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxWheelsCtrlNameStr[];
 

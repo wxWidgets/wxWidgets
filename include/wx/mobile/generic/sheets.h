@@ -14,7 +14,7 @@
 
 #include "wx/dialog.h"
 #include "wx/stattext.h"
-#include "wx/mobile/panel.h"
+#include "wx/mobile/generic/panel.h"
 
 // Action sheet styles
 #define wxACTION_SHEET_DEFAULT      0x1000
@@ -314,5 +314,6 @@ END_DECLARE_EVENT_TYPES()
 int wxIBMessageBox(const wxString& message, const wxString& caption = _("Message"), int style = wxOK,
                    wxWindow *parent = NULL, int x = -1, int y = -1);
 
-#endif // _WX_MOBILE_GENERIC_SHEETS_H_
+#endif
+    // _WX_MOBILE_GENERIC_SHEETS_H_
 

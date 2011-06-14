@@ -12,7 +12,7 @@
 #ifndef _WX_MOBILE_GENERIC_PANEL_H_
 #define _WX_MOBILE_GENERIC_PANEL_H_
 
-#include "wx/mobile/window.h"
+#include "wx/mobile/generic/window.h"
 #include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxControlContainer;
@@ -76,5 +76,5 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // _WX_MOBILE_GENERIC_PANEL_H_
-
+#endif
+    // _WX_MOBILE_GENERIC_PANEL_H_

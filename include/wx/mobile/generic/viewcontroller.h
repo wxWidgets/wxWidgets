@@ -13,7 +13,7 @@
 #define _WX_MOBILE_GENERIC_VIEWCONTROLLER_H_
 
 #include "wx/dynarray.h"
-#include "wx/mobile/navitem.h"
+#include "wx/mobile/generic/navitem.h"
 
 /**
     @class wxMoViewController

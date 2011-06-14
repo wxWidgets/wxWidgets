@@ -71,7 +71,7 @@ behaviour).
 // If none is defined, decide on the most appropriate selection.
 #if !defined(wxMOBILE_HAVE_IPHONE) && !defined(wxMOBILE_HAVE_WINMOBILE) && !defined(wxMOBILE_HAVE_GENERIC_IPHONE) && !defined(wxMOBILE_HAVE_GENERIC_CUSTOM)
 
-#ifdef __WXOSX_IPHONE__
+#ifdef wxOSX_USE_IPHONE
 #define wxMOBILE_HAVE_IPHONE                1
 #define wxMOBILE_HAVE_WINMOBILE             0
 #define wxMOBILE_HAVE_GENERIC_IPHONE        0
@@ -92,8 +92,9 @@ behaviour).
 
 #define wxUSE_MOBILE_NATIVE_APP                    1
 #define wxUSE_MOBILE_NATIVE_BARBUTTON              1
-#define wxUSE_MOBILE_NATIVE_BITMAPBUTTON           1
+#define wxUSE_MOBILE_NATIVE_BMPBUTTON              1
 #define wxUSE_MOBILE_NATIVE_BUTTON                 1
+#define wxUSE_MOBILE_NATIVE_BUTTONSTRIP            1
 #define wxUSE_MOBILE_NATIVE_FRAME                  1
 #define wxUSE_MOBILE_NATIVE_GAUGE                  1
 #define wxUSE_MOBILE_NATIVE_KEYBOARD               1
@@ -128,8 +129,9 @@ behaviour).
 
 #define wxUSE_MOBILE_NATIVE_APP                    0
 #define wxUSE_MOBILE_NATIVE_BARBUTTON              0
-#define wxUSE_MOBILE_NATIVE_BITMAPBUTTON           0
+#define wxUSE_MOBILE_NATIVE_BMPBUTTON              0
 #define wxUSE_MOBILE_NATIVE_BUTTON                 0
+#define wxUSE_MOBILE_NATIVE_BUTTONSTRIP            0
 #define wxUSE_MOBILE_NATIVE_FRAME                  0
 #define wxUSE_MOBILE_NATIVE_GAUGE                  0
 #define wxUSE_MOBILE_NATIVE_KEYBOARD               0
