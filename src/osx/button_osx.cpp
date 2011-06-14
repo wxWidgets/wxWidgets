@@ -131,6 +131,12 @@ bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
     return true;
 }
 
+/* static */
+wxSize wxButtonBase::GetDefaultSize()
+{
+    return wxAnyButton::GetDefaultSize();
+}
+
 //-------------------------------------------------------
 // wxDisclosureTriangle
 //-------------------------------------------------------
