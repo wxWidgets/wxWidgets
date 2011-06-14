@@ -50,7 +50,7 @@ static Atom _NET_WM_WINDOW_TYPE_NORMAL = 0;
 static Atom _KDE_NET_WM_WINDOW_TYPE_OVERRIDE = 0;
 static Atom _WIN_LAYER = 0;
 static Atom KWIN_RUNNING = 0;
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) && !defined(__WXGTK30__)
 static Atom _NET_SUPPORTING_WM_CHECK = 0;
 static Atom _NET_SUPPORTED = 0;
 #endif
@@ -266,13 +266,22 @@ static void wxWinHintsSetLayer(Display *display, Window rootWnd,
 
 
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) 
 static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
                                  Window WXUNUSED(rootWnd),
                                  Atom (feature))
 {
     GdkAtom gatom = gdk_x11_xatom_to_atom(feature);
     return gdk_net_wm_supports(gatom);
+}
+#elif defined(__WXGTK30__)
+static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
+                                 Window WXUNUSED(rootWnd),
+                                 Atom (feature))
+{
+    GdkAtom gatom = gdk_x11_xatom_to_atom(feature);
+    //TODO Fix NULL here
+    return gdk_x11_screen_supports_net_wm_hint(NULL, gatom);
 }
 #else
 static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)

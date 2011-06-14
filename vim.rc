@@ -1,4 +1,5 @@
-set makeprg=make\ -j20\ -C\ ../wx-branch-build
+"set makeprg=make\ -j20\ -C\ ../wx-branch-build
+set makeprg=make\ -C\ ../wx-branch-build
 set tags=./tags
 set sw=4
 set csprg=gtags-cscope
