@@ -713,6 +713,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
+    if ( m_netFrameExtentsTimerId )
+    {
+        // Don't let the timer callback fire as the window pointer passed to it
+        // will become invalid very soon.
+        g_source_remove(m_netFrameExtentsTimerId);
+    }
+
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // it can also be a (standard) dialog
     if ( HILDON_IS_WINDOW(m_widget) )
