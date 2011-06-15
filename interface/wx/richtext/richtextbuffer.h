@@ -9,96 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTBUFFER_H_
-#define _WX_RICHTEXTBUFFER_H_
-
-/*
-
-  Data structures
-  ===============
-
-  Data is represented by a hierarchy of objects, all derived from
-  wxRichTextObject.
-
-  The top of the hierarchy is the buffer, a kind of wxRichTextParagraphLayoutBox.
-  These boxes will allow flexible placement of text boxes on a page, but
-  for now there is a single box representing the document, and this box is
-  a wxRichTextParagraphLayoutBox which contains further wxRichTextParagraph
-  objects, each of which can include text and images.
-
-  Each object maintains a range (start and end position) measured
-  from the start of the main parent box.
-  A paragraph object knows its range, and a text fragment knows its range
-  too. So, a character or image in a page has a position relative to the
-  start of the document, and a character in an embedded text box has
-  a position relative to that text box. For now, we will not be dealing with
-  embedded objects but it's something to bear in mind for later.
-
-  Note that internally, a range (5,5) represents a range of one character.
-  In the public wx[Rich]TextCtrl API, this would be passed to e.g. SetSelection
-  as (5,6). A paragraph with one character might have an internal range of (0, 1)
-  since the end of the paragraph takes up one position.
-
-  Layout
-  ======
-
-  When Layout is called on an object, it is given a size which the object
-  must limit itself to, or one or more flexible directions (vertical
-  or horizontal). So for example a centered paragraph is given the page
-  width to play with (minus any margins), but can extend indefinitely
-  in the vertical direction. The implementation of Layout can then
-  cache the calculated size and position within the parent.
-
- */
-
-/*!
- * Includes
- */
-
-#include "wx/defs.h"
-
-#if wxUSE_RICHTEXT
-
-#include "wx/list.h"
-#include "wx/textctrl.h"
-#include "wx/bitmap.h"
-#include "wx/image.h"
-#include "wx/cmdproc.h"
-#include "wx/txtstrm.h"
-#include "wx/variant.h"
-
-#if wxUSE_DATAOBJ
-#include "wx/dataobj.h"
-#endif
-
-// Compatibility
-//#define wxRichTextAttr wxTextAttr
-#define wxTextAttrEx wxTextAttr
-
-// Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a
-// caret reliably without using wxClientDC in case there
-// are platform-specific problems with the generic caret.
-#if defined(__WXGTK__) || defined(__WXMAC__)
-#define wxRICHTEXT_USE_OWN_CARET 1
-#else
-#define wxRICHTEXT_USE_OWN_CARET 0
-#endif
-
-// Switch off for binary compatibility, on for faster drawing
-// Note: this seems to be buggy (overzealous use of extents) so
-// don't use for now
-#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
-
-// The following two symbols determine whether an output implementation
-// is present. To switch the relevant one on, set wxRICHTEXT_USE_XMLDOCUMENT_OUTPUT in
-// richtextxml.cpp. By default, the faster direct output implementation is used.
-
-// Include the wxXmlDocument implementation for output
-#define wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT 1
-
-// Include the faster, direct implementation for output
-#define wxRICHTEXT_HAVE_DIRECT_OUTPUT 1
-
 /**
     The line break character that can be embedded in content.
  */
@@ -117,31 +27,6 @@ enum wxRichTextFileType
     wxRICHTEXT_TYPE_RTF,
     wxRICHTEXT_TYPE_PDF
 };
-
-/*
- * Forward declarations
- */
-
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCtrl;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObject;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextImage;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCacheObject;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObjectList;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextLine;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextParagraph;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFileHandler;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleSheet;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextXMLHandler;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextParagraphLayoutBox;
-class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextImageBlock;
-class WXDLLIMPEXP_FWD_XML      wxXmlNode;
-class                          wxRichTextFloatCollector;
-class WXDLLIMPEXP_FWD_BASE wxDataInputStream;
-class WXDLLIMPEXP_FWD_BASE wxDataOutputStream;
 
 /**
     Flags determining the available space, passed to Layout.
@@ -5553,10 +5438,3 @@ WXDLLIMPEXP_RICHTEXT wxString wxRichTextDecimalToRoman(long n);
 WXDLLIMPEXP_RICHTEXT void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAttr& attr, wxTextAttr& clashingAttr, wxTextAttr& absentAttr);
 
 WXDLLIMPEXP_RICHTEXT void wxRichTextModuleInit();
-
-#endif
-    // wxUSE_RICHTEXT
-
-#endif
-    // _WX_RICHTEXTBUFFER_H_
-
