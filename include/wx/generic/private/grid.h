@@ -613,8 +613,8 @@ public:
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
         {  grid->SetDefaultRowSize(size, resizeExisting); }
 
-    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int line) const
-        { return line; } // TODO: implement row reordering
+    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int pos) const
+        { return pos; } // TODO: implement row reordering
 
     virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const
         { return line ? line - 1 : line; }
@@ -677,8 +677,8 @@ public:
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
         {  grid->SetDefaultColSize(size, resizeExisting); }
 
-    virtual int GetLineAt(const wxGrid *grid, int line) const
-        { return grid->GetColAt(line); }
+    virtual int GetLineAt(const wxGrid *grid, int pos) const
+        { return grid->GetColAt(pos); }
 
     virtual int GetLineBefore(const wxGrid* grid, int line) const
         { return grid->GetColAt(wxMax(0, grid->GetColPos(line) - 1)); }
