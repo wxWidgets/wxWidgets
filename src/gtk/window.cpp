@@ -245,7 +245,11 @@ gdk_window_warp_pointer (GdkWindow      *window,
   if (!window)
     window = gdk_get_default_root_window();
 
+#if GTK_CHECK_VERSION(3,0,0)
+  if (!gdk_window_is_destroyed(window))
+#else
   if (!GDK_WINDOW_DESTROYED(window))
+#endif
   {
       XWarpPointer (GDK_WINDOW_XDISPLAY(window),
                     None,              /* not source window -> move from anywhere */

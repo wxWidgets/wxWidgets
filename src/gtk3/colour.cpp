@@ -57,6 +57,7 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxColourRefData);
 };
 
+// FIXME Uncomment
 // void wxColourRefData::FreeColour()
 // {
 //     if (m_colormap)
@@ -67,6 +68,7 @@ public:
 //     }
 // }
 
+// FIXME Uncomment
 // void wxColourRefData::AllocColour( GdkColormap *cmap )
 // {
 //     if (m_colormap != cmap)
