@@ -1142,7 +1142,7 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     {
         wxBitmap bmp = m_imageData->GetBitmap(GetButtonState(this, state));
         if ( !bmp.IsOk() )
-            bmp = m_imageData->GetBitmap(GetNormalState());
+            bmp = m_imageData->GetBitmap(State_Normal);
 
         const wxSize sizeBmp = bmp.GetSize();
         const wxSize margin = m_imageData->GetBitmapMargins();
