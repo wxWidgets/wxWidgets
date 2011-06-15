@@ -443,6 +443,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if (GetCaret())
         GetCaret()->Show();
     PositionCaret();
+#else
+#if !defined(__WXMAC__)
+    // Causes caret dropouts on Mac
+    PositionCaret();
+#endif
 #endif
 }
 
