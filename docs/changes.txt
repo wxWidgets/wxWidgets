@@ -508,6 +508,7 @@ All (GUI):
 - Allow customizing AUI tab colours in wxAuiTabArt (snowleopard).
 - Added wxAffineMatrix2D class (Catalin Raceanu).
 - Allow showing preview frame non modally (John Roberts).
+- Improve appearance of the generic wxHyperlinkCtrl (David Connet).
 
 GTK:
 

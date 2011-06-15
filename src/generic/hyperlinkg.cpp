@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/renderer.h"
 
 // ============================================================================
 // implementation
@@ -89,6 +90,9 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     //       with GTK+'s native handling):
 
     Connect( wxEVT_PAINT, wxPaintEventHandler(wxGenericHyperlinkCtrl::OnPaint) );
+    Connect( wxEVT_SET_FOCUS, wxFocusEventHandler(wxGenericHyperlinkCtrl::OnFocus) );
+    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler(wxGenericHyperlinkCtrl::OnFocus) );
+    Connect( wxEVT_CHAR, wxKeyEventHandler(wxGenericHyperlinkCtrl::OnChar) );
     Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeaveWindow) );
 
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftDown) );
@@ -187,6 +191,32 @@ void wxGenericHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.SetTextBackground(GetBackgroundColour());
 
     dc.DrawText(GetLabel(), GetLabelRect().GetTopLeft());
+    if (HasFocus())
+    {
+        wxRendererNative::Get().DrawFocusRect(this, dc, GetClientRect(), wxCONTROL_SELECTED);
+    }
+}
+
+void wxGenericHyperlinkCtrl::OnFocus(wxFocusEvent& event)
+{
+    Refresh();
+    event.Skip();
+}
+
+void wxGenericHyperlinkCtrl::OnChar(wxKeyEvent& event)
+{
+    switch (event.m_keyCode)
+    {
+    default:
+        event.Skip();
+        break;
+    case WXK_SPACE:
+    case WXK_NUMPAD_SPACE:
+        SetForegroundColour(m_visitedColour);
+        m_visited = true;
+        SendEvent();
+        break;
+    }
 }
 
 void wxGenericHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
