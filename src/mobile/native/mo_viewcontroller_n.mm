@@ -49,5 +49,5 @@ void wxMoViewController::SetTitle(const wxString& title)
 wxString wxMoViewController::GetTitle() const
 {
     // FIXME stub
-	return wxEmptyString;
+    return wxEmptyString;
 }

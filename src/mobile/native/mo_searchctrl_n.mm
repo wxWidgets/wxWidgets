@@ -34,72 +34,72 @@ IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
 
 wxSearchCtrl::wxSearchCtrl()
 {
-	// FIXME stub	
+    // FIXME stub    
 }
 
 wxSearchCtrl::~wxSearchCtrl()
 {
-	// FIXME stub	
+    // FIXME stub    
 }
 
 void wxSearchCtrl::Init() {
-	// FIXME stub
+    // FIXME stub
 }
 
 bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
-            			  const wxString& value,
-            			  const wxPoint& pos,
-            			  const wxSize& size,
-            			  long style,
-            			  const wxValidator& validator,
-            			  const wxString& name)
+                          const wxString& value,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxValidator& validator,
+                          const wxString& name)
 {
-	// FIXME stub
-	
-	return true;
+    // FIXME stub
+    
+    return true;
 }
 
 wxSize wxSearchCtrl::DoGetBestSize() const {
-	
-	// FIXME stub
-	
-	wxSize empty(1, 1);
-	return empty;
+    
+    // FIXME stub
+    
+    wxSize empty(1, 1);
+    return empty;
 }
 
 void wxSearchCtrl::ShowSearchButton( bool show ) {
-	// FIXME stub
+    // FIXME stub
 }
 
 bool wxSearchCtrl::IsSearchButtonVisible() const {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 void wxSearchCtrl::ShowCancelButton( bool show ) {
-	// FIXME stub
+    // FIXME stub
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 void wxSearchCtrl::SetMenu( wxMenu* menu ) {
-	// FIXME stub
+    // FIXME stub
 }
 
 wxMenu* wxSearchCtrl::GetMenu() {
-	// FIXME stub
-	return NULL;
+    // FIXME stub
+    return NULL;
 }
 
 bool wxSearchCtrl::HandleSearchFieldSearchHit() {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 bool wxSearchCtrl::HandleSearchFieldCancelHit() {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }

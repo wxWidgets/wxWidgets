@@ -66,8 +66,8 @@ wxMoKeyboard* wxMoKeyboard::sm_keyboard = NULL;
 
 bool wxMoKeyboard::Create(wxWindow *parent)
 {
-	// FIXME stub
-	
+    // FIXME stub
+    
     return true;
 }
 
@@ -117,6 +117,8 @@ void wxMoKeyboard::DoShowKeyboard(wxWindow* win)
 wxWindow* wxMoKeyboard::GetWindowForName(const wxString& name) const
 {
     // FIXME stub
+    
+    return NULL;
 }
 
 wxString wxMoKeyboard::GetNameForWindow(wxWindow* win) const
@@ -161,6 +163,8 @@ bool wxMoKeyboardBase::Create(wxWindow *parent,
                       const wxString& name)
 {
     // FIXME stub
+    
+    return true;
 }
 
 wxMoKeyboardBase::~wxMoKeyboardBase()

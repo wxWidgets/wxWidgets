@@ -129,7 +129,7 @@ void wxMoTableCtrl::Init()
 wxSize wxMoTableCtrl::DoGetBestSize() const
 {
     // FIXME stub
-	wxSize best(100, 100);
+    wxSize best(100, 100);
     return best;
 }
 
@@ -138,8 +138,8 @@ wxBitmap wxMoTableCtrl::LoadBitmap(const char* bitmapData, size_t len)
 {
     // FIXME stub
 
-	wxBitmap empty;
-	return empty;
+    wxBitmap empty;
+    return empty;
 }
 
 bool wxMoTableCtrl::SetBackgroundColour(const wxColour &colour)
@@ -170,7 +170,7 @@ bool wxMoTableCtrl::Enable(bool enable)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoTableCtrl::SetFont(const wxFont& font)
@@ -197,7 +197,7 @@ bool wxMoTableCtrl::RecalculateDimensions()
 
 void wxMoTableCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoTableCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -209,7 +209,7 @@ void wxMoTableCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 int wxMoTableCtrl::HitTest(const wxPoint& pt, int& retSection, int& retRow, int& region) const
 {
     // FIXME stub
-	return 0;
+    return 0;
 }
 
 void wxMoTableCtrl::OnMouseEvent(wxMouseEvent& event)
@@ -314,7 +314,7 @@ wxTablePath* wxMoTableCtrl::GetSelection() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // Scroll to the given section
@@ -322,7 +322,7 @@ bool wxMoTableCtrl::ScrollToSection(int section)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Scroll to the given path (section/row)
@@ -458,7 +458,7 @@ bool wxMoTableDataSource::CommitInsertRow(wxMoTableCtrl* ctrl, const wxTablePath
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Called by the table control to commit a deletion requested by the user. This function should
@@ -467,5 +467,5 @@ bool wxMoTableDataSource::CommitDeleteRow(wxMoTableCtrl* ctrl, const wxTablePath
 {
     // FIXME stub
 
-	return true;
+    return true;
 }

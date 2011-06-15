@@ -104,6 +104,6 @@ wxFont wxMoSystemSettings::GetFont(wxMoSystemFont id)
 {
     // FIXME stub
 
-	wxFont empty;
-	return empty;
+    wxFont empty;
+    return empty;
 }

@@ -57,8 +57,8 @@ wxSize wxMoSlider::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoSlider::SetBackgroundColour(const wxColour &colour)
@@ -94,7 +94,7 @@ int wxMoSlider::GetValue() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 void wxMoSlider::SetValue(int value)
@@ -112,14 +112,14 @@ int wxMoSlider::GetMin() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoSlider::GetMax() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // the line/page size is the increment by which the slider moves when

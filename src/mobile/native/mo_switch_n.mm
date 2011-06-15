@@ -75,15 +75,15 @@ wxSize wxMoSwitchCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoSwitchCtrl::SendClickEvent()
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoSwitchCtrl::SetBackgroundColour(const wxColour &colour)
@@ -123,12 +123,12 @@ bool wxMoSwitchCtrl::GetValue() const
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoSwitchCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoSwitchCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))

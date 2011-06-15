@@ -51,7 +51,7 @@ wxMoWheelsTextDataSource* wxMoListBox::GetTextDataSource() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 void wxMoListBox::Clear()
@@ -71,9 +71,9 @@ void wxMoListBox::Append(const wxString& str)
 
 int wxMoListBox::Insert(const wxString& str, int pos)
 {
-	// FIXME stub
-	
-	return 0;
+    // FIXME stub
+    
+    return 0;
 }
 
 void wxMoListBox::InsertItems(const wxArrayString& items, int pos)
@@ -97,7 +97,7 @@ wxString wxMoListBox::GetString(int n) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 void wxMoListBox::SetString(int n, const wxString& str)
@@ -109,15 +109,15 @@ wxArrayString wxMoListBox::GetStrings() const
 {
     // FIXME stub
 
-	wxArrayString empty;
-	return empty;
+    wxArrayString empty;
+    return empty;
 }
 
 int wxMoListBox::GetSelections(wxArrayInt& selections) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Returns the number of strings in the listbox.
@@ -125,15 +125,15 @@ int wxMoListBox::GetCount() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 wxSize wxMoListBox::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 void wxMoListBox::OnWheelSelected(wxWheelsCtrlEvent& event)

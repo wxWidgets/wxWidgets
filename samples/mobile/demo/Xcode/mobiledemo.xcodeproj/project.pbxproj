@@ -485,7 +485,7 @@
 		B9DA8D6513A7C78C0043DCD4 /* toolbar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = toolbar.h; sourceTree = "<group>"; };
 		B9DA8D6613A7C78C0043DCD4 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B9DA8D6713A7C78C0043DCD4 /* viewcontroller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = viewcontroller.h; sourceTree = "<group>"; };
-		B9DA8D6813A7C78C0043DCD4 /* vlbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vlbox.h; sourceTree = "<group>"; };
+		B9DA8D6813A7C78C0043DCD4 /* vlbox.h */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = vlbox.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		B9DA8D6913A7C78C0043DCD4 /* vscroll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vscroll.h; sourceTree = "<group>"; };
 		B9DA8D6A13A7C78C0043DCD4 /* wheelsctrl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wheelsctrl.h; sourceTree = "<group>"; };
 		B9DA8D6B13A7C78C0043DCD4 /* window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };

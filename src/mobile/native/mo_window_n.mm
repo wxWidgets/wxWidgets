@@ -36,7 +36,7 @@ bool wxMoWindow::Create(wxWindow *parent, wxWindowID id,
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 wxMoWindow::~wxMoWindow()
@@ -56,32 +56,32 @@ void wxMoWindow::SetScrollPos( int orient, int pos, bool refresh)
 
 int wxMoWindow::GetScrollPos( int orient ) const
 {
-	// FIXME stub
-	return 0;
+    // FIXME stub
+    return 0;
 }
 
 int wxMoWindow::GetScrollThumb( int orient ) const
 {
-	// FIXME stub
-	return 0;
+    // FIXME stub
+    return 0;
 }
 
 int wxMoWindow::GetScrollRange( int orient ) const
 {
-	// FIXME stub
-	return 0;
+    // FIXME stub
+    return 0;
 }
 
 bool wxMoWindow::ScrollLines(int WXUNUSED(lines))
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return false;
 }
 
 bool wxMoWindow::ScrollPages(int WXUNUSED(pages))
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return false;
 }

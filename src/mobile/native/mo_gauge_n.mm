@@ -52,8 +52,8 @@ void wxMoGauge::Init()
 
 wxSize wxMoGauge::DoGetBestSize() const
 {
-	// FIXME stub
-	
+    // FIXME stub
+    
     wxSize sz(100, 20);
     return sz;
 }
@@ -88,25 +88,25 @@ bool wxMoGauge::SetBackgroundColour(const wxColour& col)
 
 void wxMoGauge::SetIndeterminateMode()
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 }
 
 void wxMoGauge::SetDeterminateMode()
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 }
 
 void wxMoGauge::Pulse()
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 }
 
 void wxMoGauge::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoGauge::OnEraseBackground(wxEraseEvent& WXUNUSED(event))

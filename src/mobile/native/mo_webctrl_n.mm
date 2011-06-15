@@ -43,7 +43,7 @@ bool wxMoWebCtrl::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-	// FIXME stub
+    // FIXME stub
 
     return true;
 }
@@ -61,22 +61,22 @@ wxSize wxMoWebCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoWebCtrl::SetBackgroundColour(const wxColour &colour)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoWebCtrl::SetForegroundColour(const wxColour &colour)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoWebCtrl::Enable(bool enable)
@@ -100,30 +100,30 @@ void wxMoWebCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
 bool wxMoWebCtrl::LoadURL(const wxString& url)
 {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 bool wxMoWebCtrl::CanGoBack()
 {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 bool wxMoWebCtrl::CanGoForward()
 {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 bool wxMoWebCtrl::GoBack()
 {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 bool wxMoWebCtrl::GoForward()
 {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }

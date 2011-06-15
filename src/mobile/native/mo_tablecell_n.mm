@@ -88,7 +88,7 @@ bool wxMoTableCell::IsDeleteButtonShowing(wxMoTableCtrl* tableCtrl) const
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Prepares the cell for reuse
@@ -119,7 +119,7 @@ void wxMoTableCellContentWindow::Init()
 
 void wxMoTableCellContentWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoTableCellContentWindow::OnMouseEvents(wxMouseEvent& event)

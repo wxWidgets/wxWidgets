@@ -66,7 +66,7 @@ bool wxMoSegmentedCtrl::SendCommand(wxEventType eventType, int selection)
 
 void wxMoSegmentedCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoSegmentedCtrl::OnInsertItem(wxMoBarButton* button)
@@ -78,6 +78,6 @@ wxSize wxMoSegmentedCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }

@@ -76,7 +76,7 @@ void wxMoWheelsCtrl::Init()
 
 void wxMoWheelsCtrl::ClearComponents()
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 
     // FIXME stub
@@ -152,15 +152,15 @@ int wxMoWheelsCtrl::GetComponentRowCount(int component) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Returns the number of components.
 int wxMoWheelsCtrl::GetComponentCount() const
 {
     // FIXME stub
-	
-	return 0;
+    
+    return 0;
 }
 
 // Returns the size required to display the largest view in the given component.
@@ -168,7 +168,7 @@ wxSize wxMoWheelsCtrl::GetRowSizeForComponent(int component) const
 {
     // FIXME stub
 
-	return wxSize(0, 0);
+    return wxSize(0, 0);
 }
 
 // Sets the data source object, recreating the components.
@@ -197,7 +197,7 @@ void wxMoWheelsCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void wxMoWheelsCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoWheelsCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -208,7 +208,7 @@ wxSize wxMoWheelsCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	return wxSize(100, 100);
+    return wxSize(100, 100);
 }
 
 IMPLEMENT_CLASS(wxMoWheelsDataSource, wxEvtHandler)
@@ -217,8 +217,8 @@ IMPLEMENT_CLASS(wxMoWheelsDataSource, wxEvtHandler)
 bool wxMoWheelsDataSource::OnSelectRow(wxMoWheelsCtrl* ctrl, int component, int row)
 {
     // FIXME stub
-	
-	return true;
+    
+    return true;
 }
 
 // Override to provide the row height for a component. Should returns a height in pixels.
@@ -254,8 +254,8 @@ wxArrayString wxMoWheelsTextDataSource::GetStrings(int component) const
 {
     // FIXME stub
 
-	wxArrayString empty;
-	return empty;
+    wxArrayString empty;
+    return empty;
 }
 
 void wxMoWheelsTextDataSource::SetStrings(const wxArrayString& strings, int component)
@@ -267,7 +267,7 @@ wxSize wxMoWheelsTextDataSource::GetRowSize(int component) const
 {
     // FIXME stub
 
-	return wxSize(0, 0);
+    return wxSize(0, 0);
 }
 
 void wxMoWheelsTextDataSource::SetRowSize(const wxSize& sz, int component)
@@ -280,7 +280,7 @@ int wxMoWheelsTextDataSource::GetNumberOfRowsForComponent(wxMoWheelsCtrl* WXUNUS
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Override to provide the title for a component's row. If you override GetRowWindow instead,

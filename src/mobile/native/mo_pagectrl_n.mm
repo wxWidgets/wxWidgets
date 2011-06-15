@@ -42,6 +42,8 @@ bool wxMoPageCtrl::Create(wxWindow *parent,
                       const wxString& name)
 {
     // FIXME stub
+    
+    return true;
 }
 
 wxMoPageCtrl::~wxMoPageCtrl()
@@ -57,8 +59,8 @@ wxSize wxMoPageCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 void wxMoPageCtrl::SetPageCount(int pageCount)
@@ -73,8 +75,8 @@ void wxMoPageCtrl::SetCurrentPage(int page)
 
 wxSize wxMoPageCtrl::GetSizeForPageCount(int pageCount) const
 {
-	// FIXME stub
-	
+    // FIXME stub
+    
     wxSize sz(1, 1);
     return sz;
 }
@@ -109,7 +111,7 @@ bool wxMoPageCtrl::SetFont(const wxFont& font)
 
 void wxMoPageCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 int wxMoPageCtrl::HitTest(const wxPoint& pos)

@@ -124,9 +124,9 @@ wxToolBarToolBase *wxMoToolBar::CreateTool(wxControl *control,
 {
     wxMoToolBarTool *toolbarTool = new wxMoToolBarTool(this, control);
     if (toolbarTool != NULL) {
-        toolbarTool.SetLabel(label);
+        toolbarTool->SetLabel(label);
     }
-    return toolbar;
+    return toolbarTool;
 }
 
 // ----------------------------------------------------------------------------

@@ -98,21 +98,21 @@ bool wxMoTabCtrl::DeleteItem(int item)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Get the selection
 int wxMoTabCtrl::GetSelection() const
 {
-	// FIXME stub
-	
-	return 0;
+    // FIXME stub
+    
+    return 0;
 }
 
 // Get the tab with the current keyboard focus
 int wxMoTabCtrl::GetCurFocus() const
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return -1;
 }
@@ -122,13 +122,13 @@ int wxMoTabCtrl::GetItemCount() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Get the rect corresponding to the tab
 bool wxMoTabCtrl::GetItemRect(int WXUNUSED(item), wxRect& WXUNUSED(rect)) const
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return false;
 }
@@ -136,7 +136,7 @@ bool wxMoTabCtrl::GetItemRect(int WXUNUSED(item), wxRect& WXUNUSED(rect)) const
 // Get the number of rows
 int wxMoTabCtrl::GetRowCount() const
 {
-	// FIXME stub
+    // FIXME stub
     return 1;
 }
 
@@ -145,7 +145,7 @@ wxString wxMoTabCtrl::GetItemText(int idx) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 // Get the item image
@@ -153,13 +153,13 @@ int wxMoTabCtrl::GetItemImage(int idx) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Hit test
 int wxMoTabCtrl::HitTest(const wxPoint& WXUNUSED(pt), long& WXUNUSED(flags))
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return 0;
 }
@@ -206,7 +206,7 @@ int wxMoTabCtrl::SetSelection(int item)
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Set the selection, without generating events
@@ -214,7 +214,7 @@ int wxMoTabCtrl::ChangeSelection(int item)
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // Set the image list
@@ -234,7 +234,7 @@ bool wxMoTabCtrl::SetItemText(int idx, const wxString& text)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Set the image for an item
@@ -248,14 +248,14 @@ bool wxMoTabCtrl::SetItemImage(int idx, int image)
 // Set the size for a fixed-width tab control
 void wxMoTabCtrl::SetItemSize(const wxSize& WXUNUSED(size))
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 }
 
 // Set the padding between tabs
 void wxMoTabCtrl::SetPadding(const wxSize& WXUNUSED(padding))
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
 }
 
@@ -263,8 +263,8 @@ wxSize wxMoTabCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 void wxMoTabCtrl::OnMouseEvent(wxMouseEvent& event)
@@ -274,7 +274,7 @@ void wxMoTabCtrl::OnMouseEvent(wxMouseEvent& event)
 
 void wxMoTabCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -296,8 +296,8 @@ wxColour wxMoTabCtrl::GetBorderColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoTabCtrl::SetBackgroundColour(const wxColour &colour)
@@ -311,8 +311,8 @@ wxColour wxMoTabCtrl::GetBackgroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoTabCtrl::SetButtonBackgroundColour(const wxColour &colour)
@@ -326,8 +326,8 @@ wxColour wxMoTabCtrl::GetButtonBackgroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoTabCtrl::SetForegroundColour(const wxColour &colour)
@@ -341,8 +341,8 @@ wxColour wxMoTabCtrl::GetForegroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoTabCtrl::SetFont(const wxFont& font)
@@ -356,8 +356,8 @@ wxFont wxMoTabCtrl::GetFont() const
 {
     // FIXME stub
 
-	wxFont empty;
-	return empty;
+    wxFont empty;
+    return empty;
 }
 
 // Set a text badge for the given item
@@ -365,7 +365,7 @@ bool wxMoTabCtrl::SetBadge(int item, const wxString& badge)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Get the text badge for the given item
@@ -373,5 +373,5 @@ wxString wxMoTabCtrl::GetBadge(int item) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }

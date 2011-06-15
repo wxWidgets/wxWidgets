@@ -158,8 +158,8 @@ wxSize wxMoToolBar::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 // ----------------------------------------------------------------------------
@@ -185,7 +185,7 @@ wxToolBarToolBase *wxMoToolBar::AddFixedSeparator(int width)
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // New function to insert a fixed-width separator.
@@ -193,7 +193,7 @@ wxToolBarToolBase *wxMoToolBar::InsertFixedSeparator(size_t pos, int width)
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 bool wxMoToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
@@ -233,7 +233,7 @@ void wxMoToolBar::SetRows(int WXUNUSED(nRows))
 // The button size is bigger than the bitmap size
 wxSize wxMoToolBar::GetToolSize() const
 {
-	// FIXME stub
+    // FIXME stub
     // Not implemented
     return wxSize(0, 0);
 }
@@ -261,13 +261,13 @@ void wxMoToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 
 void wxMoToolBar::DoToggleTool(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
-	// FIXME stub
+    // FIXME stub
     // Not implemented
 }
 
 void wxMoToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
-	// FIXME stub
+    // FIXME stub
     // VZ: AFAIK, the button has to be created either with TBSTYLE_CHECK or
     //     without, so we really need to delete the button and recreate it here
     wxFAIL_MSG( _T("not implemented") );
@@ -290,7 +290,7 @@ void wxMoToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 // Responds to colour changes, and passes event on to children.
 void wxMoToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoToolBar::OnMouseEvent(wxMouseEvent& event)
@@ -304,7 +304,7 @@ void wxMoToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 
 void wxMoToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoToolBar::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -321,8 +321,8 @@ wxColour wxMoToolBar::GetBorderColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoToolBar::SetBackgroundColour(const wxColour &colour)
@@ -336,8 +336,8 @@ wxColour wxMoToolBar::GetBackgroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoToolBar::SetButtonBackgroundColour(const wxColour &colour)
@@ -351,8 +351,8 @@ wxColour wxMoToolBar::GetButtonBackgroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoToolBar::SetForegroundColour(const wxColour &colour)
@@ -366,8 +366,8 @@ wxColour wxMoToolBar::GetForegroundColour() const
 {
     // FIXME stub
 
-	wxColour empty;
-	return empty;
+    wxColour empty;
+    return empty;
 }
 
 bool wxMoToolBar::SetFont(const wxFont& font)
@@ -381,6 +381,6 @@ wxFont wxMoToolBar::GetFont() const
 {
     // FIXME stub
 
-	wxFont empty;
-	return empty;
+    wxFont empty;
+    return empty;
 }

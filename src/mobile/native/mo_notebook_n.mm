@@ -111,14 +111,14 @@ size_t wxMoNotebook::GetPageCount() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoNotebook::GetRowCount() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // get the currently selected page
@@ -126,49 +126,49 @@ int wxMoNotebook::GetSelection() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoNotebook::SetSelection(size_t page)
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoNotebook::ChangeSelection(size_t page)
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 bool wxMoNotebook::SetPageText(size_t page, const wxString& strText)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 wxString wxMoNotebook::GetPageText(size_t page) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 int wxMoNotebook::GetPageImage(size_t page) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 bool wxMoNotebook::SetPageImage(size_t page, int nImage)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoNotebook::SetImageList(wxImageList* imageList)
@@ -184,7 +184,7 @@ wxSize wxMoNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
+    wxSize empty(1, 1);
     return empty;
 }
 
@@ -198,8 +198,8 @@ wxSize wxMoNotebook::GetControllerSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 
@@ -208,7 +208,7 @@ wxNotebookPage *wxMoNotebook::DoRemovePage(size_t page)
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // remove all pages
@@ -216,7 +216,7 @@ bool wxMoNotebook::DeleteAllPages()
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // same as AddPage() but does it at given position
@@ -255,7 +255,7 @@ wxBookCtrlBaseEvent* wxMoNotebook::CreatePageChangingEvent() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 void wxMoNotebook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
@@ -268,7 +268,7 @@ bool wxMoNotebook::SetBadge(int item, const wxString& badge)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Get the text badge for the given item
@@ -276,7 +276,7 @@ wxString wxMoNotebook::GetBadge(int item) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 
@@ -291,63 +291,63 @@ END_EVENT_TABLE()
 
 
 wxBookCtrlBase::~wxBookCtrlBase() {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxBookCtrlBase::Init() {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxBookCtrlBase::DoInvalidateBestSize() {
-	// FIXME stub
+    // FIXME stub
 }
 
 wxSize wxBookCtrlBase::DoGetBestSize() const {
-	// FIXME stub
-	
-	wxSize empty(1, 1);
-	return empty;
+    // FIXME stub
+    
+    wxSize empty(1, 1);
+    return empty;
 }
 
 void wxBookCtrlBase::OnSize(wxSizeEvent& event) {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxBookCtrlBase::SetPageSize(const wxSize& size) {
-	// FIXME stub
+    // FIXME stub
 }
 
 bool wxBookCtrlBase::DeletePage(size_t n) {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 int wxBookCtrlBase::DoSetSelection(size_t nPage, int flags) {
-	// FIXME stub
-	return 0;
+    // FIXME stub
+    return 0;
 }
 
 bool wxBookCtrlBase::DoSetSelectionAfterInsertion(size_t n, bool bSelect) {
-	// FIXME stub
-	return true;
+    // FIXME stub
+    return true;
 }
 
 void wxBookCtrlBase::DoSize() {
-	// FIXME stub
+    // FIXME stub
 }
 
 wxRect wxBookCtrlBase::GetPageRect() const {
-	// FIXME stub
-	wxRect empty;
-	return empty;
+    // FIXME stub
+    wxRect empty;
+    return empty;
 }
 
 void wxBookCtrlBase::SetImageList(wxImageList *imageList) {
-	// FIXME stub
+    // FIXME stub
 }
 
 wxSize wxBookCtrlBase::CalcSizeFromPage(const wxSize& sizePage) const {
-	// FIXME stub
-	wxSize empty(1, 1);
-	return empty;
+    // FIXME stub
+    wxSize empty(1, 1);
+    return empty;
 }

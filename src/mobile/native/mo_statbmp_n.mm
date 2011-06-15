@@ -38,12 +38,12 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBitmap, wxControl, "wx/statbmp.h")
 
 wxStaticBitmapBase::~wxStaticBitmapBase()
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
-	// FIXME stub
-	wxSize empty(1, 1);
-	return empty;
+    // FIXME stub
+    wxSize empty(1, 1);
+    return empty;
 }

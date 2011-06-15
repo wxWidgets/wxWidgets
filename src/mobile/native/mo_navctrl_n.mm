@@ -64,8 +64,8 @@ wxSize wxMoNavigationCtrl::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoNavigationCtrl::SetBackgroundColour(const wxColour &colour)
@@ -127,7 +127,7 @@ wxMoViewController* wxMoNavigationCtrl::GetTopController() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // Returns the back item.
@@ -135,7 +135,7 @@ wxMoViewController* wxMoNavigationCtrl::GetBackController() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // Sets the item stack.

@@ -86,13 +86,13 @@ wxString wxMoSheetBase::GetOKButtonTitle() const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 // If this returns the empty string, there is no Cancel button.
 wxString wxMoSheetBase::GetCancelButtonTitle() const
 {
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 // Index starts at zero. 0 is Cancel, 1 is OK, from 2 - custom buttons
@@ -100,7 +100,7 @@ wxString wxMoSheetBase::GetButtonTitle(size_t i) const
 {
     // FIXME stub
 
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 // Get button identifier for the given index. 0 is Cancel, 1 is OK, from 2 - custom buttons
@@ -115,14 +115,14 @@ bool wxMoSheetBase::ShowSheet(wxWindow* WXUNUSED(animateFrom))
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoSheetBase::DismissSheet(wxWindowID WXUNUSED(id))
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoSheetBase::OnButtonClick(wxCommandEvent& event)
@@ -187,5 +187,5 @@ int wxIBMessageBox(const wxString& message, const wxString& caption, int style,
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }

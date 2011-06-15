@@ -59,7 +59,7 @@ void wxMoFrame::DoLayout()
 // (menubar, toolbar and statusbar are excluded from automatic layout)
 bool wxMoFrame::IsOneOfBars(const wxWindow *WXUNUSED(win)) const
 {
-	// FIXME stub
+    // FIXME stub
     // TODO
     return false;
 }

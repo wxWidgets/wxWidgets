@@ -46,8 +46,8 @@ wxBitmap wxMoRenderer::MakeDisabledBitmap(wxBitmap& bmp)
 {
     // FIXME stub
 
-	wxBitmap empty;
-	return empty;
+    wxBitmap empty;
+    return empty;
 }
 
 bool wxMoButtonPressDetector::ProcessMouseEvent(wxWindow* win, const wxRect& rect, wxMouseEvent& event, int id)

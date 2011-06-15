@@ -97,7 +97,7 @@ bool wxMoButton::SendClickEvent()
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButton::SetBackgroundColour(const wxColour &colour)

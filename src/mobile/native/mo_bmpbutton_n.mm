@@ -75,8 +75,8 @@ void wxMoBitmapButton::Init()
 
 wxSize wxMoBitmapButton::DoGetBestSize() const
 {
-	// FIXME stub
-	
+    // FIXME stub
+    
     wxSize best(10, 10);
     return best;
 }
@@ -85,8 +85,8 @@ wxSize wxMoBitmapButton::IPGetDefaultSize()
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoBitmapButton::SendClickEvent()

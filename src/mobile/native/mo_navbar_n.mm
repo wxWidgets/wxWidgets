@@ -69,15 +69,15 @@ wxSize wxMoNavigationBar::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoNavigationBar::SendClickEvent(wxMoBarButton* button)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoNavigationBar::SetBackgroundColour(const wxColour &colour)
@@ -115,7 +115,7 @@ void wxMoNavigationBar::OnBack(wxCommandEvent& WXUNUSED(event))
 
 void wxMoNavigationBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// FIXME stub
+    // FIXME stub
 }
 
 void wxMoNavigationBar::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -154,7 +154,7 @@ wxMoNavigationItem* wxMoNavigationBar::GetTopItem() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // Returns the back item.
@@ -162,14 +162,14 @@ wxMoNavigationItem* wxMoNavigationBar::GetBackItem() const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 // Sets the item stack.
 void wxMoNavigationBar::SetItems(const wxMoNavigationItemArray& items)
 {
     // FIXME stub
-	// TODO: delete old items?
+    // TODO: delete old items?
 }
 
 // Clears the item stack, deleting the items.
@@ -209,8 +209,8 @@ wxSize wxMoNavigationBar::GetBestButtonSize(wxDC& dc, const wxMoBarButton& item)
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 // Draw the title

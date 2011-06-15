@@ -98,31 +98,31 @@ wxSize wxMoBarButton::DoGetBestSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 wxSize wxMoBarButton::GetBestButtonSize(wxDC& dc) const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 wxSize wxMoBarButton::IPGetDefaultSize() const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 bool wxMoBarButton::SendClickEvent()
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoBarButton::Draw(wxDC& dc, int flags)
@@ -161,8 +161,8 @@ wxBitmap wxMoBarButton::GetStockBitmap(int id, int barType)
 {
     // FIXME stub
 
-	wxBitmap empty;
-	return empty;
+    wxBitmap empty;
+    return empty;
 }
 
 // Get the stock help string for the given identifier
@@ -178,6 +178,6 @@ wxBitmap wxMoBarButton::GetBitmapFromData(const unsigned char *data, int length)
 {
     // FIXME stub
 
-	wxBitmap empty;
-	return empty;
+    wxBitmap empty;
+    return empty;
 }

@@ -81,14 +81,14 @@ void wxMoVListBox::SetItemCount(size_t count)
 bool wxMoVListBox::IsSelected(size_t line) const
 {
     // FIXME stub
-	return true;
+    return true;
 }
 
 bool wxMoVListBox::Select(size_t item, bool select)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoVListBox::SelectRange(size_t from, size_t to)
@@ -126,21 +126,21 @@ size_t wxMoVListBox::GetSelectedCount() const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoVListBox::GetFirstSelected(unsigned long& cookie) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 int wxMoVListBox::GetNextSelected(unsigned long& cookie) const
 {
     // FIXME stub
 
-	return 0;
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ void wxMoVListBox::SetSelectionBackground(const wxColour& col)
 wxCoord wxMoVListBox::OnGetLineHeight(size_t line) const
 {
     // FIXME stub
-	return NULL;
+    return NULL;
 }
 
 void wxMoVListBox::OnDrawSeparator(wxDC& WXUNUSED(dc),
@@ -226,6 +226,6 @@ wxMoVListBox::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     // FIXME stub
 
-	wxVisualAttributes empty;
-	return empty;
+    wxVisualAttributes empty;
+    return empty;
 }

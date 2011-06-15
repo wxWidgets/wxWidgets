@@ -82,7 +82,7 @@ bool wxMoScrolledWindow::Create(wxWindow *parent,
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoScrolledWindow::OnPaint(wxPaintEvent& event)
@@ -126,14 +126,14 @@ bool wxMoTouchScrollHelperBase::ProcessEvent(wxEvent& event)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoTouchScrollHelperBase::DoMouseEvent(wxMouseEvent& event)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Cancels scroll overriding, at least in the generic implementation.
@@ -156,7 +156,7 @@ bool wxMoTouchScrollHelperBase::MovedSignificantly(const wxPoint& pt1, const wxP
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 void wxMoTouchScrollHelperBase::OnTimerNotify(wxTimerEvent& WXUNUSED(event))

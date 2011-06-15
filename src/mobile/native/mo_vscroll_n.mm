@@ -45,7 +45,7 @@ bool wxMoVScrolledWindow::Create(wxWindow *parent,
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 wxMoVScrolledWindow::~wxMoVScrolledWindow()
@@ -55,13 +55,13 @@ wxMoVScrolledWindow::~wxMoVScrolledWindow()
 int wxMoVScrolledWindow::GetAverageLineHeight() const
 {
     // FIXME stub
-	return 0;
+    return 0;
 }
 
 int wxMoVScrolledWindow::GetEstimatedTotalHeight() const
 {
     // FIXME stub
-	return 0;
+    return 0;
 }
 
 IMPLEMENT_CLASS(wxMoTouchVScrollHelper, wxMoTouchScrollHelperBase)
@@ -71,7 +71,7 @@ bool wxMoTouchVScrollHelper::GetScrollBarDetails(int orientation,
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 // Does the scrolling for the specific scrolled window type.

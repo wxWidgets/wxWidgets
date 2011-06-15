@@ -94,140 +94,140 @@ int wxMoButtonStrip::AddBitmapButton(wxWindow* parent, int id, int imageIndex, c
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::AddFlexibleSeparator()
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::AddFixedSeparator(int width)
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::InsertTextButton(wxWindow* parent, int id, int insertBefore, const wxString& text, const wxString& badge)
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::InsertBitmapButton(wxWindow* parent, int id, int insertBefore, const wxBitmap& bitmap1, const wxString& text1, const wxString& badge)
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::InsertBitmapButton(wxWindow* parent, int id, int insertBefore, int imageIndex, const wxString& text, const wxString& badge)
 {
    // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::InsertFlexibleSeparator(int insertBefore)
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 int wxMoButtonStrip::InsertFixedSeparator(int insertBefore, int width)
 {
     // FIXME stub
 
-	return -1;
+    return -1;
 }
 
 bool wxMoButtonStrip::DeleteButton(size_t idx)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonText(size_t idx, const wxString& text)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonBadge(size_t idx, const wxString& badge)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonNormalBitmap(size_t idx, const wxBitmap& bitmap)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonDisabledBitmap(size_t idx, const wxBitmap& bitmap)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonSelectedBitmap(size_t idx, const wxBitmap& bitmap)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::SetButtonHighlightedBitmap(size_t idx, const wxBitmap& bitmap)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::EnableButton(size_t idx, bool enable)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::IsButtonEnabled(size_t idx) const
 {
-	// FIXME stub
-	
-	return true;
+    // FIXME stub
+    
+    return true;
 }
 
 bool wxMoButtonStrip::SelectButton(size_t idx, bool selected)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 bool wxMoButtonStrip::IsButtonSelected(size_t idx) const
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 wxMoBarButton* wxMoButtonStrip::GetButton(size_t idx) const
 {
     // FIXME stub
 
-	return NULL;
+    return NULL;
 }
 
 int wxMoButtonStrip::FindIndexForId(int id)
@@ -246,21 +246,21 @@ bool wxMoButtonStrip::SetSelection(int sel)
 {
     // FIXME stub
 
-	return true;
+    return true;
 }
 
 wxSize wxMoButtonStrip::GetBestButtonSize(wxDC& dc, const wxMoBarButton& item) const
 {
     // FIXME stub
 
-	wxSize empty(1, 1);
-	return empty;
+    wxSize empty(1, 1);
+    return empty;
 }
 
 wxSize wxMoButtonStrip::GetBestSize() const
 {
-	// FIXME stub
-	
+    // FIXME stub
+    
     wxSize sz(0, 0);
     return sz;
 }
@@ -268,7 +268,7 @@ wxSize wxMoButtonStrip::GetBestSize() const
 // Gets the space taking up by just the buttons.
 wxSize wxMoButtonStrip::GetTotalButtonSize(wxSize& maxButtonSize, wxSize& totalIncludingMargins) const
 {
-	// FIXME stub
+    // FIXME stub
 
     wxSize sz(0, 0);
     return sz;
