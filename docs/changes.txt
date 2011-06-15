@@ -486,6 +486,7 @@ All (GUI):
 - Added wxDocManager::FindTemplate() (troelsk).
 - Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
 - Fixed resizing columns in wxGrid when they were reordered.
+- Fixed keyboard navigation when wxGrid columns are reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
 - Added support for saving TGA files.
 - Added wxArtProvider returning higher quality icons from Tango project.
