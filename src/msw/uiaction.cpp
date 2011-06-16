@@ -20,6 +20,8 @@
 
 #include "wx/msw/private/keyboard.h"
 
+#include "wx/math.h"
+
 namespace
 {
 
@@ -56,11 +58,13 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 {
     // Because MOUSEEVENTF_ABSOLUTE takes measurements scaled between 0 & 65535
     // we need to scale our input too
-    int displayx, displayy, scaledx, scaledy;
+    int displayx, displayy;
     wxDisplaySize(&displayx, &displayy);
-    scaledx = ((float)x / displayx) * 65535;
-    scaledy = ((float)y / displayy) * 65535;
+
+    int scaledx = wxRound(((float)x / displayx) * 65535);
+    int scaledy = wxRound(((float)y / displayy) * 65535);
     mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, scaledx, scaledy, 0, 0);
+
     return true;
 }
 
