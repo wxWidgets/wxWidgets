@@ -43755,6 +43755,12 @@ _ACEOF
         else
             wxUSE_FSWATCHER=no
         fi
+    else
+        if test "$wxUSE_THREADS" != "yes"; then
+            { echo "$as_me:$LINENO: WARNING: wxFileSystemWatcher disabled due to --disable-threads" >&5
+echo "$as_me: WARNING: wxFileSystemWatcher disabled due to --disable-threads" >&2;}
+            wxUSE_FSWATCHER=no
+        fi
     fi
 
     if test "$wxUSE_FSWATCHER" = "yes"; then
