@@ -1125,7 +1125,7 @@ void wxTextCtrl::AppendText(const wxString& text)
     // don't do this if we're frozen, saves some time
     if ( !IsFrozen() && IsMultiLine() && GetRichVersion() > 1 )
     {
-        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, NULL);
+        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, (LPARAM)NULL);
     }
 #endif // wxUSE_RICHEDIT
 }

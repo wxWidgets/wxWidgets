@@ -2020,7 +2020,7 @@ wxLongLong wxAMMediaBackend::GetDuration()
 
         case S_OK:
             // outDuration is in seconds, we need milliseconds
-            return outDuration * 1000;
+            return static_cast<wxLongLong>(outDuration * 1000);
     }
 }
 

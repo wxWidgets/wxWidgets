@@ -602,7 +602,7 @@ wxSize wxSlider::DoGetBestSize() const
             if ( HasFlag(wxSL_MIN_MAX_LABELS) )
                 size.y += labelSize;
             if ( HasFlag(wxSL_VALUE_LABEL) )
-                size.y += labelSize*2.75;
+                size.y += static_cast<int>(labelSize*2.75);
         }
     }
 
