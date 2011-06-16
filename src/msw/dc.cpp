@@ -34,6 +34,7 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/log.h"
+    #include "wx/math.h"
     #include "wx/icon.h"
     #include "wx/dcprint.h"
     #include "wx/module.h"
@@ -1978,24 +1979,24 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
         logExtX, logExtY;   // Window, i.e. logical coordinate space, extents.
     if ( m_scaleX >= 1 )
     {
-        devExtX = VIEWPORT_EXTENT*m_scaleX;
+        devExtX = wxRound(VIEWPORT_EXTENT*m_scaleX);
         logExtX = m_signX*VIEWPORT_EXTENT;
     }
     else
     {
         devExtX = VIEWPORT_EXTENT;
-        logExtX = m_signX*VIEWPORT_EXTENT/m_scaleX;
+        logExtX = wxRound(m_signX*VIEWPORT_EXTENT/m_scaleX);
     }
 
     if ( m_scaleY >= 1 )
     {
-        devExtY = VIEWPORT_EXTENT*m_scaleY;
+        devExtY = wxRound(VIEWPORT_EXTENT*m_scaleY);
         logExtY = m_signY*VIEWPORT_EXTENT;
     }
     else
     {
         devExtY = VIEWPORT_EXTENT;
-        logExtY = m_signY*VIEWPORT_EXTENT/m_scaleY;
+        logExtY = wxRound(m_signY*VIEWPORT_EXTENT/m_scaleY);
     }
 
     ::SetViewportExtEx(GetHdc(), devExtX, devExtY, NULL);
