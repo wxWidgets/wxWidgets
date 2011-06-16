@@ -76,18 +76,6 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxSize wxToggleButton::DoGetBestSize() const
-{
-    int wBtn = 70 ;
-    int hBtn = 20 ;
-
-    int lBtn = m_label.Length() * 8 + 12 ;
-    if (lBtn > wBtn)
-        wBtn = lBtn;
-
-    return wxSize ( wBtn , hBtn ) ;
-}
-
 void wxToggleButton::SetValue(bool val)
 {
     GetPeer()->SetValue( val ) ;
@@ -141,18 +129,6 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
     MacPostControlCreate(pos,size) ;
 
     return TRUE;
-}
-
-wxSize wxBitmapToggleButton::DoGetBestSize() const
-{
-    if (!GetBitmap().IsOk())
-       return wxSize(20,20);
-
-    wxSize best;
-    best.x = GetBitmap().GetWidth() + 2 * m_marginX;
-    best.y = GetBitmap().GetHeight() + 2 * m_marginY;
-
-    return best;
 }
 
 #endif // wxUSE_TOGGLEBTN

@@ -47,7 +47,6 @@ public:
 
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-    virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton)
@@ -78,9 +77,6 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
-
-protected:
-    virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton)
