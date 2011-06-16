@@ -76,7 +76,12 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_strings = new wxGtkCollatedArrayString;
     }
 
+#ifdef __WXGTK30__
+    m_widget = gtk_combo_box_text_new();
+#else
     m_widget = gtk_combo_box_new_text();
+#endif
+
     g_object_ref(m_widget);
 
     Append(n, choices);
@@ -117,7 +122,11 @@ void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
 
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
+#ifdef __WXGTK30__
+    gtk_combo_box_text_insert_text( GTK_COMBO_BOX_TEXT( m_widget ), n, wxGTK_CONV( text ) );
+#else
     gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
+#endif
 }
 
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
@@ -334,7 +343,11 @@ void wxChoice::GTKEnableEvents()
 
 GdkWindow *wxChoice::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_widget_get_window(m_widget);
+#else
     return m_widget->window;
+#endif
 }
 
 // Notice that this method shouldn't be necessary, because GTK calculates
@@ -371,7 +384,11 @@ wxSize wxChoice::DoGetBestSize() const
 void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
+#ifdef __WXGTK30__
+    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
+#else
     gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
+#endif
 }
 
 

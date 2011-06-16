@@ -418,7 +418,9 @@ bool wxNotebook::InsertPage( size_t position,
                 pageData->m_image, false, false, m_padding);
         }
         else
+        {
             wxFAIL_MSG("invalid notebook imagelist");
+        }
     }
 
     /* set the label text */
@@ -434,7 +436,12 @@ bool wxNotebook::InsertPage( size_t position,
     if ( style )
     {
         gtk_widget_modify_style(pageData->m_label, style);
+#ifdef __WXGTK30__
+        g_object_unref(style);
+#else
         gtk_rc_style_unref(style);
+#endif
+        
     }
 
     if (select && GetPageCount() > 1)
@@ -453,24 +460,30 @@ static bool
 IsPointInsideWidget(const wxPoint& pt, GtkWidget *w,
                     gint x, gint y, gint border = 0)
 {
+    GtkAllocation a;
+    gtk_widget_get_allocation(w, &a);
     return
-        (pt.x >= w->allocation.x - x - border) &&
-        (pt.x <= w->allocation.x - x + border + w->allocation.width) &&
-        (pt.y >= w->allocation.y - y - border) &&
-        (pt.y <= w->allocation.y - y + border + w->allocation.height);
+        (pt.x >= a.x - x - border) &&
+        (pt.x <= a.x - x + border + a.width) &&
+        (pt.y >= a.y - y - border) &&
+        (pt.y <= a.y - y + border + a.height);
 }
 
 int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
-    const gint x = m_widget->allocation.x;
-    const gint y = m_widget->allocation.y;
+    GtkAllocation a;
+    gtk_widget_get_allocation(m_widget, &a);
+    const int x = a.x;
+    const int y = a.y;
 
     const size_t count = GetPageCount();
     size_t i = 0;
 
+#if !GTK_CHECK_VERSION(3,0,0) && !defined(GSEAL_ENABLE)
     GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
     if (gtk_notebook_get_scrollable(notebook))
         i = g_list_position( notebook->children, notebook->first_tab );
+#endif
 
     for ( ; i < count; i++ )
     {
@@ -556,8 +569,14 @@ void wxNotebook::DoApplyWidgetStyle(GtkRcStyle *style)
 
 GdkWindow *wxNotebook::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
+#ifdef __WXGTK30__
+    windows.push_back(gtk_widget_get_window(m_widget));
+    // GtkNotebook has no event-window in gtk3. So I comment it out
+    //windows.push_back(gtk_notebook_get_event_window(m_widget)); 
+#else
     windows.push_back(m_widget->window);
     windows.push_back(GTK_NOTEBOOK(m_widget)->event_window);
+#endif
 
     return NULL;
 }

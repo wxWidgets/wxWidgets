@@ -71,7 +71,12 @@ wxSize wxControl::DoGetBestSize() const
     else
     {
         GtkRequisition req;
+#ifdef __WXGTK30__
+        GTK_WIDGET_GET_CLASS(m_widget)->get_preferred_width(m_widget, &(req.width), NULL);
+        GTK_WIDGET_GET_CLASS(m_widget)->get_preferred_height(m_widget, &(req.height), NULL);
+#else
         GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
+#endif
         best.Set(req.width, req.height);
     }
     CacheBestSize(best);

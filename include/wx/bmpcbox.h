@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxItemContainer;
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which
 // wxBitmapComboBox implementation utilizes ownerdrawn combobox
 // (either native or generic).
-#if !defined(__WXGTK20__) || !defined(__WXGTK30__) || defined(__WXUNIVERSAL__)
+#if !(defined(__WXGTK20__) || defined(__WXGTK30__)) || defined(__WXUNIVERSAL__)
     #define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED
 
 class WXDLLIMPEXP_FWD_CORE wxDC;

@@ -134,7 +134,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         gtk_entry_set_activates_default( entry,
                                          !HasFlag(wxTE_PROCESS_ENTER) );
 
+#ifdef __WXGTK30__
+        gtk_editable_set_editable( GTK_EDITABLE(entry), true );
+#else
         gtk_entry_set_editable( entry, TRUE );
+#endif
     }
 
     Append(n, choices);
@@ -155,7 +159,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
             // wxMSW and also because it doesn't make sense to have a string
             // which is not a possible choice in a read-only combobox)
             SetStringSelection(value);
+#ifdef __WXGTK30__
+            gtk_editable_set_editable( GTK_EDITABLE(entry), false );
+#else
             gtk_entry_set_editable( entry, FALSE );
+#endif
         }
         else // editable combobox
         {
@@ -183,15 +191,27 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 void wxComboBox::GTKCreateComboBoxWidget()
 {
+#ifdef __WXGTK30__
+    m_widget = gtk_combo_box_text_new_with_entry();
+#else
     m_widget = gtk_combo_box_entry_new_text();
+#endif
     g_object_ref(m_widget);
 
+#ifdef __WXGTK30__
+    m_entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(m_widget)));
+#else
     m_entry = GTK_ENTRY(GTK_BIN(m_widget)->child);
+#endif
 }
 
 GtkEditable *wxComboBox::GetEditable() const
 {
+#ifdef __WXGTK30__
+    return GTK_EDITABLE( gtk_bin_get_child(GTK_BIN(m_widget)));
+#else
     return GTK_EDITABLE( GTK_BIN(m_widget)->child );
+#endif
 }
 
 void wxComboBox::OnChar( wxKeyEvent &event )
@@ -227,13 +247,23 @@ void wxComboBox::EnableTextChangedEvents(bool enable)
 
     if ( enable )
     {
+#ifdef __WXGTK30__
+        g_signal_handlers_unblock_by_func(gtk_bin_get_child(GTK_BIN(m_widget)),
+            (gpointer)gtkcombobox_text_changed_callback, this);
+#else
         g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
             (gpointer)gtkcombobox_text_changed_callback, this);
+#endif
     }
     else // disable
     {
+#ifdef __WXGTK30__
+        g_signal_handlers_block_by_func(gtk_bin_get_child(GTK_BIN(m_widget)),
+            (gpointer)gtkcombobox_text_changed_callback, this);
+#else
         g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
             (gpointer)gtkcombobox_text_changed_callback, this);
+#endif
     }
 }
 
@@ -264,14 +294,24 @@ GtkWidget* wxComboBox::GetConnectWidget()
 
 GdkWindow* wxComboBox::GTKGetWindow(wxArrayGdkWindows& /* windows */) const
 {
+#ifdef __WXGTK30__
+    // FIXME I can't find the similar gtk3 function
+    //       gtk_entry_get_text_area() seems a way to go.
+    return NULL;
+#else
     return GetEntry()->text_area;
+#endif
 }
 
 // static
 wxVisualAttributes
 wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
+#ifdef __WXGTK30__
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new_with_entry, true);
+#else
     return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
+#endif
 }
 
 void wxComboBox::SetValue(const wxString& value)

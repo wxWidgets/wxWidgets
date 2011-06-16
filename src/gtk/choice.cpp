@@ -76,7 +76,12 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_strings = new wxGtkCollatedArrayString;
     }
 
+#ifdef __WXGTK30__
+    m_widget = gtk_combo_box_text_new();
+#else
     m_widget = gtk_combo_box_new_text();
+#endif
+
     g_object_ref(m_widget);
 
     Append(n, choices);

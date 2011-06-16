@@ -88,7 +88,7 @@ protected:
 #elif defined(__WXMOTIF__)
     virtual WXWidget GetTextWidget() const { return NULL; }
 #elif defined(__WXGTK__)
-#if defined(__WXGTK20__)
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
 #endif

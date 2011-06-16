@@ -38,6 +38,14 @@
 
     typedef HWND wxNativeContainerWindowId;
     typedef HWND wxNativeContainerWindowHandle;
+#elif defined(__WXGTK30__)
+    #include <gdk/gdk.h>
+    #include <gdk/gdkx.h>
+
+    // FIXME
+    // JC: This typedef might be wrong. Should I use 'Window' here?
+    typedef Window wxNativeContainerWindowId;
+    typedef GdkWindow *wxNativeContainerWindowHandle;
 #elif defined(__WXGTK__)
     #include <gdk/gdk.h>
 

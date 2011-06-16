@@ -227,6 +227,8 @@ protected:
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/control.h"
+#elif defined(__WXGTK30__)
+    #include "wx/gtk/control.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/control.h"
 #elif defined(__WXGTK__)

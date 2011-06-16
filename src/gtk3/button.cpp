@@ -2,7 +2,7 @@
 // Name:        src/gtk/button.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id: button.cpp 67066 2011-02-27 12:48:30Z VZ $
+// Id:          $Id: button.cpp 67326 2011-03-28 06:27:49Z PC $
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 {
     /* the default button has a border around it */
     wxWindow* parent = win->GetParent();
-    if (parent && parent->m_wxwindow && GTK_WIDGET_CAN_DEFAULT(widget))
+    if (parent && parent->m_wxwindow && gtk_widget_get_can_default(widget))
     {
         GtkBorder* border = NULL;
         gtk_widget_style_get(widget, "default_border", &border, NULL);
@@ -181,7 +181,7 @@ wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+    gtk_widget_set_can_default(m_widget, TRUE);
     gtk_widget_grab_default( m_widget );
 
     // resize for default border
@@ -262,6 +262,7 @@ void wxButton::SetLabel( const wxString &lbl )
     GTKApplyWidgetStyle( false );
 }
 
+#if wxUSE_MARKUP
 bool wxButton::DoSetLabelMarkup(const wxString& markup)
 {
     wxCHECK_MSG( m_widget != NULL, false, "invalid button" );
@@ -279,13 +280,14 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
+#endif // wxUSE_MARKUP
 
 bool wxButton::Enable( bool enable )
 {
     if (!base_type::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+    gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
     if (enable)
         GTKFixSensitivity();
@@ -297,23 +299,35 @@ bool wxButton::Enable( bool enable )
 
 GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
+#else
     return GTK_BUTTON(m_widget)->event_window;
+#endif
 }
 
 GtkLabel *wxButton::GTKGetLabel() const
 {
-    GtkWidget *child = GTK_BIN(m_widget)->child;
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     if ( GTK_IS_ALIGNMENT(child) )
     {
-        GtkWidget *box = GTK_BIN(child)->child;
-        for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+        GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
+        GtkLabel* label = NULL;
+        GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+        for (GList* item = list; item; item = item->next)
         {
+#ifdef __WXGTK30__
+            if ( GTK_IS_LABEL(item->data)) 
+                label = GTK_LABEL(item->data);
+#else
             GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
             if ( GTK_IS_LABEL(boxChild->widget) )
-                return GTK_LABEL(boxChild->widget);
+                label = GTK_LABEL(boxChild->widget);
+#endif
         }
+        g_list_free(list);
 
-        return NULL;
+        return label;
     }
 
     return GTK_LABEL(child);
@@ -322,21 +336,27 @@ GtkLabel *wxButton::GTKGetLabel() const
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    GtkWidget *child = GTK_BIN(m_widget)->child;
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     gtk_widget_modify_style(child, style);
 
     // for buttons with images, the path to the label is (at least in 2.12)
     // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
     if ( GTK_IS_ALIGNMENT(child) )
     {
-        GtkWidget *box = GTK_BIN(child)->child;
+        GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         if ( GTK_IS_BOX(box) )
         {
-            for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+            GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+            for (GList* item = list; item; item = item->next)
             {
+#ifdef __WXGTK30__
+                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
+#else
                 GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
                 gtk_widget_modify_style(boxChild->widget, style);
+#endif
             }
+            g_list_free(list);
         }
     }
 }
@@ -347,11 +367,11 @@ wxSize wxButton::DoGetBestSize() const
     // extra border around it, but we don't want to take it into account in
     // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
-    const bool isDefault = GTK_WIDGET_HAS_DEFAULT(m_widget);
+    const bool isDefault = gtk_widget_has_default(m_widget);
     if ( isDefault )
     {
         // temporarily unset default flag
-        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+        gtk_widget_set_can_default(m_widget, FALSE);
     }
 
     wxSize ret( wxControl::DoGetBestSize() );
@@ -359,7 +379,7 @@ wxSize wxButton::DoGetBestSize() const
     if ( isDefault )
     {
         // set it back again
-        GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
+        gtk_widget_set_can_default(m_widget, TRUE);
     }
 
     if (!HasFlag(wxBU_EXACTFIT))
@@ -458,7 +478,7 @@ void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
     GtkWidget *image;
     if ( DontShowLabel() )
     {
-        image = GTK_BIN(m_widget)->child;
+        image = gtk_bin_get_child(GTK_BIN(m_widget));
     }
     else // have both label and bitmap
     {
