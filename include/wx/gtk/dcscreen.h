@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxWindowDCImpl
 {
 public:
-    wxScreenDCImpl( wxDC *owner );
+    wxScreenDCImpl( wxScreenDC *owner );
     virtual ~wxScreenDCImpl();
 
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;

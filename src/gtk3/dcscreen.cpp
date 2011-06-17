@@ -19,7 +19,7 @@
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
 // Create a DC representing the whole screen
-wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
+wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) :
    wxWindowDCImpl( owner )
 {
     wxDisplaySize( &m_width, &m_height );
