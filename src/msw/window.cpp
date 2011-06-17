@@ -186,7 +186,7 @@ extern wxMenu *wxCurrentPopupMenu;
 // This is a hack used by the owner-drawn wxButton implementation to ensure
 // that the brush used for erasing its background is correctly aligned with the
 // control.
-extern wxWindowMSW *wxWindowBeingErased = NULL;
+wxWindowMSW *wxWindowBeingErased = NULL;
 #endif // wxUSE_UXTHEME
 
 namespace
