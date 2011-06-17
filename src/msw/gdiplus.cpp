@@ -36,6 +36,14 @@
 
 #include "wx/msw/wrapgdip.h"
 
+// w32api headers used by both MinGW and Cygwin wrongly define UINT16 inside
+// Gdiplus namespace in gdiplus.h which results in ambiguity errors when using
+// this type as UINT16 is also defined in global scope by windows.h (or rather
+// basetsd.h included from it), so we redefine it to work around this problem.
+#if defined(__CYGWIN__) || defined(__MINGW32__)
+    #define UINT16 unsigned short
+#endif
+
 // ----------------------------------------------------------------------------
 // helper macros
 // ----------------------------------------------------------------------------
