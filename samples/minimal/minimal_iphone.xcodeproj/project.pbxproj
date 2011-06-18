@@ -203,6 +203,7 @@
 					"__WXDEBUG__=1",
 				);
 				PRODUCT_NAME = minimal_iphone;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -213,6 +214,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(GCC_PREPROCESSOR_DEFINITIONS)";
 				PRODUCT_NAME = minimal_iphone;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
