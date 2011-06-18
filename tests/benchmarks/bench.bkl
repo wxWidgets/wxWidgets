@@ -11,6 +11,7 @@
                     template_append="wx_append_base">
         <sources>
             bench.cpp
+            datetime.cpp
             htmlparser/htmlpars.cpp
             htmlparser/htmltag.cpp
             ipcclient.cpp

@@ -760,7 +760,7 @@ bool getID(unsigned long *id, const wxString& str)
 }
 
 // utility specialized to parse efficiently the gccXML list of IDs which occur
-// in nodes like <Class> ones... i.e. numeric values separed by " _" token
+// in nodes like <Class> ones... i.e. numeric values separated by " _" token
 bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxString& str)
 {
     const wxStringCharType * const start = str.wx_str();
@@ -1280,7 +1280,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
 
     // NOTE: gccxml is smart enough to mark as virtual those functions
     //       which are declared virtual in base classes but don't have
-    //       the "virtual" keyword explicitely indicated in the derived
+    //       the "virtual" keyword explicitly indicated in the derived
     //       classes... so we don't need any further logic for virtuals
 
     m.SetVirtual(p->GetAttribute("virtual") == "1");
@@ -1686,7 +1686,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
 
     // NOTE: Doxygen is smart enough to mark as virtual those functions
     //       which are declared virtual in base classes but don't have
-    //       the "virtual" keyword explicitely indicated in the derived
+    //       the "virtual" keyword explicitly indicated in the derived
     //       classes... so we don't need any further logic for virtuals
 
     m.SetVirtual(p->GetAttribute("virt")=="virtual");

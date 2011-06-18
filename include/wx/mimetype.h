@@ -389,7 +389,7 @@ public:
 
     // operations
         // expand a string in the format of GetOpenCommand (which may contain
-        // '%s' and '%t' format specificators for the file name and mime type
+        // '%s' and '%t' format specifiers for the file name and mime type
         // and %{param} constructions).
     static wxString ExpandCommand(const wxString& command,
                                   const MessageParameters& params);

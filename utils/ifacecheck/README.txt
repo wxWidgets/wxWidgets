@@ -13,7 +13,7 @@
  (see http://www.gccxml.org) and of the Doxygen utility (see http://www.doxygen.org)
  to do the comparison.
 
- It's explicitely designed for wxWidgets documentation needs and is probably of little
+ It's explicitly designed for wxWidgets documentation needs and is probably of little
  use for anything else than wxWidgets docs reviewing.
 
 

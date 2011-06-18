@@ -73,7 +73,7 @@ bool wxControl::ProcessCommand( wxCommandEvent &event )
 
 void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
 {
-    if ( m_peer == NULL || !m_peer->IsOk() )
+    if ( GetPeer() == NULL || !GetPeer()->IsOk() )
         return;
 
 #if wxOSX_USE_CARBON
@@ -84,7 +84,7 @@ void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
     GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
     GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
 
-    m_peer->HandleKey( keyCode, charCode, modifiers );
+    GetPeer()->HandleKey( keyCode, charCode, modifiers );
 #else
     // TODO
 #endif

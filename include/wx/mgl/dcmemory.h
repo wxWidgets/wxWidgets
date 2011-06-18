@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.h
+// Name:        wx/mgl/dcmemory.h
 // Purpose:
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

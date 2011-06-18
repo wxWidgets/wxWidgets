@@ -182,6 +182,13 @@
     #include "wx/setup_gccxml.h"
 #endif
 
+/*
+   Convenience for any optional classes that use the wxAnyButton base class.
+ */
+#if wxUSE_TOGGLEBTN || wxUSE_BUTTON
+    #define wxHAS_ANY_BUTTON
+#endif
+
 
 /*
    Hardware platform detection.
@@ -273,7 +280,7 @@
     /*
         Preprocessor in older Borland compilers have major problems
         concatenating with ##. Specifically, if the string operands being
-        concatenated have special meaning (e.g L"str", 123i64 etc)
+        concatenated have special meaning (e.g. L"str", 123i64 etc)
         then ## will not concatenate the operands correctly.
 
         As a workaround, define wxPREPEND* and wxAPPEND* without using
@@ -820,7 +827,7 @@
 
 #if defined (__WXPALMOS__)
 #include "wx/palmos/missing.h"
-#endif // __WXPALMOS__
+#endif /* __WXPALMOS__ */
 
 #if !defined (__WXPALMOS5__)
 #define POSSEC_APPBASE
@@ -841,7 +848,7 @@
 #define POSSEC_FILE
 #define POSSEC_FILECONF
 #define POSSEC_FILEFN
-#endif // __WXPALMOS5__
+#endif /* __WXPALMOS5__ */
 
 /*
     Optionally supported C++ features.
@@ -866,6 +873,6 @@
 #           define wxNO_RTTI
 #       endif
 #   endif
-#endif // wxNO_RTTI
+#endif /* wxNO_RTTI */
 
 #endif /* _WX_PLATFORM_H_ */

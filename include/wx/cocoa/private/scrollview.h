@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/cocoa/scrollview.h
+// Name:        wx/cocoa/private/scrollview.h
 // Purpose:     wxWindowCocoaScrollView
 // Author:      David Elliott
 // Modified by:
@@ -48,7 +48,7 @@ protected:
     virtual void Cocoa_synthesizeMouseMoved(void) {}
     /*!
         Flag as to whether we're scrolling for a native view or a custom
-        wxWindow.  This controls the scrolling behavior.  When providing
+        wxWindow.  This controls the scrolling behaviour.  When providing
         scrolling for a native view we don't catch scroller action messages
         and thus don't send scroll events and we don't actually scroll the
         window when the application calls ScrollWindow.

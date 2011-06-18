@@ -269,7 +269,7 @@ public:
     /**
         Set the value of a certain colour setting to the value @e colour.
         @a id can be one of the colour values of @ref wxRibbonArtSetting, though
-        not all colour settings will have an affect on every art provider.
+        not all colour settings will have an effect on every art provider.
         
         @see SetColourScheme()
     */
@@ -455,7 +455,7 @@ public:
     
     /**
         Draw the background and chrome for a wxRibbonGallery control. This
-        should draw the border, brackground, scroll buttons, extension button,
+        should draw the border, background, scroll buttons, extension button,
         and any other UI elements which are not attached to a specific gallery
         item.
         
@@ -833,7 +833,7 @@ public:
     /**
         Calculate the portion of a page background which needs to be redrawn
         when a page is resized. To optimise the drawing of page backgrounds, as
-        small an area as possible should be returned. Of couse, if the way in
+        small an area as possible should be returned. Of course, if the way in
         which a background is drawn means that the entire background needs to
         be repainted on resize, then the entire new size should be returned.
         

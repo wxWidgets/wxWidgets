@@ -40,6 +40,9 @@ private:
 #if wxUSE_STD_STRING
         CPPUNIT_TEST( StdString );
 #endif
+#if wxUSE_LONGLONG
+        CPPUNIT_TEST( LongLongPrintf );
+#endif
         CPPUNIT_TEST( Sscanf );
         CPPUNIT_TEST( RepeatedPrintf );
         CPPUNIT_TEST( ArgsValidation );
@@ -49,6 +52,9 @@ private:
     void CharPrintf();
 #if wxUSE_STD_STRING
     void StdString();
+#endif
+#if wxUSE_LONGLONG
+    void LongLongPrintf();
 #endif
     void Sscanf();
     void RepeatedPrintf();
@@ -60,7 +66,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( VarArgTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VarArgTestCase, "VarArgTestCase" );
 
 void VarArgTestCase::StringPrintf()
@@ -152,6 +158,18 @@ void VarArgTestCase::StdString()
 }
 #endif // wxUSE_STD_STRING
 
+#if wxUSE_LONGLONG
+void VarArgTestCase::LongLongPrintf()
+{
+    const char * const llfmt = "%" wxLongLongFmtSpec "d";
+
+    CPPUNIT_ASSERT_EQUAL( "17", wxString::Format(llfmt, wxLL(17)) );
+
+    wxLongLong ll = 1234567890;
+    CPPUNIT_ASSERT_EQUAL( "1234567890", wxString::Format(llfmt, ll) );
+}
+#endif // wxUSE_LONGLONG
+
 void VarArgTestCase::Sscanf()
 {
     int i = 0;
@@ -240,12 +258,12 @@ void VarArgTestCase::ArgsValidation()
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
 
     // the following test (correctly) fails at compile-time with <type_traits>
-    // and it also (wrongly) fails when using VC6 because it somehow tries to
-    // use (inaccessible) VarArgTestCase copy ctor (FIXME-VC6)
-#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS) && \
-        !defined(__VISUALC6__)
-    VarArgTestCase& somePOD = *this;
-    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", somePOD) );
+#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+    wxObject obj;
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", obj) );
+
+    wxObject& ref = obj;
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", ref) );
 #endif
 
     // %c should accept integers too

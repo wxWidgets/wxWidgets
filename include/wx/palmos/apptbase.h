@@ -31,12 +31,14 @@ public:
     virtual void AfterChildWaitLoop(void *data) = 0;
 
 
+#if wxUSE_THREADS
     // wxThread helpers
     // ----------------
 
     // process a message while waiting for a(nother) thread, should return
     // false if and only if we have to exit the application
     virtual bool DoMessageFromThreadWait() = 0;
+#endif // wxUSE_THREADS
 };
 
 #endif // _WX_PALMOS_APPTBASE_H_

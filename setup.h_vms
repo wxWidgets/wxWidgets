@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 3 January 2011                                                     *
+ * Date : 27 April 2011                                                      *
  *                                                                           *
  *****************************************************************************/
 
@@ -216,8 +216,6 @@ typedef pid_t GPid;
 
 #define wxUSE_EXTENDED_RTTI 0
 
-#define wxUSE_STL 0
-
 #define wxUSE_LOG 1
 
 #define wxUSE_LOGWINDOW 1
@@ -232,6 +230,10 @@ typedef pid_t GPid;
 
 #define wxUSE_STREAMS       1
 
+#define wxUSE_PRINTF_POS_PARAMS      0
+
+#define wxUSE_STL 0
+
 #if defined(__DMC__) || defined(__WATCOMC__) \
         || (defined(_MSC_VER) && _MSC_VER < 1200)
     #define wxUSE_STD_DEFAULT  0
@@ -239,11 +241,15 @@ typedef pid_t GPid;
     #define wxUSE_STD_DEFAULT  1
 #endif
 
+#define wxUSE_STD_CONTAINERS wxUSE_STD_DEFAULT
+
 #define wxUSE_STD_IOSTREAM  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
-#define wxUSE_PRINTF_POS_PARAMS 0
+#define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
+
+#define wxUSE_IOSTREAMH     1
 
 #define wxUSE_LONGLONG      1
 
@@ -372,6 +378,8 @@ typedef pid_t GPid;
 #endif
 
 #define wxUSE_CONTROLS     1
+
+#define wxUSE_MARKUP       1
 
 #ifdef __WXMOTIF__
 #define wxUSE_POPUPWIN 0
@@ -591,12 +599,6 @@ typedef pid_t GPid;
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
 
 #define wxUSE_SVG 1
-
-#define REMOVE_UNUSED_ARG   1
-
-#define wxUSE_IOSTREAMH     1
-
-
 
 #define wxUSE_IMAGE         1
 
@@ -835,6 +837,9 @@ typedef pid_t GPid;
  * Use the Hildon 2.0 framework
  */
 #define wxUSE_LIBHILDON2 0
+
+#define wxUSE_DC_TRANSFORM_MATRIX 1
+
 /*
  * Have glibc2
  */

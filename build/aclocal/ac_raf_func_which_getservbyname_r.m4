@@ -3,7 +3,7 @@ dnl
 dnl Provides a test to determine the correct way to call
 dnl getservbyname_r:
 dnl
-dnl  - defines HAVE_FUNC_GETSERVBYNAME_R_6 if it needs 6 arguments (e.g linux)
+dnl  - defines HAVE_FUNC_GETSERVBYNAME_R_6 if it needs 6 arguments (e.g. linux)
 dnl  - defines HAVE_FUNC_GETSERVBYNAME_R_5 if it needs 5 arguments (e.g. solaris)
 dnl  - defines HAVE_FUNC_GETSERVBYNAME_R_4 if it needs 4 arguments (e.g. osf/1)
 dnl

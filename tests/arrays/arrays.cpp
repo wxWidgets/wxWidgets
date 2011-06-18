@@ -160,6 +160,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ArraysTestCase );
         CPPUNIT_TEST( wxStringArrayTest );
+        CPPUNIT_TEST( SortedArray );
         CPPUNIT_TEST( wxStringArraySplitTest );
         CPPUNIT_TEST( wxStringArrayJoinTest );
         CPPUNIT_TEST( wxStringArraySplitJoinTest );
@@ -175,6 +176,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
+    void SortedArray();
     void wxStringArraySplitTest();
     void wxStringArrayJoinTest();
     void wxStringArraySplitJoinTest();
@@ -193,7 +195,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( ArraysTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ArraysTestCase, "ArraysTestCase" );
 
 void ArraysTestCase::wxStringArrayTest()
@@ -338,6 +340,18 @@ void ArraysTestCase::wxStringArrayTest()
     a5.resize(3);
     CPPUNIT_ASSERT_EQUAL( 3, a5.size() );
     CPPUNIT_ASSERT_EQUAL( "Foo", a5[2] );
+}
+
+void ArraysTestCase::SortedArray()
+{
+    wxSortedArrayString a;
+    a.Add("d");
+    a.Add("c");
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index("c") );
+
+    a.push_back("b");
+    a.push_back("a");
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index("a") );
 }
 
 void ArraysTestCase::wxStringArraySplitTest()

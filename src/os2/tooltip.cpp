@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/tooltip.cpp
+// Name:        src/os2/tooltip.cpp
 // Purpose:     wxToolTip class implementation for MSW
 // Author:      David Webster
 // Modified by:

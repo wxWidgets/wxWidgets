@@ -40,7 +40,7 @@ public:
     void OnType(wxCommandEvent& event);
     void OnOrient(wxCommandEvent& event);
     void OnShowImages(wxCommandEvent& event);
-    void OnMulti(wxCommandEvent& event);
+    void OnStyle(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
     void OnAddPage(wxCommandEvent& event);
@@ -106,7 +106,11 @@ private:
     } m_type;
     int m_orient;
     bool m_chkShowImages;
+    bool m_fixedWidth;
     bool m_multi;
+    bool m_noPageTheme;
+    bool m_buttonBar;
+    bool m_horzLayout;
 
     // Controls
 
@@ -142,7 +146,11 @@ enum ID_COMMANDS
     ID_ORIENT_RIGHT,
     ID_ORIENT_MAX,
     ID_SHOW_IMAGES,
+    ID_FIXEDWIDTH,
     ID_MULTI,
+    ID_NOPAGETHEME,
+    ID_BUTTONBAR,
+    ID_HORZ_LAYOUT,
     ID_ADD_PAGE,
     ID_ADD_PAGE_NO_SELECT,
     ID_INSERT_PAGE,

@@ -375,9 +375,7 @@ void wxPropertyGrid::Init1()
     m_coloursCustomized = 0;
     m_frozen = 0;
 
-#if wxPG_DOUBLE_BUFFER
     m_doubleBuffer = NULL;
-#endif
 
 #ifndef wxPG_ICON_WIDTH
     m_expandbmp = NULL;
@@ -544,10 +542,8 @@ wxPropertyGrid::~wxPropertyGrid()
                       wxS("Close(false).)") );
     }
 
-#if wxPG_DOUBLE_BUFFER
     if ( m_doubleBuffer )
         delete m_doubleBuffer;
-#endif
 
     if ( m_iFlags & wxPG_FL_CREATEDSTATE )
         delete m_pState;
@@ -1127,9 +1123,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         }
         else
         {
-        #if wxPG_DOUBLE_BUFFER
             wxDELETE(m_doubleBuffer);
-        #endif
         }
     }
 
@@ -1965,7 +1959,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         wxDC* dcPtr = &dc;
         bool isBuffered = false;
 
-    #if wxPG_DOUBLE_BUFFER
         wxMemoryDC* bufferDC = NULL;
 
         if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
@@ -1986,7 +1979,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
                 isBuffered = true;
             }
         }
-    #endif
 
         if ( dcPtr )
         {
@@ -2005,7 +1997,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             }
         }
 
-    #if wxPG_DOUBLE_BUFFER
         if ( bufferDC )
         {
             dc.Blit( drawRect.x, drawRect.y, drawRect.width,
@@ -2013,7 +2004,6 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
                      bufferDC, 0, 0, wxCOPY );
             delete bufferDC;
         }
-    #endif
     }
     else
     {
@@ -2085,10 +2075,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int xRelMod = 0;
 
     //
-    // With wxPG_DOUBLE_BUFFER, do double buffering
+    // For now, do some manual calculation for double buffering
     // - buffer's y = 0, so align itemsRect and coordinates to that
     //
-#if wxPG_DOUBLE_BUFFER
+    // TODO: In future use wxAutoBufferedPaintDC (for example)
+    //
     int yRelMod = 0;
 
     wxRect cr2;
@@ -2107,9 +2098,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         firstItemTopY -= yRelMod;
         lastItemBottomY -= yRelMod;
     }
-#else
-    wxUnusedVar(isBuffered);
-#endif
 
     int x = m_marginWidth - xRelMod;
 
@@ -2612,7 +2600,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
-    if ( m_pState->DoIsPropertySelected(p) )
+    if ( m_pState->DoIsPropertySelected(p) || p->IsChildSelected(true) )
     {
         // NB: We must copy the selection.
         wxArrayPGProperty selection = m_pState->m_selection;
@@ -3608,6 +3596,12 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         }
         else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
         {
+            // In some cases we might stumble unintentionally on
+            // wxComboCtrl's embedded wxTextCtrl's events. Let's
+            // avoid them.
+            if ( editorWnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+                return false;
+
             wxComboCtrl* cc = (wxComboCtrl*) wnd;
 
             wxString newTcValue = cc->GetTextCtrl()->GetValue();
@@ -3982,20 +3976,7 @@ void wxPropertyGrid::FreeEditors()
     // Return focus back to canvas from children (this is required at least for
     // GTK+, which, unlike Windows, clears focus when control is destroyed
     // instead of moving it to closest parent).
-    wxWindow* focus = wxWindow::FindFocus();
-    if ( focus )
-    {
-        wxWindow* parent = focus->GetParent();
-        while ( parent )
-        {
-            if ( parent == this )
-            {
-                SetFocusOnCanvas();
-                break;
-            }
-            parent = parent->GetParent();
-        }
-    }
+    SetFocusOnCanvas();
 
     // Do not free editors immediately if processing events
     if ( m_wndEditor2 )
@@ -4626,7 +4607,6 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
     m_width = width;
     m_height = height;
 
-#if wxPG_DOUBLE_BUFFER
     if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
         int dblh = (m_lineHeight*2);
@@ -4653,8 +4633,6 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
             }
         }
     }
-
-#endif
 
     m_pState->OnClientWidthChange( width, event.GetSize().x - m_ncWidth, true );
     m_ncWidth = event.GetSize().x;
@@ -4691,7 +4669,24 @@ void wxPropertyGrid::SetVirtualWidth( int width )
 
 void wxPropertyGrid::SetFocusOnCanvas()
 {
-    SetFocus();
+    // To prevent wxPropertyGrid from stealing focus from other controls,
+    // only move focus to the grid if it was already in one if its child
+    // controls.
+    wxWindow* focus = wxWindow::FindFocus();
+    if ( focus )
+    {
+        wxWindow* parent = focus->GetParent();
+        while ( parent )
+        {
+            if ( parent == this )
+            {
+                SetFocus();
+                break;
+            }
+            parent = parent->GetParent();
+        }
+    }
+
     m_editorFocused = 0;
 }
 
@@ -4824,7 +4819,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     }
 
                 // Do not Skip() the event after selection has been made.
-                // Otherwise default event handling behavior kicks in
+                // Otherwise default event handling behaviour kicks in
                 // and may revert focus back to the main canvas.
                 res = true;
             }

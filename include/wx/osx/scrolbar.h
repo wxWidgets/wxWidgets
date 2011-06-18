@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrollbar.h
+// Name:        wx/osx/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      Stefan Csomor
 // Modified by:

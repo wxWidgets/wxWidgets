@@ -19,4 +19,4 @@
 #undef wxUSE_LOG_DIALOG
 #define wxUSE_LOG_DIALOG 0
 
-#endif // _WX_COCOA_CHKCONF_H_
+#endif /* _WX_COCOA_CHKCONF_H_ */

@@ -27,6 +27,20 @@ enum wxAntialiasMode
     wxANTIALIAS_DEFAULT,
 };
 
+enum wxInterpolationQuality
+{
+    // default interpolation
+    wxINTERPOLATION_DEFAULT,
+    // no interpolation
+    wxINTERPOLATION_NONE, 
+    // fast interpolation, suited for interactivity
+    wxINTERPOLATION_FAST,
+    // better quality
+    wxINTERPOLATION_GOOD,
+    // best quality, not suited for interactivity
+    wxINTERPOLATION_BEST
+};
+
 enum wxCompositionMode
 {
     // R = Result, S = Source, D = Destination, premultiplied with alpha
@@ -496,6 +510,12 @@ public:
     // sets the antialiasing mode, returns true if it supported
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
+    // returns the current interpolation quality
+    virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
+    
+    // sets the interpolation quality, returns true if it supported
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+    
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
 
@@ -503,7 +523,13 @@ public:
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
     // returns the size of the graphics context in device coordinates
-    virtual void GetSize( wxDouble* width, wxDouble* height);
+    void GetSize(wxDouble* width, wxDouble* height)
+    {
+        if ( width )
+            *width = m_width;
+        if ( height )
+            *height = m_height;
+    }
 
     // returns the resolution of the graphics context in device points per inch
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
@@ -636,14 +662,26 @@ public:
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
-
+    
+    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on 
+    // bitmap devices like screen, by default this is turned off
+    virtual void EnableOffset(bool enable = true);
+    
+    void DisableOffset() { EnableOffset(false); }
+    bool OffsetEnabled() { return m_enableOffset; }
+    
 protected:
+    // These fields must be initialized in the derived class ctors.
+    wxDouble m_width,
+             m_height;
 
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
     wxGraphicsFont m_font;
     wxAntialiasMode m_antialias;
     wxCompositionMode m_composition;
+    wxInterpolationQuality m_interpolation;
+    bool m_enableOffset;
 
 protected:
     // implementations of overloaded public functions: we use different names

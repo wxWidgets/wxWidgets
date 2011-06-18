@@ -734,10 +734,10 @@ bool wxGLCanvas::SetupPalette(const wxPalette& palette)
 
     m_palette = palette;
 
-    if ( !m_palette.Ok() )
+    if ( !m_palette.IsOk() )
     {
         m_palette = CreateDefaultPalette();
-        if ( !m_palette.Ok() )
+        if ( !m_palette.IsOk() )
             return false;
     }
 
@@ -799,7 +799,7 @@ wxPalette wxGLCanvas::CreateDefaultPalette()
 void wxGLCanvas::OnQueryNewPalette(wxQueryNewPaletteEvent& event)
 {
   /* realize palette if this is the current window */
-  if ( GetPalette()->Ok() ) {
+  if ( GetPalette()->IsOk() ) {
     ::UnrealizeObject((HPALETTE) GetPalette()->GetHPALETTE());
     ::SelectPalette(GetHDC(), (HPALETTE) GetPalette()->GetHPALETTE(), FALSE);
     ::RealizePalette(GetHDC());
@@ -814,7 +814,7 @@ void wxGLCanvas::OnPaletteChanged(wxPaletteChangedEvent& event)
 {
   /* realize palette if this is *not* the current window */
   if ( GetPalette() &&
-       GetPalette()->Ok() && (this != event.GetChangedWindow()) )
+       GetPalette()->IsOk() && (this != event.GetChangedWindow()) )
   {
     ::UnrealizeObject((HPALETTE) GetPalette()->GetHPALETTE());
     ::SelectPalette(GetHDC(), (HPALETTE) GetPalette()->GetHPALETTE(), FALSE);

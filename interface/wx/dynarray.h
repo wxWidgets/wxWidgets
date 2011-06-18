@@ -32,7 +32,7 @@
     functions are inline, so they do not take @e any space at all.
 
     wxWidgets has three different kinds of array. All of them derive from
-    wxBaseArray class which works with untyped data and can not be used
+    wxBaseArray class which works with untyped data and cannot be used
     directly. The standard macros WX_DEFINE_ARRAY(), WX_DEFINE_SORTED_ARRAY()
     and WX_DEFINE_OBJARRAY() are used to define a new class deriving from it.
     The classes declared will be called in this documentation wxArray,
@@ -124,7 +124,7 @@
     however dumb, C++ compiler in the world.
 
     Remember to include @<wx/arrimpl.cpp@> just before each
-    WX_DEFINE_OBJARRAY() ocurrence in your code, even if you have several in
+    WX_DEFINE_OBJARRAY() occurrence in your code, even if you have several in
     the same file.
 
     Things are much simpler for wxArray and wxSortedArray however: it is enough
@@ -659,7 +659,7 @@ public:
 
 /**
     This macro may be used to delete all elements of the array before emptying
-    it. It can not be used with wxObjArrays - but they will delete their
+    it. It cannot be used with wxObjArrays - but they will delete their
     elements anyway when you call Empty().
 */
 #define WX_CLEAR_ARRAY(wxArray_arrayToBeCleared)

@@ -104,7 +104,7 @@ private:
 // ----------------------------------------------------------------------------
 // (background) log window: this class forwards all log messages to the log
 // target which was active when it was instantiated, but also collects them
-// to the log window. This window has it's own menu which allows the user to
+// to the log window. This window has its own menu which allows the user to
 // close it, clear the log contents or save it to the file.
 // ----------------------------------------------------------------------------
 

@@ -30,6 +30,7 @@
 #include "wx/math.h"
 #include "wx/image.h"
 #include "wx/region.h"
+#include "wx/affinematrix2d.h"
 
 #define wxUSE_NEW_DC 1
 
@@ -489,6 +490,20 @@ public:
         if ( x ) *x = m_deviceOriginX;
         if ( y ) *y = m_deviceOriginY;
     }
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    // Transform matrix support is not available in most ports right now
+    // (currently only wxMSW provides it) so do nothing in these methods by
+    // default.
+    virtual bool CanUseTransformMatrix() const
+        { return false; }
+    virtual bool SetTransformMatrix(const wxAffineMatrix2D& WXUNUSED(matrix))
+        { return false; }
+    virtual wxAffineMatrix2D GetTransformMatrix() const
+        { return wxAffineMatrix2D(); }
+    virtual void ResetTransformMatrix()
+        { }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     virtual void SetDeviceLocalOrigin( wxCoord x, wxCoord y );
 
@@ -1001,6 +1016,20 @@ public:
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
         { m_pimpl->SetAxisOrientation(xLeftRight, yBottomUp); }
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+    bool CanUseTransformMatrix() const
+        { return m_pimpl->CanUseTransformMatrix(); }
+
+    bool SetTransformMatrix(const wxAffineMatrix2D &matrix)
+        { return m_pimpl->SetTransformMatrix(matrix); }
+
+    wxAffineMatrix2D GetTransformMatrix() const
+        { return m_pimpl->GetTransformMatrix(); }
+
+    void ResetTransformMatrix()
+        { m_pimpl->ResetTransformMatrix(); }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
     // mostly internal
     void SetDeviceLocalOrigin( wxCoord x, wxCoord y )
         { m_pimpl->SetDeviceLocalOrigin( x, y ); }
@@ -1315,13 +1344,13 @@ public:
 
     ~wxDCTextColourChanger()
     {
-        if ( m_colFgOld.Ok() )
+        if ( m_colFgOld.IsOk() )
             m_dc.SetTextForeground(m_colFgOld);
     }
 
     void Set(const wxColour& col)
     {
-        if ( !m_colFgOld.Ok() )
+        if ( !m_colFgOld.IsOk() )
             m_colFgOld = m_dc.GetTextForeground();
         m_dc.SetTextForeground(col);
     }
@@ -1349,7 +1378,7 @@ public:
 
     ~wxDCPenChanger()
     {
-        if ( m_penOld.Ok() )
+        if ( m_penOld.IsOk() )
             m_dc.SetPen(m_penOld);
     }
 
@@ -1376,7 +1405,7 @@ public:
 
     ~wxDCBrushChanger()
     {
-        if ( m_brushOld.Ok() )
+        if ( m_brushOld.IsOk() )
             m_dc.SetBrush(m_brushOld);
     }
 
@@ -1432,14 +1461,14 @@ public:
 
     void Set(const wxFont& font)
     {
-        if ( !m_fontOld.Ok() )
+        if ( !m_fontOld.IsOk() )
             m_fontOld = m_dc.GetFont();
         m_dc.SetFont(font);
     }
 
     ~wxDCFontChanger()
     {
-        if ( m_fontOld.Ok() )
+        if ( m_fontOld.IsOk() )
             m_dc.SetFont(m_fontOld);
     }
 

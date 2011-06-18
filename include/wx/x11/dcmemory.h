@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.h
+// Name:        wx/x11/dcmemory.h
 // Purpose:     wxMemoryDC class
 // Author:      Julian Smart
 // Modified by:

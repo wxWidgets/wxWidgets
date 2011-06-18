@@ -41,6 +41,7 @@ wxCairoLibrary::wxCairoLibrary()
     if ( !m_ok )
         return;
 
+#if wxUSE_PANGO
     m_libPangoCairo.Load("libpangocairo-1.0.so.0");
     m_ok = m_libPangoCairo.IsLoaded();
     if ( !m_ok )
@@ -48,6 +49,7 @@ wxCairoLibrary::wxCairoLibrary()
         m_libCairo.Unload();
         return;
     }
+#endif
 
     m_ok = InitializeMethods();
 }
@@ -129,8 +131,10 @@ bool wxCairoLibrary::InitializeMethods()
     wxDL_METHOD_LOAD(m_libCairo, cairo_surface_destroy);
     wxDL_METHOD_LOAD(m_libCairo, cairo_translate);
 
+#if wxUSE_PANGO
     wxDL_METHOD_LOAD(m_libPangoCairo, pango_cairo_update_layout);
     wxDL_METHOD_LOAD(m_libPangoCairo, pango_cairo_show_layout);
+#endif
 
     return true;
 }

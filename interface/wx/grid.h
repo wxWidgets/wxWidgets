@@ -1630,7 +1630,7 @@ struct wxGridSizesInfo
     The default table class is called wxGridStringTable and holds an array of
     strings. An instance of such a class is created by CreateGrid().
 
-    wxGridCellRenderer is the abstract base class for rendereing contents in a
+    wxGridCellRenderer is the abstract base class for rendering contents in a
     cell. The following renderers are predefined:
 
     - wxGridCellBoolRenderer
@@ -2781,7 +2781,7 @@ public:
         @a resizeExistingRows is @true.
 
         If @a height is less than GetRowMinimalAcceptableHeight(), then the
-        minimal acceptable heihgt is used instead of it.
+        minimal acceptable height is used instead of it.
     */
     void SetDefaultRowSize(int height, bool resizeExistingRows = false);
 
@@ -3009,7 +3009,7 @@ public:
         Notice that currently there is no way to make some columns resizable in
         a grid where columns can't be resized by default as there doesn't seem
         to be any need for this in practice. There is also no way to make the
-        column marked as fixed using this method resizeable again because it is
+        column marked as fixed using this method resizable again because it is
         supposed that fixed columns are used for static parts of the grid and
         so should remain fixed during the entire grid lifetime.
 

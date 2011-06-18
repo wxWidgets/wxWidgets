@@ -155,6 +155,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_colour.o \
 	test_gui_ellipsization.o \
 	test_gui_measuring.o \
+	test_gui_affinematrix.o \
 	test_gui_config.o \
 	test_gui_bitmapcomboboxtest.o \
 	test_gui_bitmaptogglebuttontest.o \
@@ -215,6 +216,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_socket.o \
 	test_gui_boxsizer.o \
 	test_gui_wrapsizer.o \
+	test_gui_toplevel.o \
 	test_gui_valnum.o \
 	test_gui_clientsize.o \
 	test_gui_setsize.o \
@@ -696,6 +698,9 @@ test_gui_ellipsization.o: $(srcdir)/graphics/ellipsization.cpp $(TEST_GUI_ODEP)
 test_gui_measuring.o: $(srcdir)/graphics/measuring.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/measuring.cpp
 
+test_gui_affinematrix.o: $(srcdir)/graphics/affinematrix.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/affinematrix.cpp
+
 test_gui_config.o: $(srcdir)/config/config.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/config/config.cpp
 
@@ -875,6 +880,9 @@ test_gui_boxsizer.o: $(srcdir)/sizers/boxsizer.cpp $(TEST_GUI_ODEP)
 
 test_gui_wrapsizer.o: $(srcdir)/sizers/wrapsizer.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/wrapsizer.cpp
+
+test_gui_toplevel.o: $(srcdir)/toplevel/toplevel.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/toplevel/toplevel.cpp
 
 test_gui_valnum.o: $(srcdir)/validators/valnum.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/validators/valnum.cpp

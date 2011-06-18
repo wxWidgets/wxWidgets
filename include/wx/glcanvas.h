@@ -49,7 +49,7 @@ enum
     WX_GL_MIN_ACCUM_BLUE,  // use blue buffer with most bits (> MIN_ACCUM_BLUE bits)
     WX_GL_MIN_ACCUM_ALPHA, // use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits)
     WX_GL_SAMPLE_BUFFERS,  // 1 for multisampling support (antialiasing)
-    WX_GL_SAMPLES          // 4 for 2x2 antialising supersampling on most graphics cards
+    WX_GL_SAMPLES          // 4 for 2x2 antialiasing supersampling on most graphics cards
 };
 
 #define wxGLCanvasName wxT("GLCanvas")

@@ -1118,9 +1118,9 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
             SetAutomaticControlDragTrackingEnabledForWindow( tlw, true );
 
-            m_peer->Move(0,0,0,0 );
+            GetPeer()->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
-            m_peer->SetVisibility( false );
+            GetPeer()->SetVisibility( false );
             wxToolBarBase::Show( false );
         }
     }
@@ -1135,7 +1135,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             ChangeWindowAttributes( tlw, 0, kWindowToolbarButtonAttribute );
             MacUninstallNativeToolbar();
 
-            m_peer->SetVisibility( true );
+            GetPeer()->SetVisibility( true );
         }
     }
 

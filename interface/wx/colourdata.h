@@ -87,7 +87,7 @@ public:
     void SetCustomColour(int i, const wxColour& colour);
 
     /**
-        Converts the colours saved in this class in a string form, separing
+        Converts the colours saved in this class in a string form, separating
         the various colours with a comma.
     */
     wxString ToString() const;

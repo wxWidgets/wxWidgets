@@ -904,7 +904,7 @@ bool wxMsgCatalogFile::LoadFile(const wxString& filename,
     if ( !fileMsg.IsOpened() )
         return false;
 
-    // get the file size (assume it is less than 4Gb...)
+    // get the file size (assume it is less than 4GB...)
     wxFileOffset lenFile = fileMsg.Length();
     if ( lenFile == wxInvalidOffset )
         return false;

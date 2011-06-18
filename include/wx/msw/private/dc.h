@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/private/dc.h
+// Name:        wx/msw/private/dc.h
 // Purpose:     private wxMSW helpers for working with HDCs
 // Author:      Vadim Zeitlin
 // Created:     2009-06-16 (extracted from src/msw/dc.cpp)

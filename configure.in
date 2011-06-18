@@ -374,6 +374,7 @@ dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
 dnl default)
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
+DEFAULT_wxUSE_STD_CONTAINERS=no
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
@@ -536,7 +537,7 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
       done
     else
-      dnl try to guess the most apropriate toolkit for this platform
+      dnl try to guess the most appropriate toolkit for this platform
       for toolkit in $ALL_TOOLKITS; do
         var=DEFAULT_DEFAULT_wxUSE_$toolkit
         eval "wxUSE_$toolkit=\$${var}"
@@ -703,9 +704,16 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
+WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
+if test "$wxUSE_STL" = "yes"; then
+    DEFAULT_wxUSE_STD_CONTAINERS=yes
+    DEFAULT_wxUSE_STD_IOSTREAM=yes
+    DEFAULT_wxUSE_STD_STRING=yes
+fi
+WX_ARG_ENABLE(std_containers,[  --enable-std_containers use standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
+WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
@@ -1036,6 +1044,7 @@ WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 onl
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
+WX_ARG_FEATURE(dctransform,  [  --enable-dctransform    use wxDC::SetTransformMatrix and related], wxUSE_DC_TRANSFORM_MATRIX)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -1142,7 +1151,7 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
         dnl --enable-universal_binary=SDK names a path to an SDK
         if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
             # Implicitly turn on the new --with-macosx-sdk using the default
-            # SDK which provides the behavior this option has always had.
+            # SDK which provides the behaviour this option has always had.
             if test "x$wxUSE_MACOSX_SDK" = "x"; then
                 AC_MSG_WARN([Enabling default SDK due to --enable-universal_binary.])
                 AC_MSG_WARN([If you don't want this, specify --without-macosx-sdk])
@@ -1219,10 +1228,8 @@ if test "x$wxUSE_MACOSX_SDK" != "x"; then
     else
         AC_MSG_RESULT([exists])
     fi
+    dnl CC and CXX will have these flags added below, after the compiler has been chosen
     MACOSX_SDK_OPTS="-isysroot $wxUSE_MACOSX_SDK"
-    eval "CC=\"$CC $MACOSX_SDK_OPTS\""
-    eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
-    eval "LD=\"$LD $MACOSX_SDK_OPTS\""
     retest_macosx_linking=yes
     dnl NOTE: When libtool is used in lieu of AR/RANLIB (i.e. in static mode)
     dnl the syslibroot makes no difference.  We aren't using libtool now but
@@ -1304,16 +1311,22 @@ if test "x$NEEDS_GCC40" == "xyes"; then
         CCVERSION=`$CC --version | grep 4.[[2-9]].`
         if test "x$CCVERSION" != "x"; then
             echo "$as_me:$LINENO: WARNING: gcc >= 4.2 cannot compile 10.4 compatible code. Using gcc 4.0 instead."
-            CC="/usr/bin/gcc-4.0"
+            CC="gcc-4.0"
         fi
     fi
 
     if test "x$CXX" = "xg++"; then
         CCVERSION=`$CXX --version | grep 4.[[2-9]].`
         if test "x$CCVERSION" != "x"; then
-            CXX="/usr/bin/g++-4.0"
+            CXX="g++-4.0"
         fi
     fi
+fi
+
+if test "x$MACOSX_SDK_OPTS" != "x"; then 
+    eval "CC=\"$CC $MACOSX_SDK_OPTS\""
+    eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
+    eval "LD=\"$LD $MACOSX_SDK_OPTS\""
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
@@ -1452,7 +1465,7 @@ if test "$wxUSE_WINE" = "yes"; then
     LDFLAGS_GUI="-mwindows"
 fi
 
-dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
+dnl NB: The two tests below are *NOT* mutually exclusive! They should only
 dnl     take effect on Cygwin/Mingw and not other platforms.
 if test "$wants_win32" = 1 ; then
     USE_UNIX=0
@@ -2950,13 +2963,8 @@ if test "$wxUSE_GUI" = "yes"; then
 
                     AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
-                    dnl Solaris also requires -lX11 for static lib
-                    case "${host}" in
-                        *-*-solaris2* )
-                            if test "$wxUSE_SHARED" != "yes"; then
-                                GTK_LIBS="$GTK_LIBS -lX11"
-                            fi
-                    esac
+                    dnl we use symbols from X11 directly so we should link with it
+                    GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                 dnl detect GTK1.x
@@ -4010,16 +4018,16 @@ if test "$wxUSE_SHARED" = "yes"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+libnames=\`cd \${2} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
 for i in \${libnames} ; do
-    ${HOST_PREFIX}install_name_tool -id \${1}/\${i} \${1}/\${i}
+    ${HOST_PREFIX}install_name_tool -id \${3}/\${i} \${1}/\${i}
     for dep in \${libnames} ; do
-        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${1}/\${dep} \${1}/\${i}
+        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${3}/\${dep} \${1}/\${i}
     done
 done
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \$(wx_top_builddir)/lib \${libdir}"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
@@ -4276,7 +4284,7 @@ AC_CHECK_FUNCS([wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp])
 dnl On HP-UX aCC need this define to find mbstrtowcs() &c
 dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
 dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
-dnl flags when g++ is configured, it will declare it's own).
+dnl flags when g++ is configured, it will declare its own).
 if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
     CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
 fi
@@ -4291,7 +4299,7 @@ AC_CHECK_TYPES([mbstate_t],
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
 dnl
-dnl the trouble here is that on some systems (e.g HP-UX 10) this function is
+dnl the trouble here is that on some systems (e.g. HP-UX 10) this function is
 dnl present in libc but not in the system headers and so AC_CHECK_FUNCS (which,
 dnl stupidly, provides a dummy function declaration inside its extension)
 dnl succeeds, even with C++ compiler, but the compilation of wxWidgets fails
@@ -5679,6 +5687,11 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
         else
             wxUSE_FSWATCHER=no
         fi
+    else
+        if test "$wxUSE_THREADS" != "yes"; then
+            AC_MSG_WARN([wxFileSystemWatcher disabled due to --disable-threads])
+            wxUSE_FSWATCHER=no
+        fi
     fi
 
     if test "$wxUSE_FSWATCHER" = "yes"; then
@@ -5986,12 +5999,20 @@ if test "$wxUSE_BUSYINFO" = "yes"; then
   AC_DEFINE(wxUSE_BUSYINFO)
 fi
 
+if test "$wxUSE_STD_CONTAINERS" = "yes"; then
+  AC_DEFINE(wxUSE_STD_CONTAINERS)
+fi
+
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
 fi
 
 if test "$wxUSE_STD_STRING" = "yes"; then
   AC_DEFINE(wxUSE_STD_STRING)
+fi
+
+if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
+  AC_DEFINE(wxUSE_STD_STRING_CONV_IN_WXSTRING)
 fi
 
 if test "$wxUSE_STDPATHS" = "yes"; then
@@ -6762,6 +6783,10 @@ fi
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+fi
+
+if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then
+    AC_DEFINE(wxUSE_DC_TRANSFORM_MATRIX)
 fi
 
 dnl ---------------------------------------------------------------------------

@@ -31,7 +31,12 @@ protected:
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
     
     void* m_modalSession;
+    
+    wxWindow* m_modalWindow;
+    
     WXWindow m_dummyWindow;
+    
+    int m_modalNestedLevel;
 };
 
 #endif // _WX_OSX_COCOA_EVTLOOP_H_

@@ -85,7 +85,7 @@
 #endif
 
 // deriving wxWin containers from STL ones changes them completely:
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
     #define __WX_BO_STL ",STL containers"
 #else
     #define __WX_BO_STL ",wx containers"

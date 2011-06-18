@@ -931,14 +931,14 @@ void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxAny &value
 {
     wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
-    dynobj->SetProperty(m_propertyName, value );
+    dynobj->SetProperty(m_propertyName.c_str(), value );
 }
 
 void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxAny& value) const
 {
     const wxDynamicObject* dynobj = wx_dynamic_cast( const wxDynamicObject * ,  object );
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
-    value = dynobj->GetProperty( m_propertyName );
+    value = dynobj->GetProperty( m_propertyName.c_str() );
 }
 
 // ----------------------------------------------------------------------------

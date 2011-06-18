@@ -73,6 +73,6 @@ is an unfortunate reflection of the reality of earlier versions of
 wxWindows :-)) to wxBombs.
 
 3) Added SetClientData to resize the window on Restart; eliminated
-scrollbars; made the frame unresizeable.
+scrollbars; made the frame unresizable.
 
 4) Added makefile.dos for VC++ 1.x, makefile.wat for Watcom C++.

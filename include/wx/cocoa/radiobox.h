@@ -110,7 +110,7 @@ public:
     virtual void SetString(unsigned int n, const wxString& label);
     // change the individual radio button state
 protected:
-    // We don't want the typical wxCocoaNSBox behavior because our real
+    // We don't want the typical wxCocoaNSBox behaviour because our real
     // implementation is by using an NSMatrix as the NSBox's contentView.
     WX_NSMatrix GetNSMatrix() const;
     void AssociateNSBox(WX_NSBox theBox);

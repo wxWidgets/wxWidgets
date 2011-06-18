@@ -34,6 +34,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/stopwatch.h"
     #include "wx/dcclient.h"
     #include "wx/textctrl.h"
 #endif
@@ -1441,7 +1442,7 @@ void wxListCtrl::InitEditControl(WXHWND hWnd)
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
 
-    // we must disallow TABbing away from the control while the edit contol is
+    // we must disallow TABbing away from the control while the edit control is
     // shown because this leaves it in some strange state (just try removing
     // this line and then pressing TAB while editing an item in  listctrl
     // inside a panel)
@@ -1820,8 +1821,8 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
     wxMSWListItemData *data1 = (wxMSWListItemData *) lParam1;
     wxMSWListItemData *data2 = (wxMSWListItemData *) lParam2;
 
-    long d1 = (data1 == NULL ? 0 : data1->lParam);
-    long d2 = (data2 == NULL ? 0 : data2->lParam);
+    wxIntPtr d1 = (data1 == NULL ? 0 : data1->lParam);
+    wxIntPtr d2 = (data2 == NULL ? 0 : data2->lParam);
 
     return internalData->user_fn(d1, d2, internalData->data);
 
@@ -2366,12 +2367,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #ifdef HAVE_NMLVFINDITEM
             case LVN_ODFINDITEM:
-                // this message is only used with the virtual list control but
-                // even there we don't want to always use it: in a control with
-                // sufficiently big number of items (defined as > 1000 here),
-                // accidentally pressing a key could result in hanging an
-                // application waiting while it performs linear search
-                if ( IsVirtual() && GetItemCount() <= 1000 )
+                // Find an item in a (necessarily virtual) list control.
+                if ( IsVirtual() )
                 {
                     NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
 
@@ -2391,22 +2388,34 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     // this is the first item we should examine, search from it
                     // wrapping if necessary
-                    const int startPos = pFindInfo->iStart;
+                    int startPos = pFindInfo->iStart;
                     const int maxPos = GetItemCount();
-                    wxCHECK_MSG( startPos <= maxPos, false,
-                                 wxT("bad starting position in LVN_ODFINDITEM") );
 
-                    int currentPos = startPos;
-                    do
+                    // Check that the index is valid to ensure that our loop
+                    // below always terminates.
+                    if ( startPos < 0 || startPos >= maxPos )
                     {
-                        // wrap to the beginning if necessary
-                        if ( currentPos == maxPos )
+                        // When the last item in the control is selected,
+                        // iStart is really set to (invalid) maxPos index so
+                        // accept this silently.
+                        if ( startPos != maxPos )
                         {
-                            // somewhat surprisingly, LVFI_WRAP isn't set in
-                            // flags but we still should wrap
-                            currentPos = 0;
+                            wxLogDebug(wxT("Ignoring invalid search start ")
+                                       wxT("position %d in list control with ")
+                                       wxT("%d items."), startPos, maxPos);
                         }
 
+                        startPos = 0;
+                    }
+
+                    // Linear search in a control with a lot of items can take
+                    // a long time so we limit the total time of the search to
+                    // ensure that the program doesn't appear to hang.
+#if wxUSE_STOPWATCH
+                    wxStopWatch sw;
+#endif // wxUSE_STOPWATCH
+                    for ( int currentPos = startPos; ; )
+                    {
                         // does this item begin with searchstr?
                         if ( wxStrnicmp(searchstr,
                                             GetItemText(currentPos), len) == 0 )
@@ -2414,13 +2423,46 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             *result = currentPos;
                             break;
                         }
-                    }
-                    while ( ++currentPos != startPos );
 
-                    if ( *result == -1 )
-                    {
-                        // not found
-                        return false;
+                        // Go to next item with wrapping if necessary.
+                        if ( ++currentPos == maxPos )
+                        {
+                            // Surprisingly, LVFI_WRAP seems to be never set in
+                            // the flags so wrap regardless of it.
+                            currentPos = 0;
+                        }
+
+                        if ( currentPos == startPos )
+                        {
+                            // We examined all items without finding anything.
+                            //
+                            // Notice that we still return true as we did
+                            // perform the search, if we didn't do this the
+                            // message would have been considered unhandled and
+                            // the control seems to always select the first
+                            // item by default in this case.
+                            return true;
+                        }
+
+#if wxUSE_STOPWATCH
+                        // Check the time elapsed only every thousand
+                        // iterations for performance reasons: if we did it
+                        // more often calling wxStopWatch::Time() could take
+                        // noticeable time on its own.
+                        if ( !((currentPos - startPos)%1000) )
+                        {
+                            // We use half a second to limit the search time
+                            // which is about as long as we can take without
+                            // annoying the user.
+                            if ( sw.Time() > 500 )
+                            {
+                                // As above, return true to prevent the control
+                                // from selecting the first item by default.
+                                return true;
+                            }
+                        }
+#endif // wxUSE_STOPWATCH
+
                     }
 
                     SetItemState(*result,

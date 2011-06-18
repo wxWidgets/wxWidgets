@@ -125,6 +125,7 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TEXT(wxID_ANY,MyFrame::OnComboBoxUpdate)
+    EVT_TEXT_ENTER(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_COMBOBOX(wxID_ANY,MyFrame::OnComboBoxUpdate)
 
     EVT_MENU(ComboCtrl_Compare,  MyFrame::OnShowComparison)
@@ -375,6 +376,14 @@ public:
 
     virtual void Init()
     {
+    }
+    virtual ~TreeCtrlComboPopup()
+    {
+        if (!m_isBeingDeleted)
+        {
+            wxMessageBox("error wxTreeCtrl::Destroy() was not called");
+        }
+        SendDestroyEvent();
     }
 
     virtual bool Create( wxWindow* parent )
@@ -937,6 +946,11 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
     {
         wxLogDebug(wxT("EVT_TEXT(id=%i,string=\"%s\")"),event.GetId(),event.GetString().c_str());
+    }
+    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+    {
+        wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
+                   event.GetId(), event.GetString().c_str());
     }
 }
 

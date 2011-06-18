@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/tooltip.h
+// Name:        wx/os2/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      David Webster
 // Modified by:

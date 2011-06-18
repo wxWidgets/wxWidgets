@@ -351,7 +351,6 @@ void wxDataViewCtrl::Init()
 {
   m_CustomRendererPtr = NULL;
   m_Deleting          = false;
-  m_macIsUserPane     = false;
   m_cgContext         = NULL;
 }
 
@@ -363,9 +362,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
-  m_peer = ::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle());
+  SetPeer(::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle()));
 
   MacPostControlCreate(pos,size);
 
@@ -407,8 +407,7 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   wxCHECK_MSG(columnPtr != NULL,                                                 false,"Column pointer must not be NULL.");
   wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,"Column does not have a renderer.");
   wxCHECK_MSG(GetModel() != NULL,                                          false,"No model associated with control.");
-  wxCHECK_MSG((columnPtr->GetModelColumn() >= 0) &&
-              (columnPtr->GetModelColumn() < GetModel()->GetColumnCount()),false,"Column's model column has no equivalent in the associated model.");
+  wxCHECK_MSG(columnPtr->GetModelColumn() < GetModel()->GetColumnCount(),false,"Column's model column has no equivalent in the associated model.");
 
  // add column to wxWidget's internal structure:
   if (wxDataViewCtrlBase::InsertColumn(pos,columnPtr))
@@ -632,6 +631,11 @@ void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
   wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
   noOfChildren = GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
+}
+
+void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    GetDataViewPeer()->StartEditor(item, column);
 }
 
 void wxDataViewCtrl::FinishCustomItemEditing()

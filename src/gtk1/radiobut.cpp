@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        src/gtk1/radiobut.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -180,10 +180,10 @@ bool wxRadioButton::IsOwnGtkWindow( GdkWindow *window )
 void wxRadioButton::OnInternalIdle()
 {
     wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+    if (g_globalCursor.IsOk()) cursor = g_globalCursor;
 
     GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
-    if ( win && cursor.Ok())
+    if ( win && cursor.IsOk())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
        as setting the cursor in a parent window also effects the

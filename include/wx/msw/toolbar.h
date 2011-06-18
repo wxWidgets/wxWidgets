@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/tbar95.h
+// Name:        wx/msw/toolbar.h
 // Purpose:     wxToolBar (Windows 95 toolbar) class
 // Author:      Julian Smart
 // Modified by:

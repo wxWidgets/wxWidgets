@@ -33,7 +33,7 @@
 
 wxArrayString::wxArrayString(size_t sz, const char** a)
 {
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
     for (size_t i=0; i < sz; i++)
@@ -42,7 +42,7 @@ wxArrayString::wxArrayString(size_t sz, const char** a)
 
 wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 {
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
     for (size_t i=0; i < sz; i++)
@@ -51,14 +51,14 @@ wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 
 wxArrayString::wxArrayString(size_t sz, const wxString* a)
 {
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
     for (size_t i=0; i < sz; i++)
         Add(a[i]);
 }
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
 
 // size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
 #define   ARRAY_MAXSIZE_INCREMENT       4096
@@ -462,7 +462,7 @@ bool wxArrayString::operator==(const wxArrayString& a) const
     return true;
 }
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
 // ===========================================================================
 // wxJoin and wxSplit

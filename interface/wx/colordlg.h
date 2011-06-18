@@ -25,7 +25,7 @@ public:
         of colour data, which will be copied to the colour dialog's colour
         data.
 
-        Custom colours from colour data object will be be used in the dialog's
+        Custom colours from colour data object will be used in the dialog's
         colour palette. Invalid entries in custom colours list will be ignored
         on some platforms(GTK) or replaced with white colour on platforms where
         custom colours palette has fixed size (MSW).

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/joystick.h
 // Purpose:     wxJoystick base header
 // Author:      wxWidgets Team
 // Modified by:

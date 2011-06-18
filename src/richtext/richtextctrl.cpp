@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/richtext/richeditctrl.cpp
+// Name:        src/richtext/richtextctrl.cpp
 // Purpose:     A rich edit control
 // Author:      Julian Smart
 // Modified by:
@@ -230,7 +230,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
                            validator, name))
         return false;
 
-    if (!GetFont().Ok())
+    if (!GetFont().IsOk())
     {
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     }
@@ -456,6 +456,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if (GetCaret())
         GetCaret()->Show();
     PositionCaret();
+#else
+#if !defined(__WXMAC__)
+    // Causes caret dropouts on Mac
+    PositionCaret();
+#endif
 #endif
 }
 
@@ -1221,6 +1226,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 SetDefaultStyleToCursorStyle();
                 ScrollIntoView(m_caretPosition, WXK_RIGHT);
 
+                cmdEvent.SetPosition(m_caretPosition);
                 GetEventHandler()->ProcessEvent(cmdEvent);
 
                 Update();
@@ -2203,6 +2209,19 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+// Force any pending layout due to large buffer
+void wxRichTextCtrl::ForceDelayedLayout()
+{
+    if (m_fullLayoutRequired)
+    {
+        m_fullLayoutRequired = false;
+        m_fullLayoutTime = 0;
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        ShowPosition(m_fullLayoutSavedPosition);
+        Refresh(false);
+        Update();
+    }
+}
 
 /// Idle-time processing
 void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
@@ -2309,7 +2328,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
 void wxRichTextCtrl::PaintBackground(wxDC& dc)
 {
     wxColour backgroundColour = GetBackgroundColour();
-    if (!backgroundColour.Ok())
+    if (!backgroundColour.IsOk())
         backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     // Clear the background
@@ -2336,9 +2355,9 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
     if (sz.x < 1 || sz.y < 1)
         return false;
 
-    if (!m_bufferBitmap.Ok() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
+    if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
         m_bufferBitmap = wxBitmap(sz.x, sz.y);
-    return m_bufferBitmap.Ok();
+    return m_bufferBitmap.IsOk();
 }
 #endif
 
@@ -2650,12 +2669,12 @@ bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock, const wx
 
 bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType, const wxRichTextAttr& textAttr)
 {
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
     {
         wxRichTextImageBlock imageBlock;
 
         wxImage image = bitmap.ConvertToImage();
-        if (image.Ok() && imageBlock.MakeImageBlock(image, bitmapType))
+        if (image.IsOk() && imageBlock.MakeImageBlock(image, bitmapType))
             return WriteImage(imageBlock, textAttr);
     }
 

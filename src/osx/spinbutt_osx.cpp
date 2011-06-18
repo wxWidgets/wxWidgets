@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        src/osx/spinbutt_osx.cpp
 // Purpose:     wxSpinButton
 // Author:      Stefan Csomor
 // Modified by:
@@ -25,9 +25,8 @@ wxSpinButton::wxSpinButton()
 bool wxSpinButton::Create( wxWindow *parent,
     wxWindowID id, const wxPoint& pos, const wxSize& size,
     long style, const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
     if ( !wxSpinButtonBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
@@ -37,8 +36,8 @@ bool wxSpinButton::Create( wxWindow *parent,
     if (!parent)
         return false;
 
-    m_peer = wxWidgetImpl::CreateSpinButton( this , parent, id, 0, m_min, m_max, pos, size,
-        style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateSpinButton( this , parent, id, 0, m_min, m_max, pos, size,
+        style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -51,20 +50,20 @@ wxSpinButton::~wxSpinButton()
 
 void wxSpinButton::SetValue( int val )
 {
-    m_peer->SetValue( val );
+    GetPeer()->SetValue( val );
 }
 
 int wxSpinButton::GetValue() const
 {
-    return m_peer->GetValue();
+    return GetPeer()->GetValue();
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     m_min = minVal;
     m_max = maxVal;
-    m_peer->SetMaximum( maxVal );
-    m_peer->SetMinimum( minVal );
+    GetPeer()->SetMaximum( maxVal );
+    GetPeer()->SetMinimum( minVal );
 }
 
 void wxSpinButton::SendThumbTrackEvent()
@@ -143,7 +142,7 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
             newValue = oldValue;
     }
 
-    m_peer->SetValue( newValue );
+    GetPeer()->SetValue( newValue );
 
     // always send a thumbtrack event
     SendThumbTrackEvent() ;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.h
+// Name:        wx/osx/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Stefan Csomor
 // Modified by:

@@ -159,7 +159,7 @@ wxPG_ALPHABETIC_MODE                = (wxPG_HIDE_CATEGORIES|wxPG_AUTO_SORT),
 wxPG_BOLD_MODIFIED                  = 0x00000040,
 
 /** Using this style, the column splitters move automatically based on column
-    proportions (default is equal proportion for every column). This behavior
+    proportions (default is equal proportion for every column). This behaviour
     stops once the user manually moves a splitter, and returns when a
     splitter is double-clicked.
 
@@ -248,7 +248,7 @@ wxPG_EX_MODE_BUTTONS                = 0x00008000,
 */
 wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 
-/** Prevent TAB from focusing to wxButtons. This behavior was default
+/** Prevent TAB from focusing to wxButtons. This behaviour was default
     in version 1.2.0 and earlier.
     NOTE! Tabbing to button doesn't work yet. Problem seems to be that on wxMSW
       atleast the button doesn't properly propagate key events (yes, I'm using
@@ -376,7 +376,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_vfbflags wxPropertyGrid Validation Failure Behavior Flags
+/** @section propgrid_vfbflags wxPropertyGrid Validation Failure behaviour Flags
     @{
 */
 
@@ -384,7 +384,7 @@ enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
 {
 
 /** Prevents user from leaving property unless value is valid. If this
-    behavior flag is not used, then value change is instead cancelled.
+    behaviour flag is not used, then value change is instead cancelled.
 */
 wxPG_VFB_STAY_IN_PROPERTY           = 0x01,
 
@@ -401,7 +401,7 @@ wxPG_VFB_MARK_CELL                  = 0x04,
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
-    derived class. Default behavior is to display the text on
+    derived class. Default behaviour is to display the text on
     the top-level frame's status bar, if present, and otherwise
     using wxMessageBox.
 */
@@ -460,7 +460,7 @@ public:
     }
 
     /**
-        @return Returns failure behavior which is a combination of
+        @return Returns failure behaviour which is a combination of
                @ref propgrid_vfbflags.
     */
     wxPGVFBFlags GetFailureBehavior() const
@@ -481,7 +481,7 @@ public:
         return *m_pValue;
     }
 
-    /** Set validation failure behavior
+    /** Set validation failure behaviour
 
         @param failureBehavior
             Mixture of @ref propgrid_vfbflags.
@@ -504,7 +504,7 @@ private:
     */
     wxString        m_failureMessage;
 
-    /** Validation failure behavior. Use wxPG_VFB_XXX flags.
+    /** Validation failure behaviour. Use wxPG_VFB_XXX flags.
     */
     wxPGVFBFlags    m_failureBehavior;
 
@@ -1625,7 +1625,7 @@ public:
             Return true if user is allowed to change to another property even
             if current has invalid value.
         @remarks
-        To add your own validation failure behavior, override
+        To add your own validation failure behaviour, override
         wxPropertyGrid::DoOnValidationFailure().
     */
     bool OnValidationFailure( wxPGProperty* property,
@@ -1669,13 +1669,13 @@ public:
     /**
         Return wxStatusBar that is used by this wxPropertyGrid. You can
         reimplement this member function in derived class to override
-        the default behavior of using the top-level wxFrame's status
+        the default behaviour of using the top-level wxFrame's status
         bar, if any.
     */
     virtual wxStatusBar* GetStatusBar();
 #endif
 
-    /** Override to customize property validation failure behavior.
+    /** Override to customize property validation failure behaviour.
         @param invalidValue
             Value which failed in validation.
         @return
@@ -1743,7 +1743,7 @@ protected:
     /**
         Runs all validation functionality (includes sending wxEVT_PG_CHANGING).
         Returns true if all tests passed. Implement in derived class to
-        add additional validation behavior.
+        add additional validation behaviour.
     */
     virtual bool PerformValidation( wxPGProperty* p,
                                     wxVariant& pendingValue,
@@ -1795,9 +1795,7 @@ protected:
     wxWindow            *m_wndEditor;
     wxWindow            *m_wndEditor2;
 
-#if wxPG_DOUBLE_BUFFER
     wxBitmap            *m_doubleBuffer;
-#endif
 
     /** Local time ms when control was created. */
     wxLongLong          m_timeCreated;
@@ -2238,6 +2236,8 @@ protected:
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
 
+    // This function only moves focus to the wxPropertyGrid if it already
+    // was on one of its child controls.
     void SetFocusOnCanvas();
 
     bool DoHideProperty( wxPGProperty* p, bool hide, int flags );
@@ -2487,7 +2487,7 @@ public:
     }
 
     /**
-        Set override validation failure behavior.
+        Set override validation failure behaviour.
 
         Only effective if Veto was also called, and only allowed if event type
         is wxEVT_PG_CHANGING.
@@ -2685,7 +2685,6 @@ protected:
     #undef wxPG_FL_INITIALIZED
     #undef wxPG_FL_ACTIVATION_BY_CLICK
     #undef wxPG_SUPPORT_TOOLTIPS
-    #undef wxPG_DOUBLE_BUFFER
     #undef wxPG_ICON_WIDTH
     #undef wxPG_USE_RENDERER_NATIVE
 // Following are needed by the manager headers

@@ -277,7 +277,7 @@ public:
     /**
         @deprecated This function is deprecated, please use ToWChar() instead.
 
-        Converts from a string @a in in multibyte encoding to Unicode putting up to
+        Converts from a string @a in multibyte encoding to Unicode putting up to
         @a outLen characters into the buffer @e out.
 
         If @a out is @NULL, only the length of the string which would result

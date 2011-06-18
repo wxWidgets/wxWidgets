@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        encconv.cpp
+// Name:        src/common/encconv.cpp
 // Purpose:     wxEncodingConverter class for converting between different
 //              font encodings
 // Author:      Vaclav Slavik

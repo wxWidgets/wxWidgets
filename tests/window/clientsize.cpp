@@ -37,10 +37,12 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClientSizeTestCase );
         CPPUNIT_TEST( ClientToWindow );
+        CPPUNIT_TEST( ClientSizeNotNegative );
         CPPUNIT_TEST( WindowToClient );
     CPPUNIT_TEST_SUITE_END();
 
     void ClientToWindow();
+    void ClientSizeNotNegative();
     void WindowToClient();
 
     wxWindow *m_win;
@@ -51,7 +53,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( ClientSizeTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClientSizeTestCase, "ClientSizeTestCase" );
 
 // ----------------------------------------------------------------------------
@@ -76,6 +78,18 @@ void ClientSizeTestCase::ClientToWindow()
 {
     CPPUNIT_ASSERT(m_win->GetSize() ==
                    m_win->ClientToWindowSize(m_win->GetClientSize()));
+}
+
+void ClientSizeTestCase::ClientSizeNotNegative()
+{
+    wxWindow* w = new wxWindow(wxTheApp->GetTopWindow(), -1,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxBORDER_THEME);
+    w->SetSize(wxSize(1,1));
+    const wxSize szw = w->GetClientSize();
+    CPPUNIT_ASSERT(szw.GetWidth() >= 0);
+    CPPUNIT_ASSERT(szw.GetHeight() >= 0);
+    w->Destroy();
 }
 
 void ClientSizeTestCase::WindowToClient()

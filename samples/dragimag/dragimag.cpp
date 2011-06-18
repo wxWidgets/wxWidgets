@@ -87,7 +87,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void MyCanvas::OnEraseBackground(wxEraseEvent& event)
 {
-    if (wxGetApp().GetBackgroundBitmap().Ok())
+    if (wxGetApp().GetBackgroundBitmap().IsOk())
     {
         wxSize sz = GetClientSize();
         wxRect rect(0, 0, sz.x, sz.y);
@@ -468,7 +468,7 @@ bool DragShape::HitTest(const wxPoint& pt) const
 
 bool DragShape::Draw(wxDC& dc, bool highlight)
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         wxMemoryDC memDC;
         memDC.SelectObject(m_bitmap);
@@ -498,7 +498,7 @@ bool MyDragImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& 
 {
     destDC.SetClippingRegion(destRect);
 
-    if (wxGetApp().GetBackgroundBitmap().Ok())
+    if (wxGetApp().GetBackgroundBitmap().IsOk())
         wxGetApp().TileBitmap(destRect, destDC, wxGetApp().GetBackgroundBitmap());
 
     m_canvas->DrawShapes(destDC);

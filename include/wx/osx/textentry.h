@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by: Kevin Ollivier
 // Created:     1998-01-01
-// RCS-ID:      $Id: textctrl.h 62531 2009-11-01 00:58:04Z KO $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,12 +32,8 @@ class WXDLLIMPEXP_CORE wxTextEntry: public wxTextEntryBase
 {
 
 public:
-    wxTextEntry()
-        : m_editable(true),
-          m_maxLength(0)
-    { }
-
-    virtual ~wxTextEntry() {};
+    wxTextEntry();
+    virtual ~wxTextEntry();
 
     virtual bool IsEditable() const;
 
@@ -88,9 +84,17 @@ public:
     // --------------
 
     virtual wxTextWidgetImpl * GetTextPeer() const;
+    wxTextCompleter *OSXGetCompleter() const { return m_completer; }
+
 protected:
 
     virtual wxString DoGetValue() const;
+
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices);
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
+
+    // The object providing auto-completions or NULL if none.
+    wxTextCompleter *m_completer;
 
     bool  m_editable;
 

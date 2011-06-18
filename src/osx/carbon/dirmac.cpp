@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dirmac.cpp
+// Name:        src/osx/carbon/dirmac.cpp
 // Purpose:     wxDir implementation for Mac
 // Author:      Stefan Csomor
 // Modified by:

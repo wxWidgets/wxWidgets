@@ -409,7 +409,7 @@ void wxComboBox::SetSelection(int n)
 
 int wxComboBox::GetSelection() const
 {
-#if 1 // FIXME:: What is the correct behavior?
+#if 1 // FIXME:: What is the correct behaviour?
     // if the current value isn't one of the listbox strings, return -1
     return GetLBox()->GetSelection();
 #else

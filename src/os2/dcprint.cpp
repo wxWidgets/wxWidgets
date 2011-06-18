@@ -261,7 +261,7 @@ void wxPrinterDCImpl::DoDrawBitmap( const wxBitmap& rBmp,
                                     wxCoord WXUNUSED(vY),
                                     bool WXUNUSED(bUseMask))
 {
-    wxCHECK_RET( rBmp.Ok(), wxT("invalid bitmap in wxPrinterDC::DrawBitmap") );
+    wxCHECK_RET( rBmp.IsOk(), wxT("invalid bitmap in wxPrinterDC::DrawBitmap") );
 
 //    int                             nWidth  = rBmp.GetWidth();
 //    int                             nHeight = rBmp.GetHeight();

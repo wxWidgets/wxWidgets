@@ -43,12 +43,14 @@ private:
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
         CPPUNIT_TEST( DateTimeFmtC );
+        CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
     void DateTimeFmtC();
+    void IsAvailable();
 
     wxLocale *m_locale;
 
@@ -58,7 +60,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( IntlTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IntlTestCase, "IntlTestCase" );
 
 void IntlTestCase::setUp()
@@ -202,6 +204,16 @@ void IntlTestCase::DateTimeFmtC()
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
     WX_ASSERT_EQUAL_FORMAT( "C time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
+}
+
+void IntlTestCase::IsAvailable()
+{
+    const wxString origLocale(setlocale(LC_ALL, NULL));
+
+    // Calling IsAvailable() shouldn't change the locale.
+    wxLocale::IsAvailable(wxLANGUAGE_ENGLISH);
+
+    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
 }
 
 #endif // wxUSE_INTL

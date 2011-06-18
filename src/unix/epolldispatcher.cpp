@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/epolldispatcher.cpp
+// Name:        src/unix/epolldispatcher.cpp
 // Purpose:     implements dispatcher for epoll_wait() call
 // Author:      Lukasz Michalski
 // Created:     April 2007

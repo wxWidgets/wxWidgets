@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/richtext/richeditxml.h
+// Name:        wx/richtext/richtextxml.h
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextXMLHandler: public wxRichTextFileHandler
 {
-    DECLARE_CLASS(wxRichTextXMLHandler)
+    DECLARE_DYNAMIC_CLASS(wxRichTextXMLHandler)
 public:
     wxRichTextXMLHandler(const wxString& name = wxT("XML"), const wxString& ext = wxT("xml"), int type = wxRICHTEXT_TYPE_XML)
         : wxRichTextFileHandler(name, ext, type)

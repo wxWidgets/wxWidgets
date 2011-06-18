@@ -23,15 +23,15 @@ bool wxStaticBox::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
     m_labelOrig = m_label = label;
 
-    m_peer = wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -40,12 +40,6 @@ bool wxStaticBox::Create( wxWindow *parent,
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-#if wxOSX_USE_COCOA
-    int l,t,w,h;
-    m_peer->GetContentArea(l, t, w, h);
-    *borderTop = t + 10;
-    *borderOther = l + 10;
-#else
     static int extraTop = -1; // Uninitted
     static int other = 5;
 
@@ -59,7 +53,11 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         // pixels (otherwise overlapping occurs at the top). The "other"
         // border has to be 11.
         extraTop = 11;
+#if wxOSX_USE_COCOA
+        other = 17;
+#else
         other = 11;
+#endif
     }
 
     *borderTop = extraTop;
@@ -67,7 +65,6 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         *borderTop += GetCharHeight();
 
     *borderOther = other;
-#endif
 }
 
 bool wxStaticBox::SetFont(const wxFont& font)

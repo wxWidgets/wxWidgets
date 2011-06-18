@@ -104,7 +104,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( StringTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StringTestCase, "StringTestCase" );
 
 StringTestCase::StringTestCase()
@@ -762,25 +762,30 @@ void StringTestCase::FromDouble()
     static const struct FromDoubleTestData
     {
         double value;
+        int prec;
         const char *str;
     } testData[] =
     {
-        { 1.23,             "1.23" },
+        { 1.23,             -1, "1.23" },
         // NB: there are no standards about the minimum exponent width
         //     and newer MSVC versions use 3 digits as minimum exponent
         //     width while GNU libc uses 2 digits as minimum width...
 #ifdef wxUSING_VC_CRT_IO
-        { -3e-10,           "-3e-010" },
+        { -3e-10,           -1, "-3e-010" },
 #else
-        { -3e-10,           "-3e-10" },
+        { -3e-10,           -1, "-3e-10" },
 #endif
-        { -0.45678,         "-0.45678" },
+        { -0.45678,         -1, "-0.45678" },
+        { 1.2345678,         0, "1" },
+        { 1.2345678,         1, "1.2" },
+        { 1.2345678,         2, "1.23" },
+        { 1.2345678,         3, "1.235" },
     };
 
     for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
     {
         const FromDoubleTestData& td = testData[n];
-        CPPUNIT_ASSERT_EQUAL( td.str, wxString::FromCDouble(td.value) );
+        CPPUNIT_ASSERT_EQUAL( td.str, wxString::FromCDouble(td.value, td.prec) );
     }
 
     if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
@@ -795,7 +800,7 @@ void StringTestCase::FromDouble()
 
         wxString str(td.str);
         str.Replace(".", ",");
-        CPPUNIT_ASSERT_EQUAL( str, wxString::FromDouble(td.value) );
+        CPPUNIT_ASSERT_EQUAL( str, wxString::FromDouble(td.value, td.prec) );
     }
 }
 

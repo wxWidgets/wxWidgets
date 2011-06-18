@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextmarginspage.h
+// Name:        wx/richtext/richtextmarginspage.h
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 

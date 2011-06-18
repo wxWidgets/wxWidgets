@@ -180,7 +180,7 @@ void ZipPipeTestCase::runTest()
 
     {
         PFileInputStream in(cmd);
-        if (in.Ok())
+        if (in.IsOk())
             out.Write(in);
     }
 

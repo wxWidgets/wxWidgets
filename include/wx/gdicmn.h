@@ -903,7 +903,7 @@ class WXDLLIMPEXP_CORE wxResourceCache: public wxList
 {
 public:
     wxResourceCache() { }
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     wxResourceCache(const unsigned int keyType) : wxList(keyType) { }
 #endif
     virtual ~wxResourceCache();

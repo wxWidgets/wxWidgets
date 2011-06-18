@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.h
+// Name:        wx/gtk/font.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

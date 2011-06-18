@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 #include <vector>
 #include <algorithm>
@@ -26,7 +26,7 @@ inline void wxVectorSort(wxVector<T>& v)
     std::sort(v.begin(), v.end());
 }
 
-#else // !wxUSE_STL
+#else // !wxUSE_STD_CONTAINERS
 
 #include "wx/utils.h"
 #include "wx/scopeguard.h"
@@ -485,7 +485,7 @@ void wxVectorSort(wxVector<T>& v)
 
 
 
-#endif // wxUSE_STL/!wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
 #if WXWIN_COMPATIBILITY_2_8
     #define WX_DECLARE_VECTORBASE(obj, cls) typedef wxVector<obj> cls

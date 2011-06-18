@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/window.cpp
+// Name:        src/common/wincmn.cpp
 // Purpose:     common (to all ports) wxWindow functions
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by:
@@ -554,7 +554,14 @@ void wxWindowBase::SendDestroyEvent()
 
 bool wxWindowBase::Destroy()
 {
-    SendDestroyEvent();
+    // If our handle is invalid, it means that this window has never been
+    // created, either because creating it failed or, more typically, because
+    // this wxWindow object was default-constructed and its Create() method had
+    // never been called. As we didn't send wxWindowCreateEvent in this case
+    // (which is sent after successful creation), don't send the matching
+    // wxWindowDestroyEvent neither.
+    if ( GetHandle() )
+        SendDestroyEvent();
 
     delete this;
 
@@ -1064,7 +1071,7 @@ void wxWindowBase::SendSizeEvent(int flags)
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
     if ( flags & wxSEND_EVENT_POST )
-        wxPostEvent(this, event);
+        wxPostEvent(GetEventHandler(), event);
     else
         HandleWindowEvent(event);
 }
@@ -1521,7 +1528,7 @@ wxColour wxWindowBase::GetBackgroundColour() const
         // wxWidgets versions where GetBackgroundColour() always returned
         // something -- so give them something even if it doesn't make sense
         // for this window (e.g. it has a themed background)
-        if ( !colBg.Ok() )
+        if ( !colBg.IsOk() )
             colBg = GetClassDefaultAttributes().colBg;
 
         return colBg;
@@ -1533,7 +1540,7 @@ wxColour wxWindowBase::GetBackgroundColour() const
 wxColour wxWindowBase::GetForegroundColour() const
 {
     // logic is the same as above
-    if ( !m_hasFgCol && !m_foregroundColour.Ok() )
+    if ( !m_hasFgCol && !m_foregroundColour.IsOk() )
     {
         wxColour colFg = GetDefaultAttributes().colFg;
 
@@ -1555,7 +1562,7 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 
     m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;
-    SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.Ok() );
+    SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.IsOk() );
     return true;
 }
 
@@ -1567,7 +1574,7 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
     m_hasFgCol = colour.IsOk();
     m_inheritFgCol = m_hasFgCol;
     m_foregroundColour = colour;
-    SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.Ok() );
+    SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.IsOk() );
     return true;
 }
 
@@ -2644,7 +2651,7 @@ bool wxWindowBase::SendIdleEvents(wxIdleEvent& event)
 
 void wxWindowBase::OnInternalIdle()
 {
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
+    if ( wxUpdateUIEvent::CanUpdate(this) )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
@@ -2967,19 +2974,19 @@ wxAccessible* wxWindowBase::CreateAccessible()
 // list classes implementation
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList)
 
-#else // !wxUSE_STL
+#else // !wxUSE_STD_CONTAINERS
 
 void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
 }
 
-#endif // wxUSE_STL/!wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
 // ----------------------------------------------------------------------------
 // borders
@@ -3283,8 +3290,8 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
     wxWindowList::compatibility_iterator i = siblings.Find(win);
     wxCHECK_RET( i, wxT("MoveBefore/AfterInTabOrder(): win is not a sibling") );
 
-    // unfortunately, when wxUSE_STL == 1 DetachNode() is not implemented so we
-    // can't just move the node around
+    // unfortunately, when wxUSE_STD_CONTAINERS == 1 DetachNode() is not
+    // implemented so we can't just move the node around
     wxWindow *self = (wxWindow *)this;
     siblings.DeleteObject(self);
     if ( move == OrderAfter )

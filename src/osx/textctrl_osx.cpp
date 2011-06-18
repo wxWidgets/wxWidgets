@@ -95,7 +95,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     const wxValidator& validator,
     const wxString& name )
 {
-    m_macIsUserPane = false ;
+    DontCreatePeer();
     m_editable = true ;
 
     if ( ! (style & wxNO_BORDER) )
@@ -112,7 +112,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
 
-    m_peer = wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos, size) ;
 

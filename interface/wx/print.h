@@ -117,7 +117,33 @@ public:
     void OnPaint(wxPaintEvent& event);
 };
 
+/**
+    Preview frame modality kind.
 
+    The elements of this enum can be used with wxPreviewFrame::Initialize() to
+    indicate how should the preview frame be shown.
+
+    @since 2.9.2
+*/
+enum wxPreviewFrameModalityKind
+{
+    /**
+        Disable all the other top level windows while the preview frame is shown.
+
+        This is the default behaviour.
+     */
+    wxPreviewFrame_AppModal,
+
+    /**
+        Disable only the parent window while the preview frame is shown.
+     */
+    wxPreviewFrame_WindowModal,
+
+    /**
+        Show the preview frame non-modally and don't disable any other windows.
+     */
+    wxPreviewFrame_NonModal
+};
 
 /**
     @class wxPreviewFrame
@@ -169,15 +195,24 @@ public:
     virtual void CreateControlBar();
 
     /**
-        Creates the preview canvas and control bar, and calls wxWindow::MakeModal(@true)
-        to disable other top-level windows in the application.
+        Creates the preview canvas and control bar.
 
-        This function should be called by the application prior to showing the frame.
+        By default also disables the other existing top level windows to
+        prepare for showing the preview frame modally. Since wxWidgets 2.9.2
+        this can be changed by specifying either wxPreviewFrame_WindowModal --
+        to disable just the parent window -- or wxPreviewFrame_NonModal -- to
+        not disable any windows at all -- as @a kind parameter.
+
+        This function must be called by the application prior to showing the frame.
+
+        @param kind
+            The modality kind of preview frame. @since 2.9.2
     */
-    virtual void Initialize();
+    virtual void Initialize(wxPreviewFrameModalityKind kind
+                                = wxPreviewFrame_AppModal);
 
     /**
-        Enables the other frames in the application, and deletes the print preview
+        Enables any disabled frames in the application, and deletes the print preview
         object, implicitly deleting any printout objects associated with the print
         preview object.
     */
@@ -747,14 +782,14 @@ public:
     void MapScreenSizeToDevice();
 
     /**
-        This sets the user scale of the wxDC assocated with this wxPrintout to the same
+        This sets the user scale of the wxDC associated with this wxPrintout to the same
         scale as MapScreenSizeToPaper() but sets the logical origin to the top left corner
         of the page rectangle.
     */
     void MapScreenSizeToPage();
 
     /**
-        This sets the user scale of the wxDC assocated with this wxPrintout to the same
+        This sets the user scale of the wxDC associated with this wxPrintout to the same
         scale as MapScreenSizeToPageMargins() but sets the logical origin to the top left
         corner of the page margins specified by the given wxPageSetupDialogData object.
     */
@@ -770,7 +805,7 @@ public:
         (It will, of course, be larger or smaller in the preview image, depending on the
         zoom factor.)
 
-        Use this if you want WYSIWYG behavior, e.g., in a text editor.
+        Use this if you want WYSIWYG behaviour, e.g., in a text editor.
     */
     void MapScreenSizeToPaper();
 

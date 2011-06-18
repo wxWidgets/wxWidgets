@@ -3,7 +3,7 @@
 // Purpose:     interface of wxUString
 // Author:      Robert Roebling
 // Copyright:   (c) Robert Roebling
-// RCS-ID:      $Id: tab.h 37400 2006-02-09 00:28:34Z VZ $
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@
     each character is stored using a 32-bit value. This is different from
     wxString which may store a character either as a UTF-8 or as a UTF-16
     sequence and different from @c std::string which stores a string
-    as a squence of simple 8-bit charactesr and also different from
+    as a sequence of simple 8-bit characters and also different from
     @c std::wstring which stores the string differently depending on
     the definition of wchar_t.
 
@@ -151,35 +151,35 @@ public:
 
 
     /**
-       Assigment from a 7-bit ASCII string literal
+       Assignment from a 7-bit ASCII string literal
     */
     wxUString &assignFromAscii( const char *str );
     /**
-       Assigment from a 7-bit ASCII string literal
+       Assignment from a 7-bit ASCII string literal
     */
     wxUString &assignFromAscii( const char *str, size_t n );
     /**
-       Assigment from a UTF-8 string literal
+       Assignment from a UTF-8 string literal
     */
     wxUString &assignFromUTF8( const char *str );
     /**
-       Assigment from a UTF-8 string literal
+       Assignment from a UTF-8 string literal
     */
     wxUString &assignFromUTF8( const char *str, size_t n );
     /**
-       Assigment from a UTF-16 string literal
+       Assignment from a UTF-16 string literal
     */
     wxUString &assignFromUTF16( const wxChar16* str );
     /**
-       Assigment from a UTF-16 string literal
+       Assignment from a UTF-16 string literal
     */
     wxUString &assignFromUTF16( const wxChar16* str, size_t n );
     /**
-       Assigment from a C string literal using wxConvLibc
+       Assignment from a C string literal using wxConvLibc
     */
     wxUString &assignFromCString( const char* str );
     /**
-       Assigment from a C string literal using @a conv
+       Assignment from a C string literal using @a conv
     */
     wxUString &assignFromCString( const char* str, const wxMBConv &conv );
 

@@ -301,9 +301,6 @@ private :
     cairo_font_slant_t m_slant;
     cairo_font_weight_t m_weight;
 #endif
-#ifdef __WXMSW__
-    wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
-#endif
 };
 
 class wxCairoBitmapData : public wxGraphicsObjectRefData
@@ -333,6 +330,9 @@ public:
 #ifdef __WXGTK__
     wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
 #endif
+#ifdef __WXMSW__
+    wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
+#endif
     wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context );
     wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window);
     wxCairoContext();
@@ -340,6 +340,9 @@ public:
 
     virtual bool ShouldOffset() const
     {
+        if ( !m_enableOffset )
+            return false;
+        
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -364,6 +367,8 @@ public:
     virtual void * GetNativeContext();
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
+
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
 
     virtual bool SetCompositionMode(wxCompositionMode op);
 
@@ -548,7 +553,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         {
             /*
             wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->Ok() )
+            if ( bmp && bmp->IsOk() )
             {
             wxDELETE( m_penImage );
             wxDELETE( m_penBrush );
@@ -663,7 +668,7 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush 
     else
     {
     wxBitmap* bmp = brush.GetStipple();
-    if ( bmp && bmp->Ok() )
+    if ( bmp && bmp->IsOk() )
     {
     wxDELETE( m_brushImage );
     m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),(HPALETTE)bmp->GetPalette()->GetHPALETTE());
@@ -1189,6 +1194,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     const wxDCImpl *impl = dc.GetImpl();
     Init( (cairo_t*) impl->GetCairoContext() );
 
+    wxSize sz = dc.GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
+
     wxPoint org = dc.GetDeviceOrigin();
     cairo_translate( m_context, org.x, org.y );
 
@@ -1204,6 +1213,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
 : wxGraphicsContext(renderer)
 {
+    int width, height;
+    dc.GetSize( &width, &height );
+    m_width = width;
+    m_height = height;
+
+    m_enableOffset = true;
+
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1226,8 +1242,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #endif
 
 #ifdef __WXMAC__
-    int width, height;
-    dc.GetSize( &width, &height );
     CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
@@ -1238,6 +1252,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
 : wxGraphicsContext(renderer)
 {
+    int width, height;
+    dc.GetSize( &width, &height );
+    m_width = width;
+    m_height = height;
+
+    m_enableOffset = true;
+    
 #ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1260,8 +1281,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXMAC__
-    int width, height;
-    dc.GetSize( &width, &height );
     CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
@@ -1274,6 +1293,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawa
 : wxGraphicsContext(renderer)
 {
     Init( gdk_cairo_create( drawable ) );
+
+    int width, height;
+    gdk_drawable_get_size( drawable, &width, &height );
+    m_width = width;
+    m_height = height;
 }
 #endif
 
@@ -1282,9 +1306,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 : wxGraphicsContext(renderer)
 {
     m_mswSurface = cairo_win32_surface_create(handle);
-    m_context = cairo_create(m_mswSurface);
-    PushState();
-    PushState();
+    Init( cairo_create(m_mswSurface) );
+    m_width =
+    m_height = 0;
 }
 #endif
 
@@ -1293,11 +1317,14 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
     Init( context );
+    m_width =
+    m_height = 0;
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 : wxGraphicsContext(renderer)
 {
+    m_enableOffset = true;    
 #ifdef __WXGTK__
     // something along these lines (copied from dcclient)
 
@@ -1312,7 +1339,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     wxASSERT_MSG( window->m_wxwindow, wxT("wxCairoContext needs a widget") );
 
     Init(gdk_cairo_create(window->GTKGetDrawingWindow()));
+
+    wxSize sz = window->GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
 #endif
+
+#ifdef __WXMSW__
+    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
+    Init(cairo_create(m_mswSurface));
+#endif
+
 }
 
 wxCairoContext::~wxCairoContext()
@@ -1320,10 +1357,6 @@ wxCairoContext::~wxCairoContext()
     if ( m_context )
     {
         PopState();
-#ifdef __WXMSW__
-    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
-    m_context = cairo_create(m_mswSurface);
-#endif
         PopState();
         cairo_destroy(m_context);
     }
@@ -1663,6 +1696,12 @@ bool wxCairoContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
+bool wxCairoContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
+}
+
 bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
@@ -1756,7 +1795,11 @@ public :
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
     virtual wxGraphicsContext * CreateMeasuringContext();
-
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
+#endif
+#endif
     // Path
 
     virtual wxGraphicsPath CreatePath();
@@ -1831,6 +1874,15 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
        return NULL;
 }
 
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+wxGraphicsContext * wxCairoRenderer::CreateContext( const wxEnhMetaFileDC& dc)
+{
+    return NULL;
+}
+#endif
+#endif
+
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {
 #ifdef __WXMSW__
@@ -1889,7 +1941,7 @@ wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble
 
 wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -1901,7 +1953,7 @@ wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -1938,7 +1990,7 @@ wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // sets the font
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxCairoFontData( this , font, col ));
@@ -1950,7 +2002,7 @@ wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour 
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxCairoBitmapData( this , bmp ));

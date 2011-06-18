@@ -148,7 +148,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
 
     wxFont font = m_fontData.GetInitialFont();
-    if( font.Ok() )
+    if( font.IsOk() )
     {
         const wxNativeFontInfo *info = font.GetNativeFontInfo();
 

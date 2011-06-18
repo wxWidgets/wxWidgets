@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 September 2009                                                   *
+# Date : 16 June 2011                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -99,7 +99,7 @@ OBJECTS0= \
 	tglbtn.obj,\
 	msgdlg.obj,\
 	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj,win_gtk.obj,\
-	mnemonics.obj,private.obj,assertdlg_gtk.obj,infobar.obj
+	mnemonics.obj,private.obj,assertdlg_gtk.obj,infobar.obj,anybutton.obj
 
 SOURCES =\
 	animate.cpp,\
@@ -165,7 +165,7 @@ SOURCES =\
 	utilsgtk.cpp,\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
-	mnemonics.cpp,private.cpp,assertdlg_gtk.c,infobar.cpp
+	mnemonics.cpp,private.cpp,assertdlg_gtk.cpp,infobar.cpp,anybutton.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -258,5 +258,6 @@ print.obj : print.cpp
 win_gtk.obj : win_gtk.cpp
 mnemonics.obj : mnemonics.cpp
 private.obj : private.cpp
-assertdlg_gtk.obj : assertdlg_gtk.c
+assertdlg_gtk.obj : assertdlg_gtk.cpp
 infobar.obj : infobar.cpp
+anybutton.obj : anybutton.cpp

@@ -74,6 +74,13 @@ public:
     ~wxTextInputStream();
 
     /**
+        Returns a pointer to the underlying input stream object.
+
+        @since 2.9.2
+    */
+    const wxInputStream& GetInputStream() const;
+
+    /**
         Reads a character, returns 0 if there are no more characters in the
         stream.
     */
@@ -251,6 +258,13 @@ public:
         @since 2.9.0
      */
     void Flush();
+
+    /**
+        Returns a pointer to the underlying output stream object.
+
+        @since 2.9.2
+    */
+    const wxOutputStream& GetOutputStream() const;
 
     /**
         Returns the end-of-line mode. One of ::wxEOL_DOS, ::wxEOL_MAC and

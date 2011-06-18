@@ -33,8 +33,8 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxValidator& validator,
                              const wxString& name )
 {
-    m_macIsUserPane = false;
-
+    DontCreatePeer();
+    
     if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;
@@ -52,7 +52,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
 
     m_bitmaps[State_Normal] = bitmap;
 
-    m_peer = wxWidgetImpl::CreateBitmapButton( this, parent, id, bitmap, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateBitmapButton( this, parent, id, bitmap, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 

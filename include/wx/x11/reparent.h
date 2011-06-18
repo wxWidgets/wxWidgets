@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        reparent.h
+// Name:        wx/x11/reparent.h
 // Purpose:     Reparenting classes
 // Author:      Julian Smart
 // Modified by:

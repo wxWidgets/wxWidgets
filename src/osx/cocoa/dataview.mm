@@ -25,6 +25,7 @@
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
+#include "wx/dcgraph.h"
 
 // ============================================================================
 // Constants used locally
@@ -329,7 +330,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
-    else // column is not resizeable [by user]
+    else // column is not resizable [by user]
     {
         // if the control doesn't show a header, make the columns resize
         // automatically, this is particularly important for the single column
@@ -494,6 +495,9 @@ outlineView:(NSOutlineView*)outlineView
     acceptDrop:(id<NSDraggingInfo>)info
     item:(id)item childIndex:(NSInteger)index
 {
+    wxUnusedVar(outlineView);
+    wxUnusedVar(index);
+    
     NSArray* supportedTypes(
         [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
     );
@@ -517,7 +521,7 @@ outlineView:(NSOutlineView*)outlineView
     event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
 
-    BOOL dragSuccessful;
+    BOOL dragSuccessful = false;
     if ( [bestType compare:DataViewPboardType] == NSOrderedSame )
     {
         NSArray* dataArray((NSArray*)
@@ -609,6 +613,8 @@ outlineView:(NSOutlineView*)outlineView
     child:(NSInteger)index
     ofItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     if ((item == currentParentItem) &&
             (index < ((NSInteger) [self getChildCount])))
         return [self getChild:index];
@@ -625,12 +631,16 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
     return model->IsContainer(wxDataViewItemFromItem(item));
 }
 
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     NSInteger noOfChildren;
 
     wxDataViewItemArray dataViewChildren;
@@ -650,6 +660,8 @@ outlineView:(NSOutlineView*)outlineView
     objectValueForTableColumn:(NSTableColumn*)tableColumn
     byItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
@@ -673,6 +685,8 @@ outlineView:(NSOutlineView*)outlineView
     forTableColumn:(NSTableColumn*)tableColumn
     byItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
 
     col->GetRenderer()->
@@ -681,6 +695,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
 {
+    wxUnusedVar(oldDescriptors);
+    
     // Warning: the new sort descriptors are guaranteed to be only of type
     // NSSortDescriptor! Therefore, the sort descriptors for the data source
     // have to be converted.
@@ -730,6 +746,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(NSDragOperation) outlineView:(NSOutlineView*)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
+    wxUnusedVar(outlineView);
+    wxUnusedVar(index);
+
     NSArray* supportedTypes([NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]);
 
     NSPasteboard* pasteboard([info draggingPasteboard]);
@@ -738,7 +757,7 @@ outlineView:(NSOutlineView*)outlineView
     if (bestType == nil)
         return NSDragOperationNone;
 
-    NSDragOperation dragOperation;
+    NSDragOperation dragOperation = NSDragOperationNone;
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
 
     wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
@@ -827,6 +846,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)writeItems toPasteboard:(NSPasteboard*)pasteboard
 {
+    wxUnusedVar(outlineView);
+
     // the pasteboard will be filled up with an array containing the data as
     // returned by the events (including the data type) and a concatenation of
     // text (string) data; the text data will only be put onto the pasteboard
@@ -842,7 +863,7 @@ outlineView:(NSOutlineView*)outlineView
     if ([writeItems count] > 0)
     {
         bool            dataStringAvailable(true); // a flag indicating if for all items a data string is available
-        NSMutableArray* dataArray = [[NSMutableArray arrayWithCapacity:[writeItems count]] retain]; // data of all items
+        NSMutableArray* dataArray = [NSMutableArray arrayWithCapacity:[writeItems count]]; // data of all items
         wxString        dataString; // contains the string data of all items
 
         // send a begin drag event for all selected items and proceed with
@@ -1144,9 +1165,27 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
-    wxDC * const dc = renderer->GetDC();
-    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), dc, 0);
-    renderer->SetDC(NULL);
+    // if this method is called everything is already setup correctly, 
+    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSaveGState( context );
+    
+    if ( ![controlView isFlipped] )
+    {
+        CGContextTranslateCTM( context, 0,  [controlView bounds].size.height );
+        CGContextScaleCTM( context, 1, -1 );
+    }
+        
+    wxGCDC dc;
+    wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
+    dc.SetGraphicsContext(gc);
+
+    int state = 0;
+    if ( [self isHighlighted] )
+        state |= wxDATAVIEW_CELL_SELECTED;
+
+    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, state);
+
+    CGContextRestoreGState( context );
 }
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
@@ -1534,6 +1573,8 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(void) actionDoubleClick:(id)sender
 {
+    wxUnusedVar(sender);
+
     // actually the documentation (NSTableView 2007-10-31) for doubleAction:
     // and setDoubleAction: seems to be wrong as this action message is always
     // sent whether the cell is editable or not
@@ -1553,6 +1594,8 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(NSMenu*) menuForEvent:(NSEvent*)theEvent
 {
+    wxUnusedVar(theEvent);
+
     // this method does not do any special menu event handling but only sends
     // an event message; therefore, the user has full control if a context
     // menu should be shown or not
@@ -1624,6 +1667,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
@@ -1640,6 +1685,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
@@ -1656,6 +1703,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldSelectTableColumn:(NSTableColumn*)tableColumn
 {
+    wxUnusedVar(tableColumn);
+    wxUnusedVar(outlineView);
+
     return NO;
 }
 
@@ -1664,6 +1714,8 @@ outlineView:(NSOutlineView*)outlineView
     forTableColumn:(NSTableColumn*)tableColumn
     item:(id)item
 {
+    wxUnusedVar(outlineView);
+
     wxDataViewCtrl * const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
@@ -1749,6 +1801,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewSelectionDidChange:(NSNotification*)notification
 {
+    wxUnusedVar(notification);
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
@@ -2156,6 +2210,8 @@ bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataVi
 
 bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
 {
+    wxUnusedVar(columnPtr);
+    
     return false;
 }
 
@@ -2275,6 +2331,11 @@ void wxCocoaDataViewControl::Resort()
 {
     [m_DataSource clearChildren];
     [m_OutlineView reloadData];
+}
+
+void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
 }
 
 //
@@ -2743,9 +2804,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
 
     cell = [[NSPopUpButtonCell alloc] init];
     [cell setControlSize:NSMiniControlSize];
-    [cell setFont:[[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]] autorelease]];
+    [cell setFont:[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
     for (size_t i=0; i<choices.GetCount(); ++i)
-        [cell addItemWithTitle:[[wxCFStringRef(choices[i]).AsNSString() retain] autorelease]];
+        [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
@@ -2966,6 +3027,8 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer(const wxString& label,
                                                        int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
+    wxUnusedVar(label);
+    
     NSLevelIndicatorCell* cell;
 
     cell = [[NSLevelIndicatorCell alloc] initWithLevelIndicatorStyle:NSContinuousCapacityLevelIndicatorStyle];
@@ -3083,6 +3146,7 @@ void wxDataViewColumn::SetMinWidth(int minWidth)
 
 void wxDataViewColumn::SetReorderable(bool reorderable)
 {
+    wxUnusedVar(reorderable);
 }
 
 void wxDataViewColumn::SetHidden(bool hidden)
@@ -3097,10 +3161,10 @@ bool wxDataViewColumn::IsHidden() const
     return [m_NativeDataPtr->GetNativeColumnPtr() isHidden];
 }
 
-void wxDataViewColumn::SetResizeable(bool resizeable)
+void wxDataViewColumn::SetResizeable(bool resizable)
 {
-    wxDataViewColumnBase::SetResizeable(resizeable);
-    if (resizeable)
+    wxDataViewColumnBase::SetResizeable(resizable);
+    if (resizable)
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];

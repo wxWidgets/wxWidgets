@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/hildon/notifmsg.cpp
+// Name:        src/gtk/hildon/notifmsg.cpp
 // Purpose:     Hildon implementation of wxNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-21

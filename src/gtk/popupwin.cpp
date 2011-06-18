@@ -46,7 +46,7 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
         {
             if (child == widget)
                 return FALSE;
-            child = child->parent;
+            child = gtk_widget_get_parent(child);
         }
     }
 

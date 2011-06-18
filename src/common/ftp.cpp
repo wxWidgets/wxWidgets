@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/ftp.cpp
+// Name:        src/common/ftp.cpp
 // Purpose:     FTP protocol
 // Author:      Guilhem Lavaux
 // Modified by: Mark Johnson, wxWindows@mj10777.de
@@ -587,9 +587,9 @@ wxSocketBase *wxFTP::GetActivePort()
     addrNew.Service(0); // pick an open port number.
 
     wxSocketServer *sockSrv = new wxSocketServer(addrNew);
-    if (!sockSrv->Ok())
+    if (!sockSrv->IsOk())
     {
-        // We use Ok() here to see if everything is ok
+        // We use IsOk() here to see if everything is ok
         m_lastError = wxPROTO_PROTERR;
         delete sockSrv;
         return NULL;
@@ -686,7 +686,7 @@ public:
 
         // when checking the result, the stream will
         // almost always show an error, even if the file was
-        // properly transfered, thus, lets just grab the result
+        // properly transfered, thus, let's just grab the result
 
         // we are looking for "226 transfer completed"
         char code = m_ftp->GetResult();

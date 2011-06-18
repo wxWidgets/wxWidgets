@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/checkbox.cpp
+// Name:        src/osx/checkbox_osx.cpp
 // Purpose:     wxCheckBox
 // Author:      Stefan Csomor
 // Modified by:
@@ -27,16 +27,16 @@ bool wxCheckBox::Create(wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name)
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
     m_labelOrig = m_label = label ;
 
     WXValidateStyle( &style );
-    m_peer = wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() )) ;
 
     MacPostControlCreate(pos, size) ;
 
@@ -72,12 +72,12 @@ void wxCheckBox::Command(wxCommandEvent & event)
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState)m_peer->GetValue() ;
+    return (wxCheckBoxState)GetPeer()->GetValue() ;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
 {
-    m_peer->SetValue( val ) ;
+    GetPeer()->SetValue( val ) ;
 }
 
 bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
@@ -85,11 +85,11 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     bool sendEvent = true;
     wxCheckBoxState newState = Get3StateValue();
 
-    if ( !m_peer->ButtonClickDidStateChange() )
+    if ( !GetPeer()->ButtonClickDidStateChange() )
     {
         wxCheckBoxState origState ;
 
-        newState = origState = Get3StateValue();
+        origState = Get3StateValue();
 
         switch (origState)
         {
@@ -110,14 +110,24 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
             default:
                 break;
         }
+        
         if (newState == origState)
             sendEvent = false;
+        else
+            Set3StateValue( newState );
     }
-
+    else
+    {
+        // in case we cannot avoid this user state change natively (eg cocoa) we intercept it here
+        if ( newState == wxCHK_UNDETERMINED && !Is3rdStateAllowedForUser() )
+        {
+            newState = wxCHK_CHECKED;
+            Set3StateValue( newState );
+        }
+    }
+    
     if (sendEvent)
     {
-        Set3StateValue( newState );
-
         wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
         event.SetInt( newState );
         event.SetEventObject( this );

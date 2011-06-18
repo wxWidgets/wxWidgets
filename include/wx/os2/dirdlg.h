@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.h
+// Name:        wx/os2/dirdlg.h
 // Purpose:     wxDirDialog class
 // Author:      David Webster
 // Modified by:

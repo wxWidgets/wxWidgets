@@ -23,7 +23,7 @@ enum wxAuiManagerDock
 
 
 /**
-    @todo wxAuiManager behavior style flags.
+    @todo wxAuiManager behaviour style flags.
 */
 enum wxAuiManagerOption
 {
@@ -50,7 +50,7 @@ enum wxAuiManagerOption
 
     wxAuiManager manages the panes associated with it for a particular wxFrame,
     using a pane's wxAuiPaneInfo information to determine each pane's docking
-    and floating behavior.
+    and floating behaviour.
 
     wxAuiManager uses wxWidgets' sizer mechanism to plan the layout of each
     frame. It uses a replaceable dock art class to do all drawing, so all
@@ -135,7 +135,7 @@ class wxAuiManager : public wxEvtHandler
 public:
     /**
         Constructor. @a managed_wnd specifies the wxFrame which should be managed.
-        @a flags  specifies options which allow the frame management behavior
+        @a flags  specifies options which allow the frame management behaviour
         to be modified.
     */
     wxAuiManager(wxWindow* managed_wnd = NULL,
@@ -244,7 +244,7 @@ public:
                     int insert_level = wxAUI_INSERT_PANE);
 
     /**
-        LoadPaneInfo() is similar to to LoadPerspective, with the exception that it
+        LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.  It is used in combination with
         SavePaneInfo().
     */
@@ -299,7 +299,7 @@ public:
 
     /**
         This method is used to specify wxAuiManager's settings flags. @a flags
-        specifies options which allow the frame management behavior to be modified.
+        specifies options which allow the frame management behaviour to be modified.
     */
     void SetFlags(unsigned int flags);
 
@@ -442,7 +442,7 @@ public:
     wxAuiPaneInfo& DefaultPane();
 
     /**
-        DestroyOnClose() indicates whether a pane should be detroyed when it is closed.
+        DestroyOnClose() indicates whether a pane should be destroyed when it is closed.
         Normally a pane is simply hidden when the close button is clicked.
         Setting DestroyOnClose to @true will cause the window to be destroyed when
         the user clicks the pane's close button.

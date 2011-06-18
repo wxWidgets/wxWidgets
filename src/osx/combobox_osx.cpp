@@ -53,18 +53,18 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    DontCreatePeer();
+    
     m_text = NULL;
     m_choice = NULL;
-
-    m_macIsUserPane = false;
-
+    
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
     wxASSERT_MSG( !(style & wxCB_SORT),
                   "wxCB_SORT not currently supported by wxOSX/Cocoa");
 
-    m_peer = wxWidgetImpl::CreateComboBox( this, parent, id, NULL, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateComboBox( this, parent, id, NULL, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -110,7 +110,7 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
         AssignNewItemClientData(idx, clientData, i, type);
     }
 
-    m_peer->SetMaximum( GetCount() );
+    GetPeer()->SetMaximum( GetCount() );
 
     return pos - 1;
 }
@@ -216,7 +216,7 @@ bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 wxComboWidgetImpl* wxComboBox::GetComboPeer() const
 {
-    return dynamic_cast<wxComboWidgetImpl*> (m_peer);
+    return dynamic_cast<wxComboWidgetImpl*> (GetPeer());
 }
 
 #endif // wxUSE_COMBOBOX && wxOSX_USE_COCOA

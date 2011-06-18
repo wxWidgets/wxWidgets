@@ -577,7 +577,7 @@ void wxObjectRuntimeReaderCallback::SetProperty(int objectID,
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
-    classInfo->SetProperty( o, propertyInfo->GetName(), value );
+    classInfo->SetProperty( o, propertyInfo->GetName().c_str(), value );
 }
 
 void wxObjectRuntimeReaderCallback::SetPropertyAsObject(int objectID,
@@ -599,7 +599,7 @@ void wxObjectRuntimeReaderCallback::SetPropertyAsObject(int objectID,
         valo = dynvalo->GetSuperClassInstance();
     }
 
-    classInfo->SetProperty( o, propertyInfo->GetName(), 
+    classInfo->SetProperty( o, propertyInfo->GetName().c_str(),
                             valClassInfo->ObjectPtrToAny(valo) );
 }
 
@@ -650,7 +650,7 @@ void wxObjectRuntimeReaderCallback::AddToPropertyCollection( int objectID,
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
-    classInfo->AddToPropertyCollection( o, propertyInfo->GetName(), value );
+    classInfo->AddToPropertyCollection( o, propertyInfo->GetName().c_str(), value );
 }
 
 void wxObjectRuntimeReaderCallback::AddToPropertyCollectionAsObject(int objectID,
@@ -674,7 +674,7 @@ void wxObjectRuntimeReaderCallback::AddToPropertyCollectionAsObject(int objectID
         valo = dynvalo->GetSuperClassInstance();
     }
 
-    classInfo->AddToPropertyCollection( o, propertyInfo->GetName(), 
+    classInfo->AddToPropertyCollection( o, propertyInfo->GetName().c_str(),
                                         valClassInfo->ObjectPtrToAny(valo) );
 }
 

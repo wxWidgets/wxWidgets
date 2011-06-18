@@ -1,7 +1,7 @@
                     How to write unit tests for wxWidgets
                     =====================================
 
- Unit tests for wxWidgets are written using small cppunit framework. To compile
+Unit tests for wxWidgets are written using small cppunit framework. To compile
 (but not to run) them you need to have it installed. Hence the first part of
 this note explains how to do it while the second one explains how to write the
 test.
@@ -17,7 +17,7 @@ I. CppUnit Installation
     - build everything in CppUnitLibraries.dsw work space
     - add include and lib subdirectories of the directory
       where you installed cppunit to the compiler search path
-      using "Tools|Options" menu in VC IDEA
+      using "Tools|Options" menu in VC IDE
 
  b) Under Unix: run configure && make && make install as usual
 
@@ -38,7 +38,7 @@ II. Writing tests with CppUnit
     // register in the unnamed registry so that these tests are run by default
     CPPUNIT_TEST_SUITE_REGISTRATION(MBConvTestCase);
 
-    // also include in it's own registry so that these tests can be run alone
+    // also include in its own registry so that these tests can be run alone
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MBConvTestCase, "MBConvTestCase");
 
     Read CppUnit documentation for more.
@@ -130,7 +130,7 @@ IV. Notes
     //CPPUNIT_TEST_SUITE_REGISTRATION(wxRegExTestCase);
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestCase, "fixme");
 
-    // also include in it's own registry so that these tests can be run alone
+    // also include in its own registry so that these tests can be run alone
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestCase, "wxRegExTestCase");
 
 4. Tests which take a long time to execute can be registered under "advanced"

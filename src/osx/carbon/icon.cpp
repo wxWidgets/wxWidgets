@@ -137,21 +137,21 @@ wxIcon::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 
 WXHICON wxIcon::GetHICON() const
 {
-    wxASSERT( Ok() ) ;
+    wxASSERT( IsOk() ) ;
 
     return (WXHICON) ((wxIconRefData*)m_refData)->GetHICON() ;
 }
 
 int wxIcon::GetWidth() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid icon") );
 
    return M_ICONDATA->GetWidth();
 }
 
 int wxIcon::GetHeight() const
 {
-   wxCHECK_MSG( Ok(), -1, wxT("invalid icon") );
+   wxCHECK_MSG( IsOk(), -1, wxT("invalid icon") );
 
    return M_ICONDATA->GetHeight();
 }
@@ -414,7 +414,7 @@ bool wxIcon::LoadIconAsBitmap(const wxString& filename, wxBitmapType type, int d
     else
     {
         wxImage loadimage( filename, type );
-        if (loadimage.Ok())
+        if (loadimage.IsOk())
         {
             if ( desiredWidth == -1 )
                 desiredWidth = loadimage.GetWidth() ;
@@ -440,8 +440,21 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
     UnRef() ;
 
     // as the bitmap owns that ref, we have to acquire it as well
-    IconRef iconRef = bmp.CreateIconRef() ;
-    m_refData = new wxIconRefData( (WXHICON) iconRef, bmp.GetWidth(), bmp.GetHeight()  ) ;
+    
+    int w = bmp.GetWidth() ;
+    int h = bmp.GetHeight() ;
+    int sz = wxMax( w , h ) ;
+
+    if ( sz == 24 || sz == 64 )
+    {
+        wxBitmap scaleBmp( bmp.ConvertToImage().Scale( w * 2 , h * 2 ) ) ;
+        m_refData = new wxIconRefData( (WXHICON) scaleBmp.CreateIconRef(), bmp.GetWidth(), bmp.GetHeight()  ) ;
+    }
+    else 
+    {
+        m_refData = new wxIconRefData( (WXHICON) bmp.CreateIconRef() , bmp.GetWidth(), bmp.GetHeight()  ) ;
+    }
+
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
@@ -454,7 +467,7 @@ bool  wxICONResourceHandler::LoadFile(
     if ( icon.LoadFile( name , wxBITMAP_TYPE_ICON_RESOURCE , desiredWidth , desiredHeight ) )
     {
         bitmap->CopyFromIcon( icon ) ;
-        return bitmap->Ok() ;
+        return bitmap->IsOk() ;
     }
     return false;
 }

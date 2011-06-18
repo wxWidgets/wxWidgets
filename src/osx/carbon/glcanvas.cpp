@@ -257,19 +257,29 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     if ( !m_glContext )
         return false;
 
-    AGLDrawable drawable = (AGLDrawable)GetWindowPort(
-                                MAC_WXHWND(win.MacGetTopLevelWindowRef()));
-
     GLint bufnummer = win.GetAglBufferName();
     aglSetInteger(m_glContext, AGL_BUFFER_NAME, &bufnummer);
     //win.SetLastContext(m_glContext);
 
     const_cast<wxGLCanvas&>(win).SetViewport();
 
-    if ( !aglSetDrawable(m_glContext, drawable) )
+    
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    if ( UMAGetSystemVersion() >= 0x1050 )
     {
-        wxLogAGLError("aglSetDrawable");
-        return false;
+        aglSetWindowRef(m_glContext, win.MacGetTopLevelWindowRef());
+    }
+    else
+#endif
+    {
+        AGLDrawable drawable = (AGLDrawable)GetWindowPort(
+                                                      MAC_WXHWND(win.MacGetTopLevelWindowRef()));
+    
+        if ( !aglSetDrawable(m_glContext, drawable) )
+        {
+            wxLogAGLError("aglSetDrawable");
+            return false;
+        }
     }
 
     return WXGLSetCurrentContext(m_glContext);
@@ -311,7 +321,7 @@ that previously allocated surface is associated with the context (e.g., no
 new surface is created) and the subsequent call to aglSetDrawable will
 attach that surface. This allows multiple contexts to be attached to a single
 surface. Using the default buffer name zero, returns to one surface per
-context behavior.
+context behaviour.
 */
 
 /*
@@ -345,8 +355,17 @@ bool wxGLCanvas::Create(wxWindow *parent,
     m_bufferName = gCurrentBufferName++;
     aglSetInteger (m_dummyContext, AGL_BUFFER_NAME, &m_bufferName);
 
-    AGLDrawable drawable = (AGLDrawable)GetWindowPort(MAC_WXHWND(MacGetTopLevelWindowRef()));
-    aglSetDrawable(m_dummyContext, drawable);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    if ( UMAGetSystemVersion() >= 0x1050 )
+    {
+        aglSetWindowRef(m_dummyContext, MacGetTopLevelWindowRef());
+    }
+    else
+#endif
+    {
+        AGLDrawable drawable = (AGLDrawable)GetWindowPort(MAC_WXHWND(MacGetTopLevelWindowRef()));
+        aglSetDrawable(m_dummyContext, drawable);
+    }
 
     m_macCanvasIsShown = true;
 

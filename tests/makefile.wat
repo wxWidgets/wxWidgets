@@ -379,6 +379,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_colour.obj &
 	$(OBJS)\test_gui_ellipsization.obj &
 	$(OBJS)\test_gui_measuring.obj &
+	$(OBJS)\test_gui_affinematrix.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj &
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj &
@@ -439,6 +440,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_boxsizer.obj &
 	$(OBJS)\test_gui_wrapsizer.obj &
+	$(OBJS)\test_gui_toplevel.obj &
 	$(OBJS)\test_gui_valnum.obj &
 	$(OBJS)\test_gui_clientsize.obj &
 	$(OBJS)\test_gui_setsize.obj &
@@ -784,6 +786,9 @@ $(OBJS)\test_gui_ellipsization.obj :  .AUTODEPEND .\graphics\ellipsization.cpp
 $(OBJS)\test_gui_measuring.obj :  .AUTODEPEND .\graphics\measuring.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
+$(OBJS)\test_gui_affinematrix.obj :  .AUTODEPEND .\graphics\affinematrix.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
 $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
@@ -962,6 +967,9 @@ $(OBJS)\test_gui_boxsizer.obj :  .AUTODEPEND .\sizers\boxsizer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_wrapsizer.obj :  .AUTODEPEND .\sizers\wrapsizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_toplevel.obj :  .AUTODEPEND .\toplevel\toplevel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_valnum.obj :  .AUTODEPEND .\validators\valnum.cpp

@@ -233,7 +233,7 @@ public:
         Returns the size (in bytes) of all files recursively found in @c dir or
         @c wxInvalidSize in case of error.
 
-        In case it happens that while traversing folders a file's size can not
+        In case it happens that while traversing folders a file's size cannot
         be read, that file is added to the @a filesSkipped array, if not @NULL,
         and then skipped. This usually happens with some special folders which
         are locked by the operating system or by another process. Remember that

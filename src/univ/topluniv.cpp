@@ -208,7 +208,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
 
     if ( IsMaximized() )
         style |= wxTOPLEVEL_MAXIMIZED;
-    if ( GetIcon().Ok() )
+    if ( GetIcon().IsOk() )
         style |= wxTOPLEVEL_ICON;
     if ( m_isActive )
         style |= wxTOPLEVEL_ACTIVE;
@@ -329,13 +329,13 @@ void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
         wxSize size = m_renderer->GetFrameIconSize();
         const wxIcon& icon = icons.GetIcon( size );
 
-        if ( !icon.Ok() || size.x == wxDefaultCoord  )
+        if ( !icon.IsOk() || size.x == wxDefaultCoord  )
             m_titlebarIcon = icon;
         else
         {
             wxBitmap bmp1;
             bmp1.CopyFromIcon(icon);
-            if ( !bmp1.Ok() )
+            if ( !bmp1.IsOk() )
                 m_titlebarIcon = wxNullIcon;
             else if ( bmp1.GetWidth() == size.x && bmp1.GetHeight() == size.y )
                 m_titlebarIcon = icon;

@@ -131,7 +131,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     else
     {
         m_widgetCheckbox = gtk_check_button_new_with_label("");
-        m_widgetLabel = GTK_BIN(m_widgetCheckbox)->child;
+        m_widgetLabel = gtk_bin_get_child(GTK_BIN(m_widgetCheckbox));
         m_widget = m_widgetCheckbox;
     }
     g_object_ref(m_widget);

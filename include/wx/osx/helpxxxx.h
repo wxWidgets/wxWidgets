@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpxxxx.h
+// Name:        wx/osx/helpxxxx.h
 // Purpose:     Help system: native implementation for your system. Replace
 //              XXXX with suitable name.
 // Author:      Stefan Csomor

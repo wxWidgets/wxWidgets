@@ -10,6 +10,8 @@
 #ifndef __GTKWINDOWH__
 #define __GTKWINDOWH__
 
+typedef struct _GtkTooltips GtkTooltips;
+
 // helper structure that holds class that holds GtkIMContext object and
 // some additional data needed for key events processing
 struct wxGtkIMData;
@@ -112,7 +114,7 @@ public:
     // OnInternalIdle
     virtual void OnInternalIdle();
 
-    // Internal represention of Update()
+    // Internal representation of Update()
     void GtkUpdate();
 
     // For compatibility across platforms (not in event table)
@@ -153,7 +155,7 @@ public:
     void GtkUpdateScrollbar(int orient);
 
     // Called from GTK signal handlers. it indicates that
-    // the layouting functions have to be called later on
+    // the layout functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = false; }
 

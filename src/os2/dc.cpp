@@ -386,7 +386,7 @@ void wxPMDCImpl::SelectOldObjects(
         if (m_hOldBitmap)
         {
             ::GpiSetBitmap(hPS, (HBITMAP) m_hOldBitmap);
-            if (m_vSelectedBitmap.Ok())
+            if (m_vSelectedBitmap.IsOk())
             {
                 m_vSelectedBitmap.SetSelectedInto(NULL);
             }
@@ -644,7 +644,7 @@ void wxPMDCImpl::DoDrawLine(
     }
     else
     {
-        if (m_vSelectedBitmap.Ok())
+        if (m_vSelectedBitmap.IsOk())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -656,7 +656,7 @@ void wxPMDCImpl::DoDrawLine(
     vPoint[0].y = vY1;
     vPoint[1].x = vX2;
     vPoint[1].y = vY2;
-    if (m_pen.Ok())
+    if (m_pen.IsOk())
     {
         vColor = m_pen.GetColour().GetPixel();
     }
@@ -822,7 +822,7 @@ void wxPMDCImpl::DoDrawPoint(
     POINTL                          vPoint;
     COLORREF                        vColor = 0x00ffffff;
 
-    if (m_pen.Ok())
+    if (m_pen.IsOk())
     {
         vColor = m_pen.GetColour().GetPixel();
     }
@@ -974,7 +974,7 @@ void wxPMDCImpl::DoDrawRectangle(
         vY = OS2Y(vY,vHeight);
     else
     {
-        if (m_vSelectedBitmap.Ok())
+        if (m_vSelectedBitmap.IsOk())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -1064,7 +1064,7 @@ void wxPMDCImpl::DoDrawRoundedRectangle(
         vY = OS2Y(vY,vHeight);
     else
     {
-        if (m_vSelectedBitmap.Ok())
+        if (m_vSelectedBitmap.IsOk())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -1359,7 +1359,7 @@ void wxPMDCImpl::DoDrawBitmap(
 
                     lColor = pWindowDC->m_pCanvas->GetBackgroundColour().GetPixel();
                 }
-                else if (GetBrush().Ok())
+                else if (GetBrush().IsOk())
                     lColor = GetBrush().GetColour().GetPixel();
                 else
                     lColor = m_textBackgroundColour.GetPixel();
@@ -1526,13 +1526,13 @@ void wxPMDCImpl::DoDrawBitmap(
             ULONG                       lOldForeGround = ::GpiQueryColor((HPS)GetHPS());
             ULONG                       lOldBackGround = ::GpiQueryBackColor((HPS)GetHPS());
 
-            if (m_textForegroundColour.Ok())
+            if (m_textForegroundColour.IsOk())
             {
                 ::GpiSetColor( (HPS)GetHPS()
                                ,m_textForegroundColour.GetPixel()
                               );
             }
-            if (m_textBackgroundColour.Ok())
+            if (m_textBackgroundColour.IsOk())
             {
                 ::GpiSetBackColor( (HPS)GetHPS()
                                   ,m_textBackgroundColour.GetPixel()
@@ -1703,14 +1703,14 @@ void wxPMDCImpl::DrawAnyText( const wxString& rsText,
     //
     // Set text color attributes
     //
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         SetTextColor( m_hPS
                      ,(int)m_textForegroundColour.GetPixel()
                     );
     }
 
-    if (m_textBackgroundColour.Ok())
+    if (m_textBackgroundColour.IsOk())
     {
         nOldBackground = SetTextBkColor( m_hPS
                                         ,(int)m_textBackgroundColour.GetPixel()
@@ -1733,7 +1733,7 @@ void wxPMDCImpl::DrawAnyText( const wxString& rsText,
     }
     else
     {
-        if (m_vSelectedBitmap.Ok())
+        if (m_vSelectedBitmap.IsOk())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -1758,7 +1758,7 @@ void wxPMDCImpl::DrawAnyText( const wxString& rsText,
     // it never is set to anything else, but background should remain
     // transparent even if we just drew an opaque string)
     //
-    if (m_textBackgroundColour.Ok())
+    if (m_textBackgroundColour.IsOk())
             SetTextBkColor( m_hPS
                            ,nOldBackground
                           );
@@ -1849,7 +1849,7 @@ void wxPMDCImpl::DoSelectPalette( bool WXUNUSED(bRealize) )
         m_hOldPalette = 0;
     }
 
-    if (m_palette.Ok())
+    if (m_palette.IsOk())
     {
         HPALETTE                    hOldPal;
 
@@ -1891,7 +1891,7 @@ void wxPMDCImpl::SetPalette(
         m_hOldFont = 0;
     }
     m_palette = rPalette;
-    if (!rPalette.Ok())
+    if (!rPalette.IsOk())
     {
         if (m_hOldFont)
         {
@@ -1916,14 +1916,14 @@ void wxPMDCImpl::SetFont(
         m_hOldFont = 0;
     }
     m_font = rFont;
-    if (!rFont.Ok())
+    if (!rFont.IsOk())
     {
         m_hOldFont = 0;
     }
 
     m_font.SetPS(m_hPS); // this will realize the font
 
-    if (m_font.Ok())
+    if (m_font.IsOk())
     {
         HFONT                       hFont = m_font.GetResourceHandle();
         if (hFont == (HFONT) NULL)
@@ -1942,14 +1942,14 @@ void wxPMDCImpl::SetPen(
     if (m_pen == rPen)
         return;
     m_pen = rPen;
-    if (!m_pen.Ok())
+    if (!m_pen.IsOk())
         return;
 
     if (m_hOldPen)
         m_hOldPen = 0L;
     m_pen = rPen;
 
-    if (!m_pen.Ok())
+    if (!m_pen.IsOk())
     {
         if (m_hOldPen)
         {
@@ -1958,7 +1958,7 @@ void wxPMDCImpl::SetPen(
         m_hOldPen = 0L;
     }
 
-    if (m_pen.Ok())
+    if (m_pen.IsOk())
     {
         if (m_pen.GetResourceHandle())
         {
@@ -1977,14 +1977,14 @@ void wxPMDCImpl::SetBrush(
     if (m_hOldBrush)
         m_hOldBrush = 0L;
     m_brush = rBrush;
-    if (!m_brush.Ok())
+    if (!m_brush.IsOk())
     if (m_brush == rBrush)
         return;
-    if (!m_brush.Ok())
+    if (!m_brush.IsOk())
         if (m_hOldBrush)
             m_hOldBrush = 0L;
 
-    if (!m_brush.Ok())
+    if (!m_brush.IsOk())
     {
         if (m_hOldBrush)
         {
@@ -1993,7 +1993,7 @@ void wxPMDCImpl::SetBrush(
         m_hOldBrush = 0L;
     }
 
-    if (m_brush.Ok())
+    if (m_brush.IsOk())
     {
         if (m_brush.GetResourceHandle())
         {
@@ -2008,7 +2008,7 @@ void wxPMDCImpl::SetBackground(const wxBrush& rBrush)
 {
     m_backgroundBrush = rBrush;
 
-    if (m_backgroundBrush.Ok())
+    if (m_backgroundBrush.IsOk())
     {
         (void)::GpiSetBackColor((HPS)m_hPS, m_backgroundBrush.GetColour().GetPixel());
     }
@@ -2383,7 +2383,7 @@ bool wxPMDCImpl::DoBlit( wxCoord vXdest,
         const wxBitmap&             rBmp = pm_impl->GetSelectedBitmap();
 
         pMask = rBmp.GetMask();
-        if (!(rBmp.Ok() && pMask && pMask->GetMaskBitmap()))
+        if (!(rBmp.IsOk() && pMask && pMask->GetMaskBitmap()))
         {
             bUseMask = false;
         }
@@ -2396,7 +2396,7 @@ bool wxPMDCImpl::DoBlit( wxCoord vXdest,
                    );
     vOldTextColor = (COLORREF)vCbnd.lColor;
 
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         vCbnd.lColor = (LONG)m_textForegroundColour.GetPixel();
         ::GpiSetAttrs( m_hPS           // presentation-space handle
@@ -2406,7 +2406,7 @@ bool wxPMDCImpl::DoBlit( wxCoord vXdest,
                       ,&vCbnd          // buffer for attributes.
                      );
     }
-    if (m_textBackgroundColour.Ok())
+    if (m_textBackgroundColour.IsOk())
     {
         ::GpiSetBackColor(m_hPS, (LONG)m_textBackgroundColour.GetPixel());
     }

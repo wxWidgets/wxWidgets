@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: utils.mm 48805 2007-09-19 14:52:25Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -127,6 +127,49 @@ void wxBell()
     return NO;
 }
 
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+
+    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+         end = wxTopLevelWindows.end();
+         i != end;
+         ++i )
+    {
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : NULL;
+        WXWindow nswindow = win ? win->GetWXWindow() : nil;
+        
+        if ( nswindow && [nswindow hidesOnDeactivate] == NO && winimpl)
+            winimpl->RestoreWindowLevel();
+    }
+    if ( wxTheApp )
+        wxTheApp->SetActive( true , NULL ) ;
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+         end = wxTopLevelWindows.end();
+         i != end;
+         ++i )
+    {
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+        WXWindow nswindow = win ? win->GetWXWindow() : nil;
+        
+        if ( nswindow && [nswindow level] == kCGFloatingWindowLevel && [nswindow hidesOnDeactivate] == NO )
+            [nswindow setLevel:kCGNormalWindowLevel];
+    }
+}
+
+- (void)applicationDidResignActive:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    if ( wxTheApp )
+        wxTheApp->SetActive( false , NULL ) ;
+}
+
 @end
 
 /*
@@ -136,7 +179,7 @@ void wxBell()
 @implementation ModalDialogDelegate
 - (id)init
 {
-    [super init];
+    self = [super init];
     sheetFinished = NO;
     resultCode = -1;
     impl = 0;
@@ -328,29 +371,30 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
 
-    NSView* view = (NSView*) m_window->GetHandle();
-    [view lockFocus];
-    // we use this method as other methods force a repaint, and this method can be
-    // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
-    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
-    [view unlockFocus];
-
     wxBitmap bitmap(width, height);
-    if ( [rep respondsToSelector:@selector(CGImage)] )
-    {
-        CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
 
-        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-        // since our context is upside down we dont use CGContextDrawImage
-        wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
-        CGImageRelease(cgImageRef);
-        cgImageRef = NULL;
-    }
-    else
+    NSView* view = (NSView*) m_window->GetHandle();
+    if ( [view isHiddenOrHasHiddenAncestor] == NO )
     {
-        // TODO for 10.4 in case we can support this for osx_cocoa
+        [view lockFocus];
+        // we use this method as other methods force a repaint, and this method can be
+        // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
+        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]];
+        [view unlockFocus];
+        if ( [rep respondsToSelector:@selector(CGImage)] )
+        {
+            CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
+
+            CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+            // since our context is upside down we dont use CGContextDrawImage
+            wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+        }
+        else
+        {
+            // TODO for 10.4 in case we can support this for osx_cocoa
+        }
+        [rep release];
     }
-    [rep release];
 
     return bitmap;
 }

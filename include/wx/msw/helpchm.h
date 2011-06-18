@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpchm.h
+// Name:        wx/msw/helpchm.h
 // Purpose:     Help system: MS HTML Help implementation
 // Author:      Julian Smart
 // Modified by:
@@ -82,7 +82,7 @@ protected:
 
     wxString m_helpFile;
 
-    DECLARE_CLASS(wxCHMHelpController)
+    DECLARE_DYNAMIC_CLASS(wxCHMHelpController)
 };
 
 #endif // wxUSE_MS_HTML_HELP

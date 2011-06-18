@@ -262,7 +262,7 @@ public:
         This function is simple event handler.
         Each time the user clicks mouse button over a cell within wxHtmlWindow
         this method of that cell is called.
-        Default behavior is to call wxHtmlWindow::LoadPage.
+        Default behaviour is to call wxHtmlWindow::LoadPage.
 
         @param window
             interface to the parent HTML window

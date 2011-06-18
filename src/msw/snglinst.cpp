@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/snglinst.cpp
+// Name:        src/msw/snglinst.cpp
 // Purpose:     implements wxSingleInstanceChecker class for Win32 using
 //              named mutexes
 // Author:      Vadim Zeitlin

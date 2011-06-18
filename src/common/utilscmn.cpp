@@ -1536,7 +1536,7 @@ wxColour wxGetColourFromUser(wxWindow *parent,
 wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit, const wxString& caption)
 {
     wxFontData data;
-    if ( fontInit.Ok() )
+    if ( fontInit.IsOk() )
     {
         data.SetInitialFont(fontInit);
     }

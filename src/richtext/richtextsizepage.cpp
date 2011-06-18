@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextsizepage.cpp
+// Name:        src/richtext/richtextsizepage.cpp
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 

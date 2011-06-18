@@ -499,7 +499,7 @@ bool wxDropSource::GiveFeedback (
 {
     const wxCursor&                 rCursor = GetCursor(eEffect);
 
-    if (rCursor.Ok())
+    if (rCursor.IsOk())
     {
         ::WinSetPointer(HWND_DESKTOP, (HPOINTER)rCursor.GetHCURSOR());
         m_vDragImage.hImage = (LHANDLE)rCursor.GetHCURSOR();

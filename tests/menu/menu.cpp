@@ -84,6 +84,7 @@ private:
         CPPUNIT_TEST( FindInMenu );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
+        CPPUNIT_TEST( RadioItems );
     CPPUNIT_TEST_SUITE_END();
 
     void CreateFrame();
@@ -92,6 +93,7 @@ private:
     void FindInMenu();
     void Count();
     void Labels();
+    void RadioItems();
 
     wxFrame* m_frame;
 
@@ -112,7 +114,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( MenuTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MenuTestCase, "MenuTestCase" );
 
 void MenuTestCase::CreateFrame()
@@ -303,4 +305,57 @@ void MenuTestCase::Labels()
     // wxMenuItem
     CPPUNIT_ASSERT_EQUAL( "Foo", itemFoo->GetItemLabelText() );
     CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
+}
+
+void MenuTestCase::RadioItems()
+{
+    wxMenuBar * const bar = m_frame->GetMenuBar();
+    wxMenu * const menu = new wxMenu;
+    bar->Append(menu, "&Radio");
+
+    // Adding consecutive radio items creates a radio group.
+    menu->AppendRadioItem(MenuTestCase_First, "Radio 0");
+    menu->AppendRadioItem(MenuTestCase_First + 1, "Radio 1");
+
+    // First item of a radio group is checked by default.
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+
+    // Checking the second one make the first one unchecked however.
+    menu->Check(MenuTestCase_First + 1, true);
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First) );
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+
+    // Adding more radio items after a separator creates another radio group...
+    menu->AppendSeparator();
+    menu->AppendRadioItem(MenuTestCase_First + 2, "Radio 2");
+    menu->AppendRadioItem(MenuTestCase_First + 3, "Radio 3");
+    menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
+
+    // ... which is independent from the first one.
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
+
+    menu->Check(MenuTestCase_First + 3, true);
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 2) );
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+
+
+    // Insert an item in the middle of an existing radio group.
+    menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
+
+    menu->Check( MenuTestCase_First + 5, true );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 3) );
+
+
+    // Prepend a couple of items before the first group.
+    menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
+    menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
+    menu->Check(MenuTestCase_First + 7, true);
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+
+
+    // Check that the last radio group still works as expected.
+    menu->Check(MenuTestCase_First + 4, true);
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
 }

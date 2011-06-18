@@ -26,6 +26,9 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
 
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
+
 #if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"
     #if wxUSE_STACKWALKER
@@ -39,9 +42,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>   // for WNOHANG
 #include <unistd.h>
-
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
 #if wxUSE_DETECT_SM
     #include <X11/SM/SMlib.h>
@@ -100,7 +100,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_drawable_get_visual( wxGetRootWindow()->window )->depth;
+    return gtk_widget_get_visual(wxGetRootWindow())->depth;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -186,31 +186,28 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 // ----------------------------------------------------------------------------
 
 extern "C" {
-static
-void GTK_EndProcessDetector(gpointer data, gint source,
-                            GdkInputCondition WXUNUSED(condition))
+static gboolean EndProcessDetector(GIOChannel* source, GIOCondition, void* data)
 {
     wxEndProcessData * const
         proc_data = static_cast<wxEndProcessData *>(data);
 
     // child exited, end waiting
-    close(source);
-
-    // don't call us again!
-    gdk_input_remove(proc_data->tag);
+    close(g_io_channel_unix_get_fd(source));
 
     wxHandleProcessTermination(proc_data);
+
+    // don't call us again!
+    return false;
 }
 }
 
 int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-    int tag = gdk_input_add(fd,
-                            GDK_INPUT_READ,
-                            GTK_EndProcessDetector,
-                            (gpointer)proc_data);
-
-    return tag;
+    GIOChannel* channel = g_io_channel_unix_new(fd);
+    GIOCondition cond = GIOCondition(G_IO_IN | G_IO_HUP | G_IO_ERR);
+    unsigned id = g_io_add_watch(channel, cond, EndProcessDetector, proc_data);
+    g_io_channel_unref(channel);
+    return int(id);
 }
 
 
@@ -328,14 +325,11 @@ private:
     GtkAssertDialog *m_dlg;
 };
 
-// the callback functions must be extern "C" to comply with GTK+ declarations
-extern "C"
+static void get_stackframe_callback(void* p)
 {
-    void get_stackframe_callback(StackDump *dump)
-    {
-        // skip over frames up to including wxOnAssert()
-        dump->ProcessFrames(3);
-    }
+    StackDump* dump = static_cast<StackDump*>(p);
+    // skip over frames up to including wxOnAssert()
+    dump->ProcessFrames(3);
 }
 
 #endif // wxDEBUG_LEVEL && wxUSE_STACKWALKER
@@ -362,7 +356,7 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         gtk_assert_dialog_set_backtrace_callback
         (
             GTK_ASSERT_DIALOG(dialog),
-            (GtkAssertDialogStackFrameCallback)get_stackframe_callback,
+            get_stackframe_callback,
             &dump
         );
 #endif // wxUSE_STACKWALKER

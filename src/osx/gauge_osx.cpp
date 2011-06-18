@@ -25,15 +25,15 @@ bool wxGauge::Create( wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxGaugeBase::Create( parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name ) )
         return false;
 
     wxSize size = s;
 
-    m_peer = wxWidgetImpl::CreateGauge( this, parent, id, GetValue() , 0, GetRange(), pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateGauge( this, parent, id, GetValue() , 0, GetRange(), pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -45,8 +45,8 @@ void wxGauge::SetRange(int r)
     // we are going via the base class in case there is
     // some change behind the values by it
     wxGaugeBase::SetRange( r ) ;
-    if ( m_peer )
-        m_peer->SetMaximum( GetRange() ) ;
+    if ( GetPeer() )
+        GetPeer()->SetMaximum( GetRange() ) ;
 }
 
 void wxGauge::SetValue(int pos)
@@ -55,8 +55,8 @@ void wxGauge::SetValue(int pos)
     // some change behind the values by it
     wxGaugeBase::SetValue( pos ) ;
 
-    if ( m_peer )
-        m_peer->SetValue( GetValue() ) ;
+    if ( GetPeer() )
+        GetPeer()->SetValue( GetValue() ) ;
 }
 
 int wxGauge::GetValue() const
@@ -66,7 +66,7 @@ int wxGauge::GetValue() const
 
 void wxGauge::Pulse()
 {
-    m_peer->PulseGauge();
+    GetPeer()->PulseGauge();
 }
 
 #endif // wxUSE_GAUGE

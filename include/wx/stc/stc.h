@@ -3056,19 +3056,19 @@ public:
     // Set the display mode of visual flags for wrapped lines.
     void SetWrapVisualFlags(int wrapVisualFlags);
 
-    // Retrive the display mode of visual flags for wrapped lines.
+    // Retrieve the display mode of visual flags for wrapped lines.
     int GetWrapVisualFlags() const;
 
     // Set the location of visual flags for wrapped lines.
     void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
 
-    // Retrive the location of visual flags for wrapped lines.
+    // Retrieve the location of visual flags for wrapped lines.
     int GetWrapVisualFlagsLocation() const;
 
     // Set the start indent for wrapped lines.
     void SetWrapStartIndent(int indent);
 
-    // Retrive the start indent for wrapped lines.
+    // Retrieve the start indent for wrapped lines.
     int GetWrapStartIndent() const;
 
     // Sets how wrapped sublines are placed. Default is fixed.
@@ -3464,7 +3464,7 @@ public:
     // Delete forwards from the current position to the end of the line.
     void DelLineRight();
 
-    // Get and Set the xOffset (ie, horizonal scroll position).
+    // Get and Set the xOffset (ie, horizontal scroll position).
     void SetXOffset(int newOffset);
     int GetXOffset() const;
 
@@ -4042,7 +4042,7 @@ public:
 
 
 
-    // The following methods are nearly equivallent to their similarly named
+    // The following methods are nearly equivalent to their similarly named
     // cousins above.  The difference is that these methods bypass wxString
     // and always use a char* even if used in a unicode build of wxWidgets.
     // In that case the character data will be utf-8 encoded since that is

@@ -77,7 +77,7 @@ public:
     wxVector(size_type size, const value_type& value);
 
     /**
-        Copy onstructor.
+        Copy constructor.
     */
     wxVector(const wxVector<T>& c);
 

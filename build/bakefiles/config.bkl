@@ -388,7 +388,7 @@ to run the tests, include CppUnit library here.
 
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
-        <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
+        <set var="WXTOPDIR"/> <!-- to be overridden on bakefile cmd line -->
 
         <option name="WITH_PLUGIN_SDL">
             <values>0,1</values>
@@ -413,7 +413,7 @@ it if SHARED=1 unless you know what you are doing.
             </description>
         </option>
 
-        <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
+        <set var="WXTOPDIR"/> <!-- to be overridden on bakefile cmd line -->
 
         <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT=='msevc4prj'">WINCE</if>

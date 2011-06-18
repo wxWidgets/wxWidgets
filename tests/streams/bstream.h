@@ -81,7 +81,7 @@ protected:
         const TStreamIn &stream_in = CreateInStream();
         CPPUNIT_ASSERT(!stream_in.Eof());
 
-        // Size should be greater then zero.
+        // Size should be greater than zero.
         // Note: streams not supporting this should register this test
         //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
         CPPUNIT_ASSERT(stream_in.GetSize() != 0);
@@ -154,7 +154,7 @@ protected:
         // Check EOF stream state.
         CPPUNIT_ASSERT_MESSAGE("EOF is not EOF?", stream_in.Eof());
 
-        // Ok we found the end, lets see if we can go past it.
+        // Ok we found the end, let's see if we can go past it.
         for (size_t i = 0; i < 100; i++)
             (void)stream_in.GetC();
 
@@ -419,7 +419,7 @@ protected:
             return;
         delete m_pCurrentIn;
         m_pCurrentIn = NULL;
-        // Incase something extra needs to be done.
+        // In case something extra needs to be done.
         DoDeleteInStream();
     }
     void DeleteOutStream()
@@ -431,7 +431,7 @@ protected:
 
         delete m_pCurrentOut;
         m_pCurrentOut = NULL;
-        // Incase something extra needs to be done.
+        // In case something extra needs to be done.
         DoDeleteOutStream();
     }
 

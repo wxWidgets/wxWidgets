@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/popupwin.cpp
+// Name:        src/os2/popupwin.cpp
 // Purpose:     implements wxPopupWindow for OS2
 // Author:      Dave Webster
 // Modified by:

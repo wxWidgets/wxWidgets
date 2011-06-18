@@ -255,7 +255,7 @@ bool wxRadioBox::Show(unsigned int n, bool show)
     // TODO
     // NOTE: Cocoa has no visible state for cells so we'd need to replace the
     // cell with a dummy one to hide it or alternatively subclass NSButtonCell
-    // and add the behavior.
+    // and add the behaviour.
     return false;
 }
 

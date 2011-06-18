@@ -21,10 +21,10 @@
     If you get an error saying "wxUSE_FOO must be defined", it means that you
     are not using the correct up-to-date version of setup.h. This happens most
     often when using svn or daily snapshots and a new symbol was added to
-    setup0.h and you haven't updated your local setup.h to to reflect it. If
+    setup0.h and you haven't updated your local setup.h to reflect it. If
     this is the case, you need to propagate the changes from setup0.h to your
     setup.h and, if using makefiles under MSW, also remove setup.h under the
-    build directory (lib/$(COMPILER)_{lib,dll}/msw[u][d][dll]/wx) so that it
+    build directory (lib/$(COMPILER)_{lib,dll}/msw[u][d][dll]/wx) so that
     the new setup.h is copied there.
 
     If you get an error of the form "wxFoo requires wxBar", then the settings
@@ -298,6 +298,22 @@
 #       define wxUSE_SOCKETS 0
 #   endif
 #endif /* !defined(wxUSE_SOCKETS) */
+
+#ifndef wxUSE_STD_CONTAINERS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STD_CONTAINERS must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_STD_CONTAINERS 0
+#   endif
+#endif /* !defined(wxUSE_STD_CONTAINERS) */
+
+#ifndef wxUSE_STD_STRING_CONV_IN_WXSTRING
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STD_STRING_CONV_IN_WXSTRING must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_STD_STRING_CONV_IN_WXSTRING 0
+#   endif
+#endif /* !defined(wxUSE_STD_STRING_CONV_IN_WXSTRING) */
 
 #ifndef wxUSE_STREAMS
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -598,6 +614,14 @@
 #       define wxUSE_DATEPICKCTRL 0
 #   endif
 #endif /* !defined(wxUSE_DATEPICKCTRL) */
+
+#ifndef wxUSE_DC_TRANSFORM_MATRIX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DC_TRANSFORM_MATRIX must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_DC_TRANSFORM_MATRIX 1
+#   endif
+#endif /* wxUSE_DC_TRANSFORM_MATRIX */
 
 #ifndef wxUSE_DIRPICKERCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.h
+// Name:        wx/os2/button.h
 // Purpose:     wxButton class
 // Author:      David Webster
 // Modified by:

@@ -437,7 +437,7 @@ public:
     void CheckColumnWidths( int widthChange = 0 );
 
     /**
-        Override this member function to add custom behavior on property
+        Override this member function to add custom behaviour on property
         deletion.
     */
     virtual void DoDelete( wxPGProperty* item, bool doDelete = true );
@@ -447,7 +447,7 @@ public:
     wxPGProperty* DoGetItemAtY( int y ) const;
 
     /**
-        Override this member function to add custom behavior on property
+        Override this member function to add custom behaviour on property
         insertion.
     */
     virtual wxPGProperty* DoInsert( wxPGProperty* parent,

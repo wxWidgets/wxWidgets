@@ -47,40 +47,43 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
+    DontCreatePeer();
+    
+    m_marginX =
+    m_marginY = 0;
+
+    // FIXME: this hack is needed because we're called from
+    //        wxBitmapToggleButton::Create() with this style and we currently use a
+    //        different wxWidgetImpl method (CreateBitmapToggleButton() rather than
+    //        CreateToggleButton()) for creating bitmap buttons, but we really ought
+    //        to unify the creation of buttons of all kinds and then remove
+    //        this check
+    if ( style & wxBU_NOTEXT )
+    {
+        return wxControl::Create(parent, id, pos, size, style,
+                                 validator, name);
+    }
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
     m_labelOrig = m_label = label ;
 
-    m_peer = wxWidgetImpl::CreateToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() )) ;
 
     MacPostControlCreate(pos,size) ;
 
   return TRUE;
 }
 
-wxSize wxToggleButton::DoGetBestSize() const
-{
-    int wBtn = 70 ;
-    int hBtn = 20 ;
-
-    int lBtn = m_label.Length() * 8 + 12 ;
-    if (lBtn > wBtn)
-        wBtn = lBtn;
-
-    return wxSize ( wBtn , hBtn ) ;
-}
-
 void wxToggleButton::SetValue(bool val)
 {
-    m_peer->SetValue( val ) ;
+    GetPeer()->SetValue( val ) ;
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return m_peer->GetValue() ;
+    return GetPeer()->GetValue() ;
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)
@@ -102,7 +105,7 @@ bool wxToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 // wxBitmapToggleButton
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton)
 
 bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxBitmap& label,
@@ -111,58 +114,21 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-
-    m_bitmap = label;
+    DontCreatePeer();
+    
+    if ( !wxToggleButton::Create(parent, id, wxEmptyString, pos, size, style | wxBU_NOTEXT | wxBU_EXACTFIT, validator, name) )
+        return false;
 
     m_marginX =
     m_marginY = wxDEFAULT_BUTTON_MARGIN;
 
-    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return false;
+    m_bitmaps[State_Normal] = label;
 
-    m_peer = wxWidgetImpl::CreateBitmapToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
+    SetPeer(wxWidgetImpl::CreateBitmapToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos,size) ;
 
     return TRUE;
-}
-
-wxSize wxBitmapToggleButton::DoGetBestSize() const
-{
-    if (!m_bitmap.IsOk())
-       return wxSize(20,20);
-
-    wxSize best;
-    best.x = m_bitmap.GetWidth() + 2 * m_marginX;
-    best.y = m_bitmap.GetHeight() + 2 * m_marginY;
-
-    return best;
-}
-
-void wxBitmapToggleButton::SetValue(bool val)
-{
-    m_peer->SetValue( val ) ;
-}
-
-bool wxBitmapToggleButton::GetValue() const
-{
-    return m_peer->GetValue() ;
-}
-
-void wxBitmapToggleButton::Command(wxCommandEvent & event)
-{
-   SetValue((event.GetInt() != 0));
-   ProcessCommand(event);
-}
-
-bool wxBitmapToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-    event.SetInt(GetValue());
-    event.SetEventObject(this);
-    ProcessCommand(event);
-    return noErr ;
 }
 
 #endif // wxUSE_TOGGLEBTN

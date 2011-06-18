@@ -94,7 +94,7 @@ public:
             y start coordinate, in screen coordinates.
 
         @param x2
-            x desintation coordinate, in screen coordinates.
+            x destination coordinate, in screen coordinates.
 
         @param y2
             y destination coordinate, in screen coordinates.

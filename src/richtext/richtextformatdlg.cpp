@@ -516,7 +516,7 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         font.SetPointSize( static_cast<int>(size) );
     }
 
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         dc.SetFont(font);
         // Calculate vertical and horizontal centre
@@ -828,7 +828,7 @@ wxString wxRichTextFontListBox::CreateHTML(const wxString& facename) const
     if (!facename.IsEmpty() && facename != _("(none)"))
         str << wxT(" face=\"") << facename << wxT("\"");
 /*
-    if (def->GetStyle().GetTextColour().Ok())
+    if (def->GetStyle().GetTextColour().IsOk())
         str << wxT(" color=\"#") << ColourToHexString(def->GetStyle().GetTextColour()) << wxT("\"");
 */
 

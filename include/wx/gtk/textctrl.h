@@ -214,6 +214,7 @@ private:
     GtkTextBuffer *m_buffer;
 
     GtkTextMark* m_showPositionOnThaw;
+    GSList* m_anonymousMarkList;
 
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);

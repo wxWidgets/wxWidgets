@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/gauge/gaugecmn.cpp
+// Name:        src/gauge/gauge.cpp
 // Purpose:     wxGauge for wxUniversal
 // Author:      Vadim Zeitlin
 // Modified by:

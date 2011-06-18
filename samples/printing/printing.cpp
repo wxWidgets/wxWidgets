@@ -287,12 +287,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_MENU(WXPRINT_ANGLEUP, MyFrame::OnAngleUp)
     EVT_MENU(WXPRINT_ANGLEDOWN, MyFrame::OnAngleDown)
+
+    EVT_MENU_RANGE(WXPRINT_FRAME_MODAL_APP,
+                   WXPRINT_FRAME_MODAL_NON,
+                   MyFrame::OnPreviewFrameModalityKind)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const wxSize&size)
         : wxFrame(frame, wxID_ANY, title, pos, size)
 {
     m_canvas = NULL;
+    m_previewModality = wxPreviewFrame_AppModal;
 
 #if wxUSE_STATUSBAR
     // Give us a status line
@@ -313,6 +318,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
 #endif
     file_menu->Append(wxID_PREVIEW, wxT("Print Pre&view"),          wxT("Preview"));
 
+    wxMenu * const menuModalKind = new wxMenu;
+    menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_APP, "&App modal");
+    menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_WIN, "&Window modal");
+    menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_NON, "&Not modal");
+    file_menu->AppendSubMenu(menuModalKind, "Preview frame &modal kind");
 #if wxUSE_ACCEL
     // Accelerators
     wxAcceleratorEntry entries[1];
@@ -400,7 +410,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     wxPreviewFrame *frame =
         new wxPreviewFrame(preview, this, wxT("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
-    frame->Initialize();
+    frame->Initialize(m_previewModality);
     frame->Show();
 }
 
@@ -480,6 +490,12 @@ void MyFrame::OnAngleDown(wxCommandEvent& WXUNUSED(event))
     m_canvas->Refresh();
 }
 
+void MyFrame::OnPreviewFrameModalityKind(wxCommandEvent& event)
+{
+    m_previewModality = static_cast<wxPreviewFrameModalityKind>(
+                            wxPreviewFrame_AppModal +
+                                (event.GetId() - WXPRINT_FRAME_MODAL_APP));
+}
 
 // ----------------------------------------------------------------------------
 // MyCanvas
@@ -642,7 +658,7 @@ void MyPrintout::DrawPageTwo()
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
 
-    // This scales the DC so that the printout roughly represents the the screen
+    // This scales the DC so that the printout roughly represents the screen
     // scaling. The text point size _should_ be the right size but in fact is
     // too small for some reason. This is a detail that will need to be
     // addressed at some point but can be fudged for the moment.

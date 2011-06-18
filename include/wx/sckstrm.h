@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sckstrm.h
+// Name:        wx/sckstrm.h
 // Purpose:     wxSocket*Stream
 // Author:      Guilhem Lavaux
 // Modified by:

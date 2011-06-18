@@ -175,7 +175,7 @@ public:
 
 #define M_FONTDATA ((wxFontRefData*)m_refData)
 
-wxFontRefData::wxFontRefData(const wxFontRefData& data)
+wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
 {
     Init();
     m_info = data.m_info;
@@ -893,7 +893,7 @@ UIFont* wxFont::OSXGetUIFont() const
 const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();

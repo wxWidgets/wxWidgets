@@ -575,7 +575,7 @@ public:
         coordinates, of the given subitem, i.e. the part of the row @a item in the
         column @a subItem.
 
-        This method is only meaningfull when the wxListCtrl is in the report mode.
+        This method is only meaningful when the wxListCtrl is in the report mode.
         If @a subItem parameter is equal to the special value
         @c wxLIST_GETSUBITEMRECT_WHOLEITEM the return value is the same as
         for GetItemRect().
@@ -953,7 +953,7 @@ public:
         using the specified @a fnSortCallBack function. This function must have the
         following prototype:
         @code
-        int wxCALLBACK wxListCompareFunction(long item1, long item2, wxIntPtr sortData)
+        int wxCALLBACK wxListCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData)
         @endcode
 
         It is called each time when the two items must be compared and should return 0

@@ -35,7 +35,7 @@ Most C++ GUI frameworks overcome these limitations by means of a set of macros
 and functions and wxWidgets is no exception. As it originated before the
 addition of RTTI to the C++ standard and as support for it is still missing
 from some (albeit old) compilers, wxWidgets doesn't (yet) use it, but provides
-it's own macro-based RTTI system.
+its own macro-based RTTI system.
 
 In the future, the standard C++ RTTI will be used though and you're encouraged
 to use whenever possible the wxDynamicCast macro which, for the implementations
@@ -79,7 +79,7 @@ This class stores meta-information about classes. An application may use macros
 such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to record runtime
 information about a class, including:
 
-@li It's position in the inheritance hierarchy.
+@li Its position in the inheritance hierarchy.
 @li The base class name(s) (up to two base classes are permitted).
 @li A string representation of the class name.
 @li A function that can be called to construct an instance of this class.

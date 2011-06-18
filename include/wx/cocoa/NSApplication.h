@@ -19,7 +19,7 @@
 // ========================================================================
 /*!
     @class wxNSApplicationDelegate
-    @discussion Implements an NSApplication delegate which can respond to messages sent by Cocoa to change Cocoa's behavior.
+    @discussion Implements an NSApplication delegate which can respond to messages sent by Cocoa to change Cocoa's behaviour.
 
     wxCocoa will set a singleton instance of this class as the NSApplication delegate upon startup unless wxWidgets is running
     in a "plugin" manner in which case it would not be appropriate to do this.

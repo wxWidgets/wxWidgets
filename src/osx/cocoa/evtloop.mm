@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin, Stefan Csomor
 // Modified by:
 // Created:     2006-01-12
-// RCS-ID:      $Id: evtloop.cpp 54845 2008-07-30 14:52:41Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,6 +39,9 @@
 // wxEventLoop implementation
 // ============================================================================
 
+#if 0
+
+// in case we want to integrate this
 
 static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
 {
@@ -98,17 +101,21 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
     return mask;
 }
 
+#endif
 
 wxGUIEventLoop::wxGUIEventLoop()
 {
     m_modalSession = nil;
     m_dummyWindow = nil;
+    m_modalNestedLevel = 0;
+    m_modalWindow = NULL;
 }
 
 wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT( m_modalSession == nil );
     wxASSERT( m_dummyWindow == nil );
+    wxASSERT( m_modalNestedLevel == 0 );
 }
 
 //-----------------------------------------------------------------------------
@@ -210,9 +217,9 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
                 return -1;
             default:
                 wxFAIL_MSG("unknown response code");
-                return -1;
                 break;
         }
+        return -1;
     }
     else 
     {        
@@ -304,9 +311,24 @@ void wxModalEventLoop::DoStop()
 void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
 {
     WXWindow nsnow = nil;
+
+    if ( m_modalNestedLevel > 0 )
+    {
+        wxASSERT_MSG( m_modalWindow == modalWindow, "Nested Modal Sessions must be based on same window");
+        m_modalNestedLevel++;
+        return;
+    }
+    
+    m_modalWindow = modalWindow;
+    m_modalNestedLevel = 1;
     
     if ( modalWindow )
     {
+        // we must show now, otherwise beginModalSessionForWindow does it but it
+        // also would do a centering of the window before overriding all our position
+        if ( !modalWindow->IsShownOnScreen() )
+            modalWindow->Show();
+        
         wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
         wxASSERT_MSG( now != NULL, "must pass in a toplevel window for modal event loop" );
         nsnow = now ? now->GetWXWindow() : nil;
@@ -324,17 +346,24 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
         m_dummyWindow = nsnow;
     }
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
+    wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
 }
 
 void wxGUIEventLoop::EndModalSession()
 {
     wxASSERT_MSG(m_modalSession != NULL, "no modal session active");
-    [NSApp endModalSession:(NSModalSession)m_modalSession];
-    m_modalSession = nil;
-    if ( m_dummyWindow )
+    
+    wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
+    
+    if ( --m_modalNestedLevel == 0 )
     {
-        [m_dummyWindow release];
-        m_dummyWindow = nil;
+        [NSApp endModalSession:(NSModalSession)m_modalSession];
+        m_modalSession = nil;
+        if ( m_dummyWindow )
+        {
+            [m_dummyWindow release];
+            m_dummyWindow = nil;
+        }
     }
 }
 

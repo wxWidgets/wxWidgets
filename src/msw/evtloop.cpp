@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/evtloop.cpp
+// Name:        src/msw/evtloop.cpp
 // Purpose:     implements wxEventLoop for MSW
 // Author:      Vadim Zeitlin
 // Modified by:

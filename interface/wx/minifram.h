@@ -35,7 +35,7 @@
     @style{wxSYSTEM_MENU}
         Displays a system menu (Windows and Motif only).
     @style{wxRESIZE_BORDER}
-        Displays a resizeable border around the window.
+        Displays a resizable border around the window.
     @endStyleTable
 
     @remarks

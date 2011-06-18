@@ -24,54 +24,15 @@
 
     For the full list of change types that are reported see wxFSWFlags.
 
-    There are three different ways to use this class:
-
-     - You may derive a new class from wxFileSystemWatcher and override the
-       wxFileSystemWatcher::OnChange member to perform the required action
-       when file system change occurrs. Additionally you may also want to
-       override wxFileSystemWatcher::OnWarning and
-       wxFileSystemWatcher::OnError to be notified when an error condition
-       arises.
-     - You may use a derived class and the @c EVT_FSWATCHER macro or
-       wxEvtHandler::Connect to redirect events to an event handler defined in
-       the derived class. If the default constructor is used, the file system
-       watcher object will be its own owner object, since it is derived from
-       wxEvtHandler.
-     - You may redirect the notifications of file system changes as well as of
-       error conditions to any wxEvtHandler derived object by using
-       wxFileSystemWatcher::SetOwner.
-       Then use the @c EVT_FSWATCHER macro or wxEvtHandler::Connect to send the
-       events to the event handler which will receive wxFileSystemWatcherEvent.
-
-    For example:
-
-    @code
-    class MyWatcher : public wxFileSystemWatcher
-    {
-    protected:
-        void OnChange(int changeType, const wxFileName& path, const wxFileName& newPath)
-        {
-            // do whatever you like with the event
-        }
-    };
-
-    class MyApp : public wxApp
-    {
-    public:
-        ...
-        void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop))
-        {
-            // you have to construct the watcher here, because it needs an active loop
-            m_watcher = new MyWatcher();
-
-            // please notify me when a new log file is created
-            m_watcher->Add(wxFileName::DirName("/var/log", wxFSW_EVENT_CREATE);
-        }
-
-    private:
-        MyWatcher* m_watcher;
-    };
-    @endcode
+    This class notifies the application about the file system changes by
+    sending events of wxFileSystemWatcherEvent class. By default these events
+    are sent to the wxFileSystemWatcher object itself so you can derive from it
+    and use the event table @c EVT_FSWATCHER macro to handle these events in a
+    derived class method. Alternatively, you can use
+    wxFileSystemWatcher::SetOwner() to send the events to another object. Or
+    you could use wxEvtHandler::Connect() with @c wxEVT_FSWATCHER to handle
+    these events in any other object. See the fswatcher sample for an example
+    of the latter approach.
 
     @library{wxbase}
     @category{file}
@@ -82,9 +43,7 @@ class wxFileSystemWatcher: public wxEvtHandler
 {
 public:
     /**
-        Default constructor. If you create file system watcher using it you have
-        to either call SetOwner() and connect an event handler or override
-        OnChange(), OnWarning() and OnError().
+        Default constructor.
      */
     wxFileSystemWatcher();
 
@@ -95,24 +54,34 @@ public:
     virtual ~wxFileSystemWatcher();
 
     /**
-        Adds @a path to currently watched files. Optionally a filter can be
-        specified to receive only events of particular type.
+        Adds @a path to currently watched files.
 
-        Any events concerning this particular path will be sent either to
-        connected handler or passed to OnChange(), OnWarning() or OnError().
+        The @a path argument can currently only be a directory and any changes
+        to this directory itself or its immediate children will generate the
+        events. Use AddTree() to monitor the directory recursively.
 
-        @note When adding a directory, immediate children will be watched
-        as well.
+        @param path
+            The name of the path to watch.
+        @param events
+            An optional filter to receive only events of particular types.
      */
     virtual bool Add(const wxFileName& path, int events = wxFSW_EVENT_ALL);
 
     /**
         This is the same as Add(), but recursively adds every file/directory in
-        the tree rooted at @a path. Additionally a file mask can be specified to
-        include only files matching that particular mask.
+        the tree rooted at @a path.
+
+        Additionally a file mask can be specified to include only files
+        matching that particular mask.
+
+        This method is implemented efficiently under MSW but shouldn't be used
+        for the directories with a lot of children (such as e.g. the root
+        directory) under the other platforms as it calls Add() there for each
+        subdirectory potentially creating a lot of watches and taking a long
+        time to execute.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                        const wxString& filter = wxEmptyString) = 0;
+                         const wxString& filter = wxEmptyString);
 
     /**
         Removes @a path from the list of watched paths.
@@ -147,9 +116,8 @@ public:
     /**
         Associates the file system watcher with the given @a handler object.
 
-        Basically this means that all events will be passed to this handler
-        object unless you have change the default behaviour by overriding
-        OnChange(), OnWarning() or OnError().
+        All the events generated by this object will be passed to the specified
+        owner.
      */
     void SetOwner(wxEvtHandler* handler);
 };
@@ -160,7 +128,7 @@ public:
     @class wxFileSystemWatcherEvent
 
     A class of events sent when a file system event occurs. Types of events
-    reported may vary depending on a platfrom, however all platforms report
+    reported may vary depending on a platform, however all platforms report
     at least creation of new file/directory and access, modification, move
     (rename) or deletion of an existing one.
 

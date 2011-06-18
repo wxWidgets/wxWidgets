@@ -75,7 +75,7 @@ methods in a different manner.
 Because the Cocoa view hierarchy isn't a perfect match with the wxWidgets hierarchy, there are some conventions
 used to resolve this conflict.  The first is that m_cocoaNSView is defined to be the view which most-closely
 represents the wxWidgets view.  For instance, a wxButton has an NSButton instance and a wxStaticBox has an NSBox
-instance.  Unfortunately, wxWidgets defines some behavior that Cocoa cannot directly implement.  This is primarily
+instance.  Unfortunately, wxWidgets defines some behaviour that Cocoa cannot directly implement.  This is primarily
 window scrolling (e.g. without using a wxScrolledWindow) and window hiding.
 
 Scrolling is implemented in a separate class known as wxWindowCocoaScrollView.  This class does not fit into
@@ -89,7 +89,7 @@ This is an artifact of the pre-Panther days of Cocoa where there was no method f
 
 What these classes do is provide a Cocoa view that sits between the wxWidget's parent window's view and the
 m_cocoaNSView provided by the window.  The wxWindow class has a GetNSViewForSuperview() method that returns either
-the m_cocoaNSView (if the window does not need scrolling behavior and is not hidden) or returns the scroll view
+the m_cocoaNSView (if the window does not need scrolling behaviour and is not hidden) or returns the scroll view
 for the case of scrolling or the dummy view in the case of hiding.  As the name suggests, the method is used
 from the parent wxWindow (the superview) when it sends something like an addSubview: message.  The method is under
 no circumstances intended to be used as the receiver of an addSubview message.  In fact, not even the GetNSView()

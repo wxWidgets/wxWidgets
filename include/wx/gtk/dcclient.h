@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.h
+// Name:        wx/gtk/dcclient.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

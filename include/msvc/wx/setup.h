@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msvc/wx/msw/setup.h
+// Name:        msvc/wx/setup.h
 // Purpose:     wrapper around the real wx/setup.h for Visual C++
 // Author:      Vadim Zeitlin
 // Modified by:

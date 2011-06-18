@@ -149,7 +149,7 @@
 // Number added to image width for SetCustomPaintWidth
 #define ODCB_CUST_PAINT_MARGIN               6
 
-// Milliseconds to wait for two mouse-ups after focus inorder
+// Milliseconds to wait for two mouse-ups after focus in order
 // to trigger a double-click.
 #define DOUBLE_CLICK_CONVERSION_TRESHOLD        500
 
@@ -774,7 +774,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().Ok() && comValIndex == -1 )
+    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -2159,35 +2159,35 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
     Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
 }
 
-int wxPGMultiButton::GenId( int id ) const
+int wxPGMultiButton::GenId( int itemid ) const
 {
-    if ( id < -1 )
+    if ( itemid < -1 )
     {
         if ( m_buttons.size() )
-            id = GetButton(m_buttons.size()-1)->GetId() + 1;
+            itemid = GetButton(m_buttons.size()-1)->GetId() + 1;
         else
-            id = wxPG_SUBID2;
+            itemid = wxPG_SUBID2;
     }
-    return id;
+    return itemid;
 }
 
 #if wxUSE_BMPBUTTON
-void wxPGMultiButton::Add( const wxBitmap& bitmap, int id )
+void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
 {
-    id = GenId(id);
+    itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxBitmapButton( this, id, bitmap,
+    wxButton* button = new wxBitmapButton( this, itemid, bitmap,
                                            wxPoint(sz.x, 0),
                                            wxSize(sz.y, sz.y) );
     DoAddButton( button, sz );
 }
 #endif
 
-void wxPGMultiButton::Add( const wxString& label, int id )
+void wxPGMultiButton::Add( const wxString& label, int itemid )
 {
-    id = GenId(id);
+    itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxButton( this, id, label, wxPoint(sz.x, 0),
+    wxButton* button = new wxButton( this, itemid, label, wxPoint(sz.x, 0),
                                      wxSize(sz.y, sz.y) );
     DoAddButton( button, sz );
 }

@@ -114,7 +114,7 @@ public:
         Like Update() but makes the gauge control run in indeterminate mode.
 
         In indeterminate mode the remaining and the estimated time labels (if
-        present) are set to to "Unknown" or to @a newmsg (if it's non-empty).
+        present) are set to "Unknown" or to @a newmsg (if it's non-empty).
         Each call to this function moves the progress bar a bit to indicate
         that some progress was done.
 

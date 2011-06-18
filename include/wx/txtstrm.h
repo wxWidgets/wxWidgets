@@ -45,6 +45,8 @@ public:
 #endif
     ~wxTextInputStream();
 
+    const wxInputStream& GetInputStream() const { return m_input; }
+
     wxUint32 Read32(int base = 10); // base may be between 2 and 36, inclusive, or the special 0 (= C format)
     wxUint16 Read16(int base = 10);
     wxUint8  Read8(int base = 10);
@@ -115,6 +117,8 @@ public:
     wxTextOutputStream(wxOutputStream& s, wxEOL mode = wxEOL_NATIVE);
 #endif
     virtual ~wxTextOutputStream();
+
+    const wxOutputStream& GetOutputStream() const { return m_output; }
 
     void SetMode( wxEOL mode = wxEOL_NATIVE );
     wxEOL GetMode() { return m_mode; }

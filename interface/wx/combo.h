@@ -37,6 +37,18 @@ public:
     virtual bool Create(wxWindow* parent) = 0;
 
     /**
+        You only need to implement this member function if you create
+        your popup class in non-standard way. The default implementation can
+        handle both multiple-inherited popup control (as seen in wxComboCtrl
+        samples) and one allocated separately in heap.
+
+        If you do completely re-implement this function, make sure it calls
+        Destroy() for the popup control and also deletes @a this object
+        (usually as the last thing).
+    */
+    virtual void DestroyPopup();
+
+    /**
         Utility function that hides the popup.
     */
     void Dismiss();
@@ -856,7 +868,7 @@ protected:
     /**
         This member function is not normally called in application code.
         Instead, it can be implemented in a derived class to return default
-        wxComboPopup, incase @a popup is @NULL.
+        wxComboPopup, in case @a popup is @NULL.
 
         @note If you have implemented OnButtonClick() to do something else than
               show the popup, then DoSetPopupControl() must always set @a popup

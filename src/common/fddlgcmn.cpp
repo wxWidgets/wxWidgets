@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/fdrepdlg.cpp
+// Name:        src/common/fddlgcmn.cpp
 // Purpose:     common parts of wxFindReplaceDialog implementations
 // Author:      Vadim Zeitlin
 // Modified by:

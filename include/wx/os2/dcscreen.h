@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.h
+// Name:        wx/os2/dcscreen.h
 // Purpose:     wxScreenDC class
 // Author:      David Webster
 // Modified by:

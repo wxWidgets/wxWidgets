@@ -1146,28 +1146,6 @@ void wxNotebook::UpdateBgBrush()
     }
 }
 
-WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child)
-{
-    if ( m_hbrBackground )
-    {
-        // before drawing with the background brush, we need to position it
-        // correctly
-        RECT rc;
-        ::GetWindowRect(GetHwndOf(child), &rc);
-
-        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
-
-        if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
-        {
-            wxLogLastError(wxT("SetBrushOrgEx(notebook bg brush)"));
-        }
-
-        return m_hbrBackground;
-    }
-
-    return wxNotebookBase::MSWGetBgBrushForChild(hDC, child);
-}
-
 bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 {
     // solid background colour overrides themed background drawing
@@ -1336,10 +1314,12 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   event.SetEventObject(this);
   event.SetInt(idCtrl);
 
-  bool processed = HandleWindowEvent(event);
+  // Change the selection before generating the event as its handler should
+  // already see the new page selected.
   if ( hdr->code == TCN_SELCHANGE )
       UpdateSelection(event.GetSelection());
 
+  bool processed = HandleWindowEvent(event);
   *result = !event.IsAllowed();
   return processed;
 }

@@ -940,7 +940,7 @@ wxThreadError wxThread::Resume()
 // exiting thread
 // -----------------------------------------------------------------------------
 
-wxThread::ExitCode wxThread::Wait()
+wxThread::ExitCode wxThread::Wait(wxThreadWait WXUNUSED(waitMode))
 {
     wxCHECK_MSG( This() != this, (ExitCode)-1,
                  wxT("a thread can't wait for itself") );
@@ -953,7 +953,7 @@ wxThread::ExitCode wxThread::Wait()
     return m_internal->GetExitCode();
 }
 
-wxThreadError wxThread::Delete(ExitCode *rc)
+wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
 {
     wxCHECK_MSG( This() != this, wxTHREAD_MISC_ERROR,
                  wxT("a thread can't delete itself") );

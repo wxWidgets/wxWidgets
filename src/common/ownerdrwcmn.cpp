@@ -93,11 +93,11 @@ void wxOwnerDrawnBase::GetColourToUse(wxODStatus stat, wxColour& colText, wxColo
         }
         else
         {
-            colText = m_colText.Ok() ? m_colText
+            colText = m_colText.IsOk() ? m_colText
                                      : wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
         }
 
-        colBack = m_colBack.Ok() ? m_colBack
+        colBack = m_colBack.IsOk() ? m_colBack
                                  : wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
     }
 }

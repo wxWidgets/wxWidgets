@@ -194,11 +194,11 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
 
     if (page > 1 || m_headerFooterData.GetShowOnFirstPage())
     {
-        if (m_headerFooterData.GetFont().Ok())
+        if (m_headerFooterData.GetFont().IsOk())
             dc->SetFont(m_headerFooterData.GetFont());
         else
             dc->SetFont(*wxNORMAL_FONT);
-        if (m_headerFooterData.GetTextColour().Ok())
+        if (m_headerFooterData.GetTextColour().IsOk())
             dc->SetTextForeground(m_headerFooterData.GetTextColour());
         else
             dc->SetTextForeground(*wxBLACK);
@@ -371,7 +371,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
         !m_headerFooterData.GetHeaderText(wxRICHTEXT_PAGE_EVEN, wxRICHTEXT_PAGE_CENTRE).IsEmpty() ||
         !m_headerFooterData.GetHeaderText(wxRICHTEXT_PAGE_EVEN, wxRICHTEXT_PAGE_RIGHT).IsEmpty())
     {
-        if (m_headerFooterData.GetFont().Ok())
+        if (m_headerFooterData.GetFont().IsOk())
             dc->SetFont(m_headerFooterData.GetFont());
         else
             dc->SetFont(*wxNORMAL_FONT);
@@ -396,7 +396,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
         !m_headerFooterData.GetFooterText(wxRICHTEXT_PAGE_EVEN, wxRICHTEXT_PAGE_CENTRE).IsEmpty() ||
         !m_headerFooterData.GetFooterText(wxRICHTEXT_PAGE_EVEN, wxRICHTEXT_PAGE_RIGHT).IsEmpty())
     {
-        if (m_headerFooterData.GetFont().Ok())
+        if (m_headerFooterData.GetFont().IsOk())
             dc->SetFont(m_headerFooterData.GetFont());
         else
             dc->SetFont(*wxNORMAL_FONT);
@@ -570,7 +570,7 @@ bool wxRichTextPrinting::DoPreview(wxRichTextPrintout *printout1, wxRichTextPrin
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrintPreview *preview = new wxPrintPreview(printout1, printout2, &printDialogData);
-    if (!preview->Ok())
+    if (!preview->IsOk())
     {
         delete preview;
         return false;
@@ -601,7 +601,7 @@ bool wxRichTextPrinting::DoPrint(wxRichTextPrintout *printout)
 
 void wxRichTextPrinting::PageSetup()
 {
-    if (!GetPrintData()->Ok())
+    if (!GetPrintData()->IsOk())
     {
         wxLogError(_("There was a problem during page setup: you may need to set a default printer."));
         return;

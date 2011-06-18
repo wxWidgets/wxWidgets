@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.h
+// Name:        wx/osx/statbox.h
 // Purpose:     wxStaticBox class
 // Author:      Stefan Csomor
 // Modified by:

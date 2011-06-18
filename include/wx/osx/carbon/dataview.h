@@ -427,6 +427,8 @@ public:
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height);
   virtual void OnSize      ();
 
+  virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+
  //
  // other methods
  //

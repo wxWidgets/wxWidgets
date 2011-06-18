@@ -1429,45 +1429,45 @@ msgid "Ca&pitals"
 msgstr "大文字化 (&P)"
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Mutex を作成できません。"
 
 #: ../src/common/filefn.cpp:1359
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "ファイルを列挙できません '%s'"
 
 #: ../src/msw/dir.cpp:212
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "ディレクトリー '%s' のファイルは列挙できません"
 
 #: ../src/os2/thread.cpp:528
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "スレッド %lu のリジュームができません"
 
 #: ../src/msw/thread.cpp:895
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "スレッド %x のリジュームができません"
 
 #: ../src/msw/thread.cpp:548
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "スレッドを開始できませんでした: TLS への書き込みに失敗しています。"
 
 #: ../src/os2/thread.cpp:514
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "スレッド %lu のサスペンドができません"
 
 #: ../src/msw/thread.cpp:880
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "スレッド %x のサスペンドができません"
 
 #: ../src/msw/thread.cpp:803
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "スレッドの終了を待つことはできません"
 
 #: ../src/common/cmdproc.cpp:266
@@ -6071,7 +6071,7 @@ msgid "This system doesn't support date controls, please upgrade your version of
 msgstr "このシステムは、date コントロールに未対応です。comctl32.dllを更新してください"
 
 #: ../src/msw/thread.cpp:1264
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "スレッドモジュールの初期化に失敗: スレッドローカルストレージに値を保存できませんでした"
 
 #: ../src/unix/threadpsx.cpp:1694
@@ -7213,7 +7213,7 @@ msgstr "軽量"
 
 #: ../src/common/intl.cpp:297
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "ロケールに '%s' を指定できませんでした｡"
 
 #: ../src/common/datetimefmt.cpp:1917

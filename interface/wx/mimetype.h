@@ -152,7 +152,7 @@ wxMimeTypesManager* wxTheMimeTypesManager;
     such as the original file name or the charset (for the text documents).
     These parameters may be useful to the program used to open, edit, view or
     print the message, so, for example, an e-mail client program will have to
-    pass them to this program. Because wxFileType itself can not know about
+    pass them to this program. Because wxFileType itself cannot know about
     these parameters, it uses MessageParameters class to query them.
 
     The default implementation only requires the caller to provide the file name

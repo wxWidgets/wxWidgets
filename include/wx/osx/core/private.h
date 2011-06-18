@@ -6,7 +6,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: private.h 53819 2008-05-29 14:11:45Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@
     #define wxOSX_10_6_AND_LATER(x)
 #endif
 
-#if !wxUSE_GUI || wxOSX_USE_COCOA_OR_CARBON
+#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 // Carbon functions are currently still used in wxOSX/Cocoa too (including
 // wxBase part of it).
@@ -46,6 +46,11 @@ wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from 
 WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
+
+// keycode utils from app.cpp
+
+WXDLLIMPEXP_BASE CGKeyCode wxCharCodeWXToOSX(wxKeyCode code);
+WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
 
@@ -193,13 +198,15 @@ protected :
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
 {
 public :
-    wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false );
+    wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false, bool isUserPane = false );
     wxWidgetImpl();
     virtual ~wxWidgetImpl();
 
     void Init();
 
     bool                IsRootControl() const { return m_isRootControl; }
+    
+    bool                IsUserPane() const { return m_isUserPane; }
 
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
@@ -520,6 +527,7 @@ public :
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
 protected :
     bool                m_isRootControl;
+    bool                m_isUserPane;
     wxWindowMac*        m_wxPeer;
     bool                m_needsFocusRect;
     bool                m_needsFrame;
@@ -853,6 +861,12 @@ public :
     virtual void SetModified(bool WXUNUSED(modified)) { }
     virtual bool IsModified() const { return false; }
 
+#if wxOSX_USE_IPHONE
+    virtual CGFloat GetWindowLevel() const { return 0.0; }
+#else
+    virtual CGWindowLevel GetWindowLevel() const { return kCGNormalWindowLevel; }
+#endif
+    virtual void RestoreWindowLevel() {}
 protected :
     wxNonOwnedWindow*   m_wxPeer;
     DECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl)

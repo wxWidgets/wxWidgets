@@ -34,7 +34,7 @@
     { \
         int ind; \
         wxIcon icon = wxArtProvider::GetIcon(id, client, size); \
-        if ( icon.Ok() ) \
+        if ( icon.IsOk() ) \
             ind = images->Add(icon); \
         else \
             ind = 0; \

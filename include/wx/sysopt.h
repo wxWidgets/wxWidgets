@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sysopt.h
+// Name:        wx/sysopt.h
 // Purpose:     wxSystemOptions
 // Author:      Julian Smart
 // Modified by:

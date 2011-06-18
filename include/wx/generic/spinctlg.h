@@ -82,6 +82,9 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool Reparent(wxWindowBase *newParent);
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip(wxToolTip *tip);
+#endif // wxUSE_TOOLTIPS
 
     // get the subcontrols
     wxTextCtrl   *GetText() const       { return m_textCtrl; }
@@ -89,7 +92,7 @@ public:
 
     // forwarded events from children windows
     void OnSpinButton(wxSpinEvent& event);
-    void OnTextLostFocus();
+    void OnTextLostFocus(wxFocusEvent& event);
     void OnTextChar(wxKeyEvent& event);
 
     // this window itself is used only as a container for its sub windows so it
@@ -145,6 +148,8 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    DECLARE_EVENT_TABLE()
 };
 
 #else // !wxUSE_SPINBTN

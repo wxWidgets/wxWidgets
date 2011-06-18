@@ -3,7 +3,7 @@
 // Purpose:     Unit tests for wxWrapSizer
 // Author:      Catalin Raceanu
 // Created:     2010-10-23
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WrapSizerTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WrapSizerTestCase, "WrapSizerTestCase" );
 
 // ----------------------------------------------------------------------------

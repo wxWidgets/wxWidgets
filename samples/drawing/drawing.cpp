@@ -419,7 +419,22 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxRED, wxCROSSDIAG_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Hatched red"), x + 10, y + 10);
+    dc.DrawText(wxT("Diagonally hatched red"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxBLUE, wxCROSS_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Cross hatched blue"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxCYAN, wxVERTICAL_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Vertically hatched cyan"), x + 10, y + 10);
+
+    y += HEIGHT;
+    dc.SetBrush(wxBrush(*wxBLACK, wxHORIZONTAL_HATCH));
+    dc.DrawRectangle(x, y, WIDTH, HEIGHT);
+    dc.DrawText(wxT("Horizontally hatched black"), x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*gs_bmpMask));
@@ -565,7 +580,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     // rectangle above)
     //dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
-    if (m_smile_bmp.Ok())
+    if (m_smile_bmp.IsOk())
         dc.DrawBitmap(m_smile_bmp, x + rectSize - 20, rectSize - 10, true);
 
     dc.SetBrush( *wxBLACK_BRUSH );
@@ -1453,7 +1468,7 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     dc.SetBrush( *wxGREY_BRUSH );
     dc.DrawRectangle( x, y, 310, 310 );
 
-    if (m_smile_bmp.Ok())
+    if (m_smile_bmp.IsOk())
     {
         dc.DrawBitmap( m_smile_bmp, x + 150, y + 150, true );
         dc.DrawBitmap( m_smile_bmp, x + 130, y + 10,  true );
@@ -1488,15 +1503,15 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     m_owner->PrepareDC(dc);
 
     dc.SetBackgroundMode( m_owner->m_backgroundMode );
-    if ( m_owner->m_backgroundBrush.Ok() )
+    if ( m_owner->m_backgroundBrush.IsOk() )
         dc.SetBackground( m_owner->m_backgroundBrush );
-    if ( m_owner->m_colourForeground.Ok() )
+    if ( m_owner->m_colourForeground.IsOk() )
         dc.SetTextForeground( m_owner->m_colourForeground );
-    if ( m_owner->m_colourBackground.Ok() )
+    if ( m_owner->m_colourBackground.IsOk() )
         dc.SetTextBackground( m_owner->m_colourBackground );
 
     if ( m_owner->m_textureBackground) {
-        if ( ! m_owner->m_backgroundBrush.Ok() ) {
+        if ( ! m_owner->m_backgroundBrush.IsOk() ) {
             wxColour clr(0,128,0);
             wxBrush b(clr, wxSOLID);
             dc.SetBackground(b);
@@ -1650,15 +1665,15 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
         m_overlay.Reset();
         m_rubberBand = false;
 
-        int x,y,xx,yy ;
-        event.GetPosition(&x,&y);
-        CalcUnscrolledPosition( x, y, &xx, &yy );
+        wxPoint endpoint = CalcUnscrolledPosition(event.GetPosition());
 
-        wxString str;
-        str.Printf( wxT("Rectangle selection from %d,%d to %d,%d"),
-            m_anchorpoint.x, m_anchorpoint.y , (int)xx, (int)yy );
-        wxMessageBox( str , wxT("Rubber-Banding") );
-
+        // Don't pop up the message box if nothing was actually selected.
+        if ( endpoint != m_anchorpoint )
+        {
+            wxLogMessage("Selected rectangle from (%d, %d) to (%d, %d)",
+                         m_anchorpoint.x, m_anchorpoint.y,
+                         endpoint.x, endpoint.y);
+        }
     }
 }
 
@@ -1901,7 +1916,7 @@ void MyFrame::OnOption(wxCommandEvent& event)
         case Colour_Background:
             {
                 wxColour col = SelectColour();
-                if ( col.Ok() )
+                if ( col.IsOk() )
                 {
                     m_backgroundBrush.SetColour(col);
                 }

@@ -24,9 +24,11 @@ public:
     virtual void AfterChildWaitLoop(void *data);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
-#endif
+#endif // wxUSE_TIMER
+#if wxUSE_THREADS
     virtual bool DoMessageFromThreadWait();
-    virtual WXDWORD WaitForThread(WXHANDLE hThread);
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
+#endif // wxUSE_THREADS
 #ifndef __WXWINCE__
     virtual bool CanUseStderr() { return true; }
     virtual bool WriteToStderr(const wxString& text);
@@ -43,10 +45,12 @@ public:
     virtual void AfterChildWaitLoop(void *data);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
-#endif
+#endif // wxUSE_TIMER
+#if wxUSE_THREADS
     virtual bool DoMessageFromThreadWait();
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
+#endif // wxUSE_THREADS
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
-    virtual WXDWORD WaitForThread(WXHANDLE hThread);
 
 #ifndef __WXWINCE__
     virtual bool CanUseStderr();

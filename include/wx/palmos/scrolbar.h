@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/palmos/scrollbar.h
+// Name:        wx/palmos/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:

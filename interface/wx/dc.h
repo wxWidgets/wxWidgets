@@ -113,7 +113,7 @@ struct wxFontMetrics
     wxWidgets offers an alternative drawing API based on the modern drawing
     backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
     and related classes. There is also a wxGCDC linking the APIs by offering
-    the wxDC API ontop of a wxGraphicsContext.
+    the wxDC API on top of a wxGraphicsContext.
 
     wxDC is an abstract base class and cannot be created directly.
     Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
@@ -143,7 +143,7 @@ struct wxFontMetrics
     a device unit is a @e pixel. For a printer, the device unit is defined by the
     resolution of the printer (usually given in @c DPI: dot-per-inch).
 
-    All wxDC functions use instead @b logical units, unless where explicitely
+    All wxDC functions use instead @b logical units, unless where explicitly
     stated. Logical units are arbitrary units mapped to device units using
     the current mapping mode (see wxDC::SetMapMode).
 
@@ -153,9 +153,25 @@ struct wxFontMetrics
 
     @section dc_alpha_support Support for Transparency / Alpha Channel
 
-    On Mac OS X colours with alpha channel are supported. Instances of wxPen
-    or wxBrush that are built from wxColour use the colour's alpha values
-    when stroking or filling.
+    In general wxDC methods don't support alpha transparency and the alpha
+    component of wxColour is simply ignored and you need to use wxGraphicsContext
+    for full transparency support. There are, however, a few exceptions: first,
+    under Mac OS X colours with alpha channel are supported in all the normal
+    wxDC-derived classes as they use wxGraphicsContext internally. Second,
+    under all platforms wxSVGFileDC also fully supports alpha channel. In both
+    of these cases the instances of wxPen or wxBrush that are built from
+    wxColour use the colour's alpha values when stroking or filling.
+
+
+    @section Support for Transformation Matrix
+
+    On some platforms (currently only under MSW and only on Windows NT, i.e.
+    not Windows 9x/ME, systems) wxDC has support for applying an arbitrary
+    affine transformation matrix to its coordinate system. Call
+    CanUseTransformMatrix() to check if this support is available and then call
+    SetTransformMatrix() if it is. If the transformation matrix is not
+    supported, SetTransformMatrix() always simply returns false and doesn't do
+    anything.
 
 
     @library{wxcore}
@@ -1494,6 +1510,58 @@ public:
         'zooming'.
     */
     void SetUserScale(double xScale, double yScale);
+
+
+    /**
+        @name Transformation matrix
+
+        See the notes about the availability of these functions in the class
+        documentation.
+    */
+    //@{
+
+    /**
+        Check if the use of transformation matrix is supported by the current
+        system.
+
+        Currently this function always returns @false for non-MSW platforms and
+        may return @false for old (Windows 9x/ME) Windows systems. Normally
+        support for the transformation matrix is always available in any
+        relatively recent Windows versions.
+
+        @since 2.9.2
+    */
+    bool CanUseTransformMatrix() const;
+
+    /**
+        Set the transformation matrix.
+
+        If transformation matrix is supported on the current system, the
+        specified @a matrix will be used to transform between wxDC and physical
+        coordinates. Otherwise the function returns @false and doesn't change
+        the coordinate mapping.
+
+        @since 2.9.2
+    */
+    bool SetTransformMatrix(const wxAffineMatrix2D& matrix);
+
+    /**
+        Return the transformation matrix used by this device context.
+
+        By default the transformation matrix is the identity matrix.
+
+        @since 2.9.2
+    */
+    wxAffineMatrix2D GetTransformMatrix() const;
+
+    /**
+        Revert the transformation matrix to identity matrix.
+
+        @since 2.9.2
+    */
+    void ResetTransformMatrix();
+
+    //@}
 };
 
 

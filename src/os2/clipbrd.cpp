@@ -68,7 +68,7 @@ bool wxOpenClipboard()
     }
     else
     {
-        wxLogDebug(wxT("Can not open clipboard without a main window."));
+        wxLogDebug(wxT("Cannot open clipboard without a main window."));
 
         return false;
     }

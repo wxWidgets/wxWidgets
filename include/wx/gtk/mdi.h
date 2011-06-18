@@ -120,7 +120,6 @@ public:
     void OnMenuHighlight( wxMenuEvent& event );
 
     wxMenuBar         *m_menuBar;
-    GtkNotebookPage   *m_page;
     bool               m_justInserted;
 
 private:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagpnm.h
+// Name:        wx/imagpnm.h
 // Purpose:     wxImage PNM handler
 // Author:      Sylvain Bougnoux
 // RCS-ID:      $Id$

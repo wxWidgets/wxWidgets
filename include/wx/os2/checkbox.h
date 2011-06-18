@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.h
+// Name:        wx/os2/checkbox.h
 // Purpose:     wxCheckBox class
 // Author:      David Webster
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.h
+// Name:        wx/os2/clipbrd.h
 // Purpose:     Clipboard functionality.
 //              Note: this functionality is under review, and
 //              is derived from wxWidgets 1.xx code. Please contact

@@ -206,6 +206,7 @@ wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
 
 // Character input event type
 wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_AFTER_CHAR, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent );
 wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent );
@@ -471,6 +472,13 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     if (win &&
        (GetMode() == wxUPDATE_UI_PROCESS_SPECIFIED &&
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_UI_UPDATES) == 0)))
+        return false;
+
+    // Don't update children of the hidden windows: this is useless as any
+    // change to their state won't be seen by the user anyhow. Notice that this
+    // argument doesn't apply to the hidden windows (with visible parent)
+    // themselves as they could be shown by their EVT_UPDATE_UI handler.
+    if ( win->GetParent() && !win->GetParent()->IsShownOnScreen() )
         return false;
 
     if (sm_updateInterval == -1)
@@ -959,7 +967,7 @@ void wxEventHashTable::InitHashTable()
         table = table->baseTable;
     }
 
-    // Lets free some memory.
+    // Let's free some memory.
     size_t i;
     for(i = 0; i < m_size; i++)
     {

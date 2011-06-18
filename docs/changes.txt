@@ -188,6 +188,17 @@ Changes in behaviour not resulting in compilation errors, please read this!
   StartDrag() virtual methods changed.  You will need to change them in your
   derived renderer class too if you override them.
 
+- wxThread::Wait() and wxThread::Delete() used to dispatch the events while
+  waiting for the thread to exit in wxMSW. They still do it in default build
+  with WXWIN_COMPATIBILITY_2_8 defined but won't dispatch any events, i.e. the
+  default wait mode will become wxTHREAD_WAIT_BLOCK in the next wxWidgets
+  release so you are strongly encouraged to upgrade your code to stop relying
+  on this behaviour.
+
+- wxEVT_CHAR_HOOK events are not generated any more if the mouse is captured to
+  prevent the parent wxTopLevelWindow from interfering with the keyboard
+  handling of the window that captured the mouse.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -255,7 +266,7 @@ Changes in behaviour which may result in compilation errors
 
 - Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8
+- Functions that took wxChar* arguments that could be NULL in wxWidgets 2.8
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
 
@@ -310,7 +321,7 @@ Changes in behaviour which may result in compilation errors
   without enclosing parentheses results in warnings from g++ with -Wparentheses,
   add parentheses around the if statement body to work around it.
 
-- wxList::Member() now returns book and not a pointer/iterator. This shouldn't
+- wxList::Member() now returns bool and not a pointer/iterator. This shouldn't
   require any changes as it was always meant to be used for checking for the
   presence of an element in the list only. If you used it as Find(), simple do
   use Find() instead.
@@ -428,6 +439,8 @@ Major new features in this release
 
 All:
 
+- Use standard implementations of container classes by default, you need to
+  explicitly set wxUSE_STD_CONTAINERS to 0 to use wxWidgets implementations.
 - Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
@@ -438,6 +451,10 @@ All:
 - Added wxIntegerValidator<> and wxFloatingPointValidator<> validators.
 - Added wxIMAGE_OPTION_GIF_COMMENT to read and write GIF comments (troelsk).
 - Added wxStack<> template class.
+- Added precision parameter to wxString::From[C]Double().
+- Added wxThread::Wait() and Delete() "wait mode" parameter (Catalin Raceanu).
+- Allow showing milliseconds in wxLog time stamps (tan).
+- Added support for processing instructions in wxXmlDocument (Nick Matthews).
 
 Unix:
 
@@ -449,8 +466,11 @@ All (GUI):
 - Added wxRichMessageDialog (Rickard Westerlund, GSoC 2010 project).
 - Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
+- Added support for dynamic auto-completion in wxTextEntry.
+- Added images support to wxToggleButton (Garrick Meeker).
 - wxAUI: support auto-orientable toolbars (wsu).
 - wxAUI: add support for icons in pane title bars (triton).
+- Added wxPanel::SetBackgroundBitmap().
 - Added wxDataViewCtrl::Set/GetCurrentItem().
 - Added possibility to disable individual wxDataViewCtrl items (Neno Ganchev).
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
@@ -461,25 +481,42 @@ All (GUI):
 - Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
 - Fix display of right aligned columns in wxGenericListCtrl (jl).
 - Restore text drag-and-drop in wxSTC broken by Scintilla 2 update (Jens Lody).
-- Improve wxGTK print/page setup dialog (rafravago).
 - Add support for id ranges to XRC (David Hart).
 - Added wxToolbook XRC handler (Andrea Zanellato).
 - Added wxDocManager::FindTemplate() (troelsk).
 - Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
 - Fixed resizing columns in wxGrid when they were reordered.
+- Fixed keyboard navigation when wxGrid columns are reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
 - Added support for saving TGA files.
 - Added wxArtProvider returning higher quality icons from Tango project.
 - wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
+- wxPropertyGrid: Disabling a property didn't work properly if a child item
+  was selected (Sébastien Gallou).
 - Added support for saving PNG files with palette (troelsk).
 - Added support for saving as GIF and animated GIF (troelsk).
 - Fix wxWrapSizer minimal size calculation (Catalin Raceanu).
 - Added wxFont::Underlined() and MakeUnderlined() methods.
 - Added wxFont::SetSymbolicSize() and related methods.
+- Fix SVG files generation in locales using decimal comma (snowleopard).
+- Fix setting tooltips for generic wxSpinCtrl (Catalin Raceanu).
+- Added support for reading image resolutions from PNG images (scottb).
+- wxComboCtrl, wxOwnerDrawnComboBox: better support for themed and custom
+  panel backgrounds, especially on OS X.
+- Add WXK_CONTROL_A..WXK_CONTROL_Z constants (Jan van Dijk).
+- Add support for alpha channel in colours in wxSVGFileDC (snowleopard).
+- Allow customizing AUI tab colours in wxAuiTabArt (snowleopard).
+- Added wxAffineMatrix2D class (Catalin Raceanu).
+- Allow showing preview frame non modally (John Roberts).
+- Improve appearance of the generic wxHyperlinkCtrl (David Connet).
 
 GTK:
 
+- Improve print/page setup dialog (rafravago).
 - Switch to GtkTooltip from deprecated GtkTooltips (Emilien Kia).
+- wxTLW generates wxEVT_MAXIMIZE.
+- Fix copying clipboard data to primary selection (David Hart).
+- Implement wxGraphicsContext::GetSize() (Marcin Wojdyr).
 
 MSW:
 
@@ -490,9 +527,12 @@ MSW:
 - Fix wxBitmapButton best size determination broken in 2.9.1.
 - Center task dialog-based wxProgressDialog on the parent (John Roberts).
 - wxAutomationObject::GetInstance() creates objects on demand (Kolya Kosenko).
+- Fix EVT_UPDATE_UI generation for items in submenus (wsu).
+- Added support for world transformation matrix to wxDC (Catalin Raceanu).
 
 OSX:
 
+- Implement auto-completion support in wxTextEntry.
 - Implement switching to default video mode in wxDisplay (soren).
 
 
@@ -592,7 +632,7 @@ All (GUI):
   dismissed immediately as text control grabbed the focus).
 - wxPropertyGrid: added wxPG_EX_MULTIPLE_SELECTION.
 - wxPropertyGrid: added functions for editing property labels.
-- wxPropertyGrid: many fixes to property validation failure behavior. Added
+- wxPropertyGrid: many fixes to property validation failure behaviour. Added
   new flags: wxPG_VFB_SHOW_MESSAGEBOX and wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR.
 - wxPropertyGrid: Added wxPropertyGrid::DedicateKey().
 - wxPropertyGrid: wxArrayStringProperty now uses wxEditableListBox.
@@ -919,7 +959,7 @@ wxMSW:
 - Fix centering wxFileDialog and allow positioning it.
 - Allow centering wxMessageDialog on its parent window (troelsk).
 - Use vertical scrollbar in wxMessageDialog if it's too big to fit on screen.
-- Show resize gripper on resizeable dialogs (Kolya Kosenko).
+- Show resize gripper on resizable dialogs (Kolya Kosenko).
 - Implement support for display enumeration under WinCE (Vince Harron).
 - Use different Win32 class names in different wx instances (Thomas Hauk).
 - Support multiline labels for wxCheckBox and wxToggleButton.
@@ -1691,7 +1731,7 @@ All (GUI):
 - Fixed centering of top level windows on secondary displays.
 - Implemented wxDisplay::GetFromWindow() for platforms other than MSW.
 - UpdateUI handler can now show/hide the window too (Ronald Weiss).
-- More than one filter allowed in in wxDocTemplate filter.
+- More than one filter allowed in wxDocTemplate filter.
 - Added wxListBox::HitTest().
 - Added wxDisplay::GetClientArea().
 - Indices and counts in wxControlWithItems derived API are unsigned.
@@ -2223,7 +2263,7 @@ All:
 - Unicode support in wxODBC is now fully implemented
 - A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
   SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent
-  behavior between Unicode and non-unicode builds
+  behaviour between Unicode and non-unicode builds
 - BLOB example added to samples/db (thanks to Casey O'Donnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
 - wxGetOsDescription() is now more precise (Olly Betts)
@@ -2370,7 +2410,7 @@ All:
 - sped up wxHTTP and wxFTP
 - added wxStringInput/OutputStreams
 - added wxFileConfig::Save(wxOutputStream)
-- fixed wxString's behavior with inserted null characters
+- fixed wxString's behaviour with inserted null characters
 
 All (GUI):
 
@@ -2636,7 +2676,7 @@ wxMSW:
 - several fixes to owner drawn menu items (Christian Sturmlechner)
 - wxGauge now supports full 32 bit range (Miroslav Rajcic)
 - make it possible to give focus to the notebook tabs (Hajo Kirchhoff)
-- MDI child frames are not always resizeable any more (Andrei Fortuna)
+- MDI child frames are not always resizable any more (Andrei Fortuna)
 - fixed enumerating of entries/groups under '/' in wxRegConfig
 - added wxSYS_ICONTITLE_FONT (Andreas Pflug)
 - added wxPATH_NORM_SHORTCUT to wxFileName
@@ -2743,7 +2783,7 @@ All GUI ports:
 - added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames
 - added wxSplitterWindow and wxWizard handlers to XRC
-- wxWizard is now sizer-friendly and may be made resizeable (Robert Vazan)
+- wxWizard is now sizer-friendly and may be made resizable (Robert Vazan)
 - added proportion to wxFlexGridSizer::AddGrowableRow/Col (Maxim Babitski)
 - added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
@@ -3504,7 +3544,7 @@ wxMSW:
 - wxFileDialog: adjusts struct size if there's an error (struct
   sizes can be different on different versions of Windows)
 - wxImageList::GetSize() documented and added to wxMSW
-- fixed default dialog style to make them non resizeable again
+- fixed default dialog style to make them non resizable again
 - fixed wxFrame::IsShown() which always returned TRUE before
 
 wxGTK:

@@ -88,7 +88,7 @@ public:
     wxRichTextFormattingDialogFactory() {}
     virtual ~wxRichTextFormattingDialogFactory() {}
 
-// Overrideables
+// Overridables
 
     /// Create all pages, under the dialog's book control, also calling AddPage
     virtual bool CreatePages(long pages, wxRichTextFormattingDialog* dialog);

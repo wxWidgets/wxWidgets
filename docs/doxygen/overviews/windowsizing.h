@@ -43,7 +43,7 @@ some simple explanations of things.
     the minimal size.
 
 @li @b "Maximum Size": just like for the minimal size, the maximum size is normally
-    explicitely set by the programmer with the wxWindow::SetMaxSize() method or
+    explicitly set by the programmer with the wxWindow::SetMaxSize() method or
     with wxWindow::SetSizeHints().
     Top-level windows such as wxFrame will not allow the user to resize the frame above
     the maximum size.

@@ -6,7 +6,7 @@
 // Created:     03/06/2007 14:49:55
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Francesco Montorsi
-// Licence:     wxWidgets license
+// Licence:     wxWindows licence
 ////////////////////////////////////////////////////
 
 #ifndef _CLASSLIST_H_
@@ -44,7 +44,7 @@
 
 class ClassListDialog: public wxDialog
 {    
-    // we explicitely don't want to use the following macro:
+    // we explicitly don't want to use the following macro:
     //     DECLARE_DYNAMIC_CLASS( ClassListDialog )
     // as otherwise the ClassListDialog class would appear in the list
     // shown by this dialog!

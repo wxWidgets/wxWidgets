@@ -43,8 +43,6 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void GetSelection(long *from, long *to) const;
 
-    virtual bool AutoComplete(const wxArrayString& choices);
-
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 
@@ -59,6 +57,8 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
+
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices);
 
 private:
     // implement this to return the associated GtkEntry or another widget

@@ -43,7 +43,7 @@ struct colStruct
             // ('width' is the number, 'units' determines its meaning)
     int minWidth, maxWidth;
             // minimal/maximal column width. This is needed by HTML 4.0
-            // layouting algorithm and can be determined by trying to
+            // layout algorithm and can be determined by trying to
             // layout table cells with width=1 and width=infinity
     int leftpos, pixwidth, maxrealwidth;
             // temporary (depends on actual width of table)
@@ -135,7 +135,7 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
     if (tag.HasParam(wxT("BGCOLOR")))
     {
         tag.GetParamAsColour(wxT("BGCOLOR"), &m_tBkg);
-        if (m_tBkg.Ok())
+        if (m_tBkg.IsOk())
             SetBackgroundColour(m_tBkg);
     }
     if (tag.HasParam(wxT("VALIGN")))
@@ -344,7 +344,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         wxColour bk = m_rBkg;
         if (tag.HasParam(wxT("BGCOLOR")))
             tag.GetParamAsColour(wxT("BGCOLOR"), &bk);
-        if (bk.Ok())
+        if (bk.IsOk())
             cell->SetBackgroundColour(bk);
     }
     if (m_Border > 0)
@@ -460,7 +460,7 @@ void wxHtmlTableCell::Layout(int w)
 
     /*
 
-    LAYOUTING :
+    LAYOUT :
 
     */
 

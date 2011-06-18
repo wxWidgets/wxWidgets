@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.h
+// Name:        wx/mgl/dcscreen.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$

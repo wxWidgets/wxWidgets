@@ -134,7 +134,8 @@ protected:
 #if wxUSE_MARKUP
                *m_chkUseMarkup,
 #endif // wxUSE_MARKUP
-               *m_chkDefault;
+               *m_chkDefault,
+               *m_chkUseBitmapClass;
 
     // more checkboxes for wxBitmapButton only
     wxCheckBox *m_chkUsePressed,
@@ -216,6 +217,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkUseMarkup =
 #endif // wxUSE_MARKUP
     m_chkDefault =
+    m_chkUseBitmapClass =
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
@@ -251,6 +253,10 @@ void ButtonWidgetsPage::CreateContent()
     m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup");
 #endif // wxUSE_MARKUP
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Default"));
+
+    m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
+        "Use wxBitmapButton");
+    m_chkUseBitmapClass->SetValue(true);
 
     sizerLeft->AddSpacer(5);
 
@@ -363,6 +369,7 @@ void ButtonWidgetsPage::Reset()
 #if wxUSE_MARKUP
     m_chkUseMarkup->SetValue(false);
 #endif // wxUSE_MARKUP
+    m_chkUseBitmapClass->SetValue(true);
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -449,8 +456,17 @@ void ButtonWidgetsPage::CreateButton()
     {
         showsBitmap = true;
 
-        wxBitmapButton *bbtn = new wxBitmapButton(this, ButtonPage_Button,
-                                                  CreateBitmap(wxT("normal")));
+        wxButton *bbtn;
+        if ( m_chkUseBitmapClass->GetValue() )
+        {
+          bbtn = new wxBitmapButton(this, ButtonPage_Button,
+                                    CreateBitmap(wxT("normal")));
+        }
+        else
+        {
+          bbtn = new wxButton(this, ButtonPage_Button);
+          bbtn->SetBitmapLabel(CreateBitmap(wxT("normal")));
+        }
         if ( m_chkUsePressed->GetValue() )
             bbtn->SetBitmapPressed(CreateBitmap(wxT("pushed")));
         if ( m_chkUseFocused->GetValue() )
@@ -497,18 +513,20 @@ void ButtonWidgetsPage::CreateButton()
             wxLEFT, wxRIGHT, wxTOP, wxBOTTOM
         };
 
-        m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION),
+        m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_BUTTON),
                             positions[m_radioImagePos->GetSelection()]);
 
         if ( m_chkUsePressed->GetValue() )
-            m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP));
+            m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP, wxART_BUTTON));
         if ( m_chkUseFocused->GetValue() )
-            m_button->SetBitmapFocus(wxArtProvider::GetIcon(wxART_ERROR));
+            m_button->SetBitmapFocus(wxArtProvider::GetIcon(wxART_ERROR, wxART_BUTTON));
         if ( m_chkUseCurrent->GetValue() )
-            m_button->SetBitmapCurrent(wxArtProvider::GetIcon(wxART_WARNING));
+            m_button->SetBitmapCurrent(wxArtProvider::GetIcon(wxART_WARNING, wxART_BUTTON));
         if ( m_chkUseDisabled->GetValue() )
-            m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE));
+            m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE, wxART_BUTTON));
     }
+
+    m_chkUseBitmapClass->Enable(showsBitmap);
 
     m_chkUsePressed->Enable(showsBitmap);
     m_chkUseFocused->Enable(showsBitmap);

@@ -40,7 +40,7 @@ wxMemoryDC::~wxMemoryDC()
 
 void wxMemoryDC::DoSelect(const wxBitmap& bitmap)
 {
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         m_selected = bitmap;
         SetMGLDC(m_selected.CreateTmpDC(), TRUE);
@@ -49,7 +49,7 @@ void wxMemoryDC::DoSelect(const wxBitmap& bitmap)
 
 void wxMemoryDC::SetPen(const wxPen &pen)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( GetDepth() == 1 && *wxTRANSPARENT_PEN != pen )
     {
@@ -66,7 +66,7 @@ void wxMemoryDC::SetPen(const wxPen &pen)
 
 void wxMemoryDC::SetBrush(const wxBrush &brush)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( GetDepth() == 1 && *wxTRANSPARENT_BRUSH != brush )
     {
@@ -83,7 +83,7 @@ void wxMemoryDC::SetBrush(const wxBrush &brush)
 
 void wxMemoryDC::SetTextForeground(const wxColour &col)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( GetDepth() == 1 )
     {
@@ -100,7 +100,7 @@ void wxMemoryDC::SetTextForeground(const wxColour &col)
 
 void wxMemoryDC::SetTextBackground(const wxColour &col)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( GetDepth() == 1 )
     {

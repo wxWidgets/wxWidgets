@@ -3069,7 +3069,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
         }
-        else // not on row separator or it's not resizeable
+        else // not on row separator or it's not resizable
         {
             row = YToRow(y);
             if ( row >=0 &&
@@ -6918,7 +6918,7 @@ void wxGrid::SetCellHighlightPenWidth(int width)
         m_cellHighlightPenWidth = width;
 
         // Just redrawing the cell highlight is not enough since that won't
-        // make any visible change if the the thickness is getting smaller.
+        // make any visible change if the thickness is getting smaller.
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         if ( row == -1 || col == -1 || GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
@@ -6936,7 +6936,7 @@ void wxGrid::SetCellHighlightROPenWidth(int width)
         m_cellHighlightROPenWidth = width;
 
         // Just redrawing the cell highlight is not enough since that won't
-        // make any visible change if the the thickness is getting smaller.
+        // make any visible change if the thickness is getting smaller.
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         if ( row == -1 || col == -1 ||

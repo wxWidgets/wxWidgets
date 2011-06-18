@@ -15,6 +15,7 @@
 #include <gtk/gtk.h>
 
 #include "wx/gtk/private/string.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // pango_version_check symbol is quite recent ATM (4/2007)... so we
 // use our own wrapper which implements a smart trick.
@@ -51,13 +52,13 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
     // helper: use the encoding of the given font if it's valid
     inline wxCharBuffer wxConvertToGTK(const wxString& s, const wxFont& font)
     {
-        return wxConvertToGTK(s, font.Ok() ? font.GetEncoding()
+        return wxConvertToGTK(s, font.IsOk() ? font.GetEncoding()
                                            : wxFONTENCODING_SYSTEM);
     }
 
     inline wxCharBuffer wxConvertFromGTK(const wxString& s, const wxFont& font)
     {
-        return wxConvertFromGTK(s, font.Ok() ? font.GetEncoding()
+        return wxConvertFromGTK(s, font.IsOk() ? font.GetEncoding()
                                              : wxFONTENCODING_SYSTEM);
     }
 

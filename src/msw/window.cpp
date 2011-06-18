@@ -182,6 +182,13 @@
 extern wxMenu *wxCurrentPopupMenu;
 #endif
 
+#if wxUSE_UXTHEME
+// This is a hack used by the owner-drawn wxButton implementation to ensure
+// that the brush used for erasing its background is correctly aligned with the
+// control.
+wxWindowMSW *wxWindowBeingErased = NULL;
+#endif // wxUSE_UXTHEME
+
 namespace
 {
 
@@ -227,6 +234,15 @@ WX_DECLARE_HASH_MAP(wxWindow *, wxWindow *,
 EraseBgHooks gs_eraseBgHooks;
 
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
+// If this variable is strictly positive, EVT_CHAR_HOOK is not generated for
+// Escape key presses as it can't be intercepted because it's needed by some
+// currently shown window, e.g. IME entry.
+//
+// This is currently global as we allow using UI from the main thread only
+// anyhow but could be replaced with a thread-specific value in the future if
+// needed.
+int gs_modalEntryWindowCount = 0;
 
 } // anonymous namespace
 
@@ -822,7 +838,7 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     }
 
     // don't "overwrite" busy cursor
-    if ( m_cursor.Ok() && !wxIsBusy() )
+    if ( m_cursor.IsOk() && !wxIsBusy() )
     {
         // normally we should change the cursor only if it's over this window
         // but we should do it always if we capture the mouse currently
@@ -1771,6 +1787,15 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
+
+    // The size of the client window can't be negative but ::GetClientRect()
+    // can return negative size for an extremely small (1x1) window with
+    // borders so ensure that we correct it here as having negative sizes is
+    // completely unexpected.
+    if ( x && *x < 0 )
+        *x = 0;
+    if ( y && *y < 0 )
+        *y = 0;
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
@@ -2124,7 +2149,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *externalLeading,
                                   const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
+    wxASSERT_MSG( !fontToUse || fontToUse->IsOk(),
                     wxT("invalid font in GetTextExtent()") );
 
     HFONT hfontToUse;
@@ -2188,18 +2213,16 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
 
+    wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
-        wxPoint mouse = ScreenToClient(wxGetMousePosition());
-        x = mouse.x; y = mouse.y;
+        pt = wxGetMousePosition();
+    }
+    else
+    {
+        pt = ClientToScreen(wxPoint(x, y));
     }
 
-    HWND hWnd = GetHwnd();
-    HMENU hMenu = GetHmenuOf(menu);
-    POINT point;
-    point.x = x;
-    point.y = y;
-    ::ClientToScreen(hWnd, &point);
 #if defined(__WXWINCE__)
     static const UINT flags = 0;
 #else // !__WXWINCE__
@@ -2217,7 +2240,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     }
 #endif // __WXWINCE__/!__WXWINCE__
 
-    ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
+    ::TrackPopupMenu(GetHmenuOf(menu), flags, pt.x, pt.y, 0, GetHwnd(), NULL);
 
     // we need to do it right now as otherwise the events are never going to be
     // sent to wxCurrentPopupMenu from HandleCommand()
@@ -2239,10 +2262,23 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 
 WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    WXLRESULT rc;
     if ( m_oldWndProc )
-        return ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+        rc = ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
     else
-        return ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
+        rc = ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
+
+    // Special hack used by wxTextEntry auto-completion only: this event is
+    // sent after the normal keyboard processing so that its handler could use
+    // the updated contents of the text control, after taking the key that was
+    // pressed into account.
+    if ( nMsg == WM_CHAR )
+    {
+        wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
+        HandleWindowEvent(event);
+    }
+
+    return rc;
 }
 
 bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
@@ -3169,6 +3205,17 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             {
                 processed = HandleChar((WORD)wParam, lParam);
             }
+            break;
+
+        case WM_IME_STARTCOMPOSITION:
+            // IME popup needs Escape as it should undo the changes in its
+            // entry window instead of e.g. closing the dialog for which the
+            // IME is used (and losing all the changes in the IME window).
+            gs_modalEntryWindowCount++;
+            break;
+
+        case WM_IME_ENDCOMPOSITION:
+            gs_modalEntryWindowCount--;
             break;
 
 #if wxUSE_HOTKEY
@@ -4141,7 +4188,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             // m_cursor if the user code caught EVT_SET_CURSOR() and returned
             // nothing from it - this is a way to say that our cursor shouldn't
             // be used for this point
-            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() )
             {
                 hcursor = GetHcursorOf(m_cursor);
             }
@@ -4149,7 +4196,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
-                if ( cursor && cursor->Ok() )
+                if ( cursor && cursor->IsOk() )
                 {
                     hcursor = GetHcursorOf(*cursor);
                 }
@@ -4586,7 +4633,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // to.
             wxLogNull logNo; // suppress error if we couldn't load the bitmap
             wxBitmap stdColourBitmap(wxT("wxBITMAP_STD_COLOURS"));
-            if ( stdColourBitmap.Ok() )
+            if ( stdColourBitmap.IsOk() )
             {
                 // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
                 wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,
@@ -4864,9 +4911,30 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC),
-                                   wxWindowMSW * WXUNUSED(child))
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
 {
+    // Test for the custom background brush first.
+    WXHBRUSH hbrush = MSWGetCustomBgBrush();
+    if ( hbrush )
+    {
+        // We assume that this is either a stipple or hatched brush and not a
+        // solid one as otherwise it would have been enough to set the
+        // background colour and such brushes need to be positioned correctly
+        // in order to align when different windows are painted, so do it here.
+        RECT rc;
+        ::GetWindowRect(GetHwndOf(child), &rc);
+
+        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
+
+        if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
+        {
+            wxLogLastError(wxT("SetBrushOrgEx(bg brush)"));
+        }
+
+        return hbrush;
+    }
+
+    // Otherwise see if we have a custom background colour.
     if ( m_hasBgCol )
     {
         wxBrush *
@@ -4880,9 +4948,17 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC),
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
+    // Use the special wxWindowBeingErased variable if it is set as the child
+    // being erased.
+    wxWindowMSW * const child =
+#if wxUSE_UXTHEME
+                                wxWindowBeingErased ? wxWindowBeingErased :
+#endif
+                                this;
+
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, this);
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, child);
         if ( hBrush )
             return hBrush;
 
@@ -5619,11 +5695,12 @@ wxWindowMSW::CreateKeyEvent(wxEventType evType,
     return event;
 }
 
-// isASCII is true only when we're called from WM_CHAR handler and not from
-// WM_KEYDOWN one
-bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
+wxKeyEvent
+wxWindowMSW::CreateCharEvent(wxEventType evType,
+                             WXWPARAM wParam,
+                             WXLPARAM lParam) const
 {
-    wxKeyEvent event(wxEVT_CHAR);
+    wxKeyEvent event(evType);
     InitAnyKeyEvent(event, wParam, lParam);
 
 #if wxUSE_UNICODE
@@ -5667,6 +5744,14 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
         event.m_altDown = false;
     }
 
+    return event;
+}
+
+// isASCII is true only when we're called from WM_CHAR handler and not from
+// WM_KEYDOWN one
+bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxKeyEvent event(CreateCharEvent(wxEVT_CHAR, wParam, lParam));
     return HandleWindowEvent(event);
 }
 
@@ -6497,29 +6582,42 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     {
         wchar_t uc;
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
-        if ( id != WXK_NONE
-#if wxUSE_UNICODE
-                || static_cast<int>(uc) != WXK_NONE
-#endif // wxUSE_UNICODE
-                )
+
+        // Don't intercept keyboard entry (notably Escape) if a modal window
+        // (not managed by wx, e.g. IME one) is currently opened as more often
+        // than not it needs all the keys for itself.
+        //
+        // Also don't catch it if a window currently captures the mouse as
+        // Escape is normally used to release the mouse capture and if you
+        // really need to catch all the keys in the window that has mouse
+        // capture it can be easily done in its own EVT_CHAR handler as it is
+        // certain to have focus while it has the capture.
+        if ( !gs_modalEntryWindowCount && !::GetCapture() )
         {
-            const wxWindow * const win = wxGetActiveWindow();
-
-            wxKeyEvent event(wxEVT_CHAR_HOOK);
-            MSWInitAnyKeyEvent(event, wParam, lParam, win);
-
-            event.m_keyCode = id;
+            if ( id != WXK_NONE
 #if wxUSE_UNICODE
-            event.m_uniChar = uc;
+                    || static_cast<int>(uc) != WXK_NONE
+#endif // wxUSE_UNICODE
+                    )
+            {
+                const wxWindow * const win = wxGetActiveWindow();
+
+                wxKeyEvent event(wxEVT_CHAR_HOOK);
+                MSWInitAnyKeyEvent(event, wParam, lParam, win);
+
+                event.m_keyCode = id;
+#if wxUSE_UNICODE
+                event.m_uniChar = uc;
 #endif // wxUSE_UNICODE
 
-            wxEvtHandler * const handler = win ? win->GetEventHandler()
-                                               : wxTheApp;
+                wxEvtHandler * const handler = win ? win->GetEventHandler()
+                                                   : wxTheApp;
 
-            if ( handler && handler->ProcessEvent(event) )
-            {
-                // processed
-                return 1;
+                if ( handler && handler->ProcessEvent(event) )
+                {
+                    // processed
+                    return 1;
+                }
             }
         }
     }

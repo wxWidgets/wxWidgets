@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSBox.mm
+// Name:        src/cocoa/NSBox.mm
 // Purpose:     wxCocoaNSBox
 // Author:      David Elliott
 // Modified by:

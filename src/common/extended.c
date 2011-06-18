@@ -1,5 +1,5 @@
 /*****************************************************************************
-** Name:        extended.c
+** Name:        src/common/extended.c
 ** Purpose:     IEEE Extended<->Double routines to save floats to file
 ** Maintainer:  Ryan Norton
 ** Modified by:

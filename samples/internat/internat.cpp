@@ -398,7 +398,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
         str = wxGetTranslation(wxTRANSLATE("Bad luck! try again..."));
 
         // note also that if we want 'str' to contain a localized string
-        // we need to use wxGetTranslation explicitely as wxTRANSLATE just
+        // we need to use wxGetTranslation explicitly as wxTRANSLATE just
         // tells xgettext to extract the string but has no effect on the
         // runtime of the program!
     }

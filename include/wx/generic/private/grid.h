@@ -546,6 +546,11 @@ public:
     //     implemented for the lines
     virtual int GetLineAt(const wxGrid *grid, int pos) const = 0;
 
+    // Return the display position of the line with the given index.
+    //
+    // NB: As GetLineAt(), currently this is always identity for rows.
+    virtual int GetLinePos(const wxGrid *grid, int line) const = 0;
+
     // Return the index of the line just before the given one.
     virtual int GetLineBefore(const wxGrid* grid, int line) const = 0;
 
@@ -613,7 +618,9 @@ public:
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
         {  grid->SetDefaultRowSize(size, resizeExisting); }
 
-    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int line) const
+    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int pos) const
+        { return pos; } // TODO: implement row reordering
+    virtual int GetLinePos(const wxGrid * WXUNUSED(grid), int line) const
         { return line; } // TODO: implement row reordering
 
     virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const
@@ -677,8 +684,10 @@ public:
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
         {  grid->SetDefaultColSize(size, resizeExisting); }
 
-    virtual int GetLineAt(const wxGrid *grid, int line) const
-        { return grid->GetColAt(line); }
+    virtual int GetLineAt(const wxGrid *grid, int pos) const
+        { return grid->GetColAt(pos); }
+    virtual int GetLinePos(const wxGrid *grid, int line) const
+        { return grid->GetColPos(line); }
 
     virtual int GetLineBefore(const wxGrid* grid, int line) const
         { return grid->GetColAt(wxMax(0, grid->GetColPos(line) - 1)); }
@@ -691,7 +700,10 @@ public:
 
 // This class abstracts the difference between operations going forward
 // (down/right) and backward (up/left) and allows to use the same code for
-// functions which differ only in the direction of grid traversal
+// functions which differ only in the direction of grid traversal.
+//
+// Notice that all operations in this class work with display positions and not
+// internal indices which can be different if the columns were reordered.
 //
 // Like wxGridOperations it's an ABC with two concrete subclasses below. Unlike
 // it, this is a normal object and not just a function dispatch table and has a
@@ -720,6 +732,12 @@ public:
     // Find the line at the given distance, in pixels, away from this one
     // (this uses clipping, i.e. anything after the last line is counted as the
     // last one and anything before the first one as 0)
+    //
+    // TODO: Implementation of this method currently doesn't support column
+    //       reordering as it mixes up indices and positions. But this doesn't
+    //       really matter as it's only called for rows (Page Up/Down only work
+    //       vertically) and row reordering is not currently supported. We'd
+    //       need to fix it if this ever changes however.
     virtual int MoveByPixelDistance(int line, int distance) const = 0;
 
     // This class is never used polymorphically but give it a virtual dtor
@@ -727,6 +745,22 @@ public:
     virtual ~wxGridDirectionOperations() { }
 
 protected:
+    // Get the position of the row or column from the given coordinates pair.
+    //
+    // This is just a shortcut to avoid repeating m_oper and m_grid multiple
+    // times in the derived classes code.
+    int GetLinePos(const wxGridCellCoords& coords) const
+    {
+        return m_oper.GetLinePos(m_grid, m_oper.Select(coords));
+    }
+
+    // Get the index of the row or column from the position.
+    int GetLineAt(int pos) const
+    {
+        return m_oper.GetLineAt(m_grid, pos);
+    }
+
+
     wxGrid * const m_grid;
     const wxGridOperations& m_oper;
 };
@@ -743,14 +777,14 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) >= 0, "invalid row/column" );
 
-        return m_oper.Select(coords) == 0;
+        return GetLinePos(coords) == 0;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
         wxASSERT( !IsAtBoundary(coords) );
 
-        m_oper.Set(coords, m_oper.Select(coords) - 1);
+        m_oper.Set(coords, GetLineAt(GetLinePos(coords) - 1));
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const
@@ -773,14 +807,14 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) < m_numLines, "invalid row/column" );
 
-        return m_oper.Select(coords) == m_numLines - 1;
+        return GetLinePos(coords) == m_numLines - 1;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
         wxASSERT( !IsAtBoundary(coords) );
 
-        m_oper.Set(coords, m_oper.Select(coords) + 1);
+        m_oper.Set(coords, GetLineAt(GetLinePos(coords) + 1));
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const

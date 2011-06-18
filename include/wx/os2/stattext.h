@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.h
+// Name:        wx/os2/stattext.h
 // Purpose:     wxStaticText class
 // Author:      David Webster
 // Modified by:
@@ -46,7 +46,7 @@ public:
     virtual bool SetFont(const wxFont &rFont);
 
     //
-    // Overriden base class virtuals
+    // Overridden base class virtuals
     //
     virtual bool AcceptsFocus() const { return FALSE; }
 

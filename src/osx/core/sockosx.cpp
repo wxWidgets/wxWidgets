@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        osx/core/gsockosx.cpp
+// Name:        src/osx/core/gsockosx.cpp
 // Purpose:     wxSocketImpl implementation for OS X
 // Authors:     Brian Victor, Vadim Zeitlin
 // Created:     February 2002
@@ -141,7 +141,7 @@ private:
                 // KH: If data is non-NULL, the connect failed, do not call Detected_Write,
                 // which will only end up creating a spurious connect event because the
                 // call to getsocketopt SO_ERROR inexplicably returns no error.
-                // The change in behavior cannot be traced to any particular commit or
+                // The change in behaviour cannot be traced to any particular commit or
                 // timeframe so I'm not sure what to think, but after so many hours,
                 // this seems to address the issue and it's time to move on.
                 if (data == NULL)

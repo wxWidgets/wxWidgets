@@ -312,7 +312,7 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
         wxCHECK_RET( p != NULL, "pointer can't be NULL" )
 */
 
-// the generic macro: takes the condition to check, the statement to be execute
+// the generic macro: takes the condition to check, the statement to be executed
 // in case the condition is false and the message to pass to the assert handler
 #define wxCHECK2_MSG(cond, op, msg)                                       \
     if ( cond )                                                           \

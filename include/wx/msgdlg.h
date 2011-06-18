@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msgdlgg.h
+// Name:        wx/msgdlg.h
 // Purpose:     common header and base class for wxMessageDialog
 // Author:      Julian Smart
 // Modified by:

@@ -69,6 +69,7 @@ private:
         CPPUNIT_TEST( BitOperations );
         CPPUNIT_TEST( ToString );
         CPPUNIT_TEST( LoHi );
+        CPPUNIT_TEST( Limits );
     CPPUNIT_TEST_SUITE_END();
 
     void Conversion();
@@ -79,6 +80,7 @@ private:
     void BitOperations();
     void ToString();
     void LoHi();
+    void Limits();
 
     DECLARE_NO_COPY_CLASS(LongLongTestCase)
 };
@@ -86,7 +88,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( LongLongTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( LongLongTestCase, "LongLongTestCase" );
 
 LongLongTestCase::LongLongTestCase()
@@ -335,6 +337,21 @@ void LongLongTestCase::LoHi()
     wxULongLong ull(987, 654);
     CPPUNIT_ASSERT_EQUAL( 654u, ull.GetLo() );
     CPPUNIT_ASSERT_EQUAL( 987u, ull.GetHi() );
+}
+
+void LongLongTestCase::Limits()
+{
+    // VC6 doesn't specialize numeric_limits<> for __int64 so skip this test
+    // for it.
+#ifndef __VISUALC6__
+#if wxUSE_LONGLONG_NATIVE
+    CPPUNIT_ASSERT( std::numeric_limits<wxLongLong>::is_specialized );
+    CPPUNIT_ASSERT( std::numeric_limits<wxULongLong>::is_specialized );
+
+    wxULongLong maxval = std::numeric_limits<wxULongLong>::max();
+    CPPUNIT_ASSERT( maxval.ToDouble() > 0 );
+#endif // wxUSE_LONGLONG_NATIVE
+#endif // !__VISUALC6__
 }
 
 #endif // wxUSE_LONGLONG

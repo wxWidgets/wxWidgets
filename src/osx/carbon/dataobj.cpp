@@ -162,6 +162,10 @@ void wxDataFormat::SetId( NativeFormat format )
     {
         m_type = wxDF_UNICODETEXT;
     }
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-external-plain-text") )  )
+    {
+        m_type = wxDF_UNICODETEXT;
+    }
     else if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
     {
         m_type = wxDF_TEXT;
@@ -530,7 +534,7 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
 
                     if ( dataFormat == flavorFormat ||
-                        dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
+                        (dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT) )
                     {
                         hasData = true;
                     }
@@ -632,7 +636,7 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& rBitmap )
 {
     Init();
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         SetBitmap( rBitmap );
     }
@@ -647,7 +651,7 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 {
     Clear();
     wxBitmapDataObjectBase::SetBitmap( rBitmap );
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         CGImageRef cgImageRef = (CGImageRef) m_bitmap.CreateCGImage();
 
@@ -738,8 +742,8 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     if ( source )
     {
         cgImageRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
+        CFRelease( source );
     }
-    CFRelease( source );
     CFRelease( data );
 
     if ( cgImageRef )
@@ -752,7 +756,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
         cgImageRef = NULL;
     }
 
-    return m_bitmap.Ok();
+    return m_bitmap.IsOk();
 }
 
 #endif

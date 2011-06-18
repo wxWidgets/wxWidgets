@@ -5,7 +5,7 @@ INTRODUCTION
 ============
 
 The Motif Multi-Document Interface (MDI) is a collection of C++ classes
-that emulates the behavior of the Multi-Document Interface in Microsoft
+that emulates the behaviour of the Multi-Document Interface in Microsoft
 Windows.  The MDI framework allows a user to view multiple documents (windows)
 constrained to a single parent window.
 

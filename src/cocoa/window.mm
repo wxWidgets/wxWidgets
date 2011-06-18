@@ -357,9 +357,9 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 
 
 /*! @class WXManualScrollView
-    @abstract   An NSScrollView subclass which implements wx scroll behavior
+    @abstract   An NSScrollView subclass which implements wx scroll behaviour
     @discussion
-    Overrides default behavior of NSScrollView such that this class receives
+    Overrides default behaviour of NSScrollView such that this class receives
     the scroller action messages and allows the wxCocoaScrollView to act
     on them accordingly.  In particular, because the NSScrollView will not
     receive action messages from the scroller, it will not adjust the
@@ -735,7 +735,7 @@ int wxWindowCocoaScrollView::GetScrollPos(wxOrientation orient)
         position is at range-thumbsize.
 
         The range of an NSScroller is 0.0 to 1.0.  Much easier! NOTE: Apple doesn't really specify
-        but GNUStep docs do say that 0.0 is top/left and 1.0 is bottom/right.  This is actualy
+        but GNUStep docs do say that 0.0 is top/left and 1.0 is bottom/right.  This is actually
         in contrast to NSSlider which generally has 1.0 at the TOP when it's done vertically.
      */
     CGFloat cocoaScrollPos = [cocoaScroller floatValue];

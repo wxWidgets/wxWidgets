@@ -949,17 +949,17 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
     wxString name = def->GetName();
     wxString nameProp;
     if (!name.empty())
-        nameProp = wxT(" name=\"") + name + wxT("\"");
+        nameProp = wxT(" name=\"") + AttributeToXML(name) + wxT("\"");
 
     wxString baseStyle = def->GetBaseStyle();
     wxString baseStyleProp;
     if (!baseStyle.empty())
-        baseStyleProp = wxT(" basestyle=\"") + baseStyle + wxT("\"");
+        baseStyleProp = wxT(" basestyle=\"") + AttributeToXML(baseStyle) + wxT("\"");
 
     wxString descr = def->GetDescription();
     wxString descrProp;
     if (!descr.empty())
-        descrProp = wxT(" description=\"") + descr + wxT("\"");
+        descrProp = wxT(" description=\"") + AttributeToXML(descr) + wxT("\"");
 
     if (charDef)
     {
@@ -986,7 +986,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
         OutputIndentation(stream, level);
 
         if (!listDef->GetNextStyle().empty())
-            baseStyleProp << wxT(" nextstyle=\"") << listDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << AttributeToXML(listDef->GetNextStyle()) << wxT("\"");
 
         OutputString(stream, wxT("<liststyle") + nameProp + baseStyleProp + descrProp + wxT(">"));
 
@@ -1027,7 +1027,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
         OutputIndentation(stream, level);
 
         if (!paraDef->GetNextStyle().empty())
-            baseStyleProp << wxT(" nextstyle=\"") << paraDef->GetNextStyle() << wxT("\"");
+            baseStyleProp << wxT(" nextstyle=\"") << AttributeToXML(paraDef->GetNextStyle()) << wxT("\"");
 
         OutputString(stream, wxT("<paragraphstyle") + nameProp + baseStyleProp + descrProp + wxT(">"));
 
@@ -1076,10 +1076,10 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
 wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool isPara)
 {
     wxString str;
-    if (attr.HasTextColour() && attr.GetTextColour().Ok())
+    if (attr.HasTextColour() && attr.GetTextColour().IsOk())
         AddAttribute(str, wxT("textcolor"), attr.GetTextColour());
 
-    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().Ok())
+    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         AddAttribute(str, wxT("bgcolor"), attr.GetBackgroundColour());
 
     if (attr.HasFontSize())
@@ -1098,7 +1098,7 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
         AddAttribute(str, wxT("fontunderlined"), (int) attr.GetFontUnderlined());
 
     if (attr.HasFontFaceName())
-        AddAttribute(str, wxT("fontface"), attr.GetFontFaceName());
+        AddAttribute(str, wxT("fontface"), AttributeToXML(attr.GetFontFaceName()));
 
     if (attr.HasTextEffects())
     {
@@ -1107,7 +1107,7 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
     }
 
     if (!attr.GetCharacterStyleName().empty())
-        AddAttribute(str, wxT("characterstyle"), attr.GetCharacterStyleName());
+        AddAttribute(str, wxT("characterstyle"), AttributeToXML(attr.GetCharacterStyleName()));
 
     if (attr.HasURL())
         AddAttribute(str, wxT("url"), AttributeToXML(attr.GetURL()));
@@ -1148,19 +1148,19 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
             if (!attr.GetBulletText().empty() && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL))
                 AddAttribute(str, wxT("bulletsymbol"), (int) (attr.GetBulletText()[0]));
             else
-                AddAttribute(str, wxT("bullettext"), attr.GetBulletText());
+                AddAttribute(str, wxT("bullettext"), AttributeToXML(attr.GetBulletText()));
 
             AddAttribute(str, wxT("bulletfont"), attr.GetBulletFont());
         }
 
         if (attr.HasBulletName())
-            AddAttribute(str, wxT("bulletname"), attr.GetBulletName());
+            AddAttribute(str, wxT("bulletname"), AttributeToXML(attr.GetBulletName()));
 
         if (!attr.GetParagraphStyleName().empty())
-            AddAttribute(str, wxT("parstyle"), attr.GetParagraphStyleName());
+            AddAttribute(str, wxT("parstyle"), AttributeToXML(attr.GetParagraphStyleName()));
 
         if (!attr.GetListStyleName().empty())
-            AddAttribute(str, wxT("liststyle"), attr.GetListStyleName());
+            AddAttribute(str, wxT("liststyle"), AttributeToXML(attr.GetListStyleName()));
 
         if (attr.HasTabs())
         {
@@ -1371,9 +1371,9 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxXmlNode* parent, wxRichTextSt
 
 bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, bool isPara)
 {
-    if (attr.HasTextColour() && attr.GetTextColour().Ok())
+    if (attr.HasTextColour() && attr.GetTextColour().IsOk())
         node->AddAttribute(wxT("textcolor"), MakeString(attr.GetTextColour()));
-    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().Ok())
+    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         node->AddAttribute(wxT("bgcolor"), MakeString(attr.GetBackgroundColour()));
 
     if (attr.HasFontSize())
@@ -2381,7 +2381,7 @@ bool wxRichTextImage::ExportXML(wxOutputStream& stream, int indent, wxRichTextXM
 
     ::OutputIndentation(stream, indent);
     ::OutputString(stream, wxT("<image"), handler->GetConvMem(), handler->GetConvFile());
-    if (!GetImageBlock().Ok())
+    if (!GetImageBlock().IsOk())
     {
         // No data
         ::OutputString(stream, style + wxT(">"), handler->GetConvMem(), handler->GetConvFile());
@@ -2419,7 +2419,7 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
     wxXmlNode* elementNode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("image"));
     parent->AddChild(elementNode);
 
-    if (GetImageBlock().Ok())
+    if (GetImageBlock().IsOk())
         elementNode->AddAttribute(wxT("imagetype"), MakeString((int) GetImageBlock().GetImageType()));
 
     handler->AddAttributes(elementNode, GetAttributes(), false);

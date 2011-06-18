@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/crashrpt.cpp
+// Name:        src/msw/crashrpt.cpp
 // Purpose:     code to generate crash dumps (minidumps)
 // Author:      Vadim Zeitlin
 // Modified by:

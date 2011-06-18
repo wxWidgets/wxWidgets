@@ -1342,47 +1342,47 @@ msgstr ""
 
 #: ../src/os2/thread.cpp:117
 #, fuzzy
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "No se puede crear el mutex"
 
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Non se puido enumerar os ficheiros '%s'"
 
 #: ../src/unix/dir.cpp:228 ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Non se puido enumerar os ficheiros do directorio '%s'"
 
 #: ../src/os2/thread.cpp:526
 #, fuzzy, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "No se puede continuar el hilo de ejecución %lu"
 
 #: ../src/msw/thread.cpp:873
 #, fuzzy, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "No se puede continuar hilo de ejecución %x"
 
 #: ../src/msw/thread.cpp:526
 #, fuzzy
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "No se puede empezar el hilo de ejecución: error al escribir TLS."
 
 #: ../src/os2/thread.cpp:512
 #, fuzzy, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "No se puede suspender el hilo de ejecución %lu"
 
 #: ../src/msw/thread.cpp:858
 #, fuzzy, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "No se puede suspender el hilo de ejecución %x"
 
 #: ../src/msw/thread.cpp:781
 #, fuzzy
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "No se puede esperar a la finalización del hilo de ejecución"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5961,7 +5961,7 @@ msgstr ""
 #: ../src/msw/thread.cpp:1247
 #, fuzzy
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Error en la inicialización del módulo de hilos: no se puede almacenar valor "
@@ -7077,7 +7077,7 @@ msgstr "ligera"
 
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "Non se pode establecer locale '%s'."
 
 #: ../src/common/intl.cpp:1210

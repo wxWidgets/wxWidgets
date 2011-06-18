@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/choice.cpp
+// Name:        src/osx/choice_osx.cpp
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
 // Modified by:
@@ -65,20 +65,20 @@ bool wxChoice::Create(wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{
-    m_macIsUserPane = false;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxChoiceBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
     m_popUpMenu = new wxMenu();
     m_popUpMenu->SetNoEventsMode(true);
 
-    m_peer = wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     if ( style & wxCB_SORT )
         // autosort
         m_strings = wxArrayString( 1 );
@@ -109,7 +109,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
     {
         unsigned int idx;
 
-#if wxUSE_STL
+#if wxUSE_STD_CONTAINERS
         if ( IsSorted() )
         {
             wxArrayString::iterator
@@ -118,7 +118,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
             m_strings.insert( insertPoint, items[i] );
         }
         else
-#endif // wxUSE_STL
+#endif // wxUSE_STD_CONTAINERS
         {
             idx = pos;
             m_strings.Insert( items[i], idx );
@@ -132,7 +132,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         AssignNewItemClientData(idx, clientData, i, type);
     }
 
-    m_peer->SetMaximum( GetCount() );
+    GetPeer()->SetMaximum( GetCount() );
 
     return pos - 1;
 }
@@ -148,7 +148,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
-    m_peer->SetMaximum( GetCount() ) ;
+    GetPeer()->SetMaximum( GetCount() ) ;
 
 }
 
@@ -162,7 +162,7 @@ void wxChoice::DoClear()
     m_strings.Empty() ;
     m_datas.Empty() ;
 
-    m_peer->SetMaximum( 0 ) ;
+    GetPeer()->SetMaximum( 0 ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -170,12 +170,12 @@ void wxChoice::DoClear()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return m_peer->GetValue();
+    return GetPeer()->GetValue();
 }
 
 void wxChoice::SetSelection( int n )
 {
-    m_peer->SetValue( n );
+    GetPeer()->SetValue( n );
 }
 
 // ----------------------------------------------------------------------------
@@ -189,7 +189,7 @@ unsigned int wxChoice::GetCount() const
 
 int wxChoice::FindString( const wxString& s, bool bCase ) const
 {
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
     // Avoid assert for non-default args passed to sorted array Index
     if ( IsSorted() )
         bCase = true;

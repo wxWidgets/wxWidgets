@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.h
+// Name:        wx/os2/icon.h
 // Purpose:     wxIcon class
 // Author:      David Webster
 // Modified by:

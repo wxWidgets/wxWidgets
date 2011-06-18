@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/corefoundation/utilsexec_cf.cpp
+// Name:        src/osx/core/utilsexc_cf.cpp
 // Purpose:     Execution-related utilities for Darwin
 // Author:      David Elliott, Ryan Norton (wxMacExecute)
 // Modified by: Stefan Csomor (added necessary wxT for unicode builds)

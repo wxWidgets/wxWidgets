@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/srchctrl.cpp
+// Name:        src/osx/cocoa/srchctrl.mm
 // Purpose:     implements mac carbon wxSearchCtrl
 // Author:      Vince Harron
 // Created:     2006-02-19
-// RCS-ID:      $Id: srchctrl.cpp 54820 2008-07-29 20:04:11Z SC $
+// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     return self;
 }
  
@@ -59,6 +59,30 @@
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+}
+
+- (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
+ forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+{
+    NSMutableArray* matches = NULL;
+    NSString*       partialString;
+    
+    partialString = [[textView string] substringWithRange:charRange];
+    matches       = [NSMutableArray array];
+    
+    // wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxArrayString completions;
+    
+    // adapt to whatever strategy we have for getting the strings
+    // impl->GetTextEntry()->GetCompletions(wxCFStringRef::AsString(partialString), completions);
+    
+    for (size_t i = 0; i < completions.GetCount(); ++i )
+        [matches addObject: wxCFStringRef(completions[i]).AsNSString()];
+    
+    // [matches sortUsingSelector:@selector(compare:)];
+    
+    
+    return matches;
 }
 
 @end

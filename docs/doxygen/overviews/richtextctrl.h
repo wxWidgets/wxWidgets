@@ -17,6 +17,8 @@
 @li @ref overview_richtextctrl_styles
 @li @ref overview_richtextctrl_dialogs
 @li @ref overview_richtextctrl_impl
+@li @ref overview_richtextctrl_nested_object
+@li @ref overview_richtextctrl_context_menus
 @li @ref overview_richtextctrl_roadmap
 
 
@@ -58,7 +60,7 @@ editing, wxStyledTextCtrl is a better choice.
 
 Despite its name, it cannot currently read or write RTF (rich text format)
 files. Instead, it uses its own XML format, and can also read and write plain
-text. In future we expect to provide RTF file capabilities. Custom file formats
+text. In future we expect to provide RTF or OpenDocument file capabilities. Custom file formats
 can be supported by creating additional file handlers and registering them with
 the control.
 
@@ -250,7 +252,8 @@ between controls.
 
 @section overview_richtextctrl_styles Text Styles
 
-Styling attributes are represented by wxTextAttr.
+Styling attributes are represented by wxTextAttr, or for more control over
+attributes such as margins and size, the derived class wxRichTextAttr.
 
 When setting a style, the flags of the attribute object determine which
 attributes are applied. When querying a style, the passed flags are ignored
@@ -351,7 +354,8 @@ editing functionality.
 
 wxRichTextFormattingDialog can be used for character or paragraph formatting,
 or a combination of both. It's a wxPropertySheetDialog with the following
-available tabs: Font, Indents @& Spacing, Tabs, Bullets, Style, and List Style.
+available tabs: Font, Indents @& Spacing, Tabs, Bullets, Style, Borders,
+Margins, Background, Size, and List Style.
 You can select which pages will be shown by supplying flags to the dialog
 constructor. In a character formatting dialog, typically only the Font page
 will be shown. In a paragraph formatting dialog, you'll show the Indents @&
@@ -380,7 +384,7 @@ has one such buffer.
 
 The content is represented by a hierarchy of objects, all derived from
 wxRichTextObject. An object might be an image, a fragment of text, a paragraph,
-or a whole buffer. Objects store a wxTextAttr containing style information; a
+or a further composite object. Objects store a wxRichTextAttr containing style information; a
 paragraph object can contain both paragraph and character information, but
 content objects such as text can only store character information. The final
 style displayed in the control or in a printout is a combination of base style,
@@ -412,6 +416,54 @@ objects with the same style where just one would do. So a Defragment function
 is called when updating the control's display, to ensure that the minimum
 number of objects is used.
 
+@section overview_richtextctrl_nested_object Nested Objects
+
+wxRichTextCtrl supports nested objects such as text boxes and tables. To achieve
+compatibility with the existing API, there is the concept of @e object @e focus.
+When the user clicks on a nested text box, the object focus is set to that
+container object so all keyboard input and API functions apply to that
+container. The application can change the focus using wxRichTextCtrl::SetObjectFocus.
+Call this function with a @null parameter to set the focus back to the top-level
+object.
+
+An event will be sent to the control when the focus changes.
+
+When the user clicks on the control, wxRichTextCtrl determines which container to set
+as the current object focus by calling the found container's overrided wxRichTextObject::AcceptsFocus
+function. For example, although a table is a container, it must not itself be
+the object focus because there is no text editing at the table level. Instead, a cell
+within the table must accept the focus.
+
+Since with nested objects it is not possible to represent a section with merely
+a start position and an end position, the class wxRichTextSelection is provided
+which stores multiple ranges (for non-contiguous selections such as table cells) and
+a pointer to the container object in question. You can pass wxRichTextSelection
+to wxRichTextCtrl::SetSelection or get an instance of it from wxRichTextCtrl::GetSelection.
+
+When selecting multiple objects, such as cell tables, the wxRichTextCtrl dragging handler code calls the
+function wxRichTextObject::HandlesChildSelections to determine whether the children
+can be individual selections. Currently only table cells can be multiply-selected
+in this way.
+
+@section overview_richtextctrl_context_menus Context menus and property dialogs
+
+There are three ways you can make use of context menus: you can let wxRichTextCtrl handle everything and provide a basic menu;
+you can set your own context menu using wxRichTextCtrl::SetContextMenu but let wxRichTextCtrl handle showing it and adding property items;
+or you can override the default context menu behaviour by adding a context menu event handler
+to your class in the normal way.
+
+If you right-click over a text box in cell in a table, you may want to edit the properties of
+one of these objects - but which properties will you be editing?
+
+Well, the default behaviour allows up to three property-editing menu items simultaneously - for the object clicked on,
+the container of that object, and the container's parent (depending on whether any of these
+objects return @true from their wxRichTextObject::CanEditProperties functions).
+If you supply a context menu, add a property command item using the wxID_RICHTEXT_PROPERTIES1 identifier,
+so that wxRichTextCtrl can find the position to add command items. The object should
+tell the control what label to use by returning a string from wxRichTextObject::GetPropertiesMenuLabel.
+
+Since there may be several property-editing commands showing, it is recommended that you don't
+include the word Properties - just the name of the object, such as Text Box or Table.
 
 @section overview_richtextctrl_roadmap Development Roadmap
 
@@ -433,17 +485,17 @@ This is an incomplete list of bugs.
 This is a list of some of the features that have yet to be implemented. Help
 with them will be appreciated.
 
-@li RTF input and output
-@li Conversion from HTML
+@li support for composite objects in some functions where it's not yet implemented, for example ApplyStyleSheet
+@li Table API enhancements and dialogs; improved table layout especially row spans and fitting
+@li Conversion from HTML, and a rewrite of the HTML output handler that includes CSS,
+tables, text boxes, and floating images, in addition to a simplified-HTML mode for wxHTML compatibility
 @li Open Office input and output
-@li Floating images, with content wrapping around them
+@li RTF input and output
 @li A ruler control
 @li Standard editing toolbars
-@li Tables
 @li Bitmap bullets
-@li Borders
-@li Text frames
 @li Justified text, in print/preview at least
+@li scaling: either everything scaled, or rendering using a custom reference point size and an optional dimension scale
 
 There are also things that could be done to take advantage of the underlying
 text capabilities of the platform; higher-level text formatting APIs are

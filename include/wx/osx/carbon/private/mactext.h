@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mactext.h
+// Name:        wx/osx/carbon/private/mactext.h
 // Purpose:     private wxMacTextControl base class
 // Author:      Stefan Csomor
 // Modified by:

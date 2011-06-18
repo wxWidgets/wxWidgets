@@ -341,6 +341,20 @@ public:
     virtual void SetSelectedFont(const wxFont& font) = 0;
 
     /**
+        Sets the colour of the inactive tabs.
+
+        @since 2.9.2
+    */
+    virtual void SetColour(const wxColour& colour) = 0;
+
+    /**
+        Sets the colour of the selected tab.
+
+        @since 2.9.2
+    */
+    virtual void SetActiveColour(const wxColour& colour) = 0;
+
+    /**
         Sets sizing information.
     */
     virtual void SetSizingInfo(const wxSize& tab_ctrl_size, size_t tab_count) = 0;

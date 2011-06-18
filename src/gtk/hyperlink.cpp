@@ -123,6 +123,13 @@ wxSize wxHyperlinkCtrl::DoGetBestSize() const
     return wxGenericHyperlinkCtrl::DoGetBestSize();
 }
 
+wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
+{
+    if ( UseNative() )
+        return wxControl::DoGetBestClientSize();
+    return wxGenericHyperlinkCtrl::DoGetBestClientSize();
+}
+
 void wxHyperlinkCtrl::SetLabel(const wxString &label)
 {
     if ( UseNative() )

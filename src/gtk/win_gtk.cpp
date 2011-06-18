@@ -52,7 +52,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     int w = alloc->width - 2 * border_x;
     if (w < 0) w = 0;
 
-    if (GTK_WIDGET_REALIZED(widget) && (is_move || is_resize))
+    if (gtk_widget_get_realized(widget) && (is_move || is_resize))
     {
         int h = alloc->height - 2 * border_y;
         if (h < 0) h = 0;
@@ -76,7 +76,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     for (const GList* list = pizza->m_fixed.children; list; list = list->next)
     {
         const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
-        if (GTK_WIDGET_VISIBLE(child->widget))
+        if (gtk_widget_get_visible(child->widget))
         {
             GtkAllocation child_alloc;
             // note that child positions do not take border into
@@ -236,7 +236,11 @@ GtkWidget* wxPizza::New(long windowStyle)
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
     // mask off border styles not useable with wxPizza
     pizza->m_border_style = int(windowStyle & BORDER_STYLES);
+#if GTK_CHECK_VERSION(3,0,0) || defined(GTK_DISABLE_DEPRECATED)
+    gtk_widget_set_has_window(widget, true);
+#else
     gtk_fixed_set_has_window(GTK_FIXED(widget), true);
+#endif
     gtk_widget_add_events(widget,
         GDK_EXPOSURE_MASK |
         GDK_SCROLL_MASK |

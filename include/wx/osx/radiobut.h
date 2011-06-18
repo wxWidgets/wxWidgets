@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.h
+// Name:        wx/osx/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      Stefan Csomor
 // Modified by:

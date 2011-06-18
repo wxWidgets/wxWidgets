@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/osx/app.h
 // Purpose:     wxApp class
 // Author:      Stefan Csomor
 // Modified by:

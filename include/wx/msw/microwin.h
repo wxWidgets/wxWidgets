@@ -1,6 +1,6 @@
 /*
 /////////////////////////////////////////////////////////////////////////////
-// Name:        microwin.h
+// Name:        wx/msw/microwin.h
 // Purpose:     Extra implementation for MicroWindows
 // Author:      Julian Smart
 // Created:     2001-05-31

@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: menuitem.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,8 +74,8 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 - (id) initWithTitle:(NSString *)aString action:(SEL)aSelector keyEquivalent:(NSString *)charCode
 {
-    [super initWithTitle:aString action:aSelector keyEquivalent:charCode];
-     return self;
+    self = [super initWithTitle:aString action:aSelector keyEquivalent:charCode];
+    return self;
 }
 
 - (void) clickedAction: (id) sender
@@ -100,8 +100,12 @@ SEL wxOSXGetSelectorFromID(int menuId )
     wxUnusedVar(menuItem);
     if( impl )
     {
-        if ( impl->GetWXPeer()->GetMenu()->HandleCommandUpdateStatus(impl->GetWXPeer()) )
-            return impl->GetWXPeer()->IsEnabled();
+        wxMenuItem* wxmenuitem = impl->GetWXPeer();
+        if ( wxmenuitem )
+        {
+            wxmenuitem->GetMenu()->HandleCommandUpdateStatus(wxmenuitem);
+            return wxmenuitem->IsEnabled();
+        }
     }
     return YES ;
 }
@@ -120,6 +124,12 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry* entry )
 {
+    if ( entry == NULL )
+    {
+        [menuItem setKeyEquivalent:@""];
+        return;
+    }
+         
     unsigned int modifiers = 0 ;
     int key = entry->GetKeyCode() ;
     if ( key )
@@ -256,9 +266,7 @@ public :
         wxCFStringRef cfText(text);
         [m_osxMenuItem setTitle:cfText.AsNSString()];
 
-        if ( entry )
-            wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
-
+        wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
     }
     
     bool DoDefault();
@@ -342,8 +350,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         }
         else
         {
-            if ( entry )
-                wxMacCocoaMenuItemSetAccelerator( menuitem, entry );
+            wxMacCocoaMenuItemSetAccelerator( menuitem, entry );
         }
         item = menuitem;
     }

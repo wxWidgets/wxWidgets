@@ -983,7 +983,10 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
             return NULL;
         }
 
-        if ( !node.GetChildren() )
+        const bool hasOnlyRefAttr = node.GetAttributes() != NULL &&
+                                    node.GetAttributes()->GetNext() == NULL;
+
+        if ( hasOnlyRefAttr && !node.GetChildren() )
         {
             // In the typical, simple case, <object_ref> is used to link
             // to another node and doesn't have any content of its own that
@@ -1742,7 +1745,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& 
         // the colour doesn't use #RRGGBB format, check if it is symbolic
         // colour name:
         clr = GetSystemColour(v);
-        if (clr.Ok())
+        if (clr.IsOk())
             return clr;
 
         ReportParamError
@@ -1820,7 +1823,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
                           art_id, art_client) )
     {
         wxBitmap stockArt(wxArtProvider::GetBitmap(art_id, art_client, size));
-        if ( stockArt.Ok() )
+        if ( stockArt.IsOk() )
             return stockArt;
     }
 
@@ -1844,7 +1847,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
     wxImage img(name);
 #endif
 
-    if (!img.Ok())
+    if (!img.IsOk())
     {
         ReportParamError
         (
@@ -2274,7 +2277,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     // is this font based on a system font?
     wxFont font = GetSystemFont(GetParamValue(wxT("sysfont")));
 
-    if (font.Ok())
+    if (font.IsOk())
     {
         if (hasSize && isize != -1)
             font.SetPointSize(isize);

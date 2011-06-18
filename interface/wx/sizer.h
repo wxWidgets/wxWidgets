@@ -88,7 +88,7 @@
              @c wxFIXED_MINSIZE.}
     @itemdef{wxRESERVE_SPACE_EVEN_IF_HIDDEN,
              Normally wxSizers don't allocate space for hidden windows or other
-             items. This flag overrides this behavior so that sufficient space
+             items. This flag overrides this behaviour so that sufficient space
              is allocated for the window even if it isn't visible. This makes
              it possible to dynamically show and hide controls without resizing
              parent dialog, for example. (Available since 2.8.8.)}
@@ -168,7 +168,7 @@ public:
             to make them grow and shrink equally with the sizer's horizontal
             dimension.
         @param flag
-            OR-combination of flags affecting sizer's behavior. See
+            OR-combination of flags affecting sizer's behaviour. See
             @ref wxsizer_flags "wxSizer flags list" for details.
         @param border
             Determines the border width, if the flag parameter is set to
@@ -226,7 +226,7 @@ public:
             to make them grow and shrink equally with the sizer's horizontal
             dimension.
         @param flag
-            OR-combination of flags affecting sizer's behavior. See
+            OR-combination of flags affecting sizer's behaviour. See
             @ref wxsizer_flags "wxSizer flags list" for details.
         @param border
             Determines the border width, if the flag parameter is set to
@@ -274,7 +274,7 @@ public:
             to make them grow and shrink equally with the sizer's horizontal
             dimension.
         @param flag
-            OR-combination of flags affecting sizer's behavior. See
+            OR-combination of flags affecting sizer's behaviour. See
             @ref wxsizer_flags "wxSizer flags list" for details.
         @param border
             Determines the border width, if the flag parameter is set to
@@ -1362,7 +1362,7 @@ public:
     /**
         Set the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag. Normally wxSizers
         don't allocate space for hidden windows or other items. This flag
-        overrides this behavior so that sufficient space is allocated for the
+        overrides this behaviour so that sufficient space is allocated for the
         window even if it isn't visible. This makes it possible to dynamically
         show and hide controls without resizing parent dialog, for example.
 

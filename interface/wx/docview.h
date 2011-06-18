@@ -177,6 +177,15 @@ public:
     long GetFlags() const;
 
     /**
+        Returns a reference to the wxPageSetupDialogData associated with the
+        printing operations of this document manager.
+    */
+    //@{
+    wxPageSetupDialogData& GetPageSetupDialogData();
+    const wxPageSetupDialogData& GetPageSetupDialogData() const;
+    //@}
+
+    /**
         Returns the run-time class information that allows view instances
         to be constructed dynamically, as passed to the document template
         constructor.
@@ -683,7 +692,7 @@ public:
         @param noTemplates
             Number of templates being pointed to by the templates pointer.
         @param sort
-            If more than one template is passed in in templates, then this
+            If more than one template is passed into templates, then this
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
@@ -709,7 +718,7 @@ public:
         @param noTemplates
             Number of templates being pointed to by the templates pointer.
         @param sort
-            If more than one template is passed in in templates, then this
+            If more than one template is passed into templates, then this
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.

@@ -417,7 +417,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
             // ok
             {
                 // If we have a top-level, full-screen frame, emulate
-                // the DirectX behavior and resize it.  This makes this
+                // the DirectX behaviour and resize it.  This makes this
                 // API quite a bit easier to use.
                 wxWindow *winTop = wxTheApp->GetTopWindow();
                 wxFrame *frameTop = wxDynamicCast(winTop, wxFrame);

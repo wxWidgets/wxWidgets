@@ -390,7 +390,7 @@ namespace wxPrivate
 {
 
 // empty class just to be able to define a reference to it
-class VariableSetterBase { };
+class VariableSetterBase : public wxScopeGuardImplBase { };
 
 typedef const VariableSetterBase& VariableSetter;
 
@@ -404,10 +404,9 @@ public:
     {
     }
 
-    ~VariableSetterImpl()
-    {
-        m_var = m_value;
-    }
+    ~VariableSetterImpl() { wxPrivateOnScopeExit(*this); }
+
+    void Execute() { m_var = m_value; }
 
 private:
     T& m_var;
@@ -426,10 +425,9 @@ public:
     {
     }
 
-    ~VariableNullerImpl()
-    {
-        m_var = NULL;
-    }
+    ~VariableNullerImpl() { wxPrivateOnScopeExit(*this); }
+
+    void Execute() { m_var = NULL; }
 
 private:
     T& m_var;

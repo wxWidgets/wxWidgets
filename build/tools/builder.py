@@ -89,17 +89,21 @@ class Builder:
 
         return self.name
 
-    def clean(self, dir=None, projectFile=None):
+    def clean(self, dir=None, projectFile=None, options=None):
         """
         dir = the directory containing the project file
         projectFile = Some formats need to explicitly specify the project file's name
         """
-        
-        args = [self.getProgramPath(), "clean"]
-        if dir:
-            args.append(dir)
         if self.isAvailable():
-            result = runInDir(args)
+            if options:
+                optionList = list(options)
+            else:
+                optionList = []
+
+            optionList.insert(0, self.getProgramPath())
+            optionList.append("clean")
+        
+            result = runInDir(optionList, dir)
             return result
 
         return False
@@ -200,7 +204,7 @@ class MSVCProjectBuilder(Builder):
         Builder.__init__(self, commandName="VCExpress.exe", formatName="msvcProject")
         for key in ["VS90COMNTOOLS", "VC80COMNTOOLS", "VC71COMNTOOLS"]:
             if os.environ.has_key(key):
-                self.prgoramDir = os.path.join(os.environ[key], "..", "IDE")
+                self.programDir = os.path.join(os.environ[key], "..", "IDE")
 
         if self.programDir == None:
             for version in ["9.0", "8", ".NET 2003"]:

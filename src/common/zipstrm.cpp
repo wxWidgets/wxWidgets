@@ -1341,7 +1341,7 @@ void wxZipInputStream::Init(const wxString& file)
     ffile = static_cast<wxFFileInputStream*>(m_parent_i_stream);
     wxZipEntryPtr_ entry;
 
-    if (ffile->Ok()) {
+    if (ffile->IsOk()) {
         do {
             entry.reset(GetNextEntry());
         }
@@ -1773,7 +1773,7 @@ bool wxZipInputStream::OpenDecompressor(bool raw /*=false*/)
     return IsOk();
 }
 
-// Can be overriden to add support for additional decompression methods
+// Can be overridden to add support for additional decompression methods
 //
 wxInputStream *wxZipInputStream::OpenDecompressor(wxInputStream& stream)
 {
@@ -2128,7 +2128,7 @@ bool wxZipOutputStream::DoCreate(wxZipEntry *entry, bool raw /*=false*/)
     return true;
 }
 
-// Can be overriden to add support for additional compression methods
+// Can be overridden to add support for additional compression methods
 //
 wxOutputStream *wxZipOutputStream::OpenCompressor(
     wxOutputStream& stream,

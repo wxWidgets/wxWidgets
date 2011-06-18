@@ -60,7 +60,7 @@ public:
     virtual void SetMaxWidth   (int maxWidth);
     virtual void SetMinWidth   (int minWidth);
     virtual void SetReorderable(bool reorderable);
-    virtual void SetResizeable (bool resizeable);
+    virtual void SetResizeable (bool resizable);
     virtual void SetSortable   (bool sortable);
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);
@@ -201,6 +201,8 @@ public:
 
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
   void FinishCustomItemEditing();
+  
+  virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th

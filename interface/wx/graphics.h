@@ -213,6 +213,23 @@ enum wxAntialiasMode
 };
 
 /**
+    Interpolation quality used by wxGraphicsContext::SetInterpolationQuality().
+ */
+enum wxInterpolationQuality
+{
+    /** default interpolation, based on type of context, in general medium quality */
+    wxINTERPOLATION_DEFAULT,
+    /** no interpolation */
+    wxINTERPOLATION_NONE, 
+    /** fast interpolation, suited for interactivity */
+    wxINTERPOLATION_FAST,
+    /** better quality */
+    wxINTERPOLATION_GOOD,
+    /** best quality, not suited for interactivity */
+    wxINTERPOLATION_BEST
+};
+
+/**
     Compositing is done using Porter-Duff compositions
     (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
     wxGraphicsContext::SetCompositionMode().
@@ -403,7 +420,7 @@ public:
     /**
         Creates a native brush with a radial gradient.
 
-        The brush originats at (@a xo, @a yc) and ends on a circle around
+        The brush originates at (@a xo, @a yc) and ends on a circle around
         (@a xc, @a yc) with the given @a radius.
 
         The gradient may be specified either by its start and end colours @a
@@ -620,8 +637,10 @@ public:
     virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
                              const wxPoint2DDouble* endPoints);
     /**
-        Stroke disconnected lines from begin to end points, fastest method
-        available for this purpose.
+        Stroke lines connecting all the points.
+
+        Unlike the other overload of this function, this method draws a single
+        polyline and not a number of disconnected lines.
     */
     virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
 
@@ -656,6 +675,16 @@ public:
     */
     virtual wxAntialiasMode GetAntialiasMode() const ;
 
+    /**
+        Sets the interpolation quality, returns true if it supported
+     */
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+    
+    /**
+        Returns the current interpolation quality
+     */
+    virtual wxInterpolationQuality GetInterpolationQuality() const;
+    
     /**
         Sets the compositing operator, returns true if it supported
     */

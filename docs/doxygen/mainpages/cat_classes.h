@@ -655,13 +655,13 @@ These are the data structure classes supported by wxWidgets.
 These classes define objects for performing conversions between different
 multibyte and Unicode encodings and wide character strings.
 
-@li wxMBConv: Base class for all convertors, defines the API implemented by all
-    the other convertor classes.
-@li wxMBConvUTF7: Convertor for UTF-7
-@li wxMBConvUTF8: Convertor for UTF-8
-@li wxMBConvUTF16: Convertor for UTF-16
-@li wxMBConvUTF32: Convertor for UTF-32
-@li wxCSConv: Convertor for any system-supported encoding which can be
+@li wxMBConv: Base class for all converters, defines the API implemented by all
+    the other converter classes.
+@li wxMBConvUTF7: Converter for UTF-7
+@li wxMBConvUTF8: Converter for UTF-8
+@li wxMBConvUTF16: Converter for UTF-16
+@li wxMBConvUTF32: Converter for UTF-32
+@li wxCSConv: Converter for any system-supported encoding which can be
     specified by name.
 
 Related Overviews: @ref overview_mbconv

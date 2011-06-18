@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/univ/button.h
+// Name:        wx/univ/tglbtn.h
 // Purpose:     wxToggleButton for wxUniversal
 // Author:      Vadim Zeitlin
 // Modified by: David Bjorkevik

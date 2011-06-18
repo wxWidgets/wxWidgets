@@ -171,20 +171,20 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         wxDrawSplashBitmap(dc, m_bitmap, 0, 0);
 }
 
 void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
 {
-    if (event.GetDC() && m_bitmap.Ok())
+    if (event.GetDC() && m_bitmap.IsOk())
     {
         wxDrawSplashBitmap(* event.GetDC(), m_bitmap, 0, 0);
     }
     else
     {
         wxClientDC dc(this);
-        if (m_bitmap.Ok())
+        if (m_bitmap.IsOk())
             wxDrawSplashBitmap(dc, m_bitmap, 0, 0);
     }
 }

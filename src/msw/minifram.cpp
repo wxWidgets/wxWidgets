@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.cpp
+// Name:        src/msw/minifram.cpp
 // Purpose:     wxMiniFrame
 // Author:      Julian Smart
 // Modified by:

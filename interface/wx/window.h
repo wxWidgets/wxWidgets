@@ -237,8 +237,12 @@ enum wxWindowVariant
         See wxKeyEvent.
     @event{EVT_KEY_UP(func)}
         Process a @c wxEVT_KEY_UP event (any key has been released).
+        See wxKeyEvent.
     @event{EVT_CHAR(func)}
         Process a @c wxEVT_CHAR event.
+        See wxKeyEvent.
+    @event{EVT_CHAR_HOOK(func)}
+        Process a @c wxEVT_CHAR_HOOK event.
         See wxKeyEvent.
     @event{EVT_MOUSE_CAPTURE_LOST(func)}
         Process a @c wxEVT_MOUSE_CAPTURE_LOST event. See wxMouseCaptureLostEvent.
@@ -487,7 +491,7 @@ public:
     */
     wxWindow* GetPrevSibling() const;
     /**
-        Reparents the window, i.e the window will be removed from its
+        Reparents the window, i.e. the window will be removed from its
         current parent window (e.g. a non-standard toolbar in a wxFrame)
         and then re-inserted into another.
 
@@ -2079,7 +2083,7 @@ public:
 
     /**
         Sets the style of the window. Please note that some styles cannot be changed
-        after the window creation and that Refresh() might need to be be called
+        after the window creation and that Refresh() might need to be called
         after changing the others for the change to take place immediately.
 
         See @ref overview_windowstyles "Window styles" for more information about flags.
@@ -2783,7 +2787,7 @@ public:
 
 
     /**
-        @name Constraints, sizers and window layouting functions
+        @name Constraints, sizers and window layout functions
     */
     //@{
 
@@ -2826,7 +2830,7 @@ public:
         This method calls SetSizer() and then wxSizer::SetSizeHints which sets the initial
         window size to the size needed to accommodate all sizer elements and sets the
         size hints which, if this window is a top level one, prevent the user from
-        resizing it to be less than this minimial size.
+        resizing it to be less than this minimal size.
     */
     void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
 
@@ -3365,7 +3369,7 @@ protected:
 
         @remarks This function is not meant to be called directly by user code,
                  but via Centre, Center, CentreOnParent, or CenterOnParent.
-                 This function can be overriden to fine-tune centring behaviour.
+                 This function can be overridden to fine-tune centring behaviour.
     */
     virtual void DoCentre(int direction);
 

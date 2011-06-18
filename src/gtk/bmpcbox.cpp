@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/bmpcboxg.cpp
+// Name:        src/gtk/bmpcbox.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     2008-05-19
@@ -122,8 +122,8 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
     else
     {
         m_widget = gtk_combo_box_entry_new_with_model( GTK_TREE_MODEL(store), m_stringCellIndex );
-        m_entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
-        gtk_entry_set_editable( m_entry, TRUE );
+        m_entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(m_widget)));
+        gtk_editable_set_editable(GTK_EDITABLE(m_entry), true);
     }
     g_object_ref(m_widget);
 

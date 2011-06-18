@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/statlmac.cpp
+// Name:        src/osx/statline_osx.cpp
 // Purpose:     a generic wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
@@ -47,14 +47,14 @@ bool wxStaticLine::Create( wxWindow *parent,
                            const wxSize &size,
                            long style,
                            const wxString &name)
-{
-    m_macIsUserPane = false ;
-
+{    
+    DontCreatePeer();
+    
     if ( !wxStaticLineBase::Create(parent, id, pos, size,
                                    style, wxDefaultValidator, name) )
         return false;
 
-    m_peer = wxWidgetImpl::CreateStaticLine( this, parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateStaticLine( this, parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos,size) ;
 

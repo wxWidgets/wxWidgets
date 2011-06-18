@@ -36,7 +36,7 @@ public:
         @param stream
             The output stream.
         @param conv
-            Charset conversion object object used to encoding Unicode strings
+            Charset conversion object used to encoding Unicode strings
             before writing them to the stream in Unicode mode (see
             WriteString() for a detailed description). Note that you must not
             destroy @a conv before you destroy this wxDataOutputStream
@@ -184,7 +184,7 @@ public:
         @param stream
             The input stream.
         @param conv
-            Charset conversion object object used to decode strings in Unicode
+            Charset conversion object used to decode strings in Unicode
             mode (see ReadString() for a detailed description). Note that you
             must not destroy @a conv before you destroy this wxDataInputStream
             instance!
@@ -272,7 +272,7 @@ public:
         In Unicode build of wxWidgets, the fuction first reads multibyte
         (char*) string from the stream and then converts it to Unicode using
         the @e conv object passed to constructor and returns the result as
-        wxString. You are responsible for using the same convertor as when
+        wxString. You are responsible for using the same converter as when
         writing the stream.
 
         @see wxDataOutputStream::WriteString()

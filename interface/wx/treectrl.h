@@ -15,7 +15,7 @@
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
 
-    A similar control with a fully native implemtation for GTK+ and OS X
+    A similar control with a fully native implementation for GTK+ and OS X
     as well is wxDataViewTreeCtrl.
 
     To intercept events from a tree control, use the event table macros
@@ -72,12 +72,12 @@
     @event{EVT_TREE_BEGIN_DRAG(id, func)}
           Begin dragging with the left mouse button.
           If you want to enable left-dragging you need to intercept this event
-          and explicitely call wxTreeEvent::Allow(), as it's vetoed by default.
+          and explicitly call wxTreeEvent::Allow(), as it's vetoed by default.
           Processes a @c wxEVT_COMMAND_TREE_BEGIN_DRAG event type.
     @event{EVT_TREE_BEGIN_RDRAG(id, func)}
           Begin dragging with the right mouse button.
           If you want to enable right-dragging you need to intercept this event
-          and explicitely call wxTreeEvent::Allow(), as it's vetoed by default.
+          and explicitly call wxTreeEvent::Allow(), as it's vetoed by default.
           Processes a @c wxEVT_COMMAND_TREE_BEGIN_RDRAG event type.
     @event{EVT_TREE_END_DRAG(id, func)}
           End dragging with the left or right mouse button.
@@ -812,9 +812,14 @@ public:
     virtual void ScrollTo(const wxTreeItemId& item);
 
     /**
-        Selects the given item. In multiple selection controls, can be also used
-        to deselect a currently selected item if the value of @a select is
-        @false.
+        Selects the given item.
+
+        In multiple selection controls, can be also used to deselect a
+        currently selected item if the value of @a select is @false.
+
+        Notice that calling this method will generate
+        @c wxEVT_COMMAND_TREE_SEL_CHANGING and @c wxEVT_COMMAND_TREE_SEL_CHANGED
+        events and that the change could be vetoed by the former event handler.
     */
     virtual void SelectItem(const wxTreeItemId& item, bool select = true);
 
@@ -1027,13 +1032,13 @@ public:
     @beginEventTable{wxTreeEvent}
     @event{EVT_TREE_BEGIN_DRAG(id, func)}
         Begin dragging with the left mouse button. If you want to enable
-        left-dragging you need to intercept this event and explicitely call
+        left-dragging you need to intercept this event and explicitly call
         wxTreeEvent::Allow(), as it's vetoed by default. Also notice that the
         control must have an associated image list (see SetImageList()) to
         drag its items under MSW.
     @event{EVT_TREE_BEGIN_RDRAG(id, func)}
         Begin dragging with the right mouse button. If you want to enable
-        right-dragging you need to intercept this event and explicitely call
+        right-dragging you need to intercept this event and explicitly call
         wxTreeEvent::Allow(), as it's vetoed by default.
     @event{EVT_TREE_END_DRAG(id, func)}
         End dragging with the left or right mouse button.

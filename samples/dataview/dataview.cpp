@@ -1160,8 +1160,11 @@ void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     wxDataViewItem selected = ctrl->GetSelection();
-    if (ctrl->IsContainer(selected))
-        ctrl->AppendItem( selected, "Item", 0 );
+    if (ctrl->IsContainer(selected)) {
+        wxDataViewItem newitem = ctrl->AppendItem( selected, "Item", 0 );
+        ctrl->Select(newitem);
+        ctrl->StartEditor(newitem, 0);
+    }
 }
 
 void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))

@@ -747,6 +747,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\affinematrix2d.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\anidecod.cpp"
 				>
 			</File>
@@ -1398,6 +1402,26 @@
 			<File
 				RelativePath="..\..\src\msw\ole\activex.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\anybutton.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\app.cpp"
@@ -2618,6 +2642,26 @@
 			<File
 				RelativePath="..\..\src\msw\palette.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\panel.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\pen.cpp"
@@ -5652,6 +5696,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\anybutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\app.h"
 				>
 			</File>
@@ -6025,6 +6073,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\palette.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\panel.h"
 				>
 			</File>
 			<File
@@ -6482,6 +6534,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\univ\panel.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\univ\radiobox.h"
 				>
 			</File>
@@ -6656,6 +6712,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\affinematrix2d.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\affinematrix2dbase.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\anidecod.h"
 				>
 			</File>
@@ -6665,6 +6729,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\animdecod.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\anybutton.h"
 				>
 			</File>
 			<File
@@ -7372,11 +7440,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbackgroundpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextborderspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextbuffer.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbulletspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextdialogpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextfontpage.h"
 				>
 			</File>
 			<File
@@ -7392,11 +7480,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextindentspage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextliststylepage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextmarginspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextsizepage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextstyledlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextstylepage.h"
 				>
 			</File>
 			<File
@@ -7405,6 +7513,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextsymboldlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextuicustomization.h"
 				>
 			</File>
 			<File
@@ -7501,6 +7613,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tbarbase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\textcompleter.h"
 				>
 			</File>
 			<File

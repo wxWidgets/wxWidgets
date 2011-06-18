@@ -106,7 +106,7 @@ typedef struct _MYRECORD
 // Problem:
 //  The MSW version had problems with SetTextColour() et al as the
 //  CListItemAttr's were stored keyed on the item index. If a item was
-//  inserted anywhere but the end of the list the the text attributes
+//  inserted anywhere but the end of the list the text attributes
 //  (colour etc) for the following items were out of sync.
 //
 // Solution:
@@ -2247,7 +2247,7 @@ long wxListCtrl::InsertItem (
     vInsert.fInvalidateRecord = TRUE;
 
     //
-    // Check wether we need to allocate our internal data
+    // Check whether we need to allocate our internal data
     //
     bool                            bNeedInternalData = ((rInfo.GetMask() & wxLIST_MASK_DATA) ||
                                                           rInfo.HasAttributes()

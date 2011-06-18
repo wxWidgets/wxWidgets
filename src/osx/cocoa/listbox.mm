@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: listbox.cpp 54820 2008-07-29 20:04:11Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ protected :
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     column = nil;
     return self;
 }
@@ -224,7 +224,7 @@ protected:
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     impl = nil;
     return self;
 }

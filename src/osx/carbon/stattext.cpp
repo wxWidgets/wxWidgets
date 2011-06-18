@@ -48,10 +48,11 @@ wxSize wxStaticText::DoGetBestSize() const
     Rect bestsize = { 0 , 0 , 0 , 0 } ;
 
     // try the built-in best size if available
-    Boolean former = m_peer->GetData<Boolean>( kControlStaticTextIsMultilineTag);
-    m_peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
-    m_peer->GetBestRect( &bestsize ) ;
-    m_peer->SetData( kControlStaticTextIsMultilineTag, former );
+    Boolean former = GetPeer()->GetData<Boolean>( kControlStaticTextIsMultilineTag);
+    GetPeer()->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
+    GetPeer()->GetBestRect( &bestsize ) ;
+    GetPeer()->SetData( kControlStaticTextIsMultilineTag, former );
+    
     if ( !EmptyRect( &bestsize ) )
     {
         bounds.h = bestsize.right - bestsize.left ;
@@ -62,7 +63,7 @@ wxSize wxStaticText::DoGetBestSize() const
     {
 #if wxOSX_USE_CARBON
         ControlFontStyleRec controlFont;
-        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
+        OSStatus err = GetPeer()->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
 
 #if wxOSX_USE_ATSU_TEXT

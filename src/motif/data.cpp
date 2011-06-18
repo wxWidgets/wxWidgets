@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        motif/data.cpp
+// Name:        src/motif/data.cpp
 // Purpose:     Various Motif-specific global data
 // Author:      Julian Smart
 // Modified by:

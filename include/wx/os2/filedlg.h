@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/os2/filedlg.h
 // Purpose:     wxFileDialog class
 // Author:      David Webster
 // Modified by:

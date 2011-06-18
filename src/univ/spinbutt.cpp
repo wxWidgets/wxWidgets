@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/spinbutt.cpp
+// Name:        src/univ/spinbutt.cpp
 // Purpose:     implementation of the universal version of wxSpinButton
 // Author:      Vadim Zeitlin
 // Modified by:

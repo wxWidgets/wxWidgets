@@ -3,7 +3,7 @@
 // Purpose:     Cairo library
 // Author:      Anthony Bretaudeau
 // Created:     2007-08-25
-// RCS-ID:      $Id: cairo.h 47254 2007-08-25 10:09:52Z VS $
+// RCS-ID:      $Id$
 // Copyright:   (c) Anthony Bretaudeau
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -132,11 +132,12 @@ public:
     wxDL_VOIDMETHOD_DEFINE( cairo_translate,
         (cairo_t *cr, double tx, double ty), (cr, tx, ty) )
 
+#if wxUSE_PANGO
     wxDL_VOIDMETHOD_DEFINE( pango_cairo_update_layout,
         (cairo_t *cr, PangoLayout *layout), (cr, layout) )
     wxDL_VOIDMETHOD_DEFINE( pango_cairo_show_layout,
         (cairo_t *cr, PangoLayout *layout), (cr, layout) )
-
+#endif
     wxDECLARE_NO_COPY_CLASS(wxCairoLibrary);
 };
 

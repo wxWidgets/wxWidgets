@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.h
+// Name:        wx/osx/menu.h
 // Purpose:     wxMenu, wxMenuBar classes
 // Author:      Stefan Csomor
 // Modified by:

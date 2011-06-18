@@ -1368,48 +1368,48 @@ msgid "Ca&pitals"
 msgstr "बड़े अक्षर (&P)"
 
 #: ../src/os2/thread.cpp:116
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "म्यूटेक्स का निर्माण नहीं किया जा सकता है।"
 
 #: ../src/common/filefn.cpp:1383
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "'%s' फ़ाइलों की परिगणना नहीं की जा सकती है"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:201
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "'%s' निर्देशिका में फ़ाइलों की परिगणना नहीं की जा सकती है"
 
 #: ../src/os2/thread.cpp:516
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "%lu थ्रेड को समान-बिन्दु से पुनः आरम्भ नहीं किया जा सकता है"
 
 #: ../src/msw/thread.cpp:889
 #: ../src/mac/classic/thread.cpp:487
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "%x थ्रेड को समान-बिन्दु से पुनः आरम्भ नहीं किया जा सकता है"
 
 #: ../src/msw/thread.cpp:525
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "थ्रेड को आरम्भ नहीं किया जा सकता है: टीएलएस लेखन में त्रुटि"
 
 #: ../src/os2/thread.cpp:502
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "%lu थ्रेड को अधर में नहीं छोड़ा जा सकता है"
 
 #: ../src/msw/thread.cpp:874
 #: ../src/mac/classic/thread.cpp:460
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "%x थ्रेड को अधर में नहीं छोड़ा जा सकता है"
 
 #: ../src/msw/thread.cpp:793
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "थ्रेड समाप्ति की प्रतीक्षा नहीं की जा सकती है"
 
 #: ../src/common/cmdproc.cpp:262
@@ -5553,7 +5553,7 @@ msgid "This system doesn't support date picker control, please upgrade your vers
 msgstr ""
 
 #: ../src/msw/thread.cpp:1268
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "थ्रेड माड्यूल आरम्भीकरण असफ़ल रहा: स्थानीय थ्रेड में मूल्य को सुरक्षित नहीं किया जा सका "
 
 #: ../src/unix/threadpsx.cpp:1618
@@ -6593,7 +6593,7 @@ msgstr "हल्का"
 
 #: ../src/common/intl.cpp:1580
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "'%s' लोकेल को स्थापित नहीं किया जा सका।"
 
 #: ../src/common/intl.cpp:1151

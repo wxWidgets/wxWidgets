@@ -40,6 +40,11 @@ enum wxXmlNodeType
     @c title and irrelevant content and one child of type @c wxXML_TEXT_NODE
     with @c hi as content.
 
+    The @c wxXML_PI_NODE type sets the name to the PI target and the contents to
+    the instructions. Note that whilst the PI instructions are often in the form
+    of pseudo-attributes these do not use the nodes attribute system. It is the users
+    responsibility to code and decode the instruction text.
+
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
 
@@ -100,7 +105,7 @@ public:
     /**
         Copy constructor.
 
-        Note that this does NOT copy syblings and parent pointer, i.e. GetParent()
+        Note that this does NOT copy siblings and parent pointer, i.e. GetParent()
         and GetNext() will return @NULL after using copy ctor and are never unmodified by operator=().
         On the other hand, it DOES copy children and attributes.
     */
@@ -175,11 +180,11 @@ public:
     const wxString& GetContent() const;
 
     /**
-        Returns the number of nodes which separe this node from @c grandparent.
+        Returns the number of nodes which separate this node from @c grandparent.
 
         This function searches only the parents of this node until it finds
         @a grandparent or the @NULL node (which is the parent of non-linked
-        nodes or the parent of a wxXmlDocument's root node).
+        nodes or the parent of a wxXmlDocument's root element node).
     */
     int GetDepth(wxXmlNode* grandparent = NULL) const;
 
@@ -215,14 +220,14 @@ public:
         is represented by expat with the following tag tree:
 
         @code
-        wxXML_ENTITY_NODE name="tagname", content=""
+        wxXML_ELEMENT_NODE name="tagname", content=""
         |-- wxXML_TEXT_NODE name="", content="tagcontent"
         @endcode
 
         or eventually:
 
         @code
-        wxXML_ENTITY_NODE name="tagname", content=""
+        wxXML_ELEMENT_NODE name="tagname", content=""
         |-- wxXML_CDATA_SECTION_NODE name="", content="tagcontent"
         @endcode
 
@@ -300,7 +305,7 @@ public:
 
         Returns @true if the node was found and removed or @false if the node
         could not be found.
-        Note that the caller is reponsible for deleting the removed node in order
+        Note that the caller is responsible for deleting the removed node in order
         to avoid memory leaks.
     */
     virtual bool RemoveChild(wxXmlNode* child);
@@ -449,6 +454,20 @@ public:
     if (doc.GetRoot()->GetName() != "myroot-node")
         return false;
 
+    // examine prologue
+    wxXmlNode *prolog = doc.GetDocumentNode()->GetChildren();
+    while (prolog) {
+
+        if (prolog->GetType() == wxXML_PI_NODE && prolog->GetName() == "target") {
+
+            // process Process Instruction contents
+            wxString pi = prolog->GetContent();
+
+            ...
+
+        }
+    }
+
     wxXmlNode *child = doc.GetRoot()->GetChildren();
     while (child) {
 
@@ -484,7 +503,7 @@ public:
     wxXmlDocument doc;
     doc.Load("myfile.xml", "UTF-8", wxXMLDOC_KEEP_WHITESPACE_NODES);
 
-    // myfile2.xml will be indentic to myfile.xml saving it this way:
+    // myfile2.xml will be identical to myfile.xml saving it this way:
     doc.Save("myfile2.xml", wxXML_NO_INDENTATION);
     @endcode
 
@@ -533,10 +552,34 @@ public:
     virtual ~wxXmlDocument();
 
     /**
-        Detaches the document root node and returns it.
+        Appends a Process Instruction or Comment node to the document prologue.
 
-        The document root node will be set to @NULL and thus IsOk() will
+        Calling this function will create a prologue or attach the node to the
+        end of an existing prologue.
+
+        @since 2.9.2
+    */
+    void AppendToProlog(wxXmlNode* node);
+
+    /**
+        Detaches the document node and returns it.
+
+        The document node will be set to @NULL and thus IsOk() will
         return @false after calling this function.
+
+        Note that the caller is responsible for deleting the returned node in order
+        to avoid memory leaks.
+
+        @since 2.9.2
+    */
+    wxXmlNode* DetachDocumentNode();
+
+    /**
+        Detaches the root entity node and returns it.
+
+        After calling this function, the document node will remain together with
+        any prologue nodes, but IsOk() will return @false since the root entity
+        will be missing.
 
         Note that the caller is reponsible for deleting the returned node in order
         to avoid memory leaks.
@@ -560,7 +603,14 @@ public:
     const wxString& GetFileEncoding() const;
 
     /**
-        Returns the root node of the document.
+        Returns the document node of the document.
+
+        @since 2.9.2
+    */
+    wxXmlNode* GetDocumentNode() const;
+
+    /**
+        Returns the root element node of the document.
     */
     wxXmlNode* GetRoot() const;
 
@@ -568,7 +618,7 @@ public:
         Returns the version of document.
 
         This is the value in the @c \<?xml version="1.0"?\> header of the XML document.
-        If the version attribute was not explicitely given in the header, this function
+        If the version attribute was not explicitly given in the header, this function
         returns an empty string.
     */
     const wxString& GetVersion() const;
@@ -620,7 +670,18 @@ public:
     virtual bool Save(wxOutputStream& stream, int indentstep = 2) const;
 
     /**
-        Sets the enconding of the document.
+        Sets the document node of this document.
+
+        Deletes any previous document node.
+        Use DetachDocumentNode() and then SetDocumentNode() if you want to
+        replace the document node without deleting the old document tree.
+
+        @since 2.9.2
+    */
+    void SetDocumentNode(wxXmlNode* node);
+
+    /**
+        Sets the encoding of the document.
     */
     void SetEncoding(const wxString& enc);
 
@@ -630,9 +691,10 @@ public:
     void SetFileEncoding(const wxString& encoding);
 
     /**
-        Sets the root node of this document. Deletes previous root node.
-        Use DetachRoot() and then SetRoot() if you want to replace the root
-        node without deleting the old document tree.
+        Sets the root element node of this document.
+
+        Will create the document node if necessary. Any previous
+        root element node is deleted.
     */
     void SetRoot(wxXmlNode* node);
 

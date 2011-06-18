@@ -49,83 +49,83 @@ wxUint8 gs_autoIdsRefCount[wxID_AUTO_HIGHEST - wxID_AUTO_LOWEST + 1] = { 0 };
 wxWindowID gs_nextAutoId = wxID_AUTO_LOWEST;
 
 // Reserve an ID
-void ReserveIdRefCount(wxWindowID id)
+void ReserveIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST,
+    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
             wxT("invalid id range"));
 
-    id -= wxID_AUTO_LOWEST;
+    winid -= wxID_AUTO_LOWEST;
 
-    wxCHECK_RET(gs_autoIdsRefCount[id] == ID_FREE,
+    wxCHECK_RET(gs_autoIdsRefCount[winid] == ID_FREE,
             wxT("id already in use or already reserved"));
-    gs_autoIdsRefCount[id] = ID_RESERVED;
+    gs_autoIdsRefCount[winid] = ID_RESERVED;
 }
 
 // Unreserve and id
-void UnreserveIdRefCount(wxWindowID id)
+void UnreserveIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST,
+    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
             wxT("invalid id range"));
 
-    id -= wxID_AUTO_LOWEST;
+    winid -= wxID_AUTO_LOWEST;
 
-    wxCHECK_RET(gs_autoIdsRefCount[id] == ID_RESERVED,
+    wxCHECK_RET(gs_autoIdsRefCount[winid] == ID_RESERVED,
             wxT("id already in use or not reserved"));
-    gs_autoIdsRefCount[id] = ID_FREE;
+    gs_autoIdsRefCount[winid] = ID_FREE;
 }
 
 // Get the usage count of an id
-int GetIdRefCount(wxWindowID id)
+int GetIdRefCount(wxWindowID winid)
 {
-    wxCHECK_MSG(id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST, 0,
+    wxCHECK_MSG(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST, 0,
             wxT("invalid id range"));
 
-    id -= wxID_AUTO_LOWEST;
-    return gs_autoIdsRefCount[id];
+    winid -= wxID_AUTO_LOWEST;
+    return gs_autoIdsRefCount[winid];
 }
 
 // Increase the count for an id
-void IncIdRefCount(wxWindowID id)
+void IncIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST,
+    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
             wxT("invalid id range"));
 
-    id -= wxID_AUTO_LOWEST;
+    winid -= wxID_AUTO_LOWEST;
 
-    wxCHECK_RET(gs_autoIdsRefCount[id] != ID_MAXCOUNT, wxT("id count at max"));
-    wxCHECK_RET(gs_autoIdsRefCount[id] != ID_FREE, wxT("id should first be reserved"));
+    wxCHECK_RET(gs_autoIdsRefCount[winid] != ID_MAXCOUNT, wxT("id count at max"));
+    wxCHECK_RET(gs_autoIdsRefCount[winid] != ID_FREE, wxT("id should first be reserved"));
 
-    if(gs_autoIdsRefCount[id] == ID_RESERVED)
-        gs_autoIdsRefCount[id] = ID_STARTCOUNT;
+    if(gs_autoIdsRefCount[winid] == ID_RESERVED)
+        gs_autoIdsRefCount[winid] = ID_STARTCOUNT;
     else
-        gs_autoIdsRefCount[id]++;
+        gs_autoIdsRefCount[winid]++;
 
     wxLogTrace(wxTRACE_WINDOWID, wxT("Increasing ref count of ID %d to %d"),
-            id + wxID_AUTO_LOWEST, gs_autoIdsRefCount[id]);
+            winid + wxID_AUTO_LOWEST, gs_autoIdsRefCount[winid]);
 }
 
 // Decrease the count for an id
-void DecIdRefCount(wxWindowID id)
+void DecIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST,
+    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
             wxT("invalid id range"));
 
-    id -= wxID_AUTO_LOWEST;
+    winid -= wxID_AUTO_LOWEST;
 
-    wxCHECK_RET(gs_autoIdsRefCount[id] != ID_FREE, wxT("id count already 0"));
+    wxCHECK_RET(gs_autoIdsRefCount[winid] != ID_FREE, wxT("id count already 0"));
 
     // DecIdRefCount is only called on an ID that has been IncIdRefCount'ed'
     // so it should never be reserved, but test anyway
-    if(gs_autoIdsRefCount[id] == ID_RESERVED)
+    if(gs_autoIdsRefCount[winid] == ID_RESERVED)
     {
         wxFAIL_MSG(wxT("reserve id being decreased"));
-        gs_autoIdsRefCount[id] = ID_FREE;
+        gs_autoIdsRefCount[winid] = ID_FREE;
     }
     else
-        gs_autoIdsRefCount[id]--;
+        gs_autoIdsRefCount[winid]--;
 
     wxLogTrace(wxTRACE_WINDOWID, wxT("Decreasing ref count of ID %d to %d"),
-            id + wxID_AUTO_LOWEST, gs_autoIdsRefCount[id]);
+            winid + wxID_AUTO_LOWEST, gs_autoIdsRefCount[winid]);
 }
 
 #else // wxUSE_AUTOID_MANAGEMENT
@@ -139,15 +139,15 @@ static wxWindowID gs_nextAutoId = wxID_AUTO_HIGHEST;
 
 #if wxUSE_AUTOID_MANAGEMENT
 
-void wxWindowIDRef::Assign(wxWindowID id)
+void wxWindowIDRef::Assign(wxWindowID winid)
 {
-    if ( id != m_id )
+    if ( winid != m_id )
     {
         // decrease count if it is in the managed range
         if ( m_id >= wxID_AUTO_LOWEST && m_id <= wxID_AUTO_HIGHEST )
             DecIdRefCount(m_id);
 
-        m_id = id;
+        m_id = winid;
 
         // increase count if it is in the managed range
         if ( m_id >= wxID_AUTO_LOWEST && m_id <= wxID_AUTO_HIGHEST )
@@ -167,22 +167,22 @@ wxWindowID wxIdManager::ReserveId(int count)
 #if wxUSE_AUTOID_MANAGEMENT
     if ( gs_nextAutoId + count - 1 <= wxID_AUTO_HIGHEST )
     {
-        wxWindowID id = gs_nextAutoId;
+        wxWindowID winid = gs_nextAutoId;
 
         while(count--)
         {
             ReserveIdRefCount(gs_nextAutoId++);
         }
 
-        return id;
+        return winid;
     }
     else
     {
         int found = 0;
 
-        for(wxWindowID id = wxID_AUTO_LOWEST; id <= wxID_AUTO_HIGHEST; id++)
+        for(wxWindowID winid = wxID_AUTO_LOWEST; winid <= wxID_AUTO_HIGHEST; winid++)
         {
-            if(GetIdRefCount(id) == 0)
+            if(GetIdRefCount(winid) == 0)
             {
                 found++;
                 if(found == count)
@@ -196,13 +196,13 @@ wxWindowID wxIdManager::ReserveId(int count)
                     // called, and accorind to gs_nextAutoId, their are still
                     // 50 at the end so it returns them without testing the ref
                     // To fix this, the next ID is also updated here as needed
-                    if(id >= gs_nextAutoId)
-                        gs_nextAutoId = id + 1;
+                    if(winid >= gs_nextAutoId)
+                        gs_nextAutoId = winid + 1;
 
                     while(count--)
-                        ReserveIdRefCount(id--);
+                        ReserveIdRefCount(winid--);
 
-                    return id + 1;
+                    return winid + 1;
                 }
             }
             else
@@ -216,19 +216,19 @@ wxWindowID wxIdManager::ReserveId(int count)
     return wxID_NONE;
 #else // !wxUSE_AUTOID_MANAGEMENT
     // Make sure enough in the range
-    wxWindowID id;
+    wxWindowID winid;
 
-    id = gs_nextAutoId - count + 1;
+    winid = gs_nextAutoId - count + 1;
 
-    if ( id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST )
+    if ( winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST )
     {
         // There is enough, but it may be time to wrap
-        if(id == wxID_AUTO_LOWEST)
+        if(winid == wxID_AUTO_LOWEST)
             gs_nextAutoId = wxID_AUTO_HIGHEST;
         else
-            gs_nextAutoId = id - 1;
+            gs_nextAutoId = winid - 1;
 
-        return id;
+        return winid;
     }
     else
     {
@@ -241,15 +241,15 @@ wxWindowID wxIdManager::ReserveId(int count)
 #endif // wxUSE_AUTOID_MANAGEMENT/!wxUSE_AUTOID_MANAGEMENT
 }
 
-void wxIdManager::UnreserveId(wxWindowID id, int count)
+void wxIdManager::UnreserveId(wxWindowID winid, int count)
 {
     wxASSERT_MSG(count > 0, wxT("can't unreserve less than 1 id"));
 
 #if wxUSE_AUTOID_MANAGEMENT
     while (count--)
-        UnreserveIdRefCount(id++);
+        UnreserveIdRefCount(winid++);
 #else
-    wxUnusedVar(id);
+    wxUnusedVar(winid);
     wxUnusedVar(count);
 #endif
 }

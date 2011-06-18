@@ -147,7 +147,7 @@ public:
     virtual void OnKillFocus() { }
 
 protected:
-    // these functions may be overriden in the derived classes, but they
+    // these functions may be overridden in the derived classes, but they
     // should call the base class version first
     virtual bool DoCreate(wxWindowBase *window, int width, int height)
     {

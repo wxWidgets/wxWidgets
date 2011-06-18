@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ipcbase.h
+// Name:        wx/ipcbase.h
 // Purpose:     Base classes for IPC
 // Author:      Julian Smart
 // Modified by:

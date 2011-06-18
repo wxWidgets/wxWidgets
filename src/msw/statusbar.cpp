@@ -89,7 +89,7 @@ WXDWORD wxStatusBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     WXDWORD msStyle = wxStatusBarBase::MSWGetStyle(style, exstyle);
 
     // wxSTB_SIZEGRIP is part of our default style but it doesn't make sense to
-    // show size grip if this is the status bar of a non-resizeable TLW so turn
+    // show size grip if this is the status bar of a non-resizable TLW so turn
     // it off in such case
     wxWindow * const parent = GetParent();
     wxCHECK_MSG( parent, msStyle, wxS("Status bar must have a parent") );
@@ -502,9 +502,6 @@ void wxStatusBar::DoMoveWindow(int x, int y, int width, int height)
                        );
     }
 
-    // adjust fields widths to the new size
-    MSWUpdateFieldsWidths();
-
     // we have to trigger wxSizeEvent if there are children window in status
     // bar because GetFieldRect returned incorrect (not updated) values up to
     // here, which almost certainly resulted in incorrectly redrawn statusbar
@@ -595,15 +592,21 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     }
 #endif
 
-    bool needsEllipsization = HasFlag(wxSTB_ELLIPSIZE_START) ||
-                              HasFlag(wxSTB_ELLIPSIZE_MIDDLE) ||
-                              HasFlag(wxSTB_ELLIPSIZE_END);
-    if ( nMsg == WM_SIZE && needsEllipsization )
+    if ( nMsg == WM_SIZE )
     {
-        for (int i=0; i<GetFieldsCount(); i++)
-            DoUpdateStatusText(i);
-            // re-set the field text, in case we need to ellipsize
-            // (or de-ellipsize) some parts of it
+        MSWUpdateFieldsWidths();
+
+        if ( HasFlag(wxSTB_ELLIPSIZE_START) ||
+                HasFlag(wxSTB_ELLIPSIZE_MIDDLE) ||
+                    HasFlag(wxSTB_ELLIPSIZE_END) )
+        {
+            for (int i=0; i<GetFieldsCount(); i++)
+            {
+                // re-set the field text, in case we need to ellipsize
+                // (or de-ellipsize) some parts of it
+                DoUpdateStatusText(i);
+            }
+        }
     }
 
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);

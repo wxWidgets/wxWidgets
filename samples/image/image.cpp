@@ -407,7 +407,7 @@ private:
 
         wxImage img(m_bitmap.ConvertToImage());
         img = img.Rotate(angle, wxPoint(img.GetWidth() / 2, img.GetHeight() / 2));
-        if ( !img.Ok() )
+        if ( !img.IsOk() )
         {
             wxLogWarning(wxT("Rotation failed"));
             return;

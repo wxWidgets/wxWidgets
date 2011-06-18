@@ -253,8 +253,10 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     {
         if ( *i != '\n' )
         {
-            // found last non-newline char, remove everything after it and stop
-            text.erase(i.base() + 1, text.end());
+            // found last non-newline char, remove anything after it if
+            // necessary and stop in any case
+            if ( i != text.rbegin() )
+                text.erase(i.base() + 1, text.end());
             break;
         }
     }
@@ -591,6 +593,16 @@ int wxMessageDialog::ShowModal()
             return wxID_CANCEL;
         }
 
+        // In case only an "OK" button was specified we actually created a
+        // "Cancel" button (see comment in MSWCommonTaskDialogInit). This
+        // results in msAns being IDCANCEL while we want IDOK (just like
+        // how the native MessageBox function does with only an "OK" button).
+        if ( (msAns == IDCANCEL)
+            && !(GetMessageDialogStyle() & (wxYES_NO|wxCANCEL)) )
+        {
+            msAns = IDOK;
+        }
+
         return MSWTranslateReturnCode( msAns );
     }
 #endif // wxHAS_MSW_TASKDIALOG
@@ -719,15 +731,28 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     }
     else // without Yes/No we're going to have an OK button
     {
-        AddTaskDialogButton(tdc, IDOK, TDCBF_OK_BUTTON, btnOKLabel);
-
         if ( style & wxCANCEL )
         {
+            AddTaskDialogButton(tdc, IDOK, TDCBF_OK_BUTTON, btnOKLabel);
             AddTaskDialogButton(tdc, IDCANCEL,
                                 TDCBF_CANCEL_BUTTON, btnCancelLabel);
 
             if ( style & wxCANCEL_DEFAULT )
                 tdc.nDefaultButton = IDCANCEL;
+        }
+        else // Only "OK"
+        {
+            // We actually create a "Cancel" button instead because we want to
+            // allow closing the dialog box with Escape (and also Alt-F4 or
+            // clicking the close button in the title bar) which wouldn't work
+            // without a Cancel button.
+            if ( !useCustomLabels )
+            {
+                useCustomLabels = true;
+                btnOKLabel = _("OK");
+            }
+
+            AddTaskDialogButton(tdc, IDCANCEL, TDCBF_CANCEL_BUTTON, btnOKLabel);
         }
     }
 }

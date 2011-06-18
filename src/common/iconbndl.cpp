@@ -163,7 +163,7 @@ void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
     if ( type == wxBITMAP_TYPE_ICON_RESOURCE )
     {
         wxIcon tmp(file, type);
-        if (tmp.Ok())
+        if (tmp.IsOk())
         {
             AddIcon(tmp);
             return;
@@ -245,7 +245,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
 wxIcon wxIconBundle::GetIconOfExactSize(const wxSize& size) const
 {
     wxIcon icon = GetIcon(size);
-    if ( icon.Ok() &&
+    if ( icon.IsOk() &&
             (icon.GetWidth() != size.x || icon.GetHeight() != size.y) )
     {
         icon = wxNullIcon;
@@ -267,7 +267,7 @@ void wxIconBundle::AddIcon(const wxIcon& icon)
     for ( size_t i = 0; i < count; ++i )
     {
         wxIcon& tmp = iconArray[i];
-        if ( tmp.Ok() &&
+        if ( tmp.IsOk() &&
                 tmp.GetWidth() == icon.GetWidth() &&
                 tmp.GetHeight() == icon.GetHeight() )
         {

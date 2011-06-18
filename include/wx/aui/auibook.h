@@ -149,6 +149,8 @@ public:
     virtual void SetNormalFont(const wxFont& font) = 0;
     virtual void SetSelectedFont(const wxFont& font) = 0;
     virtual void SetMeasuringFont(const wxFont& font) = 0;
+    virtual void SetColour(const wxColour& colour) = 0;
+    virtual void SetActiveColour(const wxColour& colour) = 0;
 
     virtual void DrawBackground(
                          wxDC& dc,
@@ -212,6 +214,8 @@ public:
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
     void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
 
     void DrawBackground(
                  wxDC& dc,
@@ -265,6 +269,7 @@ protected:
     wxPen m_base_colour_pen;
     wxPen m_border_pen;
     wxBrush m_base_colour_brush;
+    wxColour m_active_colour;
     wxBitmap m_active_close_bmp;
     wxBitmap m_disabled_close_bmp;
     wxBitmap m_active_left_bmp;
@@ -297,6 +302,8 @@ public:
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
     void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
 
     void DrawBackground(
                  wxDC& dc,
@@ -404,6 +411,8 @@ public:
     void SetNormalFont(const wxFont& normal_font);
     void SetSelectedFont(const wxFont& selected_font);
     void SetMeasuringFont(const wxFont& measuring_font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
     void DoShowHide();
     void SetRect(const wxRect& rect);
 
@@ -618,6 +627,7 @@ protected:
     void OnTabBeginDrag(wxAuiNotebookEvent& evt);
     void OnTabDragMotion(wxAuiNotebookEvent& evt);
     void OnTabEndDrag(wxAuiNotebookEvent& evt);
+    void OnTabCancelDrag(wxAuiNotebookEvent& evt);
     void OnTabButton(wxAuiNotebookEvent& evt);
     void OnTabMiddleDown(wxAuiNotebookEvent& evt);
     void OnTabMiddleUp(wxAuiNotebookEvent& evt);

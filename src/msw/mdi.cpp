@@ -1111,7 +1111,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 
         WXHMENU hMenuParent = parent->m_hMenu;
 
-        // activate the the parent menu only when there is no other child
+        // activate the parent menu only when there is no other child
         // that has been activated
         if ( hMenuParent && !hwndAct )
             hMenuToSet = hMenuParent;

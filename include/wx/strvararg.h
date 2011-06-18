@@ -207,7 +207,7 @@ public:
         { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
     // InputAsChar() returns the value passed to ctor, only converted
-    // to char, while AsChar() takes the the string returned by InputAsChar()
+    // to char, while AsChar() takes the string returned by InputAsChar()
     // and does format string conversion on it as well (and similarly for
     // ..AsWChar() below)
     const char* InputAsChar();
@@ -825,7 +825,7 @@ WX_ARG_NORMALIZER_FORWARD(const signed char&, signed char);
 #undef WX_ARG_NORMALIZER_FORWARD
 #undef _WX_ARG_NORMALIZER_FORWARD_IMPL
 
-#undef wxASSERT_ARG_TYPE
+// NB: Don't #undef wxASSERT_ARG_TYPE here as it's also used in wx/longlong.h.
 
 // ----------------------------------------------------------------------------
 // WX_VA_ARG_STRING

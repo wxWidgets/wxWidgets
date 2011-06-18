@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: notebmac.cpp 55079 2008-08-13 14:56:42Z PC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     return self;
 }
 
@@ -175,7 +175,7 @@ public:
             if ( notebook.GetImageList() && notebook.GetPageImage(i) >= 0 )
             {
                 const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
-                if ( bmap.Ok() )
+                if ( bmap.IsOk() )
                 {
                     // TODO how to set an image on a tab
                 }
@@ -221,7 +221,7 @@ public:
     m_peer = new wxMacControl( this );
     OSStatus err = CreateTabsControl(
         MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        tabsize, tabstyle, 0, NULL, m_peer->GetControlRefAddr() );
+        tabsize, tabstyle, 0, NULL, GetPeer()->GetControlRefAddr() );
     verify_noerr( err );
 #endif
 */

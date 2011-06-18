@@ -239,6 +239,10 @@ SOURCE=.\menu\accelentry.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\affinematrix.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\asserthelper.cpp
 # End Source File
 # Begin Source File
@@ -510,6 +514,10 @@ SOURCE=.\controls\togglebuttontest.cpp
 # Begin Source File
 
 SOURCE=.\controls\toolbooktest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\toplevel\toplevel.cpp
 # End Source File
 # Begin Source File
 

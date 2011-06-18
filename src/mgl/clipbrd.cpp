@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/clipbrd.cpp
+// Name:        src/mgl/clipbrd.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

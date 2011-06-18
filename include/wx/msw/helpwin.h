@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwin.h
+// Name:        wx/msw/helpwin.h
 // Purpose:     Help system: WinHelp implementation
 // Author:      Julian Smart
 // Modified by:
@@ -20,7 +20,7 @@
 
 class WXDLLIMPEXP_CORE wxWinHelpController: public wxHelpControllerBase
 {
-    DECLARE_CLASS(wxWinHelpController)
+    DECLARE_DYNAMIC_CLASS(wxWinHelpController)
 
 public:
     wxWinHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}

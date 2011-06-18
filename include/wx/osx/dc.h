@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/osx/dc.h
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:

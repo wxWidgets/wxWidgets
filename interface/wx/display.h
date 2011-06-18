@@ -40,7 +40,7 @@ public:
 
         If wxDefaultVideoMode is passed in as the mode parameter, the defined
         behaviour is that wxDisplay will reset the video mode to the default
-        mode used by the display. On Windows, the behavior is normal. However,
+        mode used by the display. On Windows, the behaviour is normal. However,
         there are differences on other platforms. On Unix variations using X11
         extensions it should behave as defined, but some irregularities may
         occur.

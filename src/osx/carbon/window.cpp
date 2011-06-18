@@ -836,7 +836,7 @@ wxWidgetImplType* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer,
 {
     OSStatus err = noErr;
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
-    wxMacControl* c = new wxMacControl(wxpeer) ;
+    wxMacControl* c = new wxMacControl(wxpeer, false, true) ;
     UInt32 features = 0
         | kControlSupportsEmbedding
         | kControlSupportsLiveFeedback
@@ -868,8 +868,8 @@ wxMacControl::wxMacControl()
     Init();
 }
 
-wxMacControl::wxMacControl(wxWindowMac* peer , bool isRootControl ) :
-    wxWidgetImpl( peer, isRootControl )
+wxMacControl::wxMacControl(wxWindowMac* peer , bool isRootControl, bool isUserPane ) :
+    wxWidgetImpl( peer, isRootControl, isUserPane )
 {
     Init();
 }

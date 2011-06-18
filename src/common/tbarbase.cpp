@@ -158,7 +158,7 @@ void wxToolBarBase::FixupStyle()
     }
 }
 
-wxToolBarToolBase *wxToolBarBase::DoAddTool(int id,
+wxToolBarToolBase *wxToolBarBase::DoAddTool(int toolid,
                                             const wxString& label,
                                             const wxBitmap& bitmap,
                                             const wxBitmap& bmpDisabled,
@@ -170,12 +170,12 @@ wxToolBarToolBase *wxToolBarBase::DoAddTool(int id,
                                             wxCoord WXUNUSED(yPos))
 {
     InvalidateBestSize();
-    return InsertTool(GetToolsCount(), id, label, bitmap, bmpDisabled,
+    return InsertTool(GetToolsCount(), toolid, label, bitmap, bmpDisabled,
                       kind, shortHelp, longHelp, clientData);
 }
 
 wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
-                                             int id,
+                                             int toolid,
                                              const wxString& label,
                                              const wxBitmap& bitmap,
                                              const wxBitmap& bmpDisabled,
@@ -187,7 +187,7 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
-    return DoInsertNewTool(pos, CreateTool(id, label, bitmap, bmpDisabled, kind,
+    return DoInsertNewTool(pos, CreateTool(toolid, label, bitmap, bmpDisabled, kind,
                                            clientData, shortHelp, longHelp));
 }
 
@@ -233,7 +233,7 @@ wxToolBarBase::InsertControl(size_t pos,
     return DoInsertNewTool(pos, CreateTool(control, label));
 }
 
-wxControl *wxToolBarBase::FindControl( int id )
+wxControl *wxToolBarBase::FindControl( int toolid )
 {
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
@@ -248,7 +248,7 @@ wxControl *wxToolBarBase::FindControl( int id )
             {
                 wxFAIL_MSG( wxT("NULL control in toolbar?") );
             }
-            else if ( control->GetId() == id )
+            else if ( control->GetId() == toolid )
             {
                 // found
                 return control;
@@ -291,13 +291,13 @@ wxToolBarToolBase *wxToolBarBase::InsertStretchableSpace(size_t pos)
     return DoInsertNewTool(pos, tool);
 }
 
-wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
+wxToolBarToolBase *wxToolBarBase::RemoveTool(int toolid)
 {
     size_t pos = 0;
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
-        if ( node->GetData()->GetId() == id )
+        if ( node->GetData()->GetId() == toolid )
             break;
 
         pos++;
@@ -341,13 +341,13 @@ bool wxToolBarBase::DeleteToolByPos(size_t pos)
     return true;
 }
 
-bool wxToolBarBase::DeleteTool(int id)
+bool wxToolBarBase::DeleteTool(int toolid)
 {
     size_t pos = 0;
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
-        if ( node->GetData()->GetId() == id )
+        if ( node->GetData()->GetId() == toolid )
             break;
 
         pos++;
@@ -364,7 +364,7 @@ bool wxToolBarBase::DeleteTool(int id)
     return true;
 }
 
-wxToolBarToolBase *wxToolBarBase::FindById(int id) const
+wxToolBarToolBase *wxToolBarBase::FindById(int toolid) const
 {
     wxToolBarToolBase *tool = NULL;
 
@@ -373,7 +373,7 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
           node = node->GetNext() )
     {
         tool = node->GetData();
-        if ( tool->GetId() == id )
+        if ( tool->GetId() == toolid )
         {
             // found
             break;
@@ -484,9 +484,9 @@ wxToolBarBase::~wxToolBarBase()
 // wxToolBarBase tools state
 // ----------------------------------------------------------------------------
 
-void wxToolBarBase::EnableTool(int id, bool enable)
+void wxToolBarBase::EnableTool(int toolid, bool enable)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     if ( tool )
     {
         if ( tool->Enable(enable) )
@@ -496,9 +496,9 @@ void wxToolBarBase::EnableTool(int id, bool enable)
     }
 }
 
-void wxToolBarBase::ToggleTool(int id, bool toggle)
+void wxToolBarBase::ToggleTool(int toolid, bool toggle)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     if ( tool && tool->CanBeToggled() )
     {
         if ( tool->Toggle(toggle) )
@@ -509,9 +509,9 @@ void wxToolBarBase::ToggleTool(int id, bool toggle)
     }
 }
 
-void wxToolBarBase::SetToggle(int id, bool toggle)
+void wxToolBarBase::SetToggle(int toolid, bool toggle)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     if ( tool )
     {
         if ( tool->SetToggle(toggle) )
@@ -521,48 +521,48 @@ void wxToolBarBase::SetToggle(int id, bool toggle)
     }
 }
 
-void wxToolBarBase::SetToolShortHelp(int id, const wxString& help)
+void wxToolBarBase::SetToolShortHelp(int toolid, const wxString& help)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     if ( tool )
     {
         (void)tool->SetShortHelp(help);
     }
 }
 
-void wxToolBarBase::SetToolLongHelp(int id, const wxString& help)
+void wxToolBarBase::SetToolLongHelp(int toolid, const wxString& help)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     if ( tool )
     {
         (void)tool->SetLongHelp(help);
     }
 }
 
-wxObject *wxToolBarBase::GetToolClientData(int id) const
+wxObject *wxToolBarBase::GetToolClientData(int toolid) const
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
 
     return tool ? tool->GetClientData() : NULL;
 }
 
-void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)
+void wxToolBarBase::SetToolClientData(int toolid, wxObject *clientData)
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
 
     wxCHECK_RET( tool, wxT("no such tool in wxToolBar::SetToolClientData") );
 
     tool->SetClientData(clientData);
 }
 
-int wxToolBarBase::GetToolPos(int id) const
+int wxToolBarBase::GetToolPos(int toolid) const
 {
     size_t pos = 0;
     wxToolBarToolsList::compatibility_iterator node;
 
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
-        if ( node->GetData()->GetId() == id )
+        if ( node->GetData()->GetId() == toolid )
             return pos;
 
         pos++;
@@ -571,33 +571,33 @@ int wxToolBarBase::GetToolPos(int id) const
     return wxNOT_FOUND;
 }
 
-bool wxToolBarBase::GetToolState(int id) const
+bool wxToolBarBase::GetToolState(int toolid) const
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     wxCHECK_MSG( tool, false, wxT("no such tool") );
 
     return tool->IsToggled();
 }
 
-bool wxToolBarBase::GetToolEnabled(int id) const
+bool wxToolBarBase::GetToolEnabled(int toolid) const
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     wxCHECK_MSG( tool, false, wxT("no such tool") );
 
     return tool->IsEnabled();
 }
 
-wxString wxToolBarBase::GetToolShortHelp(int id) const
+wxString wxToolBarBase::GetToolShortHelp(int toolid) const
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     wxCHECK_MSG( tool, wxEmptyString, wxT("no such tool") );
 
     return tool->GetShortHelp();
 }
 
-wxString wxToolBarBase::GetToolLongHelp(int id) const
+wxString wxToolBarBase::GetToolLongHelp(int toolid) const
 {
-    wxToolBarToolBase *tool = FindById(id);
+    wxToolBarToolBase *tool = FindById(toolid);
     wxCHECK_MSG( tool, wxEmptyString, wxT("no such tool") );
 
     return tool->GetLongHelp();
@@ -629,9 +629,9 @@ bool wxToolBarBase::IsVertical() const
 // ----------------------------------------------------------------------------
 
 // Only allow toggle if returns true
-bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
+bool wxToolBarBase::OnLeftClick(int toolid, bool toggleDown)
 {
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, id);
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, toolid);
     event.SetEventObject(this);
 
     // we use SetInt() to make wxCommandEvent::IsChecked() return toggleDown
@@ -647,42 +647,42 @@ bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
 }
 
 // Call when right button down.
-void wxToolBarBase::OnRightClick(int id,
+void wxToolBarBase::OnRightClick(int toolid,
                                  long WXUNUSED(x),
                                  long WXUNUSED(y))
 {
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, id);
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolid);
     event.SetEventObject(this);
-    event.SetInt(id);
+    event.SetInt(toolid);
 
     GetEventHandler()->ProcessEvent(event);
 }
 
 // Called when the mouse cursor enters a tool bitmap (no button pressed).
 // Argument is wxID_ANY if mouse is exiting the toolbar.
-// Note that for this event, the id of the window is used,
+// Note that for this event, the toolid of the window is used,
 // and the integer parameter of wxCommandEvent is used to retrieve
-// the tool id.
-void wxToolBarBase::OnMouseEnter(int id)
+// the tool toolid.
+void wxToolBarBase::OnMouseEnter(int toolid)
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, GetId());
     event.SetEventObject(this);
-    event.SetInt(id);
+    event.SetInt(toolid);
 
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame )
     {
         wxString help;
-        if ( id != wxID_ANY )
+        if ( toolid != wxID_ANY )
         {
-           const wxToolBarToolBase * const tool = FindById(id);
+           const wxToolBarToolBase * const tool = FindById(toolid);
            if ( tool )
                help = tool->GetLongHelp();
         }
 
         // call DoGiveHelp() even if help string is empty to avoid showing the
         // help for the previously selected tool when another one is selected
-        frame->DoGiveHelp(help, id != wxID_ANY);
+        frame->DoGiveHelp(help, toolid != wxID_ANY);
     }
 
     (void)GetEventHandler()->ProcessEvent(event);
@@ -717,17 +717,17 @@ void wxToolBarBase::UpdateWindowUI(long flags)
         if ( tool->IsSeparator() )
             continue;
 
-        int id = tool->GetId();
+        int toolid = tool->GetId();
 
-        wxUpdateUIEvent event(id);
+        wxUpdateUIEvent event(toolid);
         event.SetEventObject(this);
 
         if ( evtHandler->ProcessEvent(event) )
         {
             if ( event.GetSetEnabled() )
-                EnableTool(id, event.GetEnabled());
+                EnableTool(toolid, event.GetEnabled());
             if ( event.GetSetChecked() )
-                ToggleTool(id, event.GetChecked());
+                ToggleTool(toolid, event.GetChecked());
 #if 0
             if ( event.GetSetText() )
                 // Set tooltip?
@@ -740,7 +740,7 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 {
     wxToolBarToolBase * const tool = FindById(toolid);
-    wxCHECK_MSG( tool, false, wxT("invalid tool id") );
+    wxCHECK_MSG( tool, false, wxT("invalid tool toolid") );
 
     wxCHECK_MSG( tool->GetKind() == wxITEM_DROPDOWN, false,
                     wxT("menu can be only associated with drop down tools") );
@@ -757,7 +757,7 @@ bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
 {
 #if wxUSE_IMAGE
     out = in.ConvertToGreyscale();
-    if ( out.Ok() )
+    if ( out.IsOk() )
         return true;
 #endif // wxUSE_IMAGE
     return false;

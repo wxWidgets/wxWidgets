@@ -322,7 +322,7 @@ void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 MyApp::MyApp()
 {
-    // user needs to explicitely enable this
+    // user needs to explicitly enable this
     m_uploadReport = false;
 
     // call this to tell the library to call our OnFatalException()

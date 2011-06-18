@@ -429,7 +429,7 @@ bool wxToolMenuBar::Realize()
                 }
 
                 int n = 0;
-                if ( bmpToUse.Ok() )
+                if ( bmpToUse.IsOk() )
                 {
                     n = ::CommandBar_AddBitmap( (HWND) GetHWND(), NULL, (int) (HBITMAP) bmpToUse.GetHBITMAP(),
                                                     1, 16, 16 );
@@ -525,7 +525,7 @@ bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
     if ( !tool->CanBeToggled() || tool->GetKind() != wxITEM_RADIO || toggled )
     {
         // OnLeftClick() can veto the button state change - for buttons which
-        // may be toggled only, of couse
+        // may be toggled only, of course.
         if ( !OnLeftClick((int)id, toggled) && tool->CanBeToggled() )
         {
             // revert back

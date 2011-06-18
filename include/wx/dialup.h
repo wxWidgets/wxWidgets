@@ -171,7 +171,7 @@ public:
     bool IsConnectedEvent() const
         { return GetEventType() == wxEVT_DIALUP_CONNECTED; }
 
-    // does this event come from wxDialUpManager::Dial() or from some extrenal
+    // does this event come from wxDialUpManager::Dial() or from some external
     // process (i.e. does it result from our own attempt to establish the
     // connection)?
     bool IsOwnEvent() const { return m_id != 0; }

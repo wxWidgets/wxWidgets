@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wizard.h
+// Name:        wx/wizard.h
 // Purpose:     wxWizard class: a GUI control presenting the user with a
 //              sequence of dialogs which allows to simply perform some task
 // Author:      Vadim Zeitlin (partly based on work by Ron Kuris and Kevin B.

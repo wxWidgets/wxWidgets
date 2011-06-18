@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
-// Name:        src/aui/dockart.cpp
+// Name:        src/aui/auibar.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:
@@ -362,10 +362,8 @@ void wxAuiDefaultToolBarArt::DrawButton(
     else
         bmp = item.GetBitmap();
 
-    if (!bmp.IsOk())
-        return;
-
-    dc.DrawBitmap(bmp, bmp_x, bmp_y, true);
+    if ( bmp.IsOk() )
+        dc.DrawBitmap(bmp, bmp_x, bmp_y, true);
 
     // set the item's text color based on if it is disabled
     dc.SetTextForeground(*wxBLACK);
@@ -460,6 +458,15 @@ void wxAuiDefaultToolBarArt::DrawDropDownButton(
     else if (item.GetState() & wxAUI_BUTTON_STATE_HOVER ||
              item.IsSticky())
     {
+        dc.SetPen(wxPen(m_highlight_colour));
+        dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
+        dc.DrawRectangle(button_rect);
+        dc.DrawRectangle(dropdown_rect);
+    }
+    else if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
+    {
+        // Notice that this branch must come after the hover one to ensure the
+        // correct appearance when the mouse hovers over a checked item.
         dc.SetPen(wxPen(m_highlight_colour));
         dc.SetBrush(wxBrush(m_highlight_colour.ChangeLightness(170)));
         dc.DrawRectangle(button_rect);
@@ -1537,13 +1544,13 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 
             if (idx >= 0 && idx < count)
             {
-                for (i = idx; i < count; ++i)
+                for (i = idx + 1; i < count; ++i)
                 {
                     if (m_items[i].kind != wxITEM_RADIO)
                         break;
                     m_items[i].state &= ~wxAUI_BUTTON_STATE_CHECKED;
                 }
-                for (i = idx; i > 0; i--)
+                for (i = idx - 1; i >= 0; i--)
                 {
                     if (m_items[i].kind != wxITEM_RADIO)
                         break;
@@ -2446,8 +2453,11 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         }
         else if (item.kind == wxITEM_CHECK)
         {
-            // draw a toggle button
-            m_art->DrawButton(dc, this, item, item_rect);
+            // draw either a regular or dropdown toggle button
+            if (!item.dropdown)
+                m_art->DrawButton(dc, this, item, item_rect);
+            else
+                m_art->DrawDropDownButton(dc, this, item, item_rect);
         }
         else if (item.kind == wxITEM_RADIO)
         {

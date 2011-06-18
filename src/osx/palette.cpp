@@ -46,7 +46,7 @@ wxPaletteRefData::wxPaletteRefData()
     m_count = 0;
 }
 
-wxPaletteRefData::wxPaletteRefData(const wxPaletteRefData& data)
+wxPaletteRefData::wxPaletteRefData(const wxPaletteRefData& data) : wxGDIRefData()
 {
     m_count = data.m_count;
     m_palette = new wxColour[m_count];

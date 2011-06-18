@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-06-20
-// RCS-ID:      $Id: window.mm 48805 2007-09-19 14:52:25Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -802,12 +802,32 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     // [NSWindow setAllowsConcurrentViewDrawing:NO] does not affect it.
     if ( !wxThread::IsMain() )
     {
-      // just call the superclass handler, we don't need any custom wx drawing
-      // here and it seems to work fine:
-      wxOSX_DrawRectHandlerPtr
-          superimpl = (wxOSX_DrawRectHandlerPtr)
-                        [[self superclass] instanceMethodForSelector:_cmd];
-      superimpl(self, _cmd, rect);
+        if ( impl->IsUserPane() )
+        {
+            wxWindow* win = impl->GetWXPeer();
+            if ( win->UseBgCol() )
+            {
+                
+                CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+                CGContextSaveGState( context );
+
+                CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
+                CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+                CGContextFillRect( context, r );
+
+                CGContextRestoreGState( context );
+            }
+        }
+        else 
+        {
+            // just call the superclass handler, we don't need any custom wx drawing
+            // here and it seems to work fine:
+            wxOSX_DrawRectHandlerPtr
+            superimpl = (wxOSX_DrawRectHandlerPtr)
+            [[self superclass] instanceMethodForSelector:_cmd];
+            superimpl(self, _cmd, rect);
+        }
+
       return;
     }
 #endif // wxUSE_THREADS
@@ -988,7 +1008,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
-        if (!m_wxPeer->MacIsUserPane())
+        if (!IsUserPane())
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
@@ -1062,7 +1082,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
-    if ( m_wxPeer->MacIsUserPane() )
+    if ( IsUserPane() )
         return m_wxPeer->AcceptsFocus();
     else
     {
@@ -1266,7 +1286,7 @@ void wxWidgetCocoaImpl::controlTextDidChange()
 #else
 
 #define wxOSX_CLASS_ADD_METHOD( c, s, i, t ) \
-    { s, t, i },
+    { s, (char*) t, i },
 
 #endif
 
@@ -1345,8 +1365,8 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 
 IMPLEMENT_DYNAMIC_CLASS( wxWidgetCocoaImpl , wxWidgetImpl )
 
-wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl ) :
-    wxWidgetImpl( peer, isRootControl )
+wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
+    wxWidgetImpl( peer, isRootControl, isUserPane )
 {
     Init();
     m_osxView = w;
@@ -1424,7 +1444,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 - (id)init:(wxWindow *)win
 {
-    [super init];
+    self = [super init];
 
     m_win = win;
     m_isDone = false;
@@ -2095,9 +2115,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
 
-    if ( m_wxPeer->MacIsUserPane() && [event type] == NSKeyDown)
+    if ( !result )
     {
-        if ( !result )
+        if ( IsUserPane() && [event type] == NSKeyDown)
         {
             if ( wxevent.GetKeyCode() < WXK_SPACE || wxevent.GetKeyCode() == WXK_DELETE || wxevent.GetKeyCode() >= WXK_START )
             {
@@ -2219,7 +2239,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     [v registerForDraggedTypes:[NSArray arrayWithObjects:
         NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
     return c;
 }
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dataobj.h
+// Name:        wx/osx/dataobj.h
 // Purpose:     declaration of the wxDataObject
 // Author:      Stefan Csomor (adapted from Robert Roebling's gtk port)
 // Modified by:

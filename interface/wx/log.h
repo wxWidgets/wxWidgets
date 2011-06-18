@@ -747,7 +747,7 @@ public:
         Note that the latter must be called the same number of times as the former
         to undo it, i.e. if you call Suspend() twice you must call Resume() twice as well.
 
-        Note that suspending the logging means that the log sink won't be be flushed
+        Note that suspending the logging means that the log sink won't be flushed
         periodically, it doesn't have any effect if the current log target does the
         logging immediately without waiting for Flush() to be called (the standard
         GUI log target only shows the log dialog when it is flushed, so Suspend()
@@ -869,7 +869,7 @@ public:
     /**
         Sets the timestamp format prepended by the default log targets to all
         messages. The string may contain any normal characters as well as %
-        prefixed format specificators, see @e strftime() manual for details.
+        prefixed format specifiers, see @e strftime() manual for details.
         Passing an empty string to this function disables message time stamping.
     */
     static void SetTimestamp(const wxString& format);

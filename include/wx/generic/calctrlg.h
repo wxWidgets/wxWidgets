@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/calctrlg.h
+// Name:        wx/generic/calctrlg.h
 // Purpose:     generic implementation of date-picker control
 // Author:      Vadim Zeitlin
 // Modified by:

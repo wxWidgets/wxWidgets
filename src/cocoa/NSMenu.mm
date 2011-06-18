@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSMenu.mm
+// Name:        src/cocoa/NSMenu.mm
 // Purpose:     wxCocoaNSMenu implementation
 // Author:      David Elliott
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wince/missing.h
+// Name:        wx/msw/wince/missing.h
 // Purpose:     Missing things in WinCE
 // Author:      Marco Cavallini
 // Modified by:

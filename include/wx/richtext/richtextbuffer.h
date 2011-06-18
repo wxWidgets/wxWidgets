@@ -1110,7 +1110,7 @@ public:
     bool HasFloatMode() const { return HasFlag(wxTEXT_BOX_ATTR_FLOAT); }
 
     /**
-        Returns @true if this object is floating?
+        Returns @true if this object is floating.
     */
     bool IsFloating() const { return HasFloatMode() && GetFloatMode() != wxTEXT_BOX_ATTR_FLOAT_NONE; }
 
@@ -1977,7 +1977,7 @@ public:
 
     virtual ~wxRichTextObject();
 
-// Overrideables
+// Overridables
 
     /**
         Draw the item, within the given range. Some objects may ignore the range (for
@@ -1993,11 +1993,21 @@ public:
 
     /**
         Hit-testing: returns a flag indicating hit test details, plus
-        information about position. contextObj is returned to specify what object
+        information about position. @a contextObj is returned to specify what object
         position is relevant to, since otherwise there's an ambiguity.
-        obj may not a child of contextObj, since we may be referring to the container itself
+        @ obj might not be a child of @a contextObj, since we may be referring to the container itself
         if we have no hit on a child - for example if we click outside an object.
+
+        The function puts the position in @a textPosition if one is found.
+        @a pt is in logical units (a zero y position is at the beginning of the buffer).
+
+        Pass wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS if you only want to consider objects
+        directly under the object you are calling HitTest on. Otherwise, it will recurse
+        and potentially find a nested object.
+
+        @return One of the ::wxRichTextHitTestFlags values.
     */
+
     virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
     /**
@@ -2519,79 +2529,94 @@ public:
     wxRichTextCompositeObject(wxRichTextObject* parent = NULL);
     virtual ~wxRichTextCompositeObject();
 
-// Overrideables
+// Overridables
 
-    /// Hit-testing: returns a flag indicating hit test details, plus
-    /// information about position
     virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    /// Finds the absolute position and row height for the given character position
     virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
 
-    /// Calculate range
     virtual void CalculateRange(long start, long& end);
 
-    /// Delete range
     virtual bool DeleteRange(const wxRichTextRange& range);
 
-    /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
-    /// Gets the object size for the given range. Returns false if the range
-    /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    /// Dump to output stream for debugging
     virtual void Dump(wxTextOutputStream& stream);
 
-    /// Invalidate the buffer. With no argument, invalidates whole buffer.
     virtual void Invalidate(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
 
 // Accessors
 
-    /// Get the children
+    /**
+        Returns the children.
+    */
     wxRichTextObjectList& GetChildren() { return m_children; }
+    /**
+        Returns the children.
+    */
     const wxRichTextObjectList& GetChildren() const { return m_children; }
 
-    /// Get the child count
+    /**
+        Returns the number of children.
+    */
     size_t GetChildCount() const ;
 
-    /// Get the nth child
+    /**
+        Returns the nth child.
+    */
     wxRichTextObject* GetChild(size_t n) const ;
 
-    /// Is this composite?
+    /**
+        Returns @true if this object is composite.
+    */
     virtual bool IsComposite() const { return true; }
 
-    /// Returns true if the buffer is empty
+    /**
+        Returns true if the buffer is empty.
+    */
     virtual bool IsEmpty() const { return GetChildCount() == 0; }
 
-    /// Get the child object at the given character position
+    /**
+        Returns the child object at the given character position.
+    */
     virtual wxRichTextObject* GetChildAtPosition(long pos) const;
 
 // Operations
 
-    /// Copy
     void Copy(const wxRichTextCompositeObject& obj);
 
-    /// Assignment
     void operator= (const wxRichTextCompositeObject& obj) { Copy(obj); }
 
-    /// Append a child, returning the position
+    /**
+        Appends a child, returning the position.
+    */
     size_t AppendChild(wxRichTextObject* child) ;
 
-    /// Insert the child in front of the given object, or at the beginning
+    /**
+        Inserts the child in front of the given object, or at the beginning.
+    */
     bool InsertChild(wxRichTextObject* child, wxRichTextObject* inFrontOf) ;
 
-    /// Delete the child
+    /**
+        Removes and optionally deletes the specified child.
+    */
     bool RemoveChild(wxRichTextObject* child, bool deleteChild = false) ;
 
-    /// Delete all children
+    /**
+        Deletes all the children.
+    */
     bool DeleteChildren() ;
 
-    /// Recursively merge all pieces that can be merged.
+    /**
+        Recursively merges all pieces that can be merged.
+    */
     bool Defragment(const wxRichTextRange& range = wxRICHTEXT_ALL);
 
-    /// Move the object recursively, by adding the offset from old to new
+    /**
+        Moves the object recursively, by adding the offset from old to new.
+    */
     virtual void Move(const wxPoint& pt);
 
 protected:
@@ -2619,304 +2644,539 @@ public:
     wxRichTextParagraphLayoutBox(const wxRichTextParagraphLayoutBox& obj): wxRichTextCompositeObject() { Init(); Copy(obj); }
     ~wxRichTextParagraphLayoutBox();
 
-// Overrideables
+// Overridables
 
-    /// Hit-testing: returns a flag indicating hit test details, plus
-    /// information about position
     virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /// Lay the item out
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
-    /// Gets the object size for the given range. Returns false if the range
-    /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    /// Delete range
     virtual bool DeleteRange(const wxRichTextRange& range);
 
-    /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
 #if wxUSE_XML
-    /// Import this object from XML
     virtual bool ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, wxRichTextXMLHandler* handler, bool* recurse);
 #endif
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-    /// Export this object directly to the given stream.
     virtual bool ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler);
 #endif
 
 #if wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT
-    /// Export this object to the given parent node, usually creating at least one child node.
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    /// What is the XML node name of this object?
     virtual wxString GetXMLNodeName() const { return wxT("paragraphlayout"); }
 
-    /// Returns true if objects of this class can accept the focus, i.e. a call to SetFocusObject
-    /// is possible. For example, containers supporting text, such as a text box object, can accept the focus,
-    /// but a table can't (set the focus to individual cells instead).
     virtual bool AcceptsFocus() const { return true; }
 
 // Accessors
 
-    /// Associate a control with the buffer, for operations that for example require refreshing the window.
+    /**
+        Associates a control with the buffer, for operations that for example require refreshing the window.
+    */
     void SetRichTextCtrl(wxRichTextCtrl* ctrl) { m_ctrl = ctrl; }
 
-    /// Get the associated control.
+    /**
+        Returns the associated control.
+    */
     wxRichTextCtrl* GetRichTextCtrl() const { return m_ctrl; }
 
-    /// Get/set whether the last paragraph is partial or complete
+    /**
+        Sets a flag indicating whether the last paragraph is partial or complete.
+    */
     void SetPartialParagraph(bool partialPara) { m_partialParagraph = partialPara; }
+
+    /**
+        Returns a flag indicating whether the last paragraph is partial or complete.
+    */
     bool GetPartialParagraph() const { return m_partialParagraph; }
 
-    /// Returns the style sheet associated with the overall buffer.
+    /**
+        Returns the style sheet associated with the overall buffer.
+    */
     virtual wxRichTextStyleSheet* GetStyleSheet() const;
 
-    /// Is this object top-level, i.e. with its own paragraphs, such as a text box?
     virtual bool IsTopLevel() const { return true; }
 
 // Operations
 
-    /// Submit command to insert paragraphs
+    /**
+        Submits a command to insert paragraphs.
+    */
     bool InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
 
-    /// Submit command to insert the given text
+    /**
+        Submits a command to insert the given text.
+    */
     bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
 
-    /// Submit command to insert the given text
+    /**
+        Submits a command to insert the given text.
+    */
     bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
 
-    /// Submit command to insert the given image
+    /**
+        Submits a command to insert the given image.
+    */
     bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock,
                                                         wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags,
                                                         const wxRichTextAttr& textAttr);
 
-    /// Get the style that is appropriate for a new paragraph at this position.
-    /// If the previous paragraph has a paragraph style name, look up the next-paragraph
-    /// style.
+    /**
+        Returns the style that is appropriate for a new paragraph at this position.
+        If the previous paragraph has a paragraph style name, looks up the next-paragraph
+        style.
+    */
     wxRichTextAttr GetStyleForNewParagraph(wxRichTextBuffer* buffer, long pos, bool caretPosition = false, bool lookUpNewParaStyle=false) const;
 
-    /// Insert an object.
+    /**
+        Inserts an object.
+    */
     wxRichTextObject* InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
 
-    /// Submit command to delete this range
+    /**
+        Submits a command to delete this range.
+    */
     bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer);
 
-    /// Draw the floats of this buffer
+    /**
+        Draws the floating objects in this buffer.
+    */
     void DrawFloats(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /// Move an anchored object to another paragraph
+    /**
+        Moves an anchored object to another paragraph.
+    */
     void MoveAnchoredObjectToParagraph(wxRichTextParagraph* from, wxRichTextParagraph* to, wxRichTextObject* obj);
 
-    /// Initialize the object.
+    /**
+        Initializes the object.
+    */
     void Init();
 
-    /// Clear all children
+    /**
+        Clears all the children.
+    */
     virtual void Clear();
 
-    /// Clear and initialize with one blank paragraph
+    /**
+        Clears and initializes with one blank paragraph.
+    */
     virtual void Reset();
 
-    /// Convenience function to add a paragraph of text
+    /**
+        Convenience function to add a paragraph of text.
+    */
     virtual wxRichTextRange AddParagraph(const wxString& text, wxRichTextAttr* paraStyle = NULL);
 
-    /// Convenience function to add an image
+    /**
+        Convenience function to add an image.
+    */
     virtual wxRichTextRange AddImage(const wxImage& image, wxRichTextAttr* paraStyle = NULL);
 
-    /// Adds multiple paragraphs, based on newlines.
+    /**
+        Adds multiple paragraphs, based on newlines.
+    */
     virtual wxRichTextRange AddParagraphs(const wxString& text, wxRichTextAttr* paraStyle = NULL);
 
-    /// Get the line at the given position. If caretPosition is true, the position is
-    /// a caret position, which is normally a smaller number.
+    /**
+        Returns the line at the given position. If @a caretPosition is true, the position is
+        a caret position, which is normally a smaller number.
+    */
     virtual wxRichTextLine* GetLineAtPosition(long pos, bool caretPosition = false) const;
 
-    /// Get the line at the given y pixel position, or the last line.
+    /**
+        Returns the line at the given y pixel position, or the last line.
+    */
     virtual wxRichTextLine* GetLineAtYPosition(int y) const;
 
-    /// Get the paragraph at the given character or caret position
+    /**
+        Returns the paragraph at the given character or caret position.
+    */
     virtual wxRichTextParagraph* GetParagraphAtPosition(long pos, bool caretPosition = false) const;
 
-    /// Get the line size at the given position
+    /**
+        Returns the line size at the given position.
+    */
     virtual wxSize GetLineSizeAtPosition(long pos, bool caretPosition = false) const;
 
-    /// Given a position, get the number of the visible line (potentially many to a paragraph),
-    /// starting from zero at the start of the buffer. We also have to pass a bool (startOfLine)
-    /// that indicates whether the caret is being shown at the end of the previous line or at the start
-    /// of the next, since the caret can be shown at 2 visible positions for the same underlying
-    /// position.
+    /**
+        Given a position, returns the number of the visible line (potentially many to a paragraph),
+        starting from zero at the start of the buffer. We also have to pass a bool (@a startOfLine)
+        that indicates whether the caret is being shown at the end of the previous line or at the start
+        of the next, since the caret can be shown at two visible positions for the same underlying
+        position.
+    */
     virtual long GetVisibleLineNumber(long pos, bool caretPosition = false, bool startOfLine = false) const;
 
-    /// Given a line number, get the corresponding wxRichTextLine object.
+    /**
+        Given a line number, returns the corresponding wxRichTextLine object.
+    */
     virtual wxRichTextLine* GetLineForVisibleLineNumber(long lineNumber) const;
 
-    /// Get the leaf object in a paragraph at this position.
-    /// Given a position, get the corresponding wxRichTextLine object.
+    /**
+        Returns the leaf object in a paragraph at this position.
+    */
     virtual wxRichTextObject* GetLeafObjectAtPosition(long position) const;
 
-    /// Get the paragraph by number
+    /**
+        Returns the paragraph by number.
+    */
     virtual wxRichTextParagraph* GetParagraphAtLine(long paragraphNumber) const;
 
-    /// Get the paragraph for a given line
+    /**
+        Returns the paragraph for a given line.
+    */
     virtual wxRichTextParagraph* GetParagraphForLine(wxRichTextLine* line) const;
 
-    /// Get the length of the paragraph
+    /**
+        Returns the length of the paragraph.
+    */
     virtual int GetParagraphLength(long paragraphNumber) const;
 
-    /// Get the number of paragraphs
+    /**
+        Returns the number of paragraphs.
+    */
     virtual int GetParagraphCount() const { return static_cast<int>(GetChildCount()); }
 
-    /// Get the number of visible lines
+    /**
+        Returns the number of visible lines.
+    */
     virtual int GetLineCount() const;
 
-    /// Get the text of the paragraph
+    /**
+        Returns the text of the paragraph.
+    */
     virtual wxString GetParagraphText(long paragraphNumber) const;
 
-    /// Convert zero-based line column and paragraph number to a position.
+    /**
+        Converts zero-based line column and paragraph number to a position.
+    */
     virtual long XYToPosition(long x, long y) const;
 
-    /// Convert zero-based position to line column and paragraph number
+    /**
+        Converts a zero-based position to line column and paragraph number.
+    */
     virtual bool PositionToXY(long pos, long* x, long* y) const;
 
-    /// Set text attributes: character and/or paragraph styles.
+    /**
+        Sets the attributes for the given range. Pass flags to determine how the
+        attributes are set.
+
+        The end point of range is specified as the last character position of the span
+        of text. So, for example, to set the style for a character at position 5,
+        use the range (5,5).
+        This differs from the wxRichTextCtrl API, where you would specify (5,6).
+
+        @a flags may contain a bit list of the following values:
+        - wxRICHTEXT_SETSTYLE_NONE: no style flag.
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this operation should be
+          undoable.
+        - wxRICHTEXT_SETSTYLE_OPTIMIZE: specifies that the style should not be applied
+          if the combined style at this point is already the style in question.
+        - wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY: specifies that the style should only be
+          applied to paragraphs, and not the content.
+          This allows content styling to be preserved independently from that
+          of e.g. a named paragraph style.
+        - wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY: specifies that the style should only be
+          applied to characters, and not the paragraph.
+          This allows content styling to be preserved independently from that
+          of e.g. a named paragraph style.
+        - wxRICHTEXT_SETSTYLE_RESET: resets (clears) the existing style before applying
+          the new style.
+        - wxRICHTEXT_SETSTYLE_REMOVE: removes the specified style.
+          Only the style flags are used in this operation.
+    */
     virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
-    /// Set the attributes for the given object only, for example the box attributes for a text box.
+    /**
+        Sets the attributes for the given object only, for example the box attributes for a text box.
+    */
     virtual void SetStyle(wxRichTextObject *obj, const wxRichTextAttr& textAttr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
-    /// Get the combined text attributes for this position.
+    /**
+        Returns the combined text attributes for this position.
+
+        This function gets the @e uncombined style - that is, the attributes associated
+        with the paragraph or character content, and not necessarily the combined
+        attributes you see on the screen. To get the combined attributes, use GetStyle().
+        If you specify (any) paragraph attribute in @e style's flags, this function
+        will fetch the paragraph attributes.
+        Otherwise, it will return the character attributes.
+    */
     virtual bool GetStyle(long position, wxRichTextAttr& style);
 
-    /// Get the content (uncombined) attributes for this position.
+    /**
+        Returns the content (uncombined) attributes for this position.
+    */
     virtual bool GetUncombinedStyle(long position, wxRichTextAttr& style);
 
-    /// Implementation helper for GetStyle. If combineStyles is true, combine base, paragraph and
-    /// context attributes.
+    /**
+        Implementation helper for GetStyle. If combineStyles is true, combine base, paragraph and
+        context attributes.
+    */
     virtual bool DoGetStyle(long position, wxRichTextAttr& style, bool combineStyles = true);
 
-    /// Get the combined style for a range - if any attribute is different within the range,
-    /// that attribute is not present within the flags
+    /**
+        This function gets a style representing the common, combined attributes in the
+        given range.
+        Attributes which have different values within the specified range will not be
+        included the style flags.
+
+        The function is used to get the attributes to display in the formatting dialog:
+        the user can edit the attributes common to the selection, and optionally specify the
+        values of further attributes to be applied uniformly.
+
+        To apply the edited attributes, you can use SetStyle() specifying
+        the wxRICHTEXT_SETSTYLE_OPTIMIZE flag, which will only apply attributes that
+        are different from the @e combined attributes within the range.
+        So, the user edits the effective, displayed attributes for the range,
+        but his choice won't be applied unnecessarily to content. As an example,
+        say the style for a paragraph specifies bold, but the paragraph text doesn't
+        specify a weight.
+        The combined style is bold, and this is what the user will see on-screen and
+        in the formatting dialog. The user now specifies red text, in addition to bold.
+        When applying with SetStyle(), the content font weight attributes won't be
+        changed to bold because this is already specified by the paragraph.
+        However the text colour attributes @e will be changed to show red.
+    */
     virtual bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
 
-    /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
-    /// content.
+    /**
+        Combines @a style with @a currentStyle for the purpose of summarising the attributes of a range of
+        content.
+    */
     bool CollectStyle(wxRichTextAttr& currentStyle, const wxRichTextAttr& style, wxRichTextAttr& clashingAttr, wxRichTextAttr& absentAttr);
 
-    /// Set list style
+    //@{
+    /**
+        Sets the list attributes for the given range, passing flags to determine how
+        the attributes are set.
+        Either the style definition or the name of the style definition (in the current
+        sheet) can be passed.
+
+        @a flags is a bit list of the following:
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+          as the level for all paragraphs, otherwise the current indentation will be used.
+
+        @see NumberList(), PromoteList(), ClearListStyle().
+    */
     virtual bool SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     virtual bool SetListStyle(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    //@}
 
-    /// Clear list for given range
+    /**
+        Clears the list style from the given range, clearing list-related attributes
+        and applying any named paragraph style associated with each paragraph.
+
+        @a flags is a bit list of the following:
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+
+        @see SetListStyle(), PromoteList(), NumberList()
+    */
     virtual bool ClearListStyle(const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
-    /// Number/renumber any list elements in the given range.
-    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    //@{
+    /**
+        Numbers the paragraphs in the given range.
+
+        Pass flags to determine how the attributes are set.
+        Either the style definition or the name of the style definition (in the current
+        sheet) can be passed.
+
+        @a flags is a bit list of the following:
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+          as the level for all paragraphs, otherwise the current indentation will be used.
+
+        @a def can be NULL to indicate that the existing list style should be used.
+
+        @see SetListStyle(), PromoteList(), ClearListStyle()
+    */
     virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     virtual bool NumberList(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    //@}
 
-    /// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
-    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    //@{
+    /**
+        Promotes the list items within the given range.
+        A positive @a promoteBy produces a smaller indent, and a negative number
+        produces a larger indent. Pass flags to determine how the attributes are set.
+        Either the style definition or the name of the style definition (in the current
+        sheet) can be passed.
+
+        @a flags is a bit list of the following:
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+          as the level for all paragraphs, otherwise the current indentation will be used.
+
+        @see SetListStyle(), SetListStyle(), ClearListStyle()
+    */
     virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
     virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+    //@}
 
-    /// Helper for NumberList and PromoteList, that does renumbering and promotion simultaneously
-    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    /**
+        Helper for NumberList and PromoteList, that does renumbering and promotion simultaneously
+        @a def can be NULL/empty to indicate that the existing list style should be used.
+    */
     virtual bool DoNumberList(const wxRichTextRange& range, const wxRichTextRange& promotionRange, int promoteBy, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
 
-    /// Fills in the attributes for numbering a paragraph after previousParagraph.
+    /**
+        Fills in the attributes for numbering a paragraph after previousParagraph.
+    */
     virtual bool FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const;
 
-    /// Test if this whole range has character attributes of the specified kind. If any
-    /// of the attributes are different within the range, the test fails. You
-    /// can use this to implement, for example, bold button updating. style must have
-    /// flags indicating which attributes are of interest.
+    /**
+        Test if this whole range has character attributes of the specified kind. If any
+        of the attributes are different within the range, the test fails. You
+        can use this to implement, for example, bold button updating. style must have
+        flags indicating which attributes are of interest.
+    */
     virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
 
-    /// Test if this whole range has paragraph attributes of the specified kind. If any
-    /// of the attributes are different within the range, the test fails. You
-    /// can use this to implement, for example, centering button updating. style must have
-    /// flags indicating which attributes are of interest.
+    /**
+        Test if this whole range has paragraph attributes of the specified kind. If any
+        of the attributes are different within the range, the test fails. You
+        can use this to implement, for example, centering button updating. style must have
+        flags indicating which attributes are of interest.
+    */
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
 
-    /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextParagraphLayoutBox(*this); }
 
-    /// Insert fragment into this box at the given position. If partialParagraph is true,
-    /// it is assumed that the last (or only) paragraph is just a piece of data with no paragraph
-    /// marker.
+    /**
+        Insert fragment into this box at the given position. If partialParagraph is true,
+        it is assumed that the last (or only) paragraph is just a piece of data with no paragraph
+        marker.
+    */
     virtual bool InsertFragment(long position, wxRichTextParagraphLayoutBox& fragment);
 
-    /// Make a copy of the fragment corresponding to the given range, putting it in 'fragment'.
+    /**
+        Make a copy of the fragment corresponding to the given range, putting it in @a fragment.
+    */
     virtual bool CopyFragment(const wxRichTextRange& range, wxRichTextParagraphLayoutBox& fragment);
 
-    /// Apply the style sheet to the buffer, for example if the styles have changed.
+    /**
+        Apply the style sheet to the buffer, for example if the styles have changed.
+    */
     virtual bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet);
 
-    /// Copy
     void Copy(const wxRichTextParagraphLayoutBox& obj);
 
-    /// Assignment
     void operator= (const wxRichTextParagraphLayoutBox& obj) { Copy(obj); }
 
-    /// Calculate ranges
+    /**
+        Calculate ranges.
+    */
     virtual void UpdateRanges();
 
-    /// Get all the text
+    /**
+        Get all the text.
+    */
     virtual wxString GetText() const;
 
-    /// Set default style for new content. Setting it to a default attribute
-    /// makes new content take on the 'basic' style.
+    /**
+        Sets the default style, affecting the style currently being applied
+        (for example, setting the default style to bold will cause subsequently
+        inserted text to be bold).
+
+        This is not cumulative - setting the default style will replace the previous
+        default style.
+
+        Setting it to a default attribute object makes new content take on the 'basic' style.
+    */
     virtual bool SetDefaultStyle(const wxRichTextAttr& style);
 
-    /// Get default style
+    /**
+        Returns the current default style, affecting the style currently being applied
+        (for example, setting the default style to bold will cause subsequently
+        inserted text to be bold).
+    */
     virtual const wxRichTextAttr& GetDefaultStyle() const { return m_defaultAttributes; }
 
-    /// Set basic (overall) style
+    /**
+        Sets the basic (overall) style. This is the style of the whole
+        buffer before further styles are applied, unlike the default style, which
+        only affects the style currently being applied (for example, setting the default
+        style to bold will cause subsequently inserted text to be bold).
+    */
     virtual void SetBasicStyle(const wxRichTextAttr& style) { m_attributes = style; }
 
-    /// Get basic (overall) style
+    /**
+        Returns the basic (overall) style.
+
+        This is the style of the whole buffer before further styles are applied,
+        unlike the default style, which only affects the style currently being
+        applied (for example, setting the default style to bold will cause
+        subsequently inserted text to be bold).
+    */
     virtual const wxRichTextAttr& GetBasicStyle() const { return m_attributes; }
 
-    /// Invalidate the buffer. With no argument, invalidates whole buffer.
+    /**
+        Invalidates the buffer. With no argument, invalidates whole buffer.
+    */
     virtual void Invalidate(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
 
-    /// Do the (in)validation for this object only
+    /**
+        Do the (in)validation for this object only.
+    */
     virtual void DoInvalidate(const wxRichTextRange& invalidRange);
 
-    /// Do the (in)validation both up and down the hierarchy
+    /**
+        Do the (in)validation both up and down the hierarchy.
+    */
     virtual void InvalidateHierarchy(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
 
-    /// Gather information about floating objects. If untilObj is non-NULL,
-    /// will stop getting information if the current object is this, since we
-    /// will collect the rest later.
+    /**
+        Gather information about floating objects. If untilObj is non-NULL,
+        will stop getting information if the current object is this, since we
+        will collect the rest later.
+    */
     virtual bool UpdateFloatingObjects(const wxRect& availableRect, wxRichTextObject* untilObj = NULL);
 
-    /// Get invalid range, rounding to entire paragraphs if argument is true.
+    /**
+        Get invalid range, rounding to entire paragraphs if argument is true.
+    */
     wxRichTextRange GetInvalidRange(bool wholeParagraphs = false) const;
 
-    /// Does this object need layout?
+    /**
+        Returns @true if this object needs layout.
+    */
     bool IsDirty() const { return m_invalidRange != wxRICHTEXT_NONE; }
 
-    /// Get the wxRichTextFloatCollector of this object
+    /**
+        Returns the wxRichTextFloatCollector of this object.
+    */
     wxRichTextFloatCollector* GetFloatCollector() { return m_floatCollector; }
 
-    /// Get the number of floating objects at this level
+    /**
+        Returns the number of floating objects at this level.
+    */
     int GetFloatingObjectCount() const;
 
-    /// Get a list of floating objects
+    /**
+        Returns a list of floating objects.
+    */
     bool GetFloatingObjects(wxRichTextObjectList& objects) const;
 
 protected:
     wxRichTextCtrl* m_ctrl;
     wxRichTextAttr  m_defaultAttributes;
 
-    /// The invalidated range that will need full layout
+    // The invalidated range that will need full layout
     wxRichTextRange m_invalidRange;
 
     // Is the last paragraph partial or complete?
@@ -2955,41 +3215,24 @@ public:
 
     wxRichTextBox(const wxRichTextBox& obj): wxRichTextParagraphLayoutBox() { Copy(obj); }
 
-// Overrideables
-
-    /**
-        Draws the item.
-    */
+// Overridables
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /**
-        Returns the XML node name of this object.
-    */
-
     virtual wxString GetXMLNodeName() const { return wxT("textbox"); }
 
-    /// Can we edit properties via a GUI?
     virtual bool CanEditProperties() const { return true; }
 
-    /// Edit properties via a GUI
     virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
 
-    /// Return the label to be used for the properties context menu item.
     virtual wxString GetPropertiesMenuLabel() const { return _("&Box"); }
 
 // Accessors
 
 // Operations
 
-    /**
-        Makes a clone of this object.
-    */
     virtual wxRichTextObject* Clone() const { return new wxRichTextBox(*this); }
 
-    /**
-        Copies this object.
-    */
     void Copy(const wxRichTextBox& obj);
 
 protected:
@@ -3017,40 +3260,76 @@ public:
     wxRichTextLine(const wxRichTextLine& obj) { Init( NULL); Copy(obj); }
     virtual ~wxRichTextLine() {}
 
-// Overrideables
+// Overridables
 
 // Accessors
 
-    /// Set the range
+    /**
+        Sets the range associated with this line.
+    */
     void SetRange(const wxRichTextRange& range) { m_range = range; }
+    /**
+        Sets the range associated with this line.
+    */
     void SetRange(long from, long to) { m_range = wxRichTextRange(from, to); }
 
-    /// Get the parent paragraph
+    /**
+        Returns the parent paragraph.
+    */
     wxRichTextParagraph* GetParent() { return m_parent; }
 
-    /// Get the range
+    /**
+        Returns the range.
+    */
     const wxRichTextRange& GetRange() const { return m_range; }
+    /**
+        Returns the range.
+    */
     wxRichTextRange& GetRange() { return m_range; }
 
-    /// Get the absolute range
+    /**
+        Returns the absolute range.
+    */
     wxRichTextRange GetAbsoluteRange() const;
 
-    /// Get/set the line size as calculated by Layout.
+    /**
+        Returns the line size as calculated by Layout.
+    */
     virtual wxSize GetSize() const { return m_size; }
+
+    /**
+        Sets the line size as calculated by Layout.
+    */
     virtual void SetSize(const wxSize& sz) { m_size = sz; }
 
-    /// Get/set the object position relative to the parent
+    /**
+        Returns the object position relative to the parent.
+    */
     virtual wxPoint GetPosition() const { return m_pos; }
+
+    /**
+        Sets the object position relative to the parent.
+    */
     virtual void SetPosition(const wxPoint& pos) { m_pos = pos; }
 
-    /// Get the absolute object position
+    /**
+        Returns the absolute object position.
+    */
     virtual wxPoint GetAbsolutePosition() const;
 
-    /// Get the rectangle enclosing the line
+    /**
+        Returns the rectangle enclosing the line.
+    */
     virtual wxRect GetRect() const { return wxRect(GetAbsolutePosition(), GetSize()); }
 
-    /// Set/get stored descent
+    /**
+        Sets the stored descent.
+    */
     void SetDescent(int descent) { m_descent = descent; }
+
+    /**
+        Returns the stored descent.
+    */
     int GetDescent() const { return m_descent; }
 
 #if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
@@ -3060,26 +3339,29 @@ public:
 
 // Operations
 
-    /// Initialisation
+    /**
+        Initialises the object.
+    */
     void Init(wxRichTextParagraph* parent);
 
-    /// Copy
+    /**
+        Copies from @a obj.
+    */
     void Copy(const wxRichTextLine& obj);
 
-    /// Clone
     virtual wxRichTextLine* Clone() const { return new wxRichTextLine(*this); }
 
 protected:
 
-    /// The range of the line (start position to end position)
-    /// This is relative to the parent paragraph.
+    // The range of the line (start position to end position)
+    // This is relative to the parent paragraph.
     wxRichTextRange     m_range;
 
-    /// Size and position measured relative to top of paragraph
+    // Size and position measured relative to top of paragraph
     wxPoint             m_pos;
     wxSize              m_size;
 
-    /// Maximum descent for this line (location of text baseline)
+    // Maximum descent for this line (location of text baseline)
     int                 m_descent;
 
     // The parent object
@@ -3109,117 +3391,156 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph: public wxRichTextCompositeObject
 public:
 // Constructors
 
+    /**
+        Constructor taking a parent and style.
+    */
     wxRichTextParagraph(wxRichTextObject* parent = NULL, wxRichTextAttr* style = NULL);
+    /**
+        Constructor taking a text string, a parent and paragraph and character attributes.
+    */
     wxRichTextParagraph(const wxString& text, wxRichTextObject* parent = NULL, wxRichTextAttr* paraStyle = NULL, wxRichTextAttr* charStyle = NULL);
     virtual ~wxRichTextParagraph();
     wxRichTextParagraph(const wxRichTextParagraph& obj): wxRichTextCompositeObject() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
-    /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /// Lay the item out
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
-    /// Gets the object size for the given range. Returns false if the range
-    /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    /// Finds the absolute position and row height for the given character position
     virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
 
-    /// Hit-testing: returns a flag indicating hit test details, plus
-    /// information about position and the object that was found.
     virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    /// Calculate range
     virtual void CalculateRange(long start, long& end);
 
-    /// What is the XML node name of this object?
     virtual wxString GetXMLNodeName() const { return wxT("paragraph"); }
 
 // Accessors
 
-    /// Get the cached lines
+    /**
+        Returns the cached lines.
+    */
     wxRichTextLineList& GetLines() { return m_cachedLines; }
 
 // Operations
 
-    /// Copy
+    /**
+        Copies the object.
+    */
     void Copy(const wxRichTextParagraph& obj);
 
-    /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextParagraph(*this); }
 
-    /// Clear the cached lines
+    /**
+        Clears the cached lines.
+    */
     void ClearLines();
 
 // Implementation
 
-    /// Apply paragraph styles such as centering to the wrapped lines
+    /**
+        Applies paragraph styles such as centering to the wrapped lines.
+    */
     virtual void ApplyParagraphStyle(wxRichTextLine* line, const wxRichTextAttr& attr, const wxRect& rect, wxDC& dc);
 
-    /// Insert text at the given position
+    /**
+        Inserts text at the given position.
+    */
     virtual bool InsertText(long pos, const wxString& text);
 
-    /// Split an object at this position if necessary, and return
-    /// the previous object, or NULL if inserting at beginning.
+    /**
+        Splits an object at this position if necessary, and returns
+        the previous object, or NULL if inserting at the beginning.
+    */
     virtual wxRichTextObject* SplitAt(long pos, wxRichTextObject** previousObject = NULL);
 
-    /// Move content to a list from this point
+    /**
+        Moves content to a list from this point.
+    */
     virtual void MoveToList(wxRichTextObject* obj, wxList& list);
 
-    /// Add content back from list
+    /**
+        Adds content back from a list.
+    */
     virtual void MoveFromList(wxList& list);
 
-    /// Get the plain text searching from the start or end of the range.
-    /// The resulting string may be shorter than the range given.
+    /**
+        Returns the plain text searching from the start or end of the range.
+        The resulting string may be shorter than the range given.
+    */
     bool GetContiguousPlainText(wxString& text, const wxRichTextRange& range, bool fromStart = true);
 
-    /// Find a suitable wrap position. wrapPosition is the last position in the line to the left
-    /// of the split.
+    /**
+        Finds a suitable wrap position. @a wrapPosition is the last position in the line to the left
+        of the split.
+    */
     bool FindWrapPosition(const wxRichTextRange& range, wxDC& dc, int availableSpace, long& wrapPosition, wxArrayInt* partialExtents);
 
-    /// Find the object at the given position
+    /**
+        Finds the object at the given position.
+    */
     wxRichTextObject* FindObjectAtPosition(long position);
 
-    /// Get the bullet text for this paragraph.
+    /**
+        Returns the bullet text for this paragraph.
+    */
     wxString GetBulletText();
 
-    /// Allocate or reuse a line object
+    /**
+        Allocates or reuses a line object.
+    */
     wxRichTextLine* AllocateLine(int pos);
 
-    /// Clear remaining unused line objects, if any
+    /**
+        Clears remaining unused line objects, if any.
+    */
     bool ClearUnusedLines(int lineCount);
 
-    /// Get combined attributes of the base style, paragraph style and character style. We use this to dynamically
-    /// retrieve the actual style.
+    /**
+        Returns combined attributes of the base style, paragraph style and character style. We use this to dynamically
+        retrieve the actual style.
+    */
     wxRichTextAttr GetCombinedAttributes(const wxRichTextAttr& contentStyle, bool includingBoxAttr = false) const;
 
-    /// Get combined attributes of the base style and paragraph style.
+    /**
+        Returns the combined attributes of the base style and paragraph style.
+    */
     wxRichTextAttr GetCombinedAttributes(bool includingBoxAttr = false) const;
 
-    /// Get the first position from pos that has a line break character.
+    /**
+        Returns the first position from pos that has a line break character.
+    */
     long GetFirstLineBreakPosition(long pos);
 
-    /// Create default tabstop array
+    /**
+        Creates a default tabstop array.
+    */
     static void InitDefaultTabs();
 
-    /// Clear default tabstop array
+    /**
+        Clears the default tabstop array.
+    */
     static void ClearDefaultTabs();
 
-    /// Get default tabstop array
+    /**
+        Returns the default tabstop array.
+    */
     static const wxArrayInt& GetDefaultTabs() { return sm_defaultTabs; }
 
-    /// Layout the floats object
+    /**
+        Lays out the floating objects.
+    */
     void LayoutFloat(wxDC& dc, const wxRect& rect, int style, wxRichTextFloatCollector* floatCollector);
 
 protected:
-    /// The lines that make up the wrapped paragraph
+
+    // The lines that make up the wrapped paragraph
     wxRichTextLineList m_cachedLines;
 
-    /// Default tabstops
+    // Default tabstops
     static wxArrayInt  sm_defaultTabs;
 
 friend class wxRichTextFloatCollector;
@@ -3242,86 +3563,82 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextPlainText: public wxRichTextObject
 public:
 // Constructors
 
+    /**
+        Constructor.
+    */
     wxRichTextPlainText(const wxString& text = wxEmptyString, wxRichTextObject* parent = NULL, wxRichTextAttr* style = NULL);
+
+    /**
+        Copy constructor.
+    */
     wxRichTextPlainText(const wxRichTextPlainText& obj): wxRichTextObject() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
-    /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /// Lay the item out
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
-    /// Gets the object size for the given range. Returns false if the range
-    /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
-    /// Do a split, returning an object containing the second part, and setting
-    /// the first part in 'this'.
     virtual wxRichTextObject* DoSplit(long pos);
 
-    /// Calculate range
     virtual void CalculateRange(long start, long& end);
 
-    /// Delete range
     virtual bool DeleteRange(const wxRichTextRange& range);
 
-    /// Returns true if the object is empty
     virtual bool IsEmpty() const { return m_text.empty(); }
 
-    /// Returns true if this object can merge itself with the given one.
     virtual bool CanMerge(wxRichTextObject* object) const;
 
-    /// Returns true if this object merged itself with the given one.
-    /// The calling code will then delete the given object.
     virtual bool Merge(wxRichTextObject* object);
 
-    /// Dump to output stream for debugging
     virtual void Dump(wxTextOutputStream& stream);
 
-    /// Get the first position from pos that has a line break character.
+    /**
+        Get the first position from pos that has a line break character.
+    */
     long GetFirstLineBreakPosition(long pos);
 
     /// Does this object take note of paragraph attributes? Text and image objects don't.
     virtual bool UsesParagraphAttributes() const { return false; }
 
 #if wxUSE_XML
-    /// Import this object from XML
     virtual bool ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, wxRichTextXMLHandler* handler, bool* recurse);
 #endif
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-    /// Export this object directly to the given stream.
     virtual bool ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler);
 #endif
 
 #if wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT
-    /// Export this object to the given parent node, usually creating at least one child node.
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    /// What is the XML node name of this object?
     virtual wxString GetXMLNodeName() const { return wxT("text"); }
 
 // Accessors
 
-    /// Get the text
+    /**
+        Returns the text.
+    */
     const wxString& GetText() const { return m_text; }
 
-    /// Set the text
+    /**
+        Sets the text.
+    */
     void SetText(const wxString& text) { m_text = text; }
 
 // Operations
 
-    /// Copy
+    // Copies the text object,
     void Copy(const wxRichTextPlainText& obj);
 
-    /// Clone
+    // Clones the text object.
     virtual wxRichTextObject* Clone() const { return new wxRichTextPlainText(*this); }
+
 private:
     bool DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, bool selected);
 
@@ -3343,75 +3660,148 @@ protected:
 class WXDLLIMPEXP_RICHTEXT wxRichTextImageBlock: public wxObject
 {
 public:
+    /**
+        Constructor.
+    */
     wxRichTextImageBlock();
+
+    /**
+        Copy constructor.
+    */
     wxRichTextImageBlock(const wxRichTextImageBlock& block);
     virtual ~wxRichTextImageBlock();
 
+    /**
+        Initialises the block.
+    */
     void Init();
+
+    /**
+        Clears the block.
+    */
+
     void Clear();
 
-    // Load the original image into a memory block.
-    // If the image is not a JPEG, we must convert it into a JPEG
-    // to conserve space.
-    // If it's not a JPEG we can make use of 'image', already scaled, so we don't have to
-    // load the image a 2nd time.
+    /**
+        Load the original image into a memory block.
+        If the image is not a JPEG, we must convert it into a JPEG
+        to conserve space.
+        If it's not a JPEG we can make use of @a image, already scaled, so we don't have to
+        load the image a second time.
+    */
     virtual bool MakeImageBlock(const wxString& filename, wxBitmapType imageType,
                                 wxImage& image, bool convertToJPEG = true);
 
-    // Make an image block from the wxImage in the given
-    // format.
+    /**
+        Make an image block from the wxImage in the given
+        format.
+    */
     virtual bool MakeImageBlock(wxImage& image, wxBitmapType imageType, int quality = 80);
 
-    // Uses a const wxImage for efficiency, but can't set quality (only relevant for JPEG)
+    /**
+        Uses a const wxImage for efficiency, but can't set quality (only relevant for JPEG)
+    */
     virtual bool MakeImageBlockDefaultQuality(const wxImage& image, wxBitmapType imageType);
 
-    // Makes the image block
+    /**
+        Makes the image block.
+    */
     virtual bool DoMakeImageBlock(const wxImage& image, wxBitmapType imageType);
 
-    // Write to a file
+    /**
+        Writes the block to a file.
+    */
     bool Write(const wxString& filename);
 
-    // Write data in hex to a stream
+    /**
+        Writes the data in hex to a stream.
+    */
     bool WriteHex(wxOutputStream& stream);
 
-    // Read data in hex from a stream
+    /**
+        Reads the data in hex from a stream.
+    */
     bool ReadHex(wxInputStream& stream, int length, wxBitmapType imageType);
 
-    // Copy from 'block'
+    /**
+        Copy from @a block.
+    */
     void Copy(const wxRichTextImageBlock& block);
 
     // Load a wxImage from the block
+    /**
+    */
     bool Load(wxImage& image);
 
-//// Operators
+// Operators
+
+    /**
+        Assignment operation.
+    */
     void operator=(const wxRichTextImageBlock& block);
 
-//// Accessors
+// Accessors
 
+    /**
+        Returns the raw data.
+    */
     unsigned char* GetData() const { return m_data; }
+
+    /**
+        Returns the data size in bytes.
+    */
     size_t GetDataSize() const { return m_dataSize; }
+
+    /**
+        Returns the image type.
+    */
     wxBitmapType GetImageType() const { return m_imageType; }
 
+    /**
+    */
     void SetData(unsigned char* image) { m_data = image; }
+
+    /**
+        Sets the data size.
+    */
     void SetDataSize(size_t size) { m_dataSize = size; }
+
+    /**
+        Sets the image type.
+    */
     void SetImageType(wxBitmapType imageType) { m_imageType = imageType; }
 
-    bool Ok() const { return IsOk(); }
+    /**
+        Returns @true if the data is non-NULL.
+    */
     bool IsOk() const { return GetData() != NULL; }
+    bool Ok() const { return IsOk(); }
 
-    // Gets the extension for the block's type
+    /**
+        Gets the extension for the block's type.
+    */
     wxString GetExtension() const;
 
 /// Implementation
 
-    // Allocate and read from stream as a block of memory
+    /**
+        Allocates and reads from a stream as a block of memory.
+    */
     static unsigned char* ReadBlock(wxInputStream& stream, size_t size);
+
+    /**
+        Allocates and reads from a file as a block of memory.
+    */
     static unsigned char* ReadBlock(const wxString& filename, size_t size);
 
-    // Write memory block to stream
+    /**
+        Writes a memory block to stream.
+    */
     static bool WriteBlock(wxOutputStream& stream, unsigned char* block, size_t size);
 
-    // Write memory block to file
+    /**
+        Writes a memory block to a file.
+    */
     static bool WriteBlock(const wxString& filename, unsigned char* block, size_t size);
 
 protected:
@@ -3439,86 +3829,103 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextObject
 public:
 // Constructors
 
+    /**
+        Default constructor.
+    */
     wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { }
+
+    /**
+        Creates a wxRichTextImage from a wxImage.
+    */
     wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxRichTextAttr* charStyle = NULL);
+
+    /**
+        Creates a wxRichTextImage from an image block.
+    */
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxRichTextAttr* charStyle = NULL);
+
+    /**
+        Copy constructor.
+    */
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject(obj) { Copy(obj); }
 
-// Overrideables
+// Overridables
 
-    /// Draw the item
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /// Lay the item out
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
-    /// Get the object size for the given range. Returns false if the range
-    /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    /// Get the 'natural' size for an object. For an image, it would be the
-    /// image size.
+    /**
+        Returns the 'natural' size for this object - the image size.
+    */
     virtual wxTextAttrSize GetNaturalSize() const;
 
-    /// Returns true if the object is empty. An image is never empty; if the image is broken, that's not the same thing as empty.
-    virtual bool IsEmpty() const { return false; /* !m_imageBlock.Ok(); */ }
+    virtual bool IsEmpty() const { return false; /* !m_imageBlock.IsOk(); */ }
 
-    /// Can we edit properties via a GUI?
     virtual bool CanEditProperties() const { return true; }
 
-    /// Edit properties via a GUI
     virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
 
-    /// Return the label to be used for the properties context menu item.
     virtual wxString GetPropertiesMenuLabel() const { return _("&Picture"); }
 
-    /// Does this object take note of paragraph attributes? Text and image objects don't.
     virtual bool UsesParagraphAttributes() const { return false; }
 
 #if wxUSE_XML
-    /// Import this object from XML
     virtual bool ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, wxRichTextXMLHandler* handler, bool* recurse);
 #endif
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-    /// Export this object directly to the given stream.
     virtual bool ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler);
 #endif
 
 #if wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT
-    /// Export this object to the given parent node, usually creating at least one child node.
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
     // Images can be floatable (optionally).
     virtual bool IsFloatable() const { return true; }
 
-    /// What is the XML node name of this object?
     virtual wxString GetXMLNodeName() const { return wxT("image"); }
 
 // Accessors
 
-    /// Get the image cache (scaled bitmap)
+    /**
+        Returns the image cache (a scaled bitmap).
+    */
     const wxBitmap& GetImageCache() const { return m_imageCache; }
 
-    /// Set the image cache
+    /**
+        Sets the image cache.
+    */
     void SetImageCache(const wxBitmap& bitmap) { m_imageCache = bitmap; }
 
-    /// Reset the image cache
+    /**
+        Resets the image cache.
+    */
     void ResetImageCache() { m_imageCache = wxNullBitmap; }
 
-    /// Get the image block containing the raw data
+    /**
+        Returns the image block containing the raw data.
+    */
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
 // Operations
 
-    /// Copy
+    /**
+        Copies the image object.
+    */
     void Copy(const wxRichTextImage& obj);
 
-    /// Clone
+    /**
+        Clones the image object.
+    */
     virtual wxRichTextObject* Clone() const { return new wxRichTextImage(*this); }
 
-    /// Create a cached image at the required size
+    /**
+        Creates a cached image at the required size.
+    */
     virtual bool LoadImageCache(wxDC& dc, bool resetCache = false);
 
 protected:
@@ -3546,332 +3953,620 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer: public wxRichTextParagraphLayoutBox
 public:
 // Constructors
 
+    /**
+        Default constructor.
+    */
     wxRichTextBuffer() { Init(); }
+
+    /**
+        Copy constructor.
+    */
     wxRichTextBuffer(const wxRichTextBuffer& obj): wxRichTextParagraphLayoutBox() { Init(); Copy(obj); }
+
     virtual ~wxRichTextBuffer() ;
 
 // Accessors
 
-    /// Gets the command processor
+    /**
+        Returns the command processor.
+        A text buffer always creates its own command processor when it is initialized.
+    */
     wxCommandProcessor* GetCommandProcessor() const { return m_commandProcessor; }
 
-    /// Set style sheet, if any.
+    /**
+        Sets style sheet, if any. This will allow the application to use named character and paragraph
+        styles found in the style sheet.
+
+        Neither the buffer nor the control owns the style sheet so must be deleted by the application.
+    */
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_styleSheet = styleSheet; }
+
+    /**
+        Returns the style sheet.
+    */
     virtual wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
 
-    /// Set style sheet and notify of the change
+    /**
+        Sets the style sheet and sends a notification of the change.
+    */
     bool SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet);
 
-    /// Push style sheet to top of stack
+    /**
+        Pushes the style sheet to the top of the style sheet stack.
+    */
     bool PushStyleSheet(wxRichTextStyleSheet* styleSheet);
 
-    /// Pop style sheet from top of stack
+    /**
+        Pops the style sheet from the top of the style sheet stack.
+    */
     wxRichTextStyleSheet* PopStyleSheet();
 
-    /// Set/get table storing fonts
+    /**
+        Returns the table storing fonts, for quick access and font reuse.
+    */
     wxRichTextFontTable& GetFontTable() { return m_fontTable; }
+
+    /**
+        Returns the table storing fonts, for quick access and font reuse.
+    */
     const wxRichTextFontTable& GetFontTable() const { return m_fontTable; }
+
+    /**
+        Sets table storing fonts, for quick access and font reuse.
+    */
     void SetFontTable(const wxRichTextFontTable& table) { m_fontTable = table; }
 
 // Operations
 
-    /// Initialisation
+    /**
+        Initialisation.
+    */
     void Init();
 
-    /// Clears the buffer, adds an empty paragraph, and clears the command processor.
+    /**
+        Clears the buffer, adds an empty paragraph, and clears the command processor.
+    */
     virtual void ResetAndClearCommands();
 
-    /// Load a file
+    //@{
+    /**
+        Loads content from a stream or file.
+        Not all handlers will implement file loading.
+    */
     virtual bool LoadFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
-
-    /// Save a file
-    virtual bool SaveFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
-
-    /// Load from a stream
     virtual bool LoadFile(wxInputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
+    //@}
 
-    /// Save to a stream
+    //@{
+    /**
+        Saves content to a stream or file.
+        Not all handlers will implement file saving.
+    */
+    virtual bool SaveFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
     virtual bool SaveFile(wxOutputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
+    //@}
 
-    /// Set the handler flags, controlling loading and saving
+    /**
+        Sets the handler flags, controlling loading and saving.
+    */
     void SetHandlerFlags(int flags) { m_handlerFlags = flags; }
 
-    /// Get the handler flags, controlling loading and saving
+    /**
+        Gets the handler flags, controlling loading and saving.
+    */
     int GetHandlerFlags() const { return m_handlerFlags; }
 
-    /// Convenience function to add a paragraph of text
+    /**
+        Convenience function to add a paragraph of text.
+    */
     virtual wxRichTextRange AddParagraph(const wxString& text, wxRichTextAttr* paraStyle = NULL) { Modify(); return wxRichTextParagraphLayoutBox::AddParagraph(text, paraStyle); }
 
-    /// Begin collapsing undo/redo commands. Note that this may not work properly
-    /// if combining commands that delete or insert content, changing ranges for
-    /// subsequent actions.
+    /**
+        Begin collapsing undo/redo commands. Note that this may not work properly
+        if combining commands that delete or insert content, changing ranges for
+        subsequent actions.
+
+        @a cmdName should be the name of the combined command that will appear
+        next to Undo and Redo in the edit menu.
+    */
     virtual bool BeginBatchUndo(const wxString& cmdName);
 
-    /// End collapsing undo/redo commands
+    /**
+        End collapsing undo/redo commands.
+    */
     virtual bool EndBatchUndo();
 
-    /// Collapsing commands?
+    /**
+        Returns @true if we are collapsing commands.
+    */
     virtual bool BatchingUndo() const { return m_batchedCommandDepth > 0; }
 
-    /// Submit immediately, or delay according to whether collapsing is on
+    /**
+        Submit the action immediately, or delay according to whether collapsing is on.
+    */
     virtual bool SubmitAction(wxRichTextAction* action);
 
-    /// Get collapsed command
+    /**
+        Returns the collapsed command.
+    */
     virtual wxRichTextCommand* GetBatchedCommand() const { return m_batchedCommand; }
 
-    /// Begin suppressing undo/redo commands. The way undo is suppressed may be implemented
-    /// differently by each command. If not dealt with by a command implementation, then
-    /// it will be implemented automatically by not storing the command in the undo history
-    /// when the action is submitted to the command processor.
+    /**
+        Begin suppressing undo/redo commands. The way undo is suppressed may be implemented
+        differently by each command. If not dealt with by a command implementation, then
+        it will be implemented automatically by not storing the command in the undo history
+        when the action is submitted to the command processor.
+    */
     virtual bool BeginSuppressUndo();
 
-    /// End suppressing undo/redo commands.
+    /**
+        End suppressing undo/redo commands.
+    */
     virtual bool EndSuppressUndo();
 
-    /// Collapsing commands?
+    /**
+        Are we suppressing undo??
+    */
     virtual bool SuppressingUndo() const { return m_suppressUndo > 0; }
 
-    /// Copy the range to the clipboard
+    /**
+        Copy the range to the clipboard.
+    */
     virtual bool CopyToClipboard(const wxRichTextRange& range);
 
-    /// Paste the clipboard content to the buffer
+    /**
+        Paste the clipboard content to the buffer.
+    */
     virtual bool PasteFromClipboard(long position);
 
-    /// Can we paste from the clipboard?
+    /**
+        Returns @true if we can paste from the clipboard.
+    */
     virtual bool CanPasteFromClipboard() const;
 
-    /// Begin using a style
+    /**
+        Begin using a style.
+    */
     virtual bool BeginStyle(const wxRichTextAttr& style);
 
-    /// End the style
+    /**
+        End the style.
+    */
     virtual bool EndStyle();
 
-    /// End all styles
+    /**
+        End all styles.
+    */
     virtual bool EndAllStyles();
 
-    /// Clear the style stack
+    /**
+        Clears the style stack.
+    */
     virtual void ClearStyleStack();
 
-    /// Get the size of the style stack, for example to check correct nesting
+    /**
+        Returns the size of the style stack, for example to check correct nesting.
+    */
     virtual size_t GetStyleStackSize() const { return m_attributeStack.GetCount(); }
 
-    /// Begin using bold
+    /**
+        Begins using bold.
+    */
     bool BeginBold();
 
-    /// End using bold
+    /**
+        Ends using bold.
+    */
     bool EndBold() { return EndStyle(); }
 
-    /// Begin using italic
+    /**
+        Begins using italic.
+    */
     bool BeginItalic();
 
-    /// End using italic
+    /**
+        Ends using italic.
+    */
     bool EndItalic() { return EndStyle(); }
 
-    /// Begin using underline
+    /**
+        Begins using underline.
+    */
     bool BeginUnderline();
 
-    /// End using underline
+    /**
+        Ends using underline.
+    */
     bool EndUnderline() { return EndStyle(); }
 
-    /// Begin using point size
+    /**
+        Begins using point size.
+    */
     bool BeginFontSize(int pointSize);
 
-    /// End using point size
+    /**
+        Ends using point size.
+    */
     bool EndFontSize() { return EndStyle(); }
 
-    /// Begin using this font
+    /**
+        Begins using this font.
+    */
     bool BeginFont(const wxFont& font);
 
-    /// End using a font
+    /**
+        Ends using a font.
+    */
     bool EndFont() { return EndStyle(); }
 
-    /// Begin using this colour
+    /**
+        Begins using this colour.
+    */
     bool BeginTextColour(const wxColour& colour);
 
-    /// End using a colour
+    /**
+        Ends using a colour.
+    */
     bool EndTextColour() { return EndStyle(); }
 
-    /// Begin using alignment
+    /**
+        Begins using alignment.
+    */
     bool BeginAlignment(wxTextAttrAlignment alignment);
 
-    /// End alignment
+    /**
+        Ends alignment.
+    */
     bool EndAlignment() { return EndStyle(); }
 
-    /// Begin left indent
+    /**
+        Begins using @a leftIndent for the left indent, and optionally @a leftSubIndent for
+        the sub-indent. Both are expressed in tenths of a millimetre.
+
+        The sub-indent is an offset from the left of the paragraph, and is used for all
+        but the first line in a paragraph. A positive value will cause the first line to appear
+        to the left of the subsequent lines, and a negative value will cause the first line to be
+        indented relative to the subsequent lines.
+    */
     bool BeginLeftIndent(int leftIndent, int leftSubIndent = 0);
 
-    /// End left indent
+    /**
+        Ends left indent.
+    */
     bool EndLeftIndent() { return EndStyle(); }
 
-    /// Begin right indent
+    /**
+        Begins a right indent, specified in tenths of a millimetre.
+    */
     bool BeginRightIndent(int rightIndent);
 
-    /// End right indent
+    /**
+        Ends right indent.
+    */
     bool EndRightIndent() { return EndStyle(); }
 
-    /// Begin paragraph spacing
+    /**
+        Begins paragraph spacing; pass the before-paragraph and after-paragraph spacing
+        in tenths of a millimetre.
+    */
     bool BeginParagraphSpacing(int before, int after);
 
-    /// End paragraph spacing
+    /**
+        Ends paragraph spacing.
+    */
     bool EndParagraphSpacing() { return EndStyle(); }
 
-    /// Begin line spacing
+    /**
+        Begins line spacing using the specified value. @e spacing is a multiple, where
+        10 means single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
+
+        The ::wxTextAttrLineSpacing enumeration values are defined for convenience.
+    */
     bool BeginLineSpacing(int lineSpacing);
 
-    /// End line spacing
+    /**
+        Ends line spacing.
+    */
     bool EndLineSpacing() { return EndStyle(); }
 
-    /// Begin numbered bullet
+    /**
+        Begins numbered bullet.
+
+        This call will be needed for each item in the list, and the
+        application should take care of incrementing the numbering.
+
+        @a bulletNumber is a number, usually starting with 1.
+        @a leftIndent and @a leftSubIndent are values in tenths of a millimetre.
+        @a bulletStyle is a bitlist of the following values:
+
+        wxRichTextBuffer uses indentation to render a bulleted item.
+        The left indent is the distance between the margin and the bullet.
+        The content of the paragraph, including the first line, starts
+        at leftMargin + leftSubIndent.
+        So the distance between the left edge of the bullet and the
+        left of the actual paragraph is leftSubIndent.
+    */
     bool BeginNumberedBullet(int bulletNumber, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD);
 
-    /// End numbered bullet
+    /**
+        Ends numbered bullet.
+    */
     bool EndNumberedBullet() { return EndStyle(); }
 
-    /// Begin symbol bullet
+    /**
+        Begins applying a symbol bullet, using a character from the current font.
+
+        See BeginNumberedBullet() for an explanation of how indentation is used
+        to render the bulleted paragraph.
+    */
     bool BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
 
-    /// End symbol bullet
+    /**
+        Ends symbol bullet.
+    */
     bool EndSymbolBullet() { return EndStyle(); }
 
-    /// Begin standard bullet
+    /**
+        Begins applying a standard bullet, using one of the standard bullet names
+        (currently @c standard/circle or @c standard/square.
+
+        See BeginNumberedBullet() for an explanation of how indentation is used to
+        render the bulleted paragraph.
+    */
     bool BeginStandardBullet(const wxString& bulletName, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_STANDARD);
 
-    /// End standard bullet
+    /**
+        Ends standard bullet.
+    */
     bool EndStandardBullet() { return EndStyle(); }
 
-    /// Begin named character style
+    /**
+        Begins named character style.
+    */
     bool BeginCharacterStyle(const wxString& characterStyle);
 
-    /// End named character style
+    /**
+        Ends named character style.
+    */
     bool EndCharacterStyle() { return EndStyle(); }
 
-    /// Begin named paragraph style
+    /**
+        Begins named paragraph style.
+    */
     bool BeginParagraphStyle(const wxString& paragraphStyle);
 
-    /// End named character style
+    /**
+        Ends named character style.
+    */
     bool EndParagraphStyle() { return EndStyle(); }
 
-    /// Begin named list style
+    /**
+        Begins named list style.
+
+        Optionally, you can also pass a level and a number.
+    */
     bool BeginListStyle(const wxString& listStyle, int level = 1, int number = 1);
 
-    /// End named character style
+    /**
+        Ends named character style.
+    */
     bool EndListStyle() { return EndStyle(); }
 
-    /// Begin URL
+    /**
+        Begins applying wxTEXT_ATTR_URL to the content.
+
+        Pass a URL and optionally, a character style to apply, since it is common
+        to mark a URL with a familiar style such as blue text with underlining.
+    */
     bool BeginURL(const wxString& url, const wxString& characterStyle = wxEmptyString);
 
-    /// End URL
+    /**
+        Ends URL.
+    */
     bool EndURL() { return EndStyle(); }
 
 // Event handling
 
-    /// Add an event handler
+    /**
+        Adds an event handler.
+
+        A buffer associated with a control has the control as the only event handler,
+        but the application is free to add more if further notification is required.
+        All handlers are notified of an event originating from the buffer, such as
+        the replacement of a style sheet during loading.
+
+        The buffer never deletes any of the event handlers, unless RemoveEventHandler()
+        is called with @true as the second argument.
+    */
     bool AddEventHandler(wxEvtHandler* handler);
 
-    /// Remove an event handler
+    /**
+        Removes an event handler from the buffer's list of handlers, deleting the
+        object if @a deleteHandler is @true.
+    */
     bool RemoveEventHandler(wxEvtHandler* handler, bool deleteHandler = false);
 
-    /// Clear event handlers
+    /**
+        Clear event handlers.
+    */
     void ClearEventHandlers();
 
-    /// Send event to event handlers. If sendToAll is true, will send to all event handlers,
-    /// otherwise will stop at the first successful one.
+    /**
+        Send event to event handlers. If sendToAll is true, will send to all event handlers,
+        otherwise will stop at the first successful one.
+    */
     bool SendEvent(wxEvent& event, bool sendToAll = true);
 
 // Implementation
 
-    /// Hit-testing: returns a flag indicating hit test details, plus
-    /// information about position
     virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    /// Copy
+    /**
+        Copies the buffer.
+    */
     void Copy(const wxRichTextBuffer& obj);
 
-    /// Assignment
+    /**
+        Assignment operator.
+    */
     void operator= (const wxRichTextBuffer& obj) { Copy(obj); }
 
-    /// Clone
+    /**
+        Clones the buffer.
+    */
     virtual wxRichTextObject* Clone() const { return new wxRichTextBuffer(*this); }
 
-    /// Submit command to insert paragraphs
+    /**
+        Submits a command to insert paragraphs.
+    */
     bool InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags = 0);
 
-    /// Submit command to insert the given text
+    /**
+        Submits a command to insert the given text.
+    */
     bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags = 0);
 
-    /// Submit command to insert a newline
+    /**
+        Submits a command to insert a newline.
+    */
     bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
-    /// Submit command to insert the given image
+    /**
+        Submits a command to insert the given image.
+    */
     bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0,
             const wxRichTextAttr& textAttr = wxRichTextAttr());
 
-    /// Submit command to insert an object
+    /**
+        Submits a command to insert an object.
+    */
     wxRichTextObject* InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags);
 
-    /// Submit command to delete this range
+    /**
+        Submits a command to delete this range.
+    */
     bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl);
 
-    /// Mark modified
+    /**
+        Mark modified.
+    */
     void Modify(bool modify = true) { m_modified = modify; }
+
+    /**
+        Returns @true if the buffer was modified.
+    */
     bool IsModified() const { return m_modified; }
 
-    /// Dumps contents of buffer for debugging purposes
+    //@{
+    /**
+        Dumps contents of buffer for debugging purposes.
+    */
     virtual void Dump();
     virtual void Dump(wxTextOutputStream& stream) { wxRichTextParagraphLayoutBox::Dump(stream); }
+    //@}
 
-    /// Returns the file handlers
+    /**
+        Returns the file handlers.
+    */
     static wxList& GetHandlers() { return sm_handlers; }
 
-    /// Adds a handler to the end
+    /**
+        Adds a file handler to the end.
+    */
     static void AddHandler(wxRichTextFileHandler *handler);
 
-    /// Inserts a handler at the front
+    /**
+        Inserts a file handler at the front.
+    */
     static void InsertHandler(wxRichTextFileHandler *handler);
 
-    /// Removes a handler
+    /**
+        Removes a file handler.
+    */
     static bool RemoveHandler(const wxString& name);
 
-    /// Finds a handler by name
+    /**
+        Finds a file handler by name.
+    */
     static wxRichTextFileHandler *FindHandler(const wxString& name);
 
-    /// Finds a handler by extension and type
+    /**
+        Finds a file handler by extension and type.
+    */
     static wxRichTextFileHandler *FindHandler(const wxString& extension, wxRichTextFileType imageType);
 
-    /// Finds a handler by filename or, if supplied, type
+    /**
+        Finds a handler by filename or, if supplied, type.
+    */
     static wxRichTextFileHandler *FindHandlerFilenameOrType(const wxString& filename,
                                                             wxRichTextFileType imageType);
 
-    /// Finds a handler by type
+    /**
+        Finds a handler by type.
+    */
     static wxRichTextFileHandler *FindHandler(wxRichTextFileType imageType);
 
-    /// Gets a wildcard incorporating all visible handlers. If 'types' is present,
-    /// will be filled with the file type corresponding to each filter. This can be
-    /// used to determine the type to pass to LoadFile given a selected filter.
+    /**
+        Gets a wildcard incorporating all visible handlers. If @a types is present,
+        it will be filled with the file type corresponding to each filter. This can be
+        used to determine the type to pass to LoadFile given a selected filter.
+    */
     static wxString GetExtWildcard(bool combine = false, bool save = false, wxArrayInt* types = NULL);
 
-    /// Clean up handlers
+    /**
+        Clean up file handlers.
+    */
     static void CleanUpHandlers();
 
-    /// Initialise the standard handlers
+    /**
+        Initialise the standard file handlers.
+        Currently, only the plain text loading/saving handler is initialised by default.
+    */
     static void InitStandardHandlers();
 
-    /// Get renderer
+    /**
+        Returns the renderer object.
+    */
     static wxRichTextRenderer* GetRenderer() { return sm_renderer; }
 
-    /// Set renderer, deleting old one
+    /**
+        Sets @a renderer as the object to be used to render certain aspects of the
+        content, such as bullets.
+
+        You can override default rendering by deriving a new class from
+        wxRichTextRenderer or wxRichTextStdRenderer, overriding one or more
+        virtual functions, and setting an instance of the class using this function.
+    */
     static void SetRenderer(wxRichTextRenderer* renderer);
 
-    /// Minimum margin between bullet and paragraph in 10ths of a mm
+    /**
+        Returns the minimum margin between bullet and paragraph in 10ths of a mm.
+    */
     static int GetBulletRightMargin() { return sm_bulletRightMargin; }
+
+    /**
+        Sets the minimum margin between bullet and paragraph in 10ths of a mm.
+    */
     static void SetBulletRightMargin(int margin) { sm_bulletRightMargin = margin; }
 
-    /// Factor to multiply by character height to get a reasonable bullet size
+    /**
+        Returns the factor to multiply by character height to get a reasonable bullet size.
+    */
     static float GetBulletProportion() { return sm_bulletProportion; }
+
+    /**
+        Sets the factor to multiply by character height to get a reasonable bullet size.
+    */
     static void SetBulletProportion(float prop) { sm_bulletProportion = prop; }
 
-    /// Scale factor for calculating dimensions
+    /**
+        Returns the scale factor for calculating dimensions.
+    */
     double GetScale() const { return m_scale; }
+
+    /**
+        Sets the scale factor for calculating dimensions.
+    */
     void SetScale(double scale) { m_scale = scale; }
 
 protected:
@@ -3949,41 +4644,24 @@ public:
 
     wxRichTextCell(const wxRichTextCell& obj): wxRichTextBox() { Copy(obj); }
 
-// Overrideables
-
-    /**
-        Draws the item.
-    */
+// Overridables
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    /**
-        Returns the XML node name of this object.
-    */
-
     virtual wxString GetXMLNodeName() const { return wxT("cell"); }
 
-    /// Can we edit properties via a GUI?
     virtual bool CanEditProperties() const { return true; }
 
-    /// Edit properties via a GUI
     virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
 
-    /// Return the label to be used for the properties context menu item.
     virtual wxString GetPropertiesMenuLabel() const { return _("&Cell"); }
 
 // Accessors
 
 // Operations
 
-    /**
-        Makes a clone of this object.
-    */
     virtual wxRichTextObject* Clone() const { return new wxRichTextCell(*this); }
 
-    /**
-        Copies this object.
-    */
     void Copy(const wxRichTextCell& obj);
 
 protected:
@@ -4017,83 +4695,89 @@ public:
 
     wxRichTextTable(const wxRichTextTable& obj): wxRichTextBox() { Copy(obj); }
 
-// Overrideables
+// Overridables
 
-    // Draws the object.
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    // Returns the XML node name of this object.
     virtual wxString GetXMLNodeName() const { return wxT("table"); }
 
-    // Lays the object out.
     virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
-    // Gets the range size.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    // Deletes content in the given range.
     virtual bool DeleteRange(const wxRichTextRange& range);
 
-    // Gets any text in this object for the given range.
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
 #if wxUSE_XML
-    // Import this object from XML
     virtual bool ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, wxRichTextXMLHandler* handler, bool* recurse);
 #endif
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-    // Export this object directly to the given stream.
     virtual bool ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler);
 #endif
 
 #if wxRICHTEXT_HAVE_XMLDOCUMENT_OUTPUT
-    // Export this object to the given parent node, usually creating at least one child node.
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    /// Finds the absolute position and row height for the given character position
     virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
 
-    /// Calculate range
     virtual void CalculateRange(long start, long& end);
 
-    /// Can this object handle the selections of its children? FOr example, a table.
+    // Can this object handle the selections of its children? FOr example, a table.
     virtual bool HandlesChildSelections() const { return true; }
 
     /// Returns a selection object specifying the selections between start and end character positions.
     /// For example, a table would deduce what cells (of range length 1) are selected when dragging across the table.
     virtual wxRichTextSelection GetSelection(long start, long end) const;
 
-    /// Can we edit properties via a GUI?
     virtual bool CanEditProperties() const { return true; }
 
-    /// Edit properties via a GUI
     virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
 
-    /// Return the label to be used for the properties context menu item.
     virtual wxString GetPropertiesMenuLabel() const { return _("&Table"); }
 
-    /// Returns true if objects of this class can accept the focus, i.e. a call to SetFocusObject
-    /// is possible. For example, containers supporting text, such as a text box object, can accept the focus,
-    /// but a table can't (set the focus to individual cells instead).
+    // Returns true if objects of this class can accept the focus, i.e. a call to SetFocusObject
+    // is possible. For example, containers supporting text, such as a text box object, can accept the focus,
+    // but a table can't (set the focus to individual cells instead).
     virtual bool AcceptsFocus() const { return false; }
 
 // Accessors
 
+    /**
+        Returns the cells array.
+    */
     const wxRichTextObjectPtrArrayArray& GetCells() const { return m_cells; }
+
+    /**
+        Returns the cells array.
+    */
     wxRichTextObjectPtrArrayArray& GetCells() { return m_cells; }
 
+    /**
+        Returns the row count.
+    */
     int GetRowCount() const { return m_rowCount; }
+
+    /**
+        Returns the column count.
+    */
     int GetColumnCount() const { return m_colCount; }
 
-    /// Get the cell at the given row/column position
+    /**
+        Returns the cell at the given row/column position.
+    */
     virtual wxRichTextCell* GetCell(int row, int col) const;
 
-    /// Get the cell at the given character position (in the range of the table).
+    /**
+        Returns the cell at the given character position (in the range of the table).
+    */
     virtual wxRichTextCell* GetCell(long pos) const;
 
-    /// Get the row/column for a given character position
+    /**
+        Returns the row/column for a given character position.
+    */
     virtual bool GetCellRowColumnPosition(long pos, int& row, int& col) const;
 
 // Operations
@@ -4156,7 +4840,7 @@ protected:
     // Problem: if boxes are immediate children of a box, this will cause problems
     // with wxRichTextParagraphLayoutBox functions (and functions elsewhere) that
     // expect to find just paragraphs. May have to adjust the way we handle the
-    // hierarchy to accept non-paragraph objects in a a paragraph layout box.
+    // hierarchy to accept non-paragraph objects in a paragraph layout box.
     // We'll be overriding much wxRichTextParagraphLayoutBox functionality so this
     // may not be such a problem. Perhaps the table should derive from a different
     // class?
@@ -4164,10 +4848,9 @@ protected:
 };
 
 
-/*!
- * The command identifiers
- *
- */
+/**
+    The command identifiers for Do/Undo.
+*/
 
 enum wxRichTextCommandId
 {
@@ -4195,20 +4878,52 @@ enum wxRichTextCommandId
 class WXDLLIMPEXP_RICHTEXT wxRichTextObjectAddress
 {
 public:
-    // Creates the address given container and object.
+    /**
+        Creates the address given a container and an object.
+    */
     wxRichTextObjectAddress(wxRichTextParagraphLayoutBox* topLevelContainer, wxRichTextObject* obj) { Create(topLevelContainer, obj); }
+    /**
+    */
     wxRichTextObjectAddress() { Init(); }
+    /**
+    */
     wxRichTextObjectAddress(const wxRichTextObjectAddress& address) { Copy(address); }
 
     void Init() {}
+
+    /**
+        Copies the address.
+    */
     void Copy(const wxRichTextObjectAddress& address) { m_address = address.m_address; }
+
+    /**
+        Assignment operator.
+    */
     void operator=(const wxRichTextObjectAddress& address) { Copy(address); }
 
+    /**
+        Returns the object specified by the address, given a top level container.
+    */
     wxRichTextObject* GetObject(wxRichTextParagraphLayoutBox* topLevelContainer) const;
+
+    /**
+        Creates the address given a container and an object.
+    */
     bool Create(wxRichTextParagraphLayoutBox* topLevelContainer, wxRichTextObject* obj);
 
+    /**
+        Returns the array of integers representing the object address.
+    */
     wxArrayInt& GetAddress() { return m_address; }
+
+    /**
+        Returns the array of integers representing the object address.
+    */
     const wxArrayInt& GetAddress() const { return m_address; }
+
+    /**
+        Sets the address from an array of integers.
+    */
     void SetAddress(const wxArrayInt& address) { m_address = address; }
 
 protected:
@@ -4233,21 +4948,42 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAction;
 class WXDLLIMPEXP_RICHTEXT wxRichTextCommand: public wxCommand
 {
 public:
-    // Ctor for one action
+    /**
+        Constructor for one action.
+    */
     wxRichTextCommand(const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
         wxRichTextParagraphLayoutBox* container, wxRichTextCtrl* ctrl, bool ignoreFirstTime = false);
 
-    // Ctor for multiple actions
+    /**
+        Constructor for multiple actions.
+    */
     wxRichTextCommand(const wxString& name);
 
     virtual ~wxRichTextCommand();
 
+    /**
+        Performs the command.
+    */
     bool Do();
+
+    /**
+        Undoes the command.
+    */
     bool Undo();
 
+    /**
+        Adds an action to the action list.
+    */
     void AddAction(wxRichTextAction* action);
+
+    /**
+        Clears the action list.
+    */
     void ClearActions();
 
+    /**
+        Returns the action list.
+    */
     wxList& GetActions() { return m_actions; }
 
 protected:
@@ -4269,57 +5005,122 @@ protected:
 class WXDLLIMPEXP_RICHTEXT wxRichTextAction: public wxObject
 {
 public:
-    /// Constructor. 'buffer' is the top-level buffer, while 'container' is the object within
-    /// which the action is taking place. In the simplest case, they are the same.
+    /**
+        Constructor. @a buffer is the top-level buffer, while @a container is the object within
+        which the action is taking place. In the simplest case, they are the same.
+    */
     wxRichTextAction(wxRichTextCommand* cmd, const wxString& name, wxRichTextCommandId id,
         wxRichTextBuffer* buffer, wxRichTextParagraphLayoutBox* container,
         wxRichTextCtrl* ctrl, bool ignoreFirstTime = false);
 
     virtual ~wxRichTextAction();
 
+    /**
+        Performs the action.
+    */
     bool Do();
+
+    /**
+        Undoes the action.
+    */
     bool Undo();
 
-    /// Update the control appearance
+    /**
+        Updates the control appearance, optimizing if possible given information from the call to Layout.
+    */
     void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false,
                             wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL, bool isDoCmd = true);
 
-    /// Replace the buffer paragraphs with the given fragment.
+    /**
+        Replaces the buffer paragraphs with the given fragment.
+    */
     void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
 
-    /// Get the fragments
+    /**
+        Returns the new fragments.
+    */
     wxRichTextParagraphLayoutBox& GetNewParagraphs() { return m_newParagraphs; }
+
+    /**
+        Returns the old fragments.
+    */
     wxRichTextParagraphLayoutBox& GetOldParagraphs() { return m_oldParagraphs; }
 
-    /// Get the attributes
+    /**
+        Returns the attributes, for single-object commands.
+    */
     wxRichTextAttr& GetAttributes() { return m_attributes; }
 
-    /// An object to replace the one at the position
-    /// defined by the container address and the action's range start position.
+    /**
+        Returns the object to replace the one at the position defined by the container address
+        and the action's range start position.
+    */
     wxRichTextObject* GetObject() const { return m_object; }
+
+    /**
+        Sets the object to replace the one at the position defined by the container address
+        and the action's range start position.
+    */
     void SetObject(wxRichTextObject* obj) { m_object = obj; m_objectAddress.Create(m_buffer, m_object); }
+
+    /**
+        Makes an address from the given object.
+    */
     void MakeObject(wxRichTextObject* obj) { m_objectAddress.Create(m_buffer, obj); }
 
-    /// Calculate arrays for refresh optimization
+    /**
+        Calculate arrays for refresh optimization.
+    */
     void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions);
 
-    /// Set/get the position used for e.g. insertion
+    /**
+        Sets the position used for e.g. insertion.
+    */
     void SetPosition(long pos) { m_position = pos; }
+
+    /**
+        Returns the position used for e.g. insertion.
+    */
     long GetPosition() const { return m_position; }
 
-    /// Set/get the range for e.g. deletion
+    /**
+        Sets the range for e.g. deletion.
+    */
     void SetRange(const wxRichTextRange& range) { m_range = range; }
+
+    /**
+        Returns the range for e.g. deletion.
+    */
     const wxRichTextRange& GetRange() const { return m_range; }
 
-    /// The address (nested position) of the container within the buffer being manipulated
+    /**
+        Returns the address (nested position) of the container within the buffer being manipulated.
+    */
     wxRichTextObjectAddress& GetContainerAddress() { return m_containerAddress; }
+
+    /**
+        Returns the address (nested position) of the container within the buffer being manipulated.
+    */
     const wxRichTextObjectAddress& GetContainerAddress() const { return m_containerAddress; }
+
+    /**
+        Sets the address (nested position) of the container within the buffer being manipulated.
+    */
     void SetContainerAddress(const wxRichTextObjectAddress& address) { m_containerAddress = address; }
+
+    /**
+        Sets the address (nested position) of the container within the buffer being manipulated.
+    */
     void SetContainerAddress(wxRichTextParagraphLayoutBox* container, wxRichTextObject* obj) { m_containerAddress.Create(container, obj); }
 
-    /// Returns the container that this action refers to, using the container address and top-level buffer.
+    /**
+        Returns the container that this action refers to, using the container address and top-level buffer.
+    */
     wxRichTextParagraphLayoutBox* GetContainer() const;
-    /// Get name
+
+    /**
+        Returns the action name.
+    */
     const wxString& GetName() const { return m_name; }
 
 protected:
@@ -4408,59 +5209,135 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler: public wxObject
 {
     DECLARE_CLASS(wxRichTextFileHandler)
 public:
+    /**
+        Creates a file handler object.
+    */
     wxRichTextFileHandler(const wxString& name = wxEmptyString, const wxString& ext = wxEmptyString, int type = 0)
         : m_name(name), m_extension(ext), m_type(type), m_flags(0), m_visible(true)
         { }
 
 #if wxUSE_STREAMS
+    /**
+        Loads the buffer from a stream.
+        Not all handlers will implement file loading.
+    */
     bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream)
     { return DoLoadFile(buffer, stream); }
+
+    /**
+        Saves the buffer to a stream.
+        Not all handlers will implement file saving.
+    */
     bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
     { return DoSaveFile(buffer, stream); }
 #endif
 
 #if wxUSE_FFILE && wxUSE_STREAMS
+    /**
+        Loads the buffer from a file.
+    */
     virtual bool LoadFile(wxRichTextBuffer *buffer, const wxString& filename);
+
+    /**
+        Saves the buffer to a file.
+    */
     virtual bool SaveFile(wxRichTextBuffer *buffer, const wxString& filename);
 #endif // wxUSE_STREAMS && wxUSE_STREAMS
 
-    /// Can we handle this filename (if using files)? By default, checks the extension.
+    /**
+        Returns @true if we handle this filename (if using files). By default, checks the extension.
+    */
     virtual bool CanHandle(const wxString& filename) const;
 
-    /// Can we save using this handler?
+    /**
+        Returns @true if we can save using this handler.
+    */
     virtual bool CanSave() const { return false; }
 
-    /// Can we load using this handler?
+    /**
+        Returns @true if we can load using this handler.
+    */
     virtual bool CanLoad() const { return false; }
 
-    /// Should this handler be visible to the user?
+    /**
+        Returns @true if this handler should be visible to the user.
+    */
     virtual bool IsVisible() const { return m_visible; }
+
+    /**
+        Sets whether the handler should be visible to the user (via the application's
+        load and save dialogs).
+    */
     virtual void SetVisible(bool visible) { m_visible = visible; }
 
-    /// The name of the nandler
+    /**
+        Sets the name of the nandler.
+    */
     void SetName(const wxString& name) { m_name = name; }
+
+    /**
+        Returns the name of the nandler.
+    */
     wxString GetName() const { return m_name; }
 
-    /// The default extension to recognise
+    /**
+        Sets the default extension to recognise.
+    */
     void SetExtension(const wxString& ext) { m_extension = ext; }
+
+    /**
+        Returns the default extension to recognise.
+    */
     wxString GetExtension() const { return m_extension; }
 
-    /// The handler type
+    /**
+        Sets the handler type.
+    */
     void SetType(int type) { m_type = type; }
+
+    /**
+        Returns the handler type.
+    */
     int GetType() const { return m_type; }
 
-    /// Flags controlling how loading and saving is done
+    /**
+        Sets flags that change the behaviour of loading or saving.
+        See the documentation for each handler class to see what flags are relevant
+        for each handler.
+
+        You call this function directly if you are using a file handler explicitly
+        (without going through the text control or buffer LoadFile/SaveFile API).
+        Or, you can call the control or buffer's SetHandlerFlags function to set
+        the flags that will be used for subsequent load and save operations.
+    */
     void SetFlags(int flags) { m_flags = flags; }
+
+    /**
+        Returns flags controlling how loading and saving is done.
+    */
     int GetFlags() const { return m_flags; }
 
-    /// Encoding to use when saving a file. If empty, a suitable encoding is chosen
+    /**
+        Sets the encoding to use when saving a file. If empty, a suitable encoding is chosen.
+    */
     void SetEncoding(const wxString& encoding) { m_encoding = encoding; }
+
+    /**
+        Returns the encoding to use when saving a file. If empty, a suitable encoding is chosen.
+    */
     const wxString& GetEncoding() const { return m_encoding; }
 
 protected:
 
 #if wxUSE_STREAMS
+    /**
+        Override to load content from @a stream into @a buffer.
+    */
     virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) = 0;
+
+    /**
+        Override to save content to @a stream from @a buffer.
+    */
     virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) = 0;
 #endif
 
@@ -4493,10 +5370,10 @@ public:
         : wxRichTextFileHandler(name, ext, type)
         { }
 
-    /// Can we save using this handler?
+    // Can we save using this handler?
     virtual bool CanSave() const { return true; }
 
-    /// Can we load using this handler?
+    // Can we load using this handler?
     virtual bool CanLoad() const { return true; }
 
 protected:
@@ -4524,16 +5401,22 @@ protected:
 class WXDLLIMPEXP_RICHTEXT wxRichTextBufferDataObject: public wxDataObjectSimple
 {
 public:
-    // ctor doesn't copy the pointer, so it shouldn't go away while this object
-    // is alive
+    /**
+        The constructor doesn't copy the pointer, so it shouldn't go away while this object
+        is alive.
+    */
     wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer = NULL);
     virtual ~wxRichTextBufferDataObject();
 
-    // after a call to this function, the buffer is owned by the caller and it
-    // is responsible for deleting it
+    /**
+        After a call to this function, the buffer is owned by the caller and it
+        is responsible for deleting it.
+    */
     wxRichTextBuffer* GetRichTextBuffer();
 
-    // Returns the id for the new data format
+    /**
+        Returns the id for the new data format.
+    */
     static const wxChar* GetRichTextBufferFormatId() { return ms_richTextBufferFormatId; }
 
     // base class pure virtuals
@@ -4571,19 +5454,30 @@ private:
 class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer: public wxObject
 {
 public:
+    /**
+        Constructor.
+    */
     wxRichTextRenderer() {}
     virtual ~wxRichTextRenderer() {}
 
-    /// Draw a standard bullet, as specified by the value of GetBulletName
+    /**
+        Draws a standard bullet, as specified by the value of GetBulletName. This function should be overridden.
+    */
     virtual bool DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect) = 0;
 
-    /// Draw a bullet that can be described by text, such as numbered or symbol bullets
+    /**
+        Draws a bullet that can be described by text, such as numbered or symbol bullets. This function should be overridden.
+    */
     virtual bool DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, const wxString& text) = 0;
 
-    /// Draw a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName
+    /**
+        Draws a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName. This function should be overridden.
+    */
     virtual bool DrawBitmapBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect) = 0;
 
-    /// Enumerate the standard bullet names currently supported
+    /**
+        Enumerate the standard bullet names currently supported. This function should be overridden.
+    */
     virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames) = 0;
 };
 
@@ -4601,18 +5495,21 @@ public:
 class WXDLLIMPEXP_RICHTEXT wxRichTextStdRenderer: public wxRichTextRenderer
 {
 public:
+    /**
+        Constructor.
+    */
     wxRichTextStdRenderer() {}
 
-    /// Draw a standard bullet, as specified by the value of GetBulletName
+    // Draw a standard bullet, as specified by the value of GetBulletName
     virtual bool DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect);
 
-    /// Draw a bullet that can be described by text, such as numbered or symbol bullets
+    // Draw a bullet that can be described by text, such as numbered or symbol bullets
     virtual bool DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, const wxString& text);
 
-    /// Draw a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName
+    // Draw a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName
     virtual bool DrawBitmapBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect);
 
-    /// Enumerate the standard bullet names currently supported
+    // Enumerate the standard bullet names currently supported
     virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames);
 };
 

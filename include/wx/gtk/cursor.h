@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/gtk/cursor.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

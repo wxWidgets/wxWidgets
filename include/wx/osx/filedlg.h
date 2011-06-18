@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/osx/filedlg.h
 // Purpose:     wxFileDialog class
 // Author:      Stefan Csomor
 // Modified by:
@@ -41,6 +41,10 @@ public:
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
 
+#if wxOSX_USE_COCOA
+    ~wxFileDialog();
+#endif
+    
     virtual void GetPaths(wxArrayString& paths) const { paths = m_paths; }
     virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
@@ -70,6 +74,7 @@ protected:
     
 #if wxOSX_USE_COCOA
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
+    void DoOnFilterSelected(int index);
     virtual void OnFilterSelected(wxCommandEvent &event);
 
     wxArrayString m_filterExtensions;
@@ -80,6 +85,7 @@ protected:
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
     WX_NSObject m_delegate;
+    WX_NSObject m_sheetDelegate;
 #endif
 };
 

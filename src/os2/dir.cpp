@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dir.cpp
+// Name:        src/os2/dir.cpp
 // Purpose:     wxDir implementation for OS/2
 // Author:      Vadim Zeitlin
 // Modified by: Stefan Neis

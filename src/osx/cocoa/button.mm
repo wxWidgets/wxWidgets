@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: button.cpp 54845 2008-07-30 14:52:41Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,36 +22,6 @@
     #include "wx/osx/cocoa/private/markuptoattr.h"
 #endif // wxUSE_MARKUP
 
-
-wxSize wxButton::DoGetBestSize() const
-{
-    // We only use help button bezel if we don't have any (non standard) label
-    // to display in the button. Otherwise even wxID_HELP buttons look like
-    // normal push buttons.
-    if ( GetId() == wxID_HELP && GetLabel().empty() )
-        return wxSize( 23 , 23 ) ;
-
-    wxRect r ;
-    m_peer->GetBestRect(&r);
-
-    wxSize sz = r.GetSize();
-    sz.x  = sz.x  + MacGetLeftBorderSize() +
-    MacGetRightBorderSize();
-    sz.y = sz.y + MacGetTopBorderSize() +
-    MacGetBottomBorderSize();
-    
-    const int wBtnStd = GetDefaultSize().x;
-
-    if ( (sz.x < wBtnStd) && !HasFlag(wxBU_EXACTFIT) )
-        sz.x = wBtnStd;
-
-    return sz ;
-}
-
-wxSize wxButton::GetDefaultSize()
-{
-    return wxSize(84, 20);
-}
 
 @implementation wxNSButton
 
@@ -289,7 +259,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
 
     SetBezelStyleFromBorderFlags(v, style);
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         [v setImage:bitmap.GetNSImage() ];
 
     [v setButtonType:NSMomentaryPushInButton];
@@ -379,7 +349,7 @@ wxCFRef<NSImage*> downArray ;
     static wxBitmap trianglebm(disc_triangle_xpm);
     if ( downArray.get() == NULL )
     {
-        downArray.reset( [wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] );
+        downArray.reset( [[wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] retain] );
     }
 
     if ( isOpen )
@@ -407,7 +377,7 @@ wxCFRef<NSImage*> downArray ;
         fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
 
     [newImage unlockFocus];
-    return newImage;
+    return [newImage autorelease];
 }
 
 @end

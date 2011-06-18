@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/fdrepdlg.h
+// Name:        wx/generic/fdrepdlg.h
 // Purpose:     wxGenericFindReplaceDialog class
 // Author:      Markus Greither
 // Modified by:

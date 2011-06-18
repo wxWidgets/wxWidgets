@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.5 2005/07/26 08:11:13 dron Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

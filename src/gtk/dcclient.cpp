@@ -295,7 +295,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
         wxCHECK_RET(widget, "DC needs a widget");
 
         m_gdkwindow = widget->window;
-        if (GTK_WIDGET_NO_WINDOW(widget))
+        if (!gtk_widget_get_has_window(widget))
             SetDeviceLocalOrigin(widget->allocation.x, widget->allocation.y);
     }
 
@@ -1492,7 +1492,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
 
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-#if __WXGTK26__
+#ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
         x = XLOG2DEV(x);

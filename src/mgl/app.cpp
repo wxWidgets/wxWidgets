@@ -197,7 +197,7 @@ bool wxApp::OnInitGui()
     if ( !wxAppBase::OnInitGui() )
         return false;
 
-    // MGL redirects stdout and stderr to physical console, so lets redirect
+    // MGL redirects stdout and stderr to physical console, so let's redirect
     // it to file if WXSTDERR environment variable is set to be able to see
     // wxLogDebug() output
     wxString redirect;

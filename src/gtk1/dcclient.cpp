@@ -1004,7 +1004,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( bitmap.IsOk(), wxT("invalid bitmap") );
 
     bool is_mono = (bitmap.GetBitmap() != NULL);
 
@@ -1160,7 +1160,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
 
     if (srcDC->m_isMemDC)
     {
-        if (!memDC->m_selected.Ok()) return false;
+        if (!memDC->m_selected.IsOk()) return false;
 
         is_mono = (memDC->m_selected.GetDepth() == 1);
 
@@ -1650,7 +1650,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     m_pen = pen;
 
-    if (!m_pen.Ok()) return;
+    if (!m_pen.IsOk()) return;
 
     if (!m_window) return;
 
@@ -1800,7 +1800,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
 
     m_brush = brush;
 
-    if (!m_brush.Ok()) return;
+    if (!m_brush.IsOk()) return;
 
     if (!m_window) return;
 
@@ -1809,7 +1809,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
 
     gdk_gc_set_fill( m_brushGC, GDK_SOLID );
 
-    if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->Ok()))
+    if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->IsOk()))
     {
         if (m_brush.GetStipple()->GetPixmap())
         {
@@ -1848,7 +1848,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.Ok()) return;
+    if (!m_backgroundBrush.IsOk()) return;
 
     if (!m_window) return;
 
@@ -1860,7 +1860,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     gdk_gc_set_fill( m_bgGC, GDK_SOLID );
 
-    if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->Ok()))
+    if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->IsOk()))
     {
         if (m_backgroundBrush.GetStipple()->GetPixmap())
         {
@@ -1937,7 +1937,7 @@ void wxWindowDCImpl::SetTextForeground( const wxColour &col )
     // don't set m_textForegroundColour to an invalid colour as we'd crash
     // later then (we use m_textForegroundColour.GetColor() without checking
     // in a few places)
-    if ( !col.Ok() || (m_textForegroundColour == col) )
+    if ( !col.IsOk() || (m_textForegroundColour == col) )
         return;
 
     m_textForegroundColour = col;
@@ -1954,7 +1954,7 @@ void wxWindowDCImpl::SetTextBackground( const wxColour &col )
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     // same as above
-    if ( !col.Ok() || (m_textBackgroundColour == col) )
+    if ( !col.IsOk() || (m_textBackgroundColour == col) )
         return;
 
     m_textBackgroundColour = col;
@@ -2103,7 +2103,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
     wxGTKDCImpl::ComputeScaleAndOrigin();
 
     // if scale has changed call SetPen to recalulate the line width
-    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.Ok() )
+    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
     {
         // this is a bit artificial, but we need to force wxDC to think the pen
         // has changed

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:       wx/msw/gsockmsw.h
+// Name:       wx/msw/private/gsockmsw.h
 // Purpose:    MSW-specific socket implementation
 // Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia, Vadim Zeitlin
 // Created:    April 1997

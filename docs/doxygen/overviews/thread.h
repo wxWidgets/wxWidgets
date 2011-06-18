@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-    NOTE: we explicitely don't name wxMutexGUIEnter() and wxMutexGUILeave()
+    NOTE: we explicitly don't name wxMutexGUIEnter() and wxMutexGUILeave()
           as they're not safe. See also ticket #10366.
 */
 

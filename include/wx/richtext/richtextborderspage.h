@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextborderspage.h
+// Name:        wx/richtext/richtextborderspage.h
 // Purpose:
 // Author:      Julian Smart
 // Modified by:

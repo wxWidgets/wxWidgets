@@ -350,7 +350,7 @@ public:
         @c wxCONTROL_DISABLED and @c wxCONTROL_CURRENT bits, see @ref wxCONTROL_FLAGS.
 
         @return
-        The optimal width to contain the the unabreviated label text or
+        The optimal width to contain the unabbreviated label text or
         bitmap, the sort arrow if present, and internal margins.
     */
     virtual int DrawHeaderButton(wxWindow* win, wxDC& dc, const wxRect& rect,
@@ -365,7 +365,7 @@ public:
         @c wxCONTROL_DISABLED and @c wxCONTROL_CURRENT bits, see @ref wxCONTROL_FLAGS.
 
         @return
-        The optimal width to contain the the unabreviated label text or
+        The optimal width to contain the unabbreviated label text or
         bitmap, the sort arrow if present, and internal margins.
     */
     virtual int DrawHeaderButtonContents(wxWindow* win, wxDC& dc,
@@ -380,7 +380,7 @@ public:
         which are selected (e.g. often a blue rectangle) and @c wxCONTROL_CURRENT
         for the item that has the focus (often a dotted line around the item's text).
         @c wxCONTROL_FOCUSED may be used to indicate if the control has the focus
-        (othewise the the selection rectangle is e.g. often grey and not blue).
+        (otherwise the selection rectangle is e.g. often grey and not blue).
         This may be ignored by the renderer or deduced by the code directly from
         the @a win.
     */

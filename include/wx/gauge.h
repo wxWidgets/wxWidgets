@@ -84,7 +84,7 @@ public:
     virtual void SetBezelFace(int w);
     virtual int GetBezelFace() const;
 
-    // overriden base class virtuals
+    // overridden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
 
 protected:

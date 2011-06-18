@@ -39,11 +39,13 @@ public:
 private:
     CPPUNIT_TEST_SUITE( XLocaleTestCase );
         CPPUNIT_TEST( TestCtor );
+        CPPUNIT_TEST( PreserveLocale );
         CPPUNIT_TEST( TestCtypeFunctions );
         CPPUNIT_TEST( TestStdlibFunctions );
     CPPUNIT_TEST_SUITE_END();
 
     void TestCtor();
+    void PreserveLocale();
     void TestCtypeFunctions();
     void TestStdlibFunctions();
 
@@ -56,7 +58,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( XLocaleTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( XLocaleTestCase, "XLocaleTestCase" );
 
 
@@ -79,6 +81,16 @@ void XLocaleTestCase::TestCtor()
     CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
 #endif
 #endif
+}
+
+void XLocaleTestCase::PreserveLocale()
+{
+    // Test that using locale functions doesn't change the global C locale.
+    const wxString origLocale(setlocale(LC_ALL, NULL));
+
+    wxStrtod_l(wxT("1.234"), NULL, wxCLocale);
+
+    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
 }
 
 // test the ctype functions with the given locale

@@ -135,6 +135,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_colour.obj \
 	$(OBJS)\test_gui_ellipsization.obj \
 	$(OBJS)\test_gui_measuring.obj \
+	$(OBJS)\test_gui_affinematrix.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj \
@@ -195,6 +196,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
+	$(OBJS)\test_gui_toplevel.obj \
 	$(OBJS)\test_gui_valnum.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj \
@@ -870,6 +872,9 @@ $(OBJS)\test_gui_ellipsization.obj: .\graphics\ellipsization.cpp
 $(OBJS)\test_gui_measuring.obj: .\graphics\measuring.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\measuring.cpp
 
+$(OBJS)\test_gui_affinematrix.obj: .\graphics\affinematrix.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\affinematrix.cpp
+
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
 
@@ -1049,6 +1054,9 @@ $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 
 $(OBJS)\test_gui_wrapsizer.obj: .\sizers\wrapsizer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\sizers\wrapsizer.cpp
+
+$(OBJS)\test_gui_toplevel.obj: .\toplevel\toplevel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\toplevel\toplevel.cpp
 
 $(OBJS)\test_gui_valnum.obj: .\validators\valnum.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\validators\valnum.cpp

@@ -26,7 +26,7 @@ and is obviously easier and faster.
 However there are situations where you need to show some particular kind of data
 which is not suited to any existing control.
 In these cases rather than hacking an existing control for something it has not
-been coinceived for, it's better to write a new widget.
+been conceived for, it's better to write a new widget.
 
 
 @section overview_customwidgets_how How to write the custom widget
@@ -135,7 +135,7 @@ The organization used by wxWidgets consists in:
 - declaring the real widget class inheriting from the Base version in
   platform-specific headers; see for example the wxWidgets' @c "wx/gtk/button.h" file.
 
-- separing the different implementations in different source files, putting
+- separating the different implementations in different source files, putting
   all common stuff in a separate source.
   See for example the wxWidgets' @c "src/common/btncmn.cpp", @c "src/gtk/button.cpp"
   and @c "src/msw/button.cpp" files.

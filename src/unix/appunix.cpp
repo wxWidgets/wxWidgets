@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/unix/appunix.cpp
+// Name:        src/unix/appunix.cpp
 // Purpose:     wxAppConsole with wxMainLoop implementation
 // Author:      Lukasz Michalski
 // Created:     28/01/2005

@@ -55,7 +55,7 @@ public:
         (it may also be set or changed later with wxVListBox::SetItemCount).
 
         There are no special styles defined for wxHtmlListBox, in particular the
-        wxListBox styles (with the exception of @c wxLB_MULTIPLE) can not be used here.
+        wxListBox styles (with the exception of @c wxLB_MULTIPLE) cannot be used here.
 
         Returns @true on success or @false if the control couldn't be created
     */

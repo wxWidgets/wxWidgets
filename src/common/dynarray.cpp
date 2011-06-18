@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <string.h> // for memmove
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
 
 // we cast the value to long from which we cast it to void * in IndexForInsert:
 // this can't work if the pointers are not big enough
@@ -383,7 +383,7 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
     #pragma warning(pop)
 #endif
 
-#else // wxUSE_STL
+#else // wxUSE_STD_CONTAINERS
 
 #include "wx/arrstr.h"
 
@@ -491,4 +491,4 @@ int wxSortedArrayString::Index(const wxString& str,
     return it - begin();
 }
 
-#endif // !wxUSE_STL/wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS/wxUSE_STD_CONTAINERS

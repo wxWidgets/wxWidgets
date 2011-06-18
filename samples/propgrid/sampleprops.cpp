@@ -60,7 +60,7 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
 
     // Fix value.
     fontData.SetChosenFont(value.GetInitialFont());
-    if ( !fontData.GetColour().Ok() )
+    if ( !fontData.GetColour().IsOk() )
         fontData.SetColour(*wxBLACK);
 
     // Set initial value - should be done in a simpler way like this
@@ -113,7 +113,7 @@ void wxFontDataProperty::OnSetValue()
         fontData << m_value_wxFontData;
 
         wxFont font = fontData.GetChosenFont();
-        if ( !font.Ok() )
+        if ( !font.IsOk() )
             font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
 
         m_value = WXVARIANT(font);

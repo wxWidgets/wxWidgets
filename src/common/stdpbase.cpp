@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/stdpbase.cpp
+// Name:        src/common/stdpbase.cpp
 // Purpose:     wxStandardPathsBase methods common to all ports
 // Author:      Vadim Zeitlin
 // Modified by:

@@ -1489,14 +1489,14 @@ msgstr "Ve&like začetnice"
 #
 # msw/thread.cpp:519
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Mutexa ni mogoče ustvariti."
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
 #: ../src/common/filefn.cpp:1421
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Oštevilčenje datotek '%s' ni možno"
 
 # common/filefn.cpp:1287
@@ -1504,7 +1504,7 @@ msgstr "Oštevilčenje datotek '%s' ni možno"
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Oštevilčenje datotek v mapi '%s' ni možno."
 
 # SOME DESCRIPTIVE TITLE.
@@ -1514,34 +1514,34 @@ msgstr "Oštevilčenje datotek v mapi '%s' ni možno."
 # msw/thread.cpp:519
 #: ../src/os2/thread.cpp:526
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Niti %lu ni mogoče nadaljevati."
 
 # msw/thread.cpp:552
 #: ../src/msw/thread.cpp:873
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Niti %x ni mogoče nadaljevati"
 
 # msw/thread.cpp:433
 #: ../src/msw/thread.cpp:526
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Niti ni mogoče začeti: napaka pri pisanju TLS."
 
 #: ../src/os2/thread.cpp:512
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Niti %lu ni mogoče začasno ustaviti."
 
 # msw/thread.cpp:537
 #: ../src/msw/thread.cpp:858
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Niti %x ni mogoče začasno ustaviti."
 
 # msw/thread.cpp:871
 #: ../src/msw/thread.cpp:781
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Ustavitve niti ni mogoče pričakati."
 
 # common/docview.cpp:1928
@@ -6613,7 +6613,7 @@ msgstr "Ta sistem ne podpira kontrolnika za izbor datuma, prosimo, nadgradite sv
 
 # msw/thread.cpp:1083
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Inicializacija modula niti ni uspela: vrednosti ni mogoče shraniti v lokalni shrambi niti"
 
 #: ../src/unix/threadpsx.cpp:1686
@@ -7792,7 +7792,7 @@ msgstr "svetlo"
 # common/intl.cpp:575
 #: ../src/common/intl.cpp:1645
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "ne morem nastaviti locale '%s'."
 
 # common/intl.cpp:369

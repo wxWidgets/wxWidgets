@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dataform.h
+// Name:        wx/os2/dataform.h
 // Purpose:     declaration of the wxDataFormat class
 // Author:      Stefan Csomor
 // Modified by:

@@ -112,7 +112,7 @@ protected:
     // the controls
     // ------------
 
-    // the contols to choose the checkbox style
+    // the controls to choose the checkbox style
     wxCheckBox *m_chkRight;
     wxRadioBox *m_radioKind;
 

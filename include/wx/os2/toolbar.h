@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        toolbar.h
+// Name:        wx/os2/toolbar.h
 // Purpose:     wxToolBar class
 // Author:      David Webster
 // Modified by:

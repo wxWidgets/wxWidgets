@@ -77,7 +77,7 @@ typedef struct tagNMTVITEMCHANGE
 // The vista tree control includes some new code that originally broke the
 // multi-selection tree, causing seemingly spurious item selection state changes
 // during Shift or Ctrl-click item selection. (To witness the original broken
-// behavior, simply make IsLocked() below always return false). This problem was
+// behaviour, simply make IsLocked() below always return false). This problem was
 // solved by using the following class to 'unlock' an item's selection state.
 
 class TreeItemUnlocker
@@ -3371,7 +3371,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // the wrong items are deselected.
 
         // Fortunately, Vista provides a new notification, TVN_ITEMCHANGING
-        // that can be used to regulate this incorrect behavior.  The
+        // that can be used to regulate this incorrect behaviour.  The
         // following messages will allow only the unlocked item's selection
         // state to change
 

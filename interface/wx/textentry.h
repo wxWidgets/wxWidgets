@@ -46,8 +46,8 @@ public:
         Call this function to enable auto-completion of the text typed in a
         single-line text control using the given @a choices.
 
-        Notice that currently this function is only implemented in wxGTK2 and
-        wxMSW ports and does nothing under the other platforms.
+        Notice that currently this function is only implemented in wxGTK2,
+        wxMSW and wxOSX/Cocoa ports and does nothing under the other platforms.
 
         @since 2.9.0
 
@@ -58,13 +58,47 @@ public:
 
         @see AutoCompleteFileNames()
     */
-    virtual bool AutoComplete(const wxArrayString& choices);
+    bool AutoComplete(const wxArrayString& choices);
+
+    /**
+        Enable auto-completion using the provided completer object.
+
+        This method should be used instead of AutoComplete() overload taking
+        the array of possible completions if the total number of strings is too
+        big as it allows to return the completions dynamically, depending on
+        the text already entered by user and so is more efficient.
+
+        The specified @a completer object will be used to retrieve the list of
+        possible completions for the already entered text and will be deleted
+        by wxTextEntry itself when it's not needed any longer.
+
+        Notice that you need to include @c wx/textcompleter.h in order to
+        define your class inheriting from wxTextCompleter.
+
+        Currently this method is only implemented in wxMSW and wxOSX/Cocoa.
+
+        @since 2.9.2
+
+        @param completer
+            The object to be used for generating completions if non-@NULL. If
+            it is @NULL, auto-completion is disabled. The wxTextEntry object
+            takes ownership of this pointer and will delete it in any case
+            (i.e. even if this method returns @false).
+
+        @return
+            @true if the auto-completion was enabled or @false if the operation
+            failed, typically because auto-completion is not supported by the
+            current platform.
+
+        @see wxTextCompleter
+     */
+    bool AutoComplete(wxTextCompleter *completer);
 
     /**
         Call this function to enable auto-completion of the text typed in a
         single-line text control using all valid file system paths.
 
-        Notice that currently this function is only implemented in wxGTK2 port
+        Notice that currently this function is only implemented in wxMSW port
         and does nothing under the other platforms.
 
         @since 2.9.0
@@ -76,7 +110,7 @@ public:
 
         @see AutoComplete()
     */
-    virtual bool AutoCompleteFileNames();
+    bool AutoCompleteFileNames();
 
     /**
         Returns @true if the selection can be copied to the clipboard.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        unix/stdpaths.cpp
+// Name:        src/os2/stdpaths.cpp
 // Purpose:     wxStandardPaths implementation for OS/2 systems
 // Author:      Stefan Neis
 // Modified by:

@@ -479,7 +479,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 
 wxString wxFont::GetNativeFontInfoDesc() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     // be sure we have an HFONT associated...
     wxConstCast(this, wxFont)->RealizeResource();
@@ -488,7 +488,7 @@ wxString wxFont::GetNativeFontInfoDesc() const
 
 wxString wxFont::GetNativeFontInfoUserDesc() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     // be sure we have an HFONT associated...
     wxConstCast(this, wxFont)->RealizeResource();

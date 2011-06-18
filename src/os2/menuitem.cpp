@@ -489,10 +489,10 @@ bool wxMenuItem::OnMeasureItem( size_t* pWidth, size_t* pHeight )
     // resize the space so the BMP will fit.  Without this, BMPs
     // must be no larger or smaller than 16x16.
     //
-    if (m_bmpChecked.Ok())
+    if (m_bmpChecked.IsOk())
     {
         //
-        // Is BMP height larger then text height?
+        // Is BMP height larger than text height?
         //
         size_t                      nAdjustedHeight = m_bmpChecked.GetHeight() +
                                                       wxSystemSettings::GetMetric(wxSYS_EDGE_Y);
@@ -695,7 +695,7 @@ bool wxMenuItem::OnDrawItem( wxDC& rDC,
     // Draw the bitmap
     // ---------------
     //
-    if (IsCheckable() && !m_bmpChecked.Ok())
+    if (IsCheckable() && !m_bmpChecked.IsOk())
     {
         if (eStatus & wxODChecked)
         {
@@ -724,7 +724,7 @@ bool wxMenuItem::OnDrawItem( wxDC& rDC,
         //
         wxBitmap vBmp(GetBitmap(IsCheckable() ? ((eStatus & wxODChecked) != 0) : TRUE));
 
-        if (vBmp.Ok())
+        if (vBmp.IsOk())
         {
 
             wxMemoryDC              vDCMem(&rDC);

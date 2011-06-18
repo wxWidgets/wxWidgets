@@ -201,11 +201,11 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 #if WXWIN_COMPATIBILITY_2_6
     // NB: Older versions of wx used GetCursor() virtual method in place of
     //     GetMouseCursor(interface). This code ensures that user code that
-    //     overriden GetCursor() continues to work. The trick is that the base
+    //     overridden GetCursor() continues to work. The trick is that the base
     //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
-    //     know that GetCursor() was overriden iff it returns valid cursor.
+    //     know that GetCursor() was overridden iff it returns valid cursor.
     wxCursor cur = GetCursor();
-    if (cur.Ok())
+    if (cur.IsOk())
         return cur;
 #endif // WXWIN_COMPATIBILITY_2_6
 
@@ -870,7 +870,7 @@ void wxHtmlContainerCell::Layout(int w)
 
     /*
 
-    LAYOUTING :
+    LAYOUT :
 
     */
 
@@ -878,7 +878,7 @@ void wxHtmlContainerCell::Layout(int w)
     s_indent = (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
     s_width = m_Width - s_indent - ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
 
-    // my own layouting:
+    // my own layout:
     wxHtmlCell *cell = m_Cells,
                *line = m_Cells;
     while (cell != NULL)

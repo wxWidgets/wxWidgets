@@ -46,7 +46,7 @@ public:
     virtual void SetSortOrder( bool ascending );
     virtual void SetAsSortKey(bool sort = true);
 
-    virtual void SetResizeable( bool resizeable );
+    virtual void SetResizeable( bool resizable );
     virtual void SetHidden( bool hidden );
 
     virtual void SetMinWidth( int minWidth );
@@ -76,8 +76,7 @@ public:
     virtual int GetFlags() const { return GetFromIndividualFlags(); }
 
     // implementation
-    GtkWidget* GetGtkHandle() { return m_column; }
-    GtkWidget* GetConstGtkHandle() const { return m_column; }
+    GtkWidget* GetGtkHandle() const { return m_column; }
 
 private:
     // holds the GTK handle
@@ -160,6 +159,10 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem &item,
                                 const wxDataViewColumn *column = NULL ) const;
 
+    virtual bool SetRowHeight( int rowHeight );
+
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
@@ -181,6 +184,8 @@ public:
 
     virtual void OnInternalIdle();
 
+    int GTKGetUniformRowHeight() const { return m_uniformRowHeight; }
+
 protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
@@ -193,6 +198,12 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
+    // Return wxDataViewColumn matching the given GtkTreeViewColumn.
+    //
+    // If the input argument is NULL, return NULL too. Otherwise we must find
+    // the matching column and assert if we didn't.
+    wxDataViewColumn* FromGTKColumn(GtkTreeViewColumn *gtk_col) const;
+
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
     friend class wxDataViewCtrlInternal;
@@ -201,6 +212,11 @@ private:
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
     wxDataViewItem           m_ensureVisibleDefered;
+
+    // By default this is set to -1 and the height of the rows is determined by
+    // GetRect() methods of the renderers but this can be set to a positive
+    // value to force the height of all rows to the given value.
+    int m_uniformRowHeight;
 
     virtual void AddChildGTK(wxWindowGTK* child);
     void GtkEnableSelectionEvents();

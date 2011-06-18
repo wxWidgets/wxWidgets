@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/corefoundation/stdpaths.cpp
+// Name:        src/osx/core/stdpaths_cf.cpp
 // Purpose:     wxStandardPaths implementation for CoreFoundation systems
 // Author:      David Elliott
 // Modified by:

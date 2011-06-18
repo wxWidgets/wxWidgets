@@ -450,6 +450,7 @@ public:
     // (politely, this is not Kill()!) to do it
     wxThreadError WaitForTerminate(wxCriticalSection& cs,
                                    wxThread::ExitCode *pRc,
+                                   wxThreadWait waitMode,
                                    wxThread *threadToDelete = NULL);
 
     // kill the thread unconditionally
@@ -545,7 +546,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
         // store the thread object in the TLS
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
-            wxLogSysError(_("Can not start thread: error writing TLS."));
+            wxLogSysError(_("Cannot start thread: error writing TLS."));
 
             return THREAD_ERROR_EXIT;
         }
@@ -703,6 +704,7 @@ wxThreadError wxThreadInternal::Kill()
 wxThreadError
 wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                                    wxThread::ExitCode *pRc,
+                                   wxThreadWait waitMode,
                                    wxThread *threadToDelete)
 {
     // prevent the thread C++ object from disappearing as long as we are using
@@ -792,7 +794,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
         if ( traits )
         {
-            result = traits->WaitForThread(m_hThread);
+            result = traits->WaitForThread(m_hThread, waitMode);
         }
         else // can't wait for the thread
         {
@@ -804,7 +806,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         {
             case 0xFFFFFFFF:
                 // error
-                wxLogSysError(_("Can not wait for thread termination"));
+                wxLogSysError(_("Cannot wait for thread termination"));
                 Kill();
                 return wxTHREAD_KILLED;
 
@@ -881,7 +883,7 @@ bool wxThreadInternal::Suspend()
     DWORD nSuspendCount = ::SuspendThread(m_hThread);
     if ( nSuspendCount == (DWORD)-1 )
     {
-        wxLogSysError(_("Can not suspend thread %x"), m_hThread);
+        wxLogSysError(_("Cannot suspend thread %x"), m_hThread);
 
         return false;
     }
@@ -896,7 +898,7 @@ bool wxThreadInternal::Resume()
     DWORD nSuspendCount = ::ResumeThread(m_hThread);
     if ( nSuspendCount == (DWORD)-1 )
     {
-        wxLogSysError(_("Can not resume thread %x"), m_hThread);
+        wxLogSysError(_("Cannot resume thread %x"), m_hThread);
 
         return false;
     }
@@ -1108,7 +1110,7 @@ wxThreadError wxThread::Resume()
 // stopping thread
 // ---------------
 
-wxThread::ExitCode wxThread::Wait()
+wxThread::ExitCode wxThread::Wait(wxThreadWait waitMode)
 {
     ExitCode rc = wxUIntToPtr(THREAD_ERROR_EXIT);
 
@@ -1117,14 +1119,14 @@ wxThread::ExitCode wxThread::Wait()
     wxCHECK_MSG( !IsDetached(), rc,
                  wxT("wxThread::Wait(): can't wait for detached thread") );
 
-    (void)m_internal->WaitForTerminate(m_critsect, &rc);
+    (void)m_internal->WaitForTerminate(m_critsect, &rc, waitMode);
 
     return rc;
 }
 
-wxThreadError wxThread::Delete(ExitCode *pRc)
+wxThreadError wxThread::Delete(ExitCode *pRc, wxThreadWait waitMode)
 {
-    return m_internal->WaitForTerminate(m_critsect, pRc, this);
+    return m_internal->WaitForTerminate(m_critsect, pRc, waitMode, this);
 }
 
 wxThreadError wxThread::Kill()
@@ -1262,7 +1264,7 @@ bool wxThreadModule::OnInit()
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = 0xFFFFFFFF;
 
-        wxLogSysError(_("Thread module initialization failed: can not store value in thread local storage"));
+        wxLogSysError(_("Thread module initialization failed: cannot store value in thread local storage"));
 
         return false;
     }

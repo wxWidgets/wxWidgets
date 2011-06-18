@@ -97,7 +97,7 @@ public:
     // unspecified/default
     virtual int GetWidth() const = 0;
 
-    // minimal width can be set for resizeable columns to forbid resizing them
+    // minimal width can be set for resizable columns to forbid resizing them
     // below the specified size (set to 0 to remove)
     virtual int GetMinWidth() const = 0;
 
@@ -177,8 +177,8 @@ public:
     void ClearFlag(int flag);
     void ToggleFlag(int flag);
 
-    virtual void SetResizeable(bool resizeable)
-        { ChangeFlag(wxCOL_RESIZABLE, resizeable); }
+    virtual void SetResizeable(bool resizable)
+        { ChangeFlag(wxCOL_RESIZABLE, resizable); }
     virtual void SetSortable(bool sortable)
         { ChangeFlag(wxCOL_SORTABLE, sortable); }
     virtual void SetReorderable(bool reorderable)

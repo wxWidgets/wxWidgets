@@ -79,7 +79,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   bool bDoUseGlobal = (style & wxCONFIG_USE_GLOBAL_FILE) != 0;
 
   // the convention is to put the programs keys under <vendor>\<appname>
-  // (but it can be overriden by specifying the pathes explicitly in strLocal
+  // (but it can be overridden by specifying the pathes explicitly in strLocal
   // and/or strGlobal)
   if ( strLocal.empty() || (strGlobal.empty() && bDoUseGlobal) )
   {
@@ -563,7 +563,7 @@ bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
   bool bQueryGlobal = true;
 
   // if immutable key exists in global key we must check that it's not
-  // overriden by the local key with the same name
+  // overridden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
       if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {
@@ -600,7 +600,7 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
   bool bQueryGlobal = true;
 
   // if immutable key exists in global key we must check that it's not
-  // overriden by the local key with the same name
+  // overridden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), plResult) ) {
       if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {
@@ -634,7 +634,7 @@ bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
   bool bQueryGlobal = true;
 
   // if immutable key exists in global key we must check that it's not
-  // overriden by the local key with the same name
+  // overridden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
     if ( TryGetValue(m_keyGlobal, path.Name(), *buf) ) {
       if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {

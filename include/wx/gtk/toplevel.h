@@ -117,6 +117,8 @@ public:
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
+    // timer for detecting WM with broken _NET_REQUEST_FRAME_EXTENTS handling
+    unsigned m_netFrameExtentsTimerId;
 
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;

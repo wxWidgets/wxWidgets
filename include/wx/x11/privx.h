@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        privx.h
+// Name:        wx/x11/privx.h
 // Purpose:     Private declarations common to X11 and Motif ports
 // Author:      Julian Smart
 // Modified by:

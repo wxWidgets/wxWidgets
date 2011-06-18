@@ -87,7 +87,7 @@ enum
     wxCC_IFLAG_CREATED              = 0x0100,
     // Internal use: really put button outside
     wxCC_IFLAG_BUTTON_OUTSIDE       = 0x0200,
-    // Internal use: SetMargins has been succesfully called
+    // Internal use: SetMargins has been successfully called
     wxCC_IFLAG_LEFT_MARGIN_SET      = 0x0400,
     // Internal use: Set wxTAB_TRAVERSAL to parent when popup is dismissed
     wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800,
@@ -445,6 +445,9 @@ public:
     // Return true if Create has finished
     bool IsCreated() const { return m_iFlags & wxCC_IFLAG_CREATED ? true : false; }
 
+    // Need to override to return text area background colour
+    wxColour GetBackgroundColour() const;
+
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss(bool generateEvent);
 
@@ -638,7 +641,7 @@ protected:
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
 
-    // used to prevent immediate re-popupping incase closed popup
+    // used to prevent immediate re-popupping in case closed popup
     // by clicking on the combo control (needed because of inconsistent
     // transient implementation across platforms).
     wxLongLong              m_timeCanAcceptClick;
@@ -670,6 +673,9 @@ protected:
     // The button and textctrl click/paint areas
     wxRect                  m_tcArea;
     wxRect                  m_btnArea;
+
+    // Colour of the text area, in case m_text is NULL
+    wxColour                m_tcBgCol;
 
     // current button state (uses renderer flags)
     int                     m_btnState;
@@ -706,6 +712,9 @@ protected:
 
     // should the focus be reset to the textctrl in idle time?
     bool                    m_resetFocus;
+
+    // is the text-area background colour overridden?
+    bool                    m_hasTcBgCol;
 
 private:
     void Init();
@@ -757,6 +766,13 @@ public:
     // Create the popup child control.
     // Return true for success.
     virtual bool Create(wxWindow* parent) = 0;
+
+    // Calls Destroy() for the popup control (i.e. one returned by
+    // GetControl()) and makes sure that 'this' is deleted at the end.
+    // Default implementation works for both cases where popup control
+    // class is multiple inherited or created on heap as a separate
+    // object.
+    virtual void DestroyPopup();
 
     // We must have an associated control which is subclassed by the combobox.
     virtual wxWindow *GetControl() = 0;

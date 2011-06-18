@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/utilsgui.cpp
+// Name:        src/msw/utilsgui.cpp
 // Purpose:     Various utility functions only available in GUI
 // Author:      Vadim Zeitlin
 // Modified by:

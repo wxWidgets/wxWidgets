@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/toolbar.cpp
+// Name:        src/osx/cocoa/toolbar.mm
 // Purpose:     wxToolBar
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id: toolbar.cpp 54954 2008-08-03 11:27:03Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -324,7 +324,7 @@ private:
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
-    [super initWithItemIdentifier:identifier];
+    self = [super initWithItemIdentifier:identifier];
     impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];
@@ -413,7 +413,7 @@ private:
 
 - (id)initWithFrame:(NSRect)frame
 {
-    [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];
@@ -841,9 +841,9 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             [tlw setToolbar:(NSToolbar*) m_macToolbar];
             [(NSToolbar*) m_macToolbar setVisible:YES];
 
-            m_peer->Move(0,0,0,0 );
+            GetPeer()->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
-            m_peer->SetVisibility( false );
+            GetPeer()->SetVisibility( false );
             wxToolBarBase::Show( false );
         }
     }
@@ -855,7 +855,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             bResult = true;
             [(NSToolbar*) m_macToolbar setVisible:NO];
             MacUninstallNativeToolbar();
-            m_peer->SetVisibility( true );
+            GetPeer()->SetVisibility( true );
         }
     }
 
@@ -887,7 +887,7 @@ void wxToolBar::DoLayout()
     
     // find the maximum tool width and height
     // and the number of stretchable items
-    unsigned numStretchableSpaces = 0;
+    int numStretchableSpaces = 0;
     wxToolBarTool *tool;
     wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
     while ( node )

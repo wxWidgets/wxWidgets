@@ -58,8 +58,10 @@
     #include <float.h>
     #define wxFinite(x) _finite(x)
 #elif defined(__MINGW64__)
-    // add more compilers with C99 support here: using C99 isfinite() is
-    // preferable to using BSD-ish finite()
+    /*
+        add more compilers with C99 support here: using C99 isfinite() is
+        preferable to using BSD-ish finite()
+     */
     #define wxFinite(x) isfinite(x)
 #elif ( defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
@@ -144,7 +146,7 @@
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( WXDLLIMPEXP_BASE wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes) );
     wxDEPRECATED( WXDLLIMPEXP_BASE void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes) );
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif
 
 #ifdef __cplusplus
     }

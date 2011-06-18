@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/popupwin.cpp
+// Name:        src/osx/carbon/popupwin.cpp
 // Purpose:     implements wxPopupWindow for wxMac
 // Author:      Stefan Csomor
 // Modified by:

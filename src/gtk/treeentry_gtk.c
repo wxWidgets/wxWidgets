@@ -46,10 +46,10 @@ gtk_tree_entry_new()
     return GTK_TREE_ENTRY(g_object_new(GTK_TYPE_TREE_ENTRY, NULL));
 }
 
-GtkType
+GType
 gtk_tree_entry_get_type ()
 {
-    static GtkType tree_entry_type = 0;
+    static GType tree_entry_type = 0;
 
     if (!tree_entry_type)
     {

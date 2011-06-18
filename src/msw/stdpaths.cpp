@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/stdpaths.cpp
+// Name:        src/msw/stdpaths.cpp
 // Purpose:     wxStandardPaths implementation for Win32
 // Author:      Vadim Zeitlin
 // Modified by:

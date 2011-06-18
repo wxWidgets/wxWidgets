@@ -227,7 +227,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(ID_BOOK_NOTEBOOK, ID_BOOK_MAX, MyFrame::OnType)
     EVT_MENU_RANGE(ID_ORIENT_DEFAULT, ID_ORIENT_MAX, MyFrame::OnOrient)
     EVT_MENU(ID_SHOW_IMAGES, MyFrame::OnShowImages)
-    EVT_MENU(ID_MULTI, MyFrame::OnMulti)
+    EVT_MENU_RANGE(ID_FIXEDWIDTH, ID_HORZ_LAYOUT, MyFrame::OnStyle)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
 
     // Operations menu
@@ -299,7 +299,11 @@ MyFrame::MyFrame()
 
     m_orient = ID_ORIENT_DEFAULT;
     m_chkShowImages = true;
+    m_fixedWidth = false;
     m_multi = false;
+    m_noPageTheme = false;
+    m_buttonBar = false;
+    m_horzLayout = false;
 
     SetIcon(wxICON(sample));
 
@@ -330,6 +334,17 @@ MyFrame::MyFrame()
     menuOrient->AppendRadioItem(ID_ORIENT_LEFT,    wxT("&Left\tAlt-3"));
     menuOrient->AppendRadioItem(ID_ORIENT_RIGHT,   wxT("&Right\tAlt-4"));
 
+    wxMenu *menuStyle = new wxMenu;
+#if wxUSE_NOTEBOOK
+    menuStyle->AppendCheckItem(ID_FIXEDWIDTH, wxT("&Fixed Width (wxNotebook)"));
+    menuStyle->AppendCheckItem(ID_MULTI, wxT("&Multiple lines (wxNotebook)"));
+    menuStyle->AppendCheckItem(ID_NOPAGETHEME, wxT("&No Page Theme (wxNotebook)"));
+#endif
+#if wxUSE_TOOLBOOK
+    menuStyle->AppendCheckItem(ID_BUTTONBAR, wxT("&Button Bar (wxToolbook)"));
+    menuStyle->AppendCheckItem(ID_HORZ_LAYOUT, wxT("&Horizontal layout (wxToolbook)"));
+#endif
+
     wxMenu *menuPageOperations = new wxMenu;
     menuPageOperations->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
     menuPageOperations->Append(ID_ADD_PAGE_NO_SELECT, wxT("&Add page (don't select)\tAlt-B"));
@@ -356,11 +371,10 @@ MyFrame::MyFrame()
     menuFile->Append(wxID_ANY, wxT("&Type"), menuType, wxT("Type of control"));
     menuFile->Append(wxID_ANY, wxT("&Orientation"), menuOrient, wxT("Orientation of control"));
     menuFile->AppendCheckItem(ID_SHOW_IMAGES, wxT("&Show images\tAlt-S"));
-    menuFile->AppendCheckItem(ID_MULTI, wxT("&Multiple lines\tAlt-M"));
+    menuFile->Append(wxID_ANY, wxT("&Style"), menuStyle, wxT("Style of control"));
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, wxT("E&xit"), wxT("Quits the application"));
     menuFile->Check(ID_SHOW_IMAGES, m_chkShowImages);
-    menuFile->Check(ID_MULTI, m_multi);
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, wxT("&File"));
@@ -502,8 +516,20 @@ void MyFrame::RecreateBook()
             flags = wxBK_DEFAULT;
     }
 
+#if wxUSE_NOTEBOOK
+    if ( m_fixedWidth && m_type == Type_Notebook )
+        flags |= wxNB_FIXEDWIDTH;
     if ( m_multi && m_type == Type_Notebook )
         flags |= wxNB_MULTILINE;
+    if ( m_noPageTheme && m_type == Type_Notebook )
+        flags |= wxNB_NOPAGETHEME;
+#endif
+#if wxUSE_TOOLBOOK
+    if ( m_buttonBar && m_type == Type_Toolbook )
+        flags |= wxTBK_BUTTONBAR;
+    if ( m_horzLayout && m_type == Type_Toolbook )
+        flags |= wxTBK_HORZ_LAYOUT;
+#endif
 
     wxBookCtrlBase *oldBook = m_bookCtrl;
 
@@ -522,7 +548,8 @@ void MyFrame::RecreateBook()
 
     m_bookCtrl->Hide();
 
-    if ( m_chkShowImages )
+    // wxToolbook doesn't work without icons so always use them for it.
+    if ( m_chkShowImages || m_type == Type_Toolbook )
     {
         m_bookCtrl->SetImageList(m_imageList);
     }
@@ -677,12 +704,21 @@ void MyFrame::OnShowImages(wxCommandEvent& event)
     m_sizerFrame->Layout();
 }
 
-void MyFrame::OnMulti(wxCommandEvent& event)
+void MyFrame::OnStyle(wxCommandEvent& event)
 {
-    m_multi = event.IsChecked();
+    bool checked = event.IsChecked();
+    switch (event.GetId())
+    {
+        case ID_FIXEDWIDTH:  m_fixedWidth = checked;  break;
+        case ID_MULTI:       m_multi = checked;       break;
+        case ID_NOPAGETHEME: m_noPageTheme = checked; break;
+        case ID_BUTTONBAR:   m_buttonBar = checked;   break;
+        case ID_HORZ_LAYOUT: m_horzLayout = checked;  break;
+        default: break; // avoid compiler warning
+    }
+
     RecreateBook();
     m_sizerFrame->Layout();
-    wxLogMessage(wxT("Multiline setting works only in wxNotebook."));
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -936,6 +972,12 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
              nameControl,
              veto;
     const wxEventType eventType = event.GetEventType();
+
+    // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
+    //     wxRTTI
+    const wxBookCtrlBase * const
+        book = static_cast<wxBookCtrlBase *>(event.GetEventObject());
+
     for ( size_t n = 0; n < WXSIZEOF(events); n++ )
     {
         const EventInfo& ei = events[n];
@@ -947,10 +989,6 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
         {
             const int idx = event.GetOldSelection();
 
-            // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
-            //     wxRTTI
-            const wxBookCtrlBase * const
-                book = static_cast<wxBookCtrlBase *>(event.GetEventObject());
             if ( idx != wxNOT_FOUND &&
                     book && book->GetPageText(idx) == VETO_PAGE_NAME )
             {
@@ -981,13 +1019,14 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
 
     static int s_num = 0;
 
-    wxLogMessage(wxT("Event #%d: %s: %s (%d) new sel %d, old %d%s"),
+    wxLogMessage(wxT("Event #%d: %s: %s (%d) new sel %d, old %d, current %d%s"),
                  ++s_num,
                  nameControl.c_str(),
                  nameEvent.c_str(),
                  eventType,
                  event.GetSelection(),
                  event.GetOldSelection(),
+                 book->GetSelection(),
                  veto.c_str());
 
 #if USE_LOG

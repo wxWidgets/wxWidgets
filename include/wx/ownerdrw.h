@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        ownerdrw.h
+// Name:        wx/ownerdrw.h
 // Purpose:     interface for owner-drawn GUI elements
 // Author:      Vadim Zeitlin
 // Modified by: Marcin Malich

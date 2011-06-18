@@ -109,7 +109,7 @@ wxLANGUAGE_IRISH                       ga_IE  -                -                
 wxLANGUAGE_ITALIAN                     it_IT  LANG_ITALIAN     SUBLANG_ITALIAN                     LTR    "Italian"
 wxLANGUAGE_ITALIAN_SWISS               it_CH  LANG_ITALIAN     SUBLANG_ITALIAN_SWISS               LTR    "Italian (Swiss)"
 wxLANGUAGE_JAPANESE                    ja_JP  LANG_JAPANESE    SUBLANG_DEFAULT                     LTR    "Japanese"
-wxLANGUAGE_JAVANESE                    jw     -                -                                   LTR    "Javanese"
+wxLANGUAGE_JAVANESE                    jv     -                -                                   LTR    "Javanese"
 wxLANGUAGE_KANNADA                     kn     LANG_KANNADA     SUBLANG_DEFAULT                     LTR    "Kannada"
 wxLANGUAGE_KASHMIRI                    ks     LANG_KASHMIRI    SUBLANG_DEFAULT                     LTR    "Kashmiri"
 wxLANGUAGE_KASHMIRI_INDIA              ks_IN  LANG_KASHMIRI    SUBLANG_KASHMIRI_INDIA              LTR    "Kashmiri (India)"

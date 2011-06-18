@@ -67,7 +67,7 @@ class wxFindDialogEvent : public wxCommandEvent
 {
 public:
     /**
-        Constuctor used by wxWidgets only.
+        Constructor used by wxWidgets only.
     */
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL,
                       int id = 0);
@@ -117,7 +117,7 @@ class wxFindReplaceData : public wxObject
 {
 public:
     /**
-        Constuctor initializes the flags to default value (0).
+        Constructor initializes the flags to default value (0).
     */
     wxFindReplaceData(wxUint32 flags = 0);
 

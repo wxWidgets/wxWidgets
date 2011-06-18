@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextbackgroundpage.cpp
+// Name:        src/richtext/richtextbackgroundpage.cpp
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 

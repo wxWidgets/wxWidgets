@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/stdstream.h
+// Name:        src/common/stdstream.cpp
 // Purpose:     Implementation of std::istream and std::ostream derived
 //              wrappers for wxInputStream and wxOutputStream
 // Author:      Jonathan Liu <net147@gmail.com>

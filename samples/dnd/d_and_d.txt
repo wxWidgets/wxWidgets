@@ -32,7 +32,7 @@ act as modifiers: keeping down the <Ctrl> key at the moment of drop does
     There are several objects participating in a d&d operation. First of all,
 there is the data object itself. Second, there is the drop source which is
 responsible for creating the data object (if it doesn't exist yet) and starting
-the d&d operation. Finally, the drop target recieves the notification when
+the d&d operation. Finally, the drop target receives the notification when
 the data is dropped onto the associated window (see below) and is responsible
 for pasting the data and returning the result code (copy, move or failure).
 There is one class for each one of these roles in wxWindows d&d implementation,
@@ -127,7 +127,7 @@ metafile picture. All of them are defined in wxDataObject::StdFormats
 enumeration. Of course, it's not always enough and you'll often need your
 own format for data transfer. The simple helper class wxDataFormat may help
 you: when you create an object of this class, it registers a new clipboard
-data format identified by the string passed to it's ctor.
+data format identified by the string passed to its ctor.
 
     After your new format is registered, you may use it as any other one.
 
@@ -138,7 +138,7 @@ data format identified by the string passed to it's ctor.
  
     In order to start the d&d operation you should call the DoDragDrop function
 (typically in reply to a "mouse button press" message). NB: DoDragDrop() is a
-blocking function which enters into it's own message loop and may return after
+blocking function which enters into its own message loop and may return after
 an arbitrarily long time interval. During it, the QueryContinueDrag() is called
 whenever the mouse or keyboard state changes. The default behaviour is quite
 reasonable for 99% of cases: the drag operation is cancelled if the <Esc> key

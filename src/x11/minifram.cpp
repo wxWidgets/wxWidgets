@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.cpp
+// Name:        src/x11/minifram.cpp
 // Purpose:     wxMiniFrame. Optional; identical to wxFrame if not supported.
 // Author:      Julian Smart
 // Modified by:

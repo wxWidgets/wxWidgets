@@ -138,7 +138,7 @@ public:
         gauge move a bit to indicate the user that some progress has been made.
 
         @note After calling this function the value returned by GetValue() is
-              undefined and thus you need to explicitely call SetValue() if you
+              undefined and thus you need to explicitly call SetValue() if you
               want to restore the determinate mode.
     */
     virtual void Pulse();

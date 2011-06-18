@@ -50,6 +50,7 @@
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
 #include "wx/wupdlock.h"
+#include "wx/textcompleter.h"
 
 #include "wx/persist/toplevel.h"
 #include "wx/persist/treebook.h"
@@ -98,6 +99,7 @@ enum
     TextEntry_DisableAutoComplete = TextEntry_Begin,
     TextEntry_AutoCompleteFixed,
     TextEntry_AutoCompleteFilenames,
+    TextEntry_AutoCompleteCustom,
 
     TextEntry_SetHint,
     TextEntry_End
@@ -172,6 +174,7 @@ protected:
     void OnDisableAutoComplete(wxCommandEvent& event);
     void OnAutoCompleteFixed(wxCommandEvent& event);
     void OnAutoCompleteFilenames(wxCommandEvent& event);
+    void OnAutoCompleteCustom(wxCommandEvent& event);
 
     void OnSetHint(wxCommandEvent& event);
 
@@ -300,6 +303,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(TextEntry_DisableAutoComplete,   WidgetsFrame::OnDisableAutoComplete)
     EVT_MENU(TextEntry_AutoCompleteFixed,     WidgetsFrame::OnAutoCompleteFixed)
     EVT_MENU(TextEntry_AutoCompleteFilenames, WidgetsFrame::OnAutoCompleteFilenames)
+    EVT_MENU(TextEntry_AutoCompleteCustom,    WidgetsFrame::OnAutoCompleteCustom)
 
     EVT_MENU(TextEntry_SetHint, WidgetsFrame::OnSetHint)
 
@@ -414,6 +418,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                                    wxT("Fixed-&list auto-completion"));
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteFilenames,
                                    wxT("&Files names auto-completion"));
+    menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteCustom,
+                                   wxT("&Custom auto-completion"));
     menuTextEntry->AppendSeparator();
     menuTextEntry->Append(TextEntry_SetHint, "Set help &hint");
 
@@ -794,11 +800,11 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
 
-    if (!m_colFg.Ok())
+    if (!m_colFg.IsOk())
         m_colFg = page->GetForegroundColour();
 
     wxColour col = GetColourFromUser(this, m_colFg);
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     m_colFg = col;
@@ -817,11 +823,11 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
     WidgetsPage *page = CurrentPage();
 
-    if ( !m_colBg.Ok() )
+    if ( !m_colBg.IsOk() )
         m_colBg = page->GetBackgroundColour();
 
     wxColour col = GetColourFromUser(this, m_colBg);
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     m_colBg = col;
@@ -839,7 +845,7 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetPageBg(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = GetColourFromUser(this, GetBackgroundColour());
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     CurrentPage()->SetBackgroundColour(col);
@@ -851,11 +857,11 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FONTDLG
     WidgetsPage *page = CurrentPage();
 
-    if (!m_font.Ok())
+    if (!m_font.IsOk())
         m_font = page->GetFont();
 
     wxFont font = wxGetFontFromUser(this, m_font);
-    if ( !font.Ok() )
+    if ( !font.IsOk() )
         return;
 
     m_font = font;
@@ -981,11 +987,117 @@ void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
 
     if ( entry->AutoCompleteFileNames() )
     {
-        wxLogMessage("Enable auto completion of file names.");
+        wxLogMessage("Enabled auto completion of file names.");
     }
     else
     {
         wxLogMessage("AutoCompleteFileNames() failed.");
+    }
+}
+
+void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextEntryBase *entry = CurrentPage()->GetTextEntry();
+    wxCHECK_RET( entry, "menu item should be disabled" );
+
+    // This is a simple (and hence rather useless) example of a custom
+    // completer class that completes the first word (only) initially and only
+    // build the list of the possible second words once the first word is
+    // known. This allows to avoid building the full 676000 item list of
+    // possible strings all at once as the we have 1000 possibilities for the
+    // first word (000..999) and 676 (aa..zz) for the second one.
+    class CustomTextCompleter : public wxTextCompleterSimple
+    {
+    public:
+        virtual void GetCompletions(const wxString& prefix, wxArrayString& res)
+        {
+            // This is used for illustrative purposes only and shows how many
+            // completions we return every time when we're called.
+            class LogCompletions
+            {
+            public:
+                LogCompletions(const wxString& prefix, const wxArrayString& res)
+                    : m_prefix(prefix),
+                      m_res(res)
+                {
+                }
+
+                ~LogCompletions()
+                {
+                    wxLogMessage("Returning %lu possible completions for "
+                                 "prefix \"%s\"",
+                                 m_res.size(), m_prefix);
+                }
+
+            private:
+                const wxString& m_prefix;
+                const wxArrayString& m_res;
+            } logCompletions(prefix, res);
+
+
+            // Normally it doesn't make sense to complete empty control, there
+            // are too many choices and listing them all wouldn't be helpful.
+            if ( prefix.empty() )
+                return;
+
+            // The only valid strings start with 3 digits so check for their
+            // presence proposing to complete the remaining ones.
+            if ( !wxIsdigit(prefix[0]) )
+                return;
+
+            if ( prefix.length() == 1 )
+            {
+                for ( int i = 0; i < 10; i++ )
+                    for ( int j = 0; j < 10; j++ )
+                        res.push_back(wxString::Format("%s%02d",
+                                                       prefix, 10*i + j));
+                return;
+            }
+            else if ( !wxIsdigit(prefix[1]) )
+                return;
+
+            if ( prefix.length() == 2 )
+            {
+                for ( int i = 0; i < 10; i++ )
+                    res.push_back(wxString::Format("%s%d", prefix, i));
+                return;
+            }
+            else if ( !wxIsdigit(prefix[2]) )
+                return;
+
+            // Next we must have a space and two letters.
+            wxString prefix2(prefix);
+            if ( prefix.length() == 3 )
+                prefix2 += ' ';
+            else if ( prefix[3] != ' ' )
+                return;
+
+            if ( prefix2.length() == 4 )
+            {
+                for ( char c = 'a'; c <= 'z'; c++ )
+                    for ( char d = 'a'; d <= 'z'; d++ )
+                        res.push_back(wxString::Format("%s%c%c", prefix2, c, d));
+                return;
+            }
+            else if ( !wxIslower(prefix[4]) )
+                return;
+
+            if ( prefix.length() == 5 )
+            {
+                for ( char c = 'a'; c <= 'z'; c++ )
+                    res.push_back(prefix + c);
+            }
+        }
+    };
+
+    if ( entry->AutoComplete(new CustomTextCompleter) )
+    {
+        wxLogMessage("Enabled custom auto completer for \"NNN XX\" items "
+                     "(where N is a digit and X is a letter).");
+    }
+    else
+    {
+        wxLogMessage("AutoComplete() failed.");
     }
 }
 

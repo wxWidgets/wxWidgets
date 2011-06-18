@@ -70,13 +70,13 @@ const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
 static const int NUM_ICONS = 9;
 
 int wxCALLBACK
-MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
+MyCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr WXUNUSED(sortData))
 {
     // inverse the order
     if (item1 < item2)
-        return -1;
-    if (item1 > item2)
         return 1;
+    if (item1 > item2)
+        return -1;
 
     return 0;
 }

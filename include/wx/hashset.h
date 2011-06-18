@@ -17,7 +17,7 @@
 // see comment in wx/hashmap.h which also applies to different standard hash
 // set classes
 
-#if wxUSE_STL && \
+#if wxUSE_STD_CONTAINERS && \
     (defined(HAVE_STD_UNORDERED_SET) || defined(HAVE_TR1_UNORDERED_SET))
 
 #if defined(HAVE_STD_UNORDERED_SET)
@@ -30,7 +30,7 @@
     #error Update this code: unordered_set is available, but I do not know where.
 #endif
 
-#elif wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+#elif wxUSE_STD_CONTAINERS && defined(HAVE_STL_HASH_MAP)
 
 #if defined(HAVE_EXT_HASH_MAP)
     #include <ext/hash_set>

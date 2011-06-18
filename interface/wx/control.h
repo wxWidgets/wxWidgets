@@ -121,7 +121,7 @@ public:
         following character is a @e mnemonic for this control and can be used to
         activate it from the keyboard (typically by using @e Alt key in
         combination with it). To insert a literal ampersand character, you need
-        to double it, i.e. use use "&&". If this behaviour is undesirable, use
+        to double it, i.e. use "&&". If this behaviour is undesirable, use
         SetLabelText() instead.
     */
     void SetLabel(const wxString& label);

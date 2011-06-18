@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/listbox.cpp
+// Name:        src/osx/listbox_osx.cpp
 // Purpose:     wxListBox
 // Author:      Stefan Csomor
 // Modified by:
@@ -71,8 +71,8 @@ bool wxListBox::Create(
     const wxValidator& validator,
     const wxString& name )
 {
+    DontCreatePeer();
     m_blockEvents = false;
-    m_macIsUserPane = false;
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   wxT("only a single listbox selection mode can be specified") );
@@ -85,7 +85,7 @@ bool wxListBox::Create(
     else
         m_strings.unsorted = new wxArrayString;
 
-    m_peer = wxWidgetImpl::CreateListBox( this, parent, id, pos, size, style, GetExtraStyle() );
+    SetPeer(wxWidgetImpl::CreateListBox( this, parent, id, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -106,7 +106,7 @@ wxListBox::~wxListBox()
     m_blockEvents = false;
 
     // make sure no native events get sent to a object in destruction
-    wxDELETE(m_peer);
+    SetPeer(NULL);
 
     if ( IsSorted() )
         delete m_strings.sorted;
@@ -327,7 +327,6 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 
 void wxListBox::OnItemInserted(unsigned int WXUNUSED(pos))
 {
-
 }
 
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,

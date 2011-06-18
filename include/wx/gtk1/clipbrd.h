@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk1/clipboard.h
+// Name:        wx/gtk1/clipbrd.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

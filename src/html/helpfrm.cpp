@@ -89,6 +89,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Data = data;
     m_HtmlHelpWin = NULL;
     m_helpController = NULL;
+    m_shouldPreventAppExit = false;
 }
 
 void wxHtmlHelpFrame::SetController(wxHtmlHelpController* controller)
@@ -245,6 +246,11 @@ void wxHtmlHelpFrame::UseConfig(wxConfigBase *config, const wxString& rootPath)
         m_HtmlHelpWin->UseConfig(config, rootPath);
 }
 #endif // wxUSE_CONFIG
+
+void wxHtmlHelpFrame::SetShouldPreventAppExit(bool enable)
+{
+    m_shouldPreventAppExit = enable;
+}
 
 #ifdef __WXMAC__
 void wxHtmlHelpFrame::OnClose(wxCommandEvent& WXUNUSED(event))

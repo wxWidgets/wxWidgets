@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.h
+// Name:        wx/osx/control.h
 // Purpose:     wxControl class
 // Author:      Stefan Csomor
 // Modified by:

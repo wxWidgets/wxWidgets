@@ -1392,7 +1392,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             s = wxString::Format(wxT("%i tests failed!!!"), failures);
 #ifdef __WXDEBUG__
         else
-            s = wxString::Format(wxT("All tests were succesfull, but there were %i warnings!"), wxPGGlobalVars->m_warnings);
+            s = wxString::Format(wxT("All tests were successful, but there were %i warnings!"), wxPGGlobalVars->m_warnings);
 #endif
         RT_MSG(s)
         for ( i=0; i<errorMessages.size(); i++ )
@@ -1401,7 +1401,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
     else
     {
-        RT_MSG(wxT("All tests succesfull"))
+        RT_MSG(wxT("All tests successfull"))
         retVal = true;
 
         if ( !interactive )

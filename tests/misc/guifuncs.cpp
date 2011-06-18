@@ -19,6 +19,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
+    #include "wx/filefn.h"
 #endif // !PCH
 
 #include "wx/defs.h"
@@ -38,10 +39,12 @@ private:
     CPPUNIT_TEST_SUITE( MiscGUIFuncsTestCase );
         CPPUNIT_TEST( DisplaySize );
         CPPUNIT_TEST( URLDataObject );
+        CPPUNIT_TEST( ParseFileDialogFilter );
     CPPUNIT_TEST_SUITE_END();
 
     void DisplaySize();
     void URLDataObject();
+    void ParseFileDialogFilter();
 
     DECLARE_NO_COPY_CLASS(MiscGUIFuncsTestCase)
 };
@@ -49,7 +52,7 @@ private:
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( MiscGUIFuncsTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MiscGUIFuncsTestCase, "MiscGUIFuncsTestCase" );
 
 void MiscGUIFuncsTestCase::DisplaySize()
@@ -86,5 +89,43 @@ void MiscGUIFuncsTestCase::URLDataObject()
     wxClipboardLocker lockClip;
     CPPUNIT_ASSERT( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
+}
+
+void MiscGUIFuncsTestCase::ParseFileDialogFilter()
+{
+    wxArrayString descs,
+                  filters;
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        1,
+        wxParseCommonDialogsFilter("Image files|*.jpg;*.png", descs, filters)
+    );
+
+    CPPUNIT_ASSERT_EQUAL( "Image files", descs[0] );
+    CPPUNIT_ASSERT_EQUAL( "*.jpg;*.png", filters[0] );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        2,
+        wxParseCommonDialogsFilter
+        (
+            "All files (*.*)|*.*|Python source (*.py)|*.py",
+            descs, filters
+        )
+    );
+
+    CPPUNIT_ASSERT_EQUAL( "*.*", filters[0] );
+    CPPUNIT_ASSERT_EQUAL( "*.py", filters[1] );
+
+    // Test some invalid ones too.
+    WX_ASSERT_FAILS_WITH_ASSERT
+    (
+        wxParseCommonDialogsFilter
+        (
+            "All files (*.*)|*.*|Python source (*.py)|*.py|",
+            descs, filters
+        )
+    );
 }
 

@@ -208,7 +208,7 @@ public:
     virtual bool LoadFile(const wxString& file = wxEmptyString);
 
     /**
-        Overrideable member called when this application's viewer is quit by the user.
+        Overridable member called when this application's viewer is quit by the user.
         This does not work for all help controllers.
     */
     virtual bool OnQuit();

@@ -172,9 +172,9 @@ bool wxCommandProcessor::Redo()
 {
     wxCommand *redoCommand = NULL;
     wxList::compatibility_iterator redoNode
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
         = NULL          // just to avoid warnings
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
         ;
 
     if ( m_currentCommand )

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/accesscmn.cpp
+// Name:        src/common/accesscmn.cpp
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-02-12

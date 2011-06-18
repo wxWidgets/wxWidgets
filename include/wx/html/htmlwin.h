@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlwin.h
+// Name:        wx/html/htmlwin.h
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -195,7 +195,7 @@ protected:
 
     /**
         Called by HandleMouseClick when the user clicks on a cell.
-        Default behavior is to call wxHtmlWindowInterface::OnLinkClicked()
+        Default behaviour is to call wxHtmlWindowInterface::OnLinkClicked()
         if this cell corresponds to a hypertext link.
 
         @param cell   the cell the mouse is over
@@ -358,7 +358,7 @@ public:
     // (depending on the information passed to SetRelatedFrame() method)
     virtual void OnSetTitle(const wxString& title);
 
-    // Called when user clicked on hypertext link. Default behavior is to
+    // Called when user clicked on hypertext link. Default behaviour is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
 
@@ -469,19 +469,19 @@ protected:
     // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
     // parser which is used to parse HTML input.
-    // Each wxHtmlWindow has it's own parser because sharing one global
+    // Each wxHtmlWindow has its own parser because sharing one global
     // parser would be problematic (because of reentrancy)
     wxHtmlWinParser *m_Parser;
-    // contains name of actualy opened page or empty string if no page opened
+    // contains name of actually opened page or empty string if no page opened
     wxString m_OpenedPage;
     // contains name of current anchor within m_OpenedPage
     wxString m_OpenedAnchor;
-    // contains title of actualy opened page or empty string if no <TITLE> tag
+    // contains title of actually opened page or empty string if no <TITLE> tag
     wxString m_OpenedPageTitle;
     // class for opening files (file system)
     wxFileSystem* m_FS;
 
-    // frame in which page title should be displayed & number of it's statusbar
+    // frame in which page title should be displayed & number of its statusbar
     // reserved for usage with this html window
     wxFrame *m_RelatedFrame;
 #if wxUSE_STATUSBAR

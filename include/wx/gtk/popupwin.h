@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        popupwin.h
+// Name:        wx/gtk/popupwin.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:

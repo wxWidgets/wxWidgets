@@ -29,6 +29,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/spinctrl.h"
+#include "wx/tooltip.h"
 
 #if wxUSE_SPINCTRL
 
@@ -84,13 +85,13 @@ public:
     void OnChar( wxKeyEvent &event )
     {
         if (m_spin)
-            m_spin->OnTextChar(event);
+            m_spin->ProcessWindowEvent(event);
     }
 
     void OnKillFocus(wxFocusEvent& event)
     {
         if (m_spin)
-            m_spin->OnTextLostFocus();
+            m_spin->ProcessWindowEvent(event);
 
         event.Skip();
     }
@@ -192,6 +193,10 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
 
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, value, style);
     m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
+#if wxUSE_TOOLTIPS
+    m_textCtrl->SetToolTip(GetToolTipText());
+    m_spinButton->SetToolTip(GetToolTipText());
+#endif // wxUSE_TOOLTIPS
 
     m_spin_value = m_spinButton->GetValue();
 
@@ -321,9 +326,41 @@ bool wxSpinCtrlGenericBase::Reparent(wxWindowBase *newParent)
     return true;
 }
 
+#if wxUSE_TOOLTIPS
+void wxSpinCtrlGenericBase::DoSetToolTip(wxToolTip *tip)
+{
+    // Notice that we must check for the subcontrols not being NULL (as they
+    // could be if we were created with the default ctor and this is called
+    // before Create() for some reason) and that we can't call SetToolTip(tip)
+    // because this would take ownership of the wxToolTip object (twice).
+    if ( m_textCtrl )
+    {
+        if ( tip )
+            m_textCtrl->SetToolTip(tip->GetTip());
+        else
+            m_textCtrl->SetToolTip(NULL);
+    }
+
+    if ( m_spinButton )
+    {
+        if( tip )
+            m_spinButton->SetToolTip(tip->GetTip());
+        else
+            m_spinButton->SetToolTip(NULL);
+    }
+
+    wxWindowBase::DoSetToolTip(tip);
+}
+#endif // wxUSE_TOOLTIPS
+
 // ----------------------------------------------------------------------------
 // Handle sub controls events
 // ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxSpinCtrlGenericBase, wxSpinCtrlBase)
+    EVT_CHAR(wxSpinCtrlGenericBase::OnTextChar)
+    EVT_KILL_FOCUS(wxSpinCtrlGenericBase::OnTextLostFocus)
+END_EVENT_TABLE()
 
 void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 {
@@ -356,10 +393,12 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
         DoSendEvent();
 }
 
-void wxSpinCtrlGenericBase::OnTextLostFocus()
+void wxSpinCtrlGenericBase::OnTextLostFocus(wxFocusEvent& event)
 {
     SyncSpinToText();
     DoSendEvent();
+
+    event.Skip();
 }
 
 void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)

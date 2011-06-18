@@ -173,12 +173,12 @@ public:
             or test if it can be opened for writing with Access(). */
         write,
 
-        /** Open file for reading and writing; can not be used with Access() */
+        /** Open file for reading and writing; cannot be used with Access() */
         read_write,
 
         /** Open file for appending: the file is opened for writing, but the old contents
             of the file are not erased and the file pointer is initially placed at the end
-            of the file; can not be used with Access().
+            of the file; cannot be used with Access().
 
             This is the same as OpenMode::write if the file doesn't exist.
         */

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        file.h
+// Name:        wx/file.h
 // Purpose:     wxFile - encapsulates low-level "file descriptor"
 //              wxTempFile - safely replace the old file
 // Author:      Vadim Zeitlin

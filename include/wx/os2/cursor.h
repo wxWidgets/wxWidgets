@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/os2/cursor.h
 // Purpose:     wxCursor class
 // Author:      David Webster
 // Modified by:

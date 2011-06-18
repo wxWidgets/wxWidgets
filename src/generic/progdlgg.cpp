@@ -261,7 +261,7 @@ void wxGenericProgressDialog::Create( const wxString& title,
 
     // Windows dialogs usually have buttons in the lower right corner
     const int sizerFlags =
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXOSX__)
                            wxALIGN_RIGHT | wxALL
 #else // !MSW
                            wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP

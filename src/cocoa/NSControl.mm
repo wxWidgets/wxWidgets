@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSControl.cpp
+// Name:        src/cocoa/NSControl.mm
 // Purpose:     wxCocoaNSControl
 // Author:      David Elliott
 // Modified by:

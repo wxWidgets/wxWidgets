@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/menu.cpp
+// Name:        src/cocoa/menu.mm
 // Purpose:     wxMenu and wxMenuBar implementation
 // Author:      David Elliott
 // Modified by:

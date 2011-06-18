@@ -80,7 +80,7 @@ protected:
 
     virtual wxIDirectFBSurfacePtr ObtainDfbSurface() const;
 
-    // overriden wxWindow methods
+    // overridden wxWindow methods
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -92,7 +92,7 @@ protected:
     // wxWindows as in wx
     void SetDfbFocus();
 
-    // overriden in wxTopLevelWindowDFB, there's no common handling for wxTLW
+    // overridden in wxTopLevelWindowDFB, there's no common handling for wxTLW
     // and wxPopupWindow to be done here
     virtual void HandleFocusEvent(const wxDFBWindowEvent& WXUNUSED(event_)) {}
 

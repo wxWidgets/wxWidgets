@@ -207,7 +207,7 @@ public:
     bool IsConnectedEvent() const;
 
     /**
-        Does this event come from wxDialUpManager::Dial() or from some extrenal
+        Does this event come from wxDialUpManager::Dial() or from some external
         process (i.e. does it result from our own attempt to establish the
         connection)?
     */

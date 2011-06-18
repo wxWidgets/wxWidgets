@@ -31,7 +31,7 @@ enum wxURIHostType
     chance of wxURI "failing" on construction/creation.
 
     wxURI supports copy construction and standard assignment operators. wxURI
-    can also be inherited from to provide furthur functionality.
+    can also be inherited from to provide further functionality.
 
     To obtain individual components you can use one of the GetXXX() methods.
     However, you should check HasXXX() before calling a get method, which

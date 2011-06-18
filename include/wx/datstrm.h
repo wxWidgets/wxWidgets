@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        datstrm.h
+// Name:        wx/datstrm.h
 // Purpose:     Data stream classes
 // Author:      Guilhem Lavaux
 // Modified by: Mickael Gilabert

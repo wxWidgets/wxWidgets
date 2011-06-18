@@ -587,7 +587,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
     }
 
-    // we can not enter threads before gtk_init is done
+    // we cannot enter threads before gtk_init is done
     gdk_threads_enter();
 
     if ( !wxAppBase::Initialize(argc, argv) )

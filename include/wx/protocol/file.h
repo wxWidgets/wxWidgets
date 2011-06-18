@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        file.h
+// Name:        wx/protocol/file.h
 // Purpose:     File protocol
 // Author:      Guilhem Lavaux
 // Modified by:

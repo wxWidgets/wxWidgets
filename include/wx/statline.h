@@ -46,7 +46,7 @@ public:
     // get the default size for the "lesser" dimension of the static line
     static int GetDefaultSize() { return 2; }
 
-    // overriden base class virtuals
+    // overridden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
 
 protected:

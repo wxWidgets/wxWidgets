@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/corefoundation/joystick.cpp
+// Name:        src/osx/core/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ryan Norton
 // Modified by:
@@ -778,7 +778,7 @@ void* wxJoystickThread::Entry()
 //---------------------------------------------------------------------------
 // wxJoystickThread::HIDCallback (static)
 //
-// Callback for the native HID device when it recieves input.
+// Callback for the native HID device when it receives input.
 //
 // This is where the REAL dirty work gets done.
 //

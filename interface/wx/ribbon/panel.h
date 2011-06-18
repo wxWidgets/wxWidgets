@@ -141,9 +141,9 @@ public:
         Show the panel externally expanded.
         
         When a panel is minimised, it can be shown full-size in a pop-out
-        window, which is refered to as being (externally) expanded. Note that
+        window, which is referred to as being (externally) expanded. Note that
         when a panel is expanded, there exist two panels - the original panel
-        (which is refered to as the dummy panel) and the expanded panel. The
+        (which is referred to as the dummy panel) and the expanded panel. The
         original is termed a dummy as it sits in the ribbon bar doing nothing,
         while the expanded panel holds the panel children.
         

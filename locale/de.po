@@ -251,7 +251,7 @@ msgstr "Stil des &Gliederungspunktes:"
 #: ../src/generic/wizard.cpp:460
 #: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
-msgstr "Ab&bruch"
+msgstr "Ab&brechen"
 
 #: ../src/msw/mdi.cpp:171
 msgid "&Cascade"
@@ -551,11 +551,11 @@ msgstr "&Rechts:"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&Save"
-msgstr "&Sichern"
+msgstr "&Speichern"
 
 #: ../src/generic/logg.cpp:511
 msgid "&Save..."
-msgstr "&Sichern..."
+msgstr "&Speichern..."
 
 #: ../src/generic/tipdlg.cpp:268
 msgid "&Show tips at startup"
@@ -709,7 +709,7 @@ msgstr "(Hilfe)"
 #: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:281
 msgid "(None)"
-msgstr "(Unbenannt)"
+msgstr "(Kein)"
 
 #: ../src/richtext/richtextsymboldlg.cpp:524
 msgid "(Normal text)"
@@ -723,7 +723,7 @@ msgstr "(Lesezeichen)"
 
 #: ../src/richtext/richtextformatdlg.cpp:627
 msgid "(none)"
-msgstr "(namenlos)"
+msgstr "(Kein)"
 
 #: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:292
@@ -1352,48 +1352,48 @@ msgid "Ca&pitals"
 msgstr "Ka&pitalien"
 
 #: ../src/os2/thread.cpp:116
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr "Kann Mutex nicht anlegen."
 
 #: ../src/common/filefn.cpp:1383
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr "Kann Dateien '%s' nicht auflisten"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:201
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr "Kann Dateien in Verzeichnis '%s' nicht auflisten"
 
 #: ../src/os2/thread.cpp:516
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr "Kann Thread %lu nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:889
 #: ../src/mac/classic/thread.cpp:487
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr "Kann Thread %x nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:525
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr "Kann Thread nicht starten: Fehler beim  Beschreiben des TLS."
 
 #: ../src/os2/thread.cpp:502
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr "Kann Thread %lu nicht anhalten."
 
 #: ../src/msw/thread.cpp:874
 #: ../src/mac/classic/thread.cpp:460
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr "Kann Thread %x nicht anhalten."
 
 #: ../src/msw/thread.cpp:793
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr "Kann nicht auf Threadende warten"
 
 #: ../src/common/cmdproc.cpp:262
@@ -1547,7 +1547,7 @@ msgstr "Kann nicht in den gepackten Datenstrom schreiben: %s"
 #: ../src/mac/carbon/msgdlg.cpp:68
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
-msgstr "Abbruch"
+msgstr "Abbrechen"
 
 #: ../src/xrc/xmlres.cpp:1268
 #: ../src/xrc/xmlres.cpp:1316
@@ -3152,7 +3152,7 @@ msgstr "Suchen"
 
 #: ../src/html/helpwnd.cpp:1215
 msgid "Fixed font:"
-msgstr "Fixed font:"
+msgstr "Schrift fester Breite:"
 
 #: ../src/html/helpwnd.cpp:1275
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
@@ -5318,7 +5318,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "Die Zeichensatz '%s' ist nicht bekannt. Wählen Sie \n"
-"einen Ersatzzeichensatz oder 'Abbruch', \n"
+"einen Ersatzzeichensatz oder 'Abbrechen', \n"
 "falls er nicht ersetzt werden kann."
 
 #: ../src/msw/ole/dataobj.cpp:161
@@ -5527,7 +5527,7 @@ msgid "This system doesn't support date picker control, please upgrade your vers
 msgstr "Dieses System unterstützt nicht die Komponente zur Darstellung der Datumsauswahl. Installieren Sie bitte eine neuere Version der comctl32.dll."
 
 #: ../src/msw/thread.cpp:1268
-msgid "Thread module initialization failed: can not store value in thread local storage"
+msgid "Thread module initialization failed: cannot store value in thread local storage"
 msgstr "Thread-Modul-Initialisierung gescheitert: Kann den Wert nicht im lokalen Speicherbereich des Thread gespeichert werden"
 
 #: ../src/unix/threadpsx.cpp:1618
@@ -6567,7 +6567,7 @@ msgstr "dünn"
 
 #: ../src/common/intl.cpp:1580
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr "Lokale Umgebung '%s' kann nicht gesetzt werden."
 
 #: ../src/common/intl.cpp:1151

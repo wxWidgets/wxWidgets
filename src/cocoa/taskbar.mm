@@ -390,7 +390,7 @@ void wxTaskBarIconWindowCustom::OnPaint(wxPaintEvent &event)
 
 // This neatly solves the problem of DLL separation.  If the wxAdvanced
 // library (which this file is part of) is loaded then this category is
-// defined and we get dock menu behavior without app.mm ever having to
+// defined and we get dock menu behaviour without app.mm ever having to
 // know we exist.  C++ did sucketh so. :-)
 
 @interface wxNSApplicationDelegate(wxTaskBarIconNSApplicationDelegateCategory)

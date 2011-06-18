@@ -209,11 +209,15 @@ private:
     // functions honours wxDP_SHOWCENTURY flag.
     wxString GetLocaleDateFormat() const
     {
+#if wxUSE_INTL
         wxString fmt = wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT);
         if ( HasDPFlag(wxDP_SHOWCENTURY) )
             fmt.Replace("%y", "%Y");
 
         return fmt;
+#else // !wxUSE_INTL
+        return wxT("x");
+#endif // wxUSE_INTL/!wxUSE_INTL
     }
 
     bool SetFormat(const wxString& fmt)

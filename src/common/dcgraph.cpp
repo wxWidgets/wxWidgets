@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/graphcmn.cpp
+// Name:        src/common/dcgraph.cpp
 // Purpose:     graphics context methods common to all platforms
 // Author:      Stefan Csomor
 // Modified by:
@@ -59,7 +59,7 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
     {
         case wxCOPY: // src
             // since we are supporting alpha, _OVER is closer to the intention than _SOURCE
-            // since the latter would overwrite even when alpha is is not set to opaque
+            // since the latter would overwrite even when alpha is not set to opaque
             *op = wxCOMPOSITION_OVER; 
             break;
         case wxOR:         // src OR dst
@@ -341,7 +341,7 @@ void wxGCDCImpl::DestroyClippingRegion()
 {
     m_graphicContext->ResetClip();
     // currently the clip eg of a window extends to the area between the scrollbars
-    // so we must explicitely make sure it only covers the area we want it to draw
+    // so we must explicitly make sure it only covers the area we want it to draw
     int width, height ;
     GetOwner()->GetSize( &width , &height ) ;
     m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
@@ -696,13 +696,13 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 
     path.MoveToPoint( x1 , y1 );
     path.AddLineToPoint( cx1 , cy1 );
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
 
     while ((node = node->GetNext()) != NULL)
 #else
 
     while ((node = node->GetNext()))
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_CONTAINERS
 
     {
         p = node->GetData();
@@ -958,6 +958,18 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
+    // For compatibility with other ports (notably wxGTK) and because it's
+    // genuinely useful, we allow passing multiline strings to DrawText().
+    // However there is no native OSX function to draw them directly so we
+    // instead reuse the generic DrawLabel() method to render them. Of course,
+    // DrawLabel() itself will call back to us but with single line strings
+    // only so there won't be any infinite recursion here.
+    if ( str.find('\n') != wxString::npos )
+    {
+        GetOwner()->DrawLabel(str, wxRect(x, y, 0, 0));
+        return;
+    }
+
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
 
     if ( str.empty() )

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/app.h
+// Name:        wx/cocoa/app.h
 // Purpose:     wxApp class
 // Author:      David Elliott
 // Modified by:

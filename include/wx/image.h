@@ -62,12 +62,13 @@ enum wxImageResizeQuality
     wxIMAGE_QUALITY_NEAREST = 0,
     wxIMAGE_QUALITY_BILINEAR = 1,
     wxIMAGE_QUALITY_BICUBIC = 2,
+    wxIMAGE_QUALITY_BOX_AVERAGE = 3,
 
     // default quality is low (but fast)
     wxIMAGE_QUALITY_NORMAL = wxIMAGE_QUALITY_NEAREST,
 
     // highest (but best) quality
-    wxIMAGE_QUALITY_HIGH = wxIMAGE_QUALITY_BICUBIC
+    wxIMAGE_QUALITY_HIGH
 };
 
 // alpha channel values: fully transparent, default threshold separating

@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxPreviewFrame;
 class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
+class wxPrintPageMaxCtrl;
 class wxPrintPageTextCtrl;
 
 //----------------------------------------------------------------------------
@@ -51,6 +52,19 @@ enum wxPrinterError
     wxPRINTER_NO_ERROR = 0,
     wxPRINTER_CANCELLED,
     wxPRINTER_ERROR
+};
+
+// Preview frame modality kind used with wxPreviewFrame::Initialize()
+enum wxPreviewFrameModalityKind
+{
+    // Disable all the other top level windows while the preview is shown.
+    wxPreviewFrame_AppModal,
+
+    // Disable only the parent window while the preview is shown.
+    wxPreviewFrame_WindowModal,
+
+    // Don't disable any windows.
+    wxPreviewFrame_NonModal
 };
 
 //----------------------------------------------------------------------------
@@ -385,7 +399,8 @@ public:
     virtual ~wxPreviewFrame();
 
     void OnCloseWindow(wxCloseEvent& event);
-    virtual void Initialize();
+    virtual void Initialize(wxPreviewFrameModalityKind kind
+                                = wxPreviewFrame_AppModal);
     virtual void CreateCanvas();
     virtual void CreateControlBar();
 
@@ -396,6 +411,9 @@ protected:
     wxPreviewControlBar*  m_controlBar;
     wxPrintPreviewBase*   m_printPreview;
     wxWindowDisabler*     m_windowDisabler;
+
+    wxPreviewFrameModalityKind m_modalityKind;
+
 
 private:
     void OnChar(wxKeyEvent& event);
@@ -453,6 +471,7 @@ public:
     virtual ~wxPreviewControlBar();
 
     virtual void CreateButtons();
+    virtual void SetPageInfo(int minPage, int maxPage);
     virtual void SetZoomControl(int zoom);
     virtual int GetZoomControl();
     virtual wxPrintPreviewBase *GetPrintPreview() const
@@ -496,7 +515,8 @@ protected:
     wxPrintPreviewBase*   m_printPreview;
     wxButton*             m_closeButton;
     wxChoice*             m_zoomControl;
-    wxPrintPageTextCtrl* m_currentPageText;
+    wxPrintPageTextCtrl*  m_currentPageText;
+    wxPrintPageMaxCtrl*   m_maxPageText;
 
     long                  m_buttonFlags;
 

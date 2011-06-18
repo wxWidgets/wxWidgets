@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
-// RCS-ID:      $Id: textctrl.cpp 54820 2008-07-29 20:04:11Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,7 @@
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
+#include "wx/textcompleter.h"
 
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
@@ -257,7 +258,12 @@ protected :
 
 - (void) setFieldEditor:(wxNSTextFieldEditor*) editor
 {
-    fieldEditor = editor;
+    if ( editor != fieldEditor )
+    {
+        [editor retain];
+        [fieldEditor release];
+        fieldEditor = editor;
+    }
 }
 
 - (wxNSTextFieldEditor*) fieldEditor
@@ -287,6 +293,57 @@ protected :
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+}
+
+- (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
+ forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+{
+    NSMutableArray* matches = NULL;
+
+    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+    wxTextEntry * const entry = impl->GetTextEntry();
+    wxTextCompleter * const completer = entry->OSXGetCompleter();
+    if ( completer )
+    {
+        const wxString prefix = entry->GetValue();
+        if ( completer->Start(prefix) )
+        {
+            const wxString
+                wordStart = wxCFStringRef::AsString(
+                              [[textView string] substringWithRange:charRange]
+                            );
+
+            matches = [NSMutableArray array];
+            for ( ;; )
+            {
+                const wxString s = completer->GetNext();
+                if ( s.empty() )
+                    break;
+
+                // Normally the completer should return only the strings
+                // starting with the prefix, but there could be exceptions
+                // and, for compatibility with MSW which simply ignores all
+                // entries that don't match the current text control contents,
+                // we ignore them as well. Besides, our own wxTextCompleterFixed
+                // doesn't respect this rule and, moreover, we need to extract
+                // just the rest of the string anyhow.
+                wxString completion;
+                if ( s.StartsWith(prefix, &completion) )
+                {
+                    // We discarded the entire prefix above but actually we
+                    // should include the part of it that consists of the
+                    // beginning of the current word, otherwise it would be
+                    // lost when completion is accepted as OS X supposes that
+                    // our matches do start with the "partial word range"
+                    // passed to us.
+                    const wxCFStringRef fullWord(wordStart + completion);
+                    [matches addObject: fullWord.AsNSString()];
+                }
+            }
+        }
+    }
+
+    return matches;
 }
 
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
@@ -487,7 +544,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
-        if (position < [[m_textView string] length]) 
+        if (position < (long) [[m_textView string] length]) 
         {
             NSTextStorage* storage = [m_textView textStorage];
             font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL] autorelease];
@@ -578,7 +635,7 @@ wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
 
 void wxNSTextFieldControl::Init(WXWidget w)
 {
-    NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField*) w;
+    NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)*) w;
     m_textField = tf;
     [m_textField setDelegate: tf];
     m_selStart = m_selEnd = 0;

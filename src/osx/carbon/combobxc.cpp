@@ -341,7 +341,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     m_text = NULL;
     m_choice = NULL;
 #if USE_HICOMBOBOX
-    m_macIsUserPane = false;
+    DontCreatePeer();
 #endif
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )

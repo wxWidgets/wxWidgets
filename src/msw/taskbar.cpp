@@ -215,7 +215,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 
     NotifyIconData notifyData(GetHwndOf(m_win));
 
-    if (icon.Ok())
+    if (icon.IsOk())
     {
         notifyData.uFlags |= NIF_ICON;
         notifyData.hIcon = GetHiconOf(icon);

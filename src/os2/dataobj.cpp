@@ -329,12 +329,12 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void* pBuf)
     m_bitmap = wxBitmap(vImage);
 #endif //wxUSE_STREAMS
 
-    return m_bitmap.Ok();
+    return m_bitmap.IsOk();
 }
 
 void wxBitmapDataObject::DoConvertToPng()
 {
-    if (!m_bitmap.Ok())
+    if (!m_bitmap.IsOk())
         return;
 
 #if wxUSE_STREAMS

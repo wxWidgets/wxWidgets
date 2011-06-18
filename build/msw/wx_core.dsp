@@ -252,6 +252,10 @@ SOURCE=..\..\src\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\affinematrix2d.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\anidecod.cpp
 # End Source File
 # Begin Source File
@@ -837,6 +841,41 @@ SOURCE=..\..\src\msw\ole\access.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\ole\activex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\anybutton.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -2074,6 +2113,41 @@ SOURCE=..\..\src\msw\ownerdrw.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\palette.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\panel.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -4843,6 +4917,10 @@ SOURCE=..\..\include\wx\msw\ole\activex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\anybutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\app.h
 # End Source File
 # Begin Source File
@@ -5211,6 +5289,10 @@ SOURCE=..\..\include\wx\msw\ownerdrw.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\palette.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\panel.h
 # End Source File
 # Begin Source File
 
@@ -5666,6 +5748,10 @@ SOURCE=..\..\include\wx\univ\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\univ\panel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\univ\radiobox.h
 # End Source File
 # Begin Source File
@@ -5838,6 +5924,14 @@ SOURCE=..\..\include\wx\propgrid\advprops.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\affinematrix2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\affinematrix2dbase.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\anidecod.h
 # End Source File
 # Begin Source File
@@ -5847,6 +5941,10 @@ SOURCE=..\..\include\wx\animate.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\animdecod.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\anybutton.h
 # End Source File
 # Begin Source File
 
@@ -6554,11 +6652,31 @@ SOURCE=..\..\include\wx\richmsgdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbackgroundpage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextborderspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextbuffer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbulletspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextdialogpage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextfontpage.h
 # End Source File
 # Begin Source File
 
@@ -6574,11 +6692,31 @@ SOURCE=..\..\include\wx\richtext\richtextimagedlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextindentspage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextliststylepage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextmarginspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextprint.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextsizepage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextstyledlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextstylepage.h
 # End Source File
 # Begin Source File
 
@@ -6587,6 +6725,10 @@ SOURCE=..\..\include\wx\richtext\richtextstyles.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\richtext\richtextsymboldlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextuicustomization.h
 # End Source File
 # Begin Source File
 
@@ -6683,6 +6825,10 @@ SOURCE=..\..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tbarbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\textcompleter.h
 # End Source File
 # Begin Source File
 

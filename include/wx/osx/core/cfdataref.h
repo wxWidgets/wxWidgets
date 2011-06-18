@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2007/05/10
-// RCS-ID:      $Id: cfdataref.h 46095 2007-05-18 07:29:49Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Stefan Csomor
 // Licence:     wxWindows licence
 // Notes:       See http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBinaryData/index.html
@@ -40,7 +40,7 @@ public:
         @param p        The raw pointer to assume ownership of.  May be NULL.
         @discussion Like shared_ptr, it is assumed that the caller has a strong reference to p and intends
                     to transfer ownership of that reference to this ref holder.  If the object comes from
-                    a Create or Copy method then this is the correct behavior.  If the object comes from
+                    a Create or Copy method then this is the correct behaviour.  If the object comes from
                     a Get method then you must CFRetain it yourself before passing it to this constructor.
                     A handy way to do this is to use the non-member wxCFRefFromGet factory funcion.
                     This method is templated and takes an otherType *p.  This prevents implicit conversion

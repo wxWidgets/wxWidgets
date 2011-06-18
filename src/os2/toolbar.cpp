@@ -821,7 +821,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
 
     PrepareDC(rDc);
 
-    if (!vBitmap.Ok())
+    if (!vBitmap.IsOk())
         return;
     if ((pMask = vBitmap.GetMask()) != NULL)
         if (pMask->GetMaskBitmap() != NULLHANDLE)
@@ -835,7 +835,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
             wxColour vColor(wxT("GREY"));
 
             rDc.SetTextForeground(vColor);
-            if (!pTool->GetDisabledBitmap().Ok())
+            if (!pTool->GetDisabledBitmap().IsOk())
                 pTool->SetDisabledBitmap(wxDisableBitmap( vBitmap
                                                          ,(long)GetBackgroundColour().GetPixel()
                                                         ));
@@ -894,7 +894,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
 
         LowerTool(pTool);
         rDc.SetTextForeground(vColor);
-        if (!pTool->GetDisabledBitmap().Ok())
+        if (!pTool->GetDisabledBitmap().IsOk())
             pTool->SetDisabledBitmap(wxDisableBitmap( vBitmap
                                                      ,(long)GetBackgroundColour().GetPixel()
                                                     ));

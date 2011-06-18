@@ -410,8 +410,8 @@ wxPG_PROP_COLLAPSED                 = 0x0020,
     If property is selected, then indicates that validation failed for pending
     value.
 
-    If property is not selected, then indicates that the the actual property
-    value has failed validation (NB: this behavior is not currently supported,
+    If property is not selected, that indicates that the actual property
+    value has failed validation (NB: this behaviour is not currently supported,
     but may be used in future).
 */
 wxPG_PROP_INVALID_VALUE             = 0x0040,
@@ -656,7 +656,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
 /**
-    wxArrayStringProperty's string delimiter character. If this is aquotation
+    wxArrayStringProperty's string delimiter character. If this is a quotation
     mark or hyphen, then strings will be quoted instead (with given
     character).
 
@@ -674,7 +674,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
 /** SpinCtrl editor, int or double. How much number changes when button is
-    pressed (or up/down on keybard).
+    pressed (or up/down on keyboard).
 */
 #define wxPG_ATTR_SPINCTRL_STEP             wxS("Step")
 
@@ -1189,7 +1189,7 @@ public:
 
                 You might want to take into account that m_value is Null variant
                 if property value is unspecified (which is usually only case if
-                you explicitly enabled that sort behavior).
+                you explicitly enabled that sort behaviour).
     */
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
@@ -1221,7 +1221,7 @@ public:
           instead of OnEvent.
         - You might want to take into account that m_value is Null variant if
           property value is unspecified (which is usually only case if you
-          explicitly enabled that sort behavior).
+          explicitly enabled that sort behaviour).
     */
     virtual bool IntToValue( wxVariant& value,
                              int number,
@@ -1247,7 +1247,7 @@ public:
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
 
     /** Converts string to a value, and if successful, calls SetValue() on it.
-        Default behavior is to do nothing.
+        Default behaviour is to do nothing.
         @param text
         String to get the value from.
         @return
@@ -1255,8 +1255,8 @@ public:
     */
     bool SetValueFromString( const wxString& text, int flags = wxPG_PROGRAMMATIC_VALUE );
 
-    /** Converts integer to a value, and if succesful, calls SetValue() on it.
-        Default behavior is to do nothing.
+    /** Converts integer to a value, and if successful, calls SetValue() on it.
+        Default behaviour is to do nothing.
         @param value
             Int to get the value from.
         @param flags
@@ -1275,7 +1275,7 @@ public:
         @param item
             Normally -1, but can be an index to the property's list of items.
         @remarks
-        - Default behavior is to return wxSize(0,0), which means no image.
+        - Default behaviour is to return wxSize(0,0), which means no image.
         - Default image width or height is indicated with dimension -1.
         - You can also return wxPG_DEFAULT_IMAGE_SIZE, i.e. wxSize(-1, -1).
     */
@@ -1309,7 +1309,7 @@ public:
 
     /**
         Called after value of a child property has been altered. Must return
-        new value of the whole property (after any alterations warrented by
+        new value of the whole property (after any alterations warranted by
         child's new value).
 
         Note that this function is usually called at the time that value of
@@ -1707,7 +1707,7 @@ public:
     /** Returns true if property has editable wxTextCtrl when selected.
 
         @remarks
-        Altough disabled properties do not displayed editor, they still
+        Although disabled properties do not displayed editor, they still
         return True here as being disabled is considered a temporary
         condition (unlike being read-only or having limited editing enabled).
     */
@@ -1932,7 +1932,7 @@ public:
         wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty.
 
         @param enable
-            Whether to enable or disable this behavior (it is disabled by
+            Whether to enable or disable this behaviour (it is disabled by
             default).
     */
     void SetAutoUnspecified( bool enable = true )
@@ -2386,6 +2386,11 @@ protected:
 
     void InitAfterAdded( wxPropertyGridPageState* pageState,
                          wxPropertyGrid* propgrid );
+
+    /**
+        Returns true if child property is selected.
+    */
+    bool IsChildSelected( bool recursive = false ) const;
 
     // Removes child property with given pointer. Does not delete it.
     void RemoveChild( wxPGProperty* p );

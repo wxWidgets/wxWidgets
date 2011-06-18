@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.h
+// Name:        wx/osx/bmpbuttn.h
 // Purpose:     wxBitmapButton class
 // Author:      Stefan Csomor
 // Modified by:

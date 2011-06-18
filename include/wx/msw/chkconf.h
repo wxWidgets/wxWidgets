@@ -239,7 +239,7 @@
    Compiler-specific checks.
  */
 
-// Borland
+/* Borland */
 #ifdef __BORLANDC__
 
 #if __BORLANDC__ < 0x500
@@ -336,6 +336,14 @@
 #endif  /* !wxUSE_DYNAMIC_LOADER */
 
 #if !wxUSE_DYNLIB_CLASS
+#   if wxUSE_DC_TRANSFORM_MATRIX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_DC_TRANSFORM_MATRIX
+#           define wxUSE_DC_TRANSFORM_MATRIX 0
+#       endif
+#   endif
 #   if wxUSE_UXTHEME
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_UXTHEME requires wxUSE_DYNLIB_CLASS"

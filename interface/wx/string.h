@@ -324,7 +324,7 @@ public:
     void SetChar(size_t n, wxUniChar ch);
 
     /**
-        Returns a the last character.
+        Returns the last character.
 
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
@@ -447,7 +447,7 @@ public:
     const wxScopedCharBuffer utf8_str() const;
 
     /**
-        Converts the strings contents to the wide character represention
+        Converts the strings contents to the wide character representation
         and returns it as a temporary wxWCharBuffer object (Unix and OS X)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
@@ -1326,7 +1326,7 @@ public:
     /**
         @member_group_name{iter, Iterator interface}
 
-        These methods return iterators to the beginnnig or end of the string.
+        These methods return iterators to the beginning or end of the string.
 
         Please see any STL reference (e.g. http://www.cppreference.com/wiki/string/start)
         for their documentation.
@@ -1473,7 +1473,7 @@ public:
 
 
     // STATIC FUNCTIONS
-    // Keep these functions separed from the other groups or Doxygen gets confused
+    // Keep these functions separated from the other groups or Doxygen gets confused
     // -----------------------------------------------------------------------------
 
     /**
@@ -1535,29 +1535,37 @@ public:
 
         Unlike FromDouble() the string returned by this function always uses
         the period character as decimal separator, independently of the current
-        locale.
+        locale. Otherwise its behaviour is identical to the other function.
 
         @since 2.9.1
 
         @see ToCDouble()
      */
-    static wxString FromCDouble(double val);
+    static wxString FromCDouble(double val, int precision = -1);
 
     /**
         Returns a string with the textual representation of the number.
 
-        This is a simple wrapper for @code wxString::Format("%g", val)
-        @endcode.
+        For the default value of @a precision, this function behaves as a
+        simple wrapper for @code wxString::Format("%g", val) @endcode. If @a
+        precision is positive (or zero), the @c %.Nf format is used with the
+        given precision value.
 
         Notice that the string returned by this function uses the decimal
         separator appropriate for the current locale, e.g. @c "," and not a
         period in French locale. Use FromCDouble() if this is unwanted.
 
+        @param val
+            The value to format.
+        @param precision
+            The number of fractional digits to use in or -1 to use the most
+            appropriate format. This parameter is new in wxWidgets 2.9.2.
+
         @since 2.9.1
 
         @see ToDouble()
      */
-    static wxString FromDouble(double val);
+    static wxString FromDouble(double val, int precision = -1);
 
     //@{
     /**

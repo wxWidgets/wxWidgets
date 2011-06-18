@@ -377,7 +377,7 @@ bool wxTopLevelWindowX11::ShowFullScreen(bool show, long style)
 
 void wxTopLevelWindowX11::DoSetIcon(const wxIcon& icon)
 {
-    if (icon.Ok() && X11GetMainWindow())
+    if (icon.IsOk() && X11GetMainWindow())
     {
 #if !wxUSE_NANOX
         XWMHints *wmHints = XAllocWMHints();

@@ -2,7 +2,7 @@
 // Name:        vidmode.h
 // Purpose:     interface of wxVideoMode
 // Author:      wxWidgets team
-// RCS-ID:      $Id: display.h 52634 2008-03-20 13:45:17Z VS $
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

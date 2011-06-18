@@ -1848,7 +1848,7 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
         {
             wxString msg;
             wxString facename(wxT("unknown"));
-            if (attr.GetFont().Ok())
+            if (attr.GetFont().IsOk())
             {
                 facename = attr.GetFont().GetFaceName();
             }

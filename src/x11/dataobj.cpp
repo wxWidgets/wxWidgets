@@ -349,7 +349,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 
     m_bitmap = image;
 
-    return m_bitmap.Ok();
+    return m_bitmap.IsOk();
 #else
     return false;
 #endif
@@ -358,7 +358,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 void wxBitmapDataObject::DoConvertToPng()
 {
 #if wxUSE_LIBPNG
-    if (!m_bitmap.Ok())
+    if (!m_bitmap.IsOk())
         return;
 
     wxImage image = m_bitmap.ConvertToImage();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/sstream.cpp
+// Name:        src/common/sstream.cpp
 // Purpose:     string-based streams implementation
 // Author:      Vadim Zeitlin
 // Modified by: Ryan Norton (UTF8 UNICODE)
@@ -146,7 +146,7 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
     const char *p = static_cast<const char *>(buffer);
 
-#if wxUSE_UNICODE_WCHAR
+#if wxUSE_UNICODE
     // the part of the string we have here may be incomplete, i.e. it can stop
     // in the middle of an UTF-8 character and so converting it would fail; if
     // this is the case, accumulate the part which we failed to convert until
@@ -188,11 +188,10 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
         // not update m_pos as m_str hasn't changed
         return size;
     }
-#else // !wxUSE_UNICODE_WCHAR
-    // no recoding necessary, the data is supposed to already be in UTF-8 (if
-    // supported) or ASCII otherwise
+#else // !wxUSE_UNICODE
+    // no recoding necessary
     m_str->append(p, size);
-#endif // wxUSE_UNICODE_WCHAR/!wxUSE_UNICODE_WCHAR
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // update position
     m_pos += size;

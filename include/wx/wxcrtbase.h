@@ -198,7 +198,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #define wxCRT_StrdupA strdup
 #endif
 
-// most Windows compilers provide _wcsdup()
+/* most Windows compilers provide _wcsdup() */
 #if defined(__WINDOWS__) && \
         !(defined(__CYGWIN__) || defined(__WX_STRICT_ANSI_GCC__))
     #define wxCRT_StrdupW _wcsdup
@@ -449,7 +449,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
                                                        wchar_t** endptr,
                                                        int base);
     #endif
-#endif // wxLongLong_t
+#endif /* wxLongLong_t */
 
 
 /* -------------------------------------------------------------------------
@@ -621,7 +621,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 #endif
 
 #ifdef __DARWIN__
-    #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
+    #if !defined(__WXOSX_IPHONE__) && MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
         #define wxNEED_WX_MBSTOWCS
     #endif
 #endif
@@ -664,9 +664,12 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     _xpg5_wcsftime(wchar_t *, size_t, const wchar_t *, const struct tm * );
     #define wxCRT_StrftimeW _xpg5_wcsftime
 #else
-    // Assume it's always available under non-Unix systems with the exception
-    // of Palm OS, this does seem to be the case for now. And under Unix we
-    // trust configure to detect it (except for SGI special case above).
+    /*
+        Assume it's always available under non-Unix systems with the
+        exception of Palm OS, this does seem to be the case for now. And
+        under Unix we trust configure to detect it (except for SGI special
+        case above).
+     */
     #if defined(HAVE_WCSFTIME) || \
         !(defined(__UNIX__) || defined(__WXPALMOS__))
         #define wxCRT_StrftimeW  wcsftime

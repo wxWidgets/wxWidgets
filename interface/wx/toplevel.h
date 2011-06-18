@@ -46,7 +46,7 @@ enum
     internal top level window list.
 
     @beginEventEmissionTable
-    @event{EVT_ACTIVATE(id, func)}
+    @event{EVT_MAXIMIZE(id, func)}
         Process a @c wxEVT_MAXIMIZE event. See wxMaximizeEvent.
     @event{EVT_MOVE(func)}
         Process a @c wxEVT_MOVE event, which is generated when a window is moved.
@@ -445,7 +445,7 @@ public:
 
         @param alpha
             Determines how opaque or transparent the window will be, if the
-            platform supports the opreration. A value of 0 sets the window to be
+            platform supports the operation. A value of 0 sets the window to be
             fully transparent, and a value of 255 sets the window to be fully
             opaque.
     */

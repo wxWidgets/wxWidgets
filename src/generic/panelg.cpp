@@ -1,13 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/panelg.cpp
-// Purpose:     wxPanel and the keyboard handling code
-// Author:      Julian Smart, Robert Roebling, Vadim Zeitlin
-// Modified by:
-// Created:     04/01/98
-// RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Purpose:     Generic wxPanel implementation.
+// Author:      Vadim Zeitlin
+// Created:     2011-03-20
+// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
+// Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
 // declarations
@@ -17,7 +16,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes "wx.h".
+// for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -25,83 +24,46 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/object.h"
-    #include "wx/font.h"
-    #include "wx/colour.h"
-    #include "wx/settings.h"
-    #include "wx/log.h"
+    #include "wx/dc.h"
     #include "wx/panel.h"
-    #include "wx/containr.h"
-#endif
+#endif // WX_PRECOMP
 
-// ----------------------------------------------------------------------------
-// wxWin macros
-// ----------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(wxPanel, wxWindow)
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxPanel)
-END_EVENT_TABLE()
+#ifdef wxHAS_GENERIC_PANEL
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel, wxWindow)
-
-// ----------------------------------------------------------------------------
-// wxPanel creation
-// ----------------------------------------------------------------------------
-
-void wxPanel::Init()
+void wxPanel::DoSetBackgroundBitmap(const wxBitmap& bmp)
 {
-    WX_INIT_CONTROL_CONTAINER();
-}
+    m_bitmapBg = bmp;
 
-bool wxPanel::Create(wxWindow *parent, wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& name)
-{
-    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
-        return false;
-
-    // so that non-solid background renders correctly under GTK+:
-    SetThemeEnabled(true);
-
-#if defined(__WXWINCE__) && (defined(__POCKETPC__) || defined(__SMARTPHONE__))
-    // Required to get solid control backgrounds under WinCE
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-#endif
-
-    return true;
-}
-
-wxPanel::~wxPanel()
-{
-}
-
-void wxPanel::InitDialog()
-{
-    wxInitDialogEvent event(GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-}
-
-#ifdef __WXMSW__
-
-bool wxPanel::HasTransparentBackground()
-{
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+    if ( m_bitmapBg.IsOk() )
     {
-        if ( win->MSWHasInheritableBackground() )
-            return true;
-
-        if ( win->IsTopLevel() )
-            break;
+        Connect(wxEVT_ERASE_BACKGROUND,
+                wxEraseEventHandler(wxPanel::OnEraseBackground));
     }
-
-    return false;
+    else
+    {
+        Disconnect(wxEVT_ERASE_BACKGROUND,
+                   wxEraseEventHandler(wxPanel::OnEraseBackground));
+    }
 }
 
-#endif // __WXMSW__
+void wxPanel::OnEraseBackground(wxEraseEvent& event)
+{
+    wxDC& dc = *event.GetDC();
+
+    const wxSize clientSize = GetClientSize();
+    const wxSize bitmapSize = m_bitmapBg.GetSize();
+
+    for ( int x = 0; x < clientSize.x; x += bitmapSize.x )
+    {
+        for ( int y = 0; y < clientSize.y; y += bitmapSize.y )
+        {
+            dc.DrawBitmap(m_bitmapBg, x, y);
+        }
+    }
+}
+
+#endif // wxHAS_GENERIC_PANEL

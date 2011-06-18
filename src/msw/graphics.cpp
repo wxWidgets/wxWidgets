@@ -37,6 +37,8 @@
     #include "wx/dcprint.h"
 #endif
 
+#include "wx/stack.h"
+
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
@@ -50,8 +52,6 @@
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
 #include <commdlg.h>
 #endif
-
-#include "wx/stack.h"
 
 namespace
 {
@@ -325,6 +325,8 @@ public:
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
+
     // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
 
@@ -333,6 +335,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -386,9 +390,6 @@ private:
     wxStack<GraphicsState> m_stateStack;
     GraphicsState m_state1;
     GraphicsState m_state2;
-
-    wxDouble m_width;
-    wxDouble m_height;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
@@ -597,25 +598,25 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     DashStyle dashStyle = DashStyleSolid;
     switch ( pen.GetStyle() )
     {
-    case wxSOLID :
+    case wxPENSTYLE_SOLID :
         break;
 
-    case wxDOT :
+    case wxPENSTYLE_DOT :
         dashStyle = DashStyleDot;
         break;
 
-    case wxLONG_DASH :
+    case wxPENSTYLE_LONG_DASH :
         dashStyle = DashStyleDash; // TODO verify
         break;
 
-    case wxSHORT_DASH :
+    case wxPENSTYLE_SHORT_DASH :
         dashStyle = DashStyleDash;
         break;
 
-    case wxDOT_DASH :
+    case wxPENSTYLE_DOT_DASH :
         dashStyle = DashStyleDashDot;
         break;
-    case wxUSER_DASH :
+    case wxPENSTYLE_USER_DASH :
         {
             dashStyle = DashStyleCustom;
             wxDash *dashes;
@@ -632,10 +633,10 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
             }
         }
         break;
-    case wxSTIPPLE :
+    case wxPENSTYLE_STIPPLE :
         {
             wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->Ok() )
+            if ( bmp && bmp->IsOk() )
             {
                 m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
 #if wxUSE_PALETTE
@@ -651,30 +652,32 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         }
         break;
     default :
-        if ( pen.GetStyle() >= wxFIRST_HATCH && pen.GetStyle() <= wxLAST_HATCH )
+        if ( pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH &&
+             pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
-            HatchStyle style = HatchStyleHorizontal;
+            HatchStyle style;
             switch( pen.GetStyle() )
             {
-            case wxBDIAGONAL_HATCH :
+            case wxPENSTYLE_BDIAGONAL_HATCH :
                 style = HatchStyleBackwardDiagonal;
                 break ;
-            case wxCROSSDIAG_HATCH :
+            case wxPENSTYLE_CROSSDIAG_HATCH :
                 style = HatchStyleDiagonalCross;
                 break ;
-            case wxFDIAGONAL_HATCH :
+            case wxPENSTYLE_FDIAGONAL_HATCH :
                 style = HatchStyleForwardDiagonal;
                 break ;
-            case wxCROSS_HATCH :
+            case wxPENSTYLE_CROSS_HATCH :
                 style = HatchStyleCross;
                 break ;
-            case wxHORIZONTAL_HATCH :
+            case wxPENSTYLE_HORIZONTAL_HATCH :
                 style = HatchStyleHorizontal;
                 break ;
-            case wxVERTICAL_HATCH :
+            case wxPENSTYLE_VERTICAL_HATCH :
                 style = HatchStyleVertical;
                 break ;
-
+            default:
+                style = HatchStyleHorizontal;
             }
             m_penBrush = new HatchBrush
                              (
@@ -710,28 +713,29 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
     }
     else if ( brush.IsHatch() )
     {
-        HatchStyle style = HatchStyleHorizontal;
+        HatchStyle style;
         switch( brush.GetStyle() )
         {
-        case wxBDIAGONAL_HATCH :
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH :
             style = HatchStyleBackwardDiagonal;
             break ;
-        case wxCROSSDIAG_HATCH :
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH :
             style = HatchStyleDiagonalCross;
             break ;
-        case wxFDIAGONAL_HATCH :
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH :
             style = HatchStyleForwardDiagonal;
             break ;
-        case wxCROSS_HATCH :
+        case wxBRUSHSTYLE_CROSS_HATCH :
             style = HatchStyleCross;
             break ;
-        case wxHORIZONTAL_HATCH :
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH :
             style = HatchStyleHorizontal;
             break ;
-        case wxVERTICAL_HATCH :
+        case wxBRUSHSTYLE_VERTICAL_HATCH :
             style = HatchStyleVertical;
             break ;
-
+        default:
+            style = HatchStyleHorizontal;
         }
         m_brush = new HatchBrush
                       (
@@ -743,7 +747,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
     else
     {
         wxBitmap* bmp = brush.GetStipple();
-        if ( bmp && bmp->Ok() )
+        if ( bmp && bmp->IsOk() )
         {
             wxDELETE( m_brushImage );
             m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
@@ -1296,6 +1300,7 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd  )
     : wxGraphicsContext(renderer)
 {
     Init();
+    m_enableOffset = true;
     m_context = new Graphics( hwnd);
     RECT rect = wxGetWindowRect(hwnd);
     m_width = rect.right - rect.left;
@@ -1360,6 +1365,31 @@ void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 void wxGDIPlusContext::ResetClip()
 {
     m_context->ResetClip();
+}
+
+void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
+    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
+    Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
+
+    if ( brush )
+    {
+        // the offset is used to fill only the inside of the rectangle and not paint underneath
+        // its border which may influence a transparent Pen
+        REAL offset = 0;
+        if ( pen )
+             offset = pen->GetWidth();
+        m_context->FillRectangle( brush, (REAL)x + offset/2, (REAL)y + offset/2, (REAL)w - offset, (REAL)h - offset);
+    }
+
+    if ( pen )
+    {
+        m_context->DrawRectangle( pen, (REAL)x, (REAL)y, (REAL)w, (REAL)h );
+    }
 }
 
 void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
@@ -1451,6 +1481,12 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
+bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
+}
+
 bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
@@ -1528,7 +1564,7 @@ void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDo
         {
             Rect drawRect((REAL) x, (REAL)y, (REAL)w, (REAL)h);
             m_context->SetPixelOffsetMode( PixelOffsetModeNone );
-            m_context->DrawImage(image, drawRect, 0 , 0 , image->GetWidth()-1, image->GetHeight()-1, UnitPixel ) ;
+            m_context->DrawImage(image, drawRect, 0 , 0 , image->GetWidth(), image->GetHeight(), UnitPixel ) ;
             m_context->SetPixelOffsetMode( PixelOffsetModeHalf );
         }
         else
@@ -1744,6 +1780,9 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 
 bool wxGDIPlusContext::ShouldOffset() const
 {
+    if ( !m_enableOffset )
+        return false;
+    
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
@@ -1873,7 +1912,9 @@ void wxGDIPlusRenderer::Unload()
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
+    context->EnableOffset(true);
+    return context;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1897,7 +1938,9 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, dc);
+    wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
+    context->EnableOffset(true);
+    return context;
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
@@ -1953,7 +1996,7 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
 wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -1966,7 +2009,7 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2009,7 +2052,7 @@ wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
                                       const wxColour &col )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxGDIPlusFontData( this, gc, font, col ));
@@ -2022,7 +2065,7 @@ wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxGDIPlusBitmapData( this , bitmap ));

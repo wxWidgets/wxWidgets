@@ -23,7 +23,7 @@
 
 // type of compare function for wxListCtrl sort operation
 typedef
-int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, wxIntPtr sortData);
+int (wxCALLBACK *wxListCtrlCompare)(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData);
 
 // ----------------------------------------------------------------------------
 // wxListCtrl constants
@@ -183,9 +183,9 @@ public:
     void SetFont(const wxFont& font) { m_font = font; }
 
     // accessors
-    bool HasTextColour() const { return m_colText.Ok(); }
-    bool HasBackgroundColour() const { return m_colBack.Ok(); }
-    bool HasFont() const { return m_font.Ok(); }
+    bool HasTextColour() const { return m_colText.IsOk(); }
+    bool HasBackgroundColour() const { return m_colBack.IsOk(); }
+    bool HasFont() const { return m_font.IsOk(); }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }

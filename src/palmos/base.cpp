@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/palmos/basemsw.cpp
+// Name:        src/palmos/base.cpp
 // Purpose:     misc stuff only used in applications under PalmOS
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
@@ -44,6 +44,7 @@ void wxConsoleAppTraits::AfterChildWaitLoop(void * WXUNUSED(data))
 {
 }
 
+#if wxUSE_THREADS
 bool wxConsoleAppTraits::DoMessageFromThreadWait()
 {
     return true;
@@ -54,6 +55,7 @@ WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
     // TODO
     return 0;
 }
+#endif // wxUSE_THREADS
 
 #if wxUSE_CONSOLE_EVENTLOOP
 wxEventLoopBase *

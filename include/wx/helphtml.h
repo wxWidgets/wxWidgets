@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helphtml.h
+// Name:        wx/helphtml.h
 // Purpose:     Includes wx/html/helpctrl.h, for wxHtmlHelpController.
 // Author:      Julian Smart
 // Modified by:

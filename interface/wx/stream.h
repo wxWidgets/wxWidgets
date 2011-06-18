@@ -589,7 +589,7 @@ public:
 
     /**
         Reads the specified amount of bytes and stores the data in buffer.
-        To check if the call was successfull you must use LastRead() to check
+        To check if the call was successful you must use LastRead() to check
         if this call did actually read @a size bytes (if it didn't, GetLastError()
         should return a meaningful value).
 

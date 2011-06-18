@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/NSTabView.mm
+// Name:        src/cocoa/NSTabView.mm
 // Purpose:     wxCocoaNSTabView
 // Author:      David Elliott
 // Modified by:

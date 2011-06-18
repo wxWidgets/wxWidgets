@@ -804,6 +804,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\affinematrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\asserthelper.cpp"
 				>
 			</File>
@@ -1133,6 +1137,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\toolbooktest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\toplevel\toplevel.cpp"
 				>
 			</File>
 			<File

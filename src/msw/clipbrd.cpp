@@ -98,7 +98,7 @@ bool wxOpenClipboard()
     }
     else
     {
-        wxLogDebug(wxT("Can not open clipboard without a main window."));
+        wxLogDebug(wxT("Cannot open clipboard without a main window."));
 
         return false;
     }
@@ -214,7 +214,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxBitmap *bitmap = (wxBitmap *)data;
 
-                if ( bitmap && bitmap->Ok() )
+                if ( bitmap && bitmap->IsOk() )
                 {
                     wxDIB dib(*bitmap);
                     if ( dib.IsOk() )

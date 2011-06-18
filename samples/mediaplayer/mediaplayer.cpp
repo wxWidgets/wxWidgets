@@ -404,7 +404,7 @@ const wxChar* wxGetMediaStateText(int nState)
 //
 // IMPLEMENT_APP does this, and also implements the platform-specific entry
 // routine, such as main or WinMain().  Use IMPLEMENT_APP_NO_MAIN if you do
-// not desire this behavior.
+// not desire this behaviour.
 // ----------------------------------------------------------------------------
 IMPLEMENT_APP(wxMediaPlayerApp)
 

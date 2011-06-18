@@ -86,6 +86,8 @@ bool MyApp::OnInit()
     delete wxLog::SetActiveTarget(new wxLogGui);
 #endif
 
+    help->SetShouldPreventAppExit(true);
+
     help -> DisplayContents();
 
     return true;

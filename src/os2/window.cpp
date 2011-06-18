@@ -571,7 +571,7 @@ bool wxWindowOS2::SetCursor( const wxCursor& rCursor)
         return false;
     }
 
-    if ( m_cursor.Ok() ) {
+    if ( m_cursor.IsOk() ) {
         HWND                            hWnd = GetHwnd();
         POINTL                          vPoint;
         RECTL                           vRect;
@@ -1251,7 +1251,7 @@ void wxWindowOS2::DoGetPosition(
     // use WinQueryWindowPos.  This call, unlike the WIN32 call, however,
     // returns a position relative to it's parent, so no parent adujstments
     // are needed under OS/2.  Also, windows should be created using
-    // wxWindow coordinates, i.e 0,0 is the TOP left.
+    // wxWindow coordinates, i.e. 0,0 is the TOP left.
     //
     if (IsKindOf(CLASSINFO(wxFrame)))
     {

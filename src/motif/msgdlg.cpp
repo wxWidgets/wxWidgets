@@ -154,7 +154,7 @@ int wxMessageDialog::ShowModal()
 
     Display* dpy = XtDisplay(wParent);
 
-    if (m_backgroundColour.Ok())
+    if (m_backgroundColour.IsOk())
     {
         wxComputeColours (dpy, & m_backgroundColour, NULL);
 

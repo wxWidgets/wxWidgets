@@ -12,7 +12,7 @@
     This class has been rewritten to be type safe and to provide the full API of
     the STL std::list container and should be used like it.
     The exception is that wxList<T> actually stores pointers and therefore its
-    iterators return pointers and not references to the actual objets in the list
+    iterators return pointers and not references to the actual objects in the list
     (see example below) and @e value_type is defined as @e T*.
     wxList<T> destroys an object after removing it only if wxList<T>::DeleteContents
     has been called.
@@ -27,7 +27,7 @@
     for further information on how to use the class.
     Below we documented both the supported STL and the legacy API
     that originated from the old wxList class and which can still be used alternatively
-    for the the same class.
+    for the same class.
 
     Note that if you compile wxWidgets in STL mode (@c wxUSE_STL defined as 1)
     then wxList<T> will actually derive from @c std::list and just add a legacy
@@ -132,7 +132,7 @@ public:
     void DeleteContents(bool destroy);
 
     /**
-        Deletes the given element refered to by @a iter from the list
+        Deletes the given element referred to by @a iter from the list
         if @a iter is a valid iterator. Returns @true if successful.
 
         Deletes the actual object if DeleteContents( @true ) was called previously.
@@ -148,9 +148,9 @@ public:
     bool DeleteObject(T* object);
 
     /**
-        Removes element refered to be @a iter.
+        Removes element referred to be @a iter.
 
-        Deletes the actualy object if DeleteContents( @true ) was called previously.
+        Deletes the actual object if DeleteContents( @true ) was called previously.
     */
     void Erase(const compatibility_iterator& iter);
 
@@ -192,7 +192,7 @@ public:
                                            T* object);
 
     /**
-        Inserts @a object before the object refered to be @a iter.
+        Inserts @a object before the object referred to be @a iter.
     */
     wxList<T>::compatibility_iterator Insert(compatibility_iterator iter,
                                            T* object);

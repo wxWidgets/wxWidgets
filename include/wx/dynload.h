@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:         dynload.h
+// Name:         wx/dynload.h
 // Purpose:      Dynamic loading framework
 // Author:       Ron Lee, David Falkinder, Vadim Zeitlin and a cast of 1000's
 //               (derived in part from dynlib.cpp (c) 1998 Guilhem Lavaux)

@@ -189,7 +189,7 @@
             $(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)$(WXDLLFLAG)$(CFG)
         </set>
 
-        <!-- NB: this is make_var so that it can be overriden on command line
+        <!-- NB: this is make_var so that it can be overridden on command line
                  like this: nmake -f makefile.vc COMPILER_PREFIX=vc6 -->
         <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 

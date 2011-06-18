@@ -142,9 +142,6 @@ public:
       return true;
   }
 
-  // return the themed brush for painting our children
-  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child);
-
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
 
@@ -174,6 +171,9 @@ protected:
   void AdjustPageSize(wxNotebookPage *page);
 
 #if wxUSE_UXTHEME
+  // return the themed brush for painting our children
+  virtual WXHBRUSH MSWGetCustomBgBrush() { return m_hbrBackground; }
+
   // gets the bitmap of notebook background and returns a brush from it
   WXHBRUSH QueryBgBitmap();
 

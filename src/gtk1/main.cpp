@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        main.cpp
+// Name:        src/gtk1/main.cpp
 // Purpose:     Entry point
 // Author:      Julian Smart
 // Modified by:

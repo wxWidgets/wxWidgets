@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/colordlg.mm
+// Name:        src/osx/carbon/colordlgosx.mm
 // Purpose:     wxColourDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
 // Author:      Ryan Norton
@@ -56,7 +56,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
 - (id)init
 {
-    [super init];
+    self = [super init];
     m_bIsClosed = false;
 
     return self;

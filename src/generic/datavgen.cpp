@@ -532,6 +532,8 @@ public:
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
 
+    void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
+
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
     int GetRowByItem( const wxDataViewItem & item ) const;
@@ -732,7 +734,7 @@ bool wxDataViewTextRenderer::HasEditorCtrl() const
     return true;
 }
 
-wxControl* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
+wxWindow* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
         wxRect labelRect, const wxVariant &value )
 {
     wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, value,
@@ -746,7 +748,7 @@ wxControl* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
     return ctrl;
 }
 
-bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVariant &value )
+bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant &value )
 {
     wxTextCtrl *text = (wxTextCtrl*) editor;
     value = text->GetValue();
@@ -796,9 +798,9 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 
 bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         dc->DrawBitmap( m_bitmap, cell.x, cell.y );
-    else if (m_icon.Ok())
+    else if (m_icon.IsOk())
         dc->DrawIcon( m_icon, cell.x, cell.y );
 
     return true;
@@ -806,9 +808,9 @@ bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
 
 wxSize wxDataViewBitmapRenderer::GetSize() const
 {
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         return wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
-    else if (m_icon.Ok())
+    else if (m_icon.IsOk())
         return wxSize( m_icon.GetWidth(), m_icon.GetHeight() );
 
     return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
@@ -863,12 +865,16 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& WXUNUSED(cursor),
+bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& cursor,
                                              const wxRect& WXUNUSED(cell),
                                              wxDataViewModel *model,
                                              const wxDataViewItem& item,
                                              unsigned int col)
 {
+    // only react to clicks directly on the checkbox, not elsewhere in the same cell:
+    if (!wxRect(GetSize()).Contains(cursor))
+        return false;
+
     if (model->IsEnabled(item, col))
     {
         model->ChangeValue(!m_toggle, item, col);
@@ -1102,7 +1108,7 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     return wxSize(80,20);
 }
 
-wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
+wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
 {
     wxDataViewIconText iconText;
     iconText << value;
@@ -1128,7 +1134,7 @@ wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect
     return ctrl;
 }
 
-bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVariant& value )
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant& value )
 {
     wxTextCtrl *text = (wxTextCtrl*) editor;
 
@@ -1593,6 +1599,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawRectangle(GetClientSize());
 #endif
 
+    if ( IsEmpty() )
+    {
+        // No items to draw.
+        return;
+    }
+
     // prepare the DC
     GetOwner()->PrepareDC( dc );
     dc.SetFont( GetFont() );
@@ -1606,10 +1618,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxMin( (int)(  GetLineAt( wxMax(0,update.y+update.height) ) - item_start + 1),
             (int)(GetRowCount( ) - item_start));
     unsigned int item_last = item_start + item_count;
-    // Get the parent of DataViewCtrl
-    wxWindow *parent = GetParent()->GetParent();
+
+    // Send the event to wxDataViewCtrl itself.
+    wxWindow * const parent = GetParent();
     wxDataViewEvent cache_event(wxEVT_COMMAND_DATAVIEW_CACHE_HINT, parent->GetId());
-    cache_event.SetEventObject(GetParent());
+    cache_event.SetEventObject(parent);
     cache_event.SetCache(item_start, item_last - 1);
     parent->ProcessWindowEvent(cache_event);
 
@@ -4111,6 +4124,16 @@ void wxDataViewCtrl::DoSetIndent()
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
     return m_cols.GetCount();
+}
+
+bool wxDataViewCtrl::SetRowHeight( int lineHeight )
+{
+    if ( !m_clientArea )
+        return false;
+
+    m_clientArea->SetRowHeight(lineHeight);
+
+    return true;
 }
 
 wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int idx ) const

@@ -55,6 +55,16 @@ enum
                          wxFSW_EVENT_WARNING | wxFSW_EVENT_ERROR
 };
 
+// Type of the path watched, used only internally for now.
+enum wxFSWPathType
+{
+    wxFSWPath_None,     // Invalid value for an initialized watch.
+    wxFSWPath_File,     // Plain file.
+    wxFSWPath_Dir,      // Watch a directory and the files in it.
+    wxFSWPath_Tree      // Watch a directory and all its children recursively.
+};
+
+
 /**
  * Event containing information about file system change.
  */
@@ -179,19 +189,17 @@ typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
 // wxFileSystemWatcherBase: interface for wxFileSystemWatcher
 // ----------------------------------------------------------------------------
 
-/**
- * Simple container to store information about one watched file
- */
+// Simple container to store information about one watched path.
 class wxFSWatchInfo
 {
 public:
     wxFSWatchInfo() :
-        m_path(wxEmptyString), m_events(-1)
+        m_events(-1), m_type(wxFSWPath_None)
     {
     }
 
-    wxFSWatchInfo(const wxString& path, int events) :
-        m_path(path), m_events(events)
+    wxFSWatchInfo(const wxString& path, int events, wxFSWPathType type) :
+        m_path(path), m_events(events), m_type(type)
     {
     }
 
@@ -205,9 +213,15 @@ public:
         return m_events;
     }
 
+    wxFSWPathType GetType() const
+    {
+        return m_type;
+    }
+
 protected:
     wxString m_path;
     int m_events;
+    wxFSWPathType m_type;
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxFSWatchInfo, wxFSWatchInfoMap);
@@ -303,6 +317,11 @@ protected:
 
         return path_copy.GetFullPath();
     }
+
+    // Delegates the real work of adding the path to wxFSWatcherImpl::Add() and
+    // updates m_watches if the new path was successfully added.
+    bool DoAdd(const wxFileName& path, int events, wxFSWPathType type);
+
 
     wxFSWatchInfoMap m_watches;        // path=>wxFSWatchInfo map
     wxFSWatcherImpl* m_service;     // file system events service

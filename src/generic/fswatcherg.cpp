@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/fswatcherg.cpp
+// Name:        src/generic/fswatcherg.cpp
 // Purpose:     wxPollingFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26

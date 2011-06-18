@@ -40,7 +40,7 @@ namespace
 class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
 {
 public:
-    wxDataViewEditorCtrlEvtHandler(wxControl *editor, wxDataViewRenderer *owner)
+    wxDataViewEditorCtrlEvtHandler(wxWindow *editor, wxDataViewRenderer *owner)
     {
         m_editorCtrl = editor;
         m_owner = owner;
@@ -59,7 +59,7 @@ protected:
 
 private:
     wxDataViewRenderer     *m_owner;
-    wxControl              *m_editorCtrl;
+    wxWindow               *m_editorCtrl;
     bool                    m_finished;
     bool                    m_focusOnIdle;
 
@@ -728,11 +728,14 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::DestroyEditControl()
 {
+    // Remove our event handler first to prevent it from (recursively) calling
+    // us again as it would do via a call to FinishEditing() when the editor
+    // loses focus when we hide it below.
+    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+
     // Hide the control immediately but don't delete it yet as there could be
     // some pending messages for it.
     m_editorCtrl->Hide();
-
-    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
 
     wxPendingDelete.Append(handler);
     wxPendingDelete.Append(m_editorCtrl);
@@ -742,8 +745,6 @@ void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl)
         return;
-
-    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
     DestroyEditControl();
 }
@@ -1417,7 +1418,7 @@ wxDataViewSpinRenderer::wxDataViewSpinRenderer( int min, int max, wxDataViewCell
     m_max = max;
 }
 
-wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+wxWindow* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
     long l = value;
     wxSize size = labelRect.GetSize();
@@ -1437,7 +1438,7 @@ wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect la
     return sc;
 }
 
-bool wxDataViewSpinRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+bool wxDataViewSpinRenderer::GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value )
 {
     wxSpinCtrl *sc = (wxSpinCtrl*) editor;
     long l = sc->GetValue();
@@ -1482,15 +1483,22 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices
     m_choices = choices;
 }
 
-wxControl* wxDataViewChoiceRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+wxWindow* wxDataViewChoiceRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    wxChoice* c = new wxChoice(parent, wxID_ANY, labelRect.GetTopLeft(), wxDefaultSize, m_choices );
+    wxChoice* c = new wxChoice
+                      (
+                          parent,
+                          wxID_ANY,
+                          labelRect.GetTopLeft(),
+                          wxSize(labelRect.GetWidth(), -1),
+                          m_choices
+                      );
     c->Move(labelRect.GetRight() - c->GetRect().width, wxDefaultCoord);
     c->SetStringSelection( value.GetString() );
     return c;
 }
 
-bool wxDataViewChoiceRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+bool wxDataViewChoiceRenderer::GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value )
 {
     wxChoice *c = (wxChoice*) editor;
     wxString s = c->GetStringSelection();
@@ -1531,14 +1539,14 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
 {
 }
 
-wxControl* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+wxWindow* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
     wxVariant string_value = GetChoice( value.GetLong() );
 
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
 
-bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value )
 {
     wxVariant string_value;
     if (!wxDataViewChoiceRenderer::GetValueFromEditorCtrl( editor, string_value ))
@@ -2238,7 +2246,7 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
         wxDATAVIEW_CELL_EDITABLE,
         -1,                         // default width
         wxALIGN_NOT,                //  and alignment
-        0                           // not resizeable
+        0                           // not resizable
     );
 
     return true;

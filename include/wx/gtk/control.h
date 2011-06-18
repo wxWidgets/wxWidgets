@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.h
+// Name:        wx/gtk/control.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

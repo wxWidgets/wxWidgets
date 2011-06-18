@@ -95,7 +95,7 @@ public:
 
     @beginEventTable{wxWizardEvent}
     @event{EVT_WIZARD_PAGE_CHANGED(id, func)}
-        The page has been just changed (this event can not be vetoed).
+        The page has been just changed (this event cannot be vetoed).
     @event{EVT_WIZARD_PAGE_CHANGING(id, func)}
         The page is being changed (this event can be vetoed).
     @event{EVT_WIZARD_PAGE_SHOWN(id, func)}
@@ -432,7 +432,7 @@ public:
     /**
         Executes the wizard starting from the given page, returning @true if it was
         successfully finished or @false if user cancelled it.
-        The @a firstPage can not be @NULL.
+        The @a firstPage cannot be @NULL.
     */
     virtual bool RunWizard(wxWizardPage* firstPage);
 
@@ -495,7 +495,7 @@ public:
         Also, the wizard will never be smaller than the default size.
 
         The recommended way to use this function is to lay out all wizard pages
-        using the sizers (even though the wizard is not resizeable) and then use
+        using the sizers (even though the wizard is not resizable) and then use
         wxSizer::CalcMin() in a loop to calculate the maximum of minimal sizes of
         the pages and pass it to SetPageSize().
     */

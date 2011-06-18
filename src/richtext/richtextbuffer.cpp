@@ -2637,49 +2637,61 @@ bool wxRichTextParagraphLayoutBox::CopyFragment(const wxRichTextRange& range, wx
     // Now top and tail the first and last paragraphs in our new fragment (which might be the same).
     if (!fragment.IsEmpty())
     {
-        wxRichTextRange topTailRange(range);
-
         wxRichTextParagraph* firstPara = wxDynamicCast(fragment.GetChildren().GetFirst()->GetData(), wxRichTextParagraph);
         wxASSERT( firstPara != NULL );
-
-        // Chop off the start of the paragraph
-        if (topTailRange.GetStart() > firstPara->GetRange().GetStart())
-        {
-            wxRichTextRange r(firstPara->GetRange().GetStart(), topTailRange.GetStart()-1);
-            firstPara->DeleteRange(r);
-
-            // Make sure the numbering is correct
-            long end;
-            fragment.CalculateRange(firstPara->GetRange().GetStart(), end);
-
-            // Now, we've deleted some positions, so adjust the range
-            // accordingly.
-            topTailRange.SetEnd(topTailRange.GetEnd() - r.GetLength());
-        }
 
         wxRichTextParagraph* lastPara = wxDynamicCast(fragment.GetChildren().GetLast()->GetData(), wxRichTextParagraph);
         wxASSERT( lastPara != NULL );
 
-        if (topTailRange.GetEnd() < (lastPara->GetRange().GetEnd()-1))
+        if (!firstPara || !lastPara)
+            return false;
+
+        bool isFragment = (range.GetEnd() < lastPara->GetRange().GetEnd());
+
+        long firstPos = firstPara->GetRange().GetStart();
+
+        // Adjust for renumbering from zero
+        wxRichTextRange topTailRange(range.GetStart() - firstPos, range.GetEnd() - firstPos);
+
+        long end;
+        fragment.CalculateRange(0, end);
+
+        // Chop off the start of the paragraph
+        if (topTailRange.GetStart() > 0)
         {
-            wxRichTextRange r(topTailRange.GetEnd()+1, lastPara->GetRange().GetEnd()-1); /* -1 since actual text ends 1 position before end of para marker */
-            lastPara->DeleteRange(r);
+            wxRichTextRange r(0, topTailRange.GetStart()-1);
+            firstPara->DeleteRange(r);
+
+            // Make sure the numbering is correct
+            fragment.CalculateRange(0, end);
+
+            // Now, we've deleted some positions, so adjust the range
+            // accordingly.
+            topTailRange.SetStart(range.GetLength());
+            topTailRange.SetEnd(fragment.GetOwnRange().GetEnd());
+        }
+        else
+        {
+            topTailRange.SetStart(range.GetLength());
+            topTailRange.SetEnd(fragment.GetOwnRange().GetEnd());
+        }
+
+        if (topTailRange.GetStart() < (lastPara->GetRange().GetEnd()-1))
+        {
+            lastPara->DeleteRange(topTailRange);
 
             // Make sure the numbering is correct
             long end;
-            fragment.CalculateRange(firstPara->GetRange().GetStart(), end);
+            fragment.CalculateRange(0, end);
 
             // We only have part of a paragraph at the end
             fragment.SetPartialParagraph(true);
         }
         else
         {
-            if (topTailRange.GetEnd() == (lastPara->GetRange().GetEnd() - 1))
-                // We have a partial paragraph (don't save last new paragraph marker)
-                fragment.SetPartialParagraph(true);
-            else
-                // We have a complete paragraph
-                fragment.SetPartialParagraph(false);
+            // We have a partial paragraph (don't save last new paragraph marker)
+            // or complete paragraph
+            fragment.SetPartialParagraph(isFragment);
         }
     }
 
@@ -4326,7 +4338,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     int lineSpacing = 0;
 
     // Let's assume line spacing of 10 is normal, 15 is 1.5, 20 is 2, etc.
-    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.GetFont().Ok())
+    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.GetFont().IsOk())
     {
         wxCheckSetFont(dc, attr.GetFont());
         lineSpacing = (int) (double(dc.GetCharHeight()) * (double(attr.GetLineSpacing())/10.0 - 1.0));
@@ -5937,7 +5949,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     int charHeight = dc.GetCharHeight();
 
     int x, y;
-    if ( textFont.Ok() )
+    if ( textFont.IsOk() )
     {
         if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) )
         {
@@ -6236,7 +6248,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     bool bScript(false);
     wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    if (font.Ok())
+    if (font.IsOk())
     {
         if ( textAttr.HasTextEffects() && ( (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
             || (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT) ) )
@@ -7721,11 +7733,11 @@ bool wxRichTextBuffer::SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet)
 {
     wxRichTextStyleSheet* oldSheet = GetStyleSheet();
 
-    wxWindowID id = wxID_ANY;
+    wxWindowID winid = wxID_ANY;
     if (GetRichTextCtrl())
-        id = GetRichTextCtrl()->GetId();
+        winid = GetRichTextCtrl()->GetId();
 
-    wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, id);
+    wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, winid);
     event.SetEventObject(GetRichTextCtrl());
     event.SetContainer(GetRichTextCtrl()->GetFocusObject());
     event.SetOldStyleSheet(oldSheet);
@@ -7780,7 +7792,7 @@ int wxRichTextBuffer::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, w
 
 bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& bulletAttr, const wxRect& rect)
 {
-    if (bulletAttr.GetTextColour().Ok())
+    if (bulletAttr.GetTextColour().IsOk())
     {
         wxCheckSetPen(dc, wxPen(bulletAttr.GetTextColour()));
         wxCheckSetBrush(dc, wxBrush(bulletAttr.GetTextColour()));
@@ -7880,7 +7892,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
 
         wxCheckSetFont(dc, font);
 
-        if (attr.GetTextColour().Ok())
+        if (attr.GetTextColour().IsOk())
             dc.SetTextForeground(attr.GetTextColour());
 
         dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
@@ -10141,7 +10153,7 @@ IMPLEMENT_CLASS(wxRichTextFileHandler, wxObject)
 bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileInputStream stream(filename);
-    if (stream.Ok())
+    if (stream.IsOk())
         return LoadFile(buffer, stream);
 
     return false;
@@ -10150,7 +10162,7 @@ bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& f
 bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileOutputStream stream(filename);
-    if (stream.Ok())
+    if (stream.IsOk())
         return SaveFile(buffer, stream);
 
     return false;
@@ -10405,8 +10417,13 @@ bool wxRichTextImageBlock::Load(wxImage& image)
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
-    const int bufSize = 512;
-    char buf[bufSize+1];
+    if (m_dataSize == 0)
+        return true;
+
+    int bufSize = 100000;
+    if (int(2*m_dataSize) < bufSize)
+        bufSize = 2*m_dataSize;
+    char* buf = new char[bufSize+1];
 
     int left = m_dataSize;
     int n, i, j;
@@ -10432,6 +10449,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
         buf[n] = 0;
         stream.Write((const char*) buf, n);
     }
+    delete[] buf;
     return true;
 }
 
@@ -10478,7 +10496,7 @@ unsigned char* wxRichTextImageBlock::ReadBlock(wxInputStream& stream, size_t siz
 unsigned char* wxRichTextImageBlock::ReadBlock(const wxString& filename, size_t size)
 {
     wxFileInputStream stream(filename);
-    if (!stream.Ok())
+    if (!stream.IsOk())
         return NULL;
 
     return ReadBlock(stream, size);
@@ -10496,7 +10514,7 @@ bool wxRichTextImageBlock::WriteBlock(wxOutputStream& stream, unsigned char* blo
 bool wxRichTextImageBlock::WriteBlock(const wxString& filename, unsigned char* block, size_t size)
 {
     wxFileOutputStream outStream(filename);
-    if (!outStream.Ok())
+    if (!outStream.IsOk())
         return false;
 
     return WriteBlock(outStream, block, size);

@@ -1171,7 +1171,6 @@ wxString wxCmdLineParser::GetUsageString() const
                 option << (!opt.longName ? wxT(':') : wxT('=')) << val;
             }
 
-            usage << negator;
             if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
             {
                 usage << wxT(']');

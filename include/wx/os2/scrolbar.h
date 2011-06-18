@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrollbar.h
+// Name:        wx/os2/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      David Webster
 // Modified by:

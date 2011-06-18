@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        treeentry_gtk.h
+// Name:        wx/gtk/treeentry_gtk.h
 // Purpose:     GtkTreeEntry - a string/userdata combo for use with treeview
 // Author:      Ryan Norton
 // Id:          $Id$
@@ -19,9 +19,9 @@ extern "C" {
 #include "wx/dlimpexp.h"
 
 #define GTK_TYPE_TREE_ENTRY          (gtk_tree_entry_get_type())
-#define GTK_TREE_ENTRY(obj)          (GTK_CHECK_CAST (obj, gtk_tree_entry_get_type (), GtkTreeEntry))
-#define GTK_TREE_ENTRY_CLASS(klass)  (GTK_CHECK_CLASS_CAST (klass, gtk_tree_entry_get_type (), GtkTreeEntryClass))
-#define GTK_IS_TREE_ENTRY(obj)       (GTK_CHECK_TYPE (obj, gtk_tree_entry_get_type ()))
+#define GTK_TREE_ENTRY(obj)          (G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_tree_entry_get_type (), GtkTreeEntry))
+#define GTK_TREE_ENTRY_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST (klass, gtk_tree_entry_get_type (), GtkTreeEntryClass))
+#define GTK_IS_TREE_ENTRY(obj)       (G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_tree_entry_get_type ()))
 
 typedef struct _GtkTreeEntry        GtkTreeEntry;
 typedef struct _GtkTreeEntryClass   GtkTreeEntryClass;
@@ -47,7 +47,7 @@ WXDLLIMPEXP_CORE
 GtkTreeEntry* gtk_tree_entry_new        (void);
 
 WXDLLIMPEXP_CORE
-GtkType    gtk_tree_entry_get_type      (void);
+GType    gtk_tree_entry_get_type      (void);
 
 WXDLLIMPEXP_CORE
 gchar*     gtk_tree_entry_get_collate_key     (GtkTreeEntry* entry);

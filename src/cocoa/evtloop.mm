@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/evtloop.mm
+// Name:        src/cocoa/evtloop.mm
 // Purpose:     implements wxEventLoop for Cocoa
 // Author:      David Elliott
 // Modified by:

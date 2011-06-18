@@ -76,7 +76,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     }
     else
     {
-        // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
+        // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
         // bitmap into sub-images of the correct size
         if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
         {
@@ -106,7 +106,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
 int wxGenericImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
 {
     wxBitmap bmp(bitmap);
-    if (mask.Ok())
+    if (mask.IsOk())
         bmp.SetMask(new wxMask(mask));
     return Add(bmp);
 }
@@ -214,7 +214,7 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap, const wxBit
         m_images.Insert( next, newBitmap );
     }
 
-    if (mask.Ok())
+    if (mask.IsOk())
         newBitmap->SetMask(new wxMask(mask));
 
     return true;

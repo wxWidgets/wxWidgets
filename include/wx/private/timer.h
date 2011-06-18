@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/timerimpl.h
+// Name:        wx/private/timer.h
 // Purpose:     Base class for wxTimer implementations
 // Author:      Lukasz Michalski <lmichalski@sf.net>
 // Created:     31.10.2006

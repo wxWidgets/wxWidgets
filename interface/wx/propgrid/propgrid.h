@@ -45,7 +45,7 @@ wxPG_BOLD_MODIFIED                  = 0x00000040,
 
 /**
     When wxPropertyGrid is resized, splitter moves to the center. This
-    behavior stops once the user manually moves the splitter.
+    behaviour stops once the user manually moves the splitter.
 */
 wxPG_SPLITTER_AUTO_CENTER           = 0x00000080,
 
@@ -209,7 +209,7 @@ wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000
 // -----------------------------------------------------------------------
 
 /**
-    @section propgrid_vfbflags wxPropertyGrid Validation Failure Behavior Flags
+    @section propgrid_vfbflags wxPropertyGrid Validation Failure behaviour Flags
     @{
 */
 
@@ -218,7 +218,7 @@ enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
 
 /**
     Prevents user from leaving property unless value is valid. If this
-    behavior flag is not used, then value change is instead cancelled.
+    behaviour flag is not used, then value change is instead cancelled.
 */
 wxPG_VFB_STAY_IN_PROPERTY           = 0x01,
 
@@ -237,7 +237,7 @@ wxPG_VFB_MARK_CELL                  = 0x04,
 
     To customize the way the message is displayed, you need to
     reimplement wxPropertyGrid::DoShowPropertyError() in a
-    derived class. Default behavior is to display the text on
+    derived class. Default behaviour is to display the text on
     the top-level frame's status bar, if present, and otherwise
     using wxMessageBox.
 */
@@ -279,7 +279,7 @@ class wxPGValidationInfo
 {
 public:
     /**
-        @return Returns failure behavior which is a combination of
+        @return Returns failure behaviour which is a combination of
             @ref propgrid_vfbflags.
     */
     wxPGVFBFlags GetFailureBehavior();
@@ -294,7 +294,7 @@ public:
     */
     wxVariant& GetValue();
 
-    /** Set validation failure behavior
+    /** Set validation failure behaviour
 
         @param failureBehavior
             Mixture of @ref propgrid_vfbflags.
@@ -1092,7 +1092,7 @@ public:
         @name wxPropertyGrid customization
 
         Reimplement these member functions in derived class for better
-        control over wxPropertyGrid behavior.
+        control over wxPropertyGrid behaviour.
     */
     //@{
 
@@ -1121,7 +1121,7 @@ public:
     /**
         Return wxStatusBar that is used by this wxPropertyGrid. You can
         reimplement this member function in derived class to override
-        the default behavior of using the top-level wxFrame's status
+        the default behaviour of using the top-level wxFrame's status
         bar, if any.
     */
     virtual wxStatusBar* GetStatusBar();
@@ -1282,7 +1282,7 @@ public:
     void SetProperty( wxPGProperty* p );
 
     /**
-        Set override validation failure behavior. Only effective if Veto() was
+        Set override validation failure behaviour. Only effective if Veto() was
         also called, and only allowed if event type is @c wxEVT_PG_CHANGING.
     */
     void SetValidationFailureBehavior( wxPGVFBFlags flags );

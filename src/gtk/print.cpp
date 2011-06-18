@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/print.cpp
+// Name:        src/gtk/print.cpp
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
@@ -36,7 +36,13 @@
 #include "wx/paper.h"
 
 #include <gtk/gtk.h>
+
+#if GTK_CHECK_VERSION(2,14,0)
+#include <gtk/gtkunixprint.h>
+#else
 #include <gtk/gtkpagesetupunixdialog.h>
+#endif
+
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -51,7 +57,7 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 
 #include "wx/gtk/private/object.h"
 
-// Usefull to convert angles from/to Rad to/from Deg.
+// Useful to convert angles from/to Rad to/from Deg.
 static const double RAD2DEG  = 180.0 / M_PI;
 static const double DEG2RAD  = M_PI / 180.0;
 
@@ -661,8 +667,8 @@ int wxGtkPrintDialog::ShowModal()
     }
     else if (response == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
+        wxLogError(_("Error while printing: ") + wxString(gError ? gError->message : "???"));
         g_error_free (gError);
-        wxLogError(_("Error while printing: ") + wxString::Format(_("%s"), gError->message));
         return wxID_NO; // We use wxID_NO because there is no wxID_ERROR available
     }
 
@@ -1732,7 +1738,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     angle = -angle;
 
-    bool underlined = m_font.Ok() && m_font.GetUnderlined();
+    bool underlined = m_font.IsOk() && m_font.GetUnderlined();
 
     const wxScopedCharBuffer data = text.utf8_str();
 
@@ -1750,7 +1756,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
         pango_attr_list_unref(attrs);
     }
 
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         unsigned char red = m_textForegroundColour.Red();
         unsigned char blue = m_textForegroundColour.Blue();
@@ -1838,7 +1844,7 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
 {
     m_font = font;
 
-    if (m_font.Ok())
+    if (m_font.IsOk())
     {
         if (m_fontdesc)
             pango_font_description_free( m_fontdesc );
@@ -1855,7 +1861,7 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
 
 void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 {
-    if (!pen.Ok()) return;
+    if (!pen.IsOk()) return;
 
     m_pen = pen;
 
@@ -1934,7 +1940,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 
 void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 {
-    if (!brush.Ok()) return;
+    if (!brush.IsOk()) return;
 
     m_brush = brush;
 
@@ -2207,7 +2213,7 @@ void wxGtkPrinterDCImpl::SetPrintData(const wxPrintData& data)
     m_printData = data;
 }
 
-// overriden for wxPrinterDC Impl
+// overridden for wxPrinterDC Impl
 
 wxRect wxGtkPrinterDCImpl::GetPaperRect() const
 {

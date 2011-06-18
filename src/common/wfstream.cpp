@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/fstream.cpp
+// Name:        src/common/wfstream.cpp
 // Purpose:     "File stream" classes
 // Author:      Julian Smart
 // Modified by:

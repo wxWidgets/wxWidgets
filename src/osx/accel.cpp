@@ -86,7 +86,7 @@ bool wxAcceleratorTable::IsOk() const
 
 int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
-    if (!Ok()) return -1;
+    if (!IsOk()) return -1;
 
     wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
     while (node)

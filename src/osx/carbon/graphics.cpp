@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/dccg.cpp
+// Name:        src/osx/carbon/graphics.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:
@@ -225,7 +225,7 @@ class ImagePattern : public wxMacCoreGraphicsPattern
 public :
     ImagePattern( const wxBitmap* bmp , const CGAffineTransform& transform )
     {
-        wxASSERT( bmp && bmp->Ok() );
+        wxASSERT( bmp && bmp->IsOk() );
 #ifdef __WXMAC__
         Init( (CGImageRef) bmp->CreateCGImage() , transform );
 #endif
@@ -500,7 +500,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         case wxPENSTYLE_STIPPLE:
             {
                 wxBitmap* bmp = pen.GetStipple();
-                if ( bmp && bmp->Ok() )
+                if ( bmp && bmp->IsOk() )
                 {
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
                     m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
@@ -647,7 +647,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     {
         // now brush is a bitmap
         wxBitmap* bmp = brush.GetStipple();
-        if ( bmp && bmp->Ok() )
+        if ( bmp && bmp->IsOk() )
         {
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
@@ -1390,9 +1390,6 @@ public:
 
     void Init();
 
-    // returns the size of the graphics context in device coordinates
-    virtual void GetSize( wxDouble* width, wxDouble* height);
-
     virtual void StartPage( wxDouble width, wxDouble height );
 
     virtual void EndPage();
@@ -1418,6 +1415,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1460,6 +1459,9 @@ public:
 
     virtual bool ShouldOffset() const
     {
+        if ( !m_enableOffset )
+            return false;
+        
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -1487,6 +1489,11 @@ public:
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    
+    // fast convenience methods
+    
+    
+    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
 
     void SetNativeContext( CGContextRef cg );
 
@@ -1506,8 +1513,6 @@ private:
 #endif
     bool m_contextSynthesized;
     CGAffineTransform m_windowTransform;
-    wxDouble m_width;
-    wxDouble m_height;
     bool m_invisible;
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -1575,6 +1580,8 @@ void wxMacCoreGraphicsContext::Init()
     m_view = NULL;
 #endif
     m_invisible = false;
+    m_antialias = wxANTIALIAS_DEFAULT;
+    m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1590,6 +1597,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
     m_windowRef = window;
+    m_enableOffset = true;
 }
 #endif
 
@@ -1597,6 +1605,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
+    m_enableOffset = true;
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -1642,12 +1651,6 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
-}
-
-void wxMacCoreGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
-{
-    *width = m_width;
-    *height = m_height;
 }
 
 
@@ -1709,16 +1712,10 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( m_cgContext )
         {
             CGContextSaveGState( m_cgContext );
-            CGContextConcatCTM( m_cgContext, m_windowTransform );
-            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
-            m_contextSynthesized = true;
 #if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
             {
-                // the clip region is in device coordinates, so we convert this again to user coordinates
                 wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
-                CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
-                HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
                 // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
                 if ( HIShapeIsEmpty(hishape))
                 {
@@ -1732,6 +1729,9 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                 }
             }
 #endif
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
+            m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
 
 #if 0 // turn on for debugging of clientdc
@@ -1778,6 +1778,41 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
+{
+    if (!EnsureIsValid())
+        return true;
+    
+    if (m_interpolation == interpolation)
+        return true;
+
+    m_interpolation = interpolation;
+    CGInterpolationQuality quality;
+    
+    switch (interpolation) 
+    {
+        case wxINTERPOLATION_DEFAULT:
+            quality = kCGInterpolationDefault;
+            break;
+        case wxINTERPOLATION_NONE:
+            quality = kCGInterpolationNone;
+            break;
+        case wxINTERPOLATION_FAST:
+            quality = kCGInterpolationLow;
+            break;
+        case wxINTERPOLATION_GOOD:
+            quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+            break;
+        case wxINTERPOLATION_BEST:
+            quality = kCGInterpolationHigh;
+            break;
+        default:
+            return false;
+    }
+    CGContextSetInterpolationQuality(m_cgContext, quality);
     return true;
 }
 
@@ -1961,6 +1996,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
+        r.size= CGSizeApplyAffineTransform(r.size, m_windowTransform);
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
 #else
     // allow usage as measuring context
@@ -2181,7 +2217,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( refdata->IsMonochrome() == 1 )
     {
-        // is is a mask, the '1' in the mask tell where to draw the current brush
+        // is a mask, the '1' in the mask tell where to draw the current brush
         if (  !m_brush.IsNull() )
         {
             if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
@@ -2387,8 +2423,8 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
         wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
         Rect rect;
-        x += (int)(sin(angle) * FixedToInt(ascent));
-        y += (int)(cos(angle) * FixedToInt(ascent));
+        x += (int)(sin(angle) * FixedToFloat(ascent));
+        y += (int)(cos(angle) * FixedToFloat(ascent));
 
         status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
                                         IntToFixed(x) , IntToFixed(y) , &rect );
@@ -2446,13 +2482,8 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
         wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-        // round the returned extent: this is probably more correct anyhow but
-        // we also need to do it to be consistent with GetPartialTextExtents()
-        // below and avoid strange situation when the last partial extent
-        // returned by it could have been greater than the full extent returned
-        // by us
-        CGFloat a, d, l;
-        int w = CTLineGetTypographicBounds(line, &a, &d, &l) + 0.5;
+        CGFloat a, d, l, w;
+        w = CTLineGetTypographicBounds(line, &a, &d, &l);
 
         if ( height )
             *height = a+d+l;
@@ -2489,13 +2520,13 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
                                             &textBefore , &textAfter, &textAscent , &textDescent );
 
         if ( height )
-            *height = FixedToInt(textAscent + textDescent);
+            *height = FixedToFloat(textAscent + textDescent);
         if ( descent )
-            *descent = FixedToInt(textDescent);
+            *descent = FixedToFloat(textDescent);
         if ( externalLeading )
             *externalLeading = 0;
         if ( width )
-            *width = FixedToInt(textAfter - textBefore);
+            *width = FixedToFloat(textAfter - textBefore);
 
         ::ATSUDisposeTextLayout(atsuLayout);
 
@@ -2512,7 +2543,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         *height = sz.height;
         /*
     if ( descent )
-        *descent = FixedToInt(textDescent);
+        *descent = FixedToFloat(textDescent);
     if ( externalLeading )
         *externalLeading = 0;
         */
@@ -2583,7 +2614,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
             if (result != noErr || actualNumberOfBounds != 1 )
                 return;
 
-            widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
+            widths[pos] = FixedToFloat( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
             //unsigned char uch = s[i];
         }
 #else
@@ -2603,7 +2634,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         {
             for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
             {
-                widths[pos-1] = FixedToInt( layoutRecords[pos].realPos );
+                widths[pos-1] = FixedToFloat( layoutRecords[pos].realPos );
             }
         }
 
@@ -2622,6 +2653,27 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 void * wxMacCoreGraphicsContext::GetNativeContext()
 {
     return m_cgContext;
+}
+
+
+void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST) 
+        return; 
+
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    if ( !m_brush.IsNull() )
+    {
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+        CGContextFillRect(m_cgContext, rect);
+    }
+    
+    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    if ( !m_pen.IsNull() )
+    {
+        ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
+        CGContextStrokeRect(m_cgContext, rect);
+    }
 }
 
 // concatenates this transform with the current transform of this context
@@ -2758,7 +2810,10 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
 
         // having a cgctx being NULL is fine (will be created on demand)
         // this is the case for all wxWindowDCs except wxPaintDC
-        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        wxMacCoreGraphicsContext *context = 
+            new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        context->EnableOffset(true);
+        return context;
     }
     return NULL;
 }
@@ -2772,8 +2827,10 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
     {
         int w, h;
         mem_impl->GetSize( &w, &h );
-        return new wxMacCoreGraphicsContext( this,
+        wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
+        context->EnableOffset(true);
+        return context;
     }
 #endif
     return NULL;
@@ -2805,7 +2862,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( v
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( void * window )
 {
 #if wxOSX_USE_CARBON
-    return new wxMacCoreGraphicsContext(this,(WindowRef)window);
+    wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext(this,(WindowRef)window);
+    context->EnableOffset(true);
+    return context;
 #else
     wxUnusedVar(window);
     return NULL;
@@ -2846,7 +2905,7 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2858,7 +2917,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2870,7 +2929,7 @@ wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage(), bmp.GetDepth() == 1 ) );
@@ -2935,7 +2994,7 @@ wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // sets the font
 wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxMacCoreGraphicsFontData( this , font, col ));

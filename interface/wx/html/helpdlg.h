@@ -56,7 +56,7 @@ public:
     /**
         Sets the help controller associated with the dialog.
     */
-    void SetController(wxHtmlHelpController* contoller);
+    void SetController(wxHtmlHelpController* controller);
 
     /**
         Sets the dialog's title format.

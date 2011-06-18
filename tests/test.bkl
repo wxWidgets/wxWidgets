@@ -136,6 +136,7 @@
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp
+            graphics/affinematrix.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
@@ -201,6 +202,7 @@
             net/socket.cpp
             sizers/boxsizer.cpp
             sizers/wrapsizer.cpp
+            toplevel/toplevel.cpp
             validators/valnum.cpp
             window/clientsize.cpp
             window/setsize.cpp

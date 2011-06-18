@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrollbar.h
+// Name:        wx/msw/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pnghand.h
+// Name:        wx/osx/pnghand.h
 // Purpose:     PNG bitmap handler
 // Author:      Julian Smart
 // Modified by:

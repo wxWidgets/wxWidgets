@@ -31,6 +31,8 @@
 
 #endif
 
+#include "wx/dcbuffer.h"
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 class WXDLLIMPEXP_CORE wxGenericComboCtrl : public wxComboCtrlBase
@@ -95,6 +97,21 @@ protected:
 #elif defined(__WXPM__)
     virtual WXHWND GetEditHWND() const { return NULL; }
 #endif
+
+    // For better transparent background rendering
+    virtual bool HasTransparentBackground()
+    {
+        #if wxALWAYS_NATIVE_DOUBLE_BUFFER
+          #ifdef __WXGTK__
+            // Sanity check for GTK+
+            return IsDoubleBuffered();
+          #else
+            return true;
+          #endif
+        #else
+            return false;
+        #endif
+    }
 
     // Mandatory virtuals
     virtual void OnResize();

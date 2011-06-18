@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
     #include "wx/dcscreen.h"
     #include "wx/log.h"
     #include "wx/gdicmn.h"
@@ -511,7 +512,7 @@ int wxFontBase::AdjustToSymbolicSize(wxFontSymbolicSize size, int base)
         WrongFontSizeFactorsSize
     );
 
-    return factors[size - wxFONTSIZE_XX_SMALL]*base;
+    return wxRound(factors[size - wxFONTSIZE_XX_SMALL]*base);
 }
 
 wxFont& wxFont::MakeBold()
@@ -1020,7 +1021,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
                 SetFamily(family);
             }
             // NB: the check on the facename is implemented in wxFontBase::SetFaceName
-            //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitely
+            //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitly
             //     call here wxFontEnumerator::IsValidFacename
             else if (
 #if wxUSE_FONTENUM
@@ -1039,7 +1040,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     if ( !face.empty() )
     {
         // NB: the check on the facename is implemented in wxFontBase::SetFaceName
-        //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitely
+        //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitly
         //     call here wxFontEnumerator::IsValidFacename
         if (
 #if wxUSE_FONTENUM

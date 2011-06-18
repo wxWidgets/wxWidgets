@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.h
+// Name:        wx/osx/font.h
 // Purpose:     wxFont class
 // Author:      Julian Smart
 // Modified by:

@@ -97,32 +97,32 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 
     HIPoint hipoint= { adjustedPt.x , adjustedPt.y } ;
     HIViewPartCode outPart = 0 ;
-    OSStatus err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
+    OSStatus err = HIViewGetPartHit( GetPeer()->GetControlRef(), &hipoint, &outPart );
 
-    int max = m_peer->GetMaximum() ;
+    int max = GetPeer()->GetMaximum() ;
     if ( outPart == 0 && max > 0 )
     {
         // this is a hack, as unfortunately a hit on an already selected tab returns 0,
         // so we have to go some extra miles to make sure we select something different
         // and try again ..
-        int val = m_peer->GetValue() ;
+        int val = GetPeer()->GetValue() ;
         int maxval = max ;
         if ( max == 1 )
         {
-            m_peer->SetMaximum( 2 ) ;
+            GetPeer()->SetMaximum( 2 ) ;
             maxval = 2 ;
         }
 
         if ( val == 1 )
-            m_peer->SetValue( maxval ) ;
+            GetPeer()->SetValue( maxval ) ;
         else
-             m_peer->SetValue( 1 ) ;
+             GetPeer()->SetValue( 1 ) ;
 
-        err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
+        err = HIViewGetPartHit( GetPeer()->GetControlRef(), &hipoint, &outPart );
 
-        m_peer->SetValue( val ) ;
+        GetPeer()->SetValue( val ) ;
         if ( max == 1 )
-            m_peer->SetMaximum( 1 ) ;
+            GetPeer()->SetMaximum( 1 ) ;
     }
 
     if ( outPart >= 1 && outPart <= countPages )
@@ -169,7 +169,7 @@ void wxMacControl::SetupTabs( const wxNotebook& notebook)
         if ( notebook.GetImageList() && notebook.GetPageImage(ii) >= 0 )
         {
             const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( ii ) ) ;
-            if ( bmap.Ok() )
+            if ( bmap.IsOk() )
             {
                 ControlButtonContentInfo info ;
 

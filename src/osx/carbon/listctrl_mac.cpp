@@ -655,8 +655,6 @@ bool wxListCtrl::Create(wxWindow *parent,
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
             (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) )
     {
-        m_macIsUserPane = true;
-
         long paneStyle = style;
         paneStyle &= ~wxSIMPLE_BORDER;
         paneStyle &= ~wxDOUBLE_BORDER;
@@ -674,15 +672,15 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     else
     {
-        m_macIsUserPane = false;
+        DontCreatePeer();
         if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
-        m_peer = m_dbImpl;
+        SetPeer(m_dbImpl);
 
         MacPostControlCreate( pos, size );
 
-        InstallControlEventHandler( m_peer->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
+        InstallControlEventHandler( GetPeer()->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, this,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
 
@@ -945,7 +943,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
         if (item.GetMask() & wxLIST_MASK_TEXT)
         {
             wxFontEncoding enc;
-            if ( m_font.Ok() )
+            if ( m_font.IsOk() )
                 enc = GetFont().GetEncoding();
             else
                 enc = wxLocale::GetSystemEncoding();
@@ -2179,7 +2177,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         if (imageList && imageList->GetImageCount() > 0)
         {
             wxBitmap bmp = imageList->GetBitmap(0);
-            //if (bmp.Ok())
+            //if (bmp.IsOk())
             //    type = kDataBrowserIconAndTextType;
         }
 
@@ -2788,7 +2786,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (bgColor == wxNullColour)
         bgColor = listBgColor;
 
-    if (!font.Ok())
+    if (!font.IsOk())
         font = list->GetFont();
 
     wxCFStringRef cfString( text, wxLocale::GetSystemEncoding() );
@@ -2852,12 +2850,12 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     else
     {
 
-        if (color.Ok())
+        if (color.IsOk())
             color.GetRGBColor(&labelColor);
-        else if (list->GetTextColour().Ok())
+        else if (list->GetTextColour().IsOk())
             list->GetTextColour().GetRGBColor(&labelColor);
 
-        if (bgColor.Ok())
+        if (bgColor.IsOk())
         {
             bgColor.GetRGBColor(&backgroundColor);
             CGContextSaveGState(context);
@@ -2899,7 +2897,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     {
         info.version = kHIThemeTextInfoVersionOne;
         info.fontID = kThemeViewsFont;
-        if (font.Ok())
+        if (font.IsOk())
         {
             info.fontID = kThemeSpecifiedFont;
             info.font = (CTFontRef) font.OSXGetCTFont();
@@ -2913,7 +2911,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         info.version = kHIThemeTextInfoVersionZero;
         info.fontID = kThemeViewsFont;
 
-        if (font.Ok())
+        if (font.IsOk())
         {
             info.fontID = font.MacGetThemeFontID();
 

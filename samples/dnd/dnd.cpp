@@ -141,7 +141,7 @@ public:
     {
         wxPaintDC dc(this);
 
-        if ( m_bitmap.Ok() )
+        if ( m_bitmap.IsOk() )
         {
             PrepareDC(dc);
 
@@ -177,7 +177,7 @@ public:
     {
         wxPaintDC dc(this);
 
-        if ( m_metafile.Ok() )
+        if ( m_metafile.IsOk() )
         {
             PrepareDC(dc);
 
@@ -1177,7 +1177,7 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
                            wxT("it to wordpad or any other droptarget accepting text (and of course you can just drag it\n")
                            wxT("to the right pane). Due to a lot of trace messages, the cursor might take some time to \n")
                            wxT("change, don't release the mouse button until it does. You can change the string being\n")
-                           wxT("dragged in in \"File|Test drag...\" dialog.\n")
+                           wxT("dragged in \"File|Test drag...\" dialog.\n")
                            wxT("\n")
                            wxT("\n")
                            wxT("Please send all questions/bug reports/suggestions &c to \n")
@@ -1327,7 +1327,7 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
                     wxBITMAP_TYPE_BMP
 #endif
                   );
-    if (!image.Ok())
+    if (!image.IsOk())
     {
         wxLogError( wxT("Invalid image file...") );
         return;

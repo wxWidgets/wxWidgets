@@ -372,7 +372,7 @@ void wxEmulatorContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     wxSize sz = GetClientSize();
-    if (wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.Ok())
+    if (wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.IsOk())
     {
         int deviceWidth = wxGetApp().m_emulatorInfo.m_emulatorDeviceSize.x;
         int deviceHeight = wxGetApp().m_emulatorInfo.m_emulatorDeviceSize.y;

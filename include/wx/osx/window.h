@@ -114,6 +114,14 @@ public:
 
     virtual bool Reparent( wxWindowBase *newParent );
 
+#if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
+    // hot keys (system wide accelerators)
+    // -----------------------------------
+    
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int keycode);
+    virtual bool UnregisterHotKey(int hotkeyId);
+#endif // wxUSE_HOTKEY
+    
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif
@@ -164,7 +172,7 @@ public:
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     virtual void        TriggerScrollEvent( wxEventType scrollEvent ) ;
-    // this should not be overriden in classes above wxWindowMac
+    // this should not be overridden in classes above wxWindowMac
     // because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
 
@@ -201,9 +209,9 @@ public:
     bool                MacIsReallyHilited() ;
 
 #if WXWIN_COMPATIBILITY_2_8
-    bool                MacIsUserPane() { return m_macIsUserPane; }
+    bool                MacIsUserPane();
 #endif
-    bool                MacIsUserPane() const { return m_macIsUserPane; }
+    bool                MacIsUserPane() const;
 
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;
 
@@ -246,7 +254,18 @@ public:
                                            int& w, int& h , bool adjustForOrigin ) const ;
 
     // the 'true' OS level control for this wxWindow
-    wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
+    wxOSXWidgetImpl*    GetPeer() const;
+    
+    // optimization to avoid creating a user pane in wxWindow::Create if we already know
+    // we will replace it with our own peer
+    void                DontCreatePeer();
+    
+    // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to 
+    // release existing peer
+    void                SetPeer(wxOSXWidgetImpl* peer);
+    
+    // wraps the already existing peer with the wrapper
+    void                SetWrappingPeer(wxOSXWidgetImpl* wrapper);
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // the NSView or NSWindow of this window: can be used for both child and
@@ -274,7 +293,6 @@ protected:
     wxList              m_subControls;
 
     // the peer object, allowing for cleaner API support
-    wxOSXWidgetImpl *   m_peer ;
 
     void *              m_cgContextRef ;
 
@@ -288,9 +306,6 @@ protected:
     mutable wxRegion    m_cachedClippedRegionWithOuterStructure ;
     mutable wxRegion    m_cachedClippedRegion ;
     mutable wxRegion    m_cachedClippedClientRegion ;
-
-    // true if is is not a native control but a wxWindow control
-    bool                m_macIsUserPane ;
 
     // insets of the mac control from the wx top left corner
     wxPoint             m_macTopLeftInset ;
@@ -365,6 +380,7 @@ protected:
                                    unsigned timeout);
 
 private:
+    wxOSXWidgetImpl *   m_peer ;
     // common part of all ctors
     void Init();
 

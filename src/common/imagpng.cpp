@@ -43,7 +43,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// image can not have any transparent pixels at all, have only 100% opaque
+// image cannot have any transparent pixels at all, have only 100% opaque
 // and/or 100% transparent pixels in which case a simple mask is enough to
 // store this information in wxImage or have a real alpha channel in which case
 // we need to have it in wxImage as well
@@ -558,7 +558,7 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
-    if (!image->Ok())
+    if (!image->IsOk())
         goto error;
 
     // initialize all line pointers to NULL to ensure that they can be safely
@@ -602,6 +602,47 @@ wxPNGHandler::LoadFile(wxImage *image,
     }
 #endif // wxUSE_PALETTE
 
+
+    // set the image resolution if it's available
+    png_uint_32 resX, resY;
+    int unitType;
+    if (png_get_pHYs(png_ptr, info_ptr, &resX, &resY, &unitType)
+        == PNG_INFO_pHYs)
+    {
+        wxImageResolution res = wxIMAGE_RESOLUTION_CM;
+
+        switch (unitType)
+        {
+            default:
+                wxLogWarning(_("Unknown PNG resolution unit %d"), unitType);
+                // fall through
+
+            case PNG_RESOLUTION_UNKNOWN:
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, resX);
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, resY);
+
+                res = wxIMAGE_RESOLUTION_NONE;
+                break;
+
+            case PNG_RESOLUTION_METER:
+                /*
+                Convert meters to centimeters.
+                Use a string to not lose precision (converting to cm and then
+                to inch would result in integer rounding error).
+                If an app wants an int, GetOptionInt will convert and round
+                down for them.
+                */
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX,
+                    wxString::FromCDouble((double) resX / 100.0, 2));
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY,
+                    wxString::FromCDouble((double) resY / 100.0, 2));
+                break;
+        }
+
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, res);
+    }
+
+
     png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
 
     // loaded successfully, now init wxImage with this data
@@ -619,7 +660,7 @@ error:
        wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
     }
 
-    if ( image->Ok() )
+    if ( image->IsOk() )
     {
         image->Destroy();
     }

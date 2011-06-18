@@ -239,6 +239,10 @@ SOURCE=.\bench.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\datetime.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\htmlparser\htmlpars.cpp
 # End Source File
 # Begin Source File

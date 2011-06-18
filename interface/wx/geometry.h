@@ -2,7 +2,7 @@
 // Name:        geometry.h
 // Purpose:     interface of geometry classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id: $
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -150,8 +150,8 @@ public:
     wxPoint2DDouble GetPosition();
     wxSize GetSize();
 
-    // for the edge and corner accessors there are two setters conterparts, the Set.. functions keep the other corners at their
-        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners apropriately
+    // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
+        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
 
     wxDouble GetLeft() const;
     void SetLeft( wxDouble n );
@@ -241,8 +241,8 @@ public:
     wxPoint2DInt GetPosition();
     wxSize GetSize();
 
-        // for the edge and corner accessors there are two setters conterparts, the Set.. functions keep the other corners at their
-        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners apropriately
+        // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
+        // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
 
     wxInt32 GetLeft() const;
     void SetLeft( wxInt32 n );

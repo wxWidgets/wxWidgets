@@ -165,7 +165,7 @@ int wxFileDialog::ShowModal()
     Arg args[10];
     int ac = 0;
 
-    if (m_backgroundColour.Ok())
+    if (m_backgroundColour.IsOk())
     {
         wxComputeColours (dpy, & m_backgroundColour, NULL);
 

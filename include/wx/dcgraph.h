@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/graphdc.h
+// Name:        wx/dcgraph.h
 // Purpose:     graphics context device bridge header
 // Author:      Stefan Csomor
 // Modified by:

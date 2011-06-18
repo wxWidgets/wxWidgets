@@ -372,7 +372,7 @@ public:
 
     /**
         This function may be called if something fatal happens: an unhandled
-        exception under Win32 or a a fatal signal under Unix, for example. However,
+        exception under Win32 or a fatal signal under Unix, for example. However,
         this will not happen by default: you have to explicitly call
         wxHandleFatalExceptions() to enable this.
 
@@ -391,7 +391,7 @@ public:
         You may use OnExit() to clean up anything initialized here, provided
         that the function returns @true.
 
-        Notice that if you want to to use the command line processing provided by
+        Notice that if you want to use the command line processing provided by
         wxWidgets you have to call the base class version in the derived class
         OnInit().
 

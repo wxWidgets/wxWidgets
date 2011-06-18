@@ -184,8 +184,8 @@ protected:
     bool                  m_savedYet;
 
     // Called by OnSaveDocument and OnOpenDocument to implement standard
-    // Save/Load behavior. Re-implement in derived class for custom
-    // behavior.
+    // Save/Load behaviour. Re-implement in derived class for custom
+    // behaviour.
     virtual bool DoSaveDocument(const wxString& file);
     virtual bool DoOpenDocument(const wxString& file);
 
@@ -473,6 +473,13 @@ public:
 
     // Get the current document manager
     static wxDocManager* GetDocumentManager() { return sm_docManager; }
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxPageSetupDialogData& GetPageSetupDialogData()
+        { return m_pageSetupDialogData; }
+    const wxPageSetupDialogData& GetPageSetupDialogData() const
+        { return m_pageSetupDialogData; }
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #if WXWIN_COMPATIBILITY_2_8
     // deprecated, override GetDefaultName() instead

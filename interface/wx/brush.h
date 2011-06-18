@@ -201,7 +201,7 @@ public:
         A transparent brush is simply a brush with wxBRUSHSTYLE_TRANSPARENT
         style.
 
-        Notice that this function works even for non-initialized brushs (for
+        Notice that this function works even for non-initialized brushes (for
         which it returns @false) unlike tests of the form <code>GetStyle() ==
         wxBRUSHSTYLE_TRANSPARENT</code> which would assert if the brush is
         invalid.

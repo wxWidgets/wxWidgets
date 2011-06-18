@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/cocoa/sound.mm
 // Purpose:     wxSound class implementation: optional
 // Authors:     David Elliott, Ryan Norton
 // Modified by: 
@@ -165,7 +165,7 @@ bool wxSound::DoPlay(unsigned flags) const
 bool wxSound::IsPlaying()
 {
     // Normally you can send a message to a nil object and it will return
-    // nil.  That behavior would probably be okay here but in general it's
+    // nil.  That behaviour would probably be okay here but in general it's
     // not recommended to send a message to a nil object if the return
     // value is not an object.  Better safe than sorry.
     if(s_currentSound)

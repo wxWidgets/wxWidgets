@@ -1371,45 +1371,45 @@ msgid "Ca&pitals"
 msgstr ""
 
 #: ../src/os2/thread.cpp:117
-msgid "Can not create mutex."
+msgid "Cannot create mutex."
 msgstr ""
 
 #: ../src/common/filefn.cpp:1359
 #, c-format
-msgid "Can not enumerate files '%s'"
+msgid "Cannot enumerate files '%s'"
 msgstr ""
 
 #: ../src/msw/dir.cpp:212
 #, c-format
-msgid "Can not enumerate files in directory '%s'"
+msgid "Cannot enumerate files in directory '%s'"
 msgstr ""
 
 #: ../src/os2/thread.cpp:528
 #, c-format
-msgid "Can not resume thread %lu"
+msgid "Cannot resume thread %lu"
 msgstr ""
 
 #: ../src/msw/thread.cpp:895
 #, c-format
-msgid "Can not resume thread %x"
+msgid "Cannot resume thread %x"
 msgstr ""
 
 #: ../src/msw/thread.cpp:548
-msgid "Can not start thread: error writing TLS."
+msgid "Cannot start thread: error writing TLS."
 msgstr ""
 
 #: ../src/os2/thread.cpp:514
 #, c-format
-msgid "Can not suspend thread %lu"
+msgid "Cannot suspend thread %lu"
 msgstr ""
 
 #: ../src/msw/thread.cpp:880
 #, c-format
-msgid "Can not suspend thread %x"
+msgid "Cannot suspend thread %x"
 msgstr ""
 
 #: ../src/msw/thread.cpp:803
-msgid "Can not wait for thread termination"
+msgid "Cannot wait for thread termination"
 msgstr ""
 
 #: ../src/common/cmdproc.cpp:266
@@ -5877,7 +5877,7 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1264
 msgid ""
-"Thread module initialization failed: can not store value in thread local "
+"Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 
@@ -6994,7 +6994,7 @@ msgstr ""
 
 #: ../src/common/intl.cpp:297
 #, c-format
-msgid "locale '%s' can not be set."
+msgid "locale '%s' cannot be set."
 msgstr ""
 
 #: ../src/common/datetimefmt.cpp:1917

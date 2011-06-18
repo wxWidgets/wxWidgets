@@ -33,7 +33,7 @@ enum wxOrientation
     */
     wxBOTH                    = wxVERTICAL | wxHORIZONTAL,
 
-    /// A synonim for @c wxBOTH.
+    /// A synonym for @c wxBOTH.
     wxORIENTATION_MASK        = wxBOTH
 };
 

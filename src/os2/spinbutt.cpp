@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        src/os2/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      David Webster
 // Modified by:

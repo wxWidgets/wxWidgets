@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.h
+// Name:        wx/gtk/minifram.h
 // Purpose:     wxMiniFrame class
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

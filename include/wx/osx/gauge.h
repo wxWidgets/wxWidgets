@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.h
+// Name:        wx/osx/gauge.h
 // Purpose:     wxGauge class
 // Author:      Stefan Csomor
 // Modified by:

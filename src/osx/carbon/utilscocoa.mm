@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/utils.mm
+// Name:        src/osx/carbon/utilscocoa.mm
 // Purpose:     various cocoa mixin utility functions
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: utilscocoa.mm 48805 2007-09-19 14:52:25Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -368,7 +368,7 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, c
 
 #if wxOSX_USE_COCOA
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(size))
 {
     wxCFStringRef cfname(name);
     wxCFRef<CGImageRef> image( wxOSXCreateCGImageFromNSImage([NSImage imageNamed:cfname.AsNSString()]) );
@@ -413,8 +413,7 @@ CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
     if (nsimage != nil)
     {
         NSSize imageSize = [nsimage size];
-        CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
-        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
+        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst); 
         NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];

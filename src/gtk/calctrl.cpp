@@ -142,6 +142,8 @@ bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
     g_signal_handlers_block_by_func(m_widget,
         (gpointer) gtk_day_selected_callback, this);
+    g_signal_handlers_block_by_func(m_widget,
+        (gpointer) gtk_month_changed_callback, this);
 
     m_selectedDate = date;
     int year = date.GetYear();
@@ -151,6 +153,8 @@ bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
     gtk_calendar_select_day(GTK_CALENDAR(m_widget), day);
 
     g_signal_handlers_unblock_by_func( m_widget,
+        (gpointer) gtk_month_changed_callback, this);
+    g_signal_handlers_unblock_by_func( m_widget,
         (gpointer) gtk_day_selected_callback, this);
 
     return true;
@@ -158,9 +162,22 @@ bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 
 wxDateTime wxGtkCalendarCtrl::GetDate() const
 {
-    guint year, month, day;
-    gtk_calendar_get_date(GTK_CALENDAR(m_widget), &year, &month, &day);
-    return wxDateTime(day, (wxDateTime::Month) month, year);
+    guint year, monthGTK, day;
+    gtk_calendar_get_date(GTK_CALENDAR(m_widget), &year, &monthGTK, &day);
+
+    // GTK may return an invalid date, this happens at least when switching the
+    // month (or the year in case of February in a leap year) and the new month
+    // has fewer days than the currently selected one making the currently
+    // selected day invalid, e.g. just choosing May 31 and going back a month
+    // results in the date being (non existent) April 31 when we're called from
+    // gtk_prev_month_callback(). We need to manually work around this to avoid
+    // asserts from wxDateTime ctor.
+    const wxDateTime::Month month = static_cast<wxDateTime::Month>(monthGTK);
+    const guint dayMax = wxDateTime::GetNumberOfDays(month, year);
+    if ( day > dayMax )
+        day = dayMax;
+
+    return wxDateTime(day, month, year);
 }
 
 void wxGtkCalendarCtrl::Mark(size_t day, bool mark)

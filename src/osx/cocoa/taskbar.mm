@@ -4,7 +4,7 @@
 // Author:      David Elliott, Stefan Csomor
 // Modified by:
 // Created:     2004/01/24
-// RCS-ID:      $Id: taskbar.mm 35650 2005-09-23 12:56:45Z MR $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott, Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
     virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) = 0;
     virtual bool RemoveIcon() = 0;
     
-    bool IsIconInstalled() const { return m_icon.Ok(); }
+    bool IsIconInstalled() const { return m_icon.IsOk(); }
         
     virtual bool PopupMenu(wxMenu *menu) = 0;
     virtual ~wxTaskBarIconImpl();
@@ -291,6 +291,8 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 @implementation wxNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
 - (NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
+    wxUnusedVar(sender);
+    
     return wxTaskBarIconDockImpl::OSXGetDockHMenu();
 }
 @end
@@ -303,6 +305,7 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 
 - (void) clickedAction: (id) sender
 {
+    wxUnusedVar(sender);
     wxMenu *menu = impl->CreatePopupMenu();
     if (menu)
     {

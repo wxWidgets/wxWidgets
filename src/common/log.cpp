@@ -676,16 +676,8 @@ void wxLog::TimeStamp(wxString *str)
 #if wxUSE_DATETIME
     if ( !ms_timestamp.empty() )
     {
-        wxChar buf[256];
-        time_t timeNow;
-        (void)time(&timeNow);
-
-        struct tm tm;
-        wxStrftime(buf, WXSIZEOF(buf),
-                    ms_timestamp, wxLocaltime_r(&timeNow, &tm));
-
-        str->Empty();
-        *str << buf << wxS(": ");
+        *str = wxDateTime::UNow().Format(ms_timestamp);
+        *str += wxS(": ");
     }
 #endif // wxUSE_DATETIME
 }

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/spinbutt.mm
+// Name:        src/cocoa/spinbutt.mm
 // Purpose:     wxSpinButton
 // Author:      David Elliott
 // Modified by:

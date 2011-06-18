@@ -107,7 +107,7 @@ private:
 class WXDLLIMPEXP_RICHTEXT wxRichTextPrintout : public wxPrintout
 {
 public:
-    wxRichTextPrintout(const wxString& title = wxT("Printout"));
+    wxRichTextPrintout(const wxString& title = _("Printout"));
     virtual ~wxRichTextPrintout();
 
     /// The buffer to print
@@ -161,7 +161,7 @@ private:
 class WXDLLIMPEXP_RICHTEXT wxRichTextPrinting : public wxObject
 {
 public:
-    wxRichTextPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = NULL);
+    wxRichTextPrinting(const wxString& name = _("Printing"), wxWindow *parentWindow = NULL);
     virtual ~wxRichTextPrinting();
 
     /// Preview the file or buffer

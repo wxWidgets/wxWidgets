@@ -586,6 +586,17 @@ Example:
 @endcode
 
 
+@subsubsection xrc_wxtogglebuttton wxBitmapToggleButton
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+     Label to display on the button (required).}
+@row3col{checked, @ref overview_xrcformat_type_bool,
+     Should the button be checked/pressed initially (default: 0)?}
+@endTable
+
+
 @subsubsection xrc_wxbutton wxButton
 
 @beginTable
@@ -1792,7 +1803,7 @@ wxWizardPageSimple classes. They both support the following properties
 @endTable
 
 wxWizardPageSimple pages are automatically chained together; wxWizardPage pages
-transitions must be handled programatically.
+transitions must be handled programmatically.
 
 
 @section overview_xrcformat_sizers Sizers

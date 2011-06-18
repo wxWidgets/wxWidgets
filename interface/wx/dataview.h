@@ -216,7 +216,7 @@ public:
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
-        of @a item or an invalid wxDataViewItem if the the root item is
+        of @a item or an invalid wxDataViewItem if the root item is
         the parent item.
     */
     virtual wxDataViewItem GetParent(const wxDataViewItem& item) const = 0;
@@ -231,7 +231,7 @@ public:
     /**
         Override this method to indicate if a container item merely acts as a
         headline (or for categorisation) or if it also acts a normal item with
-        entries for futher columns. By default returns @false.
+        entries for further columns. By default returns @false.
     */
     virtual bool HasContainerColumns(const wxDataViewItem& item) const;
 
@@ -1086,7 +1086,7 @@ public:
     void SetCurrentItem(const wxDataViewItem& item);
 
     /**
-        Sets the indendation.
+        Sets the indentation.
     */
     void SetIndent(int indent);
 
@@ -1094,6 +1094,14 @@ public:
         Sets the selection to the array of wxDataViewItems.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
+
+    /** 
+        Programmatically starts editing the given item on the given column.
+        Currently not implemented on wxOSX Carbon.
+        @since 2.9.2
+    */
+    
+    virtual void StartEditor(const wxDataViewItem & item, unsigned int column);
 
     /**
         Unselect the given item.
@@ -1105,6 +1113,26 @@ public:
         This method only has effect if multiple selections are allowed.
     */
     virtual void UnselectAll();
+
+    /**
+        Sets the row height.
+
+        This function can only be used when all rows have the same height, i.e.
+        when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
+
+        Currently this is implemented in the generic and native GTK versions
+        only and nothing is done (and @false returned) when using OS X port.
+
+        Also notice that this method can only be used to increase the row
+        height compared with the default one (as determined by the return value
+        of wxDataViewRenderer::GetSize()), if it is set to a too small value
+        then the minimum required by the renderers will be used.
+
+        @return @true if the line height was changed or @false otherwise.
+
+        @since 2.9.2
+    */
+    virtual bool SetRowHeight(int rowHeight);
 };
 
 
@@ -1590,9 +1618,9 @@ public:
         }
         @endcode
     */
-    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
-                                        wxRect labelRect,
-                                        const wxVariant& value);
+    virtual wxWindow* CreateEditorCtrl(wxWindow* parent,
+                                       wxRect labelRect,
+                                       const wxVariant& value);
 
     /**
         Return the attribute to be used for rendering.
@@ -1627,7 +1655,7 @@ public:
         }
         @endcode
     */
-    virtual bool GetValueFromEditorCtrl(wxControl* editor,
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor,
                                         wxVariant& value);
 
     /**
@@ -2054,7 +2082,7 @@ public:
     /**
          Sets the value in the store and update the control.
 
-         This method assumes that the a string is stored in respective
+         This method assumes that the string is stored in respective
          column.
     */
     void SetTextValue( const wxString &value, unsigned int row, unsigned int col );
@@ -2062,7 +2090,7 @@ public:
     /**
          Returns the value from the store.
 
-         This method assumes that the a string is stored in respective
+         This method assumes that the string is stored in respective
          column.
     */
     wxString GetTextValue( unsigned int row, unsigned int col ) const;
@@ -2070,7 +2098,7 @@ public:
     /**
          Sets the value in the store and update the control.
 
-         This method assumes that the a boolean value is stored in
+         This method assumes that the boolean value is stored in
          respective column.
     */
     void SetToggleValue( bool value, unsigned int row, unsigned int col );
@@ -2078,7 +2106,7 @@ public:
     /**
          Returns the value from the store.
 
-         This method assumes that the a boolean value is stored in
+         This method assumes that the boolean value is stored in
          respective column.
     */
     bool GetToggleValue( unsigned int row, unsigned int col ) const;
@@ -2393,23 +2421,23 @@ public:
     void DeleteAllItems();
 
     /**
-        Overriden from wxDataViewModel
+        Overridden from wxDataViewModel
     */
     virtual unsigned int GetColumnCount() const;
 
     /**
-        Overriden from wxDataViewModel
+        Overridden from wxDataViewModel
     */
     virtual wxString GetColumnType( unsigned int col ) const;
 
     /**
-        Overriden from wxDataViewIndexListModel
+        Overridden from wxDataViewIndexListModel
     */
     virtual void GetValueByRow( wxVariant &value,
                            unsigned int row, unsigned int col ) const;
 
     /**
-        Overriden from wxDataViewIndexListModel
+        Overridden from wxDataViewIndexListModel
     */
     virtual bool SetValueByRow( const wxVariant &value,
                            unsigned int row, unsigned int col );
@@ -2419,7 +2447,7 @@ public:
 /**
     @class wxDataViewTreeStore
 
-    wxDataViewTreeStore is a specialised wxDataViewModel for stroing simple
+    wxDataViewTreeStore is a specialised wxDataViewModel for storing simple
     trees very much like wxTreeCtrl does and it offers a similar API.
 
     This class actually stores the entire tree and the values (therefore its name)
@@ -2481,7 +2509,7 @@ public:
     int GetChildCount(const wxDataViewItem& parent) const;
 
     /**
-        Returns the client data asoociated with the item.
+        Returns the client data associated with the item.
     */
     wxClientData* GetItemData(const wxDataViewItem& item) const;
 
@@ -2678,7 +2706,7 @@ public:
     wxDataViewModel* GetModel() const;
 
     /**
-        Returns a the position of a context menu event in screen coordinates.
+        Returns the position of a context menu event in screen coordinates.
     */
     wxPoint GetPosition() const;
 

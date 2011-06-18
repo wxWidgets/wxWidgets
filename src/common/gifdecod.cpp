@@ -138,7 +138,7 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     image->Create(sz.GetWidth(), sz.GetHeight());
     image->SetType(wxBITMAP_TYPE_GIF);
 
-    if (!image->Ok())
+    if (!image->IsOk())
         return false;
 
     pal = GetPalette(frame);

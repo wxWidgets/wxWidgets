@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/valnumtext.cpp
+// Name:        src/common/valnum.cpp
 // Purpose:     Numeric validator classes implementation
 // Author:      Vadim Zeitlin based on the submission of Fulvio Senore
 // Created:     2010-11-06

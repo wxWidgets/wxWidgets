@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.h
+// Name:        wx/os2/statbmp.h
 // Purpose:     wxStaticBitmap class
 // Author:      David Webster
 // Modified by:
@@ -52,7 +52,7 @@ class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
     wxBitmap GetBitmap() const
       { wxASSERT( !m_bIsIcon ); return *(wxBitmap *)m_pImage; }
 
-    // overriden base class virtuals
+    // overridden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
     virtual MRESULT OS2WindowProc( WXUINT   uMsg
                                   ,WXWPARAM wParam

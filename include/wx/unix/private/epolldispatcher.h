@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/epolldispatcher.h
+// Name:        wx/unix/private/epolldispatcher.h
 // Purpose:     wxEpollDispatcher class
 // Authors:     Lukasz Michalski
 // Created:     April 2007

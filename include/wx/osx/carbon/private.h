@@ -279,7 +279,7 @@ enum {
 class WXDLLIMPEXP_CORE wxMacControl : public wxWidgetImpl
 {
 public :
-    wxMacControl( wxWindowMac* peer , bool isRootControl = false );
+    wxMacControl( wxWindowMac* peer , bool isRootControl = false, bool isUserPane = false );
     wxMacControl() ;
     virtual ~wxMacControl();
 

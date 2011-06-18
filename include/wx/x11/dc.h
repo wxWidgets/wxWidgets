@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/x11/dc.h
 // Purpose:     wxDC class
 // Author:      Julian Smart
 // Modified by:

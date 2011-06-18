@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.h
+// Name:        wx/mgl/dcclient.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$

@@ -116,7 +116,7 @@ public:
 
     // returns a wxString for the this accelerator.
     // this function formats it using the <flags>-<keycode> format
-    // where <flags> maybe a hyphen-separed list of "shift|alt|ctrl"
+    // where <flags> maybe a hyphen-separated list of "shift|alt|ctrl"
     wxString ToString() const;
 
     // returns true if the given string correctly initialized this object

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_spin.cpp
+// Name:        src/xrc/xh_spin.cpp
 // Purpose:     XRC resource for wxSpinButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21

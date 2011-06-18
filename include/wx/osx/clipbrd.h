@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.h
+// Name:        wx/osx/clipbrd.h
 // Purpose:     Clipboard functionality.
 // Author:      Stefan Csomor
 // Modified by:

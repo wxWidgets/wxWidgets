@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: glcanvas.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
         return false;
 */
 #if USE_SEPARATE_VIEW
-    m_macIsUserPane = false ;
+    DontCreatePeer();
 #endif
 
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
@@ -397,7 +397,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
             [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, 
             kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
             
-    m_peer = new wxWidgetIPhoneImpl( this, v );
+    SetPeer(new wxWidgetIPhoneImpl( this, v ));
 
     MacPostControlCreate(pos, size) ;
 #endif
@@ -415,7 +415,7 @@ bool wxGLCanvas::SwapBuffers()
     WXGLContext context = WXGLGetCurrentContext();
     wxCHECK_MSG(context, false, wxT("should have current context"));
 
-    wxUICustomOpenGLView* v = (wxUICustomOpenGLView*) m_peer->GetWXWidget();
+    wxUICustomOpenGLView* v = (wxUICustomOpenGLView*) GetPeer()->GetWXWidget();
     [v swapBuffers];
     return true;
 }

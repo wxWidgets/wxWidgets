@@ -218,7 +218,7 @@ public:
 
 #if wxUSE_TOOLTIPS
     // applies tooltip to the widget (tip must be UTF-8 encoded)
-    virtual void GTKApplyToolTip( GtkTooltips *tips, const gchar *tip );
+    virtual void GTKApplyToolTip(const char* tip);
 #endif // wxUSE_TOOLTIPS
 
     // Called when a window should delay showing itself

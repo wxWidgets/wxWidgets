@@ -3,7 +3,7 @@
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
-// RCS-ID:      $Id: print.h,v 1 2007-08-25 05:44:44 PC Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Anthony Bretaudeau
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ public:
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
     void SetResolution(int ppi);
 
-    // overriden for wxPrinterDC Impl
+    // overridden for wxPrinterDC Impl
     virtual int GetResolution() const;
     virtual wxRect GetPaperRect() const;
 

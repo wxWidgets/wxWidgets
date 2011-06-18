@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/richtext/richeditfontpage.h
+// Name:        wx/richtext/richtextfontpage.h
 // Purpose:     Font page for wxRichTextFormattingDialog
 // Author:      Julian Smart
 // Modified by:

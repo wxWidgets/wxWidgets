@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/corefoundation/utilsexc_base.cpp
+// Name:        src/osx/core/utilsexc_base.cpp
 // Purpose:     wxMacLaunch
 // Author:      Ryan Norton
 // Modified by:
@@ -60,7 +60,7 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
     return false;
 }
 
-#if !wxUSE_GUI || wxOSX_USE_COCOA_OR_CARBON
+#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 // have a fast version for mac code that returns the version as a return value
 

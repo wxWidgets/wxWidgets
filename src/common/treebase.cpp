@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treebase.cpp
+// Name:        src/common/treebase.cpp
 // Purpose:     Base wxTreeCtrl classes
 // Author:      Julian Smart
 // Created:     01/02/97

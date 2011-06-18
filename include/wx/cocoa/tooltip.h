@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/tooltip.h
+// Name:        wx/cocoa/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Ryan Norton
 // Modified by:

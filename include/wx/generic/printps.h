@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printps.h
+// Name:        wx/generic/printps.h
 // Purpose:     wxPostScriptPrinter, wxPostScriptPrintPreview
 //              wxGenericPageSetupDialog
 // Author:      Julian Smart

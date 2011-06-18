@@ -855,7 +855,7 @@ void wxMacDataItemBrowserControl::InsertColumn(int col, DataBrowserPropertyType 
     // TODO: Why is m_font not defined when we enter wxLC_LIST mode, but is
     // defined for other modes?
     wxFontEncoding enc;
-    if ( m_font.Ok() )
+    if ( m_font.IsOk() )
         enc = m_font.GetEncoding();
     else
         enc = wxLocale::GetSystemEncoding();

@@ -226,6 +226,7 @@ BENCH_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  &
 	$(OBJS)\bench_bench.obj &
+	$(OBJS)\bench_datetime.obj &
 	$(OBJS)\bench_htmlpars.obj &
 	$(OBJS)\bench_htmltag.obj &
 	$(OBJS)\bench_ipcclient.obj &
@@ -268,6 +269,9 @@ data : .SYMBOLIC
 	for %f in (htmltest.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\bench_bench.obj :  .AUTODEPEND .\bench.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_datetime.obj :  .AUTODEPEND .\datetime.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_htmlpars.obj :  .AUTODEPEND .\htmlparser\htmlpars.cpp

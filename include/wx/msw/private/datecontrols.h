@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/private/datecontrols.h
+// Name:        wx/msw/private/datecontrols.h
 // Purpose:     implementation helpers for wxDatePickerCtrl and wxCalendarCtrl
 // Author:      Vadim Zeitlin
 // Created:     2008-04-04

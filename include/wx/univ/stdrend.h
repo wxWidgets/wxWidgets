@@ -322,7 +322,7 @@ protected:
     // return the frame icon bitmap
     virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type) = 0;
 
-    // get the width of either normal or resizeable frame border depending on
+    // get the width of either normal or resizable frame border depending on
     // whether flags contains wxTOPLEVEL_RESIZEABLE bit
     //
     // notice that these methods only make sense with standard border drawing

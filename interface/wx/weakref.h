@@ -18,7 +18,7 @@
     is to handle objects which derived type one does not know.
 
     @note wxWeakRef<T> selects an implementation based on the static type of T.
-          If T does not have wxTrackable statically, it defaults to to a mixed-
+          If T does not have wxTrackable statically, it defaults to a mixed-
           mode operation, where it uses @c dynamic_cast as the last measure
           (if available from the compiler and enabled when building wxWidgets).
 

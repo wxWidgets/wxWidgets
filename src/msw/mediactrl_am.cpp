@@ -1823,8 +1823,8 @@ void wxAMMediaBackend::FinishLoad()
 bool wxAMMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 {
     // Note that IMediaPlayer doesn't have a statusbar by
-    // default but IActiveMovie does - so lets try to keep
-    // the interface consistant
+    // default but IActiveMovie does - so let's try to keep
+    // the interface consistent.
     if(!flags)
     {
         GetAM()->put_Enabled(VARIANT_FALSE);
@@ -2020,7 +2020,7 @@ wxLongLong wxAMMediaBackend::GetDuration()
 
         case S_OK:
             // outDuration is in seconds, we need milliseconds
-            return outDuration * 1000;
+            return static_cast<wxLongLong>(outDuration * 1000);
     }
 }
 

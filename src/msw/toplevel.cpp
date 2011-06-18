@@ -403,7 +403,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         if ( winTop )
         {
             wxIcon icon = winTop->GetIcon();
-            if ( icon.Ok() )
+            if ( icon.IsOk() )
             {
                 ::SendMessage(GetHwnd(), WM_SETICON,
                               (WPARAM)TRUE,
@@ -496,8 +496,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
     {
         // we have different dialog templates to allows creation of dialogs
-        // with & without captions under MSWindows, resizeable or not (but a
-        // resizeable dialog always has caption - otherwise it would look too
+        // with & without captions under MSWindows, resizable or not (but a
+        // resizable dialog always has caption - otherwise it would look too
         // strange)
 
         // we need 3 additional WORDs for dialog menu, class and title (as we
@@ -1014,6 +1014,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
 
         // finally send an event allowing the window to relayout itself &c
         wxSizeEvent event(rect.GetSize(), GetId());
+        event.SetEventObject(this);
         HandleWindowEvent(event);
     }
     else // stop showing full screen

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        config.h
+// Name:        wx/config.h
 // Purpose:     wxConfig base header
 // Author:      Julian Smart
 // Modified by:

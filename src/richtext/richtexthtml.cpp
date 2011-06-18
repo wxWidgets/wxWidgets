@@ -488,9 +488,9 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
     if (GetFlags() & wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY)
     {
 #if 0
-        if (!image->GetImage().Ok() && image->GetImageBlock().GetData())
+        if (!image->GetImage().IsOk() && image->GetImageBlock().GetData())
             image->LoadFromBlock();
-        if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
+        if (image->GetImage().IsOk() && !image->GetImageBlock().GetData())
             image->MakeBlock();
 #endif
 
@@ -517,13 +517,13 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
     else if (GetFlags() & wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_FILES)
     {
 #if 0
-        if (!image->GetImage().Ok() && image->GetImageBlock().GetData())
+        if (!image->GetImage().IsOk() && image->GetImageBlock().GetData())
             image->LoadFromBlock();
-        if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
+        if (image->GetImage().IsOk() && !image->GetImageBlock().GetData())
             image->MakeBlock();
 #endif
 
-        if (image->GetImageBlock().Ok())
+        if (image->GetImageBlock().IsOk())
         {
             wxString tempDir(GetTempDir());
             if (tempDir.IsEmpty())
@@ -549,10 +549,10 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
         str << GetMimeType(image->GetImageBlock().GetImageType());
         str << wxT(";base64,");
 #if 0
-        if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
+        if (image->GetImage().IsOk() && !image->GetImageBlock().GetData())
             image->MakeBlock();
 #endif
-        if (image->GetImageBlock().Ok())
+        if (image->GetImageBlock().IsOk())
         {
             wxChar* data = b64enc( image->GetImageBlock().GetData(), image->GetImageBlock().GetDataSize() );
             str << data;

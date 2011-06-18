@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        ScintillaWX.cxx
+// Name:        src/stc/ScintillaWX.cpp
 // Purpose:     A wxWidgets implementation of Scintilla.  A class derived
 //              from ScintillaBase that uses the "wx platform" defined in
 //              PlatformWX.cxx  This class is one end of a bridge between
@@ -33,6 +33,12 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+
+#if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
+    #include "wx/beforestd.h"
+    #include <string>
+    #include "wx/afterstd.h"
+#endif
 
 #include "ScintillaWX.h"
 #include "ExternalLexer.h"

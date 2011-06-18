@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/utils.cpp
+// Name:        src/cocoa/utils.mm
 // Purpose:     Various utilities
 // Author:      David Elliott
 // Created:     2003/??/??

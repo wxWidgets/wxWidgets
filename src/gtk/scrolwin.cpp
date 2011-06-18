@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/scrolwin.cpp
+// Name:        src/gtk/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Robert Roebling
 // Modified by: Ron Lee
@@ -20,6 +20,7 @@
 #include "wx/scrolwin.h"
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // wxScrollHelper implementation
@@ -30,12 +31,15 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
-    m_win->m_scrollPos[wxWindow::ScrollDir_Horz] =
-    m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value = xPos;
-    m_win->m_scrollPos[wxWindow::ScrollDir_Vert] =
-    m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value = yPos;
     base_type::SetScrollbars(
         pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, noRefresh);
+
+    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz], m_xScrollPosition);
+    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert], m_yScrollPosition);
+    m_win->m_scrollPos[wxWindow::ScrollDir_Horz] =
+        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz]);
+    m_win->m_scrollPos[wxWindow::ScrollDir_Vert] =
+        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert]);
 }
 
 void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
@@ -68,10 +72,8 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
         *linesPerPage = 0;
     }
 
-    GtkAdjustment* adj = range->adjustment;
-    adj->step_increment = 1;
-    adj->page_increment =
-    adj->page_size = page_size;
+    gtk_range_set_increments(range, 1, page_size);
+    gtk_adjustment_set_page_size(gtk_range_get_adjustment(range), page_size);
     gtk_range_set_range(range, 0, upper);
 
     // ensure that the scroll position is always in valid range

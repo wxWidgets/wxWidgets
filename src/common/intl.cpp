@@ -293,7 +293,7 @@ bool wxLocale::DoInit(const wxString& name,
 
     if ( m_pszOldLocale == NULL )
     {
-        wxLogError(_("locale '%s' can not be set."), szLocale);
+        wxLogError(_("locale '%s' cannot be set."), szLocale);
     }
 
     // the short name will be used to look for catalog files as well,
@@ -1045,16 +1045,21 @@ bool wxLocale::IsAvailable(int lang)
 #elif defined(__UNIX__)
 
     // Test if setting the locale works, then set it back.
-    const char *oldLocale = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
-    if ( !oldLocale )
-    {
-        // Some C libraries don't like xx_YY form and require xx only
-        oldLocale = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
-        if ( !oldLocale )
-            return false;
-    }
+    char * const oldLocale = wxStrdupA(setlocale(LC_ALL, NULL));
+
+    // Some platforms don't like xx_YY form and require xx only so test for
+    // it too.
+    const bool
+        available = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName) ||
+                    wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
+
     // restore the original locale
     wxSetlocale(LC_ALL, oldLocale);
+
+    free(oldLocale);
+
+    if ( !available )
+        return false;
 #endif
 
     return true;

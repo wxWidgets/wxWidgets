@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/calctrlcmn.cpp
+// Name:        src/common/calctrlcmn.cpp
 // Author:      Marcin Wojdyr
 // Created:     2008-03-26
 // RCS-ID:      $Id$

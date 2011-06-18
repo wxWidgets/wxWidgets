@@ -379,6 +379,7 @@ public:
     void Rearrange(wxCommandEvent& event);
 
 #if wxUSE_TEXTDLG
+    void LineEntry(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
     void PasswordEntry(wxCommandEvent& event);
 #endif // wxUSE_TEXTDLG
@@ -534,6 +535,7 @@ enum
     DIALOGS_SINGLE_CHOICE,
     DIALOGS_MULTI_CHOICE,
     DIALOGS_REARRANGE,
+    DIALOGS_LINE_ENTRY,
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
     DIALOGS_FILE_OPEN,

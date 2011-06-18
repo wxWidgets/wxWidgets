@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.cpp
+// Name:        src/gtk/statbmp.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -47,7 +47,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     m_widget = gtk_image_new();
     g_object_ref(m_widget);
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         SetBitmap(bitmap);
 
     PostCreation(size);
@@ -60,7 +60,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 {
     m_bitmap = bitmap;
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         // always use pixbuf, because pixmap mask does not
         // work with disabled images in some themes

@@ -61,7 +61,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION( PointTestCase );
 CPPUNIT_TEST_SUITE_REGISTRATION( RealPointTestCase );
 
-// also include in it's own registry so that these tests can be run alone
+// also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( PointTestCase, "PointTestCase" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RealPointTestCase, "RealPointTestCase" );
 

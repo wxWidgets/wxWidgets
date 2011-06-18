@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/bmpbutton.h
+// Name:        wx/bmpbuttn.h
 // Purpose:     wxBitmapButton class interface
 // Author:      Vadim Zeitlin
 // Modified by:

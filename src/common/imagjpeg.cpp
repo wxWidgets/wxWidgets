@@ -257,7 +257,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
       }
       (cinfo.src->term_source)(&cinfo);
       jpeg_destroy_decompress(&cinfo);
-      if (image->Ok()) image->Destroy();
+      if (image->IsOk()) image->Destroy();
       return false;
     }
 
@@ -291,7 +291,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     jpeg_start_decompress( &cinfo );
 
     image->Create( cinfo.output_width, cinfo.output_height );
-    if (!image->Ok()) {
+    if (!image->IsOk()) {
         jpeg_finish_decompress( &cinfo );
         jpeg_destroy_decompress( &cinfo );
         return false;

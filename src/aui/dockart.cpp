@@ -43,6 +43,11 @@
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/renderer.h"
+#if GTK_CHECK_VERSION(2,0,0)
+   #include "wx/gtk/private/gtk2-compat.h"
+#else
+   #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
+#endif
 #endif
 
 
@@ -410,11 +415,11 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     if (!window) return;
     if (!window->m_wxwindow) return;
-    if (!GTK_WIDGET_DRAWABLE(window->m_wxwindow)) return;
+    if (!gtk_widget_is_drawable(window->m_wxwindow)) return;
 
     gtk_paint_handle
     (
-        window->m_wxwindow->style,
+        gtk_widget_get_style(window->m_wxwindow),
         window->GTKGetDrawingWindow(),
         // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_STATE_NORMAL,
