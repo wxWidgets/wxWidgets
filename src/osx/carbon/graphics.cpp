@@ -1804,7 +1804,11 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             quality = kCGInterpolationLow;
             break;
         case wxINTERPOLATION_GOOD:
+#if wxOSX_USE_COCOA_OR_CARBON
             quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+#else
+            quality = kCGInterpolationMedium;
+#endif
             break;
         case wxINTERPOLATION_BEST:
             quality = kCGInterpolationHigh;
