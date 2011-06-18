@@ -86,7 +86,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    return wxSize();
+    return sizePage;
 }
 
 int wxNotebook::SetSelection(size_t n)
@@ -105,8 +105,6 @@ int wxNotebook::GetSelection() const
 
 int wxNotebook::ChangeSelection(size_t n)
 {
-    wxMISSING_FUNCTION();
-
     return SetSelection( n );
 }
 

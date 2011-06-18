@@ -37,10 +37,11 @@ bool wxStaticText::Create(wxWindow *parent,
 {
     m_qtLabel = new QLabel( wxQtConvertString( label ), parent->GetHandle() );
 
-    // QLabel will only draw the shortcut/mnemonic key when it has a 'buddy', but
-    // wxStaticText has no concept of a buddy, so we set it to itself:
+    // Set the buddy to itself to get the mnemonic key but ensure that we don't have
+    // any unwanted side effects, so disable the interaction:
 
     m_qtLabel->setBuddy( m_qtLabel );
+    m_qtLabel->setTextInteractionFlags( Qt::NoTextInteraction );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }

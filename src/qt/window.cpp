@@ -72,25 +72,29 @@ static wxWindow *s_capturedWindow = NULL;
     return window;
 }
 
+#define Init() \
+    m_horzScrollBar = NULL; \
+    m_vertScrollBar = NULL; \
+    \
+    m_qtPicture = new QPicture(); \
+    m_qtPaintBuffer = NULL; \
+    \
+    m_mouseInside = false; \
+    \
+    m_qtShortcutHandler = new wxQtShortcutHandler( this ); \
+    m_processingShortcut = false
 
 wxWindow::wxWindow()
 {
-    m_horzScrollBar = NULL;
-    m_vertScrollBar = NULL;
-
-    m_qtPicture = new QPicture();
-    m_qtPaintBuffer = NULL;
-
-    m_mouseInside = false;
-
-    m_qtShortcutHandler = new wxQtShortcutHandler( this );
-    m_processingShortcut = false;
+    Init();
 }
 
 
 wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
     long style, const wxString& name)
 {
+    Init();
+
     Create( parent, id, pos, size, style, name );
 }
 
@@ -581,17 +585,21 @@ wxWindow *wxWindowBase::GetCapture()
 
 void wxWindow::DoGetPosition(int *x, int *y) const
 {
-    QPoint position = GetHandle()->pos();
-    *x = position.x();
-    *y = position.y();
+    QWidget *qtWidget = GetHandle();
+    *x = qtWidget->x();
+    *y = qtWidget->y();
 }
 
 
 void wxWindow::DoGetSize(int *width, int *height) const
 {
     QSize size = GetHandle()->frameSize();
-    *width = size.width();
-    *height = size.height();
+    QRect rect = GetHandle()->frameGeometry();
+    wxASSERT( size.width() == rect.width() );
+    wxASSERT( size.height() == rect.height() );
+
+    *width = rect.width();
+    *height = rect.height();
 }
 
     
