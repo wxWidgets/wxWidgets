@@ -244,7 +244,6 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
-#endif // wxUSE_MARKUP
 
 GtkLabel *wxButton::GTKGetLabel() const
 {
@@ -256,9 +255,8 @@ GtkLabel *wxButton::GTKGetLabel() const
         GList* list = gtk_container_get_children(GTK_CONTAINER(box));
         for (GList* item = list; item; item = item->next)
         {
-            GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
-            if ( GTK_IS_LABEL(boxChild->widget) )
-                label = GTK_LABEL(boxChild->widget);
+            if (GTK_IS_LABEL(item->data))
+                label = GTK_LABEL(item->data);
         }
         g_list_free(list);
 
@@ -267,6 +265,7 @@ GtkLabel *wxButton::GTKGetLabel() const
 
     return GTK_LABEL(child);
 }
+#endif // wxUSE_MARKUP
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
@@ -284,8 +283,7 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
             GList* list = gtk_container_get_children(GTK_CONTAINER(box));
             for (GList* item = list; item; item = item->next)
             {
-                GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
-                gtk_widget_modify_style(boxChild->widget, style);
+                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
             }
             g_list_free(list);
         }
