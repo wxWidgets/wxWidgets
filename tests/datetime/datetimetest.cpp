@@ -22,18 +22,9 @@
 
 #if wxUSE_DATETIME
 
-#include "wx/datetime.h"
 #include "wx/wxcrt.h"       // for wxStrstr()
 
-// need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
-static std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
-{
-    ostr << dt.FormatISOCombined(' ');
-
-    return ostr;
-}
-
-WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxDateTime::wxDateTime_t)
+#include "testdate.h"
 
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
