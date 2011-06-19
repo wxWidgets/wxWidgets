@@ -390,6 +390,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_choicebooktest.obj &
 	$(OBJS)\test_gui_choicetest.obj &
 	$(OBJS)\test_gui_comboboxtest.obj &
+	$(OBJS)\test_gui_datepickerctrltest.obj &
 	$(OBJS)\test_gui_frametest.obj &
 	$(OBJS)\test_gui_gaugetest.obj &
 	$(OBJS)\test_gui_gridtest.obj &
@@ -817,6 +818,9 @@ $(OBJS)\test_gui_choicetest.obj :  .AUTODEPEND .\controls\choicetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_comboboxtest.obj :  .AUTODEPEND .\controls\comboboxtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_datepickerctrltest.obj :  .AUTODEPEND .\controls\datepickerctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_frametest.obj :  .AUTODEPEND .\controls\frametest.cpp

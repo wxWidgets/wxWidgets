@@ -900,6 +900,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\datepickerctrltest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dummy.cpp"
 				>
 				<FileConfiguration

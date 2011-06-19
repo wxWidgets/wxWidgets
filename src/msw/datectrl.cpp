@@ -193,7 +193,19 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
                                  dt.IsValid() ? GDT_VALID : GDT_NONE,
                                  &st) )
     {
-        wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
+        // Attempts to set the date outside of the valid range should fail so
+        // there is nothing unexpected if they do but still log a message if we
+        // failed for some other reason.
+        wxDateTime dtStart, dtEnd;
+        GetRange(&dtStart, &dtEnd);
+        if ( (!dtStart.IsValid() || dt >= dtStart) &&
+                (!dtEnd.IsValid() || dt <= dtEnd) )
+        {
+            wxLogDebug(wxT("DateTime_SetSystemtime() unexpectedly failed"));
+        }
+
+        // In any case, skip updating m_date below.
+        return;
     }
 
     // we need to keep only the date part, times don't make sense for this
