@@ -517,6 +517,7 @@ GTK:
 - wxTLW generates wxEVT_MAXIMIZE.
 - Fix copying clipboard data to primary selection (David Hart).
 - Implement wxGraphicsContext::GetSize() (Marcin Wojdyr).
+- Implement wxCalendarCtrl::SetDateRange() for the native control.
 
 MSW:
 

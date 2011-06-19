@@ -424,7 +424,9 @@ public:
     /**
         Sets the current date.
 
-        The @a date parameter must be valid.
+        The @a date parameter must be valid and in the currently valid range as
+        set by SetDateRange(), otherwise the current date is not changed and
+        the function returns @false.
     */
     virtual bool SetDate(const wxDateTime& date);
 
@@ -476,14 +478,12 @@ public:
 
     /**
         @name Date Range Functions
-
-        The functions in this section are currently implemented in the generic
-        and MSW versions and do nothing in the native GTK implementation.
      */
     //@{
 
     /**
-        Restrict the dates shown by the control to the specified range.
+        Restrict the dates that can be selected in the control to the specified
+        range.
 
         If either date is set, the corresponding limit will be enforced and
         @true returned. If none are set, the existing restrictions are removed
