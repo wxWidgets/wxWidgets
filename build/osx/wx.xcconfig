@@ -7,6 +7,7 @@ PRODUCT_NAME = wx_osx_$(WXTOOLKIT)
 
 // USER_HEADER_SEARCH_PATHS = ${SYMROOT}/include ../include osx/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src
 
+OTHER_CFLAGS = -fno-strict-aliasing -fno-common
 
 GCC_PREFIX_HEADER = $(WXROOT)/include/wx/wxprec.h
 GCC_PRECOMPILE_PREFIX_HEADER = YES
