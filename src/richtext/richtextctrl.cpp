@@ -568,12 +568,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
         // For now, don't handle shift-click when we're selecting multiple objects.
         if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
-        {
-            if (!m_selection.IsValid())
-                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-            else
-                ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-        }
+            ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
         else
             SelectNone();
     }
