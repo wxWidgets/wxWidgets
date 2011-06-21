@@ -533,12 +533,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
         SetDefaultStyleToCursorStyle();
 
         if (event.ShiftDown())
-        {
-            if (m_selectionRange.GetStart() == -2)
-                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-            else
-                ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-        }
+            ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
         else
             SelectNone();
     }
