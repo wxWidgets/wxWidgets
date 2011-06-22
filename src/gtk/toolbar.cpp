@@ -199,12 +199,25 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
     gtk_widget_get_allocation(widget, &alloc);
     GtkRequisition req;
     gtk_widget_get_requisition(widget, &req);
+#ifdef __WXGTK30__
+    cairo_t* cr = gdk_cairo_create(gtk_widget_get_window(widget));
+
+    gdk_cairo_set_source_pixbuf(
+        cr, 
+        bitmap.GetPixbuf(),
+        alloc.x + (alloc.width - req.width) / 2,
+        alloc.y + (alloc.height - req.height) / 2);
+
+    cairo_paint(cr);
+    cairo_destroy(cr);
+#else
     gdk_draw_pixbuf(
         gtk_widget_get_window(widget), gtk_widget_get_style(widget)->black_gc, bitmap.GetPixbuf(),
         0, 0,
         alloc.x + (alloc.width - req.width) / 2,
         alloc.y + (alloc.height - req.height) / 2,
         -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
+#endif
     return true;
 }
 }
@@ -357,7 +370,11 @@ wxToolBar::~wxToolBar()
 {
     if (m_tooltips) // always NULL if GTK >= 2.12
     {
+#ifdef __WXGTK30__
+        gtk_widget_destroy(GTK_WIDGET(m_tooltips));
+#else
         gtk_object_destroy(GTK_OBJECT(m_tooltips));
+#endif
         g_object_unref(m_tooltips);
     }
 }
@@ -625,7 +642,11 @@ bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase* toolBase)
         GtkWidget* widget = tool->GetControl()->m_widget;
         gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(widget)), widget);
     }
+#ifdef __WXGTK30__
+    gtk_widget_destroy(GTK_WIDGET(tool->m_item));
+#else
     gtk_object_destroy(GTK_OBJECT(tool->m_item));
+#endif
     tool->m_item = NULL;
 
     InvalidateBestSize();

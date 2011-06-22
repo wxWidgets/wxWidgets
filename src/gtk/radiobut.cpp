@@ -159,7 +159,11 @@ void wxRadioButton::DoApplyWidgetStyle(GtkRcStyle *style)
 GdkWindow *
 wxRadioButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
+#else
     return GTK_BUTTON(m_widget)->event_window;
+#endif
 }
 
 // static

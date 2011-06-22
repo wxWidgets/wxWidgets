@@ -73,7 +73,11 @@ void wxBell()
 
 void *wxGetDisplay()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    return gdk_display_get_default();
+#else
     return GDK_DISPLAY();
+#endif
 }
 
 void wxDisplaySize( int *width, int *height )
@@ -100,7 +104,12 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gtk_widget_get_visual(wxGetRootWindow())->depth;
+    GdkVisual* vis = gtk_widget_get_visual(wxGetRootWindow()); 
+#if GTK_CHECK_VERSION(3,0,0)
+    return gdk_visual_get_depth(vis);
+#else
+    return vis->depth;
+#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -281,7 +290,20 @@ wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 #if wxUSE_INTL
 void wxGUIAppTraits::SetLocale()
 {
+#ifdef __WXGTK20__ 
+    /*
+        Copied from gtk+ documentation:
+        Initializes internationalization support for GTK+. gtk_init() automatically
+        does this, so there is typically no point in calling this function.
+
+        If you are calling this function because you changed the locale after GTK+ is
+        was initialized, then calling this function may help a bit. (Note, however,
+        that changing the locale after GTK+ is initialized may produce inconsistent
+        results and is not really supported.)
+    */
     gtk_set_locale();
+#endif
+
     wxUpdateLocaleIsUtf8();
 }
 #endif

@@ -88,7 +88,12 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     wxASSERT_MSG(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
     XWMHints *wm_hints;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDisplay *display = gtk_widget_get_display(GTK_WIDGET(win));
+    wm_hints = XGetWMHints(gdk_x11_display_get_xdisplay(display), gdk_x11_window_get_xid(window));
+#else
     wm_hints = XGetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window));
+#endif
 
     if (!wm_hints)
         wm_hints = XAllocWMHints();
@@ -98,7 +103,12 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     else
         wm_hints->flags &= ~XUrgencyHint;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    XSetWMHints(gdk_x11_display_get_xdisplay(display), gdk_x11_window_get_xid(window), wm_hints);
+#else
     XSetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window), wm_hints);
+#endif
+
     XFree(wm_hints);
 }
 
@@ -407,18 +417,35 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDisplay *display = gdk_window_get_display(window);
+    Atom xproperty = gdk_x11_atom_to_xatom_for_display(display, property);
+#else
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(
                         gdk_drawable_get_display(window), property);
+#endif
+
     Atom type;
     int format;
     gulong nitems, bytes_after;
     guchar* data;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    Status status = XGetWindowProperty(
+        gdk_x11_display_get_xdisplay(display),
+        gdk_x11_window_get_xid(window),
+        xproperty,
+        0, 4, false, XA_CARDINAL,
+        &type, &format, &nitems, &bytes_after, &data);
+#else
     Status status = XGetWindowProperty(
         gdk_x11_drawable_get_xdisplay(window),
         gdk_x11_drawable_get_xid(window),
         xproperty,
         0, 4, false, XA_CARDINAL,
         &type, &format, &nitems, &bytes_after, &data);
+#endif
+
     const bool success = status == Success && data && nitems == 4;
     if (success)
     {
@@ -800,15 +827,26 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_set_functions(window, (GdkWMFunction)0);
 
             gdk_window_get_origin(window, &root_x, &root_y);
+        #if GTK_CHECK_VERSION(3,0,0)
+            gdk_window_get_geometry(window, &client_x, &client_y, &width, &height);
+        #else
             gdk_window_get_geometry(window, &client_x, &client_y, &width, &height, NULL);
+        #endif
 
             gdk_window_move_resize(
                 window, -client_x, -client_y, screen_width + 1, screen_height + 1);
 
+        #if GTK_CHECK_VERSION(3,0,0)
             wxSetFullScreenStateX11((WXDisplay*)gdk_display_get_default(),
+                                    (WXWindow)GDK_ROOT_WINDOW(),
+                                    (WXWindow)gdk_x11_window_get_xid(window),
+                                    show, &m_fsSaveFrame, method);
+        #else
+            wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
                                     (WXWindow)GDK_WINDOW_XWINDOW(window),
                                     show, &m_fsSaveFrame, method);
+        #endif
         }
         else // hide
         {
@@ -817,10 +855,17 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
             gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
+        #if GTK_CHECK_VERSION(3,0,0)
+            wxSetFullScreenStateX11((WXDisplay*)gdk_display_get_default(),
+                                    (WXWindow)GDK_ROOT_WINDOW(),
+                                    (WXWindow)gdk_x11_window_get_xid(window),
+                                    show, &m_fsSaveFrame, method);
+        #else
             wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
                                     (WXWindow)GDK_WINDOW_XWINDOW(window),
                                     show, &m_fsSaveFrame, method);
+        #endif
 
             SetSize(m_fsSaveFrame.x, m_fsSaveFrame.y,
                     m_fsSaveFrame.width, m_fsSaveFrame.height);
@@ -916,12 +961,23 @@ bool wxTopLevelWindowGTK::Show( bool show )
         memset(&xevent, 0, sizeof(xevent));
         xevent.type = ClientMessage;
         GdkWindow* window = gtk_widget_get_window(m_widget);
+
+#if GTK_CHECK_VERSION(3,0,0)
+        xevent.window = gdk_x11_window_get_xid(window);
+        xevent.message_type = gdk_x11_atom_to_xatom_for_display(
+            gdk_window_get_display(window),
+            gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false));
+        xevent.format = 32;
+        GdkDisplay *disp = gdk_window_get_display(window);
+        Display* display = gdk_x11_display_get_xdisplay(disp);
+#else
         xevent.window = gdk_x11_drawable_get_xid(window);
         xevent.message_type = gdk_x11_atom_to_xatom_for_display(
             gdk_drawable_get_display(window),
             gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false));
         xevent.format = 32;
         Display* display = gdk_x11_drawable_get_xdisplay(window);
+#endif
         XSendEvent(display, DefaultRootWindow(display), false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             (XEvent*)&xevent);
@@ -1328,7 +1384,9 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
     {
         if (region.IsEmpty())
         {
+#if !GTK_CHECK_VERSION(3,0,0)
             gdk_window_shape_combine_mask(window, NULL, 0, 0);
+#endif
         }
         else
         {

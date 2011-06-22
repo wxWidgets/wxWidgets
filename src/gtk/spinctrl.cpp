@@ -325,10 +325,16 @@ void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
 
 GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
+#ifdef __WXGTK__
+    // JC: FIXME
+    // panel and entry.text_area are not available in gtk3. 
+    windows.push_back(gtk_widget_get_window(m_widget));
+#else
     GtkSpinButton* spinbutton = GTK_SPIN_BUTTON(m_widget);
 
     windows.push_back(spinbutton->entry.text_area);
     windows.push_back(spinbutton->panel);
+#endif
 
     return NULL;
 }

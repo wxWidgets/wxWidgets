@@ -432,8 +432,14 @@ void wxListBox::Update()
 {
     wxWindow::Update();
 
-    if (m_treeview)
-        gdk_window_process_updates(gtk_widget_get_window(GTK_WIDGET(m_treeview)), true);
+    if (m_treeview) 
+    {
+#ifdef __WXGTK30__
+        gdk_window_process_updates(gtk_widget_get_window(GTK_WIDGET(m_treeview)), TRUE);
+#else
+        gdk_window_process_updates(GTK_WIDGET(m_treeview)->window, TRUE);
+#endif
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -773,8 +779,14 @@ void wxListBox::DoScrollToCell(int n, float alignY, float alignX)
     wxCHECK_RET( IsValid(n), wxT("invalid index"));
 
     //RN: I have no idea why this line is needed...
+#ifdef __WXGTK30__
     if (gdk_pointer_is_grabbed () && gtk_widget_has_grab(GTK_WIDGET(m_treeview)))
+#else
+    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_treeview))
+#endif
+    {
         return;
+    }
 
     GtkTreeIter iter;
     if ( !GTKGetIteratorFor(n, &iter) )
@@ -813,8 +825,13 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 
     // need to translate from master window since it is in client coords
     gint binx, biny;
+#ifdef __WXGTK30__
+    gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview),
+                            &binx, &biny, NULL, NULL);
+#else
     gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview),
                             &binx, &biny, NULL, NULL, NULL);
+#endif
 
     GtkTreePath* path;
     if ( !gtk_tree_view_get_path_at_pos
@@ -860,9 +877,21 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
         GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
         if (window)
         {
+#ifdef __WXGTK30__
+            // FIXME 
+            // JC: Missing here on purpose. Need to work on color.cpp before getting it fixed
+            // here
+#else
             m_backgroundColour.CalcPixel( gdk_drawable_get_colormap( window ) );
+#endif
             gdk_window_set_background( window, m_backgroundColour.GetColor() );
+
+#ifdef __WXGTK30__
+            // FIXME 
+            // JC: Missing here on purpose. I don't find the equivelent in gtk3 maybe in cairo?
+#else
             gdk_window_clear( window );
+#endif
         }
     }
 

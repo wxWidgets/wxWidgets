@@ -1602,7 +1602,14 @@ GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     }
     else
     {
+#ifdef __WXGTK30__
+        // FIXME JC:
+        // The equivalent function is gtk_entry_get_text_area(), but it returns
+        // GdkRectangle(cairo_rectangle_int_t), I need to fix it.
+        return NULL;
+#else
         return gtk_entry_get_text_window(GTK_ENTRY(m_text));
+#endif
     }
 }
 

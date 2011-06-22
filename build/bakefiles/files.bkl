@@ -1086,18 +1086,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
-    src/gtk3/sockgtk.cpp
     src/gtk3/minifram.cpp
     src/gtk3/pen.cpp
-    src/gtk3/popupwin.cpp
+    src/gtk/popupwin.cpp
     src/gtk3/private.cpp
     src/gtk3/region.cpp
     src/gtk3/renderer.cpp
     src/gtk3/settings.cpp
-    src/gtk3/timer.cpp
+    src/gtk/sockgtk.cpp
+    src/gtk/timer.cpp
     src/gtk/tooltip.cpp
-    src/gtk3/toplevel.cpp
-    src/gtk3/utilsgtk.cpp
+    src/gtk/toplevel.cpp
+    src/gtk/utilsgtk.cpp
     src/gtk3/win_gtk.cpp
     src/gtk/window.cpp
 </set>
@@ -1151,7 +1151,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk3/checkbox.cpp
     src/gtk/checklst.cpp
     src/gtk3/choice.cpp
-    src/gtk3/collpane.cpp
+    src/gtk/collpane.cpp
     src/gtk3/colordlg.cpp
     src/gtk3/combobox.cpp
     src/gtk3/control.cpp
@@ -1159,38 +1159,38 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/dialog.cpp
     src/gtk/fontpicker.cpp
     src/gtk3/filepicker.cpp
-    src/gtk3/dirdlg.cpp
-    src/gtk3/filedlg.cpp
+    src/gtk/dirdlg.cpp
+    src/gtk/filedlg.cpp
     src/gtk3/fontdlg.cpp
     src/gtk3/frame.cpp
-    src/gtk3/gauge.cpp
+    src/gtk/gauge.cpp
     src/gtk3/gnome/gprint.cpp
     src/gtk3/gnome/gvfs.cpp
     src/gtk/infobar.cpp
-    src/gtk3/listbox.cpp
+    src/gtk/listbox.cpp
     src/gtk/mdi.cpp
     src/gtk3/menu.cpp
     src/gtk/mnemonics.cpp
     src/gtk/msgdlg.cpp
-    src/gtk3/nativewin.cpp
-    src/gtk3/notebook.cpp
+    src/gtk/nativewin.cpp
+    src/gtk/notebook.cpp
     src/gtk3/print.cpp
     src/gtk/radiobox.cpp
-    src/gtk3/radiobut.cpp
-    src/gtk3/scrolbar.cpp
-    src/gtk3/scrolwin.cpp
-    src/gtk3/slider.cpp
-    src/gtk3/spinbutt.cpp
-    src/gtk3/spinctrl.cpp
+    src/gtk/radiobut.cpp
+    src/gtk/scrolbar.cpp
+    src/gtk/scrolwin.cpp
+    src/gtk/slider.cpp
+    src/gtk/spinbutt.cpp
+    src/gtk/spinctrl.cpp
     src/gtk3/statbmp.cpp
     src/gtk/statbox.cpp
-    src/gtk3/statline.cpp
-    src/gtk3/stattext.cpp
-    src/gtk3/toolbar.cpp
-    src/gtk3/textctrl.cpp
+    src/gtk/statline.cpp
+    src/gtk/stattext.cpp
+    src/gtk/toolbar.cpp
+    src/gtk/textctrl.cpp
     src/gtk/textentry.cpp
     src/gtk3/tglbtn.cpp
-    src/gtk3/treeentry_gtk.c
+    src/gtk/treeentry_gtk.c
 </set>
 <set var="GTK3_HDR" hints="files">
     wx/generic/fdrepdlg.h

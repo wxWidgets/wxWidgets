@@ -436,7 +436,12 @@ bool wxNotebook::InsertPage( size_t position,
     if ( style )
     {
         gtk_widget_modify_style(pageData->m_label, style);
+#ifdef __WXGTK30__
         g_object_unref(style);
+#else
+        gtk_rc_style_unref(style);
+#endif
+        
     }
 
     if (select && GetPageCount() > 1)
@@ -564,8 +569,14 @@ void wxNotebook::DoApplyWidgetStyle(GtkRcStyle *style)
 
 GdkWindow *wxNotebook::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
+#ifdef __WXGTK30__
     windows.push_back(gtk_widget_get_window(m_widget));
+    // GtkNotebook has no event-window in gtk3. So I comment it out
+    //windows.push_back(gtk_notebook_get_event_window(m_widget)); 
+#else
+    windows.push_back(m_widget->window);
     windows.push_back(GTK_NOTEBOOK(m_widget)->event_window);
+#endif
 
     return NULL;
 }

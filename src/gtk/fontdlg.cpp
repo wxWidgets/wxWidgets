@@ -106,11 +106,19 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 
     GtkFontSelectionDialog *sel = GTK_FONT_SELECTION_DIALOG(m_widget);
 
+#ifdef __WXGTK30__
     g_signal_connect (gtk_font_selection_dialog_get_ok_button(sel), "clicked",
                       G_CALLBACK (gtk_fontdialog_ok_callback), this);
 
     g_signal_connect (gtk_font_selection_dialog_get_cancel_button(sel), "clicked",
                       G_CALLBACK (gtk_fontdialog_cancel_callback), this);
+#else
+    g_signal_connect (sel->ok_button, "clicked",
+                      G_CALLBACK (gtk_fontdialog_ok_callback), this);
+
+    g_signal_connect (sel->cancel_button, "clicked",
+                      G_CALLBACK (gtk_fontdialog_cancel_callback), this);
+#endif
 
     g_signal_connect (m_widget, "delete_event",
                       G_CALLBACK (gtk_fontdialog_delete_callback), this);

@@ -42,8 +42,13 @@ bool wxGauge::Create( wxWindow *parent,
     g_object_ref(m_widget);
     if ( style & wxGA_VERTICAL )
     {
+#ifdef __WXGTK30__
+        gtk_orientable_set_orientation( GTK_ORIENTABLE(m_widget), GTK_ORIENTATION_VERTICAL );
+        gtk_progress_bar_set_inverted( GTK_PROGRESS_BAR(m_widget), TRUE );
+#else
         gtk_progress_bar_set_orientation( GTK_PROGRESS_BAR(m_widget),
                                           GTK_PROGRESS_BOTTOM_TO_TOP );
+#endif
     }
 
     // when using the gauge in indeterminate mode, we need this:

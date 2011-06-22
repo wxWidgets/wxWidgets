@@ -167,25 +167,49 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
 int wxScrollBar::GetThumbPosition() const
 {
+#ifdef __WXGTK30__
     return wxRound(gtk_range_get_value(GTK_RANGE(m_widget)));
+#else
+    GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
+    return int(adj->value + 0.5);
+#endif
+
 }
 
 int wxScrollBar::GetThumbSize() const
 {
+#ifdef __WXGTK30__
     GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_widget));
     return int(gtk_adjustment_get_page_size(adj));
+#else
+    GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
+    return int(adj->page_size);
+#endif
+
 }
 
 int wxScrollBar::GetPageSize() const
 {
+#ifdef __WXGTK30__
     GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_widget));
     return int(gtk_adjustment_get_page_increment(adj));
+#else
+    GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
+    return int(adj->page_increment);
+#endif
+
 }
 
 int wxScrollBar::GetRange() const
 {
+#ifdef __WXGTK30__
     GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_widget));
     return int(gtk_adjustment_get_upper(adj));
+#else
+    GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
+    return int(adj->upper);
+#endif
+
 }
 
 void wxScrollBar::SetThumbPosition( int viewStart )

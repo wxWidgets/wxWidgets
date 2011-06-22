@@ -211,11 +211,19 @@ wxSize wxStaticText::DoGetBestSize() const
     // gtk_label_set_line_wrap() from here is a bad idea as it queues another
     // size request by calling gtk_widget_queue_resize() and we end up in
     // infinite loop sometimes (notably when the control is in a toolbar)
+#ifdef __WXGTK30__
+    gtk_label_set_line_wrap(GTK_LABEL(m_widget), FALSE);
+#else
     GTK_LABEL(m_widget)->wrap = FALSE;
+#endif
 
     wxSize size = wxStaticTextBase::DoGetBestSize();
 
+#ifdef __WXGTK30__
+    gtk_label_set_line_wrap(GTK_LABEL(m_widget), TRUE);
+#else
     GTK_LABEL(m_widget)->wrap = TRUE; // restore old value
+#endif
 
     // Adding 1 to width to workaround GTK sometimes wrapping the text needlessly
     size.x++;

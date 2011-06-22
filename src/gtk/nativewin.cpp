@@ -95,7 +95,14 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 bool wxNativeContainerWindow::Create(wxNativeContainerWindowId anid)
 {
     bool rc;
+#ifdef __WXGTK30__
+    // JC:
+    // FIXME gdk_window_foreign_new() is gone in gtk3. The following function is what I can find the
+    // most similiar
+    GdkWindow * const win = gdk_x11_window_foreign_new_for_display(NULL, anid);
+#else
     GdkWindow * const win = gdk_window_foreign_new(anid);
+#endif
     if ( win )
     {
         rc = Create(win);

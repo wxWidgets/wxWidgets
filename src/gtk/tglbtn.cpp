@@ -170,7 +170,11 @@ void wxBitmapToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 GdkWindow *
 wxBitmapToggleButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
+#else
     return GTK_BUTTON(m_widget)->event_window;
+#endif
 }
 
 // Get the "best" size for this control.
@@ -305,7 +309,11 @@ void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 GdkWindow *
 wxToggleButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
+#else
     return GTK_BUTTON(m_widget)->event_window;
+#endif
 }
 
 // Get the "best" size for this control.
