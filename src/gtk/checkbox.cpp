@@ -131,7 +131,11 @@ bool wxCheckBox::Create(wxWindow *parent,
     else
     {
         m_widgetCheckbox = gtk_check_button_new_with_label("");
+#ifdef __WXGTK30__
         m_widgetLabel = gtk_bin_get_child(GTK_BIN(m_widgetCheckbox));
+#else
+        m_widgetLabel = GTK_BIN(m_widgetCheckbox)->child;
+#endif
         m_widget = m_widgetCheckbox;
     }
     g_object_ref(m_widget);
@@ -230,7 +234,11 @@ void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
 GdkWindow *wxCheckBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widgetCheckbox));
+#else
     return GTK_BUTTON(m_widgetCheckbox)->event_window;
+#endif
 }
 
 // static

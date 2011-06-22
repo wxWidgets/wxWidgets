@@ -299,7 +299,11 @@ bool wxButton::Enable( bool enable )
 
 GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
+#ifdef __WXGTK30__
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
+#else
     return GTK_BUTTON(m_widget)->event_window;
+#endif
 }
 
 GtkLabel *wxButton::GTKGetLabel() const
@@ -312,9 +316,14 @@ GtkLabel *wxButton::GTKGetLabel() const
         GList* list = gtk_container_get_children(GTK_CONTAINER(box));
         for (GList* item = list; item; item = item->next)
         {
+#ifdef __WXGTK30__
+            if ( GTK_IS_LABEL(item->data)) 
+                label = GTK_LABEL(item->data);
+#else
             GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
             if ( GTK_IS_LABEL(boxChild->widget) )
                 label = GTK_LABEL(boxChild->widget);
+#endif
         }
         g_list_free(list);
 
@@ -340,8 +349,12 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
             GList* list = gtk_container_get_children(GTK_CONTAINER(box));
             for (GList* item = list; item; item = item->next)
             {
+#ifdef __WXGTK30__
+                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
+#else
                 GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
                 gtk_widget_modify_style(boxChild->widget, style);
+#endif
             }
             g_list_free(list);
         }

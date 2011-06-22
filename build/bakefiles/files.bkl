@@ -1147,34 +1147,34 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- GTK+ specific files: -->
     src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
-    src/gtk3/button.cpp
-    src/gtk3/checkbox.cpp
+    src/gtk/button.cpp
+    src/gtk/checkbox.cpp
     src/gtk/checklst.cpp
-    src/gtk3/choice.cpp
+    src/gtk/choice.cpp
     src/gtk/collpane.cpp
-    src/gtk3/colordlg.cpp
-    src/gtk3/combobox.cpp
-    src/gtk3/control.cpp
+    src/gtk/colordlg.cpp
+    src/gtk/combobox.cpp
+    src/gtk/control.cpp
     src/gtk/clrpicker.cpp
     src/gtk/dialog.cpp
     src/gtk/fontpicker.cpp
-    src/gtk3/filepicker.cpp
+    src/gtk/filepicker.cpp
     src/gtk/dirdlg.cpp
     src/gtk/filedlg.cpp
-    src/gtk3/fontdlg.cpp
-    src/gtk3/frame.cpp
+    src/gtk/fontdlg.cpp
+    src/gtk/frame.cpp
     src/gtk/gauge.cpp
-    src/gtk3/gnome/gprint.cpp
-    src/gtk3/gnome/gvfs.cpp
+    src/gtk/gnome/gprint.cpp
+    src/gtk/gnome/gvfs.cpp
     src/gtk/infobar.cpp
     src/gtk/listbox.cpp
     src/gtk/mdi.cpp
-    src/gtk3/menu.cpp
+    src/gtk/menu.cpp
     src/gtk/mnemonics.cpp
     src/gtk/msgdlg.cpp
     src/gtk/nativewin.cpp
     src/gtk/notebook.cpp
-    src/gtk3/print.cpp
+    src/gtk/print.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
     src/gtk/scrolbar.cpp
@@ -1182,14 +1182,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/slider.cpp
     src/gtk/spinbutt.cpp
     src/gtk/spinctrl.cpp
-    src/gtk3/statbmp.cpp
+    src/gtk/statbmp.cpp
     src/gtk/statbox.cpp
     src/gtk/statline.cpp
     src/gtk/stattext.cpp
     src/gtk/toolbar.cpp
     src/gtk/textctrl.cpp
     src/gtk/textentry.cpp
-    src/gtk3/tglbtn.cpp
+    src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
 </set>
 <set var="GTK3_HDR" hints="files">

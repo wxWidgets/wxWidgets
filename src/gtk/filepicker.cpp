@@ -17,7 +17,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
+#if wxUSE_FILEPICKERCTRL && (defined(__WXGTK26__) || defined(__WXGTK30__))
 
 #include "wx/filepicker.h"
 #include "wx/tooltip.h"

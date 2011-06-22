@@ -126,8 +126,14 @@ DetachFromFrame(wxMenu* menu, wxFrame* frame)
         // Note that wxGetTopLevelParent() is really needed because this frame
         // can be an MDI child frame which is a fake frame and not a TLW at all
         GtkWindow * const tlw = GTK_WINDOW(wxGetTopLevelParent(frame)->m_widget);
+#ifdef __WXGTK30__
+        if (g_slist_find(gtk_accel_groups_from_object(G_OBJECT(menu->m_menu)), tlw))
+#else
         if (g_slist_find(menu->m_accel->acceleratables, tlw))
+#endif
+        {
             gtk_window_remove_accel_group(tlw, menu->m_accel);
+        }
     }
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
@@ -147,8 +153,14 @@ AttachToFrame(wxMenu* menu, wxFrame* frame)
     if (menu->m_accel)
     {
         GtkWindow * const tlw = GTK_WINDOW(wxGetTopLevelParent(frame)->m_widget);
+#ifdef __WXGTK30__
+        if (!g_slist_find(gtk_accel_groups_from_object(G_OBJECT(menu->m_menu)), tlw))
+#else
         if (!g_slist_find(menu->m_accel->acceleratables, tlw))
+#endif
+        {
             gtk_window_add_accel_group(tlw, menu->m_accel);
+        }
     }
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
