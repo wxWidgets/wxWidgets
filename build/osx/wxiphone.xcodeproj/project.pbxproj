@@ -302,6 +302,7 @@
 		64F11C549E3035DF85691060 /* tif_ojpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 1FBC6F8B4CA63A0081D6F34A /* tif_ojpeg.c */; };
 		652CFDD9A1C1366E99B5D6BC /* socketiohandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDE22D7DDAC93DCABAE5AED0 /* socketiohandler.cpp */; };
 		65514CD6A9F23ED98436AC02 /* ftp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CB4781DF8C432C688F30CDD /* ftp.cpp */; };
+		65AD3B31319C35F1AC9EC625 /* anybutton.mm in Sources */ = {isa = PBXBuildFile; fileRef = F4020D790AE7363CB29F1C2F /* anybutton.mm */; };
 		65E8A5F333D7336C816F0D0C /* variant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31F4B9B03D52339B8F82C114 /* variant.cpp */; };
 		65FCDBFFF3F138A3ABBAA650 /* xh_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3078CDAEB863CFD84EDD3BB /* xh_menu.cpp */; };
 		664A54F914443110B7BB6928 /* tglbtn_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B7308D9C4BA39F19223C82C /* tglbtn_osx.cpp */; };
@@ -691,6 +692,7 @@
 		E7D02E64384F37BC8939A2C4 /* jdpostct.c in Sources */ = {isa = PBXBuildFile; fileRef = 375FF97B202F3C359402D13E /* jdpostct.c */; };
 		E7F35B834A163C67B65176C6 /* tif_dirwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = B9FD5AE12CA9376883AEE4FC /* tif_dirwrite.c */; };
 		E80BEED62EBF34F09B3F401F /* LexMagik.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 45860601270D318D93BEE1F3 /* LexMagik.cxx */; };
+		E82CB89681FF3747B6A94427 /* anybutton_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C62CD918A09D3FE5B1BF2D17 /* anybutton_osx.cpp */; };
 		E882402BEE0330A080A6516F /* strconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB8204E530329FA085E5B8 /* strconv.cpp */; };
 		E8BBC08597EF383597DA0308 /* LexEiffel.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 55EBB18CB4773C788510B14B /* LexEiffel.cxx */; };
 		E8EE34F0A78C31B489B19FEE /* LexMSSQL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C71BF55495034FFBE653C80 /* LexMSSQL.cxx */; };
@@ -1157,6 +1159,7 @@
 		86884BC843F6337EABF744BB /* jdapimin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdapimin.c; path = ../../src/jpeg/jdapimin.c; sourceTree = "<group>"; };
 		86A0C3603C8A343AAFBD2CE0 /* LexFortran.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexFortran.cxx; path = ../../src/stc/scintilla/src/LexFortran.cxx; sourceTree = "<group>"; };
 		86F26F6418C53AFE8154BFC8 /* LexPascal.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexPascal.cxx; path = ../../src/stc/scintilla/src/LexPascal.cxx; sourceTree = "<group>"; };
+		8707324525DB344EA0E7D5CE /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxdebug.xcconfig; sourceTree = "<group>"; };
 		8734C52C7559310784396455 /* LexRuby.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRuby.cxx; path = ../../src/stc/scintilla/src/LexRuby.cxx; sourceTree = "<group>"; };
 		8744F2C80ECF375999195935 /* LexPB.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexPB.cxx; path = ../../src/stc/scintilla/src/LexPB.cxx; sourceTree = "<group>"; };
 		87799D3168B43EB7B5686826 /* pngrtran.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngrtran.c; path = ../../src/png/pngrtran.c; sourceTree = "<group>"; };
@@ -1371,6 +1374,7 @@
 		C4C45D3C63AA37CEBCE83321 /* richtextprint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtextprint.cpp; path = ../../src/richtext/richtextprint.cpp; sourceTree = "<group>"; };
 		C513377E9E303F778BA9D7ED /* arcfind.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arcfind.cpp; path = ../../src/common/arcfind.cpp; sourceTree = "<group>"; };
 		C562D5885AFF3E15837325CE /* xpmdecod.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xpmdecod.cpp; path = ../../src/common/xpmdecod.cpp; sourceTree = "<group>"; };
+		C62CD918A09D3FE5B1BF2D17 /* anybutton_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = anybutton_osx.cpp; path = ../../src/osx/anybutton_osx.cpp; sourceTree = "<group>"; };
 		C63C3983BD243D55AF88DD67 /* AutoComplete.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AutoComplete.cxx; path = ../../src/stc/scintilla/src/AutoComplete.cxx; sourceTree = "<group>"; };
 		C63C964DAFAD311694367C94 /* xh_datectrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_datectrl.cpp; path = ../../src/xrc/xh_datectrl.cpp; sourceTree = "<group>"; };
 		C64705CE9398316D87BAB4DC /* logg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = logg.cpp; path = ../../src/generic/logg.cpp; sourceTree = "<group>"; };
@@ -1414,6 +1418,7 @@
 		D4A23A8BC7373D4BBD72851D /* apptraits.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = apptraits.cpp; path = ../../src/unix/apptraits.cpp; sourceTree = "<group>"; };
 		D4E1DC1869C6327C80D2F5F4 /* uri.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uri.cpp; path = ../../src/common/uri.cpp; sourceTree = "<group>"; };
 		D4FC6F0AB2AC34D2B26F8ED8 /* markuptext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = markuptext.cpp; path = ../../src/generic/markuptext.cpp; sourceTree = "<group>"; };
+		D5B7B7C10A3E3C689AE1E418 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxrelease.xcconfig; sourceTree = "<group>"; };
 		D5F9383D1CE931499F339D85 /* strconv_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strconv_cf.cpp; path = ../../src/osx/core/strconv_cf.cpp; sourceTree = "<group>"; };
 		D73954EB5397301F87881646 /* statboxcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statboxcmn.cpp; path = ../../src/common/statboxcmn.cpp; sourceTree = "<group>"; };
 		D76B3D3BD33E3775BEAB4737 /* LexVerilog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexVerilog.cxx; path = ../../src/stc/scintilla/src/LexVerilog.cxx; sourceTree = "<group>"; };
@@ -1505,6 +1510,7 @@
 		F263022F3FEA3F75895B644D /* filesys.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filesys.cpp; path = ../../src/common/filesys.cpp; sourceTree = "<group>"; };
 		F32C0D20638232CE8F43BF33 /* LexFlagship.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexFlagship.cxx; path = ../../src/stc/scintilla/src/LexFlagship.cxx; sourceTree = "<group>"; };
 		F32F6B47EBB23068B1FCDC0D /* sysopt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sysopt.cpp; path = ../../src/common/sysopt.cpp; sourceTree = "<group>"; };
+		F4020D790AE7363CB29F1C2F /* anybutton.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = anybutton.mm; path = ../../src/osx/iphone/anybutton.mm; sourceTree = "<group>"; };
 		F43AF44465B335479752116D /* xh_radbx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_radbx.cpp; path = ../../src/xrc/xh_radbx.cpp; sourceTree = "<group>"; };
 		F46EC1508C063C8395CE7A95 /* sstream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sstream.cpp; path = ../../src/common/sstream.cpp; sourceTree = "<group>"; };
 		F4B85051B7C835A8BF4E3EE1 /* xh_panel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_panel.cpp; path = ../../src/xrc/xh_panel.cpp; sourceTree = "<group>"; };
@@ -1560,6 +1566,8 @@
 				82F403E7B8653CBD908BC258 /* Frameworks */,
 				C2FC1A9BBB8C3046994369BF /* Products */,
 				477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */,
+				8707324525DB344EA0E7D5CE /* wxdebug.xcconfig */,
+				D5B7B7C10A3E3C689AE1E418 /* wxrelease.xcconfig */,
 				83F62FA47C9636169F1E18E8 /* base */,
 				2E7B4F88F81E37B4A9FF6C0F /* core */,
 				374BD863E6AD33189B7E4040 /* net */,
@@ -2364,6 +2372,7 @@
 		D1F5E5C8429235E68E4AC902 /* src/osx/iphone */ = {
 			isa = PBXGroup;
 			children = (
+				F4020D790AE7363CB29F1C2F /* anybutton.mm */,
 				C06FED83BF933DF98C2466AE /* button.mm */,
 				81708CFA21A03013ACB8DDD7 /* checkbox.mm */,
 				83B878A16ABC396E8C03A15E /* dialog.mm */,
@@ -2759,6 +2768,7 @@
 				AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */,
 				EED7C691150139EFA35E8EBD /* utils_osx.cpp */,
 				26D7C4995D7A35A1854B533F /* window_osx.cpp */,
+				C62CD918A09D3FE5B1BF2D17 /* anybutton_osx.cpp */,
 				38EF5FC5934C34D599FD6074 /* bmpbuttn_osx.cpp */,
 				CF4F4F5211933057824B5621 /* button_osx.cpp */,
 				998C092CB83639CFA3DC63B1 /* checkbox_osx.cpp */,
@@ -2851,7 +2861,7 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone Kopie 2" */;
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3025,6 +3035,7 @@
 				91BDA5B04CF33C9AB7358B8A /* timer.cpp in Sources */,
 				C2D45B334BE03F6C941CA041 /* utilsexc_cf.cpp in Sources */,
 				A92439BAFD3A30A29DD93131 /* apptraits.cpp in Sources */,
+				E82CB89681FF3747B6A94427 /* anybutton_osx.cpp in Sources */,
 				49FE0228D8FD3F7AB64A4432 /* bmpbuttn_osx.cpp in Sources */,
 				6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */,
 				0E92CEF677AA32C9A8CDA0A7 /* checkbox_osx.cpp in Sources */,
@@ -3096,6 +3107,7 @@
 				A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */,
 				9519D59421513FF28FF717B6 /* regiong.cpp in Sources */,
 				01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */,
+				65AD3B31319C35F1AC9EC625 /* anybutton.mm in Sources */,
 				14D6D5F8F5ED3C71936DD2AF /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D12 /* checkbox.mm in Sources */,
 				6C3A459236F736B8A14A13AC /* dialog.mm in Sources */,
@@ -3665,29 +3677,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				DSTROOT = /tmp/wxiPhone.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					"__WXDEBUG__=1",
-				);
-				INSTALL_PATH = /usr/local/lib;
 			};
 			name = Debug;
 		};
 		55C93151F6053EBCBDD70DF9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8707324525DB344EA0E7D5CE /* wxdebug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Debug;
@@ -3696,21 +3692,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				DSTROOT = /tmp/wxiPhone.dst;
-				INSTALL_PATH = /usr/local/lib;
 			};
 			name = Release;
 		};
 		99B665C6D0D137B38CEA938F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5B7B7C10A3E3C689AE1E418 /* wxrelease.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Release;
@@ -3727,7 +3715,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone Kopie 2" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,
