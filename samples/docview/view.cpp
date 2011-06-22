@@ -53,6 +53,7 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         wxFrame* frame = app.CreateChildFrame(this, true);
         wxASSERT(frame == GetFrame());
         m_canvas = new MyCanvas(this);
+        frame->Show();
     }
     else // single document mode
     {
@@ -64,7 +65,6 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         doc->GetCommandProcessor()->SetEditMenu(app.GetMainWindowEditMenu());
         doc->GetCommandProcessor()->Initialize();
     }
-    GetFrame()->Show();
 
     return true;
 }
