@@ -1099,7 +1099,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk3/toplevel.cpp
     src/gtk3/utilsgtk.cpp
     src/gtk3/win_gtk.cpp
-    src/gtk3/window.cpp
+    src/gtk/window.cpp
 </set>
 <set var="GTK3_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)

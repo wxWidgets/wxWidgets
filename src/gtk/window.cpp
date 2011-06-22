@@ -329,8 +329,16 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
     if (win->HasFlag(wxBORDER_SIMPLE))
     {
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_t* cr = gdk_cairo_create(gdk_event->window);
+        cairo_rectangle(cr, x, y, w - 1, h - 1);
+        cairo_set_source_rgb(cr, 0, 0, 0);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+#else 
         gdk_draw_rectangle(gdk_event->window,
             gtk_widget_get_style(widget)->black_gc, false, x, y, w - 1, h - 1);
+#endif
     }
     else
     {
@@ -350,9 +358,20 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
         // clip rect is required to avoid painting background
         // over upper left (w,h) of parent window
         GdkRectangle clipRect = { x, y, w, h };
+
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_t* cr = gdk_cairo_create(gdk_event->window);
+
+        gdk_cairo_rectangle(cr, &clipRect);
+
+        gtk_paint_shadow(
+           gtk_widget_get_style(win->m_wxwindow), cr, GTK_STATE_NORMAL,
+           shadow, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
+#else
         gtk_paint_shadow(
            gtk_widget_get_style(win->m_wxwindow), gdk_event->window, GTK_STATE_NORMAL,
            shadow, &clipRect, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
+#endif
     }
     return false;
 }
@@ -364,7 +383,11 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
 extern "C" {
 static void
-parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
+#if GTK_CHECK_VERSION(3,0,0)
+    parent_set(GtkWidget* widget, GtkWidget* old_parent, wxWindow* win)
+#else
+    parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
+#endif
 {
     if (old_parent)
     {
@@ -1361,12 +1384,17 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( gdk_event->type == GDK_2BUTTON_PRESS &&
             gdk_event->button >= 1 && gdk_event->button <= 3 )
     {
+#if GTK_CHECK_VERSION(3,0,0)
+        // TODO I don't know what would happen if I just skip. I cannot find the similar 
+        // field in gtk3
+#else
         // Reset GDK internal timestamp variables in order to disable GDK
         // triple click events. GDK will then next time believe no button has
         // been clicked just before, and send a normal button click event.
         GdkDisplay* display = gtk_widget_get_display (widget);
         display->button_click_time[1] = 0;
         display->button_click_time[0] = 0;
+#endif
     }
 
     if (gdk_event->button == 1)
@@ -2685,8 +2713,13 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
                             continue;
                 }
 
+            #if GTK_CHECK_VERSION(3,0,0)
+                GtkScrolledWindowClass *scroll_class =
+                    GTK_SCROLLED_WINDOW_CLASS( GTK_WIDGET_GET_CLASS(m_widget) );
+            #else
                 GtkScrolledWindowClass *scroll_class =
                     GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
+            #endif
 
                 GtkRequisition req;
                 gtk_widget_size_request(GTK_WIDGET(range), &req);
@@ -3652,7 +3685,11 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_updateRegion.Clear();
 
         gint width;
+    #if GTK_CHECK_VERSION(3,0,0)
+        width = gdk_window_get_width(gtk_widget_get_window(m_wxwindow));
+    #else
         gdk_drawable_get_size(gtk_widget_get_window(m_wxwindow), &width, NULL);
+    #endif
 
         wxRegionIterator upd( m_nativeUpdateRegion );
         while (upd)
@@ -3717,6 +3754,20 @@ void wxWindowGTK::GtkSendPaintEvents()
                         rect.width = upd.GetWidth();
                         rect.height = upd.GetHeight();
 
+                    #if GTK_CHECK_VERSION(3,0,0)
+                        cairo_t* cr = gdk_cairo_create(GTKGetDrawingWindow());
+                        gdk_cairo_rectangle(cr, &rect);
+
+                        // TODO this function has been deprecated since 3.0. Use gtk_render_frame()
+                        gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),
+                                    cr,
+                                    gtk_widget_get_state(m_wxwindow),
+                                    GTK_SHADOW_NONE,
+                                    parent->m_widget,
+                                    (char *)"base",
+                                    0, 0, -1, -1 );
+
+                    #else
                         gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),
                                     GTKGetDrawingWindow(),
                                     gtk_widget_get_state(m_wxwindow),
@@ -3725,6 +3776,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                                     parent->m_widget,
                                     (char *)"base",
                                     0, 0, -1, -1 );
+                    #endif
 
                         ++upd;
                     }
@@ -3802,7 +3854,11 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
     if (colour.IsOk())
     {
         // We need the pixel value e.g. for background clearing.
+    #if GTK_CHECK_VERSION(3,0,0)
+        // FIXME Missing code here. Need to modify colour.cpp first.
+    #else
         m_backgroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
+    #endif
     }
 
     // apply style change (forceStyle=true so that new style is applied
@@ -3824,7 +3880,11 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
     if (colour.IsOk())
     {
         // We need the pixel value e.g. for background clearing.
+    #if GTK_CHECK_VERSION(3,0,0)
+        // FIXME Missing code here. Need to modify colour.cpp first.
+    #else
         m_foregroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
+    #endif
     }
 
     // apply style change (forceStyle=true so that new style is applied
@@ -3968,9 +4028,14 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
         if (window)
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            // FIXME this function has been deprecated. Check if something bad happens.
+#else
             // Make sure GDK/X11 doesn't refresh the window
             // automatically.
             gdk_window_set_back_pixmap( window, None, False );
+#endif
+
 #ifdef __X__
             Display* display = GDK_WINDOW_DISPLAY(window);
             XFlush(display);
@@ -4409,7 +4474,11 @@ wxPoint wxGetMousePosition()
     int x, y;
     GdkWindow* windowAtPtr = gdk_window_at_pointer(& x, & y);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    Display *display = windowAtPtr ? GDK_WINDOW_XDISPLAY(windowAtPtr) : (Display*)gdk_display_get_default();
+#else
     Display *display = windowAtPtr ? GDK_WINDOW_XDISPLAY(windowAtPtr) : GDK_DISPLAY();
+#endif
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
     Window rootReturn, childReturn;
     int rootX, rootY, winX, winY;
