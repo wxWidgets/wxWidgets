@@ -134,7 +134,7 @@ void wxFileButton::SetPath(const wxString &str)
 
 
 
-#if wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)
+#if wxUSE_DIRPICKERCTRL && (defined(__WXGTK26__) || defined(__WXGTK30__))
 
 #include <unistd.h> // chdir
 
