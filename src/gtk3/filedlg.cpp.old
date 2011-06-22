@@ -2,7 +2,7 @@
 // Name:        src/gtk/filedlg.cpp
 // Purpose:     native implementation of wxFileDialog
 // Author:      Robert Roebling, Zbigniew Zagorski, Mart Raudsepp
-// Id:          $Id: filedlg.cpp 64381 2010-05-22 12:07:54Z VZ $
+// Id:          $Id: filedlg.cpp 67384 2011-04-03 20:31:32Z DS $
 // Copyright:   (c) 1998 Robert Roebling, 2004 Zbigniew Zagorski, 2005 Mart Raudsepp
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -235,7 +235,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     // local-only property could be set to false to allow non-local files to be
     // loaded. In that case get/set_uri(s) should be used instead of
     // get/set_filename(s) everywhere and the GtkFileChooserDialog should
-    // probably also be created with a backend, e.g "gnome-vfs", "default", ...
+    // probably also be created with a backend, e.g. "gnome-vfs", "default", ...
     // (gtk_file_chooser_dialog_new_with_backend). Currently local-only is kept
     // as the default - true:
     // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
