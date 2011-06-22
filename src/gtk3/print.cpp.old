@@ -1738,7 +1738,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     angle = -angle;
 
-    bool underlined = m_font.Ok() && m_font.GetUnderlined();
+    bool underlined = m_font.IsOk() && m_font.GetUnderlined();
 
     const wxScopedCharBuffer data = text.utf8_str();
 
@@ -1756,7 +1756,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
         pango_attr_list_unref(attrs);
     }
 
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         unsigned char red = m_textForegroundColour.Red();
         unsigned char blue = m_textForegroundColour.Blue();
@@ -1844,7 +1844,7 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
 {
     m_font = font;
 
-    if (m_font.Ok())
+    if (m_font.IsOk())
     {
         if (m_fontdesc)
             pango_font_description_free( m_fontdesc );
@@ -1861,7 +1861,7 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
 
 void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 {
-    if (!pen.Ok()) return;
+    if (!pen.IsOk()) return;
 
     m_pen = pen;
 
@@ -1940,7 +1940,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 
 void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 {
-    if (!brush.Ok()) return;
+    if (!brush.IsOk()) return;
 
     m_brush = brush;
 

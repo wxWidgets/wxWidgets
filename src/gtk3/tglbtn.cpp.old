@@ -5,7 +5,7 @@
 // Author:      John Norris, minor changes by Axel Schlueter
 // Modified by:
 // Created:     08.02.01
-// RCS-ID:      $Id: tglbtn.cpp 67681 2011-05-03 16:29:04Z DS $
+// RCS-ID:      $Id: tglbtn.cpp 68013 2011-06-22 17:19:18Z JC $
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ wxSize wxBitmapToggleButton::DoGetBestSize() const
 {
     wxSize best;
 
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
     {
         int border = HasFlag(wxNO_BORDER) ? 4 : 10;
         best.x = m_bitmap.GetWidth()+border;
