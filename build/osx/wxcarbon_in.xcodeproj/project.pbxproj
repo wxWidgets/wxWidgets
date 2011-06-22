@@ -8,6 +8,8 @@
 
 /* Begin PBXFileReference section */
 		404BEE6110EC83280080E2B8 /* libwx_osx_carbon_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwx_osx_carbon_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		409C323613B27E1D0009CB3C /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxdebug.xcconfig; sourceTree = "<group>"; };
+		409C323713B27E1D0009CB3C /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxrelease.xcconfig; sourceTree = "<group>"; };
 		40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxcarbon.xcconfig; sourceTree = "<group>"; };
 		D2AAC0C705546C1D00DB518D /* libwx_osx_carbon.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_osx_carbon.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -43,6 +45,8 @@
 			isa = PBXGroup;
 			children = (
 				40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */,
+				409C323613B27E1D0009CB3C /* wxdebug.xcconfig */,
+				409C323713B27E1D0009CB3C /* wxrelease.xcconfig */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
 			name = wxcocoa;
@@ -181,15 +185,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					"__WXDEBUG__=1",
-				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -202,9 +198,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
-				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -215,24 +209,16 @@
 		};
 		1DEB918208733D990010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 409C323613B27E1D0009CB3C /* wxdebug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.6;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Debug;
 		};
 		1DEB918308733D990010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 409C323713B27E1D0009CB3C /* wxrelease.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx10.6;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Release;
@@ -241,16 +227,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					"__WXDEBUG__=1",
-				);
-				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 			};
 			name = Debug;
@@ -259,12 +235,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
