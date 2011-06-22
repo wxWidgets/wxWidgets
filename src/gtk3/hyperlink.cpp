@@ -3,7 +3,7 @@
 // Purpose:     Hyperlink control
 // Author:      Francesco Montorsi
 // Created:     14/2/2007
-// RCS-ID:      $Id: hyperlink.cpp 65334 2010-08-17 16:55:32Z VZ $
+// RCS-ID:      $Id: hyperlink.cpp 67378 2011-04-02 20:43:29Z PC $
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -121,6 +121,13 @@ wxSize wxHyperlinkCtrl::DoGetBestSize() const
     if ( UseNative() )
         return wxControl::DoGetBestSize();
     return wxGenericHyperlinkCtrl::DoGetBestSize();
+}
+
+wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
+{
+    if ( UseNative() )
+        return wxControl::DoGetBestClientSize();
+    return wxGenericHyperlinkCtrl::DoGetBestClientSize();
 }
 
 void wxHyperlinkCtrl::SetLabel(const wxString &label)

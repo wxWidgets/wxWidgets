@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/print.cpp
+// Name:        src/gtk/print.cpp
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
@@ -36,7 +36,13 @@
 #include "wx/paper.h"
 
 #include <gtk/gtk.h>
+
+#if GTK_CHECK_VERSION(2,14,0)
+#include <gtk/gtkunixprint.h>
+#else
 #include <gtk/gtkpagesetupunixdialog.h>
+#endif
+
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -51,7 +57,7 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 
 #include "wx/gtk/private/object.h"
 
-// Usefull to convert angles from/to Rad to/from Deg.
+// Useful to convert angles from/to Rad to/from Deg.
 static const double RAD2DEG  = 180.0 / M_PI;
 static const double DEG2RAD  = M_PI / 180.0;
 
@@ -2207,7 +2213,7 @@ void wxGtkPrinterDCImpl::SetPrintData(const wxPrintData& data)
     m_printData = data;
 }
 
-// overriden for wxPrinterDC Impl
+// overridden for wxPrinterDC Impl
 
 wxRect wxGtkPrinterDCImpl::GetPaperRect() const
 {
