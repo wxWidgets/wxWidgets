@@ -24,20 +24,19 @@
 #include <exdisp.h>
 #include <mshtml.h>
 
+// Various definitions are missing from mingw
 #ifdef __MINGW32__
-// FIXME: Seems like MINGW does not have these, how to handle cleanly?
-#define DISPID_COMMANDSTATECHANGE   105
 typedef enum CommandStateChangeConstants {
     CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
     CSC_NAVIGATEFORWARD = 0x1,
     CSC_NAVIGATEBACK = 0x2
 } CommandStateChangeConstants;
 
-
-// FIXME: Seems like MINGW does not have these, how to handle cleanly?
-#define DISPID_NAVIGATECOMPLETE2    252
-#define DISPID_NAVIGATEERROR        271
-#define OLECMDID_OPTICAL_ZOOM  63
+#define DISPID_COMMANDSTATECHANGE 105
+#define DISPID_NAVIGATECOMPLETE2 252
+#define DISPID_NAVIGATEERROR 271
+#define DISPID_NEWWINDOW3 273
+#define OLECMDID_OPTICAL_ZOOM 63
 #define INET_E_ERROR_FIRST 0x800C0002L
 #define INET_E_INVALID_URL 0x800C0002L
 #define INET_E_NO_SESSION 0x800C0003L
@@ -67,6 +66,7 @@ typedef enum CommandStateChangeConstants {
 #define INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY 0x800C0500L
 #define INET_E_CODE_INSTALL_SUPPRESSED 0x800C0400L
 
+#define REFRESH_NORMAL 0
 #define REFRESH_COMPLETELY 3
 #endif
 
