@@ -62,6 +62,8 @@
 		405B1A9810EF228C00676938 /* minimal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minimal.cpp; sourceTree = "<group>"; };
 		405B1ACB10EF253300676938 /* minimal_carbon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal_carbon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4073593F1370888D0077DE1B /* Info_carbon.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_carbon.plist; sourceTree = "<group>"; };
+		40A9683713B281D700B0D0DD /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
+		40A9683813B281D700B0D0DD /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		40E3517C10EF30F90029DC34 /* wxcarbon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wxcarbon.xcodeproj; path = ../../build/osx/wxcarbon.xcodeproj; sourceTree = SOURCE_ROOT; };
 		40E3518610EF31130029DC34 /* wxcarbon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxcarbon.xcconfig; path = ../../build/osx/wxcarbon.xcconfig; sourceTree = SOURCE_ROOT; };
 		8D1107320486CEB800E47090 /* minimal_carbon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal_carbon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +103,8 @@
 			children = (
 				4073593F1370888D0077DE1B /* Info_carbon.plist */,
 				40E3518610EF31130029DC34 /* wxcarbon.xcconfig */,
+				40A9683713B281D700B0D0DD /* wxdebug.xcconfig */,
+				40A9683813B281D700B0D0DD /* wxrelease.xcconfig */,
 				40E3517C10EF30F90029DC34 /* wxcarbon.xcodeproj */,
 				405B1A9710EF227D00676938 /* src */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -250,13 +254,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3518610EF31130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
 				PRODUCT_NAME = minimal_carbon;
 			};
 			name = Debug;
@@ -265,10 +266,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3518610EF31130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
 				PRODUCT_NAME = minimal_carbon;
 			};
 			name = Release;
@@ -277,13 +278,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3518610EF31130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = minimal_carbon;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
@@ -293,10 +287,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3518610EF31130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = minimal_carbon;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
@@ -304,16 +294,9 @@
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A9683713B281D700B0D0DD /* wxdebug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info_carbon.plist;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx10.6;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Debug;
@@ -321,13 +304,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info_carbon.plist;
-				PREBINDING = NO;
-				SDKROOT = macosx10.6;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Release;
