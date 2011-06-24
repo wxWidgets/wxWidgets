@@ -1173,10 +1173,11 @@ void MyPipeFrame::DoGetFromStream(wxTextCtrl *text, wxInputStream& in)
 {
     while ( in.CanRead() )
     {
-        wxChar buffer[4096];
+        char buffer[4096];
         buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = _T('\0');
 
-        text->AppendText(buffer);
+        wxString input(buffer, wxConvUTF8);
+        text->AppendText(input);
     }
 }
 
