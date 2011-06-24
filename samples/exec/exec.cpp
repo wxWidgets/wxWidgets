@@ -1470,8 +1470,8 @@ void MyPipeFrame::DoGetFromStream(wxTextCtrl *text, wxInputStream& in)
 {
     while ( in.CanRead() )
     {
-        wxChar buffer[4096];
-        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = wxT('\0');
+        char buffer[4096];
+        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = '\0';
 
         text->AppendText(buffer);
     }
