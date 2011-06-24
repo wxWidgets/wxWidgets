@@ -17,7 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxControlContainer;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[];
 
 /**
     @class wxMoPanel

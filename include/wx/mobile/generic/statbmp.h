@@ -14,7 +14,7 @@
 
 #include "wx/statbmp.h"
 
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticBitmapNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxStaticBitmapNameStr[];
 
 /**
     @class wxMoStaticBitmap

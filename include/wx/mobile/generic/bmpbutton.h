@@ -94,6 +94,10 @@ private:
 
     wxMoButtonPressDetector m_pressDetector;
     wxColour                m_borderColour;
+    wxBitmap                m_bmpNormal;
+    wxBitmap                m_bmpDisabled;
+    wxBitmap                m_bmpSelected;
+    
 };
 
 #endif

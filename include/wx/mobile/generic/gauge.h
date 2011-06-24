@@ -14,7 +14,7 @@
 
 #include "wx/gauge.h"
 
-extern WXDLLEXPORT_DATA(const wxChar) wxGaugeNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxGaugeNameStr[];
 
 /**
     @class wxMoGauge
