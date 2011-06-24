@@ -272,7 +272,7 @@ bool wxMoBarButton::SendClickEvent()
 
     bool processed = ProcessEvent(event);
     if (!processed && GetParent())
-        processed = GetParent()->ProcessEvent(event);
+        processed = GetParent()->GetEventHandler()->ProcessEvent(event);
     return processed;
 }
 

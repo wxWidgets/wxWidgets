@@ -73,7 +73,7 @@ public:
     }
 
     wxMoToolBarTool(wxMoToolBar *tbar, wxControl *control)
-        : wxToolBarToolBase(tbar, control)
+        : wxToolBarToolBase(tbar, control, wxEmptyString)
     {
         m_width = -1;
     }

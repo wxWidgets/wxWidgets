@@ -59,7 +59,7 @@ bool wxMoWebCtrl::Create(wxWindow *parent,
     m_htmlWindow = new wxIEHtmlWin(this, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, wxBORDER_NONE|wxWANTS_CHARS);
 #elif defined(__WXMAC__) && wxUSE_WEBKIT
-    m_htmlWindow = new wxWebKitCtrl(this, wxID_ANY, wxDefaultPosition,
+    m_htmlWindow = new wxWebKitCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
         wxDefaultSize, wxBORDER_NONE);
 #else
     m_htmlWindow = new wxHtmlWindow(this, wxID_ANY, wxDefaultPosition,
@@ -149,7 +149,8 @@ bool wxMoWebCtrl::LoadURL(const wxString& url)
     m_htmlWindow->LoadUrl(url);
     return true;
 #elif defined(__WXMAC__) && wxUSE_WEBKIT
-    return m_htmlWindow->LoadURL(url);
+    m_htmlWindow->LoadURL(url);
+    return true;
 #else
     return m_htmlWindow->LoadPage(url);
 #endif

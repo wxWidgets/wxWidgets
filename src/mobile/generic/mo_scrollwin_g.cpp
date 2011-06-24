@@ -60,7 +60,7 @@ BEGIN_EVENT_TABLE(wxMoScrolledWindow, wxMoPanel)
     EVT_PAINT(wxMoScrolledWindow::OnPaint)
 END_EVENT_TABLE()
 
-wxMoScrolledWindow::wxMoScrolledWindow() : wxScrollHelperNative(this), m_touchScrollHelper(this)
+wxMoScrolledWindow::wxMoScrolledWindow() : wxScrollHelper(this), m_touchScrollHelper(this)
 {
     Init();
 }
