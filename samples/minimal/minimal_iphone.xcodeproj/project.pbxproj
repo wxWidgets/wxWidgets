@@ -116,9 +116,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* minimal_iphone */ = {
+		1D6058900D05DD3D006BFB54 /* static */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "minimal_iphone" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "static" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -128,7 +128,7 @@
 			);
 			dependencies = (
 			);
-			name = minimal_iphone;
+			name = static;
 			productName = minimal_iphone;
 			productReference = 1D6058910D05DD3D006BFB54 /* minimal_iphone.app */;
 			productType = "com.apple.product-type.application";
@@ -158,7 +158,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* minimal_iphone */,
+				1D6058900D05DD3D006BFB54 /* static */,
 			);
 		};
 /* End PBXProject section */
@@ -236,7 +236,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "minimal_iphone" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "static" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
