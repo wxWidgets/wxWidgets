@@ -10,7 +10,7 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#include "wx/gtk/dcclient.h"
+#include "wx/gtk/dcclient_gtk3.h"
 
 class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxPaintDCImpl
 {

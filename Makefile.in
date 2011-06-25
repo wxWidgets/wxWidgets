@@ -2597,8 +2597,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_LOWLEVEL_HDR =  \
 	wx/gtk/dataobj2.h \
 	wx/gtk/dc.h \
 	wx/gtk/dcclient_gtk3.h \
-	wx/gtk/dcmemory.h \
-	wx/gtk/dcscreen.h \
+	wx/gtk/dcmemory_gtk3.h \
+	wx/gtk/dcscreen_gtk3.h \
 	wx/gtk/dnd.h \
 	wx/gtk/evtloop.h \
 	wx/gtk/evtloopsrc.h \

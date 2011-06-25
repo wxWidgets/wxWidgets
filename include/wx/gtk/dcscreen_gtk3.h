@@ -11,7 +11,7 @@
 #define _WX_DCSCREEN_H_
 
 #include "wx/dcclient.h"
-#include "wx/gtk/dcclient.h"
+#include "wx/gtk/dcclient_gtk3.h"
 
 class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxWindowDCImpl
 {

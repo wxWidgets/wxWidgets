@@ -11,7 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcscreen.h"
-#include "wx/gtk/dcscreen.h"
+#include "wx/gtk/dcscreen_gtk3.h"
 
 #include "wx/gtk/private.h"
 #include "wx/graphics.h"
@@ -19,7 +19,7 @@
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
 // Create a DC representing the whole screen
-wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) :
+wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
     wxDisplaySize( &m_width, &m_height );

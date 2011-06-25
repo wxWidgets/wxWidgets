@@ -24,7 +24,7 @@
 #include "wx/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/gtk/private.h"
-#include "wx/gtk/dcclient.h"
+#include "wx/gtk/dcclient_gtk3.h"
 
 //-----------------------------------------------------------------------------
 // wxWindowDCImpl

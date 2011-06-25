@@ -1117,8 +1117,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dataobj2.h
     wx/gtk/dc.h
     wx/gtk/dcclient_gtk3.h
-    wx/gtk/dcmemory.h
-    wx/gtk/dcscreen.h
+    wx/gtk/dcmemory_gtk3.h
+    wx/gtk/dcscreen_gtk3.h
     wx/gtk/dnd.h
     wx/gtk/evtloop.h
     wx/gtk/evtloopsrc.h

@@ -11,7 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcmemory.h"
-#include "wx/gtk/dcmemory.h"
+#include "wx/gtk/dcmemory_gtk3.h"
 #include "wx/graphics.h"
 
 #include "wx/gtk/private.h"
