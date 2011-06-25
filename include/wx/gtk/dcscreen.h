@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.h
+// Name:        wx/gtk/dcscreen.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -7,27 +7,28 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCSCREEN_H_
-#define _WX_DCSCREEN_H_
+#ifndef _WX_GTKDCSCREEN_H_
+#define _WX_GTKDCSCREEN_H_
 
-#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
 #include "wx/gtk/dcclient.h"
 
-class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxWindowDCImpl
+//-----------------------------------------------------------------------------
+// wxScreenDCImpl
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxScreenDCImpl : public wxWindowDCImpl
 {
 public:
     wxScreenDCImpl( wxScreenDC *owner );
-    virtual ~wxScreenDCImpl();
+    ~wxScreenDCImpl();
 
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
-private:
-    void* m_overlayWindow;
+    virtual void DoGetSize(int *width, int *height) const;
 
-private:
-    DECLARE_CLASS(wxScreenDCImpl)
-    wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);
+protected:
+    void Init();
+
+    DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)
 };
 
-#endif
-    // _WX_DCSCREEN_H_
-
+#endif // _WX_GTKDCSCREEN_H_
