@@ -14,6 +14,80 @@
 		40E9BBAE13B50E84001FFB52 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BBAC13B50E84001FFB52 /* demoframe.cpp */; };
 		40E9BBAF13B50E84001FFB52 /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BBAB13B50E84001FFB52 /* demoapp.cpp */; };
 		40E9BBB013B50E84001FFB52 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BBAC13B50E84001FFB52 /* demoframe.cpp */; };
+		B9EB595D13B6866200D480A7 /* mo_app_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593713B6866200D480A7 /* mo_app_g.cpp */; };
+		B9EB595E13B6866200D480A7 /* mo_barbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593813B6866200D480A7 /* mo_barbutton_g.cpp */; };
+		B9EB595F13B6866200D480A7 /* mo_bmpbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593913B6866200D480A7 /* mo_bmpbutton_g.cpp */; };
+		B9EB596013B6866200D480A7 /* mo_button_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593A13B6866200D480A7 /* mo_button_g.cpp */; };
+		B9EB596113B6866200D480A7 /* mo_buttonstrip_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593B13B6866200D480A7 /* mo_buttonstrip_g.cpp */; };
+		B9EB596213B6866200D480A7 /* mo_frame_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593C13B6866200D480A7 /* mo_frame_g.cpp */; };
+		B9EB596313B6866200D480A7 /* mo_gauge_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593D13B6866200D480A7 /* mo_gauge_g.cpp */; };
+		B9EB596413B6866200D480A7 /* mo_keyboard_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593E13B6866200D480A7 /* mo_keyboard_g.cpp */; };
+		B9EB596513B6866200D480A7 /* mo_listbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593F13B6866200D480A7 /* mo_listbox_g.cpp */; };
+		B9EB596613B6866200D480A7 /* mo_navbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594013B6866200D480A7 /* mo_navbar_g.cpp */; };
+		B9EB596713B6866200D480A7 /* mo_navctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594113B6866200D480A7 /* mo_navctrl_g.cpp */; };
+		B9EB596813B6866200D480A7 /* mo_navitem_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594213B6866200D480A7 /* mo_navitem_g.cpp */; };
+		B9EB596913B6866200D480A7 /* mo_notebook_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594313B6866200D480A7 /* mo_notebook_g.cpp */; };
+		B9EB596A13B6866200D480A7 /* mo_pagectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594413B6866200D480A7 /* mo_pagectrl_g.cpp */; };
+		B9EB596B13B6866200D480A7 /* mo_panel_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594513B6866200D480A7 /* mo_panel_g.cpp */; };
+		B9EB596C13B6866200D480A7 /* mo_scrollwin_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594613B6866200D480A7 /* mo_scrollwin_g.cpp */; };
+		B9EB596D13B6866200D480A7 /* mo_searchctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594713B6866200D480A7 /* mo_searchctrl_g.cpp */; };
+		B9EB596E13B6866200D480A7 /* mo_segctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594813B6866200D480A7 /* mo_segctrl_g.cpp */; };
+		B9EB596F13B6866200D480A7 /* mo_settings_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594913B6866200D480A7 /* mo_settings_g.cpp */; };
+		B9EB597013B6866200D480A7 /* mo_sheets_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594A13B6866200D480A7 /* mo_sheets_g.cpp */; };
+		B9EB597113B6866200D480A7 /* mo_simulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594B13B6866200D480A7 /* mo_simulator.cpp */; };
+		B9EB597213B6866200D480A7 /* mo_slider_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594C13B6866200D480A7 /* mo_slider_g.cpp */; };
+		B9EB597313B6866200D480A7 /* mo_statbmp_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594D13B6866200D480A7 /* mo_statbmp_g.cpp */; };
+		B9EB597413B6866200D480A7 /* mo_stattext_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594E13B6866200D480A7 /* mo_stattext_g.cpp */; };
+		B9EB597513B6866200D480A7 /* mo_switch_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594F13B6866200D480A7 /* mo_switch_g.cpp */; };
+		B9EB597613B6866200D480A7 /* mo_tabctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595013B6866200D480A7 /* mo_tabctrl_g.cpp */; };
+		B9EB597713B6866200D480A7 /* mo_tablecell_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595113B6866200D480A7 /* mo_tablecell_g.cpp */; };
+		B9EB597813B6866200D480A7 /* mo_tablectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595213B6866200D480A7 /* mo_tablectrl_g.cpp */; };
+		B9EB597913B6866200D480A7 /* mo_textctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595313B6866200D480A7 /* mo_textctrl_g.cpp */; };
+		B9EB597A13B6866200D480A7 /* mo_toolbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595413B6866200D480A7 /* mo_toolbar_g.cpp */; };
+		B9EB597B13B6866200D480A7 /* mo_utils_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595513B6866200D480A7 /* mo_utils_g.cpp */; };
+		B9EB597C13B6866200D480A7 /* mo_viewcontroller_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595613B6866200D480A7 /* mo_viewcontroller_g.cpp */; };
+		B9EB597D13B6866200D480A7 /* mo_vlbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595713B6866200D480A7 /* mo_vlbox_g.cpp */; };
+		B9EB597E13B6866200D480A7 /* mo_vscroll_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595813B6866200D480A7 /* mo_vscroll_g.cpp */; };
+		B9EB597F13B6866200D480A7 /* mo_webctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595913B6866200D480A7 /* mo_webctrl_g.cpp */; };
+		B9EB598013B6866200D480A7 /* mo_wheelsctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595A13B6866200D480A7 /* mo_wheelsctrl_g.cpp */; };
+		B9EB598113B6866200D480A7 /* mo_window_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595B13B6866200D480A7 /* mo_window_g.cpp */; };
+		B9EB598213B6866200D480A7 /* mo_app_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593713B6866200D480A7 /* mo_app_g.cpp */; };
+		B9EB598313B6866200D480A7 /* mo_barbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593813B6866200D480A7 /* mo_barbutton_g.cpp */; };
+		B9EB598413B6866200D480A7 /* mo_bmpbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593913B6866200D480A7 /* mo_bmpbutton_g.cpp */; };
+		B9EB598513B6866200D480A7 /* mo_button_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593A13B6866200D480A7 /* mo_button_g.cpp */; };
+		B9EB598613B6866200D480A7 /* mo_buttonstrip_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593B13B6866200D480A7 /* mo_buttonstrip_g.cpp */; };
+		B9EB598713B6866200D480A7 /* mo_frame_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593C13B6866200D480A7 /* mo_frame_g.cpp */; };
+		B9EB598813B6866200D480A7 /* mo_gauge_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593D13B6866200D480A7 /* mo_gauge_g.cpp */; };
+		B9EB598913B6866200D480A7 /* mo_keyboard_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593E13B6866200D480A7 /* mo_keyboard_g.cpp */; };
+		B9EB598A13B6866200D480A7 /* mo_listbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB593F13B6866200D480A7 /* mo_listbox_g.cpp */; };
+		B9EB598B13B6866200D480A7 /* mo_navbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594013B6866200D480A7 /* mo_navbar_g.cpp */; };
+		B9EB598C13B6866200D480A7 /* mo_navctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594113B6866200D480A7 /* mo_navctrl_g.cpp */; };
+		B9EB598D13B6866200D480A7 /* mo_navitem_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594213B6866200D480A7 /* mo_navitem_g.cpp */; };
+		B9EB598E13B6866200D480A7 /* mo_notebook_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594313B6866200D480A7 /* mo_notebook_g.cpp */; };
+		B9EB598F13B6866200D480A7 /* mo_pagectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594413B6866200D480A7 /* mo_pagectrl_g.cpp */; };
+		B9EB599013B6866200D480A7 /* mo_panel_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594513B6866200D480A7 /* mo_panel_g.cpp */; };
+		B9EB599113B6866200D480A7 /* mo_scrollwin_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594613B6866200D480A7 /* mo_scrollwin_g.cpp */; };
+		B9EB599213B6866200D480A7 /* mo_searchctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594713B6866200D480A7 /* mo_searchctrl_g.cpp */; };
+		B9EB599313B6866200D480A7 /* mo_segctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594813B6866200D480A7 /* mo_segctrl_g.cpp */; };
+		B9EB599413B6866200D480A7 /* mo_settings_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594913B6866200D480A7 /* mo_settings_g.cpp */; };
+		B9EB599513B6866200D480A7 /* mo_sheets_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594A13B6866200D480A7 /* mo_sheets_g.cpp */; };
+		B9EB599613B6866200D480A7 /* mo_simulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594B13B6866200D480A7 /* mo_simulator.cpp */; };
+		B9EB599713B6866200D480A7 /* mo_slider_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594C13B6866200D480A7 /* mo_slider_g.cpp */; };
+		B9EB599813B6866200D480A7 /* mo_statbmp_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594D13B6866200D480A7 /* mo_statbmp_g.cpp */; };
+		B9EB599913B6866200D480A7 /* mo_stattext_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594E13B6866200D480A7 /* mo_stattext_g.cpp */; };
+		B9EB599A13B6866200D480A7 /* mo_switch_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB594F13B6866200D480A7 /* mo_switch_g.cpp */; };
+		B9EB599B13B6866200D480A7 /* mo_tabctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595013B6866200D480A7 /* mo_tabctrl_g.cpp */; };
+		B9EB599C13B6866200D480A7 /* mo_tablecell_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595113B6866200D480A7 /* mo_tablecell_g.cpp */; };
+		B9EB599D13B6866200D480A7 /* mo_tablectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595213B6866200D480A7 /* mo_tablectrl_g.cpp */; };
+		B9EB599E13B6866200D480A7 /* mo_textctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595313B6866200D480A7 /* mo_textctrl_g.cpp */; };
+		B9EB599F13B6866200D480A7 /* mo_toolbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595413B6866200D480A7 /* mo_toolbar_g.cpp */; };
+		B9EB59A013B6866200D480A7 /* mo_utils_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595513B6866200D480A7 /* mo_utils_g.cpp */; };
+		B9EB59A113B6866200D480A7 /* mo_viewcontroller_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595613B6866200D480A7 /* mo_viewcontroller_g.cpp */; };
+		B9EB59A213B6866200D480A7 /* mo_vlbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595713B6866200D480A7 /* mo_vlbox_g.cpp */; };
+		B9EB59A313B6866200D480A7 /* mo_vscroll_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595813B6866200D480A7 /* mo_vscroll_g.cpp */; };
+		B9EB59A413B6866200D480A7 /* mo_webctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595913B6866200D480A7 /* mo_webctrl_g.cpp */; };
+		B9EB59A513B6866200D480A7 /* mo_wheelsctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595A13B6866200D480A7 /* mo_wheelsctrl_g.cpp */; };
+		B9EB59A613B6866200D480A7 /* mo_window_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9EB595B13B6866200D480A7 /* mo_window_g.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +144,44 @@
 		40E9BBAB13B50E84001FFB52 /* demoapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoapp.cpp; path = demo/demoapp.cpp; sourceTree = "<group>"; };
 		40E9BBAC13B50E84001FFB52 /* demoframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoframe.cpp; path = demo/demoframe.cpp; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* minimal_cocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal_cocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9EB593713B6866200D480A7 /* mo_app_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_app_g.cpp; sourceTree = "<group>"; };
+		B9EB593813B6866200D480A7 /* mo_barbutton_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_barbutton_g.cpp; sourceTree = "<group>"; };
+		B9EB593913B6866200D480A7 /* mo_bmpbutton_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_bmpbutton_g.cpp; sourceTree = "<group>"; };
+		B9EB593A13B6866200D480A7 /* mo_button_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_button_g.cpp; sourceTree = "<group>"; };
+		B9EB593B13B6866200D480A7 /* mo_buttonstrip_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_buttonstrip_g.cpp; sourceTree = "<group>"; };
+		B9EB593C13B6866200D480A7 /* mo_frame_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_frame_g.cpp; sourceTree = "<group>"; };
+		B9EB593D13B6866200D480A7 /* mo_gauge_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_gauge_g.cpp; sourceTree = "<group>"; };
+		B9EB593E13B6866200D480A7 /* mo_keyboard_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_keyboard_g.cpp; sourceTree = "<group>"; };
+		B9EB593F13B6866200D480A7 /* mo_listbox_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_listbox_g.cpp; sourceTree = "<group>"; };
+		B9EB594013B6866200D480A7 /* mo_navbar_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_navbar_g.cpp; sourceTree = "<group>"; };
+		B9EB594113B6866200D480A7 /* mo_navctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_navctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB594213B6866200D480A7 /* mo_navitem_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_navitem_g.cpp; sourceTree = "<group>"; };
+		B9EB594313B6866200D480A7 /* mo_notebook_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_notebook_g.cpp; sourceTree = "<group>"; };
+		B9EB594413B6866200D480A7 /* mo_pagectrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_pagectrl_g.cpp; sourceTree = "<group>"; };
+		B9EB594513B6866200D480A7 /* mo_panel_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_panel_g.cpp; sourceTree = "<group>"; };
+		B9EB594613B6866200D480A7 /* mo_scrollwin_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_scrollwin_g.cpp; sourceTree = "<group>"; };
+		B9EB594713B6866200D480A7 /* mo_searchctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_searchctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB594813B6866200D480A7 /* mo_segctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_segctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB594913B6866200D480A7 /* mo_settings_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_settings_g.cpp; sourceTree = "<group>"; };
+		B9EB594A13B6866200D480A7 /* mo_sheets_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_sheets_g.cpp; sourceTree = "<group>"; };
+		B9EB594B13B6866200D480A7 /* mo_simulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_simulator.cpp; sourceTree = "<group>"; };
+		B9EB594C13B6866200D480A7 /* mo_slider_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_slider_g.cpp; sourceTree = "<group>"; };
+		B9EB594D13B6866200D480A7 /* mo_statbmp_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_statbmp_g.cpp; sourceTree = "<group>"; };
+		B9EB594E13B6866200D480A7 /* mo_stattext_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_stattext_g.cpp; sourceTree = "<group>"; };
+		B9EB594F13B6866200D480A7 /* mo_switch_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_switch_g.cpp; sourceTree = "<group>"; };
+		B9EB595013B6866200D480A7 /* mo_tabctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_tabctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB595113B6866200D480A7 /* mo_tablecell_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_tablecell_g.cpp; sourceTree = "<group>"; };
+		B9EB595213B6866200D480A7 /* mo_tablectrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_tablectrl_g.cpp; sourceTree = "<group>"; };
+		B9EB595313B6866200D480A7 /* mo_textctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_textctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB595413B6866200D480A7 /* mo_toolbar_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_toolbar_g.cpp; sourceTree = "<group>"; };
+		B9EB595513B6866200D480A7 /* mo_utils_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_utils_g.cpp; sourceTree = "<group>"; };
+		B9EB595613B6866200D480A7 /* mo_viewcontroller_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_viewcontroller_g.cpp; sourceTree = "<group>"; };
+		B9EB595713B6866200D480A7 /* mo_vlbox_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_vlbox_g.cpp; sourceTree = "<group>"; };
+		B9EB595813B6866200D480A7 /* mo_vscroll_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_vscroll_g.cpp; sourceTree = "<group>"; };
+		B9EB595913B6866200D480A7 /* mo_webctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_webctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB595A13B6866200D480A7 /* mo_wheelsctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_wheelsctrl_g.cpp; sourceTree = "<group>"; };
+		B9EB595B13B6866200D480A7 /* mo_window_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mo_window_g.cpp; sourceTree = "<group>"; };
+		B9EB595C13B6866200D480A7 /* simulator.pjd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = simulator.pjd; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +221,7 @@
 				407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */,
 				40735927137088070077DE1B /* Info_cocoa.plist */,
 				405B1A8410EF202100676938 /* wxmobilecocoa.xcodeproj */,
+				B9EB593613B6866200D480A7 /* mobile */,
 				405B1A9710EF227D00676938 /* src */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -132,6 +245,52 @@
 			);
 			name = src;
 			sourceTree = "<group>";
+		};
+		B9EB593613B6866200D480A7 /* mobile */ = {
+			isa = PBXGroup;
+			children = (
+				B9EB593713B6866200D480A7 /* mo_app_g.cpp */,
+				B9EB593813B6866200D480A7 /* mo_barbutton_g.cpp */,
+				B9EB593913B6866200D480A7 /* mo_bmpbutton_g.cpp */,
+				B9EB593A13B6866200D480A7 /* mo_button_g.cpp */,
+				B9EB593B13B6866200D480A7 /* mo_buttonstrip_g.cpp */,
+				B9EB593C13B6866200D480A7 /* mo_frame_g.cpp */,
+				B9EB593D13B6866200D480A7 /* mo_gauge_g.cpp */,
+				B9EB593E13B6866200D480A7 /* mo_keyboard_g.cpp */,
+				B9EB593F13B6866200D480A7 /* mo_listbox_g.cpp */,
+				B9EB594013B6866200D480A7 /* mo_navbar_g.cpp */,
+				B9EB594113B6866200D480A7 /* mo_navctrl_g.cpp */,
+				B9EB594213B6866200D480A7 /* mo_navitem_g.cpp */,
+				B9EB594313B6866200D480A7 /* mo_notebook_g.cpp */,
+				B9EB594413B6866200D480A7 /* mo_pagectrl_g.cpp */,
+				B9EB594513B6866200D480A7 /* mo_panel_g.cpp */,
+				B9EB594613B6866200D480A7 /* mo_scrollwin_g.cpp */,
+				B9EB594713B6866200D480A7 /* mo_searchctrl_g.cpp */,
+				B9EB594813B6866200D480A7 /* mo_segctrl_g.cpp */,
+				B9EB594913B6866200D480A7 /* mo_settings_g.cpp */,
+				B9EB594A13B6866200D480A7 /* mo_sheets_g.cpp */,
+				B9EB594B13B6866200D480A7 /* mo_simulator.cpp */,
+				B9EB594C13B6866200D480A7 /* mo_slider_g.cpp */,
+				B9EB594D13B6866200D480A7 /* mo_statbmp_g.cpp */,
+				B9EB594E13B6866200D480A7 /* mo_stattext_g.cpp */,
+				B9EB594F13B6866200D480A7 /* mo_switch_g.cpp */,
+				B9EB595013B6866200D480A7 /* mo_tabctrl_g.cpp */,
+				B9EB595113B6866200D480A7 /* mo_tablecell_g.cpp */,
+				B9EB595213B6866200D480A7 /* mo_tablectrl_g.cpp */,
+				B9EB595313B6866200D480A7 /* mo_textctrl_g.cpp */,
+				B9EB595413B6866200D480A7 /* mo_toolbar_g.cpp */,
+				B9EB595513B6866200D480A7 /* mo_utils_g.cpp */,
+				B9EB595613B6866200D480A7 /* mo_viewcontroller_g.cpp */,
+				B9EB595713B6866200D480A7 /* mo_vlbox_g.cpp */,
+				B9EB595813B6866200D480A7 /* mo_vscroll_g.cpp */,
+				B9EB595913B6866200D480A7 /* mo_webctrl_g.cpp */,
+				B9EB595A13B6866200D480A7 /* mo_wheelsctrl_g.cpp */,
+				B9EB595B13B6866200D480A7 /* mo_window_g.cpp */,
+				B9EB595C13B6866200D480A7 /* simulator.pjd */,
+			);
+			name = mobile;
+			path = ../../src/mobile/generic;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -228,6 +387,43 @@
 			files = (
 				40E9BBAD13B50E84001FFB52 /* demoapp.cpp in Sources */,
 				40E9BBAE13B50E84001FFB52 /* demoframe.cpp in Sources */,
+				B9EB598213B6866200D480A7 /* mo_app_g.cpp in Sources */,
+				B9EB598313B6866200D480A7 /* mo_barbutton_g.cpp in Sources */,
+				B9EB598413B6866200D480A7 /* mo_bmpbutton_g.cpp in Sources */,
+				B9EB598513B6866200D480A7 /* mo_button_g.cpp in Sources */,
+				B9EB598613B6866200D480A7 /* mo_buttonstrip_g.cpp in Sources */,
+				B9EB598713B6866200D480A7 /* mo_frame_g.cpp in Sources */,
+				B9EB598813B6866200D480A7 /* mo_gauge_g.cpp in Sources */,
+				B9EB598913B6866200D480A7 /* mo_keyboard_g.cpp in Sources */,
+				B9EB598A13B6866200D480A7 /* mo_listbox_g.cpp in Sources */,
+				B9EB598B13B6866200D480A7 /* mo_navbar_g.cpp in Sources */,
+				B9EB598C13B6866200D480A7 /* mo_navctrl_g.cpp in Sources */,
+				B9EB598D13B6866200D480A7 /* mo_navitem_g.cpp in Sources */,
+				B9EB598E13B6866200D480A7 /* mo_notebook_g.cpp in Sources */,
+				B9EB598F13B6866200D480A7 /* mo_pagectrl_g.cpp in Sources */,
+				B9EB599013B6866200D480A7 /* mo_panel_g.cpp in Sources */,
+				B9EB599113B6866200D480A7 /* mo_scrollwin_g.cpp in Sources */,
+				B9EB599213B6866200D480A7 /* mo_searchctrl_g.cpp in Sources */,
+				B9EB599313B6866200D480A7 /* mo_segctrl_g.cpp in Sources */,
+				B9EB599413B6866200D480A7 /* mo_settings_g.cpp in Sources */,
+				B9EB599513B6866200D480A7 /* mo_sheets_g.cpp in Sources */,
+				B9EB599613B6866200D480A7 /* mo_simulator.cpp in Sources */,
+				B9EB599713B6866200D480A7 /* mo_slider_g.cpp in Sources */,
+				B9EB599813B6866200D480A7 /* mo_statbmp_g.cpp in Sources */,
+				B9EB599913B6866200D480A7 /* mo_stattext_g.cpp in Sources */,
+				B9EB599A13B6866200D480A7 /* mo_switch_g.cpp in Sources */,
+				B9EB599B13B6866200D480A7 /* mo_tabctrl_g.cpp in Sources */,
+				B9EB599C13B6866200D480A7 /* mo_tablecell_g.cpp in Sources */,
+				B9EB599D13B6866200D480A7 /* mo_tablectrl_g.cpp in Sources */,
+				B9EB599E13B6866200D480A7 /* mo_textctrl_g.cpp in Sources */,
+				B9EB599F13B6866200D480A7 /* mo_toolbar_g.cpp in Sources */,
+				B9EB59A013B6866200D480A7 /* mo_utils_g.cpp in Sources */,
+				B9EB59A113B6866200D480A7 /* mo_viewcontroller_g.cpp in Sources */,
+				B9EB59A213B6866200D480A7 /* mo_vlbox_g.cpp in Sources */,
+				B9EB59A313B6866200D480A7 /* mo_vscroll_g.cpp in Sources */,
+				B9EB59A413B6866200D480A7 /* mo_webctrl_g.cpp in Sources */,
+				B9EB59A513B6866200D480A7 /* mo_wheelsctrl_g.cpp in Sources */,
+				B9EB59A613B6866200D480A7 /* mo_window_g.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +433,43 @@
 			files = (
 				40E9BBAF13B50E84001FFB52 /* demoapp.cpp in Sources */,
 				40E9BBB013B50E84001FFB52 /* demoframe.cpp in Sources */,
+				B9EB595D13B6866200D480A7 /* mo_app_g.cpp in Sources */,
+				B9EB595E13B6866200D480A7 /* mo_barbutton_g.cpp in Sources */,
+				B9EB595F13B6866200D480A7 /* mo_bmpbutton_g.cpp in Sources */,
+				B9EB596013B6866200D480A7 /* mo_button_g.cpp in Sources */,
+				B9EB596113B6866200D480A7 /* mo_buttonstrip_g.cpp in Sources */,
+				B9EB596213B6866200D480A7 /* mo_frame_g.cpp in Sources */,
+				B9EB596313B6866200D480A7 /* mo_gauge_g.cpp in Sources */,
+				B9EB596413B6866200D480A7 /* mo_keyboard_g.cpp in Sources */,
+				B9EB596513B6866200D480A7 /* mo_listbox_g.cpp in Sources */,
+				B9EB596613B6866200D480A7 /* mo_navbar_g.cpp in Sources */,
+				B9EB596713B6866200D480A7 /* mo_navctrl_g.cpp in Sources */,
+				B9EB596813B6866200D480A7 /* mo_navitem_g.cpp in Sources */,
+				B9EB596913B6866200D480A7 /* mo_notebook_g.cpp in Sources */,
+				B9EB596A13B6866200D480A7 /* mo_pagectrl_g.cpp in Sources */,
+				B9EB596B13B6866200D480A7 /* mo_panel_g.cpp in Sources */,
+				B9EB596C13B6866200D480A7 /* mo_scrollwin_g.cpp in Sources */,
+				B9EB596D13B6866200D480A7 /* mo_searchctrl_g.cpp in Sources */,
+				B9EB596E13B6866200D480A7 /* mo_segctrl_g.cpp in Sources */,
+				B9EB596F13B6866200D480A7 /* mo_settings_g.cpp in Sources */,
+				B9EB597013B6866200D480A7 /* mo_sheets_g.cpp in Sources */,
+				B9EB597113B6866200D480A7 /* mo_simulator.cpp in Sources */,
+				B9EB597213B6866200D480A7 /* mo_slider_g.cpp in Sources */,
+				B9EB597313B6866200D480A7 /* mo_statbmp_g.cpp in Sources */,
+				B9EB597413B6866200D480A7 /* mo_stattext_g.cpp in Sources */,
+				B9EB597513B6866200D480A7 /* mo_switch_g.cpp in Sources */,
+				B9EB597613B6866200D480A7 /* mo_tabctrl_g.cpp in Sources */,
+				B9EB597713B6866200D480A7 /* mo_tablecell_g.cpp in Sources */,
+				B9EB597813B6866200D480A7 /* mo_tablectrl_g.cpp in Sources */,
+				B9EB597913B6866200D480A7 /* mo_textctrl_g.cpp in Sources */,
+				B9EB597A13B6866200D480A7 /* mo_toolbar_g.cpp in Sources */,
+				B9EB597B13B6866200D480A7 /* mo_utils_g.cpp in Sources */,
+				B9EB597C13B6866200D480A7 /* mo_viewcontroller_g.cpp in Sources */,
+				B9EB597D13B6866200D480A7 /* mo_vlbox_g.cpp in Sources */,
+				B9EB597E13B6866200D480A7 /* mo_vscroll_g.cpp in Sources */,
+				B9EB597F13B6866200D480A7 /* mo_webctrl_g.cpp in Sources */,
+				B9EB598013B6866200D480A7 /* mo_wheelsctrl_g.cpp in Sources */,
+				B9EB598113B6866200D480A7 /* mo_window_g.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

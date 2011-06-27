@@ -210,42 +210,6 @@
 		3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
 		403FBA20CEFE3EAFB4E6B905 /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7332A03D93D3DABB050615D /* dir.cpp */; };
 		4040AE89BF9F34668091064A /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
-		40E9BB5913B50D4E001FFB52 /* mo_app_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3513B50D4D001FFB52 /* mo_app_n.mm */; };
-		40E9BB5A13B50D4E001FFB52 /* mo_barbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3613B50D4D001FFB52 /* mo_barbutton_n.mm */; };
-		40E9BB5B13B50D4E001FFB52 /* mo_bmpbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3713B50D4D001FFB52 /* mo_bmpbutton_n.mm */; };
-		40E9BB5C13B50D4E001FFB52 /* mo_button_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3813B50D4D001FFB52 /* mo_button_n.mm */; };
-		40E9BB5D13B50D4E001FFB52 /* mo_buttonstrip_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3913B50D4D001FFB52 /* mo_buttonstrip_n.mm */; };
-		40E9BB5E13B50D4E001FFB52 /* mo_frame_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3A13B50D4D001FFB52 /* mo_frame_n.mm */; };
-		40E9BB5F13B50D4E001FFB52 /* mo_gauge_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3B13B50D4D001FFB52 /* mo_gauge_n.mm */; };
-		40E9BB6013B50D4E001FFB52 /* mo_keyboard_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3C13B50D4D001FFB52 /* mo_keyboard_n.mm */; };
-		40E9BB6113B50D4E001FFB52 /* mo_listbox_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3D13B50D4D001FFB52 /* mo_listbox_n.mm */; };
-		40E9BB6213B50D4E001FFB52 /* mo_navbar_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3E13B50D4D001FFB52 /* mo_navbar_n.mm */; };
-		40E9BB6313B50D4E001FFB52 /* mo_navctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB3F13B50D4D001FFB52 /* mo_navctrl_n.mm */; };
-		40E9BB6413B50D4E001FFB52 /* mo_navitem_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4013B50D4D001FFB52 /* mo_navitem_n.mm */; };
-		40E9BB6513B50D4E001FFB52 /* mo_notebook_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4113B50D4D001FFB52 /* mo_notebook_n.mm */; };
-		40E9BB6613B50D4E001FFB52 /* mo_pagectrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4213B50D4D001FFB52 /* mo_pagectrl_n.mm */; };
-		40E9BB6713B50D4E001FFB52 /* mo_panel_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4313B50D4D001FFB52 /* mo_panel_n.mm */; };
-		40E9BB6813B50D4E001FFB52 /* mo_scrollwin_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4413B50D4D001FFB52 /* mo_scrollwin_n.mm */; };
-		40E9BB6913B50D4E001FFB52 /* mo_searchctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4513B50D4D001FFB52 /* mo_searchctrl_n.mm */; };
-		40E9BB6A13B50D4E001FFB52 /* mo_segctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4613B50D4D001FFB52 /* mo_segctrl_n.mm */; };
-		40E9BB6B13B50D4E001FFB52 /* mo_settings_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4713B50D4D001FFB52 /* mo_settings_n.mm */; };
-		40E9BB6C13B50D4E001FFB52 /* mo_sheets_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4813B50D4D001FFB52 /* mo_sheets_n.mm */; };
-		40E9BB6D13B50D4E001FFB52 /* mo_slider_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4913B50D4D001FFB52 /* mo_slider_n.mm */; };
-		40E9BB6E13B50D4E001FFB52 /* mo_statbmp_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4A13B50D4D001FFB52 /* mo_statbmp_n.mm */; };
-		40E9BB6F13B50D4E001FFB52 /* mo_stattext_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4B13B50D4D001FFB52 /* mo_stattext_n.mm */; };
-		40E9BB7013B50D4E001FFB52 /* mo_switch_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4C13B50D4D001FFB52 /* mo_switch_n.mm */; };
-		40E9BB7113B50D4E001FFB52 /* mo_tabctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4D13B50D4D001FFB52 /* mo_tabctrl_n.mm */; };
-		40E9BB7213B50D4E001FFB52 /* mo_tablecell_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4E13B50D4D001FFB52 /* mo_tablecell_n.mm */; };
-		40E9BB7313B50D4E001FFB52 /* mo_tablectrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB4F13B50D4D001FFB52 /* mo_tablectrl_n.mm */; };
-		40E9BB7413B50D4E001FFB52 /* mo_textctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5013B50D4D001FFB52 /* mo_textctrl_n.mm */; };
-		40E9BB7513B50D4E001FFB52 /* mo_toolbar_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5113B50D4D001FFB52 /* mo_toolbar_n.mm */; };
-		40E9BB7613B50D4E001FFB52 /* mo_utils_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5213B50D4D001FFB52 /* mo_utils_n.mm */; };
-		40E9BB7713B50D4E001FFB52 /* mo_viewcontroller_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5313B50D4D001FFB52 /* mo_viewcontroller_n.mm */; };
-		40E9BB7813B50D4E001FFB52 /* mo_vlbox_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5413B50D4E001FFB52 /* mo_vlbox_n.mm */; };
-		40E9BB7913B50D4E001FFB52 /* mo_vscroll_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5513B50D4E001FFB52 /* mo_vscroll_n.mm */; };
-		40E9BB7A13B50D4E001FFB52 /* mo_webctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5613B50D4E001FFB52 /* mo_webctrl_n.mm */; };
-		40E9BB7B13B50D4E001FFB52 /* mo_wheelsctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5713B50D4E001FFB52 /* mo_wheelsctrl_n.mm */; };
-		40E9BB7C13B50D4E001FFB52 /* mo_window_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40E9BB5813B50D4E001FFB52 /* mo_window_n.mm */; };
 		41943A8F82723027A151A468 /* fileconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61DA2A4C0D143CBE804BB8A1 /* fileconf.cpp */; };
 		4269B85FDC5639BEB76A8AEB /* nonownedwnd_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19559DDA007D364E838014B5 /* nonownedwnd_osx.cpp */; };
 		4279D39CAAF834F6A5B99196 /* persist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22D9626646773CED82449D5D /* persist.cpp */; };
@@ -990,42 +954,6 @@
 		40586C8986443431A64EB066 /* LexLisp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLisp.cxx; path = ../../src/stc/scintilla/src/LexLisp.cxx; sourceTree = "<group>"; };
 		4071FF90F1D4336C836B2AE4 /* tif_pixarlog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_pixarlog.c; path = ../../src/tiff/libtiff/tif_pixarlog.c; sourceTree = "<group>"; };
 		40CE02524DD4385AB2C3DF95 /* socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = socket.cpp; path = ../../src/common/socket.cpp; sourceTree = "<group>"; };
-		40E9BB3513B50D4D001FFB52 /* mo_app_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_app_n.mm; path = ../../src/mobile/native/mo_app_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3613B50D4D001FFB52 /* mo_barbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_barbutton_n.mm; path = ../../src/mobile/native/mo_barbutton_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3713B50D4D001FFB52 /* mo_bmpbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_bmpbutton_n.mm; path = ../../src/mobile/native/mo_bmpbutton_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3813B50D4D001FFB52 /* mo_button_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_button_n.mm; path = ../../src/mobile/native/mo_button_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3913B50D4D001FFB52 /* mo_buttonstrip_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_buttonstrip_n.mm; path = ../../src/mobile/native/mo_buttonstrip_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3A13B50D4D001FFB52 /* mo_frame_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_frame_n.mm; path = ../../src/mobile/native/mo_frame_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3B13B50D4D001FFB52 /* mo_gauge_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_gauge_n.mm; path = ../../src/mobile/native/mo_gauge_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3C13B50D4D001FFB52 /* mo_keyboard_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_keyboard_n.mm; path = ../../src/mobile/native/mo_keyboard_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3D13B50D4D001FFB52 /* mo_listbox_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_listbox_n.mm; path = ../../src/mobile/native/mo_listbox_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3E13B50D4D001FFB52 /* mo_navbar_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_navbar_n.mm; path = ../../src/mobile/native/mo_navbar_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB3F13B50D4D001FFB52 /* mo_navctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_navctrl_n.mm; path = ../../src/mobile/native/mo_navctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4013B50D4D001FFB52 /* mo_navitem_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_navitem_n.mm; path = ../../src/mobile/native/mo_navitem_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4113B50D4D001FFB52 /* mo_notebook_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_notebook_n.mm; path = ../../src/mobile/native/mo_notebook_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4213B50D4D001FFB52 /* mo_pagectrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_pagectrl_n.mm; path = ../../src/mobile/native/mo_pagectrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4313B50D4D001FFB52 /* mo_panel_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_panel_n.mm; path = ../../src/mobile/native/mo_panel_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4413B50D4D001FFB52 /* mo_scrollwin_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_scrollwin_n.mm; path = ../../src/mobile/native/mo_scrollwin_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4513B50D4D001FFB52 /* mo_searchctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_searchctrl_n.mm; path = ../../src/mobile/native/mo_searchctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4613B50D4D001FFB52 /* mo_segctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_segctrl_n.mm; path = ../../src/mobile/native/mo_segctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4713B50D4D001FFB52 /* mo_settings_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_settings_n.mm; path = ../../src/mobile/native/mo_settings_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4813B50D4D001FFB52 /* mo_sheets_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_sheets_n.mm; path = ../../src/mobile/native/mo_sheets_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4913B50D4D001FFB52 /* mo_slider_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_slider_n.mm; path = ../../src/mobile/native/mo_slider_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4A13B50D4D001FFB52 /* mo_statbmp_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_statbmp_n.mm; path = ../../src/mobile/native/mo_statbmp_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4B13B50D4D001FFB52 /* mo_stattext_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_stattext_n.mm; path = ../../src/mobile/native/mo_stattext_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4C13B50D4D001FFB52 /* mo_switch_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_switch_n.mm; path = ../../src/mobile/native/mo_switch_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4D13B50D4D001FFB52 /* mo_tabctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_tabctrl_n.mm; path = ../../src/mobile/native/mo_tabctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4E13B50D4D001FFB52 /* mo_tablecell_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_tablecell_n.mm; path = ../../src/mobile/native/mo_tablecell_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB4F13B50D4D001FFB52 /* mo_tablectrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_tablectrl_n.mm; path = ../../src/mobile/native/mo_tablectrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5013B50D4D001FFB52 /* mo_textctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_textctrl_n.mm; path = ../../src/mobile/native/mo_textctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5113B50D4D001FFB52 /* mo_toolbar_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_toolbar_n.mm; path = ../../src/mobile/native/mo_toolbar_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5213B50D4D001FFB52 /* mo_utils_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_utils_n.mm; path = ../../src/mobile/native/mo_utils_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5313B50D4D001FFB52 /* mo_viewcontroller_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_viewcontroller_n.mm; path = ../../src/mobile/native/mo_viewcontroller_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5413B50D4E001FFB52 /* mo_vlbox_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_vlbox_n.mm; path = ../../src/mobile/native/mo_vlbox_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5513B50D4E001FFB52 /* mo_vscroll_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_vscroll_n.mm; path = ../../src/mobile/native/mo_vscroll_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5613B50D4E001FFB52 /* mo_webctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_webctrl_n.mm; path = ../../src/mobile/native/mo_webctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5713B50D4E001FFB52 /* mo_wheelsctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_wheelsctrl_n.mm; path = ../../src/mobile/native/mo_wheelsctrl_n.mm; sourceTree = SOURCE_ROOT; };
-		40E9BB5813B50D4E001FFB52 /* mo_window_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = mo_window_n.mm; path = ../../src/mobile/native/mo_window_n.mm; sourceTree = SOURCE_ROOT; };
 		4188821BBA833CCAA678B234 /* utilscmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilscmn.cpp; path = ../../src/common/utilscmn.cpp; sourceTree = "<group>"; };
 		418AD9241B673308BE31DC06 /* xlocale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xlocale.cpp; path = ../../src/common/xlocale.cpp; sourceTree = "<group>"; };
 		425BFA3FDB7D3EA7ADCE1087 /* renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = renderer.cpp; path = ../../src/osx/carbon/renderer.cpp; sourceTree = "<group>"; };
@@ -1641,7 +1569,6 @@
 				374BD863E6AD33189B7E4040 /* net */,
 				2FF0B5E0505D3AEA9A4ACF11 /* adv */,
 				5C5CD199E7573C73AE6F392D /* media */,
-				402531F413B4E0B8002F37CD /* mobile */,
 				60E51BFF5CD2327483201F14 /* html */,
 				60328E6EA3793DA990E18FC1 /* xrc */,
 				4D98B791E17232D39944F04F /* xml */,
@@ -1839,49 +1766,6 @@
 				AC04244D4E183DF480908048 /* src/osx/core */,
 			);
 			name = net;
-			sourceTree = "<group>";
-		};
-		402531F413B4E0B8002F37CD /* mobile */ = {
-			isa = PBXGroup;
-			children = (
-				40E9BB3513B50D4D001FFB52 /* mo_app_n.mm */,
-				40E9BB3613B50D4D001FFB52 /* mo_barbutton_n.mm */,
-				40E9BB3713B50D4D001FFB52 /* mo_bmpbutton_n.mm */,
-				40E9BB3813B50D4D001FFB52 /* mo_button_n.mm */,
-				40E9BB3913B50D4D001FFB52 /* mo_buttonstrip_n.mm */,
-				40E9BB3A13B50D4D001FFB52 /* mo_frame_n.mm */,
-				40E9BB3B13B50D4D001FFB52 /* mo_gauge_n.mm */,
-				40E9BB3C13B50D4D001FFB52 /* mo_keyboard_n.mm */,
-				40E9BB3D13B50D4D001FFB52 /* mo_listbox_n.mm */,
-				40E9BB3E13B50D4D001FFB52 /* mo_navbar_n.mm */,
-				40E9BB3F13B50D4D001FFB52 /* mo_navctrl_n.mm */,
-				40E9BB4013B50D4D001FFB52 /* mo_navitem_n.mm */,
-				40E9BB4113B50D4D001FFB52 /* mo_notebook_n.mm */,
-				40E9BB4213B50D4D001FFB52 /* mo_pagectrl_n.mm */,
-				40E9BB4313B50D4D001FFB52 /* mo_panel_n.mm */,
-				40E9BB4413B50D4D001FFB52 /* mo_scrollwin_n.mm */,
-				40E9BB4513B50D4D001FFB52 /* mo_searchctrl_n.mm */,
-				40E9BB4613B50D4D001FFB52 /* mo_segctrl_n.mm */,
-				40E9BB4713B50D4D001FFB52 /* mo_settings_n.mm */,
-				40E9BB4813B50D4D001FFB52 /* mo_sheets_n.mm */,
-				40E9BB4913B50D4D001FFB52 /* mo_slider_n.mm */,
-				40E9BB4A13B50D4D001FFB52 /* mo_statbmp_n.mm */,
-				40E9BB4B13B50D4D001FFB52 /* mo_stattext_n.mm */,
-				40E9BB4C13B50D4D001FFB52 /* mo_switch_n.mm */,
-				40E9BB4D13B50D4D001FFB52 /* mo_tabctrl_n.mm */,
-				40E9BB4E13B50D4D001FFB52 /* mo_tablecell_n.mm */,
-				40E9BB4F13B50D4D001FFB52 /* mo_tablectrl_n.mm */,
-				40E9BB5013B50D4D001FFB52 /* mo_textctrl_n.mm */,
-				40E9BB5113B50D4D001FFB52 /* mo_toolbar_n.mm */,
-				40E9BB5213B50D4D001FFB52 /* mo_utils_n.mm */,
-				40E9BB5313B50D4D001FFB52 /* mo_viewcontroller_n.mm */,
-				40E9BB5413B50D4E001FFB52 /* mo_vlbox_n.mm */,
-				40E9BB5513B50D4E001FFB52 /* mo_vscroll_n.mm */,
-				40E9BB5613B50D4E001FFB52 /* mo_webctrl_n.mm */,
-				40E9BB5713B50D4E001FFB52 /* mo_wheelsctrl_n.mm */,
-				40E9BB5813B50D4E001FFB52 /* mo_window_n.mm */,
-			);
-			name = mobile;
 			sourceTree = "<group>";
 		};
 		42F504C4994C38D7A8F062F4 /* libexpat */ = {
@@ -2971,7 +2855,7 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxmobileiphone" */;
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxMobileiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3775,42 +3659,6 @@
 				C2DEE063B5E032C1BD2B5026 /* xmlparse.c in Sources */,
 				AE84BC9A1CCA3ADA9C483950 /* xmlrole.c in Sources */,
 				DB9565CC4EAE3BCB9F490620 /* xmltok.c in Sources */,
-				40E9BB5913B50D4E001FFB52 /* mo_app_n.mm in Sources */,
-				40E9BB5A13B50D4E001FFB52 /* mo_barbutton_n.mm in Sources */,
-				40E9BB5B13B50D4E001FFB52 /* mo_bmpbutton_n.mm in Sources */,
-				40E9BB5C13B50D4E001FFB52 /* mo_button_n.mm in Sources */,
-				40E9BB5D13B50D4E001FFB52 /* mo_buttonstrip_n.mm in Sources */,
-				40E9BB5E13B50D4E001FFB52 /* mo_frame_n.mm in Sources */,
-				40E9BB5F13B50D4E001FFB52 /* mo_gauge_n.mm in Sources */,
-				40E9BB6013B50D4E001FFB52 /* mo_keyboard_n.mm in Sources */,
-				40E9BB6113B50D4E001FFB52 /* mo_listbox_n.mm in Sources */,
-				40E9BB6213B50D4E001FFB52 /* mo_navbar_n.mm in Sources */,
-				40E9BB6313B50D4E001FFB52 /* mo_navctrl_n.mm in Sources */,
-				40E9BB6413B50D4E001FFB52 /* mo_navitem_n.mm in Sources */,
-				40E9BB6513B50D4E001FFB52 /* mo_notebook_n.mm in Sources */,
-				40E9BB6613B50D4E001FFB52 /* mo_pagectrl_n.mm in Sources */,
-				40E9BB6713B50D4E001FFB52 /* mo_panel_n.mm in Sources */,
-				40E9BB6813B50D4E001FFB52 /* mo_scrollwin_n.mm in Sources */,
-				40E9BB6913B50D4E001FFB52 /* mo_searchctrl_n.mm in Sources */,
-				40E9BB6A13B50D4E001FFB52 /* mo_segctrl_n.mm in Sources */,
-				40E9BB6B13B50D4E001FFB52 /* mo_settings_n.mm in Sources */,
-				40E9BB6C13B50D4E001FFB52 /* mo_sheets_n.mm in Sources */,
-				40E9BB6D13B50D4E001FFB52 /* mo_slider_n.mm in Sources */,
-				40E9BB6E13B50D4E001FFB52 /* mo_statbmp_n.mm in Sources */,
-				40E9BB6F13B50D4E001FFB52 /* mo_stattext_n.mm in Sources */,
-				40E9BB7013B50D4E001FFB52 /* mo_switch_n.mm in Sources */,
-				40E9BB7113B50D4E001FFB52 /* mo_tabctrl_n.mm in Sources */,
-				40E9BB7213B50D4E001FFB52 /* mo_tablecell_n.mm in Sources */,
-				40E9BB7313B50D4E001FFB52 /* mo_tablectrl_n.mm in Sources */,
-				40E9BB7413B50D4E001FFB52 /* mo_textctrl_n.mm in Sources */,
-				40E9BB7513B50D4E001FFB52 /* mo_toolbar_n.mm in Sources */,
-				40E9BB7613B50D4E001FFB52 /* mo_utils_n.mm in Sources */,
-				40E9BB7713B50D4E001FFB52 /* mo_viewcontroller_n.mm in Sources */,
-				40E9BB7813B50D4E001FFB52 /* mo_vlbox_n.mm in Sources */,
-				40E9BB7913B50D4E001FFB52 /* mo_vscroll_n.mm in Sources */,
-				40E9BB7A13B50D4E001FFB52 /* mo_webctrl_n.mm in Sources */,
-				40E9BB7B13B50D4E001FFB52 /* mo_wheelsctrl_n.mm in Sources */,
-				40E9BB7C13B50D4E001FFB52 /* mo_window_n.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3859,7 +3707,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxmobileiphone" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxMobileiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,

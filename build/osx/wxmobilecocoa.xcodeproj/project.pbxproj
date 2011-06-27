@@ -427,80 +427,6 @@
 		3EB6B8528A0D3B6CADAE1257 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D2E8B5C89939CE90B99E2B /* archive.cpp */; };
 		3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
 		3ED6F4B64C283232A79423D0 /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
-		4025322813B4E143002F37CD /* mo_app_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320313B4E143002F37CD /* mo_app_g.cpp */; };
-		4025322913B4E143002F37CD /* mo_barbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320413B4E143002F37CD /* mo_barbutton_g.cpp */; };
-		4025322A13B4E143002F37CD /* mo_bmpbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320513B4E143002F37CD /* mo_bmpbutton_g.cpp */; };
-		4025322B13B4E143002F37CD /* mo_button_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320613B4E143002F37CD /* mo_button_g.cpp */; };
-		4025322C13B4E143002F37CD /* mo_buttonstrip_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320713B4E143002F37CD /* mo_buttonstrip_g.cpp */; };
-		4025322D13B4E143002F37CD /* mo_frame_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320813B4E143002F37CD /* mo_frame_g.cpp */; };
-		4025322E13B4E143002F37CD /* mo_gauge_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320913B4E143002F37CD /* mo_gauge_g.cpp */; };
-		4025322F13B4E143002F37CD /* mo_keyboard_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320A13B4E143002F37CD /* mo_keyboard_g.cpp */; };
-		4025323013B4E143002F37CD /* mo_listbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320B13B4E143002F37CD /* mo_listbox_g.cpp */; };
-		4025323113B4E143002F37CD /* mo_navbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320C13B4E143002F37CD /* mo_navbar_g.cpp */; };
-		4025323213B4E143002F37CD /* mo_navctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320D13B4E143002F37CD /* mo_navctrl_g.cpp */; };
-		4025323313B4E143002F37CD /* mo_navitem_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320E13B4E143002F37CD /* mo_navitem_g.cpp */; };
-		4025323413B4E143002F37CD /* mo_notebook_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320F13B4E143002F37CD /* mo_notebook_g.cpp */; };
-		4025323513B4E143002F37CD /* mo_pagectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321013B4E143002F37CD /* mo_pagectrl_g.cpp */; };
-		4025323613B4E143002F37CD /* mo_panel_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321113B4E143002F37CD /* mo_panel_g.cpp */; };
-		4025323713B4E143002F37CD /* mo_scrollwin_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321213B4E143002F37CD /* mo_scrollwin_g.cpp */; };
-		4025323813B4E143002F37CD /* mo_searchctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321313B4E143002F37CD /* mo_searchctrl_g.cpp */; };
-		4025323913B4E143002F37CD /* mo_segctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321413B4E143002F37CD /* mo_segctrl_g.cpp */; };
-		4025323A13B4E143002F37CD /* mo_settings_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321513B4E143002F37CD /* mo_settings_g.cpp */; };
-		4025323B13B4E143002F37CD /* mo_sheets_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321613B4E143002F37CD /* mo_sheets_g.cpp */; };
-		4025323C13B4E143002F37CD /* mo_simulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321713B4E143002F37CD /* mo_simulator.cpp */; };
-		4025323D13B4E143002F37CD /* mo_slider_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321813B4E143002F37CD /* mo_slider_g.cpp */; };
-		4025323E13B4E143002F37CD /* mo_statbmp_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321913B4E143002F37CD /* mo_statbmp_g.cpp */; };
-		4025323F13B4E143002F37CD /* mo_stattext_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321A13B4E143002F37CD /* mo_stattext_g.cpp */; };
-		4025324013B4E143002F37CD /* mo_switch_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321B13B4E143002F37CD /* mo_switch_g.cpp */; };
-		4025324113B4E143002F37CD /* mo_tabctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321C13B4E143002F37CD /* mo_tabctrl_g.cpp */; };
-		4025324213B4E143002F37CD /* mo_tablecell_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321D13B4E143002F37CD /* mo_tablecell_g.cpp */; };
-		4025324313B4E143002F37CD /* mo_tablectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321E13B4E143002F37CD /* mo_tablectrl_g.cpp */; };
-		4025324413B4E143002F37CD /* mo_textctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321F13B4E143002F37CD /* mo_textctrl_g.cpp */; };
-		4025324513B4E143002F37CD /* mo_toolbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322013B4E143002F37CD /* mo_toolbar_g.cpp */; };
-		4025324613B4E143002F37CD /* mo_utils_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322113B4E143002F37CD /* mo_utils_g.cpp */; };
-		4025324713B4E143002F37CD /* mo_viewcontroller_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322213B4E143002F37CD /* mo_viewcontroller_g.cpp */; };
-		4025324813B4E143002F37CD /* mo_vlbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322313B4E143002F37CD /* mo_vlbox_g.cpp */; };
-		4025324913B4E143002F37CD /* mo_vscroll_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322413B4E143002F37CD /* mo_vscroll_g.cpp */; };
-		4025324A13B4E143002F37CD /* mo_webctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322513B4E143002F37CD /* mo_webctrl_g.cpp */; };
-		4025324B13B4E143002F37CD /* mo_wheelsctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322613B4E143002F37CD /* mo_wheelsctrl_g.cpp */; };
-		4025324C13B4E143002F37CD /* mo_window_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322713B4E143002F37CD /* mo_window_g.cpp */; };
-		4025324D13B4E143002F37CD /* mo_app_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320313B4E143002F37CD /* mo_app_g.cpp */; };
-		4025324E13B4E143002F37CD /* mo_barbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320413B4E143002F37CD /* mo_barbutton_g.cpp */; };
-		4025324F13B4E143002F37CD /* mo_bmpbutton_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320513B4E143002F37CD /* mo_bmpbutton_g.cpp */; };
-		4025325013B4E143002F37CD /* mo_button_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320613B4E143002F37CD /* mo_button_g.cpp */; };
-		4025325113B4E143002F37CD /* mo_buttonstrip_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320713B4E143002F37CD /* mo_buttonstrip_g.cpp */; };
-		4025325213B4E143002F37CD /* mo_frame_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320813B4E143002F37CD /* mo_frame_g.cpp */; };
-		4025325313B4E143002F37CD /* mo_gauge_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320913B4E143002F37CD /* mo_gauge_g.cpp */; };
-		4025325413B4E143002F37CD /* mo_keyboard_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320A13B4E143002F37CD /* mo_keyboard_g.cpp */; };
-		4025325513B4E143002F37CD /* mo_listbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320B13B4E143002F37CD /* mo_listbox_g.cpp */; };
-		4025325613B4E143002F37CD /* mo_navbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320C13B4E143002F37CD /* mo_navbar_g.cpp */; };
-		4025325713B4E143002F37CD /* mo_navctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320D13B4E143002F37CD /* mo_navctrl_g.cpp */; };
-		4025325813B4E143002F37CD /* mo_navitem_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320E13B4E143002F37CD /* mo_navitem_g.cpp */; };
-		4025325913B4E143002F37CD /* mo_notebook_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025320F13B4E143002F37CD /* mo_notebook_g.cpp */; };
-		4025325A13B4E143002F37CD /* mo_pagectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321013B4E143002F37CD /* mo_pagectrl_g.cpp */; };
-		4025325B13B4E143002F37CD /* mo_panel_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321113B4E143002F37CD /* mo_panel_g.cpp */; };
-		4025325C13B4E143002F37CD /* mo_scrollwin_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321213B4E143002F37CD /* mo_scrollwin_g.cpp */; };
-		4025325D13B4E143002F37CD /* mo_searchctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321313B4E143002F37CD /* mo_searchctrl_g.cpp */; };
-		4025325E13B4E143002F37CD /* mo_segctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321413B4E143002F37CD /* mo_segctrl_g.cpp */; };
-		4025325F13B4E143002F37CD /* mo_settings_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321513B4E143002F37CD /* mo_settings_g.cpp */; };
-		4025326013B4E143002F37CD /* mo_sheets_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321613B4E143002F37CD /* mo_sheets_g.cpp */; };
-		4025326113B4E143002F37CD /* mo_simulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321713B4E143002F37CD /* mo_simulator.cpp */; };
-		4025326213B4E143002F37CD /* mo_slider_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321813B4E143002F37CD /* mo_slider_g.cpp */; };
-		4025326313B4E143002F37CD /* mo_statbmp_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321913B4E143002F37CD /* mo_statbmp_g.cpp */; };
-		4025326413B4E143002F37CD /* mo_stattext_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321A13B4E143002F37CD /* mo_stattext_g.cpp */; };
-		4025326513B4E143002F37CD /* mo_switch_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321B13B4E143002F37CD /* mo_switch_g.cpp */; };
-		4025326613B4E143002F37CD /* mo_tabctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321C13B4E143002F37CD /* mo_tabctrl_g.cpp */; };
-		4025326713B4E143002F37CD /* mo_tablecell_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321D13B4E143002F37CD /* mo_tablecell_g.cpp */; };
-		4025326813B4E143002F37CD /* mo_tablectrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321E13B4E143002F37CD /* mo_tablectrl_g.cpp */; };
-		4025326913B4E143002F37CD /* mo_textctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025321F13B4E143002F37CD /* mo_textctrl_g.cpp */; };
-		4025326A13B4E143002F37CD /* mo_toolbar_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322013B4E143002F37CD /* mo_toolbar_g.cpp */; };
-		4025326B13B4E143002F37CD /* mo_utils_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322113B4E143002F37CD /* mo_utils_g.cpp */; };
-		4025326C13B4E143002F37CD /* mo_viewcontroller_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322213B4E143002F37CD /* mo_viewcontroller_g.cpp */; };
-		4025326D13B4E143002F37CD /* mo_vlbox_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322313B4E143002F37CD /* mo_vlbox_g.cpp */; };
-		4025326E13B4E143002F37CD /* mo_vscroll_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322413B4E143002F37CD /* mo_vscroll_g.cpp */; };
-		4025326F13B4E143002F37CD /* mo_webctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322513B4E143002F37CD /* mo_webctrl_g.cpp */; };
-		4025327013B4E143002F37CD /* mo_wheelsctrl_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322613B4E143002F37CD /* mo_wheelsctrl_g.cpp */; };
-		4025327113B4E143002F37CD /* mo_window_g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4025322713B4E143002F37CD /* mo_window_g.cpp */; };
 		403FBA20CEFE3EAFB4E6B905 /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7332A03D93D3DABB050615D /* dir.cpp */; };
 		403FBA20CEFE3EAFB4E6B906 /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7332A03D93D3DABB050615D /* dir.cpp */; };
 		4040AE89BF9F34668091064A /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
@@ -1843,43 +1769,6 @@
 		3F8836E29C5A370E80CE070E /* splash.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = splash.cpp; path = ../../src/generic/splash.cpp; sourceTree = "<group>"; };
 		3FB6D34C3029357EB64AECAA /* scrlwing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrlwing.cpp; path = ../../src/generic/scrlwing.cpp; sourceTree = "<group>"; };
 		3FEBA7AC7F743EE88352AEBC /* htmlwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmlwin.cpp; path = ../../src/html/htmlwin.cpp; sourceTree = "<group>"; };
-		4025320313B4E143002F37CD /* mo_app_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_app_g.cpp; path = ../../src/mobile/generic/mo_app_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320413B4E143002F37CD /* mo_barbutton_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_barbutton_g.cpp; path = ../../src/mobile/generic/mo_barbutton_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320513B4E143002F37CD /* mo_bmpbutton_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_bmpbutton_g.cpp; path = ../../src/mobile/generic/mo_bmpbutton_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320613B4E143002F37CD /* mo_button_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_button_g.cpp; path = ../../src/mobile/generic/mo_button_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320713B4E143002F37CD /* mo_buttonstrip_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_buttonstrip_g.cpp; path = ../../src/mobile/generic/mo_buttonstrip_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320813B4E143002F37CD /* mo_frame_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_frame_g.cpp; path = ../../src/mobile/generic/mo_frame_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320913B4E143002F37CD /* mo_gauge_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_gauge_g.cpp; path = ../../src/mobile/generic/mo_gauge_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320A13B4E143002F37CD /* mo_keyboard_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_keyboard_g.cpp; path = ../../src/mobile/generic/mo_keyboard_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320B13B4E143002F37CD /* mo_listbox_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_listbox_g.cpp; path = ../../src/mobile/generic/mo_listbox_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320C13B4E143002F37CD /* mo_navbar_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_navbar_g.cpp; path = ../../src/mobile/generic/mo_navbar_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320D13B4E143002F37CD /* mo_navctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_navctrl_g.cpp; path = ../../src/mobile/generic/mo_navctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320E13B4E143002F37CD /* mo_navitem_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_navitem_g.cpp; path = ../../src/mobile/generic/mo_navitem_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025320F13B4E143002F37CD /* mo_notebook_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_notebook_g.cpp; path = ../../src/mobile/generic/mo_notebook_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321013B4E143002F37CD /* mo_pagectrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_pagectrl_g.cpp; path = ../../src/mobile/generic/mo_pagectrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321113B4E143002F37CD /* mo_panel_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_panel_g.cpp; path = ../../src/mobile/generic/mo_panel_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321213B4E143002F37CD /* mo_scrollwin_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_scrollwin_g.cpp; path = ../../src/mobile/generic/mo_scrollwin_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321313B4E143002F37CD /* mo_searchctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_searchctrl_g.cpp; path = ../../src/mobile/generic/mo_searchctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321413B4E143002F37CD /* mo_segctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_segctrl_g.cpp; path = ../../src/mobile/generic/mo_segctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321513B4E143002F37CD /* mo_settings_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_settings_g.cpp; path = ../../src/mobile/generic/mo_settings_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321613B4E143002F37CD /* mo_sheets_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_sheets_g.cpp; path = ../../src/mobile/generic/mo_sheets_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321713B4E143002F37CD /* mo_simulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_simulator.cpp; path = ../../src/mobile/generic/mo_simulator.cpp; sourceTree = SOURCE_ROOT; };
-		4025321813B4E143002F37CD /* mo_slider_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_slider_g.cpp; path = ../../src/mobile/generic/mo_slider_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321913B4E143002F37CD /* mo_statbmp_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_statbmp_g.cpp; path = ../../src/mobile/generic/mo_statbmp_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321A13B4E143002F37CD /* mo_stattext_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_stattext_g.cpp; path = ../../src/mobile/generic/mo_stattext_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321B13B4E143002F37CD /* mo_switch_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_switch_g.cpp; path = ../../src/mobile/generic/mo_switch_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321C13B4E143002F37CD /* mo_tabctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_tabctrl_g.cpp; path = ../../src/mobile/generic/mo_tabctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321D13B4E143002F37CD /* mo_tablecell_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_tablecell_g.cpp; path = ../../src/mobile/generic/mo_tablecell_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321E13B4E143002F37CD /* mo_tablectrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_tablectrl_g.cpp; path = ../../src/mobile/generic/mo_tablectrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025321F13B4E143002F37CD /* mo_textctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_textctrl_g.cpp; path = ../../src/mobile/generic/mo_textctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322013B4E143002F37CD /* mo_toolbar_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_toolbar_g.cpp; path = ../../src/mobile/generic/mo_toolbar_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322113B4E143002F37CD /* mo_utils_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_utils_g.cpp; path = ../../src/mobile/generic/mo_utils_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322213B4E143002F37CD /* mo_viewcontroller_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_viewcontroller_g.cpp; path = ../../src/mobile/generic/mo_viewcontroller_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322313B4E143002F37CD /* mo_vlbox_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_vlbox_g.cpp; path = ../../src/mobile/generic/mo_vlbox_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322413B4E143002F37CD /* mo_vscroll_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_vscroll_g.cpp; path = ../../src/mobile/generic/mo_vscroll_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322513B4E143002F37CD /* mo_webctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_webctrl_g.cpp; path = ../../src/mobile/generic/mo_webctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322613B4E143002F37CD /* mo_wheelsctrl_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_wheelsctrl_g.cpp; path = ../../src/mobile/generic/mo_wheelsctrl_g.cpp; sourceTree = SOURCE_ROOT; };
-		4025322713B4E143002F37CD /* mo_window_g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mo_window_g.cpp; path = ../../src/mobile/generic/mo_window_g.cpp; sourceTree = SOURCE_ROOT; };
 		4048A3523EC03409BD899BEF /* xtixml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xtixml.cpp; path = ../../src/common/xtixml.cpp; sourceTree = "<group>"; };
 		40586C8986443431A64EB066 /* LexLisp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLisp.cxx; path = ../../src/stc/scintilla/src/LexLisp.cxx; sourceTree = "<group>"; };
 		4071FF90F1D4336C836B2AE4 /* tif_pixarlog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_pixarlog.c; path = ../../src/tiff/libtiff/tif_pixarlog.c; sourceTree = "<group>"; };
@@ -2565,7 +2454,6 @@
 				374BD863E6AD33189B7E4040 /* net */,
 				2FF0B5E0505D3AEA9A4ACF11 /* adv */,
 				5C5CD199E7573C73AE6F392D /* media */,
-				402531FE13B4E129002F37CD /* mobile */,
 				60E51BFF5CD2327483201F14 /* html */,
 				60328E6EA3793DA990E18FC1 /* xrc */,
 				4D98B791E17232D39944F04F /* xml */,
@@ -2724,50 +2612,6 @@
 				AC04244D4E183DF480908048 /* src/osx/core */,
 			);
 			name = net;
-			sourceTree = "<group>";
-		};
-		402531FE13B4E129002F37CD /* mobile */ = {
-			isa = PBXGroup;
-			children = (
-				4025320313B4E143002F37CD /* mo_app_g.cpp */,
-				4025320413B4E143002F37CD /* mo_barbutton_g.cpp */,
-				4025320513B4E143002F37CD /* mo_bmpbutton_g.cpp */,
-				4025320613B4E143002F37CD /* mo_button_g.cpp */,
-				4025320713B4E143002F37CD /* mo_buttonstrip_g.cpp */,
-				4025320813B4E143002F37CD /* mo_frame_g.cpp */,
-				4025320913B4E143002F37CD /* mo_gauge_g.cpp */,
-				4025320A13B4E143002F37CD /* mo_keyboard_g.cpp */,
-				4025320B13B4E143002F37CD /* mo_listbox_g.cpp */,
-				4025320C13B4E143002F37CD /* mo_navbar_g.cpp */,
-				4025320D13B4E143002F37CD /* mo_navctrl_g.cpp */,
-				4025320E13B4E143002F37CD /* mo_navitem_g.cpp */,
-				4025320F13B4E143002F37CD /* mo_notebook_g.cpp */,
-				4025321013B4E143002F37CD /* mo_pagectrl_g.cpp */,
-				4025321113B4E143002F37CD /* mo_panel_g.cpp */,
-				4025321213B4E143002F37CD /* mo_scrollwin_g.cpp */,
-				4025321313B4E143002F37CD /* mo_searchctrl_g.cpp */,
-				4025321413B4E143002F37CD /* mo_segctrl_g.cpp */,
-				4025321513B4E143002F37CD /* mo_settings_g.cpp */,
-				4025321613B4E143002F37CD /* mo_sheets_g.cpp */,
-				4025321713B4E143002F37CD /* mo_simulator.cpp */,
-				4025321813B4E143002F37CD /* mo_slider_g.cpp */,
-				4025321913B4E143002F37CD /* mo_statbmp_g.cpp */,
-				4025321A13B4E143002F37CD /* mo_stattext_g.cpp */,
-				4025321B13B4E143002F37CD /* mo_switch_g.cpp */,
-				4025321C13B4E143002F37CD /* mo_tabctrl_g.cpp */,
-				4025321D13B4E143002F37CD /* mo_tablecell_g.cpp */,
-				4025321E13B4E143002F37CD /* mo_tablectrl_g.cpp */,
-				4025321F13B4E143002F37CD /* mo_textctrl_g.cpp */,
-				4025322013B4E143002F37CD /* mo_toolbar_g.cpp */,
-				4025322113B4E143002F37CD /* mo_utils_g.cpp */,
-				4025322213B4E143002F37CD /* mo_viewcontroller_g.cpp */,
-				4025322313B4E143002F37CD /* mo_vlbox_g.cpp */,
-				4025322413B4E143002F37CD /* mo_vscroll_g.cpp */,
-				4025322513B4E143002F37CD /* mo_webctrl_g.cpp */,
-				4025322613B4E143002F37CD /* mo_wheelsctrl_g.cpp */,
-				4025322713B4E143002F37CD /* mo_window_g.cpp */,
-			);
-			name = mobile;
 			sourceTree = "<group>";
 		};
 		42F504C4994C38D7A8F062F4 /* libexpat */ = {
@@ -4753,43 +4597,6 @@
 				C2DEE063B5E032C1BD2B5027 /* xmlparse.c in Sources */,
 				AE84BC9A1CCA3ADA9C483951 /* xmlrole.c in Sources */,
 				DB9565CC4EAE3BCB9F490621 /* xmltok.c in Sources */,
-				4025322813B4E143002F37CD /* mo_app_g.cpp in Sources */,
-				4025322913B4E143002F37CD /* mo_barbutton_g.cpp in Sources */,
-				4025322A13B4E143002F37CD /* mo_bmpbutton_g.cpp in Sources */,
-				4025322B13B4E143002F37CD /* mo_button_g.cpp in Sources */,
-				4025322C13B4E143002F37CD /* mo_buttonstrip_g.cpp in Sources */,
-				4025322D13B4E143002F37CD /* mo_frame_g.cpp in Sources */,
-				4025322E13B4E143002F37CD /* mo_gauge_g.cpp in Sources */,
-				4025322F13B4E143002F37CD /* mo_keyboard_g.cpp in Sources */,
-				4025323013B4E143002F37CD /* mo_listbox_g.cpp in Sources */,
-				4025323113B4E143002F37CD /* mo_navbar_g.cpp in Sources */,
-				4025323213B4E143002F37CD /* mo_navctrl_g.cpp in Sources */,
-				4025323313B4E143002F37CD /* mo_navitem_g.cpp in Sources */,
-				4025323413B4E143002F37CD /* mo_notebook_g.cpp in Sources */,
-				4025323513B4E143002F37CD /* mo_pagectrl_g.cpp in Sources */,
-				4025323613B4E143002F37CD /* mo_panel_g.cpp in Sources */,
-				4025323713B4E143002F37CD /* mo_scrollwin_g.cpp in Sources */,
-				4025323813B4E143002F37CD /* mo_searchctrl_g.cpp in Sources */,
-				4025323913B4E143002F37CD /* mo_segctrl_g.cpp in Sources */,
-				4025323A13B4E143002F37CD /* mo_settings_g.cpp in Sources */,
-				4025323B13B4E143002F37CD /* mo_sheets_g.cpp in Sources */,
-				4025323C13B4E143002F37CD /* mo_simulator.cpp in Sources */,
-				4025323D13B4E143002F37CD /* mo_slider_g.cpp in Sources */,
-				4025323E13B4E143002F37CD /* mo_statbmp_g.cpp in Sources */,
-				4025323F13B4E143002F37CD /* mo_stattext_g.cpp in Sources */,
-				4025324013B4E143002F37CD /* mo_switch_g.cpp in Sources */,
-				4025324113B4E143002F37CD /* mo_tabctrl_g.cpp in Sources */,
-				4025324213B4E143002F37CD /* mo_tablecell_g.cpp in Sources */,
-				4025324313B4E143002F37CD /* mo_tablectrl_g.cpp in Sources */,
-				4025324413B4E143002F37CD /* mo_textctrl_g.cpp in Sources */,
-				4025324513B4E143002F37CD /* mo_toolbar_g.cpp in Sources */,
-				4025324613B4E143002F37CD /* mo_utils_g.cpp in Sources */,
-				4025324713B4E143002F37CD /* mo_viewcontroller_g.cpp in Sources */,
-				4025324813B4E143002F37CD /* mo_vlbox_g.cpp in Sources */,
-				4025324913B4E143002F37CD /* mo_vscroll_g.cpp in Sources */,
-				4025324A13B4E143002F37CD /* mo_webctrl_g.cpp in Sources */,
-				4025324B13B4E143002F37CD /* mo_wheelsctrl_g.cpp in Sources */,
-				4025324C13B4E143002F37CD /* mo_window_g.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5583,43 +5390,6 @@
 				C2DEE063B5E032C1BD2B5026 /* xmlparse.c in Sources */,
 				AE84BC9A1CCA3ADA9C483950 /* xmlrole.c in Sources */,
 				DB9565CC4EAE3BCB9F490620 /* xmltok.c in Sources */,
-				4025324D13B4E143002F37CD /* mo_app_g.cpp in Sources */,
-				4025324E13B4E143002F37CD /* mo_barbutton_g.cpp in Sources */,
-				4025324F13B4E143002F37CD /* mo_bmpbutton_g.cpp in Sources */,
-				4025325013B4E143002F37CD /* mo_button_g.cpp in Sources */,
-				4025325113B4E143002F37CD /* mo_buttonstrip_g.cpp in Sources */,
-				4025325213B4E143002F37CD /* mo_frame_g.cpp in Sources */,
-				4025325313B4E143002F37CD /* mo_gauge_g.cpp in Sources */,
-				4025325413B4E143002F37CD /* mo_keyboard_g.cpp in Sources */,
-				4025325513B4E143002F37CD /* mo_listbox_g.cpp in Sources */,
-				4025325613B4E143002F37CD /* mo_navbar_g.cpp in Sources */,
-				4025325713B4E143002F37CD /* mo_navctrl_g.cpp in Sources */,
-				4025325813B4E143002F37CD /* mo_navitem_g.cpp in Sources */,
-				4025325913B4E143002F37CD /* mo_notebook_g.cpp in Sources */,
-				4025325A13B4E143002F37CD /* mo_pagectrl_g.cpp in Sources */,
-				4025325B13B4E143002F37CD /* mo_panel_g.cpp in Sources */,
-				4025325C13B4E143002F37CD /* mo_scrollwin_g.cpp in Sources */,
-				4025325D13B4E143002F37CD /* mo_searchctrl_g.cpp in Sources */,
-				4025325E13B4E143002F37CD /* mo_segctrl_g.cpp in Sources */,
-				4025325F13B4E143002F37CD /* mo_settings_g.cpp in Sources */,
-				4025326013B4E143002F37CD /* mo_sheets_g.cpp in Sources */,
-				4025326113B4E143002F37CD /* mo_simulator.cpp in Sources */,
-				4025326213B4E143002F37CD /* mo_slider_g.cpp in Sources */,
-				4025326313B4E143002F37CD /* mo_statbmp_g.cpp in Sources */,
-				4025326413B4E143002F37CD /* mo_stattext_g.cpp in Sources */,
-				4025326513B4E143002F37CD /* mo_switch_g.cpp in Sources */,
-				4025326613B4E143002F37CD /* mo_tabctrl_g.cpp in Sources */,
-				4025326713B4E143002F37CD /* mo_tablecell_g.cpp in Sources */,
-				4025326813B4E143002F37CD /* mo_tablectrl_g.cpp in Sources */,
-				4025326913B4E143002F37CD /* mo_textctrl_g.cpp in Sources */,
-				4025326A13B4E143002F37CD /* mo_toolbar_g.cpp in Sources */,
-				4025326B13B4E143002F37CD /* mo_utils_g.cpp in Sources */,
-				4025326C13B4E143002F37CD /* mo_viewcontroller_g.cpp in Sources */,
-				4025326D13B4E143002F37CD /* mo_vlbox_g.cpp in Sources */,
-				4025326E13B4E143002F37CD /* mo_vscroll_g.cpp in Sources */,
-				4025326F13B4E143002F37CD /* mo_webctrl_g.cpp in Sources */,
-				4025327013B4E143002F37CD /* mo_wheelsctrl_g.cpp in Sources */,
-				4025327113B4E143002F37CD /* mo_window_g.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

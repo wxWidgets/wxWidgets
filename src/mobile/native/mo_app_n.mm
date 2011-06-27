@@ -38,7 +38,7 @@ bool wxMoApp::OnInit()
 // Called on exit
 int wxMoApp::OnExit()
 {
-    // FIXME stub
+    // FIXME stub 
 
     return 0;
 }
