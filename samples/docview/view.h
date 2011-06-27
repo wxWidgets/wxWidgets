@@ -148,4 +148,22 @@ private:
     DECLARE_DYNAMIC_CLASS(ImageView)
 };
 
+// ----------------------------------------------------------------------------
+// ImageDetailsView
+// ----------------------------------------------------------------------------
+
+class ImageDetailsView : public wxView
+{
+public:
+    ImageDetailsView(ImageDetailsDocument *doc);
+
+    virtual void OnDraw(wxDC *dc);
+    virtual bool OnClose(bool deleteWindow);
+
+private:
+    wxFrame *m_frame;
+
+    wxDECLARE_NO_COPY_CLASS(ImageDetailsView);
+};
+
 #endif // _WX_SAMPLES_DOCVIEW_VIEW_H_

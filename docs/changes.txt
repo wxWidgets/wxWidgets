@@ -476,6 +476,7 @@ All (GUI):
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - wxRibbon: allow hiding the panels and showing tabs only (snowleopard).
+- Add support for child documents to docview framework.
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 - Consistency fixes for keyboard events across all major ports.
 - Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).

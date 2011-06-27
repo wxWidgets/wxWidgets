@@ -122,8 +122,12 @@ wxString FindExtension(const wxString& path)
 wxDocument::wxDocument(wxDocument *parent)
 {
     m_documentModified = false;
-    m_documentParent = parent;
     m_documentTemplate = NULL;
+
+    m_documentParent = parent;
+    if ( parent )
+        parent->m_childDocuments.push_back(this);
+
     m_commandProcessor = NULL;
     m_savedYet = false;
 }
@@ -140,6 +144,9 @@ wxDocument::~wxDocument()
     if (GetDocumentManager())
         GetDocumentManager()->RemoveDocument(this);
 
+    if ( m_documentParent )
+        m_documentParent->m_childDocuments.remove(this);
+
     // Not safe to do here, since it'll invoke virtual view functions
     // expecting to see valid derived objects: and by the time we get here,
     // we've called destructors higher up.
@@ -150,6 +157,40 @@ bool wxDocument::Close()
 {
     if ( !OnSaveModified() )
         return false;
+
+    // When the parent document closes, its children must be closed as well as
+    // they can't exist without the parent.
+
+    // As usual, first check if all children can be closed.
+    DocsList::const_iterator it = m_childDocuments.begin();
+    for ( DocsList::const_iterator end = m_childDocuments.end(); it != end; ++it )
+    {
+        if ( !(*it)->OnSaveModified() )
+        {
+            // Leave the parent document opened if a child can't close.
+            return false;
+        }
+    }
+
+    // Now that they all did, do close them: as m_childDocuments is modified as
+    // we iterate over it, don't use the usual for-style iteration here.
+    while ( !m_childDocuments.empty() )
+    {
+        wxDocument * const childDoc = m_childDocuments.front();
+
+        // This will call OnSaveModified() once again but it shouldn't do
+        // anything as the document was just saved or marked as not needing to
+        // be saved by the call to OnSaveModified() that returned true above.
+        if ( !childDoc->Close() )
+        {
+            wxFAIL_MSG( "Closing the child document unexpectedly failed "
+                        "after its OnSaveModified() returned true" );
+        }
+
+        // Delete the child document by deleting all its views.
+        childDoc->DeleteAllViews();
+    }
+
 
     return OnCloseDocument();
 }
@@ -231,6 +272,12 @@ void wxDocument::Modify(bool mod)
 
 wxDocManager *wxDocument::GetDocumentManager() const
 {
+    // For child documents we use the same document manager as the parent, even
+    // though we don't have our own template (as children are not opened/saved
+    // directly).
+    if ( m_documentParent )
+        return m_documentParent->GetDocumentManager();
+
     return m_documentTemplate ? m_documentTemplate->GetDocumentManager() : NULL;
 }
 
@@ -895,7 +942,7 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateFileRevert)
     EVT_UPDATE_UI(wxID_NEW, wxDocManager::OnUpdateFileNew)
     EVT_UPDATE_UI(wxID_SAVE, wxDocManager::OnUpdateFileSave)
-    EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateDisableIfNoDoc)
+    EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateFileSaveAs)
     EVT_UPDATE_UI(wxID_UNDO, wxDocManager::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxDocManager::OnUpdateRedo)
 
@@ -1254,7 +1301,13 @@ void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
 void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument * const doc = GetCurrentDocument();
-    event.Enable( doc && !doc->AlreadySaved() );
+    event.Enable( doc && !doc->IsChildDocument() && !doc->AlreadySaved() );
+}
+
+void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
+{
+    wxDocument * const doc = GetCurrentDocument();
+    event.Enable( doc && !doc->IsChildDocument() );
 }
 
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
