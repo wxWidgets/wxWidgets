@@ -12,12 +12,6 @@
 #ifndef _WX_MOBILE_NATIVE_SEARCHCTRL_H_
 #define _WX_MOBILE_NATIVE_SEARCHCTRL_H_
 
-// FIXME LV wxUSE_NOTEBOOK is reset to 0 in include/wx/osx/iphone/chkconf.h
-// as unimplemented capability.
-#undef _WX_SEARCHCTRL_H_BASE_
-#undef wxUSE_SEARCHCTRL
-#define wxUSE_SEARCHCTRL 1
-
 #include "wx/srchctrl.h"
 
 /**

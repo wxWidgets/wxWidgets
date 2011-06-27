@@ -12,12 +12,6 @@
 #ifndef _WX_MOBILE_NATIVE_BMPBUTTON_H_
 #define _WX_MOBILE_NATIVE_BMPBUTTON_H_
 
-// FIXME LV wxUSE_BMPBUTTON is reset to 0 in include/wx/osx/iphone/chkconf.h
-// as unimplemented capability.
-#undef _WX_BMPBUTTON_H_BASE_
-#undef wxUSE_BMPBUTTON
-#define wxUSE_BMPBUTTON 1
-
 #include "wx/bitmap.h"
 #include "wx/bmpbuttn.h"
 #include "wx/mobile/native/utils.h"

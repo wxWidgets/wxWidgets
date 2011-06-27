@@ -12,19 +12,8 @@
 #ifndef _WX_MOBILE_NATIVE_NOTEBOOK_H_
 #define _WX_MOBILE_NATIVE_NOTEBOOK_H_
 
-// FIXME LV wxUSE_NOTEBOOK/wxUSE_BOOKCTRL is reset to 0 in include/wx/osx/iphone/chkconf.h
-// as unimplemented capability.
-#undef _WX_BOOKCTRL_H_
-#undef wxUSE_BOOKCTRL
-#define wxUSE_BOOKCTRL 1
 #include "wx/bookctrl.h"
-
-#undef _WX_NOTEBOOK_H_BASE_
-#undef wxUSE_NOTEBOOK
-#define wxUSE_NOTEBOOK 1
 #include "wx/notebook.h"
-
-
 #include "wx/mobile/native/tabctrl.h"
 
 // Not currently needed

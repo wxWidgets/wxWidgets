@@ -418,7 +418,7 @@ void DemoFrame::CreateControls()
         wxMoToolBar* toolbar = new wxMoToolBar(page3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
         sizer->Add(toolbar, 0, wxEXPAND, 0);
         
-        // toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
+        toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
         toolbar->AddSeparator();
         toolbar->AddTool(wxID_REFRESH, wxEmptyString, wxNullBitmap);
         toolbar->AddSeparator();
@@ -967,7 +967,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             wxMoToolBar* toolbar = new wxMoToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
             sizer->Add(toolbar, 0, wxEXPAND, 0);
             
-            // toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
+            toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
             toolbar->AddSeparator();
             toolbar->AddTool(wxID_REFRESH, wxEmptyString, wxNullBitmap);
             toolbar->AddSeparator();

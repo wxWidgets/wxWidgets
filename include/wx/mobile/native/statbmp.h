@@ -12,12 +12,6 @@
 #ifndef _WX_MOBILE_NATIVE_STATBMP_H_
 #define _WX_MOBILE_NATIVE_STATBMP_H_
 
-// FIXME LV wxUSE_STATBMP is reset to 0 in include/wx/osx/iphone/chkconf.h
-// as unimplemented capability.
-#undef _WX_STATBMP_H_BASE_
-#undef wxUSE_STATBMP
-#define wxUSE_STATBMP 1
-
 #include "wx/statbmp.h"
 
 extern WXDLLEXPORT_DATA(const char) wxStaticBitmapNameStr[];

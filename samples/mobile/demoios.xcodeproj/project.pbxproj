@@ -60,6 +60,13 @@
 			remoteGlobalIDString = B4DEA098A05736AE94F01926;
 			remoteInfo = static;
 		};
+		B9B24E3113B831390031EF09 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 404BECC510EBDB420080E2B8 /* wxmobileiphone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB02EC06578349A9171CCAC /* static */;
+			remoteInfo = static;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -247,6 +254,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B9B24E3213B831390031EF09 /* PBXTargetDependency */,
 			);
 			name = demo;
 			productName = minimal_iphone;
@@ -350,6 +358,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B9B24E3213B831390031EF09 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = static;
+			targetProxy = B9B24E3113B831390031EF09 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

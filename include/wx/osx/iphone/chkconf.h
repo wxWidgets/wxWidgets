@@ -103,7 +103,6 @@
 #undef wxUSE_ABOUTDLG
 #undef wxUSE_STATLINE
 #undef wxUSE_COLLPANE
-#undef wxUSE_STATBMP
 #undef wxUSE_STATBOX
 #undef wxUSE_RADIOBTN
 #undef wxUSE_RADIOBOX
@@ -115,7 +114,6 @@
 #define wxUSE_ABOUTDLG 0
 #define wxUSE_STATLINE 0
 #define wxUSE_COLLPANE 0
-#define wxUSE_STATBMP 0
 #define wxUSE_STATBOX 0
 #define wxUSE_RADIOBTN 0
 #define wxUSE_RADIOBOX 0
@@ -133,12 +131,10 @@
 #undef wxUSE_COMBOCTRL
 #undef wxUSE_ODCOMBOBOX
 #undef wxUSE_BITMAPCOMBOBOX
-#undef wxUSE_BMPBUTTON
 #undef wxUSE_CHECKLISTBOX
 #undef wxUSE_GRID
 #undef wxUSE_LISTBOX
 #undef wxUSE_LISTCTRL
-#undef wxUSE_NOTEBOOK
 #undef wxUSE_SPINBTN
 #undef wxUSE_SPINCTRL
 #undef wxUSE_TREECTRL
@@ -155,19 +151,16 @@
 #undef wxUSE_STC
 #undef wxUSE_AUI
 #undef wxUSE_BUSYINFO
-#undef wxUSE_SEARCHCTRL
 
 #define wxUSE_ANIMATIONCTRL 0
 #define wxUSE_CALENDARCTRL 0
 #define wxUSE_COMBOCTRL 0
 #define wxUSE_ODCOMBOBOX 0
 #define wxUSE_BITMAPCOMBOBOX 0
-#define wxUSE_BMPBUTTON 0
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_GRID 0
 #define wxUSE_LISTBOX 0
 #define wxUSE_LISTCTRL 0
-#define wxUSE_NOTEBOOK 0
 #define wxUSE_SPINBTN 0
 #define wxUSE_SPINCTRL 0
 #define wxUSE_TREECTRL 0
@@ -184,7 +177,6 @@
 #define wxUSE_STC 0
 #define wxUSE_AUI 0
 #define wxUSE_BUSYINFO 0
-#define wxUSE_SEARCHCTRL 0
 
 #undef wxUSE_LOGWINDOW
 #undef wxUSE_LOG_DIALOG
@@ -217,7 +209,7 @@
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_HELP 0
 #define wxUSE_PROGRESSDLG 0
-#define  wxUSE_FONTDLG 0
+#define wxUSE_FONTDLG 0
 #define wxUSE_FILEDLG 0
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_NUMBERDLG 0
