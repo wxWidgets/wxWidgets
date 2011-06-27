@@ -160,6 +160,14 @@ public:
                 long style = wxScrolledWindowStyle,
                 const wxString& name = wxPanelNameStr);
     
+    void SetScrollbars(int pixelsPerUnitX,
+        int pixelsPerUnitY,
+        int noUnitsX,
+        int noUnitsY,
+        int xPos = 0,
+        int yPos = 0,
+        bool noRefresh = false);
+    
     /// Sets the flag determining whether the horizontal scroll indicator is displayed.
     void SetShowHorizontalScrollIndicator(bool show) { m_showHorizontalScrollIndicator = show; }
     

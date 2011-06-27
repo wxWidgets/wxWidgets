@@ -171,6 +171,15 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
         }
         //[m_macWindow orderFront: self];
         [m_macWindow makeKeyWindow];
+		for (UIView *subview in m_macWindow.subviews) {
+			NSLog(@"subview: %@", subview);
+			for (UIView *subsubview in subview.subviews) {
+				NSLog(@"subsubview: %@", subsubview);
+				for (UIView *subsubsubview in subsubview.subviews) {
+					NSLog(@"subsubsubview: %@", subsubsubview);
+				}
+			}
+		}
     }
     return true;
 }

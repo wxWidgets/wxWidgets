@@ -64,13 +64,12 @@ bool wxMoButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxButton::Create(parent, id, lbl, pos, size, style, validator, name);
 }
 
 wxMoButton::~wxMoButton()
 {
+    
 }
 
 void wxMoButton::Init()

@@ -59,7 +59,7 @@ public:
     /// Returns false if this orientation not supported.
     virtual bool GetScrollBarDetails(int orientation,
         int* range, int* thumbPosition, int* thumbSize);
-
+    
     /// Does the scrolling for the specific scrolled window type.
     virtual bool DoScrolling(const wxPoint& lastPos, const wxPoint& newPos);
 
@@ -109,6 +109,14 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxScrolledWindowStyle,
                 const wxString& name = wxPanelNameStr);
+                
+    void SetScrollbars(int pixelsPerUnitX,
+        int pixelsPerUnitY,
+        int noUnitsX,
+        int noUnitsY,
+        int xPos = 0,
+        int yPos = 0,
+        bool noRefresh = false);
 
     /// Sets the flag determining whether the horizontal scroll indicator is displayed.
     void SetShowHorizontalScrollIndicator(bool show) { m_showHorizontalScrollIndicator = show; }

@@ -57,6 +57,8 @@ public:
     
     virtual ~wxMoNotebook();
     
+#if 0
+    
     /// Gets the number of pages in the notebook.
     virtual size_t GetPageCount() const;
     
@@ -110,6 +112,7 @@ public:
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
     
     void SetTabSize(const wxSize& WXUNUSED(sz)) {}
+#endif  // 0
     
     /// Sets a text badge for the given item
     bool SetBadge(int item, const wxString& badge);
@@ -122,19 +125,19 @@ protected:
     void Init();
     
     // remove one page from the notebook, without deleting
-    virtual wxNotebookPage *DoRemovePage(size_t page);
+    //virtual wxNotebookPage *DoRemovePage(size_t page);
     
     // get the size which the choice control should have
-    virtual wxSize GetControllerSize() const;
+    //virtual wxSize GetControllerSize() const;
     
-    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
+    //wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
+    //void MakeChangedEvent(wxBookCtrlBaseEvent &event);
     
-    void UpdateSelectedPage(size_t newsel);
+    //void UpdateSelectedPage(size_t newsel);
     
     void OnEraseBackground(wxEraseEvent& event);
-    void OnTabChanging(wxTabEvent& event);
-    void OnTabChanged(wxTabEvent& event);
+    //void OnTabChanging(wxTabEvent& event);
+    //void OnTabChanged(wxTabEvent& event);
     
     // the current selection (-1 if none)
     int               m_selection;

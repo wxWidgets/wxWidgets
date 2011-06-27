@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/iphone/notebook.mm
 // Purpose:     wxNotebook
-// Author:      Stefan Csomor
+// Author:      Linas Valiukas
 // Modified by:
-// Created:     04/01/98
+// Created:     2011-06-27
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// Copyright:   (c) Linas Valiukas
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,54 +16,178 @@
 #include "wx/notebook.h"
 
 #ifndef WX_PRECOMP
+#include "wx/string.h"
+#include "wx/log.h"
 #include "wx/app.h"
-#include "wx/utils.h"
-#include "wx/dc.h"
-#include "wx/dcclient.h"
-#include "wx/settings.h"
+#include "wx/image.h"
 #endif // WX_PRECOMP
 
+#include "wx/string.h"
+#include "wx/imaglist.h"
 #include "wx/osx/private.h"
+#include "wx/mobile/defs.h"
 
 #include <stdio.h>
 
-@interface wxUITabBar : UITabBar
-{
-}
-@end
 
-@implementation wxUITabBar
+#pragma mark -
+#pragma mark Cocoa
 
-+ (void)initialize
+#pragma mark UITabBarController
+
+@interface wxUITabBarController : UITabBarController <UITabBarControllerDelegate, UITabBarDelegate>
 {
-    static BOOL initialized = NO;
-    if (!initialized)
-    {
-        initialized = YES;
-        wxOSXIPhoneClassAddWXMethods( self );
-    }
+
 }
 
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController;
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController;
+
 @end
+
+@implementation wxUITabBarController
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    return YES;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark wx
 
 class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 {
 public:
     wxNotebookIPhoneImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
     {
-    }
-    
-    /*
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding)
-    {
-        wxUILabel* v = (wxUILabel*)GetWXWidget();
-        wxCFStringRef text( title , encoding );
         
-        [v setText:text.AsNSString()];
     }
-    */
     
-    private :
+    // Ignore attempts to set position/size
+    void Move(int x, int y, int width, int height)
+    {
+        
+    }
+    
+    void GetContentArea( int &left , int &top , int &width , int &height ) const
+    {
+        UITabBar *tabBar = (UITabBar *)m_osxView;
+
+        CGRect r = tabBar.bounds;
+        left = (int)r.origin.x;
+        top = (int)r.origin.y;
+        width = (int)r.size.width;
+        height = (int)r.size.height;
+    }
+    
+    void SetValue( wxInt32 value )
+    {
+        UITabBar *tabBar = (UITabBar *) m_osxView;
+        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
+
+        // avoid 'changed' events when setting the tab programmatically
+        [tabBarController setDelegate:nil];
+        [tabBarController setSelectedIndex:(value-1)];
+        [tabBarController setDelegate:tabBarController];
+    }
+    
+    wxInt32 GetValue() const
+    {
+        UITabBar *tabBar = (UITabBar *) m_osxView;
+        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
+        return [tabBarController selectedIndex]+1;
+    }
+    
+    void SetMaximum( wxInt32 maximum )
+    {
+        UITabBar *tabBar = (UITabBar *) m_osxView;
+        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
+        
+        int tabCount = [[tabBarController viewControllers] count];
+        
+        if (maximum != tabCount) {
+        
+            NSMutableArray *controllers = [NSMutableArray arrayWithArray:[tabBarController viewControllers]];
+            
+            // avoid 'changed' events when setting the tab programmatically
+            [tabBarController setDelegate:nil];
+            
+            if ( maximum > tabCount )
+            {
+                for ( int i = tabCount ; i < maximum ; ++i )
+                {
+                    UIViewController *viewController = [[UIViewController alloc] init];
+                    [viewController setTitle:@"-"];
+                    [controllers addObject:viewController];
+                    [viewController release];
+                }
+            }
+            else if ( maximum < tabCount )
+            {
+                NSRange removeRange;
+                removeRange.location = maximum;
+                removeRange.length = tabCount-maximum;
+                [controllers removeObjectsInRange:removeRange];
+            }
+            
+            [tabBarController setViewControllers:controllers];
+            [tabBarController setDelegate:tabBarController];
+        }
+    }
+
+    void SetupTabs( const wxNotebook& notebook )
+    {
+        int pageCount = notebook.GetPageCount();
+        
+        SetMaximum( pageCount );
+                
+        UITabBar *tabBar = (UITabBar *) m_osxView;
+        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
+                
+        // avoid 'changed' events when setting the tab programmatically
+        [tabBarController setDelegate:nil];
+        
+        for ( int i = 0 ; i < pageCount ; ++i )
+        {
+            wxNotebookPage* page = notebook.GetPage(i);
+            UIViewController *controller = [[tabBarController viewControllers] objectAtIndex:i];
+                        
+            int pageImage = notebook.GetPageImage(i);
+            UITabBarSystemItem systemItem = UITabBarSystemItemHistory;
+            
+            switch (pageImage) {
+                case wxID_FAVORITES:    systemItem = UITabBarSystemItemFavorites;   break;
+                case wxID_FEATURED:     systemItem = UITabBarSystemItemFeatured;    break;
+                case wxID_TOPRATED:     systemItem = UITabBarSystemItemTopRated;    break;
+                case wxID_RECENTS:      systemItem = UITabBarSystemItemRecents;     break;
+                case wxID_CONTACTS:     systemItem = UITabBarSystemItemContacts;    break;
+                case wxID_HISTORY:      systemItem = UITabBarSystemItemBookmarks;   break;
+                case wxID_BOOKMARKS:    systemItem = UITabBarSystemItemBookmarks;   break;
+                case wxID_SEARCH:       systemItem = UITabBarSystemItemSearch;      break;
+                case wxID_DOWNLOADS:    systemItem = UITabBarSystemItemDownloads;   break;
+                case wxID_MOSTRECENT:   systemItem = UITabBarSystemItemMostRecent;  break;
+                case wxID_MOSTVIEWED:   systemItem = UITabBarSystemItemMostViewed;  break;
+                default:                systemItem = UITabBarSystemItemHistory;     break;
+            };
+             
+            controller.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:systemItem
+                                                                               tag:i];
+            
+            [controller setView:page->GetHandle()];
+            wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
+            NSString *tabTitle = cf.AsNSString();
+            [controller setTitle:tabTitle];
+        }
+        
+        [tabBarController setDelegate:tabBarController];
+    }
+    
 };
 
 wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
@@ -74,30 +198,18 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                                  long style,
                                                  long WXUNUSED(extraStyle))
 {
+    wxUITabBarController* controller = [[wxUITabBarController alloc] init];
+    
+    // Status bar (20 px)
+    CGRect tabBarFrame = controller.tabBar.frame;
+    tabBarFrame.origin.y -= 20;
+    [controller.tabBar setFrame:tabBarFrame];
+    
+    [controller setDelegate:controller];
+        
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxUITabBar* v = [[wxUITabBar alloc] initWithFrame:r];
-    v.backgroundColor = [UIColor clearColor];
     
-    /*
-    UILineBreakMode linebreak = UILineBreakModeWordWrap;
-    if ( ((wxStaticText*)wxpeer)->IsEllipsized() )
-    {
-        if ( style & wxST_ELLIPSIZE_MIDDLE )
-            linebreak = UILineBreakModeMiddleTruncation;
-        else if (style & wxST_ELLIPSIZE_END )
-            linebreak = UILineBreakModeTailTruncation;
-        else if (style & wxST_ELLIPSIZE_START )
-            linebreak = UILineBreakModeHeadTruncation;
-    }
-    [v setLineBreakMode:linebreak];
-    
-    if (style & wxALIGN_CENTER)
-        [v setTextAlignment: UITextAlignmentCenter];
-    else if (style & wxALIGN_RIGHT)
-        [v setTextAlignment: UITextAlignmentRight];
-    */
-    
-    wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, v );
+    wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, controller.tabBar );
     return c;
 }
 

@@ -25,18 +25,17 @@ END_EVENT_TABLE()
 
 void wxMoWindow::Init()
 {
-    // FIXME stub
+    
 }
 
-bool wxMoWindow::Create(wxWindow *parent, wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& name)
+bool wxMoWindow::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxWindow::Create(parent, id, pos, size, style, name);
 }
 
 wxMoWindow::~wxMoWindow()

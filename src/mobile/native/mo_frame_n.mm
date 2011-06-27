@@ -37,11 +37,14 @@ void wxMoFrame::Init()
     // FIXME stub
 }
 
-bool wxMoFrame::Create(wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style)
+bool wxMoFrame::Create(wxWindow* parent,
+                       wxWindowID id,
+                       const wxString& caption,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style)
 {
-    // FIXME stub
-
-    return true;    
+    return wxFrame::Create(parent, id, caption, pos, size, style, caption);
 }
 
 void wxMoFrame::OnSize(wxSizeEvent& WXUNUSED(event))

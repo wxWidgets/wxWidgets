@@ -32,6 +32,10 @@
 
 #include "wx/imaglist.h"
 #include "wx/sysopt.h"
+#include "wx/osx/private.h"
+#include "wx/osx/iphone/private.h"
+
+#import <UIKit/UIKit.h>
 
 // ----------------------------------------------------------------------------
 // macros
@@ -50,8 +54,8 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 #endif
 
 BEGIN_EVENT_TABLE(wxMoNotebook, wxBookCtrlBase)
-    EVT_TAB_SEL_CHANGING(wxID_ANY, wxMoNotebook::OnTabChanging)
-    EVT_TAB_SEL_CHANGED(wxID_ANY, wxMoNotebook::OnTabChanged)
+    //EVT_TAB_SEL_CHANGING(wxID_ANY, wxMoNotebook::OnTabChanging)
+    //EVT_TAB_SEL_CHANGED(wxID_ANY, wxMoNotebook::OnTabChanged)
 
 #ifdef USE_NOTEBOOK_ANTIFLICKER && USE_NOTEBOOK_ANTIFLICKER
     EVT_ERASE_BACKGROUND(wxMoNotebook::OnEraseBackground)
@@ -66,12 +70,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMoNotebook, wxBookCtrlBase)
 // common part of all ctors
 void wxMoNotebook::Init()
 {
-    // FIXME stub
+    
 }
 
 wxMoNotebook::wxMoNotebook()
 {
-    // FIXME stub
+    Init();
 }
 
 wxMoNotebook::wxMoNotebook(wxWindow *parent,
@@ -81,7 +85,8 @@ wxMoNotebook::wxMoNotebook(wxWindow *parent,
                        long style,
                        const wxString& name)
 {
-    // FIXME stub
+    Init();
+    Create(parent, id, pos, size, style, name);
 }
 
 bool wxMoNotebook::Create(wxWindow *parent,
@@ -91,9 +96,7 @@ bool wxMoNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxNotebook::Create(parent, id, pos, size, style, name);
 }
 
 wxMoNotebook::~wxMoNotebook()
@@ -103,6 +106,8 @@ wxMoNotebook::~wxMoNotebook()
 // ----------------------------------------------------------------------------
 // wxMoNotebook accessors
 // ----------------------------------------------------------------------------
+
+#if 0
 
 size_t wxMoNotebook::GetPageCount() const
 {
@@ -260,18 +265,52 @@ void wxMoNotebook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
     // FIXME stub
 }
 
+#endif  // 0
+
 // Set a text badge for the given item
 bool wxMoNotebook::SetBadge(int item, const wxString& badge)
 {
-    // FIXME stub
-
+    UITabBar *tabBar = (UITabBar *) GetPeer()->GetWXWidget();
+    UITabBarController *tabBarController = (UITabBarController *)[tabBar delegate];
+    
+    if ( [[tabBarController viewControllers] count] < (unsigned int)(item+1) ) {
+        return false;
+    }
+    
+    UIViewController *viewController = [[tabBarController viewControllers] objectAtIndex:item];
+    UITabBarItem *tabBarItem = [viewController tabBarItem];
+    
+    if ( !tabBarItem ) {
+        return false;
+    }
+    
+    wxCFStringRef cf( badge );
+    [tabBarItem setBadgeValue:cf.AsNSString()];
+    
     return true;
 }
 
 // Get the text badge for the given item
 wxString wxMoNotebook::GetBadge(int item) const
 {
-    // FIXME stub
-
-    return wxEmptyString;
+    UITabBar *tabBar = (UITabBar *) GetPeer()->GetWXWidget();
+    UITabBarController *tabBarController = (UITabBarController *)[tabBar delegate];
+    
+    if ( [[tabBarController viewControllers] count] < (unsigned int)(item+1) ) {
+        return wxEmptyString;
+    }
+    
+    UIViewController *viewController = [[tabBarController viewControllers] objectAtIndex:item];
+    UITabBarItem *tabBarItem = [viewController tabBarItem];
+    
+    if ( !tabBarItem ) {
+        return wxEmptyString;
+    }
+    
+    NSString *badgeValue = [tabBarItem badgeValue];
+    if ( !badgeValue || [badgeValue isEqualToString:@""] ) {
+        return wxEmptyString;
+    }
+    
+    return wxString([badgeValue cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }

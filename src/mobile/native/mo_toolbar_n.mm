@@ -145,8 +145,7 @@ bool wxMoToolBar::Create(wxWindow *parent,
                        long style,
                        const wxString& name)
 {
-    // FIXME stub
-    return true;
+    return wxToolBar::Create(parent, id, pos, size, style, name);
 }
 
 wxMoToolBar::~wxMoToolBar()

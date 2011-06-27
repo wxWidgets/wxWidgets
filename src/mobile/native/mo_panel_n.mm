@@ -49,18 +49,17 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxMoPanel, wxMoWindow)
 
 void wxMoPanel::Init()
 {
-    // FIXME stub
+    m_container.SetContainerWindow(this);
 }
 
-bool wxMoPanel::Create(wxWindow *parent, wxWindowID id,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& name)
+bool wxMoPanel::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxMoWindow::Create(parent, id, pos, size, style, name);
 }
 
 wxMoPanel::~wxMoPanel()

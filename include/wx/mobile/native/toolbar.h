@@ -64,7 +64,7 @@ enum {
 */
 
 
-class WXDLLEXPORT wxMoToolBar: public wxToolBarBase
+class WXDLLEXPORT wxMoToolBar: public wxToolBar
 {
 public:
     /// Default constructor.

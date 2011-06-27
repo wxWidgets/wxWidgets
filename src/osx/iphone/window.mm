@@ -388,8 +388,10 @@ void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 
 void wxWidgetIPhoneImpl::Move(int x, int y, int width, int height)
 {
-    CGRect r = CGRectMake( x, y, width, height) ;
-    [m_osxView setFrame:r];
+    if (! [m_osxView isKindOfClass:[UITabBar class]]) {
+        CGRect r = CGRectMake( x, y, width, height) ;
+        [m_osxView setFrame:r];
+    }
 }
 
 
@@ -464,7 +466,9 @@ void wxWidgetIPhoneImpl::Embed( wxWidgetImpl *parent )
         return;
     UIView* container = parent->GetWXWidget() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    [container addSubview:m_osxView];
+    if ( ![container isKindOfClass:[UITabBar class]] ) {
+        [container addSubview:m_osxView];
+    }
 }
 
 void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to )

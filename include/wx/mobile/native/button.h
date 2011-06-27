@@ -54,7 +54,7 @@ enum {  wxBU_ROUNDED_RECTANGLE=0x0800,
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoButton : public wxButtonBase
+class WXDLLEXPORT wxMoButton : public wxButton
 {
 public:
     /// Default constructor.

@@ -45,9 +45,7 @@ bool wxMoNavigationCtrl::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxControl::Create(parent, id, pos, size, style, validator, name);
 }
 
 wxMoNavigationCtrl::~wxMoNavigationCtrl()

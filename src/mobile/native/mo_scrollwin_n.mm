@@ -80,14 +80,23 @@ bool wxMoScrolledWindow::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxMoPanel::Create(parent, id, pos, size, style, name);
 }
 
 void wxMoScrolledWindow::OnPaint(wxPaintEvent& event)
 {
     // FIXME stub
+}
+
+void wxMoScrolledWindow::SetScrollbars(int pixelsPerUnitX,
+                                       int pixelsPerUnitY,
+                                       int noUnitsX,
+                                       int noUnitsY,
+                                       int xPos,
+                                       int yPos,
+                                       bool noRefresh)
+{
+    // Do nothing
 }
 
 // Forward mouse event from another window to this window (useful within simulator
