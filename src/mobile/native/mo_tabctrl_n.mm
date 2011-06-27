@@ -30,7 +30,7 @@
 #include "wx/imaglist.h"
 #include "wx/dcbuffer.h"
 
-#if !wxUSE_TAB_DIALOG
+#ifndef wxUSE_TAB_DIALOG || !wxUSE_TAB_DIALOG
 IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED)

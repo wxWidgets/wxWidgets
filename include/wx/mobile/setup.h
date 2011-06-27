@@ -107,6 +107,7 @@ behaviour).
 #define wxUSE_MOBILE_NATIVE_PANEL                  1
 #define wxUSE_MOBILE_NATIVE_SCROLLWIN              1
 #define wxUSE_MOBILE_NATIVE_SEARCHCTRL             1
+#define wxUSE_MOBILE_NATIVE_SETTINGS               1
 #define wxUSE_MOBILE_NATIVE_SEGCTRL                1
 #define wxUSE_MOBILE_NATIVE_SHEETS                 1
 #define wxUSE_MOBILE_NATIVE_SLIDER                 1
@@ -145,6 +146,7 @@ behaviour).
 #define wxUSE_MOBILE_NATIVE_SCROLLWIN              0
 #define wxUSE_MOBILE_NATIVE_SEARCHCTRL             0
 #define wxUSE_MOBILE_NATIVE_SEGCTRL                0
+#define wxUSE_MOBILE_NATIVE_SETTINGS               0
 #define wxUSE_MOBILE_NATIVE_SHEETS                 0
 #define wxUSE_MOBILE_NATIVE_SLIDER                 0
 #define wxUSE_MOBILE_NATIVE_STATBMP                0

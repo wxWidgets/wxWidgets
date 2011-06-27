@@ -73,7 +73,7 @@ public:
     // ---------
 
     // get the number of items in the control
-    size_t GetItemCount() const { return GetLineCount(); }
+    size_t GetItemCount() const { return GetRowCount(); }
 
     // does this control use multiple selection?
     bool HasMultipleSelection() const { return m_selStore != NULL; }

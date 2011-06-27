@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxImageList;
 #define wxTAB_BITMAP 0x00020000
 
 
-#if wxUSE_TAB_DIALOG
+#ifdef wxUSE_TAB_DIALOG && wxUSE_TAB_DIALOG
 #include "wx/tabctrl.h"
 #else
 

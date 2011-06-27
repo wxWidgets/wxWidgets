@@ -56,7 +56,7 @@ BEGIN_EVENT_TABLE(wxMoNotebook, wxBookCtrlBase)
     EVT_TAB_SEL_CHANGING(wxID_ANY, wxMoNotebook::OnTabChanging)
     EVT_TAB_SEL_CHANGED(wxID_ANY, wxMoNotebook::OnTabChanged)
 
-#if USE_NOTEBOOK_ANTIFLICKER
+#ifdef USE_NOTEBOOK_ANTIFLICKER && USE_NOTEBOOK_ANTIFLICKER
     EVT_ERASE_BACKGROUND(wxMoNotebook::OnEraseBackground)
     EVT_PAINT(wxMoNotebook::OnPaint)
 #endif // USE_NOTEBOOK_ANTIFLICKER
