@@ -459,6 +459,9 @@ void wxWidgetIPhoneImpl::RemoveFromParent()
 
 void wxWidgetIPhoneImpl::Embed( wxWidgetImpl *parent )
 {
+    wxASSERT_MSG( parent != NULL, wxT("No parent is set") ) ;
+    if ( !parent )
+        return;
     UIView* container = parent->GetWXWidget() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
