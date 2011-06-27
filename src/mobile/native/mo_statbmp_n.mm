@@ -18,32 +18,7 @@
 
 #include "wx/mobile/native/statbmp.h"
 
-extern WXDLLEXPORT_DATA(const char) wxStaticBitmapNameStr[] = "staticBitmap";
 
 IMPLEMENT_DYNAMIC_CLASS(wxMoStaticBitmap, wxStaticBitmap)
 
 // FIXME stub
-
-
-
-#pragma mark -
-#pragma mark wxStaticBitmap implementation
-
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBitmap, wxControl, "wx/statbmp.h")
-
-
-
-#pragma mark -
-#pragma mark wxStaticBitmapBase implementation
-
-wxStaticBitmapBase::~wxStaticBitmapBase()
-{
-    // FIXME stub
-}
-
-wxSize wxStaticBitmapBase::DoGetBestSize() const
-{
-    // FIXME stub
-    wxSize empty(1, 1);
-    return empty;
-}

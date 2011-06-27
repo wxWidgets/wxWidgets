@@ -24,7 +24,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_OWNER_DRAWN
+#ifdef wxUSE_OWNER_DRAWN && wxUSE_OWNER_DRAWN
 
 #include "wx/ownerdrw.h"
 

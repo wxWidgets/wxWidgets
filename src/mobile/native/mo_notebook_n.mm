@@ -40,9 +40,6 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(page) ((page) < GetPageCount())
 
-// copied from src/common/nbkbase.cpp
-extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
-
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------

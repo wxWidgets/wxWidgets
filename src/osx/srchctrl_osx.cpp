@@ -73,7 +73,9 @@ wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const
 
 wxSearchCtrl::~wxSearchCtrl()
 {
+#if wxUSE_MENUS
     delete m_menu;
+#endif
 }
 
 wxSize wxSearchCtrl::DoGetBestSize() const
@@ -86,6 +88,7 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     return size;
 }
 
+#if wxUSE_MENUS
 
 // search control specific interfaces
 // wxSearchCtrl owns menu after this call
@@ -117,6 +120,8 @@ wxMenu* wxSearchCtrl::GetMenu()
 {
     return m_menu;
 }
+
+#endif  // wxUSE_MENUS
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {

@@ -674,6 +674,8 @@ bool wxUITextFieldControl::SetHint(const wxString& hint)
 {
     wxCFStringRef hintstring(hint);
     [m_textField setPlaceholder:hintstring.AsNSString()];
+    
+    return true;
 }
 
 #endif

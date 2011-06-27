@@ -521,6 +521,7 @@ void wxWidgetIPhoneImpl::ReleaseMouse()
 
 wxInt32 wxWidgetIPhoneImpl::GetValue() const
 {
+    return 0;
 }
 
 void wxWidgetIPhoneImpl::SetValue( wxInt32 v )
@@ -562,6 +563,7 @@ void wxWidgetIPhoneImpl::GetBestRect( wxRect *r ) const
 
 bool wxWidgetIPhoneImpl::IsEnabled() const
 {
+    return true;
 }
 
 void wxWidgetIPhoneImpl::Enable( bool enable )
@@ -578,10 +580,12 @@ void wxWidgetIPhoneImpl::SetMaximum( wxInt32 v )
 
 wxInt32 wxWidgetIPhoneImpl::GetMinimum() const
 {
+    return 0;
 }
 
 wxInt32 wxWidgetIPhoneImpl::GetMaximum() const
 {
+    return 0;
 }
 
 void wxWidgetIPhoneImpl::PulseGauge()

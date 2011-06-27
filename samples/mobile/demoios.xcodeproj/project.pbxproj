@@ -14,6 +14,7 @@
 		406DAC1F13B508E0002E4240 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406DAC1D13B508E0002E4240 /* demoframe.cpp */; };
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
+		B9B24E7813B836A70031EF09 /* notebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B24E7713B836A70031EF09 /* notebook.mm */; };
 		B9EB59F613B687D300D480A7 /* mo_app_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D213B687D300D480A7 /* mo_app_n.mm */; };
 		B9EB59F713B687D300D480A7 /* mo_barbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D313B687D300D480A7 /* mo_barbutton_n.mm */; };
 		B9EB59F813B687D300D480A7 /* mo_bmpbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D413B687D300D480A7 /* mo_bmpbutton_n.mm */; };
@@ -82,6 +83,7 @@
 		407EE18912F04CF900D0F171 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		B9B24E7713B836A70031EF09 /* notebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/iphone/notebook.mm; sourceTree = SOURCE_ROOT; };
 		B9EB59D213B687D300D480A7 /* mo_app_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_app_n.mm; sourceTree = "<group>"; };
 		B9EB59D313B687D300D480A7 /* mo_barbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_barbutton_n.mm; sourceTree = "<group>"; };
 		B9EB59D413B687D300D480A7 /* mo_bmpbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_bmpbutton_n.mm; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				404BECC510EBDB420080E2B8 /* wxmobileiphone.xcodeproj */,
 				B9EB59D113B687D300D480A7 /* mobile */,
 				404BECD110EBDC6F0080E2B8 /* src */,
+				B9B24E5613B8364D0031EF09 /* src-osx-iphone */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -194,6 +197,14 @@
 				406DAC1D13B508E0002E4240 /* demoframe.cpp */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		B9B24E5613B8364D0031EF09 /* src-osx-iphone */ = {
+			isa = PBXGroup;
+			children = (
+				B9B24E7713B836A70031EF09 /* notebook.mm */,
+			);
+			name = "src-osx-iphone";
 			sourceTree = "<group>";
 		};
 		B9EB59D113B687D300D480A7 /* mobile */ = {
@@ -354,6 +365,7 @@
 				B9EB5A1713B687D300D480A7 /* mo_webctrl_n.mm in Sources */,
 				B9EB5A1813B687D300D480A7 /* mo_wheelsctrl_n.mm in Sources */,
 				B9EB5A1913B687D300D480A7 /* mo_window_n.mm in Sources */,
+				B9B24E7813B836A70031EF09 /* notebook.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

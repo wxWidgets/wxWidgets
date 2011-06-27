@@ -32,7 +32,8 @@
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoNotebook: public wxBookCtrlBase
+//class WXDLLEXPORT wxMoNotebook: public wxBookCtrlBase
+class WXDLLEXPORT wxMoNotebook: public wxNotebook
 {
 public:
     /// Default constructor.

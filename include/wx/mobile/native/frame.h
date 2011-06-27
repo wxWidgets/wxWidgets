@@ -23,7 +23,7 @@
  @category{wxMobile}
  */
 
-class wxMoFrame: public wxWindow
+class wxMoFrame: public wxFrame
 {
     DECLARE_DYNAMIC_CLASS( wxMoFrame )
     DECLARE_EVENT_TABLE( )
