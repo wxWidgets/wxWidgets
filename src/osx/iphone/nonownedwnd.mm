@@ -129,7 +129,8 @@ long style, long extraStyle, const wxString& name )
     if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
         std::swap(r.size.width,r.size.height);
 
-    [m_macWindow initWithFrame:r ];
+    // Ignore size parameter, use the whole screen
+    [m_macWindow initWithFrame:[[UIScreen mainScreen] bounds]];
     [m_macWindow setHidden:YES];
 
     [m_macWindow setWindowLevel:level];
