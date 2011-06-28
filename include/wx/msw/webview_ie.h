@@ -12,11 +12,7 @@
 
 #include "wx/setup.h"
 
-#ifdef __WXMSW__
-    #define wxHAVE_WEB_BACKEND_IE 1
-#endif
-
-#if wxHAVE_WEB_BACKEND_IE
+#if wxUSE_WEBVIEW_IE
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -114,6 +110,6 @@ private:
     bool m_isBusy;
 };
 
-#endif // wxHAVE_WEB_BACKEND_IE
+#endif // wxUSE_WEBVIEW_IE
 
 #endif // wxWebViewIE_H

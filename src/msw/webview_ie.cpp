@@ -16,7 +16,7 @@
 
 #include "wx/msw/webview_ie.h"
 
-#if wxHAVE_WEB_BACKEND_IE
+#if wxUSE_WEBVIEW_IE
 
 #include <olectl.h>
 #include <oleidl.h>
