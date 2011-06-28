@@ -358,7 +358,7 @@ void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 
 void wxWebViewWebKit::LoadUrl(const wxString& url)
 {
-    webkit_web_view_open(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(url));
+    webkit_web_view_load_uri(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(url));
 }
 
 
