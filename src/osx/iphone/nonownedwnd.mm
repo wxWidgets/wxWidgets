@@ -155,6 +155,31 @@ void wxNonOwnedWindowIPhoneImpl::Lower()
 {
 }
 
+#ifdef __WXDEBUG__
+
+// Recursive function for printing out UIView tree
+void _wxDebugiPhonePrintUIViewSubviews(UIView *view, unsigned int level = 1) {
+    
+    std::string indentTabs = std::string((level-1)*2, ' ');
+    
+    NSLog(@"%sview: %@", indentTabs.c_str(), view);
+ 
+    if ([view isKindOfClass:[UITabBar class]]) {
+        NSLog(@"%stabs:", indentTabs.c_str());
+        UITabBarController *tabBarController = (UITabBarController *)[(UITabBar *)view delegate];
+        for (UIViewController *viewController in tabBarController.viewControllers) {
+            _wxDebugiPhonePrintUIViewSubviews(viewController.view, level+1);
+        }
+    } else {
+        NSLog(@"%ssubviews:", indentTabs.c_str());
+        for (UIView *subview in view.subviews) {
+            _wxDebugiPhonePrintUIViewSubviews(subview, level+1);
+        }        
+    }
+}
+
+#endif
+
 bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
 {
     [m_macWindow setHidden:(show ? NO : YES)];
@@ -172,15 +197,11 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
         }
         //[m_macWindow orderFront: self];
         [m_macWindow makeKeyWindow];
-		for (UIView *subview in m_macWindow.subviews) {
-			NSLog(@"subview: %@", subview);
-			for (UIView *subsubview in subview.subviews) {
-				NSLog(@"subsubview: %@", subsubview);
-				for (UIView *subsubsubview in subsubview.subviews) {
-					NSLog(@"subsubsubview: %@", subsubsubview);
-				}
-			}
-		}
+        
+#ifdef __WXDEBUG__
+        _wxDebugiPhonePrintUIViewSubviews(m_macWindow);
+#endif
+
     }
     return true;
 }
@@ -459,6 +480,3 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 }
 
 @end
-
-
-
