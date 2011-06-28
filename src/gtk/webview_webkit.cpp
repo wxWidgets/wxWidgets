@@ -10,8 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
-#if wxHAVE_WEB_BACKEND_GTK_WEBKIT
+#if wxUSE_WEBVIEW_WEBKIT
 
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
@@ -359,7 +358,7 @@ void wxWebViewGTKWebKit::Reload(wxWebViewReloadFlags flags)
 
 void wxWebViewGTKWebKit::LoadUrl(const wxString& url)
 {
-    webkit_web_view_open(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(loc));
+    webkit_web_view_open(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(url));
 }
 
 

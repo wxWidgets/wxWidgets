@@ -42,32 +42,32 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
 {
     switch (backend)
     {
-        #if wxHAVE_WEB_BACKEND_OSX_WEBKIT
+        #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             case wxWEB_VIEW_BACKEND_OSX_WEBKIT:
                 return new wxOSXWebKitCtrl();
         #endif
 
-        #if wxHAVE_WEB_BACKEND_GTK_WEBKIT
+        #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
             case wxWEB_VIEW_BACKEND_GTK_WEBKIT:
-                return new wxGtkWebKitCtrl();
+                return new wxWebViewGTKWebKit();
         #endif
 
-        #if wxHAVE_WEB_BACKEND_IE
+        #if wxUSE_WEBVIEW_IE
             case wxWEB_VIEW_BACKEND_IE:
                 return new wxWebViewIE();
         #endif
 
         case wxWEB_VIEW_BACKEND_DEFAULT:
 
-            #if wxHAVE_WEB_BACKEND_OSX_WEBKIT
+            #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             return new wxOSXWebKitCtrl();
             #endif
 
-            #if wxHAVE_WEB_BACKEND_GTK_WEBKIT
-            return new wxGtkWebKitCtrl();
+            #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
+            return new wxWebViewGTKWebKit();
             #endif
 
-            #if wxHAVE_WEB_BACKEND_IE
+            #if wxUSE_WEBVIEW_IE
             return new wxWebViewIE();
             #endif
 
@@ -89,34 +89,34 @@ wxWebView* wxWebView::New(wxWindow* parent,
 {
     switch (backend)
     {
-        #if wxHAVE_WEB_BACKEND_OSX_WEBKIT
+        #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             case wxWEB_VIEW_BACKEND_OSX_WEBKIT:
                 return new wxOSXWebKitCtrl(parent, id, url, pos, size, style,
                                            name);
         #endif
 
-        #if wxHAVE_WEB_BACKEND_GTK_WEBKIT
+        #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
             case wxWEB_VIEW_BACKEND_GTK_WEBKIT:
-                return new wxGtkWebKitCtrl(parent, id, url, pos, size, style,
+                return new wxWebViewGTKWebKit(parent, id, url, pos, size, style,
                                            name);
         #endif
 
-        #if wxHAVE_WEB_BACKEND_IE
+        #if wxUSE_WEBVIEW_IE
             case wxWEB_VIEW_BACKEND_IE:
                 return new wxWebViewIE(parent, id, url, pos, size, style, name);
         #endif
 
         case wxWEB_VIEW_BACKEND_DEFAULT:
 
-            #if wxHAVE_WEB_BACKEND_OSX_WEBKIT
+            #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             return new wxOSXWebKitCtrl(parent, id, url, pos, size, style, name);
             #endif
 
-            #if wxHAVE_WEB_BACKEND_GTK_WEBKIT
-            return new wxGtkWebKitCtrl(parent, id, url, pos, size, style, name);
+            #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
+            return new wxWebViewGTKWebKit(parent, id, url, pos, size, style, name);
             #endif
 
-            #if wxHAVE_WEB_BACKEND_IE
+            #if wxUSE_WEBVIEW_IE
             return new wxWebViewIE(parent, id, url, pos, size, style, name);
             #endif
 
