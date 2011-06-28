@@ -14,7 +14,22 @@
 		406DAC1F13B508E0002E4240 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406DAC1D13B508E0002E4240 /* demoframe.cpp */; };
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
-		B9B24E7813B836A70031EF09 /* notebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B24E7713B836A70031EF09 /* notebook.mm */; };
+		B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072E13B9FCF700D6F0D8 /* button.mm */; };
+		B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */; };
+		B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073013B9FCF700D6F0D8 /* dialog.mm */; };
+		B9DF074113B9FCF700D6F0D8 /* evtloop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073113B9FCF700D6F0D8 /* evtloop.mm */; };
+		B9DF074213B9FCF700D6F0D8 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073213B9FCF700D6F0D8 /* gauge.mm */; };
+		B9DF074313B9FCF700D6F0D8 /* glcanvas.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */; };
+		B9DF074413B9FCF700D6F0D8 /* msgdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */; };
+		B9DF074513B9FCF700D6F0D8 /* nonownedwnd.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */; };
+		B9DF074613B9FCF700D6F0D8 /* notebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073613B9FCF700D6F0D8 /* notebook.mm */; };
+		B9DF074713B9FCF700D6F0D8 /* scrolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */; };
+		B9DF074813B9FCF700D6F0D8 /* slider.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073813B9FCF700D6F0D8 /* slider.mm */; };
+		B9DF074913B9FCF700D6F0D8 /* stattext.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073913B9FCF700D6F0D8 /* stattext.mm */; };
+		B9DF074A13B9FCF700D6F0D8 /* textctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */; };
+		B9DF074B13B9FCF700D6F0D8 /* toolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */; };
+		B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073C13B9FCF700D6F0D8 /* utils.mm */; };
+		B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073D13B9FCF700D6F0D8 /* window.mm */; };
 		B9EB59F613B687D300D480A7 /* mo_app_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D213B687D300D480A7 /* mo_app_n.mm */; };
 		B9EB59F713B687D300D480A7 /* mo_barbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D313B687D300D480A7 /* mo_barbutton_n.mm */; };
 		B9EB59F813B687D300D480A7 /* mo_bmpbutton_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59D413B687D300D480A7 /* mo_bmpbutton_n.mm */; };
@@ -76,7 +91,59 @@
 		407EE18912F04CF900D0F171 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
-		B9B24E7713B836A70031EF09 /* notebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/iphone/notebook.mm; sourceTree = SOURCE_ROOT; };
+		B9DF070813B9FCD800D6F0D8 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
+		B9DF070913B9FCD800D6F0D8 /* barbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barbutton.h; sourceTree = "<group>"; };
+		B9DF070A13B9FCD800D6F0D8 /* bmpbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmpbutton.h; sourceTree = "<group>"; };
+		B9DF070B13B9FCD800D6F0D8 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
+		B9DF070C13B9FCD800D6F0D8 /* buttonstrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buttonstrip.h; sourceTree = "<group>"; };
+		B9DF070D13B9FCD800D6F0D8 /* defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defs.h; sourceTree = "<group>"; };
+		B9DF070E13B9FCD800D6F0D8 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = frame.h; sourceTree = "<group>"; };
+		B9DF070F13B9FCD800D6F0D8 /* gauge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gauge.h; sourceTree = "<group>"; };
+		B9DF071013B9FCD800D6F0D8 /* keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyboard.h; sourceTree = "<group>"; };
+		B9DF071113B9FCD800D6F0D8 /* listbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listbox.h; sourceTree = "<group>"; };
+		B9DF071213B9FCD800D6F0D8 /* navbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = navbar.h; sourceTree = "<group>"; };
+		B9DF071313B9FCD800D6F0D8 /* navctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = navctrl.h; sourceTree = "<group>"; };
+		B9DF071413B9FCD800D6F0D8 /* navitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = navitem.h; sourceTree = "<group>"; };
+		B9DF071513B9FCD800D6F0D8 /* notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = notebook.h; sourceTree = "<group>"; };
+		B9DF071613B9FCD800D6F0D8 /* pagectrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pagectrl.h; sourceTree = "<group>"; };
+		B9DF071713B9FCD800D6F0D8 /* panel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = panel.h; sourceTree = "<group>"; };
+		B9DF071813B9FCD800D6F0D8 /* scrollwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scrollwin.h; sourceTree = "<group>"; };
+		B9DF071913B9FCD800D6F0D8 /* searchctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = searchctrl.h; sourceTree = "<group>"; };
+		B9DF071A13B9FCD800D6F0D8 /* segctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = segctrl.h; sourceTree = "<group>"; };
+		B9DF071B13B9FCD800D6F0D8 /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settings.h; sourceTree = "<group>"; };
+		B9DF071C13B9FCD800D6F0D8 /* sheets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sheets.h; sourceTree = "<group>"; };
+		B9DF071D13B9FCD800D6F0D8 /* slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slider.h; sourceTree = "<group>"; };
+		B9DF071E13B9FCD800D6F0D8 /* statbmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = statbmp.h; sourceTree = "<group>"; };
+		B9DF071F13B9FCD800D6F0D8 /* stattext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stattext.h; sourceTree = "<group>"; };
+		B9DF072013B9FCD800D6F0D8 /* switch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = switch.h; sourceTree = "<group>"; };
+		B9DF072113B9FCD800D6F0D8 /* tabctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tabctrl.h; sourceTree = "<group>"; };
+		B9DF072213B9FCD800D6F0D8 /* tablecell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tablecell.h; sourceTree = "<group>"; };
+		B9DF072313B9FCD800D6F0D8 /* tablectrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tablectrl.h; sourceTree = "<group>"; };
+		B9DF072413B9FCD800D6F0D8 /* textctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = textctrl.h; sourceTree = "<group>"; };
+		B9DF072513B9FCD800D6F0D8 /* toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = toolbar.h; sourceTree = "<group>"; };
+		B9DF072613B9FCD800D6F0D8 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B9DF072713B9FCD800D6F0D8 /* viewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = viewcontroller.h; sourceTree = "<group>"; };
+		B9DF072813B9FCD800D6F0D8 /* vlbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vlbox.h; sourceTree = "<group>"; };
+		B9DF072913B9FCD800D6F0D8 /* vscroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vscroll.h; sourceTree = "<group>"; };
+		B9DF072A13B9FCD800D6F0D8 /* webctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webctrl.h; sourceTree = "<group>"; };
+		B9DF072B13B9FCD800D6F0D8 /* wheelsctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wheelsctrl.h; sourceTree = "<group>"; };
+		B9DF072C13B9FCD800D6F0D8 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
+		B9DF072E13B9FCF700D6F0D8 /* button.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = button.mm; path = ../../src/osx/iphone/button.mm; sourceTree = SOURCE_ROOT; };
+		B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = checkbox.mm; path = ../../src/osx/iphone/checkbox.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073013B9FCF700D6F0D8 /* dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = dialog.mm; path = ../../src/osx/iphone/dialog.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073113B9FCF700D6F0D8 /* evtloop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = evtloop.mm; path = ../../src/osx/iphone/evtloop.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073213B9FCF700D6F0D8 /* gauge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = gauge.mm; path = ../../src/osx/iphone/gauge.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = glcanvas.mm; path = ../../src/osx/iphone/glcanvas.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = msgdlg.mm; path = ../../src/osx/iphone/msgdlg.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nonownedwnd.mm; path = ../../src/osx/iphone/nonownedwnd.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073613B9FCF700D6F0D8 /* notebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/iphone/notebook.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = scrolbar.mm; path = ../../src/osx/iphone/scrolbar.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073813B9FCF700D6F0D8 /* slider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = slider.mm; path = ../../src/osx/iphone/slider.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073913B9FCF700D6F0D8 /* stattext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = stattext.mm; path = ../../src/osx/iphone/stattext.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = textctrl.mm; path = ../../src/osx/iphone/textctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = toolbar.mm; path = ../../src/osx/iphone/toolbar.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073C13B9FCF700D6F0D8 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/iphone/utils.mm; sourceTree = SOURCE_ROOT; };
+		B9DF073D13B9FCF700D6F0D8 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
 		B9EB59D213B687D300D480A7 /* mo_app_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_app_n.mm; sourceTree = "<group>"; };
 		B9EB59D313B687D300D480A7 /* mo_barbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_barbutton_n.mm; sourceTree = "<group>"; };
 		B9EB59D413B687D300D480A7 /* mo_bmpbutton_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_bmpbutton_n.mm; sourceTree = "<group>"; };
@@ -147,6 +214,7 @@
 				409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */,
 				409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */,
 				404BECC510EBDB420080E2B8 /* wxmobileiphone.xcodeproj */,
+				B9DF070713B9FCD800D6F0D8 /* include */,
 				B9EB59D113B687D300D480A7 /* mobile */,
 				404BECD110EBDC6F0080E2B8 /* src */,
 				B9B24E5613B8364D0031EF09 /* src-osx-iphone */,
@@ -195,10 +263,70 @@
 		B9B24E5613B8364D0031EF09 /* src-osx-iphone */ = {
 			isa = PBXGroup;
 			children = (
-				B9B24E7713B836A70031EF09 /* notebook.mm */,
+				B9DF072E13B9FCF700D6F0D8 /* button.mm */,
+				B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */,
+				B9DF073013B9FCF700D6F0D8 /* dialog.mm */,
+				B9DF073113B9FCF700D6F0D8 /* evtloop.mm */,
+				B9DF073213B9FCF700D6F0D8 /* gauge.mm */,
+				B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */,
+				B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */,
+				B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */,
+				B9DF073613B9FCF700D6F0D8 /* notebook.mm */,
+				B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */,
+				B9DF073813B9FCF700D6F0D8 /* slider.mm */,
+				B9DF073913B9FCF700D6F0D8 /* stattext.mm */,
+				B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */,
+				B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */,
+				B9DF073C13B9FCF700D6F0D8 /* utils.mm */,
+				B9DF073D13B9FCF700D6F0D8 /* window.mm */,
 			);
 			name = "src-osx-iphone";
 			sourceTree = "<group>";
+		};
+		B9DF070713B9FCD800D6F0D8 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				B9DF070813B9FCD800D6F0D8 /* app.h */,
+				B9DF070913B9FCD800D6F0D8 /* barbutton.h */,
+				B9DF070A13B9FCD800D6F0D8 /* bmpbutton.h */,
+				B9DF070B13B9FCD800D6F0D8 /* button.h */,
+				B9DF070C13B9FCD800D6F0D8 /* buttonstrip.h */,
+				B9DF070D13B9FCD800D6F0D8 /* defs.h */,
+				B9DF070E13B9FCD800D6F0D8 /* frame.h */,
+				B9DF070F13B9FCD800D6F0D8 /* gauge.h */,
+				B9DF071013B9FCD800D6F0D8 /* keyboard.h */,
+				B9DF071113B9FCD800D6F0D8 /* listbox.h */,
+				B9DF071213B9FCD800D6F0D8 /* navbar.h */,
+				B9DF071313B9FCD800D6F0D8 /* navctrl.h */,
+				B9DF071413B9FCD800D6F0D8 /* navitem.h */,
+				B9DF071513B9FCD800D6F0D8 /* notebook.h */,
+				B9DF071613B9FCD800D6F0D8 /* pagectrl.h */,
+				B9DF071713B9FCD800D6F0D8 /* panel.h */,
+				B9DF071813B9FCD800D6F0D8 /* scrollwin.h */,
+				B9DF071913B9FCD800D6F0D8 /* searchctrl.h */,
+				B9DF071A13B9FCD800D6F0D8 /* segctrl.h */,
+				B9DF071B13B9FCD800D6F0D8 /* settings.h */,
+				B9DF071C13B9FCD800D6F0D8 /* sheets.h */,
+				B9DF071D13B9FCD800D6F0D8 /* slider.h */,
+				B9DF071E13B9FCD800D6F0D8 /* statbmp.h */,
+				B9DF071F13B9FCD800D6F0D8 /* stattext.h */,
+				B9DF072013B9FCD800D6F0D8 /* switch.h */,
+				B9DF072113B9FCD800D6F0D8 /* tabctrl.h */,
+				B9DF072213B9FCD800D6F0D8 /* tablecell.h */,
+				B9DF072313B9FCD800D6F0D8 /* tablectrl.h */,
+				B9DF072413B9FCD800D6F0D8 /* textctrl.h */,
+				B9DF072513B9FCD800D6F0D8 /* toolbar.h */,
+				B9DF072613B9FCD800D6F0D8 /* utils.h */,
+				B9DF072713B9FCD800D6F0D8 /* viewcontroller.h */,
+				B9DF072813B9FCD800D6F0D8 /* vlbox.h */,
+				B9DF072913B9FCD800D6F0D8 /* vscroll.h */,
+				B9DF072A13B9FCD800D6F0D8 /* webctrl.h */,
+				B9DF072B13B9FCD800D6F0D8 /* wheelsctrl.h */,
+				B9DF072C13B9FCD800D6F0D8 /* window.h */,
+			);
+			name = include;
+			path = ../../include/wx/mobile/native;
+			sourceTree = SOURCE_ROOT;
 		};
 		B9EB59D113B687D300D480A7 /* mobile */ = {
 			isa = PBXGroup;
@@ -357,7 +485,22 @@
 				B9EB5A1713B687D300D480A7 /* mo_webctrl_n.mm in Sources */,
 				B9EB5A1813B687D300D480A7 /* mo_wheelsctrl_n.mm in Sources */,
 				B9EB5A1913B687D300D480A7 /* mo_window_n.mm in Sources */,
-				B9B24E7813B836A70031EF09 /* notebook.mm in Sources */,
+				B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */,
+				B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */,
+				B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */,
+				B9DF074113B9FCF700D6F0D8 /* evtloop.mm in Sources */,
+				B9DF074213B9FCF700D6F0D8 /* gauge.mm in Sources */,
+				B9DF074313B9FCF700D6F0D8 /* glcanvas.mm in Sources */,
+				B9DF074413B9FCF700D6F0D8 /* msgdlg.mm in Sources */,
+				B9DF074513B9FCF700D6F0D8 /* nonownedwnd.mm in Sources */,
+				B9DF074613B9FCF700D6F0D8 /* notebook.mm in Sources */,
+				B9DF074713B9FCF700D6F0D8 /* scrolbar.mm in Sources */,
+				B9DF074813B9FCF700D6F0D8 /* slider.mm in Sources */,
+				B9DF074913B9FCF700D6F0D8 /* stattext.mm in Sources */,
+				B9DF074A13B9FCF700D6F0D8 /* textctrl.mm in Sources */,
+				B9DF074B13B9FCF700D6F0D8 /* toolbar.mm in Sources */,
+				B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */,
+				B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
