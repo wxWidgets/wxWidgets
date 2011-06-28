@@ -455,6 +455,7 @@ All:
 - Added wxThread::Wait() and Delete() "wait mode" parameter (Catalin Raceanu).
 - Allow showing milliseconds in wxLog time stamps (tan).
 - Added support for processing instructions in wxXmlDocument (Nick Matthews).
+- Added wxThreadEvent for communicating between threads to wxBase.
 
 Unix:
 

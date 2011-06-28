@@ -62,11 +62,11 @@
     IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
     IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxThreadEvent, wxEvent)
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
     IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxThreadEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
@@ -154,6 +154,9 @@ const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 const wxEventType wxEVT_NULL = wxNewEventType();
 
 wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent );
+
+// Thread event
+wxDEFINE_EVENT( wxEVT_THREAD, wxThreadEvent );
 
 #endif // wxUSE_BASE
 
@@ -312,9 +315,6 @@ wxDEFINE_EVENT( wxEVT_COMMAND_ENTER, wxCommandEvent );
 wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent );
 wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent );
 
-// Thread event
-wxDEFINE_EVENT( wxEVT_COMMAND_THREAD, wxThreadEvent );
-
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -422,8 +422,6 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 {
     m_clientData = NULL;
     m_clientObject = NULL;
-    m_extraLong = 0;
-    m_commandInt = 0;
     m_isCommandEvent = true;
 
     // the command events are propagated upwards by default

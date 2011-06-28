@@ -3036,14 +3036,16 @@ public:
     @category{events,threading}
 
     @see @ref overview_thread, wxEventLoopBase::YieldFor
+
+    @since 2.9.0
 */
-class wxThreadEvent : public wxCommandEvent
+class wxThreadEvent : public wxEvent
 {
 public:
     /**
         Constructor.
     */
-    wxThreadEvent(wxEventType eventType = wxEVT_COMMAND_THREAD, int id = wxID_ANY);
+    wxThreadEvent(wxEventType eventType = wxEVT_THREAD, int id = wxID_ANY);
 
     /**
         Clones this event making sure that all internal members which use
@@ -3090,6 +3092,37 @@ public:
      */
     template<typename T>
     T GetPayload() const;
+
+    /**
+        Returns extra information integer value.
+    */
+    long GetExtraLong() const;
+
+    /**
+        Returns stored integer value.
+    */
+    int GetInt() const;
+
+    /**
+        Returns stored string value.
+    */
+    wxString GetString() const;
+
+
+    /**
+        Sets the extra information value.
+    */
+    void SetExtraLong(long extraLong);
+
+    /**
+        Sets the integer value.
+    */
+    void SetInt(int intCommand);
+
+    /**
+        Sets the string value.
+    */
+    void SetString(const wxString& string);
 };
 
 
@@ -4244,7 +4277,7 @@ wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
 wxEventType wxEVT_COMMAND_TOOL_ENTER;
 wxEventType wxEVT_COMMAND_COMBOBOX_DROPDOWN;
 wxEventType wxEVT_COMMAND_COMBOBOX_CLOSEUP;
-wxEventType wxEVT_COMMAND_THREAD;
+wxEventType wxEVT_THREAD;
 wxEventType wxEVT_LEFT_DOWN;
 wxEventType wxEVT_LEFT_UP;
 wxEventType wxEVT_MIDDLE_DOWN;
