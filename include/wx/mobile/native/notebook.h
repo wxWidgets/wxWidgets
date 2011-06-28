@@ -120,6 +120,9 @@ public:
     /// Gets the text badge for the given item
     wxString GetBadge(int item) const;
     
+    // Ignore attempts to set font
+    bool SetFont( const wxFont &font ) { }
+    
 protected:
     // common part of all ctors
     void Init();

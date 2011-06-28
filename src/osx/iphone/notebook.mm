@@ -66,11 +66,18 @@ class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 public:
     wxNotebookIPhoneImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
     {
-        
+        m_isUserPane = true;
+        m_isRootControl = true;
     }
     
     // Ignore attempts to set position/size
     void Move(int x, int y, int width, int height)
+    {
+        
+    }
+    
+    // Don't know nothing about labels too
+    void SetLabel(const wxString& title, wxFontEncoding encoding)
     {
         
     }
@@ -179,7 +186,7 @@ public:
             controller.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:systemItem
                                                                                tag:i];
             
-            [controller setView:page->GetHandle()];
+            [controller setView:page->GetPeer()->GetWXWidget()];
             wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
             NSString *tabTitle = cf.AsNSString();
             [controller setTitle:tabTitle];

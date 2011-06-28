@@ -56,6 +56,9 @@ public:
     
     virtual ~wxMoPanel();
     
+    // Ignore attempts to hide too
+    bool Show(bool show = true);
+    
     // calls layout for layout constraints and sizers
     void OnSize(wxSizeEvent& event);
     
@@ -70,6 +73,11 @@ public:
 protected:
     // common part of all ctors
     void Init();
+    
+    // Ignore attempts to set size
+    void DoSetSize(int x, int y,
+                   int width, int height,
+                   int sizeFlags = wxSIZE_AUTO);
     
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMoPanel)

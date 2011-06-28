@@ -18,6 +18,8 @@
 
 #include "wx/mobile/native/panel.h"
 #include "wx/mobile/settings.h"
+#include "wx/osx/private.h"
+#import <UIKit/UIKit.h>
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -66,9 +68,28 @@ wxMoPanel::~wxMoPanel()
 {
 }
 
+bool wxMoPanel::Show(bool show)
+{
+    UIView *view = (UIView *)GetPeer()->GetWXWidget();
+    NSLog(@"ignored attempt to hide panel %@", view);
+    return true;
+}
+
 void wxMoPanel::InitDialog()
 {
     // FIXME stub
+}
+
+void wxMoPanel::DoSetSize(int x, int y,
+                          int width, int height,
+                          int sizeFlags)
+{    
+    UIView *view = (UIView *)GetPeer()->GetWXWidget();
+    
+    NSLog(@"attempt to set size; curr. panel: %@", view);
+    [view setFrame:CGRectMake(20, 20, 80, 80)];
+    [view setBackgroundColor:[UIColor redColor]];
+    [view setOpaque:YES];
 }
 
 // ----------------------------------------------------------------------------
@@ -77,5 +98,9 @@ void wxMoPanel::InitDialog()
 
 void wxMoPanel::OnSize(wxSizeEvent& event)
 {
-    // FIXME stub
+    if (GetAutoLayout()) {
+        Layout();
+    }
+    
+    event.Skip();    
 }
