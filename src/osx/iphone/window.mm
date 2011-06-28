@@ -481,11 +481,17 @@ void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to
 
 void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 {
-    m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    CGFloat red =  (CGFloat)random()/(CGFloat)RAND_MAX;
+    CGFloat blue = (CGFloat)random()/(CGFloat)RAND_MAX;
+    CGFloat green = (CGFloat)random()/(CGFloat)RAND_MAX;
+    
+    m_osxView.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+    //m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
 }
 
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
 {
+    /*
     if ( style == wxBG_STYLE_PAINT )
         [m_osxView setOpaque: YES ];
     else
@@ -493,6 +499,7 @@ bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
         [m_osxView setOpaque: NO ];
         m_osxView.backgroundColor = [UIColor clearColor];
     }
+    */
     return true;
 }
 

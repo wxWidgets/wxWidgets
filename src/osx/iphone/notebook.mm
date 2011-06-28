@@ -66,8 +66,7 @@ class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 public:
     wxNotebookIPhoneImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
     {
-        m_isUserPane = true;
-        m_isRootControl = true;
+
     }
     
     // Ignore attempts to set position/size
