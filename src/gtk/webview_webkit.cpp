@@ -27,7 +27,7 @@ extern "C"
 
 static void
 wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec* arg1,
-                                      wxWebViewGTKWebKit *webKitCtrl)
+                                      wxWebViewWebKit *webKitCtrl)
 {
     if (!webKitCtrl->m_ready) return;
 
@@ -64,7 +64,7 @@ static WebKitNavigationResponse
 wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView        *web_view,
                                           WebKitWebFrame       *frame,
                                           WebKitNetworkRequest *request,
-                                          wxWebViewGTKWebKit      *webKitCtrl)
+                                          wxWebViewWebKit      *webKitCtrl)
 {
     webKitCtrl->m_busy = true;
 
@@ -96,7 +96,7 @@ wxgtk_webkitctrl_error (WebKitWebView  *web_view,
                         WebKitWebFrame *web_frame,
                         gchar          *uri,
                         gpointer        web_error,
-                        wxWebViewGTKWebKit* webKitWindow)
+                        wxWebViewWebKit* webKitWindow)
 {
     webKitWindow->m_busy = false;
     wxWebNavigationError type = wxWEB_NAV_ERR_OTHER;
@@ -238,12 +238,12 @@ wxgtk_webkitctrl_error (WebKitWebView  *web_view,
 } // extern "C"
 
 //-----------------------------------------------------------------------------
-// wxWebViewGTKWebKit
+// wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
-//IMPLEMENT_DYNAMIC_CLASS(wxWebViewGTKWebKit, wxControl)
+//IMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxControl)
 
-bool wxWebViewGTKWebKit::Create(wxWindow *parent,
+bool wxWebViewWebKit::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString &url,
                       const wxPoint& pos,
@@ -257,7 +257,7 @@ bool wxWebViewGTKWebKit::Create(wxWindow *parent,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( wxT("wxWebViewGTKWebKit creation failed") );
+        wxFAIL_MSG( wxT("wxWebViewWebKit creation failed") );
         return false;
     }
 
@@ -299,7 +299,7 @@ bool wxWebViewGTKWebKit::Create(wxWindow *parent,
     return true;
 }
 
-bool wxWebViewGTKWebKit::Enable( bool enable )
+bool wxWebViewWebKit::Enable( bool enable )
 {
     if (!wxControl::Enable(enable))
         return false;
@@ -313,38 +313,38 @@ bool wxWebViewGTKWebKit::Enable( bool enable )
 }
 
 GdkWindow*
-wxWebViewGTKWebKit::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
+wxWebViewWebKit::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     GdkWindow* window = gtk_widget_get_parent_window(m_widget);
     return window;
 }
 
-void wxWebViewGTKWebKit::ZoomIn()
+void wxWebViewWebKit::ZoomIn()
 {
     webkit_web_view_zoom_in (WEBKIT_WEB_VIEW(web_view));
 }
 
-void wxWebViewGTKWebKit::ZoomOut()
+void wxWebViewWebKit::ZoomOut()
 {
     webkit_web_view_zoom_out (WEBKIT_WEB_VIEW(web_view));
 }
 
-void wxWebViewGTKWebKit::SetWebkitZoom(float level)
+void wxWebViewWebKit::SetWebkitZoom(float level)
 {
     webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW(web_view), level);
 }
 
-float wxWebViewGTKWebKit::GetWebkitZoom()
+float wxWebViewWebKit::GetWebkitZoom()
 {
     return webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW(web_view));
 }
 
-void wxWebViewGTKWebKit::Stop()
+void wxWebViewWebKit::Stop()
 {
      webkit_web_view_stop_loading (WEBKIT_WEB_VIEW(web_view));
 }
 
-void wxWebViewGTKWebKit::Reload(wxWebViewReloadFlags flags)
+void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 {
     if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
     {
@@ -356,36 +356,36 @@ void wxWebViewGTKWebKit::Reload(wxWebViewReloadFlags flags)
     }
 }
 
-void wxWebViewGTKWebKit::LoadUrl(const wxString& url)
+void wxWebViewWebKit::LoadUrl(const wxString& url)
 {
     webkit_web_view_open(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(url));
 }
 
 
-void wxWebViewGTKWebKit::GoBack()
+void wxWebViewWebKit::GoBack()
 {
     webkit_web_view_go_back (WEBKIT_WEB_VIEW(web_view));
 }
 
-void wxWebViewGTKWebKit::GoForward()
+void wxWebViewWebKit::GoForward()
 {
     webkit_web_view_go_forward (WEBKIT_WEB_VIEW(web_view));
 }
 
 
-bool wxWebViewGTKWebKit::CanGoBack()
+bool wxWebViewWebKit::CanGoBack()
 {
     return webkit_web_view_can_go_back (WEBKIT_WEB_VIEW(web_view));
 }
 
 
-bool wxWebViewGTKWebKit::CanGoForward()
+bool wxWebViewWebKit::CanGoForward()
 {
     return webkit_web_view_can_go_forward (WEBKIT_WEB_VIEW(web_view));
 }
 
 
-wxString wxWebViewGTKWebKit::GetCurrentURL()
+wxString wxWebViewWebKit::GetCurrentURL()
 {
     // FIXME: check which encoding the web kit control uses instead of
     // assuming UTF8 (here and elsewhere too)
@@ -394,14 +394,14 @@ wxString wxWebViewGTKWebKit::GetCurrentURL()
 }
 
 
-wxString wxWebViewGTKWebKit::GetCurrentTitle()
+wxString wxWebViewWebKit::GetCurrentTitle()
 {
     return wxString::FromUTF8(webkit_web_view_get_title(
                                 WEBKIT_WEB_VIEW(web_view)));
 }
 
 
-wxString wxWebViewGTKWebKit::GetPageSource()
+wxString wxWebViewWebKit::GetPageSource()
 {
     WebKitWebFrame* frame = webkit_web_view_get_main_frame(
         WEBKIT_WEB_VIEW(web_view));
@@ -414,7 +414,7 @@ wxString wxWebViewGTKWebKit::GetPageSource()
 }
 
 
-wxWebViewZoom wxWebViewGTKWebKit::GetZoom()
+wxWebViewZoom wxWebViewWebKit::GetZoom()
 {
     float zoom = GetWebkitZoom();
 
@@ -446,7 +446,7 @@ wxWebViewZoom wxWebViewGTKWebKit::GetZoom()
 }
 
 
-void wxWebViewGTKWebKit::SetZoom(wxWebViewZoom zoom)
+void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
     // arbitrary way to map our common zoom enum to float zoom
     switch (zoom)
@@ -476,14 +476,14 @@ void wxWebViewGTKWebKit::SetZoom(wxWebViewZoom zoom)
     }
 }
 
-void wxWebViewGTKWebKit::SetZoomType(wxWebViewZoomType type)
+void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     webkit_web_view_set_full_content_zoom(WEBKIT_WEB_VIEW(web_view),
                                           (type == wxWEB_VIEW_ZOOM_TYPE_LAYOUT ?
                                           TRUE : FALSE));
 }
 
-wxWebViewZoomType wxWebViewGTKWebKit::GetZoomType() const
+wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
 {
     gboolean fczoom = webkit_web_view_get_full_content_zoom(
             WEBKIT_WEB_VIEW(web_view));
@@ -492,13 +492,13 @@ wxWebViewZoomType wxWebViewGTKWebKit::GetZoomType() const
     else        return wxWEB_VIEW_ZOOM_TYPE_TEXT;
 }
 
-bool wxWebViewGTKWebKit::CanSetZoomType(wxWebViewZoomType) const
+bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
 {
     // this port supports all zoom types
     return true;
 }
 
-void wxWebViewGTKWebKit::SetPage(const wxString& html, const wxString& baseUri)
+void wxWebViewWebKit::SetPage(const wxString& html, const wxString& baseUri)
 {
     webkit_web_view_load_string (WEBKIT_WEB_VIEW(web_view),
                                  html.mb_str(wxConvUTF8),
@@ -507,7 +507,7 @@ void wxWebViewGTKWebKit::SetPage(const wxString& html, const wxString& baseUri)
                                  baseUri.mb_str(wxConvUTF8));
 }
 
-void wxWebViewGTKWebKit::Print()
+void wxWebViewWebKit::Print()
 {
     WebKitWebFrame* frame = webkit_web_view_get_main_frame(
             WEBKIT_WEB_VIEW(web_view));
@@ -522,7 +522,7 @@ void wxWebViewGTKWebKit::Print()
 }
 
 
-bool wxWebViewGTKWebKit::IsBusy()
+bool wxWebViewWebKit::IsBusy()
 {
     return m_busy;
 
@@ -550,7 +550,7 @@ bool wxWebViewGTKWebKit::IsBusy()
 
 // static
 wxVisualAttributes
-wxWebViewGTKWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
      return GetDefaultAttributesFromGTKWidget(webkit_web_view_new);
 }

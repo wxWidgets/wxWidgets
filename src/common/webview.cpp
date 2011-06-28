@@ -49,7 +49,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
 
         #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
             case wxWEB_VIEW_BACKEND_GTK_WEBKIT:
-                return new wxWebViewGTKWebKit();
+                return new wxWebViewWebKit();
         #endif
 
         #if wxUSE_WEBVIEW_IE
@@ -64,7 +64,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
             #endif
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
-            return new wxWebViewGTKWebKit();
+            return new wxWebViewWebKit();
             #endif
 
             #if wxUSE_WEBVIEW_IE
@@ -97,7 +97,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
 
         #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
             case wxWEB_VIEW_BACKEND_GTK_WEBKIT:
-                return new wxWebViewGTKWebKit(parent, id, url, pos, size, style,
+                return new wxWebViewWebKit(parent, id, url, pos, size, style,
                                            name);
         #endif
 
@@ -113,7 +113,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
             #endif
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
-            return new wxWebViewGTKWebKit(parent, id, url, pos, size, style, name);
+            return new wxWebViewWebKit(parent, id, url, pos, size, style, name);
             #endif
 
             #if wxUSE_WEBVIEW_IE

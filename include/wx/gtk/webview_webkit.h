@@ -12,20 +12,20 @@
 
 #include "wx/setup.h"
 
-#if wxHAVE_WEB_BACKEND_GTK_WEBKIT
+#if wxUSE_WEBVIEW_WEBKIT
 
 #include "wx/webview.h"
 
 //-----------------------------------------------------------------------------
-// wxWebViewGTKWebKit
+// wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_WEB wxWebViewGTKWebKit : public wxWebView
+class WXDLLIMPEXP_WEB wxWebViewWebKit : public wxWebView
 {
 public:
-    wxWebViewGTKWebKit() { Init(); }
+    wxWebViewWebKit() { Init(); }
 
-    wxWebViewGTKWebKit(wxWindow *parent,
+    wxWebViewWebKit(wxWindow *parent,
            wxWindowID id = wxID_ANY,
            const wxString& url = wxWebViewDefaultURLStr,
            const wxPoint& pos = wxDefaultPosition,
@@ -109,7 +109,7 @@ private:
     GtkWidget *web_view;
 
     // FIXME: try to get DECLARE_DYNAMIC_CLASS macros & stuff right
-    //DECLARE_DYNAMIC_CLASS(wxWebViewGTKWebKit)
+    //DECLARE_DYNAMIC_CLASS(wxWebViewWebKit)
 };
 
 #endif // if wxHAVE_WEB_BACKEND_GTK_WEBKIT
