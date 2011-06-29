@@ -374,7 +374,7 @@ int wxStatusBar::MSWGetBorderWidth() const
 /* static */
 const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
 {
-    static MSWMetrics s_metrics = { 0 };
+    static MSWMetrics s_metrics = { 0, 0 };
     if ( !s_metrics.textMargin )
     {
         // Grip size should be self explanatory (the only problem with it is

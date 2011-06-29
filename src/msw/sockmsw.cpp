@@ -347,7 +347,7 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
                 // only then). Ignore such dummy notifications.
                 {
                     fd_set fds;
-                    timeval tv = { 0 };
+                    timeval tv = { 0, 0 };
 
                     wxFD_ZERO(&fds);
                     wxFD_SET(socket->m_fd, &fds);
