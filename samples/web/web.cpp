@@ -38,12 +38,9 @@
 #error "wxStyledTextControl is needed by this sample"
 #endif
 
-#include "wxlogo.xpm"
-#include "back.xpm"
-#include "forward.xpm"
 #include "stop.xpm"
 #include "refresh.xpm"
-
+#include "wxlogo.xpm"
 
 class WebApp : public wxApp
 {
@@ -94,7 +91,6 @@ private:
     wxTimer* m_timer;
     int m_animation_angle;
 
-
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
 };
@@ -137,11 +133,24 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     // Create the toolbar
     m_toolbar = CreateToolBar(wxTB_TEXT);
     m_toolbar->SetToolBitmapSize(wxSize(32, 32));
-    
-    m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"),    wxBitmap(back_xpm));
-    m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), wxBitmap(forward_xpm));
-    m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"),    wxBitmap(stop_xpm));
-    m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  wxBitmap(refresh_xpm));
+ 
+    wxBitmap back = wxArtProvider::GetBitmap(wxART_GO_BACK , wxART_TOOLBAR);
+    wxBitmap forward = wxArtProvider::GetBitmap(wxART_GO_FORWARD , wxART_TOOLBAR);
+    #ifdef __WXGTK__
+        wxBitmap stop = wxArtProvider::GetBitmap("gtk-stop", wxART_TOOLBAR);
+    #else 
+        wxBitmap stop = wxBitmap(stop_xpm);
+    #endif
+    #ifdef __WXGTK__
+        wxBitmap refresh = wxArtProvider::GetBitmap("gtk-refresh", wxART_TOOLBAR);
+    #else 
+        wxBitmap refresh = wxBitmap(refresh_xpm);
+    #endif
+
+    m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"), back);
+    m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
+    m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
+    m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
     m_url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));    
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
