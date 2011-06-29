@@ -26,8 +26,18 @@ IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
           to be in the release, commit them first.
 
 
-Also run doxygen to create HTML documentation and pack it in .tar.bz2 and .zip
-formats.
+Alternative non official release scripts
+----------------------------------------
+
+If you use git-svn, then you can use alternative script that avoids the
+problems such as using non-clean tree and also has better handling of the ends
+of lines conversions. To use it you need to run
+
+- build/tools/svn-find-native-eols.pl
+- build/tools/git-make-release
+- build/tools/make-html-docs
+
+(the last one can also be used without git).
 
 
 Uploading
