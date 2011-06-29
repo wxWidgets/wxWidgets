@@ -112,6 +112,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetDoubleBuffered(true);
+    LoadUrl(url);
     return true;
 }
 

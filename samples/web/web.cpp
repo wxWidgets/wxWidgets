@@ -153,8 +153,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY);
-    m_browser->LoadUrl("http://www.wxwidgets.org");
+    m_browser = wxWebView::New(this, wxID_ANY, "http://www.wxwidgets.org");
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     SetSizer(topsizer);
