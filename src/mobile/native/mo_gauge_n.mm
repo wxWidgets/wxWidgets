@@ -41,15 +41,15 @@ bool wxMoGauge::Create(wxWindow *parent,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxGauge::Create(parent, id, range, pos, size, style, validator, name);
 }
 
 void wxMoGauge::Init()
 {
+    
 }
 
+#if 0
 wxSize wxMoGauge::DoGetBestSize() const
 {
     // FIXME stub
@@ -103,6 +103,8 @@ void wxMoGauge::Pulse()
     // FIXME stub
     // TODO
 }
+
+#endif  // 0
 
 void wxMoGauge::OnPaint(wxPaintEvent& WXUNUSED(event))
 {

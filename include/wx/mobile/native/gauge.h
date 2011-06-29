@@ -26,7 +26,7 @@ extern WXDLLEXPORT_DATA(const char) wxGaugeNameStr[];
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoGauge : public wxGaugeBase
+class WXDLLEXPORT wxMoGauge : public wxGauge
 {
 public:
     /// Default constructor.
@@ -43,8 +43,7 @@ public:
               const wxString& name = wxGaugeNameStr)
     {
         Init();
-        
-        (void)Create(parent, id, range, pos, size, style, validator, name);
+        Create(parent, id, range, pos, size, style, validator, name);
     }
     
     /// Creation function.
@@ -57,8 +56,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxGaugeNameStr);
     
-    void Init();
-    
+#if 0
     /// Set the gauge maximum value (the minimum value is zero).
     virtual void SetRange(int range);
     
@@ -78,9 +76,13 @@ public:
     // the gauge move a bit to indicate the user that some progress has been made.
     // Not currently implemented.
     void Pulse();
+#endif  // 0
     
 protected:
-    virtual wxSize DoGetBestSize() const;
+    
+    void Init();
+
+    //virtual wxSize DoGetBestSize() const;
     
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);

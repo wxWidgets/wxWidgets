@@ -17,6 +17,9 @@
 
 #include "wx/osx/private.h"
 
+
+// Subclass doesn't work for some funny reason; maybe because essentials are overloaded (wxOSXIPhoneClassAddWXMethods)?
+#if 0
 @interface wxUIProgressView : UIProgressView
 {
 }
@@ -34,19 +37,20 @@
         wxOSXIPhoneClassAddWXMethods( self );
     }
 }
-
 @end
+#endif  // 0
 
 class wxOSXGaugeIPhoneImpl : public wxWidgetIPhoneImpl
 {
 public :
     wxOSXGaugeIPhoneImpl( wxWindowMac* peer, WXWidget w) : wxWidgetIPhoneImpl( peer, w )
     {
+
     }
 
     void SetMaximum(wxInt32 m)
     {
-        wxUIProgressView* v =  (wxUIProgressView*)GetWXWidget();
+        UIProgressView* v =  (UIProgressView*)GetWXWidget();
         wxGauge* wxpeer = (wxGauge*) GetWXPeer();
         SetDeterminateMode();
         [v setProgress:(float) wxpeer->GetValue() / m];
@@ -54,7 +58,7 @@ public :
 
     void SetValue(wxInt32 n)
     {
-        wxUIProgressView* v =  (wxUIProgressView*)GetWXWidget();
+        UIProgressView* v =  (UIProgressView*)GetWXWidget();
         wxGauge* wxpeer = (wxGauge*) GetWXPeer();
         SetDeterminateMode();
         [v setProgress:(float) n / wxpeer->GetRange()];
@@ -83,8 +87,9 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxUIProgressView* v = [[wxUIProgressView alloc] initWithFrame:r];
+    UIProgressView* v = [[UIProgressView alloc] initWithFrame:r];
     [v setProgress:(float) value/maximum];
+    [v setOpaque:NO];
 
     wxWidgetIPhoneImpl* c = new wxOSXGaugeIPhoneImpl( wxpeer, v );
     return c;
