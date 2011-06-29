@@ -65,6 +65,7 @@ cd html
 del *.dot
 del *.md5
 zip -r wx.htb *.*
+copy wx.htb %DAILY%\wxWidgets-%WXW_VER%-html.zip
 zip wxWidgets-%WXW_VER%-htb.zip wx.htb
 copy wxWidgets-%WXW_VER%-htb.zip %DAILY%
 
