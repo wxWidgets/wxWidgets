@@ -234,6 +234,36 @@ wxgtk_webkitctrl_error (WebKitWebView  *web_view,
     return FALSE;
 }
 
+static gboolean
+wxgtk_webkitctrl_new_window(WebKitWebView *webView,
+                            WebKitWebFrame *frame,
+                            WebKitNetworkRequest *request,
+                            WebKitWebNavigationAction *navigation_action,
+                            WebKitWebPolicyDecision *policy_decision,
+                    wxWebViewWebKit *webKitCtrl)
+{
+    const gchar* uri = webkit_network_request_get_uri(request);
+
+    wxString target = webkit_web_frame_get_name (frame);
+    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                                   webKitCtrl->GetId(),
+                                   wxString( uri, wxConvUTF8 ),
+                                   target,
+                                   true);
+
+    if (webKitCtrl && webKitCtrl->GetEventHandler())
+        webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+
+    if (thisEvent.IsVetoed())
+    {
+        webkit_web_policy_decision_ignore(policy_decision);
+    }
+    else
+    {
+        webkit_web_policy_decision_use(policy_decision);
+    }
+    return TRUE;
+}
 
 } // extern "C"
 
@@ -283,9 +313,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                            G_CALLBACK(wxgtk_webkitctrl_error),
                            this);
 
-    // this signal can be added if we care about new frames open requests
-    //g_signal_connect_after(web_view, "new-window-policy-decision-requested",
-    //                       G_CALLBACK(...), this);
+    g_signal_connect_after(web_view, "new-window-policy-decision-requested",
+                           G_CALLBACK(wxgtk_webkitctrl_new_window), this);
 
     m_parent->DoAddChild( this );
 
