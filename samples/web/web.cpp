@@ -154,7 +154,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
     m_url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
-    m_toolbar->AddControl(m_url, _("URL"));    
+    m_toolbar->AddControl(m_url, _("URL"));
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
 
     m_toolbar->Realize();
@@ -168,6 +168,9 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     SetSizer(topsizer);
+
+    //Set a more sensible size for web browsing
+    SetSize(wxSize(800, 600));
 
     // Create a log window
     new wxLogWindow(this, _("Logging"));
