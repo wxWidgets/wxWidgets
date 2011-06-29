@@ -87,6 +87,8 @@ private:
     wxMenuItem* m_tools_medium;
     wxMenuItem* m_tools_large;
     wxMenuItem* m_tools_largest;
+    wxMenuItem* m_tools_handle_navigation;
+    wxMenuItem* m_tools_handle_new_window;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -180,6 +182,13 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
     m_tools_large = m_tools_menu->AppendCheckItem(wxID_ANY, _("Large"));
     m_tools_largest = m_tools_menu->AppendCheckItem(wxID_ANY, _("Largest"));
+    m_tools_menu->AppendSeparator();
+    m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
+    m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
+
+    //By default we want to handle naigation and new windows
+    m_tools_handle_navigation->Check();
+    m_tools_handle_new_window->Check();
 
 
     // Connect the toolbar events
@@ -346,14 +355,12 @@ void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
     evt.GetTarget() + "')");
     
     wxASSERT(m_browser->IsBusy());
-    
-    // Uncomment this to see how to block navigation requests
-    //int answer = wxMessageBox("Proceed with navigation to '" + evt.GetHref() + "'?",
-    //                          "Proceed with navigation?", wxYES_NO );
-    //if (answer != wxYES)
-    //{
-    //    evt.Veto();
-    //}
+
+    //If we don't want to handle navigation then veto the event and navigation
+    //will not take place
+    if(!m_tools_handle_navigation->IsChecked())
+        evt.Veto();
+
     UpdateState();
 }
 
@@ -381,6 +388,14 @@ void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
 void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
 {
     wxLogMessage("%s", "New window; url='" + evt.GetHref() + "'");
+
+    //If we handle new window events then just load them in this window as we 
+    //are a single window browser
+    if(m_tools_handle_new_window->IsChecked())
+        m_browser->LoadUrl(evt.GetHref());
+
+    //We always veto because we handle the event, otherwise under windows a new
+    //internet explorer windowis created
     evt.Veto();
 
     UpdateState();
