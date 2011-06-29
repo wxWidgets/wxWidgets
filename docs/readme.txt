@@ -1,4 +1,4 @@
-               wxWidgets 2.9.1 Release Notes
+               wxWidgets 2.9.2 Release Notes
                =============================
 
 Welcome to the latest release of wxWidgets, a cross-platform C++
@@ -13,10 +13,10 @@ thread handling, and more.
 
 A detailed reference manual including in-depth overviews for various
 topics is supplied in various formats and can be accessed online at
-http://docs.wxwidgets.org/
+http://docs.wxwidgets.org/2.9.2/
 
 
-Note about naming: while 2.9.1 is called a "development" release,
+Note about naming: while 2.9.2 is called a "development" release,
 this only means that API is not guaranteed to remain unchanged in
 the subsequent 2.9.x releases, unlike in the stable 2.8.x branch. We
 believe the current version is stable and suitable for use in
@@ -133,7 +133,7 @@ Documentation
 -------------
 
 wxWidgets documentation is available online at
-http://docs.wxwidgets.org/2.9.1/ and can also be downloaded in HTML
+http://docs.wxwidgets.org/2.9.2/ and can also be downloaded in HTML
 format. To generate documentation in other formats (PDF, CHM, ...)
 please use the scripts in docs/doxygen directory.
 
@@ -160,11 +160,11 @@ Further information
 
 The wxWidgets Web site is located at:
 
-  http://www.wxwidgets.org
+  http://www.wxwidgets.org/
 
 The main wxWidgets ftp site is at:
 
-  ftp://biolpc22.york.ac.uk/pub
+  ftp://ftp.wxwidgets.org/pub/
 
 A wxWidgets CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other
@@ -173,5 +173,4 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, July 2010
-
+The wxWidgets Team, July 2011
