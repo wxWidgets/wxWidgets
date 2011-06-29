@@ -186,7 +186,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
 
-    //By default we want to handle naigation and new windows
+    //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
 
@@ -240,7 +240,7 @@ void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
     m_animation_angle += 15;
     if (m_animation_angle > 360) m_animation_angle -= 360;
     
-    wxBitmap image(32, 32);    
+    wxBitmap image(24, 24);    
     {
         wxMemoryDC dc;
         dc.SelectObject(image);
