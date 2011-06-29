@@ -97,7 +97,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
         buttonType = UIButtonTypeInfoDark;
     }
 
-    UIButton* v = [[UIButton buttonWithType:buttonType] retain];
+    wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];
     v.frame = r;
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
@@ -121,8 +121,9 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxUIButton* v = [[wxUIButton alloc] initWithFrame:r];
-    [v setTitle:wxCFStringRef( label).AsNSString() forState:UIControlStateNormal];
+    wxUIButton* v = [[wxUIButton buttonWithType:UIButtonTypeDetailDisclosure] retain];
+    [v setFrame:r];    
+    //[v setTitle:wxCFStringRef( label).AsNSString() forState:UIControlStateNormal];
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
 }
