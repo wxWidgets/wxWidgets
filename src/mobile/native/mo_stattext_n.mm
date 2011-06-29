@@ -20,4 +20,38 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMoStaticText, wxStaticText)
 
-// FIXME stub
+
+/// Default constructor.
+wxMoStaticText::wxMoStaticText()
+{
+    Init();
+}
+
+void wxMoStaticText::Init()
+{
+    
+}
+
+/// Constructor.
+wxMoStaticText::wxMoStaticText(wxWindow *parent,
+                               wxWindowID id,
+                               const wxString& label,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxString& name)
+{
+    Init();
+    Create(parent, id, label, pos, size, style, name);
+}
+
+bool wxMoStaticText::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxString& label,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxString& name)
+{
+    return wxStaticText::Create(parent, id, label, pos, size, style, name);
+}

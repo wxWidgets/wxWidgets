@@ -26,7 +26,7 @@ class WXDLLEXPORT wxMoStaticText : public wxStaticText
 {
 public:
     /// Default constructor.
-    wxMoStaticText() { }
+    wxMoStaticText();
     
     /// Constructor.
     wxMoStaticText(wxWindow *parent,
@@ -35,12 +35,19 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = wxStaticTextNameStr)
-    {
-        Create(parent, id, label, pos, size, style, name);
-    }
+                   const wxString& name = wxStaticTextNameStr);
+    
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticTextNameStr);    
     
 protected:
+    
+    void Init();
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMoStaticText)
 };

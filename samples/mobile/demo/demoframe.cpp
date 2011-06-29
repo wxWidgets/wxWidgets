@@ -374,6 +374,10 @@ void DemoFrame::CreateControls()
 //// @end DemoFrame content construction
     wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(topSizer);
+    
+    wxMoStaticText *testStaticText = new wxMoStaticText(this, wxID_ANY, "Hello.", wxDefaultPosition, wxSize(-1, -1), wxNO_BORDER);
+    
+    return;
 
     wxMoNotebook* notebook = new wxMoNotebook(this, wxID_ANY, wxDefaultPosition, wxSize(-1, -1), wxBK_BOTTOM|wxBK_TEXT|wxBK_BITMAP|wxNO_BORDER);
     topSizer->Add(notebook, 1, wxEXPAND);

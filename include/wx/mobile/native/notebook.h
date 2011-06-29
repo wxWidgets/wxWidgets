@@ -121,7 +121,7 @@ public:
     wxString GetBadge(int item) const;
     
     // Ignore attempts to set font
-    bool SetFont( const wxFont &font ) { }
+    bool SetFont( const wxFont &font ) { return true; }
     
 protected:
     // common part of all ctors
