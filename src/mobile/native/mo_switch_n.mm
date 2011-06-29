@@ -57,9 +57,7 @@ bool wxMoSwitchCtrl::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxCheckBox::Create(parent, id, wxEmptyString, pos, size, style, validator, name);
 }
 
 wxMoSwitchCtrl::~wxMoSwitchCtrl()
@@ -68,9 +66,10 @@ wxMoSwitchCtrl::~wxMoSwitchCtrl()
 
 void wxMoSwitchCtrl::Init()
 {
-    // FIXME stub
+    
 }
 
+#if 0
 wxSize wxMoSwitchCtrl::DoGetBestSize() const
 {
     // FIXME stub
@@ -125,6 +124,7 @@ bool wxMoSwitchCtrl::GetValue() const
 
     return true;
 }
+#endif  // 0
 
 void wxMoSwitchCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {

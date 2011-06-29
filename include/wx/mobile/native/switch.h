@@ -26,7 +26,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxSwitchCtrlNameStr[];
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoSwitchCtrl : public wxControl
+class WXDLLEXPORT wxMoSwitchCtrl : public wxCheckBox
 {
 public:
     /// Default constructor.
@@ -58,6 +58,7 @@ public:
     
     void Init();
     
+#if 0
     /// Sets the switch value.
     virtual void SetValue(bool value);
     
@@ -68,13 +69,17 @@ public:
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+#endif  // 0
     
 protected:
+    
+#if 0
     // send a notification event, return true if processed
     bool SendClickEvent();
     
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
+#endif  // 0
     
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
