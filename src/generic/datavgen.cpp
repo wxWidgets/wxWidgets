@@ -3029,7 +3029,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     // Find the item along the parent-chain.
     // This algorithm is designed to speed up the node-finding method
     wxDataViewTreeNode* node = m_root;
-    for( unsigned iter = parentChain.size()-1; iter>=0; --iter )
+    for( unsigned iter = parentChain.size()-1; ; --iter )
     {
         if( node->HasChildren() )
         {
@@ -3060,6 +3060,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
         }
         else
             return NULL;
+
+        if ( !iter )
+            break;
     }
     return NULL;
 }
