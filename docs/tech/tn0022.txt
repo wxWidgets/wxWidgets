@@ -1,6 +1,13 @@
                         Making a new wxWidgets release
                         ==============================
 
+Before making the release
+-------------------------
+
+Update docs/readme.txt. Please review its contents in addition to just
+changing the version number.
+
+
 Creating release files
 ----------------------
 
@@ -47,7 +54,7 @@ Upload the files to SourceForge (the simplest is to scp them to
 sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z) and to
 ftp.wxwidgets.org (ask Chris to do it).
 
-Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it).
+Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
 
 Announcement
