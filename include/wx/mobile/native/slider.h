@@ -20,7 +20,7 @@
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoSlider : public wxSliderBase
+class WXDLLEXPORT wxMoSlider : public wxSlider
 {
 public:
     /// Default constructor.
@@ -54,6 +54,7 @@ public:
     
     void Init();
     
+#if 0
     /// Gets the current slider value (should be in range).
     virtual int GetValue() const;
     
@@ -81,6 +82,14 @@ public:
     // these methods get/set the length of the slider pointer in pixels
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
+        
+    // Standard window functions
+    
+    virtual bool SetBackgroundColour(const wxColour &colour);
+    virtual bool SetForegroundColour(const wxColour &colour);
+    virtual bool SetFont(const wxFont& font);
+    virtual bool Enable(bool enable);
+#endif  // 0
     
     // New iPhone functionality
     
@@ -94,20 +103,16 @@ public:
     virtual void SetMaxValueBitmap(const wxBitmap& bitmap);
     
     /// Get the maximum value bitmap (drawn on the right side of the slider)
-    virtual wxBitmap GetMaxValueBitmap() { return m_maxValueBitmap; }
-    
-    // Standard window functions
-    
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual bool SetFont(const wxFont& font);
-    virtual bool Enable(bool enable);
+    virtual wxBitmap GetMaxValueBitmap() { return m_maxValueBitmap; }    
     
 protected:
+    
+#if 0
     // Gets the track area rectangle
     bool GetTrackDimensions(wxRect& retTrackRect, wxRect& thumbRect) const;
     
     virtual wxSize DoGetBestSize() const;
+#endif  // 0
     
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);

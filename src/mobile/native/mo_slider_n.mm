@@ -31,17 +31,17 @@ BEGIN_EVENT_TABLE(wxMoSlider, wxControl)
 END_EVENT_TABLE()
 
 bool wxMoSlider::Create(wxWindow *parent,
-                      wxWindowID id,
-                      int value, int minValue, int maxValue,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      long style,
-                      const wxValidator& validator,
-                      const wxString& name)
+                        wxWindowID id,
+                        int value,
+                        int minValue,
+                        int maxValue,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxSlider::Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
 }
 
 wxMoSlider::~wxMoSlider()
@@ -53,6 +53,7 @@ void wxMoSlider::Init()
     // FIXME stub
 }
 
+#if 0
 wxSize wxMoSlider::DoGetBestSize() const
 {
     // FIXME stub
@@ -153,6 +154,8 @@ int wxMoSlider::GetThumbLength() const
     return 1;
 }
 
+#endif  // 0
+
 // Set the minimum value bitmap (drawn on the left side of the slider)
 void wxMoSlider::SetMinValueBitmap(const wxBitmap& bitmap)
 {
@@ -180,6 +183,7 @@ void wxMoSlider::OnMouseEvent(wxMouseEvent& event)
     // FIXME stub
 }
 
+#if 0
 // Gets the track area rectangle
 bool wxMoSlider::GetTrackDimensions(wxRect& retTrackRect, wxRect& thumbRect) const
 {
@@ -187,3 +191,4 @@ bool wxMoSlider::GetTrackDimensions(wxRect& retTrackRect, wxRect& thumbRect) con
 
     return true;
 }
+#endif  // 0
