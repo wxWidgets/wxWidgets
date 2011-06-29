@@ -57,6 +57,7 @@ enum {
     wxID_PAUSE,
     wxID_REWIND,
     wxID_FASTFORWARD,
+    wxID_PAGECURL,
     
     // Tab bar item
     

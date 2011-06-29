@@ -94,6 +94,8 @@ public:
     virtual ~wxMoToolBar();
 
     void Init();
+    
+#if 0
 
     /// Add a tool.
     wxToolBarToolBase *AddTool(int toolid,
@@ -205,6 +207,7 @@ public:
 
     // Only 1 row is allowed
     virtual void SetRows(int nRows);
+#endif  // 0
 
 protected:
 
@@ -214,6 +217,7 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
 
+#if 0
     // implement base class pure virtuals
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
@@ -239,6 +243,7 @@ protected:
 
     // should be called whenever the toolbar size changes
     void UpdateSize();
+#endif
 
 private:
     wxMoButtonStrip m_buttonStrip;

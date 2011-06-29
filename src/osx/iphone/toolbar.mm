@@ -13,6 +13,7 @@
 
 #if wxUSE_TOOLBAR
 
+#include "wx/mobile/native/defs.h"
 #include "wx/toolbar.h"
 
 #ifndef WX_PRECOMP
@@ -111,36 +112,110 @@ wxToolBarTool::wxToolBarTool(
                              wxObject *clientData,
                              const wxString& shortHelp,
                              const wxString& longHelp )
-:
-wxToolBarToolBase(
-                  tbar, id, label, bmpNormal, bmpDisabled, kind,
-                  clientData, shortHelp, longHelp )
+: wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                    clientData, shortHelp, longHelp)
 {
     Init();
     UIBarButtonItem* bui = [UIBarButtonItem alloc];
-    UIBarButtonItemStyle style = UIBarButtonItemStylePlain;
+    UIBarButtonItemStyle style = UIBarButtonItemStylePlain;     // default
     wxUIToolbar* toolbar = (wxUIToolbar*) tbar->GetHandle();
     
-    if ( id == wxID_SEPARATOR )
-    {
-        [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        bui.width = 25.0f;
-    }
-    else if ( bmpNormal.Ok() )
-    {
-        [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
-                      action:@selector(clickedAction:)];
-    }
-    else
-    {
-        if ( id == wxID_OK )
-            style = UIBarButtonItemStyleDone;
-        else
-            style = UIBarButtonItemStyleBordered;
+    enum wxUIBarButtonItemType {
+        wxUIBarButtonItemTypeSystemItem,
+        wxUIBarButtonItemTypeBitmap,
+        wxUIBarButtonItemTypeString
+    };
+    
+    wxUIBarButtonItemType itemType = wxUIBarButtonItemTypeSystemItem;   // default
+    UIBarButtonSystemItem systemItemID;
+    float preferredWidth = 0;
+    
+    /*
+     [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+     target:nil
+     action:nil];
+     bui.width = 25.0f;     
+     */
+    
+    switch (id) {
+            
+        // wxUIBarButtonItemTypeSystemItem cases (up to 'default:')
+        case wxID_OK:           systemItemID = UIBarButtonSystemItemDone;       break;
+        case wxID_CANCEL:       systemItemID = UIBarButtonSystemItemCancel;     break;
+        case wxID_EDIT:         systemItemID = UIBarButtonSystemItemEdit;       break;
+        case wxID_SAVE:         systemItemID = UIBarButtonSystemItemSave;       break;
+        case wxID_ADD:          systemItemID = UIBarButtonSystemItemAdd;        break;
+        case wxID_FLEXIBLESPACE:systemItemID = UIBarButtonSystemItemFlexibleSpace;                      break;
+        case wxID_FIXEDSPACE:   systemItemID = UIBarButtonSystemItemFixedSpace;                         break;
+        case wxID_SEPARATOR:    systemItemID = UIBarButtonSystemItemFixedSpace; preferredWidth = 25.0f; break;
+        case wxID_COMPOSE:      systemItemID = UIBarButtonSystemItemCompose;    break;
+        case wxID_REPLY:        systemItemID = UIBarButtonSystemItemReply;      break;
+        case wxID_ACTION:       systemItemID = UIBarButtonSystemItemAction;     break;
+        case wxID_ORGANIZE:     systemItemID = UIBarButtonSystemItemOrganize;   break;
+        case wxID_BOOKMARKS:    systemItemID = UIBarButtonSystemItemBookmarks;  break;
+        case wxID_SEARCH:       systemItemID = UIBarButtonSystemItemSearch;     break;
+        case wxID_REFRESH:      systemItemID = UIBarButtonSystemItemRefresh;    break;
+        case wxID_STOP:         systemItemID = UIBarButtonSystemItemStop;       break;
+        case wxID_CAMERA:       systemItemID = UIBarButtonSystemItemCamera;     break;
+        case wxID_TRASH:        systemItemID = UIBarButtonSystemItemTrash;      break;
+        case wxID_PLAY:         systemItemID = UIBarButtonSystemItemPlay;       break;
+        case wxID_PAUSE:        systemItemID = UIBarButtonSystemItemPause;      break;
+        case wxID_REWIND:       systemItemID = UIBarButtonSystemItemRewind;     break;
+        case wxID_FASTFORWARD:  systemItemID = UIBarButtonSystemItemFastForward;break;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_3_0
+        case wxID_UNDO:         systemItemID = UIBarButtonSystemItemUndo;       break;
+        case wxID_REDO:         systemItemID = UIBarButtonSystemItemRedo;       break;
+#endif
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_4_0
+        case wxID_PAGECURL:     systemItemID = UIBarButtonSystemItemPageCurl;   break;
+#endif
         
-        [bui initWithTitle:wxCFStringRef(label).AsNSString() style:style target:toolbar
-                      action:@selector(clickedAction:)];
-    }
+        default:
+            
+            if (bmpNormal.Ok()) {
+                itemType = wxUIBarButtonItemTypeBitmap;
+            } else {                
+                itemType = wxUIBarButtonItemTypeString;
+            
+                if ( id == wxID_OK ) {
+                    style = UIBarButtonItemStyleDone;
+                } else {
+                    style = UIBarButtonItemStyleBordered;
+                }
+            
+            }
+            
+            break;
+    };
+    
+    // Create toolbar item
+    switch (itemType) {
+        case wxUIBarButtonItemTypeSystemItem:
+            [bui initWithBarButtonSystemItem:systemItemID
+                                      target:nil
+                                      action:nil];
+            if (preferredWidth) {
+                bui.width = preferredWidth;
+            }
+            break;
+            
+        case wxUIBarButtonItemTypeBitmap:
+            [bui initWithImage:bmpNormal.GetUIImage()
+                         style:UIBarButtonItemStylePlain
+                        target:toolbar
+                        action:@selector(clickedAction:)];            
+            break;
+            
+        case wxUIBarButtonItemTypeString:
+            [bui initWithTitle:wxCFStringRef(label).AsNSString()
+                         style:style
+                        target:toolbar
+                        action:@selector(clickedAction:)];
+            break;
+            
+        default:
+            break;
+    };
 
     m_toolbarItem = bui;
     wxToolBarToolList[bui] = this;
@@ -188,9 +263,8 @@ wxToolBarToolBase *wxToolBar::CreateTool(
                                          const wxString& shortHelp,
                                          const wxString& longHelp )
 {
-    return new wxToolBarTool(
-                             this, id, label, bmpNormal, bmpDisabled, kind,
-                             clientData, shortHelp, longHelp );
+    return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
+                             clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *
@@ -232,15 +306,13 @@ bool wxToolBar::Create(
     
     switch ( [[UIApplication sharedApplication] statusBarStyle] ) 
     {
-#ifdef __IPHONE_3_0
         case UIStatusBarStyleBlackOpaque:
-            toolbar.barStyle = UIBarStyleBlack;
+            toolbar.barStyle = UIBarStyleBlackOpaque;
             break;
         case UIStatusBarStyleBlackTranslucent:
-            toolbar.barStyle = UIBarStyleBlack;
+            toolbar.barStyle = UIBarStyleBlackTranslucent;
             toolbar.translucent = YES;
             break;
-#endif
         default:
             toolbar.barStyle = UIBarStyleDefault;
             break;

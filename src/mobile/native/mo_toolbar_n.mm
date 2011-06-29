@@ -97,6 +97,8 @@ private:
 // implementation
 // ============================================================================
 
+#if 0
+
 // ----------------------------------------------------------------------------
 // wxMoToolBarTool
 // ----------------------------------------------------------------------------
@@ -129,6 +131,8 @@ wxToolBarToolBase *wxMoToolBar::CreateTool(wxControl *control,
     return toolbarTool;
 }
 
+#endif  // 0
+
 // ----------------------------------------------------------------------------
 // wxMoToolBar construction
 // ----------------------------------------------------------------------------
@@ -150,8 +154,11 @@ bool wxMoToolBar::Create(wxWindow *parent,
 
 wxMoToolBar::~wxMoToolBar()
 {
-    // FIXME stub
+    
 }
+
+
+#if 0
 
 wxSize wxMoToolBar::DoGetBestSize() const
 {
@@ -282,35 +289,6 @@ void wxMoToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
     // FIXME stub
 }
 
-// ----------------------------------------------------------------------------
-// event handlers
-// ----------------------------------------------------------------------------
-
-// Responds to colour changes, and passes event on to children.
-void wxMoToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-    // FIXME stub
-}
-
-void wxMoToolBar::OnMouseEvent(wxMouseEvent& event)
-{
-    // FIXME stub
-}
-
-void wxMoToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-{
-}
-
-void wxMoToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    // FIXME stub
-}
-
-void wxMoToolBar::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-    // FIXME stub
-}
-
 void wxMoToolBar::SetBorderColour(const wxColour &colour)
 {
     // FIXME stub
@@ -382,4 +360,36 @@ wxFont wxMoToolBar::GetFont() const
 
     wxFont empty;
     return empty;
+}
+
+#endif  // 0
+
+
+// ----------------------------------------------------------------------------
+// event handlers
+// ----------------------------------------------------------------------------
+
+// Responds to colour changes, and passes event on to children.
+void wxMoToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    // FIXME stub
+}
+
+void wxMoToolBar::OnMouseEvent(wxMouseEvent& event)
+{
+    // FIXME stub
+}
+
+void wxMoToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+{
+}
+
+void wxMoToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    // FIXME stub
+}
+
+void wxMoToolBar::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    // FIXME stub
 }
