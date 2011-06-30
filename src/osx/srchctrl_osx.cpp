@@ -63,7 +63,9 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
+#if wxUSE_MENUS
     m_menu = 0;
+#endif
 }
 
 wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const

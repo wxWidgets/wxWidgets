@@ -726,7 +726,9 @@ public :
     virtual void ShowCancelButton( bool show ) = 0;
     virtual bool IsCancelButtonVisible() const = 0;
 
+#if wxUSE_MENUS
     virtual void SetSearchMenu( wxMenu* menu ) = 0;
+#endif
 
     virtual void SetDescriptiveText(const wxString& text) = 0;
 } ;
