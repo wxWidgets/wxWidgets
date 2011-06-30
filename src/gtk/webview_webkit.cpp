@@ -323,6 +323,11 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     /* Open a webpage */
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
 
+    //Get the initial history limit so we can enable and disable it later
+    WebKitWebBackForwardList* history;
+    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    m_historyLimit = webkit_web_back_forward_list_get_limit(history);
+
     m_ready = true;
 
     return true;
@@ -413,6 +418,26 @@ bool wxWebViewWebKit::CanGoForward()
     return webkit_web_view_can_go_forward (WEBKIT_WEB_VIEW(web_view));
 }
 
+void wxWebViewWebKit::ClearHistory()
+{
+    WebKitWebBackForwardList* history;
+    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_back_forward_list_clear(history);
+}
+
+void wxWebViewWebKit::EnableHistory(bool enable)
+{
+    WebKitWebBackForwardList* history;
+    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    if(enable)
+    {
+        webkit_web_back_forward_list_set_limit(history, m_historyLimit);
+    }
+    else
+    {
+        webkit_web_back_forward_list_set_limit(history, 0);
+    }
+}
 
 wxString wxWebViewWebKit::GetCurrentURL()
 {

@@ -70,6 +70,8 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
     virtual bool CanGoBack();
     virtual bool CanGoForward();
+    virtual void ClearHistory();
+    virtual void EnableHistory(bool enable = true);
     virtual wxString GetCurrentURL();
     virtual wxString GetCurrentTitle();
     virtual wxString GetPageSource();
@@ -107,6 +109,7 @@ private:
     void GTKOnFocus(wxFocusEvent& event);
 
     GtkWidget *web_view;
+    gint m_historyLimit;
 
     // FIXME: try to get DECLARE_DYNAMIC_CLASS macros & stuff right
     //DECLARE_DYNAMIC_CLASS(wxWebViewWebKit)

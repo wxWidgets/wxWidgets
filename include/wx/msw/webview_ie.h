@@ -50,6 +50,8 @@ public:
     virtual bool CanGoBack() { return m_canNavigateBack; }
     virtual void GoBack();
     virtual void GoForward();
+    virtual void ClearHistory() {};
+    virtual void EnableHistory(bool enable = true) {};
     virtual void Stop();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
 

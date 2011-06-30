@@ -60,6 +60,8 @@ public:
     void OnForward(wxCommandEvent& evt);
     void OnStop(wxCommandEvent& evt);
     void OnReload(wxCommandEvent& evt);
+    void OnClearHistory(wxCommandEvent& evt);
+    void OnEnableHistory(wxCommandEvent& evt);
     void OnNavigationRequest(wxWebNavigationEvent& evt);
     void OnNavigationComplete(wxWebNavigationEvent& evt);
     void OnDocumentLoaded(wxWebNavigationEvent& evt);
@@ -89,6 +91,7 @@ private:
     wxMenuItem* m_tools_largest;
     wxMenuItem* m_tools_handle_navigation;
     wxMenuItem* m_tools_handle_new_window;
+    wxMenuItem* m_tools_enable_history;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -188,10 +191,14 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_menu->AppendSeparator();
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
+    m_tools_menu->AppendSeparator();
+    wxMenuItem* clearhist =  m_tools_menu->Append(wxID_ANY, _("Clear History"));
+    m_tools_enable_history = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable History"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
+    m_tools_enable_history->Check();
 
 
     // Connect the toolbar events
@@ -236,6 +243,10 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
     Connect(m_tools_largest->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
+    Connect(clearhist->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnClearHistory),  NULL, this );
+    Connect(m_tools_enable_history->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnEnableHistory),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
@@ -345,6 +356,18 @@ void WebFrame::OnStop(wxCommandEvent& evt)
 void WebFrame::OnReload(wxCommandEvent& evt)
 {
     m_browser->Reload();
+    UpdateState();
+}
+
+void WebFrame::OnClearHistory(wxCommandEvent& evt)
+{
+    m_browser->ClearHistory();
+    UpdateState();
+}
+
+void WebFrame::OnEnableHistory(wxCommandEvent& evt)
+{
+    m_browser->EnableHistory(m_tools_enable_history->IsChecked());
     UpdateState();
 }
 

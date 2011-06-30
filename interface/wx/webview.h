@@ -200,6 +200,16 @@ public:
     virtual void GoForward() = 0;
 
     /**
+        Clear the history, this will also remove the visible page.
+    */
+    virtual void ClearHistory() = 0;
+    
+    /**
+        Enable or disable the history. This will also clear the history.
+    */
+    virtual void EnableHistory(bool enable = true) = 0;
+    
+    /**
         Load a HTMl document (web page) from a URL
         @param url the URL where the HTML document to display can be found
         @note web engines generally report errors asynchronously, so if you wish

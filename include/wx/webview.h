@@ -173,6 +173,9 @@ public:
      */
     virtual void LoadUrl(const wxString& url) = 0;
 
+    virtual void ClearHistory() = 0;
+    virtual void EnableHistory(bool enable = true) = 0;
+
     /**
      * Stop the current page loading process, if any.
      * May trigger an error event of type wxWEB_NAV_ERR_USER_CANCELLED.
