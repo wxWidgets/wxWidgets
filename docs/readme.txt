@@ -72,7 +72,14 @@ Files
 -----
 
 The distribution is available in archive formats appropriate to the
-target system. See the download pages for details.
+target system, i.e. ZIP or 7z for Microsoft Windows and compressed tar
+archives for Unix systems. Please notice that some Windows tools still
+don't accept files with Unix line endings and that compiling sources
+with DOS line endings under Unix will fail, so please choosw the
+correct file for your system.
+
+See the download pages for the details of the files available for this
+release.
 
 
 Installation
