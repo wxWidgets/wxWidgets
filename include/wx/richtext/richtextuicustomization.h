@@ -60,10 +60,10 @@ public:
         
     virtual bool ShowHelp(wxWindow* win)
     {
-        if (m_uiCustomization && m_helpTopic != -1)
-            return m_uiCustomization->ShowHelp(win, m_helpTopic);
-        else
+        if ( !m_uiCustomization || m_helpTopic == -1 )
             return false;
+
+        return m_uiCustomization->ShowHelp(win, m_helpTopic);
     }
 
     /// Get the help topic identifier.
