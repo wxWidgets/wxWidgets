@@ -57,7 +57,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
+    new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
 
     return true;
 }
