@@ -500,6 +500,13 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
         case DISPID_DOCUMENTCOMPLETE:
         {
+            //Only send a complete even if we are actually finished, this brings
+            //the event in to line with webkit
+            READYSTATE rs;
+            m_webBrowser->get_ReadyState( &rs );
+            if(rs != READYSTATE_COMPLETE)
+                break;
+
             wxString url = evt[1].GetString();
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
