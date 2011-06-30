@@ -20,4 +20,40 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMoTextCtrl, wxTextCtrl)
 
-// FIXME stub
+/// Default constructor.
+wxMoTextCtrl::wxMoTextCtrl()
+{
+    Init();
+}
+
+void wxMoTextCtrl::Init()
+{
+    
+}
+
+/// Constructor.
+wxMoTextCtrl::wxMoTextCtrl(wxWindow *parent,
+                           wxWindowID id,
+                           const wxString& value,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxValidator& validator,
+                           const wxString& name)
+{
+    Init();
+    
+    Create(parent, id, value, pos, size, style, validator, name);
+}
+
+bool wxMoTextCtrl::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxString& value,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxValidator& validator,
+                          const wxString& name)
+{
+    return wxTextCtrl::Create(parent, id, value, pos, size, style, validator, name);
+}
