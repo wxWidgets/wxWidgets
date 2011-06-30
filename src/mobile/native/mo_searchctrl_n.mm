@@ -21,85 +21,34 @@
 IMPLEMENT_DYNAMIC_CLASS(wxMoSearchCtrl, wxSearchCtrl)
 
 
-// FIXME stub
-
-
-#pragma mark -
-#pragma mark Definition of absent wxSearch methods
-
-BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
-
-wxSearchCtrl::wxSearchCtrl()
+wxMoSearchCtrl::wxMoSearchCtrl()
 {
-    // FIXME stub    
+
 }
 
-wxSearchCtrl::~wxSearchCtrl()
+/// Constructor.
+wxMoSearchCtrl::wxMoSearchCtrl(wxWindow *parent,
+                               wxWindowID id,
+                               const wxString& value,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
 {
-    // FIXME stub    
+    Init();
+    
+    Create(parent, id, value, pos, size, style, validator, name);
 }
 
-void wxSearchCtrl::Init() {
-    // FIXME stub
-}
-
-bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
-                          const wxString& value,
-                          const wxPoint& pos,
-                          const wxSize& size,
-                          long style,
-                          const wxValidator& validator,
-                          const wxString& name)
+bool wxMoSearchCtrl::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxString& value,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString& name)
 {
-    // FIXME stub
-    
-    return true;
-}
-
-wxSize wxSearchCtrl::DoGetBestSize() const {
-    
-    // FIXME stub
-    
-    wxSize empty(1, 1);
-    return empty;
-}
-
-void wxSearchCtrl::ShowSearchButton( bool show ) {
-    // FIXME stub
-}
-
-bool wxSearchCtrl::IsSearchButtonVisible() const {
-    // FIXME stub
-    return true;
-}
-
-void wxSearchCtrl::ShowCancelButton( bool show ) {
-    // FIXME stub
-}
-
-bool wxSearchCtrl::IsCancelButtonVisible() const {
-    // FIXME stub
-    return true;
-}
-
-void wxSearchCtrl::SetMenu( wxMenu* menu ) {
-    // FIXME stub
-}
-
-wxMenu* wxSearchCtrl::GetMenu() {
-    // FIXME stub
-    return NULL;
-}
-
-bool wxSearchCtrl::HandleSearchFieldSearchHit() {
-    // FIXME stub
-    return true;
-}
-
-bool wxSearchCtrl::HandleSearchFieldCancelHit() {
-    // FIXME stub
-    return true;
+    return wxSearchCtrl::Create(parent, id, value, pos, size, style, validator, name);
 }

@@ -26,21 +26,26 @@ class WXDLLEXPORT wxMoSearchCtrl: public wxSearchCtrl
 {
 public:
     /// Default constructor.
-    wxMoSearchCtrl() { }
+    wxMoSearchCtrl();
     
     /// Constructor.
-    wxMoSearchCtrl(wxWindow *parent, wxWindowID id,
+    wxMoSearchCtrl(wxWindow *parent,
+                   wxWindowID id,
                    const wxString& value = wxEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxTextCtrlNameStr)
-    {
-        Init();
-        
-        Create(parent, id, value, pos, size, style, validator, name);
-    }
+                   const wxString& name = wxTextCtrlNameStr);
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& value = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxTextCtrlNameStr);
     
 private:
     
