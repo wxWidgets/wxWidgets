@@ -6,7 +6,7 @@ echo docs building for %WXW_VER%
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
-rem  it uses a number of tools nmake, gnuwin32 zip & dos2unix, ghostscript
+rem  it uses a number of tools, gnuwin32 zip & dos2unix, 
 rem  writes a log file in c:\
 
 echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
