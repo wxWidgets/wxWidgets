@@ -168,6 +168,7 @@ void _wxDebugiPhonePrintUIViewSubviews(UIView *view, unsigned int level = 1) {
         NSLog(@"%stabs:", indentTabs.c_str());
         UITabBarController *tabBarController = (UITabBarController *)[(UITabBar *)view delegate];
         for (UIViewController *viewController in tabBarController.viewControllers) {
+            NSLog(@"%s  tab view controller: %@", indentTabs.c_str(), viewController);
             _wxDebugiPhonePrintUIViewSubviews(viewController.view, level+1);
         }
     } else {
