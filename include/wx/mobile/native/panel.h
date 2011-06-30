@@ -56,7 +56,7 @@ public:
     
     virtual ~wxMoPanel();
     
-    // Ignore attempts to hide too
+    // Ignore attempts to hide panel
     bool Show(bool show = true);
     
     // calls layout for layout constraints and sizers

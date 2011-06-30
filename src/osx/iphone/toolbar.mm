@@ -317,6 +317,7 @@ bool wxToolBar::Create(
             toolbar.barStyle = UIBarStyleDefault;
             break;
     }
+        
     m_macToolbar = toolbar;
 
     SetPeer(new wxWidgetIPhoneImpl( this, toolbar ));    

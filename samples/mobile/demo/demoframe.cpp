@@ -375,26 +375,25 @@ void DemoFrame::CreateControls()
     wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(topSizer);
     
-    wxMoStaticText *testStaticText = new wxMoStaticText(this, wxID_ANY, "Hello.", wxDefaultPosition, wxSize(-1, -1), wxNO_BORDER);
-    
-    return;
-
     wxMoNotebook* notebook = new wxMoNotebook(this, wxID_ANY, wxDefaultPosition, wxSize(-1, -1), wxBK_BOTTOM|wxBK_TEXT|wxBK_BITMAP|wxNO_BORDER);
     topSizer->Add(notebook, 1, wxEXPAND);
 
-    wxMoPanel* page1 = new wxMoPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+    wxMoPanel* page1 = new wxMoPanel(notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
     notebook->AddPage(page1, _("Demo"), true, wxID_TOPRATED);
     // Items for page 1
     {
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         page1->SetSizer(sizer);
+        
+        wxMoStaticText *testStaticText = new wxMoStaticText(page1, wxID_ANY, "Hello.", wxPoint(40, 40), wxSize(100, 100), wxNO_BORDER);
+        
         wxMoNavigationCtrl* navCtrl = new wxMoNavigationCtrl(page1, wxID_ANY);
         sizer->Add(navCtrl, 1, wxEXPAND, 0);
 
         navCtrl->PushController(new TableDemoController(_("iPhone Demo"), navCtrl));
     }
-
-    wxMoPanel* page2 = new wxMoPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+    
+    wxMoPanel* page2 = new wxMoPanel(notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
     notebook->AddPage(page2, _("Navigation"), false, wxID_SEARCH);
 
     // Items for page 2
@@ -408,7 +407,7 @@ void DemoFrame::CreateControls()
         navCtrl->PushController(new DemoViewController(_("Demo View 1"), navCtrl, 1));
     }
 
-    wxMoPanel* page3 = new wxMoPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+    wxMoPanel* page3 = new wxMoPanel(notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
     notebook->AddPage(page3, _("Scrolling"), false, wxID_CONTACTS);
     notebook->SetBadge(2, wxT("1"));
 

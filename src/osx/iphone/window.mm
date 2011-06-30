@@ -71,6 +71,9 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
+
+- (NSString *)description;
+
 @end
 
 //
@@ -287,6 +290,27 @@ void wxOSX_drawRect(UIView* self, SEL _cmd, CGRect rect)
     return impl->drawRect(&rect, self, _cmd);
 }
 
+NSString *wxOSX_description(UIView* self, SEL _cmd)
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return @"N/A";
+    
+    NSMutableString *description = [NSMutableString stringWithString:@""];
+    [description appendFormat:@"<%@: 0x%08x; superClass = %@; frame = %@; hidden = %@; opaque = %@; alpha = %f; backgroundColor = %@>",
+        NSStringFromClass([self class]),
+        self,
+        NSStringFromClass([self superclass]),
+        NSStringFromCGRect(self.frame),
+        (self.hidden ? @"YES" : @"NO"),
+        (self.opaque ? @"YES" : @"NO"),
+        self.alpha,
+        [self.backgroundColor description]];
+    
+    return [NSString stringWithString:description];
+    
+    // <UIWindow: 0x541b910; frame = (0 0; 768 1024); layer = <CALayer: 0x541b9c0>>
+}
 
 void wxOSXIPhoneClassAddWXMethods(Class c)
 {
@@ -296,6 +320,7 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
     class_addMethod(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" );
     class_addMethod(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" );
     class_addMethod(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_CGRect={_CGPoint=ff}{_CGSize=ff}}" );
+    class_addMethod(c, @selector(description), (IMP) wxOSX_description, "c@:" );
 }
 
 //
@@ -481,17 +506,11 @@ void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to
 
 void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 {
-    CGFloat red =  (CGFloat)random()/(CGFloat)RAND_MAX;
-    CGFloat blue = (CGFloat)random()/(CGFloat)RAND_MAX;
-    CGFloat green = (CGFloat)random()/(CGFloat)RAND_MAX;
-    
-    m_osxView.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
-    //m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
 }
 
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
 {
-    /*
     if ( style == wxBG_STYLE_PAINT )
         [m_osxView setOpaque: YES ];
     else
@@ -499,7 +518,6 @@ bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
         [m_osxView setOpaque: NO ];
         m_osxView.backgroundColor = [UIColor clearColor];
     }
-    */
     return true;
 }
 
@@ -508,7 +526,8 @@ void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding
     if ( [m_osxView respondsToSelector:@selector(setTitle:forState:) ] )
     {
         wxCFStringRef cf( title , encoding );
-        [m_osxView setTitle:cf.AsNSString() forState:UIControlStateNormal ];
+        [m_osxView setTitle:cf.AsNSString()
+                   forState:UIControlStateNormal ];
     }
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
@@ -806,19 +825,25 @@ void wxWidgetIPhoneImpl::controlTextDidChange()
 // Factory methods
 //
 
-wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent),
-    wxWindowID WXUNUSED(id), const wxPoint& pos, const wxSize& size,
-    long WXUNUSED(style), long WXUNUSED(extraStyle))
+wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer,
+                                           wxWindowMac* WXUNUSED(parent),
+                                           wxWindowID WXUNUSED(id),
+                                           const wxPoint& pos,
+                                           const wxSize& size,
+                                           long WXUNUSED(style),
+                                           long WXUNUSED(extraStyle))
 {
     UIView* sv = (wxpeer->GetParent()->GetHandle() );
 
     CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
     // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
-    wxUIView* v = [[wxUIView alloc] initWithFrame:r];
+    //wxUIView* v = [[wxUIView alloc] initWithFrame:r];
+    UIView* v = [[UIView alloc] initWithFrame:r];
     sv.clipsToBounds = YES;
     sv.contentMode =  UIViewContentModeRedraw;
-    sv.clearsContextBeforeDrawing = NO;
+    //sv.clearsContextBeforeDrawing = NO;
+    //sv.backgroundColor = [UIColor greenColor];
+    sv.clearsContextBeforeDrawing = YES;
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v, false, true );
     return c;
 }
-

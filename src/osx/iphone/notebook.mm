@@ -33,9 +33,10 @@
 #pragma mark -
 #pragma mark Cocoa
 
+
 #pragma mark UITabBarController
 
-@interface wxUITabBarController : UITabBarController <UITabBarControllerDelegate, UITabBarDelegate>
+@interface wxUITabBarController : UITabBarController <UITabBarControllerDelegate>
 {
 
 }
@@ -64,9 +65,9 @@
 class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 {
 public:
-    wxNotebookIPhoneImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
+    wxNotebookIPhoneImpl( wxWindowMac* peer , wxUITabBarController *tabBarController, WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
     {
-
+        m_tabBarController = tabBarController;
     }
     
     // Ignore attempts to set position/size
@@ -83,9 +84,7 @@ public:
     
     void GetContentArea( int &left , int &top , int &width , int &height ) const
     {
-        UITabBar *tabBar = (UITabBar *)m_osxView;
-
-        CGRect r = tabBar.bounds;
+        CGRect r = m_osxView.bounds;
         left = (int)r.origin.x;
         top = (int)r.origin.y;
         width = (int)r.size.width;
@@ -94,35 +93,27 @@ public:
     
     void SetValue( wxInt32 value )
     {
-        UITabBar *tabBar = (UITabBar *) m_osxView;
-        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
-
         // avoid 'changed' events when setting the tab programmatically
-        [tabBarController setDelegate:nil];
-        [tabBarController setSelectedIndex:(value-1)];
-        [tabBarController setDelegate:tabBarController];
+        [m_tabBarController setDelegate:nil];
+        [m_tabBarController setSelectedIndex:(value-1)];
+        [m_tabBarController setDelegate:m_tabBarController];
     }
     
     wxInt32 GetValue() const
     {
-        UITabBar *tabBar = (UITabBar *) m_osxView;
-        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
-        return [tabBarController selectedIndex]+1;
+        return [m_tabBarController selectedIndex]+1;
     }
     
     void SetMaximum( wxInt32 maximum )
     {
-        UITabBar *tabBar = (UITabBar *) m_osxView;
-        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
-        
-        int tabCount = [[tabBarController viewControllers] count];
+        int tabCount = [[m_tabBarController viewControllers] count];
         
         if (maximum != tabCount) {
         
-            NSMutableArray *controllers = [NSMutableArray arrayWithArray:[tabBarController viewControllers]];
+            NSMutableArray *controllers = [NSMutableArray arrayWithArray:[m_tabBarController viewControllers]];
             
             // avoid 'changed' events when setting the tab programmatically
-            [tabBarController setDelegate:nil];
+            [m_tabBarController setDelegate:nil];
             
             if ( maximum > tabCount )
             {
@@ -142,8 +133,8 @@ public:
                 [controllers removeObjectsInRange:removeRange];
             }
             
-            [tabBarController setViewControllers:controllers];
-            [tabBarController setDelegate:tabBarController];
+            [m_tabBarController setViewControllers:controllers];
+            [m_tabBarController setDelegate:m_tabBarController];
         }
     }
 
@@ -152,17 +143,14 @@ public:
         int pageCount = notebook.GetPageCount();
         
         SetMaximum( pageCount );
-                
-        UITabBar *tabBar = (UITabBar *) m_osxView;
-        wxUITabBarController *tabBarController = (wxUITabBarController *)[tabBar delegate];
-                
+        
         // avoid 'changed' events when setting the tab programmatically
-        [tabBarController setDelegate:nil];
+        [m_tabBarController setDelegate:nil];
         
         for ( int i = 0 ; i < pageCount ; ++i )
         {
             wxNotebookPage* page = notebook.GetPage(i);
-            UIViewController *controller = [[tabBarController viewControllers] objectAtIndex:i];
+            UIViewController *controller = [[m_tabBarController viewControllers] objectAtIndex:i];
                         
             int pageImage = notebook.GetPageImage(i);
             UITabBarSystemItem systemItem = UITabBarSystemItemHistory;
@@ -191,9 +179,11 @@ public:
             [controller setTitle:tabTitle];
         }
         
-        [tabBarController setDelegate:tabBarController];
+        [m_tabBarController setDelegate:m_tabBarController];
     }
     
+private:
+    wxUITabBarController *m_tabBarController;
 };
 
 wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
@@ -210,12 +200,9 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     CGRect tabBarFrame = controller.tabBar.frame;
     tabBarFrame.origin.y -= 20;
     [controller.tabBar setFrame:tabBarFrame];
-    
     [controller setDelegate:controller];
         
-    CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    
-    wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, controller.tabBar );
+    wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, controller, controller.view );
     return c;
 }
 
