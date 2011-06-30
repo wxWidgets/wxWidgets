@@ -32,6 +32,18 @@ IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
           release. If you have legitimate modifications in the tree that need
           to be in the release, commit them first.
 
+To generate the windows installer (.exe) and the documentation files (chm and htb formats)
+run:
+
+build\tools\bld_chm_exe.bat
+
+which depends on the wxwidgets.iss file, and generates output in the %DAILY% directory. It 
+assumes a clean copy of the wxWidgets source tree in %INNO%. Temporary files will be generated 
+in the tree from which the batch file is run. It depends on doxygen, a number of gnu
+win32 tools and Microsofts htmlhelp compiler. The wxwidgets.iss file should not need 
+editing, but you will want to check that the bld_chm_exe.bat has the correct version number.
+
+
 
 Alternative non official release scripts
 ----------------------------------------
