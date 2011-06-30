@@ -86,7 +86,7 @@ void wxMoPanel::DoSetSize(int x, int y,
 {    
     UIView *view = (UIView *)GetPeer()->GetWXWidget();
     
-    NSLog(@"attempt to set size; curr. panel: %@", view);
+    NSLog(@"ignored attempt to set size; curr. panel: %@", view);
     //[view setFrame:CGRectMake(20, 20, 80, 80)];
 }
 

@@ -15,6 +15,7 @@
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
 		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
+		B913435013BC0A780024E59E /* navctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B913434F13BC0A780024E59E /* navctrl.mm */; };
 		B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072E13B9FCF700D6F0D8 /* button.mm */; };
 		B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */; };
 		B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073013B9FCF700D6F0D8 /* dialog.mm */; };
@@ -93,6 +94,7 @@
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
+		B913434F13BC0A780024E59E /* navctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navctrl.mm; path = ../../src/osx/iphone/navctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9DF070813B9FCD800D6F0D8 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
 		B9DF070913B9FCD800D6F0D8 /* barbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barbutton.h; sourceTree = "<group>"; };
 		B9DF070A13B9FCD800D6F0D8 /* bmpbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmpbutton.h; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				B9DF073213B9FCF700D6F0D8 /* gauge.mm */,
 				B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */,
 				B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */,
+				B913434F13BC0A780024E59E /* navctrl.mm */,
 				B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */,
 				B9DF073613B9FCF700D6F0D8 /* notebook.mm */,
 				B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */,
@@ -505,6 +508,7 @@
 				B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */,
 				B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */,
 				B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */,
+				B913435013BC0A780024E59E /* navctrl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

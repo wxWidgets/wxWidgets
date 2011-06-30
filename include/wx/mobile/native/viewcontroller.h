@@ -48,10 +48,10 @@ public:
     wxMoNavigationItem* GetNavigationItem() const { return m_item; }
 
     /// Sets the associated window
-    void SetWindow(wxWindow* window) { m_window = window; }
+    void SetWindow(wxWindow* window);
 
     /// Gets the navigation item
-    wxWindow* GetWindow() const { return m_window; }
+    wxWindow* GetWindow() const;
 
     /// Sets the auto-delete flag. If true, the controller will be deleted when
     /// popped off a navigation stack.
@@ -73,6 +73,10 @@ public:
     /// Returns true if the window will be deleted when the controller
     /// is deleted. By default this is true.
     bool GetOwnsWindow() const { return m_ownsWindow; }
+    
+    
+    // Returns a pointer to UIViewController
+    void* GetUIViewController() const { return m_uiviewcontroller; }
 
 protected:
 
@@ -80,6 +84,9 @@ protected:
     bool                    m_autoDelete;
     bool                    m_ownsWindow;
     wxWindow*               m_window;
+    
+    // Pointer to UIViewController
+    void*                   m_uiviewcontroller;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMoViewController)
 };

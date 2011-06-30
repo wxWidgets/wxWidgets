@@ -2595,6 +2595,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
     src/osx/iphone/msgdlg.mm
+    src/osx/iphone/navctrl.mm
     src/osx/iphone/nonownedwnd.mm
 	src/osx/iphone/notebook.mm
     src/osx/iphone/scrolbar.mm

@@ -21,6 +21,10 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
 
+#if wxOSX_USE_IPHONE
+#include "wx/mobile/native/viewcontroller.h"
+#endif
+
 // Define helper macros allowing to insert small snippets of code to be
 // compiled for high enough OS X version only: this shouldn't be abused for
 // anything big but it's handy for e.g. specifying OS X 10.6-only protocols in
@@ -521,7 +525,19 @@ public :
                                     const wxSize& size,
                                     long style,
                                     long extraStyle);
-#endif
+#endif  // wxOSX_USE_COCOA
+
+#if wxOSX_USE_IPHONE
+
+    static wxWidgetImplType*    CreateNavigationController( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long style,
+                                    long extraStyle);
+
+#endif  // wxOSX_USE_IPHONE
 
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
@@ -873,6 +889,26 @@ protected :
     wxNonOwnedWindow*   m_wxPeer;
     DECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl)
 };
+
+
+#if wxOSX_USE_IPHONE
+
+//
+// common interface for iPhone's UINavigationController
+//
+
+class wxNavigationControllerImpl
+{
+    public :
+
+    wxNavigationControllerImpl(){}
+    virtual ~wxNavigationControllerImpl(){}
+    
+    virtual bool PushViewController(wxMoViewController *controller) = 0;
+    virtual bool PopViewController() = 0;
+} ;
+#endif  // wxOSX_USE_IPHONE
+
 
 #endif // wxUSE_GUI
 

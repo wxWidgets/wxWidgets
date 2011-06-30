@@ -92,7 +92,7 @@ class WXDLLEXPORT wxMoNavigationCtrl: public wxControl
 {
 public:
     /// Default constructor.
-    wxMoNavigationCtrl() { Init(); }
+    wxMoNavigationCtrl();
     
     /// Constructor.
     wxMoNavigationCtrl(wxWindow *parent,
@@ -101,11 +101,7 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
                        const wxValidator& validator = wxDefaultValidator,
-                       const wxString& name = wxNavigationCtrlNameStr)
-    {
-        Init();
-        Create(parent, id, pos, size, style, validator, name);
-    }
+                       const wxString& name = wxNavigationCtrlNameStr);
     
     /// Creation function.
     bool Create(wxWindow *parent,
@@ -132,8 +128,11 @@ public:
     /// Returns the back controller (the controller below the top controller).
     virtual wxMoViewController* GetBackController() const;
     
+    /// Returns the root controller (the controller which is first in the queue).
+    virtual wxMoViewController* GetRootController() const;
+    
     /// Returns the controller stack.
-    const wxMoViewControllerArray& GetControllers() const { return m_controllers; }
+    const wxMoViewControllerArray& GetControllers() const;
     
     /// Sets the controller stack.
     void SetControllers(const wxMoViewControllerArray& controllers);
@@ -155,6 +154,7 @@ public:
     
     // IMPLEMENTATION
     
+#if 0
     // Position the control items
     virtual void PositionItems();
     
@@ -162,12 +162,15 @@ public:
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+#endif
     
 protected:
     
+#if 0
     // Get the best size
     virtual wxSize DoGetBestSize() const;
-    
+#endif
+        
     void OnSize(wxSizeEvent& event);
     void OnBack(wxCommandEvent& event);
     
