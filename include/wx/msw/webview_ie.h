@@ -3,7 +3,7 @@
 // Purpose:     wxMSW IE wxWebView backend
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon
+// Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,6 +18,19 @@
 #include "wx/webview.h"
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
+#include "wx/sharedptr.h"
+
+class WXDLLIMPEXP_WEB wxWebHistoryItem
+{
+public:
+    wxWebHistoryItem(const wxString& url, const wxString& title) : 
+                     m_url(url), m_title(title) {}
+    wxString GetUrl() { return m_url; }
+    wxString GetTitle() { return m_title; }
+
+private:
+    wxString m_url, m_title;
+};
 
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
@@ -45,13 +58,14 @@ public:
            const wxString& name = wxWebViewNameStr);
 
     virtual void LoadUrl(const wxString& url);
+    virtual void LoadHistoryItem(wxWebHistoryItem* item);
 
-    virtual bool CanGoForward() { return m_canNavigateForward; }
-    virtual bool CanGoBack() { return m_canNavigateBack; }
+    virtual bool CanGoForward();
+    virtual bool CanGoBack();
     virtual void GoBack();
     virtual void GoForward();
-    virtual void ClearHistory() {};
-    virtual void EnableHistory(bool enable = true) {};
+    virtual void ClearHistory();
+    virtual void EnableHistory(bool enable = true);
     virtual void Stop();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
 
@@ -110,6 +124,12 @@ private:
      *  Busy property is false but should be true.
      */
     bool m_isBusy;
+    //We manage our own history
+    wxVector<wxSharedPtr<wxWebHistoryItem> > m_historyList;
+    int m_historyPosition;
+    bool m_historyLoadingFromList;
+    bool m_historyEnabled;
+
 };
 
 #endif // wxUSE_WEBVIEW_IE

@@ -3,7 +3,7 @@
 // Purpose:     wxMSW wxWebViewIE class implementation for web view component
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon
+// Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +93,9 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_canNavigateBack = false;
     m_canNavigateForward = false;
     m_isBusy = false;
+    m_historyLoadingFromList = false;
+    m_historyEnabled = true;
+    m_historyPosition = -1;
 
     if (::CoCreateInstance(CLSID_WebBrowser, NULL,
                            CLSCTX_INPROC_SERVER, // CLSCTX_INPROC,
@@ -354,20 +357,43 @@ void wxWebViewIE::Print()
                          OLECMDEXECOPT_DODEFAULT, NULL, NULL);
 }
 
+bool wxWebViewIE::CanGoBack()
+{
+    if(m_historyEnabled)
+        return m_historyPosition > 0;
+    else
+        return false;
+}
+
+bool wxWebViewIE::CanGoForward()
+{
+    if(m_historyEnabled)
+        return m_historyPosition != m_historyList.size() - 1;
+    else
+        return false;
+}
+
+void wxWebViewIE::LoadHistoryItem(wxWebHistoryItem* item)
+{
+    int pos = -1;
+    for(unsigned int i = 0; i < m_historyList.size(); i++)
+    {
+        if(m_historyList[i].get() == item)
+            pos = i;
+    }
+    m_historyLoadingFromList = true;
+    LoadUrl(item->GetUrl());
+    m_historyPosition = pos;
+}
+
 void wxWebViewIE::GoBack()
 {
-    wxVariant out = m_ie.CallMethod("GoBack");
-
-    // FIXME: why is out value null??
-    //return (HRESULT)(out.GetLong()) == S_OK;
+    LoadHistoryItem(m_historyList[m_historyPosition - 1].get());
 }
 
 void wxWebViewIE::GoForward()
 {
-    wxVariant out = m_ie.CallMethod("GoForward");
-
-    // FIXME: why is out value null??
-    //return (HRESULT)(out.GetLong()) == S_OK;
+    LoadHistoryItem(m_historyList[m_historyPosition + 1].get());
 }
 
 void wxWebViewIE::Stop()
@@ -378,6 +404,18 @@ void wxWebViewIE::Stop()
     //return (HRESULT)(out.GetLong()) == S_OK;
 }
 
+void wxWebViewIE::ClearHistory()
+{
+    m_historyList.clear();
+    m_historyPosition = -1;
+}
+
+void wxWebViewIE::EnableHistory(bool enable)
+{
+    m_historyEnabled = enable;
+    m_historyList.clear();
+    m_historyPosition = -1;
+}
 
 void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
 {
@@ -508,6 +546,22 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
                 break;
 
             wxString url = evt[1].GetString();
+            //As we are complete we also add to the history list
+            if(m_historyEnabled && !m_historyLoadingFromList)
+            {
+                //If we are not at the end of the list, then erase everything
+                //between us and the end before adding the new page
+                if(m_historyPosition != m_historyList.size() - 1)
+                {
+                    m_historyList.erase(m_historyList.begin() + m_historyPosition + 1,
+                                        m_historyList.end());
+                }
+                wxSharedPtr<wxWebHistoryItem> item(new wxWebHistoryItem(url, GetCurrentTitle()));
+                m_historyList.push_back(item);
+                m_historyPosition++;
+            }
+            //Reset as we are done now
+            m_historyLoadingFromList = false;
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
             wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED, GetId(),
