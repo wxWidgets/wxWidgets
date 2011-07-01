@@ -381,6 +381,7 @@ void wxWebViewIE::LoadHistoryItem(wxWebHistoryItem* item)
         if(m_historyList[i].get() == item)
             pos = i;
     }
+    wxASSERT_MSG(pos != m_historyList.size(), "invalid history item");
     m_historyLoadingFromList = true;
     LoadUrl(item->GetUrl());
     m_historyPosition = pos;
