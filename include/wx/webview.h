@@ -17,6 +17,19 @@
 #include <wx/control.h>
 #include <wx/event.h>
 #include <wx/sstream.h>
+#include "wx/sharedptr.h"
+
+class WXDLLIMPEXP_WEB wxWebHistoryItem
+{
+public:
+    wxWebHistoryItem(const wxString& url, const wxString& title) : 
+                     m_url(url), m_title(title) {}
+    wxString GetUrl() { return m_url; }
+    wxString GetTitle() { return m_title; }
+
+private:
+    wxString m_url, m_title;
+};
 
 /**
  * Zoom level in web view component
@@ -175,6 +188,9 @@ public:
 
     virtual void ClearHistory() = 0;
     virtual void EnableHistory(bool enable = true) = 0;
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory() = 0;
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() = 0;
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
 
     /**
      * Stop the current page loading process, if any.

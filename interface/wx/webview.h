@@ -208,6 +208,24 @@ public:
         Enable or disable the history. This will also clear the history.
     */
     virtual void EnableHistory(bool enable = true) = 0;
+
+    /**
+        Returns a list of items in the back history. The first item in the
+        vector is the first page that was loaded by the control.
+    */
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory() = 0;
+    
+    /**
+        Returns a list of items in the forward history. The first item in the 
+        vector is the next item in the history with respect to the curently 
+        loaded page.
+    */
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() = 0;
+    
+    /**
+        Loads a history item. 
+    */
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
     
     /**
         Load a HTMl document (web page) from a URL

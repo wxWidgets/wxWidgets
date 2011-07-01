@@ -19,18 +19,7 @@
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
 #include "wx/sharedptr.h"
-
-class WXDLLIMPEXP_WEB wxWebHistoryItem
-{
-public:
-    wxWebHistoryItem(const wxString& url, const wxString& title) : 
-                     m_url(url), m_title(title) {}
-    wxString GetUrl() { return m_url; }
-    wxString GetTitle() { return m_title; }
-
-private:
-    wxString m_url, m_title;
-};
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
@@ -59,6 +48,8 @@ public:
 
     virtual void LoadUrl(const wxString& url);
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory();
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory();
 
     virtual bool CanGoForward();
     virtual bool CanGoBack();
