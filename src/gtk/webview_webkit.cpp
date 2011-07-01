@@ -439,6 +439,56 @@ void wxWebViewWebKit::EnableHistory(bool enable)
     }
 }
 
+wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
+{
+    wxVector<wxSharedPtr<wxWebHistoryItem> > backhist; 
+    WebKitWebBackForwardList* history;
+    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    GList* list = webkit_web_back_forward_list_get_back_list_with_limit(history, 
+                                                                        m_historyLimit);
+    //We need to iterate in reverse to get the order we desire
+    for(int i = g_list_length(list) - 1; i >= 0 ; i--)
+    {
+        WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
+        wxSharedPtr<wxWebHistoryItem> item(new wxWebHistoryItem(
+                                           webkit_web_history_item_get_uri(gtkitem),
+                                           webkit_web_history_item_get_title(gtkitem)));
+        backhist.push_back(item);
+        m_historyMap[item] = gtkitem;
+    }
+    return backhist;
+}
+
+wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetForwardHistory()
+{
+    wxVector<wxSharedPtr<wxWebHistoryItem> > forwardhist; 
+    WebKitWebBackForwardList* history;
+    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    GList* list = webkit_web_back_forward_list_get_forward_list_with_limit(history, 
+                                                                           m_historyLimit);
+    for(guint i = 0; i < g_list_length(list); i++)
+    {
+        WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
+        wxSharedPtr<wxWebHistoryItem> item(new wxWebHistoryItem(
+                                           webkit_web_history_item_get_uri(gtkitem),
+                                           webkit_web_history_item_get_title(gtkitem)));
+        forwardhist.push_back(item);
+        m_historyMap[item] = gtkitem;
+    }
+    return forwardhist;
+}
+
+void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
+{
+    WebKitWebHistoryItem* gtkitem = m_historyMap[item];
+    if(gtkitem)
+    {
+        WebKitWebBackForwardList* history;
+        history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+        webkit_web_back_forward_list_go_to_item(history, gtkitem);
+    }
+}
+
 wxString wxWebViewWebKit::GetCurrentURL()
 {
     // FIXME: check which encoding the web kit control uses instead of

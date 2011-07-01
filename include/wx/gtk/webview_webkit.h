@@ -14,7 +14,39 @@
 
 #if wxUSE_WEBVIEW_WEBKIT
 
+#include "webkit/webkit.h"
+#include "wx/sharedptr.h"
 #include "wx/webview.h"
+
+//A set of hash function so we can map wxWebHistoryItems to WebKitWebHistoryItems
+class SharedPtrHash
+{
+public:
+    SharedPtrHash() { }
+
+    unsigned long operator()( const wxSharedPtr<wxWebHistoryItem> & item ) const
+    {
+        
+        return wxPointerHash()(item.get());
+    }
+    SharedPtrHash& operator=(const SharedPtrHash&) { return *this; }
+};
+
+class SharedPtrEqual
+{
+public:
+    SharedPtrEqual() { }
+    bool operator()( const wxSharedPtr<wxWebHistoryItem> & a,
+                     const wxSharedPtr<wxWebHistoryItem> & b ) const
+    {
+        return wxPointerEqual()(a.get(), b.get());
+    }
+
+    SharedPtrEqual& operator=(const SharedPtrEqual&) { return *this; }
+};
+
+WX_DECLARE_HASH_MAP(wxSharedPtr<wxWebHistoryItem>, WebKitWebHistoryItem*,
+                    SharedPtrHash, SharedPtrEqual, HistoryItemHash);
 
 //-----------------------------------------------------------------------------
 // wxWebViewWebKit
@@ -72,6 +104,9 @@ public:
     virtual bool CanGoForward();
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory();
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory();
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
     virtual wxString GetCurrentURL();
     virtual wxString GetCurrentTitle();
     virtual wxString GetPageSource();
@@ -110,6 +145,7 @@ private:
 
     GtkWidget *web_view;
     gint m_historyLimit;
+    HistoryItemHash m_historyMap;
 
     // FIXME: try to get DECLARE_DYNAMIC_CLASS macros & stuff right
     //DECLARE_DYNAMIC_CLASS(wxWebViewWebKit)
