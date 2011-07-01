@@ -373,12 +373,13 @@ bool wxWebViewIE::CanGoForward()
         return false;
 }
 
-void wxWebViewIE::LoadHistoryItem(wxWebHistoryItem* item)
+void wxWebViewIE::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
 {
     int pos = -1;
     for(unsigned int i = 0; i < m_historyList.size(); i++)
     {
-        if(m_historyList[i].get() == item)
+        //We compare the actual pointers to find the correct item
+        if(m_historyList[i].get() == item.get())
             pos = i;
     }
     wxASSERT_MSG(pos != m_historyList.size(), "invalid history item");
@@ -389,12 +390,12 @@ void wxWebViewIE::LoadHistoryItem(wxWebHistoryItem* item)
 
 void wxWebViewIE::GoBack()
 {
-    LoadHistoryItem(m_historyList[m_historyPosition - 1].get());
+    LoadHistoryItem(m_historyList[m_historyPosition - 1]);
 }
 
 void wxWebViewIE::GoForward()
 {
-    LoadHistoryItem(m_historyList[m_historyPosition + 1].get());
+    LoadHistoryItem(m_historyList[m_historyPosition + 1]);
 }
 
 void wxWebViewIE::Stop()

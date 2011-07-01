@@ -58,7 +58,7 @@ public:
            const wxString& name = wxWebViewNameStr);
 
     virtual void LoadUrl(const wxString& url);
-    virtual void LoadHistoryItem(wxWebHistoryItem* item);
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
 
     virtual bool CanGoForward();
     virtual bool CanGoBack();
@@ -124,7 +124,10 @@ private:
      *  Busy property is false but should be true.
      */
     bool m_isBusy;
-    //We manage our own history
+    //We manage our own history, the history list contains the history items 
+    //which are added as documentcomplete events arrive, unless we are loading
+    //an item from the history. The position is stored as an int, and reflects
+    //where we are in the history list.
     wxVector<wxSharedPtr<wxWebHistoryItem> > m_historyList;
     int m_historyPosition;
     bool m_historyLoadingFromList;
