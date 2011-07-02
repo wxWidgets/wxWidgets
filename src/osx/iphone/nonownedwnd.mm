@@ -158,25 +158,8 @@ void wxNonOwnedWindowIPhoneImpl::Lower()
 #ifdef __WXDEBUG__
 
 // Recursive function for printing out UIView tree
-void _wxDebugiPhonePrintUIViewSubviews(UIView *view, unsigned int level = 1) {
-    
-    std::string indentTabs = std::string((level-1)*2, ' ');
-    
-    NSLog(@"%sview: %@", indentTabs.c_str(), view);
- 
-    if ([view isKindOfClass:[UITabBar class]]) {
-        NSLog(@"%stabs:", indentTabs.c_str());
-        UITabBarController *tabBarController = (UITabBarController *)[(UITabBar *)view delegate];
-        for (UIViewController *viewController in tabBarController.viewControllers) {
-            NSLog(@"%s  tab view controller: %@", indentTabs.c_str(), viewController);
-            _wxDebugiPhonePrintUIViewSubviews(viewController.view, level+1);
-        }
-    } else {
-        NSLog(@"%ssubviews:", indentTabs.c_str());
-        for (UIView *subview in view.subviews) {
-            _wxDebugiPhonePrintUIViewSubviews(subview, level+1);
-        }        
-    }
+void _wxDebugiPhonePrintUIViewSubviews(UIView *view, unsigned int level = 1) {    
+    NSLog(@"%@", (NSString *)[view performSelector:@selector(recursiveDescription)]);
 }
 
 #endif
@@ -385,6 +368,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
     impl->InstallEventHandler();
     [toplevelwindow addSubview:contentview];
+    [toplevelwindow setRootViewController:controller];
     return impl;
 }
 
