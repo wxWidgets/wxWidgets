@@ -96,7 +96,9 @@ enum wxWebViewBackend
     of a wxWebView. 
    
     @library{wxweb}
-    @category{ctrl}
+    @category{web}
+    
+    @see wxWebView
  */
 class wxWebHistoryItem
 {
@@ -154,7 +156,7 @@ public:
     @endEventTable
    
     @library{wxweb}
-    @category{ctrl}
+    @category{ctrl,web}
  */
 class wxWebView : public wxControl
 {
@@ -464,7 +466,7 @@ public:
     @endEventTable
 
     @library{wxweb}
-    @category{events}
+    @category{events,web}
 
     @see wxWebView
 */
