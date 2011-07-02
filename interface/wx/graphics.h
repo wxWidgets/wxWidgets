@@ -262,7 +262,7 @@ enum wxCompositionMode
     wxCOMPOSITION_DEST_OUT, /**< @e R = @e D*(1 - @e Sa) */
     wxCOMPOSITION_DEST_ATOP, /**< @e R = @e S*(1 - @e Da) + @e D*@e Sa */
     wxCOMPOSITION_XOR, /**< @e R = @e S*(1 - @e Da) + @e D*(1 - @e Sa) */
-    wxCOMPOSITION_ADD, /**< @e R = @e S + @e D */
+    wxCOMPOSITION_ADD  /**< @e R = @e S + @e D */
 };
 
 

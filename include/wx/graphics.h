@@ -65,7 +65,7 @@ enum wxCompositionMode
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
 
     // mathematical compositions
-    wxCOMPOSITION_ADD, /* R = S + D */
+    wxCOMPOSITION_ADD /* R = S + D */
 };
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
