@@ -163,8 +163,18 @@ titleForHeaderInSection:(NSInteger)section {
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    wxTablePath path = wxTablePath(indexPath.section, indexPath.row);
+    wxTableCtrlEvent event(wxEVT_COMMAND_TABLE_ROW_SELECTED, moTableCtrl->GetId(), moTableCtrl);
+    event.SetPath(path);
+    event.SetEventObject(moTableCtrl);
     
-    
+    wxMoTableDataSource *dataSource = [self moDataSource];
+    if (dataSource == NULL) {
+        moTableCtrl->GetEventHandler()->ProcessEvent(event);
+    } else {
+        dataSource->ProcessEvent(event);
+    }
+        
 }
 
 @end
