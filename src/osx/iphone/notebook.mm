@@ -186,22 +186,28 @@ private:
     wxUITabBarController *m_tabBarController;
 };
 
-wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
-                                                 wxWindowMac* WXUNUSED(parent),
-                                                 wxWindowID WXUNUSED(id),
-                                                 const wxPoint& pos,
-                                                 const wxSize& size,
-                                                 long style,
-                                                 long WXUNUSED(extraStyle))
+wxWidgetImplType* wxWidgetImpl::CreateTabView(wxWindowMac* wxpeer,
+                                              wxWindowMac* parent,
+                                              wxWindowID WXUNUSED(id),
+                                              const wxPoint& pos,
+                                              const wxSize& size,
+                                              long style,
+                                              long WXUNUSED(extraStyle))
 {
     wxUITabBarController* controller = [[wxUITabBarController alloc] init];
-    
-    // Status bar (20 px)
-    CGRect tabBarFrame = controller.tabBar.frame;
-    tabBarFrame.origin.y -= 20;
-    [controller.tabBar setFrame:tabBarFrame];
     [controller setDelegate:controller];
-        
+
+    // Adjust to parent's size
+    if (parent) {
+        UIView *parentView = parent->GetPeer()->GetWXWidget();
+        if (parentView) {
+            CGRect parentViewFrame = parentView.frame;
+            parentViewFrame.origin.x = 0;
+            parentViewFrame.origin.y = 0;
+            [controller.view setFrame:parentViewFrame];
+        }        
+    }
+            
     wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, controller, controller.view );
     return c;
 }

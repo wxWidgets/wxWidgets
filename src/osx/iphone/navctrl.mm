@@ -190,7 +190,7 @@ bool wxNavigationCtrlIPhoneImpl::PopViewController()
 
 
 wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
-                                                           wxWindowMac* WXUNUSED(parent),
+                                                           wxWindowMac* parent,
                                                            wxWindowID WXUNUSED(id),
                                                            const wxPoint& pos,
                                                            const wxSize& size,
@@ -199,10 +199,16 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
 {
     wxUINavigationController* v = [[wxUINavigationController alloc] initWithFakeRootViewController];
     
-    // FIXME view originally has a mysterious 40 px offset from top
-    CGRect frame = v.view.frame;
-    frame.origin.y -= 40;
-    [v.view setFrame:frame];
+    // Adjust to parent's size
+    if (parent) {
+        UIView *parentView = parent->GetPeer()->GetWXWidget();
+        if (parentView) {
+            CGRect parentViewFrame = parentView.frame;
+            parentViewFrame.origin.x = 0;
+            parentViewFrame.origin.y = 0;
+            [v.view setFrame:parentViewFrame];
+        }        
+    }
     
     wxWidgetIPhoneImpl* c = new wxNavigationCtrlIPhoneImpl( wxpeer, v, v.view );
     return c;

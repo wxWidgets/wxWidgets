@@ -290,6 +290,7 @@ void wxOSX_drawRect(UIView* self, SEL _cmd, CGRect rect)
     return impl->drawRect(&rect, self, _cmd);
 }
 
+/*
 NSString *wxOSX_description(UIView* self, SEL _cmd)
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -311,6 +312,7 @@ NSString *wxOSX_description(UIView* self, SEL _cmd)
     
     // <UIWindow: 0x541b910; frame = (0 0; 768 1024); layer = <CALayer: 0x541b9c0>>
 }
+*/
 
 void wxOSXIPhoneClassAddWXMethods(Class c)
 {
@@ -320,7 +322,7 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
     class_addMethod(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" );
     class_addMethod(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" );
     class_addMethod(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_CGRect={_CGPoint=ff}{_CGSize=ff}}" );
-    class_addMethod(c, @selector(description), (IMP) wxOSX_description, "c@:" );
+    //class_addMethod(c, @selector(description), (IMP) wxOSX_description, "c@:" );
 }
 
 //

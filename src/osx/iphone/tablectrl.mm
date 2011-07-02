@@ -24,6 +24,10 @@
 #include "wx/osx/iphone/private/tablectrlimpl.h"
 #include "wx/osx/iphone/private/tablecellimpl.h"
 
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import <CoreGraphics/CoreGraphics.h>
+
 
 @implementation wxUITableView
 
