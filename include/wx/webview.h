@@ -18,6 +18,7 @@
 #include <wx/event.h>
 #include <wx/sstream.h>
 #include "wx/sharedptr.h"
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_WEB wxWebHistoryItem
 {

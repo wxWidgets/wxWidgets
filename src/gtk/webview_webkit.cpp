@@ -489,6 +489,36 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
     }
 }
 
+bool wxWebViewWebKit::CanCut()
+{
+    return webkit_web_view_can_cut_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
+bool wxWebViewWebKit::CanCopy()
+{
+    return webkit_web_view_can_copy_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
+bool wxWebViewWebKit::CanPaste()
+{
+    return webkit_web_view_can_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::Cut()
+{
+    webkit_web_view_cut_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::Copy()
+{
+    webkit_web_view_copy_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::Paste()
+{
+    webkit_web_view_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
+}
+
 wxString wxWebViewWebKit::GetCurrentURL()
 {
     // FIXME: check which encoding the web kit control uses instead of

@@ -120,7 +120,13 @@ public:
     virtual wxWebViewZoom GetZoom();
     virtual void SetZoom(wxWebViewZoom);
 
-
+    //Clipboard functions
+    virtual bool CanCut();
+    virtual bool CanCopy();
+    virtual bool CanPaste();
+    virtual void Cut();
+    virtual void Copy();
+    virtual void Paste();
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
