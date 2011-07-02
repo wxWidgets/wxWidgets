@@ -130,6 +130,9 @@
     // Title alignment
     wxMoTableCell::wxMoTableCellTextAlignment wxTitleAlignment = moTableCell->GetTextAlignment();
     UITextAlignment titleAlignment;
+    if (wxTitleAlignment != wxMoTableCell::TextAlignmentLeft) {
+        NSLog(@"something's wrong");
+    }
     switch (wxTitleAlignment) {
         case wxMoTableCell::TextAlignmentLeft:      titleAlignment = UITextAlignmentLeft;   break;
         case wxMoTableCell::TextAlignmentCenter:    titleAlignment = UITextAlignmentCenter; break;

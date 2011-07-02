@@ -41,17 +41,41 @@ IMPLEMENT_CLASS(wxMoTableCell, wxObject)
 
 wxMoTableCell::wxMoTableCell(wxMoTableCtrl* ctrl, const wxString& reuseName, wxMoTableCellStyle cellStyle)
 {
+    Init();
+    
     SetCellWidgetImpl(wxWidgetImpl::CreateTableViewCell( this ));
 }
 
 wxMoTableCell::~wxMoTableCell()
 {
+    NSLog(@"cell is being freed");
     // FIXME stub
 }
 
 void wxMoTableCell::Init()
 {
     m_widgetImpl = NULL;
+    
+    m_textAlignment = TextAlignmentLeft;
+    m_detailTextAlignment = TextAlignmentLeft;
+    m_textLineBreakMode = LineBreakModeWordWrap;
+    m_detailTextLineBreakMode = LineBreakModeWordWrap;
+    m_selected = false;
+    m_selectionStyle = SelectionStyleBlue;
+    //m_eventHandler = NULL;
+    m_accessoryType = AccessoryTypeNone;
+    m_accessoryWindow = NULL;
+    m_editingAccessoryType = AccessoryTypeNone;
+    m_editingAccessoryWindow = NULL;
+    //m_editStyle = EditStyleNone;
+    m_indentationLevel = 0;
+    m_indentationWidth = 0;
+    m_contentWindow = NULL;
+    m_cellStyle = CellStyleDefault;
+    m_detailWidth = 80;
+    m_editingMode = false;
+    m_shouldIndentWhileEditing = true;
+    m_showReorderingButton = false;    
 }
 
 void wxMoTableCell::Copy(const wxMoTableCell& cell)
