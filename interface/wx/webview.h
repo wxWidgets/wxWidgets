@@ -2,7 +2,7 @@
 // Name:        webview.h
 // Purpose:     interface of wxWebView
 // Author:      wxWidgets team
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -90,6 +90,34 @@ enum wxWebViewBackend
 };
 
 /**
+    @class wxWebHistoryItem
+  
+    A simple class that contains the URL and title of an element of the history
+    of a wxWebView. 
+   
+    @library{wxweb}
+    @category{ctrl}
+ */
+class wxWebHistoryItem
+{
+public:
+    /**
+        Construtor.
+    */
+    wxWebHistoryItem(const wxString& url, const wxString& title);
+    
+    /**
+        @return The url of the page.
+    */
+    wxString GetUrl();
+    
+    /**
+        @return The title of the page.
+    */
+    wxString GetTitle();
+};
+
+/**
     @class wxWebView
   
     This control may be used to render web (HTML / CSS / javascript) documents.
@@ -174,36 +202,133 @@ public:
            long style = 0,
            const wxString& name = wxWebViewNameStr);
 
+    /**
+        Get the title of the current web page, or its URL/path if title is not
+        available.
+    */
+    virtual wxString GetCurrentTitle() = 0;
+
+   /**
+        Get the URL of the currently displayed document.
+    */
+    virtual wxString GetCurrentURL() = 0;
+
+    /**
+        Get the HTML source code of the currently displayed document.
+        @return The HTML source code, or an empty string if no page is currently
+                shown.
+    */
+    virtual wxString GetPageSource() = 0;
+    
+    /**
+        Returns whether the web control is currently busy (e.g. loading a page).
+    */
+    virtual bool IsBusy() = 0;          
+
+    /**
+        Load a web page from a URL
+        @param url The URL of the page to be loaded.
+        @note Web engines generally report errors asynchronously, so if you wish
+            to know whether loading the URL was successful, register to receive
+            navigation error events.
+    */
+    virtual void LoadUrl(const wxString& url) = 0;
+
+    /**
+        Opens a print dialog so that the user may print the currently
+        displayed page.
+    */
+    virtual void Print() = 0;
+
+    /**
+        Reload the currently displayed URL.
+        @param flags A bit array that may optionally contain reload options.
+    */
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given string.
+        @param html    The string that contains the HTML data to display.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+    */
+    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given stream.
+        @param html    The stream to read HTML data from.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+    */
+    virtual void SetPage(wxInputStream& html, wxString baseUrl)
+    {
+        wxStringOutputStream stream;
+        stream.Write(html);
+        SetPage(stream.GetString(), baseUrl);
+    }
+
+    /**
+        Stop the current page loading process, if any.
+        May trigger an error event of type @c wxWEB_NAV_ERR_USER_CANCELLED.
+        TODO: make @c wxWEB_NAV_ERR_USER_CANCELLED errors uniform across ports.
+    */
+    virtual void Stop() = 0;
+
+    /**
+        @name Clipboard
+    */
+
+    /**
+        Returns @true if the current selection can be copied.
+    */
+    virtual bool CanCopy() = 0;
+
+    /**
+        Returns @true if the current selection can be cut.
+    */
+    virtual bool CanCut() = 0;
+
+    /**
+        Returns @true if data can be pasted.
+    */
+    virtual bool CanPaste() = 0;
+
+    /**
+        Copies the current selection. 
+    */
+    virtual void Copy() = 0;
+
+    /**
+        Cuts the current selection.
+    */
+    virtual void Cut() = 0;
+
+    /**
+        Pastes the current data.
+    */
+    virtual void Paste() = 0;
+
+    /**
+        @name History
+    */
 
     /** 
-        Get whether it is possible to navigate back in the history of
-        visited pages
+        Returns @true if it is possible to navigate backward in the history of
+        visited pages.
     */
     virtual bool CanGoBack() = 0;
 
     /** 
-        Get whether it is possible to navigate forward in the history of
-        visited pages
+        Returns @true if it is possible to navigate forward in the history of
+        visited pages.
     */
     virtual bool CanGoForward() = 0;
-
-    /** 
-        Navigate back in the history of visited pages.
-        Only valid if CanGoBack() returned true.
-    */
-    virtual void GoBack() = 0;
-
-    /**
-        Navigate forwardin the history of visited pages.
-        Only valid if CanGoForward() returned true.
-    */
-    virtual void GoForward() = 0;
 
     /**
         Clear the history, this will also remove the visible page.
     */
     virtual void ClearHistory() = 0;
-    
+
     /**
         Enable or disable the history. This will also clear the history.
     */
@@ -214,126 +339,93 @@ public:
         vector is the first page that was loaded by the control.
     */
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory() = 0;
-    
+
     /**
         Returns a list of items in the forward history. The first item in the 
         vector is the next item in the history with respect to the curently 
         loaded page.
     */
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() = 0;
-    
+
+    /** 
+        Navigate back in the history of visited pages.
+        Only valid if CanGoBack() returns true.
+    */
+    virtual void GoBack() = 0;
+
+    /**
+        Navigate forward in the history of visited pages.
+        Only valid if CanGoForward() returns true.
+    */
+    virtual void GoForward() = 0;
+
     /**
         Loads a history item. 
     */
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
-    
+
     /**
-        Load a HTMl document (web page) from a URL
-        @param url the URL where the HTML document to display can be found
-        @note web engines generally report errors asynchronously, so if you wish
-            to know whether loading the URL was successful, register to receive
-            navigation error events
+        @name Undo / Redo
     */
-    virtual void LoadUrl(const wxString& url) = 0;
 
     /**
-        Stop the current page loading process, if any.
-        May trigger an error event of type @c wxWEB_NAV_ERR_USER_CANCELLED.
-        TODO: make @c wxWEB_NAV_ERR_USER_CANCELLED errors uniform across ports.
+        Returns @true if there is an action to redo.
     */
-    virtual void Stop() = 0;
+    virtual bool CanRedo() = 0;
 
     /**
-        Reload the currently displayed URL.
-        @param flags A bit array that may optionnally contain reload options
+        Returns @true if there is an action to undo.
     */
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
-
+    virtual bool CanUndo() = 0;
 
     /**
-        Get the URL of the currently displayed document
+        Redos the last action.
     */
-    virtual wxString GetCurrentURL() = 0;
+    virtual void Redo() = 0;
 
     /**
-        Get the title of the current web page, or its URL/path if title is not
-        available
+        Undos the last action.
     */
-    virtual wxString GetCurrentTitle() = 0;
+    virtual void Undo() = 0;
 
     /**
-        Get the HTML source code of the currently displayed document
-        @return the HTML source code, or an empty string if no page is currently
-                shown
+        @name Zoom
     */
-    virtual wxString GetPageSource() = 0;
 
     /**
-        Get the zoom factor of the page
-        @return How much the HTML document is zoomed (scaleed)
-    */
-    virtual wxWebViewZoom GetZoom() = 0;
-
-    /**
-        Set the zoom factor of the page
-        @param zoom How much to zoom (scale) the HTML document
-    */
-    virtual void SetZoom(wxWebViewZoom zoom) = 0;
-
-    /**
-        Set how to interpret the zoom factor
-        @param zoomType how the zoom factor should be interpreted by the
-                        HTML engine
-        @note invoke    canSetZoomType() first, some HTML renderers may not
-                        support all zoom types
-    */
-    virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
-
-    /**
-        Get how the zoom factor is currently interpreted
-        @return how the zoom factor is currently interpreted by the HTML engine
-    */
-    virtual wxWebViewZoomType GetZoomType() const = 0;
-
-    /**
-        Retrieve whether the current HTML engine supports a type of zoom
-        @param type the type of zoom to test
-        @return whether this type of zoom is supported by this HTML engine
-                (and thus can be set through setZoomType())
+        Retrieve whether the current HTML engine supports a zoom type.
+        @param type The zoom type to test.
+        @return Whether this type of zoom is supported by this HTML engine
+                (and thus can be set through SetZoomType()).
     */
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
 
     /**
-        Set the displayed page source to the contents of the given string
-        @param html    the string that contains the HTML data to display
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance
+        Get the zoom factor of the page.
+        @return The current level of zoom.
     */
-    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+    virtual wxWebViewZoom GetZoom() = 0;
 
     /**
-        Set the displayed page source to the contents of the given stream
-        @param html    the stream to read HTML data from
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance
+        Get how the zoom factor is currently interpreted.
+        @return How the zoom factor is currently interpreted by the HTML engine.
     */
-    virtual void SetPage(wxInputStream& html, wxString baseUrl)
-    {
-        wxStringOutputStream stream;
-        stream.Write(html);
-        SetPage(stream.GetString(), baseUrl);
-    }
+    virtual wxWebViewZoomType GetZoomType() const = 0;
 
     /**
-        Opens a print dialog so that the user may print the currently
-        displayed page.
+        Set the zoom factor of the page.
+        @param zoom How much to zoom (scale) the HTML document.
     */
-    virtual void Print() = 0;
+    virtual void SetZoom(wxWebViewZoom zoom) = 0;
 
     /**
-        Returns whether the web control is currently busy (e.g. loading a page)
+        Set how to interpret the zoom factor.
+        @param zoomType How the zoom factor should be interpreted by the
+                        HTML engine.
+        @note invoke    CanSetZoomType() first, some HTML renderers may not
+                        support all zoom types.
     */
-    virtual bool IsBusy() = 0;
+    virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 };
 
 
