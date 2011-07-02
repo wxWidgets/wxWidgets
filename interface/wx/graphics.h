@@ -241,6 +241,14 @@ enum wxInterpolationQuality
 */
 enum wxCompositionMode
 {
+    /**
+        Indicates invalid or unsupported composition mode.
+
+        This value can't be passed to wxGraphicsContext::SetCompositionMode().
+
+        @since 2.9.2
+     */
+    wxCOMPOSITION_INVALID = -1,
     wxCOMPOSITION_CLEAR, /**< @e R = 0 */
     wxCOMPOSITION_SOURCE, /**< @e R = S */
     wxCOMPOSITION_OVER, /**< @e R = @e S + @e D*(1 - @e Sa) */

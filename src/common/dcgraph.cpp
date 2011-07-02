@@ -53,27 +53,26 @@ static inline double DegToRad(double deg)
     return (deg * M_PI) / 180.0;
 }
 
-static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode *op)
+static wxCompositionMode TranslateRasterOp(wxRasterOperationMode function)
 {
     switch ( function )
     {
         case wxCOPY: // src
             // since we are supporting alpha, _OVER is closer to the intention than _SOURCE
             // since the latter would overwrite even when alpha is not set to opaque
-            *op = wxCOMPOSITION_OVER; 
-            break;
+            return wxCOMPOSITION_OVER;
+
         case wxOR:         // src OR dst
-            *op = wxCOMPOSITION_ADD;
-            break;
+            return wxCOMPOSITION_ADD;
+
         case wxNO_OP:      // dst
-            *op = wxCOMPOSITION_DEST; // ignore the source
-            break;
+            return wxCOMPOSITION_DEST; // ignore the source
+
         case wxCLEAR:      // 0
-            *op = wxCOMPOSITION_CLEAR;// clear dst
-            break;
+            return wxCOMPOSITION_CLEAR;// clear dst
+
         case wxXOR:        // src XOR dst
-            *op = wxCOMPOSITION_XOR;
-            break;
+            return wxCOMPOSITION_XOR;
 
         case wxAND:        // src AND dst
         case wxAND_INVERT: // (NOT src) AND dst
@@ -86,10 +85,10 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
         case wxOR_REVERSE: // src OR (NOT dst)
         case wxSET:        // 1
         case wxSRC_INVERT: // NOT src
-        default:
-            return false;
+            break;
     }
-    return true;
+
+    return wxCOMPOSITION_INVALID;
 }
 
 //-----------------------------------------------------------------------------
@@ -502,8 +501,8 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 
     m_logicalFunction = function;
 
-    wxCompositionMode mode;
-    m_logicalFunctionSupported = TranslateRasterOp( function, &mode);
+    wxCompositionMode mode = TranslateRasterOp( function );
+    m_logicalFunctionSupported = mode != wxCOMPOSITION_INVALID;
     if (m_logicalFunctionSupported)
         m_logicalFunctionSupported = m_graphicContext->SetCompositionMode(mode);
 
@@ -874,8 +873,8 @@ bool wxGCDCImpl::DoStretchBlit(
     if ( logical_func == wxNO_OP )
         return true;
 
-    wxCompositionMode mode;
-    if ( !TranslateRasterOp(logical_func, &mode) )
+    wxCompositionMode mode = TranslateRasterOp(logical_func);
+    if ( mode == wxCOMPOSITION_INVALID )
     {
         wxFAIL_MSG( wxT("Blitting is not supported with this logical operation.") );
         return false;
