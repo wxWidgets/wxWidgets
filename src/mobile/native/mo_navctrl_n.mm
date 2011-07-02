@@ -106,7 +106,9 @@ bool wxMoNavigationCtrl::PushController(wxMoViewController* controller)
     
     m_controllers.Add(controller);
     wxNavigationCtrlIPhoneImpl *peer = (wxNavigationCtrlIPhoneImpl *)GetPeer();
-    peer->PushViewController(controller);
+    if (! peer->PushViewController(controller)) {
+        return false;
+    }
     
     {
         wxNavigationCtrlEvent navEvent(wxEVT_COMMAND_NAVCTRL_PUSHED,
@@ -149,7 +151,10 @@ wxMoViewController* wxMoNavigationCtrl::PopController()
     }
     
     m_controllers.RemoveAt(m_controllers.GetCount()-1);
-    ((wxNavigationCtrlIPhoneImpl *)GetPeer())->PopViewController();
+    wxNavigationCtrlIPhoneImpl *peer = (wxNavigationCtrlIPhoneImpl *)GetPeer();
+    if (! peer->PopViewController()) {
+        return NULL;
+    }
     
     {
         wxNavigationCtrlEvent navEvent(wxEVT_COMMAND_NAVCTRL_POPPED,
@@ -217,9 +222,15 @@ void wxMoNavigationCtrl::ClearControllers()
     
     size_t i;
     size_t count = m_controllers.GetCount();
+
+    wxNavigationCtrlIPhoneImpl *peer = (wxNavigationCtrlIPhoneImpl *)GetPeer();
+
     for (i = 0; i < count; i++) {
         wxMoViewController* controller = m_controllers[0];
+
+        peer->PopViewController();
         m_controllers.RemoveAt(0);
+        
         if (controller->OnDelete()) {
             delete controller;
         }
