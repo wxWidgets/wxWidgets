@@ -26,11 +26,11 @@
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoBitmapButton: public wxBitmapButtonBase
+class WXDLLEXPORT wxMoBitmapButton: public wxBitmapButton
 {
 public:
     /// Default constructor.
-    wxMoBitmapButton() { Init(); }
+    wxMoBitmapButton();
     
     /// Constructor taking a bitmap.
     wxMoBitmapButton(wxWindow *parent,
@@ -40,11 +40,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxButtonNameStr)
-    {
-        Init();
-        Create(parent, id, label, pos, size, style, validator, name);
-    }
+                     const wxString& name = wxButtonNameStr);
     
     /// Creation function taking a bitmap.
     bool Create(wxWindow *parent,
@@ -60,6 +56,7 @@ public:
     
     void Init();
     
+#if 0
     // Sets the background colour
     virtual bool SetBackgroundColour(const wxColour &colour);
     
@@ -87,6 +84,7 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
+#endif  // 0
     
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMoBitmapButton)

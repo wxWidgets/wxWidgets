@@ -34,12 +34,14 @@
 
 #include "wx/dcbuffer.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxMoBitmapButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxMoBitmapButton, wxBitmapButton)
 
-BEGIN_EVENT_TABLE(wxMoBitmapButton, wxControl)
+BEGIN_EVENT_TABLE(wxMoBitmapButton, wxBitmapButton)
+#if 0
     EVT_PAINT(wxMoBitmapButton::OnPaint)
     EVT_MOUSE_EVENTS(wxMoBitmapButton::OnMouseEvent)
     EVT_ERASE_BACKGROUND(wxMoBitmapButton::OnEraseBackground)
+#endif
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -50,6 +52,26 @@ END_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+/// Default constructor.
+wxMoBitmapButton::wxMoBitmapButton()
+{
+    Init();
+}
+
+/// Constructor taking a bitmap.
+wxMoBitmapButton::wxMoBitmapButton(wxWindow *parent,
+                                   wxWindowID id,
+                                   const wxBitmap& label,
+                                   const wxPoint& pos,
+                                   const wxSize& size,
+                                   long style,
+                                   const wxValidator& validator,
+                                   const wxString& name)
+{
+    Init();
+    Create(parent, id, label, pos, size, style, validator, name);
+}
+
 bool wxMoBitmapButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxBitmap& bitmap,
@@ -59,9 +81,7 @@ bool wxMoBitmapButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxBitmapButton::Create(parent, id, bitmap, pos, size, style, validator, name);
 }
 
 wxMoBitmapButton::~wxMoBitmapButton()
@@ -73,6 +93,7 @@ void wxMoBitmapButton::Init()
     // FIXME stub
 }
 
+#if 0
 wxSize wxMoBitmapButton::DoGetBestSize() const
 {
     // FIXME stub
@@ -132,3 +153,5 @@ void wxMoBitmapButton::OnMouseEvent(wxMouseEvent& event)
 {
     // FIXME stub
 }
+
+#endif  // 0
