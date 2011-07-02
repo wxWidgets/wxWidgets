@@ -96,6 +96,9 @@ bool MobileDemoApp::OnInit()
 #if wxUSE_GIF
     wxImage::AddHandler(new wxGIFHandler);
 #endif
+#if wxUSE_LIBPNG
+    wxImage::AddHandler(new wxPNGHandler);
+#endif
     DemoFrame* mainWindow = new DemoFrame( NULL );
     mainWindow->Show(true);
 

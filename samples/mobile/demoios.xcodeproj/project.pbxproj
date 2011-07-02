@@ -16,6 +16,8 @@
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
 		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
 		B913435013BC0A780024E59E /* navctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B913434F13BC0A780024E59E /* navctrl.mm */; };
+		B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA6D3A13BEF72300061979 /* tablecell.mm */; };
+		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072E13B9FCF700D6F0D8 /* button.mm */; };
 		B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */; };
 		B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073013B9FCF700D6F0D8 /* dialog.mm */; };
@@ -68,6 +70,7 @@
 		B9EB5A1713B687D300D480A7 /* mo_webctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59F313B687D300D480A7 /* mo_webctrl_n.mm */; };
 		B9EB5A1813B687D300D480A7 /* mo_wheelsctrl_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59F413B687D300D480A7 /* mo_wheelsctrl_n.mm */; };
 		B9EB5A1913B687D300D480A7 /* mo_window_n.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EB59F513B687D300D480A7 /* mo_window_n.mm */; };
+		B9F1F27A13BC5AF40039F5C2 /* tablectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9F1F27913BC5AF40039F5C2 /* tablectrl.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +98,8 @@
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
 		B913434F13BC0A780024E59E /* navctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navctrl.mm; path = ../../src/osx/iphone/navctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9CA6D3A13BEF72300061979 /* tablecell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablecell.mm; path = ../../src/osx/iphone/tablecell.mm; sourceTree = SOURCE_ROOT; };
+		B9CA6F9113BF1EF900061979 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B9DF070813B9FCD800D6F0D8 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
 		B9DF070913B9FCD800D6F0D8 /* barbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barbutton.h; sourceTree = "<group>"; };
 		B9DF070A13B9FCD800D6F0D8 /* bmpbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmpbutton.h; sourceTree = "<group>"; };
@@ -184,6 +189,7 @@
 		B9EB59F313B687D300D480A7 /* mo_webctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_webctrl_n.mm; sourceTree = "<group>"; };
 		B9EB59F413B687D300D480A7 /* mo_wheelsctrl_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_wheelsctrl_n.mm; sourceTree = "<group>"; };
 		B9EB59F513B687D300D480A7 /* mo_window_n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mo_window_n.mm; sourceTree = "<group>"; };
+		B9F1F27913BC5AF40039F5C2 /* tablectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablectrl.mm; path = ../../src/osx/iphone/tablectrl.mm; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +202,7 @@
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */,
 				407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */,
+				B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +232,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				B9CA6F9113BF1EF900061979 /* libz.dylib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -281,6 +289,8 @@
 				B9DF073813B9FCF700D6F0D8 /* slider.mm */,
 				B9133F9413BBC9FB0024E59E /* srchctrl.mm */,
 				B9DF073913B9FCF700D6F0D8 /* stattext.mm */,
+				B9CA6D3A13BEF72300061979 /* tablecell.mm */,
+				B9F1F27913BC5AF40039F5C2 /* tablectrl.mm */,
 				B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */,
 				B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */,
 				B9DF073C13B9FCF700D6F0D8 /* utils.mm */,
@@ -509,6 +519,8 @@
 				B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */,
 				B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */,
 				B913435013BC0A780024E59E /* navctrl.mm in Sources */,
+				B9F1F27A13BC5AF40039F5C2 /* tablectrl.mm in Sources */,
+				B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

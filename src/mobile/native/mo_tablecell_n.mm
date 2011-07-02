@@ -29,15 +29,19 @@
 
 #include "wx/dcbuffer.h"
 
+#include "wx/osx/private.h"
 #include "wx/mobile/native/tablectrl.h"
 #include "wx/mobile/native/tablecell.h"
 #include "wx/mobile/native/settings.h"
 
+
+#pragma mark wxMoTableCell
+
 IMPLEMENT_CLASS(wxMoTableCell, wxObject)
 
-wxMoTableCell::wxMoTableCell(wxMoTableCtrl* ctrl, const wxString& reuseName, int cellStyle)
+wxMoTableCell::wxMoTableCell(wxMoTableCtrl* ctrl, const wxString& reuseName, wxMoTableCellStyle cellStyle)
 {
-    // FIXME stub
+    SetCellWidgetImpl(wxWidgetImpl::CreateTableViewCell( this ));
 }
 
 wxMoTableCell::~wxMoTableCell()
@@ -47,7 +51,7 @@ wxMoTableCell::~wxMoTableCell()
 
 void wxMoTableCell::Init()
 {
-    // FIXME stub
+    m_widgetImpl = NULL;
 }
 
 void wxMoTableCell::Copy(const wxMoTableCell& cell)
@@ -96,6 +100,9 @@ void wxMoTableCell::PrepareForReuse(wxMoTableCtrl* WXUNUSED(tableCtrl))
 {
     // FIXME stub
 }
+
+
+#pragma mark wxMoTableCellContentWindow
 
 IMPLEMENT_DYNAMIC_CLASS(wxMoTableCellContentWindow, wxWindow)
 

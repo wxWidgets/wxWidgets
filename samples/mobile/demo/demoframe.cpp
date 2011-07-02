@@ -159,7 +159,7 @@ END_EVENT_TABLE()
 class MultiSectionDataSource: public wxMoTableDataSource
 {
 public:
-    MultiSectionDataSource(int cellStyle = wxMoTableCell::CellStyleDefault) { m_cellStyle = cellStyle; }
+    MultiSectionDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle = wxMoTableCell::CellStyleDefault) { m_cellStyle = cellStyle; }
 
     /// Returns a table cell for the give location.
     virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
@@ -177,7 +177,7 @@ public:
     /// on the right hand side of a plain list.
     virtual wxArrayString GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const;
 
-    int m_cellStyle;
+    wxMoTableCell::wxMoTableCellStyle m_cellStyle;
 };
 
 // This data source demonstrates plain and grouped tables with editing
@@ -185,7 +185,7 @@ public:
 class EditableDataSource: public wxMoTableDataSource
 {
 public:
-    EditableDataSource(int cellStyle = wxMoTableCell::CellStyleDefault);
+    EditableDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle = wxMoTableCell::CellStyleDefault);
 
     /// Returns a table cell for the give location.
     virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
@@ -227,7 +227,7 @@ public:
     wxArrayString m_rowLabels;
     wxArrayInt    m_rowData;
 
-    int m_cellStyle;
+    wxMoTableCell::wxMoTableCellStyle m_cellStyle;
 };
 
 // This data source populates the root table in the Demo tab
@@ -237,7 +237,7 @@ class TableDemoRootDataSource: public wxMoTableDataSource
 public:
     TableDemoRootDataSource(wxMoNavigationCtrl* ctrl) { m_navCtrl = ctrl; }
 
-    /// Returns a table cell for the give location.
+    /// Returns a table cell for the given location.
     virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
 
     /// Returns the number of sections in the table.
@@ -385,11 +385,9 @@ void DemoFrame::CreateControls()
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         page1->SetSizer(sizer);
         
-        wxMoStaticText *testStaticText = new wxMoStaticText(page1, wxID_ANY, "Hello.", wxPoint(40, 40), wxSize(100, 100), wxNO_BORDER);
-        
         wxMoNavigationCtrl* navCtrl = new wxMoNavigationCtrl(page1, wxID_ANY);
         sizer->Add(navCtrl, 1, wxEXPAND, 0);
-
+        
         navCtrl->PushController(new TableDemoController(_("iPhone Demo"), navCtrl));
     }
     
@@ -643,8 +641,9 @@ wxMoTableCell* TableDemoRootDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTab
     int row = path.GetRow();
 
     wxMoTableCell* cell = ctrl->GetReusableCell(wxT("DemoCell"));
-    if (!cell)
+    if (!cell) {
         cell = new wxMoTableCell(ctrl, wxT("DemoCell"));
+    }
 
     if (section == 0)
     {
@@ -680,7 +679,8 @@ wxMoTableCell* TableDemoRootDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTab
 
     {
         wxMemoryInputStream is(wxwidgets_png, sizeof(wxwidgets_png));
-        wxBitmap bitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
+        wxImage image = wxImage(is, wxBITMAP_TYPE_ANY, -1);
+        wxBitmap bitmap = wxBitmap(image, -1);
 
         cell->SetBitmap(bitmap);
     }
@@ -1042,7 +1042,7 @@ void TableDemoRootDataSource::PushWindow(wxWindow* win, const wxString& title)
     win->Show(true);
 }
 
-EditableDataSource::EditableDataSource(int cellStyle)
+EditableDataSource::EditableDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle)
 {
     m_cellStyle = cellStyle;
 

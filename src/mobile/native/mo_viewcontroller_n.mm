@@ -91,7 +91,11 @@ void wxMoViewController::SetWindow(wxWindow* window)
     m_window = window;
     
     UIViewController *viewController = (UIViewController *)m_uiviewcontroller;
-    [viewController setView:window->GetPeer()->GetWXWidget()];
+    wxOSXWidgetImpl *windowPeer = window->GetPeer();
+    wxASSERT_MSG(windowPeer, "No window peer");
+    UIView *windowUIView = windowPeer->GetWXWidget();
+    wxASSERT_MSG(windowUIView, "No window peer UIView");
+    [viewController setView:windowUIView];
 }
 
 /// Gets the navigation item

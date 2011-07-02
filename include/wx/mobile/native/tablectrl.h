@@ -14,7 +14,6 @@
 
 #include "wx/dynarray.h"
 
-#include "wx/mobile/native/scrollwin.h"
 #include "wx/mobile/native/tablecell.h"
 #include "wx/mobile/native/button.h"
 
@@ -24,6 +23,9 @@
 
 class WXDLLEXPORT wxMoTableDataSource;
 class WXDLLEXPORT wxTableCtrlEvent;
+
+
+#pragma mark wxTablePath
 
 /**
     @class wxTablePath
@@ -37,37 +39,37 @@ class WXDLLEXPORT wxTablePath: public wxObject
 {
 public:
     /// Copy constructor.
-    wxTablePath(const wxTablePath& path) { Copy(path); }
+    wxTablePath(const wxTablePath& path);
 
     /// Constructor.
-    wxTablePath(int section = 0, int row = 0) { Init(); m_row = row; m_section = section; }
+    wxTablePath(int section = 0, int row = 0);
 
-    void Init() { m_row = 0; m_section = 0; }
+    void Init();
 
     /// Assignment operator.
-    void operator=(const wxTablePath& path) { Copy(path); }
+    void operator=(const wxTablePath& path);
 
     /// Equality operator.
-    bool operator==(const wxTablePath& path) const { return m_row == path.m_row && m_section == path.m_section; }
-    bool operator!=(const wxTablePath& path) const { return m_row != path.m_row || m_section != path.m_section; }
+    bool operator==(const wxTablePath& path) const;
+    bool operator!=(const wxTablePath& path) const;
 
     /// Copys the path.
-    void Copy(const wxTablePath& path) { m_row = path.m_row; m_section = path.m_section; }
+    void Copy(const wxTablePath& path);
 
     /// Sets the row index.
-    void SetRow(int row) { m_row = row; }
+    void SetRow(int row);
 
     /// Gets the row index.
-    int GetRow() const { return m_row; }
+    int GetRow() const;
 
     /// Sets the section index.
-    void SetSection(int section) { m_section = section; }
+    void SetSection(int section);
 
     /// Gets the section index.
-    int GetSection() const { return m_section; }
+    int GetSection() const;
 
     /// Returns true if the path is valid (neither row nor section are -1).
-    bool IsValid() const { return m_row != -1 && m_section != -1; }
+    bool IsValid() const;
 
 protected:
     int m_row;
@@ -77,6 +79,9 @@ protected:
 };
 
 WX_DECLARE_OBJARRAY(wxTablePath, wxTablePathArray);
+
+
+#pragma mark wxMoTableRow
 
 /*
     @class wxMoTableRow
@@ -89,15 +94,16 @@ WX_DECLARE_OBJARRAY(wxTablePath, wxTablePathArray);
 class WXDLLEXPORT wxMoTableRow: public wxObject
 {
 public:
-    wxMoTableRow(const wxMoTableRow& row) { Copy(row); }
-    wxMoTableRow() { Init(); }
+    wxMoTableRow(const wxMoTableRow& row);
+    wxMoTableRow();
     ~wxMoTableRow();
-
+    
     void Init();
 
-    void operator=(const wxMoTableRow& row) { Copy(row); }
+    void operator=(const wxMoTableRow& row);
     void Copy(const wxMoTableRow& row);
 
+protected:
     // Can be NULL if the cell has been reused.
     wxMoTableCell*    m_tableCell;
     int             m_rowY;
@@ -108,6 +114,9 @@ public:
 
 WX_DECLARE_OBJARRAY(wxMoTableRow, wxMoTableRowArray);
 
+
+#pragma mark wxMoTableSection
+
 /*
     @class wxMoTableSection
 
@@ -116,20 +125,22 @@ WX_DECLARE_OBJARRAY(wxMoTableRow, wxMoTableRowArray);
     @category{wxMobileImplementation}
 */
 
+
 class WXDLLEXPORT wxMoTableSection: public wxObject
 {
 public:
-    wxMoTableSection(const wxMoTableSection& section) { Copy(section); }
-    wxMoTableSection() { Init(); }
+    wxMoTableSection(const wxMoTableSection& section);
+    wxMoTableSection();
 
     void Init();
 
-    void operator=(const wxMoTableSection& section) { Copy(section); }
+    void operator=(const wxMoTableSection& section);
     void Copy(const wxMoTableSection& section);
 
-    void SetSectionName(const wxString& name) { m_sectionName = name; }
-    const wxString& GetSectionName() const { return m_sectionName; }
+    void SetSectionName(const wxString& name);
+    const wxString& GetSectionName() const;
 
+protected:
     wxString            m_sectionName;
     int                 m_sectionWidth;
     int                 m_sectionHeight;
@@ -143,6 +154,9 @@ public:
 };
 
 WX_DECLARE_OBJARRAY(wxMoTableSection, wxMoTableSectionArray);
+
+
+#pragma mark wxMoTableCtrl
 
 /**
     @class wxMoTableCtrl
@@ -181,7 +195,7 @@ WX_DECLARE_OBJARRAY(wxMoTableSection, wxMoTableSectionArray);
     @category{wxMobile}
 */
 
-class WXDLLEXPORT wxMoTableCtrl: public wxMoScrolledWindow
+class WXDLLEXPORT wxMoTableCtrl: public wxWindow
 {
 public:
     /// Cell separator style.
@@ -203,19 +217,15 @@ public:
     enum { MouseStatusNone, MouseStatusClicking, MouseStatusDraggingRow };
 
     /// Default constructor.
-    wxMoTableCtrl() { Init(); }
+    wxMoTableCtrl();
 
     /// Constructor.
     wxMoTableCtrl(wxWindow *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxString& name = wxButtonNameStr)
-    {
-        Init();
-        Create(parent, id, pos, size, style, name);
-    }
+                  wxWindowID id,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0,
+                  const wxString& name = wxButtonNameStr);
 
     /// Creation function.
     bool Create(wxWindow *parent,
@@ -298,14 +308,10 @@ public:
     wxMoTableCell* GetReusableCell(const wxString& reuseName);
 
     /// Gets the data source
-    wxMoTableDataSource* GetDataSource() const { return m_dataSource; }
+    wxMoTableDataSource* GetDataSource() const;
 
     /// Sets the data source
-    virtual void SetDataSource(wxMoTableDataSource* dataSource, bool ownsDataSource = true)
-    {
-        m_dataSource = dataSource;
-        m_ownsDataSource = ownsDataSource;
-    }
+    virtual void SetDataSource(wxMoTableDataSource* dataSource, bool ownsDataSource = true);
 
     /// Finds the path for the cell.
     bool FindPathForCell(wxMoTableCell* cell, wxTablePath& path) const;
@@ -405,7 +411,7 @@ public:
     wxBitmap LoadBitmap(const char* bitmapData, size_t len);
     wxBitmap LoadBitmap(unsigned char bitmapData[], size_t len) { return LoadBitmap((const char*) bitmapData, len); }
     wxBitmap LoadBitmap(const void *bitmapData, size_t len) { return LoadBitmap((const char*) bitmapData, len); }
-
+    
 protected:
 
     virtual wxSize DoGetBestSize() const;
@@ -466,6 +472,9 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMoTableCtrl)
     DECLARE_EVENT_TABLE()
 };
+
+
+#pragma mark wxMoTableDataSource
 
 /**
     @class wxMoTableDataSource
@@ -541,6 +550,9 @@ public:
 
     DECLARE_CLASS(wxMoTableDataSource)
 };
+
+
+#pragma mark wxTableCtrlEvent
 
 /**
     @class wxTableCtrlEvent

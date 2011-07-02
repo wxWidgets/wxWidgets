@@ -19,6 +19,9 @@
 class WXDLLEXPORT wxMoTableCell;
 class WXDLLEXPORT wxMoTableCtrl;
 
+
+#pragma mark wxMoTableCellContentWindow
+
 class WXDLLEXPORT wxMoTableCellContentWindow: public wxWindow
 {
 public:
@@ -51,6 +54,9 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxMoTableCellContentWindow)
     DECLARE_EVENT_TABLE()
 };
+
+
+#pragma mark wxMoTableCell
 
 /**
  @class wxMoTableCell
@@ -86,31 +92,52 @@ class WXDLLEXPORT wxMoTableCell: public wxObject
 {
 public:
     /// Text alignment
-    enum { TextAlignmentLeft, TextAlignmentCenter, TextAlignmentRight };
+    enum wxMoTableCellTextAlignment {
+        TextAlignmentLeft,
+        TextAlignmentCenter,
+        TextAlignmentRight
+    };
     
     /// Line break mode
-    enum { LineBreakModeWordWrap,
+    enum wxMoTableCellLineBreakMode {
+        LineBreakModeWordWrap,
         LineBreakModeCharacterWrap,
         LineBreakModeClip,
         LineBreakModeHeadTruncation,
         LineBreakModeTailTruncation,
-        LineBreakModeMiddleTruncation };
+        LineBreakModeMiddleTruncation
+    };
     
     /// Selection style
-    enum { SelectionStyleNone, SelectionStyleBlue, SelectionStyleGrey };
+    enum wxMoTableCellSelectionStyle {
+        SelectionStyleNone,
+        SelectionStyleBlue,
+        SelectionStyleGrey
+    };
     
     /// Accessory type
-    enum { AccessoryTypeNone, AccessoryTypeDisclosureIndicator,
-        AccessoryTypeDetailDisclosureButton, AccessoryTypeCheckmark };
+    enum wxMoTableCellAccessoryType {
+        AccessoryTypeNone,
+        AccessoryTypeDisclosureIndicator,
+        AccessoryTypeDetailDisclosureButton,
+        AccessoryTypeCheckmark
+    };
     
     /// Cell style
-    enum { CellStyleDefault, CellStyleValue1, CellStyleValue2, CellStyleSubtitle };
+    enum wxMoTableCellStyle {
+        CellStyleDefault,
+        CellStyleValue1,
+        CellStyleValue2,
+        CellStyleSubtitle
+    };
     
     /// Default constructor.
     wxMoTableCell(const wxMoTableCell& cell) { Copy(cell); }
     
     /// Constructor.
-    wxMoTableCell(wxMoTableCtrl* ctrl, const wxString& reuseName = wxEmptyString, int cellStyle = CellStyleDefault);
+    wxMoTableCell(wxMoTableCtrl* ctrl,
+                  const wxString& reuseName = wxEmptyString,
+                  wxMoTableCellStyle cellStyle = CellStyleDefault);
     ~wxMoTableCell();
     
     void Init();
@@ -134,7 +161,7 @@ public:
     const wxString& GetReuseName() const { return m_reuseName; }
     
     /// Sets the cell font
-    void SetFont(const wxFont& font) { m_font = font; }
+    bool SetFont(const wxFont& font) { m_font = font; return true; }
     
     /// Gets the cell font
     wxFont GetFont() const { return m_font; }
@@ -177,27 +204,27 @@ public:
     
     /// Sets the text alignment. Alignment can be TextAlignmentLeft, TextAlignmentCenter,
     /// or TextAlignmentRight.s
-    void SetTextAlignment(int alignment) { m_textAlignment = alignment; }
+    void SetTextAlignment(wxMoTableCellTextAlignment alignment) { m_textAlignment = alignment; }
     
     /// Gets the text alignment.
-    int GetTextAlignment() const { return m_textAlignment; }
+    wxMoTableCellTextAlignment GetTextAlignment() const { return m_textAlignment; }
     
     /// Sets the detail text alignment. Alignment can be TextAlignmentLeft, TextAlignmentCenter,
     /// or TextAlignmentRight.s
-    void SetDetailTextAlignment(int alignment) { m_detailTextAlignment = alignment; }
+    void SetDetailTextAlignment(wxMoTableCellTextAlignment alignment) { m_detailTextAlignment = alignment; }
     
     /// Gets the detail text alignment.
-    int GetDetailTextAlignment() const { return m_detailTextAlignment; }
+    wxMoTableCellTextAlignment GetDetailTextAlignment() const { return m_detailTextAlignment; }
     
     /// Sets the line break mode. The mode can be one of
     /// LineBreakModeWordWrap, LineBreakModeCharacterWrap,
     /// LineBreakModeClip, LineBreakModeHeadTruncation,
     /// LineBreakModeTailTruncation, LineBreakModeMiddleTruncation.
     /// This is not currently implemented.
-    void SetLineBreakMode(int lineBreakMode) { m_lineBreakMode = lineBreakMode; }
+    void SetLineBreakMode(wxMoTableCellLineBreakMode lineBreakMode) { m_lineBreakMode = lineBreakMode; }
     
     /// Gets the line break mode.
-    int GetLineBreakMode() const { return m_lineBreakMode; }
+    wxMoTableCellLineBreakMode GetLineBreakMode() const { return m_lineBreakMode; }
     
     /// Sets the bitmap on the left side of the cell.
     void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
@@ -218,10 +245,10 @@ public:
     bool GetSelected() const { return m_selected; }
     
     /// Sets the selection style: SelectionStyleNone, SelectionStyleBlue, or SelectionStyleGrey.
-    void SetSelectionStyle(int style) { m_selectionStyle = style; }
+    void SetSelectionStyle(wxMoTableCellSelectionStyle style) { m_selectionStyle = style; }
     
     /// Gets the selection style.
-    int GetSelectionStyle() const { return m_selectionStyle; }
+    wxMoTableCellSelectionStyle GetSelectionStyle() const { return m_selectionStyle; }
     
     // Sets the event handler for the cell.
     //void SetEventHandler(wxEvtHandler* handler) { m_eventHandler = handler; }
@@ -270,10 +297,10 @@ public:
     /// Sets the accessory type. This can be AccessoryTypeNone, AccessoryTypeDisclosureIndicator,
     /// AccessoryTypeDetailDisclosureButton, or AccessoryTypeCheckmark.
     /// The accessory is the image or button that appears on the right of the row.
-    void SetAccessoryType(int accessoryType) { m_accessoryType = accessoryType; }
+    void SetAccessoryType(wxMoTableCellAccessoryType accessoryType) { m_accessoryType = accessoryType; }
     
     /// Gets the accessor type.
-    int GetAccessoryType() const { return m_accessoryType; }
+    wxMoTableCellAccessoryType GetAccessoryType() const { return m_accessoryType; }
     
     /// Sets the window to be shown in place of a standard accessory.
     /// If there is already an accessory window, it is destroyed.
@@ -288,10 +315,10 @@ public:
     /// Sets the editing accessory type. This can be AccessoryTypeNone, AccessoryTypeDisclosureIndicator,
     /// AccessoryTypeDetailDisclosureButton, or AccessoryTypeCheckmark.
     /// The accessory is the image or button that appears on the right of the row.
-    void SetEditingAccessoryType(int accessoryType) { m_editingAccessoryType = accessoryType; }
+    void SetEditingAccessoryType(wxMoTableCellAccessoryType accessoryType) { m_editingAccessoryType = accessoryType; }
     
     /// Gets the accessor type.
-    int GetEditingAccessoryType() const { return m_editingAccessoryType; }
+    wxMoTableCellAccessoryType GetEditingAccessoryType() const { return m_editingAccessoryType; }
     
     /// Sets the editing window to be shown in place of a standard accessory.
     /// If there is already an accessory window, it is destroyed.
@@ -305,10 +332,10 @@ public:
     
     /// Sets the cell style. The style can be one of CellStyleDefault, CellStyleValue1,
     /// CellStyleValue2, and CellStyleSubtitle.
-    void SetCellStyle(int style) { m_cellStyle = style; }
+    void SetCellStyle(wxMoTableCellStyle style) { m_cellStyle = style; }
     
     /// Gets the cell style.
-    int GetCellStyle() const { return m_cellStyle; }
+    wxMoTableCellStyle GetCellStyle() const { return m_cellStyle; }
     
     /// Determines whether the cell should indent during editing.
     void SetIndentWhileEditing(bool indent) { m_shouldIndentWhileEditing = indent; }
@@ -325,39 +352,48 @@ public:
     /// Is the delete confirmation button showing for this path?
     bool IsDeleteButtonShowing(wxMoTableCtrl* tableCtrl) const;
     
+    // Variants of SetPeer()/GetPeer()
+    void                SetCellWidgetImpl(wxOSXWidgetImpl* widgetImpl) { m_widgetImpl = widgetImpl; }
+    wxOSXWidgetImpl*    GetCellWidgetImpl() { return m_widgetImpl; }
+    
 protected:
     
-    wxString        m_reuseName;
-    wxFont          m_font;
-    wxFont          m_detailFont;
-    wxString        m_text;
-    wxString        m_detailText;
-    wxColour        m_textColour;
-    wxColour        m_detailTextColour;
-    wxColour        m_selectedTextColour;
-    int             m_textAlignment;
-    int             m_detailTextAlignment;
-    int             m_lineBreakMode;
-    wxBitmap        m_bitmap;
-    wxBitmap        m_selectedBitmap;
-    bool            m_selected;
-    int             m_selectionStyle;
-    //wxEvtHandler*   m_eventHandler;
-    int             m_accessoryType;
-    int             m_editingAccessoryType;
-    //int             m_editStyle;
-    int             m_indentationLevel;
-    int             m_indentationWidth;
-    int             m_detailWidth;
-    int             m_cellStyle;
-    bool            m_editingMode;
-    bool            m_shouldIndentWhileEditing;
-    bool            m_showReorderingButton;
+    wxString                    m_reuseName;
+    wxFont                      m_font;
+    wxFont                      m_detailFont;
+    wxString                    m_text;
+    wxString                    m_detailText;
+    wxColour                    m_textColour;
+    wxColour                    m_detailTextColour;
+    wxColour                    m_selectedTextColour;
+    wxMoTableCellTextAlignment  m_textAlignment;
+    wxMoTableCellTextAlignment  m_detailTextAlignment;
+    wxMoTableCellLineBreakMode  m_lineBreakMode;
+    wxBitmap                    m_bitmap;
+    wxBitmap                    m_selectedBitmap;
+    bool                        m_selected;
+    wxMoTableCellSelectionStyle m_selectionStyle;
+    //wxEvtHandler*             m_eventHandler;
+    wxMoTableCellAccessoryType  m_accessoryType;
+    wxMoTableCellAccessoryType  m_editingAccessoryType;
+    //int                       m_editStyle;
+    int                         m_indentationLevel;
+    int                         m_indentationWidth;
+    int                         m_detailWidth;
+    wxMoTableCell::wxMoTableCellStyle          m_cellStyle;
+    bool                        m_editingMode;
+    bool                        m_shouldIndentWhileEditing;
+    bool                        m_showReorderingButton;
     wxMoTableCellContentWindow* m_contentWindow;
-    wxWindow*       m_accessoryWindow;
-    wxWindow*       m_editingAccessoryWindow;
+    wxWindow*                   m_accessoryWindow;
+    wxWindow*                   m_editingAccessoryWindow;
     
     DECLARE_CLASS(wxMoTableCell)
+    
+    
+private:
+    wxOSXWidgetImpl*    m_widgetImpl;
+    
 };
 
 WX_DEFINE_ARRAY_PTR(wxMoTableCell*, wxMoTableCellArray);

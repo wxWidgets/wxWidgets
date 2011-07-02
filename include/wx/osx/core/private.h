@@ -23,6 +23,7 @@
 
 #if wxOSX_USE_IPHONE
 #include "wx/mobile/native/viewcontroller.h"
+#include "wx/mobile/native/tablecell.h"
 #endif
 
 // Define helper macros allowing to insert small snippets of code to be
@@ -536,6 +537,16 @@ public :
                                     const wxSize& size,
                                     long style,
                                     long extraStyle);
+                                    
+    static wxWidgetImplType*    CreateTableViewCtrl( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long style,
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateTableViewCell( wxMoTableCell* wxpeer) ;
 
 #endif  // wxOSX_USE_IPHONE
 
@@ -907,6 +918,39 @@ class wxNavigationControllerImpl
     virtual bool PushViewController(wxMoViewController *controller) = 0;
     virtual bool PopViewController() = 0;
 } ;
+
+
+//
+// common interface for iPhone's UITableViewController
+//
+
+#include "wx/mobile/native/tablectrl.h"
+
+class wxTableViewControllerImpl
+{
+    public:
+    
+    wxTableViewControllerImpl() {}
+    virtual ~wxTableViewControllerImpl() {}
+    
+    virtual bool ReloadData() = 0;
+} ;
+
+
+//
+// common interface for iPhone's UITableViewCell
+//
+
+#include "wx/mobile/native/tablectrl.h"
+
+class wxTableViewCellImpl
+{
+    public:
+    
+    wxTableViewCellImpl() {}
+    virtual ~wxTableViewCellImpl() {}
+} ;
+
 #endif  // wxOSX_USE_IPHONE
 
 

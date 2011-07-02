@@ -64,12 +64,16 @@ Notes
 #include "wx/dcbuffer.h"
 #include "wx/arrimpl.cpp"
 
+#include "wx/osx/private.h"
+#include "wx/osx/iphone/private/tablectrlimpl.h"
+#include "wx/osx/iphone/private/tablecellimpl.h"
+
 #include "wx/mobile/native/utils.h"
 #include "wx/mobile/native/tablectrl.h"
 
 #define MO_EDIT_CONTROL_MARGIN 35
 
-IMPLEMENT_DYNAMIC_CLASS(wxMoTableCtrl, wxMoScrolledWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxMoTableCtrl, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxTablePath, wxObject)
 IMPLEMENT_CLASS(wxMoTableDataSource, wxEvtHandler)
 IMPLEMENT_CLASS(wxMoTableRow, wxObject)
@@ -79,7 +83,7 @@ WX_DEFINE_EXPORTED_OBJARRAY(wxMoTableSectionArray);
 WX_DEFINE_EXPORTED_OBJARRAY(wxMoTableRowArray);
 WX_DEFINE_EXPORTED_OBJARRAY(wxTablePathArray);
 
-BEGIN_EVENT_TABLE(wxMoTableCtrl, wxMoScrolledWindow)
+BEGIN_EVENT_TABLE(wxMoTableCtrl, wxWindow)
     EVT_PAINT(wxMoTableCtrl::OnPaint)
     EVT_SIZE(wxMoTableCtrl::OnSize)
     EVT_TOUCH_SCROLL_DRAG(wxMoTableCtrl::OnTouchScrollDrag)
@@ -104,6 +108,32 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_MOVE_DRAGGED)
 
 #define wxMoTableCtrlLoadBitmap(bitmapData) LoadBitmap(bitmapData, sizeof(bitmapData))
 
+
+#pragma mark wxMoTableCtrl
+
+/// Default constructor.
+wxMoTableCtrl::wxMoTableCtrl()
+{
+    Init();
+}
+
+/// Constructor.
+wxMoTableCtrl::wxMoTableCtrl(wxWindow *parent,
+                             wxWindowID id,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name)
+{
+    Init();
+    Create(parent, id, pos, size, style, name);
+}
+
+void wxMoTableCtrl::Init()
+{
+    m_dataSource = NULL;
+}
+
 bool wxMoTableCtrl::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxPoint& pos,
@@ -111,19 +141,22 @@ bool wxMoTableCtrl::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    DontCreatePeer();
+    
+    if ( !wxWindow::Create( parent, id, pos, size, style, name )) {
+        return false;
+    }
+    
+    SetPeer(wxWidgetImpl::CreateTableViewCtrl( this, parent, id, pos, size, style, GetExtraStyle() ));
+    
+    MacPostControlCreate( pos, size );
+    
+    return true;    
 }
 
 wxMoTableCtrl::~wxMoTableCtrl()
 {
-    // FIXME stub
-}
-
-void wxMoTableCtrl::Init()
-{
-    // FIXME stub
+    
 }
 
 wxSize wxMoTableCtrl::DoGetBestSize() const
@@ -249,10 +282,37 @@ void wxMoTableCtrl::OnInternalIdle()
 }
 
 wxMoTableCell* wxMoTableCtrl::GetReusableCell(const wxString& reuseName)
-{
-    // FIXME stub
+{            
+    // Let the Cocoa part take care of the reusability.
+    
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return NULL;
+    }
+    
+    NSString *cellIdentifier = wxCFStringRef(reuseName).AsNSString();
+    if (! cellIdentifier) {
+        return NULL;
+    }
+    
+    wxUITableViewCell *cell = (wxUITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (! cell) {
+        return NULL;
+    }
+    
+    return [cell moTableCell];
+}
 
-    return NULL;
+/// Gets the data source
+wxMoTableDataSource* wxMoTableCtrl::GetDataSource() const {
+    return m_dataSource;
+}
+
+/// Sets the data source
+void wxMoTableCtrl::SetDataSource(wxMoTableDataSource* dataSource, bool ownsDataSource)
+{
+    m_dataSource = dataSource;
+    m_ownsDataSource = ownsDataSource;
 }
 
 // Finds the path for the cell
@@ -274,14 +334,25 @@ wxMoTableCell* wxMoTableCtrl::FindCellForPath(const wxTablePath& path) const
 // Clears all data
 void wxMoTableCtrl::Clear()
 {
-    // FIXME stub
+    m_sections.Clear();
+    m_indexTitles.Clear();
+    
+    size_t i;
+    for (i = 0; i < m_reusableCells.GetCount(); i++)
+    {
+        wxMoTableCell* cell = m_reusableCells[i];
+        delete cell;
+    }
+    m_reusableCells.Clear();
+    m_totalTableHeight = 0;
 }
 
 bool wxMoTableCtrl::ReloadData(bool resetScrollbars)
 {
-    // FIXME stub
+    Clear();
 
-    return true;
+    wxTableViewCtrlIPhoneImpl *peer = (wxTableViewCtrlIPhoneImpl *)GetPeer();
+    return peer->ReloadData();
 }
 
 // Loads the data within the specified rectangle.
@@ -426,46 +497,189 @@ void wxMoTableCtrl::OnConfirmDeleteButtonClicked(wxCommandEvent& WXUNUSED(cmdEve
     // FIXME stub
 }
 
+#pragma mark wxMoTableRow
 
-void wxMoTableRow::Init()
+wxMoTableRow::wxMoTableRow(const wxMoTableRow& row)
 {
-    // FIXME stub
+    Copy(row);
+}
+
+wxMoTableRow::wxMoTableRow()
+{
+    Init();
 }
 
 wxMoTableRow::~wxMoTableRow()
 {
-    // FIXME stub
+    if (m_tableCell) {
+        delete m_tableCell;
+        m_tableCell = NULL;
+    }
+}
+
+void wxMoTableRow::Init()
+{
+    m_tableCell = NULL;
+    m_rowY = 0;
+    m_rowHeight = 0;
+}
+
+void wxMoTableRow::operator=(const wxMoTableRow& row)
+{
+    Copy(row);
 }
 
 void wxMoTableRow::Copy(const wxMoTableRow& row)
 {
-    // FIXME stub
+    m_tableCell = row.m_tableCell;
+    const_cast<wxMoTableRow&>(row).m_tableCell = NULL;
+    m_rowY = row.m_rowY;
+    m_rowHeight = row.m_rowHeight;    
+}
+
+
+#pragma mark wxTablePath
+
+/// Copy constructor.
+wxTablePath::wxTablePath(const wxTablePath& path)
+{
+    Copy(path);
+}
+
+/// Constructor.
+wxTablePath::wxTablePath(int section, int row)
+{
+    Init();
+    m_row = row;
+    m_section = section;
+}
+
+void wxTablePath::Init()
+{
+    m_row = 0;
+    m_section = 0;
+}
+
+/// Assignment operator.
+void wxTablePath::operator=(const wxTablePath& path)
+{
+    Copy(path);
+}
+
+/// Equality operator.
+bool wxTablePath::operator==(const wxTablePath& path) const
+{
+    return m_row == path.m_row && m_section == path.m_section;
+}
+
+bool wxTablePath::operator!=(const wxTablePath& path) const
+{
+    return m_row != path.m_row || m_section != path.m_section;
+}
+
+/// Copys the path.
+void wxTablePath::Copy(const wxTablePath& path)
+{
+    m_row = path.m_row;
+    m_section = path.m_section;
+}
+
+/// Sets the row index.
+void wxTablePath::SetRow(int row)
+{
+    m_row = row;
+}
+
+/// Gets the row index.
+int wxTablePath::GetRow() const
+{
+    return m_row;
+}
+
+/// Sets the section index.
+void wxTablePath::SetSection(int section)
+{
+    m_section = section;
+}
+
+/// Gets the section index.
+int wxTablePath::GetSection() const
+{
+    return m_section;
+}
+
+/// Returns true if the path is valid (neither row nor section are -1).
+bool wxTablePath::IsValid() const
+{
+    return m_row != -1 && m_section != -1;
+}
+
+
+#pragma mark wxMoTableSection
+
+wxMoTableSection::wxMoTableSection(const wxMoTableSection& section)
+{
+    Copy(section);
+}
+
+wxMoTableSection::wxMoTableSection()
+{
+    Init();
 }
 
 void wxMoTableSection::Init()
 {
-    // FIXME stub
+    m_sectionWidth = 0;
+    m_sectionHeight = 0;
+    m_sectionY = 0;
+    m_sectionHeaderHeight = 0;
+    m_sectionFooterHeight = 0;
+    m_rowCount = 0;    
+}
+
+void wxMoTableSection::operator=(const wxMoTableSection& section)
+{
+    Copy(section);
 }
 
 void wxMoTableSection::Copy(const wxMoTableSection& section)
 {
-    // FIXME stub
+    m_sectionName = section.m_sectionName;
+    m_sectionWidth = section.m_sectionWidth;
+    m_sectionHeight = section.m_sectionHeight;
+    m_sectionY = section.m_sectionY;
+    m_rows = section.m_rows;
+    m_sectionHeaderHeight = section.m_sectionHeaderHeight;
+    m_sectionFooterHeight = section.m_sectionFooterHeight;
+    m_rowCount = section.m_rowCount;    
 }
+
+void wxMoTableSection::SetSectionName(const wxString& name)
+{
+    m_sectionName = name;
+}
+
+const wxString& wxMoTableSection::GetSectionName() const
+{
+    return m_sectionName;
+}
+
+#pragma mark wxMoTableDataSource
 
 // Called by the table control to commit an insertion requested by the user. This function should
 // then call InsertRows in response.
 bool wxMoTableDataSource::CommitInsertRow(wxMoTableCtrl* ctrl, const wxTablePath& path)
 {
-    // FIXME stub
-
-    return true;
+    wxTablePathArray paths;
+    paths.Add(path);
+    return ctrl->InsertRows(paths, wxMoTableCtrl::RowAnimationNone);
 }
 
 // Called by the table control to commit a deletion requested by the user. This function should
 // then call DeleteRows in response.
 bool wxMoTableDataSource::CommitDeleteRow(wxMoTableCtrl* ctrl, const wxTablePath& path)
 {
-    // FIXME stub
-
-    return true;
+    wxTablePathArray paths;
+    paths.Add(path);
+    return ctrl->DeleteRows(paths, wxMoTableCtrl::RowAnimationNone);
 }
