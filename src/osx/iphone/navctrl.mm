@@ -180,9 +180,11 @@ bool wxNavigationCtrlIPhoneImpl::PushViewController(wxMoViewController *controll
 bool wxNavigationCtrlIPhoneImpl::PopViewController()
 {
     wxUINavigationController *navController = (wxUINavigationController *)m_navcontroller;
-    [navController popViewControllerAnimated:YES];
-     
-    return true;
+    if ([navController popViewControllerAnimated:YES]) {
+        return true;
+    } else {
+        return false;
+    }
 }
         
 
@@ -196,6 +198,11 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
                                                            long WXUNUSED(extraStyle))
 {
     wxUINavigationController* v = [[wxUINavigationController alloc] initWithFakeRootViewController];
+    
+    // FIXME view originally has a mysterious 40 px offset from top
+    CGRect frame = v.view.frame;
+    frame.origin.y -= 40;
+    [v.view setFrame:frame];
     
     wxWidgetIPhoneImpl* c = new wxNavigationCtrlIPhoneImpl( wxpeer, v, v.view );
     return c;
