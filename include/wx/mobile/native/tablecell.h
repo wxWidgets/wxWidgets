@@ -201,6 +201,12 @@ public:
     
     /// Gets the selected text colour.
     const wxColour& GetSelectedTextColour() const { return m_selectedTextColour; }
+
+    /// Sets the selected detail text colour.
+    void SetSelectedDetailTextColour(const wxColour& colour) { m_selectedDetailTextColour = colour; }
+    
+    /// Gets the selected detail text colour.
+    const wxColour& GetSelectedDetailTextColour() const { return m_selectedDetailTextColour; }
     
     /// Sets the text alignment. Alignment can be TextAlignmentLeft, TextAlignmentCenter,
     /// or TextAlignmentRight.s
@@ -216,15 +222,27 @@ public:
     /// Gets the detail text alignment.
     wxMoTableCellTextAlignment GetDetailTextAlignment() const { return m_detailTextAlignment; }
     
-    /// Sets the line break mode. The mode can be one of
+    /// Sets the text line break mode. The mode can be one of
     /// LineBreakModeWordWrap, LineBreakModeCharacterWrap,
     /// LineBreakModeClip, LineBreakModeHeadTruncation,
     /// LineBreakModeTailTruncation, LineBreakModeMiddleTruncation.
     /// This is not currently implemented.
-    void SetLineBreakMode(wxMoTableCellLineBreakMode lineBreakMode) { m_lineBreakMode = lineBreakMode; }
+    // FIXME rename this in "generic" too.
+    void SetTextLineBreakMode(wxMoTableCellLineBreakMode lineBreakMode) { m_textLineBreakMode = lineBreakMode; }
     
     /// Gets the line break mode.
-    wxMoTableCellLineBreakMode GetLineBreakMode() const { return m_lineBreakMode; }
+    wxMoTableCellLineBreakMode GetTextLineBreakMode() const { return m_textLineBreakMode; }
+
+    /// Sets the detail text line break mode. The mode can be one of
+    /// LineBreakModeWordWrap, LineBreakModeCharacterWrap,
+    /// LineBreakModeClip, LineBreakModeHeadTruncation,
+    /// LineBreakModeTailTruncation, LineBreakModeMiddleTruncation.
+    /// This is not currently implemented.
+    // FIXME add this in "generic" too.
+    void SetDetailTextLineBreakMode(wxMoTableCellLineBreakMode lineBreakMode) { m_detailTextLineBreakMode = lineBreakMode; }
+    
+    /// Gets the line break mode.
+    wxMoTableCellLineBreakMode GetDetailTextLineBreakMode() const { return m_detailTextLineBreakMode; }
     
     /// Sets the bitmap on the left side of the cell.
     void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
@@ -366,9 +384,11 @@ protected:
     wxColour                    m_textColour;
     wxColour                    m_detailTextColour;
     wxColour                    m_selectedTextColour;
+    wxColour                    m_selectedDetailTextColour; // FIXME add to "generic" too
     wxMoTableCellTextAlignment  m_textAlignment;
     wxMoTableCellTextAlignment  m_detailTextAlignment;
-    wxMoTableCellLineBreakMode  m_lineBreakMode;
+    wxMoTableCellLineBreakMode  m_textLineBreakMode;
+    wxMoTableCellLineBreakMode  m_detailTextLineBreakMode;
     wxBitmap                    m_bitmap;
     wxBitmap                    m_selectedBitmap;
     bool                        m_selected;

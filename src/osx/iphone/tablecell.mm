@@ -19,6 +19,7 @@
 #include "wx/settings.h"
 #endif // WX_PRECOMP
 
+#include "wx/mobile/native/tablecell.h"
 #include "wx/mobile/native/tablectrl.h"
 #include "wx/osx/private.h"
 #include "wx/osx/iphone/private/tablecellimpl.h"
@@ -106,15 +107,24 @@
         [self.detailTextLabel setTextColor:[UIColor grayColor]]; // FIXME might be blue or gray
     }
 
-    // Selected text colour
-    // FIXME detailTextLabel too!
-    UIColor *selectedTextColour = nil;
-    wxColour wxSelectedTextColour = moTableCell->GetSelectedTextColour();
-    selectedTextColour = [[[UIColor alloc] initWithCGColor:wxSelectedTextColour.GetCGColor()] autorelease];
-    if (selectedTextColour) {
-        [self.textLabel setHighlightedTextColor:selectedTextColour];
+    // Selected title colour
+    UIColor *selectedTitleColour = nil;
+    wxColour wxSelectedTitleColour = moTableCell->GetSelectedTextColour();
+    selectedTitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedTitleColour.GetCGColor()] autorelease];
+    if (selectedTitleColour) {
+        [self.textLabel setHighlightedTextColor:selectedTitleColour];
     } else {
         [self.textLabel setHighlightedTextColor:nil];
+    }
+
+    // Selected subtitle colour
+    UIColor *selectedSubtitleColour = nil;
+    wxColour wxSelectedSubtitleColour = moTableCell->GetSelectedTextColour();
+    selectedSubtitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedSubtitleColour.GetCGColor()] autorelease];
+    if (selectedSubtitleColour) {
+        [self.detailTextLabel setHighlightedTextColor:selectedSubtitleColour];
+    } else {
+        [self.detailTextLabel setHighlightedTextColor:nil];
     }
     
     // Title alignment
@@ -139,7 +149,56 @@
     };
     [self.detailTextLabel setTextAlignment:subtitleAlignment];
     
-    // FIXME various other properties too
+    // Accessory type
+    wxMoTableCell::wxMoTableCellAccessoryType wxAccessoryType = moTableCell->GetAccessoryType();
+    UITableViewCellAccessoryType accessoryType;
+    switch (wxAccessoryType) {
+        case wxMoTableCell::AccessoryTypeNone:                      accessoryType = UITableViewCellAccessoryNone;                   break;
+        case wxMoTableCell::AccessoryTypeDisclosureIndicator:       accessoryType = UITableViewCellAccessoryDisclosureIndicator;    break;
+        case wxMoTableCell::AccessoryTypeDetailDisclosureButton:    accessoryType = UITableViewCellAccessoryDetailDisclosureButton; break;
+        case wxMoTableCell::AccessoryTypeCheckmark:                 accessoryType = UITableViewCellAccessoryCheckmark;              break;
+        default:                                                    accessoryType = UITableViewCellAccessoryNone;                   break;
+    };
+    [self setAccessoryType:accessoryType];
+    
+    // Selection style
+    wxMoTableCell::wxMoTableCellSelectionStyle wxSelectionStyle = moTableCell->GetSelectionStyle();
+    UITableViewCellSelectionStyle selectionStyle;
+    switch (wxSelectionStyle) {
+        case wxMoTableCell::SelectionStyleNone:     selectionStyle = UITableViewCellSelectionStyleNone;     break;
+        case wxMoTableCell::SelectionStyleBlue:     selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+        case wxMoTableCell::SelectionStyleGrey:     selectionStyle = UITableViewCellSelectionStyleGray;     break;
+        default:                                    selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+    };
+    [self setSelectionStyle:selectionStyle];
+    
+    // Title line break mode (FIXME merge with detail line break mode to avoid duplicating the code)
+    wxMoTableCell::wxMoTableCellLineBreakMode wxTitleLineBreakMode = moTableCell->GetTextLineBreakMode();
+    UILineBreakMode titleLineBreakMode;
+    switch (wxTitleLineBreakMode) {
+        case wxMoTableCell::LineBreakModeWordWrap:         titleLineBreakMode = UILineBreakModeWordWrap;           break;
+        case wxMoTableCell::LineBreakModeCharacterWrap:    titleLineBreakMode = UILineBreakModeCharacterWrap;      break;
+        case wxMoTableCell::LineBreakModeClip:             titleLineBreakMode = UILineBreakModeClip;               break;
+        case wxMoTableCell::LineBreakModeHeadTruncation:   titleLineBreakMode = UILineBreakModeHeadTruncation;     break;
+        case wxMoTableCell::LineBreakModeTailTruncation:   titleLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxMoTableCell::LineBreakModeMiddleTruncation: titleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
+        default:                                           titleLineBreakMode = UILineBreakModeTailTruncation;     break;
+    };
+    [self.textLabel setLineBreakMode:titleLineBreakMode];
+
+    // Subtitle line break mode (FIXME merge with title line break mode to avoid duplicating the code)
+    wxMoTableCell::wxMoTableCellLineBreakMode wxSubtitleLineBreakMode = moTableCell->GetDetailTextLineBreakMode();
+    UILineBreakMode subtitleLineBreakMode;
+    switch (wxSubtitleLineBreakMode) {
+        case wxMoTableCell::LineBreakModeWordWrap:         subtitleLineBreakMode = UILineBreakModeWordWrap;           break;
+        case wxMoTableCell::LineBreakModeCharacterWrap:    subtitleLineBreakMode = UILineBreakModeCharacterWrap;      break;
+        case wxMoTableCell::LineBreakModeClip:             subtitleLineBreakMode = UILineBreakModeClip;               break;
+        case wxMoTableCell::LineBreakModeHeadTruncation:   subtitleLineBreakMode = UILineBreakModeHeadTruncation;     break;
+        case wxMoTableCell::LineBreakModeTailTruncation:   subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxMoTableCell::LineBreakModeMiddleTruncation: subtitleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
+        default:                                           subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
+    };
+    [self.detailTextLabel setLineBreakMode:subtitleLineBreakMode];
     
     // Bitmap
     UIImage *img = nil;
@@ -148,6 +207,10 @@
         [img retain];
     }
     [self.imageView setImage:img];
+
+    
+    // FIXME other properties (font, selectedBitmap, event handler, ...)
+    
 }
 
 @end

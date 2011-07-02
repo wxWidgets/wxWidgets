@@ -282,7 +282,9 @@ void wxMoTableCtrl::OnInternalIdle()
 }
 
 wxMoTableCell* wxMoTableCtrl::GetReusableCell(const wxString& reuseName)
-{            
+{
+    return NULL;
+    
     // Let the Cocoa part take care of the reusability.
     
     wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
