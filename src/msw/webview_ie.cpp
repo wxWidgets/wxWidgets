@@ -510,6 +510,60 @@ wxString wxWebViewIE::GetCurrentTitle()
     return out.GetString();
 }
 
+bool wxWebViewIE::CanCut()
+{
+    return CanExecCommand("Cut");
+}
+
+bool wxWebViewIE::CanCopy()
+{
+    return CanExecCommand("Copy");
+}
+bool wxWebViewIE::CanPaste()
+{
+    return CanExecCommand("Paste");
+}
+
+void wxWebViewIE::Cut()
+{
+    ExecCommand("Cut");
+}
+
+void wxWebViewIE::Copy()
+{
+    ExecCommand("Copy");
+}
+
+void wxWebViewIE::Paste()
+{
+    ExecCommand("Paste");
+}
+
+bool wxWebViewIE::CanExecCommand(wxString command)
+{
+    wxVariant documentVariant = m_ie.GetProperty("Document");
+    void* documentPtr = documentVariant.GetVoidPtr();
+    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
+
+    wxASSERT(documentPtr && document);
+
+    VARIANT_BOOL enabled;
+    document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
+
+    return (enabled == VARIANT_TRUE);
+}
+
+void wxWebViewIE::ExecCommand(wxString command)
+{
+    wxVariant documentVariant = m_ie.GetProperty("Document");
+    void* documentPtr = documentVariant.GetVoidPtr();
+    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
+
+    wxASSERT(documentPtr && document);
+
+    document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+}
+
 void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 {
     if (m_webBrowser == NULL) return;

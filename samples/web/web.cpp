@@ -71,6 +71,9 @@ public:
     void OnSetZoom(wxCommandEvent& evt);
     void OnError(wxWebNavigationEvent& evt);
     void OnPrint(wxCommandEvent& evt);
+    void OnCut(wxCommandEvent& evt);
+    void OnCopy(wxCommandEvent& evt);
+    void OnPaste(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -92,6 +95,9 @@ private:
     wxMenuItem* m_tools_handle_navigation;
     wxMenuItem* m_tools_handle_new_window;
     wxMenuItem* m_tools_enable_history;
+    wxMenuItem* m_edit_cut;
+    wxMenuItem* m_edit_copy;
+    wxMenuItem* m_edit_paste;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -195,6 +201,15 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     wxMenuItem* clearhist =  m_tools_menu->Append(wxID_ANY, _("Clear History"));
     m_tools_enable_history = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable History"));
 
+    //Create an editing menu
+    wxMenu* editmenu = new wxMenu();
+    m_edit_cut = editmenu->Append(wxID_ANY, _("Cut"));
+    m_edit_copy = editmenu->Append(wxID_ANY, _("Copy"));
+    m_edit_paste = editmenu->Append(wxID_ANY, _("Paste"));
+
+    m_tools_menu->AppendSeparator();
+    m_tools_menu->AppendSubMenu(editmenu, "Edit");
+
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
@@ -247,6 +262,12 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnClearHistory),  NULL, this );
     Connect(m_tools_enable_history->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnEnableHistory),  NULL, this );
+    Connect(m_edit_cut->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnCut),  NULL, this );
+    Connect(m_edit_copy->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnCopy),  NULL, this );
+    Connect(m_edit_paste->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnPaste),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
@@ -371,6 +392,21 @@ void WebFrame::OnEnableHistory(wxCommandEvent& evt)
     UpdateState();
 }
 
+void WebFrame::OnCut(wxCommandEvent& evt)
+{
+    m_browser->Cut();
+}
+
+void WebFrame::OnCopy(wxCommandEvent& evt)
+{
+    m_browser->Copy();
+}
+
+void WebFrame::OnPaste(wxCommandEvent& evt)
+{
+    m_browser->Paste();
+}
+
 /**
   * Callback invoked when there is a request to load a new page (for instance
   * when the user clicks a link)
@@ -469,6 +505,10 @@ void WebFrame::OnToolsClicked(wxCommandEvent& evt)
         m_tools_largest->Check();
         break;
     }
+
+    m_edit_cut->Enable(m_browser->CanCut());
+    m_edit_copy->Enable(m_browser->CanCopy());
+    m_edit_paste->Enable(m_browser->CanPaste());
     
     wxPoint position = ScreenToClient( wxGetMousePosition() );
     PopupMenu(m_tools_menu, position.x, position.y);

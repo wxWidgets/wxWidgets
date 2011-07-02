@@ -77,6 +77,14 @@ public:
     virtual wxWebViewZoom GetZoom();
     virtual void SetZoom(wxWebViewZoom zoom);
 
+    //Clipboard functions
+    virtual bool CanCut();
+    virtual bool CanCopy();
+    virtual bool CanPaste();
+    virtual void Cut();
+    virtual void Copy();
+    virtual void Paste();
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...
@@ -123,6 +131,10 @@ private:
     int m_historyPosition;
     bool m_historyLoadingFromList;
     bool m_historyEnabled;
+
+    //Generic helper functions for IHtmlDocument commands
+    bool CanExecCommand(wxString command);
+    void ExecCommand(wxString command);
 
 };
 

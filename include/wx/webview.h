@@ -324,6 +324,14 @@ public:
      * Returns whether the web control is currently busy (e.g. loading a page)
      */
     virtual bool IsBusy() = 0;
+
+    //Clipboard functions
+    virtual bool CanCut() = 0;
+    virtual bool CanCopy() = 0;
+    virtual bool CanPaste() = 0;
+    virtual void Cut() = 0;
+    virtual void Copy() = 0;
+    virtual void Paste() = 0;
 };
 
 class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent
