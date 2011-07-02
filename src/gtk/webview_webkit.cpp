@@ -519,6 +519,26 @@ void wxWebViewWebKit::Paste()
     webkit_web_view_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
 }
 
+bool wxWebViewWebKit::CanUndo()
+{
+    return webkit_web_view_can_undo(WEBKIT_WEB_VIEW(web_view));
+}
+
+bool wxWebViewWebKit::CanRedo()
+{
+    return webkit_web_view_can_redo(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::Undo()
+{
+    webkit_web_view_undo(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::Redo()
+{
+    webkit_web_view_redo(WEBKIT_WEB_VIEW(web_view));
+}
+
 wxString wxWebViewWebKit::GetCurrentURL()
 {
     // FIXME: check which encoding the web kit control uses instead of

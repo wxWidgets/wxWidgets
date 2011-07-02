@@ -74,6 +74,8 @@ public:
     void OnCut(wxCommandEvent& evt);
     void OnCopy(wxCommandEvent& evt);
     void OnPaste(wxCommandEvent& evt);
+    void OnUndo(wxCommandEvent& evt);
+    void OnRedo(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -98,6 +100,8 @@ private:
     wxMenuItem* m_edit_cut;
     wxMenuItem* m_edit_copy;
     wxMenuItem* m_edit_paste;
+    wxMenuItem* m_edit_undo;
+    wxMenuItem* m_edit_redo;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -206,6 +210,9 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_edit_cut = editmenu->Append(wxID_ANY, _("Cut"));
     m_edit_copy = editmenu->Append(wxID_ANY, _("Copy"));
     m_edit_paste = editmenu->Append(wxID_ANY, _("Paste"));
+    editmenu->AppendSeparator();
+    m_edit_undo = editmenu->Append(wxID_ANY, _("Undo"));
+    m_edit_redo = editmenu->Append(wxID_ANY, _("Redo"));
 
     m_tools_menu->AppendSeparator();
     m_tools_menu->AppendSubMenu(editmenu, "Edit");
@@ -268,6 +275,10 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnCopy),  NULL, this );
     Connect(m_edit_paste->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnPaste),  NULL, this );
+    Connect(m_edit_undo->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnUndo),  NULL, this );
+    Connect(m_edit_redo->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnRedo),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
@@ -407,6 +418,16 @@ void WebFrame::OnPaste(wxCommandEvent& evt)
     m_browser->Paste();
 }
 
+void WebFrame::OnUndo(wxCommandEvent& evt)
+{
+    m_browser->Undo();
+}
+
+void WebFrame::OnRedo(wxCommandEvent& evt)
+{
+    m_browser->Redo();
+}
+
 /**
   * Callback invoked when there is a request to load a new page (for instance
   * when the user clicks a link)
@@ -509,6 +530,9 @@ void WebFrame::OnToolsClicked(wxCommandEvent& evt)
     m_edit_cut->Enable(m_browser->CanCut());
     m_edit_copy->Enable(m_browser->CanCopy());
     m_edit_paste->Enable(m_browser->CanPaste());
+
+    m_edit_undo->Enable(m_browser->CanUndo());
+    m_edit_redo->Enable(m_browser->CanRedo());
     
     wxPoint position = ScreenToClient( wxGetMousePosition() );
     PopupMenu(m_tools_menu, position.x, position.y);

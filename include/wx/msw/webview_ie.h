@@ -85,6 +85,12 @@ public:
     virtual void Copy();
     virtual void Paste();
 
+    //Undo / redo functionality
+    virtual bool CanUndo();
+    virtual bool CanRedo();
+    virtual void Undo();
+    virtual void Redo();
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...

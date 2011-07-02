@@ -128,6 +128,12 @@ public:
     virtual void Copy();
     virtual void Paste();
 
+    //Undo / redo functionality
+    virtual bool CanUndo();
+    virtual bool CanRedo();
+    virtual void Undo();
+    virtual void Redo();
+
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
 

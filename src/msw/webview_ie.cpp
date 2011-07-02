@@ -539,6 +539,25 @@ void wxWebViewIE::Paste()
     ExecCommand("Paste");
 }
 
+bool wxWebViewIE::CanUndo()
+{
+    return CanExecCommand("Undo");
+}
+bool wxWebViewIE::CanRedo()
+{
+    return CanExecCommand("Redo");
+}
+
+void wxWebViewIE::Undo()
+{
+    ExecCommand("Undo");
+}
+
+void wxWebViewIE::Redo()
+{
+    ExecCommand("Redo");
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     wxVariant documentVariant = m_ie.GetProperty("Document");
