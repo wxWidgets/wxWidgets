@@ -504,10 +504,15 @@ wxString wxWebViewIE::GetCurrentURL()
 
 wxString wxWebViewIE::GetCurrentTitle()
 {
-    wxVariant out = m_ie.GetProperty("LocationName");
+    wxVariant documentVariant = m_ie.GetProperty("Document");
+    void* documentPtr = documentVariant.GetVoidPtr();
+    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
 
-    wxASSERT(out.GetType() == "string");
-    return out.GetString();
+    wxASSERT(documentPtr && document);
+
+    BSTR title;
+    document->get_nameProp(&title);
+    return wxString(title);
 }
 
 bool wxWebViewIE::CanCut()
