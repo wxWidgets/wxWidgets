@@ -88,7 +88,9 @@ public:
     virtual bool Enable(bool enable);
     
 protected:
+#if 0
     virtual wxSize DoGetBestSize() const;
+#endif  // 0
     
     void SendClickEvent();
     

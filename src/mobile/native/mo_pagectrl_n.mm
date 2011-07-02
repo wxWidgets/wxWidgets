@@ -23,6 +23,7 @@
 
 #include "wx/mobile/native/pagectrl.h"
 #include "wx/mobile/native/utils.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMoPageCtrl, wxControl)
 
@@ -33,6 +34,7 @@ BEGIN_EVENT_TABLE(wxMoPageCtrl, wxControl)
     EVT_MOUSE_EVENTS(wxMoPageCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
+
 bool wxMoPageCtrl::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxPoint& pos,
@@ -41,7 +43,15 @@ bool wxMoPageCtrl::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
+    DontCreatePeer();
+    
+    if ( !wxControl::Create( parent, id, pos, size, style, validator, name )) {
+        return false;
+    }
+    
+    SetPeer(wxWidgetImpl::CreatePageCtrl( this, parent, id, pos, size, style, GetExtraStyle() ));
+    
+    MacPostControlCreate( pos, size );
     
     return true;
 }
@@ -55,6 +65,7 @@ void wxMoPageCtrl::Init()
     // FIXME stub
 }
 
+#if 0
 wxSize wxMoPageCtrl::DoGetBestSize() const
 {
     // FIXME stub
@@ -62,6 +73,7 @@ wxSize wxMoPageCtrl::DoGetBestSize() const
     wxSize empty(1, 1);
     return empty;
 }
+#endif  // 0
 
 void wxMoPageCtrl::SetPageCount(int pageCount)
 {

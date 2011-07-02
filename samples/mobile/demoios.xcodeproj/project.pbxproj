@@ -19,6 +19,7 @@
 		B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA6D3A13BEF72300061979 /* tablecell.mm */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9CA720513BF960400061979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA720413BF960400061979 /* QuartzCore.framework */; };
+		B9CA731513BFA41000061979 /* pagectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA731413BFA41000061979 /* pagectrl.mm */; };
 		B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072E13B9FCF700D6F0D8 /* button.mm */; };
 		B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */; };
 		B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073013B9FCF700D6F0D8 /* dialog.mm */; };
@@ -102,6 +103,7 @@
 		B9CA6D3A13BEF72300061979 /* tablecell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablecell.mm; path = ../../src/osx/iphone/tablecell.mm; sourceTree = SOURCE_ROOT; };
 		B9CA6F9113BF1EF900061979 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B9CA720413BF960400061979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B9CA731413BFA41000061979 /* pagectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = pagectrl.mm; path = ../../src/osx/iphone/pagectrl.mm; sourceTree = SOURCE_ROOT; };
 		B9DF070813B9FCD800D6F0D8 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
 		B9DF070913B9FCD800D6F0D8 /* barbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barbutton.h; sourceTree = "<group>"; };
 		B9DF070A13B9FCD800D6F0D8 /* bmpbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmpbutton.h; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				B913434F13BC0A780024E59E /* navctrl.mm */,
 				B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */,
 				B9DF073613B9FCF700D6F0D8 /* notebook.mm */,
+				B9CA731413BFA41000061979 /* pagectrl.mm */,
 				B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */,
 				B9DF073813B9FCF700D6F0D8 /* slider.mm */,
 				B9133F9413BBC9FB0024E59E /* srchctrl.mm */,
@@ -525,6 +528,7 @@
 				B913435013BC0A780024E59E /* navctrl.mm in Sources */,
 				B9F1F27A13BC5AF40039F5C2 /* tablectrl.mm in Sources */,
 				B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */,
+				B9CA731513BFA41000061979 /* pagectrl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
