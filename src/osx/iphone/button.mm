@@ -92,7 +92,7 @@ void wxWidgetIPhoneImpl::PerformClick()
 wxWidgetImplType* wxWidgetImpl::CreateButton(wxWindowMac* wxpeer,
                                              wxWindowMac* WXUNUSED(parent),
                                              wxWindowID id,
-                                             const wxString& WXUNUSED(label),
+                                             const wxString& label,
                                              const wxPoint& pos,
                                              const wxSize& size,
                                              long WXUNUSED(style),
@@ -108,6 +108,8 @@ wxWidgetImplType* wxWidgetImpl::CreateButton(wxWindowMac* wxpeer,
     
     wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];
     v.frame = r;
+    [v setTitle:[NSString stringWithString:wxCFStringRef(label).AsNSString()]
+       forState:UIControlStateNormal];
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
 }
@@ -147,8 +149,7 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle(wxWindowMac* wxpeer,
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxUIButton* v = [[wxUIButton buttonWithType:UIButtonTypeDetailDisclosure] retain];
-    [v setFrame:r];    
-    //[v setTitle:wxCFStringRef( label).AsNSString() forState:UIControlStateNormal];
+    [v setFrame:r];
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
 }

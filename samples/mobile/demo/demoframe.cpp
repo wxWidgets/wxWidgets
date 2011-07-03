@@ -786,16 +786,23 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             wxFlexGridSizer* innerSizer = new wxFlexGridSizer(2);
             sizer->Add(innerSizer, 1, wxEXPAND|wxALL, 5);
             
-            innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Switch control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
+            //wxMoStaticText *switchControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Switch control:"));
+            wxMoStaticText *switchControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Switch control:"), wxPoint(20, 10));
+            innerSizer->Add(switchControlLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoSwitchCtrl* switchCtrl = new wxMoSwitchCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+            //wxMoSwitchCtrl* switchCtrl = new wxMoSwitchCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+            wxMoSwitchCtrl* switchCtrl = new wxMoSwitchCtrl( panel, wxID_ANY, wxPoint(160, 10));
             innerSizer->Add(switchCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             
-            innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Text buttons:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
+            //wxMoStaticText *textButtonsLabel = new wxMoStaticText(panel, wxID_STATIC, _("Text buttons:"));
+            wxMoStaticText *textButtonsLabel = new wxMoStaticText(panel, wxID_STATIC, _("Text buttons:"), wxPoint(20, 55));
+            innerSizer->Add(textButtonsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-            wxMoButton* button = new wxMoButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxDefaultPosition, wxDefaultSize, 0 );
-            wxMoButton* button2 = new wxMoButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+            //wxMoButton* button = new wxMoButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxDefaultPosition, wxDefaultSize, 0 );
+            wxMoButton* button = new wxMoButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxPoint(160, 55));
+            //wxMoButton* button2 = new wxMoButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+            wxMoButton* button2 = new wxMoButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxPoint(200, 55), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
             buttonSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             buttonSizer->Add(button2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5);
             innerSizer->Add(buttonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -807,14 +814,18 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
                 bitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
             }
             
-            innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Bitmap buttons:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
+            //wxMoStaticText *bitmapButtonsLabel = new wxMoStaticText(panel, wxID_STATIC, _("Bitmap buttons:"));
+            wxMoStaticText *bitmapButtonsLabel = new wxMoStaticText(panel, wxID_STATIC, _("Bitmap buttons:"), wxPoint(20, 100));
+            innerSizer->Add(bitmapButtonsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxBoxSizer* bmpButtonSizer = new wxBoxSizer(wxHORIZONTAL);
-            wxMoBitmapButton* bitmapButton = new wxMoBitmapButton( panel, wxID_ANY, bitmap, wxDefaultPosition, wxDefaultSize, 0 );
-            //bitmapButton->SetBackgroundColour(wxColour(wxT("#C21212")));
+            //wxMoBitmapButton* bitmapButton = new wxMoBitmapButton( panel, wxID_ANY, bitmap, wxDefaultPosition, wxDefaultSize, 0 );
+            wxMoBitmapButton* bitmapButton = new wxMoBitmapButton( panel, wxID_ANY, bitmap, wxPoint(160, 100));
+            bitmapButton->SetBackgroundColour(wxColour(wxT("#C21212")));
             bmpButtonSizer->Add(bitmapButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             
-            wxMoBitmapButton* bitmapButton2 = new wxMoBitmapButton( panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_DISCLOSURE );
+            //wxMoBitmapButton* bitmapButton2 = new wxMoBitmapButton( panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_DISCLOSURE );
+            wxMoBitmapButton* bitmapButton2 = new wxMoBitmapButton( panel, wxID_ANY, wxNullBitmap, wxPoint(200, 100), wxDefaultSize, wxBU_DISCLOSURE );
             bmpButtonSizer->Add(bitmapButton2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             innerSizer->Add(bmpButtonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 0);
             
@@ -824,22 +835,28 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
                 wxMemoryInputStream is(toucan_png, sizeof(toucan_png));
                 staticBitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
             }
-            
-#if 0
+
+#if 0   // FIXME
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Static bitmap:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxMoStaticBitmap* staticBitmapItem = new wxMoStaticBitmap( panel, wxID_ANY, staticBitmap);
             innerSizer->Add(staticBitmapItem, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
             
-            innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Text control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
+            //wxMoStaticText *textControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Text control:"));
+            wxMoStaticText *textControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Text control:"), wxPoint(20, 150));
+            innerSizer->Add(textControlLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoTextCtrl* textCtrl = new wxMoTextCtrl( panel, wxID_ANY, _("Text"), wxDefaultPosition, wxSize(120, -1), 0 );
+            //wxMoTextCtrl* textCtrl = new wxMoTextCtrl( panel, wxID_ANY, _("Text"), wxDefaultPosition, wxSize(120, -1), 0 );
+            wxMoTextCtrl* textCtrl = new wxMoTextCtrl( panel, wxID_ANY, _("Text"), wxPoint(160, 150), wxSize(120, -1), 0 );
             innerSizer->Add(textCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             
-            innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Search control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
+            //wxMoStaticText *searchControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Search control:"));
+            wxMoStaticText *searchControlLabel = new wxMoStaticText(panel, wxID_STATIC, _("Search control:"), wxPoint(20, 190));
+            innerSizer->Add(searchControlLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoSearchCtrl* searchCtrl = new wxMoSearchCtrl( panel, wxID_ANY, _("Search"), wxDefaultPosition, wxSize(120, -1), 0 );
+            //wxMoSearchCtrl* searchCtrl = new wxMoSearchCtrl( panel, wxID_ANY, _("Search"), wxDefaultPosition, wxSize(120, -1), 0 );
+            wxMoSearchCtrl* searchCtrl = new wxMoSearchCtrl( panel, wxID_ANY, _("Search"), wxPoint(160, 190), wxSize(120, -1), 0 );
             innerSizer->Add(searchCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
             PushWindow(panel, _("Basic Controls"));
