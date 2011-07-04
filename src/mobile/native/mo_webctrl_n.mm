@@ -23,17 +23,32 @@
 
 #include "wx/arrimpl.cpp"
 
-#ifdef __WXMSW__
-#include "wx/mobile/web/iehtmlwin.h"
-#endif
-
 extern WXDLLEXPORT_DATA(const wxChar) wxWebCtrlNameStr[] = wxT("WebCtrl");
 
-IMPLEMENT_DYNAMIC_CLASS(wxMoWebCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxMoWebCtrl, wxWebKitCtrl)
 
-BEGIN_EVENT_TABLE(wxMoWebCtrl, wxControl)
+BEGIN_EVENT_TABLE(wxMoWebCtrl, wxWebKitCtrl)
     EVT_SIZE(wxMoWebCtrl::OnSize)
 END_EVENT_TABLE()
+
+/// Default constructor.
+wxMoWebCtrl::wxMoWebCtrl()
+{
+    Init();
+}
+
+/// Constructor.
+wxMoWebCtrl::wxMoWebCtrl(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxValidator& validator,
+                         const wxString& name)
+{
+    Init();
+    Create(parent, id, pos, size, style, validator, name);
+}
 
 bool wxMoWebCtrl::Create(wxWindow *parent,
                       wxWindowID id,
@@ -43,13 +58,12 @@ bool wxMoWebCtrl::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // FIXME stub
-
-    return true;
+    return wxWebKitCtrl::Create(parent, id, wxEmptyString, pos, size, style, validator, name);
 }
 
 wxMoWebCtrl::~wxMoWebCtrl()
 {
+    
 }
 
 void wxMoWebCtrl::Init()
@@ -96,34 +110,4 @@ bool wxMoWebCtrl::SetFont(const wxFont& font)
 void wxMoWebCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     // FIXME stub
-}
-
-bool wxMoWebCtrl::LoadURL(const wxString& url)
-{
-    // FIXME stub
-    return true;
-}
-
-bool wxMoWebCtrl::CanGoBack()
-{
-    // FIXME stub
-    return true;
-}
-
-bool wxMoWebCtrl::CanGoForward()
-{
-    // FIXME stub
-    return true;
-}
-
-bool wxMoWebCtrl::GoBack()
-{
-    // FIXME stub
-    return true;
-}
-
-bool wxMoWebCtrl::GoForward()
-{
-    // FIXME stub
-    return true;
 }

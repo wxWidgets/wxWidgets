@@ -14,6 +14,7 @@
 
 #include "wx/bitmap.h"
 #include "wx/control.h"
+#include "wx/html/webkit.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxWebCtrlNameStr[];
 
@@ -25,11 +26,11 @@ extern WXDLLEXPORT_DATA(const wxChar) wxWebCtrlNameStr[];
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoWebCtrl : public wxControl
+class WXDLLEXPORT wxMoWebCtrl : public wxWebKitCtrl
 {
 public:
     /// Default constructor.
-    wxMoWebCtrl() { Init(); }
+    wxMoWebCtrl();
     
     /// Constructor.
     wxMoWebCtrl(wxWindow *parent,
@@ -38,11 +39,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxWebCtrlNameStr)
-    {
-        Init();
-        Create(parent, id, pos, size, style, validator, name);
-    }
+                const wxString& name = wxWebCtrlNameStr);
     
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -55,28 +52,6 @@ public:
     virtual ~wxMoWebCtrl();
     
     void Init();
-    
-    /// Begins loading the specified URL.
-    bool LoadURL(const wxString& url);
-    
-    /// Returns true if it is possible to go back in the browser history.
-    bool CanGoBack();
-    
-    /// Returns true if it is possible to go forward in the browser history.
-    bool CanGoForward();
-    
-    /// Goes back in the browser history.
-    bool GoBack();
-    
-    /// Goes forward in the browser history.
-    bool GoForward();
-    
-    /// If scaling is true, the user will be able to adjust the zoom.
-    /// The default is false.
-    void SetUserScaling(bool scaling) { m_userScaling = scaling; }
-    
-    /// Returns true if the user can adjust the zoom.
-    bool GetUserScaling() const { return m_userScaling; }
     
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);

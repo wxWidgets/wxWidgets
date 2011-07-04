@@ -2610,6 +2610,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/textctrl.mm
     src/osx/iphone/toolbar.mm
     src/osx/iphone/utils.mm
+    src/osx/iphone/webkit.mm
     src/osx/iphone/window.mm
 </set>
 

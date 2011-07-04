@@ -14,12 +14,17 @@
 
 #if wxUSE_WEBKIT
 
-#if !defined(__WXMAC__) && !defined(__WXCOCOA__)
+#if !defined(__WXMAC__) && !defined(__WXCOCOA__) && !defined(__WXOSX_IPHONE__)
 #error "wxWebKitCtrl not implemented for this platform"
 #endif
 
 #include "wx/control.h"
-DECLARE_WXCOCOA_OBJC_CLASS(WebView); 
+
+#if wxOSX_USE_IPHONE
+    DECLARE_WXCOCOA_OBJC_CLASS(wxUIWebView);
+#else
+    DECLARE_WXCOCOA_OBJC_CLASS(WebView);
+#endif
 
 // ----------------------------------------------------------------------------
 // Web Kit Control
@@ -37,7 +42,8 @@ public:
                     wxWindowID winID,
                     const wxString& strURL,
                     const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize, long style = 0,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxWebKitCtrlNameStr)
     {
@@ -47,7 +53,8 @@ public:
                 wxWindowID winID,
                 const wxString& strURL,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxWebKitCtrlNameStr);
     virtual ~wxWebKitCtrl();
@@ -62,7 +69,8 @@ public:
     void Stop();
     bool CanGetPageSource();
     wxString GetPageSource();
-    void SetPageSource(const wxString& source, const wxString& baseUrl = wxEmptyString);
+    void SetPageSource(const wxString& source,
+                       const wxString& baseUrl = wxEmptyString);
     wxString GetPageURL(){ return m_currentURL; }
     void SetPageTitle(const wxString& title) { m_pageTitle = title; }
     wxString GetPageTitle(){ return m_pageTitle; }
@@ -87,6 +95,15 @@ public:
 
     void SetScrollPos(int pos);
     int GetScrollPos();
+    
+#if wxOSX_USE_IPHONE
+    /// If scaling is true, the user will be able to adjust the zoom.
+    /// The default is false.
+    void SetUserScaling(bool scaling);
+    
+    /// Returns true if the user can adjust the zoom.
+    bool GetUserScaling() const;
+#endif  // wxOSX_USE_IPHONE
 
     // don't hide base class virtuals
     virtual void SetScrollPos( int orient, int pos, bool refresh = true )
@@ -107,8 +124,20 @@ private:
     wxWindowID m_windowID;
     wxString m_currentURL;
     wxString m_pageTitle;
+    
+#if wxOSX_USE_IPHONE
+    // Takes note of the curr. text size; used by IncreaseTextSize() / DecreaseTextSize()
+    unsigned int m_currTextSize;
+    
+    // Adjusts text size according to m_currTextSize
+    void AdjustTextSize();
+#endif    
 
+#if wxOSX_USE_IPHONE
+    WX_wxUIWebView m_webView;
+#else
     WX_WebView m_webView;
+#endif
 
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
@@ -125,7 +154,7 @@ enum {
     wxWEBKIT_STATE_REDIRECTING = 4,
     wxWEBKIT_STATE_TRANSFERRING = 8,
     wxWEBKIT_STATE_STOP = 16,
-        wxWEBKIT_STATE_FAILED = 32
+    wxWEBKIT_STATE_FAILED = 32
 };
 
 enum {

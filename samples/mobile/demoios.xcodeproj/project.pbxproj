@@ -16,6 +16,7 @@
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
 		B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */; };
 		B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC11813C1B30E00FA1ADF /* listbox.mm */; };
+		B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC24313C1D6C800FA1ADF /* webkit.mm */; };
 		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
 		B913435013BC0A780024E59E /* navctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B913434F13BC0A780024E59E /* navctrl.mm */; };
 		B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA6D3A13BEF72300061979 /* tablecell.mm */; };
@@ -102,6 +103,7 @@
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = segctrl.mm; path = ../../src/osx/iphone/segctrl.mm; sourceTree = SOURCE_ROOT; };
 		B90DC11813C1B30E00FA1ADF /* listbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = listbox.mm; path = ../../src/osx/iphone/listbox.mm; sourceTree = SOURCE_ROOT; };
+		B90DC24313C1D6C800FA1ADF /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/osx/iphone/webkit.mm; sourceTree = SOURCE_ROOT; };
 		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
 		B913434F13BC0A780024E59E /* navctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navctrl.mm; path = ../../src/osx/iphone/navctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9CA6D3A13BEF72300061979 /* tablecell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablecell.mm; path = ../../src/osx/iphone/tablecell.mm; sourceTree = SOURCE_ROOT; };
@@ -307,6 +309,7 @@
 				B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */,
 				B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */,
 				B9DF073C13B9FCF700D6F0D8 /* utils.mm */,
+				B90DC24313C1D6C800FA1ADF /* webkit.mm */,
 				B9DF073D13B9FCF700D6F0D8 /* window.mm */,
 			);
 			name = "src-osx-iphone";
@@ -537,6 +540,7 @@
 				B9CA731513BFA41000061979 /* pagectrl.mm in Sources */,
 				B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */,
 				B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */,
+				B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

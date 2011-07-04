@@ -313,11 +313,6 @@
 #define wxUSE_PROPGRID 0
 #endif
 
-#if wxUSE_WEBKIT
-#undef wxUSE_WEBKIT
-#define wxUSE_WEBKIT 0
-#endif
-
 #if wxUSE_DATAOBJ
 #undef wxUSE_DATAOBJ
 #define wxUSE_DATAOBJ 0
