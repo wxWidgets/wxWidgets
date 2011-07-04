@@ -72,8 +72,12 @@ wxSize wxControl::DoGetBestSize() const
     {
         GtkRequisition req;
 #ifdef __WXGTK30__
-        GTK_WIDGET_GET_CLASS(m_widget)->get_preferred_width(m_widget, &(req.width), NULL);
-        GTK_WIDGET_GET_CLASS(m_widget)->get_preferred_height(m_widget, &(req.height), NULL);
+        // CZ: gtk_widget_size_request() is deprecated in gtk3.0
+        //gtk_widget_size_request(GTK_WIDGET(m_widget), &req);
+        
+        // CZ: gtk_widget_get_preferred_size() is recommended in gtk3.0. But I'm not sure if I use
+        // it correctly here, especially the third argument 'NULL'.
+        gtk_widget_get_preferred_size(GTK_WIDGET(m_widget), &req, NULL);
 #else
         GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
 #endif
