@@ -1502,8 +1502,8 @@ public:
     bool LeftDClick() const { return (m_eventType == wxEVT_LEFT_DCLICK); }
     bool MiddleDClick() const { return (m_eventType == wxEVT_MIDDLE_DCLICK); }
     bool RightDClick() const { return (m_eventType == wxEVT_RIGHT_DCLICK); }
-    bool Aux1DClick() const { return (m_eventType == wxEVT_AUX1_UP); }
-    bool Aux2DClick() const { return (m_eventType == wxEVT_AUX2_UP); }
+    bool Aux1DClick() const { return (m_eventType == wxEVT_AUX1_DCLICK); }
+    bool Aux2DClick() const { return (m_eventType == wxEVT_AUX2_DCLICK); }
 
     // True if a button is down and the mouse is moving
     bool Dragging() const
