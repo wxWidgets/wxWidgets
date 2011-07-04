@@ -1,26 +1,42 @@
                wxWidgets 2.9.2 Release Notes
                =============================
 
-Welcome to the latest release of wxWidgets, a cross-platform C++
-framework for writing advanced GUI applications using native
-controls where possible.
+Welcome to the latest release of wxWidgets, a free cross-platform C++
+framework for writing advanced GUI applications using native controls.
+
 
 In addition to common and advanced GUI facilities such as frames,
 scrolling windows, toolbars, tree controls, icons, device contexts,
 printing, splitter windows and so on, there are wrappers for common
-file operations, and facilities for writing TCP/IP applications,
-thread handling, and more.
+file operations, facilities for writing network applications,
+thread handling, and so on. You can learn more about wxWidgets at
+
+        http://www.wxwidgets.org/
+
+
+wxWidgets sources are available for download from
+
+        https://sourceforge.net/projects/wxwindows/files/2.9.2/
+
+or
+
+        ftp://ftp.wxwidgets.org/pub/2.9.2/
+
+Please see the "Files" section below for the description of various
+files available at these locations.
+
 
 A detailed reference manual including in-depth overviews for various
 topics is supplied in various formats and can be accessed online at
-http://docs.wxwidgets.org/2.9.2/
+
+        http://docs.wxwidgets.org/2.9.2/
 
 
 Note about naming: while 2.9.2 is called a "development" release,
-this only means that API is not guaranteed to remain unchanged in
-the subsequent 2.9.x releases, unlike in the stable 2.8.x branch. We
-believe the current version is stable and suitable for use in
-production environment.
+this only means that API is not guaranteed to remain unchanged in the
+subsequent 2.9.x releases (although it is still likely that it will),
+unlike in the stable 2.8.x branch. We believe the current version is
+stable and suitable for use in production environment.
 
 
 
@@ -71,15 +87,19 @@ date status.
 Files
 -----
 
-The distribution is available in archive formats appropriate to the
-target system, i.e. ZIP or 7z for Microsoft Windows and compressed tar
-archives for Unix systems. Please notice that some Windows tools still
-don't accept files with Unix line endings and that compiling sources
-with DOS line endings under Unix will fail, so please choosw the
-correct file for your system.
+wxWidgets is distributed in source form in several archive formats.
+ZIP and 7z archives are for Microsoft Windows users and contain the
+files with DOS/Windows line endings while the compressed tar archives
+for Unix systems users (including OS X) and contain the files with
+Unix line endings. Please notice that some Windows tools still don't
+accept files with Unix line endings and that compiling sources with
+DOS line endings under Unix will fail, so please choose the correct
+file for your system.
 
-See the download pages for the details of the files available for this
-release.
+In addition to the sources, documentation in HTML, CHM and HTB
+(wxWidgets help viewer) formats is provided as well as an installer
+for Microsoft Windows. Notice that you will still need to compile
+wxWidgets even when using the installer.
 
 
 Installation
