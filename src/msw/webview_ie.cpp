@@ -138,11 +138,6 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
     // FIXME: calling wxYield is not elegant nor very reliable probably
     wxYield();
 
-    wxVariant documentVariant = m_ie.GetProperty("Document");
-    void* documentPtr = documentVariant.GetVoidPtr();
-
-    wxASSERT (documentPtr != NULL);
-
     // TODO: consider the "baseUrl" parameter if possible
     // TODO: consider encoding
     BSTR bstr = SysAllocString(html.wc_str());
@@ -157,8 +152,7 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
         param->bstrVal = bstr;
 
         hr = SafeArrayUnaccessData(psaStrings);
-
-        IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
+        IHTMLDocument2* document = GetDocument();
         document->write(psaStrings);
 
         // SafeArrayDestroy calls SysFreeString for each BSTR
@@ -173,16 +167,7 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
 
 wxString wxWebViewIE::GetPageSource()
 {
-    wxVariant documentVariant = m_ie.GetProperty("Document");
-    void* documentPtr = documentVariant.GetVoidPtr();
-
-    if (documentPtr == NULL)
-    {
-        return wxEmptyString;
-    }
-
-    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
-
+    IHTMLDocument2* document = GetDocument();
     IHTMLElement *bodyTag = NULL;
     IHTMLElement *htmlTag = NULL;
     document->get_body(&bodyTag);
@@ -504,11 +489,7 @@ wxString wxWebViewIE::GetCurrentURL()
 
 wxString wxWebViewIE::GetCurrentTitle()
 {
-    wxVariant documentVariant = m_ie.GetProperty("Document");
-    void* documentPtr = documentVariant.GetVoidPtr();
-    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
-
-    wxASSERT(documentPtr && document);
+    IHTMLDocument2* document = GetDocument();
 
     BSTR title;
     document->get_nameProp(&title);
@@ -565,11 +546,7 @@ void wxWebViewIE::Redo()
 
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
-    wxVariant documentVariant = m_ie.GetProperty("Document");
-    void* documentPtr = documentVariant.GetVoidPtr();
-    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
-
-    wxASSERT(documentPtr && document);
+    IHTMLDocument2* document = GetDocument();
 
     VARIANT_BOOL enabled;
     document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
@@ -579,13 +556,18 @@ bool wxWebViewIE::CanExecCommand(wxString command)
 
 void wxWebViewIE::ExecCommand(wxString command)
 {
-    wxVariant documentVariant = m_ie.GetProperty("Document");
-    void* documentPtr = documentVariant.GetVoidPtr();
-    IHTMLDocument2* document = (IHTMLDocument2*)documentPtr;
-
-    wxASSERT(documentPtr && document);
-
+    IHTMLDocument2* document = GetDocument();
     document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+}
+
+IHTMLDocument2* wxWebViewIE::GetDocument()
+{
+    wxVariant variant = m_ie.GetProperty("Document");
+    IHTMLDocument2* document = (IHTMLDocument2*)variant.GetVoidPtr();
+
+    wxASSERT(document);
+
+    return document;
 }
 
 void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)

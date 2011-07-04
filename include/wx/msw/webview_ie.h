@@ -21,6 +21,8 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
+class IHTMLDocument2;
+
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
 public:
@@ -141,6 +143,7 @@ private:
     //Generic helper functions for IHtmlDocument commands
     bool CanExecCommand(wxString command);
     void ExecCommand(wxString command);
+    IHTMLDocument2* GetDocument();
 
 };
 
