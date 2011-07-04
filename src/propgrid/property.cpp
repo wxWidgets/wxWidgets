@@ -24,6 +24,7 @@
     #include "wx/hash.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/math.h"
     #include "wx/event.h"
     #include "wx/window.h"
     #include "wx/panel.h"
@@ -2103,8 +2104,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
             // Here we use high-quality wxImage scaling functions available
             wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
-            img.Rescale(((double)bmp.GetWidth())*scaleY,
-                        ((double)bmp.GetHeight())*scaleY,
+            img.Rescale(wxRound(bmp.GetWidth()*scaleY),
+                        wxRound(bmp.GetHeight()*scaleY),
                         wxIMAGE_QUALITY_HIGH);
             wxBitmap* bmpNew = new wxBitmap(img, 32);
         #else
