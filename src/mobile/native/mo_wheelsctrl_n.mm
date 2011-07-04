@@ -43,6 +43,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxWheelsCtrlEvent, wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_WHEEL_SELECTED)
 
+
+#pragma mark wxMoWheelsCtrl
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -50,6 +53,25 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_WHEEL_SELECTED)
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
+
+/// Default constructor.
+wxMoWheelsCtrl::wxMoWheelsCtrl()
+{
+    Init();
+}
+
+/// Constructor.
+wxMoWheelsCtrl::wxMoWheelsCtrl(wxWindow *parent,
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
+{
+    Init();
+    Create(parent, id, pos, size, style, validator, name);
+}
 
 bool wxMoWheelsCtrl::Create(wxWindow *parent,
                       wxWindowID id,
@@ -172,7 +194,8 @@ wxSize wxMoWheelsCtrl::GetRowSizeForComponent(int component) const
 }
 
 // Sets the data source object, recreating the components.
-void wxMoWheelsCtrl::SetDataSource(wxMoWheelsDataSource* dataSource, bool ownsDataSource)
+void wxMoWheelsCtrl::SetDataSource(wxMoWheelsDataSource* dataSource,
+                                   bool ownsDataSource)
 {
     // FIXME stub
 }
@@ -211,10 +234,15 @@ wxSize wxMoWheelsCtrl::DoGetBestSize() const
     return wxSize(100, 100);
 }
 
+
+#pragma mark wxMoWheelsDataSource
+
 IMPLEMENT_CLASS(wxMoWheelsDataSource, wxEvtHandler)
 
 // Override to intercept row click; by default, sends an event to itself and then to control.
-bool wxMoWheelsDataSource::OnSelectRow(wxMoWheelsCtrl* ctrl, int component, int row)
+bool wxMoWheelsDataSource::OnSelectRow(wxMoWheelsCtrl* ctrl,
+                                       int component,
+                                       int row)
 {
     // FIXME stub
     
@@ -222,20 +250,26 @@ bool wxMoWheelsDataSource::OnSelectRow(wxMoWheelsCtrl* ctrl, int component, int 
 }
 
 // Override to provide the row height for a component. Should returns a height in pixels.
-int wxMoWheelsDataSource::GetRowHeightForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl), int WXUNUSED(component))
+int wxMoWheelsDataSource::GetRowHeightForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                                   int WXUNUSED(component))
 {
     return 0;
 }
 
 // Override to provide the row width for a component. Should returns a width in pixels.
-int wxMoWheelsDataSource::GetRowWidthForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl), int WXUNUSED(component))
+int wxMoWheelsDataSource::GetRowWidthForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                                  int WXUNUSED(component))
 {
     return 0;
 }
 
+
+#pragma mark wxMoWheelsTextDataSource
+
 IMPLEMENT_CLASS(wxMoWheelsTextDataSource, wxMoWheelsDataSource)
 
-wxMoWheelsTextDataSource::wxMoWheelsTextDataSource(int componentCount, const wxSize& rowSize)
+wxMoWheelsTextDataSource::wxMoWheelsTextDataSource(int componentCount,
+                                                   const wxSize& rowSize)
 {
     // FIXME stub
 }
@@ -258,7 +292,8 @@ wxArrayString wxMoWheelsTextDataSource::GetStrings(int component) const
     return empty;
 }
 
-void wxMoWheelsTextDataSource::SetStrings(const wxArrayString& strings, int component)
+void wxMoWheelsTextDataSource::SetStrings(const wxArrayString& strings,
+                                          int component)
 {
     // FIXME stub
 }
@@ -270,13 +305,15 @@ wxSize wxMoWheelsTextDataSource::GetRowSize(int component) const
     return wxSize(0, 0);
 }
 
-void wxMoWheelsTextDataSource::SetRowSize(const wxSize& sz, int component)
+void wxMoWheelsTextDataSource::SetRowSize(const wxSize& sz,
+                                          int component)
 {
     // FIXME stub
 }
 
 // Override to provide the number of rows in a component.
-int wxMoWheelsTextDataSource::GetNumberOfRowsForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl), int component)
+int wxMoWheelsTextDataSource::GetNumberOfRowsForComponent(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                                          int component)
 {
     // FIXME stub
 
@@ -285,7 +322,9 @@ int wxMoWheelsTextDataSource::GetNumberOfRowsForComponent(wxMoWheelsCtrl* WXUNUS
 
 // Override to provide the title for a component's row. If you override GetRowWindow instead,
 // this method is optional.
-wxString wxMoWheelsTextDataSource::GetRowTitle(wxMoWheelsCtrl* WXUNUSED(ctrl), int component, int row)
+wxString wxMoWheelsTextDataSource::GetRowTitle(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                               int component,
+                                               int row)
 {
     // FIXME stub
 
@@ -293,7 +332,8 @@ wxString wxMoWheelsTextDataSource::GetRowTitle(wxMoWheelsCtrl* WXUNUSED(ctrl), i
 }
 
 // Override to provide the row height for a component. Should returns a height in pixels.
-int wxMoWheelsTextDataSource::GetRowHeightForComponent(wxMoWheelsCtrl* ctrl, int component)
+int wxMoWheelsTextDataSource::GetRowHeightForComponent(wxMoWheelsCtrl* ctrl,
+                                                       int component)
 {
     // FIXME stub
 
@@ -301,21 +341,88 @@ int wxMoWheelsTextDataSource::GetRowHeightForComponent(wxMoWheelsCtrl* ctrl, int
 }
 
 // Override to provide the row width for a component. Should returns a width in pixels.
-int wxMoWheelsTextDataSource::GetRowWidthForComponent(wxMoWheelsCtrl* ctrl, int component)
+int wxMoWheelsTextDataSource::GetRowWidthForComponent(wxMoWheelsCtrl* ctrl,
+                                                      int component)
 {
     // FIXME stub
 
     return 0;
 }
 
+
+#pragma mark wxMoWheelComponent
+
 IMPLEMENT_CLASS(wxMoWheelComponent, wxEvtHandler)
+
+// Constructor.
+wxMoWheelComponent::wxMoWheelComponent(wxMoWheelsCtrl* wheelsCtrl,
+                                       wxMoWheelsListBox* listBox,
+                                       int n)
+{
+    Init();
+    m_wheelsCtrl = wheelsCtrl;
+    m_listBox = listBox;
+    m_componentNumber = n;
+}
 
 void wxMoWheelComponent::Init()
 {
     // FIXME stub
 }
 
+wxMoWheelsListBox* wxMoWheelComponent::GetListBox() const
+{
+    return m_listBox;
+}
+
+void wxMoWheelComponent::SetListBox(wxMoWheelsListBox* listBox)
+{
+    m_listBox = listBox;
+}
+
+int wxMoWheelComponent::GetComponentNumber() const
+{
+    return m_componentNumber;
+}
+
+const wxRect& wxMoWheelComponent::GetRect() const
+{
+    return m_rect;
+}
+
+void wxMoWheelComponent::SetRect(const wxRect& rect)
+{
+    m_rect = rect;
+}
+
+wxMoWheelsCtrl* wxMoWheelComponent::GetWheelsCtrl() const
+{
+    return m_wheelsCtrl;
+}
+
+
+#pragma mark wxMoWheelsListBox
+
 IMPLEMENT_CLASS(wxMoWheelsListBox, wxMoVListBox)
+
+/// Default constructor.
+wxMoWheelsListBox::wxMoWheelsListBox()
+{
+    Init();
+}
+
+/// Constructor.
+wxMoWheelsListBox::wxMoWheelsListBox(wxWindow *parent,
+                                     wxWindowID id,
+                                     const wxPoint& pos,
+                                     const wxSize& size,
+                                     long style,
+                                     const wxString& name)
+{
+    Init();
+    
+    Create(parent, id, pos, size, style, name);
+}
 
 // Creation function.
 bool wxMoWheelsListBox::Create(wxWindow *parent,
@@ -330,6 +437,11 @@ bool wxMoWheelsListBox::Create(wxWindow *parent,
     return true;
 }
 
+wxMoWheelsListBox::~wxMoWheelsListBox()
+{
+
+}
+
 // common part of all ctors
 void wxMoWheelsListBox::Init()
 {
@@ -338,7 +450,9 @@ void wxMoWheelsListBox::Init()
 
 // the derived class must implement this function to actually draw the item
 // with the given index on the provided DC
-void wxMoWheelsListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+void wxMoWheelsListBox::OnDrawItem(wxDC& dc,
+                                   const wxRect& rect,
+                                   size_t n) const
 {
     // FIXME stub
 }
@@ -375,7 +489,9 @@ void wxMoWheelsListBox::DrawBackground(wxDC& dc)
     // FIXME stub
 }
 
-void wxMoWheelsListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
+void wxMoWheelsListBox::OnDrawBackground(wxDC& dc,
+                                         const wxRect& rect,
+                                         size_t n) const
 {
     // FIXME stub
 }

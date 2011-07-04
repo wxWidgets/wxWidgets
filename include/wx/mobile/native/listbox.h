@@ -12,10 +12,13 @@
 #ifndef _WX_MOBILE_NATIVE_LISTBOX_H_
 #define _WX_MOBILE_NATIVE_LISTBOX_H_
 
+#if wxUSE_LISTBOX
+
 // ----------------------------------------------------------------------------
 // headers and constants
 // ----------------------------------------------------------------------------
 
+#include "wx/listbox.h"
 #include "wx/mobile/native/wheelsctrl.h"
 
 /**
@@ -30,11 +33,12 @@
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoListBox: public wxMoWheelsCtrl
+//class WXDLLEXPORT wxMoListBox: public wxMoWheelsCtrl
+class WXDLLEXPORT wxMoListBox: public wxListBox
 {
 public:
     /// Default constructor.
-    wxMoListBox() { Init(); }
+    wxMoListBox();
     
     /// Constructor.
     wxMoListBox(wxWindow *parent,
@@ -44,12 +48,7 @@ public:
                 const wxArrayString& strings = wxArrayString(),
                 long style = wxLB_SINGLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxMoVListBoxNameStr)
-    {
-        Init();
-        
-        (void)Create(parent, id, pos, size, strings, style, validator, name);
-    }
+                const wxString& name = wxMoVListBoxNameStr);
     
     /// Creation function.
     bool Create(wxWindow *parent,
@@ -61,8 +60,9 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxMoVListBoxNameStr);
     
-    virtual ~wxMoListBox () {}
+    virtual ~wxMoListBox();
     
+#if 0
     /// Appends a string to the end of the list box.
     void Append(const wxString& str);
     
@@ -79,7 +79,8 @@ public:
     wxString GetStringSelection() const;
     
     /// Sets the selection by string, if in single-selection mode.
-    void SetStringSelection(const wxString& str);
+    // FIXME set return type to bool in generic too
+    bool SetStringSelection(const wxString& str);
     
     /// Gets the string at the given position.
     wxString GetString(int n) const;
@@ -91,26 +92,32 @@ public:
     wxArrayString GetStrings() const;
     
     /// Returns the number of strings in the listbox.
-    int GetCount() const;
+    // FIXME set return type to uint in generic too
+    unsigned int GetCount() const;
     
     /// Inserts items into the listbox at the given position.
     void InsertItems(const wxArrayString& items, int pos);
     
     /// Gets the selection indices if the listbox is in multiple selection mode.
     int GetSelections(wxArrayInt& selections) const;
+#endif  // 0
     
 protected:
+
+    void Init();
+
     void OnWheelSelected(wxWheelsCtrlEvent& event);
-    
+
+#if 0    
     virtual wxSize DoGetBestSize() const;
     
     wxMoWheelsTextDataSource* GetTextDataSource() const;
-    
-    // common part of all ctors
-    void Init();
-    
+#endif
+        
     DECLARE_CLASS(wxMoListBox)
     DECLARE_EVENT_TABLE()
 };
+
+#endif  // wxUSE_LISTBOX
 
 #endif // _WX_MOBILE_NATIVE_LISTBOX_H_

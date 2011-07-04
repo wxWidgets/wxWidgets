@@ -16,37 +16,65 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTBOX
+
 #include "wx/dcscreen.h"
 #include "wx/settings.h"
 
+#include "wx/listbox.h"
 #include "wx/mobile/native/listbox.h"
 
-IMPLEMENT_CLASS(wxMoListBox, wxMoWheelsCtrl)
+IMPLEMENT_CLASS(wxMoListBox, wxListBox)
 
-BEGIN_EVENT_TABLE(wxMoListBox, wxMoWheelsCtrl)
+BEGIN_EVENT_TABLE(wxMoListBox, wxListBox)
     EVT_WHEEL_SELECTED(wxID_ANY, wxMoListBox::OnWheelSelected)
 END_EVENT_TABLE()
 
 
-bool wxMoListBox::Create(wxWindow *parent,
-            wxWindowID id,
-            const wxPoint& pos,
-            const wxSize& size,
-            const wxArrayString& strings,
-            long style,
-            const wxValidator& validator,
-            const wxString& name)
+/// Default constructor.
+wxMoListBox::wxMoListBox()
 {
-    // FIXME stub
-
-    return true;
+    Init();
 }
 
-// common part of all ctors
+/// Constructor.
+wxMoListBox::wxMoListBox(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         const wxArrayString& strings,
+                         long style,
+                         const wxValidator& validator,
+                         const wxString& name)
+{
+    Init();
+    
+    Create(parent, id, pos, size, strings, style, validator, name);
+}
+
+wxMoListBox::~wxMoListBox()
+{
+    
+}
+
 void wxMoListBox::Init()
 {
+    
 }
 
+bool wxMoListBox::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         const wxArrayString& strings,
+                         long style,
+                         const wxValidator& validator,
+                         const wxString& name)
+{
+    return wxListBox::Create(parent, id, pos, size, strings, style, validator, name);
+}
+
+#if 0
 wxMoWheelsTextDataSource* wxMoListBox::GetTextDataSource() const
 {
     // FIXME stub
@@ -88,9 +116,10 @@ wxString wxMoListBox::GetStringSelection() const
     return wxEmptyString;
 }
 
-void wxMoListBox::SetStringSelection(const wxString& str)
+bool wxMoListBox::SetStringSelection(const wxString& str)
 {
     // FIXME stub
+    return false;
 }
 
 wxString wxMoListBox::GetString(int n) const
@@ -121,7 +150,7 @@ int wxMoListBox::GetSelections(wxArrayInt& selections) const
 }
 
 // Returns the number of strings in the listbox.
-int wxMoListBox::GetCount() const
+unsigned int wxMoListBox::GetCount() const
 {
     // FIXME stub
 
@@ -135,8 +164,11 @@ wxSize wxMoListBox::DoGetBestSize() const
     wxSize empty(1, 1);
     return empty;
 }
+#endif  // 0
 
 void wxMoListBox::OnWheelSelected(wxWheelsCtrlEvent& event)
 {
     // FIXME stub
 }
+
+#endif  // wxUSE_LISTBOX

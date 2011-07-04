@@ -1822,7 +1822,7 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxmobileiphone" */;
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxMobileiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -2391,7 +2391,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxmobileiphone" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxMobileiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,

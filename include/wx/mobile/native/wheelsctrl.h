@@ -24,6 +24,9 @@ class WXDLLEXPORT wxMoWheelsCtrl;
 class WXDLLEXPORT wxMoWheelsDataSource;
 class WXDLLEXPORT wxMoWheelsListBox;
 
+
+#pragma mark wxMoWheelComponent
+
 class wxMoWheelComponent: public wxEvtHandler
 {
     DECLARE_CLASS(wxMoWheelComponent)
@@ -31,18 +34,19 @@ public:
 
     // Constructor.
     wxMoWheelComponent(wxMoWheelsCtrl* wheelsCtrl,
-        wxMoWheelsListBox* listBox, int n)
-    { Init(); m_wheelsCtrl = wheelsCtrl; m_listBox = listBox; m_componentNumber = n; }
+                       wxMoWheelsListBox* listBox,
+                       int n);
 
     void Init();
 
-    wxMoWheelsListBox* GetListBox() const { return m_listBox; }
-    void SetListBox(wxMoWheelsListBox* listBox) { m_listBox = listBox; }
-    int GetComponentNumber() const { return m_componentNumber; }
-    const wxRect& GetRect() const { return m_rect; }
-    void SetRect(const wxRect& rect) { m_rect = rect; }
-    wxMoWheelsCtrl* GetWheelsCtrl() const { return m_wheelsCtrl; }
-
+    wxMoWheelsListBox* GetListBox() const;
+    void SetListBox(wxMoWheelsListBox* listBox);
+    int GetComponentNumber() const;
+    const wxRect& GetRect() const;
+    void SetRect(const wxRect& rect);
+    wxMoWheelsCtrl* GetWheelsCtrl() const;
+    
+private:
     wxMoWheelsListBox*  m_listBox;
     int                 m_componentNumber;
     wxRect              m_rect;
@@ -50,6 +54,9 @@ public:
 };
 
 WX_DEFINE_ARRAY_PTR(wxMoWheelComponent*, wxMoWheelComponentArray);
+
+
+#pragma mark wxMoWheelsCtrl
 
 /**
     @class wxMoWheelsCtrl
@@ -67,20 +74,16 @@ class WXDLLEXPORT wxMoWheelsCtrl: public wxControl
 {
 public:
     /// Default constructor.
-    wxMoWheelsCtrl() { Init(); }
+    wxMoWheelsCtrl();
 
     /// Constructor.
     wxMoWheelsCtrl(wxWindow *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxWheelsCtrlNameStr)
-    {
-        Init();
-        Create(parent, id, pos, size, style, validator, name);
-    }
+                   wxWindowID id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxWheelsCtrlNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -176,6 +179,9 @@ private:
     int                     m_interWheelSpacing;
 };
 
+
+#pragma mark wxWheelsCtrlEvent
+
 /**
     @class wxMoWheelsCtrlEvent
 
@@ -190,19 +196,22 @@ public:
     {
         m_component = 0;
     }
+    
     /// Copy constructor.
     wxWheelsCtrlEvent(const wxWheelsCtrlEvent& event): wxNotifyEvent(event)
     {
         m_component = event.m_component;
     }
+    
     /// Constructor.
-    wxWheelsCtrlEvent(wxEventType commandType, int id,
-                    int component, int row)
-        : wxNotifyEvent(commandType, id)
-        {
-            m_commandInt = row;
-            m_component = component;
-        }
+    wxWheelsCtrlEvent(wxEventType commandType,
+                      int id,
+                      int component,
+                      int row) : wxNotifyEvent(commandType, id)
+    {
+        m_commandInt = row;
+        m_component = component;
+    }
 
     /// Set the component
     void SetComponent(int component) { m_component = component; }
@@ -230,6 +239,9 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_WHEEL_SELECTED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_WHEEL_SELECTED, \
   id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWheelsCtrlEventFunction, & fn ), NULL),
 
+
+#pragma mark wxMoWheelsDataSource
+
 /**
     @class wxMoWheelsDataSource
 
@@ -251,28 +263,47 @@ public:
     virtual int GetNumberOfComponents(wxMoWheelsCtrl* ctrl) = 0;
 
     /// Override to provide the number of rows in a component.
-    virtual int GetNumberOfRowsForComponent(wxMoWheelsCtrl* ctrl, int component) = 0;
+    virtual int GetNumberOfRowsForComponent(wxMoWheelsCtrl* ctrl,
+                                            int component) = 0;
 
     /// Override to provide the row height for a component. Should returns a height in pixels.
-    virtual int GetRowHeightForComponent(wxMoWheelsCtrl* ctrl, int component) = 0;
+    virtual int GetRowHeightForComponent(wxMoWheelsCtrl* ctrl,
+                                         int component) = 0;
 
     /// Override to provide the row width for a component. Should returns a width in pixels.
-    virtual int GetRowWidthForComponent(wxMoWheelsCtrl* ctrl, int component) = 0;
+    virtual int GetRowWidthForComponent(wxMoWheelsCtrl* ctrl,
+                                        int component) = 0;
 
     /// Override to provide the title for a component's row. If you override GetRowWindow instead,
     /// this method is optional.
-    virtual wxString GetRowTitle(wxMoWheelsCtrl* WXUNUSED(ctrl), int WXUNUSED(component), int WXUNUSED(row)) { return wxEmptyString; }
+    virtual wxString GetRowTitle(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                 int WXUNUSED(component),
+                                 int WXUNUSED(row))
+    {
+        return wxEmptyString;
+    }
 
     /// Override to provide a control for a component's row. This is optional.
-    virtual wxWindow* GetRowWindow(wxMoWheelsCtrl* WXUNUSED(ctrl), int WXUNUSED(component), int WXUNUSED(row), wxWindow* WXUNUSED(reusingWindow)) { return NULL; }
+    virtual wxWindow* GetRowWindow(wxMoWheelsCtrl* WXUNUSED(ctrl),
+                                   int WXUNUSED(component),
+                                   int WXUNUSED(row),
+                                   wxWindow* WXUNUSED(reusingWindow))
+    {
+        return NULL;
+    }
 
     /// Override to intercept row click; by default, sends an event to itself and then to control.
-    virtual bool OnSelectRow(wxMoWheelsCtrl* ctrl, int component, int row);
+    virtual bool OnSelectRow(wxMoWheelsCtrl* ctrl,
+                             int component,
+                             int row);
 
 protected:
 
     DECLARE_CLASS(wxMoWheelsDataSource)
 };
+
+
+#pragma mark wxMoWheelsTextDataSource
 
 /**
     @class wxMoWheelsTextDataSource
@@ -290,7 +321,8 @@ class WXDLLEXPORT wxMoWheelsTextDataSource: public wxMoWheelsDataSource
 {
 public:
     /// Constructor.
-    wxMoWheelsTextDataSource(int componentCount = 1, const wxSize& rowSize = wxDefaultSize);
+    wxMoWheelsTextDataSource(int componentCount = 1,
+                             const wxSize& rowSize = wxDefaultSize);
 
     void Init();
 
@@ -298,17 +330,22 @@ public:
     virtual int GetNumberOfComponents(wxMoWheelsCtrl* WXUNUSED(ctrl)) { return m_componentCount; }
 
     /// Override to provide the number of rows in a component.
-    virtual int GetNumberOfRowsForComponent(wxMoWheelsCtrl* ctrl, int component);
+    virtual int GetNumberOfRowsForComponent(wxMoWheelsCtrl* ctrl,
+                                            int component);
 
     /// Override to provide the row height for a component. Should returns a height in pixels.
-    virtual int GetRowHeightForComponent(wxMoWheelsCtrl* ctrl, int component);
+    virtual int GetRowHeightForComponent(wxMoWheelsCtrl* ctrl,
+                                         int component);
 
     /// Override to provide the row width for a component. Should returns a width in pixels.
-    virtual int GetRowWidthForComponent(wxMoWheelsCtrl* ctrl, int component);
+    virtual int GetRowWidthForComponent(wxMoWheelsCtrl* ctrl,
+                                        int component);
 
     /// Override to provide the title for a component's row. If you override GetRowWindow instead,
     /// this method is optional.
-    virtual wxString GetRowTitle(wxMoWheelsCtrl* ctrl, int component, int row);
+    virtual wxString GetRowTitle(wxMoWheelsCtrl* ctrl,
+                                 int component,
+                                 int row);
 
 // New methods
 
@@ -330,6 +367,9 @@ protected:
     DECLARE_CLASS(wxMoWheelsDataSource)
 };
 
+
+#pragma mark wxMoWheelsListBox
+
 /**
     @class wxMoWheelsListBox
 
@@ -343,20 +383,15 @@ class WXDLLEXPORT wxMoWheelsListBox: public wxMoVListBox
 {
 public:
     /// Default constructor.
-    wxMoWheelsListBox() { Init(); }
+    wxMoWheelsListBox();
 
     /// Constructor.
     wxMoWheelsListBox(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxLB_SINGLE,
-               const wxString& name = wxMoVListBoxNameStr)
-    {
-        Init();
-
-        (void)Create(parent, id, pos, size, style, name);
-    }
+                      wxWindowID id = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxLB_SINGLE,
+                      const wxString& name = wxMoVListBoxNameStr);
 
     /// Creation function.
     bool Create(wxWindow *parent,
@@ -366,7 +401,7 @@ public:
                 long style = wxLB_SINGLE,
                 const wxString& name = wxMoVListBoxNameStr);
 
-    virtual ~wxMoWheelsListBox() {}
+    virtual ~wxMoWheelsListBox();
 
     /// Sets the wheels control implementing this control.
     void SetWheelsCtrl(wxMoWheelsCtrl* ctrl) { m_wheelsCtrl = ctrl; }
@@ -384,7 +419,9 @@ public:
     wxMoWheelComponent* GetComponent() const;
 
 protected:
-    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+    virtual void OnDrawBackground(wxDC& dc,
+                                  const wxRect& rect,
+                                  size_t n) const;
     virtual void DrawBackground(wxDC& dc);
 
     virtual wxSize DoGetBestSize() const;
@@ -393,7 +430,9 @@ protected:
 
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC
-    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
+    virtual void OnDrawItem(wxDC& dc,
+                            const wxRect& rect,
+                            size_t n) const;
 
     // the derived class must implement this method to return the height of the
     // specified item

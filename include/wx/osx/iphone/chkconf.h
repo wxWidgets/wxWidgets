@@ -133,7 +133,6 @@
 #undef wxUSE_BITMAPCOMBOBOX
 #undef wxUSE_CHECKLISTBOX
 #undef wxUSE_GRID
-#undef wxUSE_LISTBOX
 #undef wxUSE_LISTCTRL
 #undef wxUSE_SPINBTN
 #undef wxUSE_SPINCTRL
@@ -159,7 +158,6 @@
 #define wxUSE_BITMAPCOMBOBOX 0
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_GRID 0
-#define wxUSE_LISTBOX 0
 #define wxUSE_LISTCTRL 0
 #define wxUSE_SPINBTN 0
 #define wxUSE_SPINCTRL 0
