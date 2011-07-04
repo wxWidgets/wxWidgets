@@ -362,6 +362,10 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
                 variant = oleVariant.boolVal != 0;
                 break;
 
+            case VT_R4:
+                variant = oleVariant.fltVal;
+                break;
+
             case VT_R8:
                 variant = oleVariant.dblVal;
                 break;
