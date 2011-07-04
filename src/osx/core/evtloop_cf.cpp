@@ -192,7 +192,9 @@ void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(obs
     }
 }
 
-void wxCFEventLoop::DefaultModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), int activity)
+void
+wxCFEventLoop::DefaultModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer),
+                                           int WXUNUSED(activity))
 {
     /*
     if ( activity & kCFRunLoopBeforeTimers )

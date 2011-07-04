@@ -40,7 +40,7 @@
 
 
 // check if we're having a CGContext we can draw into
-inline bool wxHasCGContext(wxWindow* win, wxDC& dc)
+inline bool wxHasCGContext(wxWindow* WXUNUSED(win), wxDC& dc)
 {
     wxGCDCImpl* gcdc = wxDynamicCast( dc.GetImpl() , wxGCDCImpl);
     
