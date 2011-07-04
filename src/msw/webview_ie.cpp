@@ -650,8 +650,10 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
                 break;
 
             wxString url = evt[1].GetString();
-            //As we are complete we also add to the history list
-            if(m_historyEnabled && !m_historyLoadingFromList)
+
+            //As we are complete we also add to the history list, but not if the
+            //page is not the main page, ie it is a subframe
+            if(m_historyEnabled && !m_historyLoadingFromList && url == GetCurrentURL())
             {
                 //If we are not at the end of the list, then erase everything
                 //between us and the end before adding the new page

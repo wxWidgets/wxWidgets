@@ -148,7 +148,8 @@ public:
        will be generated per frame.
     @event{EVT_WEB_VIEW_LOADED(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
-       is fully loaded and displayed.
+       is fully loaded and displayed. Note that if the displayed HTML document has 
+       several frames, one such event will be generated per frame.
     @event{EVT_WEB_VIEW_ERRROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
        error occurs.
@@ -458,7 +459,8 @@ public:
        will be generated per frame.
     @event{EVT_WEB_VIEW_LOADED(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
-       is fully loaded and displayed.
+       is fully loaded and displayed. Note that if the displayed HTML document has 
+       several frames, one such event will be generated per frame.
     @event{EVT_WEB_VIEW_ERRROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
        error occurs.

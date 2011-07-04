@@ -461,7 +461,9 @@ void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
   */
 void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
 {
-    wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
+    //Only notify if the document is the main frame, not a subframe
+    if(evt.GetHref() == m_browser->GetCurrentURL())
+        wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
     UpdateState();
 }
 
