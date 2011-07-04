@@ -124,7 +124,13 @@ public:
   
     This control may be used to render web (HTML / CSS / javascript) documents.
     Capabilities of the HTML renderer will depend upon the backed.
-    TODO: describe each backend and its capabilities here
+
+    @c wxWEB_VIEW_BACKEND_IE uses the the Trident rendering engine, which 
+    is also used by Internet Explorer. It is important to note that by default 
+    it emulates Internet Explorer 7, this can be chaged with a registry 
+    setting, see 
+    <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
+    this</a> article for more information.
   
     Note that errors are generally reported asynchronously though the
     @c wxEVT_COMMAND_WEB_VIEW_ERROR event described below.
