@@ -2459,15 +2459,20 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     {
         m_renderer = (GtkCellRenderer*) gtk_cell_renderer_progress_new();
 
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_STRING );
-
-        g_value_set_string( &gvalue, wxGTK_CONV_FONT( m_label, GetOwner()->GetOwner()->GetFont() ) );
-        g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
-        g_value_unset( &gvalue );
-
         SetMode(mode);
         SetAlignment(align);
+
+#if !wxUSE_UNICODE
+        // We can't initialize the renderer just yet because we don't have the
+        // pointer to the column that uses this renderer yet and so attempt to
+        // dereference GetOwner() to get the font that is used as a source of
+        // encoding in multibyte-to-Unicode conversion in GTKSetLabel() in
+        // non-Unicode builds would crash. So simply remember to do it later.
+        if ( !m_label.empty() )
+            m_needsToSetLabel = true;
+        else
+#endif // !wxUSE_UNICODE
+            GTKSetLabel();
     }
     else
 #endif
@@ -2481,11 +2486,36 @@ wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
 {
 }
 
+void wxDataViewProgressRenderer::GTKSetLabel()
+{
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_STRING );
+
+    // Take care to not use GetOwner() here if the label is empty, we can be
+    // called from ctor when GetOwner() is still NULL in this case.
+    g_value_set_string( &gvalue,
+                        m_label.empty() ? ""
+                                        : wxGTK_CONV_FONT(m_label,
+                                            GetOwner()->GetOwner()->GetFont())
+                      );
+    g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+    g_value_unset( &gvalue );
+
+#if !wxUSE_UNICODE
+    m_needsToSetLabel = false;
+#endif // !wxUSE_UNICODE
+}
+
 bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
+#if !wxUSE_UNICODE
+        if ( m_needsToSetLabel )
+            GTKSetLabel();
+#endif // !wxUSE_UNICODE
+
         gint tmp = (long) value;
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_INT );
