@@ -100,54 +100,58 @@ public:
     wxMoTabCtrl();
     
     /// Constructor.
-    wxMoTabCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TEXT|wxTAB_BITMAP, const wxString& name = wxT("tabCtrl"))
-    {
-        Init();
-        
-        Create(parent, id, pos, size, style, name);
-    }
+    wxMoTabCtrl(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TEXT|wxTAB_BITMAP,
+                const wxString& name = wxT("tabCtrl"));
+    
     ~wxMoTabCtrl();
     
-    bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TEXT|wxTAB_BITMAP, const wxString& name = wxT("tabCtrl"));
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TEXT|wxTAB_BITMAP,
+                const wxString& name = wxT("tabCtrl"));
     
     void Init();
     
     // Accessors
     
     /// Get the selection
-    int GetSelection() const;
+    virtual int GetSelection() const;
     
     /// Get the tab with the current keyboard focus. Not implemented.
     int GetCurFocus() const;
     
     /// Get the associated image list
-    wxImageList* GetImageList() const { return m_buttonStrip.GetImageList(); }
+    virtual wxImageList* GetImageList() const { return m_buttonStrip.GetImageList(); }
     
     /// Get the number of items
-    int GetItemCount() const;
+    virtual int GetItemCount() const;
     
     /// Get the rect corresponding to the tab. Not implemented.
-    bool GetItemRect(int item, wxRect& rect) const;
+    virtual bool GetItemRect(int item, wxRect& rect) const;
     
     // Get the number of rows
     int GetRowCount() const;
     
     /// Get the item text
-    wxString GetItemText(int item) const ;
+    virtual wxString GetItemText(int item) const ;
     
     /// Get the item image
-    int GetItemImage(int item) const;
+    virtual int GetItemImage(int item) const;
     
     // Get the item data
     //void* GetItemData(int item) const;
     
     /// Set the selection, generating events
-    int SetSelection(int item);
+    virtual int SetSelection(int item);
     
     /// Set the selection, without generating events
-    int ChangeSelection(int item);
+    virtual int ChangeSelection(int item);
     
     /// Set the image list
     void SetImageList(wxImageList* imageList);
@@ -156,16 +160,16 @@ public:
     void AssignImageList(wxImageList* imageList);
     
     /// Set the text for an item
-    bool SetItemText(int item, const wxString& text);
+    virtual bool SetItemText(int item, const wxString& text);
     
     /// Set the image for an item
-    bool SetItemImage(int item, int image);
+    virtual bool SetItemImage(int item, int image);
     
     // Set the data for an item
     // bool SetItemData(int item, void* data);
     
     /// Set the size for a fixed-width tab control. Not implemented.
-    void SetItemSize(const wxSize& size);
+    virtual void SetItemSize(const wxSize& size);
     
     /// Set the padding between tabs. Not implemented.
     void SetPadding(const wxSize& padding);
@@ -173,31 +177,31 @@ public:
     // Operations
     
     /// Delete all items
-    bool DeleteAllItems();
+    virtual bool DeleteAllItems();
     
     /// Delete an item
-    bool DeleteItem(int item);
+    virtual bool DeleteItem(int item);
     
     /// Hit test. Not implemented.
     int HitTest(const wxPoint& pt, long& flags);
     
     /// Insert an item, passing an optional index into the image list.
-    bool InsertItem(int item, const wxString& text, int imageId = -1);
+    virtual bool InsertItem(int item, const wxString& text, int imageId = -1);
     
     /// Insert an item, passing a bitmap.
-    bool InsertItem(int item, const wxString& text, const wxBitmap& bitmap);
+    virtual bool InsertItem(int item, const wxString& text, const wxBitmap& bitmap);
     
     /// Add an item, passing an optional index into the image list.
-    bool AddItem(const wxString& text, int imageId = -1);
+    virtual bool AddItem(const wxString& text, int imageId = -1);
     
     /// Add an item, passing a bitmap.
-    bool AddItem(const wxString& text, const wxBitmap& bitmap);
+    virtual bool AddItem(const wxString& text, const wxBitmap& bitmap);
     
     /// Set a text badge for the given item
-    bool SetBadge(int item, const wxString& badge);
+    virtual bool SetBadge(int item, const wxString& badge);
     
     /// Get the text badge for the given item
-    wxString GetBadge(int item) const;
+    virtual wxString GetBadge(int item) const;
     
     // Implementation
     

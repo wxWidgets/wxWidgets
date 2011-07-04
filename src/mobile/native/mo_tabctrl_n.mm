@@ -52,12 +52,26 @@ wxMoTabCtrl::wxMoTabCtrl()
     // FIXME stub
 }
 
-bool wxMoTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+wxMoTabCtrl::wxMoTabCtrl(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
-    // FIXME stub
+    Init();
     
-    return true;
+    Create(parent, id, pos, size, style, name);
+}
+
+bool wxMoTabCtrl::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
+{
+    return wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name);
 }
 
 wxMoTabCtrl::~wxMoTabCtrl()

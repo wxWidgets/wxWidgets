@@ -554,6 +554,14 @@ public :
                                     long style,
                                     long extraStyle) ;
 
+    static wxWidgetImplType*    CreateSegmentedCtrl( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long style,
+                                    long extraStyle) ;
+                                                                
     static wxWidgetImplType*    CreateTableViewCell( wxMoTableCell* wxpeer) ;
 
 #endif  // wxOSX_USE_IPHONE

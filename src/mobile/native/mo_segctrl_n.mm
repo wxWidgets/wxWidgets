@@ -26,6 +26,8 @@
 #endif
 
 #include "wx/mobile/native/segctrl.h"
+#include "wx/osx/private.h"
+#include "wx/osx/iphone/private/segctrlimpl.h"
 
 #include "wx/imaglist.h"
 #include "wx/dcbuffer.h"
@@ -38,13 +40,38 @@ END_EVENT_TABLE()
 
 wxMoSegmentedCtrl::wxMoSegmentedCtrl()
 {
-    // FIXME stub
+    Init();
 }
 
-bool wxMoSegmentedCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+wxMoSegmentedCtrl::wxMoSegmentedCtrl(wxWindow *parent,
+                                     wxWindowID id,
+                                     const wxPoint& pos,
+                                     const wxSize& size,
+                                     long style,
+                                     const wxString& name)
 {
-    // FIXME stub
+    Init();
+    
+    Create(parent, id, pos, size, style, name);
+}
+
+
+bool wxMoSegmentedCtrl::Create(wxWindow *parent,
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxString& name)
+{
+    DontCreatePeer();
+    
+    if (! wxMoTabCtrl::Create(parent, id, pos, size, style, name)) {
+        return false;
+    }
+    
+    SetPeer(wxWidgetImpl::CreateSegmentedCtrl( this, parent, id, pos, size, style, GetExtraStyle() ));
+    
+    MacPostControlCreate( pos, size );
     
     return true;
 }
@@ -80,4 +107,60 @@ wxSize wxMoSegmentedCtrl::DoGetBestSize() const
 
     wxSize empty(1, 1);
     return empty;
+}
+
+#pragma mark wxMoTabCtrl overrides
+
+bool wxMoSegmentedCtrl::AddItem(const wxString& text, int imageId)
+{
+    wxUISegmentedControl *segmentedControl = (wxUISegmentedControl *)(GetPeer()->GetWXWidget());
+    if (! segmentedControl) {
+        return false;
+    }
+
+    NSString *segmTitle = [NSString stringWithString:wxCFStringRef(text).AsNSString()];
+    if (! segmTitle) {
+        return false;
+    }
+    NSUInteger segmIndex = [segmentedControl numberOfSegments];
+    
+    [segmentedControl insertSegmentWithTitle:segmTitle
+                                     atIndex:segmIndex
+                                    animated:NO];
+    
+    return true;
+}
+
+// Add an item, passing a bitmap.
+bool wxMoSegmentedCtrl::AddItem(const wxString& text, const wxBitmap& bitmap)
+{
+    wxUISegmentedControl *segmentedControl = (wxUISegmentedControl *)(GetPeer()->GetWXWidget());
+    if (! segmentedControl) {
+        return false;
+    }
+    
+    UIImage *segmImage = [bitmap.GetUIImage() retain];
+    if (! segmImage) {
+        return false;
+    }
+    NSUInteger segmIndex = [segmentedControl numberOfSegments];
+    
+    [segmentedControl insertSegmentWithImage:segmImage
+                                     atIndex:segmIndex
+                                    animated:NO];
+    
+    return true;
+}
+
+// Set the selection
+int wxMoSegmentedCtrl::SetSelection(int item)
+{
+    wxUISegmentedControl *segmentedControl = (wxUISegmentedControl *)(GetPeer()->GetWXWidget());
+    if (! segmentedControl) {
+        return -1;
+    }
+    
+    NSInteger previousSelection = [segmentedControl selectedSegmentIndex];
+    [segmentedControl setSelectedSegmentIndex:item];
+    return previousSelection;
 }

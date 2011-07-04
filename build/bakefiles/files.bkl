@@ -2599,6 +2599,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/nonownedwnd.mm
 	src/osx/iphone/notebook.mm
 	src/osx/iphone/pagectrl.mm
+	src/osx/iphone/segctrl.mm
     src/osx/iphone/scrolbar.mm
     src/osx/iphone/slider.mm
     src/osx/iphone/srchctrl.mm

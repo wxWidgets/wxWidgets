@@ -14,6 +14,7 @@
 		406DAC1F13B508E0002E4240 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406DAC1D13B508E0002E4240 /* demoframe.cpp */; };
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
+		B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */; };
 		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
 		B913435013BC0A780024E59E /* navctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B913434F13BC0A780024E59E /* navctrl.mm */; };
 		B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA6D3A13BEF72300061979 /* tablecell.mm */; };
@@ -98,6 +99,7 @@
 		407EE18912F04CF900D0F171 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = segctrl.mm; path = ../../src/osx/iphone/segctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
 		B913434F13BC0A780024E59E /* navctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navctrl.mm; path = ../../src/osx/iphone/navctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9CA6D3A13BEF72300061979 /* tablecell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablecell.mm; path = ../../src/osx/iphone/tablecell.mm; sourceTree = SOURCE_ROOT; };
@@ -292,6 +294,7 @@
 				B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */,
 				B9DF073613B9FCF700D6F0D8 /* notebook.mm */,
 				B9CA731413BFA41000061979 /* pagectrl.mm */,
+				B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */,
 				B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */,
 				B9DF073813B9FCF700D6F0D8 /* slider.mm */,
 				B9133F9413BBC9FB0024E59E /* srchctrl.mm */,
@@ -529,6 +532,7 @@
 				B9F1F27A13BC5AF40039F5C2 /* tablectrl.mm in Sources */,
 				B9CA6D3B13BEF72300061979 /* tablecell.mm in Sources */,
 				B9CA731513BFA41000061979 /* pagectrl.mm in Sources */,
+				B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

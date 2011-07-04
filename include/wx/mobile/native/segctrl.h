@@ -32,17 +32,20 @@ public:
     wxMoSegmentedCtrl();
     
     /// Constructor.
-    wxMoSegmentedCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                      long style = wxTAB_TEXT, const wxString& name = wxT("tabCtrl"))
-    {
-        Init();
-        
-        Create(parent, id, pos, size, style, name);
-    }
+    wxMoSegmentedCtrl(wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxTAB_TEXT,
+                      const wxString& name = wxT("tabCtrl"));
     
     /// Creation function.
-    bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TEXT, const wxString& name = wxT("segmentedCtrl"));
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TEXT,
+                const wxString& name = wxT("segmentedCtrl"));
     
     void Init();
     
@@ -53,6 +56,17 @@ public:
     void OnPaint(wxPaintEvent& event);
     
     bool SendCommand(wxEventType eventType, int selection);
+    
+#pragma mark wxMoTabCtrl overrides
+    
+    /// Add an item, passing an optional index into the image list.
+    bool AddItem(const wxString& text, int imageId = -1);
+    
+    /// Add an item, passing a bitmap.
+    bool AddItem(const wxString& text, const wxBitmap& bitmap);
+
+    /// Set the selection, generating events
+    int SetSelection(int item);
     
 protected:
     
