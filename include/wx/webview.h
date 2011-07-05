@@ -305,16 +305,6 @@ public:
     //    virtual bool IsOfflineMode() = 0;                 // maybe?
     //     virtual void SetOfflineMode(bool offline) = 0;   // maybe?
 
-    // TODO: offer API to control the opening of new frames
-    //       (through <a target="..."> as well as through javascript), OR
-    //       provide a behavior consistent across ports.
-    // - OSX : I receive an event for new frames opened with HTML target, and
-    //           currently block them all.
-    // - IE  : An event is recieved for new frames and they are currently 
-    //           blocked
-    // - GTK : All frame open requests are blocked. A slot exists that I could
-    //           connect to to be notified if ever needed
-
     /**
      * Opens a print dialog so that the user may print the currently
      * displayed page.
