@@ -97,11 +97,8 @@ enum wxWebViewBackend
      * engine for the current platform*/
     wxWEB_VIEW_BACKEND_DEFAULT,
 
-    /** The OSX-native WebKit web engine */
-    wxWEB_VIEW_BACKEND_OSX_WEBKIT,
-
-    /** The GTK port of the WebKit engine */
-    wxWEB_VIEW_BACKEND_GTK_WEBKIT,
+    /** The WebKit web engine */
+    wxWEB_VIEW_BACKEND_WEBKIT,
 
     /** Use Microsoft Internet Explorer as web engine */
     wxWEB_VIEW_BACKEND_IE
