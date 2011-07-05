@@ -17,9 +17,6 @@
 
 #if wxUSE_WEBKIT && (defined(__WXMAC__) || defined(__WXCOCOA__))
 
-// TODO: define this in setup.h ?
-#define wxHAVE_WEB_BACKEND_OSX_WEBKIT 1
-
 #include "wx/control.h"
 #include "wx/webview.h"
 
@@ -131,11 +128,6 @@ private:
     //It should be WebView*, but WebView is an Objective-C class
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
-
-
-#else
-// TODO: define this in setup.h ?
-#define wxHAVE_WEB_BACKEND_OSX_WEBKIT 0
 
 #endif // wxUSE_WEBKIT
 
