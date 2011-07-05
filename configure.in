@@ -7386,6 +7386,29 @@ if test "$wxUSE_WEB" = "yes"; then
            AC_MSG_RESULT([not found])
        fi
    fi
+
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="-x objective-c++ $CPPFLAGS"
+        AC_CHECK_HEADER([WebKit/HIWebView.h],
+                        [
+                           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+                           WEBKIT_LINK="-framework WebKit"
+                        ],
+                        [
+                           AC_MSG_WARN([WebKit headers not found; disabling wxWebView WebKit])
+                           wxUSE_WEBVIEW_WEBKIT=no
+                        ],
+                        [
+                           #include <Carbon/Carbon.h>
+                           #include <WebKit/WebKit.h>
+                        ])
+        CPPFLAGS="$old_CPPFLAGS"
+    elif test "$wxUSE_OLD_COCOA" = 1; then
+        AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+    else
+        wxUSE_WEBVIEW_WEBKIT=no
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
