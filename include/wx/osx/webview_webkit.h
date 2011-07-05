@@ -74,6 +74,21 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const;
 
     virtual bool IsBusy() { return m_busy; }
+    
+    //History functions
+    virtual void ClearHistory() {}
+    virtual void EnableHistory(bool enable = true) {}
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
+            { return wxVector<wxSharedPtr<wxWebHistoryItem> >() }
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() 
+            { return wxVector<wxSharedPtr<wxWebHistoryItem> >() }
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) {}
+    
+    //Undo / redo functionality
+    virtual bool CanUndo() {}
+    virtual bool CanRedo() {}
+    virtual void Undo() {}
+    virtual void Redo() {}
 
     // ---- methods not from the parent (common) interface
     wxString GetSelectedText();
