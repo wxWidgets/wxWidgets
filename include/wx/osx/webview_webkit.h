@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        include/wx/osx/webkit.h
-// Purpose:     wxOSXWebKitCtrl - embeddable web kit control,
+// Purpose:     wxWebViewWebKit - embeddable web kit control,
 //                             OS X implementation of web view component
 // Author:      Jethro Grassie / Kevin Ollivier / Marianne Gagnon
 // Modified by:
@@ -24,13 +24,13 @@
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_WEB wxOSXWebKitCtrl : public wxWebView
+class WXDLLIMPEXP_WEB wxWebViewWebKit : public wxWebView
 {
 public:
-    wxDECLARE_DYNAMIC_CLASS(wxOSXWebKitCtrl);
+    wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 
-    wxOSXWebKitCtrl() {}
-    wxOSXWebKitCtrl(wxWindow *parent,
+    wxWebViewWebKit() {}
+    wxWebViewWebKit(wxWindow *parent,
                     wxWindowID winID = wxID_ANY,
                     const wxString& strURL = wxWebViewDefaultURLStr,
                     const wxPoint& pos = wxDefaultPosition,
@@ -45,7 +45,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxWebViewNameStr);
-    virtual ~wxOSXWebKitCtrl();
+    virtual ~wxWebViewWebKit();
 
     void InternalLoadURL(const wxString &url);
 

@@ -44,7 +44,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
     {
         #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             case wxWEB_VIEW_BACKEND_OSX_WEBKIT:
-                return new wxOSXWebKitCtrl();
+                return new wxWebViewWebKit();
         #endif
 
         #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
@@ -60,7 +60,7 @@ wxWebView* wxWebView::New(wxWebViewBackend backend)
         case wxWEB_VIEW_BACKEND_DEFAULT:
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
-            return new wxOSXWebKitCtrl();
+            return new wxWebViewWebKit();
             #endif
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)
@@ -91,7 +91,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
     {
         #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
             case wxWEB_VIEW_BACKEND_OSX_WEBKIT:
-                return new wxOSXWebKitCtrl(parent, id, url, pos, size, style,
+                return new wxWebViewWebKit(parent, id, url, pos, size, style,
                                            name);
         #endif
 
@@ -109,7 +109,7 @@ wxWebView* wxWebView::New(wxWindow* parent,
         case wxWEB_VIEW_BACKEND_DEFAULT:
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXOSX__)
-            return new wxOSXWebKitCtrl(parent, id, url, pos, size, style, name);
+            return new wxWebViewWebKit(parent, id, url, pos, size, style, name);
             #endif
 
             #if defined(wxUSE_WEBVIEW_WEBKIT) && defined(__WXGTK__)

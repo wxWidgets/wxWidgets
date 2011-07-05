@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/webview_webkit.mm
-// Purpose:     wxOSXWebKitCtrl - embeddable web kit control,
+// Purpose:     wxWebViewWebKit - embeddable web kit control,
 //                             OS X implementation of web view component
 // Author:      Jethro Grassie / Kevin Ollivier / Marianne Gagnon
 // Modified by:
@@ -37,7 +37,7 @@
 
 // FIXME: find cleaner way to find the wxWidgets ID of a webview than this hack
 #include <map>
-std::map<WebView*, wxOSXWebKitCtrl*> wx_webviewctrls;
+std::map<WebView*, wxWebViewWebKit*> wx_webviewctrls;
 
 #define DEBUG_WEBKIT_SIZING 0
 
@@ -45,11 +45,11 @@ std::map<WebView*, wxOSXWebKitCtrl*> wx_webviewctrls;
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxOSXWebKitCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxControl)
 
-BEGIN_EVENT_TABLE(wxOSXWebKitCtrl, wxControl)
+BEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
-    EVT_SIZE(wxOSXWebKitCtrl::OnSize)
+    EVT_SIZE(wxWebViewWebKit::OnSize)
 #endif
 END_EVENT_TABLE()
 
@@ -97,7 +97,7 @@ static pascal OSStatus wxWebKitKeyEventHandler(EventHandlerCallRef handler,
     OSStatus result = eventNotHandledErr ;
     wxMacCarbonEvent cEvent( event ) ;
 
-    wxOSXWebKitCtrl* thisWindow = (wxOSXWebKitCtrl*) data ;
+    wxWebViewWebKit* thisWindow = (wxWebViewWebKit*) data ;
     wxWindow* focus = thisWindow ;
 
     unsigned char charCode ;
@@ -229,14 +229,14 @@ static pascal OSStatus wxWebKitKeyEventHandler(EventHandlerCallRef handler,
     return result ;
 }
 
-static pascal OSStatus wxOSXWebKitCtrlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus wxWebViewWebKitEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
     wxMacCarbonEvent cEvent( event ) ;
 
     ControlRef controlRef ;
-    wxOSXWebKitCtrl* thisWindow = (wxOSXWebKitCtrl*) data ;
+    wxWebViewWebKit* thisWindow = (wxWebViewWebKit*) data ;
     wxNonOwnedWindow* tlw = NULL;
     if (thisWindow)
         tlw = thisWindow->MacGetTopLevelWindow();
@@ -297,7 +297,7 @@ static pascal OSStatus wxOSXWebKitCtrlEventHandler( EventHandlerCallRef handler 
     return result ;
 }
 
-DEFINE_ONE_SHOT_HANDLER_GETTER( wxOSXWebKitCtrlEventHandler )
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 #endif
 
@@ -344,19 +344,19 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @interface MyFrameLoadMonitor : NSObject
 {
-    wxOSXWebKitCtrl* webKitWindow;
+    wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxOSXWebKitCtrl*)inWindow;
+- initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
 @interface MyPolicyDelegate : NSObject
 {
-    wxOSXWebKitCtrl* webKitWindow;
+    wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxOSXWebKitCtrl*)inWindow;
+- initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -364,7 +364,7 @@ inline int wxNavTypeFromWebNavType(int type){
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-bool wxOSXWebKitCtrl::Create(wxWindow *parent,
+bool wxWebViewWebKit::Create(wxWindow *parent,
                                  wxWindowID winID,
                                  const wxString& strURL,
                                  const wxPoint& pos,
@@ -426,7 +426,7 @@ bool wxOSXWebKitCtrl::Create(wxWindow *parent,
         HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
     InstallControlEventHandler(m_peer->GetControlRef(),
-                               GetwxOSXWebKitCtrlEventHandlerUPP(),
+                               GetwxWebViewWebKitEventHandlerUPP(),
                                GetEventTypeCount(eventList), eventList, this,
                               (EventHandlerRef *)&m_webKitCtrlEventHandler);
 #else
@@ -464,7 +464,7 @@ bool wxOSXWebKitCtrl::Create(wxWindow *parent,
     return true;
 }
 
-wxOSXWebKitCtrl::~wxOSXWebKitCtrl()
+wxWebViewWebKit::~wxWebViewWebKit()
 {
     MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
     MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
@@ -482,7 +482,7 @@ wxOSXWebKitCtrl::~wxOSXWebKitCtrl()
 // public methods
 // ----------------------------------------------------------------------------
 
-void wxOSXWebKitCtrl::InternalLoadURL(const wxString &url)
+void wxWebViewWebKit::InternalLoadURL(const wxString &url)
 {
     if( !m_webView )
         return;
@@ -491,7 +491,7 @@ void wxOSXWebKitCtrl::InternalLoadURL(const wxString &url)
             [NSURL URLWithString:wxNSStringWithWxString(url)]]];
 }
 
-bool wxOSXWebKitCtrl::CanGoBack()
+bool wxWebViewWebKit::CanGoBack()
 {
     if ( !m_webView )
         return false;
@@ -499,7 +499,7 @@ bool wxOSXWebKitCtrl::CanGoBack()
     return [m_webView canGoBack];
 }
 
-bool wxOSXWebKitCtrl::CanGoForward()
+bool wxWebViewWebKit::CanGoForward()
 {
     if ( !m_webView )
         return false;
@@ -507,7 +507,7 @@ bool wxOSXWebKitCtrl::CanGoForward()
     return [m_webView canGoForward];
 }
 
-void wxOSXWebKitCtrl::GoBack()
+void wxWebViewWebKit::GoBack()
 {
     if ( !m_webView )
         return;
@@ -518,7 +518,7 @@ void wxOSXWebKitCtrl::GoBack()
     //return result;
 }
 
-void wxOSXWebKitCtrl::GoForward()
+void wxWebViewWebKit::GoForward()
 {
     if ( !m_webView )
         return;
@@ -529,7 +529,7 @@ void wxOSXWebKitCtrl::GoForward()
     //return result;
 }
 
-void wxOSXWebKitCtrl::Reload(wxWebViewReloadFlags flags)
+void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 {
     if ( !m_webView )
         return;
@@ -547,7 +547,7 @@ void wxOSXWebKitCtrl::Reload(wxWebViewReloadFlags flags)
     }
 }
 
-void wxOSXWebKitCtrl::Stop()
+void wxWebViewWebKit::Stop()
 {
     if ( !m_webView )
         return;
@@ -555,7 +555,7 @@ void wxOSXWebKitCtrl::Stop()
     [[m_webView mainFrame] stopLoading];
 }
 
-bool wxOSXWebKitCtrl::CanGetPageSource()
+bool wxWebViewWebKit::CanGetPageSource()
 {
     if ( !m_webView )
         return false;
@@ -564,7 +564,7 @@ bool wxOSXWebKitCtrl::CanGetPageSource()
     return ( [[dataSource representation] canProvideDocumentSource] );
 }
 
-wxString wxOSXWebKitCtrl::GetPageSource()
+wxString wxWebViewWebKit::GetPageSource()
 {
 
     if (CanGetPageSource())
@@ -587,7 +587,7 @@ wxString wxOSXWebKitCtrl::GetPageSource()
     return wxEmptyString;
 }
 
-wxString wxOSXWebKitCtrl::GetSelection()
+wxString wxWebViewWebKit::GetSelection()
 {
     if ( !m_webView )
         return wxEmptyString;
@@ -596,7 +596,7 @@ wxString wxOSXWebKitCtrl::GetSelection()
     return wxStringWithNSString( selectedText );
 }
 
-bool wxOSXWebKitCtrl::CanIncreaseTextSize()
+bool wxWebViewWebKit::CanIncreaseTextSize()
 {
     if ( !m_webView )
         return false;
@@ -607,7 +607,7 @@ bool wxOSXWebKitCtrl::CanIncreaseTextSize()
         return false;
 }
 
-void wxOSXWebKitCtrl::IncreaseTextSize()
+void wxWebViewWebKit::IncreaseTextSize()
 {
     if ( !m_webView )
         return;
@@ -616,7 +616,7 @@ void wxOSXWebKitCtrl::IncreaseTextSize()
         [m_webView makeTextLarger:(WebView*)m_webView];
 }
 
-bool wxOSXWebKitCtrl::CanDecreaseTextSize()
+bool wxWebViewWebKit::CanDecreaseTextSize()
 {
     if ( !m_webView )
         return false;
@@ -627,7 +627,7 @@ bool wxOSXWebKitCtrl::CanDecreaseTextSize()
         return false;
 }
 
-void wxOSXWebKitCtrl::DecreaseTextSize()
+void wxWebViewWebKit::DecreaseTextSize()
 {
     if ( !m_webView )
         return;
@@ -636,7 +636,7 @@ void wxOSXWebKitCtrl::DecreaseTextSize()
         [m_webView makeTextSmaller:(WebView*)m_webView];
 }
 
-void wxOSXWebKitCtrl::Print()
+void wxWebViewWebKit::Print()
 {
 
     // TODO: allow specifying the "show prompt" parameter in Print() ?
@@ -660,7 +660,7 @@ void wxOSXWebKitCtrl::Print()
     [op runOperation];
 }
 
-void wxOSXWebKitCtrl::MakeEditable(bool enable)
+void wxWebViewWebKit::MakeEditable(bool enable)
 {
     if ( !m_webView )
         return;
@@ -668,7 +668,7 @@ void wxOSXWebKitCtrl::MakeEditable(bool enable)
     [m_webView setEditable:enable ];
 }
 
-bool wxOSXWebKitCtrl::IsEditable()
+bool wxWebViewWebKit::IsEditable()
 {
     if ( !m_webView )
         return false;
@@ -676,14 +676,14 @@ bool wxOSXWebKitCtrl::IsEditable()
     return [m_webView isEditable];
 }
 
-void wxOSXWebKitCtrl::SetZoomType(wxWebViewZoomType zoomType)
+void wxWebViewWebKit::SetZoomType(wxWebViewZoomType zoomType)
 {
     // there is only one supported zoom type at the moment so this setter
     // does nothing beyond checking sanity
     wxASSERT(zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT);
 }
 
-wxWebViewZoomType wxOSXWebKitCtrl::GetZoomType() const
+wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
 {
     // for now that's the only one that is supported
     // FIXME: does the default zoom type change depending on webkit versions? :S
@@ -691,7 +691,7 @@ wxWebViewZoomType wxOSXWebKitCtrl::GetZoomType() const
     return wxWEB_VIEW_ZOOM_TYPE_TEXT;
 }
 
-bool wxOSXWebKitCtrl::CanSetZoomType(wxWebViewZoomType type) const
+bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
 {
     switch (type)
     {
@@ -706,14 +706,14 @@ bool wxOSXWebKitCtrl::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-int wxOSXWebKitCtrl::GetScrollPos()
+int wxWebViewWebKit::GetScrollPos()
 {
     id result = [[m_webView windowScriptObject]
                     evaluateWebScript:@"document.body.scrollTop"];
     return [result intValue];
 }
 
-void wxOSXWebKitCtrl::SetScrollPos(int pos)
+void wxWebViewWebKit::SetScrollPos(int pos)
 {
     if ( !m_webView )
         return;
@@ -724,7 +724,7 @@ void wxOSXWebKitCtrl::SetScrollPos(int pos)
             (NSString*)wxNSStringWithWxString( javascript )];
 }
 
-wxString wxOSXWebKitCtrl::GetSelectedText()
+wxString wxWebViewWebKit::GetSelectedText()
 {
     NSString* selection = [[m_webView selectedDOMRange] markupString];
     if (!selection) return wxEmptyString;
@@ -732,7 +732,7 @@ wxString wxOSXWebKitCtrl::GetSelectedText()
     return wxStringWithNSString(selection);
 }
 
-wxString wxOSXWebKitCtrl::RunScript(const wxString& javascript)
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
         return wxEmptyString;
@@ -770,7 +770,7 @@ wxString wxOSXWebKitCtrl::RunScript(const wxString& javascript)
     return wxStringWithNSString( resultAsString );
 }
 
-void wxOSXWebKitCtrl::OnSize(wxSizeEvent &event)
+void wxWebViewWebKit::OnSize(wxSizeEvent &event)
 {
 #if defined(__WXMAC_) && wxOSX_USE_CARBON
     // This is a nasty hack because WebKit seems to lose its position when it is
@@ -849,7 +849,7 @@ void wxOSXWebKitCtrl::OnSize(wxSizeEvent &event)
 #endif
 }
 
-void wxOSXWebKitCtrl::MacVisibilityChanged(){
+void wxWebViewWebKit::MacVisibilityChanged(){
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
     bool isHidden = !IsControlVisible( m_peer->GetControlRef());
     if (!isHidden)
@@ -859,32 +859,32 @@ void wxOSXWebKitCtrl::MacVisibilityChanged(){
 #endif
 }
 
-void wxOSXWebKitCtrl::LoadUrl(const wxString& url)
+void wxWebViewWebKit::LoadUrl(const wxString& url)
 {
     InternalLoadURL(url);
 }
 
-wxString wxOSXWebKitCtrl::GetCurrentURL()
+wxString wxWebViewWebKit::GetCurrentURL()
 {
     return wxStringWithNSString([m_webView mainFrameURL]);
 }
 
-wxString wxOSXWebKitCtrl::GetCurrentTitle()
+wxString wxWebViewWebKit::GetCurrentTitle()
 {
     return GetPageTitle();
 }
 
-float wxOSXWebKitCtrl::GetWebkitZoom()
+float wxWebViewWebKit::GetWebkitZoom()
 {
     return [m_webView textSizeMultiplier];
 }
 
-void wxOSXWebKitCtrl::SetWebkitZoom(float zoom)
+void wxWebViewWebKit::SetWebkitZoom(float zoom)
 {
     [m_webView setTextSizeMultiplier:zoom];
 }
 
-wxWebViewZoom wxOSXWebKitCtrl::GetZoom()
+wxWebViewZoom wxWebViewWebKit::GetZoom()
 {
     float zoom = GetWebkitZoom();
 
@@ -915,7 +915,7 @@ wxWebViewZoom wxOSXWebKitCtrl::GetZoom()
     return wxWEB_VIEW_ZOOM_MEDIUM;
 }
 
-void wxOSXWebKitCtrl::SetZoom(wxWebViewZoom zoom)
+void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
     // arbitrary way to map our common zoom enum to float zoom
     switch (zoom)
@@ -946,7 +946,7 @@ void wxOSXWebKitCtrl::SetZoom(wxWebViewZoom zoom)
 
 }
 
-void wxOSXWebKitCtrl::SetPage(const wxString& src, const wxString& baseUrl)
+void wxWebViewWebKit::SetPage(const wxString& src, const wxString& baseUrl)
 {
    if ( !m_webView )
         return;
@@ -967,7 +967,7 @@ void wxOSXWebKitCtrl::SetPage(const wxString& src, const wxString& baseUrl)
 
 @implementation MyFrameLoadMonitor
 
-- initWithWxWindow: (wxOSXWebKitCtrl*)inWindow
+- initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -1154,7 +1154,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 
 @implementation MyPolicyDelegate
 
-- initWithWxWindow: (wxOSXWebKitCtrl*)inWindow
+- initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
