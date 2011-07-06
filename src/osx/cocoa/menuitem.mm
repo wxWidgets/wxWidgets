@@ -328,7 +328,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         wxCFStringRef cfText(text);
         SEL selector = nil;
         bool targetSelf = false;
-        if ( ! pParentMenu->GetNoEventsMode() && pSubMenu == NULL )
+        if ( (pParentMenu == NULL || !pParentMenu->GetNoEventsMode()) && pSubMenu == NULL )
         {
             selector = wxOSXGetSelectorFromID(menuid);
             
