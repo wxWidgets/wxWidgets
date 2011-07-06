@@ -956,6 +956,30 @@ void wxWebViewWebKit::SetPage(const wxString& src, const wxString& baseUrl)
                                     wxNSStringWithWxString( baseUrl )]];
 }
 
+void wxWebViewWebKit::Cut()
+{
+    if ( !m_webView )
+        return;
+
+    [(WebView*)m_webView cut];
+}
+
+void wxWebViewWebKit::Copy()
+{
+    if ( !m_webView )
+        return;
+
+    [(WebView*)m_webView copy];
+}
+
+void wxWebViewWebKit::Paste()
+{
+    if ( !m_webView )
+        return;
+
+    [(WebView*)m_webView paste];
+}
+
 //------------------------------------------------------------
 // Listener interfaces
 //------------------------------------------------------------

@@ -85,18 +85,18 @@ public:
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) {}
     
     //Undo / redo functionality
-    virtual bool CanUndo() {}
-    virtual bool CanRedo() {}
+    virtual bool CanUndo() { return false; }
+    virtual bool CanRedo() { return false; }
     virtual void Undo() {}
     virtual void Redo() {}
 
     //Clipboard functions
-    virtual bool CanCut() {}
-    virtual bool CanCopy() {}
-    virtual bool CanPaste() {}
-    virtual void Cut() {}
-    virtual void Copy() {}
-    virtual void Paste() {}
+    virtual bool CanCut() { return false; }
+    virtual bool CanCopy() { return false; }
+    virtual bool CanPaste() { return false; }
+    virtual void Cut();
+    virtual void Copy();
+    virtual void Paste();
 
     // ---- methods not from the parent (common) interface
     wxString GetSelectedText();
