@@ -84,10 +84,18 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
 }
 
+#ifdef __WXGTK30__
+wxRegion::wxRegion( cairo_region_t *region )
+#else
 wxRegion::wxRegion( GdkRegion *region )
+#endif
 {
     m_refData = new wxRegionRefData();
+#ifdef __WXGTK30__
     M_REGIONDATA->m_region = gdk_region_copy( region );
+#else
+    M_REGIONDATA->m_region = cairo_region_copy( region );
+#endif
 }
 
 wxRegion::wxRegion( size_t n, const wxPoint *points,
@@ -325,7 +333,11 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     return wxOutRegion;
 }
 
+#ifdef __WXGTK30__
+cairo_region_t *wxRegion::GetRegion() const
+#else
 GdkRegion *wxRegion::GetRegion() const
+#endif
 {
     if (!m_refData)
         return NULL;

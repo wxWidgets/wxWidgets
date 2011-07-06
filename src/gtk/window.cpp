@@ -286,6 +286,24 @@ wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+#if 0
+extern "C" {
+static gboolean
+gtk_window_draw_callback( GtkWidget*,
+                            cairo_t *cr,
+                            wxWindow *win )
+{
+    if (gdk_event->window == win->GTKGetDrawingWindow())
+    {
+        win->GetUpdateRegion() = wxRegion( gdk_event->region );
+        win->GtkSendPaintEvents();
+    }
+    // Let parent window draw window-less widgets
+    return FALSE;
+}
+}
+#endif
+//#if 0
 extern "C" {
 static gboolean
 gtk_window_expose_callback( GtkWidget*,
@@ -301,6 +319,7 @@ gtk_window_expose_callback( GtkWidget*,
     return FALSE;
 }
 }
+//#endif
 
 #ifndef __WXUNIVERSAL__
 //-----------------------------------------------------------------------------
