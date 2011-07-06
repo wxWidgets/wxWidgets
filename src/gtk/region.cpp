@@ -43,16 +43,29 @@ public:
     wxRegionRefData(const wxRegionRefData& refData)
         : wxGDIRefData()
     {
+#ifdef __WXGTK30__
+        m_region = cairo_region_copy(refData.m_region);
+#else
         m_region = gdk_region_copy(refData.m_region);
+#endif
     }
 
     virtual ~wxRegionRefData()
     {
-        if (m_region)
+        if (m_region) {
+#ifdef __WXGTK30__
+            cairo_region_destroy( m_region );
+#else
             gdk_region_destroy( m_region );
+#endif
+        }
     }
 
+#ifdef __WXGTK30__
+    cairo_region_t  *m_region;
+#else
     GdkRegion  *m_region;
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -73,7 +86,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject)
 
 void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
-    GdkRectangle rect;
+    GdkRectangle rect; // In gtk+3, GdkRectangle is identical to cairo_rectangle_int_t
     rect.x = x;
     rect.y = y;
     rect.width = w;
@@ -81,7 +94,11 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 
     m_refData = new wxRegionRefData();
 
+#ifdef __WXGTK30__
+    M_REGIONDATA->m_region = cairo_region_create_rectangle( &rect );
+#else
     M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
+#endif
 }
 
 #ifdef __WXGTK30__
@@ -110,6 +127,10 @@ wxRegion::wxRegion( size_t n, const wxPoint *points,
 
     m_refData = new wxRegionRefData();
 
+
+#ifdef __WXGTK30__
+    wxFAIL_MSG("This method is not implemented in wxGTK with gtk+3.0");
+#else
     GdkRegion* reg = gdk_region_polygon
                      (
                         gdkpoints,
@@ -119,6 +140,7 @@ wxRegion::wxRegion( size_t n, const wxPoint *points,
                      );
 
     M_REGIONDATA->m_region = reg;
+#endif
 
     delete [] gdkpoints;
 }
@@ -144,8 +166,13 @@ wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 
 bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
+#ifdef __WXGTK30__
+    return cairo_region_equal(M_REGIONDATA->m_region,
+                            M_REGIONDATA_OF(region)->m_region);
+#else
     return gdk_region_equal(M_REGIONDATA->m_region,
                             M_REGIONDATA_OF(region)->m_region);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -179,7 +206,11 @@ bool wxRegion::DoUnionWithRect(const wxRect& r)
         rect.width = r.width;
         rect.height = r.height;
 
+#ifdef __WXGTK30__
+        cairo_region_union_rectangle( M_REGIONDATA->m_region, &rect );
+#else
         gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
+#endif
     }
 
     return true;
@@ -192,14 +223,22 @@ bool wxRegion::DoUnionWithRegion( const wxRegion& region )
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
+#ifdef __WXGTK30__
+        M_REGIONDATA->m_region = cairo_region_create();
+#else
         M_REGIONDATA->m_region = gdk_region_new();
+#endif
     }
     else
     {
         AllocExclusive();
     }
 
+#ifdef __WXGTK30__
+    cairo_region_union( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
+#endif
 
     return true;
 }
@@ -216,7 +255,11 @@ bool wxRegion::DoIntersect( const wxRegion& region )
 
     AllocExclusive();
 
+#ifdef __WXGTK30__
+    cairo_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
+#endif
 
     return true;
 }
@@ -233,7 +276,11 @@ bool wxRegion::DoSubtract( const wxRegion& region )
 
     AllocExclusive();
 
+#ifdef __WXGTK30__
+    cairo_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
+#endif
 
     return true;
 }
@@ -249,7 +296,11 @@ bool wxRegion::DoXor( const wxRegion& region )
 
     AllocExclusive();
 
+#ifdef __WXGTK30__
+    cairo_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
+#endif
 
     return true;
 }
@@ -261,7 +312,11 @@ bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 
     AllocExclusive();
 
+#ifdef __WXGTK30__
+    cairo_region_translate( M_REGIONDATA->m_region, x, y );
+#else
     gdk_region_offset( M_REGIONDATA->m_region, x, y );
+#endif
 
     return true;
 }
@@ -275,7 +330,11 @@ bool wxRegion::DoGetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
     if ( m_refData )
     {
         GdkRectangle rect;
+#ifdef __WXGTK30__
+        cairo_region_get_extents( M_REGIONDATA->m_region, &rect );
+#else
         gdk_region_get_clipbox( M_REGIONDATA->m_region, &rect );
+#endif
         x = rect.x;
         y = rect.y;
         w = rect.width;
@@ -299,7 +358,11 @@ bool wxRegion::IsEmpty() const
     if (!m_refData)
         return true;
 
+#ifdef __WXGTK30__
+    return cairo_region_is_empty( M_REGIONDATA->m_region );
+#else
     return gdk_region_empty( M_REGIONDATA->m_region );
+#endif
 }
 
 wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const
@@ -307,7 +370,11 @@ wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const
     if (!m_refData)
         return wxOutRegion;
 
+#ifdef __WXGTK30__
+    if (cairo_region_contains_point( M_REGIONDATA->m_region, x, y ))
+#else
     if (gdk_region_point_in( M_REGIONDATA->m_region, x, y ))
+#endif
         return wxInRegion;
     else
         return wxOutRegion;
@@ -323,6 +390,15 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     rect.y = r.y;
     rect.width = r.width;
     rect.height = r.height;
+#ifdef __WXGTK30__
+    cairo_region_overlap_t res = cairo_region_contains_rectangle( M_REGIONDATA->m_region, &rect );
+    switch (res)
+    {
+        case CAIRO_REGION_OVERLAP_IN:   return wxInRegion;
+        case CAIRO_REGION_OVERLAP_OUT:  return wxOutRegion;
+        case CAIRO_REGION_OVERLAP_PART: return wxPartRegion;
+    }
+#else
     GdkOverlapType res = gdk_region_rect_in( M_REGIONDATA->m_region, &rect );
     switch (res)
     {
@@ -330,6 +406,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
         case GDK_OVERLAP_RECTANGLE_OUT:  return wxOutRegion;
         case GDK_OVERLAP_RECTANGLE_PART: return wxPartRegion;
     }
+#endif
     return wxOutRegion;
 }
 
@@ -377,14 +454,34 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
     wxDELETEA(m_rects);
     m_numRects = 0;
 
+    GdkRectangle *gdkrects = NULL;
+    gint numRects = 0;
+
+#ifdef __WXGTK30__
+    cairo_region_t *cairoRegion = region.GetRegion();
+    if (!cairoRegion)
+        return;
+    m_numRects = cairo_region_num_rectangles( cairoRegion );
+     
+    if (m_numRects)
+    {
+        m_rects = new wxRect[m_numRects];
+        for (size_t i=0; i < m_numRects; ++i)
+        {
+            GdkRectangle gr;
+            cairo_region_get_rectangle( cairoRegion, i, &gr );
+            wxRect &wr = m_rects[i];
+            wr.x = gr.x;
+            wr.y = gr.y;
+            wr.width = gr.width;
+            wr.height = gr.height;
+        }
+    }
+#else
     GdkRegion *gdkregion = region.GetRegion();
     if (!gdkregion)
         return;
-
-    GdkRectangle *gdkrects = NULL;
-    gint numRects = 0;
     gdk_region_get_rectangles( gdkregion, &gdkrects, &numRects );
-
     m_numRects = numRects;
     if (numRects)
     {
@@ -400,6 +497,7 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
         }
     }
     g_free( gdkrects );
+#endif
 }
 
 void wxRegionIterator::Reset( const wxRegion& region )
