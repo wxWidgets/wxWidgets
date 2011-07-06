@@ -90,6 +90,14 @@ public:
     virtual void Undo() {}
     virtual void Redo() {}
 
+    //Clipboard functions
+    virtual bool CanCut() {}
+    virtual bool CanCopy() {}
+    virtual bool CanPaste() {}
+    virtual void Cut() {}
+    virtual void Copy() {}
+    virtual void Paste() {}
+
     // ---- methods not from the parent (common) interface
     wxString GetSelectedText();
 
