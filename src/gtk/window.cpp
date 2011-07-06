@@ -280,30 +280,63 @@ wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
     requisition->height = h;
     requisition->width = w;
 }
+
+// static void
+// wxgtk_window_get_preferred_width(GtkWidget * widget,
+//                                  gint *minimal_width,
+//                                  gint *natural_width)
+// 
+// {
+//     GtkRequisition requisition;
+// 
+//     wxgtk_window_size_request_callback( widget, &requisition );
+// 
+//     *minimal_width = *natural_width = requisition.width;
+// }
+// 
+// static void
+// wxgtk_window_get_preferred_height(GtkWidget * widget,
+//                                  gint *minimal_height,
+//                                  gint *natural_height)
+// 
+// {
+//     GtkRequisition requisition;
+// 
+//     wxgtk_window_size_request_callback( widget, &requisition );
+// 
+//     *minimal_height = *natural_height = requisition.height;
+// }
 }
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-#if 0
+//#if 0
 extern "C" {
 static gboolean
-gtk_window_draw_callback( GtkWidget*,
-                            cairo_t *cr,
-                            wxWindow *win )
+gtk_window_draw_callback( GtkWidget *da, cairo_t *cr, wxWindow *win )
 {
-    if (gdk_event->window == win->GTKGetDrawingWindow())
+    GdkRectangle rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.width = gtk_widget_get_allocated_width( da );
+    rect.height = gtk_widget_get_allocated_height( da );
+
+    cairo_region_t *region = cairo_region_create_rectangle( &rect );
+
+    if (gtk_widget_get_window(da) == win->GTKGetDrawingWindow())
     {
-        win->GetUpdateRegion() = wxRegion( gdk_event->region );
+        win->GetUpdateRegion() = wxRegion( region );
         win->GtkSendPaintEvents();
     }
+
     // Let parent window draw window-less widgets
     return FALSE;
 }
 }
-#endif
-//#if 0
+//#endif
+#if 0
 extern "C" {
 static gboolean
 gtk_window_expose_callback( GtkWidget*,
@@ -319,7 +352,7 @@ gtk_window_expose_callback( GtkWidget*,
     return FALSE;
 }
 }
-//#endif
+#endif
 
 #ifndef __WXUNIVERSAL__
 //-----------------------------------------------------------------------------
@@ -2364,8 +2397,13 @@ void wxWindowGTK::PostCreation()
         {
             // these get reported to wxWidgets -> wxPaintEvent
 
+#ifdef __WXGTK30__
+            g_signal_connect (m_wxwindow, "draw",
+                              G_CALLBACK (gtk_window_draw_callback), this);
+#else
             g_signal_connect (m_wxwindow, "expose_event",
                               G_CALLBACK (gtk_window_expose_callback), this);
+#endif
 
             if (GetLayoutDirection() == wxLayout_LeftToRight)
                 gtk_widget_set_redraw_on_allocate(m_wxwindow, HasFlag(wxFULL_REPAINT_ON_RESIZE));
@@ -2453,9 +2491,20 @@ void wxWindowGTK::PostCreation()
         // GTK controls, such as the toolbar. With this callback, the
         // toolbar gets to know the correct size (the one set by the
         // programmer). Sadly, it misbehaves for wxComboBox.
+#ifdef __WXGTK30__
+        // JC: TODO This part needs to be fixed more carefully. Per the gtk+3 
+        //     migration guide, "size_request" should be replaced by 
+        //     get_preferred_height/width
+
+        // GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS(m_widget);
+
+        // widget_class->get_preferred_width = wxgtk_window_get_preferred_width;
+        // widget_class->get_preferred_height = wxgtk_window_get_preferred_height;
+#else
         g_signal_connect (m_widget, "size_request",
                           G_CALLBACK (wxgtk_window_size_request_callback),
                           this);
+#endif
     }
 
     InheritAttributes();
@@ -3775,16 +3824,20 @@ void wxWindowGTK::GtkSendPaintEvents()
 
                     #if GTK_CHECK_VERSION(3,0,0)
                         cairo_t* cr = gdk_cairo_create(GTKGetDrawingWindow());
-                        gdk_cairo_rectangle(cr, &rect);
+                        GtkStyleContext *gsc = gtk_widget_get_style_context(parent->m_widget);
 
-                        // TODO this function has been deprecated since 3.0. Use gtk_render_frame()
-                        gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),
-                                    cr,
-                                    gtk_widget_get_state(m_wxwindow),
-                                    GTK_SHADOW_NONE,
-                                    parent->m_widget,
-                                    (char *)"base",
-                                    0, 0, -1, -1 );
+                        gtk_render_frame( gsc, cr, rect.x, rect.y, rect.width, rect.height );
+
+                        // gdk_cairo_rectangle(cr, &rect);
+
+                        // // JC: this function has been deprecated since 3.0. Use gtk_render_frame()
+                        // gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),
+                        //             cr,
+                        //             gtk_widget_get_state(m_wxwindow),
+                        //             GTK_SHADOW_NONE,
+                        //             parent->m_widget,
+                        //             (char *)"base",
+                        //             0, 0, -1, -1 ); // -1, -1 will cause gtk warning
 
                     #else
                         gtk_paint_flat_box(gtk_widget_get_style(parent->m_widget),

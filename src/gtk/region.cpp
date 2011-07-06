@@ -109,9 +109,9 @@ wxRegion::wxRegion( GdkRegion *region )
 {
     m_refData = new wxRegionRefData();
 #ifdef __WXGTK30__
-    M_REGIONDATA->m_region = gdk_region_copy( region );
-#else
     M_REGIONDATA->m_region = cairo_region_copy( region );
+#else
+    M_REGIONDATA->m_region = gdk_region_copy( region );
 #endif
 }
 
