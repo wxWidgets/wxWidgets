@@ -38,6 +38,6 @@ public:
     /**
        Retrieves associated wxGraphicsContext
     */
-    wxGraphicsContext* GetGraphicsContext();
+    wxGraphicsContext* GetGraphicsContext() const;
 };
 

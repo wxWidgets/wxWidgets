@@ -32,7 +32,7 @@ public:
     wxGCDC();
     virtual ~wxGCDC();
 
-    wxGraphicsContext* GetGraphicsContext();
+    wxGraphicsContext* GetGraphicsContext() const;
     void SetGraphicsContext( wxGraphicsContext* ctx );
 
 #ifdef __WXMSW__
@@ -103,7 +103,7 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
+    wxGraphicsContext* GetGraphicsContext() const { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
 
     // the true implementations

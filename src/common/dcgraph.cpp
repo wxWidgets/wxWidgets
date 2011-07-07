@@ -123,7 +123,7 @@ wxGCDC::~wxGCDC()
 {
 }
 
-wxGraphicsContext* wxGCDC::GetGraphicsContext()
+wxGraphicsContext* wxGCDC::GetGraphicsContext() const
 {
     if (!m_pimpl) return NULL;
     wxGCDCImpl *gc_impl = (wxGCDCImpl*) m_pimpl;
