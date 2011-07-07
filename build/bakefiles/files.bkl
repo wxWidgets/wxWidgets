@@ -1072,7 +1072,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
     src/gtk3/bitmap.cpp
-    src/gtk3/brush.cpp
+    src/gtk/brush.cpp
     src/gtk3/clipbrd.cpp
     src/gtk/colour.cpp
     src/gtk3/cursor.cpp
