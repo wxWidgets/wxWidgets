@@ -1156,4 +1156,21 @@ void wxGCDCImpl::DoDrawCheckMark(wxCoord x, wxCoord y,
     wxDCImpl::DoDrawCheckMark(x,y,width,height);
 }
 
+#ifdef __WXMSW__
+wxRect wxGCDCImpl::MSWApplyGDIPlusTransform(const wxRect& r) const
+{
+    wxGraphicsContext* const gc = GetGraphicsContext();
+    wxCHECK_MSG( gc, r, wxT("Invalid wxGCDC") );
+
+    double x = 0,
+           y = 0;
+    gc->GetTransform().TransformPoint(&x, &y);
+
+    wxRect rect(r);
+    rect.Offset(x, y);
+
+    return rect;
+}
+#endif // __WXMSW__
+
 #endif // wxUSE_GRAPHICS_CONTEXT

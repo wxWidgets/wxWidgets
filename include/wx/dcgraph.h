@@ -193,6 +193,10 @@ public:
 
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
+#ifdef __WXMSW__
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
+#endif // __WXMSW__
+
 protected:
     // scaling variables
     bool m_logicalFunctionSupported;
