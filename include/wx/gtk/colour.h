@@ -33,7 +33,10 @@ public:
     unsigned char Alpha() const;
 
     // Implementation part
+#ifdef __WXGTK20__
+    // I guess we don't need it in gtk+3.0
     void CalcPixel( GdkColormap *cmap );
+#endif
     int GetPixel() const;
     const GdkColor *GetColor() const;
 
