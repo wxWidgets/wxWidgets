@@ -1087,7 +1087,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
     src/gtk3/minifram.cpp
-    src/gtk3/pen.cpp
+    src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk3/private.cpp
     src/gtk/region.cpp

@@ -31,8 +31,8 @@ public:
 
     // implementation
 #if defined(__WXGTK30__)
-    GdkPixbuf *m_bitmap;
-    GdkPixbuf *GetBitmap() const;
+    cairo_surface_t *m_bitmap;
+    cairo_surface_t *GetBitmap() const;
 #else
     GdkBitmap *m_bitmap;
     GdkBitmap *GetBitmap() const;
@@ -112,10 +112,12 @@ public:
     void SetDepth( int depth );
     void SetPixbuf(GdkPixbuf* pixbuf);
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK30__
+    cairo_surface_t *GetPixmap() const;
+#else
     GdkPixmap *GetPixmap() const;
-    bool HasPixmap() const;
 #endif
+    bool HasPixmap() const;
     bool HasPixbuf() const;
     GdkPixbuf *GetPixbuf() const;
 
@@ -134,14 +136,14 @@ protected:
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
 
 private:
-#if defined(__WXGTK20__)
+#if defined(__WXGTK30__)
+    void SetPixmap(cairo_surface_t* pixmap);
+#else
     void SetPixmap(GdkPixmap* pixmap);
 #endif
 #if wxUSE_IMAGE
     // to be called from CreateFromImage only!
-  #if defined(__WXGTK20__)
     bool CreateFromImageAsPixmap(const wxImage& image, int depth);
-  #endif
     bool CreateFromImageAsPixbuf(const wxImage& image);
 #endif // wxUSE_IMAGE
 

@@ -26,6 +26,27 @@
 
 extern GtkWidget *wxGetRootWindow();
 
+#ifdef __WXGTK30__
+static void PixmapToPixbuf(cairo_surface_t* pixmap, GdkPixbuf* pixbuf, int w, int h)
+{
+    gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
+    if (gdk_drawable_get_depth(pixmap) == 1)
+    {
+        // invert to match XBM convention
+        guchar* p = gdk_pixbuf_get_pixels(pixbuf);
+        const int inc = 3 + int(gdk_pixbuf_get_has_alpha(pixbuf) != 0);
+        const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * inc;
+        for (int y = h; y; y--, p += rowpad)
+            for (int x = w; x; x--, p += inc)
+            {
+                // pixels are either (0,0,0) or (0xff,0xff,0xff)
+                p[0] = ~p[0];
+                p[1] = ~p[1];
+                p[2] = ~p[2];
+            }
+    }
+}
+#else
 static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
 {
     gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
@@ -45,7 +66,31 @@ static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
             }
     }
 }
+#endif
 
+#ifdef __WXGTK30__
+static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
+{
+    GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_drawable(
+        NULL, mask, NULL, 0, 0, 0, 0, w, h);
+    guchar* p = gdk_pixbuf_get_pixels(pixbuf) + 3;
+    const guchar* mask_data = gdk_pixbuf_get_pixels(mask_pixbuf);
+    const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * 4;
+    const int mask_rowpad = gdk_pixbuf_get_rowstride(mask_pixbuf) - w * 3;
+    for (int y = h; y; y--, p += rowpad, mask_data += mask_rowpad)
+    {
+        for (int x = w; x; x--, p += 4, mask_data += 3)
+        {
+            *p = 255;
+            // no need to test all 3 components,
+            //   pixels are either (0,0,0) or (0xff,0xff,0xff)
+            if (mask_data[0] == 0)
+                *p = 0;
+        }
+    }
+    g_object_unref(mask_pixbuf);
+}
+#else
 static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
 {
     GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_drawable(
@@ -67,6 +112,7 @@ static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
     }
     g_object_unref(mask_pixbuf);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -87,13 +133,35 @@ wxMask::wxMask(const wxMask& mask)
         return;
     }
 
-    // create a copy of an existing mask
     gint w, h;
+
+    // create a copy of an existing mask
+#ifdef __WXGTK30__
+    // I don't know if there is a simpler way to copy cairo_image_surface. (JC)
+    w = cairo_image_surface_get_width( mask.m_bitmap );
+    h = cairo_image_surface_get_height( mask.m_bitmap );
+
+    cairo_format_t format;
+    int stride;
+    unsigned char *src_data;
+    unsigned char *data;  
+
+    stride = cairo_image_surface_get_stride( mask.m_bitmap );
+    src_data = cairo_image_surface_get_data( mask.m_bitmap );
+    format = cairo_image_surface_get_format( mask.m_bitmap );
+
+    // Caller is in charge of allocation of memory.(JC)
+    data = malloc( stride * height );
+    memcpy( data, src_data, stride * height );
+
+    m_bitmap = cairo_image_surface_create_for_data( data, format, w, h, stride );
+#else
     gdk_drawable_get_size(mask.m_bitmap, &w, &h);
     m_bitmap = gdk_pixmap_new(mask.m_bitmap, w, h, 1);
 
     wxGtkObject<GdkGC> gc(gdk_gc_new(m_bitmap));
     gdk_draw_drawable(m_bitmap, gc, mask.m_bitmap, 0, 0, 0, 0, -1, -1);
+#endif
 }
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
@@ -133,6 +201,9 @@ void wxMask::FreeData()
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 {
+#ifdef __WXGTK30__
+    wxFAIL_MSG("Not implemented for GTK+3.0 backend");
+#else
     const int w = bitmap.GetWidth();
     const int h = bitmap.GetHeight();
 
@@ -185,9 +256,12 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
         }
         g_object_unref(image);
     }
+
     m_bitmap = gdk_bitmap_create_from_data(wxGetRootWindow()->window, (char*)out, w, h);
+
     delete[] out;
     return true;
+#endif
 }
 
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
@@ -196,13 +270,34 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 
     wxCHECK_MSG( bitmap.GetDepth() == 1, false, wxT("Cannot create mask from colour bitmap") );
 
-    m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, bitmap.GetWidth(), bitmap.GetHeight(), 1 );
+    int w = bitmap.GetWidth();
+    int h = bitmap.GetHeight();
+
+#ifdef __WXGTK30__
+    // I don't know if there is a simpler way to copy cairo_image_surface. (JC)
+    cairo_format_t format;
+    int stride;
+    unsigned char *src_data;
+    unsigned char *data;  
+
+    stride = cairo_image_surface_get_stride( bitmap.GetPixmap() );
+    src_data = cairo_image_surface_get_data( bitmap.GetPixmap() );
+    format = cairo_image_surface_get_format( bitmap.GetPixmap() );
+
+    // Caller is in charge of allocation of memory.(JC)
+    data = malloc( stride * height );
+    memcpy( data, src_data, stride * height );
+
+    m_bitmap = cairo_image_surface_create_for_data( data, format, w, h, stride );
+#else
+    m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, w, h, 1 );
 
     if (!m_bitmap) return false;
 
     wxGtkObject<GdkGC> gc(gdk_gc_new( m_bitmap ));
     gdk_gc_set_function(gc, GDK_COPY_INVERT);
-    gdk_draw_drawable(m_bitmap, gc, bitmap.GetPixmap(), 0, 0, 0, 0, bitmap.GetWidth(), bitmap.GetHeight());
+    gdk_draw_drawable(m_bitmap, gc, bitmap.GetPixmap(), 0, 0, 0, 0, w, h);
+#endif
 
     return true;
 }
@@ -224,7 +319,11 @@ public:
 
     virtual bool IsOk() const;
 
+#ifdef __WXGTK30__
+    cairo_surface_t      *m_pixmap;
+#else
     GdkPixmap      *m_pixmap;
+#endif
     GdkPixbuf      *m_pixbuf;
     wxMask         *m_mask;
     int             m_width;
@@ -248,8 +347,10 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
     m_width = width;
     m_height = height;
     m_bpp = depth;
+#ifdef __WXGTK20__
     if (m_bpp < 0)
         m_bpp = gdk_drawable_get_depth(wxGetRootWindow()->window);
+#endif
     m_alphaRequested = depth == 32;
 }
 
