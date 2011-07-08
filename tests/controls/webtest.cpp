@@ -34,7 +34,10 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( WebTestCase );
+        CPPUNIT_TEST( Title );
     CPPUNIT_TEST_SUITE_END();
+
+    void Title();
 
     wxWebView* m_browser;
 
@@ -49,12 +52,26 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
 
 void WebTestCase::setUp()
 {
-    m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY, "about:blank");
+    m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
 void WebTestCase::tearDown()
 {
     wxDELETE(m_browser);
+}
+
+void WebTestCase::Title()
+{
+    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
+
+    //Test title after loading raw html
+    m_browser->SetPage("<html><title>Title</title></html>", "");
+    CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
+
+    //Test title after loading a url, we yield to let events process
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
 }
 
 #endif //wxUSE_WEB
