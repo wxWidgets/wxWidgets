@@ -179,6 +179,7 @@
             controls/treebooktest.cpp
             controls/treectrltest.cpp
             controls/virtlistctrltest.cpp
+            controls/webtest.cpp
             controls/windowtest.cpp
             events/clone.cpp
             events/propagation.cpp
@@ -208,6 +209,7 @@
             window/setsize.cpp
             xml/xrctest.cpp
         </sources>
+        <wx-lib>web</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
