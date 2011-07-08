@@ -37,11 +37,15 @@ private:
         CPPUNIT_TEST( Title );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( History );
+        CPPUNIT_TEST( HistoryEnable );
+        CPPUNIT_TEST( HistoryClear );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
     void Url();
     void History();
+    void HistoryEnable();
+    void HistoryClear();
 
     wxWebView* m_browser;
 
@@ -113,6 +117,43 @@ void WebTestCase::History()
     //We should now be at the start of the history
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
     CPPUNIT_ASSERT(m_browser->CanGoForward());
+}
+
+void WebTestCase::HistoryEnable()
+{
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->EnableHistory(false);
+
+    CPPUNIT_ASSERT(!m_browser->CanGoForward());
+    CPPUNIT_ASSERT(!m_browser->CanGoBack());
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    CPPUNIT_ASSERT(!m_browser->CanGoForward());
+    CPPUNIT_ASSERT(!m_browser->CanGoBack());
+}
+
+void WebTestCase::HistoryClear()
+{
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    //Now we are in the 'middle' of the history
+    m_browser->GoBack();
+
+    CPPUNIT_ASSERT(m_browser->CanGoForward());
+    CPPUNIT_ASSERT(m_browser->CanGoBack());
+
+    m_browser->ClearHistory();
+
+    CPPUNIT_ASSERT(!m_browser->CanGoForward());
+    CPPUNIT_ASSERT(!m_browser->CanGoBack());
 }
 
 #endif //wxUSE_WEB
