@@ -6,7 +6,7 @@
         <if cond="USE_GUI=='1'">
             $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(QA_SRC)
             $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC) $(RICHTEXT_SRC)
-            $(STC_SRC)
+            $(STC_SRC) $(ANIMATION_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">

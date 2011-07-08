@@ -388,4 +388,28 @@
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">stc=stclib+stcdll</set>
 
+    <!-- ================================================================ -->
+    <!--                            ANIMATION                             -->
+    <!-- ================================================================ -->
+
+    <dll id="animationdll" template="wx_dll"
+         cond="SHARED=='1' and USE_ANIMATION=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_ANIMATION</define>
+        <sources>$(ANIMATION_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(ANIMATION_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="animationlib" template="wx_lib"
+         cond="SHARED=='0' and USE_ANIMATION=='1' and MONOLITHIC=='0'">
+        <sources>$(ANIMATION_SRC)</sources>
+        <msvc-headers>$(ANIMATION_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxanimation" cond="MONOLITHIC=='0' and USE_ANIMATION=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">animation=animationlib+animationdll</set>
+    
 </makefile>

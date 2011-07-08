@@ -3673,6 +3673,31 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- ====================================================================== -->
+<!--                                  wxAnimation                           -->
+<!-- ====================================================================== -->
+
+<set var="ANIMATION_CMN_HDR" hints="files">
+    wx/uianimation.h
+    wx/uianimationstoryboard.h
+</set>
+<set var="ANIMATION_MSW_SRC" hints="files">
+    src/msw/uianimation.cpp
+    src/msw/uianimationstoryboard.cpp
+    src/msw/uianimationeventhander.cpp
+</set>
+<set var="ANIMATION_MSW_HDR" hints="files">
+    wx/msw/uianimation.h
+    wx/msw/uianimationstoryboard.h
+    wx/msw/private/uianimationeventhandler.h
+</set>
+<set var="ANIMATION_COCOA_SRC" hints="files">
+    src/cocoa/uianimation.cpp
+    src/cocoa/uianimationstoryboard.cpp
+</set>
+<set var="ANIMATION_COCOA_HDR" hints="files">
+    wx/cocoa/uianimationstoryboard.h
+</set>
+<!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
@@ -3914,7 +3939,23 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
     <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>
 
+    <!-- wxAnimation files: -->
+    <set var="ANIMATION_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ANIMATION_MSW_SRC)</if>
+        <!--<if cond="TOOLKIT=='OSX_COCOA'">$(ANIMATION_OSX_COCOA_SRC)</if> -->
+    </set>
+    <set var="ANIMATION_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ANIMATION_MSW_HDR)</if>
+        <!--<if cond="TOOLKIT=='OSX_COCOA'">$(ANIMATION_OSX_COCOA_HDR)</if> -->
+    </set>
 
+    <set var="ANIMATION_SRC" hints="files">
+        $(ANIMATION_CMN_SRC) $(ANIMATION_PLATFORM_SRC)
+    </set>
+	<set var="ANIMATION_HDR" hints="files">
+        $(ANIMATION_CMN_HDR) $(ANIMATION_PLATFORM_HDR)
+    </set>
+	
     <set var="GUI_CORE_HEADERS" hints="files">
         <if cond="USE_GUI=='1' and WXUNIV=='0'">$(GUI_HDR)</if>
         <if cond="USE_GUI=='1' and WXUNIV=='1'">$(UNIV_HDR)</if>
@@ -3927,7 +3968,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(PROPGRID_HDR)
-            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR)
+            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR) $(ANIMATION_HDR)
         </if>
     </set>
 

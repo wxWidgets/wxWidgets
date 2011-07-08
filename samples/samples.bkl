@@ -15,6 +15,7 @@
     <!-- all samples are enumerated here: -->
     <subproject id="access" template="sub"/>
     <subproject id="animate" template="sub"/>
+	<subproject id="animation" template="sub"/>
     <subproject id="artprov" template="sub"/>
     <subproject id="aui" template="sub"/>
     <subproject id="calendar" template="sub"/>
