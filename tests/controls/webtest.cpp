@@ -48,6 +48,7 @@ private:
     void HistoryEnable();
     void HistoryClear();
     void HistoryList();
+    void LoadUrl(const wxString& url, int times = 1);
 
     wxWebView* m_browser;
 
@@ -70,6 +71,15 @@ void WebTestCase::tearDown()
     wxDELETE(m_browser);
 }
 
+void WebTestCase::LoadUrl(const wxString& url, int times)
+{
+    for(int i = 0; i < times; i++)
+    {
+        m_browser->LoadUrl(url);
+        wxYield();
+    }
+}
+
 void WebTestCase::Title()
 {
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
@@ -79,8 +89,7 @@ void WebTestCase::Title()
     CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
 
     //Test title after loading a url, we yield to let events process
-    m_browser->LoadUrl("about:blank");
-    wxYield();
+    LoadUrl("about:blank");
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
 }
 
@@ -88,22 +97,14 @@ void WebTestCase::Url()
 {
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentURL());
 
-    m_browser->LoadUrl("about:blank");
-    wxYield();
+    LoadUrl("about:blank");
     CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
 }
 
 void WebTestCase::History()
 {
     //We use about:blank to remove the need for a network connection
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
-    m_browser->LoadUrl("about:blank");
-    wxYield();
+    LoadUrl("about:blank", 3);
 
     CPPUNIT_ASSERT(m_browser->CanGoBack());
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
@@ -123,16 +124,13 @@ void WebTestCase::History()
 
 void WebTestCase::HistoryEnable()
 {
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
+    LoadUrl("about:blank");
     m_browser->EnableHistory(false);
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
 
-    m_browser->LoadUrl("about:blank");
-    wxYield();
+    LoadUrl("about:blank");
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
@@ -140,11 +138,7 @@ void WebTestCase::HistoryEnable()
 
 void WebTestCase::HistoryClear()
 {
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
-    m_browser->LoadUrl("about:blank");
-    wxYield();
+    LoadUrl("about:blank", 2);
 
     //Now we are in the 'middle' of the history
     m_browser->GoBack();
@@ -160,12 +154,7 @@ void WebTestCase::HistoryClear()
 
 void WebTestCase::HistoryList()
 {
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
-    m_browser->LoadUrl("about:blank");
-    wxYield();
-
+    LoadUrl("about:blank", 2);
     m_browser->GoBack();
 
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
