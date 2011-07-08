@@ -39,6 +39,7 @@ private:
         CPPUNIT_TEST( History );
         CPPUNIT_TEST( HistoryEnable );
         CPPUNIT_TEST( HistoryClear );
+        CPPUNIT_TEST( HistoryList );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -46,6 +47,7 @@ private:
     void History();
     void HistoryEnable();
     void HistoryClear();
+    void HistoryList();
 
     wxWebView* m_browser;
 
@@ -154,6 +156,25 @@ void WebTestCase::HistoryClear()
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
+}
+
+void WebTestCase::HistoryList()
+{
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->GoBack();
+
+    CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
+    CPPUNIT_ASSERT_EQUAL(1, m_browser->GetForwardHistory().size());
+
+    m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
+
+    CPPUNIT_ASSERT(!m_browser->CanGoForward());
+    CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
 }
 
 #endif //wxUSE_WEB
