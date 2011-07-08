@@ -35,9 +35,13 @@ public:
 private:
     CPPUNIT_TEST_SUITE( WebTestCase );
         CPPUNIT_TEST( Title );
+        CPPUNIT_TEST( Url );
+        CPPUNIT_TEST( History );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
+    void Url();
+    void History();
 
     wxWebView* m_browser;
 
@@ -72,6 +76,43 @@ void WebTestCase::Title()
     m_browser->LoadUrl("about:blank");
     wxYield();
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
+}
+
+void WebTestCase::Url()
+{
+    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentURL());
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+    CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
+}
+
+void WebTestCase::History()
+{
+    //We use about:blank to remove the need for a network connection
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    m_browser->LoadUrl("about:blank");
+    wxYield();
+
+    CPPUNIT_ASSERT(m_browser->CanGoBack());
+    CPPUNIT_ASSERT(!m_browser->CanGoForward());
+
+    m_browser->GoBack();
+
+    CPPUNIT_ASSERT(m_browser->CanGoBack());
+    CPPUNIT_ASSERT(m_browser->CanGoForward());
+
+    m_browser->GoBack();
+    m_browser->GoBack();
+
+    //We should now be at the start of the history
+    CPPUNIT_ASSERT(!m_browser->CanGoBack());
+    CPPUNIT_ASSERT(m_browser->CanGoForward());
 }
 
 #endif //wxUSE_WEB
