@@ -26,7 +26,7 @@
 //         functions even if GTK_CHECK_VERSION would indicate the function is
 //         already available in GTK+.
 
-#if !GTK_CHECK_VERSION(3,0,0) && !(defined(GTK_DISABLE_DEPRECATED) || defined(GSEAL_ENABLE))
+#if !defined(__WXGTK30__) && !(defined(GTK_DISABLE_DEPRECATED) || defined(GSEAL_ENABLE))
 
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.8
