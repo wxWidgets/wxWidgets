@@ -229,7 +229,12 @@ public:
     /**
         Returns whether the web control is currently busy (e.g. loading a page).
     */
-    virtual bool IsBusy() = 0;          
+    virtual bool IsBusy() = 0;
+
+    /**
+        Returns whether the web control is currently editable
+    */
+    virtual bool IsEditable() = 0;
 
     /**
         Load a web page from a URL
@@ -251,6 +256,13 @@ public:
         @param flags A bit array that may optionally contain reload options.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
+    
+    /**
+        Set the editable property of the web control. Enabling allows the user
+        to edit the page even if the @c contenteditable attribute is not set.
+        The exact capabilities vary with the backend being used.
+    */
+    virtual void SetEditable(bool enable = true) = 0;
 
     /**
         Set the displayed page source to the contents of the given string.

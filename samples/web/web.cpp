@@ -76,6 +76,7 @@ public:
     void OnPaste(wxCommandEvent& evt);
     void OnUndo(wxCommandEvent& evt);
     void OnRedo(wxCommandEvent& evt);
+    void OnMode(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -102,6 +103,7 @@ private:
     wxMenuItem* m_edit_paste;
     wxMenuItem* m_edit_undo;
     wxMenuItem* m_edit_redo;
+    wxMenuItem* m_edit_mode;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -213,6 +215,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     editmenu->AppendSeparator();
     m_edit_undo = editmenu->Append(wxID_ANY, _("Undo"));
     m_edit_redo = editmenu->Append(wxID_ANY, _("Redo"));
+    editmenu->AppendSeparator();
+    m_edit_mode = editmenu->AppendCheckItem(wxID_ANY, _("Edit Mode"));
 
     m_tools_menu->AppendSeparator();
     m_tools_menu->AppendSubMenu(editmenu, "Edit");
@@ -279,6 +283,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnUndo),  NULL, this );
     Connect(m_edit_redo->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnRedo),  NULL, this );
+    Connect(m_edit_mode->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
@@ -427,6 +433,12 @@ void WebFrame::OnRedo(wxCommandEvent& evt)
 {
     m_browser->Redo();
 }
+
+void WebFrame::OnMode(wxCommandEvent& evt)
+{
+    m_browser->SetEditable(m_edit_mode->IsChecked());
+}
+
 
 /**
   * Callback invoked when there is a request to load a new page (for instance

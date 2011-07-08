@@ -97,6 +97,10 @@ public:
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();
+    
+    //Editing functions
+    void  SetEditable(bool enable = true);
+    bool  IsEditable();
 
     // ---- methods not from the parent (common) interface
     wxString GetSelectedText();
@@ -107,9 +111,6 @@ public:
 
     void  SetScrollPos(int pos);
     int   GetScrollPos();
-
-    void  MakeEditable(bool enable = true);
-    bool  IsEditable();
 
     wxString GetSelection();
 

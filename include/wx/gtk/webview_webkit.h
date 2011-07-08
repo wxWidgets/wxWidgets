@@ -134,6 +134,10 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    //Editing functions
+    virtual void SetEditable(bool enable = true);
+    virtual bool IsEditable();
+
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
 

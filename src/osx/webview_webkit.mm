@@ -660,7 +660,7 @@ void wxWebViewWebKit::Print()
     [op runOperation];
 }
 
-void wxWebViewWebKit::MakeEditable(bool enable)
+void wxWebViewWebKit::SetEditable(bool enable)
 {
     if ( !m_webView )
         return;

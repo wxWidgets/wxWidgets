@@ -544,6 +544,26 @@ void wxWebViewIE::Redo()
     ExecCommand("Redo");
 }
 
+void wxWebViewIE::SetEditable(bool enable)
+{
+    IHTMLDocument2* document = GetDocument();
+    if( enable )
+        document->put_designMode(SysAllocString(L"On"));
+    else
+        document->put_designMode(SysAllocString(L"Off"));
+}
+
+bool wxWebViewIE::IsEditable()
+{
+    IHTMLDocument2* document = GetDocument();
+    BSTR mode;
+    document->get_designMode(&mode);
+    if(wxString(mode) == "On")
+        return true;
+    else
+        return false;
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();

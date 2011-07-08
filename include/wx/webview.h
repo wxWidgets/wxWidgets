@@ -281,12 +281,12 @@ public:
         SetPage(stream.GetString(), baseUrl);
     }
 
+    virtual void SetEditable(bool enable = true) = 0;
+    virtual bool IsEditable() = 0;
+
     // TODO:
     //     wxString GetSelection();                         // maybe?
     //     void SetSelection(...);                          // maybe?
-
-    //     void MakeEditable(bool enable = true);           // maybe?
-    //     bool IsEditable();                               // maybe?
 
     //     void EnableJavascript(bool enabled);             // maybe?
     //     wxString RunScript(const wxString& javascript);  // maybe?

@@ -702,6 +702,16 @@ bool wxWebViewWebKit::IsBusy()
      */
 }
 
+void wxWebViewWebKit::SetEditable(bool enable)
+{
+    webkit_web_view_set_editable(WEBKIT_WEB_VIEW(web_view), enable);
+}
+
+bool wxWebViewWebKit::IsEditable()
+{
+    return webkit_web_view_get_editable(WEBKIT_WEB_VIEW(web_view));
+}
+
 // static
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

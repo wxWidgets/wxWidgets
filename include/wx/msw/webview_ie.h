@@ -93,6 +93,10 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    //Editing functions
+    virtual void SetEditable(bool enable = true);
+    virtual bool IsEditable();
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...

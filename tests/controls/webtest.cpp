@@ -40,6 +40,7 @@ private:
         CPPUNIT_TEST( HistoryEnable );
         CPPUNIT_TEST( HistoryClear );
         CPPUNIT_TEST( HistoryList );
+        CPPUNIT_TEST( Editable );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -48,6 +49,7 @@ private:
     void HistoryEnable();
     void HistoryClear();
     void HistoryList();
+    void Editable();
     void LoadUrl(const wxString& url, int times = 1);
 
     wxWebView* m_browser;
@@ -164,6 +166,19 @@ void WebTestCase::HistoryList()
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
+}
+
+void WebTestCase::Editable()
+{
+    CPPUNIT_ASSERT(!m_browser->IsEditable());
+
+    m_browser->SetEditable(true);
+
+    CPPUNIT_ASSERT(m_browser->IsEditable());
+
+    m_browser->SetEditable(false);
+
+    CPPUNIT_ASSERT(!m_browser->IsEditable());
 }
 
 #endif //wxUSE_WEB
