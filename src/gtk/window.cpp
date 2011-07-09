@@ -3203,8 +3203,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 {
     wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
 
-    wxWindowGTK *oldParent = m_parent,
-             *newParent = (wxWindowGTK *)newParentBase;
+    wxWindowGTK * const newParent = (wxWindowGTK *)newParentBase;
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
@@ -3213,8 +3212,11 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
-    if (oldParent)
-        gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(m_widget)), m_widget);
+    // Notice that old m_parent pointer might be non-NULL here but the widget
+    // still not have any parent at GTK level if it's a notebook page that had
+    // been removed from the notebook so test this at GTK level and not wx one.
+    if ( GtkWidget *parentGTK = gtk_widget_get_parent(m_widget) )
+        gtk_container_remove(GTK_CONTAINER(parentGTK), m_widget);
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
