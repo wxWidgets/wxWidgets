@@ -26,6 +26,8 @@
 #include "wx/msw/uianimation.h"
 #include "wx/msw/private/uianimationeventhandler.h"
 
+DEFINE_EVENT_TYPE(wxEVT_STORYBOARD)
+
 // Creates the IUIAnimationStoryboard and related MSW animation classes.
 wxUIAnimationStoryboardMSW::wxUIAnimationStoryboardMSW()
 {
@@ -44,24 +46,21 @@ wxUIAnimationStoryboardMSW::wxUIAnimationStoryboardMSW()
 // This should release every COM object that we have a reference to (TODO/NOTE: some object are left out on purpose for now)
 wxUIAnimationStoryboardMSW::~wxUIAnimationStoryboardMSW()
 {
-    //std::vector<wxUIAnimationMSW*>::iterator animations_iter = m_Animations.begin();
-    if(m_animations.size() != 0)
-    {
-        //delete (*m_Animations.begin());//TODO [urgent]:why does this release everything?
-    }
-    
-    //for(animations_iter; animations_iter != m_Animations.end(); animations_iter++)
-    //{
-    //    delete (*animations_iter);
-    //}
     m_animations.clear();
 
     // TODO: check the way these objects get released (mainly if there are no references to them elsewhere)
+    
     m_animationTimer->SetTimerEventHandler(NULL);
-    m_animationManager->Release();
-    m_animationTimer->Release();
+    m_animationManager->SetManagerEventHandler(NULL);
+
     m_transitionLibrary->Release();
     m_storyboard->Release();
+    m_animationManager->Release();
+
+    // This will cause an access violation in UIAnimation.dll!726c24c6
+    // IsEnabled returns OK even though the destructor gets called when animations finish.
+    // And even if we disable the timer(successfully) the access violation will still happen.
+    //m_animationTimer->Release();
 }
 
 // Schedules the storyboard to start playing right away.
@@ -70,19 +69,27 @@ void wxUIAnimationStoryboardMSW::Start()
     UI_ANIMATION_SECONDS now;
     m_animationTimer->GetTime(&now);
     HRESULT result;
-    UI_ANIMATION_SCHEDULING_RESULT schedulingResult;
-    if( m_storyboard == NULL)
+
+    if(m_repeatCount > 0)
     {
-        int i = 0;
+        UI_ANIMATION_KEYFRAME endKeyframe;
+
+        IUIAnimationTransition* finalTransition = m_animations.back()->GetTransitions().back();
+        m_storyboard->AddKeyframeAfterTransition(finalTransition, &endKeyframe);
+        
+        m_storyboard->RepeatBetweenKeyframes(UI_ANIMATION_KEYFRAME_STORYBOARD_START, endKeyframe, m_repeatCount);
     }
+
+    UI_ANIMATION_SCHEDULING_RESULT schedulingResult;
     result = m_storyboard->Schedule(now, &schedulingResult);
-    
+
+
     if (SUCCEEDED(result))
     {
         if (schedulingResult == UI_ANIMATION_SCHEDULING_SUCCEEDED)
         {
             m_animationTimer->Enable();
-        }   
+        }
     }
 }
 
@@ -100,23 +107,35 @@ void wxUIAnimationStoryboardMSW::Stop()
 bool wxUIAnimationStoryboardMSW::Initialize()
 {
     HRESULT result;
-    result = CoCreateInstance(CLSID_UIAnimationManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_animationManager));
+    result = CoCreateInstance(CLSID_UIAnimationManager,
+        NULL,
+        CLSCTX_INPROC_SERVER,
+        IID_IUIAnimationManager,
+        reinterpret_cast<void**>(&m_animationManager));
     if(!SUCCEEDED(result))
     {
         return false;
     }
-    result = CoCreateInstance(CLSID_UIAnimationTimer, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_animationTimer));
+    result = CoCreateInstance(CLSID_UIAnimationTimer,
+        NULL,
+        CLSCTX_INPROC_SERVER,
+        IID_IUIAnimationTimer,
+        reinterpret_cast<void**>(&m_animationTimer));
     if(!SUCCEEDED(result))
     {
         return false;
     }
-    result = CoCreateInstance(CLSID_UIAnimationTransitionLibrary, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_transitionLibrary));
+    result = CoCreateInstance(CLSID_UIAnimationTransitionLibrary,
+        NULL,
+        CLSCTX_INPROC_SERVER,
+        IID_IUIAnimationTransitionLibrary,
+        reinterpret_cast<void**>(&m_transitionLibrary));
     if(!SUCCEEDED(result))
     {
         return false;
     }
  
-    UIAnimationManagerEventHandlerBase* animation_manager_handler = new UIAnimationManagerEventHandlerBase();
+    UIAnimationManagerEventHandlerBase* animation_manager_handler = new UIAnimationManagerEventHandlerBase(this);
     result = m_animationManager->SetManagerEventHandler(animation_manager_handler);
     if(!SUCCEEDED(result))
     {
@@ -129,7 +148,7 @@ bool wxUIAnimationStoryboardMSW::Initialize()
     }
 
     IUIAnimationTimerUpdateHandler *timerUpdateHandler;
-    result = m_animationManager->QueryInterface(IID_PPV_ARGS(&timerUpdateHandler));
+    result = m_animationManager->QueryInterface(IID_IUIAnimationTimerUpdateHandler, reinterpret_cast<void**>(&timerUpdateHandler));
     if(!SUCCEEDED(result))
     {
         return false;

@@ -37,7 +37,7 @@ END_IID_TABLE;
 IMPLEMENT_IUNKNOWN_METHODS(UIAnimationTimerEventHandlerBase)
 #endif
 
-UIAnimationTimerEventHandlerBase::UIAnimationTimerEventHandlerBase(wxUIAnimationStoryboardBase* storyboard)
+UIAnimationTimerEventHandlerBase::UIAnimationTimerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard)
 {
     m_storyboard = storyboard;
 };
@@ -46,7 +46,7 @@ STDMETHODIMP UIAnimationTimerEventHandlerBase::OnPreUpdate()
 {
     //PreUpdate seems to offer smoother animation than PostUpdate
     //TODO: document better
-    ((wxUIAnimationStoryboardMSW*)m_storyboard)->Update();
+    m_storyboard->Update();
     return S_OK;
 };
 
@@ -59,15 +59,26 @@ STDMETHODIMP UIAnimationTimerEventHandlerBase::OnRenderingTooSlow(UINT32 framesP
 {
     return S_OK;
 };
+
+UIAnimationManagerEventHandlerBase::UIAnimationManagerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard)
+{
+    m_storyboard = storyboard;
+};
+
 STDMETHODIMP UIAnimationManagerEventHandlerBase::OnManagerStatusChanged(UI_ANIMATION_MANAGER_STATUS newStatus,
     UI_ANIMATION_MANAGER_STATUS previousStatus)
 {
-    // If the behaviour of a storyboard is set to repeating this is where the storyboard is reset
-    if(newStatus == UI_ANIMATION_MANAGER_IDLE)
+    if((newStatus == UI_ANIMATION_MANAGER_IDLE) && 
+        (previousStatus == UI_ANIMATION_MANAGER_BUSY))
     {
+        m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_FINISHED);
+        m_storyboard->ProcessEvent(wxUIAnimationStoryboardEvent(m_storyboard));
     }
-    if(previousStatus == UI_ANIMATION_MANAGER_BUSY)
+    if((newStatus == UI_ANIMATION_MANAGER_BUSY) && 
+        (previousStatus == UI_ANIMATION_MANAGER_IDLE))
     {
+        m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_STARTED);
+        m_storyboard->ProcessEvent(wxUIAnimationStoryboardEvent(m_storyboard));
     }
     return S_OK;
 }

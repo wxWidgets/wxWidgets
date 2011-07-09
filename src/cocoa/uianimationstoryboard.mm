@@ -36,9 +36,17 @@ void wxUIAnimationStoryboardCocoa::Start()
     wxVector<wxSharedPtr<CABasicAnimation>>::iterator animation_iter;
     for(animation_iter = m_animations.begin(); animation_iter != m_animations.end(); ++animation_iter)
 	{
+	    if( m_repeatCount == wxSTORYBOARD_REPEAT_FOREVER)
+		{
+		    (*animation_iter).repeatCount = HUGE_VALF;
+		}
+		else
+		{
+	        (*animation_iter).repeatCount = m_repeatCount;
+		}
 	    // TODO: we need to set a key for our animation so we can call removeAnimationForKey when we call ::Stop
 		// TODO [check]: Is NSView a real NSView or a wrapper?
-	    [[m_target->GetNSView() layer] addAnimation:(*iter) forKey:@""];
+	    [[m_target->GetNSView() layer] addAnimation:(*animation_iter) forKey:@""];
 	}
 }
 

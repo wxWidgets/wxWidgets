@@ -54,8 +54,25 @@ public:
         const wxUIAnimationKeyframe<T>* nextKeyframe,
         double delay);
     
+    const wxVector<IUIAnimationTransition*>& GetTransitions()
+    {
+        return m_transitions;
+    }
+
+    const wxVector<IUIAnimationVariable*>& GetVariables()
+    {
+        return m_variables;
+    }
+
     //old: currently unused
     bool AddKeyframeTransitionsToStoryboard(IUIAnimationStoryboard* storyboard, double delay);
+
+    // Queues an instantaneous transition in addition to the existing transitions.
+    // This will allow cause the animation to snap back to the specified value.
+    template <class T> bool QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+        IUIAnimationTransitionLibrary* library,
+        T value);
+
 private:
     //TODO: should these pe wxSharedPtrs as well?
     wxVector<IUIAnimationTransition*> m_transitions;
@@ -111,6 +128,22 @@ template<> bool wxUIAnimationMSW::Build(IUIAnimationManager* manager,
 
 template<> bool wxUIAnimationMSW::Build(IUIAnimationManager* manager,
     wxColour initial_value);
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    int value);
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    double value);
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    wxPoint value);
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    wxColour value);
 
 // Keyframe transition creation
 template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(IUIAnimationStoryboard* storyboard,

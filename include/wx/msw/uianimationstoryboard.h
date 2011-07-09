@@ -15,7 +15,7 @@
 #include "wx/uianimation.h"
 #include "wx/msw/uianimation.h"
 
-#include <wx/sharedptr.h>
+#include "wx/sharedptr.h"
 
 // ----------------------------------------------------------------------------
 // Forward declarations.
@@ -31,6 +31,7 @@ class WXDLLIMPEXP_ANIMATION wxUIAnimationStoryboardMSW : public wxUIAnimationSto
 {
 public:
     friend class UIAnimationTimerEventHandlerBase;// Allows the call to Update
+    friend class UIAnimationManagerEventHandlerBase;// Allows calls to SetStoryboardStatus and internal auto-repeat methods.
 
     wxUIAnimationStoryboardMSW();
 
@@ -54,10 +55,17 @@ public:
         {
             return false;
         }
+
         if(!animationData->AddTransitionsToStoryboard(m_storyboard))
         {
             return false;
         }
+
+        if(m_fillMode == wxSTORYBOARD_FILL_MODE_STOP)
+        {
+            // NOTE: Currently not implemented. CA fill mode is unknown
+        }
+
         m_animations.push_back(animationData);
         return true;
     }
@@ -123,6 +131,7 @@ private:
 
     // Performs basic initialization of the Windows Animation classes.
     bool Initialize();
+
     // ----------------------------------------------------
     // UIAnimation objects.
     // ----------------------------------------------------
@@ -131,7 +140,7 @@ private:
     IUIAnimationTransitionLibrary *m_transitionLibrary;
     IUIAnimationStoryboard *m_storyboard;
 
-    //Stores wxUIAnimation objects that take part in the actual animation.
+    //Stores wxUIAnimationMSW objects that take part in the actual animation.
     wxVector<wxSharedPtr<wxUIAnimationMSW>> m_animations;
 
     wxDECLARE_NO_COPY_CLASS(wxUIAnimationStoryboardMSW);

@@ -25,6 +25,7 @@ public:
     {
         m_referenceCount = 1;
     }
+
     HRESULT QueryInterfaceCallback(REFIID requestedInterfaceId,
         REFIID requestedInterfaceIdCallback,
         void** requestedInterfacePointer)
@@ -42,17 +43,20 @@ public:
         *requestedInterfacePointer = NULL;
         return E_NOINTERFACE;
     }
+
     STDMETHODIMP QueryInterface(REFIID requestedInterfaceId,
         void** requestedInterfacePointer)
     {
-        T** animationInterface = reinterpret_cast<T**>(requestedInterfacePointer);      
-        return QueryInterfaceCallback(requestedInterfaceId, IID_PPV_ARGS(animationInterface));
+        T** animationInterface = reinterpret_cast<T**>(requestedInterfacePointer);   
+        return QueryInterfaceCallback(requestedInterfaceId, __uuidof(**animationInterface), reinterpret_cast<void**>(animationInterface));
     }
+
     STDMETHODIMP_(ULONG) AddRef()
     {
         ++m_referenceCount;
         return m_referenceCount;
     }
+
     STDMETHODIMP_(ULONG) Release()
     {
         m_referenceCount -= 1;
@@ -63,29 +67,40 @@ public:
         }
         return m_referenceCount;
     }
+
 protected:
     DWORD m_referenceCount;
 };
+
+// MSW event handler class. Events fire when the IUIAnimationManager status changes.
+// It implements auto-repeat and event handling for storyboards.
 class UIAnimationManagerEventHandlerBase : public wxMSWAnimationEventHandlerBase<IUIAnimationManagerEventHandler>
 {
 public:
-    UIAnimationManagerEventHandlerBase()
-    {
-    }
+    UIAnimationManagerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard);
+
     // IUIAnimationManagerEventHandler
     STDMETHODIMP OnManagerStatusChanged(UI_ANIMATION_MANAGER_STATUS newStatus, 
         UI_ANIMATION_MANAGER_STATUS previousStatus);
+private:
+    wxUIAnimationStoryboardMSW* m_storyboard;
 };
+
+// MSW event handler class. Events fire when the values of the animation variables update.
 class UIAnimationTimerEventHandlerBase : public wxMSWAnimationEventHandlerBase<IUIAnimationTimerEventHandler>
 {
 public:
-    UIAnimationTimerEventHandlerBase(wxUIAnimationStoryboardBase* storyboard);
+    UIAnimationTimerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard);
+
     // IUIAnimationTimerEventHandler
     STDMETHODIMP OnPreUpdate();
+
     STDMETHODIMP OnPostUpdate();
+
     STDMETHODIMP OnRenderingTooSlow(UINT32 framesPerSecond);
+
 private:
-    wxUIAnimationStoryboardBase* m_storyboard;
+    wxUIAnimationStoryboardMSW* m_storyboard;
 };
 
 #if 0 // This will cause an access violation when the storyboard is scheduled to play.

@@ -42,10 +42,16 @@ class MyPanel : public wxPanel
 public:
     MyPanel(wxWindow *parent);
 private:
-    //Event handlers for our buttons
+    // Event handlers for our buttons
     void OnChangeBackgroundColour(wxCommandEvent& event);
+
     void OnMoveWithKeyframe(wxCommandEvent& event);
+
     void OnChangeBackgroundColourAndMove(wxCommandEvent& event);
+
+    // Event handler for when a storyboard finishes playing.
+    // The object will be released with this event handler.
+    void OnStoryboardFinished(wxUIAnimationStoryboardEvent& event);
 
     wxSizer *m_sizer;
     wxButton* m_animatedButton1;
@@ -145,14 +151,14 @@ MyPanel::MyPanel(wxWindow* parent)
 // Animates the background color of m_AnimatedButton1
 void MyPanel::OnChangeBackgroundColour(wxCommandEvent& event)
 {
-    // NOTE: The storyboard will simply be leaked until event handling is possible.
     wxUIAnimationStoryboard* storyboard = new wxUIAnimationStoryboard();
+    storyboard->Connect(wxEVT_STORYBOARD, wxStoryboardEventHandler(MyPanel::OnStoryboardFinished));
     wxUIAnimation<wxANIMATION_TARGET_PROPERTY_BACKGROUND_COLOR> backgroundColourAnimation(*wxRED,
         *wxBLUE,
         0.4);
 
     storyboard->SetAnimationTarget(m_animatedButton1);
-
+    storyboard->SetRepeatCount(4);
     storyboard->AddAnimation(&backgroundColourAnimation);// NOTE: will be changed to pass by const reference
     storyboard->Start();
 }
@@ -160,8 +166,8 @@ void MyPanel::OnChangeBackgroundColour(wxCommandEvent& event)
 // Animates the position of m_AnimatedButton2 using key frames
 void MyPanel::OnMoveWithKeyframe(wxCommandEvent& event)
 {
-    // NOTE: The storyboard will simply be leaked until event handling is possible.
     wxUIAnimationStoryboard* storyboard = new wxUIAnimationStoryboard();
+    storyboard->Connect(wxEVT_STORYBOARD, wxStoryboardEventHandler(MyPanel::OnStoryboardFinished));
     wxUIKeyframeAnimation<wxANIMATION_TARGET_PROPERTY_POSITION> positionAnimation;
     
     wxUIAnimationKeyframe<wxPoint> keyframe1(wxPoint(100,100), 0.5);
@@ -184,8 +190,8 @@ void MyPanel::OnMoveWithKeyframe(wxCommandEvent& event)
 // Animates the position and background color of m_AnimatedButton3 using simple animations 
 void MyPanel::OnChangeBackgroundColourAndMove(wxCommandEvent& event)
 {
-    // NOTE: The storyboard will simply be leaked until event handling is possible.
     wxUIAnimationStoryboard* storyboard = new wxUIAnimationStoryboard();
+    storyboard->Connect(wxEVT_STORYBOARD, wxStoryboardEventHandler(MyPanel::OnStoryboardFinished));
     wxUIAnimation<wxANIMATION_TARGET_PROPERTY_POSITION> positionAnimation(m_animatedButton3->GetPosition(),
         wxPoint(500,500), 0.4);
     wxUIAnimation<wxANIMATION_TARGET_PROPERTY_BACKGROUND_COLOR> backgroundColourAnimation(*wxRED, *wxBLUE, 0.7);
@@ -195,4 +201,13 @@ void MyPanel::OnChangeBackgroundColourAndMove(wxCommandEvent& event)
     storyboard->AddAnimation(&positionAnimation);
     storyboard->AddAnimation(&backgroundColourAnimation);
     storyboard->Start();
+}
+
+void MyPanel::OnStoryboardFinished(wxUIAnimationStoryboardEvent& event)
+{
+    if(event.GetStoryboardStatus() == wxSTORYBOARD_STATUS_FINISHED)
+    {
+        // The storyboard that fired this event has finished playing. It is now safe to delete it.
+        delete event.GetSender();
+    }
 }

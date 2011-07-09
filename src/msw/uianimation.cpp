@@ -151,8 +151,8 @@ IUIAnimationVariable* BuildAnimationVariable(IUIAnimationManager* manager, doubl
 // This should release every COM object that we have a reference to.
 wxUIAnimationMSW::~wxUIAnimationMSW()
 {
-    std::vector<IUIAnimationTransition*>::iterator transitionIter;
-    std::vector<IUIAnimationVariable*>::iterator variableIter;
+    wxVector<IUIAnimationTransition*>::iterator transitionIter;
+    wxVector<IUIAnimationVariable*>::iterator variableIter;
 
     for(transitionIter = m_transitions.begin(); transitionIter != m_transitions.end(); ++transitionIter)
     {
@@ -170,8 +170,8 @@ wxUIAnimationMSW::~wxUIAnimationMSW()
 
 bool wxUIAnimationMSW::AddTransitionsToStoryboard(IUIAnimationStoryboard* storyboard)
 {
-    std::vector<IUIAnimationTransition*>::iterator transitionIter;
-    std::vector<IUIAnimationVariable*>::iterator variableIter;
+    wxVector<IUIAnimationTransition*>::iterator transitionIter;
+    wxVector<IUIAnimationVariable*>::iterator variableIter;
     HRESULT result;
     wxCHECK(m_transitions.size() == m_variables.size(), false);
     for(transitionIter = m_transitions.begin(),variableIter = m_variables.begin(); 
@@ -193,8 +193,8 @@ bool wxUIAnimationMSW::AddKeyframeTransitionsToStoryboard(IUIAnimationStoryboard
     //As a rule we will always have at least and equal number of transitions to the number of variables.
 
     // TODO: add checks
-    std::vector<IUIAnimationTransition*>::iterator transition_iter;
-    std::vector<IUIAnimationVariable*>::iterator variable_iter = m_variables.begin();
+    wxVector<IUIAnimationTransition*>::iterator transition_iter;
+    wxVector<IUIAnimationVariable*>::iterator variable_iter = m_variables.begin();
     HRESULT result;
     for(transition_iter = m_transitions.begin(); transition_iter != m_transitions.end(); transition_iter++)
     {
@@ -650,6 +650,138 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(IUIAnimationStoryboar
         return false;
     }
     result = storyboard->AddTransitionAtKeyframe(m_variables.at(3), transitionGreen, animationKeyframe);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    return true;
+}
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    int value)
+{
+    IUIAnimationTransition* transition;
+    HRESULT result;
+    result = library->CreateInstantaneousTransition(value, &transition);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    m_transitions.push_back(transition);
+    result = storyboard->AddTransition(m_variables.at(0), transition);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    return true;
+}
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    double value)
+{
+    IUIAnimationTransition* transition;
+    HRESULT result;
+    result = library->CreateInstantaneousTransition(value, &transition);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    m_transitions.push_back(transition);
+    result = storyboard->AddTransition(m_variables.at(0), transition);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    return true;
+}
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    wxPoint value)
+{
+    IUIAnimationTransition* transitionX;
+    IUIAnimationTransition* transitionY;
+    HRESULT result;
+    result = library->CreateInstantaneousTransition(value.x, &transitionX);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = library->CreateInstantaneousTransition(value.y, &transitionY);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    m_transitions.push_back(transitionX);
+    m_transitions.push_back(transitionY);
+
+    result = storyboard->AddTransition(m_variables.at(0), transitionX);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = storyboard->AddTransition(m_variables.at(1), transitionY);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    return true;
+}
+
+template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(IUIAnimationStoryboard* storyboard,
+    IUIAnimationTransitionLibrary* library,
+    wxColour value)
+{
+    IUIAnimationTransition* transitionAlpha;
+    IUIAnimationTransition* transitionRed;
+    IUIAnimationTransition* transitionBlue;
+    IUIAnimationTransition* transitionGreen;
+
+    HRESULT result;
+    result = library->CreateInstantaneousTransition(value.Alpha(), &transitionAlpha);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = library->CreateInstantaneousTransition(value.Red(), &transitionRed);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = library->CreateInstantaneousTransition(value.Blue(), &transitionBlue);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = library->CreateInstantaneousTransition(value.Green(), &transitionGreen);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+
+    m_transitions.push_back(transitionAlpha);
+    m_transitions.push_back(transitionRed);
+    m_transitions.push_back(transitionBlue);
+    m_transitions.push_back(transitionGreen);
+
+    result = storyboard->AddTransition(m_variables.at(0), transitionAlpha);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = storyboard->AddTransition(m_variables.at(1), transitionRed);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = storyboard->AddTransition(m_variables.at(2), transitionBlue);
+    if(!SUCCEEDED(result))
+    {
+        return false;
+    }
+    result = storyboard->AddTransition(m_variables.at(3), transitionGreen);
     if(!SUCCEEDED(result))
     {
         return false;
