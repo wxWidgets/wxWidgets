@@ -2184,9 +2184,9 @@ bool wxCocoaDataViewControl::IsExpanded(const wxDataViewItem& item) const
 bool wxCocoaDataViewControl::Reload()
 {
     [m_DataSource clearBuffers];
+    [m_OutlineView reloadData];
     [m_OutlineView scrollColumnToVisible:0];
     [m_OutlineView scrollRowToVisible:0];
-    [m_OutlineView reloadData];
     return true;
 }
 
