@@ -553,10 +553,9 @@ wxMoTableCell* MultiSectionDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTabl
     wxMoTableCell* cell = ctrl->GetReusableCell(reuseName);
         
     if (!cell)
-        cell = new wxMoTableCell(ctrl, reuseName);
+        cell = new wxMoTableCell(ctrl, reuseName, m_cellStyle);
     cell->SetText(rowText);
     cell->SetDetailText(_("Detail text."));
-    cell->SetCellStyle(m_cellStyle);
 
     if (ctrl->HasFlag(wxTC_GROUPED))
     {
@@ -886,7 +885,8 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Segmented:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoSegmentedCtrl* segCtrl = new wxMoSegmentedCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 28));
+            //wxMoSegmentedCtrl* segCtrl = new wxMoSegmentedCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 28));
+            wxMoSegmentedCtrl* segCtrl = new wxMoSegmentedCtrl(panel, wxID_ANY, wxPoint(50, 50), wxSize(100, 40));
             segCtrl->AddItem(_("Tiger"));
             segCtrl->AddItem(_("Cheetah"));
             segCtrl->AddItem(_("Pig"));
@@ -913,13 +913,12 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             
             innerSizer->Add(sliderCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             
-#if 0
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Web:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoWebCtrl* webCtrl = new wxMoWebCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), 0 );
+            //wxMoWebCtrl* webCtrl = new wxMoWebCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), 0 );
+            wxMoWebCtrl* webCtrl = new wxMoWebCtrl(panel, wxID_ANY, wxPoint(0, 0), wxSize(200, 200), 0 );
             webCtrl->LoadURL(wxT("http://www.google.com"));
             innerSizer->Add(webCtrl, 1, wxGROW|wxALL, 5);
-#endif
             
             PushWindow(panel, _("More Controls"));
         }
@@ -944,6 +943,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             listBox->SetSelection(0);
             innerSizer->Add(listBox, 1, wxEXPAND|wxALL, 5);
             
+#if 0
             innerSizer->Add(new wxMoStaticText(panel, wxID_STATIC, _("Wheels control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxMoWheelsTextDataSource* dataSource = new wxMoWheelsTextDataSource(2);
@@ -968,6 +968,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             wheelsCtrl->SetDataSource(dataSource, true /* control owns the data source */);
             
             innerSizer->Add(wheelsCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+#endif  // 0
 
             PushWindow(panel, _("Picker Controls"));
         }
@@ -1089,10 +1090,9 @@ wxMoTableCell* EditableDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePat
     wxMoTableCell* cell = ctrl->GetReusableCell(reuseName);
         
     if (!cell)
-        cell = new wxMoTableCell(ctrl, reuseName);
+        cell = new wxMoTableCell(ctrl, reuseName, m_cellStyle);
     cell->SetText(rowText);
     cell->SetDetailText(_("Detail text."));
-    cell->SetCellStyle(m_cellStyle);
     cell->SetShowReorderingControl(true);
 
     if (ctrl->HasFlag(wxTC_GROUPED))
