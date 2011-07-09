@@ -434,7 +434,15 @@ Major new features in this release
   was added.
 
 
-2.9.2:
+2.9.3:
+------
+
+GTK:
+
+- Generate events for two auxiliary mouse buttons in wxGTK (Marcin Wojdyr).
+
+
+2.9.2: (released 2011-07-05)
 ------
 
 All:

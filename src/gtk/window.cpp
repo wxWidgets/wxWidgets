@@ -1145,6 +1145,10 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK) != 0;
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK) != 0;
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK) != 0;
+
+    // In gdk/win32 VK_XBUTTON1 is translated to GDK_BUTTON4_MASK
+    // and VK_XBUTTON2 to GDK_BUTTON5_MASK. In x11/gdk buttons 4/5
+    // are wheel rotation and buttons 8/9 don't change the state.
     event.m_aux1Down = (gdk_event->state & GDK_BUTTON4_MASK) != 0;
     event.m_aux2Down = (gdk_event->state & GDK_BUTTON5_MASK) != 0;
 
@@ -1194,6 +1198,20 @@ static void AdjustEventButtonState(wxMouseEvent& event)
         (event.GetEventType() == wxEVT_RIGHT_UP))
     {
         event.m_rightDown = !event.m_rightDown;
+        return;
+    }
+
+    if ((event.GetEventType() == wxEVT_AUX1_DOWN) ||
+        (event.GetEventType() == wxEVT_AUX1_DCLICK))
+    {
+        event.m_aux1Down = true;
+        return;
+    }
+
+    if ((event.GetEventType() == wxEVT_AUX2_DOWN) ||
+        (event.GetEventType() == wxEVT_AUX2_DCLICK))
+    {
+        event.m_aux2Down = true;
         return;
     }
 }
@@ -1425,6 +1443,42 @@ gtk_window_button_press_callback( GtkWidget *widget,
         }
     }
 
+    else if (gdk_event->button == 8)
+    {
+        switch (gdk_event->type)
+        {
+            case GDK_3BUTTON_PRESS:
+            case GDK_BUTTON_PRESS:
+                event_type = wxEVT_AUX1_DOWN;
+                break;
+
+            case GDK_2BUTTON_PRESS:
+                event_type = wxEVT_AUX1_DCLICK;
+                break;
+
+            default:
+                ;
+        }
+    }
+
+    else if (gdk_event->button == 9)
+    {
+        switch (gdk_event->type)
+        {
+            case GDK_3BUTTON_PRESS:
+            case GDK_BUTTON_PRESS:
+                event_type = wxEVT_AUX2_DOWN;
+                break;
+
+            case GDK_2BUTTON_PRESS:
+                event_type = wxEVT_AUX2_DCLICK;
+                break;
+
+            default:
+                ;
+        }
+    }
+
     if ( event_type == wxEVT_NULL )
     {
         // unknown mouse button or click type
@@ -1506,6 +1560,14 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
         case 3:
             event_type = wxEVT_RIGHT_UP;
+            break;
+
+        case 8:
+            event_type = wxEVT_AUX1_UP;
+            break;
+
+        case 9:
+            event_type = wxEVT_AUX2_UP;
             break;
 
         default:
@@ -2038,6 +2100,7 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown((mask & GDK_BUTTON1_MASK) != 0);
     ms.SetMiddleDown((mask & GDK_BUTTON2_MASK) != 0);
     ms.SetRightDown((mask & GDK_BUTTON3_MASK) != 0);
+    // see the comment in InitMouseEvent()
     ms.SetAux1Down((mask & GDK_BUTTON4_MASK) != 0);
     ms.SetAux2Down((mask & GDK_BUTTON5_MASK) != 0);
 
