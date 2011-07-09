@@ -4025,6 +4025,16 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     Layout();
 
     AdjustScrollbars();
+
+    // We must redraw the headers if their height changed. Normally this
+    // shouldn't happen as the control shouldn't let itself be resized beneath
+    // its minimal height but avoid the display artefacts that appear if it
+    // does happen, e.g. because there is really not enough vertical space.
+    if ( !HasFlag(wxDV_NO_HEADER) && m_headerArea &&
+            m_headerArea->GetSize().y <= m_headerArea->GetBestSize(). y )
+    {
+        m_headerArea->Refresh();
+    }
 }
 
 void wxDataViewCtrl::SetFocus()
