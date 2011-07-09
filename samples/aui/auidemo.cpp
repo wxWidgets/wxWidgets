@@ -798,7 +798,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->SetToolBitmapSize(wxSize(16,16));
 
     wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-    tb2->AddTool(ID_SampleItem+6, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+6, wxT("Disabled"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+7, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+8, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+9, wxT("Test"), tb2_bmp1);
@@ -811,6 +811,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->AddTool(ID_SampleItem+14, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+15, wxT("Test"), tb2_bmp1);
     tb2->SetCustomOverflowItems(prepend_items, append_items);
+    tb2->EnableTool(ID_SampleItem+6, false);
     tb2->Realize();
 
 
