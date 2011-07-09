@@ -17,7 +17,7 @@
     #include "wx/wx.h"
 #endif
 
-#if wxUSE_WEBKIT
+#if wxUSE_WEBKIT && !wxOSX_USE_IPHONE
 
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"

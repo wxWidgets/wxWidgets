@@ -17,7 +17,7 @@
 #include "wx/wx.h"
 #endif
 
-#if wxUSE_WEBKIT
+#if wxUSE_WEBKIT && wxOSX_USE_IPHONE
 
 #include "wx/osx/private.h"
 #include "wx/html/webkit.h"
@@ -28,7 +28,7 @@
 #endif
 
 
-// Default text size and upper/lower boundaries
+// Default text size and upper/lower boundaries (in percents)
 enum {
     WX_IPHONE_WEBKIT_TEXTSIZE_DEFAULT = 100,
     WX_IPHONE_WEBKIT_TEXTSIZE_MAX = 160,
