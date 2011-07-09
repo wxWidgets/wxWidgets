@@ -46,6 +46,7 @@
 #if wxUSE_TOGGLEBTN
     #include "wx/tglbtn.h"
 #endif
+#include "wx/filename.h"
 
 #include "wx/valgen.h"
 
@@ -81,6 +82,24 @@ wxGenericValidator::wxGenericValidator(wxDateTime *val)
 {
     Initialize();
     m_pDateTime = val;
+}
+
+wxGenericValidator::wxGenericValidator(wxFileName *val)
+{
+    Initialize();
+    m_pFileName = val;
+}
+
+wxGenericValidator::wxGenericValidator(float *val)
+{
+    Initialize();
+    m_pFloat = val;
+}
+
+wxGenericValidator::wxGenericValidator(double *val)
+{
+    Initialize();
+    m_pDouble = val;
 }
 
 #endif // wxUSE_DATETIME
@@ -319,6 +338,21 @@ bool wxGenericValidator::TransferToWindow(void)
             wxString str;
             str.Printf(wxT("%d"), *m_pInt);
             pControl->SetValue(str);
+            return true;
+        }
+        else if (m_pFileName)
+        {
+            pControl->SetValue(m_pFileName->GetFullPath());
+            return true;
+        }
+        else if (m_pFloat)
+        {
+            pControl->SetValue(wxString::Format(wxT("%g"), *m_pFloat));
+            return true;
+        }
+        else if (m_pDouble)
+        {
+            pControl->SetValue(wxString::Format(wxT("%g"), *m_pDouble));
             return true;
         }
     } else
@@ -582,6 +616,21 @@ bool wxGenericValidator::TransferFromWindow(void)
             *m_pInt = wxAtoi(pControl->GetValue());
             return true;
         }
+        else if (m_pFileName)
+        {
+            m_pFileName->Assign(pControl->GetValue());
+            return true;
+        }
+        else if (m_pFloat)
+        {
+            *m_pFloat = (float)wxAtof(pControl->GetValue());
+            return true;
+        }
+        else if (m_pDouble)
+        {
+            *m_pDouble = wxAtof(pControl->GetValue());
+            return true;
+        }
     } else
 #endif
 
@@ -652,6 +701,9 @@ void wxGenericValidator::Initialize()
 #if wxUSE_DATETIME
     m_pDateTime = NULL;
 #endif // wxUSE_DATETIME
+    m_pFileName = NULL;
+    m_pFloat = NULL;
+    m_pDouble = NULL;
 }
 
 #endif // wxUSE_VALIDATORS
