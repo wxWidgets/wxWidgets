@@ -284,6 +284,10 @@ public:
     virtual void SetEditable(bool enable = true) = 0;
     virtual bool IsEditable() = 0;
 
+    virtual void SelectAll() = 0;
+    virtual bool HasSelection() = 0;
+    virtual void DeleteSelection() = 0;
+
     // TODO:
     //     wxString GetSelection();                         // maybe?
     //     void SetSelection(...);                          // maybe?

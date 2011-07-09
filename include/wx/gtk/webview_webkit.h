@@ -138,6 +138,11 @@ public:
     virtual void SetEditable(bool enable = true);
     virtual bool IsEditable();
 
+    //Selection
+    virtual void DeleteSelection();
+    virtual bool HasSelection();
+    virtual void SelectAll();
+
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
 

@@ -97,6 +97,12 @@ public:
     virtual void SetEditable(bool enable = true);
     virtual bool IsEditable();
 
+    //Selection
+    virtual void SelectAll();
+    virtual bool HasSelection();
+    virtual void DeleteSelection();
+
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...

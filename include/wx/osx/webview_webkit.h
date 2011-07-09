@@ -99,8 +99,13 @@ public:
     virtual void Paste();
     
     //Editing functions
-    void  SetEditable(bool enable = true);
-    bool  IsEditable();
+    virtual void SetEditable(bool enable = true);
+    virtual bool IsEditable();
+    
+    //Selection
+    virtual void DeleteSelection();
+    virtual bool HasSelection() { return false };
+    virtual void SelectAll() {};
 
     // ---- methods not from the parent (common) interface
     wxString GetSelectedText();

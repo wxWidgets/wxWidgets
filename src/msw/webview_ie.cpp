@@ -564,6 +564,26 @@ bool wxWebViewIE::IsEditable()
         return false;
 }
 
+void wxWebViewIE::SelectAll()
+{
+    ExecCommand("SelectAll");
+}
+
+bool wxWebViewIE::HasSelection()
+{
+    IHTMLDocument2* document = GetDocument();
+    IHTMLSelectionObject* selection;
+    document->get_selection(&selection);
+    BSTR type;
+    selection->get_type(&type);
+    return wxString(type) != "None";
+}
+
+void wxWebViewIE::DeleteSelection()
+{
+    ExecCommand("Delete");
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();

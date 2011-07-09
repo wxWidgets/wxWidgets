@@ -712,6 +712,22 @@ bool wxWebViewWebKit::IsEditable()
     return webkit_web_view_get_editable(WEBKIT_WEB_VIEW(web_view));
 }
 
+void wxWebViewWebKit::DeleteSelection()
+{
+    webkit_web_view_delete_selection(WEBKIT_WEB_VIEW(web_view));
+}
+
+bool wxWebViewWebKit::HasSelection()
+{
+    return webkit_web_view_has_selection(WEBKIT_WEB_VIEW(web_view));
+}
+
+void wxWebViewWebKit::SelectAll()
+{
+    webkit_web_view_select_all(WEBKIT_WEB_VIEW(web_view));
+}
+
+
 // static
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

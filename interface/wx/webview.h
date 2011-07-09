@@ -381,6 +381,27 @@ public:
         Loads a history item. 
     */
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
+    
+    /**
+        @name Selection
+    */
+    
+    /**
+        Deletes the current selection. Note that for @c wxWEB_VIEW_BACKEND_WEBKIT
+        the selection must be editable, either through SetEditable or the 
+        correct HTML attribute.
+    */
+    virtual void DeleteSelection() = 0;
+
+    /**
+        Returns @true if there is a current selection.
+    */
+    virtual bool HasSelection = 0;
+
+    /**
+        Selects the entire page.
+    */
+    virtual void SelectAll() = 0;
 
     /**
         @name Undo / Redo

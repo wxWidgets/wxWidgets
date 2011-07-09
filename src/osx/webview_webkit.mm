@@ -980,6 +980,14 @@ void wxWebViewWebKit::Paste()
     [(WebView*)m_webView paste];
 }
 
+void wxWebViewWebKit::DeleteSelection()
+{
+    if ( !m_webView )
+        return;
+
+    [(WebView*)m_webView deleteSelection];
+}
+
 //------------------------------------------------------------
 // Listener interfaces
 //------------------------------------------------------------
