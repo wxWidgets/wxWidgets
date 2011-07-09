@@ -645,12 +645,12 @@ bool wxGenericValidator::TransferFromWindow(void)
 */
 void wxGenericValidator::Initialize()
 {
-    m_pBool = 0;
-    m_pInt = 0;
-    m_pString = 0;
-    m_pArrayInt = 0;
+    m_pBool = NULL;
+    m_pInt = NULL;
+    m_pString = NULL;
+    m_pArrayInt = NULL;
 #if wxUSE_DATETIME
-    m_pDateTime = 0;
+    m_pDateTime = NULL;
 #endif // wxUSE_DATETIME
 }
 
