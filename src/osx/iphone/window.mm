@@ -493,12 +493,15 @@ void wxWidgetIPhoneImpl::Embed( wxWidgetImpl *parent )
         return;
     UIView* container = parent->GetWXWidget() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    if (
+    if (! 
         // UITabBar
-        (![container isKindOfClass:[UITabBar class]]) and
+        ([container isKindOfClass:[UITabBar class]]) or
+        
+        // UITableView
+        ([container isKindOfClass:[UITableView class]]) or
         
         // UITabBar view, UINavigationController view - FIXME, poor forward compatibility
-        (! [NSStringFromClass([container class]) isEqualToString:@"UILayoutContainerView"]) )
+        ([NSStringFromClass([container class]) isEqualToString:@"UILayoutContainerView"]) )
     {
         [container addSubview:m_osxView];
     }
