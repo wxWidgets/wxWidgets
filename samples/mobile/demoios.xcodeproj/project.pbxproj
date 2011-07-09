@@ -16,6 +16,8 @@
 		B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC11813C1B30E00FA1ADF /* listbox.mm */; };
 		B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC24313C1D6C800FA1ADF /* webkit.mm */; };
 		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
+		B936DAF913C8A27300039C94 /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B936DAF513C8A27300039C94 /* demoapp.cpp */; };
+		B936DAFA13C8A27300039C94 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B936DAF713C8A27300039C94 /* demoframe.cpp */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9CA720513BF960400061979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA720413BF960400061979 /* QuartzCore.framework */; };
 		B9CA731513BFA41000061979 /* pagectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA731413BFA41000061979 /* pagectrl.mm */; };
@@ -35,8 +37,6 @@
 		B9DF074B13B9FCF700D6F0D8 /* toolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */; };
 		B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073C13B9FCF700D6F0D8 /* utils.mm */; };
 		B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073D13B9FCF700D6F0D8 /* window.mm */; };
-		B9FC14D113C5DC670048CA56 /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9FC14CF13C5DC670048CA56 /* demoapp.cpp */; };
-		B9FC14D213C5DC670048CA56 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9FC14D013C5DC670048CA56 /* demoframe.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +64,10 @@
 		B90DC11813C1B30E00FA1ADF /* listbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = listbox.mm; path = ../../src/osx/iphone/listbox.mm; sourceTree = SOURCE_ROOT; };
 		B90DC24313C1D6C800FA1ADF /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/osx/iphone/webkit.mm; sourceTree = SOURCE_ROOT; };
 		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
+		B936DAF513C8A27300039C94 /* demoapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoapp.cpp; path = demo/demoapp.cpp; sourceTree = "<group>"; };
+		B936DAF613C8A27300039C94 /* demoapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = demoapp.h; path = demo/demoapp.h; sourceTree = "<group>"; };
+		B936DAF713C8A27300039C94 /* demoframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoframe.cpp; path = demo/demoframe.cpp; sourceTree = "<group>"; wrapsLines = 1; };
+		B936DAF813C8A27300039C94 /* demoframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = demoframe.h; path = demo/demoframe.h; sourceTree = "<group>"; wrapsLines = 1; };
 		B9CA6F9113BF1EF900061979 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B9CA720413BF960400061979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B9CA731413BFA41000061979 /* pagectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = pagectrl.mm; path = ../../src/osx/iphone/pagectrl.mm; sourceTree = SOURCE_ROOT; };
@@ -83,8 +87,6 @@
 		B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = toolbar.mm; path = ../../src/osx/iphone/toolbar.mm; sourceTree = SOURCE_ROOT; };
 		B9DF073C13B9FCF700D6F0D8 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/iphone/utils.mm; sourceTree = SOURCE_ROOT; };
 		B9DF073D13B9FCF700D6F0D8 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
-		B9FC14CF13C5DC670048CA56 /* demoapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoapp.cpp; path = demo/demoapp.cpp; sourceTree = "<group>"; };
-		B9FC14D013C5DC670048CA56 /* demoframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoframe.cpp; path = demo/demoframe.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,8 +163,10 @@
 		404BECD110EBDC6F0080E2B8 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B9FC14CF13C5DC670048CA56 /* demoapp.cpp */,
-				B9FC14D013C5DC670048CA56 /* demoframe.cpp */,
+				B936DAF613C8A27300039C94 /* demoapp.h */,
+				B936DAF513C8A27300039C94 /* demoapp.cpp */,
+				B936DAF813C8A27300039C94 /* demoframe.h */,
+				B936DAF713C8A27300039C94 /* demoframe.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -291,8 +295,8 @@
 				B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */,
 				B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */,
 				B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */,
-				B9FC14D113C5DC670048CA56 /* demoapp.cpp in Sources */,
-				B9FC14D213C5DC670048CA56 /* demoframe.cpp in Sources */,
+				B936DAF913C8A27300039C94 /* demoapp.cpp in Sources */,
+				B936DAFA13C8A27300039C94 /* demoframe.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +307,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Debug;
@@ -311,6 +321,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Release;

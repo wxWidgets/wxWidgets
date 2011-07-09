@@ -51,16 +51,23 @@
  */
 
 class DemoFrame: public wxFrame
-{    
-    DECLARE_CLASS( DemoFrame )
-    DECLARE_EVENT_TABLE()
-
+{
 public:
     /// Constructors
     DemoFrame();
-    DemoFrame( wxWindow* parent, wxWindowID id = SYMBOL_DEMOFRAME_IDNAME, const wxString& caption = SYMBOL_DEMOFRAME_TITLE, const wxPoint& pos = SYMBOL_DEMOFRAME_POSITION, const wxSize& size = SYMBOL_DEMOFRAME_SIZE, long style = SYMBOL_DEMOFRAME_STYLE );
+    DemoFrame(wxWindow* parent,
+              wxWindowID id = SYMBOL_DEMOFRAME_IDNAME,
+              const wxString& caption = SYMBOL_DEMOFRAME_TITLE,
+              const wxPoint& pos = SYMBOL_DEMOFRAME_POSITION,
+              const wxSize& size = SYMBOL_DEMOFRAME_SIZE,
+              long style = SYMBOL_DEMOFRAME_STYLE );
 
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_DEMOFRAME_IDNAME, const wxString& caption = SYMBOL_DEMOFRAME_TITLE, const wxPoint& pos = SYMBOL_DEMOFRAME_POSITION, const wxSize& size = SYMBOL_DEMOFRAME_SIZE, long style = SYMBOL_DEMOFRAME_STYLE );
+    bool Create(wxWindow* parent,
+                wxWindowID id = SYMBOL_DEMOFRAME_IDNAME,
+                const wxString& caption = SYMBOL_DEMOFRAME_TITLE,
+                const wxPoint& pos = SYMBOL_DEMOFRAME_POSITION,
+                const wxSize& size = SYMBOL_DEMOFRAME_SIZE,
+                long style = SYMBOL_DEMOFRAME_STYLE );
 
     /// Destructor
     ~DemoFrame();
@@ -101,6 +108,9 @@ public:
 
     /// Should we show tooltips?
     static bool ShowToolTips();
+    
+private:
+    DECLARE_EVENT_TABLE()
 
 ////@begin DemoFrame member variables
 ////@end DemoFrame member variables
