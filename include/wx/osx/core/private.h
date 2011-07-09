@@ -21,10 +21,10 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
 
-#if wxOSX_USE_IPHONE
-#include "wx/mobile/native/viewcontroller.h"
-#include "wx/mobile/native/tablecell.h"
-#endif
+//#if wxOSX_USE_IPHONE
+//#include "wx/mobile/native/viewcontroller.h"
+//#include "wx/mobile/native/tablecell.h"
+//#endif
 
 // Define helper macros allowing to insert small snippets of code to be
 // compiled for high enough OS X version only: this shouldn't be abused for
@@ -562,7 +562,7 @@ public :
                                     long style,
                                     long extraStyle) ;
                                                                 
-    static wxWidgetImplType*    CreateTableViewCell( wxMoTableCell* wxpeer) ;
+    static wxWidgetImplType*    CreateTableViewCell( wxWindowMac* wxpeer) ;
 
 #endif  // wxOSX_USE_IPHONE
 
@@ -931,8 +931,8 @@ class wxNavigationControllerImpl
     wxNavigationControllerImpl(){}
     virtual ~wxNavigationControllerImpl(){}
     
-    virtual bool PushViewController(wxMoViewController *controller) = 0;
-    virtual bool PopViewController() = 0;
+    //virtual bool PushViewController(wxMoViewController *controller) = 0;
+    //virtual bool PopViewController() = 0;
 } ;
 
 
@@ -940,7 +940,7 @@ class wxNavigationControllerImpl
 // common interface for iPhone's UITableViewController
 //
 
-#include "wx/mobile/native/tablectrl.h"
+//#include "wx/mobile/native/tablectrl.h"
 
 class wxTableViewControllerImpl
 {
@@ -957,7 +957,7 @@ class wxTableViewControllerImpl
 // common interface for iPhone's UITableViewCell
 //
 
-#include "wx/mobile/native/tablectrl.h"
+//#include "wx/mobile/native/tablectrl.h"
 
 class wxTableViewCellImpl
 {

@@ -21,10 +21,6 @@
 #include "wx/frame.h"
 ////@end includes
 
-#include "wx/mobile/frame.h"
-#include "wx/mobile/sheets.h"
-#include "wx/mobile/tablectrl.h"
-
 /*!
  * Forward declarations
  */
@@ -54,7 +50,7 @@
  * DemoFrame class declaration
  */
 
-class DemoFrame: public wxMoFrame
+class DemoFrame: public wxFrame
 {    
     DECLARE_CLASS( DemoFrame )
     DECLARE_EVENT_TABLE()
@@ -75,6 +71,7 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+#if 0
     /// Show an action sheet
     void OnShowActionSheet(wxCommandEvent& event);
 
@@ -87,6 +84,7 @@ public:
     /// Respond to table events
     void OnAccessoryClick(wxTableCtrlEvent& event);
     void OnSelectRow(wxTableCtrlEvent& event);
+#endif  // 0
 
 ////@begin DemoFrame event handler declarations
 

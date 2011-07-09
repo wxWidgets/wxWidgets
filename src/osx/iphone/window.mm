@@ -587,6 +587,16 @@ void wxWidgetIPhoneImpl::SetupTabs( const wxNotebook &notebook )
 {
 }
 
+bool wxWidgetIPhoneImpl::SetBadge(int item, const wxString& badge)
+{
+    return false;
+}
+
+wxString wxWidgetIPhoneImpl::GetBadge(int item) const
+{
+    return wxEmptyString;
+}
+
 void wxWidgetIPhoneImpl::GetBestRect( wxRect *r ) const
 {
     r->x = r->y = r->width = r->height = 0;

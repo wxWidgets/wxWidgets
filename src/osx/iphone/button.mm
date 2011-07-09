@@ -123,9 +123,9 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton(wxWindowMac* wxpeer,
                                                    long style,
                                                    long extraStyle)
 {
-    if (style & wxBU_DISCLOSURE) {
-        return CreateDisclosureTriangle(wxpeer, parent, id, wxEmptyString, pos, size, style, extraStyle);
-    }
+    //if (style & wxBU_DISCLOSURE) {
+    //    return CreateDisclosureTriangle(wxpeer, parent, id, wxEmptyString, pos, size, style, extraStyle);
+    //}
 
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     UIButtonType buttonType = UIButtonTypeCustom;

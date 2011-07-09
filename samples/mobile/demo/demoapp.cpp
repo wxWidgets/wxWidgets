@@ -43,14 +43,14 @@ IMPLEMENT_APP( MobileDemoApp )
  * MobileDemoApp type definition
  */
 
-IMPLEMENT_CLASS( MobileDemoApp, wxMoApp )
+IMPLEMENT_CLASS( MobileDemoApp, wxApp )
 
 
 /*
  * MobileDemoApp event table definition
  */
 
-BEGIN_EVENT_TABLE( MobileDemoApp, wxMoApp )
+BEGIN_EVENT_TABLE( MobileDemoApp, wxApp )
 
 ////@begin MobileDemoApp event table entries
 ////@end MobileDemoApp event table entries
@@ -84,7 +84,7 @@ void MobileDemoApp::Init()
 
 bool MobileDemoApp::OnInit()
 {
-    wxMoApp::OnInit();
+    wxApp::OnInit();
 
     // PNG handler added in OnInit already
 #if wxUSE_XPM
@@ -112,6 +112,6 @@ bool MobileDemoApp::OnInit()
 
 int MobileDemoApp::OnExit()
 {    
-    return wxMoApp::OnExit();
+    return wxApp::OnExit();
 }
 

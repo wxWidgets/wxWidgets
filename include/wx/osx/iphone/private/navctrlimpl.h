@@ -13,8 +13,8 @@
 #define _WX_OSX_IPHONE_PRIVATE_NAVCTRL_H_
 
 #include "wx/osx/private.h"
-#include "wx/mobile/native/navctrl.h"
-#include "wx/mobile/native/viewcontroller.h"
+//#include "wx/mobile/native/navctrl.h"
+//#include "wx/mobile/native/viewcontroller.h"
 
 
 // Fake root view controller for wxUINavigationController
@@ -65,8 +65,8 @@ public:
     
     ~wxNavigationCtrlIPhoneImpl();
     
-    virtual bool PushViewController(wxMoViewController *controller);
-    virtual bool PopViewController();
+    //virtual bool PushViewController(wxMoViewController *controller);
+    //virtual bool PopViewController();
     
 private:
     void* m_navcontroller;

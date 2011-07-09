@@ -22,8 +22,6 @@
 #include "demoframe.h"
 ////@end includes
 
-#include "wx/mobile/app.h"
-
 /*!
  * Forward declarations
  */
@@ -42,7 +40,7 @@
  * MobileDemoApp class declaration
  */
 
-class MobileDemoApp: public wxMoApp
+class MobileDemoApp: public wxApp
 {    
     DECLARE_CLASS( MobileDemoApp )
     DECLARE_EVENT_TABLE()

@@ -127,7 +127,7 @@ protected:
  @category{wxMobile}
  */
 
-class WXDLLEXPORT wxMoScrolledWindow : public wxMoPanel,
+class WXDLLEXPORT wxMoScrolledWindow : public wxPanel,
 public wxScrollHelper
 {
 public:

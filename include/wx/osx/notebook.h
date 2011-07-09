@@ -71,6 +71,14 @@ public:
   int  GetPageImage(size_t nPage) const;
   bool SetPageImage(size_t nPage, int nImage);
 
+#if wxOSX_USE_IPHONE
+  // Sets a UITabBar text badge for the given item
+  bool SetBadge(int item, const wxString& badge);
+
+  // Gets the UITabBar text badge for the given item
+  wxString GetBadge(int item) const;
+#endif
+
   // control the appearance of the notebook pages
     // set the size (the same for all pages)
   virtual void SetPageSize(const wxSize& size);

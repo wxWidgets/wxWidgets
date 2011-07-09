@@ -49,13 +49,13 @@
 
 #include "wx/mobile/native/scrollwin.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxMoScrolledWindow, wxMoPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxMoScrolledWindow, wxPanel)
 
 IMPLEMENT_DYNAMIC_CLASS(wxTouchScrollEvent, wxEvent)
 DEFINE_EVENT_TYPE(wxEVT_TOUCH_SCROLL_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_TOUCH_SCROLL_CANCEL_TOUCHES)
 
-BEGIN_EVENT_TABLE(wxMoScrolledWindow, wxMoPanel)
+BEGIN_EVENT_TABLE(wxMoScrolledWindow, wxPanel)
     EVT_PAINT(wxMoScrolledWindow::OnPaint)
 END_EVENT_TABLE()
 
@@ -80,7 +80,7 @@ bool wxMoScrolledWindow::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    return wxMoPanel::Create(parent, id, pos, size, style, name);
+    return wxPanel::Create(parent, id, pos, size, style, name);
 }
 
 void wxMoScrolledWindow::OnPaint(wxPaintEvent& event)

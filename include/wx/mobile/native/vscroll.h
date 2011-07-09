@@ -28,11 +28,11 @@
 #endif
 
 
-#define wxPanel wxMoPanel
+#define wxPanel wxPanel
 
 // This include defines a new class wxMoVScrolledWindowBase by using
 // the define above. We then use it as the base class for wxMoVScrolledWindow.
-// We need to do this so that the class uses wxMoPanel as its base instead
+// We need to do this so that the class uses wxPanel as its base instead
 // of wxPanel, so we get more iPhone-like scroll facilities.
 //
 // See above for OS X note.

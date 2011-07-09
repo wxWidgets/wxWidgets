@@ -85,6 +85,9 @@ public :
     virtual void        SetBitmapPosition( wxDirection dir );
 
     void                SetupTabs( const wxNotebook &notebook );
+    bool                SetBadge(int item, const wxString& badge);
+    wxString            GetBadge(int item) const;
+    
     void                GetBestRect( wxRect *r ) const;
     bool                IsEnabled() const;
     void                Enable( bool enable );

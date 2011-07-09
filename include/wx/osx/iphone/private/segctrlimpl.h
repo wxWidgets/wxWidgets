@@ -13,8 +13,6 @@
 #define _WX_OSX_IPHONE_PRIVATE_SEGCTRL_H_
 
 #include "wx/osx/private.h"
-#include "wx/mobile/native/tablectrl.h"
-#include "wx/mobile/native/tablecell.h"
 
 
 #pragma mark Cocoa

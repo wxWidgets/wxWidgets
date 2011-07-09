@@ -137,6 +137,48 @@ public:
             [m_tabBarController setDelegate:m_tabBarController];
         }
     }
+    
+    // Set a text badge for the given item
+    bool SetBadge(int item, const wxString& badge)
+    {        
+        if ( [[m_tabBarController viewControllers] count] < (unsigned int)(item+1) ) {
+            return false;
+        }
+        
+        UIViewController *viewController = [[m_tabBarController viewControllers] objectAtIndex:item];
+        UITabBarItem *tabBarItem = [viewController tabBarItem];
+        
+        if ( !tabBarItem ) {
+            return false;
+        }
+        
+        wxCFStringRef cf( badge );
+        [tabBarItem setBadgeValue:cf.AsNSString()];
+        
+        return true;
+    }
+    
+    // Get the text badge for the given item
+    wxString GetBadge(int item) const
+    {
+        if ( [[m_tabBarController viewControllers] count] < (unsigned int)(item+1) ) {
+            return wxEmptyString;
+        }
+        
+        UIViewController *viewController = [[m_tabBarController viewControllers] objectAtIndex:item];
+        UITabBarItem *tabBarItem = [viewController tabBarItem];
+        
+        if ( !tabBarItem ) {
+            return wxEmptyString;
+        }
+        
+        NSString *badgeValue = [tabBarItem badgeValue];
+        if ( !badgeValue || [badgeValue isEqualToString:@""] ) {
+            return wxEmptyString;
+        }
+        
+        return wxString([badgeValue cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+    }    
 
     void SetupTabs( const wxNotebook& notebook )
     {

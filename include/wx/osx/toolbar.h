@@ -17,6 +17,18 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
+#ifdef __WXOSX_IPHONE__
+
+// wxToolBar iOS styles
+enum {
+    wxTB_NORMAL_BG =            0x00000000,
+    wxTB_BLACK_OPAQUE_BG =      0x00010000,
+    wxTB_BLACK_TRANSLUCENT_BG = 0x00020000
+};
+
+#endif  // __WXOSX_IPHONE__
+
+
 class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 {
   DECLARE_DYNAMIC_CLASS(wxToolBar)
