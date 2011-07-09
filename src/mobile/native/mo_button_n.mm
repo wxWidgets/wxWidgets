@@ -55,14 +55,34 @@ END_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+/// Default constructor.
+wxMoButton::wxMoButton()
+{
+    Init();
+}
+
+/// Constructor taking a text label.
+wxMoButton::wxMoButton(wxWindow *parent,
+                       wxWindowID id,
+                       const wxString& label,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    Init();
+    Create(parent, id, label, pos, size, style, validator, name);
+}
+
 bool wxMoButton::Create(wxWindow *parent,
-                      wxWindowID id,
-                      const wxString& lbl,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      long style,
-                      const wxValidator& validator,
-                      const wxString& name)
+                        wxWindowID id,
+                        const wxString& lbl,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
     return wxButton::Create(parent, id, lbl, pos, size, style, validator, name);
 }
@@ -74,8 +94,10 @@ wxMoButton::~wxMoButton()
 
 void wxMoButton::Init()
 {
+    
 }
 
+#if 0
 wxSize wxMoButton::DoGetBestSize() const
 {
     // FIXME stub
@@ -131,6 +153,7 @@ bool wxMoButton::SetFont(const wxFont& font)
 
     return true;
 }
+#endif
 
 void wxMoButton::OnPaint(wxPaintEvent& WXUNUSED(event))
 {

@@ -58,7 +58,7 @@ class WXDLLEXPORT wxMoButton : public wxButton
 {
 public:
     /// Default constructor.
-    wxMoButton() { Init(); }
+    wxMoButton();
     
     /// Constructor taking a text label.
     wxMoButton(wxWindow *parent,
@@ -68,11 +68,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxButtonNameStr)
-    {
-        Init();
-        Create(parent, id, label, pos, size, style, validator, name);
-    }
+               const wxString& name = wxButtonNameStr);
     
     /// Creation function taking a text label.
     bool Create(wxWindow *parent,
@@ -88,6 +84,7 @@ public:
     
     void Init();
     
+#if 0
     /// Sets the label
     virtual void SetLabel( const wxString &label );
     
@@ -108,8 +105,11 @@ public:
     
     // Gets the border colour
     virtual wxColour GetBorderColour() const { return m_borderColour; }
+#endif  // 0
     
 protected:
+    
+#if 0
     wxSize IPGetDefaultSize() const;
     
     // send a notification event, return true if processed
@@ -120,6 +120,7 @@ protected:
     
     // function called when any of the bitmaps changes
     virtual void OnSetLabel() { InvalidateBestSize(); Refresh(); }
+#endif  // 0
     
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
