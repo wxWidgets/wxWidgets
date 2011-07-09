@@ -829,6 +829,7 @@ bool wxWindowMSW::SetFont(const wxFont& font)
 
     return true;
 }
+
 bool wxWindowMSW::SetCursor(const wxCursor& cursor)
 {
     if ( !wxWindowBase::SetCursor(cursor) )
@@ -838,7 +839,10 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     }
 
     // don't "overwrite" busy cursor
-    if ( m_cursor.IsOk() && !wxIsBusy() )
+    if ( wxIsBusy() )
+        return true;
+
+    if ( m_cursor.IsOk() )
     {
         // normally we should change the cursor only if it's over this window
         // but we should do it always if we capture the mouse currently
@@ -864,6 +868,26 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
             ::SetCursor(GetHcursorOf(m_cursor));
         }
         //else: will be set later when the mouse enters this window
+    }
+    else // Invalid cursor: this means reset to the default one.
+    {
+        // To revert to the correct cursor we need to find the window currently
+        // under the cursor and ask it to set its cursor itself as only it
+        // knows what it is.
+        POINT pt;
+        if ( !::GetCursorPos(&pt) )
+        {
+            wxLogLastError(wxT("GetCursorPos"));
+            return false;
+        }
+
+        const wxWindow* win = wxFindWindowAtPoint(wxPoint(pt.x, pt.y));
+        if ( !win )
+            win = this;
+
+        ::SendMessage(GetHwndOf(win), WM_SETCURSOR,
+                      (WPARAM)GetHwndOf(win),
+                      MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
     }
 
     return true;
