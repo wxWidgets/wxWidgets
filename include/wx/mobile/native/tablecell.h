@@ -289,16 +289,16 @@ public:
     bool IsEditing() const { return m_editingMode; }
     
     /// Sets the indentation level.
-    void SetIndentationLevel(int indentationLevel) { m_indentationLevel = indentationLevel; }
+    void SetIndentationLevel(int indentationLevel);
     
     /// Gets the indentation level.
-    int GetIndentationLevel() const { return m_indentationLevel; }
+    int GetIndentationLevel() const;
     
     /// Sets the indentation width.
-    void SetIndentationWidth(int indentationWidth) { m_indentationWidth = indentationWidth; }
+    void SetIndentationWidth(int indentationWidth);
     
     /// Gets the indentation width.
-    int GetIndentationWidth() const { return m_indentationWidth; }
+    int GetIndentationWidth() const;
     
     /// Sets the width of the detail part of the cell.
     /// This isn't part of the Cocoa Touch API - need to find
@@ -325,7 +325,7 @@ public:
     void SetAccessoryWindow(wxWindow* win);
     
     /// Gets the custom accessory window.
-    wxWindow* GetAccessoryWindow() const { return m_accessoryWindow; }
+    wxWindow* GetAccessoryWindow() const;
     
     /// Returns true if this cell has an accessory.
     bool HasAccessory() const { return (GetAccessoryType() != AccessoryTypeNone); }
@@ -348,9 +348,8 @@ public:
     /// Returns true if this cell has an editing accessory.
     bool HasEditingAccessory() const { return (GetEditingAccessoryType() != AccessoryTypeNone); }
     
-    /// Sets the cell style. The style can be one of CellStyleDefault, CellStyleValue1,
-    /// CellStyleValue2, and CellStyleSubtitle.
-    void SetCellStyle(wxMoTableCellStyle style) { m_cellStyle = style; }
+    /// There is no SetCellStyle() because the style for the underlying UITableViewCell can't be changed
+    /// once the cell has been created.
     
     /// Gets the cell style.
     wxMoTableCellStyle GetCellStyle() const { return m_cellStyle; }

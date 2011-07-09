@@ -43,6 +43,9 @@ wxMoTableCell::wxMoTableCell(wxMoTableCtrl* ctrl, const wxString& reuseName, wxM
 {
     Init();
     
+    m_reuseName = reuseName;
+    m_cellStyle = cellStyle;
+    
     SetCellWidgetImpl(wxWidgetImpl::CreateTableViewCell( this ));
 }
 
@@ -93,7 +96,62 @@ bool wxMoTableCell::CreateContentWindow(wxMoTableCtrl* ctrl)
 // Sets the accessory window
 void wxMoTableCell::SetAccessoryWindow(wxWindow* win)
 {
-    // FIXME stub
+    UIView *accessoryView = win->GetPeer()->GetWXWidget();
+    if ( !accessoryView ) {
+        return;
+    }
+    
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setAccessoryView:accessoryView];
+    m_accessoryWindow = win;
+}
+
+/// Gets the custom accessory window.
+wxWindow* wxMoTableCell::GetAccessoryWindow() const
+{
+    return m_accessoryWindow;
+}
+
+/// Sets the indentation level.
+void wxMoTableCell::SetIndentationLevel(int indentationLevel)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setIndentationLevel:indentationLevel];
+    
+    m_indentationLevel = indentationLevel;
+}
+
+/// Gets the indentation level.
+int wxMoTableCell::GetIndentationLevel() const
+{
+    return m_indentationLevel;
+}
+
+/// Sets the indentation width.
+void wxMoTableCell::SetIndentationWidth(int indentationWidth)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setIndentationWidth:indentationWidth];
+    
+    m_indentationWidth = indentationWidth;
+}
+
+/// Gets the indentation width.
+int wxMoTableCell::GetIndentationWidth() const
+{
+    return m_indentationWidth;
 }
 
 // Sets the editing accessory window
@@ -135,8 +193,11 @@ BEGIN_EVENT_TABLE(wxMoTableCellContentWindow, wxWindow)
     EVT_MOUSE_EVENTS(wxMoTableCellContentWindow::OnMouseEvents)
 END_EVENT_TABLE()
 
-bool wxMoTableCellContentWindow::Create(wxWindow* parent, wxWindowID id,
-        const wxPoint& pos, const wxSize& sz, long style)
+bool wxMoTableCellContentWindow::Create(wxWindow* parent,
+                                        wxWindowID id,
+                                        const wxPoint& pos,
+                                        const wxSize& sz,
+                                        long style)
 {
     // FIXME stub
 
