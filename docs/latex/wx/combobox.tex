@@ -30,7 +30,9 @@ and the ready-to-use \helpref{wxBitmapComboBox}{wxbitmapcombobox}.
 \twocolitem{\windowstyle{wxCB\_READONLY}}{Same as wxCB\_DROPDOWN but only the
 strings specified as the combobox choices can be selected, it is impossible to
 select (even from a program) a string which is not in the choices list.}
-\twocolitem{\windowstyle{wxCB\_SORT}}{Sorts the entries in the list alphabetically.}
+\twocolitem{\windowstyle{wxCB\_SORT}}{Sorts the entries in the list
+alphabetically. Notice that this style is not supported in wxGTK port in
+wxWidgets 2.8.}
 \twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
 the event wxEVT\_COMMAND\_TEXT\_ENTER (otherwise pressing Enter key
 is either processed internally by the control or used for navigation between
