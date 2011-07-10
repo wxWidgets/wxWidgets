@@ -597,17 +597,18 @@ wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
 // window will be used.
 void wxMenuBase::UpdateUI(wxEvtHandler* source)
 {
-    if (GetInvokingWindow())
+    wxWindow * const win = GetWindow();
+    if ( win )
     {
         // Don't update menus if the parent
         // frame is about to get deleted
-        wxWindow *tlw = wxGetTopLevelParent( GetInvokingWindow() );
+        wxWindow *tlw = wxGetTopLevelParent(win);
         if (tlw && wxPendingDelete.Member(tlw))
             return;
     }
 
-    if ( !source && GetInvokingWindow() )
-        source = GetInvokingWindow()->GetEventHandler();
+    if ( !source && win )
+        source = win->GetEventHandler();
     if ( !source )
         source = GetEventHandler();
     if ( !source )
