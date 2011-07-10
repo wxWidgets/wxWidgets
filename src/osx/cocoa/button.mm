@@ -89,6 +89,7 @@ public:
     wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
         : wxWidgetCocoaImpl(wxpeer, v)
     {
+        SetNeedsFrame(false);
     }
 
     virtual void SetBitmap(const wxBitmap& bitmap)
@@ -191,8 +192,10 @@ void SetBezelStyleFromBorderFlags(NSButton *v, long style)
             [v setBezelStyle:NSRegularSquareBezelStyle];
         else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
             [v setBezelStyle:NSSmallSquareBezelStyle];
-        else
+        else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
             [v setBezelStyle:NSShadowlessSquareBezelStyle];
+        else
+            [v setBezelStyle:NSRegularSquareBezelStyle];
     }
 }
 
@@ -203,7 +206,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
@@ -219,9 +222,41 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     }
     else
     {
-        [v setBezelStyle:NSRoundedBezelStyle];
-    }
+        if ( style & wxBORDER_NONE )
+        {
+            [v setBezelStyle:NSShadowlessSquareBezelStyle];
+            [v setBordered:NO];
+        }
+        else 
+        {
+            // the following styles only exist for certain sizes, so avoid them for
+            // multi-line
+            if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
+            {
+                if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
+                    [v setBezelStyle:NSRoundedBezelStyle];
+                else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
+                    [v setBezelStyle:NSTexturedRoundedBezelStyle];
+                else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
+                    [v setBezelStyle:NSShadowlessSquareBezelStyle];
+                else
+                    [v setBezelStyle:NSRoundedBezelStyle];
+            }
+            else 
+            {
+                if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
+                    [v setBezelStyle:NSRegularSquareBezelStyle];
+                else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
+                    [v setBezelStyle:NSSmallSquareBezelStyle];
+                else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
+                    [v setBezelStyle:NSShadowlessSquareBezelStyle];
+                else
+                    [v setBezelStyle:NSRegularSquareBezelStyle];
+            }
 
+        }
+    }
+    
     [v setButtonType:NSMomentaryPushInButton];
     return new wxButtonCocoaImpl( wxpeer, v );
 }
