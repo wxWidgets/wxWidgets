@@ -584,6 +584,35 @@ void wxWebViewIE::DeleteSelection()
     ExecCommand("Delete");
 }
 
+wxString wxWebViewIE::GetSelectedText()
+{
+    IHTMLDocument2* document = GetDocument();
+    IHTMLSelectionObject* selection;
+    wxString selected;
+    HRESULT hr = document->get_selection(&selection);
+    if(SUCCEEDED(hr))
+    {
+        IDispatch* disrange;
+        hr = selection->createRange(&disrange);
+        if(SUCCEEDED(hr))
+        {
+            IHTMLTxtRange* range;
+            hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
+            if(SUCCEEDED(hr))
+            {
+                BSTR text;
+                range->get_text(&text);
+                selected = wxString(text);
+                range->Release();
+            }
+            disrange->Release();
+        }
+        selection->Release();
+    }
+    document->Release();
+    return selected;
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();

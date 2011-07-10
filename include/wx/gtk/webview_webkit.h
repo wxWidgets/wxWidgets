@@ -142,6 +142,7 @@ public:
     virtual void DeleteSelection();
     virtual bool HasSelection();
     virtual void SelectAll();
+    virtual wxString GetSelectedText();
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;

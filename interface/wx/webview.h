@@ -392,11 +392,16 @@ public:
         correct HTML attribute.
     */
     virtual void DeleteSelection() = 0;
+    
+    /**
+        Returns the currently selected text, if any.
+    */
+    virtual wxString GetSelectedText() = 0;
 
     /**
         Returns @true if there is a current selection.
     */
-    virtual bool HasSelection = 0;
+    virtual bool HasSelection() = 0;
 
     /**
         Selects the entire page.

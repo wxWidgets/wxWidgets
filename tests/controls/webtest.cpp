@@ -41,6 +41,7 @@ private:
         CPPUNIT_TEST( HistoryClear );
         CPPUNIT_TEST( HistoryList );
         CPPUNIT_TEST( Editable );
+        CPPUNIT_TEST( Selection );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -50,6 +51,7 @@ private:
     void HistoryClear();
     void HistoryList();
     void Editable();
+    void Selection();
     void LoadUrl(const wxString& url, int times = 1);
 
     wxWebView* m_browser;
@@ -179,6 +181,21 @@ void WebTestCase::Editable()
     m_browser->SetEditable(false);
 
     CPPUNIT_ASSERT(!m_browser->IsEditable());
+}
+
+void WebTestCase::Selection()
+{
+    m_browser->SetPage("<html><body>Some text</body></html>", "");
+    CPPUNIT_ASSERT(!m_browser->HasSelection());
+
+    m_browser->SelectAll();
+
+    CPPUNIT_ASSERT(m_browser->HasSelection());
+    CPPUNIT_ASSERT_EQUAL("Some text", m_browser->GetSelectedText());
+
+    m_browser->DeleteSelection();
+
+    CPPUNIT_ASSERT(!m_browser->HasSelection());
 }
 
 #endif //wxUSE_WEB

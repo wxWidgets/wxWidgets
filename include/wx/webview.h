@@ -287,11 +287,9 @@ public:
     virtual void SelectAll() = 0;
     virtual bool HasSelection() = 0;
     virtual void DeleteSelection() = 0;
+    virtual wxString GetSelectedText() = 0;
 
     // TODO:
-    //     wxString GetSelection();                         // maybe?
-    //     void SetSelection(...);                          // maybe?
-
     //     void EnableJavascript(bool enabled);             // maybe?
     //     wxString RunScript(const wxString& javascript);  // maybe?
 

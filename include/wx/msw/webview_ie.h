@@ -101,6 +101,7 @@ public:
     virtual void SelectAll();
     virtual bool HasSelection();
     virtual void DeleteSelection();
+    virtual wxString GetSelectedText();
 
 
     // ---- IE-specific methods

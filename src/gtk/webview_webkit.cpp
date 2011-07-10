@@ -727,6 +727,21 @@ void wxWebViewWebKit::SelectAll()
     webkit_web_view_select_all(WEBKIT_WEB_VIEW(web_view));
 }
 
+wxString wxWebViewWebKit::GetSelectedText()
+{
+    WebKitDOMDocument* doc; 
+    WebKitDOMDOMWindow* win;
+    WebKitDOMDOMSelection* sel;
+    WebKitDOMRange* range;
+
+    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
+    sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
+    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
+                                                  0, NULL);
+    return wxString(webkit_dom_range_get_text(WEBKIT_DOM_RANGE(range)), 
+                    wxConvUTF8);
+}
 
 // static
 wxVisualAttributes

@@ -106,10 +106,9 @@ public:
     virtual void DeleteSelection();
     virtual bool HasSelection() { return false };
     virtual void SelectAll() {};
+    virtual wxString GetSelectedText();
 
     // ---- methods not from the parent (common) interface
-    wxString GetSelectedText();
-
     wxString RunScript(const wxString& javascript);
 
     bool  CanGetPageSource();
