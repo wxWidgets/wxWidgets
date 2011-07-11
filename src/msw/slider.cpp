@@ -369,16 +369,8 @@ int wxSlider::GetLabelsSize(int *widthMin, int *widthMax) const
 {
     if ( widthMin && widthMax )
     {
-        if ( HasFlag(wxSL_MIN_MAX_LABELS) )
-        {
-            *widthMin = GetTextExtent(Format(m_rangeMin)).x;
-            *widthMax = GetTextExtent(Format(m_rangeMax)).x;
-        }
-        else
-        {
-            *widthMin =
-            *widthMax = 0;
-        }
+        *widthMin = GetTextExtent(Format(m_rangeMin)).x;
+        *widthMax = GetTextExtent(Format(m_rangeMax)).x;
     }
 
     return HasFlag(wxSL_LABELS) ? GetCharHeight() : 0;
@@ -398,6 +390,11 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         maxLabelWidth;
     const int labelHeight = GetLabelsSize(&minLabelWidth, &maxLabelWidth);
     const int longestLabelWidth = wxMax(minLabelWidth, maxLabelWidth);
+    if ( !HasFlag(wxSL_MIN_MAX_LABELS) )
+    {
+        minLabelWidth =
+        maxLabelWidth = 0;
+    }
 
     int labelOffset =  0;
     int tickOffset = 0;
@@ -594,7 +591,8 @@ wxSize wxSlider::DoGetBestSize() const
             int hLabel = GetLabelsSize(&widthMin, &widthMax);
 
             // account for the labels
-            size.x += HGAP + wxMax(widthMin, widthMax);
+            if ( HasFlag(wxSL_MIN_MAX_LABELS) )
+                size.x += HGAP + wxMax(widthMin, widthMax);
 
             // labels are indented relative to the slider itself
             size.y += hLabel;
