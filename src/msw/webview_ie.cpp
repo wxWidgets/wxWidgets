@@ -122,11 +122,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
 void wxWebViewIE::LoadUrl(const wxString& url)
 {
-    wxVariant out = m_ie.CallMethod("Navigate", (BSTR) url.wc_str(),
-                                    NULL, NULL, NULL, NULL);
-
-    // FIXME: why is out value null??
-    //(HRESULT)(out.GetLong()) == S_OK;
+    m_ie.CallMethod("Navigate", (BSTR) url.wc_str(), NULL, NULL, NULL, NULL);
 }
 
 void wxWebViewIE::SetPage(const wxString& html, const wxString&)
@@ -170,22 +166,20 @@ wxString wxWebViewIE::GetPageSource()
     IHTMLDocument2* document = GetDocument();
     IHTMLElement *bodyTag = NULL;
     IHTMLElement *htmlTag = NULL;
-    document->get_body(&bodyTag);
-    wxASSERT(bodyTag != NULL);
+    BSTR bstr;
+    HRESULT hr = document->get_body(&bodyTag);
+    if(SUCCEEDED(hr))
+    {
+        hr = bodyTag->get_parentElement(&htmlTag);
+        if(SUCCEEDED(hr))
+        {
+            htmlTag->get_outerHTML(&bstr);
+            htmlTag->Release();
+        }
+        bodyTag->Release();
+    }
 
     document->Release();
-    bodyTag->get_parentElement(&htmlTag);
-    wxASSERT(htmlTag != NULL);
-
-    BSTR    bstr;
-    htmlTag->get_outerHTML(&bstr);
-
-    bodyTag->Release();
-    htmlTag->Release();
-
-    //wxMessageBox(wxString(bstr));
-
-    // TODO: check encoding
     return wxString(bstr);
 }
 
@@ -271,7 +265,6 @@ int wxWebViewIE::GetIETextZoom()
     wxASSERT (result == S_OK);
 
     int zoom = V_I4(&zoomVariant);
-   // wxMessageBox(wxString::Format("Zoom : %i", zoom));
     VariantClear (&zoomVariant);
 
     return zoom;
@@ -410,10 +403,7 @@ void wxWebViewIE::GoForward()
 
 void wxWebViewIE::Stop()
 {
-    wxVariant out = m_ie.CallMethod("Stop");
-
-    // FIXME: why is out value null??
-    //return (HRESULT)(out.GetLong()) == S_OK;
+    m_ie.CallMethod("Stop");
 }
 
 void wxWebViewIE::ClearHistory()
@@ -491,9 +481,10 @@ wxString wxWebViewIE::GetCurrentURL()
 wxString wxWebViewIE::GetCurrentTitle()
 {
     IHTMLDocument2* document = GetDocument();
-
     BSTR title;
+
     document->get_nameProp(&title);
+    document->Release();
     return wxString(title);
 }
 
@@ -552,6 +543,8 @@ void wxWebViewIE::SetEditable(bool enable)
         document->put_designMode(SysAllocString(L"On"));
     else
         document->put_designMode(SysAllocString(L"Off"));
+
+    document->Release();
 }
 
 bool wxWebViewIE::IsEditable()
@@ -563,6 +556,8 @@ bool wxWebViewIE::IsEditable()
         return true;
     else
         return false;
+
+    document->Release();
 }
 
 void wxWebViewIE::SelectAll()
@@ -574,9 +569,14 @@ bool wxWebViewIE::HasSelection()
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;
-    document->get_selection(&selection);
     BSTR type;
-    selection->get_type(&type);
+    HRESULT hr = document->get_selection(&selection);
+    if(SUCCEEDED(hr))
+    {
+        selection->get_type(&type);
+        selection->Release();
+    }
+    document->Release();
     return wxString(type) != "None";
 }
 
@@ -617,9 +617,10 @@ wxString wxWebViewIE::GetSelectedText()
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();
-
     VARIANT_BOOL enabled;
+
     document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
+    document->Release();
 
     return (enabled == VARIANT_TRUE);
 }
@@ -628,6 +629,7 @@ void wxWebViewIE::ExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();
     document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+    document->Release();
 }
 
 IHTMLDocument2* wxWebViewIE::GetDocument()
