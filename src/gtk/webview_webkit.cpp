@@ -26,7 +26,7 @@ extern "C"
 {
 
 static void
-wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec* arg1,
+wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec*,
                                       wxWebViewWebKit *webKitCtrl)
 {
     if (!webKitCtrl->m_ready) return;
@@ -61,7 +61,7 @@ wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec* arg1,
 }
 
 static WebKitNavigationResponse
-wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView        *web_view,
+wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView*,
                                           WebKitWebFrame       *frame,
                                           WebKitNetworkRequest *request,
                                           wxWebViewWebKit      *webKitCtrl)
@@ -92,8 +92,8 @@ wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView        *web_view,
 }
 
 static gboolean
-wxgtk_webkitctrl_error (WebKitWebView  *web_view,
-                        WebKitWebFrame *web_frame,
+wxgtk_webkitctrl_error (WebKitWebView*,
+                        WebKitWebFrame*,
                         gchar          *uri,
                         gpointer        web_error,
                         wxWebViewWebKit* webKitWindow)
@@ -235,10 +235,10 @@ wxgtk_webkitctrl_error (WebKitWebView  *web_view,
 }
 
 static gboolean
-wxgtk_webkitctrl_new_window(WebKitWebView *webView,
+wxgtk_webkitctrl_new_window(WebKitWebView*,
                             WebKitWebFrame *frame,
                             WebKitNetworkRequest *request,
-                            WebKitWebNavigationAction *navigation_action,
+                            WebKitWebNavigationAction*,
                             WebKitWebPolicyDecision *policy_decision,
                     wxWebViewWebKit *webKitCtrl)
 {

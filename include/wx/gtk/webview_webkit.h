@@ -110,6 +110,8 @@ public:
     virtual wxString GetCurrentURL();
     virtual wxString GetCurrentTitle();
     virtual wxString GetPageSource();
+    //We do not want to hide the other overloads
+    using wxWebView::SetPage;
     virtual void SetPage(const wxString& html, const wxString& baseUrl);
     virtual void Print();
     virtual bool IsBusy();
