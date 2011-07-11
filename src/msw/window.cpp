@@ -2403,8 +2403,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                 // emulate the button click
                                 btn = wxFindWinFromHandle(msg->hwnd);
                             }
-
-                            bProcess = false;
                         }
                         else // not a button itself, do we have default button?
                         {
@@ -2463,6 +2461,13 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             btn->MSWCommand(BN_CLICKED, 0 /* unused */);
                             return true;
                         }
+
+                        // This "Return" key press won't be actually used for
+                        // navigation so don't generate wxNavigationKeyEvent
+                        // for it but still pass it to IsDialogMessage() as it
+                        // may handle it in some other way (e.g. by playing the
+                        // default error sound).
+                        bProcess = false;
 
 #endif // wxUSE_BUTTON
 

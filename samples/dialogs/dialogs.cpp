@@ -1769,10 +1769,15 @@ void MyFrame::OnStandardButtonsSizerDialog(wxCommandEvent& WXUNUSED(event))
 
 #define ID_CATCH_LISTBOX_DCLICK 100
 #define ID_LISTBOX              101
+#define ID_DISABLE_OK           102
+#define ID_DISABLE_CANCEL       103
 
 BEGIN_EVENT_TABLE(TestDefaultActionDialog, wxDialog)
     EVT_CHECKBOX(ID_CATCH_LISTBOX_DCLICK,    TestDefaultActionDialog::OnCatchListBoxDClick)
+    EVT_CHECKBOX(ID_DISABLE_OK,              TestDefaultActionDialog::OnDisableOK)
+    EVT_CHECKBOX(ID_DISABLE_CANCEL,          TestDefaultActionDialog::OnDisableCancel)
     EVT_LISTBOX_DCLICK(ID_LISTBOX,           TestDefaultActionDialog::OnListBoxDClick)
+    EVT_TEXT_ENTER(wxID_ANY,                 TestDefaultActionDialog::OnTextEnter)
 END_EVENT_TABLE()
 
 TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
@@ -1801,6 +1806,9 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), wxTE_PROCESS_ENTER ), 0, wxALIGN_CENTRE_VERTICAL );
     grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl with wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
 
+    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""), 0, wxALIGN_CENTRE_VERTICAL );
+
     main_sizer->Add( grid_sizer, 0, wxALL, 10 );
 
     wxSizer *button_sizer = CreateSeparatedButtonSizer( wxOK|wxCANCEL );
@@ -1808,6 +1816,16 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
         main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
 
     SetSizerAndFit( main_sizer );
+}
+
+void TestDefaultActionDialog::OnDisableOK(wxCommandEvent& event)
+{
+    FindWindow(wxID_OK)->Enable(!event.IsChecked());
+}
+
+void TestDefaultActionDialog::OnDisableCancel(wxCommandEvent& event)
+{
+    FindWindow(wxID_CANCEL)->Enable(!event.IsChecked());
 }
 
 void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
@@ -1818,6 +1836,11 @@ void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
 void TestDefaultActionDialog::OnCatchListBoxDClick(wxCommandEvent& WXUNUSED(event))
 {
     m_catchListBoxDClick = !m_catchListBoxDClick;
+}
+
+void TestDefaultActionDialog::OnTextEnter(wxCommandEvent& event)
+{
+    wxLogMessage("Text \"%s\" entered.", event.GetString());
 }
 
 void MyFrame::OnTestDefaultActionDialog(wxCommandEvent& WXUNUSED(event))
