@@ -12,31 +12,34 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
-		B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */; };
-		B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC11813C1B30E00FA1ADF /* listbox.mm */; };
-		B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B90DC24313C1D6C800FA1ADF /* webkit.mm */; };
-		B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9133F9413BBC9FB0024E59E /* srchctrl.mm */; };
 		B936DAF913C8A27300039C94 /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B936DAF513C8A27300039C94 /* demoapp.cpp */; };
 		B936DAFA13C8A27300039C94 /* demoframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B936DAF713C8A27300039C94 /* demoframe.cpp */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9CA720513BF960400061979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA720413BF960400061979 /* QuartzCore.framework */; };
-		B9CA731513BFA41000061979 /* pagectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9CA731413BFA41000061979 /* pagectrl.mm */; };
-		B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072E13B9FCF700D6F0D8 /* button.mm */; };
-		B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */; };
-		B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073013B9FCF700D6F0D8 /* dialog.mm */; };
-		B9DF074113B9FCF700D6F0D8 /* evtloop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073113B9FCF700D6F0D8 /* evtloop.mm */; };
-		B9DF074213B9FCF700D6F0D8 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073213B9FCF700D6F0D8 /* gauge.mm */; };
-		B9DF074313B9FCF700D6F0D8 /* glcanvas.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */; };
-		B9DF074413B9FCF700D6F0D8 /* msgdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */; };
-		B9DF074513B9FCF700D6F0D8 /* nonownedwnd.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */; };
-		B9DF074613B9FCF700D6F0D8 /* notebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073613B9FCF700D6F0D8 /* notebook.mm */; };
-		B9DF074713B9FCF700D6F0D8 /* scrolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */; };
-		B9DF074813B9FCF700D6F0D8 /* slider.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073813B9FCF700D6F0D8 /* slider.mm */; };
-		B9DF074913B9FCF700D6F0D8 /* stattext.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073913B9FCF700D6F0D8 /* stattext.mm */; };
-		B9DF074A13B9FCF700D6F0D8 /* textctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */; };
-		B9DF074B13B9FCF700D6F0D8 /* toolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */; };
-		B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073C13B9FCF700D6F0D8 /* utils.mm */; };
-		B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DF073D13B9FCF700D6F0D8 /* window.mm */; };
+		B9ED3FFA13CA6A12007570A4 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE213CA6A12007570A4 /* button.mm */; };
+		B9ED3FFB13CA6A12007570A4 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE313CA6A12007570A4 /* checkbox.mm */; };
+		B9ED3FFC13CA6A12007570A4 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE413CA6A12007570A4 /* dialog.mm */; };
+		B9ED3FFD13CA6A12007570A4 /* evtloop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE513CA6A12007570A4 /* evtloop.mm */; };
+		B9ED3FFE13CA6A12007570A4 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE613CA6A12007570A4 /* gauge.mm */; };
+		B9ED3FFF13CA6A12007570A4 /* glcanvas.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE713CA6A12007570A4 /* glcanvas.mm */; };
+		B9ED400013CA6A12007570A4 /* listbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE813CA6A12007570A4 /* listbox.mm */; };
+		B9ED400113CA6A12007570A4 /* msgdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE913CA6A12007570A4 /* msgdlg.mm */; };
+		B9ED400213CA6A12007570A4 /* navctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FEA13CA6A12007570A4 /* navctrl.mm */; };
+		B9ED400313CA6A12007570A4 /* nonownedwnd.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FEB13CA6A12007570A4 /* nonownedwnd.mm */; };
+		B9ED400413CA6A12007570A4 /* notebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FEC13CA6A12007570A4 /* notebook.mm */; };
+		B9ED400513CA6A12007570A4 /* pagectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FED13CA6A12007570A4 /* pagectrl.mm */; };
+		B9ED400613CA6A12007570A4 /* scrolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FEE13CA6A12007570A4 /* scrolbar.mm */; };
+		B9ED400713CA6A12007570A4 /* segctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FEF13CA6A12007570A4 /* segctrl.mm */; };
+		B9ED400813CA6A12007570A4 /* slider.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF013CA6A12007570A4 /* slider.mm */; };
+		B9ED400913CA6A12007570A4 /* srchctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF113CA6A12007570A4 /* srchctrl.mm */; };
+		B9ED400A13CA6A12007570A4 /* stattext.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF213CA6A12007570A4 /* stattext.mm */; };
+		B9ED400B13CA6A12007570A4 /* tablecell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF313CA6A12007570A4 /* tablecell.mm */; };
+		B9ED400C13CA6A12007570A4 /* tablectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF413CA6A12007570A4 /* tablectrl.mm */; };
+		B9ED400D13CA6A12007570A4 /* textctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF513CA6A12007570A4 /* textctrl.mm */; };
+		B9ED400E13CA6A12007570A4 /* toolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF613CA6A12007570A4 /* toolbar.mm */; };
+		B9ED400F13CA6A12007570A4 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF713CA6A12007570A4 /* utils.mm */; };
+		B9ED401013CA6A12007570A4 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF813CA6A12007570A4 /* webkit.mm */; };
+		B9ED401113CA6A12007570A4 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF913CA6A12007570A4 /* window.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,33 +63,36 @@
 		407EE18912F04CF900D0F171 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
-		B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = segctrl.mm; path = ../../src/osx/iphone/segctrl.mm; sourceTree = SOURCE_ROOT; };
-		B90DC11813C1B30E00FA1ADF /* listbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = listbox.mm; path = ../../src/osx/iphone/listbox.mm; sourceTree = SOURCE_ROOT; };
-		B90DC24313C1D6C800FA1ADF /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/osx/iphone/webkit.mm; sourceTree = SOURCE_ROOT; };
-		B9133F9413BBC9FB0024E59E /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
 		B936DAF513C8A27300039C94 /* demoapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoapp.cpp; path = demo/demoapp.cpp; sourceTree = "<group>"; };
 		B936DAF613C8A27300039C94 /* demoapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = demoapp.h; path = demo/demoapp.h; sourceTree = "<group>"; };
 		B936DAF713C8A27300039C94 /* demoframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demoframe.cpp; path = demo/demoframe.cpp; sourceTree = "<group>"; wrapsLines = 1; };
 		B936DAF813C8A27300039C94 /* demoframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = demoframe.h; path = demo/demoframe.h; sourceTree = "<group>"; wrapsLines = 1; };
 		B9CA6F9113BF1EF900061979 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B9CA720413BF960400061979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B9CA731413BFA41000061979 /* pagectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = pagectrl.mm; path = ../../src/osx/iphone/pagectrl.mm; sourceTree = SOURCE_ROOT; };
-		B9DF072E13B9FCF700D6F0D8 /* button.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = button.mm; path = ../../src/osx/iphone/button.mm; sourceTree = SOURCE_ROOT; };
-		B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = checkbox.mm; path = ../../src/osx/iphone/checkbox.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073013B9FCF700D6F0D8 /* dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = dialog.mm; path = ../../src/osx/iphone/dialog.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073113B9FCF700D6F0D8 /* evtloop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = evtloop.mm; path = ../../src/osx/iphone/evtloop.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073213B9FCF700D6F0D8 /* gauge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = gauge.mm; path = ../../src/osx/iphone/gauge.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = glcanvas.mm; path = ../../src/osx/iphone/glcanvas.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = msgdlg.mm; path = ../../src/osx/iphone/msgdlg.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nonownedwnd.mm; path = ../../src/osx/iphone/nonownedwnd.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073613B9FCF700D6F0D8 /* notebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/iphone/notebook.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = scrolbar.mm; path = ../../src/osx/iphone/scrolbar.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073813B9FCF700D6F0D8 /* slider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = slider.mm; path = ../../src/osx/iphone/slider.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073913B9FCF700D6F0D8 /* stattext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = stattext.mm; path = ../../src/osx/iphone/stattext.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = textctrl.mm; path = ../../src/osx/iphone/textctrl.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = toolbar.mm; path = ../../src/osx/iphone/toolbar.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073C13B9FCF700D6F0D8 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/iphone/utils.mm; sourceTree = SOURCE_ROOT; };
-		B9DF073D13B9FCF700D6F0D8 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE213CA6A12007570A4 /* button.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = button.mm; path = ../../src/osx/iphone/button.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE313CA6A12007570A4 /* checkbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = checkbox.mm; path = ../../src/osx/iphone/checkbox.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE413CA6A12007570A4 /* dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = dialog.mm; path = ../../src/osx/iphone/dialog.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE513CA6A12007570A4 /* evtloop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = evtloop.mm; path = ../../src/osx/iphone/evtloop.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE613CA6A12007570A4 /* gauge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = gauge.mm; path = ../../src/osx/iphone/gauge.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE713CA6A12007570A4 /* glcanvas.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = glcanvas.mm; path = ../../src/osx/iphone/glcanvas.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE813CA6A12007570A4 /* listbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = listbox.mm; path = ../../src/osx/iphone/listbox.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FE913CA6A12007570A4 /* msgdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = msgdlg.mm; path = ../../src/osx/iphone/msgdlg.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FEA13CA6A12007570A4 /* navctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navctrl.mm; path = ../../src/osx/iphone/navctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FEB13CA6A12007570A4 /* nonownedwnd.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nonownedwnd.mm; path = ../../src/osx/iphone/nonownedwnd.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FEC13CA6A12007570A4 /* notebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/iphone/notebook.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FED13CA6A12007570A4 /* pagectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = pagectrl.mm; path = ../../src/osx/iphone/pagectrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FEE13CA6A12007570A4 /* scrolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = scrolbar.mm; path = ../../src/osx/iphone/scrolbar.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FEF13CA6A12007570A4 /* segctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = segctrl.mm; path = ../../src/osx/iphone/segctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF013CA6A12007570A4 /* slider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = slider.mm; path = ../../src/osx/iphone/slider.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF113CA6A12007570A4 /* srchctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = srchctrl.mm; path = ../../src/osx/iphone/srchctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF213CA6A12007570A4 /* stattext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = stattext.mm; path = ../../src/osx/iphone/stattext.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF313CA6A12007570A4 /* tablecell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablecell.mm; path = ../../src/osx/iphone/tablecell.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF413CA6A12007570A4 /* tablectrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tablectrl.mm; path = ../../src/osx/iphone/tablectrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF513CA6A12007570A4 /* textctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = textctrl.mm; path = ../../src/osx/iphone/textctrl.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF613CA6A12007570A4 /* toolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = toolbar.mm; path = ../../src/osx/iphone/toolbar.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF713CA6A12007570A4 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/iphone/utils.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF813CA6A12007570A4 /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/osx/iphone/webkit.mm; sourceTree = SOURCE_ROOT; };
+		B9ED3FF913CA6A12007570A4 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,27 +180,30 @@
 		B9B24E5613B8364D0031EF09 /* src-osx-iphone */ = {
 			isa = PBXGroup;
 			children = (
-				B9DF072E13B9FCF700D6F0D8 /* button.mm */,
-				B9DF072F13B9FCF700D6F0D8 /* checkbox.mm */,
-				B9DF073013B9FCF700D6F0D8 /* dialog.mm */,
-				B9DF073113B9FCF700D6F0D8 /* evtloop.mm */,
-				B9DF073213B9FCF700D6F0D8 /* gauge.mm */,
-				B9DF073313B9FCF700D6F0D8 /* glcanvas.mm */,
-				B90DC11813C1B30E00FA1ADF /* listbox.mm */,
-				B9DF073413B9FCF700D6F0D8 /* msgdlg.mm */,
-				B9DF073513B9FCF700D6F0D8 /* nonownedwnd.mm */,
-				B9DF073613B9FCF700D6F0D8 /* notebook.mm */,
-				B9CA731413BFA41000061979 /* pagectrl.mm */,
-				B90DBFCD13C1A3EA00FA1ADF /* segctrl.mm */,
-				B9DF073713B9FCF700D6F0D8 /* scrolbar.mm */,
-				B9DF073813B9FCF700D6F0D8 /* slider.mm */,
-				B9133F9413BBC9FB0024E59E /* srchctrl.mm */,
-				B9DF073913B9FCF700D6F0D8 /* stattext.mm */,
-				B9DF073A13B9FCF700D6F0D8 /* textctrl.mm */,
-				B9DF073B13B9FCF700D6F0D8 /* toolbar.mm */,
-				B9DF073C13B9FCF700D6F0D8 /* utils.mm */,
-				B90DC24313C1D6C800FA1ADF /* webkit.mm */,
-				B9DF073D13B9FCF700D6F0D8 /* window.mm */,
+				B9ED3FE213CA6A12007570A4 /* button.mm */,
+				B9ED3FE313CA6A12007570A4 /* checkbox.mm */,
+				B9ED3FE413CA6A12007570A4 /* dialog.mm */,
+				B9ED3FE513CA6A12007570A4 /* evtloop.mm */,
+				B9ED3FE613CA6A12007570A4 /* gauge.mm */,
+				B9ED3FE713CA6A12007570A4 /* glcanvas.mm */,
+				B9ED3FE813CA6A12007570A4 /* listbox.mm */,
+				B9ED3FE913CA6A12007570A4 /* msgdlg.mm */,
+				B9ED3FEA13CA6A12007570A4 /* navctrl.mm */,
+				B9ED3FEB13CA6A12007570A4 /* nonownedwnd.mm */,
+				B9ED3FEC13CA6A12007570A4 /* notebook.mm */,
+				B9ED3FED13CA6A12007570A4 /* pagectrl.mm */,
+				B9ED3FEE13CA6A12007570A4 /* scrolbar.mm */,
+				B9ED3FEF13CA6A12007570A4 /* segctrl.mm */,
+				B9ED3FF013CA6A12007570A4 /* slider.mm */,
+				B9ED3FF113CA6A12007570A4 /* srchctrl.mm */,
+				B9ED3FF213CA6A12007570A4 /* stattext.mm */,
+				B9ED3FF313CA6A12007570A4 /* tablecell.mm */,
+				B9ED3FF413CA6A12007570A4 /* tablectrl.mm */,
+				B9ED3FF513CA6A12007570A4 /* textctrl.mm */,
+				B9ED3FF613CA6A12007570A4 /* toolbar.mm */,
+				B9ED3FF713CA6A12007570A4 /* utils.mm */,
+				B9ED3FF813CA6A12007570A4 /* webkit.mm */,
+				B9ED3FF913CA6A12007570A4 /* window.mm */,
 			);
 			name = "src-osx-iphone";
 			sourceTree = "<group>";
@@ -274,29 +283,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9DF073E13B9FCF700D6F0D8 /* button.mm in Sources */,
-				B9DF073F13B9FCF700D6F0D8 /* checkbox.mm in Sources */,
-				B9DF074013B9FCF700D6F0D8 /* dialog.mm in Sources */,
-				B9DF074113B9FCF700D6F0D8 /* evtloop.mm in Sources */,
-				B9DF074213B9FCF700D6F0D8 /* gauge.mm in Sources */,
-				B9DF074313B9FCF700D6F0D8 /* glcanvas.mm in Sources */,
-				B9DF074413B9FCF700D6F0D8 /* msgdlg.mm in Sources */,
-				B9DF074513B9FCF700D6F0D8 /* nonownedwnd.mm in Sources */,
-				B9DF074613B9FCF700D6F0D8 /* notebook.mm in Sources */,
-				B9DF074713B9FCF700D6F0D8 /* scrolbar.mm in Sources */,
-				B9DF074813B9FCF700D6F0D8 /* slider.mm in Sources */,
-				B9DF074913B9FCF700D6F0D8 /* stattext.mm in Sources */,
-				B9DF074A13B9FCF700D6F0D8 /* textctrl.mm in Sources */,
-				B9DF074B13B9FCF700D6F0D8 /* toolbar.mm in Sources */,
-				B9DF074C13B9FCF700D6F0D8 /* utils.mm in Sources */,
-				B9DF074D13B9FCF700D6F0D8 /* window.mm in Sources */,
-				B9133F9513BBC9FB0024E59E /* srchctrl.mm in Sources */,
-				B9CA731513BFA41000061979 /* pagectrl.mm in Sources */,
-				B90DBFCE13C1A3EA00FA1ADF /* segctrl.mm in Sources */,
-				B90DC11913C1B30E00FA1ADF /* listbox.mm in Sources */,
-				B90DC24413C1D6C800FA1ADF /* webkit.mm in Sources */,
 				B936DAF913C8A27300039C94 /* demoapp.cpp in Sources */,
 				B936DAFA13C8A27300039C94 /* demoframe.cpp in Sources */,
+				B9ED3FFA13CA6A12007570A4 /* button.mm in Sources */,
+				B9ED3FFB13CA6A12007570A4 /* checkbox.mm in Sources */,
+				B9ED3FFC13CA6A12007570A4 /* dialog.mm in Sources */,
+				B9ED3FFD13CA6A12007570A4 /* evtloop.mm in Sources */,
+				B9ED3FFE13CA6A12007570A4 /* gauge.mm in Sources */,
+				B9ED3FFF13CA6A12007570A4 /* glcanvas.mm in Sources */,
+				B9ED400013CA6A12007570A4 /* listbox.mm in Sources */,
+				B9ED400113CA6A12007570A4 /* msgdlg.mm in Sources */,
+				B9ED400213CA6A12007570A4 /* navctrl.mm in Sources */,
+				B9ED400313CA6A12007570A4 /* nonownedwnd.mm in Sources */,
+				B9ED400413CA6A12007570A4 /* notebook.mm in Sources */,
+				B9ED400513CA6A12007570A4 /* pagectrl.mm in Sources */,
+				B9ED400613CA6A12007570A4 /* scrolbar.mm in Sources */,
+				B9ED400713CA6A12007570A4 /* segctrl.mm in Sources */,
+				B9ED400813CA6A12007570A4 /* slider.mm in Sources */,
+				B9ED400913CA6A12007570A4 /* srchctrl.mm in Sources */,
+				B9ED400A13CA6A12007570A4 /* stattext.mm in Sources */,
+				B9ED400B13CA6A12007570A4 /* tablecell.mm in Sources */,
+				B9ED400C13CA6A12007570A4 /* tablectrl.mm in Sources */,
+				B9ED400D13CA6A12007570A4 /* textctrl.mm in Sources */,
+				B9ED400E13CA6A12007570A4 /* toolbar.mm in Sources */,
+				B9ED400F13CA6A12007570A4 /* utils.mm in Sources */,
+				B9ED401013CA6A12007570A4 /* webkit.mm in Sources */,
+				B9ED401113CA6A12007570A4 /* window.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

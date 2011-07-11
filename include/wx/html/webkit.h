@@ -38,6 +38,7 @@ public:
     DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
 
     wxWebKitCtrl() {};
+    
     wxWebKitCtrl(wxWindow *parent,
                     wxWindowID winID,
                     const wxString& strURL,
@@ -49,6 +50,19 @@ public:
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
     };
+    
+    // No initial URL
+    wxWebKitCtrl(wxWindow *parent,
+                 wxWindowID winID,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxWebKitCtrlNameStr)
+    {
+        Create(parent, winID, wxEmptyString, pos, size, style, validator, name);
+    };
+    
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,

@@ -17,7 +17,7 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
-#ifdef __WXOSX_IPHONE__
+#ifdef wxOSX_USE_IPHONE
 
 // wxToolBar iOS styles
 enum {
@@ -26,7 +26,40 @@ enum {
     wxTB_BLACK_TRANSLUCENT_BG = 0x00020000
 };
 
-#endif  // __WXOSX_IPHONE__
+// Bar button item styles
+enum {    
+    wxID_DONE = wxID_OK,
+    wxID_SEARCH = wxID_FIND,
+    
+    wxID_FLEXIBLESPACE = wxID_HIGHEST+1,
+    wxID_FIXEDSPACE,
+    wxID_BACK,
+    wxID_COMPOSE,
+    wxID_REPLY,
+    wxID_ACTION,
+    wxID_ORGANIZE,
+    wxID_BOOKMARKS,
+    wxID_CAMERA,
+    wxID_TRASH,
+    wxID_PLAY,
+    wxID_PAUSE,
+    wxID_REWIND,
+    wxID_FASTFORWARD,
+    wxID_PAGECURL,
+    
+    /*
+     Recognised as bar button ids but already defined by wxWidgets
+
+     wxID_CANCEL
+     wxID_SAVE
+     wxID_EDIT
+     wxID_ADD
+     wxID_REFRESH
+     wxID_STOP
+     */
+};
+
+#endif  // wxOSX_USE_IPHONE
 
 
 class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase

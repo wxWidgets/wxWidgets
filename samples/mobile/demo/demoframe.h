@@ -19,6 +19,7 @@
 
 ////@begin includes
 #include "wx/frame.h"
+#include "wx/tablectrl.h"
 ////@end includes
 
 /*!
@@ -87,11 +88,11 @@ public:
 
     /// Respond to action sheet events
     void OnActionSheet(wxSheetEvent& event);
+#endif
 
     /// Respond to table events
     void OnAccessoryClick(wxTableCtrlEvent& event);
     void OnSelectRow(wxTableCtrlEvent& event);
-#endif  // 0
 
 ////@begin DemoFrame event handler declarations
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/iphone/tablecell.mm
-// Purpose:     wxMoTableCell implementation
+// Purpose:     wxTableCell implementation
 // Author:      Linas Valiukas
 // Modified by:
 // Created:     2011-07-02
@@ -19,60 +19,63 @@
 #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#include "wx/mobile/native/tablecell.h"
-#include "wx/mobile/native/tablectrl.h"
+#include "wx/tablecell.h"
+#include "wx/tablectrl.h"
 #include "wx/osx/private.h"
 #include "wx/osx/iphone/private/tablecellimpl.h"
 
 
+#pragma mark -
+#pragma mark Cocoa class
+
 @implementation wxUITableViewCell
 
-@synthesize moTableCell;
+@synthesize tableCell;
 
 - (id)init {
     if ((self = [super init])) {
-        moTableCell = NULL;
+        tableCell = NULL;
     }
     
     return self;
 }
 
-- (id)initWithWxMoTableCell:(wxMoTableCell *)initMoTableCell {
+- (id)initWithWxTableCell:(wxTableCell *)initTableCell {
     
-    NSString *cellIdentifier = [NSString stringWithString:wxCFStringRef(initMoTableCell->GetReuseName()).AsNSString()];
+    NSString *cellIdentifier = [NSString stringWithString:wxCFStringRef(initTableCell->GetReuseName()).AsNSString()];
     if (! cellIdentifier) {
         return nil;
     }
     
     // Style
-    wxMoTableCell::wxMoTableCellStyle cellStyle = initMoTableCell->GetCellStyle();
+    wxTableCell::wxTableCellStyle cellStyle = initTableCell->GetCellStyle();
     UITableViewCellStyle style;
     switch (cellStyle) {
-        case wxMoTableCell::CellStyleDefault:   style = UITableViewCellStyleDefault;    break;
-        case wxMoTableCell::CellStyleValue1:    style = UITableViewCellStyleValue1;     break;
-        case wxMoTableCell::CellStyleValue2:    style = UITableViewCellStyleValue2;     break;
-        case wxMoTableCell::CellStyleSubtitle:  style = UITableViewCellStyleSubtitle;   break;
-        default:                                style = UITableViewCellStyleDefault;    break;
+        case wxTableCell::CellStyleDefault:   style = UITableViewCellStyleDefault;    break;
+        case wxTableCell::CellStyleValue1:    style = UITableViewCellStyleValue1;     break;
+        case wxTableCell::CellStyleValue2:    style = UITableViewCellStyleValue2;     break;
+        case wxTableCell::CellStyleSubtitle:  style = UITableViewCellStyleSubtitle;   break;
+        default:                              style = UITableViewCellStyleDefault;    break;
     };
     
     if ((self = [self initWithStyle:style reuseIdentifier:cellIdentifier])) {
-        moTableCell = initMoTableCell;
+        tableCell = initTableCell;
     }
     
     return self;
 }
 
-// Reads properties from wxMoTableCell, stores them to self ("translates" to Cocoa properties)
+// Reads properties from wxTableCell, stores them to self ("translates" to Cocoa properties)
 // Used just before showing the cell
-- (void)commitWxMoTableCellProperties {
+- (void)commitWxTableCellProperties {
     
-    wxASSERT_MSG(moTableCell, "wxMoTableCell is unset.");
-    if (! moTableCell) {
+    wxASSERT_MSG(tableCell, "wxTableCell is unset.");
+    if (! tableCell) {
         return;
     }
     
     // Title
-    NSString *title = [NSString stringWithString:wxCFStringRef(moTableCell->GetText()).AsNSString()];
+    NSString *title = [NSString stringWithString:wxCFStringRef(tableCell->GetText()).AsNSString()];
     if (title) {
         [self.textLabel setText:title];
     } else {
@@ -80,7 +83,7 @@
     }
     
     // Subtitle
-    NSString *subtitle = [NSString stringWithString:wxCFStringRef(moTableCell->GetDetailText()).AsNSString()];
+    NSString *subtitle = [NSString stringWithString:wxCFStringRef(tableCell->GetDetailText()).AsNSString()];
     if (subtitle) {
         [self.detailTextLabel setText:subtitle];
     } else {
@@ -89,7 +92,7 @@
     
     // Title colour
     UIColor *titleColour = nil;
-    wxColour wxTextColour = moTableCell->GetTextColour();
+    wxColour wxTextColour = tableCell->GetTextColour();
     titleColour = [[[UIColor alloc] initWithCGColor:wxTextColour.GetCGColor()] autorelease];
     if (titleColour) {
         [self.textLabel setTextColor:titleColour];
@@ -99,7 +102,7 @@
 
     // Subtitle colour
     UIColor *subtitleColour = nil;
-    wxColour wxDetailTextColour = moTableCell->GetDetailTextColour();
+    wxColour wxDetailTextColour = tableCell->GetDetailTextColour();
     subtitleColour = [[[UIColor alloc] initWithCGColor:wxDetailTextColour.GetCGColor()] autorelease];
     if (subtitleColour) {
         [self.detailTextLabel setTextColor:subtitleColour];
@@ -109,7 +112,7 @@
 
     // Selected title colour
     UIColor *selectedTitleColour = nil;
-    wxColour wxSelectedTitleColour = moTableCell->GetSelectedTextColour();
+    wxColour wxSelectedTitleColour = tableCell->GetSelectedTextColour();
     selectedTitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedTitleColour.GetCGColor()] autorelease];
     if (selectedTitleColour) {
         [self.textLabel setHighlightedTextColor:selectedTitleColour];
@@ -119,7 +122,7 @@
 
     // Selected subtitle colour
     UIColor *selectedSubtitleColour = nil;
-    wxColour wxSelectedSubtitleColour = moTableCell->GetSelectedTextColour();
+    wxColour wxSelectedSubtitleColour = tableCell->GetSelectedTextColour();
     selectedSubtitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedSubtitleColour.GetCGColor()] autorelease];
     if (selectedSubtitleColour) {
         [self.detailTextLabel setHighlightedTextColor:selectedSubtitleColour];
@@ -128,84 +131,84 @@
     }
     
     // Title alignment
-    wxMoTableCell::wxMoTableCellTextAlignment wxTitleAlignment = moTableCell->GetTextAlignment();
+    wxTableCell::wxTableCellTextAlignment wxTitleAlignment = tableCell->GetTextAlignment();
     UITextAlignment titleAlignment;
-    if (wxTitleAlignment != wxMoTableCell::TextAlignmentLeft) {
+    if (wxTitleAlignment != wxTableCell::TextAlignmentLeft) {
         NSLog(@"something's wrong");
     }
     switch (wxTitleAlignment) {
-        case wxMoTableCell::TextAlignmentLeft:      titleAlignment = UITextAlignmentLeft;   break;
-        case wxMoTableCell::TextAlignmentCenter:    titleAlignment = UITextAlignmentCenter; break;
-        case wxMoTableCell::TextAlignmentRight:     titleAlignment = UITextAlignmentRight;  break;
-        default:                                    titleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentLeft:      titleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentCenter:    titleAlignment = UITextAlignmentCenter; break;
+        case wxTableCell::TextAlignmentRight:     titleAlignment = UITextAlignmentRight;  break;
+        default:                                  titleAlignment = UITextAlignmentLeft;   break;
     };
     [self.textLabel setTextAlignment:titleAlignment];
 
     // Subtitle alignment
-    wxMoTableCell::wxMoTableCellTextAlignment wxSubtitleAlignment = moTableCell->GetDetailTextAlignment();
+    wxTableCell::wxTableCellTextAlignment wxSubtitleAlignment = tableCell->GetDetailTextAlignment();
     UITextAlignment subtitleAlignment;
     switch (wxSubtitleAlignment) {
-        case wxMoTableCell::TextAlignmentLeft:      subtitleAlignment = UITextAlignmentLeft;   break;
-        case wxMoTableCell::TextAlignmentCenter:    subtitleAlignment = UITextAlignmentCenter; break;
-        case wxMoTableCell::TextAlignmentRight:     subtitleAlignment = UITextAlignmentRight;  break;
-        default:                                    subtitleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentLeft:      subtitleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentCenter:    subtitleAlignment = UITextAlignmentCenter; break;
+        case wxTableCell::TextAlignmentRight:     subtitleAlignment = UITextAlignmentRight;  break;
+        default:                                  subtitleAlignment = UITextAlignmentLeft;   break;
     };
     [self.detailTextLabel setTextAlignment:subtitleAlignment];
     
     // Accessory type
-    wxMoTableCell::wxMoTableCellAccessoryType wxAccessoryType = moTableCell->GetAccessoryType();
+    wxTableCell::wxTableCellAccessoryType wxAccessoryType = tableCell->GetAccessoryType();
     UITableViewCellAccessoryType accessoryType;
     switch (wxAccessoryType) {
-        case wxMoTableCell::AccessoryTypeNone:                      accessoryType = UITableViewCellAccessoryNone;                   break;
-        case wxMoTableCell::AccessoryTypeDisclosureIndicator:       accessoryType = UITableViewCellAccessoryDisclosureIndicator;    break;
-        case wxMoTableCell::AccessoryTypeDetailDisclosureButton:    accessoryType = UITableViewCellAccessoryDetailDisclosureButton; break;
-        case wxMoTableCell::AccessoryTypeCheckmark:                 accessoryType = UITableViewCellAccessoryCheckmark;              break;
-        default:                                                    accessoryType = UITableViewCellAccessoryNone;                   break;
+        case wxTableCell::AccessoryTypeNone:                      accessoryType = UITableViewCellAccessoryNone;                   break;
+        case wxTableCell::AccessoryTypeDisclosureIndicator:       accessoryType = UITableViewCellAccessoryDisclosureIndicator;    break;
+        case wxTableCell::AccessoryTypeDetailDisclosureButton:    accessoryType = UITableViewCellAccessoryDetailDisclosureButton; break;
+        case wxTableCell::AccessoryTypeCheckmark:                 accessoryType = UITableViewCellAccessoryCheckmark;              break;
+        default:                                                  accessoryType = UITableViewCellAccessoryNone;                   break;
     };
     [self setAccessoryType:accessoryType];
     
     // Selection style
-    wxMoTableCell::wxMoTableCellSelectionStyle wxSelectionStyle = moTableCell->GetSelectionStyle();
+    wxTableCell::wxTableCellSelectionStyle wxSelectionStyle = tableCell->GetSelectionStyle();
     UITableViewCellSelectionStyle selectionStyle;
     switch (wxSelectionStyle) {
-        case wxMoTableCell::SelectionStyleNone:     selectionStyle = UITableViewCellSelectionStyleNone;     break;
-        case wxMoTableCell::SelectionStyleBlue:     selectionStyle = UITableViewCellSelectionStyleBlue;     break;
-        case wxMoTableCell::SelectionStyleGrey:     selectionStyle = UITableViewCellSelectionStyleGray;     break;
-        default:                                    selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+        case wxTableCell::SelectionStyleNone:     selectionStyle = UITableViewCellSelectionStyleNone;     break;
+        case wxTableCell::SelectionStyleBlue:     selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+        case wxTableCell::SelectionStyleGrey:     selectionStyle = UITableViewCellSelectionStyleGray;     break;
+        default:                                  selectionStyle = UITableViewCellSelectionStyleBlue;     break;
     };
     [self setSelectionStyle:selectionStyle];
     
     // Title line break mode (FIXME merge with detail line break mode to avoid duplicating the code)
-    wxMoTableCell::wxMoTableCellLineBreakMode wxTitleLineBreakMode = moTableCell->GetTextLineBreakMode();
+    wxTableCell::wxTableCellLineBreakMode wxTitleLineBreakMode = tableCell->GetTextLineBreakMode();
     UILineBreakMode titleLineBreakMode;
     switch (wxTitleLineBreakMode) {
-        case wxMoTableCell::LineBreakModeWordWrap:         titleLineBreakMode = UILineBreakModeWordWrap;           break;
-        case wxMoTableCell::LineBreakModeCharacterWrap:    titleLineBreakMode = UILineBreakModeCharacterWrap;      break;
-        case wxMoTableCell::LineBreakModeClip:             titleLineBreakMode = UILineBreakModeClip;               break;
-        case wxMoTableCell::LineBreakModeHeadTruncation:   titleLineBreakMode = UILineBreakModeHeadTruncation;     break;
-        case wxMoTableCell::LineBreakModeTailTruncation:   titleLineBreakMode = UILineBreakModeTailTruncation;     break;
-        case wxMoTableCell::LineBreakModeMiddleTruncation: titleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
-        default:                                           titleLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxTableCell::LineBreakModeWordWrap:         titleLineBreakMode = UILineBreakModeWordWrap;           break;
+        case wxTableCell::LineBreakModeCharacterWrap:    titleLineBreakMode = UILineBreakModeCharacterWrap;      break;
+        case wxTableCell::LineBreakModeClip:             titleLineBreakMode = UILineBreakModeClip;               break;
+        case wxTableCell::LineBreakModeHeadTruncation:   titleLineBreakMode = UILineBreakModeHeadTruncation;     break;
+        case wxTableCell::LineBreakModeTailTruncation:   titleLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxTableCell::LineBreakModeMiddleTruncation: titleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
+        default:                                         titleLineBreakMode = UILineBreakModeTailTruncation;     break;
     };
     [self.textLabel setLineBreakMode:titleLineBreakMode];
 
     // Subtitle line break mode (FIXME merge with title line break mode to avoid duplicating the code)
-    wxMoTableCell::wxMoTableCellLineBreakMode wxSubtitleLineBreakMode = moTableCell->GetDetailTextLineBreakMode();
+    wxTableCell::wxTableCellLineBreakMode wxSubtitleLineBreakMode = tableCell->GetDetailTextLineBreakMode();
     UILineBreakMode subtitleLineBreakMode;
     switch (wxSubtitleLineBreakMode) {
-        case wxMoTableCell::LineBreakModeWordWrap:         subtitleLineBreakMode = UILineBreakModeWordWrap;           break;
-        case wxMoTableCell::LineBreakModeCharacterWrap:    subtitleLineBreakMode = UILineBreakModeCharacterWrap;      break;
-        case wxMoTableCell::LineBreakModeClip:             subtitleLineBreakMode = UILineBreakModeClip;               break;
-        case wxMoTableCell::LineBreakModeHeadTruncation:   subtitleLineBreakMode = UILineBreakModeHeadTruncation;     break;
-        case wxMoTableCell::LineBreakModeTailTruncation:   subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
-        case wxMoTableCell::LineBreakModeMiddleTruncation: subtitleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
+        case wxTableCell::LineBreakModeWordWrap:         subtitleLineBreakMode = UILineBreakModeWordWrap;           break;
+        case wxTableCell::LineBreakModeCharacterWrap:    subtitleLineBreakMode = UILineBreakModeCharacterWrap;      break;
+        case wxTableCell::LineBreakModeClip:             subtitleLineBreakMode = UILineBreakModeClip;               break;
+        case wxTableCell::LineBreakModeHeadTruncation:   subtitleLineBreakMode = UILineBreakModeHeadTruncation;     break;
+        case wxTableCell::LineBreakModeTailTruncation:   subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxTableCell::LineBreakModeMiddleTruncation: subtitleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
         default:                                           subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
     };
     [self.detailTextLabel setLineBreakMode:subtitleLineBreakMode];
     
     // Bitmap
     UIImage *img = nil;
-    wxBitmap bitmap = moTableCell->GetBitmap();
+    wxBitmap bitmap = tableCell->GetBitmap();
     if ((img = bitmap.GetUIImage())) {
         [img retain];
     }
@@ -219,8 +222,10 @@
 @end
 
 
+#pragma mark -
+#pragma mark Peer implementation
 
-wxTableViewCellIPhoneImpl::wxTableViewCellIPhoneImpl(wxMoTableCell* peer,
+wxTableViewCellIPhoneImpl::wxTableViewCellIPhoneImpl(wxTableCell* peer,
                                                      wxUITableViewCell* cell) : wxWidgetIPhoneImpl(NULL, cell), wxTableViewCellImpl()
 {
     m_cell = cell;
@@ -228,11 +233,101 @@ wxTableViewCellIPhoneImpl::wxTableViewCellIPhoneImpl(wxMoTableCell* peer,
 
 
 
-wxWidgetImplType* wxWidgetImpl::CreateTableViewCell( wxMoTableCell* wxpeer )
+wxWidgetImplType* wxWidgetImpl::CreateTableViewCell( wxTableCell* wxpeer )
 {
-    // Cell's initializer will figure out string identifier and style from the wxMoTableCell peer
-    wxUITableViewCell *cell = [[wxUITableViewCell alloc] initWithWxMoTableCell:wxpeer];
+    // Cell's initializer will figure out string identifier and style from the wxTableCell peer
+    wxUITableViewCell *cell = [[wxUITableViewCell alloc] initWithWxTableCell:wxpeer];
     
     wxWidgetIPhoneImpl* c = new wxTableViewCellIPhoneImpl(wxpeer, cell);
     return c;
+}
+
+
+
+#pragma mark -
+#pragma mark wxTableCell implementation
+
+wxTableCell::wxTableCell(wxTableCtrl* ctrl, const wxString& reuseName, wxTableCellStyle cellStyle)
+{
+    Init();
+    
+    m_reuseName = reuseName;
+    m_cellStyle = cellStyle;
+    
+    SetCellWidgetImpl(wxWidgetImpl::CreateTableViewCell( this ));
+}
+
+wxTableCell::~wxTableCell()
+{
+    NSLog(@"cell is being freed");
+    // FIXME stub
+}
+
+void wxTableCell::Init()
+{
+    m_widgetImpl = NULL;
+    
+    m_textAlignment = TextAlignmentLeft;
+    m_detailTextAlignment = TextAlignmentLeft;
+    m_textLineBreakMode = LineBreakModeWordWrap;
+    m_detailTextLineBreakMode = LineBreakModeWordWrap;
+    m_selected = false;
+    m_selectionStyle = SelectionStyleBlue;
+    //m_eventHandler = NULL;
+    m_accessoryType = AccessoryTypeNone;
+    m_accessoryWindow = NULL;
+    m_editingAccessoryType = AccessoryTypeNone;
+    m_editingAccessoryWindow = NULL;
+    //m_editStyle = EditStyleNone;
+    m_indentationLevel = 0;
+    m_indentationWidth = 0;
+    m_contentWindow = NULL;
+    m_cellStyle = CellStyleDefault;
+    m_detailWidth = 80;
+    m_editingMode = false;
+    m_shouldIndentWhileEditing = true;
+    m_showReorderingButton = false;    
+}
+
+// Sets the accessory window
+void wxTableCell::SetAccessoryWindow(wxWindow* win)
+{
+    UIView *accessoryView = win->GetPeer()->GetWXWidget();
+    if ( !accessoryView ) {
+        return;
+    }
+    
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setAccessoryView:accessoryView];
+    m_accessoryWindow = win;
+}
+
+/// Sets the indentation level.
+void wxTableCell::SetIndentationLevel(int indentationLevel)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setIndentationLevel:indentationLevel];
+    
+    m_indentationLevel = indentationLevel;
+}
+
+/// Sets the indentation width.
+void wxTableCell::SetIndentationWidth(int indentationWidth)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setIndentationWidth:indentationWidth];
+    
+    m_indentationWidth = indentationWidth;
 }

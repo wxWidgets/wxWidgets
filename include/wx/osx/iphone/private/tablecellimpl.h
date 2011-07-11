@@ -13,8 +13,8 @@
 #define _WX_OSX_IPHONE_PRIVATE_TABLECELL_H_
 
 #include "wx/osx/private.h"
-#include "wx/mobile/native/tablectrl.h"
-#include "wx/mobile/native/tablecell.h"
+#include "wx/tablectrl.h"
+#include "wx/tablecell.h"
 
 
 #pragma mark Cocoa
@@ -22,16 +22,16 @@
 @interface wxUITableViewCell : UITableViewCell
 {
 @private
-    wxMoTableCell *moTableCell;
+    wxTableCell *tableCell;
 }
 
-@property (nonatomic) wxMoTableCell *moTableCell;
+@property (nonatomic) wxTableCell *tableCell;
 
-- (id)initWithWxMoTableCell:(wxMoTableCell *)initMoTableCell;
+- (id)initWithWxTableCell:(wxTableCell *)initTableCell;
 
 // Reads properties from wxMoTableCell, stores them to self ("translates" to Cocoa properties)
 // Used just before showing the cell
-- (void)commitWxMoTableCellProperties;
+- (void)commitWxTableCellProperties;
 
 @end
 
@@ -40,7 +40,7 @@
 class wxTableViewCellIPhoneImpl : public wxWidgetIPhoneImpl, public wxTableViewCellImpl
 {
 public:
-    wxTableViewCellIPhoneImpl(wxMoTableCell* peer,
+    wxTableViewCellIPhoneImpl(wxTableCell* peer,
                               wxUITableViewCell *cell );
         
 private:

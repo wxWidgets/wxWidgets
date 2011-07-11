@@ -13,7 +13,6 @@
 
 #if wxUSE_TOOLBAR
 
-#include "wx/mobile/native/defs.h"
 #include "wx/toolbar.h"
 
 #ifndef WX_PRECOMP

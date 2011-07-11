@@ -24,6 +24,34 @@
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
+
+#if wxOSX_USE_IPHONE
+
+// Tab bar item styles
+enum {
+    wxID_FAVORITES,
+    wxID_FEATURED,
+    wxID_TOPRATED,
+    wxID_RECENTS,
+    wxID_CONTACTS,
+    wxID_HISTORY,
+    // wxID_BOOKMARKS,
+    // wxID_SEARCH,
+    wxID_DOWNLOADS,
+    wxID_MOSTRECENT,
+    wxID_MOSTVIEWED,
+    
+    wxID_EXTENDED_HIGHEST,
+    
+    /*
+     Recognised as tab bar item ids but already defined by wxWidgets
+
+     wxID_MORE
+     */
+};
+
+#endif  // wxOSX_USE_IPHONE
+
 // ----------------------------------------------------------------------------
 // wxNotebook
 // ----------------------------------------------------------------------------

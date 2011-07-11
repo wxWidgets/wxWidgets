@@ -25,7 +25,6 @@
 #include "wx/string.h"
 #include "wx/imaglist.h"
 #include "wx/osx/private.h"
-#include "wx/mobile/defs.h"
 
 #include <stdio.h>
 

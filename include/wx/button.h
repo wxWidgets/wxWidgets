@@ -49,6 +49,20 @@
 // bitmap would be shown
 #define wxBU_NOTEXT          0x0002
 
+#ifdef __WXOSX_IPHONE__
+
+    // New iOS button styles
+    enum {
+        wxBU_ROUNDED_RECTANGLE=0x0800,
+            wxBU_DISCLOSURE=0x1000,
+            wxBU_INFO_LIGHT=0x2000,
+            wxBU_INFO_DARK=0x4000,
+            wxBU_CONTACT_ADD=0x8000
+    };
+
+#endif  // __WXOSX_IPHONE__
+
+
 
 #include "wx/bitmap.h"
 #include "wx/control.h"

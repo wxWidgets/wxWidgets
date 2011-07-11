@@ -25,6 +25,18 @@ public:
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
+    
+    #ifdef __WXOSX_IPHONE__
+        // iOS uses UISwitch which doesn't have a label
+        wxCheckBox(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxCheckBoxNameStr)
+        {
+            Create(parent, id, wxEmptyString, pos, size, style, validator, name);
+        }
+    #endif    // __WXOSX_IPHONE__
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos = wxDefaultPosition,

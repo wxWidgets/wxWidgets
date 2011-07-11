@@ -20,7 +20,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
+#include "wx/pagectrl.h"
 
+
+#pragma mark -
+#pragma mark Cocoa class
 
 @interface wxUIPageControl : UIPageControl
 {
@@ -34,7 +38,8 @@
 @end
 
 
-
+#pragma mark -
+#pragma mark Peer implementation
 
 class wxPageCtrlIPhoneImpl : public wxWidgetIPhoneImpl
 {
@@ -62,4 +67,38 @@ wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
     
     wxWidgetIPhoneImpl* c = new wxPageCtrlIPhoneImpl( wxpeer, v );
     return c;
+}
+
+
+#pragma mark -
+#pragma mark wxPageCtrl implementation
+
+bool wxPageCtrl::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxValidator& validator,
+                          const wxString& name)
+{
+    DontCreatePeer();
+    
+    if ( !wxControl::Create( parent, id, pos, size, style, validator, name )) {
+        return false;
+    }
+    
+    SetPeer(wxWidgetImpl::CreatePageCtrl( this, parent, id, pos, size, style, GetExtraStyle() ));
+    
+    MacPostControlCreate( pos, size );
+    
+    return true;
+}
+
+wxPageCtrl::~wxPageCtrl()
+{
+}
+
+void wxPageCtrl::Init()
+{
+    
 }

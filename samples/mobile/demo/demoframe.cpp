@@ -23,6 +23,13 @@
 #include "wx/dcbuffer.h"
 #include "wx/settings.h"
 #include "wx/notebook.h"
+#include "wx/navctrl.h"
+#include "wx/tablectrl.h"
+#include "wx/srchctrl.h"
+#include "wx/pagectrl.h"
+#include "wx/html/webkit.h"
+#include "wx/segctrl.h"
+#include "wx/wheelsctrl.h"
 
 #include "wx/mstream.h"
 
@@ -40,12 +47,10 @@
 #include "app.xpm"
 
 
-#if 0   // ends before BEGIN_EVENT_TABLE( DemoFrame, wxFrame )
-
-class DemoViewController: public wxMoViewController
+class DemoViewController: public wxViewController
 {
 public:
-    DemoViewController(const wxString& title, wxMoNavigationCtrl* ctrl, int viewNumber): wxMoViewController(title)
+    DemoViewController(const wxString& title, wxNavigationCtrl* ctrl, int viewNumber): wxViewController(title)
     {
         m_navCtrl = ctrl;
         m_viewNumber = viewNumber;
@@ -69,7 +74,7 @@ public:
 
         wxButton* button = new wxButton(panel, wxID_ANY, label);
         sizer->Add(button, 0, wxALIGN_CENTER_HORIZONTAL);
-wxButton
+
         sizer->AddStretchSpacer();
 
         panel->Connect(button->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(DemoViewController::OnNewView), NULL, this);
@@ -81,16 +86,16 @@ wxButton
     }
 
 protected:
-    wxMoNavigationCtrl* m_navCtrl;
+    wxNavigationCtrl* m_navCtrl;
     int                 m_viewNumber;
 };
 
-class DemoCanvas: public wxMoScrolledWindow
+class DemoCanvas: public wxScrolledWindow
 {
     DECLARE_EVENT_TABLE()
 public:
     DemoCanvas(wxWindow* parent, wxWindowID id = wxID_ANY):
-      wxMoScrolledWindow(parent, id)
+      wxScrolledWindow(parent, id)
     {
         SetBackgroundStyle(wxBG_STYLE_CUSTOM);
         SetScrollbars(1, 1, 1000, 1000);
@@ -129,155 +134,153 @@ public:
     }
 };
 
-BEGIN_EVENT_TABLE(DemoCanvas, wxMoScrolledWindow)
+BEGIN_EVENT_TABLE(DemoCanvas, wxScrolledWindow)
     EVT_PAINT(DemoCanvas::OnPaint)
 END_EVENT_TABLE()
 
 // This data source demonstrates plain and grouped tables
 
-class MultiSectionDataSource: public wxMoTableDataSource
+class MultiSectionDataSource: public wxTableDataSource
 {
 public:
-    MultiSectionDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle = wxMoTableCell::CellStyleDefault) { m_cellStyle = cellStyle; }
+    MultiSectionDataSource(wxTableCell::wxTableCellStyle cellStyle = wxTableCell::CellStyleDefault) { m_cellStyle = cellStyle; }
 
     /// Returns a table cell for the give location.
-    virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual wxTableCell* GetCell(wxTableCtrl* ctrl, const wxTablePath& path);
 
     /// Returns the number of sections in the table.
-    virtual int GetSectionCount(wxMoTableCtrl* ctrl) const;
+    virtual int GetSectionCount(wxTableCtrl* ctrl) const;
 
     /// Returns the number of rows in a section.
-    virtual int GetRowCount(wxMoTableCtrl* ctrl, int section) const;
+    virtual int GetRowCount(wxTableCtrl* ctrl, int section) const;
 
     /// Returns the number of rows in a section.
-    virtual wxArrayString GetSectionTitles(wxMoTableCtrl* ctrl) const;
+    virtual wxArrayString GetSectionTitles(wxTableCtrl* ctrl) const;
 
     /// Returns an array of strings, each one corresponding to an index title to be shown
     /// on the right hand side of a plain list.
-    virtual wxArrayString GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const;
+    virtual wxArrayString GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const;
 
-    wxMoTableCell::wxMoTableCellStyle m_cellStyle;
+    wxTableCell::wxTableCellStyle m_cellStyle;
 };
 
 // This data source demonstrates plain and grouped tables with editing
 
-class EditableDataSource: public wxMoTableDataSource
+class EditableDataSource: public wxTableDataSource
 {
 public:
-    EditableDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle = wxMoTableCell::CellStyleDefault);
+    EditableDataSource(wxTableCell::wxTableCellStyle cellStyle = wxTableCell::CellStyleDefault);
 
     /// Returns a table cell for the give location.
-    virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual wxTableCell* GetCell(wxTableCtrl* ctrl, const wxTablePath& path);
 
     /// Returns the number of sections in the table.
-    virtual int GetSectionCount(wxMoTableCtrl* ctrl) const;
+    virtual int GetSectionCount(wxTableCtrl* ctrl) const;
 
     /// Returns the number of rows in a section.
-    virtual int GetRowCount(wxMoTableCtrl* ctrl, int section) const;
+    virtual int GetRowCount(wxTableCtrl* ctrl, int section) const;
 
     /// Returns the number of rows in a section.
-    virtual wxArrayString GetSectionTitles(wxMoTableCtrl* ctrl) const;
+    virtual wxArrayString GetSectionTitles(wxTableCtrl* ctrl) const;
 
     /// Returns an array of strings, each one corresponding to an index title to be shown
     /// on the right hand side of a plain list.
-    virtual wxArrayString GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const;
+    virtual wxArrayString GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const;
 
     /// Called by the table control to commit an insertion requested by the user. This function should
     /// then call InsertRows in response.
-    virtual bool CommitInsertRow(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual bool CommitInsertRow(wxTableCtrl* ctrl, const wxTablePath& path);
 
     /// Called by the table control to commit a deletion requested by the user. This function should
     /// then call DeleteRows in response.
-    virtual bool CommitDeleteRow(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual bool CommitDeleteRow(wxTableCtrl* ctrl, const wxTablePath& path);
 
     /// Returns true if this row can be edited.
-    virtual bool CanEditRow(wxMoTableCtrl* WXUNUSED(ctrl), const wxTablePath& WXUNUSED(path)) { return true; }
+    virtual bool CanEditRow(wxTableCtrl* WXUNUSED(ctrl), const wxTablePath& WXUNUSED(path)) { return true; }
 
     /// Returns true if this row can be moved.
-    virtual bool CanMoveRow(wxMoTableCtrl* WXUNUSED(ctrl), const wxTablePath& WXUNUSED(path)) { return true; }
+    virtual bool CanMoveRow(wxTableCtrl* WXUNUSED(ctrl), const wxTablePath& WXUNUSED(path)) { return true; }
 
     /// Requests a move operation from 'from' to 'to'. The data should then reflect
     /// the new ordering. Return false if the reordering was not done.
-    virtual bool MoveRow(wxMoTableCtrl* ctrl, const wxTablePath& pathFrom, const wxTablePath& pathTo);
+    virtual bool MoveRow(wxTableCtrl* ctrl, const wxTablePath& pathFrom, const wxTablePath& pathTo);
 
     /// Get the edit style for a row
-    virtual wxMoTableCtrl::CellEditStyle GetCellEditStyle(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual wxTableCtrl::CellEditStyle GetCellEditStyle(wxTableCtrl* ctrl, const wxTablePath& path);
 
     wxArrayString m_rowLabels;
     wxArrayInt    m_rowData;
 
-    wxMoTableCell::wxMoTableCellStyle m_cellStyle;
+    wxTableCell::wxTableCellStyle m_cellStyle;
 };
+
 
 // This data source populates the root table in the Demo tab
 
-class TableDemoRootDataSource: public wxMoTableDataSource
+class TableDemoRootDataSource: public wxTableDataSource
 {
 public:
-    TableDemoRootDataSource(wxMoNavigationCtrl* ctrl) { m_navCtrl = ctrl; }
+    TableDemoRootDataSource(wxNavigationCtrl* ctrl) { m_navCtrl = ctrl; }
 
     /// Returns a table cell for the given location.
-    virtual wxMoTableCell* GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path);
+    virtual wxTableCell* GetCell(wxTableCtrl* ctrl, const wxTablePath& path);
 
     /// Returns the number of sections in the table.
-    virtual int GetSectionCount(wxMoTableCtrl* ctrl) const;
+    virtual int GetSectionCount(wxTableCtrl* ctrl) const;
 
     /// Returns the number of rows in a section.
-    virtual int GetRowCount(wxMoTableCtrl* ctrl, int section) const;
+    virtual int GetRowCount(wxTableCtrl* ctrl, int section) const;
 
     /// Returns the number of rows in a section.
-    virtual wxArrayString GetSectionTitles(wxMoTableCtrl* ctrl) const;
+    virtual wxArrayString GetSectionTitles(wxTableCtrl* ctrl) const;
 
     /// Returns an array of strings, each one corresponding to an index title to be shown
     /// on the right hand side of a plain list.
-    virtual wxArrayString GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const;
+    virtual wxArrayString GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const;
 
     void OnSelectRow(wxTableCtrlEvent& event);
 
     // Utility to push table onto the navigation controller
-    void PushTable(wxMoTableCtrl* tableCtrl, wxMoTableDataSource* dataSource, const wxString& title);
+    void PushTable(wxTableCtrl* tableCtrl, wxTableDataSource* dataSource, const wxString& title);
 
     // Utility to push a window onto the navigation controller
     void PushWindow(wxWindow* win, const wxString& title);
 
     DECLARE_EVENT_TABLE()
 protected:
-    wxMoNavigationCtrl* m_navCtrl;
+    wxNavigationCtrl* m_navCtrl;
 };
 
-// A navigation controller for Table tab, starting off with the root data source
 
-class TableDemoController: public wxMoViewController
+// A navigation controller for Table tab, starting off with the root data source
+class TableDemoController: public wxViewController
 {
 public:
-    TableDemoController(const wxString& title, wxMoNavigationCtrl* ctrl): wxMoViewController(title)
+    TableDemoController(const wxString& title, wxNavigationCtrl* ctrl): wxViewController(title)
     {
         m_navCtrl = ctrl;
 
         // Create off-screen to avoid flicker
-        wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(ctrl, wxID_ANY, wxPoint(-100, -100), wxSize(10, 10),
-            wxTC_GROUPED);
-        tableCtrl->SetDataSource(new TableDemoRootDataSource(ctrl), true);
+        wxTableCtrl* tableCtrl = new wxTableCtrl(ctrl, wxID_ANY, wxPoint(-100, -100), wxSize(10, 10), wxTC_GROUPED);
+        TableDemoRootDataSource *rootDS = new TableDemoRootDataSource(ctrl);
+        tableCtrl->SetDataSource(rootDS, true);
         tableCtrl->ReloadData();
         SetWindow(tableCtrl);
     }
 
 protected:
-    wxMoNavigationCtrl* m_navCtrl;
+    wxNavigationCtrl* m_navCtrl;
 };
 
 /*
  * DemoFrame type definition
  */
 
-IMPLEMENT_CLASS( DemoFrame, wxFrame )
+//IMPLEMENT_CLASS( DemoFrame, wxFrame )
 
 /*
  * DemoFrame event table definition
  */
-
-#endif  // 0
-
 
 BEGIN_EVENT_TABLE( DemoFrame, wxFrame )
 
@@ -285,10 +288,10 @@ BEGIN_EVENT_TABLE( DemoFrame, wxFrame )
     EVT_SHEET_BUTTON(DemoFrame::OnActionSheet)
     EVT_BUTTON(wxID_PROPERTIES, DemoFrame::OnShowActionSheet)
     EVT_BUTTON(wxID_VIEW_DETAILS, DemoFrame::OnShowAlertSheet)
+#endif
 
     EVT_TABLE_ROW_SELECTED(wxID_ANY, DemoFrame::OnSelectRow)
     EVT_TABLE_ACCESSORY_CLICKED(wxID_ANY, DemoFrame::OnAccessoryClick)
-#endif
 
 ////@begin DemoFrame event table entries
 ////@end DemoFrame event table entries
@@ -363,19 +366,18 @@ void DemoFrame::CreateControls()
     topSizer->Add(notebook, 1, wxEXPAND);
 
     wxPanel* page1 = new wxPanel(notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), 0);
-    //notebook->AddPage(page1, _("Demo"), true, wxID_TOPRATED);
-    notebook->AddPage(page1, _("Demo"), true, wxID_ANY);
+    notebook->AddPage(page1, _("Demo"), true, wxID_TOPRATED);
     
-#if 0
     // Items for page 1
     {
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         page1->SetSizer(sizer);
         
-        wxMoNavigationCtrl* navCtrl = new wxMoNavigationCtrl(page1, wxID_ANY);
+        wxNavigationCtrl* navCtrl = new wxNavigationCtrl(page1, wxID_ANY);
         sizer->Add(navCtrl, 1, wxEXPAND, 0);
         
-        navCtrl->PushController(new TableDemoController(_("iPhone Demo"), navCtrl));
+        TableDemoController *tableController = new TableDemoController(_("iPhone Demo"), navCtrl);
+        navCtrl->PushController(tableController);
     }
     
     wxPanel* page2 = new wxPanel(notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
@@ -386,7 +388,7 @@ void DemoFrame::CreateControls()
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         page2->SetSizer(sizer);
 
-        wxMoNavigationCtrl* navCtrl = new wxMoNavigationCtrl(page2, wxID_ANY);
+        wxNavigationCtrl* navCtrl = new wxNavigationCtrl(page2, wxID_ANY);
         sizer->Add(navCtrl, 1, wxEXPAND, 0);
 
         navCtrl->PushController(new DemoViewController(_("Demo View 1"), navCtrl, 1));
@@ -403,7 +405,7 @@ void DemoFrame::CreateControls()
 
         // Toolbar
         
-        wxMoToolBar* toolbar = new wxMoToolBar(page3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
+        wxToolBar* toolbar = new wxToolBar(page3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
         sizer->Add(toolbar, 0, wxEXPAND, 0);
         
         toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
@@ -423,7 +425,7 @@ void DemoFrame::CreateControls()
         DemoCanvas* canvas = new DemoCanvas(page3, wxID_ANY);
         sizer->Add(canvas, 1, wxEXPAND, 0);
     }
-#endif  // 0
+
 }
 
 
@@ -468,16 +470,17 @@ wxIcon DemoFrame::GetIconResource( const wxString& name )
 }
 
 
-#if 0   // ends at the end of this file
-
+#if 0
 // Respond to action sheet events
 void DemoFrame::OnActionSheet(wxSheetEvent& event)
 {
-    wxMoSheetBase* sheet = event.GetSheet();
+    wxSheetBase* sheet = event.GetSheet();
     sheet->DismissSheet(event.GetId());
     sheet->Destroy();
 }
+#endif
 
+#if 0
 /// Show an action sheet
 void DemoFrame::OnShowActionSheet(wxCommandEvent& WXUNUSED(event))
 {
@@ -485,7 +488,7 @@ void DemoFrame::OnShowActionSheet(wxCommandEvent& WXUNUSED(event))
     otherButtons.Add(_("First other button"));
     otherButtons.Add(_("Another other button"));
 
-    wxMoActionSheet* sheet = new wxMoActionSheet(this,
+    wxActionSheet* sheet = new wxActionSheet(this,
         _("Testing an action sheet, with a relatively long title on it."),
         _("Cancel"), _("OK"), otherButtons);
 
@@ -493,7 +496,9 @@ void DemoFrame::OnShowActionSheet(wxCommandEvent& WXUNUSED(event))
     sheet->SetOwner(this);
     sheet->ShowSheet(NULL);
 }
+#endif
 
+#if 0
 /// Show an alert sheet
 void DemoFrame::OnShowAlertSheet(wxCommandEvent& WXUNUSED(event))
 {
@@ -501,7 +506,7 @@ void DemoFrame::OnShowAlertSheet(wxCommandEvent& WXUNUSED(event))
     otherButtons.Add(_("First other button"));
     otherButtons.Add(_("Another other button"));
 
-    wxMoAlertSheet* sheet = new wxMoAlertSheet(this,
+    wxAlertSheet* sheet = new wxAlertSheet(this,
         _("Testing an alert sheet"),
         _("This is the message for the alert sheet, and it can be quite long if necessary."),
         _("Cancel"), otherButtons);
@@ -510,12 +515,13 @@ void DemoFrame::OnShowAlertSheet(wxCommandEvent& WXUNUSED(event))
     sheet->SetOwner(this);
     sheet->ShowSheet(NULL);
 }
+#endif
 
 void DemoFrame::OnAccessoryClick(wxTableCtrlEvent& event)
 {
     wxString msg(wxString::Format(_("Clicked accessory at section %d, row %d"),
         int(event.GetPath().GetSection()+1), int(event.GetPath().GetRow()+1)));
-    wxIBMessageBox(msg, _("Table Event"));
+    wxMessageBox(msg, _("Table Event"));
 }
 
 void DemoFrame::OnSelectRow(wxTableCtrlEvent& event)
@@ -527,7 +533,7 @@ void DemoFrame::OnSelectRow(wxTableCtrlEvent& event)
 
 
 // Returns a table cell for the give location.
-wxMoTableCell* MultiSectionDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path)
+wxTableCell* MultiSectionDataSource::GetCell(wxTableCtrl* ctrl, const wxTablePath& path)
 {
     int section = path.GetSection();
     int row = path.GetRow();
@@ -541,24 +547,24 @@ wxMoTableCell* MultiSectionDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTabl
     else
         reuseName = wxT("DemoCell");
 
-    wxMoTableCell* cell = ctrl->GetReusableCell(reuseName);
+    wxTableCell* cell = ctrl->GetReusableCell(reuseName);
         
     if (!cell)
-        cell = new wxMoTableCell(ctrl, reuseName, m_cellStyle);
+        cell = new wxTableCell(ctrl, reuseName, m_cellStyle);
     cell->SetText(rowText);
     cell->SetDetailText(_("Detail text."));
 
     if (ctrl->HasFlag(wxTC_GROUPED))
     {
         if (accessory == 0)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeDisclosureIndicator);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeDisclosureIndicator);
         else if (accessory == 1)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeDetailDisclosureButton);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeDetailDisclosureButton);
         else if (accessory == 2)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeCheckmark);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeCheckmark);
         else if (accessory == 3)
         {
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeNone);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeNone);
             cell->SetAccessoryWindow(new wxCheckBox(ctrl, wxID_ANY));
         }
     }
@@ -582,19 +588,19 @@ wxMoTableCell* MultiSectionDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTabl
 }
 
 // Returns the number of sections in the table.
-int MultiSectionDataSource::GetSectionCount(wxMoTableCtrl* WXUNUSED(ctrl)) const
+int MultiSectionDataSource::GetSectionCount(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     return 10;
 }
 
 // Returns the number of rows in a section.
-int MultiSectionDataSource::GetRowCount(wxMoTableCtrl* WXUNUSED(ctrl), int WXUNUSED(section)) const
+int MultiSectionDataSource::GetRowCount(wxTableCtrl* WXUNUSED(ctrl), int WXUNUSED(section)) const
 {
     return 10;
 }
 
 // Returns the number of rows in a section.
-wxArrayString MultiSectionDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString MultiSectionDataSource::GetSectionTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     wxArrayString titles;
     size_t i;
@@ -608,7 +614,7 @@ wxArrayString MultiSectionDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(c
 
 /// Returns an array of strings, each one corresponding to an index title to be shown
 /// on the right hand side of a plain list.
-wxArrayString MultiSectionDataSource::GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString MultiSectionDataSource::GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     wxArrayString index;
     size_t i;
@@ -620,19 +626,19 @@ wxArrayString MultiSectionDataSource::GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctr
 }
 
 
-BEGIN_EVENT_TABLE(TableDemoRootDataSource, wxMoTableDataSource)
+BEGIN_EVENT_TABLE(TableDemoRootDataSource, wxTableDataSource)
     EVT_TABLE_ROW_SELECTED(wxID_ANY, TableDemoRootDataSource::OnSelectRow)
 END_EVENT_TABLE()
 
 // Returns a table cell for the give location.
-wxMoTableCell* TableDemoRootDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path)
+wxTableCell* TableDemoRootDataSource::GetCell(wxTableCtrl* ctrl, const wxTablePath& path)
 {
     int section = path.GetSection();
     int row = path.GetRow();
 
-    wxMoTableCell* cell = ctrl->GetReusableCell(wxT("DemoCell"));
+    wxTableCell* cell = ctrl->GetReusableCell(wxT("DemoCell"));
     if (!cell) {
-        cell = new wxMoTableCell(ctrl, wxT("DemoCell"));
+        cell = new wxTableCell(ctrl, wxT("DemoCell"));
     }
 
     if (section == 0)
@@ -665,7 +671,7 @@ wxMoTableCell* TableDemoRootDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTab
         cell->SetText(titles[row]);
     }
 
-    cell->SetAccessoryType(wxMoTableCell::AccessoryTypeDisclosureIndicator);
+    cell->SetAccessoryType(wxTableCell::AccessoryTypeDisclosureIndicator);
 
     {
         wxMemoryInputStream is(wxwidgets_png, sizeof(wxwidgets_png));
@@ -679,13 +685,13 @@ wxMoTableCell* TableDemoRootDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTab
 }
 
 // Returns the number of sections in the table.
-int TableDemoRootDataSource::GetSectionCount(wxMoTableCtrl* WXUNUSED(ctrl)) const
+int TableDemoRootDataSource::GetSectionCount(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     return 3;
 }
 
 // Returns the number of rows in a section.
-int TableDemoRootDataSource::GetRowCount(wxMoTableCtrl* WXUNUSED(ctrl), int section) const
+int TableDemoRootDataSource::GetRowCount(wxTableCtrl* WXUNUSED(ctrl), int section) const
 {
     if (section == 0)
         return 6;
@@ -698,7 +704,7 @@ int TableDemoRootDataSource::GetRowCount(wxMoTableCtrl* WXUNUSED(ctrl), int sect
 }
 
 // Returns the number of rows in a section.
-wxArrayString TableDemoRootDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString TableDemoRootDataSource::GetSectionTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     wxArrayString titles;
     titles.Add(_("Tables"));
@@ -709,7 +715,7 @@ wxArrayString TableDemoRootDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(
 
 /// Returns an array of strings, each one corresponding to an index title to be shown
 /// on the right hand side of a plain list.
-wxArrayString TableDemoRootDataSource::GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString TableDemoRootDataSource::GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     wxArrayString index;
     return index;
@@ -719,7 +725,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
 {
     wxTablePath path = event.GetPath();
 
-    wxMoTableCtrl* tableCtrl = event.GetTableCtrl();
+    wxTableCtrl* tableCtrl = event.GetTableCtrl();
     if (tableCtrl)
         tableCtrl->Deselect(event.GetPath());
 
@@ -728,40 +734,40 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
         // Tables
         if (path.GetRow() == 0)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxMoTableCell::CellStyleDefault);
-            PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleDefault);
+            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 1)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxMoTableCell::CellStyleValue1);
-            PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue1);
+            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 2)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxMoTableCell::CellStyleValue2);
-            PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue2);
+            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 3)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxMoTableCell::CellStyleSubtitle);
-            PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleSubtitle);
+            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 4)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_PLAIN);
-            MultiSectionDataSource* dataSource = new MultiSectionDataSource;
-            PushTable(tableCtrl, dataSource, _("Plain Table"));
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_PLAIN);
+            //MultiSectionDataSource* dataSource = new MultiSectionDataSource;
+            //PushTable(tableCtrl, dataSource, _("Plain Table"));
         }
         else if (path.GetRow() == 5)
         {
-            wxMoTableCtrl* tableCtrl = new wxMoTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            EditableDataSource* dataSource = new EditableDataSource;
-            PushTable(tableCtrl, dataSource, _("Editable Table"));
-            tableCtrl->SetEditingMode(true);
+            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            //EditableDataSource* dataSource = new EditableDataSource;
+            //PushTable(tableCtrl, dataSource, _("Editable Table"));
+            //tableCtrl->SetEditingMode(true);
         }
     }
     else if (path.GetSection() == 1)
@@ -826,12 +832,10 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
                 staticBitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
             }
 
-#if 0   // FIXME
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Static bitmap:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxStaticBitmap* staticBitmapItem = new wxStaticBitmap( panel, wxID_ANY, staticBitmap);
             innerSizer->Add(staticBitmapItem, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-#endif
             
             //wxStaticText *textControlLabel = new wxStaticText(panel, wxID_STATIC, _("Text control:"));
             wxStaticText *textControlLabel = new wxStaticText(panel, wxID_STATIC, _("Text control:"), wxPoint(20, 150));
@@ -863,7 +867,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Page:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoPageCtrl* pageCtrl = new wxMoPageCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+            wxPageCtrl* pageCtrl = new wxPageCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
             pageCtrl->SetPageCount(6);
             pageCtrl->SetCurrentPage(2);
             innerSizer->Add(pageCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -876,8 +880,8 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Segmented:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            //wxMoSegmentedCtrl* segCtrl = new wxMoSegmentedCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 28));
-            wxMoSegmentedCtrl* segCtrl = new wxMoSegmentedCtrl(panel, wxID_ANY, wxPoint(50, 50), wxSize(100, 40));
+            //wxSegmentedCtrl* segCtrl = new wxSegmentedCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 28));
+            wxSegmentedCtrl* segCtrl = new wxSegmentedCtrl(panel, wxID_ANY, wxPoint(50, 50), wxSize(100, 40));
             segCtrl->AddItem(_("Tiger"));
             segCtrl->AddItem(_("Cheetah"));
             segCtrl->AddItem(_("Pig"));
@@ -934,10 +938,9 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             listBox->SetSelection(0);
             innerSizer->Add(listBox, 1, wxEXPAND|wxALL, 5);
             
-#if 0
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Wheels control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
-            wxMoWheelsTextDataSource* dataSource = new wxMoWheelsTextDataSource(2);
+            wxWheelsTextDataSource* dataSource = new wxWheelsTextDataSource(2);
             wxArrayString textDataStrings;
             textDataStrings.Add(_("First string"));
             textDataStrings.Add(_("A second string"));
@@ -954,12 +957,11 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             }
             dataSource->SetStrings(textDataStrings2, 1);
             
-            wxMoWheelsCtrl* wheelsCtrl = new wxMoWheelsCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 80),
+            wxWheelsCtrl* wheelsCtrl = new wxWheelsCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(-1, 80),
                 wxBORDER_SIMPLE);
             wheelsCtrl->SetDataSource(dataSource, true /* control owns the data source */);
             
             innerSizer->Add(wheelsCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-#endif  // 0
 
             PushWindow(panel, _("Picker Controls"));
         }
@@ -976,7 +978,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
 
             // Toolbar
             
-            wxMoToolBar* toolbar = new wxMoToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
+            wxToolBar* toolbar = new wxToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
             sizer->Add(toolbar, 0, wxEXPAND, 0);
             
             toolbar->AddTool(100, _("First tool"), wxBitmap(app_xpm));
@@ -1007,7 +1009,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
 
             // Toolbar
             
-            wxMoToolBar* toolbar = new wxMoToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_TEXT|wxTB_NORMAL_BG);
+            wxToolBar* toolbar = new wxToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_TEXT|wxTB_NORMAL_BG);
             wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
             font.SetPointSize(8);
             font.SetWeight(wxBOLD);
@@ -1028,9 +1030,9 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
 }
 
 // Utility to push a table onto the navigation controller
-void TableDemoRootDataSource::PushTable(wxMoTableCtrl* tableCtrl, wxMoTableDataSource* dataSource, const wxString& title)
+void TableDemoRootDataSource::PushTable(wxTableCtrl* tableCtrl, wxTableDataSource* dataSource, const wxString& title)
 {
-    wxMoViewController* controller = new wxMoViewController(title);
+    wxViewController* controller = new wxViewController(title);
     tableCtrl->Show(false);
     controller->SetWindow(tableCtrl);
 
@@ -1044,14 +1046,14 @@ void TableDemoRootDataSource::PushTable(wxMoTableCtrl* tableCtrl, wxMoTableDataS
 // Utility to push a window onto the navigation controller
 void TableDemoRootDataSource::PushWindow(wxWindow* win, const wxString& title)
 {
-    wxMoViewController* controller = new wxMoViewController(title);
+    wxViewController* controller = new wxViewController(title);
     win->Show(false);
     controller->SetWindow(win);
     m_navCtrl->PushController(controller);
     win->Show(true);
 }
 
-EditableDataSource::EditableDataSource(wxMoTableCell::wxMoTableCellStyle cellStyle)
+EditableDataSource::EditableDataSource(wxTableCell::wxTableCellStyle cellStyle)
 {
     m_cellStyle = cellStyle;
 
@@ -1064,7 +1066,7 @@ EditableDataSource::EditableDataSource(wxMoTableCell::wxMoTableCellStyle cellSty
 }
 
 // Returns a table cell for the give location.
-wxMoTableCell* EditableDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePath& path)
+wxTableCell* EditableDataSource::GetCell(wxTableCtrl* ctrl, const wxTablePath& path)
 {
     //int section = path.GetSection();
     int row = path.GetRow();
@@ -1078,10 +1080,10 @@ wxMoTableCell* EditableDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePat
     else
         reuseName = wxT("DemoCell");
 
-    wxMoTableCell* cell = ctrl->GetReusableCell(reuseName);
+    wxTableCell* cell = ctrl->GetReusableCell(reuseName);
         
     if (!cell)
-        cell = new wxMoTableCell(ctrl, reuseName, m_cellStyle);
+        cell = new wxTableCell(ctrl, reuseName, m_cellStyle);
     cell->SetText(rowText);
     cell->SetDetailText(_("Detail text."));
     cell->SetShowReorderingControl(true);
@@ -1089,14 +1091,14 @@ wxMoTableCell* EditableDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePat
     if (ctrl->HasFlag(wxTC_GROUPED))
     {
         if (accessory == 0)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeDisclosureIndicator);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeDisclosureIndicator);
         else if (accessory == 1)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeDetailDisclosureButton);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeDetailDisclosureButton);
         else if (accessory == 2)
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeCheckmark);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeCheckmark);
         else if (accessory == 3)
         {
-            cell->SetAccessoryType(wxMoTableCell::AccessoryTypeNone);
+            cell->SetAccessoryType(wxTableCell::AccessoryTypeNone);
         }
         cell->SetEditingAccessoryType(cell->GetAccessoryType());
 
@@ -1129,19 +1131,19 @@ wxMoTableCell* EditableDataSource::GetCell(wxMoTableCtrl* ctrl, const wxTablePat
 }
 
 // Returns the number of sections in the table.
-int EditableDataSource::GetSectionCount(wxMoTableCtrl* WXUNUSED(ctrl)) const
+int EditableDataSource::GetSectionCount(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     return 1;
 }
 
 // Returns the number of rows in a section.
-int EditableDataSource::GetRowCount(wxMoTableCtrl* WXUNUSED(ctrl), int WXUNUSED(section)) const
+int EditableDataSource::GetRowCount(wxTableCtrl* WXUNUSED(ctrl), int WXUNUSED(section)) const
 {
     return m_rowLabels.GetCount();
 }
 
 // Returns the number of rows in a section.
-wxArrayString EditableDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString EditableDataSource::GetSectionTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     wxArrayString arr;
     arr.Add(wxT("Section 1"));
@@ -1150,7 +1152,7 @@ wxArrayString EditableDataSource::GetSectionTitles(wxMoTableCtrl* WXUNUSED(ctrl)
 
 // Returns an array of strings, each one corresponding to an index title to be shown
 // on the right hand side of a plain list.
-wxArrayString EditableDataSource::GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) const
+wxArrayString EditableDataSource::GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const
 {
     return wxArrayString();
 }
@@ -1158,27 +1160,27 @@ wxArrayString EditableDataSource::GetIndexTitles(wxMoTableCtrl* WXUNUSED(ctrl)) 
 
 // Called by the table control to commit an insertion requested by the user. This function should
 // then call InsertRows in response.
-bool EditableDataSource::CommitInsertRow(wxMoTableCtrl* ctrl, const wxTablePath& path)
+bool EditableDataSource::CommitInsertRow(wxTableCtrl* ctrl, const wxTablePath& path)
 {
     m_rowLabels.Insert(wxString::Format(wxT("New row at %d"), (int)(path.GetRow()+1)), path.GetRow());
     m_rowData.Insert(0, path.GetRow());
 
-    return wxMoTableDataSource::CommitInsertRow(ctrl, path);
+    return wxTableDataSource::CommitInsertRow(ctrl, path);
 }
 
 // Called by the table control to commit a deletion requested by the user. This function should
 // then call DeleteRows in response.
-bool EditableDataSource::CommitDeleteRow(wxMoTableCtrl* ctrl, const wxTablePath& path)
+bool EditableDataSource::CommitDeleteRow(wxTableCtrl* ctrl, const wxTablePath& path)
 {
     m_rowLabels.RemoveAt(path.GetRow());
     m_rowData.RemoveAt(path.GetRow());
 
-    return wxMoTableDataSource::CommitDeleteRow(ctrl, path);
+    return wxTableDataSource::CommitDeleteRow(ctrl, path);
 }
 
 // Requests a move operation from 'from' to 'to'. The data should then reflect
 // the new ordering. Return false if the reordering was not done.
-bool EditableDataSource::MoveRow(wxMoTableCtrl* WXUNUSED(ctrl), const wxTablePath& pathFrom, const wxTablePath& pathTo)
+bool EditableDataSource::MoveRow(wxTableCtrl* WXUNUSED(ctrl), const wxTablePath& pathFrom, const wxTablePath& pathTo)
 {
     wxString label = m_rowLabels[pathFrom.GetRow()];
     int data = m_rowData[pathFrom.GetRow()];
@@ -1199,12 +1201,10 @@ bool EditableDataSource::MoveRow(wxMoTableCtrl* WXUNUSED(ctrl), const wxTablePat
 }
 
 // Get the edit style for a row
-wxMoTableCtrl::CellEditStyle EditableDataSource::GetCellEditStyle(wxMoTableCtrl* WXUNUSED(ctrl), const wxTablePath& path)
+wxTableCtrl::CellEditStyle EditableDataSource::GetCellEditStyle(wxTableCtrl* WXUNUSED(ctrl), const wxTablePath& path)
 {
     if ((path.GetRow() % 2) == 0)
-        return wxMoTableCtrl::EditStyleShowInsertButton;
+        return wxTableCtrl::EditStyleShowInsertButton;
     else
-        return wxMoTableCtrl::EditStyleShowDeleteButton;
+        return wxTableCtrl::EditStyleShowDeleteButton;
 }
-
-#endif  // 0

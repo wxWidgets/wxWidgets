@@ -99,6 +99,26 @@ public:
     virtual int GetTickFreq() const { return 0; }
     virtual void ClearTicks() { }
     virtual void SetTick(int WXUNUSED(tickPos)) { }
+    
+#ifdef __WXOSX_IPHONE__
+
+    //
+    // New iPhone functionality
+    //
+
+    /// Set the minimum value bitmap (drawn on the left side of the slider)
+    virtual void SetMinValueBitmap(const wxBitmap& bitmap);
+
+    /// Get the minimum value bitmap (drawn on the left side of the slider)
+    virtual wxBitmap GetMinValueBitmap() { return m_minValueBitmap; }
+
+    /// Set the maximum value bitmap (drawn on the right side of the slider)
+    virtual void SetMaxValueBitmap(const wxBitmap& bitmap);
+
+    /// Get the maximum value bitmap (drawn on the right side of the slider)
+    virtual wxBitmap GetMaxValueBitmap() { return m_maxValueBitmap; }
+
+#endif  // __WXOSX_IPHONE__
 
     virtual void ClearSel() { }
     virtual int GetSelEnd() const { return GetMin(); }
@@ -124,6 +144,11 @@ protected:
         else
             return value;
     }
+    
+#ifdef __WXOSX_IPHONE__
+    wxBitmap    m_minValueBitmap;
+    wxBitmap    m_maxValueBitmap;
+#endif    
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxSliderBase);

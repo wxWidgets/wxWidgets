@@ -125,6 +125,7 @@ class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
 class wxSearchCtrl;
+class wxTableCell;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
@@ -562,7 +563,7 @@ public :
                                     long style,
                                     long extraStyle) ;
                                                                 
-    static wxWidgetImplType*    CreateTableViewCell( wxWindowMac* wxpeer) ;
+    static wxWidgetImplType*    CreateTableViewCell( wxTableCell* wxpeer) ;
 
 #endif  // wxOSX_USE_IPHONE
 

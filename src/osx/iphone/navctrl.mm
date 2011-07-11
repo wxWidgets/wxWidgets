@@ -18,6 +18,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/iphone/private.h"
 
+#include "wx/viewcontroller.h"
 #include "wx/osx/iphone/private/navctrlimpl.h"
 
 
@@ -164,7 +165,7 @@ wxNavigationCtrlIPhoneImpl::~wxNavigationCtrlIPhoneImpl()
         
 }
     
-bool wxNavigationCtrlIPhoneImpl::PushViewController(wxMoViewController *controller)
+bool wxNavigationCtrlIPhoneImpl::PushViewController(wxViewController *controller)
 {
     UIViewController *viewController = (UIViewController *)controller->GetUIViewController();
     if (! viewController) {
