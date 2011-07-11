@@ -121,6 +121,9 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
 #if wxUSE_DATETIME
     m_pDateTime = val.m_pDateTime;
 #endif // wxUSE_DATETIME
+    m_pFileName = val.m_pFileName;
+    m_pFloat = val.m_pFloat;
+    m_pDouble = val.m_pDouble;
 
     return true;
 }
