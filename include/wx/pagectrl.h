@@ -45,8 +45,8 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxT("pagectrl"));
-        
-    virtual ~wxPageCtrlBase();
+    
+    virtual ~wxPageCtrlBase() { }
     
     /// Gets the current page count.
     virtual int GetPageCount() const { return m_pageCount; }
@@ -64,15 +64,17 @@ public:
     virtual bool GetHideForSinglePage() const { return (GetWindowStyle() & wxPC_HIDE_FOR_SINGLE_PAGE) != 0; }
     
     /// Gets the size of the control for the given page count.
-    virtual wxSize GetSizeForPageCount(int pageCount) const;
+    //virtual wxSize GetSizeForPageCount(int pageCount) const;
     
     // Hit testing (implementation only).
     int HitTest(const wxPoint& pos);
     
+    /*
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+    */
         
 private:
     
@@ -81,10 +83,7 @@ private:
     int     m_dotSize;
     int     m_dotMargin;
     
-    //DECLARE_DYNAMIC_CLASS_NO_COPY(wxPageCtrl)
-    //DECLARE_EVENT_TABLE()
-    
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPageCtrlBase)
+    wxDECLARE_NO_COPY_CLASS(wxPageCtrlBase);
     
 };
 

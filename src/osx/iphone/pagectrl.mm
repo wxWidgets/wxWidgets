@@ -73,6 +73,18 @@ wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
 #pragma mark -
 #pragma mark wxPageCtrl implementation
 
+IMPLEMENT_DYNAMIC_CLASS(wxPageCtrl, wxPageCtrlBase)
+
+BEGIN_EVENT_TABLE(wxPageCtrl, wxPageCtrlBase)
+#if 0
+    EVT_PAINT(wxPageCtrl::OnPaint)
+    EVT_ERASE_BACKGROUND(wxPageCtrl::OnEraseBackground)    
+    EVT_SIZE(wxPageCtrl::OnSize)
+    EVT_MOUSE_EVENTS(wxPageCtrl::OnMouseEvent)
+#endif
+END_EVENT_TABLE()
+
+
 bool wxPageCtrl::Create(wxWindow *parent,
                           wxWindowID id,
                           const wxPoint& pos,
@@ -101,4 +113,18 @@ wxPageCtrl::~wxPageCtrl()
 void wxPageCtrl::Init()
 {
     
+}
+
+/// Sets the page count.
+void wxPageCtrl::SetPageCount(int pageCount)
+{
+    m_pageCount = pageCount;
+    // FIXME stub
+}
+
+/// Sets the current page.
+void wxPageCtrl::SetCurrentPage(int page)
+{
+    m_currentPage = page;
+    // FIXME stub
 }

@@ -20,6 +20,7 @@
 class WXDLLEXPORT wxTabCtrl: public wxTabCtrlBase
 {
     DECLARE_DYNAMIC_CLASS(wxTabCtrl)
+    
 public:
     
     /// Default constructor.
@@ -32,16 +33,16 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TEXT|wxTAB_BITMAP,
                 const wxString& name = wxT("tabCtrl"));
-    
-    virtual ~wxTabCtrl();
-    
+                
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TEXT|wxTAB_BITMAP,
-                const wxString& name = wxT("tabCtrl"));
+                const wxString& name = wxT("tabCtrl"));    
     
+    virtual ~wxTabCtrl();
+        
 
     // Accessors
     
@@ -50,10 +51,7 @@ public:
     
     /// Get the tab with the current keyboard focus. Not implemented.
     int GetCurFocus() const;
-    
-    /// Get the associated image list
-    virtual wxImageList* GetImageList() const { return m_buttonStrip.GetImageList(); }
-    
+        
     /// Get the number of items
     virtual int GetItemCount() const;
     
@@ -142,37 +140,10 @@ public:
     bool SendCommand(wxEventType eventType, int selection);
     
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    
-    wxButtonStrip& GetButtonStrip() { return m_buttonStrip; }
-    const wxButtonStrip& GetButtonStrip() const { return m_buttonStrip; }
-    
-    /// Sets the border colour.
-    virtual void SetBorderColour(const wxColour &colour);
-    
-    /// Gets the border colour.
-    virtual wxColour GetBorderColour() const;
-    
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual wxColour GetBackgroundColour() const;
-    
-    /// Sets the button background colour.
-    virtual bool SetButtonBackgroundColour(const wxColour &colour);
-    
-    /// Gets the button background colour.
-    virtual wxColour GetButtonBackgroundColour() const;
-    
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual wxColour GetForegroundColour() const;
-    
-    virtual bool SetFont(const wxFont& font);
-    virtual wxFont GetFont() const;
-    
+            
 protected:
     
     void Init();
-    
-    wxButtonStrip m_buttonStrip;
-    wxColour        m_borderColour;
     
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTabCtrl)

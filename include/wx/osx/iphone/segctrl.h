@@ -21,7 +21,7 @@
 
 class WXDLLEXPORT wxSegmentedCtrl: public wxSegmentedCtrlBase
 {
-
+    DECLARE_DYNAMIC_CLASS(wxSegmentedCtrl)
 public:
     /// Default constructor.
     wxSegmentedCtrl();
@@ -57,8 +57,8 @@ protected:
     
     void Init();
     
-    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxSegmentedCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

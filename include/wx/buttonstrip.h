@@ -52,31 +52,30 @@ public:
         LayoutStretchingSeparators // buttons have fixed size, but separators determine spacing
     } LayoutStyle;
     
-    DECLARE_DYNAMIC_CLASS(wxButtonStrip)
 public:
     
     /// Constructor.
     wxButtonStripBase() { }
     
-    virtual ~wxButtonStripBase();
+    virtual ~wxButtonStripBase() { }
     
     /// Returns the bar button array.
     virtual wxBarButtonArray& GetButtonStripArray() { return m_buttonStrip; }
     
     /// Draws the strip in the given window and rectangle.
-    virtual void Draw(wxWindow* win, const wxRect& rect, wxDC& dc);
+    virtual void Draw(wxWindow* win, const wxRect& rect, wxDC& dc) = 0;
     
     /// Draws a single button.
-    virtual void DrawButton(wxWindow* win, wxDC& dc, wxBarButton& item, int i);
+    virtual void DrawButton(wxWindow* win, wxDC& dc, wxBarButton& item, int i) = 0;
     
     /// Draws the strip background.
-    virtual void DrawBackground(wxWindow* win, wxDC& dc);
+    virtual void DrawBackground(wxWindow* win, wxDC& dc) = 0;
     
     /// Returns a button index for the given point.
-    virtual int HitTest(const wxPoint& pt) const;
+    virtual int HitTest(const wxPoint& pt) const = 0;
     
     /// Returns a positive integer if a button was pressed, otherwise -1.
-    virtual int ProcessMouseEvent(wxWindow* win, const wxRect& rect, wxMouseEvent& event);
+    virtual int ProcessMouseEvent(wxWindow* win, const wxRect& rect, wxMouseEvent& event) = 0;
     
     /// Returns the current control type, which changes the way the strip is drawn.
     virtual ButtonStripType GetControlType() { return m_controlType; }
@@ -96,79 +95,79 @@ public:
     virtual void SetSelectionStyle(SelectionStyle selectionStyle) { m_selectionStyle = selectionStyle; }
     
     /// Adds a text button.
-    virtual int AddTextButton(wxWindow* parent, int id, const wxString& text, const wxString& badge = wxEmptyString);
+    virtual int AddTextButton(wxWindow* parent, int id, const wxString& text, const wxString& badge = wxEmptyString) = 0;
     
     /// Adds a bitmap and text button, passing an explicit bitmap.
-    virtual int AddBitmapButton(wxWindow* parent, int id, const wxBitmap& bitmap, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString);
+    virtual int AddBitmapButton(wxWindow* parent, int id, const wxBitmap& bitmap, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString) = 0;
     
     /// Adds a bitmap index, passing an index into an image list.
-    virtual int AddBitmapButton(wxWindow* parent, int id, int bitmapIndex, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString);
+    virtual int AddBitmapButton(wxWindow* parent, int id, int bitmapIndex, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString) = 0;
     
     /// Adds a flexible separator.
-    virtual int AddFlexibleSeparator();
+    virtual int AddFlexibleSeparator() = 0;
     
     /// Adds a fixed separator.
-    virtual int AddFixedSeparator(int width);
+    virtual int AddFixedSeparator(int width) = 0;
     
     /// Inserts a text button.
-    virtual int InsertTextButton(wxWindow* parent, int id, int insertBefore, const wxString& text, const wxString& badge = wxEmptyString);
+    virtual int InsertTextButton(wxWindow* parent, int id, int insertBefore, const wxString& text, const wxString& badge = wxEmptyString) = 0;
     
     /// Inserts a bitmap and text button, passing an explicit bitmap.
-    virtual int InsertBitmapButton(wxWindow* parent, int id, int insertBefore, const wxBitmap& bitmap, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString);
+    virtual int InsertBitmapButton(wxWindow* parent, int id, int insertBefore, const wxBitmap& bitmap, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString) = 0;
     
     /// Inserts a bitmap and text button, passing an index into an image list.
-    virtual int InsertBitmapButton(wxWindow* parent, int id, int insertBefore, int bitmapIndex, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString);
+    virtual int InsertBitmapButton(wxWindow* parent, int id, int insertBefore, int bitmapIndex, const wxString& text = wxEmptyString, const wxString& badge = wxEmptyString) = 0;
     
     /// Inserts a flexible separator.
-    virtual int InsertFlexibleSeparator(int insertBefore);
+    virtual int InsertFlexibleSeparator(int insertBefore) = 0;
     
     /// Inserts a fixed separator.
-    virtual int InsertFixedSeparator(int insertBefore, int width);
+    virtual int InsertFixedSeparator(int insertBefore, int width) = 0;
     
     /// Deletes the button by index.
-    virtual bool DeleteButton(size_t idx);
+    virtual bool DeleteButton(size_t idx) = 0;
     
     /// Sets the button text by index.
-    virtual bool SetButtonText(size_t idx, const wxString& text);
+    virtual bool SetButtonText(size_t idx, const wxString& text) = 0;
     
     /// Sets the button badge by index.
-    virtual bool SetButtonBadge(size_t idx, const wxString& badge);
+    virtual bool SetButtonBadge(size_t idx, const wxString& badge) = 0;
     
     /// Sets the button normal bitmap by index.
-    virtual bool SetButtonNormalBitmap(size_t idx, const wxBitmap& bitmap);
+    virtual bool SetButtonNormalBitmap(size_t idx, const wxBitmap& bitmap) = 0;
     
     /// Sets the button disabled bitmap by index.
-    virtual bool SetButtonDisabledBitmap(size_t idx, const wxBitmap& bitmap);
+    virtual bool SetButtonDisabledBitmap(size_t idx, const wxBitmap& bitmap) = 0;
     
     /// Sets the button selected bitmap by index.
-    virtual bool SetButtonSelectedBitmap(size_t idx, const wxBitmap& bitmap);
+    virtual bool SetButtonSelectedBitmap(size_t idx, const wxBitmap& bitmap) = 0;
     
     /// Sets the button highlighted bitmap by index.
-    virtual bool SetButtonHighlightedBitmap(size_t idx, const wxBitmap& bitmap);
+    virtual bool SetButtonHighlightedBitmap(size_t idx, const wxBitmap& bitmap) = 0;
     
     /// Enables the button by index.
-    virtual bool EnableButton(size_t idx, bool enable);
+    virtual bool EnableButton(size_t idx, bool enable) = 0;
     
     /// Returns true if the given button is enabled.
-    virtual bool IsButtonEnabled(size_t idx) const;
+    virtual bool IsButtonEnabled(size_t idx) const = 0;
     
     /// Selects the button by index.
-    virtual bool SelectButton(size_t idx, bool selected);
+    virtual bool SelectButton(size_t idx, bool selected) = 0;
     
     /// Returns true if the given button is selected.
-    virtual bool IsButtonSelected(size_t idx) const;
+    virtual bool IsButtonSelected(size_t idx) const = 0;
     
     /// Returns the number of buttons in the strip.
     virtual size_t GetCount() const { return m_buttonStrip.GetCount(); }
     
     /// Returns a pointer to the given button.
-    virtual wxBarButton* GetButton(size_t idx) const;
+    virtual wxBarButton* GetButton(size_t idx) const = 0;
     
     /// Finds the index of the button by its identifier.
-    virtual int FindIndexForId(int id);
+    virtual int FindIndexForId(int id) = 0;
     
     /// Clears the buttons.
-    virtual void Clear();
+    virtual void Clear() = 0;
     
     /// Sets the horizontal margin between the edge of the button and the content.
     virtual void SetButtonMarginX(int margin) { m_buttonMarginX = margin; }
@@ -260,26 +259,26 @@ public:
     virtual bool GetOwnsImageList() const { return m_ownsImageList; }
     
     /// Sets the selected button.
-    virtual bool SetSelection(int sel);
+    virtual bool SetSelection(int sel) = 0;
     
     /// Gets the current selection.
     virtual int GetSelection() const { return m_selection; }
     
     /// Returns the best size for the control.
-    virtual wxSize GetBestSize() const;
+    virtual wxSize GetBestSize() const = 0;
     
     /// Gets the space taking up by just the buttons.
-    virtual wxSize GetTotalButtonSize(wxSize& maxButtonSize, wxSize& totalIncluding) const;
+    virtual wxSize GetTotalButtonSize(wxSize& maxButtonSize, wxSize& totalIncluding) const = 0;
     
     /// Gets the best button size.
-    wxSize GetBestButtonSize(wxDC& dc, const wxBarButton& item) const;
+    virtual wxSize GetBestButtonSize(wxDC& dc, const wxBarButton& item) const = 0;
     
     /// Computes the button sizes taking into account control size, layout style,
     /// and individual button properties.
-    virtual bool ComputeSizes(wxWindow* win);
+    virtual bool ComputeSizes(wxWindow* win) = 0;
     
     /// Resizes the content of the control (calls ComputeSizes).
-    virtual void DoResize(wxWindow* win);
+    virtual void DoResize(wxWindow* win) = 0;
     
 protected:
     

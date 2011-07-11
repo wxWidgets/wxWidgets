@@ -91,7 +91,7 @@ public:
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = wxT("barbutton"));
         
-    virtual ~wxBarButtonBase();
+    virtual ~wxBarButtonBase() { }
     
     /// Copies the item.
     virtual void Copy(const wxBarButton& item) = 0;
@@ -124,10 +124,10 @@ public:
     virtual wxFont GetFont() const { return m_font; }
     
     /// Enables the button.
-    virtual bool Enable(bool enable) { SetEnabled(enable); return true; }
+    //virtual bool Enable(bool enable) { SetEnabled(enable); return true; }
     
     /// Returns true if the button is enabled.
-    virtual bool IsEnabled() const { return GetEnabled(); }
+    //virtual bool IsEnabled() const { return GetEnabled(); }
     
     /// Sets the button border colour.
     virtual void SetBorderColour(const wxColour &colour) { m_borderColour = colour; }
@@ -218,6 +218,7 @@ public:
     
     // Not public API
     
+    /*
     // Sets the horizontal margin between button edge and content.
     void SetMarginX(int margin) { m_marginX = margin; }
     
@@ -286,18 +287,19 @@ public:
     
     /// Draw the  button. wxbile Implementation only.
     //void Draw(wxDC& dc, int flags);
+    */
     
 protected:
     // send a notification event, return true if processed
     //bool SendClickEvent();
     
     // usually overridden base class virtuals
-    virtual wxSize DoGetBestSize() const;
+    //virtual wxSize DoGetBestSize() const;
     
     // function called when any of the bitmaps changes
-    virtual void OnSetLabel();
+    //virtual void OnSetLabel();
     
-    void ProcessMouseEvent(wxMouseEvent& event);
+    //void ProcessMouseEvent(wxMouseEvent& event);
     
 private:
     

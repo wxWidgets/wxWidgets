@@ -38,13 +38,12 @@ class WXDLLEXPORT wxTableCtrlEvent;
 class WXDLLEXPORT wxTablePath: public wxObject
 {
 public:
+        
     /// Copy constructor.
     wxTablePath(const wxTablePath& path) { Copy(path); }
-
+    
     /// Constructor.
     wxTablePath(int section = 0, int row = 0) { Init(); m_row = row; m_section = section; }
-
-    void Init() { m_row = 0; m_section = 0; }
 
     /// Assignment operator.
     void operator=(const wxTablePath& path) { Copy(path); }
@@ -72,6 +71,9 @@ public:
     bool IsValid() const { return m_row != -1 && m_section != -1; }
 
 protected:
+    
+    void Init() { m_row = 0; m_section = 0; }
+
     int m_row;
     int m_section;
 
@@ -270,7 +272,7 @@ public:
                     long style = 0,
                     const wxString& name = wxButtonNameStr);
 
-    virtual ~wxTableCtrlBase();
+    virtual ~wxTableCtrlBase() { }
 
     /// Reloads the data. Resets the scroll position to the start
     /// if resetScrollbars is true, otherwise resets it to the nearest
@@ -292,9 +294,6 @@ public:
 
     /// Returns true if Freeze has been called more times than Thaw.
     virtual bool IsFrozen() const { return m_freezeCount > 0; }
-
-    /// Scroll to the given section
-    virtual bool ScrollToSection(int section) = 0;
 
     /// Scroll to the given path (section/row)
     virtual bool ScrollToPath(const wxTablePath& path) = 0;
@@ -344,7 +343,11 @@ public:
     wxTableDataSource* GetDataSource() const { return m_dataSource; }
 
     /// Sets the data source
-    void SetDataSource(wxTableDataSource* dataSource, bool ownsDataSource = true) { m_dataSource = dataSource; m_ownsDataSource = ownsDataSource; }
+    void SetDataSource(wxTableDataSource* dataSource, bool ownsDataSource = true)
+    {
+        m_dataSource = dataSource;
+        m_ownsDataSource = ownsDataSource;
+    }
 
     /// Finds the path for the cell.
     virtual bool FindPathForCell(wxTableCell* cell, wxTablePath& path) const = 0;
@@ -425,10 +428,12 @@ public:
     int GetInterSectionSpacing() const { return m_interSectionSpacing; }
     */
 
+    /*
     virtual bool SetBackgroundColour(const wxColour &colour) = 0;
     virtual bool SetForegroundColour(const wxColour &colour) = 0;
     virtual bool SetFont(const wxFont& font) = 0;
     virtual bool Enable(bool enable) = 0;
+    */
     
     /*
     virtual bool SetSectionFont(const wxFont& font);
@@ -514,8 +519,7 @@ protected:
     wxTablePath             m_originalInsertionPoint; // starting insertion point
 
 private:
-    //DECLARE_DYNAMIC_CLASS_NO_COPY(wxTableCtrl)
-    //DECLARE_EVENT_TABLE()
+
     wxDECLARE_NO_COPY_CLASS(wxTableCtrlBase);
 };
 
@@ -540,8 +544,6 @@ public:
     wxTableDataSource() { Init(); }
 
     ~wxTableDataSource() {}
-
-    void Init() {}
 
     /// Returns a table cell for the give location. Call wxTableCtrl::GetReusableCell
     /// to check whether an off-screen cell can be reused, and create a new wxTableCel
@@ -592,9 +594,16 @@ public:
 
     /// Get the edit style for a row
     virtual wxTableCtrlBase::CellEditStyle GetCellEditStyle(wxTableCtrl* WXUNUSED(ctrl),
-                                                            const wxTablePath& WXUNUSED(path));
+                                                            const wxTablePath& WXUNUSED(path))
+    {
+        return wxTableCtrlBase::EditStyleShowDeleteButton;
+    }
 
     DECLARE_CLASS(wxTableDataSource)
+    
+protected:
+    void Init() {}
+        
 };
 
 

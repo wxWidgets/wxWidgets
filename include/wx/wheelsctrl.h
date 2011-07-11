@@ -33,10 +33,14 @@ public:
 
     // Constructor.
     wxWheelComponent(wxWheelsCtrl* wheelsCtrl,
-        wxWheelsListBox* listBox, int n)
-    { Init(); m_wheelsCtrl = wheelsCtrl; m_listBox = listBox; m_componentNumber = n; }
-
-    void Init();
+                     wxWheelsListBox* listBox,
+                     int n)
+    {
+        Init();
+        m_wheelsCtrl = wheelsCtrl;
+        m_listBox = listBox;
+        m_componentNumber = n;
+    }
 
     wxWheelsListBox* GetListBox() const { return m_listBox; }
     void SetListBox(wxWheelsListBox* listBox) { m_listBox = listBox; }
@@ -44,6 +48,14 @@ public:
     const wxRect& GetRect() const { return m_rect; }
     void SetRect(const wxRect& rect) { m_rect = rect; }
     wxWheelsCtrl* GetWheelsCtrl() const { return m_wheelsCtrl; }
+    
+protected:
+    void Init()
+    {
+        m_listBox = NULL;
+        m_componentNumber = 0;
+        m_wheelsCtrl = NULL;
+    }
     
 private:
     wxWheelsListBox*  m_listBox;
@@ -73,7 +85,7 @@ class WXDLLEXPORT wxWheelsCtrlBase: public wxControl
 {
 public:
     /// Default constructor.
-    wxWheelsCtrlBase();
+    wxWheelsCtrlBase() { }
 
     /// Constructor.
     wxWheelsCtrlBase(wxWindow *parent,
@@ -82,35 +94,35 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxWheelsCtrlNameStr);
+                   const wxString& name = wxWheelsCtrlNameStr) { }
 
-    virtual ~wxWheelsCtrlBase();
+    virtual ~wxWheelsCtrlBase() { }
 
-    virtual void ClearComponents();
+    virtual void ClearComponents() = 0;
 
     /// Reloads and displays all components.
-    virtual bool ReloadAllComponents();
+    virtual bool ReloadAllComponents() = 0;
 
     /// Reloads and displays the specified component.
-    virtual bool ReloadComponent(int component);
+    virtual bool ReloadComponent(int component) = 0;
 
     /// Sets the selection (row) in the given component.
-    virtual void SetSelection(int component, int selection);
+    virtual void SetSelection(int component, int selection) = 0;
 
     /// Sets the selection (row) for the only component in a 1-component control.
     virtual void SetSelection(int selection) { SetSelection(0, selection); }
 
     /// Gets the selection for the given component.
-    virtual int GetSelection(int component) const;
+    virtual int GetSelection(int component) const = 0;
 
     /// Returns the number of rows in the given component.
-    virtual int GetComponentRowCount(int component) const;
+    virtual int GetComponentRowCount(int component) const = 0;
 
     /// Returns the number of components.
-    virtual int GetComponentCount() const;
+    virtual int GetComponentCount() const = 0;
 
     /// Returns the size required to display the largest view in the given component.
-    virtual wxSize GetRowSizeForComponent(int component) const;
+    virtual wxSize GetRowSizeForComponent(int component) const = 0;
 
     /// Sets the row selection indicator flag
     virtual void SetRowSelectionIndicator(bool showRowSelection) { m_showRowSelection = showRowSelection; }
@@ -122,11 +134,11 @@ public:
     virtual wxWheelsDataSource* GetDataSource() const { return m_dataSource; }
 
     /// Sets the data source object, recreating the components.
-    virtual void SetDataSource(wxWheelsDataSource* dataSource, bool ownsDataSource = false);
+    virtual void SetDataSource(wxWheelsDataSource* dataSource, bool ownsDataSource = false) = 0;
 
     /// Initializes the components from the current data source. You do not usually
     /// need to call this function since it is called from SetDataSource.
-    virtual bool InitializeComponents();
+    virtual bool InitializeComponents() = 0;
 
     // Returns the array of components.
     virtual const wxWheelComponentArray& GetComponents() const { return m_components; }
@@ -134,10 +146,12 @@ public:
     // Returns the given component. Implementation only.
     virtual wxWheelComponent* GetComponent(int component) const { return m_components[component]; }
 
+    /*
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+    */
 
 private:
     

@@ -133,8 +133,8 @@ public:
     wxTableCellBase(wxTableCtrl* ctrl,
                     const wxString& reuseName = wxEmptyString,
                     wxTableCellStyle cellStyle = CellStyleDefault) { }
-    virtual ~wxTableCellBase();
-        
+    virtual ~wxTableCellBase() { }
+    
     // Assignment operato
     void operator=(const wxTableCell& cell) { Copy(cell); }
     
@@ -396,7 +396,6 @@ protected:
     wxWindow*                   m_accessoryWindow;
     wxWindow*                   m_editingAccessoryWindow;
     
-    //DECLARE_CLASS(wxTableCell)
     wxDECLARE_NO_COPY_CLASS(wxTableCellBase);
     
 };

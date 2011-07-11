@@ -19,6 +19,10 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
+#include "wx/mstream.h"
+#include "wx/dcbuffer.h"
+#include "wx/arrimpl.cpp"
+
 #include "wx/tablectrl.h"
 #include "wx/osx/private.h"
 #include "wx/osx/iphone/private/tablectrlimpl.h"
@@ -160,7 +164,7 @@ titleForHeaderInSection:(NSInteger)section {
     }
     
     // Read properties from wxTableCell, commit to Cocoa object
-    [cocoaCell commitwxTableCellProperties];
+    [cocoaCell commitWxTableCellProperties];
     
     return cocoaCell;
 }
@@ -237,6 +241,42 @@ wxWidgetImplType* wxWidgetImpl::CreateTableViewCtrl( wxWindowMac* wxpeer,
 
 #pragma mark -
 #pragma mark wxTableCtrl implementation
+
+IMPLEMENT_DYNAMIC_CLASS(wxTableCtrl, wxTableCtrlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxTablePath, wxObject)
+IMPLEMENT_CLASS(wxTableDataSource, wxEvtHandler)
+IMPLEMENT_CLASS(wxTableRow, wxObject)
+IMPLEMENT_CLASS(wxTableSection, wxObject)
+
+WX_DEFINE_EXPORTED_OBJARRAY(wxTableSectionArray);
+WX_DEFINE_EXPORTED_OBJARRAY(wxTableRowArray);
+WX_DEFINE_EXPORTED_OBJARRAY(wxTablePathArray);
+
+BEGIN_EVENT_TABLE(wxTableCtrl, wxTableCtrlBase)
+#if 0
+    EVT_PAINT(wxTableCtrl::OnPaint)
+    EVT_SIZE(wxTableCtrl::OnSize)
+    EVT_TOUCH_SCROLL_DRAG(wxTableCtrl::OnTouchScrollDrag)
+    EVT_TOUCH_SCROLL_CANCEL_TOUCHES(wxTableCtrl::OnCancelTouch)
+    EVT_MOUSE_EVENTS(wxTableCtrl::OnMouseEvent)
+    EVT_ERASE_BACKGROUND(wxTableCtrl::OnEraseBackground)
+    EVT_MOUSE_CAPTURE_CHANGED(wxTableCtrl::OnMouseCaptureChanged)
+
+    EVT_TABLE_ADD_CLICKED(wxID_ANY, wxTableCtrl::OnAddClicked)
+    EVT_TABLE_DELETE_CLICKED(wxID_ANY, wxTableCtrl::OnDeleteClicked)
+    EVT_TABLE_CONFIRM_DELETE_CLICKED(wxID_ANY, wxTableCtrl::OnConfirmDeleteClicked)
+#endif
+END_EVENT_TABLE()
+
+IMPLEMENT_DYNAMIC_CLASS(wxTableCtrlEvent, wxNotifyEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ROW_SELECTED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ACCESSORY_CLICKED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ADD_CLICKED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_DELETE_CLICKED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_CONFIRM_DELETE_CLICKED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_MOVE_DRAGGED)
+
 
 /// Constructor.
 wxTableCtrl::wxTableCtrl(wxWindow *parent,
@@ -324,6 +364,153 @@ bool wxTableCtrl::ReloadData(bool resetScrollbars)
     return peer->ReloadData();
 }
 
+/// Starts batching of operations within which no visual updates are performed.
+/// You can nest Freeze/Thaw operations.
+void wxTableCtrl::Freeze()
+{
+    // FIXME stub
+}
+
+/// Ends batching of operations, refetches the data, and refreshes the window.
+void wxTableCtrl::Thaw()
+{
+    // FIXME stub
+}
+
+/// Finds the path for the cell.
+bool wxTableCtrl::FindPathForCell(wxTableCell* cell, wxTablePath& path) const
+{
+    // FIXME stub
+    return false;
+}
+
+/// Finds the cell for the path.
+wxTableCell* wxTableCtrl::FindCellForPath(const wxTablePath& path) const
+{
+    // FIXME stub
+    return NULL;
+}
+
+// Inserts the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::ReloadRows(const wxTablePathArray& WXUNUSED(paths),
+                             RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Sets editing mode (not yet implemented).
+bool wxTableCtrl::SetEditingMode(bool editingMode,
+                                 bool WXUNUSED(animated))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Inserts the given sections, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::InsertSections(const wxArrayInt& WXUNUSED(sections),
+                                 RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Deletes the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::DeleteRows(const wxTablePathArray& WXUNUSED(paths),
+                             RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Inserts the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::InsertRows(const wxTablePathArray& WXUNUSED(paths),
+                             RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Refreshes the given sections, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::ReloadSections(const wxArrayInt& WXUNUSED(sections),
+                                 RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+// Deletes the given sections, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::DeleteSections(const wxArrayInt& WXUNUSED(sections),
+                                 RowAnimationStyle WXUNUSED(animationStyle))
+{
+    // FIXME stub
+    
+    return true;
+}
+
+/// Scroll to the given path (section/row)
+bool wxTableCtrl::ScrollToPath(const wxTablePath& path)
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:path.GetRow()
+                                                inSection:path.GetSection()];
+    if ( !indexPath ) {
+        return false;
+    }
+    
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    [tableView scrollToRowAtIndexPath:indexPath
+                     atScrollPosition:UITableViewScrollPositionTop
+                             animated:YES];
+    return true;
+}
+
+void wxTableCtrl::SetSelection(const wxTablePath& path)
+{
+    // FIXME stub
+}
+
+/// Removes the selection at the given path.
+void wxTableCtrl::Deselect(const wxTablePath& path)
+{
+    // FIXME stub
+}
+
+wxTablePath* wxTableCtrl::GetSelection() const
+{
+    // FIXME stub
+    
+    return NULL;
+}
+
+// Loads the data within the specified rectangle.
+bool wxTableCtrl::LoadVisibleData(const wxRect& rect1)
+{
+    // FIXME stub
+    
+    return true;
+}
 
 #pragma mark wxTableDataSource implementation
 

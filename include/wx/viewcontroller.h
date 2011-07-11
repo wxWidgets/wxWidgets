@@ -30,7 +30,7 @@ public:
     /// Constructor.
     wxViewControllerBase(const wxString& title = wxEmptyString, bool autoDelete = true) { }
 
-    virtual ~wxViewControllerBase();
+    virtual ~wxViewControllerBase() { }
 
 // Overridable functions
 
@@ -53,16 +53,16 @@ public:
 
     /// Sets the auto-delete flag. If true, the controller will be deleted when
     /// popped off a navigation stack.
-    void SetAutoDelete(bool autoDelete) { m_autoDelete = autoDelete; }
+    virtual void SetAutoDelete(bool autoDelete) { m_autoDelete = autoDelete; }
 
     /// Gets the auto-delete flag
-    bool GetAutoDelete() const { return m_autoDelete; }
+    virtual bool GetAutoDelete() const { return m_autoDelete; }
 
     /// Sets the view title
-    virtual void SetTitle(const wxString& title) = 0;
+    virtual void SetTitle(const wxString& title) { m_title = title; }
 
     /// Gets the view title
-    virtual wxString GetTitle() const = 0;
+    virtual wxString GetTitle() const { return m_title; }
 
     /// Pass true if the window should be deleted when the controller
     /// is deleted. By default this is true.
@@ -77,6 +77,7 @@ protected:
     wxNavigationItem*     m_item;
     bool                  m_autoDelete;
     bool                  m_ownsWindow;
+    wxString              m_title;
     wxWindow*             m_window;
     
     wxDECLARE_NO_COPY_CLASS(wxViewControllerBase);

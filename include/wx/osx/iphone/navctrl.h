@@ -64,10 +64,7 @@ public:
     
     /// Returns the root controller (the controller which is first in the queue).
     wxViewController* GetRootController() const;
-    
-    /// Returns the controller stack.
-    wxViewControllerArray& GetControllers() const;
-    
+        
     /// Sets the controller stack.
     void SetControllers(const wxViewControllerArray& controllers);
     
@@ -76,13 +73,7 @@ public:
     
     /// Returns the navigation bar
     wxNavigationBar* GetNavigationBar() const { return m_navBar; }
-    
-    /// Freezes (doesn't display or resize during operations)
-    void Freeze() { m_freezeCount++; }
-    
-    /// Restores the display
-    void Thaw();
-    
+        
     /// Returns true if the control is 'frozen', i.e. suppresses display updates and resizes.
     bool IsFrozen() const { return m_freezeCount > 0; }
         

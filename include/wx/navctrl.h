@@ -91,7 +91,7 @@ class WXDLLEXPORT wxNavigationCtrlBase: public wxControl
 {
 public:
     /// Default constructor.
-    wxNavigationCtrlBase();
+    wxNavigationCtrlBase() {}
     
     /// Constructor.
     wxNavigationCtrlBase(wxWindow *parent,
@@ -100,9 +100,9 @@ public:
                          const wxSize& size = wxDefaultSize,
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = wxNavigationCtrlNameStr);
+                         const wxString& name = wxNavigationCtrlNameStr) {}
         
-    virtual ~wxNavigationCtrlBase();
+    virtual ~wxNavigationCtrlBase() { }
     
     /// Pushes an item onto the stack.
     virtual bool PushController(wxViewController* controller) = 0;
@@ -120,10 +120,10 @@ public:
     virtual wxViewController* GetRootController() const = 0;
     
     /// Returns the controller stack.
-    virtual const wxViewControllerArray& GetControllers() const = 0;
+    virtual const wxViewControllerArray& GetControllers() const { return m_controllers; }
     
     /// Sets the controller stack.
-    virtual void SetControllers(const wxViewControllerArray& controllers) = 0;
+    virtual void SetControllers(const wxViewControllerArray& controllers) { m_controllers = controllers; }
     
     /// Clears the controller stack, deleting the controllers if signalled by auto-delete for each controller.
     virtual void ClearControllers() = 0;
@@ -135,15 +135,17 @@ public:
     virtual void Freeze() { m_freezeCount++; }
     
     /// Restores the display
-    virtual void Thaw() = 0;
+    virtual void Thaw() { }
     
     /// Returns true if the control is 'frozen', i.e. suppresses display updates and resizes.
     virtual bool IsFrozen() const { return m_freezeCount > 0; }
     
+    /*
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+    */
 
 protected:
     

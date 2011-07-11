@@ -87,7 +87,7 @@ class WXDLLEXPORT wxTabCtrlBase: public wxControl
 public:
     
     /// Default constructor.
-    wxTabCtrlBase();
+    wxTabCtrlBase() { }
     
     /// Constructor.
     wxTabCtrlBase(wxWindow *parent,
@@ -96,136 +96,144 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TEXT|wxTAB_BITMAP,
                 const wxString& name = wxT("tabCtrl"));
+                
+    virtual bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TEXT|wxTAB_BITMAP,
+                const wxString& name = wxT("tabCtrl")) = 0;    
     
-    virtual ~wxTabCtrlBase();
-        
+    virtual ~wxTabCtrlBase() { }
+    
     // Accessors
     
     /// Get the selection
-    virtual int GetSelection() const;
+    virtual int GetSelection() const = 0;
     
     /// Get the tab with the current keyboard focus. Not implemented.
-    virtual int GetCurFocus() const;
+    virtual int GetCurFocus() const = 0;
     
     /// Get the associated image list
     virtual wxImageList* GetImageList() const { return m_buttonStrip.GetImageList(); }
     
     /// Get the number of items
-    virtual int GetItemCount() const;
+    virtual int GetItemCount() const = 0;
     
     /// Get the rect corresponding to the tab. Not implemented.
-    virtual bool GetItemRect(int item, wxRect& rect) const;
+    //virtual bool GetItemRect(int item, wxRect& rect) const;
     
     // Get the number of rows
-    int GetRowCount() const;
+    virtual int GetRowCount() const = 0;
     
     /// Get the item text
-    virtual wxString GetItemText(int item) const ;
+    virtual wxString GetItemText(int item) const = 0;
     
     /// Get the item image
-    virtual int GetItemImage(int item) const;
+    virtual int GetItemImage(int item) const = 0;
     
     // Get the item data
     //void* GetItemData(int item) const;
     
     /// Set the selection, generating events
-    virtual int SetSelection(int item);
+    virtual int SetSelection(int item) = 0;
     
     /// Set the selection, without generating events
-    virtual int ChangeSelection(int item);
+    virtual int ChangeSelection(int item) = 0;
     
     /// Set the image list
-    void SetImageList(wxImageList* imageList);
+    virtual void SetImageList(wxImageList* imageList) = 0;
     
     /// Assign (own) the image list
-    void AssignImageList(wxImageList* imageList);
+    virtual void AssignImageList(wxImageList* imageList) = 0;
     
     /// Set the text for an item
-    virtual bool SetItemText(int item, const wxString& text);
+    virtual bool SetItemText(int item, const wxString& text) = 0;
     
     /// Set the image for an item
-    virtual bool SetItemImage(int item, int image);
+    virtual bool SetItemImage(int item, int image) = 0;
     
     // Set the data for an item
     // bool SetItemData(int item, void* data);
     
     /// Set the size for a fixed-width tab control. Not implemented.
-    virtual void SetItemSize(const wxSize& size);
+    virtual void SetItemSize(const wxSize& size) = 0;
     
     /// Set the padding between tabs. Not implemented.
-    void SetPadding(const wxSize& padding);
+    virtual void SetPadding(const wxSize& padding) = 0;
     
     // Operations
     
     /// Delete all items
-    virtual bool DeleteAllItems();
+    virtual bool DeleteAllItems() = 0;
     
     /// Delete an item
-    virtual bool DeleteItem(int item);
-    
-    /// Hit test. Not implemented.
-    int HitTest(const wxPoint& pt, long& flags);
-    
+    virtual bool DeleteItem(int item) = 0;
+        
     /// Insert an item, passing an optional index into the image list.
-    virtual bool InsertItem(int item, const wxString& text, int imageId = -1);
+    virtual bool InsertItem(int item, const wxString& text, int imageId = -1) = 0;
     
     /// Insert an item, passing a bitmap.
-    virtual bool InsertItem(int item, const wxString& text, const wxBitmap& bitmap);
+    virtual bool InsertItem(int item, const wxString& text, const wxBitmap& bitmap) = 0;
     
     /// Add an item, passing an optional index into the image list.
-    virtual bool AddItem(const wxString& text, int imageId = -1);
+    virtual bool AddItem(const wxString& text, int imageId = -1) = 0;
     
     /// Add an item, passing a bitmap.
-    virtual bool AddItem(const wxString& text, const wxBitmap& bitmap);
+    virtual bool AddItem(const wxString& text, const wxBitmap& bitmap) = 0;
     
     /// Set a text badge for the given item
-    virtual bool SetBadge(int item, const wxString& badge);
+    virtual bool SetBadge(int item, const wxString& badge) = 0;
     
     /// Get the text badge for the given item
-    virtual wxString GetBadge(int item) const;
+    virtual wxString GetBadge(int item) const = 0;
     
     // Implementation
     
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const = 0;
     
-    virtual void OnInsertItem(wxBarButton* button);
+    virtual void OnInsertItem(wxBarButton* button) = 0;
     
-    void OnMouseEvent(wxMouseEvent& event);
-    void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
+    virtual void OnMouseEvent(wxMouseEvent& event) = 0;
+    virtual void OnPaint(wxPaintEvent& event) = 0;
+    virtual void OnSize(wxSizeEvent& event) = 0;
+    virtual void OnEraseBackground(wxEraseEvent& event) = 0;
     
-    bool SendCommand(wxEventType eventType, int selection);
+    virtual bool SendCommand(wxEventType eventType, int selection) = 0;
     
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    virtual void OnSysColourChanged(wxSysColourChangedEvent& event) = 0;
     
     wxButtonStrip& GetButtonStrip() { return m_buttonStrip; }
     const wxButtonStrip& GetButtonStrip() const { return m_buttonStrip; }
     
     /// Sets the border colour.
-    virtual void SetBorderColour(const wxColour &colour);
+    virtual void SetBorderColour(const wxColour &colour) { m_borderColour = colour; }
     
     /// Gets the border colour.
-    virtual wxColour GetBorderColour() const;
+    virtual wxColour GetBorderColour() const { return m_borderColour; }
     
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual wxColour GetBackgroundColour() const;
+    virtual bool SetBackgroundColour(const wxColour &colour) { m_backgroundColour = colour; }
+    virtual wxColour GetBackgroundColour() const { return m_backgroundColour; }
     
     /// Sets the button background colour.
-    virtual bool SetButtonBackgroundColour(const wxColour &colour);
+    virtual bool SetButtonBackgroundColour(const wxColour &colour) { m_buttonBackgroundColour = colour; }
     
     /// Gets the button background colour.
-    virtual wxColour GetButtonBackgroundColour() const;
+    virtual wxColour GetButtonBackgroundColour() const { return m_buttonBackgroundColour; }
     
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual wxColour GetForegroundColour() const;
+    virtual bool SetForegroundColour(const wxColour &colour) { m_foregroundColour = colour; }
+    virtual wxColour GetForegroundColour() const { return m_foregroundColour; }
     
-    virtual bool SetFont(const wxFont& font);
-    virtual wxFont GetFont() const;
+    virtual bool SetFont(const wxFont& font) { m_font = font; }
+    virtual wxFont GetFont() const { return m_font; }
     
 protected:
     wxButtonStrip   m_buttonStrip;
     wxColour        m_borderColour;
+    wxColour        m_backgroundColour;
+    wxColour        m_buttonBackgroundColour;
+    wxColour        m_foregroundColour;
+    wxFont          m_font;
     
     wxDECLARE_NO_COPY_CLASS(wxTabCtrlBase);
 };

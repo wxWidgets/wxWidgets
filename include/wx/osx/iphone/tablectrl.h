@@ -68,7 +68,7 @@ public:
     virtual void Thaw();
 
     /// Scroll to the given section
-    virtual bool ScrollToSection(int section);
+    virtual bool ScrollToSection(int section) { ScrollToPath(wxTablePath(section, 0)); }
 
     /// Scroll to the given path (section/row)
     virtual bool ScrollToPath(const wxTablePath& path);
@@ -111,9 +111,6 @@ public:
     // the table that isn't currently showing.
     wxTableCell* GetReusableCell(const wxString& reuseName);
 
-    /// Sets the data source
-    virtual void SetDataSource(wxTableDataSource* dataSource, bool ownsDataSource = true);
-
     /// Finds the path for the cell.
     bool FindPathForCell(wxTableCell* cell, wxTablePath& path) const;
 
@@ -136,10 +133,12 @@ public:
     /// Gets the selection, or NULL if there is none.
     wxTablePath* GetSelection() const;
 
+    /*
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
     virtual bool SetFont(const wxFont& font);
     virtual bool Enable(bool enable);
+    */
     
     virtual bool HasIndex() const { return m_indexTitles.GetCount() > 0; }
     

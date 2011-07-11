@@ -18,7 +18,7 @@
 #include "wx/osx/private.h"
 
 
-// Subclass doesn't work for some funny reason; maybe because essentials are overloaded (wxOSXIPhoneClassAddWXMethods)?
+// FIXME Subclass doesn't work for some funny reason; maybe because essentials are overloaded (wxOSXIPhoneClassAddWXMethods)?
 #if 0
 @interface wxUIProgressView : UIProgressView
 {

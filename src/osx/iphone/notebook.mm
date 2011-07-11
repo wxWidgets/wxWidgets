@@ -30,7 +30,7 @@
 
 
 #pragma mark -
-#pragma mark Cocoa
+#pragma mark Cocoa class
 
 
 #pragma mark UITabBarController
@@ -59,7 +59,7 @@
 
 
 #pragma mark -
-#pragma mark wx
+#pragma mark Peer implementation
 
 class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 {
@@ -251,6 +251,23 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView(wxWindowMac* wxpeer,
             
     wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, controller, controller.view );
     return c;
+}
+
+
+#pragma mark -
+#pragma mark wxNotebook implementation bits
+
+bool wxNotebook::SetBadge(int item, const wxString& badge)
+{
+    wxNotebookIPhoneImpl *peer = (wxNotebookIPhoneImpl *)GetPeer();
+    peer->SetBadge(item, badge);
+}
+
+// Gets the UITabBar text badge for the given item
+wxString wxNotebook::GetBadge(int item) const
+{
+    wxNotebookIPhoneImpl *peer = (wxNotebookIPhoneImpl *)GetPeer();
+    return peer->GetBadge(item);
 }
 
 #endif //if wxUSE_NOTEBOOK

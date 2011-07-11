@@ -247,6 +247,9 @@ wxWidgetImplType* wxWidgetImpl::CreateTableViewCell( wxTableCell* wxpeer )
 #pragma mark -
 #pragma mark wxTableCell implementation
 
+IMPLEMENT_CLASS(wxTableCell, wxTableCellBase)
+
+
 wxTableCell::wxTableCell(wxTableCtrl* ctrl, const wxString& reuseName, wxTableCellStyle cellStyle)
 {
     Init();
@@ -289,6 +292,18 @@ void wxTableCell::Init()
     m_showReorderingButton = false;    
 }
 
+void wxTableCell::Copy(const wxTableCell& cell)
+{
+    // FIXME stub
+}
+
+bool wxTableCell::CreateContentWindow(wxTableCtrl* ctrl)
+{
+    // FIXME stub
+    
+    return true;
+}
+
 // Sets the accessory window
 void wxTableCell::SetAccessoryWindow(wxWindow* win)
 {
@@ -304,6 +319,11 @@ void wxTableCell::SetAccessoryWindow(wxWindow* win)
     
     [cell setAccessoryView:accessoryView];
     m_accessoryWindow = win;
+}
+
+void wxTableCell::SetAccessoryType(wxTableCellAccessoryType accessoryType)
+{
+    // FIXME stub
 }
 
 /// Sets the indentation level.
@@ -330,4 +350,10 @@ void wxTableCell::SetIndentationWidth(int indentationWidth)
     [cell setIndentationWidth:indentationWidth];
     
     m_indentationWidth = indentationWidth;
+}
+
+// Prepares the cell for reuse
+void wxTableCell::PrepareForReuse(wxTableCtrl* WXUNUSED(tableCtrl))
+{
+    // FIXME stub
 }

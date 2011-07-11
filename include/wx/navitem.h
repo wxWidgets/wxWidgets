@@ -47,9 +47,7 @@ public:
                          wxBarButton* rightButton = NULL,
                          bool ownButtons = false) { }
     
-    virtual ~wxNavigationItemBase();
-    
-    void Init();
+    virtual ~wxNavigationItemBase() { }
     
     /// Sets the button to show on the top item, when this item is under the top item.
     void SetBackButton(wxBarButton* backButton) { m_backButton = backButton; }

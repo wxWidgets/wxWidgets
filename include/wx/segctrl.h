@@ -24,11 +24,11 @@ class WXDLLIMPEXP_CORE wxImageList;
  @category{wxbile}
  */
 
-class WXDLLEXPORT wxSegmentedCtrlBase: public wxTabCtrlBase
+class WXDLLEXPORT wxSegmentedCtrlBase: public wxTabCtrl
 {    
 public:
     /// Default constructor.
-    wxSegmentedCtrlBase();
+    wxSegmentedCtrlBase() { }
     
     /// Constructor.
     wxSegmentedCtrlBase(wxWindow *parent,
@@ -36,18 +36,18 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxTAB_TEXT,
-                      const wxString& name = wxT("tabCtrl"));
+                      const wxString& name = wxT("tabCtrl")) { }
     
     // wxTabCtrl overrides
     
     /// Add an item, passing an optional index into the image list.
-    bool AddItem(const wxString& text, int imageId = -1);
+    virtual bool AddItem(const wxString& text, int imageId = -1) = 0;
     
     /// Add an item, passing a bitmap.
-    bool AddItem(const wxString& text, const wxBitmap& bitmap);
+    virtual bool AddItem(const wxString& text, const wxBitmap& bitmap) = 0;
 
     /// Set the selection, generating events
-    int SetSelection(int item);
+    virtual int SetSelection(int item) = 0;
     
 protected:
         
