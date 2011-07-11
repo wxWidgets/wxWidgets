@@ -123,8 +123,6 @@ protected:
     int           m_pageSize;
     int           m_lineSize;
     int           m_tickFreq;
-    int           m_minLabelWidth;
-    int           m_maxLabelWidth;
 
     // flag needed to detect whether we're getting THUMBRELEASE event because
     // of dragging the thumb or scrolling the mouse wheel
