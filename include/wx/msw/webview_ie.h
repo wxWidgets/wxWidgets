@@ -21,7 +21,7 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
-class IHTMLDocument2;
+struct IHTMLDocument2;
 
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
@@ -125,7 +125,7 @@ public:
     float GetIEOpticalZoom();
 
     void onActiveXEvent(wxActiveXEvent& evt);
-    void onEraseBg(wxEraseEvent& evt) {}
+    void onEraseBg(wxEraseEvent&) {}
 
     DECLARE_EVENT_TABLE();
 

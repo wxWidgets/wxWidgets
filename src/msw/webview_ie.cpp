@@ -129,7 +129,7 @@ void wxWebViewIE::LoadUrl(const wxString& url)
     //(HRESULT)(out.GetLong()) == S_OK;
 }
 
-void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
+void wxWebViewIE::SetPage(const wxString& html, const wxString&)
 {
     LoadUrl("about:blank");
 
@@ -353,7 +353,7 @@ bool wxWebViewIE::CanGoBack()
 bool wxWebViewIE::CanGoForward()
 {
     if(m_historyEnabled)
-        return m_historyPosition != m_historyList.size() - 1;
+        return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
     else
         return false;
 }
@@ -367,7 +367,8 @@ void wxWebViewIE::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
         if(m_historyList[i].get() == item.get())
             pos = i;
     }
-    wxASSERT_MSG(pos != m_historyList.size(), "invalid history item");
+    wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()), 
+                 "invalid history item");
     m_historyLoadingFromList = true;
     LoadUrl(item->GetUrl());
     m_historyPosition = pos;
@@ -390,7 +391,7 @@ wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewIE::GetForwardHistory()
     wxVector<wxSharedPtr<wxWebHistoryItem> > forwardhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for(int i = m_historyPosition + 1; i < m_historyList.size(); i++)
+    for(int i = m_historyPosition + 1; i < static_cast<int>(m_historyList.size()); i++)
     {
         forwardhist.push_back(m_historyList[i]);
     }
@@ -708,7 +709,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             {
                 //If we are not at the end of the list, then erase everything
                 //between us and the end before adding the new page
-                if(m_historyPosition != m_historyList.size() - 1)
+                if(m_historyPosition != static_cast<int>(m_historyList.size()) - 1)
                 {
                     m_historyList.erase(m_historyList.begin() + m_historyPosition + 1,
                                         m_historyList.end());
