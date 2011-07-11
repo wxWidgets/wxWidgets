@@ -288,6 +288,7 @@ public:
     virtual bool HasSelection() = 0;
     virtual void DeleteSelection() = 0;
     virtual wxString GetSelectedText() = 0;
+    virtual wxString GetSelectedHTML() = 0;
 
     // TODO:
     //     void EnableJavascript(bool enabled);             // maybe?

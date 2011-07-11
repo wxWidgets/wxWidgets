@@ -394,6 +394,11 @@ public:
     virtual void DeleteSelection() = 0;
     
     /**
+        Returns the currently selected HTML, if any.
+    */
+    virtual wxString GetSelectedHTML() = 0;
+    
+    /**
         Returns the currently selected text, if any.
     */
     virtual wxString GetSelectedText() = 0;

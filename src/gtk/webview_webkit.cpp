@@ -743,6 +743,31 @@ wxString wxWebViewWebKit::GetSelectedText()
                     wxConvUTF8);
 }
 
+wxString wxWebViewWebKit::GetSelectedHTML()
+{
+    WebKitDOMDocument* doc; 
+    WebKitDOMDOMWindow* win;
+    WebKitDOMDOMSelection* sel;
+    WebKitDOMRange* range;
+    WebKitDOMElement* div;
+    WebKitDOMDocumentFragment* clone;
+    WebKitDOMHTMLElement* html;
+
+    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
+    sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
+    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
+                                                  0, NULL);
+    div = webkit_dom_document_create_element(WEBKIT_DOM_DOCUMENT(doc), "div", NULL);
+
+    clone = webkit_dom_range_clone_contents(WEBKIT_DOM_RANGE(range), NULL);
+    webkit_dom_node_append_child(&div->parent_instance, &clone->parent_instance, NULL);
+    html = (WebKitDOMHTMLElement*)div;
+
+    return wxString(webkit_dom_html_element_get_inner_html(WEBKIT_DOM_HTML_ELEMENT(html)), 
+                    wxConvUTF8);
+}
+
 // static
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
