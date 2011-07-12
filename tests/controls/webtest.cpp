@@ -185,13 +185,16 @@ void WebTestCase::Editable()
 
 void WebTestCase::Selection()
 {
-    m_browser->SetPage("<html><body>Some text</body></html>", "");
+    m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
     CPPUNIT_ASSERT(!m_browser->HasSelection());
 
     m_browser->SelectAll();
 
     CPPUNIT_ASSERT(m_browser->HasSelection());
-    CPPUNIT_ASSERT_EQUAL("Some text", m_browser->GetSelectedText());
+    CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
+    //We lower case the result as ie returns tags in uppercase
+    CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text", 
+                         m_browser->GetSelectedHTML().Lower());
 
     m_browser->DeleteSelection();
 
