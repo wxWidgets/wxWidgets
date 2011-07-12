@@ -57,7 +57,7 @@ public:
 
         // Create off-screen to avoid flicker
         wxPanel* panel = new wxPanel(ctrl, wxID_ANY, wxPoint(-100, -100), wxSize(10, 10));
-        panel->Show(false);
+        //panel->Show(false);
         panel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
         SetWindow(panel);
 
@@ -776,6 +776,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
         if (path.GetRow() == 0)
         {
             wxPanel* panel = new wxPanel(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            panel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
             wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
             panel->SetSizer(sizer);
             
@@ -832,10 +833,12 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
                 staticBitmap = wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1);
             }
 
+#if 0
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Static bitmap:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxStaticBitmap* staticBitmapItem = new wxStaticBitmap( panel, wxID_ANY, staticBitmap);
             innerSizer->Add(staticBitmapItem, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+#endif
             
             //wxStaticText *textControlLabel = new wxStaticText(panel, wxID_STATIC, _("Text control:"));
             wxStaticText *textControlLabel = new wxStaticText(panel, wxID_STATIC, _("Text control:"), wxPoint(20, 150));
