@@ -343,6 +343,16 @@ public:
     static wxGraphicsContext* Create(const wxPrinterDC& dc);
 
     /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext* Create(const wxEnhMetaFileDC& dc);
+
+    /**
         Clips drawings to the specified region.
     */
     virtual void Clip(const wxRegion& region) = 0;
@@ -861,6 +871,14 @@ public:
         Creates a wxGraphicsContext from a wxPrinterDC
     */
     virtual wxGraphicsContext* CreateContext(const wxPrinterDC& dc) = 0 ;
+
+    /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+    */
+    virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) = 0;
 
     /**
         Creates a native brush from a wxBrush.
