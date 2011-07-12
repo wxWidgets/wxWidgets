@@ -61,28 +61,14 @@ class wxSearchTextCtrl : public wxTextCtrl
 public:
     wxSearchTextCtrl(wxSearchCtrl *search, const wxString& value, int style)
         : wxTextCtrl(search, wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     style | wxNO_BORDER)
+                     (style & ~wxBORDER_MASK) | wxNO_BORDER)
     {
         m_search = search;
-        m_defaultFG = GetForegroundColour();
+
+        SetHint(_("Search"));
 
         // remove the default minsize, the searchctrl will have one instead
         SetSizeHints(wxDefaultCoord,wxDefaultCoord);
-    }
-
-    void SetDescriptiveText(const wxString& text)
-    {
-        if ( GetValue() == m_descriptiveText )
-        {
-            ChangeValue(wxEmptyString);
-        }
-
-        m_descriptiveText = text;
-    }
-
-    wxString GetDescriptiveText() const
-    {
-        return m_descriptiveText;
     }
 
 
@@ -128,30 +114,8 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
-    void OnIdle(wxIdleEvent& WXUNUSED(event))
-    {
-        if ( IsEmpty() && !(wxWindow::FindFocus() == this) )
-        {
-            ChangeValue(m_descriptiveText);
-            SetInsertionPoint(0);
-            SetForegroundColour(m_defaultFG.ChangeLightness (LIGHT_STEP));
-        }
-    }
-
-    void OnFocus(wxFocusEvent& event)
-    {
-        event.Skip();
-        if ( GetValue() == m_descriptiveText )
-        {
-            ChangeValue(wxEmptyString);
-            SetForegroundColour(m_defaultFG);
-        }
-    }
-
 private:
     wxSearchCtrl* m_search;
-    wxString      m_descriptiveText;
-    wxColour      m_defaultFG;
 
     DECLARE_EVENT_TABLE()
 };
@@ -161,8 +125,6 @@ BEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
     EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnText)
     EVT_TEXT_URL(wxID_ANY, wxSearchTextCtrl::OnTextUrl)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
-    EVT_IDLE(wxSearchTextCtrl::OnIdle)
-    EVT_SET_FOCUS(wxSearchTextCtrl::OnFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -317,8 +279,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
-    m_text->SetDescriptiveText(_("Search"));
+    m_text = new wxSearchTextCtrl(this, value, style);
 
     m_searchButton = new wxSearchButton(this,
                                         wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN,
@@ -434,12 +395,12 @@ bool wxSearchCtrl::IsCancelButtonVisible() const
 
 void wxSearchCtrl::SetDescriptiveText(const wxString& text)
 {
-    m_text->SetDescriptiveText(text);
+    m_text->SetHint(text);
 }
 
 wxString wxSearchCtrl::GetDescriptiveText() const
 {
-    return m_text->GetDescriptiveText();
+    return m_text->GetHint();
 }
 
 // ----------------------------------------------------------------------------
@@ -538,11 +499,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 
 wxString wxSearchCtrl::DoGetValue() const
 {
-    wxString value = m_text->GetValue();
-    if (value == m_text->GetDescriptiveText())
-        return wxEmptyString;
-    else
-        return value;
+    return m_text->GetValue();
 }
 wxString wxSearchCtrl::GetRange(long from, long to) const
 {
