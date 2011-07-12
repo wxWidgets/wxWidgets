@@ -52,6 +52,14 @@
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    wxUnusedVar(viewController);
+    
+    wxWidgetIPhoneImpl* viewimpl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( tabBarController.view );
+    if ( viewimpl )
+    {
+        wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
+        wxpeer->OSXHandleClicked(0);
+    }
     
 }
 
