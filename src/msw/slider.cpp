@@ -490,7 +490,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         int xLabelValue =
             x + minLabelWidth +
             ((width  - (minLabelWidth + maxLabelWidth)) / 2) -
-            (maxLabelWidth / 2);
+            (longestLabelWidth / 2);
 
         int ySlider = y;
 
