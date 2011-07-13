@@ -394,9 +394,9 @@ public:
     virtual void DeleteSelection() = 0;
     
     /**
-        Returns the currently selected HTML, if any.
+        Returns the currently selected source, if any.
     */
-    virtual wxString GetSelectedHTML() = 0;
+    virtual wxString GetSelectedSource() = 0;
     
     /**
         Returns the currently selected text, if any.

@@ -614,7 +614,7 @@ wxString wxWebViewIE::GetSelectedText()
     return selected;
 }
 
-wxString wxWebViewIE::GetSelectedHTML()
+wxString wxWebViewIE::GetSelectedSource()
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;

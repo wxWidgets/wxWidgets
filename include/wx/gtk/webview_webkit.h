@@ -145,7 +145,7 @@ public:
     virtual bool HasSelection();
     virtual void SelectAll();
     virtual wxString GetSelectedText();
-    virtual wxString GetSelectedHTML();
+    virtual wxString GetSelectedSource();
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;

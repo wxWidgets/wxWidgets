@@ -743,7 +743,7 @@ wxString wxWebViewWebKit::GetSelectedText()
                     wxConvUTF8);
 }
 
-wxString wxWebViewWebKit::GetSelectedHTML()
+wxString wxWebViewWebKit::GetSelectedSource()
 {
     WebKitDOMDocument* doc; 
     WebKitDOMDOMWindow* win;
