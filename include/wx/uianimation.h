@@ -19,54 +19,20 @@
 // Supported easing functions.
 enum wxAnimationCurve
 {
-    // Common easing functions
     wxANIMATION_CURVE_EASE_IN,
     wxANIMATION_CURVE_EASE_OUT,
     wxANIMATION_CURVE_EASE_IN_OUT,
     wxANIMATION_CURVE_LINEAR
-#if 0// MSW-only, hard-to-emulate easing functions. Kept as reference.
-    wxANIMATION_CURVE_CONSTANT,//This does not nothing
-    wxANIMATION_CURVE_CUBIC,
-    wxANIMATION_CURVE_DISCRETE,
-    wxANIMATION_CURVE_INSTANTANEOUS,
-    wxANIMATION_CURVE_LINEAR_FROM_SPEED,
-    wxANIMATION_CURVE_PARABOLIC_FROM_ACCELERATION,
-    wxANIMATION_CURVE_REVERSAL,
-    wxANIMATION_CURVE_SINUSOIDAL_FROM_RANGE,
-    wxANIMATION_CURVE_SINUSOIDAL_FROM_VELOCITY,
-    wxANIMATION_CURVE_SMOOTH_STEP
-#endif
 };
-// Supported target properties. Every Mac OS X animatable property is included as reference
+
+// Supported target properties.
 enum wxAnimationTargetProperty
 {
     wxANIMATION_TARGET_PROPERTY_BACKGROUND_COLOR,
     wxANIMATION_TARGET_PROPERTY_POSITION,
     wxANIMATION_TARGET_PROPERTY_OPACITY,
-    // TODO: clarify the properties bellow
-    wxANIMATION_TARGET_PROPERTY_ANCHOR_POINT,
-    wxANIMATION_TARGET_PROPERTY_BORDER_COLOR,
-    wxANIMATION_TARGET_PROPERTY_BORDER_WIDTH,
-    wxANIMATION_TARGET_PROPERTY_BOUNDS,
-    wxANIMATION_TARGET_PROPERTY_CONTENTS,
-    wxANIMATION_TARGET_PROPERTY_CONTENTSRECT,
-    wxANIMATION_TARGET_PROPERTY_CORNER_RADIUS,
-    wxANIMATION_TARGET_PROPERTY_DOUBLESIDED,
-    wxANIMATION_TARGET_PROPERTY_FRAME,
-    wxANIMATION_TARGET_PROPERTY_HIDDEN,
-    wxANIMATION_TARGET_PROPERTY_MASK,
-    wxANIMATION_TARGET_PROPERTY_MASKS_TO_BOUNDS,
-    wxANIMATION_TARGET_PROPERTY_SHADOW_COLOR,
-    wxANIMATION_TARGET_PROPERTY_SHADOW_OFFSET,
-    wxANIMATION_TARGET_PROPERTY_SHADOW_OPACITY,
-    wxANIMATION_TARGET_PROPERTY_SHADOW_RADIUS,
-    wxANIMATION_TARGET_PROPERTY_SUBLAYERS,
-    wxANIMATION_TARGET_PROPERTY_SUBLAYER_TRANSFORM,
-    wxANIMATION_TARGET_PROPERTY_TRANSFORM,
-    wxANIMATION_TARGET_PROPERTY_ZPOSITION,
-    wxANIMATION_TARGET_PROPERTY_FILTERS,
-    wxANIMATION_TARGET_PROPERTY_BACKGROUND_FILTERS,
-    wxANIMATION_TARGET_PROPERTY_COMPOSITING_FILTER
+    wxANIMATION_TARGET_PROPERTY_SIZE,
+    wxANIMATION_TARGET_PROPERTY_HIDDEN
 };
 
 // Type enforcing helper for animation properties. These structs will restrict usage of a wrong type
@@ -103,9 +69,33 @@ template<> struct wxPropertyType<wxANIMATION_TARGET_PROPERTY_POSITION>
 template<> struct wxPropertyType<wxANIMATION_TARGET_PROPERTY_OPACITY> 
 {
     typedef int ValueType;
-    #if __WXCOCOA__
+#if __WXCOCOA__
     static const wxString OsXKeyPath;
     static NSNumber GetOsXValue(int value)
+    {
+        return [NSNumber numberWithFloat:(value/100.0f);
+    }
+#endif
+};
+
+template<> struct wxPropertyType<wxANIMATION_TARGET_PROPERTY_SIZE> 
+{
+    typedef wxSize ValueType;
+#if __WXCOCOA__
+    static const wxString OsXKeyPath;
+    static NSNumber GetOsXValue(wxSize value)
+    {
+        return [NSNumber numberWithFloat:(value/100.0f);
+    }
+#endif
+};
+
+template<> struct wxPropertyType<wxANIMATION_TARGET_PROPERTY_HIDDEN> 
+{
+    typedef bool ValueType;
+#if __WXCOCOA__
+    static const wxString OsXKeyPath;
+    static NSNumber GetOsXValue(bool value)
     {
         return [NSNumber numberWithFloat:(value/100.0f);
     }
@@ -286,14 +276,14 @@ public:
         m_keyframes.push_back(keyframe);
     }
 
-    const wxVector<wxUIAnimationKeyframe<ValueType>>& GetKeyframes() const
+    const wxVector<wxUIAnimationKeyframe<ValueType> >& GetKeyframes() const
     {
         return m_keyframes;
     }
 
     //DECLARE_ABSTRACT_CLASS(wxUIAnimationBase)
 protected:
-    wxVector<wxUIAnimationKeyframe<ValueType>> m_keyframes; 
+    wxVector<wxUIAnimationKeyframe<ValueType> > m_keyframes; 
 };
 
 #endif //_WX_UI_ANIMATION_H_BASE_

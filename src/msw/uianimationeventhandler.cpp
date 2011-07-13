@@ -40,7 +40,7 @@ IMPLEMENT_IUNKNOWN_METHODS(UIAnimationTimerEventHandlerBase)
 UIAnimationTimerEventHandlerBase::UIAnimationTimerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard)
 {
     m_storyboard = storyboard;
-};
+}
 
 STDMETHODIMP UIAnimationTimerEventHandlerBase::OnPreUpdate()
 {
@@ -48,22 +48,22 @@ STDMETHODIMP UIAnimationTimerEventHandlerBase::OnPreUpdate()
     //TODO: document better
     m_storyboard->Update();
     return S_OK;
-};
+}
 
 STDMETHODIMP UIAnimationTimerEventHandlerBase::OnPostUpdate()
 {
     return S_OK;
-};
+}
 
-STDMETHODIMP UIAnimationTimerEventHandlerBase::OnRenderingTooSlow(UINT32 framesPerSecond)
+STDMETHODIMP UIAnimationTimerEventHandlerBase::OnRenderingTooSlow(UINT32 WXUNUSED(framesPerSecond))
 {
     return S_OK;
-};
+}
 
 UIAnimationManagerEventHandlerBase::UIAnimationManagerEventHandlerBase(wxUIAnimationStoryboardMSW* storyboard)
 {
     m_storyboard = storyboard;
-};
+}
 
 STDMETHODIMP UIAnimationManagerEventHandlerBase::OnManagerStatusChanged(UI_ANIMATION_MANAGER_STATUS newStatus,
     UI_ANIMATION_MANAGER_STATUS previousStatus)
@@ -72,13 +72,15 @@ STDMETHODIMP UIAnimationManagerEventHandlerBase::OnManagerStatusChanged(UI_ANIMA
         (previousStatus == UI_ANIMATION_MANAGER_BUSY))
     {
         m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_FINISHED);
-        m_storyboard->ProcessEvent(wxUIAnimationStoryboardEvent(m_storyboard));
+        wxUIAnimationStoryboardEvent event(m_storyboard);
+        m_storyboard->ProcessEvent(event);
     }
     if((newStatus == UI_ANIMATION_MANAGER_BUSY) && 
         (previousStatus == UI_ANIMATION_MANAGER_IDLE))
     {
         m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_STARTED);
-        m_storyboard->ProcessEvent(wxUIAnimationStoryboardEvent(m_storyboard));
+        wxUIAnimationStoryboardEvent event(m_storyboard);
+        m_storyboard->ProcessEvent(event);
     }
     return S_OK;
 }

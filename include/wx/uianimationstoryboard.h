@@ -34,8 +34,10 @@ class WXDLLIMPEXP_ANIMATION wxUIAnimationStoryboardBase : public wxEvtHandler
 {
 public:
     wxUIAnimationStoryboardBase(wxControl* targetControl = NULL)
-        : m_targetControl(targetControl), m_status(wxSTORYBOARD_STATUS_IDLE),
-        m_fillMode(wxSTORYBOARD_FILL_MODE_HOLD_END), m_repeatCount(0)
+        : m_targetControl(targetControl),
+        m_status(wxSTORYBOARD_STATUS_IDLE),
+        m_fillMode(wxSTORYBOARD_FILL_MODE_HOLD_END),
+        m_repeatCount(0)
     {
     }
 

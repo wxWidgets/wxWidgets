@@ -31,7 +31,7 @@ class WXDLLIMPEXP_ANIMATION wxUIAnimationStoryboardMSW : public wxUIAnimationSto
 {
 public:
     friend class UIAnimationTimerEventHandlerBase;// Allows the call to Update
-    friend class UIAnimationManagerEventHandlerBase;// Allows calls to SetStoryboardStatus and internal auto-repeat methods.
+    friend class UIAnimationManagerEventHandlerBase;// Allows calls to SetStoryboardStatus
 
     wxUIAnimationStoryboardMSW();
 
@@ -39,24 +39,20 @@ public:
 
     // Adds animations to the storyboard -- also performs initialization of animation related Windows Animation objects
     // such as IUIAnimationTransition and IUIAnimationVariable.
-    // NOTE: We do not take ownership of the object. (Will be replaced with const reference soon)
-    template<wxAnimationTargetProperty Property> bool AddAnimation(wxUIAnimation<Property>* animation)
+    template<wxAnimationTargetProperty Property> bool AddAnimation(const wxUIAnimation<Property>& animation)
     {
-        wxCHECK(animation, false);
-        wxCHECK_MSG(animation->GetDuration() >= 0, false, "Animation duration can't be negative.");
+        wxCHECK_MSG(animation.GetDuration() >= 0, false, "Animation duration can't be negative.");
         
-        // The properties from the animation are given over to the MSW Animation. Should be replaced with a copy constructor.
-        wxSharedPtr<wxUIAnimationMSW> animationData(new wxUIAnimationMSW(animation->GetDuration(), animation->GetTargetProperty(), animation->GetAnimationCurve()));
-
-        if(!animationData->Build<wxUIAnimation<Property>::Type>(m_animationManager,
+        // The properties from the animation are given over to the MSW Animation.
+        wxSharedPtr<wxUIAnimationMSW> animationData(new wxUIAnimationMSW(m_animationManager,
             m_transitionLibrary,
-            animation->GetInitialValue(),
-            animation->GetTargetValue()))
-        {
-            return false;
-        }
+            m_storyboard,
+            animation.GetDuration(),
+            animation.GetTargetProperty(),
+            animation.GetAnimationCurve()));
 
-        if(!animationData->AddTransitionsToStoryboard(m_storyboard))
+        if(!animationData->Build<wxUIAnimation<Property>::Type>(animation.GetInitialValue(),
+            animation.GetTargetValue()))
         {
             return false;
         }
@@ -70,23 +66,26 @@ public:
         return true;
     }
 
-    // NOTE: We do not take ownership of the object. (Will be replaced with const reference soon)
-    template<wxAnimationTargetProperty Property> bool AddAnimation(wxUIKeyframeAnimation<Property>* animation)
+    template<wxAnimationTargetProperty Property> bool AddAnimation(const wxUIKeyframeAnimation<Property>& animation)
     {
         // Keyframe animation works by having multiple transitions for the same variable
         // Build will take care of building the variable and AddTransitionForKeyframe
         // will create the transition.
-        wxCHECK(animation, false);
-        wxCHECK_MSG(animation->GetDuration() >= 0, false, "Animation duration can't be negative.");
+        wxCHECK_MSG(animation.GetDuration() >= 0, false, "Animation duration can't be negative.");
 
-        wxVector<wxUIAnimationKeyframe<wxUIAnimation<Property>::Type>> keyframes = animation->GetKeyframes();
+        wxVector<wxUIAnimationKeyframe<wxUIAnimation<Property>::Type> > keyframes = animation.GetKeyframes();
         
         wxCHECK_MSG(keyframes.size() >= 1, false, "Key frame animations must have more than one key frames added to them.");
-        wxVector<const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type>>::const_iterator keyframe_iter = keyframes.begin();
+        wxVector<const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type> >::const_iterator keyframe_iter = keyframes.begin();
 
-        wxSharedPtr<wxUIAnimationMSW> animationData(new wxUIAnimationMSW(animation->GetDuration(), animation->GetTargetProperty(), animation->GetAnimationCurve()));
+        wxSharedPtr<wxUIAnimationMSW> animationData(new wxUIAnimationMSW(m_animationManager,
+            m_transitionLibrary,
+            m_storyboard,
+            animation.GetDuration(),
+            animation.GetTargetProperty(),
+            animation.GetAnimationCurve()));
 
-        if(!animationData->Build(m_animationManager, keyframes.at(0).GetValue()))
+        if(!animationData->Build(keyframes.at(0).GetValue()))
         {
             return false;
         }
@@ -106,9 +105,7 @@ public:
                 break;
             }
             const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type> nextKeyframe = (*keyframe_iter);
-            if(!animationData->AddTransitionForKeyframe(m_storyboard,
-                m_transitionLibrary,
-                &currentKeyframe,
+            if(!animationData->AddTransitionForKeyframe(&currentKeyframe,
                 &nextKeyframe,
                 delay))
             {
@@ -141,7 +138,7 @@ private:
     IUIAnimationStoryboard *m_storyboard;
 
     //Stores wxUIAnimationMSW objects that take part in the actual animation.
-    wxVector<wxSharedPtr<wxUIAnimationMSW>> m_animations;
+    wxVector<wxSharedPtr<wxUIAnimationMSW> > m_animations;
 
     wxDECLARE_NO_COPY_CLASS(wxUIAnimationStoryboardMSW);
 };
