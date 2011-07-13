@@ -124,7 +124,7 @@
                          tag definitions.
     -->
     <set var="WX_LIB_LIST">
-        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc
+        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc animation
     </set>
 
     <!-- if you define this variable to 0 before including wx presets, the

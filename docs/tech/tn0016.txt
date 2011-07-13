@@ -170,6 +170,7 @@ b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
      again to copy an existing one, e.g. USE_RICHTEXT, but basically you just
      need to define the option and also set its default value (usually 1) for
      the formats that don't support conditions such as e.g. MSVC projects.
+   * Add its name to WX_LIB_LIST in build/bakefile/wxpresets/presets/wx.bkl.
 
 c) Modify monolithic.bkl to add files to monolithic build: it's enough to add
    FOO_SRC to MONOLIB_GUI_SRC or MONOLIB_SRC, depending on whether wxFoo uses
