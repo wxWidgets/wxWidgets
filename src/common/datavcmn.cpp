@@ -1456,7 +1456,15 @@ bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
 
 wxSize wxDataViewSpinRenderer::GetSize() const
 {
-    return wxSize(80,16);
+    wxSize sz = GetTextExtent(wxString::Format("%d", (int)m_data));
+
+    // Allow some space for the spin buttons, which is approximately the size
+    // of a scrollbar (and getting pixel-exact value would be complicated).
+    // Also add some whitespace between the text and the button:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
 }
 
 bool wxDataViewSpinRenderer::SetValue( const wxVariant &value )
@@ -1514,7 +1522,18 @@ bool wxDataViewChoiceRenderer::Render( wxRect rect, wxDC *dc, int state )
 
 wxSize wxDataViewChoiceRenderer::GetSize() const
 {
-    return wxSize(80,16);
+    wxSize sz;
+
+    for ( wxArrayString::const_iterator i = m_choices.begin(); i != m_choices.end(); ++i )
+        sz.IncTo(GetTextExtent(*i));
+
+    // Allow some space for the right-side button, which is approximately the
+    // size of a scrollbar (and getting pixel-exact value would be complicated).
+    // Also add some whitespace between the text and the button:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
 }
 
 bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
