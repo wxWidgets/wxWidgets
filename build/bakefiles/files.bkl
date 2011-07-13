@@ -3683,7 +3683,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ANIMATION_MSW_SRC" hints="files">
     src/msw/uianimation.cpp
     src/msw/uianimationstoryboard.cpp
-    src/msw/uianimationeventhander.cpp
+    src/msw/uianimationeventhandler.cpp
 </set>
 <set var="ANIMATION_MSW_HDR" hints="files">
     wx/msw/uianimation.h
