@@ -166,6 +166,10 @@ b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
        <set var="WXLIB_FOO">
           <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('foo')))</if>
        </set>
+   * Add an option for building the new library to config.bkl. The simplest is
+     again to copy an existing one, e.g. USE_RICHTEXT, but basically you just
+     need to define the option and also set its default value (usually 1) for
+     the formats that don't support conditions such as e.g. MSVC projects.
 
 c) Modify monolithic.bkl to add files to monolithic build: it's enough to add
    FOO_SRC to MONOLIB_GUI_SRC or MONOLIB_SRC, depending on whether wxFoo uses

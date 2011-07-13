@@ -256,6 +256,14 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_ANIMATION">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build UI animation library (USE_GUI must be 1)?
+        </description>
+    </option>
+
     <option name="USE_OPENGL">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -475,6 +483,7 @@ Set the version of your Mingw installation here.
         <set var="RUNTIME_LIBS">dynamic</set>
         <set var="OFFICIAL_BUILD">0</set>
         <set var="USE_AUI">1</set>
+        <set var="USE_ANIMATION">1</set>
         <set var="USE_RIBBON">1</set>
         <set var="USE_PROPGRID">1</set>
         <set var="USE_RICHTEXT">1</set>
