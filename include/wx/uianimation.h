@@ -286,14 +286,14 @@ public:
         m_keyframes.push_back(keyframe);
     }
 
-    const wxVector<const wxUIAnimationKeyframe<ValueType>>& GetKeyframes() const
+    const wxVector<wxUIAnimationKeyframe<ValueType>>& GetKeyframes() const
     {
         return m_keyframes;
     }
 
     //DECLARE_ABSTRACT_CLASS(wxUIAnimationBase)
 protected:
-    wxVector<const wxUIAnimationKeyframe<ValueType>> m_keyframes; 
+    wxVector<wxUIAnimationKeyframe<ValueType>> m_keyframes; 
 };
 
 #endif //_WX_UI_ANIMATION_H_BASE_

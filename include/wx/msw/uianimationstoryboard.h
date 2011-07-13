@@ -79,7 +79,7 @@ public:
         wxCHECK(animation, false);
         wxCHECK_MSG(animation->GetDuration() >= 0, false, "Animation duration can't be negative.");
 
-        const wxVector<const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type>> keyframes = animation->GetKeyframes();
+        wxVector<wxUIAnimationKeyframe<wxUIAnimation<Property>::Type>> keyframes = animation->GetKeyframes();
         
         wxCHECK_MSG(keyframes.size() >= 1, false, "Key frame animations must have more than one key frames added to them.");
         wxVector<const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type>>::const_iterator keyframe_iter = keyframes.begin();
