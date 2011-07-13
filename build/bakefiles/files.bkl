@@ -3952,10 +3952,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ANIMATION_SRC" hints="files">
         $(ANIMATION_CMN_SRC) $(ANIMATION_PLATFORM_SRC)
     </set>
-	<set var="ANIMATION_HDR" hints="files">
+        <set var="ANIMATION_HDR" hints="files">
         $(ANIMATION_CMN_HDR) $(ANIMATION_PLATFORM_HDR)
     </set>
-	
+
     <set var="GUI_CORE_HEADERS" hints="files">
         <if cond="USE_GUI=='1' and WXUNIV=='0'">$(GUI_HDR)</if>
         <if cond="USE_GUI=='1' and WXUNIV=='1'">$(UNIV_HDR)</if>
