@@ -105,8 +105,8 @@ public:
                 break;
             }
             const wxUIAnimationKeyframe<wxUIAnimation<Property>::Type> nextKeyframe = (*keyframe_iter);
-            if(!animationData->AddTransitionForKeyframe(&currentKeyframe,
-                &nextKeyframe,
+            if(!animationData->AddTransitionForKeyframe(currentKeyframe,
+                nextKeyframe,
                 delay))
             {
                 return false;

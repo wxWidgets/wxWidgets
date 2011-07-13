@@ -47,8 +47,8 @@ public:
     template <class T> bool Build(T value);
 
     // Creates and adds transitions for current animation step of a key frame animation.
-    template <class T> bool AddTransitionForKeyframe(const wxUIAnimationKeyframe<T>* keyframe,
-        const wxUIAnimationKeyframe<T>* nextKeyframe,
+    template <class T> bool AddTransitionForKeyframe(const wxUIAnimationKeyframe<T>& keyframe,
+        const wxUIAnimationKeyframe<T>& nextKeyframe,
         double delay);
     
     // Returns the value of the animation variables as the specified type.
@@ -163,33 +163,33 @@ template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(wxSize valu
 template <> bool wxUIAnimationMSW::QueueInstantaneousTransitionAtEnd(bool value);
 
 // Keyframe transition creation
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<int>* keyframe,
-    const wxUIAnimationKeyframe<int>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<int>& keyframe,
+    const wxUIAnimationKeyframe<int>& nextKeyframe,
     double delay);
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<double>* keyframe,
-    const wxUIAnimationKeyframe<double>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<double>& keyframe,
+    const wxUIAnimationKeyframe<double>& nextKeyframe,
     double delay);
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxPoint>* keyframe,
-    const wxUIAnimationKeyframe<wxPoint>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxPoint>& keyframe,
+    const wxUIAnimationKeyframe<wxPoint>& nextKeyframe,
     double delay);
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxColour>* keyframe,
-    const wxUIAnimationKeyframe<wxColour>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxColour>& keyframe,
+    const wxUIAnimationKeyframe<wxColour>& nextKeyframe,
     double delay);
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxSize>* keyframe,
-    const wxUIAnimationKeyframe<wxSize>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxSize>& keyframe,
+    const wxUIAnimationKeyframe<wxSize>& nextKeyframe,
     double delay);
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<bool>* keyframe,
-    const wxUIAnimationKeyframe<bool>* nextKeyframe,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<bool>& keyframe,
+    const wxUIAnimationKeyframe<bool>& nextKeyframe,
     double delay);
 
 // The methods bellow return false to indicate that the type used is not supported.
-template<class T> inline bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<T>* keyframe,
-    const wxUIAnimationKeyframe<T>* nextKeyframe,
+template<class T> inline bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<T>& keyframe,
+    const wxUIAnimationKeyframe<T>& nextKeyframe,
     double delay)
 {
     return false;

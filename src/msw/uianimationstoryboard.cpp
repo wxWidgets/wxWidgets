@@ -43,23 +43,26 @@ wxUIAnimationStoryboardMSW::wxUIAnimationStoryboardMSW()
     }
 }
 
-// This should release every COM object that we have a reference to (TODO/NOTE: some object are left out on purpose for now)
+// This releases every COM object that we have a reference to as well as clear the animations vector.
 wxUIAnimationStoryboardMSW::~wxUIAnimationStoryboardMSW()
 {
-    // TODO: check the way these objects get released (mainly if there are no references to them elsewhere)
-    m_animationTimer->SetTimerEventHandler(NULL);
-    m_animationManager->SetManagerEventHandler(NULL);
-  
-    m_transitionLibrary->Release();
-    m_storyboard->Release();
-    m_animationManager->Release();
-
-    // This will cause an access violation in UIAnimation.dll!726c24c6
-    // IsEnabled returns OK even though the destructor gets called when animations finish (the timer is disabled).
-    // And even if we disable the timer(successfully) the access violation will still happen.
-    //m_animationTimer->Release();
-
     m_animations.clear();
+    HRESULT result;
+    result = m_animationTimer->SetTimerEventHandler(NULL);
+    if(!SUCCEEDED(result))
+    {
+        wxLogLastError("SetTimerEventHandler");
+    }
+    result = m_animationManager->SetManagerEventHandler(NULL);
+    if(!SUCCEEDED(result))
+    {
+         wxLogLastError("SetManagerEventHandler");
+    }
+    result = m_animationManager->Shutdown();
+    if(!SUCCEEDED(result))
+    {
+         wxLogLastError("Shutdown");
+    }
 }
 
 // Schedules the storyboard to start playing right away.
@@ -141,7 +144,6 @@ bool wxUIAnimationStoryboardMSW::Initialize()
         return false;
     }
  
-    // NOTE/TODO: this object does not release properly
     UIAnimationManagerEventHandlerBase* animationManagerHandler = new UIAnimationManagerEventHandlerBase(this);
     result = m_animationManager->SetManagerEventHandler(animationManagerHandler);
     if(!SUCCEEDED(result))
@@ -218,6 +220,9 @@ void wxUIAnimationStoryboardMSW::Update()
         case wxANIMATION_TARGET_PROPERTY_SIZE:
             {
                 // TODO: fix access violation (currently unreplicable)
+                // TODO: replicate access violation
+                //           - occured when closing the main window while a 
+                //             repeating animation was running
                 m_targetControl->SetSize((*iter)->GetValue<wxSize>());
                 break;
             }

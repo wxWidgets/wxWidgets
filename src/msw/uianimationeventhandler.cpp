@@ -72,15 +72,16 @@ STDMETHODIMP UIAnimationManagerEventHandlerBase::OnManagerStatusChanged(UI_ANIMA
         (previousStatus == UI_ANIMATION_MANAGER_BUSY))
     {
         m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_FINISHED);
-        wxUIAnimationStoryboardEvent event(m_storyboard);
-        m_storyboard->ProcessEvent(event);
+        wxUIAnimationStoryboardEvent* event = new wxUIAnimationStoryboardEvent(m_storyboard);
+        m_storyboard->QueueEvent(event);
+        return S_OK;
     }
     if((newStatus == UI_ANIMATION_MANAGER_BUSY) && 
         (previousStatus == UI_ANIMATION_MANAGER_IDLE))
     {
         m_storyboard->SetStoryboardStatus(wxSTORYBOARD_STATUS_STARTED);
-        wxUIAnimationStoryboardEvent event(m_storyboard);
-        m_storyboard->ProcessEvent(event);
+        wxUIAnimationStoryboardEvent* event = new wxUIAnimationStoryboardEvent(m_storyboard);
+        m_storyboard->QueueEvent(event);
+        return S_OK;
     }
-    return S_OK;
 }

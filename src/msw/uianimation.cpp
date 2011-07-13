@@ -19,12 +19,11 @@
 #include "wx/msw/uianimation.h"
 #include "wx/uianimation.h"
 
-
 WX_CHECK_BUILD_OPTIONS("wxAnimation")
 
 // TODO [iteration]: remove duplicate/similar code
 
-// This should release every COM object that we have a reference to.
+// This releases every COM object that we have a reference to.
 wxUIAnimationMSW::~wxUIAnimationMSW()
 {
     wxVector<IUIAnimationTransition*>::iterator transitionIter;
@@ -440,8 +439,8 @@ template<> bool wxUIAnimationMSW::Build(bool initialValue)
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<int>* keyFrame,
-    const wxUIAnimationKeyframe<int>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<int>& keyFrame,
+    const wxUIAnimationKeyframe<int>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -453,7 +452,7 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue()))
+    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue()))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.front(), animationKeyframe))
         {
@@ -464,8 +463,8 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<double>* keyFrame,
-    const wxUIAnimationKeyframe<double>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<double>& keyFrame,
+    const wxUIAnimationKeyframe<double>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -477,7 +476,7 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue()))
+    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue()))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.front(), animationKeyframe))
         {
@@ -488,8 +487,8 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxPoint>* keyFrame,
-    const wxUIAnimationKeyframe<wxPoint>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxPoint>& keyFrame,
+    const wxUIAnimationKeyframe<wxPoint>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -501,11 +500,11 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().x))
+    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().x))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.at(0), animationKeyframe))
         {
-            if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().y))
+            if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().y))
             {
                 if(AddLastCreatedTransitionToStoryboard(m_variables.at(1), animationKeyframe))
                 {
@@ -518,8 +517,8 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxColour>* keyFrame,
-    const wxUIAnimationKeyframe<wxColour>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxColour>& keyFrame,
+    const wxUIAnimationKeyframe<wxColour>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -531,19 +530,19 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().Alpha()))
+    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().Alpha()))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.at(0), animationKeyframe))
         {
-            if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().Red()))
+            if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().Red()))
             {
                 if(AddLastCreatedTransitionToStoryboard(m_variables.at(1), animationKeyframe))
                 {
-                    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().Blue()))
+                    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().Blue()))
                     {
                         if(AddLastCreatedTransitionToStoryboard(m_variables.at(2), animationKeyframe))
                         {
-                            if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().Green()))
+                            if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().Green()))
                             {
                                 if(AddLastCreatedTransitionToStoryboard(m_variables.at(3), animationKeyframe))
                                 {
@@ -560,8 +559,8 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxSize>* keyFrame,
-    const wxUIAnimationKeyframe<wxSize>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<wxSize>& keyFrame,
+    const wxUIAnimationKeyframe<wxSize>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -573,11 +572,11 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().GetWidth()))
+    if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().GetWidth()))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.at(0), animationKeyframe))
         {
-            if(CreateAndQueueTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue().GetHeight()))
+            if(CreateAndQueueTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue().GetHeight()))
             {
                 if(AddLastCreatedTransitionToStoryboard(m_variables.at(1), animationKeyframe))
                 {
@@ -590,8 +589,8 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
     return false;
 }
 
-template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<bool>* keyFrame,
-    const wxUIAnimationKeyframe<bool>* nextKeyFrame,
+template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKeyframe<bool>& keyFrame,
+    const wxUIAnimationKeyframe<bool>& nextKeyFrame,
     double delay)
 {
     UI_ANIMATION_KEYFRAME animationKeyframe;
@@ -603,7 +602,7 @@ template<> bool wxUIAnimationMSW::AddTransitionForKeyframe(const wxUIAnimationKe
         return false;
     }
 
-    if(CreateAndQueueDiscreteTransition(keyFrame->GetDuration(), nextKeyFrame->GetValue()))
+    if(CreateAndQueueDiscreteTransition(keyFrame.GetDuration(), nextKeyFrame.GetValue()))
     {
         if(AddLastCreatedTransitionToStoryboard(m_variables.at(0), animationKeyframe))
         {
