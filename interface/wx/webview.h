@@ -227,6 +227,11 @@ public:
     virtual wxString GetPageSource() = 0;
     
     /**
+        Get the text of the current page.
+    */
+    virtual wxString GetPageText() = 0;
+    
+    /**
         Returns whether the web control is currently busy (e.g. loading a page).
     */
     virtual bool IsBusy() = 0;

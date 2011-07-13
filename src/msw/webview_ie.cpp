@@ -643,6 +643,21 @@ wxString wxWebViewIE::GetSelectedSource()
     return selected;
 }
 
+wxString wxWebViewIE::GetPageText()
+{
+    IHTMLDocument2* document = GetDocument();
+    BSTR out;
+    IHTMLElement* body;
+    HRESULT hr = document->get_body(&body);
+    if(SUCCEEDED(hr))
+    {
+        body->get_innerText(&out);
+        body->Release();
+    }
+    document->Release();
+    return wxString(out);
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();

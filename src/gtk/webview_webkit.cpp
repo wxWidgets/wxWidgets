@@ -768,6 +768,17 @@ wxString wxWebViewWebKit::GetSelectedSource()
                     wxConvUTF8);
 }
 
+wxString wxWebViewWebKit::GetPageText()
+{
+    WebKitDOMDocument* doc; 
+    WebKitDOMHTMLElement* body;
+
+    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    body = webkit_dom_document_get_body(WEBKIT_DOM_DOCUMENT(doc));
+    return wxString(webkit_dom_html_element_get_inner_text(WEBKIT_DOM_HTML_ELEMENT(body)), 
+                    wxConvUTF8);
+}
+
 // static
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

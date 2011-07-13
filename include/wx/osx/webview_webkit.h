@@ -56,6 +56,7 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
     virtual void Stop();
     virtual wxString GetPageSource();
+    virtual wxString GetPageText() { return ""; }
     virtual void SetPageTitle(const wxString& title) { m_pageTitle = title; }
     virtual wxString GetPageTitle(){ return m_pageTitle; }
 

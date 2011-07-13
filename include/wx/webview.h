@@ -222,6 +222,7 @@ public:
      *         shown
      */
     virtual wxString GetPageSource() = 0;
+    virtual wxString GetPageText() = 0;
 
    /**
      * Get the zoom factor of the page

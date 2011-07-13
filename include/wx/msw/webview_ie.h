@@ -63,6 +63,7 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
 
     virtual wxString GetPageSource();
+    virtual wxString GetPageText();
 
     virtual bool IsBusy();
     virtual wxString GetCurrentURL();
