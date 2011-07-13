@@ -3950,7 +3950,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <set var="ANIMATION_SRC" hints="files">
-        $(ANIMATION_CMN_SRC) $(ANIMATION_PLATFORM_SRC)
+        $(ANIMATION_PLATFORM_SRC)
     </set>
         <set var="ANIMATION_HDR" hints="files">
         $(ANIMATION_CMN_HDR) $(ANIMATION_PLATFORM_HDR)
