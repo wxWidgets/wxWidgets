@@ -356,9 +356,10 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 
 IMPLEMENT_DYNAMIC_CLASS( wxWidgetIPhoneImpl , wxWidgetImpl )
 
-wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
+wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane, bool isScrollView ) :
     wxWidgetImpl( peer, isRootControl, isUserPane ), m_osxView(w)
 {
+    m_viewIsScrollView = isScrollView;
 }
 
 wxWidgetIPhoneImpl::wxWidgetIPhoneImpl()
@@ -447,13 +448,28 @@ void wxWidgetIPhoneImpl::GetContentArea( int&left, int &top, int &width, int &he
 
 void wxWidgetIPhoneImpl::SetNeedsDisplay( const wxRect* where )
 {
-    if ( where )
-    {
+    // SetNeedsDisplay() might be called from one of the "scrollbars" to adjust
+    // the content size, so reread it
+    // 
+    // FIXME scrollbars call SetNeedsDisplay() several times, there should be a better
+    // way to handle SetScrollbars()
+    if ( m_viewIsScrollView ) {
+        wxScrolledWindow *scrolledWindow = (wxScrolledWindow *)GetWXPeer();
+        if ( scrolledWindow ) {
+            wxSize virtualSize = scrolledWindow->GetVirtualSize();
+            CGSize contentSize = CGSizeMake(virtualSize.GetWidth(), virtualSize.GetHeight());
+            
+            UIScrollView *scrollView = (UIScrollView *)GetWXWidget();
+            [scrollView setContentSize:contentSize];
+        }
+    }
+    
+    if ( where ) {
         CGRect r = CGRectMake( where->x, where->y, where->width, where->height) ;
         [m_osxView setNeedsDisplayInRect:r];
-    }
-    else
+    } else {
         [m_osxView setNeedsDisplay];
+    }
 }
 
 bool wxWidgetIPhoneImpl::GetNeedsDisplay() const
@@ -846,25 +862,27 @@ void wxWidgetIPhoneImpl::controlTextDidChange()
 // Factory methods
 //
 
-wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer,
+wxWidgetImpl* wxWidgetImpl::CreateUserPane(wxWindowMac* wxpeer,
                                            wxWindowMac* WXUNUSED(parent),
                                            wxWindowID WXUNUSED(id),
                                            const wxPoint& pos,
                                            const wxSize& size,
-                                           long WXUNUSED(style),
+                                           long style,
                                            long WXUNUSED(extraStyle))
 {
-    UIView* sv = (wxpeer->GetParent()->GetHandle() );
-
     CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
-    //wxUIView* v = [[wxUIView alloc] initWithFrame:r];
-    UIView* v = [[UIView alloc] initWithFrame:r];
-    sv.clipsToBounds = YES;
-    sv.contentMode =  UIViewContentModeRedraw;
-    //sv.clearsContextBeforeDrawing = NO;
-    //sv.backgroundColor = [UIColor greenColor];
-    sv.clearsContextBeforeDrawing = YES;
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v, false, true );
+    wxWidgetIPhoneImpl* c = NULL;
+    
+    if ( style & ( wxVSCROLL | wxHSCROLL ) ) {
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:r];
+        [scrollView setScrollEnabled:YES];
+        [scrollView setBounces:YES];
+        [scrollView setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
+        c = new wxWidgetIPhoneImpl( wxpeer, scrollView, false, true, true );
+    } else {
+        UIView *view = [[UIView alloc] initWithFrame:r];
+        c = new wxWidgetIPhoneImpl( wxpeer, view, false, true, false );
+    }
+    
     return c;
 }

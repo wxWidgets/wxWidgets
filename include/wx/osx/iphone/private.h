@@ -31,7 +31,7 @@ wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxSt
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false, bool isUserPane = false ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false, bool isUserPane = false, bool isScrollView = false ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
@@ -118,6 +118,7 @@ public :
     virtual void         controlTextDidChange();
 protected:
     WXWidget m_osxView;
+    bool m_viewIsScrollView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl)
 };
 

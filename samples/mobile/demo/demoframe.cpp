@@ -96,14 +96,18 @@ class DemoCanvas: public wxScrolledWindow
     DECLARE_EVENT_TABLE()
 public:
     DemoCanvas(wxWindow* parent, wxWindowID id = wxID_ANY):
-      wxScrolledWindow(parent, id)
+//      wxScrolledWindow(parent, id)
+        wxScrolledWindow(parent, id, wxPoint(0, 0), wxSize(300, 300))
     {
         SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+        SetBackgroundColour(*wxWHITE);
         SetScrollbars(1, 1, 1000, 1000);
-        wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        SetFont(font);
+        
+        //wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        //SetFont(font);
     }
 
+    /*
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
 #ifdef __WXMSW__
@@ -133,11 +137,13 @@ public:
             dc.DrawText(text, x, y);
         }
     }
+    */
 };
 
 BEGIN_EVENT_TABLE(DemoCanvas, wxScrolledWindow)
-    EVT_PAINT(DemoCanvas::OnPaint)
+    //EVT_PAINT(DemoCanvas::OnPaint)
 END_EVENT_TABLE()
+
 
 // This data source demonstrates plain and grouped tables
 

@@ -93,11 +93,6 @@
 #define wxUSE_COMBOBOX 0
 #endif
 
-#ifndef __WXUNIVERSAL__
-#undef wxUSE_SCROLLBAR
-#define wxUSE_SCROLLBAR 0
-#endif
-
 #undef wxUSE_STATUSBAR
 #undef wxUSE_NATIVE_STATUSBAR
 #undef wxUSE_ABOUTDLG
