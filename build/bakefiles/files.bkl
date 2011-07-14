@@ -2589,28 +2589,35 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/regiong.cpp
     src/generic/icon.cpp
     <!-- iphone files -->
+    src/osx/iphone/barbutton.mm
     src/osx/iphone/button.mm
+    src/osx/iphone/buttonstrip.mm
     src/osx/iphone/checkbox.mm
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
+    src/osx/iphone/glcanvas.mm
     src/osx/iphone/listbox.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/navctrl.mm
+    src/osx/iphone/navitem.mm
     src/osx/iphone/nonownedwnd.mm
 	src/osx/iphone/notebook.mm
 	src/osx/iphone/pagectrl.mm
-	src/osx/iphone/segctrl.mm
     src/osx/iphone/scrolbar.mm
+	src/osx/iphone/segctrl.mm
     src/osx/iphone/slider.mm
     src/osx/iphone/srchctrl.mm
     src/osx/iphone/stattext.mm
+    src/osx/iphone/tabctrl.mm
     src/osx/iphone/tablecell.mm
     src/osx/iphone/tablectrl.mm
     src/osx/iphone/textctrl.mm
     src/osx/iphone/toolbar.mm
     src/osx/iphone/utils.mm
+    src/osx/iphone/viewcontroller.mm
     src/osx/iphone/webkit.mm
+    src/osx/iphone/wheelsctrl.mm
     src/osx/iphone/window.mm
 </set>
 
