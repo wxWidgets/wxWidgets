@@ -16,6 +16,7 @@
 
 #include "wx/msw/webview_ie.h"
 
+
 #if wxUSE_WEBVIEW_IE
 
 #include <olectl.h>
@@ -23,7 +24,7 @@
 #include <exdispid.h>
 #include <exdisp.h>
 #include <mshtml.h>
-
+#include "wx/msw/registry.h"
 // Various definitions are missing from mingw
 #ifdef __MINGW32__
 typedef enum CommandStateChangeConstants {
@@ -319,11 +320,19 @@ wxWebViewZoomType wxWebViewIE::GetZoomType() const
     return m_zoomType;
 }
 
-bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType) const
+bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType type) const
 {
-    // both are supported
-    // TODO: IE6 only supports text zoom, check if it's IE6 first
-    return true;
+    //IE 6 and below only support text zoom, so check the registry to see what
+    //version we actually have
+    wxRegKey key(wxRegKey::HKLM, "Software\\Microsoft\\Internet Explorer");
+    wxString value;
+    key.QueryValue("Version", value);
+
+    long version = wxAtoi(value.Left(1));
+    if(version <= 6 && type == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
+        return false;
+    else
+        return true;
 }
 
 void wxWebViewIE::Print()
