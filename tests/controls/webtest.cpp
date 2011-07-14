@@ -68,6 +68,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
 void WebTestCase::setUp()
 {
     m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
+    //We yield to let the initial page load
+    wxYield();
 }
 
 void WebTestCase::tearDown()
@@ -99,7 +101,7 @@ void WebTestCase::Title()
 
 void WebTestCase::Url()
 {
-    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentURL());
+    CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
 
     LoadUrl("about:blank");
     CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
