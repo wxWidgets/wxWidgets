@@ -54,7 +54,7 @@ private:
     void Editable();
     void Selection();
     void Zoom();
-    void LoadUrl(const wxString& url, int times = 1);
+    void LoadUrl(int times = 1);
 
     wxWebView* m_browser;
 
@@ -79,11 +79,16 @@ void WebTestCase::tearDown()
     wxDELETE(m_browser);
 }
 
-void WebTestCase::LoadUrl(const wxString& url, int times)
+void WebTestCase::LoadUrl(int times)
 {
+    //We alternate between urls as otherwise webkit merges them in the history
+    //we use about and about blank to avoid the need for a network connection
     for(int i = 0; i < times; i++)
     {
-        m_browser->LoadUrl(url);
+        if(i % 2 == 1)
+            m_browser->LoadUrl("about:blank");
+        else
+            m_browser->LoadUrl("about:");
         wxYield();
     }
 }
@@ -93,11 +98,12 @@ void WebTestCase::Title()
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
 
     //Test title after loading raw html
-    m_browser->SetPage("<html><title>Title</title></html>", "");
+    m_browser->SetPage("<html><title>Title</title><body>Text</body></html>", "");
+    wxYield();
     CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
 
     //Test title after loading a url, we yield to let events process
-    LoadUrl("about:blank");
+    LoadUrl();
     CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
 }
 
@@ -105,14 +111,14 @@ void WebTestCase::Url()
 {
     CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
 
-    LoadUrl("about:blank");
-    CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
+    //After first loading about:blank the next in the sequence is about:
+    LoadUrl();
+    CPPUNIT_ASSERT_EQUAL("about:", m_browser->GetCurrentURL());
 }
 
 void WebTestCase::History()
 {
-    //We use about:blank to remove the need for a network connection
-    LoadUrl("about:blank", 3);
+    LoadUrl(3);
 
     CPPUNIT_ASSERT(m_browser->CanGoBack());
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
@@ -132,13 +138,13 @@ void WebTestCase::History()
 
 void WebTestCase::HistoryEnable()
 {
-    LoadUrl("about:blank");
+    LoadUrl();
     m_browser->EnableHistory(false);
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
 
-    LoadUrl("about:blank");
+    LoadUrl();
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
@@ -146,10 +152,11 @@ void WebTestCase::HistoryEnable()
 
 void WebTestCase::HistoryClear()
 {
-    LoadUrl("about:blank", 2);
+    LoadUrl(2);
 
     //Now we are in the 'middle' of the history
     m_browser->GoBack();
+    wxYield();
 
     CPPUNIT_ASSERT(m_browser->CanGoForward());
     CPPUNIT_ASSERT(m_browser->CanGoBack());
@@ -162,7 +169,7 @@ void WebTestCase::HistoryClear()
 
 void WebTestCase::HistoryList()
 {
-    LoadUrl("about:blank", 2);
+    LoadUrl(2);
     m_browser->GoBack();
 
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
@@ -190,6 +197,7 @@ void WebTestCase::Editable()
 void WebTestCase::Selection()
 {
     m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
+    wxYield();
     CPPUNIT_ASSERT(!m_browser->HasSelection());
 
     m_browser->SelectAll();
@@ -199,16 +207,10 @@ void WebTestCase::Selection()
     //We lower case the result as ie returns tags in uppercase
     CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text", 
                          m_browser->GetSelectedSource().Lower());
-
-    m_browser->DeleteSelection();
-
-    CPPUNIT_ASSERT(!m_browser->HasSelection());
 }
 
 void WebTestCase::Zoom()
 {
-    CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_MEDIUM, m_browser->GetZoom());
-
     if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
     {
         m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
