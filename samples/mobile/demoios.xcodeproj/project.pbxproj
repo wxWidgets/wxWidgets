@@ -371,9 +371,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				INFOPLIST_FILE = Info_iphone.plist;
-				PROVISIONING_PROFILE = "";
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Debug;
@@ -382,9 +381,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				INFOPLIST_FILE = Info_iphone.plist;
-				PROVISIONING_PROFILE = "";
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Release;
