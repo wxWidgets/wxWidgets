@@ -42,6 +42,7 @@ private:
         CPPUNIT_TEST( HistoryList );
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( Zoom );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -52,6 +53,7 @@ private:
     void HistoryList();
     void Editable();
     void Selection();
+    void Zoom();
     void LoadUrl(const wxString& url, int times = 1);
 
     wxWebView* m_browser;
@@ -201,6 +203,32 @@ void WebTestCase::Selection()
     m_browser->DeleteSelection();
 
     CPPUNIT_ASSERT(!m_browser->HasSelection());
+}
+
+void WebTestCase::Zoom()
+{
+    CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_MEDIUM, m_browser->GetZoom());
+
+    if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
+    {
+        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
+        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
+
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
+        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TINY, m_browser->GetZoom());
+    }
+
+    //Reset the zoom level
+    m_browser->SetZoom(wxWEB_VIEW_ZOOM_MEDIUM);
+
+    if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT))
+    {
+        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT);
+        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TYPE_TEXT, m_browser->GetZoomType());
+
+        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
+        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TINY, m_browser->GetZoom());
+    }
 }
 
 #endif //wxUSE_WEB
