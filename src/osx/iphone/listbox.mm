@@ -181,7 +181,14 @@ protected:
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 10;
+    if (! implementation) {
+        return 0;
+    }
+    
+    wxListBox* lb = dynamic_cast<wxListBox*> ( implementation->GetWXPeer() );
+    unsigned int count = lb->GetCount();
+    
+    return count;
 }
 
 #pragma mark UIPickerViewDelegate
