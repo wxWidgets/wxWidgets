@@ -62,9 +62,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSegmentedCtrl(wxWindowMac* wxpeer,
 #pragma mark -
 #pragma mark wxSegmentedCtrl implementation
 
-//IMPLEMENT_DYNAMIC_CLASS(wxSegmentedCtrl, wxSegmentedCtrlBase)
-wxIMPLEMENT_CLASS_COMMON1(wxSegmentedCtrl, wxSegmentedCtrlBase, wxSegmentedCtrl::wxCreateObject)
-wxObject* wxSegmentedCtrl::wxCreateObject() { return new wxSegmentedCtrl; }
+IMPLEMENT_DYNAMIC_CLASS(wxSegmentedCtrl, wxSegmentedCtrlBase)
 
 
 BEGIN_EVENT_TABLE(wxSegmentedCtrl, wxSegmentedCtrlBase)
