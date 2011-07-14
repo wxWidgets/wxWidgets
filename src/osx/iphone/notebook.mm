@@ -49,6 +49,11 @@
         wxpeer->OSXHandleClicked(0);
     }
     
+#ifdef __WXDEBUG__
+    NSLog(@"tab changed:");
+    NSLog(@"%@", (NSString *)[viewController.view performSelector:@selector(recursiveDescription)]);
+#endif
+
 }
 
 @end
