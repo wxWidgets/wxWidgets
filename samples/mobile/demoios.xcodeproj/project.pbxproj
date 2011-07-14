@@ -40,6 +40,8 @@
 		B9ED400F13CA6A12007570A4 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF713CA6A12007570A4 /* utils.mm */; };
 		B9ED401013CA6A12007570A4 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF813CA6A12007570A4 /* webkit.mm */; };
 		B9ED401113CA6A12007570A4 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF913CA6A12007570A4 /* window.mm */; };
+		B9F3295913CE0763007E7023 /* actionsheetdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9F3295813CE0763007E7023 /* actionsheetdlg.mm */; };
+		B9F32A9513CE7ACE007E7023 /* alertsheetdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9F32A9413CE7ACE007E7023 /* alertsheetdlg.mm */; };
 		B9FE823A13CB441B009182C3 /* viewcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE823913CB441B009182C3 /* viewcontroller.mm */; };
 		B9FE836713CBA872009182C3 /* navitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE836613CBA872009182C3 /* navitem.mm */; };
 		B9FE838113CBA9F2009182C3 /* tabctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE838013CBA9F2009182C3 /* tabctrl.mm */; };
@@ -99,6 +101,8 @@
 		B9ED3FF713CA6A12007570A4 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/iphone/utils.mm; sourceTree = SOURCE_ROOT; };
 		B9ED3FF813CA6A12007570A4 /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/osx/iphone/webkit.mm; sourceTree = SOURCE_ROOT; };
 		B9ED3FF913CA6A12007570A4 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
+		B9F3295813CE0763007E7023 /* actionsheetdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = actionsheetdlg.mm; path = ../../src/osx/iphone/actionsheetdlg.mm; sourceTree = SOURCE_ROOT; };
+		B9F32A9413CE7ACE007E7023 /* alertsheetdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = alertsheetdlg.mm; path = ../../src/osx/iphone/alertsheetdlg.mm; sourceTree = SOURCE_ROOT; };
 		B9FE823913CB441B009182C3 /* viewcontroller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = viewcontroller.mm; path = ../../src/osx/iphone/viewcontroller.mm; sourceTree = SOURCE_ROOT; };
 		B9FE836613CBA872009182C3 /* navitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navitem.mm; path = ../../src/osx/iphone/navitem.mm; sourceTree = SOURCE_ROOT; };
 		B9FE838013CBA9F2009182C3 /* tabctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tabctrl.mm; path = ../../src/osx/iphone/tabctrl.mm; sourceTree = SOURCE_ROOT; };
@@ -192,6 +196,8 @@
 		B9B24E5613B8364D0031EF09 /* src-osx-iphone */ = {
 			isa = PBXGroup;
 			children = (
+				B9F3295813CE0763007E7023 /* actionsheetdlg.mm */,
+				B9F32A9413CE7ACE007E7023 /* alertsheetdlg.mm */,
 				B9FE842113CBBBC2009182C3 /* barbutton.mm */,
 				B9ED3FE213CA6A12007570A4 /* button.mm */,
 				B9FE83D813CBB12C009182C3 /* buttonstrip.mm */,
@@ -333,6 +339,8 @@
 				B9FE83D913CBB12C009182C3 /* buttonstrip.mm in Sources */,
 				B9FE840013CBB4A5009182C3 /* wheelsctrl.mm in Sources */,
 				B9FE842213CBBBC2009182C3 /* barbutton.mm in Sources */,
+				B9F3295913CE0763007E7023 /* actionsheetdlg.mm in Sources */,
+				B9F32A9513CE7ACE007E7023 /* alertsheetdlg.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

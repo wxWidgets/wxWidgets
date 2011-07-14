@@ -79,7 +79,6 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
-#if 0
     /// Show an action sheet
     void OnShowActionSheet(wxCommandEvent& event);
 
@@ -87,8 +86,7 @@ public:
     void OnShowAlertSheet(wxCommandEvent& event);
 
     /// Respond to action sheet events
-    void OnActionSheet(wxSheetEvent& event);
-#endif
+    //void OnActionSheet(wxSheetEvent& event);
 
     /// Respond to table events
     void OnAccessoryClick(wxTableCtrlEvent& event);

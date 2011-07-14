@@ -184,12 +184,8 @@
 #undef wxUSE_TOOLBOOK
 #undef wxUSE_CHOICEDLG
 #undef wxUSE_HELP
-#undef wxUSE_PROGRESSDLG
-#undef  wxUSE_FONTDLG
+#undef wxUSE_FONTDLG
 #undef wxUSE_FILEDLG
-#undef wxUSE_CHOICEDLG
-#undef wxUSE_NUMBERDLG
-#undef wxUSE_TEXTDLG
 #undef wxUSE_DIRDLG
 #undef wxUSE_STARTUP_TIPS
 #undef wxUSE_WIZARDDLG
@@ -206,12 +202,8 @@
 #define wxUSE_TOOLBOOK 0
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_HELP 0
-#define wxUSE_PROGRESSDLG 0
 #define wxUSE_FONTDLG 0
 #define wxUSE_FILEDLG 0
-#define wxUSE_CHOICEDLG 0
-#define wxUSE_NUMBERDLG 0
-#define wxUSE_TEXTDLG 0
 #define wxUSE_DIRDLG 0
 #define wxUSE_STARTUP_TIPS 0
 #define wxUSE_WIZARDDLG 0

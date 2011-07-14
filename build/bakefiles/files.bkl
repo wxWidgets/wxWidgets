@@ -2589,6 +2589,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/regiong.cpp
     src/generic/icon.cpp
     <!-- iphone files -->
+    src/osx/iphone/actionsheetdlg.mm
+    src/osx/iphone/alertsheetdlg.mm
     src/osx/iphone/barbutton.mm
     src/osx/iphone/button.mm
     src/osx/iphone/buttonstrip.mm

@@ -30,6 +30,7 @@
 #include "wx/html/webkit.h"
 #include "wx/segctrl.h"
 #include "wx/wheelsctrl.h"
+#include "wx/sheetdlg.h"
 
 #include "wx/mstream.h"
 
@@ -284,11 +285,9 @@ protected:
 
 BEGIN_EVENT_TABLE( DemoFrame, wxFrame )
 
-#if 0
-    EVT_SHEET_BUTTON(DemoFrame::OnActionSheet)
+    //EVT_SHEET_BUTTON(DemoFrame::OnActionSheet)
     EVT_BUTTON(wxID_PROPERTIES, DemoFrame::OnShowActionSheet)
     EVT_BUTTON(wxID_VIEW_DETAILS, DemoFrame::OnShowAlertSheet)
-#endif
 
     EVT_TABLE_ROW_SELECTED(wxID_ANY, DemoFrame::OnSelectRow)
     EVT_TABLE_ACCESSORY_CLICKED(wxID_ANY, DemoFrame::OnAccessoryClick)
@@ -470,8 +469,8 @@ wxIcon DemoFrame::GetIconResource( const wxString& name )
 }
 
 
-#if 0
 // Respond to action sheet events
+#if 0
 void DemoFrame::OnActionSheet(wxSheetEvent& event)
 {
     wxSheetBase* sheet = event.GetSheet();
@@ -480,42 +479,40 @@ void DemoFrame::OnActionSheet(wxSheetEvent& event)
 }
 #endif
 
-#if 0
 /// Show an action sheet
 void DemoFrame::OnShowActionSheet(wxCommandEvent& WXUNUSED(event))
 {
     wxArrayString otherButtons;
     otherButtons.Add(_("First other button"));
     otherButtons.Add(_("Another other button"));
-
-    wxActionSheet* sheet = new wxActionSheet(this,
-        _("Testing an action sheet, with a relatively long title on it."),
-        _("Cancel"), _("OK"), otherButtons);
-
+    
+    wxActionSheetDialog* sheet = new wxActionSheetDialog(this,
+                                                         _("Testing an action sheet, with a relatively long title on it."),
+                                                         _("OK"),
+                                                         otherButtons);
+    
     // Redirect events to this window
     sheet->SetOwner(this);
-    sheet->ShowSheet(NULL);
+    sheet->ShowSheetDialog(NULL);
 }
-#endif
 
-#if 0
 /// Show an alert sheet
 void DemoFrame::OnShowAlertSheet(wxCommandEvent& WXUNUSED(event))
 {
     wxArrayString otherButtons;
     otherButtons.Add(_("First other button"));
     otherButtons.Add(_("Another other button"));
-
-    wxAlertSheet* sheet = new wxAlertSheet(this,
-        _("Testing an alert sheet"),
-        _("This is the message for the alert sheet, and it can be quite long if necessary."),
-        _("Cancel"), otherButtons);
-
+    
+    wxAlertSheetDialog* sheet = new wxAlertSheetDialog(this,
+                                                       _("Testing an alert sheet"),
+                                                       _("This is the message for the alert sheet, and it can be quite long if necessary."),
+                                                       _("Cancel"),
+                                                       otherButtons);
+    
     // Redirect events to this window
     sheet->SetOwner(this);
-    sheet->ShowSheet(NULL);
+    sheet->ShowSheetDialog(NULL);
 }
-#endif
 
 void DemoFrame::OnAccessoryClick(wxTableCtrlEvent& event)
 {
@@ -528,7 +525,7 @@ void DemoFrame::OnSelectRow(wxTableCtrlEvent& event)
 {
     wxString msg(wxString::Format(_("Selected row at section %d, row %d"),
         int(event.GetPath().GetSection()+1), int(event.GetPath().GetRow()+1)));
-    //wxIBMessageBox(msg, _("Table Event"));
+    wxMessageBox(msg, _("Table Event"));
 }
 
 
@@ -734,40 +731,40 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
         // Tables
         if (path.GetRow() == 0)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleDefault);
-            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleDefault);
+            PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 1)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue1);
-            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue1);
+            PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 2)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue2);
-            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleValue2);
+            PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 3)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            //MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleSubtitle);
-            //PushTable(tableCtrl, dataSource, _("Grouped Table"));
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            MultiSectionDataSource* dataSource = new MultiSectionDataSource(wxTableCell::CellStyleSubtitle);
+            PushTable(tableCtrl, dataSource, _("Grouped Table"));
         }
         else if (path.GetRow() == 4)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_PLAIN);
-            //MultiSectionDataSource* dataSource = new MultiSectionDataSource;
-            //PushTable(tableCtrl, dataSource, _("Plain Table"));
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_PLAIN);
+            MultiSectionDataSource* dataSource = new MultiSectionDataSource;
+            PushTable(tableCtrl, dataSource, _("Plain Table"));
         }
         else if (path.GetRow() == 5)
         {
-            //wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
-            //EditableDataSource* dataSource = new EditableDataSource;
-            //PushTable(tableCtrl, dataSource, _("Editable Table"));
-            //tableCtrl->SetEditingMode(true);
+            wxTableCtrl* tableCtrl = new wxTableCtrl(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), wxTC_GROUPED);
+            EditableDataSource* dataSource = new EditableDataSource;
+            PushTable(tableCtrl, dataSource, _("Editable Table"));
+            tableCtrl->SetEditingMode(true);
         }
     }
     else if (path.GetSection() == 1)
@@ -796,10 +793,10 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             innerSizer->Add(textButtonsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-            wxButton* button = new wxButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxDefaultPosition, wxDefaultSize, 0 );
-            //wxButton* button = new wxButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxPoint(160, 55));
-            wxButton* button2 = new wxButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
-            //wxButton* button2 = new wxButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxPoint(200, 55), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+            //wxButton* button = new wxButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxDefaultPosition, wxDefaultSize, 0 );
+            wxButton* button = new wxButton( panel, wxID_PROPERTIES, _("Action Sheet"), wxPoint(160, 55));
+            //wxButton* button2 = new wxButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+            wxButton* button2 = new wxButton( panel, wxID_VIEW_DETAILS, _("Alert Sheet"), wxPoint(200, 55), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
             buttonSizer->Add(button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
             buttonSizer->Add(button2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5);
             innerSizer->Add(buttonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -941,6 +938,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             listBox->SetSelection(0);
             innerSizer->Add(listBox, 1, wxEXPAND|wxALL, 5);
             
+#if 0
             innerSizer->Add(new wxStaticText(panel, wxID_STATIC, _("Wheels control:")), 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5);
             
             wxWheelsTextDataSource* dataSource = new wxWheelsTextDataSource(2);
@@ -965,6 +963,7 @@ void TableDemoRootDataSource::OnSelectRow(wxTableCtrlEvent& event)
             wheelsCtrl->SetDataSource(dataSource, true /* control owns the data source */);
             
             innerSizer->Add(wheelsCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+#endif
 
             PushWindow(panel, _("Picker Controls"));
         }
