@@ -70,6 +70,21 @@ public:
     void SetThumbLength(int len) ;
     int GetThumbLength() const ;
     void SetTick(int tickPos) ;
+    
+#ifdef __WXOSX_IPHONE__
+
+    //
+    // New iPhone functionality
+    //
+
+    /// Set the minimum value bitmap (drawn on the left side of the slider)
+    void SetMinValueBitmap(const wxBitmap& bitmap);
+
+    /// Set the maximum value bitmap (drawn on the right side of the slider)
+    void SetMaxValueBitmap(const wxBitmap& bitmap);
+
+#endif  // __WXOSX_IPHONE__
+    
 
     void Command(wxCommandEvent& event);
     // osx specific event handling common for all osx-ports

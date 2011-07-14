@@ -16,6 +16,10 @@
 #include "wx/slider.h"
 #include "wx/osx/private.h"
 
+
+#pragma mark -
+#pragma mark Cocoa class
+
 @interface wxUISlider : UISlider
 {
 }
@@ -34,6 +38,10 @@
 }
 
 @end
+
+
+#pragma mark -
+#pragma mark Peer implementation
 
 class wxSliderIPhoneImpl : public wxWidgetIPhoneImpl
 {
@@ -100,6 +108,22 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
 
     wxWidgetIPhoneImpl* c = new wxSliderIPhoneImpl( wxpeer, v );
     return c;
+}
+
+
+#pragma mark -
+#pragma mark wxSlider implementation bits
+
+/// Set the minimum value bitmap (drawn on the left side of the slider)
+void wxSlider::SetMinValueBitmap(const wxBitmap& bitmap)
+{
+    m_minValueBitmap = bitmap;
+}
+
+/// Set the maximum value bitmap (drawn on the right side of the slider)
+void wxSlider::SetMaxValueBitmap(const wxBitmap& bitmap)
+{
+    m_maxValueBitmap = bitmap;
 }
 
 #endif // wxUSE_SLIDER

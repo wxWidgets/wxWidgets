@@ -107,13 +107,13 @@ public:
     //
 
     /// Set the minimum value bitmap (drawn on the left side of the slider)
-    virtual void SetMinValueBitmap(const wxBitmap& bitmap);
+    virtual void SetMinValueBitmap(const wxBitmap& bitmap) { m_minValueBitmap = bitmap; }
 
     /// Get the minimum value bitmap (drawn on the left side of the slider)
     virtual wxBitmap GetMinValueBitmap() { return m_minValueBitmap; }
 
     /// Set the maximum value bitmap (drawn on the right side of the slider)
-    virtual void SetMaxValueBitmap(const wxBitmap& bitmap);
+    virtual void SetMaxValueBitmap(const wxBitmap& bitmap) { m_maxValueBitmap = bitmap; }
 
     /// Get the maximum value bitmap (drawn on the right side of the slider)
     virtual wxBitmap GetMaxValueBitmap() { return m_maxValueBitmap; }
