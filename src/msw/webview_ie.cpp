@@ -168,21 +168,23 @@ wxString wxWebViewIE::GetPageSource()
     IHTMLDocument2* document = GetDocument();
     IHTMLElement *bodyTag = NULL;
     IHTMLElement *htmlTag = NULL;
-    BSTR bstr;
+    wxString source;
     HRESULT hr = document->get_body(&bodyTag);
     if(SUCCEEDED(hr))
     {
         hr = bodyTag->get_parentElement(&htmlTag);
         if(SUCCEEDED(hr))
         {
+            BSTR bstr;
             htmlTag->get_outerHTML(&bstr);
+            source = wxString(bstr);
             htmlTag->Release();
         }
         bodyTag->Release();
     }
 
     document->Release();
-    return wxString(bstr);
+    return source;
 }
 
 wxWebViewZoom wxWebViewIE::GetZoom()
@@ -193,6 +195,9 @@ wxWebViewZoom wxWebViewIE::GetZoom()
         return GetIETextZoom();
     else
         wxFAIL;
+
+    //Dummy return to stop compiler warnings
+    return wxWEB_VIEW_ZOOM_MEDIUM;
         
 }
 
@@ -304,7 +309,7 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom()
     {
         return wxWEB_VIEW_ZOOM_LARGE;
     }
-    else if (zoom > 145)
+    else /*if (zoom > 145) */ //Using else removes a compiler warning
     {
         return wxWEB_VIEW_ZOOM_LARGEST;
     }
@@ -558,12 +563,11 @@ bool wxWebViewIE::IsEditable()
     IHTMLDocument2* document = GetDocument();
     BSTR mode;
     document->get_designMode(&mode);
+    document->Release();
     if(wxString(mode) == "On")
         return true;
     else
         return false;
-
-    document->Release();
 }
 
 void wxWebViewIE::SelectAll()
@@ -575,15 +579,17 @@ bool wxWebViewIE::HasSelection()
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;
-    BSTR type;
+    wxString sel;
     HRESULT hr = document->get_selection(&selection);
     if(SUCCEEDED(hr))
     {
+        BSTR type;
         selection->get_type(&type);
+        sel = wxString(type);
         selection->Release();
     }
     document->Release();
-    return wxString(type) != "None";
+    return sel != "None";
 }
 
 void wxWebViewIE::DeleteSelection()
@@ -652,16 +658,18 @@ wxString wxWebViewIE::GetSelectedSource()
 wxString wxWebViewIE::GetPageText()
 {
     IHTMLDocument2* document = GetDocument();
-    BSTR out;
+    wxString text;
     IHTMLElement* body;
     HRESULT hr = document->get_body(&body);
     if(SUCCEEDED(hr))
     {
+        BSTR out;
         body->get_innerText(&out);
+        text = wxString(out);
         body->Release();
     }
     document->Release();
-    return wxString(out);
+    return text;
 }
 
 bool wxWebViewIE::CanExecCommand(wxString command)
