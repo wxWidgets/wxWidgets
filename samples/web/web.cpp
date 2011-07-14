@@ -77,6 +77,7 @@ public:
     void OnUndo(wxCommandEvent& evt);
     void OnRedo(wxCommandEvent& evt);
     void OnMode(wxCommandEvent& evt);
+    void OnZoomLayout(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -90,6 +91,7 @@ private:
     wxToolBarToolBase* m_toolbar_tools;
 
     wxMenu* m_tools_menu;
+    wxMenuItem* m_tools_layout;
     wxMenuItem* m_tools_tiny;
     wxMenuItem* m_tools_small;
     wxMenuItem* m_tools_medium;
@@ -195,6 +197,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     m_tools_menu->AppendSeparator();
+    m_tools_layout = m_tools_menu->AppendCheckItem(wxID_ANY, _("Use Layout Zoom"));
     m_tools_tiny = m_tools_menu->AppendCheckItem(wxID_ANY, _("Tiny"));
     m_tools_small = m_tools_menu->AppendCheckItem(wxID_ANY, _("Small"));
     m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
@@ -225,6 +228,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
     m_tools_enable_history->Check();
+    if(!m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
+        m_tools_layout->Enable(false);
 
 
     // Connect the toolbar events
@@ -259,6 +264,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
            wxCommandEventHandler(WebFrame::OnViewSourceRequest),  NULL, this );
     Connect(print->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnPrint),  NULL, this );
+    Connect(m_tools_layout->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnZoomLayout),  NULL, this );
     Connect(m_tools_tiny->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
     Connect(m_tools_small->GetId(), wxEVT_COMMAND_MENU_SELECTED,
@@ -581,6 +588,14 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
     {
         wxFAIL;
     }
+}
+
+void WebFrame::OnZoomLayout(wxCommandEvent& evt)
+{
+    if(m_tools_layout->IsChecked())
+        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
+    else
+        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT);
 }
 
 /**
