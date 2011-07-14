@@ -96,6 +96,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
     m_historyPosition = -1;
+    m_zoomType = wxWEB_VIEW_ZOOM_TYPE_TEXT;
 
     if (::CoCreateInstance(CLSID_WebBrowser, NULL,
                            CLSCTX_INPROC_SERVER, // CLSCTX_INPROC,
@@ -183,62 +184,32 @@ wxString wxWebViewIE::GetPageSource()
     return wxString(bstr);
 }
 
-// FIXME? retrieve OLECMDID_GETZOOMRANGE instead of hardcoding range 0-4
 wxWebViewZoom wxWebViewIE::GetZoom()
 {
-    const int zoom = GetIETextZoom();
-
-    switch (zoom)
-    {
-        case 0:
-            return wxWEB_VIEW_ZOOM_TINY;
-            break;
-        case 1:
-            return wxWEB_VIEW_ZOOM_SMALL;
-            break;
-        case 2:
-            return wxWEB_VIEW_ZOOM_MEDIUM;
-            break;
-        case 3:
-            return wxWEB_VIEW_ZOOM_LARGE;
-            break;
-        case 4:
-            return wxWEB_VIEW_ZOOM_LARGEST;
-            break;
-        default:
-            wxASSERT(false);
-            return wxWEB_VIEW_ZOOM_MEDIUM;
-    }
+    if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
+        return GetIEOpticalZoom();
+    else if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT)
+        return GetIETextZoom();
+    else
+        wxFAIL;
+        
 }
+
 void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 {
-    // I know I could cast from enum to int since wxWebViewZoom happens to
-    // match with IE's zoom levels, but I don't like doing that, what if enum
-    // values change...
-    switch (zoom)
-    {
-        case wxWEB_VIEW_ZOOM_TINY:
-            SetIETextZoom(0);
-            break;
-        case wxWEB_VIEW_ZOOM_SMALL:
-            SetIETextZoom(1);
-            break;
-        case wxWEB_VIEW_ZOOM_MEDIUM:
-            SetIETextZoom(2);
-            break;
-        case wxWEB_VIEW_ZOOM_LARGE:
-            SetIETextZoom(3);
-            break;
-        case wxWEB_VIEW_ZOOM_LARGEST:
-            SetIETextZoom(4);
-            break;
-        default:
-            wxASSERT(false);
-    }
+    if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
+        SetIEOpticalZoom(zoom);
+    else if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT)
+        SetIETextZoom(zoom);
+    else
+        wxFAIL;
 }
 
-void wxWebViewIE::SetIETextZoom(int level)
+void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
 {
+    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range 
+    //is 0 to 4 so the check is unnecessary, these match exactly with the
+    //enum values
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
@@ -247,79 +218,105 @@ void wxWebViewIE::SetIETextZoom(int level)
     HRESULT result = m_webBrowser->ExecWB(OLECMDID_ZOOM,
                                           OLECMDEXECOPT_DONTPROMPTUSER,
                                           &zoomVariant, NULL);
-    wxASSERT (result == S_OK);
-
-    VariantClear (&zoomVariant);
+    wxASSERT(result == S_OK);
 }
 
-int wxWebViewIE::GetIETextZoom()
+wxWebViewZoom wxWebViewIE::GetIETextZoom()
 {
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
-    V_I4(&zoomVariant) = 4;
 
     HRESULT result = m_webBrowser->ExecWB(OLECMDID_ZOOM,
                                           OLECMDEXECOPT_DONTPROMPTUSER,
                                           NULL, &zoomVariant);
-    wxASSERT (result == S_OK);
+    wxASSERT(result == S_OK);
 
-    int zoom = V_I4(&zoomVariant);
-    VariantClear (&zoomVariant);
-
-    return zoom;
+    //We can safely cast here as we know that the range matches our enum
+    return static_cast<wxWebViewZoom>(V_I4(&zoomVariant));
 }
 
-void wxWebViewIE::SetIEOpticalZoom(float zoom)
+void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
 {
-    // TODO: add support for optical zoom (IE7+ only)
-
-    // TODO: get range from OLECMDID_OPTICAL_GETZOOMRANGE instead of hardcoding?
-    wxASSERT(zoom >= 10.0f);
-    wxASSERT(zoom <= 1000.0f);
-
+    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range 
+    //is 10 to 1000 so the check is unnecessary
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
-    V_I4(&zoomVariant) = (zoom * 100.0f);
+
+    //We make a somewhat arbitray map here, taken from values used by webkit
+    switch(level)
+    {
+        case wxWEB_VIEW_ZOOM_TINY:
+            V_I4(&zoomVariant) = 60;
+            break;
+        case wxWEB_VIEW_ZOOM_SMALL:
+            V_I4(&zoomVariant) = 80;
+            break;
+        case wxWEB_VIEW_ZOOM_MEDIUM:
+            V_I4(&zoomVariant) = 100;
+            break;
+        case wxWEB_VIEW_ZOOM_LARGE:
+            V_I4(&zoomVariant) = 130;
+            break;
+        case wxWEB_VIEW_ZOOM_LARGEST:
+            V_I4(&zoomVariant) = 160;
+            break;
+        default:
+            wxFAIL;
+    }
 
     HRESULT result = m_webBrowser->ExecWB((OLECMDID)OLECMDID_OPTICAL_ZOOM,
                                           OLECMDEXECOPT_DODEFAULT,
                                           &zoomVariant,
                                           NULL);
-    wxASSERT (result == S_OK);
+    wxASSERT(result == S_OK);
 }
 
-float wxWebViewIE::GetIEOpticalZoom()
+wxWebViewZoom wxWebViewIE::GetIEOpticalZoom()
 {
-    // TODO: add support for optical zoom (IE7+ only)
-
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
-    V_I4(&zoomVariant) = -1;
 
     HRESULT result = m_webBrowser->ExecWB((OLECMDID)OLECMDID_OPTICAL_ZOOM,
                                           OLECMDEXECOPT_DODEFAULT, NULL,
                                           &zoomVariant);
-    wxASSERT (result == S_OK);
+    wxASSERT(result == S_OK);
 
     const int zoom = V_I4(&zoomVariant);
-    VariantClear (&zoomVariant);
 
-    return zoom / 100.0f;
+    //We make a somewhat arbitray map here, taken from values used by webkit
+    if (zoom <= 65)
+    {
+        return wxWEB_VIEW_ZOOM_TINY;
+    }
+    else if (zoom > 65 && zoom <= 90)
+    {
+        return wxWEB_VIEW_ZOOM_SMALL;
+    }
+    else if (zoom > 90 && zoom <= 115)
+    {
+        return wxWEB_VIEW_ZOOM_MEDIUM;
+    }
+    else if (zoom > 115 && zoom <= 145)
+    {
+        return wxWEB_VIEW_ZOOM_LARGE;
+    }
+    else if (zoom > 145)
+    {
+        return wxWEB_VIEW_ZOOM_LARGEST;
+    }
 }
 
-void wxWebViewIE::SetZoomType(wxWebViewZoomType)
+void wxWebViewIE::SetZoomType(wxWebViewZoomType type)
 {
-    // TODO: add support for optical zoom (IE7+ only)
-    wxASSERT(false);
+    m_zoomType = type;
 }
 
 wxWebViewZoomType wxWebViewIE::GetZoomType() const
 {
-    // TODO: add support for optical zoom (IE7+ only)
-    return wxWEB_VIEW_ZOOM_TYPE_TEXT;
+    return m_zoomType;
 }
 
 bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType) const

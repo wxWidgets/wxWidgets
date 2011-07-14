@@ -112,19 +112,11 @@ public:
     bool IsOfflineMode();
     void SetOfflineMode(bool offline);
 
-    /**
-     * Get text zoom
-     * @return text zoom from 0 to 4
-     */
-    int GetIETextZoom();
+    wxWebViewZoom GetIETextZoom();
+    void SetIETextZoom(wxWebViewZoom level);
 
-    /**
-     *  @param level 0 to 4
-     */
-    void SetIETextZoom(int level);
-
-    void SetIEOpticalZoom(float zoom);
-    float GetIEOpticalZoom();
+    wxWebViewZoom GetIEOpticalZoom();
+    void SetIEOpticalZoom(wxWebViewZoom level);
 
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
@@ -138,6 +130,9 @@ private:
     DWORD m_dwCookie;
     bool m_canNavigateBack;
     bool m_canNavigateForward;
+
+    //We store the current zoom type;
+    wxWebViewZoomType m_zoomType;
 
     /** The "Busy" property of IWebBrowser2 does not always return busy when
      *  we'd want it to; this variable may be set to true in cases where the
