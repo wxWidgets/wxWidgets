@@ -161,22 +161,6 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
     return true;
 }
 
-#if wxOSX_USE_IPHONE
-
-// Sets a UITabBar text badge for the given item
-bool wxNotebook::SetBadge(int item, const wxString& badge)
-{
-    GetPeer()->SetBadge(item, badge);
-}
-
-// Gets the UITabBar text badge for the given item
-wxString wxNotebook::GetBadge(int item) const
-{
-    return GetPeer()->GetBadge(item);
-}
-
-#endif  // wxOSX_USE_IPHONE
-
 // ----------------------------------------------------------------------------
 // wxNotebook operations
 // ----------------------------------------------------------------------------
