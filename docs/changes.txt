@@ -441,6 +441,10 @@ All (GUI):
 
 - Support float, double and file name values in wxGenericValidator (troelsk).
 
+OSX:
+
+- Implement wxRegion::Equal() (Dr.Acula).
+
 GTK:
 
 - Generate events for two auxiliary mouse buttons in wxGTK (Marcin Wojdyr).

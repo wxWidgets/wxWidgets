@@ -242,11 +242,21 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 //# Information on region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
+bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
-    wxFAIL_MSG( wxT("not implemented") );
+    // There doesn't seem to be any native function for checking the equality
+    // of HIShapes so we compute their differences to determine if they are
+    // equal.
+    wxRegion r(this);
+    r.Subtract(region);
 
-    return false;
+    if ( !r.IsEmpty() )
+        return false;
+
+    wxRegion r2(region);
+    r2.Subtract(*this);
+
+    return r2.IsEmpty();
 }
 
 // Outer bounds of region
