@@ -768,6 +768,19 @@ wxString wxWebViewWebKit::GetSelectedSource()
                     wxConvUTF8);
 }
 
+void wxWebViewWebKit::ClearSelection()
+{
+    WebKitDOMDocument* doc; 
+    WebKitDOMDOMWindow* win;
+    WebKitDOMDOMSelection* sel;
+
+    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
+    sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
+    webkit_dom_dom_selection_remove_all_ranges(WEBKIT_DOM_DOM_SELECTION(sel));
+
+}
+
 wxString wxWebViewWebKit::GetPageText()
 {
     WebKitDOMDocument* doc; 

@@ -392,6 +392,11 @@ public:
     */
     
     /**
+        Clears the current selection. 
+    */
+    virtual void ClearSelection() = 0;
+    
+    /**
         Deletes the current selection. Note that for @c wxWEB_VIEW_BACKEND_WEBKIT
         the selection must be editable, either through SetEditable or the 
         correct HTML attribute.

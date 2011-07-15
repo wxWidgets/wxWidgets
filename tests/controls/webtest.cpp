@@ -207,6 +207,9 @@ void WebTestCase::Selection()
     //We lower case the result as ie returns tags in uppercase
     CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text", 
                          m_browser->GetSelectedSource().Lower());
+
+    m_browser->ClearSelection();
+    CPPUNIT_ASSERT(!m_browser->HasSelection());  
 }
 
 void WebTestCase::Zoom()

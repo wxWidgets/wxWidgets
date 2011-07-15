@@ -655,6 +655,20 @@ wxString wxWebViewIE::GetSelectedSource()
     return selected;
 }
 
+void wxWebViewIE::ClearSelection()
+{
+    IHTMLDocument2* document = GetDocument();
+    IHTMLSelectionObject* selection;
+    wxString selected;
+    HRESULT hr = document->get_selection(&selection);
+    if(SUCCEEDED(hr))
+    {
+        selection->empty();
+        selection->Release();
+    }
+    document->Release();
+}
+
 wxString wxWebViewIE::GetPageText()
 {
     IHTMLDocument2* document = GetDocument();
