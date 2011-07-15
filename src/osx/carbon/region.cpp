@@ -191,6 +191,8 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
         // nothing to do
         return true;
 
+    AllocExclusive();
+
     verify_noerr( HIShapeOffset( M_REGION , x , y ) ) ;
 
     return true ;
