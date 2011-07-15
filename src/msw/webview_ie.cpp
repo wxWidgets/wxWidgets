@@ -127,17 +127,8 @@ void wxWebViewIE::LoadUrl(const wxString& url)
     m_ie.CallMethod("Navigate", (BSTR) url.wc_str(), NULL, NULL, NULL, NULL);
 }
 
-void wxWebViewIE::SetPage(const wxString& html, const wxString&)
+void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
 {
-    LoadUrl("about:blank");
-
-    // Let the wx events generated for navigation events be processed, so
-    // that the underlying IE component completes its Document object.
-    // FIXME: calling wxYield is not elegant nor very reliable probably
-    wxYield();
-
-    // TODO: consider the "baseUrl" parameter if possible
-    // TODO: consider encoding
     BSTR bstr = SysAllocString(html.wc_str());
 
     // Creates a new one-dimensional array
@@ -145,16 +136,30 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString&)
     if (psaStrings != NULL)
     {
         VARIANT *param;
+
         HRESULT hr = SafeArrayAccessData(psaStrings, (LPVOID*)&param);
         param->vt = VT_BSTR;
         param->bstrVal = bstr;
-
         hr = SafeArrayUnaccessData(psaStrings);
+
         IHTMLDocument2* document = GetDocument();
         document->write(psaStrings);
+        document->Release();
 
         // SafeArrayDestroy calls SysFreeString for each BSTR
         SafeArrayDestroy(psaStrings);
+
+        //We send the events when we are done to mimic webkit
+        //Navigated event
+        wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+                                   GetId(), baseUrl, "", false);
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+
+        //Document complete event
+        event.SetEventType(wxEVT_COMMAND_WEB_VIEW_LOADED);
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
     }
     else
     {
