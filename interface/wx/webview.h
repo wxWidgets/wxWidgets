@@ -288,12 +288,7 @@ public:
         @param baseUrl URL assigned to the HTML data, to be used to resolve
                     relative paths, for instance.
     */
-    virtual void SetPage(wxInputStream& html, wxString baseUrl)
-    {
-        wxStringOutputStream stream;
-        stream.Write(html);
-        SetPage(stream.GetString(), baseUrl);
-    }
+    virtual void SetPage(wxInputStream& html, wxString baseUrl);
 
     /**
         Stop the current page loading process, if any.
