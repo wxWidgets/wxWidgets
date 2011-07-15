@@ -792,6 +792,12 @@ wxString wxWebViewWebKit::GetPageText()
                     wxConvUTF8);
 }
 
+void wxWebViewWebKit::RunScript(const wxString& javascript)
+{
+    webkit_web_view_execute_script(WEBKIT_WEB_VIEW(web_view), 
+                                   javascript.mb_str(wxConvUTF8));
+}
+
 // static
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

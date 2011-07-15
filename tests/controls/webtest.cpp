@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
+        CPPUNIT_TEST( RunScript );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -54,6 +55,7 @@ private:
     void Editable();
     void Selection();
     void Zoom();
+    void RunScript();
     void LoadUrl(int times = 1);
 
     wxWebView* m_browser;
@@ -234,6 +236,12 @@ void WebTestCase::Zoom()
         m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
         CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TINY, m_browser->GetZoom());
     }
+}
+
+void WebTestCase::RunScript()
+{
+    m_browser->RunScript("document.write(\"Hello World!\");");
+    CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 }
 
 #endif //wxUSE_WEB

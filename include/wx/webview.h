@@ -292,9 +292,11 @@ public:
     virtual wxString GetSelectedSource() = 0;
     virtual void ClearSelection() = 0;
 
+    virtual void RunScript(const wxString& javascript) = 0;
+
     // TODO:
     //     void EnableJavascript(bool enabled);             // maybe?
-    //     wxString RunScript(const wxString& javascript);  // maybe?
+    //       // maybe?
 
     //     void SetScrollPos(int pos);                      // maybe?
     //     int GetScrollPos();                              // maybe?

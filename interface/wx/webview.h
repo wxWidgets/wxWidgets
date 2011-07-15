@@ -263,6 +263,11 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
     
     /**
+        Runs the given javascript code. 
+    */
+    virtual void RunScript(const wxString& javascript) = 0;
+    
+    /**
         Set the editable property of the web control. Enabling allows the user
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.

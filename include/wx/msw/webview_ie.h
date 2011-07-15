@@ -106,6 +106,7 @@ public:
     virtual wxString GetSelectedSource();
     virtual void ClearSelection();
 
+    virtual void RunScript(const wxString& javascript);
 
     // ---- IE-specific methods
 

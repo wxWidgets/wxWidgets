@@ -686,6 +686,22 @@ wxString wxWebViewIE::GetPageText()
     return text;
 }
 
+void wxWebViewIE::RunScript(const wxString& javascript)
+{
+    IHTMLDocument2* document = GetDocument();
+    IHTMLWindow2* window;
+    wxString language = "javascript";
+    HRESULT hr = document->get_parentWindow(&window);
+    if(SUCCEEDED(hr))
+    {
+        VARIANT level;
+        VariantInit(&level);
+        V_VT(&level) = VT_EMPTY;
+        window->execScript(SysAllocString(javascript), SysAllocString(language), &level);
+    }
+    document->Release();
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();

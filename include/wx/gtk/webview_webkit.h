@@ -149,6 +149,8 @@ public:
     virtual wxString GetSelectedSource();
     virtual void ClearSelection();
 
+    virtual void RunScript(const wxString& javascript);
+
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
 

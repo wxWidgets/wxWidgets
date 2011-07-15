@@ -110,10 +110,10 @@ public:
     virtual wxString GetSelectedText();
     virtual wxString GetSelectedSource() { return ""; }
     virtual void ClearSelection() {}
+    
+    void RunScript(const wxString& javascript);
 
     // ---- methods not from the parent (common) interface
-    wxString RunScript(const wxString& javascript);
-
     bool  CanGetPageSource();
 
     void  SetScrollPos(int pos);

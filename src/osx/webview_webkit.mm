@@ -732,42 +732,13 @@ wxString wxWebViewWebKit::GetSelectedText()
     return wxStringWithNSString(selection);
 }
 
-wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
         return wxEmptyString;
 
-    id result = [[m_webView windowScriptObject] evaluateWebScript:
+    [[m_webView windowScriptObject] evaluateWebScript:
                     (NSString*)wxNSStringWithWxString( javascript )];
-
-    NSString* resultAsString;
-    NSString* className = NSStringFromClass([result class]);
-
-    if ([className isEqualToString:@"NSCFNumber"])
-    {
-        resultAsString = [NSString stringWithFormat:@"%@", result];
-    }
-    else if ([className isEqualToString:@"NSCFString"])
-    {
-        resultAsString = result;
-    }
-    else if ([className isEqualToString:@"NSCFBoolean"])
-    {
-        if ([result boolValue])
-            resultAsString = @"true";
-        else
-            resultAsString = @"false";
-    }
-    else if ([className isEqualToString:@"WebScriptObject"])
-    {
-        resultAsString = [result stringRepresentation];
-    }
-    else
-    {
-        return wxString();
-    }
-
-    return wxStringWithNSString( resultAsString );
 }
 
 void wxWebViewWebKit::OnSize(wxSizeEvent &event)
