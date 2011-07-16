@@ -247,7 +247,7 @@ bool wxRegion::DoIsEqual(const wxRegion& region) const
     // There doesn't seem to be any native function for checking the equality
     // of HIShapes so we compute their differences to determine if they are
     // equal.
-    wxRegion r(this);
+    wxRegion r(*this);
     r.Subtract(region);
 
     if ( !r.IsEmpty() )
