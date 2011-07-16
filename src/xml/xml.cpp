@@ -58,6 +58,8 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
       m_lineNo(lineNo),
       m_noConversion(false)
 {
+    wxASSERT_MSG ( type != wxXML_ELEMENT_NODE || content.empty(), "element nodes can't have content" );
+
     if (m_parent)
     {
         if (m_parent->m_children)
@@ -77,7 +79,9 @@ wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
       m_attrs(NULL), m_parent(NULL),
       m_children(NULL), m_next(NULL),
       m_lineNo(lineNo), m_noConversion(false)
-{}
+{
+    wxASSERT_MSG ( type != wxXML_ELEMENT_NODE || content.empty(), "element nodes can't have content" );
+}
 
 wxXmlNode::wxXmlNode(const wxXmlNode& node)
 {
