@@ -23,6 +23,7 @@ public:
     wxRegion( WXHRGN hRegion );
     wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
     wxRegion();
+#if wxUSE_IMAGE
     wxRegion(const wxBitmap& bmp)
     {
         Union(bmp);
@@ -32,6 +33,7 @@ public:
     {
         Union(bmp, transColour, tolerance);
     }
+#endif
 
     virtual ~wxRegion();
 
