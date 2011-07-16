@@ -160,7 +160,7 @@ void wxListCtrlXmlHandler::HandleListItem()
     int image;
     if ( list->HasFlag(wxLC_ICON) )
         image = GetImageIndex(list, wxIMAGE_LIST_NORMAL);
-    else if ( list->HasFlag(wxLC_SMALL_ICON) )
+    else if ( list->HasFlag(wxLC_SMALL_ICON) || list->HasFlag(wxLC_REPORT) || list->HasFlag(wxLC_LIST) )
         image = GetImageIndex(list, wxIMAGE_LIST_SMALL);
     else
         image = wxNOT_FOUND;
