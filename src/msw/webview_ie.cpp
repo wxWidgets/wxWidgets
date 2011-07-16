@@ -16,7 +16,6 @@
 
 #include "wx/msw/webview_ie.h"
 
-
 #if wxUSE_WEBVIEW_IE
 
 #include <olectl.h>
@@ -25,51 +24,7 @@
 #include <exdisp.h>
 #include <mshtml.h>
 #include "wx/msw/registry.h"
-// Various definitions are missing from mingw
-#ifdef __MINGW32__
-typedef enum CommandStateChangeConstants {
-    CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
-    CSC_NAVIGATEFORWARD = 0x1,
-    CSC_NAVIGATEBACK = 0x2
-} CommandStateChangeConstants;
-
-#define DISPID_COMMANDSTATECHANGE 105
-#define DISPID_NAVIGATECOMPLETE2 252
-#define DISPID_NAVIGATEERROR 271
-#define DISPID_NEWWINDOW3 273
-#define OLECMDID_OPTICAL_ZOOM 63
-#define INET_E_ERROR_FIRST 0x800C0002L
-#define INET_E_INVALID_URL 0x800C0002L
-#define INET_E_NO_SESSION 0x800C0003L
-#define INET_E_CANNOT_CONNECT 0x800C0004L
-#define INET_E_RESOURCE_NOT_FOUND 0x800C0005L
-#define INET_E_OBJECT_NOT_FOUND 0x800C0006L
-#define INET_E_DATA_NOT_AVAILABLE 0x800C0007L
-#define INET_E_DOWNLOAD_FAILURE 0x800C0008L
-#define INET_E_AUTHENTICATION_REQUIRED 0x800C0009L
-#define INET_E_NO_VALID_MEDIA 0x800C000AL
-#define INET_E_CONNECTION_TIMEOUT 0x800C000BL
-#define INET_E_INVALID_REQUEST 0x800C000CL
-#define INET_E_UNKNOWN_PROTOCOL 0x800C000DL
-#define INET_E_SECURITY_PROBLEM 0x800C000EL
-#define INET_E_CANNOT_LOAD_DATA 0x800C000FL
-#define INET_E_CANNOT_INSTANTIATE_OBJECT 0x800C0010L
-#define INET_E_QUERYOPTION_UNKNOWN 0x800C0013L
-#define INET_E_REDIRECT_FAILED 0x800C0014L
-#define INET_E_REDIRECT_TO_DIR 0x800C0015L
-#define INET_E_CANNOT_LOCK_REQUEST 0x800C0016L
-#define INET_E_USE_EXTEND_BINDING 0x800C0017L
-#define INET_E_TERMINATED_BIND 0x800C0018L
-#define INET_E_INVALID_CERTIFICATE 0x800C0019L
-#define INET_E_CODE_DOWNLOAD_DECLINED 0x800C0100L
-#define INET_E_RESULT_DISPATCHED 0x800C0200L
-#define INET_E_CANNOT_REPLACE_SFP_FILE 0x800C0300L
-#define INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY 0x800C0500L
-#define INET_E_CODE_INSTALL_SUPPRESSED 0x800C0400L
-
-#define REFRESH_NORMAL 0
-#define REFRESH_COMPLETELY 3
-#endif
+#include "wx/msw/missing.h"
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
     EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
@@ -203,7 +158,7 @@ wxWebViewZoom wxWebViewIE::GetZoom()
 
     //Dummy return to stop compiler warnings
     return wxWEB_VIEW_ZOOM_MEDIUM;
-        
+
 }
 
 void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
@@ -218,7 +173,7 @@ void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 
 void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
 {
-    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range 
+    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range
     //is 0 to 4 so the check is unnecessary, these match exactly with the
     //enum values
     VARIANT zoomVariant;
@@ -249,7 +204,7 @@ wxWebViewZoom wxWebViewIE::GetIETextZoom()
 
 void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
 {
-    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range 
+    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range
     //is 10 to 1000 so the check is unnecessary
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
@@ -376,7 +331,7 @@ void wxWebViewIE::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
         if(m_historyList[i].get() == item.get())
             pos = i;
     }
-    wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()), 
+    wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()),
                  "invalid history item");
     m_historyLoadingFromList = true;
     LoadUrl(item->GetUrl());
