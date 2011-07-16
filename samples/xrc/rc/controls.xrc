@@ -511,14 +511,25 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxListCtrl" name="controls_listctrl">
                                     <size>220,160</size>
                                     <style>wxLC_REPORT|wxBORDER_SIMPLE</style>
+                                    <imagelist-small>
+                                        <size>16,16</size>
+                                        <bitmap stock_id="wxART_HELP_BOOK"/>
+                                        <bitmap stock_id="wxART_INFORMATION"/>
+                                        <bitmap stock_id="wxART_GO_UP"/>
+                                        <bitmap stock_id="wxART_PLUS"/>
+                                        <bitmap stock_id="wxART_GO_DOWN"/>
+                                        <bitmap stock_id="wxART_WARNING"/>
+                                    </imagelist-small>
                                     <object class="listcol">
                                         <text>Name</text>
-                                        <width>150</width>
+                                        <width>105</width>
+                                        <image>0</image>
                                     </object>
                                     <object class="listcol">
                                         <text>Weight</text>
                                         <align>wxLIST_FORMAT_RIGHT</align>
-                                        <width>50</width>
+                                        <width>105</width>
+                                        <image>1</image>
                                     </object>
                                     <!-- the items are added from the code -->
                                 </object>

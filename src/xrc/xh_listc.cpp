@@ -128,6 +128,8 @@ void wxListCtrlXmlHandler::HandleListCol()
     HandleCommonItemAttrs(item);
     if (HasParam(wxT("width")))
         item.SetWidth((int)GetLong(wxT("width")));
+    if (HasParam(wxT("image")))
+        item.SetImage((int)GetLong(wxT("image")));
 
     list->InsertColumn(list->GetColumnCount(), item);
 }

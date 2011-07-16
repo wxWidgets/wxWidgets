@@ -1039,6 +1039,8 @@ following properties:
     The title of the column. }
 @row3col{width, integer,
     The column width. }
+@row3col{image, integer,
+    The zero-based index of the image associated with the item in the 'small' image list. }
 @endTable
 
 The columns are appended to the control in order of their appearance and may be
