@@ -26,8 +26,9 @@ extern "C"
 {
 
 static void
-wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec*,
-                                      wxWebViewWebKit *webKitCtrl)
+wxgtk_webview_webkit_load_status(GtkWidget* widget, 
+                                 GParamSpec*,
+                                 wxWebViewWebKit *webKitCtrl)
 {
     if (!webKitCtrl->m_ready) return;
 
@@ -95,11 +96,11 @@ wxgtk_webview_webkit_navigation(WebKitWebView*,
 }
 
 static gboolean
-wxgtk_webkitctrl_error (WebKitWebView*,
-                        WebKitWebFrame*,
-                        gchar          *uri,
-                        gpointer        web_error,
-                        wxWebViewWebKit* webKitWindow)
+wxgtk_webview_webkit_error(WebKitWebView*,
+                           WebKitWebFrame*,
+                           gchar *uri,
+                           gpointer web_error,
+                           wxWebViewWebKit* webKitWindow)
 {
     webKitWindow->m_busy = false;
     wxWebNavigationError type = wxWEB_NAV_ERR_OTHER;
@@ -238,12 +239,12 @@ wxgtk_webkitctrl_error (WebKitWebView*,
 }
 
 static gboolean
-wxgtk_webkitctrl_new_window(WebKitWebView*,
-                            WebKitWebFrame *frame,
-                            WebKitNetworkRequest *request,
-                            WebKitWebNavigationAction*,
-                            WebKitWebPolicyDecision *policy_decision,
-                    wxWebViewWebKit *webKitCtrl)
+wxgtk_webview_webkit_new_window(WebKitWebView*,
+                                WebKitWebFrame *frame,
+                                WebKitNetworkRequest *request,
+                                WebKitWebNavigationAction*,
+                                WebKitWebPolicyDecision *policy_decision,
+                                wxWebViewWebKit *webKitCtrl)
 {
     const gchar* uri = webkit_network_request_get_uri(request);
 
@@ -307,17 +308,17 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     gtk_widget_show(web_view);
 
     g_signal_connect_after(web_view, "notify::load-status",
-                           G_CALLBACK(wxgtk_webkitctrl_load_status_callback),
+                           G_CALLBACK(wxgtk_webview_webkit_load_status),
                            this);
     g_signal_connect_after(web_view, "navigation-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_navigation),
                            this);
     g_signal_connect_after(web_view, "load-error", 
-                           G_CALLBACK(wxgtk_webkitctrl_error),
+                           G_CALLBACK(wxgtk_webview_webkit_error),
                            this);
 
     g_signal_connect_after(web_view, "new-window-policy-decision-requested",
-                           G_CALLBACK(wxgtk_webkitctrl_new_window), this);
+                           G_CALLBACK(wxgtk_webview_webkit_new_window), this);
 
     m_parent->DoAddChild( this );
 
