@@ -60,11 +60,13 @@ wxgtk_webkitctrl_load_status_callback(GtkWidget* widget, GParamSpec*,
     }
 }
 
-static WebKitNavigationResponse
-wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView*,
-                                          WebKitWebFrame       *frame,
-                                          WebKitNetworkRequest *request,
-                                          wxWebViewWebKit      *webKitCtrl)
+static gboolean
+wxgtk_webview_webkit_navigation(WebKitWebView*,
+                                WebKitWebFrame *frame,
+                                WebKitNetworkRequest *request,
+                                WebKitWebNavigationAction*,
+                                WebKitWebPolicyDecision *policy_decision,
+                                wxWebViewWebKit *webKitCtrl)
 {
     webKitCtrl->m_busy = true;
 
@@ -83,11 +85,12 @@ wxgtk_webkitctrl_navigation_requ_callback(WebKitWebView*,
     if (thisEvent.IsVetoed())
     {
         webKitCtrl->m_busy = false;
-        return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+        webkit_web_policy_decision_ignore(policy_decision);
+        return TRUE;
     }
     else
     {
-        return  WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
+        return FALSE;
     }
 }
 
@@ -306,8 +309,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     g_signal_connect_after(web_view, "notify::load-status",
                            G_CALLBACK(wxgtk_webkitctrl_load_status_callback),
                            this);
-    g_signal_connect_after(web_view, "navigation-requested",
-                           G_CALLBACK(wxgtk_webkitctrl_navigation_requ_callback),
+    g_signal_connect_after(web_view, "navigation-policy-decision-requested",
+                           G_CALLBACK(wxgtk_webview_webkit_navigation),
                            this);
     g_signal_connect_after(web_view, "load-error", 
                            G_CALLBACK(wxgtk_webkitctrl_error),
