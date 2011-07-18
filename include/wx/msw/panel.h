@@ -34,6 +34,8 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
+    virtual ~wxPanel();
+
     // This is overridden for MSW to return true for all panels that are child
     // of a window with themed background (such as wxNotebook) which should
     // show through the child panels.

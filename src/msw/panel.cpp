@@ -33,6 +33,11 @@
 // implementation
 // ============================================================================
 
+wxPanel::~wxPanel()
+{
+    delete m_backgroundBrush;
+}
+
 bool wxPanel::HasTransparentBackground()
 {
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
