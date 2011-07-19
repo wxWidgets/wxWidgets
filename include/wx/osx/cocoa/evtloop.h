@@ -21,6 +21,8 @@ public:
     
     void EndModalSession();
 
+    virtual void WakeUp();
+
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 

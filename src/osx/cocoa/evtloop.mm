@@ -246,9 +246,14 @@ void wxGUIEventLoop::DoRun()
 
 void wxGUIEventLoop::DoStop()
 {
-    [NSApp stop:0];
     // only calling stop: is not enough when called from a runloop-observer,
     // therefore add a dummy event, to make sure the runloop gets another round
+    [NSApp stop:0];
+    WakeUp();
+}
+
+void wxGUIEventLoop::WakeUp()
+{
     NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined 
                                         location:NSMakePoint(0.0, 0.0) 
                                    modifierFlags:0 
