@@ -36,6 +36,17 @@ public:
     wxGCDC( const wxPrinterDC& dc );
 
     /**
+       Constructs a wxGCDC from a wxEnhMetaFileDC.
+
+       This constructor is only available in wxMSW port and when @c
+       wxUSE_ENH_METAFILE build option is enabled, i.e. when wxEnhMetaFileDC
+       class itself is available.
+
+       @since 2.9.3
+    */
+    wxGCDC( const wxEnhMetaFileDC& dc );
+
+    /**
        Retrieves associated wxGraphicsContext
     */
     wxGraphicsContext* GetGraphicsContext() const;

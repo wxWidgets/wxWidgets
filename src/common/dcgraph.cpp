@@ -114,6 +114,13 @@ wxGCDC::wxGCDC( const wxPrinterDC& dc) :
 }
 #endif
 
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
+   : wxDC(new wxGCDCImpl(this, dc))
+{
+}
+#endif
+
 wxGCDC::wxGCDC() :
   wxDC( new wxGCDCImpl( this ) )
 {
@@ -190,6 +197,15 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
 {
     Init();
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
+}
+#endif
+
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+wxGCDCImpl::wxGCDCImpl(wxDC *owner, const wxEnhMetaFileDC& dc)
+   : wxDCImpl(owner)
+{
+    Init();
+    SetGraphicsContext(wxGraphicsContext::Create(dc));
 }
 #endif
 

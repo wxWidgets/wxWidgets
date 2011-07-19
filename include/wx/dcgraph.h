@@ -29,6 +29,9 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     wxGCDC( const wxPrinterDC& dc );
 #endif
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+    wxGCDC( const wxEnhMetaFileDC& dc );
+#endif
     wxGCDC();
     virtual ~wxGCDC();
 
@@ -55,6 +58,9 @@ public:
     wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc );
 #if wxUSE_PRINTING_ARCHITECTURE
     wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc );
+#endif
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+    wxGCDCImpl( wxDC *owner, const wxEnhMetaFileDC& dc );
 #endif
     wxGCDCImpl( wxDC *owner );
 
