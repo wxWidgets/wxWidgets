@@ -763,7 +763,8 @@ public:
         m_column(NULL),
         m_pos(-1,-1),
         m_cacheFrom(0),
-        m_cacheTo(0)
+        m_cacheTo(0),
+        m_editCancelled(false)
 #if wxUSE_DRAG_AND_DROP
         , m_dataObject(NULL),
         m_dataBuffer(NULL),
@@ -780,7 +781,8 @@ public:
         m_column(event.m_column),
         m_pos(event.m_pos),
         m_cacheFrom(event.m_cacheFrom),
-        m_cacheTo(event.m_cacheTo)
+        m_cacheTo(event.m_cacheTo),
+        m_editCancelled(event.m_editCancelled)
 #if wxUSE_DRAG_AND_DROP
         , m_dataObject(event.m_dataObject),
         m_dataFormat(event.m_dataFormat),
@@ -800,6 +802,10 @@ public:
 
     const wxVariant &GetValue() const { return m_value; }
     void SetValue( const wxVariant &value ) { m_value = value; }
+
+    // for wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE only
+    bool IsEditCancelled() const { return m_editCancelled; }
+    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
     // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
@@ -840,6 +846,7 @@ protected:
     wxPoint             m_pos;
     int                 m_cacheFrom;
     int                 m_cacheTo;
+    bool                m_editCancelled;
 
 #if wxUSE_DRAG_AND_DROP
     wxDataObject       *m_dataObject;

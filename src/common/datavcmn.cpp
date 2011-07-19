@@ -763,21 +763,27 @@ bool wxDataViewRendererBase::FinishEditing()
 
     DestroyEditControl();
 
-    if (!Validate(value))
-        return false;
-
+    bool isValid = Validate(value);
     unsigned int col = GetOwner()->GetModelColumn();
-    dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
 
     // Now we should send Editing Done event
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( m_item );
+    event.SetValue( value );
+    event.SetColumn( col );
+    event.SetEditCanceled( !isValid );
     event.SetEventObject( dv_ctrl );
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
-    return true;
+    if ( isValid && event.IsAllowed() )
+    {
+        dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
+        return true;
+    }
+
+    return false;
 }
 
 void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,

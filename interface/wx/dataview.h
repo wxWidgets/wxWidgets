@@ -2716,6 +2716,26 @@ public:
     const wxVariant& GetValue() const;
 
     /**
+        Can be used to determine whether the new value is going to be accepted
+        in wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE handler.
+
+        Returns @true if editing the item was cancelled or if the user tried to
+        enter an invalid value (refused by wxDataViewRenderer::Validate()). If
+        this method returns @false, it means that the value in the model is
+        about to be changed to the new one.
+
+        Notice that wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event handler can
+        call wxNotifyEvent::Veto() to prevent this from happening.
+
+        Currently support for setting this field and for vetoing the change is
+        only available in the generic version of wxDataViewCtrl, i.e. under MSW
+        but not GTK nor OS X.
+
+        @since 2.9.3
+     */
+    bool IsEditCancelled() const;
+
+    /**
         Sets the column index associated with this event.
     */
     void SetColumn(int col);
