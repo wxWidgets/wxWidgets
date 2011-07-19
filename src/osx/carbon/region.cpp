@@ -89,8 +89,8 @@ wxRegion::wxRegion(long x, long y, long w, long h)
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData(topLeft.x , topLeft.y ,
-                                    topLeft.x - bottomRight.x ,
-                                    topLeft.y - bottomRight.y);
+                                    bottomRight.x - topLeft.x,
+                                    bottomRight.y - topLeft.y);
 }
 
 wxRegion::wxRegion(const wxRect& rect)
