@@ -3723,8 +3723,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (!IsRowSelected(current))
         {
             SelectAllRows(false);
+            const unsigned oldCurrent = m_currentRow;
             ChangeCurrentRow(current);
             SelectRow(m_currentRow,true);
+            RefreshRow(oldCurrent);
             SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
     }
