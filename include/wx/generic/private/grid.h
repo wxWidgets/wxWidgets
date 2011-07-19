@@ -760,6 +760,12 @@ protected:
         return m_oper.GetLineAt(m_grid, pos);
     }
 
+    // Check if the given line is visible, i.e. has non 0 size.
+    bool IsLineVisible(int line) const
+    {
+        return m_oper.GetLineSize(m_grid, line) != 0;
+    }
+
 
     wxGrid * const m_grid;
     const wxGridOperations& m_oper;
@@ -777,14 +783,38 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) >= 0, "invalid row/column" );
 
-        return GetLinePos(coords) == 0;
+        int pos = GetLinePos(coords);
+        while ( pos )
+        {
+            // Check the previous line.
+            int line = GetLineAt(--pos);
+            if ( IsLineVisible(line) )
+            {
+                // There is another visible line before this one, hence it's
+                // not at boundary.
+                return false;
+            }
+        }
+
+        // We reached the boundary without finding any visible lines.
+        return true;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
-        wxASSERT( !IsAtBoundary(coords) );
+        int pos = GetLinePos(coords);
+        for ( ;; )
+        {
+            // This is not supposed to happen if IsAtBoundary() returned false.
+            wxCHECK_RET( pos, "can't advance when already at boundary" );
 
-        m_oper.Set(coords, GetLineAt(GetLinePos(coords) - 1));
+            int line = GetLineAt(--pos);
+            if ( IsLineVisible(line) )
+            {
+                m_oper.Set(coords, line);
+                break;
+            }
+        }
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const
@@ -794,6 +824,8 @@ public:
     }
 };
 
+// Please refer to the comments above when reading this class code, it's
+// absolutely symmetrical to wxGridBackwardOperations.
 class wxGridForwardOperations : public wxGridDirectionOperations
 {
 public:
@@ -807,14 +839,32 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) < m_numLines, "invalid row/column" );
 
-        return GetLinePos(coords) == m_numLines - 1;
+        int pos = GetLinePos(coords);
+        while ( pos < m_numLines - 1 )
+        {
+            int line = GetLineAt(++pos);
+            if ( IsLineVisible(line) )
+                return false;
+        }
+
+        return true;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
-        wxASSERT( !IsAtBoundary(coords) );
+        int pos = GetLinePos(coords);
+        for ( ;; )
+        {
+            wxCHECK_RET( pos < m_numLines - 1,
+                         "can't advance when already at boundary" );
 
-        m_oper.Set(coords, GetLineAt(GetLinePos(coords) + 1));
+            int line = GetLineAt(++pos);
+            if ( IsLineVisible(line) )
+            {
+                m_oper.Set(coords, line);
+                break;
+            }
+        }
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const
