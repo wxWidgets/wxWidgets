@@ -149,7 +149,7 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void UseGraphicContext(bool use) { m_useContext = use; Refresh(); }
 #endif
-    template <typename T> void Draw(T& dc);
+    void Draw(wxDC& dc);
 
 protected:
     enum DrawMode
@@ -1487,26 +1487,47 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
-#if TEST_CAIRO_EVERYWHERE
-extern wxGraphicsRenderer* gCairoRenderer;
-#endif
-
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC pdc(this);
     Draw(pdc);
 }
 
-template <typename T>
-void MyCanvas::Draw(T& pdc)
+void MyCanvas::Draw(wxDC& pdc)
 {
 #if wxUSE_GRAPHICS_CONTEXT
-#if TEST_CAIRO_EVERYWHERE
     wxGCDC gdc;
-    gdc.SetGraphicsContext( gCairoRenderer->CreateContext( pdc ) );
+    wxGraphicsRenderer* const renderer = wxGraphicsRenderer::
+#if TEST_CAIRO_EVERYWHERE
+        GetCairoRenderer()
 #else
-     wxGCDC gdc( pdc ) ;
+        GetDefaultRenderer()
 #endif
+        ;
+
+    wxGraphicsContext* context;
+    if ( wxPaintDC *paintdc = wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        context = renderer->CreateContext(*paintdc);
+    }
+    else if ( wxMemoryDC *memdc = wxDynamicCast(&pdc, wxMemoryDC) )
+    {
+        context = renderer->CreateContext(*memdc);
+    }
+#if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
+    else if ( wxMetafileDC *metadc = wxDynamicCast(&pdc, wxMetafileDC) )
+    {
+        context = renderer->CreateContext(*metadc);
+    }
+#endif
+    else
+    {
+        wxFAIL_MSG( "Unknown wxDC kind" );
+        return;
+    }
+
+    gdc.SetGraphicsContext(context);
+
     wxDC &dc = m_useContext ? (wxDC&) gdc : (wxDC&) pdc ;
 #else
     wxDC &dc = pdc ;
