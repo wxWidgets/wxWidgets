@@ -23,6 +23,17 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
+# public symbols added in 2.8.13 (please keep in alphabetical order):
+@WX_VERSION_TAG@.13 {
+        *wxRichTextCtrl*ForceDelayedLayout*;
+        *wxRichTextCtrl*GetFullLayoutRequired*;
+        *wxRichTextCtrl*GetFullLayoutSavedPosition*;
+        *wxRichTextCtrl*GetFullLayoutTime*;
+        *wxRichTextCtrl*SetFullLayoutRequired*;
+        *wxRichTextCtrl*SetFullLayoutSavedPosition*;
+        *wxRichTextCtrl*SetFullLayoutTime*;
+};
+
 # public symbols added in 2.8.12 (please keep in alphabetical order):
 @WX_VERSION_TAG@.12 {
         *wxDataViewListModel*GetValueByRow*;
