@@ -413,9 +413,12 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
 
     wxString leftIndent(m_indentLeft->GetValue());
     wxString leftFirstIndent(m_indentLeftFirst->GetValue());
-    if (!leftIndent.empty())
+    if (!leftIndent.empty() || !leftFirstIndent.empty())
     {
-        int visualLeftIndent = wxAtoi(leftIndent);
+        int visualLeftIndent = 0;
+        if (!leftIndent.empty())
+            visualLeftIndent = wxAtoi(leftIndent);
+
         int visualLeftFirstIndent = wxAtoi(leftFirstIndent);
         int actualLeftIndent = visualLeftFirstIndent;
         int actualLeftSubIndent = visualLeftIndent - visualLeftFirstIndent;
