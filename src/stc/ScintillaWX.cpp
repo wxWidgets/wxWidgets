@@ -1074,9 +1074,7 @@ void ScintillaWX::DoDragLeave() {
 
 // Force the whole window to be repainted
 void ScintillaWX::FullPaint() {
-#ifndef __WXMAC__
     stc->Refresh(false);
-#endif
     stc->Update();
 }
 
