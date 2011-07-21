@@ -707,11 +707,45 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                 if (longOptionsEnabled)
                 {
+                    wxString errorOpt;
+
                     optInd = m_data->FindOptionByLongName(name);
                     if ( optInd == wxNOT_FOUND )
                     {
-                        errorMsg << wxString::Format(_("Unknown long option '%s'"), name.c_str())
-                                 << wxT('\n');
+                        // Check if this could be a negatable long option.
+                        if ( name.Last() == '-' )
+                        {
+                            name.RemoveLast();
+
+                            optInd = m_data->FindOptionByLongName(name);
+                            if ( optInd != wxNOT_FOUND )
+                            {
+                                if ( !(m_data->m_options[optInd].flags &
+                                        wxCMD_LINE_SWITCH_NEGATABLE) )
+                                {
+                                    errorOpt.Printf
+                                             (
+                                              _("Option '%s' can't be negated"),
+                                              name
+                                             );
+                                    optInd = wxNOT_FOUND;
+                                }
+                            }
+                        }
+
+                        if ( optInd == wxNOT_FOUND )
+                        {
+                            if ( errorOpt.empty() )
+                            {
+                                errorOpt.Printf
+                                         (
+                                          _("Unknown long option '%s'"),
+                                          name
+                                         );
+                            }
+
+                            errorMsg << errorOpt << wxT('\n');
+                        }
                     }
                 }
                 else

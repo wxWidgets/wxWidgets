@@ -437,6 +437,10 @@ Major new features in this release
 2.9.3:
 ------
 
+All:
+
+- Fix parsing of negated long options in wxCmdLineParser (roed_bis).
+
 All (GUI):
 
 - Support float, double and file name values in wxGenericValidator (troelsk).
