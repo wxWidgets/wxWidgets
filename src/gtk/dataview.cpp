@@ -3578,6 +3578,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     GtkTreePath *path )
 {
     delete m_dragDataObject;
+    m_dragDataObject = NULL;
 
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
     if ( !item )
