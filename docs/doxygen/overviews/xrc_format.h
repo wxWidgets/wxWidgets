@@ -1730,6 +1730,9 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
     into the image list.}
 @row3col{selected, @ref overview_xrcformat_type_bool,
      Is the page selected initially (only one page can be selected; default: 0)?}
+@row3col{expanded, @ref overview_xrcformat_type_bool,
+    If set to 1, the page is initially expanded. By default all pages are
+    initially collapsed.}
 @endTable
 
 Each @c treebookpage has exactly one non-toplevel window as its child.
