@@ -1835,7 +1835,7 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
     return ret;
 }
 
-void wxDataViewRenderer::GtkUpdateAlignment()
+void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 {
     int align = m_alignment;
 
@@ -1861,7 +1861,7 @@ void wxDataViewRenderer::GtkUpdateAlignment()
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_FLOAT );
     g_value_set_float( &gvalue, xalign );
-    g_object_set_property( G_OBJECT(m_renderer), "xalign", &gvalue );
+    g_object_set_property( G_OBJECT(renderer), "xalign", &gvalue );
     g_value_unset( &gvalue );
 
     // vertical alignment:
@@ -1875,7 +1875,7 @@ void wxDataViewRenderer::GtkUpdateAlignment()
     GValue gvalue2 = { 0, };
     g_value_init( &gvalue2, G_TYPE_FLOAT );
     g_value_set_float( &gvalue2, yalign );
-    g_object_set_property( G_OBJECT(m_renderer), "yalign", &gvalue2 );
+    g_object_set_property( G_OBJECT(renderer), "yalign", &gvalue2 );
     g_value_unset( &gvalue2 );
 }
 
@@ -2359,14 +2359,20 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
+void wxDataViewCustomRenderer::GtkInitTextRenderer()
+{
+    m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
+    g_object_ref_sink(m_text_renderer);
+
+    GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
+}
+
 GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
 {
     if ( !m_text_renderer )
     {
         // we create it on demand so need to do it even from a const function
-        const_cast<wxDataViewCustomRenderer *>(this)->
-        m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
-        g_object_ref_sink(m_text_renderer);
+        const_cast<wxDataViewCustomRenderer *>(this)->GtkInitTextRenderer();
     }
 
     return m_text_renderer;
