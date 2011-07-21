@@ -214,6 +214,8 @@ private:
             model->Resort();
 
         owner->OnColumnChange(idx);
+
+        SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, idx);
     }
 
     void OnRClick(wxHeaderCtrlEvent& event)
