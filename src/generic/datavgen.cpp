@@ -1771,8 +1771,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 dataitem = node->GetItem();
 
-                if ((i > 0) && model->IsContainer(dataitem) &&
-                    !model->HasContainerColumns(dataitem))
+                // Skip all columns of "container" rows except the expander
+                // column itself unless HasContainerColumns() overrides this.
+                if ( col != GetOwner()->GetExpanderColumn() &&
+                        model->IsContainer(dataitem) &&
+                            !model->HasContainerColumns(dataitem) )
                     continue;
             }
             else
