@@ -3374,7 +3374,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_DOWN:
-            if ( m_currentRow < GetRowCount() - 1 )
+            if ( m_currentRow + 1 < GetRowCount() )
                 OnArrowChar( m_currentRow + 1, event );
             break;
         // Add the process for tree expanding/collapsing
