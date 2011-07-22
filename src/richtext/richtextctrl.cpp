@@ -2925,12 +2925,18 @@ void wxRichTextCtrl::SetSelection(long from, long to)
 // Editing
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::Replace(long WXUNUSED(from), long WXUNUSED(to),
+void wxRichTextCtrl::Replace(long from, long to,
                              const wxString& value)
 {
     BeginBatchUndo(_("Replace"));
 
+    SetSelection(from, to);
+
+    wxRichTextAttr attr = GetDefaultStyle();
+
     DeleteSelectedContent();
+
+    SetDefaultStyle(attr);
 
     DoWriteText(value, SetValue_SelectionOnly);
 
