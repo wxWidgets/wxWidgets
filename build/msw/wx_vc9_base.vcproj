@@ -394,7 +394,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_basedll.pch"
 				ObjectFile="vc_mswuddll\base\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase292ud_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase293ud_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -404,7 +404,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase292ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase293ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -415,14 +415,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase292ud_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase293ud_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase292ud_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase293ud_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -485,7 +485,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_basedll.pch"
 				ObjectFile="vc_mswudll\base\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase292u_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase293u_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -495,7 +495,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase292u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase293u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -506,14 +506,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase292u_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase293u_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxbase29u.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase292u_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase293u_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -580,7 +580,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_basedll.pch"
 				ObjectFile="vc_mswunivuddll\base\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase292ud_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase293ud_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -590,7 +590,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase292ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase293ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -601,14 +601,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase292ud_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase293ud_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase292ud_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase293ud_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -671,7 +671,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswunivudll\wxprec_basedll.pch"
 				ObjectFile="vc_mswunivudll\base\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase292u_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase293u_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -681,7 +681,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase292u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase293u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -692,14 +692,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase292u_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase293u_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxbase29u.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase292u_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase293u_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
