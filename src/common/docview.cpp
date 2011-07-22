@@ -1153,26 +1153,27 @@ void wxDocManager::DoOpenMRUFile(unsigned n)
     wxString errMsg; // must contain exactly one "%s" if non-empty
     if ( wxFile::Exists(filename) )
     {
-        // try to open it
-        if ( CreateDocument(filename, wxDOC_SILENT) )
-            return;
-
-        errMsg = _("The file '%s' couldn't be opened.");
+        // Try to open it but don't give an error if it failed: this could be
+        // normal, e.g. because the user cancelled opening it, and we don't
+        // have any useful information to put in the error message anyhow, so
+        // we assume that in case of an error the appropriate message had been
+        // already logged.
+        (void)CreateDocument(filename, wxDOC_SILENT);
     }
     else // file doesn't exist
     {
-        errMsg = _("The file '%s' doesn't exist and couldn't be opened.");
+        OnMRUFileNotExist(n, filename);
     }
+}
 
-
-    wxASSERT_MSG( !errMsg.empty(), "should have an error message" );
-
+void wxDocManager::OnMRUFileNotExist(unsigned n, const wxString& filename)
+{
     // remove the file which we can't open from the MRU list
     RemoveFileFromHistory(n);
 
     // and tell the user about it
-    wxLogError(errMsg + '\n' +
-               _("It has been removed from the most recently used files list."),
+    wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\n"
+                 "It has been removed from the most recently used files list."),
                filename);
 }
 

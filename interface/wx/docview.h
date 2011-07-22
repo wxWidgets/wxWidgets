@@ -750,6 +750,36 @@ public:
 
 protected:
     /**
+        Called when a file selected from the MRU list doesn't exist any more.
+
+        The default behaviour is to remove the file from the MRU (most recently
+        used) files list and the corresponding menu and notify the user about
+        it but this method can be overridden to customize it.
+
+        For example, an application may want to just give an error about the
+        missing file @a filename but not remove it from the file history. Or it
+        could ask the user whether the file should be kept or removed.
+
+        Notice that this method is called only if the file selected by user
+        from the MRU files in the menu doesn't exist, but not if opening it
+        failed for any other reason because in the latter case the default
+        behaviour of removing the file from the MRU list is inappropriate.
+        If you still want to do it, you would need to do it by calling
+        RemoveFileFromHistory() explicitly in the part of the file opening code
+        that may fail.
+
+        @since 2.9.3
+
+        @param n
+            The index of the file in the MRU list, it can be passed to
+            RemoveFileFromHistory() to remove this file from the list.
+        @param filename
+            The full name of the file.
+     */
+    virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
+
+
+    /**
         The currently active view.
     */
     wxView* m_currentView;
