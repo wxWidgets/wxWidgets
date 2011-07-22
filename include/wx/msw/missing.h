@@ -529,7 +529,6 @@ typedef enum CommandStateChangeConstants {
 #define DISPID_NAVIGATECOMPLETE2 252
 #define DISPID_NAVIGATEERROR 271
 #define DISPID_NEWWINDOW3 273
-#define OLECMDID_OPTICAL_ZOOM 63
 #define INET_E_ERROR_FIRST 0x800C0002L
 #define INET_E_INVALID_URL 0x800C0002L
 #define INET_E_NO_SESSION 0x800C0003L
@@ -565,8 +564,11 @@ typedef enum CommandStateChangeConstants {
 
 // For Visual C++ 6 and MinGW32. Used by webview_ie.cpp
 
-#ifndef OLECMDID_OPTICAL_ZOOM
-#define OLECMDID_OPTICAL_ZOOM  63
+#if defined (__MINGW32__) || (_MSC_VER < 1300)
+enum
+{
+    OLECMDID_OPTICAL_ZOOM = 63
+}
 #endif
 
 #ifndef INET_E_INVALID_CERTIFICATE
