@@ -79,6 +79,16 @@ DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& istream)
 
     wxInt32 count = 0;
     stream >> count;
+    if ( count < 0 )
+    {
+        wxLogWarning("Drawing document corrupted: invalid segments count.");
+#if wxUSE_STD_IOSTREAM
+        istream.clear(std::ios::badbit);
+#else
+        istream.Reset(wxSTREAM_READ_ERROR);
+#endif
+        return istream;
+    }
 
     for ( int n = 0; n < count; n++ )
     {
