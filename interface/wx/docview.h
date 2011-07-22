@@ -747,6 +747,8 @@ public:
     */
     void SetMaxDocsOpen(int n);
 
+
+protected:
     /**
         The currently active view.
     */
@@ -769,18 +771,15 @@ public:
     wxFileHistory* m_fileHistory;
 
     /**
-        Stores the flags passed to the constructor.
-    */
-    long m_flags;
-
-    /**
         The directory last selected by the user when opening a file.
     */
-    wxFileHistory* m_fileHistory;
+    wxString m_lastDirectory;
 
     /**
         Stores the maximum number of documents that can be opened before
-        existing documents are closed. By default, this is 10,000.
+        existing documents are closed.
+
+        By default, this is @c INT_MAX i.e. practically unlimited.
     */
     int m_maxDocsOpen;
 };
