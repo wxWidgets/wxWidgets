@@ -2728,7 +2728,11 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     return rc;
 }
 
-WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+bool
+wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
+                              WXUINT message,
+                              WXWPARAM wParam,
+                              WXLPARAM lParam)
 {
     // did we process the message?
     bool processed = false;
@@ -3608,15 +3612,26 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
     }
 
     if ( !processed )
+        return false;
+
+    *result = rc.result;
+
+    return true;
+}
+
+WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    WXLRESULT result;
+    if ( !MSWHandleMessage(&result, message, wParam, lParam) )
     {
 #if wxDEBUG_LEVEL >= 2
         wxLogTrace("winmsg", wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // wxDEBUG_LEVEL >= 2
-        rc.result = MSWDefWindowProc(message, wParam, lParam);
+        result = MSWDefWindowProc(message, wParam, lParam);
     }
 
-    return rc.result;
+    return result;
 }
 
 // ----------------------------------------------------------------------------
