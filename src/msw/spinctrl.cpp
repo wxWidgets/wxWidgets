@@ -119,11 +119,21 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
         // is clicked with the "?" cursor
         case WM_HELP:
 #endif
-            spin->MSWWindowProc(message, wParam, lParam);
+            {
+                WXLRESULT result;
+                if ( spin->MSWHandleMessage(&result, message, wParam, lParam) )
+                {
+                    // Do not let the message be processed by the window proc
+                    // of the text control if it had been already handled at wx
+                    // level, this is consistent with what happens for normal,
+                    // non-composite controls.
+                    return 0;
+                }
 
-            // The control may have been deleted at this point, so check.
-            if ( !::IsWindow(hwnd) )
-                return 0;
+                // The control may have been deleted at this point, so check.
+                if ( !::IsWindow(hwnd) )
+                    return 0;
+            }
             break;
 
         case WM_GETDLGCODE:
