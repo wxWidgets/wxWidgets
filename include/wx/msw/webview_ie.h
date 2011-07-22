@@ -23,6 +23,9 @@
 
 struct IHTMLDocument2;
 
+class wxFSFile;
+class wxFileSystem;
+
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {
 public:
@@ -155,6 +158,65 @@ private:
     void ExecCommand(wxString command);
     IHTMLDocument2* GetDocument();
 
+};
+
+class VirtualProtocol : public IInternetProtocol
+{
+protected:
+    ULONG m_refCount;
+    IInternetProtocolSink* m_protocolSink;
+    wxString m_html;
+    VOID * fileP;
+
+    wxFSFile* m_file;
+    wxFileSystem* m_fileSys;
+
+public:
+    VirtualProtocol();
+    ~VirtualProtocol();
+
+    //IUnknown
+    ULONG STDMETHODCALLTYPE AddRef();
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
+    ULONG STDMETHODCALLTYPE Release();
+
+    //IInternetProtocolRoot
+    HRESULT STDMETHODCALLTYPE Abort(HRESULT hrReason, DWORD dwOptions)
+                                   { return E_NOTIMPL; }
+    HRESULT STDMETHODCALLTYPE Continue(PROTOCOLDATA *pProtocolData)
+                                       { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Resume() { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl, 
+                                    IInternetProtocolSink *pOIProtSink,
+                                    IInternetBindInfo *pOIBindInfo, 
+                                    DWORD grfPI, 
+                                    HANDLE_PTR dwReserved);
+    HRESULT STDMETHODCALLTYPE Suspend() { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Terminate(DWORD dwOptions) { return S_OK; }
+
+    //IInternetProtocol
+    HRESULT STDMETHODCALLTYPE LockRequest(DWORD dwOptions) { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
+    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, 
+                                   ULARGE_INTEGER* plibNewPosition) 
+                                   { return E_FAIL; }
+    HRESULT STDMETHODCALLTYPE UnlockRequest() { return S_OK; }
+};
+
+class ClassFactory : public IClassFactory
+{
+private:
+    ULONG m_refCount;
+public:
+    //IUnknown
+    ULONG STDMETHODCALLTYPE AddRef();
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
+    ULONG STDMETHODCALLTYPE Release();
+
+    //IClassFactory
+    HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter, 
+                                             REFIID riid, void** ppvObject);
+    HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 };
 
 #endif // wxUSE_WEBVIEW_IE

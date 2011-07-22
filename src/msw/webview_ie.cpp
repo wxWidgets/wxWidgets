@@ -25,6 +25,32 @@
 #include <mshtml.h>
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
+#include "wx/filesys.h"
+
+//Taken from wx/filesys.cpp
+static wxString EscapeFileNameCharsInURL(const char *in)
+{
+    wxString s;
+
+    for ( const unsigned char *p = (const unsigned char*)in; *p; ++p )
+    {
+        const unsigned char c = *p;
+
+        if ( c == '/' || c == '-' || c == '.' || c == '_' || c == '~' ||
+             (c >= '0' && c <= '9') ||
+             (c >= 'a' && c <= 'z') ||
+             (c >= 'A' && c <= 'Z') )
+        {
+            s << c;
+        }
+        else
+        {
+            s << wxString::Format("%%%02x", c);
+        }
+    }
+
+    return s;
+}
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
     EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
@@ -67,6 +93,16 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
     //m_webBrowser->put_Silent(VARIANT_FALSE);
+
+    //We register a custom handler for the file protocol so we can handle
+    //Virtual file systems
+    ClassFactory* cf = new ClassFactory;
+    IInternetSession* session;
+    if(CoInternetGetSession(0, &session, 0) != S_OK)
+        return false;
+    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, L"file", 0, NULL, 0);
+    if(FAILED(hr))
+        return false; 
 
     m_container = new wxActiveXContainer(this, IID_IWebBrowser2, m_webBrowser);
 
@@ -949,5 +985,167 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
     evt.Skip();
 }
+
+VirtualProtocol::VirtualProtocol()
+{
+    m_refCount = 0;
+    m_file = NULL;
+    m_fileSys = new wxFileSystem;
+}
+
+VirtualProtocol::~VirtualProtocol()
+{
+    wxDELETE(m_fileSys);
+}
+
+ULONG VirtualProtocol::AddRef()
+{
+    m_refCount++;
+    return m_refCount;
+}
+
+HRESULT VirtualProtocol::QueryInterface(REFIID riid, void **ppvObject)
+{
+    if ((riid == IID_IUnknown) || (riid == IID_IInternetProtocol)
+       || (riid == IID_IInternetProtocolRoot))
+    {
+        *ppvObject = this;
+        AddRef();
+        return S_OK;
+    }
+    else
+    {
+        *ppvObject = NULL;
+        return E_POINTER;
+    }
+}
+
+ULONG VirtualProtocol::Release()
+{
+    m_refCount--;
+    if (m_refCount > 0)
+    {
+        return m_refCount;
+    }
+    else
+    {
+        delete this;
+        return 0;
+    }
+}
+
+HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink,
+                            IInternetBindInfo *pOIBindInfo, DWORD grfPI, 
+                            HANDLE_PTR dwReserved)
+{
+    m_protocolSink = pOIProtSink;
+    //We have to clean up incoming paths from the webview control as they are
+    //not properly escaped, see also the comment in filesys.cpp line 668
+    wxString path = wxString(szUrl).BeforeFirst(':') +  ":" + 
+                    EscapeFileNameCharsInURL(wxString(szUrl).AfterFirst(':'));
+    path.Replace("///", "/");
+    m_file = m_fileSys->OpenFile(path);
+
+    if(!m_file)
+        return INET_E_RESOURCE_NOT_FOUND;
+
+    //We return the stream length for current and total size as we can always
+    //read the whole file from the stream
+    m_protocolSink->ReportData(BSCF_FIRSTDATANOTIFICATION | 
+                               BSCF_DATAFULLYAVAILABLE |
+                               BSCF_LASTDATANOTIFICATION,
+                               m_file->GetStream()->GetLength(),
+                               m_file->GetStream()->GetLength());
+    return S_OK; 
+}
+
+HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
+{
+    //If the file is null we return false to indicte it is finished
+    if(!m_file) 
+        return S_FALSE;
+
+    wxStreamError err = m_file->GetStream()->Read(pv, cb).GetLastError();
+    *pcbRead = m_file->GetStream()->LastRead();
+
+    if(err == wxSTREAM_NO_ERROR)
+    {
+        if(*pcbRead < cb)
+        {
+            wxDELETE(m_file);
+            m_protocolSink->ReportResult(S_OK, 0, NULL);
+        }
+        //As we are not eof there is more data
+        return S_OK;
+    }
+    else if(err == wxSTREAM_EOF)
+    {
+        wxDELETE(m_file);
+        m_protocolSink->ReportResult(S_OK, 0, NULL);
+        //We are eof and so finished
+        return S_OK;
+    }
+    else if(err ==  wxSTREAM_READ_ERROR)
+    {
+        wxDELETE(m_file);
+        return INET_E_DOWNLOAD_FAILURE;
+    }
+}
+
+HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
+                                     void ** ppvObject)
+{
+    if (pUnkOuter) 
+        return CLASS_E_NOAGGREGATION;
+    VirtualProtocol* vp = new VirtualProtocol;
+    vp->AddRef();
+    HRESULT hr = vp->QueryInterface(riid, ppvObject);
+    vp->Release();
+    return hr;
+
+} 
+
+STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
+{
+     return S_OK;
+
+}
+
+ULONG ClassFactory::AddRef(void)
+{
+    m_refCount++;
+    return m_refCount;
+}
+
+HRESULT ClassFactory::QueryInterface(REFIID riid, void **ppvObject)
+{
+    if ((riid == IID_IUnknown) || (riid == IID_IClassFactory))
+    {
+        *ppvObject = this;
+        AddRef();
+        return S_OK;
+    }
+    else
+    {
+        *ppvObject = NULL;
+        return E_POINTER;
+    }
+
+}
+
+ULONG ClassFactory::Release(void)
+{
+    m_refCount--;
+    if (m_refCount > 0)
+    {
+        return m_refCount;
+    }
+    else
+    {
+        delete this;
+        return 0;
+    }
+
+} 
 
 #endif
