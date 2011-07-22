@@ -83,6 +83,9 @@ done
 run_sed build/osx/wxvers.xcconfig \
     "/DYLIB_.* = /s/$ver_for_sed/$ver_string_new/"
 
+run_sed build/tools/bld_chm_exe.bat \
+    "/^SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
+
 run_sed docs/doxygen/Doxyfile_inc \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
 
@@ -101,9 +104,11 @@ run_sed samples/Info.plist \
     "/version/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
+run_sed samples/minimal/Info_carbon.plist \
+    "/<string>/s/$ver_for_sed/$ver_string_new/"
+run_sed samples/minimal/Info_cocoa.plist \
+    "/<string>/s/$ver_for_sed/$ver_string_new/"
+
 run_sed samples/docview/Info.plist \
     "/versionon/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
-
-run_set src/wxWindows.xcodeproj/project.pbxproj \
-    "s/DYLIB_CURRENT_VERSION = $ver_for_sed/DYLIB_CURRENT_VERSION = $ver_string_new/"
