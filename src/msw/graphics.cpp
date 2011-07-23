@@ -1547,6 +1547,8 @@ void wxGDIPlusContext::PushState()
 
 void wxGDIPlusContext::PopState()
 {
+    wxCHECK_RET( !m_stateStack.empty(), wxT("No state to pop") );
+
     GraphicsState state = m_stateStack.top();
     m_stateStack.pop();
     m_context->Restore(state);
