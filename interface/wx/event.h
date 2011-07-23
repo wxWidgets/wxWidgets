@@ -3023,13 +3023,13 @@ public:
 /**
     @class wxThreadEvent
 
-    This class adds some simple functionalities to wxCommandEvent conceived
-    for inter-threads communications.
+    This class adds some simple functionality to wxEvent to facilitate
+    inter-thread communication.
 
-    This event is not natively emitted by any control/class: this is just
-    an helper class for the user.
+    This event is not natively emitted by any control/class: it is just
+    a helper class for the user.
     Its most important feature is the GetEventCategory() implementation which
-    allows thread events to @b NOT be processed by wxEventLoopBase::YieldFor calls
+    allows thread events @b NOT to be processed by wxEventLoopBase::YieldFor calls
     (unless the @c wxEVT_CATEGORY_THREAD is specified - which is never in wx code).
 
     @library{wxcore}
