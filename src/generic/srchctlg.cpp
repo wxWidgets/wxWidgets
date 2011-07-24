@@ -143,6 +143,13 @@ public:
 
     void SetBitmapLabel(const wxBitmap& label) { m_bmp = label; }
 
+    // The buttons in wxSearchCtrl shouldn't accept focus from keyboard because
+    // this would interfere with the usual TAB processing: the user expects
+    // that pressing TAB in the search control should switch focus to the next
+    // control and not give it to the button inside the same control. Besides,
+    // the search button can be already activated by pressing "Enter" so there
+    // is really no reason for it to be able to get focus from keyboard.
+    virtual bool AcceptsFocusFromKeyboard() const { return false; }
 
 protected:
     wxSize DoGetBestSize() const
