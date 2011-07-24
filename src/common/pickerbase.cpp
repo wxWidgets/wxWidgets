@@ -43,11 +43,6 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxPickerBase, wxControl)
 
-BEGIN_EVENT_TABLE(wxPickerBase, wxControl)
-    EVT_SIZE(wxPickerBase::OnSize)
-END_EVENT_TABLE()
-
-
 // ----------------------------------------------------------------------------
 // wxPickerBase
 // ----------------------------------------------------------------------------
@@ -175,13 +170,6 @@ void wxPickerBase::OnTextCtrlUpdate(wxCommandEvent &)
 {
     // for each text-change, update the picker
     UpdatePickerFromTextCtrl();
-}
-
-void wxPickerBase::OnSize(wxSizeEvent &event)
-{
-    if (GetAutoLayout())
-        Layout();
-    event.Skip();
 }
 
 #endif // Any picker in use

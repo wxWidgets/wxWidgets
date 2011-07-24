@@ -121,8 +121,6 @@ protected:
     void OnTextCtrlUpdate(wxCommandEvent &);
     void OnTextCtrlKillFocus(wxFocusEvent &);
 
-    void OnSize(wxSizeEvent &);
-
     // returns the set of styles for the attached wxTextCtrl
     // from given wxPickerBase's styles
     virtual long GetTextCtrlStyle(long style) const
@@ -178,7 +176,6 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxPickerBase)
-    DECLARE_EVENT_TABLE()
 };
 
 
