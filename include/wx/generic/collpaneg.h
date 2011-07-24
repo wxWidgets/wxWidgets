@@ -25,7 +25,8 @@ class WXDLLIMPEXP_FWD_CORE wxDisclosureTriangle;
 // wxGenericCollapsiblePane
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericCollapsiblePane : public wxCollapsiblePaneBase
+class WXDLLIMPEXP_CORE wxGenericCollapsiblePane :
+    public wxNavigationEnabled<wxCollapsiblePaneBase>
 {
 public:
     wxGenericCollapsiblePane() { Init(); }
@@ -103,7 +104,6 @@ private:
     void OnButton(wxCommandEvent &ev);
     void OnSize(wxSizeEvent &ev);
 
-    WX_DECLARE_CONTROL_CONTAINER();
     DECLARE_DYNAMIC_CLASS(wxGenericCollapsiblePane)
     DECLARE_EVENT_TABLE()
 };

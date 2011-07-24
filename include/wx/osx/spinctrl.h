@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrlButton;
 // wxSpinCtrl is a combination of wxTextCtrl and wxSpinButton
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxSpinCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxNavigationEnabled<wxControl>
 {
 public:
     wxSpinCtrl() { Init(); }
@@ -93,8 +93,6 @@ public:
     // number is out of range
     bool GetTextValue(int *val) const;
 
-    WX_DECLARE_CONTROL_CONTAINER();
-
 protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestSize() const;
@@ -113,7 +111,6 @@ private:
 
     int            m_oldValue;
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 

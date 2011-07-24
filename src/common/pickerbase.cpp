@@ -45,9 +45,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPickerBase, wxControl)
 
 BEGIN_EVENT_TABLE(wxPickerBase, wxControl)
     EVT_SIZE(wxPickerBase::OnSize)
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxPickerBase)
 END_EVENT_TABLE()
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxPickerBase, wxControl)
 
 
 // ----------------------------------------------------------------------------

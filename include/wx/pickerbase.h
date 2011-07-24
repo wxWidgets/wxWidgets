@@ -32,12 +32,12 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
 #define wxPB_USE_TEXTCTRL           0x0002
 
-class WXDLLIMPEXP_CORE wxPickerBase : public wxControl
+class WXDLLIMPEXP_CORE wxPickerBase : public wxNavigationEnabled<wxControl>
 {
 public:
     // ctor: text is the associated text control
     wxPickerBase() : m_text(NULL), m_picker(NULL), m_sizer(NULL)
-        { WX_INIT_CONTROL_CONTAINER(); }
+        { }
     virtual ~wxPickerBase() {}
 
 
@@ -179,9 +179,6 @@ protected:
 private:
     DECLARE_ABSTRACT_CLASS(wxPickerBase)
     DECLARE_EVENT_TABLE()
-
-    // This class must be something just like a panel...
-    WX_DECLARE_CONTROL_CONTAINER();
 };
 
 

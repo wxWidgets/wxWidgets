@@ -25,13 +25,6 @@
 
 #include "wx/osx/private.h"
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox, wxControl)
-
-BEGIN_EVENT_TABLE(wxComboBox, wxControl)
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxComboBox)
-END_EVENT_TABLE()
-
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -316,11 +309,6 @@ void wxComboBox::DelegateTextChanged( const wxString& value )
 void wxComboBox::DelegateChoice( const wxString& value )
 {
     SetStringSelection( value );
-}
-
-void wxComboBox::Init()
-{
-    WX_INIT_CONTROL_CONTAINER();
 }
 
 bool wxComboBox::Create(wxWindow *parent,

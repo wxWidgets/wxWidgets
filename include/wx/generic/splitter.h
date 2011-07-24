@@ -49,7 +49,7 @@ enum
 //    to prevent flickering. (WS_CLIPCHILDREN doesn't work in all cases so can't be
 //    standard).
 
-class WXDLLIMPEXP_CORE wxSplitterWindow: public wxWindow
+class WXDLLIMPEXP_CORE wxSplitterWindow: public wxNavigationEnabled<wxWindow>
 {
 public:
 
@@ -300,8 +300,6 @@ protected:
     bool        m_checkRequestedSashPosition:1;
 
 private:
-    WX_DECLARE_CONTROL_CONTAINER();
-
     DECLARE_DYNAMIC_CLASS(wxSplitterWindow)
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxSplitterWindow);

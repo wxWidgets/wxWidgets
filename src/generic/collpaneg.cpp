@@ -57,16 +57,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
 BEGIN_EVENT_TABLE(wxGenericCollapsiblePane, wxControl)
     EVT_BUTTON(wxID_ANY, wxGenericCollapsiblePane::OnButton)
     EVT_SIZE(wxGenericCollapsiblePane::OnSize)
-
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxGenericCollapsiblePane)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxGenericCollapsiblePane, wxControl)
 
 void wxGenericCollapsiblePane::Init()
 {
-    WX_INIT_CONTROL_CONTAINER();
-
     m_pButton = NULL;
     m_pPane = NULL;
     m_pStaticLine = NULL;

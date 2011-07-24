@@ -28,10 +28,10 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 // wxPanel contains other controls and implements TAB traversal between them
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPanelBase : public wxWindow
+class WXDLLIMPEXP_CORE wxPanelBase : public wxNavigationEnabled<wxWindow>
 {
 public:
-    wxPanelBase();
+    wxPanelBase() { }
 
     // Derived classes should also provide this constructor:
     /*
@@ -69,14 +69,10 @@ public:
 
     virtual void InitDialog();
 
-    WX_DECLARE_CONTROL_CONTAINER();
-
 protected:
     virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) = 0;
 
 private:
-    wxDECLARE_EVENT_TABLE();
-
     wxDECLARE_NO_COPY_CLASS(wxPanelBase);
 };
 

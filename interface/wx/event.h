@@ -3497,8 +3497,8 @@ public:
 
     This event is mainly used by wxWidgets implementations.
     A wxNavigationKeyEvent handler is automatically provided by wxWidgets
-    when you make a class into a control container with the macro
-    WX_DECLARE_CONTROL_CONTAINER.
+    when you enable keyboard navigation inside a window by inheriting it from
+    wxNavigationEnabled<>.
 
     @beginEventTable{wxNavigationKeyEvent}
     @event{EVT_NAVIGATION_KEY(func)}
