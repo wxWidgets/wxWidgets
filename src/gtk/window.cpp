@@ -3443,9 +3443,11 @@ void wxWindowGTK::RealizeTabOrder()
             {
                 wxWindowGTK *win = *i;
 
+                bool focusableFromKeyboard = win->AcceptsFocusFromKeyboard();
+
                 if ( mnemonicWindow )
                 {
-                    if ( win->AcceptsFocusFromKeyboard() )
+                    if ( focusableFromKeyboard )
                     {
                         // wxComboBox et al. needs to focus on on a different
                         // widget than m_widget, so if the main widget isn't
@@ -3470,7 +3472,8 @@ void wxWindowGTK::RealizeTabOrder()
                     mnemonicWindow = win;
                 }
 
-                chain = g_list_prepend(chain, win->m_widget);
+                if ( focusableFromKeyboard )
+                    chain = g_list_prepend(chain, win->m_widget);
             }
 
             chain = g_list_reverse(chain);
