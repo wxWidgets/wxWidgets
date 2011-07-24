@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/containr.h
-// Purpose:     wxControlContainer class declration: a "mix-in" class which
-//              implements the TAB navigation between the controls
+// Purpose:     wxControlContainer and wxNavigationEnabled declarations
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 2001, 2011 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,12 +18,11 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 /*
-   Implementation note: wxControlContainer is not a real mix-in but rather
-   a class meant to be aggregated with (and not inherited from). Although
-   logically it should be a mix-in, doing it like this has no advantage from
-   the point of view of the existing code but does have some problems (we'd
-   need to play tricks with event handlers which may be difficult to do
-   safely). The price we pay for this simplicity is the ugly macros below.
+    This header declares wxControlContainer class however it's not a real
+    container of controls but rather just a helper used to implement TAB
+    navigation among the window children. You should rarely need to use it
+    directly, derive from the documented public wxNavigationEnabled<> class to
+    implement TAB navigation in a custom composite window.
  */
 
 // ----------------------------------------------------------------------------
@@ -102,6 +100,164 @@ private:
     bool m_inSetFocus;
 };
 
+#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
+
+// ----------------------------------------------------------------------------
+// wxControlContainer for native TAB navigation
+// ----------------------------------------------------------------------------
+
+// this must be a real class as we forward-declare it elsewhere
+class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
+{
+protected:
+    // set the focus to the child which had it the last time
+    virtual bool SetFocusToChild();
+};
+
+#else // !wxHAS_NATIVE_TAB_TRAVERSAL
+
+class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
+class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
+
+// ----------------------------------------------------------------------------
+// wxControlContainer for TAB navigation implemented in wx itself
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
+{
+public:
+    // default ctor, SetContainerWindow() must be called later
+    wxControlContainer();
+
+    // the methods to be called from the window event handlers
+    void HandleOnNavigationKey(wxNavigationKeyEvent& event);
+    void HandleOnFocus(wxFocusEvent& event);
+    void HandleOnWindowDestroy(wxWindowBase *child);
+
+    // called from OnChildFocus() handler, i.e. when one of our (grand)
+    // children gets the focus
+    void SetLastFocus(wxWindow *win);
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(wxControlContainer);
+};
+
+#endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
+
+// this function is for wxWidgets internal use only
+extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
+
+// ----------------------------------------------------------------------------
+// wxNavigationEnabled: Derive from this class to support keyboard navigation
+// among window children in a wxWindow-derived class. The details of this class
+// don't matter, you just need to derive from it to make navigation work.
+// ----------------------------------------------------------------------------
+
+// The template parameter W must be a wxWindow-derived class.
+template <class W>
+class wxNavigationEnabled : public W
+{
+public:
+    typedef W BaseWindowClass;
+
+    wxNavigationEnabled()
+    {
+        m_container.SetContainerWindow(this);
+
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
+        Connect(wxEVT_NAVIGATION_KEY,
+                wxNavigationKeyEventHandler(wxNavigationEnabled::OnNavigationKey));
+
+        Connect(wxEVT_SET_FOCUS,
+                wxFocusEventHandler(wxNavigationEnabled::OnFocus));
+
+        Connect(wxEVT_CHILD_FOCUS,
+                wxChildFocusEventHandler(wxNavigationEnabled::OnChildFocus));
+#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
+    }
+
+    virtual bool AcceptsFocus() const
+    {
+        return m_container.AcceptsFocus();
+    }
+
+    virtual bool AcceptsFocusRecursively() const
+    {
+        return m_container.AcceptsFocusRecursively();
+    }
+
+    virtual bool AcceptsFocusFromKeyboard() const
+    {
+        return m_container.AcceptsFocusFromKeyboard();
+    }
+
+    virtual void AddChild(wxWindowBase *child)
+    {
+        BaseWindowClass::AddChild(child);
+
+        m_container.UpdateCanFocus();
+    }
+
+    virtual void RemoveChild(wxWindowBase *child)
+    {
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
+        m_container.HandleOnWindowDestroy(child);
+#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
+
+        BaseWindowClass::RemoveChild(child);
+
+        m_container.UpdateCanFocus();
+    }
+
+    virtual void SetFocus()
+    {
+        if ( !m_container.DoSetFocus() )
+            BaseWindowClass::SetFocus();
+    }
+
+    void SetFocusIgnoringChildren()
+    {
+        BaseWindowClass::SetFocus();
+    }
+
+    void AcceptFocus(bool acceptFocus)
+    {
+        m_container.SetCanFocus(acceptFocus);
+    }
+
+protected:
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
+    void OnNavigationKey(wxNavigationKeyEvent& event)
+    {
+        m_container.HandleOnNavigationKey(event);
+    }
+
+    void OnFocus(wxFocusEvent& event)
+    {
+        m_container.HandleOnFocus(event);
+    }
+
+    void OnChildFocus(wxChildFocusEvent& event)
+    {
+        m_container.SetLastFocus(event.GetWindow());
+        event.Skip();
+    }
+#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
+
+    wxControlContainer m_container;
+
+
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxNavigationEnabled, W);
+};
+
+// ----------------------------------------------------------------------------
+// Compatibility macros from now on, do NOT use them and preferably do not even
+// look at them.
+// ----------------------------------------------------------------------------
+
+#ifdef WXWIN_COMPATIBILITY_2_8
+
 // common part of WX_DECLARE_CONTROL_CONTAINER in the native and generic cases,
 // it should be used in the wxWindow-derived class declaration
 #define WX_DECLARE_CONTROL_CONTAINER_BASE()                                   \
@@ -156,19 +312,8 @@ protected:                                                                    \
         return m_container.AcceptsFocusFromKeyboard();                        \
     }
 
+
 #ifdef wxHAS_NATIVE_TAB_TRAVERSAL
-
-// ----------------------------------------------------------------------------
-// wxControlContainer for native TAB navigation
-// ----------------------------------------------------------------------------
-
-// this must be a real class as we forward-declare it elsewhere
-class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
-{
-protected:
-    // set the focus to the child which had it the last time
-    virtual bool SetFocusToChild();
-};
 
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname)
 
@@ -190,38 +335,6 @@ protected:
     }
 
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL
-
-class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
-class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
-
-// ----------------------------------------------------------------------------
-// wxControlContainer for TAB navigation implemented in wx itself
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
-{
-public:
-    // default ctor, SetContainerWindow() must be called later
-    wxControlContainer();
-
-    // the methods to be called from the window event handlers
-    void HandleOnNavigationKey(wxNavigationKeyEvent& event);
-    void HandleOnFocus(wxFocusEvent& event);
-    void HandleOnWindowDestroy(wxWindowBase *child);
-
-    // called from OnChildFocus() handler, i.e. when one of our (grand)
-    // children gets the focus
-    void SetLastFocus(wxWindow *win);
-
-protected:
-
-    wxDECLARE_NO_COPY_CLASS(wxControlContainer);
-};
-
-// ----------------------------------------------------------------------------
-// macros which may be used by the classes wishing to implement TAB navigation
-// among their children
-// ----------------------------------------------------------------------------
 
 // declare the methods to be forwarded
 #define WX_DECLARE_CONTROL_CONTAINER()                                        \
@@ -274,7 +387,6 @@ public:                                                                       \
 
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 
-// this function is for wxWidgets internal use only
-extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // _WX_CONTAINR_H_
