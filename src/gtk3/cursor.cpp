@@ -228,7 +228,8 @@ void wxCursor::InitFromImage( const wxImage & image )
     else // no colour cursor support
     {
         unsigned long keyMaskColor = 0;
-        GdkPixbuf *maskRaw;
+        /* GdkPixbuf *maskRaw; */
+        cairo_surface_t *maskRaw;
         if (bHasMask)
         {
             keyMaskColor = wxImageHistogram::MakeKey(

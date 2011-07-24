@@ -59,19 +59,21 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxColourRefData);
 };
 
-#ifdef __WXGTK20__
 void wxColourRefData::FreeColour()
 {
+#ifdef __WXGTK20__
     if (m_colormap)
     {
         gdk_colormap_free_colors(m_colormap, &m_color, 1);
         m_colormap = NULL;
         m_color.pixel = 0;
     }
+#endif
 }
 
 void wxColourRefData::AllocColour( GdkColormap *cmap )
 {
+#ifdef __WXGTK20__
     if (m_colormap != cmap)
     {
         FreeColour();
@@ -84,8 +86,8 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
             m_colormap = cmap;
         }
     }
-}
 #endif
+}
 
 //-----------------------------------------------------------------------------
 
