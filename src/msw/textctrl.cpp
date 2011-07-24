@@ -1810,6 +1810,14 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
         }
     }
 
+    // Default window procedure of multiline edit controls posts WM_CLOSE to
+    // the parent window when it gets Escape key press for some reason, prevent
+    // it from doing this as this resulted in dialog boxes being closed on
+    // Escape even when they shouldn't be (we do handle Escape ourselves
+    // correctly in the situations when it should close them).
+    if ( event.GetKeyCode() == WXK_ESCAPE && IsMultiLine() )
+        return;
+
     // no, we didn't process it
     event.Skip();
 }
