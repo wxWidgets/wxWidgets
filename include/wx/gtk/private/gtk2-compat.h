@@ -43,6 +43,13 @@ static inline GtkWidget* wx_gtk_scrolled_window_get_vscrollbar(GtkScrolledWindow
 }
 #define gtk_scrolled_window_get_vscrollbar wx_gtk_scrolled_window_get_vscrollbar
 
+static inline GdkWidget* 
+wx_gtk_bin_get_child(GtkBin* bin)
+{
+    return bin->child;
+}
+#define gtk_bin_get_child wx_gtk_bin_get_child
+
 // ----------------------------------------------------------------------------
 // the following were introduced in GLib 2.10
 

@@ -1089,7 +1089,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk3/minifram.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
-    src/gtk3/private.cpp
+    src/gtk/private.cpp
     src/gtk/region.cpp
     src/gtk3/renderer.cpp
     src/gtk/settings.cpp

@@ -125,15 +125,27 @@ static void CreateHeaderButtons()
 
         GtkTreeViewColumn *column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+#ifdef __WXGTK30__
+        s_first_button = gtk_tree_view_column_get_button(column);
+#else
         s_first_button = column->button;
+#endif
 
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+#ifdef __WXGTK30__
+        s_other_button = gtk_tree_view_column_get_button(column);
+#else
         s_other_button = column->button;
+#endif
 
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+#ifdef __WXGTK30__
+        s_last_button = gtk_tree_view_column_get_button(column);
+#else
         s_last_button = column->button;
+#endif
 }
 
 GtkWidget *GetHeaderButtonWidgetFirst()

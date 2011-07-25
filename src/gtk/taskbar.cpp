@@ -180,7 +180,7 @@ void wxTaskBarIcon::Private::SetIcon()
         m_size = 0;
         if (m_eggTrayIcon)
         {
-            GtkWidget* image = gtk_bin_get_child(GTK_BIN(m_eggTrayIcon));
+            GtkWidget* image = wx_gtk_bin_get_child(GTK_BIN(m_eggTrayIcon));
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), m_bitmap.GetPixbuf());
         }
         else
@@ -253,7 +253,7 @@ void wxTaskBarIcon::Private::size_allocate(int width, int height)
         if (h > size) h = size;
         GdkPixbuf* pixbuf =
             gdk_pixbuf_scale_simple(m_bitmap.GetPixbuf(), w, h, GDK_INTERP_BILINEAR);
-        GtkImage* image = GTK_IMAGE(gtk_bin_get_child(GTK_BIN(m_eggTrayIcon)));
+        GtkImage* image = GTK_IMAGE(wx_gtk_bin_get_child(GTK_BIN(m_eggTrayIcon)));
         gtk_image_set_from_pixbuf(image, pixbuf);
         g_object_unref(pixbuf);
     }
