@@ -1073,9 +1073,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/assertdlg_gtk.cpp
     src/gtk/bitmap_gtk3.cpp
     src/gtk/brush.cpp
-    src/gtk3/clipbrd.cpp
+    src/gtk/clipbrd.cpp
     src/gtk/colour.cpp
-    src/gtk3/cursor.cpp
+    src/gtk/cursor.cpp
     src/gtk3/dataobj.cpp
     src/gtk3/dc.cpp
     src/gtk3/dcclient.cpp
@@ -1092,7 +1092,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk3/private.cpp
     src/gtk/region.cpp
     src/gtk3/renderer.cpp
-    src/gtk3/settings.cpp
+    src/gtk/settings.cpp
     src/gtk/sockgtk.cpp
     src/gtk/timer.cpp
     src/gtk/tooltip.cpp

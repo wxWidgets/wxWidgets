@@ -290,8 +290,13 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 // on or for the default screen if window is NULL
 static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
 {
-    return window ? gtk_settings_get_for_screen(gdk_drawable_get_screen(window))
-                  : gtk_settings_get_default();
+    GdkScreen * screen;
+#ifdef __WXGTK30__
+    screen = gdk_window_get_screen(window);
+#else
+    screen = gdk_drawable_get_screen(window);
+#endif
+    return window ? gtk_settings_get_for_screen(screen) : gtk_settings_get_default();
 }
 
 static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
@@ -359,8 +364,13 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
                 return gdk_display_get_default_cursor_size(
+#ifdef __WXGTK30__
+                            window ? gdk_window_get_display(window)
+                                   : gdk_display_get_default());
+#else
                             window ? gdk_drawable_get_display(window)
                                    : gdk_display_get_default());
+#endif
 
         case wxSYS_DCLICK_X:
         case wxSYS_DCLICK_Y:
@@ -396,13 +406,21 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
         case wxSYS_SCREEN_X:
             if (window)
+#ifdef __WXGTK30__
+                return gdk_screen_get_width(gdk_window_get_screen(window));
+#else
                 return gdk_screen_get_width(gdk_drawable_get_screen(window));
+#endif
             else
                 return gdk_screen_width();
 
         case wxSYS_SCREEN_Y:
             if (window)
+#ifdef __WXGTK30__
+                return gdk_screen_get_height(gdk_window_get_screen(window));
+#else
                 return gdk_screen_get_height(gdk_drawable_get_screen(window));
+#endif
             else
                 return gdk_screen_height();
 
