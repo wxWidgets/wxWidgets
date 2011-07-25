@@ -27,6 +27,9 @@
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
 
+//We link to urlmon as it is required for CoInternetGetSession
+#pragma comment(lib, "urlmon")
+
 //Taken from wx/filesys.cpp
 static wxString EscapeFileNameCharsInURL(const char *in)
 {
