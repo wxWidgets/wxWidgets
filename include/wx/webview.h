@@ -339,11 +339,11 @@ class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent
 {
 public:
     wxWebNavigationEvent() {}
-    wxWebNavigationEvent(wxEventType type, int id, const wxString href,
+    wxWebNavigationEvent(wxEventType type, int id, const wxString url,
                          const wxString target, bool canVeto)
         : wxCommandEvent(type, id)
     {
-        m_href = href;
+        m_url = url;
         m_target = target;
         m_vetoed = false;
         m_canVeto = canVeto;
@@ -352,7 +352,7 @@ public:
     /**
      *  Get the URL being visited
      */
-    const wxString& GetHref() const { return m_href; }
+    const wxString& GetURL() const { return m_url; }
 
     /**
      * Get the target (frame or window) in which the URL that caused this event
@@ -379,7 +379,7 @@ public:
     void Veto() { wxASSERT(m_canVeto); m_vetoed = true; }
 
 private:
-    wxString m_href;
+    wxString m_url;
     wxString m_target;
     bool m_canVeto;
     bool m_vetoed;

@@ -534,10 +534,6 @@ public:
     wxWebNavigationEvent();
     wxWebNavigationEvent(wxEventType type, int id, const wxString href,
                          const wxString target, bool canVeto);
-    /**
-        Get the URL being visited
-    */
-    const wxString& GetHref() const;
 
     /**
         Get the name of the target frame which the url of this event
@@ -545,6 +541,11 @@ public:
         if the frame is not avaliable.
     */
     const wxString& GetTarget() const;
+
+    /**
+        Get the URL being visited
+    */
+    const wxString& GetURL() const;
 
     virtual wxEvent* Clone() const;
 

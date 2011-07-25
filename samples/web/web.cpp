@@ -453,7 +453,7 @@ void WebFrame::OnMode(wxCommandEvent& evt)
   */
 void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
 {
-    wxLogMessage("%s", "Navigation request to '" + evt.GetHref() + "' (target='" +
+    wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
     evt.GetTarget() + "')");
     
     wxASSERT(m_browser->IsBusy());
@@ -471,7 +471,7 @@ void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
   */
 void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
 {
-    wxLogMessage("%s", "Navigation complete; url='" + evt.GetHref() + "'");
+    wxLogMessage("%s", "Navigation complete; url='" + evt.GetURL() + "'");
     UpdateState();
 }
 
@@ -481,8 +481,8 @@ void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
 void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
 {
     //Only notify if the document is the main frame, not a subframe
-    if(evt.GetHref() == m_browser->GetCurrentURL())
-        wxLogMessage("%s", "Document loaded; url='" + evt.GetHref() + "'");
+    if(evt.GetURL() == m_browser->GetCurrentURL())
+        wxLogMessage("%s", "Document loaded; url='" + evt.GetURL() + "'");
     UpdateState();
 }
 
@@ -491,12 +491,12 @@ void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
   */
 void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
 {
-    wxLogMessage("%s", "New window; url='" + evt.GetHref() + "'");
+    wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'");
 
     //If we handle new window events then just load them in this window as we 
     //are a single window browser
     if(m_tools_handle_new_window->IsChecked())
-        m_browser->LoadUrl(evt.GetHref());
+        m_browser->LoadUrl(evt.GetURL());
 
     //We always veto because we handle the event, otherwise under windows a new
     //internet explorer windowis created
@@ -639,10 +639,10 @@ void WebFrame::OnError(wxWebNavigationEvent& evt)
         break;
     }
     
-    wxLogMessage("Error; url='" + evt.GetHref() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
+    wxLogMessage("Error; url='" + evt.GetURL() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
     
     //Show the info bar with an error
-    m_info->ShowMessage(_("An error occurred loading ") + evt.GetHref() + "\n" +
+    m_info->ShowMessage(_("An error occurred loading ") + evt.GetURL() + "\n" +
     "'" + errorCategory + "' (" + evt.GetString() + ")", wxICON_ERROR);
     
     UpdateState();
