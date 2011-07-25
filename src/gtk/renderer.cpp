@@ -206,10 +206,18 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     gtk_paint_box
     (
         gtk_widget_get_style(button),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         button,
         "button",
         dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
@@ -222,10 +230,15 @@ int wxRendererGTK::GetHeaderButtonHeight(wxWindow *WXUNUSED(win))
 {
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
 
+#ifdef __WXGTK30__
+    int width, height;
+    gtk_widget_get_size_request(button, &width, &height);
+    return height;
+#else
     GtkRequisition req;
     GTK_WIDGET_GET_CLASS(button)->size_request(button, &req);
-
     return req.height;
+#endif
 }
 
 int wxRendererGTK::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
@@ -261,9 +274,17 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     gtk_paint_expander
     (
         gtk_widget_get_style(tree),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         tree,
         "treeview",
         dc.LogicalToDeviceX(rect.x) + 6 - x_diff,
@@ -354,10 +375,18 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
     gtk_paint_handle
     (
         gtk_widget_get_style(win->m_wxwindow),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_SHADOW_NONE,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL /* no clipping */,
+#endif
         win->m_wxwindow,
         "paned",
         dc.LogicalToDeviceX(rect.x) - x_diff,
@@ -410,10 +439,18 @@ wxRendererGTK::DrawDropArrow(wxWindow* win,
     gtk_paint_arrow
     (
         gtk_widget_get_style(button),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         button,
         "arrow",
         GTK_ARROW_DOWN,
@@ -489,10 +526,18 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
     gtk_paint_check
     (
         gtk_widget_get_style(button),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         shadow_type,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         button,
         "cellcheck",
         dc.LogicalToDeviceX(rect.x) + indicator_spacing,
@@ -528,10 +573,18 @@ wxRendererGTK::DrawPushButton(wxWindow* win,
     gtk_paint_box
     (
         gtk_widget_get_style(button),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         button,
         "button",
         dc.LogicalToDeviceX(rect.x),
@@ -560,10 +613,19 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
         // the wxCONTROL_FOCUSED state is deduced
         // directly from the m_wxwindow by GTK+
         gtk_paint_flat_box(gtk_widget_get_style(wxGTKPrivate::GetTreeWidget()),
+#ifdef __WXGTK30__
+                        gdk_cairo_create(gdk_window),
+#else
                         gdk_window,
+#endif
+
                         GTK_STATE_SELECTED,
                         GTK_SHADOW_NONE,
+#ifdef __WXGTK30__
+                        // Nothing
+#else
                         NULL,
+#endif
                         win->m_wxwindow,
                         "cell_even",
                         dc.LogicalToDeviceX(rect.x) - x_diff,
@@ -589,9 +651,17 @@ void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, i
         state = GTK_STATE_NORMAL;
 
     gtk_paint_focus( gtk_widget_get_style(win->m_widget),
+#ifdef __WXGTK30__
+                     gdk_cairo_create(gdk_window),
+#else
                      gdk_window,
+#endif
                      state,
-                     NULL,
+#ifdef __WXGTK30__
+                        // Nothing
+#else
+                      NULL,
+#endif
                      win->m_wxwindow,
                      NULL,
                      dc.LogicalToDeviceX(rect.x),
@@ -616,10 +686,18 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
     gtk_paint_shadow
     (
         gtk_widget_get_style(entry),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         entry,
         "entry",
         dc.LogicalToDeviceX(rect.x),
@@ -645,10 +723,18 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
     gtk_paint_shadow
     (
         gtk_widget_get_style(combo),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         combo,
         "combobox",
         dc.LogicalToDeviceX(rect.x),
@@ -667,10 +753,18 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
     gtk_paint_arrow
     (
         gtk_widget_get_style(combo),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         GTK_SHADOW_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         combo,
         "arrow",
         GTK_ARROW_DOWN,
@@ -688,10 +782,18 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
     gtk_paint_box
     (
         gtk_widget_get_style(combo),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         GTK_SHADOW_ETCHED_OUT,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         combo,
         "vseparator",
         dc.LogicalToDeviceX(r.x),
@@ -735,10 +837,18 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect,
     gtk_paint_option
     (
         gtk_widget_get_style(button),
+#ifdef __WXGTK30__
+        gdk_cairo_create(gdk_window),
+#else
         gdk_window,
+#endif
         state,
         shadow_type,
+#ifdef __WXGTK30__
+        // Nothing
+#else
         NULL,
+#endif
         button,
         "radiobutton",
         dc.LogicalToDeviceX(rect.x),
