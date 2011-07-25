@@ -956,12 +956,10 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             event.SetEventObject(this);
             HandleWindowEvent(event);
 
-            //If we veto the event then we cancel the new window
-            if (event.IsVetoed())
-            {
-                wxActiveXEventNativeMSW* nativeParams = evt.GetNativeParameters();
-                *V_BOOLREF(&nativeParams->pDispParams->rgvarg[3]) = VARIANT_TRUE;
-            }
+            //We always cancel this event otherwise an Internet Exporer window
+            //is opened for the url
+            wxActiveXEventNativeMSW* nativeParams = evt.GetNativeParameters();
+            *V_BOOLREF(&nativeParams->pDispParams->rgvarg[3]) = VARIANT_TRUE;
             break;
         }
     }

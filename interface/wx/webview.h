@@ -155,8 +155,8 @@ public:
        precise error message/code.
     @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
-       window is created. This event may be vetoed to prevent a new window showing,
-       for example if you want to open the url in the existing window or a new tab.
+       window is created. You must handle this event if you want anything to 
+       happen, for example to load the page in a new window or tab.
     @endEventTable
    
     @library{wxweb}
@@ -519,8 +519,8 @@ public:
        precise error message/code.
     @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
-       window is created. This event may be vetoed to prevent a new window showing,
-       for example if you want to open the url in the existing window or a new tab.
+       window is created. You must handle this event if you want anything to 
+       happen, for example to load the page in a new window or tab.
     @endEventTable
 
     @library{wxweb}
@@ -549,8 +549,7 @@ public:
 
     /** 
         Get whether this event may be vetoed (stopped/prevented). Only
-        meaningful for events fired before navigation takes place or new 
-        window events.
+        meaningful for events fired before navigation takes place.
      */
     bool CanVeto() const;
 
@@ -562,8 +561,7 @@ public:
 
     /** 
         Veto (prevent/stop) this event. Only meaningful for events fired
-        before navigation takes place or new window events. Only valid 
-        if CanVeto() returned true.
+        before navigation takes place. Only valid if CanVeto() returned true.
      */
     void Veto();
 };
