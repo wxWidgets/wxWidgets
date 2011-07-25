@@ -498,10 +498,6 @@ void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
     if(m_tools_handle_new_window->IsChecked())
         m_browser->LoadUrl(evt.GetURL());
 
-    //We always veto because we handle the event, otherwise under windows a new
-    //internet explorer windowis created
-    evt.Veto();
-
     UpdateState();
 }
 
