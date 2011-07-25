@@ -67,6 +67,15 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
         return false;
     }
 
+#ifdef __WXGTK30__
+    gtk_paint_shadow (gtk_widget_get_style(widget),
+                      gdk_cairo_create(gtk_widget_get_window(widget)),
+                      GTK_STATE_NORMAL,
+                      GTK_SHADOW_OUT,
+                      NULL, NULL, // FIXME: No clipping?
+                      0, 0,
+                      win->m_width, win->m_height);
+#else
     gtk_paint_shadow (gtk_widget_get_style(widget),
                       gtk_widget_get_window(widget),
                       GTK_STATE_NORMAL,
@@ -74,6 +83,7 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
                       NULL, NULL, NULL, // FIXME: No clipping?
                       0, 0,
                       win->m_width, win->m_height);
+#endif
 
     int style = win->GetWindowStyle();
 

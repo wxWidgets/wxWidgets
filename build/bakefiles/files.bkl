@@ -1086,7 +1086,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
-    src/gtk3/minifram.cpp
+    src/gtk/minifram.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -3709,6 +3709,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='OSX_CARBON'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='OSX_COCOA'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
+        wx/gtk/glcanvas.h
+        wx/unix/glx11.h
+    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/gtk/glcanvas.h
         wx/unix/glx11.h
