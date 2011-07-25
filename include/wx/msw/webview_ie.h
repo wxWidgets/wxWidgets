@@ -133,8 +133,6 @@ private:
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
     DWORD m_dwCookie;
-    bool m_canNavigateBack;
-    bool m_canNavigateForward;
 
     //We store the current zoom type;
     wxWebViewZoomType m_zoomType;

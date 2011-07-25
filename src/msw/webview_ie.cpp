@@ -72,8 +72,6 @@ bool wxWebViewIE::Create(wxWindow* parent,
     }
 
     m_webBrowser = NULL;
-    m_canNavigateBack = false;
-    m_canNavigateForward = false;
     m_isBusy = false;
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
@@ -947,21 +945,6 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             event.SetInt(errorType);
             event.SetString(errorCode);
             HandleWindowEvent(event);
-            break;
-        }
-
-        case DISPID_COMMANDSTATECHANGE:
-        {
-            long commandId = evt[0].GetLong();
-            bool enable = evt[1].GetBool();
-            if (commandId == CSC_NAVIGATEBACK)
-            {
-                m_canNavigateBack = enable;
-            }
-            else if (commandId == CSC_NAVIGATEFORWARD)
-            {
-                m_canNavigateForward = enable;
-            }
             break;
         }
         case DISPID_NEWWINDOW3:
